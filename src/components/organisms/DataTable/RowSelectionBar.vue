@@ -12,11 +12,7 @@
 					{{ $t("pages.administration.selected") }}
 				</span>
 			</div>
-			<div
-				v-if="actions && actions.length"
-				class="actions"
-				style="position: relative"
-			>
+			<div v-if="actions && actions.length" class="actions" style="position: relative">
 				<v-btn
 					variant="tonal"
 					data-test-id="context-menu-open"
@@ -26,21 +22,10 @@
 				>
 					{{ $t("pages.administration.actions") }}
 				</v-btn>
-				<context-menu
-					v-model:show="actionsMenuOpen"
-					anchor="top-left"
-					:actions="contextActions"
-					@action="fireAction"
-				/>
+				<context-menu v-model:show="actionsMenuOpen" anchor="top-left" :actions="contextActions" @action="fireAction" />
 			</div>
 		</div>
-		<v-btn
-			variant="text"
-			:icon="mdiClose"
-			width="40"
-			height="40"
-			@click="closeBanner"
-		/>
+		<v-btn variant="text" :icon="mdiClose" width="40" height="40" @click="closeBanner" />
 	</div>
 </template>
 

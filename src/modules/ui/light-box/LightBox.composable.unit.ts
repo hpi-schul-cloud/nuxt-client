@@ -1,20 +1,13 @@
+import { LightBoxContentType, LightBoxOptions, useLightBox } from "./LightBox.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import {
-	LightBoxOptions,
-	LightBoxContentType,
-	useLightBox,
-} from "./LightBox.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("LightBox composable", () => {
 	describe("useLightBox", () => {
 		const setup = () => {
-			const { close, isLightBoxOpen, lightBoxOptions, open } = mountComposable(
-				() => useLightBox(),
-				{
-					global: { plugins: [createTestingI18n()] },
-				}
-			);
+			const { close, isLightBoxOpen, lightBoxOptions, open } = mountComposable(() => useLightBox(), {
+				global: { plugins: [createTestingI18n()] },
+			});
 
 			return {
 				close,

@@ -1,8 +1,11 @@
 import TaskOverview from "./TaskOverview.page.vue";
-import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { RoleName } from "@/serverApi/v3";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -14,14 +17,16 @@ vi.mock(
 
 describe("TaskOverview", () => {
 	const fetchAllTasksSpy = vi.fn();
-	const getWrapper = (userRole: string) => {
+	const getWrapper = (userRole?: RoleName) => {
+		setActivePinia(createTestingPinia());
+		createTestAppStore({
+			me: { roles: userRole ? [{ id: "test-user", name: userRole }] : [] },
+		});
+
 		return shallowMount(TaskOverview, {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: {
-						getUserRoles: [userRole],
-					},
 					tasksModule: {
 						fetchAllTasks: fetchAllTasksSpy,
 					},
@@ -35,31 +40,28 @@ describe("TaskOverview", () => {
 	});
 
 	it("should create component", () => {
-		const wrapper = getWrapper("teacher");
+		const wrapper = getWrapper(RoleName.Teacher);
 		expect(wrapper).toBeTruthy();
 	});
 
 	it("should set title to tasks", () => {
-		getWrapper("userRole");
+		getWrapper(RoleName.Superhero);
 		expect(document.title).toBe(`common.words.tasks`);
 	});
 
 	it("should fetchAllTasks on mount", () => {
-		getWrapper("");
+		getWrapper();
 		expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 	});
 
-	it.each(["teacher", "student"])(
-		"should render child component for %p",
-		(userRole) => {
-			const wrapper = getWrapper(userRole);
-			const childComponent = wrapper.findComponent(TasksDashboardMain);
-			expect(childComponent.exists()).toBeTruthy();
-		}
-	);
+	it.each([RoleName.Teacher, RoleName.Student])("should render child component for %p", (userRole) => {
+		const wrapper = getWrapper(userRole);
+		const childComponent = wrapper.findComponent(TasksDashboardMain);
+		expect(childComponent.exists()).toBeTruthy();
+	});
 
 	it("should not render child component for arbitrary roles", () => {
-		const wrapper = getWrapper("arbitraryRole");
+		const wrapper = getWrapper(RoleName.Superhero);
 		const childComponent = wrapper.findComponent(TasksDashboardMain);
 		expect(childComponent.exists()).toBeFalsy();
 	});

@@ -26,24 +26,17 @@
 </template>
 
 <script setup lang="ts">
-import ImportModal from "@/components/share/ImportModal.vue";
-import { useLoadingState } from "@/composables/loadingState";
-import {
-	BoardExternalReferenceType,
-	ShareTokenInfoResponseParentTypeEnum,
-} from "@/serverApi/v3/api";
-import { ImportDestinationItem } from "@/store/types/rooms";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { PropType, computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectDestinationModal from "./SelectDestinationModal.vue";
+import ImportModal from "@/components/share/ImportModal.vue";
+import { useLoadingState } from "@/composables/loadingState";
+import { BoardExternalReferenceType, ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3/api";
+import { ImportDestinationItem } from "@/store/types/rooms";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { COPY_MODULE_KEY, injectStrict, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
+import { notifyError } from "@data-app";
+import { computed, PropType, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	token: {
@@ -69,13 +62,10 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const copyModule = injectStrict(COPY_MODULE_KEY);
-const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
 
 const parentName = ref("");
-const parentType = ref<ShareTokenInfoResponseParentTypeEnum>(
-	ShareTokenInfoResponseParentTypeEnum.Lessons
-);
+const parentType = ref<ShareTokenInfoResponseParentTypeEnum>(ShareTokenInfoResponseParentTypeEnum.Lessons);
 const newName = ref("");
 
 const destinationId = ref<string>();
@@ -88,14 +78,10 @@ const isCopyResultModalOpen = computed({
 	set: (bool) => copyModule.setResultModalOpen(bool),
 });
 
-const copyResultModalItems = computed(
-	() => copyModule.getCopyResultFailedItems
-);
+const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-const { isLoadingDialogOpen } = useLoadingState(
-	t("components.molecules.import.options.loadingMessage")
-);
+const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.import.options.loadingMessage"));
 
 const openModal = (modalName: string) => {
 	isSelectCourseModalOpen.value = modalName === "selectCourse";
@@ -109,31 +95,21 @@ const closeModals = () => openModal("none");
 // notifiers
 
 const showFailureBackend = (name: string) => {
-	notifier.show({
-		text: t("components.molecules.import.options.failure.backendError", {
+	notifyError(
+		t("components.molecules.import.options.failure.backendError", {
 			name,
-		}),
-		status: "error",
-		timeout: 5000,
-	});
+		})
+	);
 	closeModals();
 };
 
 const showFailureInvalidToken = () => {
-	notifier.show({
-		text: t("components.molecules.import.options.failure.invalidToken"),
-		status: "error",
-		timeout: 5000,
-	});
+	notifyError(t("components.molecules.import.options.failure.invalidToken"));
 	closeModals();
 };
 
 const showFailurePermission = () => {
-	notifier.show({
-		text: t("components.molecules.import.options.failure.permissionError"),
-		status: "error",
-		timeout: 5000,
-	});
+	notifyError(t("components.molecules.import.options.failure.permissionError"));
 	closeModals();
 };
 

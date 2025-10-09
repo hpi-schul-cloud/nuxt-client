@@ -1,13 +1,13 @@
-import { authModule } from "@/store";
-import dayjs from "dayjs";
 import "dayjs/locale/de";
 import "dayjs/locale/es";
 import "dayjs/locale/uk";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import { useEnvConfig } from "@data-env";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -166,58 +166,44 @@ export const printDate = (date) => {
  * @param {String} Date string based on UTC (unformatted)
  * @return {String} Date string based on current timezone using locale date formating
  */
-export const printDateFromStringUTC = (date) => {
-	return dayjs(date).tz().format(DATETIME_FORMAT.dateYY);
-};
+export const printDateFromStringUTC = (date) => dayjs(date).tz().format(DATETIME_FORMAT.dateYY);
 
 /**
  * Returns formated date string based on a given dayjs object
  * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating
  */
-export const printDateTime = (date) => {
-	return dayjs(date).tz().format(DATETIME_FORMAT.dateTime);
-};
+export const printDateTime = (date) => dayjs(date).tz().format(DATETIME_FORMAT.dateTime);
 
 /**
  * Returns formated date string based on a given dayjs object
  * @param {String} Date string based on UTC (unformatted)
  * @return {String} Date string based on current timezone using locale date formating
  */
-export const printDateTimeFromStringUTC = (date) => {
-	return dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
-};
+export const printDateTimeFromStringUTC = (date) => dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
 
 /**
  * Returns formated (DD.MM.YYYY) date string based on a given dayjs object
  * @param {datejs} date
  * @return {String} Date string based on current timezone using locale date formating
  */
-export const printFromStringUtcToFullDate = (date) => {
-	return dayjs(date).tz().format(DATETIME_FORMAT.date);
-};
+export const printFromStringUtcToFullDate = (date) => dayjs(date).tz().format(DATETIME_FORMAT.date);
 
-export const printTimeFromStringUTC = (date) => {
-	return dayjs(date).tz().format(DATETIME_FORMAT.time);
-};
+export const printTimeFromStringUTC = (date) => dayjs(date).tz().format(DATETIME_FORMAT.time);
 
 /**
  * Returns formated date string based on a given dayjs object
  * @param {String} date
  * @return {String} Date string based on current timezone using locale date formating slashed
  */
-export const printDateFromDayJs = (date) => {
-	return date.format(DATETIME_FORMAT.date);
-};
+export const printDateFromDayJs = (date) => date.format(DATETIME_FORMAT.date);
 
 /**
  * Returns formated date string based on a given timestamp
  * @param {String|Integer} timestamp
  * @return {String} Date string based on current timezone using locale date formating slashed
  */
-export const printDateFromTimestamp = (timestamp) => {
-	return dayjs(parseInt(timestamp)).format(DATETIME_FORMAT.date);
-};
+export const printDateFromTimestamp = (timestamp) => dayjs(parseInt(timestamp)).format(DATETIME_FORMAT.date);
 
 /**
  * Returns formated based on current date and given offset
@@ -225,9 +211,8 @@ export const printDateFromTimestamp = (timestamp) => {
  * @param {String} offsetBase Base of offset, e.g. (y)ear, (d)days, (m)inutes...
  * @return {String} Date string based on current timezone using locale date formating
  */
-export const inputRangeDate = (offset = 0, offsetBase = "y") => {
-	return dayjs().add(offset, offsetBase).format(DATETIME_FORMAT.inputDate);
-};
+export const inputRangeDate = (offset = 0, offsetBase = "y") =>
+	dayjs().add(offset, offsetBase).format(DATETIME_FORMAT.inputDate);
 
 /**
  * Returns date by given input date and time (optional)
@@ -248,10 +233,7 @@ export const fromInputDateTime = (date, time = null) => {
 export const createInputDateTime = (date) => {
 	const utcDate = dayjs.tz(date, "UTC");
 	const localDate = utcDate.tz();
-	return [
-		localDate.format(DATETIME_FORMAT.inputDate),
-		localDate.format(DATETIME_FORMAT.inputTime),
-	];
+	return [localDate.format(DATETIME_FORMAT.inputDate), localDate.format(DATETIME_FORMAT.inputTime)];
 };
 
 /**
@@ -286,7 +268,7 @@ export const formatDateForAlerts = (date, isLocalTimeZone = false) => {
 };
 
 export const setDayjsLocale = () => {
-	const locale = authModule?.getLocale || "de";
+	const locale = useAppStore().locale || "de";
 	dayjs.locale(locale);
 };
 
@@ -308,9 +290,7 @@ export const fromNowToFuture = (date, unit) => {
 /**
  * @return {dayjs} Current date based on current timezone
  */
-export const currentDate = () => {
-	return dayjs.tz();
-};
+export const currentDate = () => dayjs.tz();
 
 export const isDateTimeInPast = (dateTime) => {
 	if (!dateTime) return false;
@@ -321,7 +301,7 @@ export const isDateTimeInPast = (dateTime) => {
 export const getTimeFromISOString = (dateIsoString) => {
 	if (!dateIsoString) return "";
 
-	const locale = authModule?.getLocale || "de";
+	const locale = useAppStore().locale || "de";
 	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
 		timeStyle: "short",
 		hourCycle: "h23",

@@ -1,15 +1,12 @@
+import RoomGrid from "./RoomGrid.vue";
+import RoomTile from "./RoomTile.vue";
 import { RoomItem } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { EmptyState } from "@ui-empty-state";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VSkeletonLoader } from "vuetify/lib/components/index";
-import RoomGrid from "./RoomGrid.vue";
-import RoomTile from "./RoomTile.vue";
 
 vi.mock("@data-room");
 

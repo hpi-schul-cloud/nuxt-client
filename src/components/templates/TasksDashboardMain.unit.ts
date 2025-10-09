@@ -1,31 +1,23 @@
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
-import CopyModule from "@/store/copy";
-import FinishedTasksModule from "@/store/finished-tasks";
-import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
-import ShareModule from "@/store/share";
-import TasksModule from "@/store/tasks";
-import {
-	COPY_MODULE_KEY,
-	FINISHED_TASKS_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	SHARE_MODULE_KEY,
-	TASKS_MODULE_KEY,
-} from "@/utils/inject";
-import { meResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { mount, VueWrapper } from "@vue/test-utils";
-import { VAutocomplete } from "vuetify/lib/components/index";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import { Permission } from "@/serverApi/v3";
+import CopyModule from "@/store/copy";
+import FinishedTasksModule from "@/store/finished-tasks";
+import LoadingStateModule from "@/store/loading-state";
+import ShareModule from "@/store/share";
+import TasksModule from "@/store/tasks";
+import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
+import { VAutocomplete } from "vuetify/lib/components/index";
 
 const $route = {
 	query: {
@@ -58,12 +50,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let loadingStateModuleMock: LoadingStateModule;
-	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
 	let wrapper: VueWrapper;
 
-	const mountComponent = (options = {}) => {
-		return mount(TasksDashboardMain, {
+	const mountComponent = (options = {}) =>
+		mount(TasksDashboardMain, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -73,7 +64,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
 				mocks: {
@@ -83,7 +73,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			},
 			...options,
 		});
-	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("when mounting the component", () => {
 		it("should receive valid role props", () => {
@@ -103,10 +96,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 	describe("when user role is student", () => {
 		beforeEach(() => {
-			tasksModuleMock = createModuleMocks(
-				TasksModule,
-				defaultTasksModuleGetters
-			);
+			tasksModuleMock = createModuleMocks(TasksModule, defaultTasksModuleGetters);
 			copyModuleMock = createModuleMocks(CopyModule, {
 				getIsResultModalOpen: false,
 			});
@@ -115,10 +105,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
 				tasksIsEmpty: false,
-			});
-
-			setupStores({
-				authModule: AuthModule,
 			});
 
 			wrapper = mountComponent({
@@ -162,8 +148,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			it("should call 'setCourseFilters' mutation with v-autocomplete on change", () => {
-				const autocompleteEl =
-					wrapper.findComponent<VAutocomplete>(".v-autocomplete");
+				const autocompleteEl = wrapper.findComponent<VAutocomplete>(".v-autocomplete");
 				autocompleteEl.vm.$emit("update:modelValue");
 
 				expect(tasksModuleMock.setCourseFilters).toHaveBeenCalled();
@@ -192,7 +177,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				getIsResultModalOpen: false,
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-			notifierModuleMock = createModuleMocks(NotifierModule);
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: false,
 			});
@@ -204,13 +188,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 			setupStores({
 				copyModule: CopyModule,
-				authModule: AuthModule,
 			});
+			createTestAppStoreWithPermissions([Permission.HomeworkCreate]);
 
-			const mockMe = meResponseFactory.build({
-				permissions: ["HOMEWORK_CREATE"],
-			});
-			authModule.setMe(mockMe);
 			wrapper = mountComponent({
 				props: {
 					role: "teacher",
@@ -232,9 +212,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 
 		it("'add task' button should have correct path", () => {
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
-			expect(fabComponent.props("href")).toStrictEqual(
-				"/homework/new?returnUrl=tasks"
-			);
+			expect(fabComponent.props("href")).toStrictEqual("/homework/new?returnUrl=tasks");
 		});
 
 		it("should open tab from store state", () => {
@@ -282,9 +260,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			const substituteFilterPlaceholder = wrapper.find(
-				".substitute-filter-placeholder"
-			);
+			const substituteFilterPlaceholder = wrapper.find(".substitute-filter-placeholder");
 			expect(substituteFilterPlaceholder.exists()).toBe(true);
 		});
 
@@ -306,9 +282,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", async () => {
-			const switchEl = wrapper
-				.findComponent({ name: "v-switch" })
-				.get('input[type="checkbox"');
+			const switchEl = wrapper.findComponent({ name: "v-switch" }).get('input[type="checkbox"');
 			await switchEl.trigger("input");
 			expect(tasksModuleMock.setSubstituteFilter).toHaveBeenCalled();
 		});
@@ -404,9 +378,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	});
 
 	describe("filter work correctly", () => {
-		it.todo(
-			"course filter dont show filter of substitutes if toggle is set disabled"
-		);
+		it.todo("course filter dont show filter of substitutes if toggle is set disabled");
 
 		describe("when substitution toggle is enabled and task with substitute flag exist", () => {
 			it.todo("substitution toggle for teachers is displayed");

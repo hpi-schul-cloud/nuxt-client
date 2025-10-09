@@ -1,5 +1,5 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { LoadingStatePayload } from "@/store/types/loading-state-payload";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "loadingStateModule",

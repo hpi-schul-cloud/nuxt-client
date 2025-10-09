@@ -15,11 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
 import { isPdfMimeType } from "@/utils/fileHelper";
+import { computed, PropType } from "vue";
 
 const props = defineProps({
 	fileProperties: {
@@ -34,7 +34,5 @@ const onUpdateCaption = (value: string) => emit("update:caption", value);
 
 const onUpdateText = (value: string) => emit("update:alternativeText", value);
 
-const hasPdfMimeType = computed(() =>
-	isPdfMimeType(props.fileProperties.mimeType)
-);
+const hasPdfMimeType = computed(() => isPdfMimeType(props.fileProperties.mimeType));
 </script>

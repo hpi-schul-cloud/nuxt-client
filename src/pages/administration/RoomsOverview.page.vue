@@ -62,10 +62,7 @@
 				</span>
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
-				<span
-					v-if="item.teacherNames.length > 0"
-					data-testid="admin-rooms-table-teacher-names"
-				>
+				<span v-if="item.teacherNames.length > 0" data-testid="admin-rooms-table-teacher-names">
 					{{ joinNamesList(item.teacherNames) }}
 				</span>
 				<span v-else data-testid="admin-rooms-table-teacher-names-empty">
@@ -199,35 +196,20 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	CourseInfoDataResponse,
-	CourseSortProps,
-	CourseStatus,
-} from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStore } from "@data-app";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { useCourseList } from "@data-room";
-import {
-	EndCourseSyncDialog,
-	StartExistingCourseSyncDialog,
-} from "@feature-course-sync";
-import {
-	mdiAlert,
-	mdiCheck,
-	mdiPencilOutline,
-	mdiSync,
-	mdiSyncOff,
-	mdiTrashCanOutline,
-} from "@icons/material";
+import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
+import { mdiAlert, mdiCheck, mdiPencilOutline, mdiSync, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
-import { useEnvConfig, useEnvStore } from "@data-env";
-import { storeToRefs } from "pinia";
 
 type Tab = "current" | "archive";
 
@@ -242,8 +224,6 @@ const props = defineProps({
 		default: "current",
 	},
 });
-
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -305,18 +285,13 @@ const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	}
 });
 
-const hasPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
-);
+const hasPermission = useAppStore().hasPermission(Permission.CourseAdministration);
 
-const showRoomAction = (item: CourseInfoDataResponse) =>
-	hasPermission.value && item.id;
+const showRoomAction = (item: CourseInfoDataResponse) => hasPermission.value && item.id;
 
-const showSyncAction = (item: CourseInfoDataResponse) =>
-	hasPermission.value && !item.syncedGroup;
+const showSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && !item.syncedGroup;
 
-const showEndSyncAction = (item: CourseInfoDataResponse) =>
-	hasPermission.value && item.syncedGroup;
+const showEndSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && item.syncedGroup;
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -328,9 +303,7 @@ const isEndSyncDialogOpen: Ref<boolean> = ref(false);
 
 const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
 
-const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.name || "???"
-);
+const selectedItemName: ComputedRef<string> = computed(() => selectedItem.value?.name || "???");
 
 const joinNamesList = (names: string[]) => {
 	if (names.length === 0) return;
@@ -358,9 +331,7 @@ const onCancelCourseDeletion = () => {
 	isDeleteDialogOpen.value = false;
 };
 
-const courseSyncEnabled = computed(
-	() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
-);
+const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
 
 const headers = computed(() => {
 	const headerList: DataTableHeader<CourseInfoDataResponse>[] = [
@@ -427,13 +398,10 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 	const fieldToSortBy: CourseSortItem = sortBy[0];
-	const key: CourseSortProps | undefined = fieldToSortBy
-		? fieldToSortBy.key
-		: undefined;
+	const key: CourseSortProps | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
 	setSortBy(key);
 
-	const sortOrder =
-		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
+	const sortOrder = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 	setSortOrder(sortOrder);
 
 	await loadCourseList();

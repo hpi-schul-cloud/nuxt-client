@@ -1,5 +1,5 @@
-import { BoardCardApiInterface } from "@/serverApi/v3";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
+import { BoardCardApiInterface } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 
 let mockReturnData: { data: { data: { id: string }[] } };
@@ -11,9 +11,7 @@ const setup = (...cardIds: string[]) => {
 	const returnedCards = cardIds.map((id) => ({ id }));
 	mockReturnData = { data: { data: returnedCards } };
 
-	vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(
-		cardsApiFactoryMock as unknown as BoardCardApiInterface
-	);
+	vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardsApiFactoryMock as unknown as BoardCardApiInterface);
 
 	return { cardsApiFactoryMock };
 };
@@ -37,9 +35,7 @@ describe("card-request-pool.composable", () => {
 		await vi.advanceTimersByTimeAsync(500);
 		await promise;
 
-		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledWith([
-			CARD_ID,
-		]);
+		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledWith([CARD_ID]);
 	});
 
 	it("should batch requests", async () => {
@@ -54,21 +50,13 @@ describe("card-request-pool.composable", () => {
 		const { fetchCard } = useSharedCardRequestPool();
 
 		// Call fetchCard in parallel
-		const promise = Promise.all([
-			fetchCard(CARD_ID1),
-			fetchCard(CARD_ID2),
-			fetchCard(CARD_ID3),
-		]);
+		const promise = Promise.all([fetchCard(CARD_ID1), fetchCard(CARD_ID2), fetchCard(CARD_ID3)]);
 
 		// Advance timers to trigger the debounced fetch
 		await vi.advanceTimersByTimeAsync(500);
 		await promise;
 
 		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledTimes(1);
-		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledWith([
-			CARD_ID1,
-			CARD_ID2,
-			CARD_ID3,
-		]);
+		expect(cardsApiFactoryMock.cardControllerGetCards).toHaveBeenCalledWith([CARD_ID1, CARD_ID2, CARD_ID3]);
 	});
 });

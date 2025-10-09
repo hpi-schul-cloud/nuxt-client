@@ -69,32 +69,21 @@ export const isCollectionHelper = (properties) => {
 	return type === "2";
 };
 
-export const getProvider = (properties) => {
-	return getMetadataAttribute(properties, "ccm:metadatacontributer_provider");
-};
+export const getProvider = (properties) => getMetadataAttribute(properties, "ccm:metadatacontributer_provider");
 
-export const getDescription = (description, properties) => {
-	return (
-		description || getMetadataAttribute(properties, "cclom:general_description")
-	);
-};
+export const getDescription = (description, properties) =>
+	description || getMetadataAttribute(properties, "cclom:general_description");
 
-export const getAuthor = (properties) => {
-	return getMetadataAttribute(properties, "cm:creator");
-};
+export const getAuthor = (properties) => getMetadataAttribute(properties, "cm:creator");
 
 export const getTags = (properties) => {
 	const tags = properties["cclom:general_keyword"];
 	return Array.isArray(tags) ? tags : [];
 };
 
-export const getTitle = (resource) => {
-	return resource.title ? resource.title : "";
-};
+export const getTitle = (resource) => (resource.title ? resource.title : "");
 
-export const getMediatype = (resource) => {
-	return resource.mediatype ? resource.mediatype : "";
-};
+export const getMediatype = (resource) => (resource.mediatype ? resource.mediatype : "");
 
 export const getUrl = (resource) => {
 	if (resource.properties && resource.properties["ccm:wwwurl"]) {
@@ -103,21 +92,11 @@ export const getUrl = (resource) => {
 	return null;
 };
 
-export const isVideoContent = (resource) => {
-	return (
-		resource.size &&
-		(resource.mediatype === "file-h5p" || resource.mediatype === "file-video")
-	);
-};
+export const isVideoContent = (resource) =>
+	resource.size && (resource.mediatype === "file-h5p" || resource.mediatype === "file-video");
 
-export const isMerlinContent = (resource) => {
-	return (
-		resource.properties &&
-		getMetadataAttribute(resource.properties, "ccm:replicationsource").includes(
-			"merlin"
-		)
-	);
-};
+export const isMerlinContent = (resource) =>
+	resource.properties && getMetadataAttribute(resource.properties, "ccm:replicationsource").includes("merlin");
 
 export const getMerlinReference = (resource) => {
 	if (resource.properties && isMerlinContent(resource)) {
@@ -128,14 +107,9 @@ export const getMerlinReference = (resource) => {
 
 export const getID = (resource) => {
 	if (resource.properties) {
-		return getMetadataAttribute(
-			resource.properties,
-			"ccm:replicationsourceuuid"
-		);
+		return getMetadataAttribute(resource.properties, "ccm:replicationsourceuuid");
 	}
 	return null;
 };
 
-export const delay = (ms) => {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-};
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

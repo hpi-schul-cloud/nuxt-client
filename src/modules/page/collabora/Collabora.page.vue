@@ -10,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
+import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import { EditorMode } from "@/types/file/File";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useAppStoreRefs } from "@data-app";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
-import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 
 interface Props {
 	fileRecordId: string;
@@ -24,13 +24,14 @@ interface Props {
 const props = defineProps<Props>();
 const url = ref<string>("");
 const iframeRef = ref<HTMLIFrameElement>();
-const authModule = injectStrict(AUTH_MODULE_KEY);
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 const { setupPostMessageAPI } = useCollaboraPostMessageApi();
 
+const { user, locale } = useAppStoreRefs();
+
 const userName = computed(() => {
-	const firstName = authModule.getUser?.firstName;
-	const lastName = authModule.getUser?.lastName;
+	const firstName = user.value?.firstName;
+	const lastName = user.value?.lastName;
 
 	if (firstName && lastName) {
 		return `${firstName} ${lastName}`;
@@ -46,10 +47,8 @@ onMounted(async () => {
 		userName.value
 	);
 
-	const locale = authModule.getLocale;
-
 	const collaboraUrl = new URL(responseCollaboraUrl);
-	collaboraUrl.searchParams.set("lang", locale);
+	collaboraUrl.searchParams.set("lang", locale.value);
 
 	url.value = collaboraUrl.toString();
 

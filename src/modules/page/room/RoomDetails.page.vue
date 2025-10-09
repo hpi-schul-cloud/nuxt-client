@@ -38,12 +38,7 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<RoomCopyFlow
-			v-if="hasRoomCopyStarted"
-			:room="room"
-			@copy:success="onCopySuccess"
-			@copy:ended="onCopyEnded"
-		/>
+		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.Room" />
 	</DefaultWireframe>
 </template>
@@ -52,38 +47,24 @@
 import ShareModal from "@/components/share/ShareModal.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { authModule } from "@/store";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import {
-	useRoomAuthorization,
-	useRoomDetailsStore,
-	useRoomsState,
-} from "@data-room";
+import { useAppStoreRefs } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
-import {
-	mdiPlus,
-	mdiViewDashboardOutline,
-	mdiViewGridPlusOutline,
-} from "@icons/material";
-import {
-	ConfirmationDialog,
-	useConfirmationDialog,
-} from "@ui-confirmation-dialog";
+import { mdiPlus, mdiViewDashboardOutline, mdiViewGridPlusOutline } from "@icons/material";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
-import {
-	LeaveRoomProhibitedDialog,
-	SelectBoardLayoutDialog,
-} from "@ui-room-details";
+import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useEnvConfig } from "@data-env";
 
 const props = defineProps<{ room: RoomDetails }>();
 const room = toRef(props, "room");
@@ -101,49 +82,32 @@ const { createBoard } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
-const pageTitle = computed(() =>
-	buildPageTitle(`${room.value.name} - ${t("pages.roomDetails.title")}`)
-);
+const pageTitle = computed(() => buildPageTitle(`${room.value.name} - ${t("pages.roomDetails.title")}`));
 useTitle(pageTitle);
 
-const {
-	canDeleteRoom,
-	canEditRoomContent,
-	canLeaveRoom,
-	canCopyRoom,
-	canShareRoom,
-	canListDrafts,
-	canViewRoom,
-} = useRoomAuthorization();
+const { canDeleteRoom, canEditRoomContent, canLeaveRoom, canCopyRoom, canShareRoom, canListDrafts, canViewRoom } =
+	useRoomAuthorization();
 
 const visibleBoards = computed(() =>
-	roomBoards.value?.filter((board) =>
-		board.isVisible ? canViewRoom.value : canListDrafts.value
-	)
+	roomBoards.value?.filter((board) => (board.isVisible ? canViewRoom.value : canListDrafts.value))
 );
 
-const roomTitle = computed(() => {
-	return room.value.name;
-});
+const roomTitle = computed(() => room.value.name);
 
-const boardLayoutsEnabled = computed(
-	() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED
-);
+const boardLayoutsEnabled = computed(() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED);
 
 const boardLayoutDialogIsOpen = ref(false);
 
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	return [
-		{
-			title: t("pages.rooms.title"),
-			to: "/rooms",
-		},
-		{
-			title: roomTitle.value,
-			disabled: true,
-		},
-	];
-});
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
+	{
+		title: t("pages.rooms.title"),
+		to: "/rooms",
+	},
+	{
+		title: roomTitle.value,
+		disabled: true,
+	},
+]);
 
 const fabItems = computed(() => {
 	if (!canEditRoomContent.value) return undefined;
@@ -206,12 +170,8 @@ const onManageMembers = () => {
 };
 
 const hasRoomCopyStarted = ref(false);
-const isRoomCopyFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED
-);
-const isRoomShareFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_SHARE
-);
+const isRoomCopyFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED);
+const isRoomShareFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_SHARE);
 
 const onCopy = () => {
 	if (isRoomCopyFeatureEnabled.value && canCopyRoom.value) {
@@ -248,13 +208,15 @@ const onDelete = async () => {
 	router.push({ name: "rooms" });
 };
 
+const { user } = useAppStoreRefs();
+
 const onLeaveRoom = async () => {
 	if (!canLeaveRoom.value) {
 		isLeaveRoomProhibitedDialogOpen.value = true;
 		return;
 	}
 
-	const currentUserId = authModule.getUser?.id;
+	const currentUserId = user.value?.id;
 	if (!currentUserId) return;
 	const roomId = room.value.id;
 
@@ -265,7 +227,9 @@ const onLeaveRoom = async () => {
 		confirmActionLangKey: "common.actions.leave",
 	});
 
-	if (!shouldLeave) return;
+	if (!shouldLeave) {
+		return;
+	}
 	await leaveRoom(roomId);
 	router.push("/rooms");
 };
@@ -273,11 +237,7 @@ const onLeaveRoom = async () => {
 const onCreateBoard = async (layout: BoardLayout) => {
 	if (!canEditRoomContent.value) return;
 
-	const boardId = await createBoard(
-		room.value.id,
-		layout,
-		t("pages.roomDetails.board.defaultName")
-	);
+	const boardId = await createBoard(room.value.id, layout, t("pages.roomDetails.board.defaultName"));
 
 	router.push(`/boards/${boardId}`);
 };

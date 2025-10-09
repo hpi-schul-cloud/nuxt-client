@@ -1,15 +1,11 @@
+import { useCourseInfoApi } from "./courseInfoApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	CourseInfoListResponse,
-	CourseSortProps,
-	CourseStatus,
-} from "@/serverApi/v3/api";
+import { CourseInfoListResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3/api";
+import { initializeAxios } from "@/utils/api";
 import { mockApiResponse } from "@@/tests/test-utils";
+import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
-import { initializeAxios } from "@/utils/api";
-import { useCourseInfoApi } from "./courseInfoApi.composable";
-import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";
 
 describe("courseInfoApi.composable", () => {
 	let courseInfoApi: DeepMocked<serverApi.CourseInfoApiInterface>;
@@ -49,18 +45,16 @@ describe("courseInfoApi.composable", () => {
 		it("should call the api to find courses by school", async () => {
 			setup();
 
-			await useCourseInfoApi().loadCoursesForSchool(
-				CourseStatus.Current,
-				true,
-				10,
-				0,
-				CourseSortProps.Name,
-				"asc"
-			);
+			await useCourseInfoApi().loadCoursesForSchool(CourseStatus.Current, true, 10, 0, CourseSortProps.Name, "asc");
 
-			expect(
-				courseInfoApi.courseInfoControllerGetCourseInfo
-			).toHaveBeenCalledWith(0, 10, "asc", "name", "current", true);
+			expect(courseInfoApi.courseInfoControllerGetCourseInfo).toHaveBeenCalledWith(
+				0,
+				10,
+				"asc",
+				"name",
+				"current",
+				true
+			);
 		});
 	});
 });

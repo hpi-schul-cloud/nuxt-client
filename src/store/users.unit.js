@@ -24,9 +24,7 @@ describe("store/users", () => {
 				expect(ctxMock.commit.mock.calls).toHaveLength(4);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
-				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
-					"updatePaginationForQuery"
-				);
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual("updatePaginationForQuery");
 				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
 				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
 				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
@@ -49,9 +47,7 @@ describe("store/users", () => {
 				expect(ctxMock.commit.mock.calls).toHaveLength(4);
 				expect(ctxMock.commit.mock.calls[0][0]).toStrictEqual("setStatus");
 				expect(ctxMock.commit.mock.calls[0][1]).toStrictEqual("pending");
-				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual(
-					"updatePaginationForQuery"
-				);
+				expect(ctxMock.commit.mock.calls[1][0]).toStrictEqual("updatePaginationForQuery");
 				expect(ctxMock.commit.mock.calls[2][0]).toStrictEqual("set");
 				expect(ctxMock.commit.mock.calls[3][0]).toStrictEqual("setStatus");
 				expect(ctxMock.commit.mock.calls[3][1]).toStrictEqual("completed");
@@ -76,9 +72,7 @@ describe("store/users", () => {
 				});
 
 				await actions.createTeacher(ctxMock, teacherDataMock);
-				expect(receivedRequests[0].url).toStrictEqual(
-					"/v1/users/admin/teachers"
-				);
+				expect(receivedRequests[0].url).toStrictEqual("/v1/users/admin/teachers");
 				expect(receivedRequests[0].params).toStrictEqual(teacherDataMock);
 			});
 		});
@@ -100,9 +94,7 @@ describe("store/users", () => {
 				});
 
 				await actions.sendRegistrationLink(ctxMock, payloadMock);
-				expect(receivedRequests[0].url).toStrictEqual(
-					"/v1/users/mail/registrationLink"
-				);
+				expect(receivedRequests[0].url).toStrictEqual("/v1/users/mail/registrationLink");
 				expect(receivedRequests[0].params).toStrictEqual(payloadMock);
 			});
 		});
@@ -124,9 +116,7 @@ describe("store/users", () => {
 				});
 
 				await actions.getQrRegistrationLinks(ctxMock, payloadMock);
-				expect(receivedRequests[0].url).toStrictEqual(
-					"/v1/users/qrRegistrationLink"
-				);
+				expect(receivedRequests[0].url).toStrictEqual("/v1/users/qrRegistrationLink");
 				expect(receivedRequests[0].params).toStrictEqual(payloadMock);
 			});
 		});
@@ -154,9 +144,7 @@ describe("store/users", () => {
 				};
 
 				await actions.createStudent(ctxMock, payloadMock);
-				expect(receivedRequests[0].url).toStrictEqual(
-					"/v1/users/admin/students"
-				);
+				expect(receivedRequests[0].url).toStrictEqual("/v1/users/admin/students");
 				expect(receivedRequests[0].params).toStrictEqual(studentData);
 			});
 
@@ -182,9 +170,7 @@ describe("store/users", () => {
 
 				await actions.createStudent(ctxMock, payloadMock);
 				expect(spyCommit.mock.calls[1][0]).toStrictEqual("setBusinessError");
-				expect(spyCommit.mock.calls[1][1]).toStrictEqual(
-					errorMock.response.data
-				);
+				expect(spyCommit.mock.calls[1][1]).toStrictEqual(errorMock.response.data);
 			});
 		});
 		describe("deleteUsers", () => {
@@ -209,9 +195,7 @@ describe("store/users", () => {
 					params: { ids: payload.ids },
 				});
 
-				const removeCommits = spyCommit.mock.calls.filter(
-					(c) => c[0] === "remove"
-				);
+				const removeCommits = spyCommit.mock.calls.filter((c) => c[0] === "remove");
 				expect(removeCommits).toHaveLength(2);
 				expect(removeCommits[0][1]).toStrictEqual(payload.ids[0]);
 				expect(removeCommits[1][1]).toStrictEqual(payload.ids[1]);

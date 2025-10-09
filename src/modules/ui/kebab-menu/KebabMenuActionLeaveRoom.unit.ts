@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import KebabMenuActionLeaveRoom from "./KebabMenuActionLeaveRoom.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("KebabMenuActionLeaveRoom", () => {
 	it("should render the component", async () => {

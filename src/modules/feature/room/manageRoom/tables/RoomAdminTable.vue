@@ -9,15 +9,8 @@
 	>
 		<template #[`item.owner`]="{ item }: RoomAdminTableItem">
 			<span data-testid="room-admin-table-owner-not-existing">
-				<VIcon
-					v-if="!item.owner"
-					:icon="mdiAlert"
-					color="warning"
-					class="text-medium-emphasis"
-				/>
-				{{
-					item.owner || t("pages.rooms.administration.table.row.owner.notExist")
-				}}
+				<VIcon v-if="!item.owner" :icon="mdiAlert" color="warning" class="text-medium-emphasis" />
+				{{ item.owner || t("pages.rooms.administration.table.row.owner.notExist") }}
 			</span>
 		</template>
 
@@ -31,9 +24,7 @@
 				"
 			>
 				<KebabMenuActionRoomMembers
-					:members-info-text="
-						t('pages.rooms.administration.table.actionMenu.manageRoom')
-					"
+					:members-info-text="t('pages.rooms.administration.table.actionMenu.manageRoom')"
 					:data-testid="`menu-manage-room-${item.roomId}`"
 					@click="onManageRoom(item.roomId)"
 				/>
@@ -58,23 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { DataTable } from "@ui-data-table";
-import { useAdministrationRoomStore } from "@data-room";
-import {
-	KebabMenu,
-	KebabMenuAction,
-	KebabMenuActionRoomMembers,
-} from "@ui-kebab-menu";
-import { storeToRefs } from "pinia";
-import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { computed } from "vue";
-import {
-	useConfirmationDialog,
-	ConfirmationDialog,
-} from "@ui-confirmation-dialog";
 import { RoomStatsItemResponse } from "@/serverApi/v3";
+import { useAdministrationRoomStore } from "@data-room";
+import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DataTable } from "@ui-data-table";
+import { KebabMenu, KebabMenuAction, KebabMenuActionRoomMembers } from "@ui-kebab-menu";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { DataTableHeader } from "vuetify";
 
 type RoomAdminTableItem = { item: RoomStatsItemResponse };

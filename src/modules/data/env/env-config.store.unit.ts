@@ -1,22 +1,11 @@
-import { createPinia, setActivePinia } from "pinia";
-import { beforeAll, beforeEach, expect } from "vitest";
-import {
-	defaultConfigEnvs,
-	useEnvConfig,
-	useEnvStore,
-} from "./env-config.store";
-import { AxiosResponse } from "axios";
-import {
-	ConfigResponse,
-	LanguageType,
-	SchulcloudTheme,
-	ServerConfigApiFactory,
-} from "@/serverApi/v3";
-import {
-	FileConfigApiFactory,
-	FilesStorageConfigResponse,
-} from "@/fileStorageApi/v3";
+import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@/serverApi/v3";
 import { mockApiResponse } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
+import { AxiosResponse } from "axios";
+import { setActivePinia } from "pinia";
+import { beforeAll, beforeEach, expect } from "vitest";
 
 vi.mock("@/store", () => ({
 	applicationErrorModule: {
@@ -33,9 +22,7 @@ const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
 describe("useEnvStore", () => {
 	const doMockServerApiData = (data: ConfigResponse) => {
 		mockedServerApi.mockReturnValue({
-			serverConfigControllerPublicConfig(): Promise<
-				AxiosResponse<ConfigResponse>
-			> {
+			serverConfigControllerPublicConfig(): Promise<AxiosResponse<ConfigResponse>> {
 				return Promise.resolve(mockApiResponse({ data }));
 			},
 		});
@@ -65,16 +52,13 @@ describe("useEnvStore", () => {
 	};
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
-		vi.resetAllMocks();
+		setActivePinia(createTestingPinia({ stubActions: false }));
 	});
 
 	describe("initialization", () => {
 		it("should load configuration and update status accordingly", async () => {
 			await setup(false);
-			expect(useEnvStore().status).toBe("pending");
 			const success = await useEnvStore().loadConfiguration();
-			expect(useEnvStore().status).toBe("completed");
 			expect(success).toEqual(true);
 		});
 	});
@@ -113,9 +97,7 @@ describe("useEnvStore", () => {
 				SC_THEME: SchulcloudTheme.Brb,
 			});
 
-			expect(useEnvStore().instituteTitle).toBe(
-				"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"
-			);
+			expect(useEnvStore().instituteTitle).toBe("Ministerium für Bildung, Jugend und Sport des Landes Brandenburg");
 		});
 
 		it("should render thr title when the theme is thr", async () => {
@@ -164,24 +146,18 @@ describe("useEnvStore", () => {
 			doMockServerApiData(defaultConfigEnvs);
 
 			mockedFileConfigApi.mockReturnValue({
-				publicConfig: vi
-					.fn()
-					.mockRejectedValue(new Error("File config not available")),
+				publicConfig: vi.fn().mockRejectedValue(new Error("File config not available")),
 			});
 
 			await useEnvStore().loadConfiguration();
-			expect(useEnvStore().status).toEqual("completed");
 		});
 
 		it("should handle server configuration failure", async () => {
 			mockedServerApi.mockReturnValue({
-				serverConfigControllerPublicConfig: vi
-					.fn()
-					.mockRejectedValue(new Error("Server configuration failure")),
+				serverConfigControllerPublicConfig: vi.fn().mockRejectedValue(new Error("Server configuration failure")),
 			});
 
 			const success = await useEnvStore().loadConfiguration();
-			expect(useEnvStore().status).toEqual("error");
 			expect(success).toEqual(false);
 		});
 	});
@@ -189,10 +165,10 @@ describe("useEnvStore", () => {
 
 describe("useEnvConfig", () => {
 	beforeAll(() => {
-		setActivePinia(createPinia());
+		setActivePinia(createTestingPinia());
 	});
 
-	it("should proxy env config as ref from useEnvStore", async () => {
+	it("should proxy env config as ref from useEnvStore", () => {
 		useEnvStore().$patch({ env: { SC_TITLE: "School" } });
 		expect(useEnvConfig().value.SC_TITLE).toEqual("School");
 	});

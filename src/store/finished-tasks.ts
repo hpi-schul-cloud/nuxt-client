@@ -1,9 +1,9 @@
-import { tasksModule } from "@/store";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { Task } from "./types/tasks";
+import { tasksModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "finishedTasksModule",
@@ -40,10 +40,7 @@ export default class FinishedTasksModule extends VuexModule {
 				return;
 			}
 
-			const response = await this.taskApi.taskControllerFindAllFinished(
-				skip,
-				limit
-			);
+			const response = await this.taskApi.taskControllerFindAllFinished(skip, limit);
 
 			await new Promise((resolve) => setTimeout(resolve, 300));
 			this.setTasks(this.tasks.concat(response.data.data));
@@ -77,10 +74,7 @@ export default class FinishedTasksModule extends VuexModule {
 			const tasks: Task[] = [];
 
 			do {
-				const response = await this.taskApi.taskControllerFindAllFinished(
-					skip,
-					limit
-				);
+				const response = await this.taskApi.taskControllerFindAllFinished(skip, limit);
 				tasks.push(...response.data.data);
 
 				skip += limit;

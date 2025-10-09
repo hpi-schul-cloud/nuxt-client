@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import FolderTitleInput from "./FolderTitleInput.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/lib/components/index";
-import FolderTitleInput from "./FolderTitleInput.vue";
 
 const VALID_TITLE = "My Folder Title";
 const INVALID_TITLE = "<A";
@@ -33,9 +30,7 @@ describe("FolderTitleInput.vue", () => {
 				const { wrapper } = setup();
 
 				await wrapper.findComponent(VTextField).setValue(VALID_TITLE);
-				await wrapper
-					.find('[data-testid="folder-title-text-field-in-card"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="folder-title-text-field-in-card"]').trigger("click");
 
 				const alerts = wrapper.find('[role="alert"]');
 
@@ -60,9 +55,7 @@ describe("FolderTitleInput.vue", () => {
 				const { wrapper } = setup();
 
 				await wrapper.findComponent(VTextField).setValue(INVALID_TITLE);
-				await wrapper
-					.find('[data-testid="folder-title-text-field-in-card"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="folder-title-text-field-in-card"]').trigger("click");
 
 				const alerts = wrapper.find('[role="alert"]');
 
@@ -86,9 +79,7 @@ describe("FolderTitleInput.vue", () => {
 			it("should show replace value with default message", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
-					.find('[data-testid="folder-title-text-field-in-card"]')
-					.trigger("submit.prevent");
+				await wrapper.find('[data-testid="folder-title-text-field-in-card"]').trigger("submit.prevent");
 
 				const textField = wrapper
 					.findComponent('[data-testid="folder-title-text-field-in-card"]')
@@ -101,9 +92,7 @@ describe("FolderTitleInput.vue", () => {
 				const { wrapper } = setup();
 
 				await wrapper.findComponent(VTextField).setValue("");
-				await wrapper
-					.find('[data-testid="save-folder-title-in-card"]')
-					.trigger("click");
+				await wrapper.find('[data-testid="save-folder-title-in-card"]').trigger("click");
 				await nextTick();
 
 				expect(wrapper.emitted("update:title")).toEqual([[""]]);

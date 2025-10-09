@@ -16,41 +16,23 @@ import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 
 export const useMediaBoardApi = () => {
-	const mediaBoardApi: MediaBoardApiInterface = MediaBoardApiFactory(
-		undefined,
-		"/v3",
-		$axios
-	);
-	const mediaLineApi: MediaLineApiInterface = MediaLineApiFactory(
-		undefined,
-		"/v3",
-		$axios
-	);
-	const mediaElementApi: MediaElementApiInterface = MediaElementApiFactory(
-		undefined,
-		"/v3",
-		$axios
-	);
+	const mediaBoardApi: MediaBoardApiInterface = MediaBoardApiFactory(undefined, "/v3", $axios);
+	const mediaLineApi: MediaLineApiInterface = MediaLineApiFactory(undefined, "/v3", $axios);
+	const mediaElementApi: MediaElementApiInterface = MediaElementApiFactory(undefined, "/v3", $axios);
 
 	const getMediaBoardForUser = async (): Promise<MediaBoardResponse> => {
-		const response: AxiosResponse<MediaBoardResponse> =
-			await mediaBoardApi.mediaBoardControllerGetMediaBoardForUser();
+		const response: AxiosResponse<MediaBoardResponse> = await mediaBoardApi.mediaBoardControllerGetMediaBoardForUser();
 
 		return response.data;
 	};
 
-	const updateBoardLayout = async (
-		boardId: string,
-		layout: BoardLayout
-	): Promise<void> => {
+	const updateBoardLayout = async (boardId: string, layout: BoardLayout): Promise<void> => {
 		await mediaBoardApi.mediaBoardControllerSetMediaBoardLayout(boardId, {
 			layout,
 		});
 	};
 
-	const getAvailableMedia = async (
-		boardId: string
-	): Promise<MediaAvailableLineResponse> => {
+	const getAvailableMedia = async (boardId: string): Promise<MediaAvailableLineResponse> => {
 		const response: AxiosResponse<MediaAvailableLineResponse> =
 			await mediaBoardApi.mediaBoardControllerGetMediaAvailableLine(boardId);
 
@@ -58,70 +40,44 @@ export const useMediaBoardApi = () => {
 	};
 
 	const createLine = async (boardId: string): Promise<MediaLineResponse> => {
-		const response: AxiosResponse<MediaLineResponse> =
-			await mediaBoardApi.mediaBoardControllerCreateLine(boardId);
+		const response: AxiosResponse<MediaLineResponse> = await mediaBoardApi.mediaBoardControllerCreateLine(boardId);
 
 		return response.data;
 	};
 
-	const moveLine = async (
-		lineId: string,
-		toBoardId: string,
-		toPosition: number
-	): Promise<void> => {
+	const moveLine = async (lineId: string, toBoardId: string, toPosition: number): Promise<void> => {
 		await mediaLineApi.mediaLineControllerMoveLine(lineId, {
 			toBoardId,
 			toPosition,
 		});
 	};
 
-	const updateLineTitle = async (
-		lineId: string,
-		title: string
-	): Promise<void> => {
+	const updateLineTitle = async (lineId: string, title: string): Promise<void> => {
 		await mediaLineApi.mediaLineControllerUpdateLineTitle(lineId, { title });
 	};
 
-	const updateLineColor = async (
-		lineId: string,
-		backgroundColor: MediaBoardColors
-	): Promise<void> => {
+	const updateLineColor = async (lineId: string, backgroundColor: MediaBoardColors): Promise<void> => {
 		await mediaLineApi.mediaLineControllerUpdateBackgroundColor(lineId, {
 			backgroundColor,
 		});
 	};
 
-	const updateAvailableLineColor = async (
-		boardId: string,
-		backgroundColor: MediaBoardColors
-	): Promise<void> => {
-		await mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor(
-			boardId,
-			{
-				backgroundColor,
-			}
-		);
+	const updateAvailableLineColor = async (boardId: string, backgroundColor: MediaBoardColors): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor(boardId, {
+			backgroundColor,
+		});
 	};
 
-	const updateLineCollapsed = async (
-		lineId: string,
-		value: boolean
-	): Promise<void> => {
+	const updateLineCollapsed = async (lineId: string, value: boolean): Promise<void> => {
 		await mediaLineApi.mediaLineControllerCollapseMediaLine(lineId, {
 			collapsed: value,
 		});
 	};
 
-	const updateAvailableLineCollapsed = async (
-		boardId: string,
-		value: boolean
-	): Promise<void> => {
-		await mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine(
-			boardId,
-			{
-				collapsed: value,
-			}
-		);
+	const updateAvailableLineCollapsed = async (boardId: string, value: boolean): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine(boardId, {
+			collapsed: value,
+		});
 	};
 
 	const deleteLine = async (lineId: string): Promise<void> => {
@@ -143,11 +99,7 @@ export const useMediaBoardApi = () => {
 		return response.data;
 	};
 
-	const moveElement = async (
-		elementId: string,
-		toLineId: string,
-		toPosition: number
-	): Promise<void> => {
+	const moveElement = async (elementId: string, toLineId: string, toPosition: number): Promise<void> => {
 		await mediaElementApi.mediaElementControllerMoveElement(elementId, {
 			toLineId,
 			toPosition,

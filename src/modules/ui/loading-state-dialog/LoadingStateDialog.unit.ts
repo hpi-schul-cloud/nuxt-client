@@ -1,12 +1,9 @@
+import LoadingStateDialog from "./LoadingStateDialog.vue";
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VCard } from "vuetify/lib/components/index";
-import LoadingStateDialog from "./LoadingStateDialog.vue";
 
 describe("@/components/molecules/LoadingModal", () => {
 	let loadingStateModuleMock: LoadingStateModule;
@@ -80,9 +77,7 @@ describe("@/components/molecules/LoadingModal", () => {
 
 		const wrapper = mountComponent();
 
-		expect(wrapper.findComponent({ name: "v-progress-linear" }).exists()).toBe(
-			true
-		);
+		expect(wrapper.findComponent({ name: "v-progress-linear" }).exists()).toBe(true);
 	});
 
 	it("should bind the dialog to our store", () => {

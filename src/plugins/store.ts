@@ -1,17 +1,15 @@
 // idea from: https://github.com/garyo/vuex-module-decorators-example/blob/master/src/store/index.ts
 
-import { createStore, Store } from "vuex";
-// Note: you shouldn't need to import store modules here.
-import { initializeStores, modules } from "@/store/store-accessor";
 import activation from "@/store/activation";
 import { bulkConsent } from "@/store/bulkConsent";
-import calendar from "@/store/calendar";
 import classes from "@/store/classes";
 import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
-import lessons from "@/store/lessons";
+// Note: you shouldn't need to import store modules here.
+import { initializeStores, modules } from "@/store/store-accessor";
 import uiState from "@/store/uiState";
 import users from "@/store/users";
+import { createStore, Store } from "vuex";
 
 // Initialize the modules using a Vuex plugin that runs when the root store is
 // first initialized. This is vital to using static modules because the
@@ -28,11 +26,9 @@ export default createStore({
 		...modules,
 		activation,
 		bulkConsent,
-		calendar,
 		classes,
 		courses,
 		"ldap-config": ldapConfig,
-		lessons,
 		uiState,
 		users,
 	},

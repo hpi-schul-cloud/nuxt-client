@@ -3,13 +3,9 @@ export function useStorage() {
 		localStorage.setItem(key, value);
 	};
 
-	const get = (key: string) => {
-		return localStorage.getItem(key);
-	};
+	const get = (key: string) => localStorage.getItem(key);
 
-	const getMultiple = (key: string[]) => {
-		return key.map((item: string) => localStorage.getItem(item));
-	};
+	const getMultiple = (key: string[]) => key.map((item: string) => localStorage.getItem(item));
 
 	const remove = (key: string): void => {
 		localStorage.removeItem(key);

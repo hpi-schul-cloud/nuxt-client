@@ -1,10 +1,10 @@
+import { FileRecordItem } from "../types/filerecord-item";
+import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useLightBox } from "@ui-light-box";
 import { ref } from "vue";
-import { FileRecordItem } from "../types/filerecord-item";
-import FileInteractionHandler from "./FileInteractionHandler.vue";
 
 vi.mock("@ui-light-box");
 
@@ -34,10 +34,7 @@ describe("FileInteractionHandler", () => {
 	};
 
 	describe("when file is selectable", () => {
-		const setup = (props: {
-			previewStatus?: FilePreviewStatus;
-			mimeType?: string;
-		}) => {
+		const setup = (props: { previewStatus?: FilePreviewStatus; mimeType?: string }) => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: props.previewStatus,
 				mimeType: props.mimeType,
@@ -133,10 +130,7 @@ describe("FileInteractionHandler", () => {
 				button.trigger("click");
 
 				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
-				expect(windowOpenSpy).toHaveBeenCalledWith(
-					fileRecordItem.url,
-					"_blank"
-				);
+				expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordItem.url, "_blank");
 				expect(useLightBoxMock().open).not.toHaveBeenCalled();
 			});
 		});

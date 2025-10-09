@@ -1,10 +1,7 @@
-import { mount } from "@vue/test-utils";
-import { mdiInformation } from "@icons/material";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import InfoChip from "./InfoChip.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mdiInformation } from "@icons/material";
+import { mount } from "@vue/test-utils";
 import { VChip, VIcon } from "vuetify/lib/components/index";
 
 describe("InfoChip", () => {

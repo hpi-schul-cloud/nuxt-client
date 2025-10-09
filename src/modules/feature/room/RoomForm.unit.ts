@@ -1,14 +1,11 @@
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
-import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import RoomForm from "./RoomForm.vue";
-import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { RoomFeatures } from "@/serverApi/v3";
+import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { roomFactory } from "@@/tests/test-utils";
-import { VTextField } from "vuetify/components";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { VTextField } from "vuetify/components";
 
 describe("@feature-room/RoomForm", () => {
 	let wrapper: VueWrapper<InstanceType<typeof RoomForm>>;
@@ -65,9 +62,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue("<abc");
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain(
-				"common.validation.containsOpeningTag"
-			);
+			expect(textField.text()).toContain("common.validation.containsOpeningTag");
 		});
 
 		it("should show error when name exceeds max length", async () => {
@@ -89,9 +84,7 @@ describe("@feature-room/RoomForm", () => {
 			it("should not emit 'save' event", async () => {
 				const { wrapper } = setup({ name: "" });
 
-				const saveBtn = wrapper.findComponent(
-					"[data-testid='room-form-save-btn']"
-				);
+				const saveBtn = wrapper.findComponent("[data-testid='room-form-save-btn']");
 				await saveBtn.trigger("click");
 				await flushPromises();
 
@@ -107,9 +100,7 @@ describe("@feature-room/RoomForm", () => {
 
 				expect(document.activeElement).not.toEqual(invalidInput.element);
 
-				const saveBtn = wrapper.getComponent(
-					"[data-testid='room-form-save-btn']"
-				);
+				const saveBtn = wrapper.getComponent("[data-testid='room-form-save-btn']");
 				await saveBtn.trigger("click");
 				await flushPromises();
 
@@ -121,9 +112,7 @@ describe("@feature-room/RoomForm", () => {
 			it("should emit 'save' event", async () => {
 				const { room, wrapper } = setup();
 
-				const saveBtn = wrapper.getComponent(
-					"[data-testid='room-form-save-btn']"
-				);
+				const saveBtn = wrapper.getComponent("[data-testid='room-form-save-btn']");
 				await saveBtn.trigger("click");
 				await flushPromises();
 
@@ -140,9 +129,7 @@ describe("@feature-room/RoomForm", () => {
 			it("should emit cancel", async () => {
 				const { wrapper } = setup();
 
-				const cancelButton = wrapper.get(
-					'[data-testid="room-form-cancel-btn"]'
-				);
+				const cancelButton = wrapper.get('[data-testid="room-form-cancel-btn"]');
 				await cancelButton.trigger("click");
 
 				expect(wrapper.emitted("cancel")).toHaveLength(1);
@@ -160,9 +147,7 @@ describe("@feature-room/RoomForm", () => {
 
 				expect(textField.props().modelValue).toEqual("New Name");
 
-				const cancelButton = wrapper.get(
-					'[data-testid="room-form-cancel-btn"]'
-				);
+				const cancelButton = wrapper.get('[data-testid="room-form-cancel-btn"]');
 				await cancelButton.trigger("click");
 
 				expect(wrapper.emitted("cancel")).toBeUndefined();
@@ -173,24 +158,16 @@ describe("@feature-room/RoomForm", () => {
 	describe("checkbox for video conference feature", () => {
 		it("should render the checkbox", () => {
 			const { wrapper } = setup();
-			const checkbox = wrapper.find(
-				'[data-testid="room-video-conference-checkbox"]'
-			);
+			const checkbox = wrapper.find('[data-testid="room-video-conference-checkbox"]');
 			expect(checkbox.exists()).toBe(true);
-			expect(checkbox.text()).toContain(
-				"components.roomForm.labels.videoConference.label"
-			);
-			expect(checkbox.text()).toContain(
-				"components.roomForm.labels.videoConference.helperText"
-			);
+			expect(checkbox.text()).toContain("components.roomForm.labels.videoConference.label");
+			expect(checkbox.text()).toContain("components.roomForm.labels.videoConference.helperText");
 		});
 
 		it("should not check the video conference checkbox if the feature is not enabled", () => {
 			const { wrapper } = setup();
 
-			const checkbox = wrapper.get(
-				'[data-testid="room-video-conference-checkbox"]'
-			);
+			const checkbox = wrapper.get('[data-testid="room-video-conference-checkbox"]');
 			expect(checkbox.get("input").element.checked).toBe(false);
 		});
 
@@ -199,18 +176,14 @@ describe("@feature-room/RoomForm", () => {
 				features: [RoomFeatures.EditorManageVideoconference],
 			});
 
-			const checkbox = wrapper.get(
-				'[data-testid="room-video-conference-checkbox"]'
-			);
+			const checkbox = wrapper.get('[data-testid="room-video-conference-checkbox"]');
 			expect(checkbox.get("input").element.checked).toBe(true);
 		});
 
 		it("should add video conference feature", async () => {
 			const { room, wrapper } = setup();
 
-			const checkbox = wrapper.getComponent(
-				'[data-testid="room-video-conference-checkbox"]'
-			);
+			const checkbox = wrapper.getComponent('[data-testid="room-video-conference-checkbox"]');
 			await checkbox.setValue(true);
 
 			expect(room.features).toEqual([RoomFeatures.EditorManageVideoconference]);
@@ -221,9 +194,7 @@ describe("@feature-room/RoomForm", () => {
 				features: [RoomFeatures.EditorManageVideoconference],
 			});
 
-			const checkbox = wrapper.getComponent(
-				'[data-testid="room-video-conference-checkbox"]'
-			);
+			const checkbox = wrapper.getComponent('[data-testid="room-video-conference-checkbox"]');
 			await checkbox.setValue(false);
 
 			expect(room.features).toEqual([]);

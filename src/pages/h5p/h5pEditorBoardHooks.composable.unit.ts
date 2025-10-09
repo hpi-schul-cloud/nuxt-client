@@ -1,3 +1,4 @@
+import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import { ElementWithParentHierarchyResponse } from "@/serverApi/v3";
 import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -10,15 +11,10 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	UpdateElementRequestPayload,
-	useBoardApi,
-	useCardStore,
-} from "@data-board";
+import { UpdateElementRequestPayload, useBoardApi, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 
 vi.mock("@data-board");
 
@@ -43,16 +39,13 @@ describe("useH5pEditorBoardHooks", () => {
 
 		const applicationErrorModule = createModuleMocks(ApplicationErrorModule);
 
-		const composable = mountComposable(
-			() => useH5pEditorBoardHooks(elementId),
-			{
-				global: {
-					provide: {
-						[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
-					},
+		const composable = mountComposable(() => useH5pEditorBoardHooks(elementId), {
+			global: {
+				provide: {
+					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
 				},
-			}
-		);
+			},
+		});
 
 		return {
 			composable,
@@ -90,9 +83,7 @@ describe("useH5pEditorBoardHooks", () => {
 
 				await composable.onCreate();
 
-				expect(
-					useBoardApiMock.getElementWithParentHierarchyCall
-				).toHaveBeenCalledWith(elementId);
+				expect(useBoardApiMock.getElementWithParentHierarchyCall).toHaveBeenCalledWith(elementId);
 			});
 
 			it("should set the element state", async () => {
@@ -106,8 +97,7 @@ describe("useH5pEditorBoardHooks", () => {
 
 		describe("when a non h5p element is loaded", () => {
 			const setup = () => {
-				const { composable, elementId, applicationErrorModule } =
-					getComposable();
+				const { composable, elementId, applicationErrorModule } = getComposable();
 
 				const element = externalToolElementResponseFactory.build({
 					id: elementId,
@@ -131,9 +121,7 @@ describe("useH5pEditorBoardHooks", () => {
 
 				await composable.onCreate();
 
-				expect(applicationErrorModule.setError).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.NotFound)
-				);
+				expect(applicationErrorModule.setError).toHaveBeenCalledWith(createApplicationError(HttpStatusCode.NotFound));
 			});
 
 			it("should set the element state", async () => {
@@ -172,9 +160,7 @@ describe("useH5pEditorBoardHooks", () => {
 
 				await composable.afterSave(contentId);
 
-				expect(useCardStoreMock.updateElementRequest).toHaveBeenCalledWith<
-					[UpdateElementRequestPayload]
-				>({
+				expect(useCardStoreMock.updateElementRequest).toHaveBeenCalledWith<[UpdateElementRequestPayload]>({
 					element: {
 						...element,
 						content: {

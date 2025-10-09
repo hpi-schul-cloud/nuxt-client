@@ -5,21 +5,20 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
+import CommonCartridgeExportModule from "./common-cartridge-export";
 import ApplicationErrorModule from "@/store/application-error";
-import AuthModule from "@/store/auth";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
+import CourseRoomDetailsModule from "@/store/course-room-details";
+import CourseRoomListModule from "@/store/course-room-list";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
-import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import CourseRoomDetailsModule from "@/store/course-room-details";
-import CourseRoomListModule from "@/store/course-room-list";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -31,13 +30,11 @@ import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import CommonCartridgeExportModule from "./common-cartridge-export";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
 export let applicationErrorModule: ApplicationErrorModule;
-export let authModule: AuthModule;
 export let contentModule: ContentModule;
 export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
@@ -46,7 +43,6 @@ export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
-export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
@@ -65,7 +61,6 @@ export let commonCartridgeImportModule: CommonCartridgeImportModule;
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
 	applicationErrorModule = getModule(ApplicationErrorModule, store);
-	authModule = getModule(AuthModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	filePathsModule = getModule(FilePaths, store);
@@ -74,7 +69,6 @@ export function initializeStores(store: Store<unknown>): void {
 	importUsersModule = getModule(ImportUsersModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
-	notifierModule = getModule(NotifierModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
@@ -96,7 +90,6 @@ export function initializeStores(store: Store<unknown>): void {
 // (This is required!)
 export const modules = {
 	applicationErrorModule: ApplicationErrorModule,
-	authModule: AuthModule,
 	contentModule: ContentModule,
 	copyModule: CopyModule,
 	filePathsModule: FilePaths,
@@ -105,7 +98,6 @@ export const modules = {
 	importUsersModule: ImportUsersModule,
 	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,
-	notifierModule: NotifierModule,
 	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,

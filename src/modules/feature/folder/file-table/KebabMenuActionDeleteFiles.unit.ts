@@ -1,19 +1,13 @@
+import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import { FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
-import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 
 describe("KebabMenuActionDeleteFiles", () => {
-	const setupWrapper = (props: {
-		fileRecords: FileRecord[];
-		selectedIds: string[];
-	}) => {
+	const setupWrapper = (props: { fileRecords: FileRecord[]; selectedIds: string[] }) => {
 		const wrapper = mount(KebabMenuActionDeleteFiles, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

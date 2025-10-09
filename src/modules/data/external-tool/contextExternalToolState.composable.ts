@@ -1,8 +1,8 @@
+import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
+import { ContextExternalTool, ContextExternalToolSave } from "./types";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { Ref, ref } from "vue";
-import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
-import { ContextExternalTool, ContextExternalToolSave } from "./types";
 
 export const useContextExternalToolState = () => {
 	const {
@@ -15,16 +15,12 @@ export const useContextExternalToolState = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref(undefined);
 
-	const fetchContextExternalTool = async (
-		contextExternalToolId: string
-	): Promise<void> => {
+	const fetchContextExternalTool = async (contextExternalToolId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
 		try {
-			contextExternalTool.value = await fetchContextExternalToolCall(
-				contextExternalToolId
-			);
+			contextExternalTool.value = await fetchContextExternalToolCall(contextExternalToolId);
 		} catch (errorResponse) {
 			const apiError = mapAxiosErrorToResponseError(errorResponse);
 
@@ -44,8 +40,7 @@ export const useContextExternalToolState = () => {
 		error.value = undefined;
 
 		try {
-			const savedContextExternalTool =
-				await createContextExternalToolCall(contextExternalTool);
+			const savedContextExternalTool = await createContextExternalToolCall(contextExternalTool);
 
 			return savedContextExternalTool;
 		} catch (errorResponse) {
@@ -66,10 +61,7 @@ export const useContextExternalToolState = () => {
 		error.value = undefined;
 
 		try {
-			const savedContextExternalTool = await updateContextExternalToolCall(
-				contextExternalToolId,
-				contextExternalTool
-			);
+			const savedContextExternalTool = await updateContextExternalToolCall(contextExternalToolId, contextExternalTool);
 
 			return savedContextExternalTool;
 		} catch (errorResponse) {
@@ -83,9 +75,7 @@ export const useContextExternalToolState = () => {
 		}
 	};
 
-	const deleteContextExternalTool = async (
-		contextExternalToolId: string
-	): Promise<void> => {
+	const deleteContextExternalTool = async (contextExternalToolId: string): Promise<void> => {
 		error.value = undefined;
 
 		try {

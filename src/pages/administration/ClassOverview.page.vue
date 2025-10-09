@@ -46,11 +46,7 @@
 			</template>
 			<template #[`item.synchronizedCourses`]="{ item }">
 				<span data-testid="class-table-synced-courses">
-					{{
-						(item.synchronizedCourses || [])
-							.map((course: CourseInfo) => course.name)
-							.join(", ") || ""
-					}}
+					{{ (item.synchronizedCourses || []).map((course: CourseInfo) => course.name).join(", ") || "" }}
 				</span>
 			</template>
 			<template #[`item.externalSourceName`]="{ item }">
@@ -221,36 +217,25 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ClassSortQueryType, SchoolYearQueryType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
+import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	AUTH_MODULE_KEY,
-	GROUP_MODULE_KEY,
-	injectStrict,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
+import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStore } from "@data-app";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
-import {
-	mdiAccountGroupOutline,
-	mdiArrowUp,
-	mdiPencilOutline,
-	mdiSyncOff,
-	mdiTrashCanOutline,
-} from "@icons/material";
-import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { mdiAccountGroupOutline, mdiArrowUp, mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
+import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { DataTableHeader } from "vuetify";
-import { useEnvConfig, useEnvStore } from "@data-env";
-import { storeToRefs } from "pinia";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -266,8 +251,8 @@ const props = defineProps({
 	},
 });
 
+const { hasPermission } = useAppStore();
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 const route = useRoute();
@@ -315,57 +300,37 @@ const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	}
 });
 
-const nextYear: ComputedRef<string> = computed(
-	() => schoolsModule.getSchool.years.nextYear.name
-);
+const nextYear = computed(() => schoolsModule.getSchool.years.nextYear.name);
 
-const currentYear: ComputedRef<string> = computed(
-	() => schoolsModule.getSchool.years.activeYear.name
-);
+const currentYear = computed(() => schoolsModule.getSchool.years.activeYear.name);
 
-const classes: ComputedRef<ClassInfo[]> = computed(
-	() => groupModule.getClasses
-);
+const classes = computed(() => groupModule.getClasses);
 
-const showSourceHeader: ComputedRef<boolean> = computed(() => {
-	return classes.value.some(
-		(classItem) => classItem.externalSourceName !== undefined
-	);
-});
+const showSourceHeader = computed(() => classes.value.some((classItem) => classItem.externalSourceName !== undefined));
 
-const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
+const isLoading = computed(() => groupModule.getLoading);
 
-const hasEditPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-);
+const hasEditPermission = hasPermission(Permission.ClassEdit);
+const hasCreatePermission = hasPermission(Permission.ClassCreate);
 
-const showClassAction = (item: ClassInfo) =>
-	hasEditPermission.value && item.type === ClassRootType.Class;
+const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Class;
 
-const showGroupAction = (item: ClassInfo) =>
-	hasEditPermission.value && item.type === ClassRootType.Group;
+const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Group;
 
-const hasCreatePermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_CREATE".toLowerCase())
-);
+const isDeleteDialogOpen = ref(false);
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
-const isEndSyncDialogOpen: Ref<boolean> = ref(false);
+const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
 
-const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.name || "???"
-);
+const selectedItemName = computed(() => selectedItem.value?.name || "???");
 
 const selectedItemForSync: ComputedRef<{
 	courseName: string;
 	groupName: string;
 	courseId?: string;
 }> = computed(() => {
-	const synchronizedCourse: CourseInfo | undefined =
-		selectedItem.value?.synchronizedCourse;
+	const synchronizedCourse: CourseInfo | undefined = selectedItem.value?.synchronizedCourse;
 
 	return {
 		courseId: synchronizedCourse?.id,
@@ -389,15 +354,11 @@ const onCancelClassDeletion = () => {
 	isDeleteDialogOpen.value = false;
 };
 
-const pagination: ComputedRef<Pagination> = computed(
-	() => groupModule.getPagination
-);
+const pagination: ComputedRef<Pagination> = computed(() => groupModule.getPagination);
 
 const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
-const courseSyncEnabled = computed(
-	() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
-);
+const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
 
 const headers = computed(() => {
 	const headerList: DataTableHeader<ClassInfo>[] = [
@@ -410,10 +371,7 @@ const headers = computed(() => {
 	if (courseSyncEnabled.value) {
 		headerList.push({
 			key: "synchronizedCourses",
-			value: (item: ClassInfo) =>
-				item.synchronizedCourses
-					?.map((course: CourseInfo): string => course.name)
-					.join(", "),
+			value: (item: ClassInfo) => item.synchronizedCourses?.map((course: CourseInfo): string => course.name).join(", "),
 			title: t("pages.administration.classes.header.sync"),
 			sortable: true,
 		});
@@ -471,13 +429,10 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
 	const fieldToSortBy: ClassSortItem = sortBy[0];
-	const key: ClassSortQueryType | undefined = fieldToSortBy
-		? fieldToSortBy.key
-		: undefined;
+	const key: ClassSortQueryType | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
 	groupModule.setSortBy(key);
 
-	const sortOrder =
-		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
+	const sortOrder = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 	groupModule.setSortOrder(sortOrder);
 
 	await loadClassList();

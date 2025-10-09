@@ -1,10 +1,5 @@
 <template>
-	<VDialog
-		v-model="isOpen"
-		:width="xs ? 'auto' : 480"
-		data-testid="dialog-leave-room-owner"
-		max-width="480"
-	>
+	<VDialog v-model="isOpen" :width="xs ? 'auto' : 480" data-testid="dialog-leave-room-owner" max-width="480">
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
@@ -35,10 +30,10 @@
 </template>
 
 <script setup lang="ts">
+import { WarningAlert } from "@ui-alert";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
-import { WarningAlert } from "@ui-alert";
 
 defineEmits(["update:modelValue"]);
 

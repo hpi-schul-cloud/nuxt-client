@@ -10,18 +10,14 @@
 				:active="isDeleting"
 				:percent="deletedPercent"
 				:title="$t('pages.administration.teachers.index.remove.progress.title')"
-				:description="
-					$t('pages.administration.teachers.index.remove.progress.description')
-				"
+				:description="$t('pages.administration.teachers.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
 
 			<base-input
 				v-model="searchQuery"
 				type="text"
-				:placeholder="
-					$t('pages.administration.teachers.index.searchbar.placeholder')
-				"
+				:placeholder="$t('pages.administration.teachers.index.searchbar.placeholder')"
 				class="search-section"
 				label=""
 				data-testid="searchbar"
@@ -32,11 +28,7 @@
 				</template>
 			</base-input>
 
-			<DataFilter
-				filter-for="teacher"
-				:class-names="classNameList"
-				@update:filter="onUpdateFilter"
-			/>
+			<DataFilter filter-for="teacher" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
 			<backend-data-table
 				v-model:current-page="page"
@@ -65,16 +57,8 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<v-icon
-							v-if="status === 'ok'"
-							color="rgba(var(--v-theme-success))"
-							:icon="mdiCheck"
-						/>
-						<v-icon
-							v-else-if="status === 'missing'"
-							color="rgba(var(--v-theme-error))"
-							:icon="mdiClose"
-						/>
+						<v-icon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
+						<v-icon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
 					</span>
 				</template>
 				<template #datacolumn-lastLoginSystemChange="{ data }">
@@ -94,9 +78,7 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
-						:aria-label="
-							$t('pages.administration.teachers.table.edit.ariaLabel')
-						"
+						:aria-label="$t('pages.administration.teachers.table.edit.ariaLabel')"
 						data-testid="edit_teacher_button"
 					>
 						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
@@ -118,16 +100,19 @@
 	</div>
 </template>
 <script>
-import { authModule, notifierModule, schoolsModule } from "@/store";
-import { mapGetters } from "vuex";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-
+import ProgressModal from "@/components/molecules/ProgressModal";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
-import ProgressModal from "@/components/molecules/ProgressModal";
+import { Permission, RoleName } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -141,10 +126,8 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
-import { useEnvConfig } from "@data-env";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -173,30 +156,23 @@ export default {
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
-			currentFilterQuery: this.getUiState(
-				"filter",
-				"pages.administration.teachers.index"
-			),
+			currentFilterQuery: this.getUiState("filter", "pages.administration.teachers.index"),
 			// test: this.$uiState,
 			page:
 				(this.getUiState("pagination", "pages.administration.teachers.index") &&
-					this.getUiState("pagination", "pages.administration.teachers.index")
-						.page) ||
+					this.getUiState("pagination", "pages.administration.teachers.index").page) ||
 				1,
 			limit:
 				(this.getUiState("pagination", "pages.administration.teachers.index") &&
-					this.getUiState("pagination", "pages.administration.teachers.index")
-						.limit) ||
+					this.getUiState("pagination", "pages.administration.teachers.index").limit) ||
 				25,
 			sortBy:
 				(this.getUiState("sorting", "pages.administration.teachers.index") &&
-					this.getUiState("sorting", "pages.administration.teachers.index")
-						.sortBy) ||
+					this.getUiState("sorting", "pages.administration.teachers.index").sortBy) ||
 				"firstName",
 			sortOrder:
 				(this.getUiState("sorting", "pages.administration.teachers.index") &&
-					this.getUiState("sorting", "pages.administration.teachers.index")
-						.sortOrder) ||
+					this.getUiState("sorting", "pages.administration.teachers.index").sortOrder) ||
 				"asc",
 			breadcrumbs: [
 				{
@@ -211,9 +187,7 @@ export default {
 
 			tableActions: [
 				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.email"
-					),
+					label: this.$t("pages.administration.teachers.index.tableActions.email"),
 					icon: mdiEmailOutline,
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
@@ -225,9 +199,7 @@ export default {
 					dataTestId: "qr_code",
 				},
 				{
-					label: this.$t(
-						"pages.administration.teachers.index.tableActions.delete"
-					),
+					label: this.$t("pages.administration.teachers.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
@@ -299,8 +271,7 @@ export default {
 			],
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.teachers.index") &&
-					this.getUiState("filter", "pages.administration.teachers.index")
-						.searchQuery) ||
+					this.getUiState("filter", "pages.administration.teachers.index").searchQuery) ||
 				"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
@@ -339,20 +310,16 @@ export default {
 			);
 
 			// filters out the QR bulk action is user is not an admin
-			if (!authModule.getUserRoles.some((name) => name === "administrator")) {
+			if (!useAppStore().userRoles.some((name) => name === RoleName.Administrator)) {
 				editedActions = editedActions.filter(
-					(action) =>
-						action.label !==
-						this.$t("pages.administration.teachers.index.tableActions.qr")
+					(action) => action.label !== this.$t("pages.administration.teachers.index.tableActions.qr")
 				);
 			}
 
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
-					(action) =>
-						action.label !==
-						this.$t("pages.administration.teachers.index.tableActions.delete")
+					(action) => action.label !== this.$t("pages.administration.teachers.index.tableActions.delete")
 				);
 			}
 
@@ -361,10 +328,7 @@ export default {
 		filteredColumns() {
 			let editedColumns = this.tableColumns;
 			// filters out edit column if school is external or if user is not an admin
-			if (
-				this.schoolIsExternallyManaged ||
-				!authModule.getUserRoles.some((name) => name === "administrator")
-			) {
+			if (this.schoolIsExternallyManaged || !useAppStore().userRoles.some((name) => name === RoleName.Administrator)) {
 				editedColumns = this.tableColumns.filter(
 					// _id field sets the edit column
 					(col) => col.field !== "_id"
@@ -373,9 +337,7 @@ export default {
 
 			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
 			if (!this.showConsent) {
-				editedColumns = editedColumns.filter(
-					(col) => col.field !== "consentStatus"
-				);
+				editedColumns = editedColumns.filter((col) => col.field !== "consentStatus");
 			}
 
 			if (!this.getFeatureUserLoginMigrationEnabled) {
@@ -387,10 +349,7 @@ export default {
 			return editedColumns;
 		},
 		fab() {
-			if (
-				this.schoolIsExternallyManaged ||
-				!this.$_userHasPermission("TEACHER_CREATE")
-			) {
+			if (this.schoolIsExternallyManaged || !this.$_userHasPermission(Permission.TeacherCreate)) {
 				return null;
 			}
 
@@ -420,20 +379,12 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const temp = this.getUiState(
-				"filter",
-				"pages.administration.teacher.index"
-			);
+			const temp = this.getUiState("filter", "pages.administration.teacher.index");
 
 			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
-			if (
-				JSON.stringify(query) !==
-				JSON.stringify(
-					this.getUiState("filter", "pages.administration.teachers.index")
-				)
-			) {
+			if (JSON.stringify(query) !== JSON.stringify(this.getUiState("filter", "pages.administration.teachers.index"))) {
 				this.onUpdateCurrentPage(1);
 			}
 			this.setUiState("filter", "pages.administration.teachers.index", {
@@ -446,9 +397,7 @@ export default {
 		this.getClassNameList();
 	},
 	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.teachers.index.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.teachers.index.title"));
 	},
 	methods: {
 		find() {
@@ -505,17 +454,9 @@ export default {
 					userIds: rowIds,
 					selectionType,
 				});
-				notifierModule.show({
-					text: this.$t("pages.administration.sendMail.success", rowIds.length),
-					status: "success",
-					timeout: 5000,
-				});
+				notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
 			} catch {
-				notifierModule.show({
-					text: this.$t("pages.administration.sendMail.error", rowIds.length),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -528,18 +469,10 @@ export default {
 				if (this.qrLinks.length) {
 					this.$_printQRs(this.qrLinks);
 				} else {
-					notifierModule.show({
-						text: this.$t("pages.administration.printQr.emptyUser"),
-						status: "info",
-						timeout: 5000,
-					});
+					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}
 			} catch {
-				notifierModule.show({
-					text: this.$t("pages.administration.printQr.error", rowIds.length),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
 		handleBulkDelete(rowIds, selectionType) {
@@ -549,18 +482,10 @@ export default {
 						ids: rowIds,
 						userType: "teacher",
 					});
-					notifierModule.show({
-						text: this.$t("pages.administration.remove.success"),
-						status: "success",
-						timeout: 5000,
-					});
+					notifySuccess(this.$t("pages.administration.remove.success"));
 					this.find();
 				} catch {
-					notifierModule.show({
-						text: this.$t("pages.administration.remove.error"),
-						status: "error",
-						timeout: 5000,
-					});
+					notifyError(this.$t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {
@@ -569,28 +494,21 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$t(
-					"pages.administration.teachers.index.remove.confirm.message.some",
-					rowIds.length,
-					{ number: rowIds.length }
-				);
+				message = this.$t("pages.administration.teachers.index.remove.confirm.message.some", rowIds.length, {
+					number: rowIds.length,
+				});
 			} else {
 				if (rowIds.length) {
-					message = this.$t(
-						"pages.administration.teachers.index.remove.confirm.message.many",
-						{ number: rowIds.length }
-					);
+					message = this.$t("pages.administration.teachers.index.remove.confirm.message.many", {
+						number: rowIds.length,
+					});
 				} else {
-					message = this.$t(
-						"pages.administration.teachers.index.remove.confirm.message.all"
-					);
+					message = this.$t("pages.administration.teachers.index.remove.confirm.message.all");
 				}
 			}
 			this.dialogConfirm({
 				message,
-				confirmText: this.$t(
-					"pages.administration.teachers.index.remove.confirm.btnText"
-				),
+				confirmText: this.$t("pages.administration.teachers.index.remove.confirm.btnText"),
 				cancelText: this.$t("common.actions.cancel"),
 				icon: mdiAlert,
 				iconColor: "rgba(var(--v-theme-error))",

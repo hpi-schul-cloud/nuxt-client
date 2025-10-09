@@ -1,25 +1,18 @@
 <template>
-	<MediaBoardElementDisplay
-		:element="displayData"
-		@click="onClick"
-		@keyup.enter="onClick"
-	/>
+	<MediaBoardElementDisplay :element="displayData" @click="onClick" @keyup.enter="onClick" />
 </template>
 
 <script setup lang="ts">
-import {
-	MediaAvailableLineElementResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
+import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import { MediaAvailableLineElementResponse, ToolContextType } from "@/serverApi/v3";
+import { notifyError } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { useDragAndDrop } from "@util-board";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
-import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
-import { useEnvConfig } from "@data-env";
 
 const props = defineProps({
 	element: {
@@ -29,13 +22,8 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-const {
-	launchTool,
-	fetchSchoolLaunchRequest,
-	error: launchError,
-} = useExternalToolLaunchState();
+const { launchTool, fetchSchoolLaunchRequest, error: launchError } = useExternalToolLaunchState();
 
 const { mediaBoard } = useSharedMediaBoardState();
 
@@ -48,9 +36,7 @@ const displayData: ComputedRef<MediaElementDisplay> = computed(() => ({
 	thumbnail: props.element.thumbnailUrl || props.element.logoUrl,
 }));
 
-const loadAvailableLineElementData = async (
-	element: MediaAvailableLineElementResponse
-): Promise<void> => {
+const loadAvailableLineElementData = async (element: MediaAvailableLineElementResponse): Promise<void> => {
 	const contextId: string | undefined = mediaBoard.value?.id;
 	if (contextId) {
 		await fetchSchoolLaunchRequest(element.schoolExternalToolId, {
@@ -85,11 +71,7 @@ const { isDragging } = useDragAndDrop();
 const onClick = async () => {
 	// Loading has failed before
 	if (launchError.value) {
-		notifierModule.show({
-			status: "error",
-			text: t("error.generic"),
-		});
-
+		notifyError(t("error.generic"));
 		return;
 	}
 

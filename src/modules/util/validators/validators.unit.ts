@@ -1,10 +1,10 @@
 import {
-	isValidUrl,
-	isRequired,
-	isValidTimeFormat,
-	isValidDateFormat,
-	isOfMaxLength,
 	isNonEmptyString,
+	isOfMaxLength,
+	isRequired,
+	isValidDateFormat,
+	isValidTimeFormat,
+	isValidUrl,
 } from "@util-validators";
 
 describe("util-validators", () => {
@@ -56,9 +56,7 @@ describe("util-validators", () => {
 
 		describe("when protocol is given", () => {
 			it("should accept true urls with http-protocol", () => {
-				expect(isValid("http://medium.com/how-to-write-great-tests")).toBe(
-					true
-				);
+				expect(isValid("http://medium.com/how-to-write-great-tests")).toBe(true);
 			});
 
 			it("should accept urls with https-protocol", () => {
@@ -81,14 +79,12 @@ describe("util-validators", () => {
 		});
 
 		describe("when url is valid IDN (internationalized domain name)", () => {
-			test.each([
-				"xn--huser-gra.tld",
-				"xn--grsse-lva.tld",
-				"xn--5eyx16c.tld",
-				"xn--90aqfi­dwgh3ei­.tld",
-			])("should return ERROR for %s", (url) => {
-				expect(isValid(url)).toBe(ERROR);
-			});
+			test.each(["xn--huser-gra.tld", "xn--grsse-lva.tld", "xn--5eyx16c.tld", "xn--90aqfi­dwgh3ei­.tld"])(
+				"should return ERROR for %s",
+				(url) => {
+					expect(isValid(url)).toBe(ERROR);
+				}
+			);
 		});
 
 		describe("when url is invalid IDN (internationalized domain name)", () => {

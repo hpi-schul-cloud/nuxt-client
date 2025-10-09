@@ -1,22 +1,12 @@
-import { defineStore, storeToRefs } from "pinia";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@/serverApi/v3";
 import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import {
-	ConfigResponse,
-	LanguageType,
-	SchulcloudTheme,
-	ServerConfigApiFactory,
-	Timezone,
-} from "@/serverApi/v3";
-import {
-	FileConfigApiFactory,
-	FilesStorageConfigResponse,
-} from "@/fileStorageApi/v3";
-import { Status } from "@/store/types/commons";
-import { computed, reactive, ref } from "vue";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { createSharedComposable } from "@vueuse/core";
+import { defineStore, storeToRefs } from "pinia";
+import { computed, reactive } from "vue";
 
 export const defaultConfigEnvs: ConfigResponse = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
@@ -84,6 +74,9 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_AI_TUTOR_ENABLED: false,
 	FEATURE_ROOM_COPY_ENABLED: false,
 	FEATURE_ROOM_SHARE: false,
+	FEATURE_ROOM_ADD_EXTERNAL_PERSONS_ENABLED: false,
+	FEATURE_ROOM_REGISTER_EXTERNAL_PERSONS_ENABLED: false,
+	FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false,
 	FEATURE_ADMINISTRATE_ROOMS_ENABLED: false,
 	CALENDAR_SERVICE_ENABLED: false,
 	FEATURE_PREFERRED_CTL_TOOLS_ENABLED: false,
@@ -102,7 +95,6 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
 	});
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
-	const status = ref<Status>("pending");
 
 	const setEnvs = (envConfig: ConfigResponse) => {
 		Object.assign(env, envConfig);
@@ -112,9 +104,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		Object.assign(envFile, fileEnvsConfig);
 	};
 
-	const fallBackLanguage = computed(() => {
-		return env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE;
-	});
+	const fallBackLanguage = computed(() => env.I18N__FALLBACK_LANGUAGE ?? env.I18N__DEFAULT_LANGUAGE);
 
 	const instituteTitle = computed(() => {
 		switch (env.SC_THEME) {
@@ -141,20 +131,15 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 				setFileEnvs(fileConfigRes?.data);
 			}
 
-			status.value = "completed";
 			return true;
 		} catch {
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.GatewayTimeout)
-			);
-			status.value = "error";
+			applicationErrorModule.setError(createApplicationError(HttpStatusCode.GatewayTimeout));
 			return false;
 		}
 	};
 
 	return {
 		loadConfiguration,
-		status,
 		env,
 		envFile,
 		fallBackLanguage,

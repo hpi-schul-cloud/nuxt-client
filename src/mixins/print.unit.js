@@ -24,9 +24,7 @@ let newWindowMock;
 describe("@/mixins/print", () => {
 	beforeEach(() => {
 		newWindowMock = getNewWindowMock();
-		vi.spyOn(window, "open")
-			.mockImplementation()
-			.mockReturnValue(newWindowMock);
+		vi.spyOn(window, "open").mockImplementation().mockReturnValue(newWindowMock);
 	});
 
 	describe("$_print", () => {
@@ -49,9 +47,7 @@ describe("@/mixins/print", () => {
 			const testContent = "some plain old content";
 			method(testContent);
 
-			expect(newWindowMock.document.write).toHaveBeenCalledWith(
-				expect.stringContaining(testContent)
-			);
+			expect(newWindowMock.document.write).toHaveBeenCalledWith(expect.stringContaining(testContent));
 			expect(newWindowMock.focus).toHaveBeenCalled();
 			expect(newWindowMock.print).toHaveBeenCalled();
 		});
@@ -78,13 +74,9 @@ describe("@/mixins/print", () => {
 				},
 			];
 			method(testContent);
-			expect(newWindowMock.document.innerHTML).toContain(
-				testContent[0].qrContent
-			);
+			expect(newWindowMock.document.innerHTML).toContain(testContent[0].qrContent);
 			expect(newWindowMock.document.innerHTML).toContain(testContent[0].title);
-			expect(newWindowMock.document.innerHTML).toContain(
-				testContent[0].description
-			);
+			expect(newWindowMock.document.innerHTML).toContain(testContent[0].description);
 		});
 
 		it("can print items with only QR content", () => {
@@ -94,23 +86,17 @@ describe("@/mixins/print", () => {
 				},
 			];
 			method(testContent);
-			expect(newWindowMock.document.innerHTML).toContain(
-				testContent[0].qrContent
-			);
+			expect(newWindowMock.document.innerHTML).toContain(testContent[0].qrContent);
 		});
 
 		it("prints an error if no items to print are given", () => {
 			method([]);
-			expect(newWindowMock.document.innerHTML).toContain(
-				"Keine Einträge zu drucken."
-			);
+			expect(newWindowMock.document.innerHTML).toContain("Keine Einträge zu drucken.");
 		});
 
 		it("can handle no parameters", () => {
 			method();
-			expect(newWindowMock.document.innerHTML).toContain(
-				"Keine Einträge zu drucken."
-			);
+			expect(newWindowMock.document.innerHTML).toContain("Keine Einträge zu drucken.");
 		});
 	});
 });

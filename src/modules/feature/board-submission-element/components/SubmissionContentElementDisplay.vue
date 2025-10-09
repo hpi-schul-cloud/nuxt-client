@@ -2,10 +2,7 @@
 	<div>
 		<div class="bg-grey-lighten-4 pa-4 rounded-t">
 			<SubmissionContentElementTitle />
-			<v-card-subtitle
-				class="pa-0 mt-1 text-subtitle-1"
-				data-testid="board-submission-element-due-date"
-			>
+			<v-card-subtitle class="pa-0 mt-1 text-subtitle-1" data-testid="board-submission-element-due-date">
 				{{ formattedDueDate }}
 			</v-card-subtitle>
 		</div>
@@ -26,16 +23,15 @@
 </template>
 
 <script lang="ts">
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { defineComponent, ref, computed, PropType } from "vue";
-import dayjs from "dayjs";
-import { useI18n } from "vue-i18n";
-import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
-import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
-import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { StudentSubmission, TeacherSubmission } from "../types/submission";
+import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
+import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { useAppStoreRefs } from "@data-app";
+import dayjs from "dayjs";
+import { computed, defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionContentElementDisplay",
@@ -68,17 +64,9 @@ export default defineComponent({
 	},
 	emits: ["update:completed"],
 	setup(props, { emit }) {
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const { t } = useI18n();
-		const userRoles = ref(authModule.getUserRoles);
 
-		const isStudent = computed(() => {
-			return userRoles.value.includes("student");
-		});
-
-		const isTeacher = computed(() => {
-			return userRoles.value.includes("teacher");
-		});
+		const { isTeacher, isStudent, locale } = useAppStoreRefs();
 
 		const updateCompleted = (completed: boolean) => {
 			emit("update:completed", completed);
@@ -89,12 +77,10 @@ export default defineComponent({
 				return undefined;
 			}
 
-			dayjs.locale(authModule.getLocale);
+			dayjs.locale(locale.value);
 			const format = `dddd, ${DATETIME_FORMAT.date} - HH:mm`;
 
-			return `${t("components.cardElement.submissionElement.until")} ${dayjs(
-				props.dueDate
-			).format(format)}`;
+			return `${t("components.cardElement.submissionElement.until")} ${dayjs(props.dueDate).format(format)}`;
 		});
 
 		return {

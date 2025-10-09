@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
 import InfoBox from "./InfoBox.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { VNode } from "vue";
 
 type MountingSlots = Record<string, string | (() => VNode[])>;

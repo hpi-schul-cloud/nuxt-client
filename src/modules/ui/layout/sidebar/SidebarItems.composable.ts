@@ -1,5 +1,7 @@
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
+import { Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountGroupOutline,
 	mdiAccountSupervisorCircleOutline,
@@ -17,8 +19,6 @@ import {
 } from "@icons/material";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { useEnvConfig } from "@data-env";
 
 export const useSidebarItems = () => {
 	const filePathsModule = injectStrict(FILE_PATHS_MODULE_KEY);
@@ -47,14 +47,14 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.teams",
 			href: "/teams",
 			icon: mdiAccountGroupOutline,
-			permissions: ["TEAMS_ENABLED"],
+			feature: "FEATURE_TEAMS_ENABLED",
 			testId: "sidebar-teams",
 		},
 		{
 			title: "global.sidebar.item.tasks",
 			to: "/tasks",
 			icon: mdiFormatListChecks,
-			permissions: ["TASK_DASHBOARD_VIEW_V3", "TASK_DASHBOARD_TEACHER_VIEW_V3"],
+			permissions: [Permission.TaskDashboardViewV3, Permission.TaskDashboardTeacherViewV3],
 			testId: "sidebar-tasks",
 		},
 		{
@@ -75,7 +75,7 @@ export const useSidebarItems = () => {
 				{
 					title: "global.sidebar.item.teams",
 					href: "/files/teams/",
-					permissions: ["TEAMS_ENABLED"],
+					feature: "FEATURE_TEAMS_ENABLED",
 					testId: "sidebar-files-teamfiles",
 				},
 				{
@@ -101,7 +101,7 @@ export const useSidebarItems = () => {
 			title: "common.words.lernstore",
 			to: "/content",
 			icon: "$lernstore_outline",
-			permissions: ["LERNSTORE_VIEW"],
+			permissions: [Permission.LernstoreView],
 			testId: "sidebar-learningstore",
 		},
 		{
@@ -115,7 +115,7 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.addons",
 			href: "/addons",
 			icon: mdiPuzzleOutline,
-			permissions: ["ADDONS_ENABLED"],
+			feature: "FEATURE_EXTENSIONS_ENABLED",
 			testId: "sidebar-addons",
 		},
 	]);
@@ -193,11 +193,7 @@ export const useSidebarItems = () => {
 			href: "https://github.com/hpi-schul-cloud",
 			testId: "sidebar-system-github",
 			target: "_blank",
-			theme: [
-				SchulcloudTheme.Brb,
-				SchulcloudTheme.Default,
-				SchulcloudTheme.Thr,
-			],
+			theme: [SchulcloudTheme.Brb, SchulcloudTheme.Default, SchulcloudTheme.Thr],
 		},
 		{
 			href: "/security",
@@ -211,13 +207,13 @@ export const useSidebarItems = () => {
 		{
 			title: "global.sidebar.item.management",
 			icon: mdiCogOutline,
-			permissions: ["TEACHER_LIST", "ADMIN_VIEW"],
+			permissions: [Permission.TeacherList, Permission.AdminView],
 			testId: "sidebar-management",
 			children: [
 				{
 					title: "global.sidebar.item.student",
 					to: "/administration/students",
-					permissions: ["STUDENT_LIST"],
+					permissions: [Permission.StudentList],
 					testId: "sidebar-management-students",
 				},
 				{
@@ -230,7 +226,7 @@ export const useSidebarItems = () => {
 					to: "/administration/rooms/manage",
 					feature: "FEATURE_ADMINISTRATE_ROOMS_ENABLED",
 					permissions: useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED
-						? ["SCHOOL_ADMINISTRATE_ROOMS"]
+						? [Permission.SchoolAdministrateRooms]
 						: undefined,
 					testId: "sidebar-room-management",
 				},
@@ -238,25 +234,25 @@ export const useSidebarItems = () => {
 					title: "global.sidebar.item.courses",
 					to: "/administration/rooms/new",
 					testId: "sidebar-management-courses",
-					permissions: ["ADMIN_VIEW"],
+					permissions: [Permission.AdminView],
 				},
 				{
 					title: "global.sidebar.item.classes",
 					to: "/administration/groups/classes",
 					testId: "sidebar-management-classes",
-					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
+					permissions: [Permission.AdminView, Permission.TeacherList],
 				},
 				{
 					title: "global.sidebar.item.teams",
 					href: "/administration/teams",
-					permissions: ["ADMIN_VIEW"],
+					permissions: [Permission.AdminView],
 					testId: "sidebar-management-teams",
 				},
 				{
 					title: "global.sidebar.item.school",
 					to: "/administration/school-settings",
 					testId: "sidebar-management-school",
-					permissions: ["ADMIN_VIEW"],
+					permissions: [Permission.AdminView],
 				},
 			],
 		},

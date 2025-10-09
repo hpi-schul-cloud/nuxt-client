@@ -1,4 +1,4 @@
-import { upperCaseFirstChar, toKebabCase } from "./textFormatting";
+import { toKebabCase, upperCaseFirstChar } from "./textFormatting";
 
 describe("@/utils/textFormatting", () => {
 	describe("upperCaseFirstChar", () => {

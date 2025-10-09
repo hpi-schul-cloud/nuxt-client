@@ -1,18 +1,9 @@
 <template>
 	<div class="rounded-b-sm">
-		<v-skeleton-loader
-			v-if="loading"
-			class="mt-5 ml-5 mb-6"
-			type="image"
-			width="120"
-			height="22"
-		/>
+		<v-skeleton-loader v-if="loading" class="mt-5 ml-5 mb-6" type="image" width="120" height="22" />
 		<VExpansionPanels v-else v-model="panel" class="rounded-0 rounded-b-sm">
 			<VExpansionPanel elevation="0">
-				<VExpansionPanelTitle
-					class="pl-4 pr-4 rounded-te-0 rounded-ts-0"
-					@dblclick.stop="() => {}"
-				>
+				<VExpansionPanelTitle class="pl-4 pr-4 rounded-te-0 rounded-ts-0" @dblclick.stop="() => {}">
 					<v-chip
 						v-if="!isOverdue"
 						ref="v-chip-open"
@@ -85,22 +76,13 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	PropType,
-	computed,
-	ref,
-	watch,
-	toRef,
-	Ref,
-	unref,
-} from "vue";
-import { TeacherSubmission, Status } from "../types/submission";
-import { DataTableHeader } from "vuetify";
-import { useI18n } from "vue-i18n";
-import { MaybeRef } from "@vueuse/core";
-import { VExpansionPanelTitle } from "vuetify/components";
+import { Status, TeacherSubmission } from "../types/submission";
 import { mdiCheck, mdiClose, mdiMinus } from "@icons/material";
+import { MaybeRef } from "@vueuse/core";
+import { computed, defineComponent, PropType, Ref, ref, toRef, unref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { DataTableHeader } from "vuetify";
+import { VExpansionPanelTitle } from "vuetify/components";
 
 type StatusFilter = "all" | Status;
 
@@ -140,17 +122,10 @@ export default defineComponent({
 		const panel = ref<number | undefined>(undefined);
 		const allSubmissions = toRef(props, "submissions");
 		const activeFilter = ref<StatusFilter>("all");
-		const filteredSubmissions = computed(() =>
-			filterByStatus(allSubmissions, activeFilter)
-		);
-		const filterByStatus = (
-			submissions: Ref<TeacherSubmission[]>,
-			statusFilter: MaybeRef<StatusFilter>
-		) => {
+		const filteredSubmissions = computed(() => filterByStatus(allSubmissions, activeFilter));
+		const filterByStatus = (submissions: Ref<TeacherSubmission[]>, statusFilter: MaybeRef<StatusFilter>) => {
 			const status = unref(statusFilter);
-			return submissions.value.filter(
-				(item) => status === "all" || item.status === status
-			);
+			return submissions.value.filter((item) => status === "all" || item.status === status);
 		};
 		const setFilter = (filter: StatusFilter) => {
 			if (filter === activeFilter.value) {
@@ -159,21 +134,11 @@ export default defineComponent({
 				activeFilter.value = filter;
 			}
 		};
-		const openCount = computed<number>(
-			() => filterByStatus(allSubmissions, "open").length
-		);
-		const completedCount = computed<number>(
-			() => filterByStatus(allSubmissions, "completed").length
-		);
-		const overdueCount = computed<number>(
-			() => filterByStatus(allSubmissions, "expired").length
-		);
-		const isDisabled = (count: number) => {
-			return count === 0;
-		};
-		const getTabIndex = (isDisabled: boolean) => {
-			return isDisabled ? -1 : 0;
-		};
+		const openCount = computed<number>(() => filterByStatus(allSubmissions, "open").length);
+		const completedCount = computed<number>(() => filterByStatus(allSubmissions, "completed").length);
+		const overdueCount = computed<number>(() => filterByStatus(allSubmissions, "expired").length);
+		const isDisabled = (count: number) => count === 0;
+		const getTabIndex = (isDisabled: boolean) => (isDisabled ? -1 : 0);
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
 				return mdiMinus;
@@ -189,9 +154,7 @@ export default defineComponent({
 			if (isDisabled(count)) {
 				return "filter-chip--disabled";
 			}
-			return activeFilter.value === filter
-				? "filter-chip--active"
-				: "filter-chip";
+			return activeFilter.value === filter ? "filter-chip--active" : "filter-chip";
 		};
 		watch(activeFilter, () => {
 			openPanel();

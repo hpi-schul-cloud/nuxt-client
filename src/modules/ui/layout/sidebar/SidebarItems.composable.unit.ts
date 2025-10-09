@@ -1,12 +1,15 @@
-import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
-import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { useSidebarItems } from "./SidebarItems.composable";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
+import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
+	setActivePinia(createTestingPinia());
 	createTestEnvStore({
 		ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		ACCESSIBILITY_REPORT_EMAIL: "email",
@@ -48,9 +51,7 @@ describe("SidebarItems Composable", () => {
 		expect(pageLinks.value).toHaveLength(11);
 		expect(pageLinks.value[1].permissions).toBeUndefined();
 
-		const roomsLink = pageLinks.value.find(
-			(link) => link.title === "global.sidebar.item.rooms"
-		);
+		const roomsLink = pageLinks.value.find((link) => link.title === "global.sidebar.item.rooms");
 
 		expect(roomsLink?.permissions).toBeUndefined();
 	});

@@ -31,13 +31,10 @@
 			</WarningAlert>
 			<p class="text-md mt-2" data-testid="group-dialog-info-text">
 				{{
-					$t(
-						"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text",
-						{
-							groupName: selectedGroup?.name || "",
-							courseName: courseName,
-						}
-					)
+					$t("feature-course-sync.StartExistingCourseSyncDialog.confirmation.text", {
+						groupName: selectedGroup?.name || "",
+						courseName: courseName,
+					})
 				}}
 			</p>
 		</template>
@@ -45,26 +42,15 @@
 </template>
 
 <script setup lang="ts">
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import {
-	GroupResponse,
-	GroupUserResponse,
-	MeResponse,
-	RoleName,
-} from "@/serverApi/v3";
-import type AuthModule from "@/store/auth";
-import {
-	AUTH_MODULE_KEY,
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const props = defineProps({
@@ -94,36 +80,27 @@ const emit = defineEmits<{
 const step: Ref<number> = ref(0);
 const selectedGroup: Ref<GroupResponse | undefined> = ref();
 
-const onConfirmGroupSelection = async (group: GroupResponse) => {
+const onConfirmGroupSelection = (group: GroupResponse) => {
 	selectedGroup.value = group;
 	step.value = 1;
 };
 
 const { startSynchronization } = useCourseApi();
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const isUserInGroup = computed(() => {
-	const me: MeResponse | undefined = authModule.getMe;
+	const me = useAppStore().meResponse;
 
 	if (!me || !selectedGroup.value) {
 		return false;
 	}
 
-	const isPartOfGroup: boolean = selectedGroup.value.users.some(
-		(user: GroupUserResponse) => user.id === me.user.id
-	);
+	const isPartOfGroup: boolean = selectedGroup.value.users.some((user: GroupUserResponse) => user.id === me.user.id);
 
-	const isAdmin: boolean = me.roles.some(
-		(role) => role.name === RoleName.Administrator
-	);
+	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.Administrator);
 
 	if (isAdmin && !isPartOfGroup) {
-		const allCourseTeacherPartOfGroup = props.courseTeachers?.every(
-			(teacher) => {
-				return selectedGroup.value?.users.some(
-					(user) => user.firstName + " " + user.lastName === teacher
-				);
-			}
+		const allCourseTeacherPartOfGroup = props.courseTeachers?.every((teacher) =>
+			selectedGroup.value?.users.some((user) => user.firstName + " " + user.lastName === teacher)
 		);
 
 		return allCourseTeacherPartOfGroup;
@@ -134,11 +111,7 @@ const isUserInGroup = computed(() => {
 
 const onConfirmWarning = async () => {
 	if (!selectedGroup.value || !props.courseId) {
-		notifierModule.show({
-			text: t("common.notification.error"),
-			status: "error",
-		});
-
+		notifyError(t("common.notification.error"));
 		return;
 	}
 
@@ -147,18 +120,10 @@ const onConfirmWarning = async () => {
 
 		closeDialog();
 
-		notifierModule.show({
-			text: t("feature-course-sync.StartExistingCourseSyncDialog.success"),
-			status: "success",
-		});
-
+		notifySuccess(t("feature-course-sync.StartExistingCourseSyncDialog.success"));
 		emit("success");
 	} catch {
-		notifierModule.show({
-			text: t("common.notification.error"),
-			status: "error",
-		});
-
+		notifyError(t("common.notification.error"));
 		return;
 	}
 

@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import CaptionText from "./CaptionText.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import CaptionText from "./CaptionText.vue";
 
 describe("CaptionText", () => {
 	const mountSetup = () => {
@@ -48,8 +45,6 @@ describe("CaptionText", () => {
 
 		const label = textarea.find("label");
 
-		expect(label.text()).toContain(
-			"components.cardElement.fileElement.caption"
-		);
+		expect(label.text()).toContain("components.cardElement.fileElement.caption");
 	});
 });
