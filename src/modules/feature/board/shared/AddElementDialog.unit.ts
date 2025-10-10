@@ -1,3 +1,4 @@
+import { elementTypeSelectionOptionsFactory } from "../test-utils/ElementTypeSelectionOptions.factory";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -12,23 +13,7 @@ describe("ElementTypeSelection", () => {
 		const { closeDialog, isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
 			setupSharedElementTypeSelectionMock();
 
-		const createTextElement = vi.fn();
-		const createFileElement = vi.fn();
-
-		staticElementTypeOptions.value = [
-			{
-				icon: "action1-icon",
-				label: "action1-label",
-				action: createTextElement,
-				testId: "action1-id",
-			},
-			{
-				icon: "action2-icon",
-				label: "action2-label",
-				action: createFileElement,
-				testId: "action2-id",
-			},
-		];
+		staticElementTypeOptions.value = elementTypeSelectionOptionsFactory.createUnsortedElementList();
 
 		return {
 			isDialogOpen,
@@ -134,18 +119,12 @@ describe("ElementTypeSelection", () => {
 		it("should show the updated element type options", async () => {
 			const { wrapper, dynamicElementTypeOptions } = await setup();
 
-			const testId = "dynamic-action1-id";
-			dynamicElementTypeOptions.value = [
-				{
-					icon: "dynamic-action1-icon",
-					label: "dynamic-action1-label",
-					action: vi.fn(),
-					testId,
-				},
-			];
+			const element = elementTypeSelectionOptionsFactory.create();
+			dynamicElementTypeOptions.value = [element];
+
 			await flushPromises();
 
-			const option = wrapper.findComponent<typeof ExtendedIconBtn>(`[data-testid="${testId}"]`);
+			const option = wrapper.findComponent<typeof ExtendedIconBtn>(`[data-testid="${element.testId}"]`);
 
 			expect(option.isVisible()).toBe(true);
 		});
@@ -153,14 +132,9 @@ describe("ElementTypeSelection", () => {
 		it("should adjust the width of the dialog", async () => {
 			const { wrapper, dynamicElementTypeOptions } = await setup();
 
-			dynamicElementTypeOptions.value = [
-				{
-					icon: "dynamic-action1-icon",
-					label: "dynamic-action1-label",
-					action: vi.fn(),
-					testId: "dynamic-action1-id",
-				},
-			];
+			const element = elementTypeSelectionOptionsFactory.create();
+			dynamicElementTypeOptions.value = [element];
+
 			await flushPromises();
 
 			expect(wrapper.vm.dialogWidth).toBe(426);
