@@ -1,5 +1,5 @@
 <template>
-	<v-select
+	<VSelect
 		v-model="lang"
 		:items="languages"
 		:label="t('pages.administration.school.index.generalSettings.labels.language')"

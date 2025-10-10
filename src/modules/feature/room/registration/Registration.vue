@@ -1,36 +1,35 @@
 <template>
 	<div>
-		<v-stepper v-model="stepValue" alt-labels>
-			<v-stepper-header>
+		<VStepper v-model="stepValue" alt-labels>
+			<VStepperHeader>
 				<template v-for="step in steps" :key="step.value">
-					<v-stepper-item :complete="false" :value="step.value" :step="step.value" color="primary">
+					<VStepperItem :complete="false" :value="step.value" :step="step.value" color="primary">
 						{{ step.title }}
-					</v-stepper-item>
-					<v-divider v-if="step.value < steps.length" />
+					</VStepperItem>
+					<VDivider v-if="step.value < steps.length" />
 				</template>
-			</v-stepper-header>
-			<v-stepper-window>
+			</VStepperHeader>
+			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
-					<v-stepper-window-item :value="step.value" class="mt-n6">
+					<VStepperWindowItem :value="step.value" class="mt-n6">
 						<h2 class="mb-10">{{ step.subtitle }}</h2>
-						<!-- :selected-language="selectedLanguage" -->
 						<LanguageSelection
 							v-if="step.value === 1"
 							:selected-language="selectedLanguage"
 							@update:selected-language="onUpdateSelectedLanguage"
 						/>
-					</v-stepper-window-item>
+					</VStepperWindowItem>
 				</template>
-			</v-stepper-window>
+			</VStepperWindow>
 			<div class="v-stepper-actions">
-				<v-btn text :disabled="stepValue === 1" @click="onStepperClick(stepValue - 1)">
+				<VBtn text :disabled="stepValue === 1" @click="onStepperClick(stepValue - 1)">
 					{{ t("common.actions.back") }}
-				</v-btn>
-				<v-btn text color="primary" :disabled="stepValue === steps.length" @click="onStepperClick(stepValue + 1)">
+				</VBtn>
+				<VBtn text color="primary" :disabled="stepValue === steps.length" @click="onStepperClick(stepValue + 1)">
 					{{ t("common.actions.continue") }}
-				</v-btn>
+				</VBtn>
 			</div>
-		</v-stepper>
+		</VStepper>
 	</div>
 </template>
 
