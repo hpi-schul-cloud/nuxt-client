@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -53,13 +53,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const setCookie = (lang = "de") => {
-	const expires = new Date(Date.now() + 60 * 60 * 24 * 365 * 1000).toUTCString();
-	document.cookie = `USER_LANG=${lang}; path=/; expires=${expires}; SameSite=Lax`;
-};
-
 const onUpdateSelectedLanguage = (value: string) => {
-	setCookie(value);
 	emit("update:selectedLanguage", value);
 };
 
@@ -77,8 +71,4 @@ const stepValue = ref(1);
 const onStepperClick = (value: number) => {
 	stepValue.value = value;
 };
-
-onMounted(() => {
-	stepValue.value = 1;
-});
 </script>
