@@ -23,6 +23,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
+import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
 vi.mock("../socket/socket");
@@ -42,6 +43,9 @@ const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
+
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("useBoardSocketApi", () => {
 	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
