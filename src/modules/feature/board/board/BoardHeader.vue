@@ -32,7 +32,7 @@
 				<KebabMenuActionShare v-if="isShareEnabled && hasShareBoardPermission" @click="onShareBoard" />
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings v-if="hasReadersEditPermission" @click="onEditBoardSettings" />
+				<KebabMenuActionEditingSettings v-if="hasReadersEditPermission && isRoomBoard" @click="onEditBoardSettings" />
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionDelete :name="title" scope-language-key="common.words.board" @click="onDeleteBoard" />
 			</BoardMenu>
@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { BoardExternalReferenceType } from "../../../../serverApi/v3";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardDraftChip from "./BoardDraftChip.vue";
@@ -67,27 +68,16 @@ import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-	boardId: {
-		type: String,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	isDraft: {
-		type: Boolean,
-		required: true,
-	},
-	isEditableChipVisible: {
-		type: Boolean,
-	},
-	hasReadersEditPermission: {
-		type: Boolean,
-		required: true,
-	},
-});
+type Props = {
+	boardId: string;
+	boardContextType?: BoardExternalReferenceType;
+	title: string;
+	isDraft: boolean;
+	isEditableChipVisible?: boolean;
+	hasReadersEditPermission: boolean;
+};
+
+const props = defineProps<Props>();
 
 const emit = defineEmits([
 	"copy:board",
@@ -116,6 +106,8 @@ const boardTitleFallback = computed(() => {
 	const translatedTitle = t("common.words.board");
 	return upperCaseFirstChar(translatedTitle);
 });
+
+const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.Room);
 
 const onStartEditMode = () => {
 	if (!hasEditPermission.value) return;

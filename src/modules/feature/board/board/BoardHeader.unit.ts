@@ -1,7 +1,7 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-import { ConfigResponse } from "@/serverApi/v3";
+import { BoardExternalReferenceType, ConfigResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -36,7 +36,7 @@ describe("BoardHeader", () => {
 			permissions?: Partial<BoardPermissionChecks>;
 			envs?: Partial<ConfigResponse>;
 		},
-		props?: { isDraft?: boolean; hasReadersEditPermission?: boolean }
+		props?: { isDraft?: boolean; hasReadersEditPermission?: boolean; boardContextType?: BoardExternalReferenceType }
 	) => {
 		const isEditMode = computed(() => true);
 		const mockedStartEditMode = vi.fn();
@@ -72,6 +72,8 @@ describe("BoardHeader", () => {
 				isDraft: props?.isDraft || false,
 				isEditableChipVisible: true,
 				hasReadersEditPermission: props?.hasReadersEditPermission || false,
+				boardContextType: BoardExternalReferenceType.Room,
+				...props,
 			},
 		});
 		return { startEditMode: mockedStartEditMode, wrapper };
@@ -334,6 +336,14 @@ describe("BoardHeader", () => {
 				expect(emitted).toBeDefined();
 				expect(emitted![0]).toStrictEqual([true]);
 			});
+		});
+	});
+
+	describe("when board belongs to a course", () => {
+		it("should not display the editable settings button", () => {
+			const { wrapper } = setup({}, { boardContextType: BoardExternalReferenceType.Course });
+
+			expect(wrapper.findComponent(KebabMenuActionEditingSettings).exists()).toBe(false);
 		});
 	});
 });
