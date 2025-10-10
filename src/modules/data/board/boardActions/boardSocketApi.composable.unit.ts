@@ -23,7 +23,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
 vi.mock("../socket/socket");
