@@ -212,22 +212,22 @@ describe("useApplicationStore", () => {
 			const store = useAppStore();
 
 			store.handleApplicationError(HttpStatusCode.BadRequest);
-			expect(store.applicationError?.errorTranslationKey).toBe("error.400");
+			expect(store.applicationError?.translationKeyOrText).toBe("error.400");
 
 			store.handleApplicationError(HttpStatusCode.InternalServerError);
-			expect(store.applicationError?.errorTranslationKey).toBe("error.generic");
+			expect(store.applicationError?.translationKeyOrText).toBe("error.generic");
 		});
 
 		it("puts unknown error codes to generic", () => {
 			useAppStore().handleApplicationError(999 as HttpStatusCode);
-			expect(useAppStore().applicationError).toEqual({ status: 999, errorTranslationKey: "error.generic" });
+			expect(useAppStore().applicationError).toEqual({ status: 999, translationKeyOrText: "error.generic" });
 		});
 
 		it("overwrites error text messages when given", () => {
 			useAppStore().handleApplicationError(HttpStatusCode.BadRequest, "custom.key");
 			expect(useAppStore().applicationError).toEqual({
 				status: HttpStatusCode.BadRequest,
-				errorTranslationKey: "custom.key",
+				translationKeyOrText: "custom.key",
 			});
 		});
 	});
@@ -243,7 +243,7 @@ describe("useApplicationStore", () => {
 			useAppStore().handleUnknownError(error);
 			expect(useAppStore().applicationError).toEqual({
 				status: HttpStatusCode.Forbidden,
-				errorTranslationKey: "error.403",
+				translationKeyOrText: "error.403",
 			});
 		});
 
@@ -251,7 +251,7 @@ describe("useApplicationStore", () => {
 			useAppStore().handleUnknownError(new Error("any error"));
 			expect(useAppStore().applicationError).toEqual({
 				status: HttpStatusCode.InternalServerError,
-				errorTranslationKey: "error.generic",
+				translationKeyOrText: "error.generic",
 			});
 		});
 	});

@@ -44,7 +44,7 @@ const error = computed(() => {
 
 	return {
 		statusCode: Number(applicationError.value?.status),
-		translationKey: applicationError.value?.errorTranslationKey,
+		translationKey: applicationError.value?.translationKeyOrText,
 	};
 });
 
@@ -54,7 +54,7 @@ addEventListener("pagehide", (event) => {
 
 	if (applicationError.value?.status) {
 		storage.set("applicationErrorStatusCode", JSON.stringify(applicationError.value?.status));
-		storage.set("applicationErrorTranslationKey", applicationError.value.errorTranslationKey ?? "");
+		storage.set("applicationErrorTranslationKey", applicationError.value.translationKeyOrText ?? "");
 	}
 });
 

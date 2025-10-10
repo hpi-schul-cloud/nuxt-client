@@ -20,7 +20,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
 
 	const isLoggedIn = ref(false);
-	const applicationError = ref<{ status: HttpStatusCode; errorTranslationKey: string }>();
+	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -76,31 +76,31 @@ export const useAppStore = defineStore("applicationStore", () => {
 			})
 			.catch(logger.error);
 
-	const handleApplicationError = (status: HttpStatusCode, errorTranslationKey?: string) => {
-		if (errorTranslationKey !== undefined) {
-			applicationError.value = { status, errorTranslationKey };
+	const handleApplicationError = (status: HttpStatusCode, translationKeyOrText?: string) => {
+		if (translationKeyOrText !== undefined) {
+			applicationError.value = { status, translationKeyOrText: translationKeyOrText };
 		} else {
 			switch (status) {
 				case HttpStatusCode.BadRequest:
-					applicationError.value = { status, errorTranslationKey: "error.400" };
+					applicationError.value = { status, translationKeyOrText: "error.400" };
 					break;
 				case HttpStatusCode.Unauthorized:
-					applicationError.value = { status, errorTranslationKey: "error.401" };
+					applicationError.value = { status, translationKeyOrText: "error.401" };
 					break;
 				case HttpStatusCode.Forbidden:
-					applicationError.value = { status, errorTranslationKey: "error.403" };
+					applicationError.value = { status, translationKeyOrText: "error.403" };
 					break;
 				case HttpStatusCode.NotFound:
-					applicationError.value = { status, errorTranslationKey: "error.404" };
+					applicationError.value = { status, translationKeyOrText: "error.404" };
 					break;
 				case HttpStatusCode.RequestTimeout:
-					applicationError.value = { status, errorTranslationKey: "error.408" };
+					applicationError.value = { status, translationKeyOrText: "error.408" };
 					break;
 				case HttpStatusCode.InternalServerError:
-					applicationError.value = { status, errorTranslationKey: "error.generic" };
+					applicationError.value = { status, translationKeyOrText: "error.generic" };
 					break;
 				default:
-					applicationError.value = { status, errorTranslationKey: "error.generic" };
+					applicationError.value = { status, translationKeyOrText: "error.generic" };
 					break;
 			}
 		}

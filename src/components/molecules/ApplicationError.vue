@@ -21,7 +21,7 @@ const { applicationError } = useAppStoreRefs();
 
 const hasError = computed(() => applicationError.value?.status !== undefined);
 const errorText = computed(() =>
-	hasError.value ? t(applicationError.value?.errorTranslationKey ?? "error.generic") : ""
+	hasError.value ? t(applicationError.value?.translationKeyOrText ?? "error.generic") : ""
 );
 
 const statusCode = computed(() => applicationError.value?.status);
