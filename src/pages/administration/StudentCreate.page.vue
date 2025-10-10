@@ -56,16 +56,11 @@ export default {
 			sendRegistration: false,
 			breadcrumbs: [
 				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
 					title: this.$t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
 					title: this.$t("pages.administration.students.new.title"),
-					to: "/administration/students/new",
 					disabled: true,
 				},
 			],

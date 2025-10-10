@@ -82,7 +82,7 @@ const { createBoard } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
-const pageTitle = computed(() => buildPageTitle(`${room.value.name} - ${t("pages.roomDetails.title")}`));
+const pageTitle = computed(() => buildPageTitle(room.value.name, t("pages.roomDetails.title")));
 useTitle(pageTitle);
 
 const { canDeleteRoom, canEditRoomContent, canLeaveRoom, canCopyRoom, canShareRoom, canListDrafts, canViewRoom } =

@@ -119,7 +119,6 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
@@ -143,13 +142,12 @@ import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, PropType, provide, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
-	breadcrumbs: { type: Array as PropType<Breadcrumb[]>, default: () => [] },
 });
 
 const { t } = useI18n();
@@ -158,7 +156,8 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-const { createPageInformation, contextType, roomId, resetPageInformation } = useSharedBoardPageInformation();
+const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInformation } =
+	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);

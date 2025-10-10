@@ -78,9 +78,8 @@ describe("SchoolExternalToolConfigurator", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.index.title");
-			expect(breadcrumbs.at(1)?.text()).toEqual("pages.administration.school.index.title");
-			expect(breadcrumbs.at(2)?.text()).toEqual("pages.tool.title");
+			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.school.index.title");
+			expect(breadcrumbs.at(1)?.text()).toEqual("pages.tool.title");
 		});
 	});
 

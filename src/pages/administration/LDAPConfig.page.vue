@@ -98,10 +98,6 @@ export default {
 		return {
 			breadcrumbs: [
 				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
 					title: this.$t("pages.administration.school.index.title"),
 					to: "/administration/school-settings",
 				},

@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<default-wireframe
-			:breadcrumbs="breadcrumbs"
-			max-width="full"
-			:headline="$t('pages.administration.teachers.index.title')"
-			:fab-items="fab"
-		>
+		<default-wireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
 			<progress-modal
 				:active="isDeleting"
 				:percent="deletedPercent"
@@ -174,17 +169,6 @@ export default {
 				(this.getUiState("sorting", "pages.administration.teachers.index") &&
 					this.getUiState("sorting", "pages.administration.teachers.index").sortOrder) ||
 				"asc",
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
-					title: this.$t("pages.administration.teachers.index.title"),
-					disabled: true,
-				},
-			],
-
 			tableActions: [
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.email"),
