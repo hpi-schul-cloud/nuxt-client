@@ -1,13 +1,12 @@
 <template>
 	<div class="page">
 		<div class="topbar" data-testid="logged-out-top-bar">
-			<navigation-bar :img="Logo" :links="navbarItems" />
+			<NavigationBar :img="Logo" :links="navbarItems" />
 		</div>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
 		</div>
-		<the-footer class="footer" />
-		<application-error-routing />
+		<TheFooter />
 	</div>
 </template>
 
@@ -15,14 +14,17 @@
 import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
-import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting.vue";
+import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+const { applicationError } = useAppStoreRefs();
+const router = useRouter();
 
 const ghostBaseUrl = computed(() => useEnvConfig().value.GHOST_BASE_URL);
 
@@ -45,6 +47,19 @@ const navbarItems = computed(() => [
 ]);
 
 const isMobile = computed(() => xs.value);
+
+watch(
+	() => applicationError.value?.status,
+	(to) => {
+		if (to !== undefined) {
+			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
+			if (router.currentRoute.value.path !== "/error") {
+				router.replace("/error");
+			}
+		}
+	},
+	{ immediate: true }
+);
 </script>
 
 <style lang="scss" scoped>

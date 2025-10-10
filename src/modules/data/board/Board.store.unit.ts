@@ -6,19 +6,17 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
-import { applicationErrorModule } from "@/store";
-import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { useAppStore } from "@data-app";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
@@ -65,10 +63,7 @@ describe("BoardStore", () => {
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
+		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
@@ -1230,8 +1225,7 @@ describe("BoardStore", () => {
 				});
 			});
 
-			it('should call applicationErrorModule.showError if "isOwnAction" is false', async () => {
-				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
+			it('should call handleApplicationError if "isOwnAction" is false', async () => {
 				const { boardStore } = setup({ socketFlag: true });
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 
@@ -1240,8 +1234,9 @@ describe("BoardStore", () => {
 					isOwnAction: false,
 				});
 
-				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
+				expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(
+					HttpStatusCode.NotFound,
+					"components.board.error.404"
 				);
 			});
 		});

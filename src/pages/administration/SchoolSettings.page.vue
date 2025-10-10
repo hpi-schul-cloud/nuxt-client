@@ -142,8 +142,6 @@ import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { SchoolSystemResponse } from "@/serverApi/v3";
-import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -210,18 +208,12 @@ export default defineComponent({
 		const openedPanels: ComputedRef<string[]> = computed(() =>
 			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
 		);
-		const systems: ComputedRef<SchoolSystemResponse[]> = computed(() => schoolsModule.getSystems);
-		const isLoading: ComputedRef<boolean> = computed(() => schoolsModule.getLoading);
-		const error: ComputedRef<ApplicationError | null> = computed(() => schoolsModule.getError);
-		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> = computed(
-			() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED
-		);
-		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> = computed(
-			() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW
-		);
-		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> = computed(
-			() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
-		);
+		const systems = computed(() => schoolsModule.getSystems);
+		const isLoading = computed(() => schoolsModule.getLoading);
+		const error = computed(() => schoolsModule.getError);
+		const isFeatureOauthMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
+		const isFeatureSchoolPolicyEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
+		const isFeatureSchoolTermsOfUseEnabled = computed(() => useEnvConfig().value.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED);
 
 		const { instituteTitle } = storeToRefs(useEnvStore());
 

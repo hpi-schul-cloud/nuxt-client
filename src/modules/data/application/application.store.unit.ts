@@ -8,6 +8,8 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@/serverApi/v3";
+import { ApplicationError } from "@/store/types/application-error";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
@@ -202,6 +204,55 @@ describe("useApplicationStore", () => {
 
 			expect(logger.error).toHaveBeenCalledWith(error);
 			expect(useAppStore().locale).toEqual(LanguageType.De);
+		});
+	});
+
+	describe("handleApplicationError", () => {
+		it("handles known status codes", () => {
+			const store = useAppStore();
+
+			store.handleApplicationError(HttpStatusCode.BadRequest);
+			expect(store.applicationError?.translationKeyOrText).toBe("error.400");
+
+			store.handleApplicationError(HttpStatusCode.InternalServerError);
+			expect(store.applicationError?.translationKeyOrText).toBe("error.generic");
+		});
+
+		it("puts unknown error codes to generic", () => {
+			useAppStore().handleApplicationError(999 as HttpStatusCode);
+			expect(useAppStore().applicationError).toEqual({ status: 999, translationKeyOrText: "error.generic" });
+		});
+
+		it("overwrites error text messages when given", () => {
+			useAppStore().handleApplicationError(HttpStatusCode.BadRequest, "custom.key");
+			expect(useAppStore().applicationError).toEqual({
+				status: HttpStatusCode.BadRequest,
+				translationKeyOrText: "custom.key",
+			});
+		});
+	});
+
+	describe("handleUnknownError", () => {
+		it("handles ApplicationError error objects", () => {
+			const error: ApplicationError = {
+				name: "ApplicationError",
+				statusCode: HttpStatusCode.Forbidden,
+				translationKey: "error.403",
+				message: "",
+			};
+			useAppStore().handleUnknownError(error);
+			expect(useAppStore().applicationError).toEqual({
+				status: HttpStatusCode.Forbidden,
+				translationKeyOrText: "error.403",
+			});
+		});
+
+		it("puts generic error for unknown errors", () => {
+			useAppStore().handleUnknownError(new Error("any error"));
+			expect(useAppStore().applicationError).toEqual({
+				status: HttpStatusCode.InternalServerError,
+				translationKeyOrText: "error.generic",
+			});
 		});
 	});
 });

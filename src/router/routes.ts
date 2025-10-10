@@ -177,14 +177,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
-		path: "/error/proxy",
-		component: () => import("@/pages/ProxyError.page.vue"),
-		name: "error-proxy",
-		meta: {
-			isPublic: true,
-		},
-	},
-	{
 		path: "/imprint",
 		component: () => import("@/pages/Imprint.page.vue"),
 		name: "imprint",

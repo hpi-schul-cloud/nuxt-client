@@ -1,25 +1,17 @@
 import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
-import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { isMongoId } from "@/utils/validation";
+import { useAppStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
-vi.mock("@/store", () => ({
-	applicationErrorModule: {
-		setError: vi.fn(),
-	},
-}));
-
-vi.mock("@/composables/application-error.composable", () => ({
-	useApplicationError: () => ({
-		createApplicationError: vi.fn(() => ({
-			status: 400,
-			message: "Bad Request",
-		})),
-	}),
-}));
-
 describe("validateQueryParameters", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -43,7 +35,7 @@ describe("validateQueryParameters", () => {
 
 		guard(to, from, next);
 
-		expect(applicationErrorModule.setError).not.toHaveBeenCalled();
+		expect(useAppStore().handleApplicationError).not.toHaveBeenCalled();
 		expect(next).toHaveBeenCalled();
 	});
 
@@ -60,10 +52,7 @@ describe("validateQueryParameters", () => {
 
 		guard(to, from, next);
 
-		expect(applicationErrorModule.setError).toHaveBeenCalledWith({
-			status: HttpStatusCode.BadRequest,
-			message: "Bad Request",
-		});
+		expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest);
 		expect(next).not.toHaveBeenCalled();
 	});
 });

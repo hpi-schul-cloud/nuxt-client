@@ -4,10 +4,8 @@ import { useBoardSocketApi } from "../boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { useCardSocketApi } from "../cardActions/cardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import ApplicationErrorModule from "@/store/application-error";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
@@ -61,9 +59,6 @@ describe("BoardStore - moveCardSuccess", () => {
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
 
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);

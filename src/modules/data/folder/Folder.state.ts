@@ -1,5 +1,6 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardElementApiFactory } from "@/serverApi/v3";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	AnyContentElement,
 	ContentElementType,
@@ -9,6 +10,7 @@ import {
 } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -102,14 +104,13 @@ const castToFileFolderElement = (element: AnyContentElement): FileFolderElement 
 	if (element.type === ContentElementType.FileFolder) {
 		return element as FileFolderElement;
 	} else {
-		throw createApplicationError(404);
+		throw createApplicationError(HttpStatusCode.NotFound);
 	}
 };
 
-const throwApplicationError = (error: unknown): never => {
+const throwApplicationError = (error: unknown) => {
 	const responseError = mapAxiosErrorToResponseError(error);
-
-	throw createApplicationError(responseError.code);
+	useAppStore().handleApplicationError(responseError.code);
 };
 
 const mapNodeTypeToPathType = (nodeType: string): string => {

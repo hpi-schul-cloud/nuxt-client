@@ -1,4 +1,3 @@
-import ApplicationErrorModule from "@/store/application-error";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
@@ -25,7 +24,6 @@ import { InjectionKey } from "vue";
 export const FILE_PATHS_MODULE_KEY: InjectionKey<FilePathsModule> = Symbol("filePathsModule");
 export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
 	Symbol("schoolExternalToolsModule");
-export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> = Symbol("applicationError");
 export const COURSE_ROOM_DETAILS_MODULE_KEY: InjectionKey<CourseRoomDetailsModule> = Symbol("courseRoomDetailsModule");
 export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> = Symbol("videoConferenceModule");
 export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> = Symbol("statusAlertsModule");

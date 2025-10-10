@@ -1,11 +1,7 @@
 <template>
 	<div class="application-error-wrapper">
 		<div v-if="hasError" class="text-centered mt-8">
-			<error-content
-				:status-code="appErrorStatusCode"
-				:error-text="translatedErrorMessage"
-				data-testid="error-content"
-			/>
+			<ErrorContent :status-code="statusCode" :error-text="errorText" data-testid="error-content" />
 			<v-btn ref="btn-back" class="mt-4" color="primary" variant="flat" data-testid="btn-back" href="/dashboard">
 				{{ $t("error.action.back") }}
 			</v-btn>
@@ -15,18 +11,18 @@
 </template>
 <script setup lang="ts">
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
-import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
+import { useAppStoreRefs } from "@data-app";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 const { t } = useI18n();
 
-const hasError = computed(() => applicationErrorModule.getStatusCode !== null);
+const { applicationError } = useAppStoreRefs();
 
-const appErrorStatusCode = computed(() => Number(applicationErrorModule.getStatusCode));
-const translatedErrorMessage = computed(() =>
-	hasError.value ? t(applicationErrorModule.getTranslationKey).toString() : ""
+const statusCode = computed(() => applicationError.value?.status);
+const hasError = computed(() => statusCode.value !== undefined);
+const errorText = computed(() =>
+	hasError.value ? t(applicationError.value?.translationKeyOrText ?? "error.generic") : ""
 );
 </script>
 <style lang="scss" scoped>

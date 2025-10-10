@@ -1,10 +1,10 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
 import { expectNotification, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -221,15 +221,14 @@ describe("@pages/RoomEdit.page.vue", () => {
 					expectNotification("error");
 				});
 
-				it("should throw application error if not due to invalid request", async () => {
+				it("should create an application error if not due to invalid request", async () => {
 					const { updateRoom, wrapper } = setup();
 					updateRoom.mockRejectedValue({ code: HttpStatusCode.Unauthorized });
 
-					await expect(() =>
-						(wrapper.vm as unknown as typeof RoomEditPage).onSave({
-							room: roomParams,
-						})
-					).rejects.toThrow(new ApplicationError(HttpStatusCode.Unauthorized, "error.401"));
+					await (wrapper.vm as unknown as typeof RoomEditPage).onSave({
+						room: roomParams,
+					});
+					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Unauthorized);
 				});
 			});
 

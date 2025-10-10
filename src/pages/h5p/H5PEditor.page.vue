@@ -22,12 +22,9 @@
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import { H5pEditorHooks } from "./types/h5pEditorHooks";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { useApplicationError } from "@/composables/application-error.composable";
 import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
-import type ApplicationErrorModule from "@/store/application-error";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
-import { notifyError, notifySuccess } from "@data-app";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -37,11 +34,7 @@ const props = defineProps<{
 	contentId?: string;
 }>();
 
-const applicationErrorModule: ApplicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
-
 const { t } = useI18n();
-
-const { createApplicationError } = useApplicationError();
 
 const editorRef: Ref<typeof H5PEditorComponent | undefined> = ref();
 
@@ -51,8 +44,7 @@ const notifyParent = (event: CustomEvent) => {
 
 const loadError = (error: unknown) => {
 	const responseError = mapAxiosErrorToResponseError(error);
-
-	applicationErrorModule.setError(createApplicationError(responseError.code));
+	useAppStore().handleApplicationError(responseError.code);
 };
 
 let hooks: H5pEditorHooks | undefined;

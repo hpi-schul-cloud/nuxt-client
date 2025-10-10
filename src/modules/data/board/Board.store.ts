@@ -30,15 +30,13 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload.types";
 import { ColumnResponse } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 export const useBoardStore = defineStore("boardStore", () => {
@@ -52,8 +50,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
-
-	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
@@ -336,7 +332,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			});
 			return;
 		}
-		applicationErrorModule.setError(createApplicationError(HttpStatusCode.NotFound, t("components.board.error.404")));
+		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
 	const reloadBoard = async () => {

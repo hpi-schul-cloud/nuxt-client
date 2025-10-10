@@ -6,7 +6,6 @@
 // into the actual stores, and then re-export them.
 
 import CommonCartridgeExportModule from "./common-cartridge-export";
-import ApplicationErrorModule from "@/store/application-error";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
@@ -34,7 +33,6 @@ import { getModule } from "vuex-module-decorators";
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
-export let applicationErrorModule: ApplicationErrorModule;
 export let contentModule: ContentModule;
 export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
@@ -60,7 +58,6 @@ export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
-	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	filePathsModule = getModule(FilePaths, store);
@@ -89,7 +86,6 @@ export function initializeStores(store: Store<unknown>): void {
 // appears as an element of the root store's state.
 // (This is required!)
 export const modules = {
-	applicationErrorModule: ApplicationErrorModule,
 	contentModule: ContentModule,
 	copyModule: CopyModule,
 	filePathsModule: FilePaths,

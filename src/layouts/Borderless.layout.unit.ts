@@ -1,6 +1,6 @@
 import BorderlessLayout from "./Borderless.layout.vue";
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
+import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
@@ -43,11 +43,11 @@ describe("BorderlessLayout", () => {
 		});
 	});
 
-	describe("ApplicationErrorWrapper", () => {
-		it("should render ApplicationErrorWrapper", () => {
+	describe("ApplicationError", () => {
+		it("should render ApplicationError", () => {
 			const { wrapper } = getWrapper();
 
-			const applicationErrorWrapper = wrapper.findComponent(ApplicationErrorWrapper);
+			const applicationErrorWrapper = wrapper.findComponent(ApplicationError);
 
 			expect(applicationErrorWrapper.exists()).toBe(true);
 		});

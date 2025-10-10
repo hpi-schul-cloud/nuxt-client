@@ -62,7 +62,7 @@ vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
 vi.mock("vue-i18n", () => ({
-	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
+	useI18n: () => ({ t: (key: string) => key }),
 }));
 
 describe("useCardRestApi", () => {

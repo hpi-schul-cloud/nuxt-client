@@ -19,7 +19,7 @@
 				@click:close="removeNotifier(notification.id)"
 			>
 				<div class="alert-text mr-2" data-testId="alert-text">
-					{{ notification.text }}
+					{{ t(notification.text) ?? notification.text }}
 				</div>
 			</v-alert>
 		</transition-group>
@@ -31,12 +31,15 @@ import { AlertStatus, useNotificationStore } from "@data-app";
 import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const { notifierItems } = storeToRefs(useNotificationStore());
 const { removeNotifier } = useNotificationStore();
 
 const { xs: isMobile } = useDisplay();
+
+const { t } = useI18n();
 
 const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 

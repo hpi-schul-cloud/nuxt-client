@@ -2,7 +2,6 @@ import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import {
 	BoardLayout,
@@ -11,8 +10,6 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
-import ApplicationErrorModule from "@/store/application-error";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import LoadingStateModule from "@/store/loading-state";
@@ -31,8 +28,7 @@ import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils"
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { useNotificationStore } from "@data-app";
+import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardInactivity,
 	useBoardPermissions,
@@ -89,9 +85,6 @@ const useRouteMock = <Mock>useRoute;
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
-vi.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = vi.mocked(useApplicationError);
-
 describe("Board", () => {
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
 	let mockedBoardPermissionsHandler: DeepMocked<ReturnType<typeof useBoardPermissions>>;
@@ -99,8 +92,6 @@ describe("Board", () => {
 	let mockedBoardPermissions: BoardPermissionChecks;
 	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof useBoardInactivity>>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
-	const setErrorMock = vi.fn();
 	const hash = "";
 
 	beforeEach(() => {
@@ -112,9 +103,6 @@ describe("Board", () => {
 
 		mockedBoardPermissionsHandler = createMock<ReturnType<typeof useBoardPermissions>>();
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
-
-		mockedCreateApplicationErrorCalls = createMock<ReturnType<typeof useApplicationError>>();
-		mockedCreateApplicationError.mockReturnValue(mockedCreateApplicationErrorCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -180,10 +168,6 @@ describe("Board", () => {
 	};
 
 	const setupProvideModules = () => {
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
-
 		const copyResultId = "42";
 		const copyModule = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
@@ -225,6 +209,7 @@ describe("Board", () => {
 		} = setupProvideModules();
 
 		setActivePinia(createTestingPinia());
+
 		createTestEnvStore({
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -273,7 +258,6 @@ describe("Board", () => {
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
-		applicationErrorModule.setError = setErrorMock;
 
 		const wrapperVM = wrapper.vm as unknown as {
 			board: Board;
@@ -791,10 +775,10 @@ describe("Board", () => {
 				expect(boardStore.updateBoardVisibilityRequest).toHaveBeenCalled();
 			});
 
-			describe("@createApplicationError", () => {
+			describe("@handleApplicationError", () => {
 				describe("when board is in draft mode", () => {
 					describe("when the user has not edit permission", () => {
-						it("should call 'createApplicationError' method", async () => {
+						it("should call 'handleApplicationError' method", async () => {
 							mockedBoardPermissions.hasEditPermission = ref(false);
 							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 
@@ -811,17 +795,15 @@ describe("Board", () => {
 								name: "room-details",
 								params: { id: mockRoomId },
 							});
-							expect(mockedCreateApplicationErrorCalls.createApplicationError).toHaveBeenCalledWith(
+							expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(
 								HttpStatusCode.Forbidden,
 								"components.board.error.403"
 							);
-
-							expect(setErrorMock).toHaveBeenCalled();
 						});
 					});
 
 					describe("when the user has edit permissions", () => {
-						it("should not call 'createApplicationError' method", async () => {
+						it("should not call 'handleApplicationError' method", async () => {
 							mockedBoardPermissions.hasEditPermission = ref(true);
 							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 							const { boardStore, wrapperVM } = setup();
@@ -831,15 +813,14 @@ describe("Board", () => {
 							await nextTick();
 
 							expect(wrapperVM.isBoardVisible).toBe(false);
-							expect(mockedCreateApplicationErrorCalls.createApplicationError).not.toHaveBeenCalled();
-							expect(setErrorMock).not.toHaveBeenCalled();
+							expect(useAppStore().handleApplicationError).not.toHaveBeenCalled();
 						});
 					});
 				});
 
 				describe("when board is published mode", () => {
 					describe("when the user has not edit permission", () => {
-						it("should not call 'createApplicationError' method", async () => {
+						it("should not call 'handleApplicationError' method", async () => {
 							mockedBoardPermissions.hasEditPermission = ref(false);
 							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 							const { boardStore, wrapperVM } = setup();
@@ -849,13 +830,12 @@ describe("Board", () => {
 							await nextTick();
 
 							expect(wrapperVM.isBoardVisible).toBe(true);
-							expect(mockedCreateApplicationErrorCalls.createApplicationError).not.toHaveBeenCalled();
-							expect(setErrorMock).not.toHaveBeenCalled();
+							expect(useAppStore().handleApplicationError).not.toHaveBeenCalled();
 						});
 					});
 
 					describe("when the user has edit permission", () => {
-						it("should not call 'createApplicationError' method", async () => {
+						it("should not call 'handleApplicationError' method", async () => {
 							mockedBoardPermissions.hasEditPermission = ref(true);
 							mockedBoardPermissions.arePermissionsLoaded = ref(true);
 							const { boardStore, wrapperVM } = setup();
@@ -865,8 +845,7 @@ describe("Board", () => {
 							await nextTick();
 
 							expect(wrapperVM.isBoardVisible).toBe(true);
-							expect(mockedCreateApplicationErrorCalls.createApplicationError).not.toHaveBeenCalled();
-							expect(setErrorMock).not.toHaveBeenCalled();
+							expect(useAppStore().handleApplicationError).not.toHaveBeenCalled();
 						});
 					});
 

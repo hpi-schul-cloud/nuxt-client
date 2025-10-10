@@ -1,20 +1,14 @@
 import { useRoomCreateState } from "./RoomCreate.state";
-import { useApplicationError } from "@/composables/application-error.composable";
 import * as serverApi from "@/serverApi/v3/api";
-import ApplicationErrorModule from "@/store/application-error";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { apiResponseErrorFactory, axiosErrorFactory } from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
 import { ref } from "vue";
 
 vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
-
-vi.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
@@ -34,7 +28,6 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 describe("useRoomCreateState", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 
 	beforeEach(() => {
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
@@ -42,13 +35,6 @@ describe("useRoomCreateState", () => {
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		initializeAxios(axiosMock);
-
-		mockedCreateApplicationErrorCalls = createMock<ReturnType<typeof useApplicationError>>();
-		mockedCreateApplicationError.mockReturnValue(mockedCreateApplicationErrorCalls);
-
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
 	});
 
 	afterEach(() => {
