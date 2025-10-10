@@ -635,6 +635,17 @@ describe("FileContent", () => {
 			expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		});
 
+		it("should emit update:name event, when it receives update:name event from file inputs component", async () => {
+			const { wrapper } = setup();
+
+			const fileInputs = wrapper.findComponent(FileInputs);
+
+			fileInputs.vm.$emit("update:name");
+			vi.runAllTimers();
+
+			expect(wrapper.emitted("update:name")).toHaveLength(1);
+		});
+
 		it("should emit update:caption event, when it receives update:caption event from file inputs component", async () => {
 			const { wrapper } = setup();
 
