@@ -1823,6 +1823,24 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_ROOM_ADD_EXTERNAL_PERSONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ROOM_REGISTER_EXTERNAL_PERSONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_ADMINISTRATE_ROOMS_ENABLED: boolean;
     /**
      * 

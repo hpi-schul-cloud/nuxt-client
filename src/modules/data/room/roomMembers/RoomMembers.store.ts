@@ -92,10 +92,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return roomId.value;
 	};
 
-	const fetchMembers = async (roomId?: string) => {
+	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(roomId ?? getRoomId())).data;
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId())).data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => ({
 				...member,
 				fullName: `${member.firstName} ${member.lastName}`,
@@ -103,9 +103,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				displayRoomRole: roomRole[member.roomRoleName],
 				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 			}));
-			isLoading.value = false;
 		} catch {
 			notifyError(t("pages.rooms.members.error.load"));
+		} finally {
 			isLoading.value = false;
 		}
 	};
@@ -159,6 +159,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			return "";
 		}
 		return member.fullName;
+	};
+
+	const getRoomOwnerFullName = () => {
+		const owner = roomMembers.value.find((member) => member.roomRoleName === RoleName.Roomowner);
+		return owner?.fullName;
 	};
 
 	const isCurrentUserStudent = computed(() => {
@@ -282,14 +287,17 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const setRoomOwner = (userId: string) => {
 		const currentOwner = roomMembers.value.find((member) => member.roomRoleName === RoleName.Roomowner);
+		if (currentOwner) {
+			updateMemberRole(currentOwner, RoleName.Roomadmin);
+		}
+
 		const memberToBeOwner = roomMembers.value.find((member) => member.userId === userId);
-		if (!currentOwner || !memberToBeOwner) {
+		if (!memberToBeOwner) {
 			notifyError(t("pages.rooms.members.error.updateRole"));
 			return;
 		}
 
 		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
-		updateMemberRole(currentOwner, RoleName.Roomadmin);
 	};
 
 	const confirmInvitations = async (ids: string[]) => {
@@ -389,6 +397,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
+		getRoomOwnerFullName,
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,

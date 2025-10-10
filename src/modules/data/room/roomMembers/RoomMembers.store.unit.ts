@@ -956,6 +956,19 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("getRoomOwnerFullName", () => {
+		it("should return the full name of the room owner", async () => {
+			const roomOwner = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomowner,
+			});
+			const { roomMembersStore } = setup([roomOwner]);
+
+			const result = roomMembersStore.getRoomOwnerFullName();
+
+			expect(result).toBe(`${roomOwner.firstName} ${roomOwner.lastName}`);
+		});
+	});
+
 	describe("roomMembers computed property", () => {
 		it("should split roomMembers into 'roomAplicants' and 'roomMembersWithoutApplicants' based on roomRoleName", async () => {
 			const { roomMembersStore } = setup();

@@ -1710,9 +1710,9 @@ export default {
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
 	"pages.rooms.members.handOverAlert.label": "Esta autorización de sala se transfiere a {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
-		"{currentUserFullName} pierde la autorización «Propietario» y gana la autorización «Administrar».",
+		"{roomOwner} pierde la autorización «Propietario» y gana la autorización «Administrar».",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
+		"Si esta autorización se transfiere a {memberFullName}, {roomOwner} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Crear enlace de invitación",

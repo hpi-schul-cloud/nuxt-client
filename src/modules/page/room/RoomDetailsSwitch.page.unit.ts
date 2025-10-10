@@ -78,10 +78,10 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 			expect(loadingState.exists()).toBe(true);
 		});
 
-		it("should fetch room", () => {
+		it("should fetch room and boards", () => {
 			const { roomDetailsStore } = setup({ isLoading: true });
 
-			expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
+			expect(roomDetailsStore.fetchRoomAndBoards).toHaveBeenCalled();
 		});
 	});
 

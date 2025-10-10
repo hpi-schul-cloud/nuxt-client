@@ -1,15 +1,22 @@
-import AdministrationRoomDetailPage from "./AdministrationRoomDetails.page.vue";
+import AdministrationRoomMembersPage from "./AdministrationRoomMembers.page.vue";
+import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/tests/test-utils";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestAppStoreWithRole,
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+	schoolFactory,
+} from "@@/tests/test-utils";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useAdministrationRoomStore } from "@data-room";
+import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
+import { useI18n } from "vue-i18n";
 import { Router, useRoute } from "vue-router";
 
 vi.mock("vue-router");
@@ -23,7 +30,15 @@ vi.mock(
 		}) as typeof import("@/utils/pageTitle")
 );
 
-describe("AdministrationRoomDetails.page", () => {
+vi.mock("vue-i18n", () => ({
+	useI18n: vi.fn().mockReturnValue({
+		t: vi.fn().mockImplementation((key: string) => key),
+		n: vi.fn().mockImplementation((key: string) => key),
+	}),
+}));
+vi.mocked(useI18n());
+
+describe("AdministrationRoomMembers.page", () => {
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -38,6 +53,8 @@ describe("AdministrationRoomDetails.page", () => {
 			schoolsModule: SchoolsModule,
 		});
 
+		createTestAppStoreWithRole(RoleName.Administrator);
+
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 	afterEach(() => {
@@ -50,10 +67,9 @@ describe("AdministrationRoomDetails.page", () => {
 		});
 		const isEmptyList = options?.isEmptyList ?? false;
 
-		const wrapper = mount(AdministrationRoomDetailPage, {
+		const wrapper = mount(AdministrationRoomMembersPage, {
 			global: {
 				plugins: [
-					createTestingI18n(),
 					createTestingVuetify(),
 					createTestingPinia({
 						initialState: {
@@ -69,14 +85,19 @@ describe("AdministrationRoomDetails.page", () => {
 						},
 					}),
 				],
+				stubs: {
+					RoomAdminMembersTable: true,
+				},
 			},
 		});
 
 		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
+		const memberStore = mockedPiniaStoreTyping(useRoomMembersStore);
 
 		return {
 			wrapper,
 			adminRoomStore,
+			memberStore,
 		};
 	};
 
@@ -127,13 +148,12 @@ describe("AdministrationRoomDetails.page", () => {
 			expect(header.text()).toBe("pages.rooms.administration.roomDetail.header.text");
 		});
 
-		it("should set 'selectedRoom' value to null when unMounted", () => {
-			const { adminRoomStore, wrapper } = setup();
-
-			expect(adminRoomStore.selectedRoom).not.toBeNull();
+		it("should call resetStore when unMounted", async () => {
+			const { memberStore, wrapper } = setup();
 			wrapper.unmount();
+			await nextTick();
 
-			expect(adminRoomStore.selectedRoom).toBeNull();
+			expect(memberStore.resetStore).toHaveBeenCalled();
 		});
 
 		it("should navigate to dashboard if feature is disabled", async () => {
