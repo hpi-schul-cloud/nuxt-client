@@ -44,8 +44,9 @@ const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("vue-i18n", () => ({
+	useI18n: () => ({ t: (key: string) => key }),
+}));
 
 describe("useBoardSocketApi", () => {
 	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
