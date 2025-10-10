@@ -19,12 +19,11 @@ const { t } = useI18n();
 
 const { applicationError } = useAppStoreRefs();
 
-const hasError = computed(() => applicationError.value?.status !== undefined);
+const statusCode = computed(() => applicationError.value?.status);
+const hasError = computed(() => statusCode.value !== undefined);
 const errorText = computed(() =>
 	hasError.value ? t(applicationError.value?.translationKeyOrText ?? "error.generic") : ""
 );
-
-const statusCode = computed(() => applicationError.value?.status);
 </script>
 <style lang="scss" scoped>
 .text-centered {
