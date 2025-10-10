@@ -391,6 +391,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "licenses",
 		meta: {
 			isPublic: true,
+			layout: Layouts.LOGGED_OUT,
+		},
+	},
+	{
+		path: "/registration-external-members",
+		component: () => import("@/pages/registration-external-members/RegistrationExternalMembers.page.vue"),
+		name: "registration-external-members",
+		meta: {
+			isPublic: true,
 		},
 	},
 	{

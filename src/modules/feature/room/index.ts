@@ -1,6 +1,7 @@
 import BoardGrid from "./BoardGrid.vue";
 import RoomAdminMembersTable from "./manageRoom/tables/RoomAdminMembersTable.vue";
 import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
+import Registration from "./registration/Registration.vue";
 import RoomCopyFlow from "./RoomCopyFlow.vue";
 import RoomForm from "./RoomForm.vue";
 import RoomGrid from "./RoomGrid.vue";
@@ -27,6 +28,7 @@ export {
 	InviteMembersDialog,
 	Members,
 	MembersTable,
+	Registration,
 	RoomAdminMembersTable,
 	RoomAdminTable,
 	RoomCopyFlow,

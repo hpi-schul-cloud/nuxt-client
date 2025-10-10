@@ -5,8 +5,7 @@
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
 const activationCode = "[a-z0-9]+";
-const uuid =
-	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+const uuid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
 const vueRoutes = [
 	`^/favicon.png$`,
@@ -62,13 +61,12 @@ const vueRoutes = [
 	`^/tasks/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
+	`^/registration-external-members/?$`,
 	`^/@`,
 	`^/src/`,
 	`^/node_modules/`,
 ];
 
-const isVueClient = (path) => {
-	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
-};
+const isVueClient = (path) => vueRoutes.some((regex) => new RegExp(regex).exec(path));
 
 export { isVueClient };
