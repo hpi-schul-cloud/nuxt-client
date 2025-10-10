@@ -21,26 +21,29 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<InfoAlert v-if="showAlertInfo" class="mb-4">
+					<InfoAlert v-if="showAlertInfo" class="mb-4" data-testid="share-info-copyright-data-protection">
 						{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
 					</InfoAlert>
 					<WarningAlert v-if="showAlertInfo">
 						<div data-testid="share-options-table-header">
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
-								<li v-if="showRoomInfo" data-testid="share-options-room-memberships-data-text">
+								<li v-if="showRoomInfo" data-testid="share-modal-room-member-permission">
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData") }}
 								</li>
-								<li v-if="showCourseInfo">
+								<li v-if="showCourseInfo" data-testid="share-modal-course-member-permission">
 									{{ t("components.molecules.copyResult.membersAndPermissions") }}
 								</li>
-								<li v-if="showCourseInfo || showLessonInfo">
+								<li v-if="showCourseInfo || showLessonInfo" data-testid="share-modal-geogebra">
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.geogebra") }}
 								</li>
-								<li v-if="showCourseInfo || showRoomInfo || showBoardInfo || showLessonInfo">
+								<li
+									v-if="showCourseInfo || showRoomInfo || showBoardInfo || showLessonInfo"
+									data-testid="share-modal-content-etherpad"
+								>
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.etherpad") }}
 								</li>
-								<li v-if="showCourseInfo || showRoomInfo || showBoardInfo">
+								<li v-if="showCourseInfo || showRoomInfo || showBoardInfo" data-testid="share-modal-content-whiteboard">
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.whiteboard") }}
 								</li>
 								<li
