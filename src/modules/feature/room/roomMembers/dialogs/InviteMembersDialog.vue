@@ -60,10 +60,10 @@
 
 						<VCheckbox
 							v-if="isInviteExternalPersonsFeatureEnabled"
-							v-model="formData.isValidForExternalExperts"
-							:label="t('pages.rooms.members.inviteMember.form.validForExternalExperts.label')"
+							v-model="formData.isValidForExternalPersons"
+							:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
 							hide-details
-							data-testid="input-invite-participants-valid-for-external-experts"
+							data-testid="input-invite-participants-valid-for-external-persons"
 						/>
 
 						<div class="d-flex align-center justify-start my-n4 pr-0">
