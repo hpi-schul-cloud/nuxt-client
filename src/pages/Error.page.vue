@@ -28,10 +28,10 @@ const error = computed(() => {
 		"applicationErrorTldraw",
 	]);
 
-	if (
-		performanceNavigation.entryType === "reload" ||
-		(performanceNavigation.entryType === "navigate" && isTldrawError)
-	) {
+	const isReloadOrNavigate =
+		performanceNavigation.entryType === "reload" || (performanceNavigation.entryType === "navigate" && isTldrawError);
+
+	if (isReloadOrNavigate) {
 		return {
 			statusCode: Number(statusCode),
 			translationKey,
