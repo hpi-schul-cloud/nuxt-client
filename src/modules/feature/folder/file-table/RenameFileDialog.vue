@@ -7,7 +7,7 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<v-text-field
+			<VTextField
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
 				density="compact"
@@ -62,7 +62,12 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
-	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
+	validateOnOpeningTag: (value: string) => {
+		const fileExtension = getFileExtension(name);
+		const nameWithExtension = `${value}.${fileExtension}`;
+
+		return validateOnOpeningTag(nameWithExtension);
+	},
 	checkDuplicatedNames: (value: string) => {
 		const fileExtension = getFileExtension(name);
 		const nameWithExtension = `${value}.${fileExtension}`;

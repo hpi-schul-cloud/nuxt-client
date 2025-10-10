@@ -104,6 +104,7 @@ export default {
 	"common.labels.updateAt": "Updated:",
 	"common.labels.visibility": "Visibility",
 	"common.labels.visible": "Visible",
+	"common.labels.fileName": "File name",
 	"common.loading.text": "Data is loading...",
 	"common.medium.alert.deactivated": "Media is disabled.",
 	"common.medium.alert.notLicensed": "Medium is not authorized.",

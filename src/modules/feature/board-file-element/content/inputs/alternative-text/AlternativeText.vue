@@ -1,21 +1,26 @@
 <template>
-	<v-textarea
-		v-model="modelValue"
-		data-testid="file-alttext-input"
-		rows="1"
-		auto-grow
-		:persistent-hint="true"
-		:hint="$t('components.cardElement.fileElement.altDescription')"
-		:label="$t('components.cardElement.fileElement.alternativeText')"
-	/>
+	<InputWrapperWithCheckmark @confirm="onConfirm">
+		<VTextField
+			v-model="modelValue"
+			data-testid="file-alttext-input"
+			:persistent-hint="true"
+			:hint="t('components.cardElement.fileElement.altDescription')"
+			:label="t('components.cardElement.fileElement.alternativeText')"
+			:rules="rules"
+			@click.stop
+			@keydown.enter.stop="onConfirm"
+		/>
+	</InputWrapperWithCheckmark>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { useOpeningTagValidator } from "@/utils/validation";
+import { InputWrapperWithCheckmark } from "@ui-input";
+import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 type Props = {
 	alternativeText?: string;
-	isEditMode: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -26,6 +31,10 @@ const emit = defineEmits<{
 	(e: "update:alternativeText", alternativeText: string): void;
 }>();
 
+const { t } = useI18n();
+
+const { validateOnOpeningTag } = useOpeningTagValidator();
+
 const modelValue = ref("");
 
 onMounted(() => {
@@ -34,9 +43,13 @@ onMounted(() => {
 	}
 });
 
-watch(modelValue, (newValue) => {
-	if (newValue !== props.alternativeText) {
-		emit("update:alternativeText", newValue);
+const rules = [(value: string) => validateOnOpeningTag(value)];
+
+const onConfirm = () => {
+	const isValid = rules.every((rule) => rule(modelValue.value) === true);
+
+	if (isValid) {
+		emit("update:alternativeText", modelValue.value);
 	}
-});
+};
 </script>
