@@ -63,12 +63,12 @@ describe("loggedOutLayout", () => {
 		expect(new URL(links[2].href).host).toEqual("works-like-charm.com");
 	});
 
-	it("should routeToErrorPage has not been called when no error in the store", () => {
+	it("should not routeToErrorPage without any errors", () => {
 		mountComponent();
 		expect(useRouter().replace).not.toHaveBeenCalledWith("/error");
 	});
 
-	it("should routeToErrorPage has been called when an error set in the store", () => {
+	it("should execute routeToErrorPage with any errors", () => {
 		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized, "error.401");
 		mountComponent();
 		expect(useRouter().replace).toHaveBeenCalledWith("/error");
