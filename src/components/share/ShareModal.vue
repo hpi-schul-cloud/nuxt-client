@@ -28,7 +28,7 @@
 						<div data-testid="share-options-table-header">
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
-								<li v-if="showRoomInfo" data-testid="share-options-room-memberships-data-text">
+								<li v-if="showRoomInfo" data-testid="share-modal-room-member-permission">
 									{{ t("components.molecules.shareImport.options.restrictions.infoText.roomMembershipsData") }}
 								</li>
 								<li v-if="showCourseInfo" data-testid="share-modal-course-member-permission">
