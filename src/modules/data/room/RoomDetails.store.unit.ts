@@ -55,6 +55,29 @@ describe("useRoomDetailsStore", () => {
 			await store.fetchRoom("room-id");
 
 			expect(roomApiMock.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-id");
+			expect(store.isLoading).toBe(false);
+		});
+
+		describe("when fetching room fails with other errors", () => {
+			it("should throw an error", async () => {
+				const { store } = setup();
+				expect(store.isLoading).toBe(true);
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+
+				await expect(store.fetchRoom("room-id")).rejects.toThrow();
+				expect(store.isLoading).toBe(false);
+			});
+		});
+	});
+
+	describe("fetchRoomAndBoards", () => {
+		it("should call fetchRoomAndBoards api", async () => {
+			const { store } = setup();
+
+			expect(store.isLoading).toBe(true);
+			await store.fetchRoomAndBoards("room-id");
+
+			expect(roomApiMock.roomControllerGetRoomDetails).toHaveBeenCalledWith("room-id");
 			expect(roomApiMock.roomControllerGetRoomBoards).toHaveBeenCalledWith("room-id");
 			expect(store.isLoading).toBe(false);
 		});
@@ -66,7 +89,7 @@ describe("useRoomDetailsStore", () => {
 				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
 				mockErrorResponse({ code: 404 });
 
-				await store.fetchRoom("room-id");
+				await store.fetchRoomAndBoards("room-id");
 
 				expect(store.roomVariant).toBe(RoomVariant.COURSE_ROOM);
 				expect(store.isLoading).toBe(false);
@@ -84,7 +107,7 @@ describe("useRoomDetailsStore", () => {
 					message: "Locker Room",
 				});
 
-				await store.fetchRoom("room-id");
+				await store.fetchRoomAndBoards("room-id");
 
 				expect(store.lockedRoomName).toBe("Locker Room");
 				expect(store.isLoading).toBe(false);
@@ -97,7 +120,7 @@ describe("useRoomDetailsStore", () => {
 				expect(store.isLoading).toBe(true);
 				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
 
-				await expect(store.fetchRoom("room-id")).rejects.toThrow();
+				await expect(store.fetchRoomAndBoards("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);
 			});
 		});

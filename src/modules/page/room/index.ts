@@ -1,4 +1,4 @@
-import AdministrationRoomDetailsPage from "./AdministrationRoomDetails.page.vue";
+import AdministrationRoomMembersPage from "./AdministrationRoomMembers.page.vue";
 import AdministrationRoomsPage from "./AdministrationRooms.page.vue";
 import RoomCreatePage from "./RoomCreate.page.vue";
 import RoomDetailsPage from "./RoomDetails.page.vue";
@@ -10,7 +10,7 @@ import RoomMembersPage from "./RoomMembers.page.vue";
 import RoomsPage from "./Rooms.page.vue";
 
 export {
-	AdministrationRoomDetailsPage,
+	AdministrationRoomMembersPage,
 	AdministrationRoomsPage,
 	RoomCreatePage,
 	RoomDetailsPage,

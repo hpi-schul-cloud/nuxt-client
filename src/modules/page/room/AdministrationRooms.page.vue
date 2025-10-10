@@ -62,7 +62,7 @@ useTitle(pageTitle);
 
 const manageRoom = (roomId: string) => {
 	router.push({
-		name: "administration-rooms-manage-details",
+		name: "administration-rooms-manage-members",
 		params: { roomId },
 	});
 };
