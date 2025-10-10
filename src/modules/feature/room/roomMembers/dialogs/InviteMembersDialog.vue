@@ -143,6 +143,7 @@
 
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { useOpeningTagValidator } from "@/utils/validation";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -156,7 +157,6 @@ import {
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { storeToRefs } from "pinia";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -283,9 +283,7 @@ const datePickerDate = computed(() =>
 );
 
 const inviteMembersContent = ref<VCard>();
-const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
-	immediate: true,
-});
+const { pause, unpause } = useSafeFocusTrap(isOpen, inviteMembersContent);
 
 watch(
 	() => formData.value.restrictedToCreatorSchool,
@@ -307,15 +305,6 @@ watch(
 			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
 			formData.value.activeUntil = newVal.activeUntil ? new Date(newVal.activeUntil) : undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
-		}
-	}
-);
-
-watch(
-	() => isOpen.value,
-	(isOpen: boolean) => {
-		if (isOpen === false) {
-			deactivate();
 		}
 	}
 );

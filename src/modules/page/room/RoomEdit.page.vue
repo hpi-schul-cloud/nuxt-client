@@ -2,7 +2,7 @@
 	<DefaultWireframe v-if="!isLoading && canEditRoom" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 data-testid="page-title">
-				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
+				{{ t("pages.roomDetails.ariaLabels.menu.action.edit") }}
 			</h1>
 		</template>
 		<div>
