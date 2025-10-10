@@ -11,7 +11,7 @@ describe("FileName", () => {
 		const fileExtension = ".png";
 
 		const wrapper = mount(FileName, {
-			props: { name: fileName + fileExtension, isEditMode: true },
+			props: { name: fileName + fileExtension },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 

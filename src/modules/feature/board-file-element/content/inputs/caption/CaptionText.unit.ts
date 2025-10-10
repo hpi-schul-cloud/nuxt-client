@@ -10,7 +10,7 @@ describe("CaptionText", () => {
 		const caption = "test text";
 
 		const wrapper = mount(CaptionText, {
-			props: { caption: caption, isEditMode: true },
+			props: { caption: caption },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 

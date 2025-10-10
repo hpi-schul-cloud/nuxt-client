@@ -1,15 +1,10 @@
 <template>
 	<div v-if="isEditMode" class="px-4 pt-4">
-		<FileName :is-edit-mode="isEditMode" :name="fileProperties.name" @update:name="onUpdateName" />
-		<CaptionText
-			:caption="fileProperties.element.content.caption"
-			:is-edit-mode="isEditMode"
-			@update:caption="onUpdateCaption"
-		/>
+		<FileName :name="fileProperties.name" @update:name="onUpdateName" />
+		<CaptionText :caption="fileProperties.element.content.caption" @update:caption="onUpdateCaption" />
 		<AlternativeText
 			v-if="fileProperties.previewUrl && !hasPdfMimeType"
 			:alternative-text="fileProperties.element.content.alternativeText"
-			:is-edit-mode="isEditMode"
 			@update:alternative-text="onUpdateText"
 		/>
 	</div>

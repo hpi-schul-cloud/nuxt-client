@@ -21,7 +21,6 @@ import { useI18n } from "vue-i18n";
 
 type Props = {
 	alternativeText?: string;
-	isEditMode: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {

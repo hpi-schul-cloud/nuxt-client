@@ -10,7 +10,7 @@ describe("AlternativeText", () => {
 		const alternativeText: string | undefined = "test text";
 
 		const wrapper = mount(AlternativeText, {
-			props: { alternativeText, isEditMode: true },
+			props: { alternativeText },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
