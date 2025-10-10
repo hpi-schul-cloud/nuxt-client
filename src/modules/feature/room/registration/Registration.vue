@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<VStepper v-model="stepValue" alt-labels>
+		<VStepper v-model="stepValue" alt-labels non-linear>
 			<VStepperHeader>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperItem :complete="false" :value="step.value" :step="step.value" color="primary">
@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -56,14 +56,34 @@ const onUpdateSelectedLanguage = (value: string) => {
 	emit("update:selectedLanguage", value);
 };
 
-const steps = [
-	{ value: 1, title: "Sprache", subtitle: "Bitte Sprache wählen" },
-	{ value: 2, title: "Wilkommen", subtitle: "Willkommen" },
-	{ value: 3, title: "Passwort", subtitle: "Passwort vergeben" },
-	{ value: 4, title: "Einwilligungserklärung", subtitle: "Einwilligungserklärung" },
-	{ value: 5, title: "Bestätigungscode", subtitle: "Bestätigungscode" },
-	{ value: 6, title: "Registrierung", subtitle: "Registrierung erfolgreich" },
-];
+const steps = computed(() => [
+	{
+		value: 1,
+		title: t("common.labels.language"),
+		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
+	},
+	{ value: 2, title: t("common.labels.welcome"), subtitle: t("common.labels.welcome") },
+	{
+		value: 3,
+		title: t("common.labels.password"),
+		subtitle: t("pages.registrationExternalMembers.steps.password.subtitle"),
+	},
+	{
+		value: 4,
+		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+		subtitle: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+	},
+	{
+		value: 5,
+		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
+		subtitle: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
+	},
+	{
+		value: 6,
+		title: t("pages.registrationExternalMembers.steps.registration.title"),
+		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
+	},
+]);
 
 const stepValue = ref(1);
 
