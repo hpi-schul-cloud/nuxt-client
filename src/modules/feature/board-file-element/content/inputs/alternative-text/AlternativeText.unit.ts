@@ -41,6 +41,18 @@ describe("AlternativeText", () => {
 		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
 	});
 
+	it("should emit update:alternativeText on keydown enter", async () => {
+		const { wrapper } = mountSetup();
+
+		const textField = wrapper.findComponent(VTextField);
+		const newText = "new text";
+		await textField.setValue(newText);
+		textField.trigger("keydown.enter");
+
+		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
+		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
+	});
+
 	it("should pass the alternativeText prop to the text field", async () => {
 		const { wrapper, alternativeText } = mountSetup();
 

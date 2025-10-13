@@ -43,6 +43,18 @@ describe("FileName", () => {
 		expect(wrapper.emitted("update:name")?.[0][0]).toBe(newFileName + fileExtension);
 	});
 
+	it("should emit update:name on keydown enter", async () => {
+		const { wrapper, fileExtension } = mountSetup();
+
+		const textField = wrapper.findComponent(VTextField);
+		const newFileName = "myNewImage";
+		await textField.setValue(newFileName);
+		textField.trigger("keydown.enter");
+
+		expect(wrapper.emitted("update:name")).toHaveLength(1);
+		expect(wrapper.emitted("update:name")?.[0][0]).toBe(newFileName + fileExtension);
+	});
+
 	it("should pass the name prop without extension to the text field", async () => {
 		const { wrapper, fileName } = mountSetup();
 

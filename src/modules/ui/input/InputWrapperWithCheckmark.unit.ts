@@ -30,4 +30,13 @@ describe("InputWrapperWithCheckmark", () => {
 
 		expect(wrapper.emitted("confirm")).toHaveLength(1);
 	});
+
+	it("should emit confirm on keydown enter", async () => {
+		const wrapper = setup();
+
+		const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
+		btn.trigger("keydown.enter");
+
+		expect(wrapper.emitted("confirm")).toHaveLength(1);
+	});
 });
