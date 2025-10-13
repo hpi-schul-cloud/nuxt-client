@@ -570,7 +570,7 @@ export default {
 
 				acc.push({
 					label: displayName,
-					value: displayName,
+					value: item._id,
 				});
 
 				return acc;
