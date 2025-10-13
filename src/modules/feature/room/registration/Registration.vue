@@ -1,11 +1,9 @@
 <template>
 	<div>
-		<VStepper v-model="stepValue" alt-labels non-linear>
+		<VStepper v-model="stepValue" alt-labels non-linear :mobile="mobileView">
 			<VStepperHeader>
 				<template v-for="step in steps" :key="step.value">
-					<VStepperItem :complete="false" :value="step.value" :step="step.value" color="primary">
-						{{ step.title }}
-					</VStepperItem>
+					<VStepperItem :value="step.value" :step="step.value" color="primary" :title="step.title" />
 					<VDivider v-if="step.value < steps.length" />
 				</template>
 			</VStepperHeader>
@@ -37,6 +35,7 @@
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
 type Props = {
 	selectedLanguage?: string;
@@ -51,9 +50,18 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { xs, sm } = useDisplay();
+
+const mobileView = computed(() => xs.value || sm.value);
 
 const onUpdateSelectedLanguage = (value: string) => {
 	emit("update:selectedLanguage", value);
+};
+
+const stepValue = ref(1);
+
+const onStepperClick = (value: number) => {
+	stepValue.value = value;
 };
 
 const steps = computed(() => [
@@ -84,10 +92,4 @@ const steps = computed(() => [
 		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
 	},
 ]);
-
-const stepValue = ref(1);
-
-const onStepperClick = (value: number) => {
-	stepValue.value = value;
-};
 </script>
