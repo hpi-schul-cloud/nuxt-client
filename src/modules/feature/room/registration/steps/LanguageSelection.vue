@@ -1,5 +1,6 @@
 <template>
 	<VSelect
+		ref="languageSelect"
 		v-model="lang"
 		:items="languages"
 		:label="t('pages.administration.school.index.generalSettings.labels.language')"
@@ -12,13 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import { toRef } from "vue";
+import { onMounted, toRef, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
 	selectedLanguage: string;
 };
-
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
@@ -26,8 +26,18 @@ const emit = defineEmits<{
 }>();
 
 const i18n = useI18n();
-
 const { t } = i18n;
+const languageSelect = useTemplateRef("languageSelect");
+const lang = toRef(props, "selectedLanguage");
+
+const onUpdateLanguage = (value: string) => {
+	lang.value = value;
+	emit("update:selectedLanguage", value);
+};
+
+onMounted(() => {
+	languageSelect.value?.focus();
+});
 
 const languages = [
 	{ code: "de", name: t("global.topbar.language.longName.de") },
@@ -35,11 +45,4 @@ const languages = [
 	{ code: "es", name: t("global.topbar.language.longName.es") },
 	{ code: "uk", name: t("global.topbar.language.longName.uk") },
 ];
-
-const lang = toRef(props, "selectedLanguage");
-
-const onUpdateLanguage = (value: string) => {
-	lang.value = value;
-	emit("update:selectedLanguage", value);
-};
 </script>
