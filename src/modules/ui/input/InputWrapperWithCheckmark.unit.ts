@@ -26,7 +26,7 @@ describe("InputWrapperWithCheckmark", () => {
 		const wrapper = setup();
 
 		const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
-		btn.trigger("click");
+		await btn.trigger("click");
 
 		expect(wrapper.emitted("confirm")).toHaveLength(1);
 	});
@@ -35,8 +35,46 @@ describe("InputWrapperWithCheckmark", () => {
 		const wrapper = setup();
 
 		const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
-		btn.trigger("keydown.enter");
+		await btn.trigger("keydown", { key: "Enter" });
 
 		expect(wrapper.emitted("confirm")).toHaveLength(1);
+	});
+
+	describe("DOM events", () => {
+		it("should stop click event", async () => {
+			const wrapper = setup();
+			const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
+
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("click", () => {
+				bubbled = true;
+			});
+
+			await btn.trigger("click");
+
+			expect(bubbled).toBe(false);
+		});
+
+		it("should stop keydown enter event", async () => {
+			const wrapper = setup();
+			const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
+
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("keydown", (e) => {
+				if (e.key === "Enter") {
+					bubbled = true;
+				}
+			});
+			await btn.trigger("keydown", { key: "Enter" });
+			expect(bubbled).toBe(false);
+		});
 	});
 });

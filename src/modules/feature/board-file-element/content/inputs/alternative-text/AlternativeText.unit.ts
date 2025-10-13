@@ -47,28 +47,49 @@ describe("AlternativeText", () => {
 		const textField = wrapper.findComponent(VTextField);
 		const newText = "new text";
 		await textField.setValue(newText);
-		textField.trigger("keydown.enter");
+		await textField.trigger("keydown", { key: "Enter" });
 
 		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
 	});
 
-	it("should stop click event", async () => {
-		const { wrapper } = mountSetup();
-		const textField = wrapper.findComponent(VTextField);
+	describe("DOM events", () => {
+		it("should stop click event", async () => {
+			const { wrapper } = mountSetup();
+			const textField = wrapper.findComponent(VTextField);
 
-		const parent = document.createElement("div");
-		document.body.appendChild(parent);
-		parent.appendChild(wrapper.element);
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
 
-		let bubbled = false;
-		parent.addEventListener("click", () => {
-			bubbled = true;
+			let bubbled = false;
+			parent.addEventListener("click", () => {
+				bubbled = true;
+			});
+
+			await textField.trigger("click");
+
+			expect(bubbled).toBe(false);
 		});
 
-		await textField.trigger("click");
+		it("should stop keydown enter event", async () => {
+			const { wrapper } = mountSetup();
+			const textField = wrapper.findComponent(VTextField);
 
-		expect(bubbled).toBe(false);
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("keydown", (e) => {
+				if (e.key === "Enter") {
+					bubbled = true;
+				}
+			});
+			await textField.trigger("keydown", { key: "Enter" });
+
+			expect(bubbled).toBe(false);
+		});
 	});
 
 	it("should pass the alternativeText prop to the text field", async () => {
