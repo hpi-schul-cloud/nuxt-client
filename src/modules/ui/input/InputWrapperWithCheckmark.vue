@@ -2,7 +2,7 @@
 	<div class="d-flex flex-row">
 		<slot />
 		<div class="align-self-center pl-2">
-			<button data-testid="save-input" @click.prevent.stop="onConfirm">
+			<button data-testid="save-input" @click.prevent.stop="onConfirm" @keydown.enter.stop="onConfirm">
 				<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
 				<span class="d-sr-only">{{ t("common.actions.save") }}</span>
 			</button>
