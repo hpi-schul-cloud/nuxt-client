@@ -15,10 +15,7 @@ import { printDate } from "@/plugins/datetime";
 import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useDataTableFilter = (
-	userType: string,
-	classNames: ComputedRef<SelectOptionsType[]> | SelectOptionsType[] = []
-) => {
+export const useDataTableFilter = (userType: string, classNames: ComputedRef<SelectOptionsType[]>) => {
 	const { t } = useI18n();
 	const { setFilterState, getFilterStorage, initializeUserType } = useFilterLocalStorage();
 	initializeUserType(userType);
@@ -142,10 +139,11 @@ export const useDataTableFilter = (
 
 		if (chipItem[0] == FilterOption.CLASSES) {
 			const classDisplayNames = chipItem[1].map((classId) => {
-				const classNameList = Array.isArray(classNames) ? classNames : classNames.value;
-				const classItem = classNameList.find((item: SelectOptionsType) => item.value === classId);
-				return classItem ? classItem.label : classId;
+				const classItem = classNames.value.find((item: SelectOptionsType) => item.value === classId);
+
+				return classItem?.label;
 			});
+
 			return `${t("utils.adminFilter.class.title")} = ${classDisplayNames.join(", ")}`;
 		}
 
