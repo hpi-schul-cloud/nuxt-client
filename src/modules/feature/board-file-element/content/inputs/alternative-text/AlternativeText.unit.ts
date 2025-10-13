@@ -53,6 +53,24 @@ describe("AlternativeText", () => {
 		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
 	});
 
+	it("should stop click event", async () => {
+		const { wrapper } = mountSetup();
+		const textField = wrapper.findComponent(VTextField);
+
+		const parent = document.createElement("div");
+		document.body.appendChild(parent);
+		parent.appendChild(wrapper.element);
+
+		let bubbled = false;
+		parent.addEventListener("click", () => {
+			bubbled = true;
+		});
+
+		await textField.trigger("click");
+
+		expect(bubbled).toBe(false);
+	});
+
 	it("should pass the alternativeText prop to the text field", async () => {
 		const { wrapper, alternativeText } = mountSetup();
 
