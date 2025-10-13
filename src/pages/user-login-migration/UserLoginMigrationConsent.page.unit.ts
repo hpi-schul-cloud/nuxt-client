@@ -14,7 +14,8 @@ vi.mock(
 	"@/utils/pageTitle",
 	() =>
 		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
+			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
+				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
 		}) as typeof import("@/utils/pageTitle")
 );
 

@@ -7,7 +7,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
 
 vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+	buildPageTitle: (pageTitle, parentTitle) => [pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
 }));
 
 initializeAxios({

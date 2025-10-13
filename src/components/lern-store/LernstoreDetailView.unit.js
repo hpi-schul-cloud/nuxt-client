@@ -3,7 +3,7 @@ import { Resource } from "@@/tests/test-utils/mockDataResource";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
+	buildPageTitle: (pageTitle, parentTitle) => [pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
 }));
 
 const testProps = {

@@ -15,9 +15,14 @@ vi.mock("@feature-media-shelf", async (importOriginal) => {
 	};
 });
 
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
-}));
+vi.mock(
+	"@/utils/pageTitle",
+	() =>
+		({
+			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
+				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
+		}) as typeof import("@/utils/pageTitle")
+);
 
 describe("MediaShelfPage", () => {
 	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
