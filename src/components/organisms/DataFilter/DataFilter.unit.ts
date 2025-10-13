@@ -56,7 +56,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 		it("should render the component", () => {
 			const wrapper = setup({ props: { filterFor: "student" } });
 			expect(wrapper.exists()).toBe(true);
-			expect(mockedUseBoardApi).toHaveBeenCalledWith("student");
+			expect(mockedUseBoardApi).toHaveBeenCalledWith("student", expect.any(Object));
 		});
 
 		it("should emit 'update:filter' when chip components be closed", async () => {

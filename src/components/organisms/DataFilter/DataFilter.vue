@@ -66,6 +66,8 @@ const filterTitle = computed(() => t("components.organisms.DataFilter.add"));
 const dialogOpen = ref(false);
 const userType = computed(() => props.filterFor);
 
+const classNames = computed(() => props.classNames);
+
 const {
 	defaultFilterMenuItems,
 	filterChipTitles,
@@ -78,7 +80,7 @@ const {
 	removeChipFilter,
 	removeFilter,
 	updateFilter,
-} = useDataTableFilter(userType.value);
+} = useDataTableFilter(userType.value, classNames);
 
 const modalTitle = computed(
 	() => defaultFilterMenuItems.find((item: SelectOptionsType) => item.value == selectedFilterType.value)?.label

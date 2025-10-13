@@ -12071,7 +12071,7 @@ export const AdminStudentsApiAxiosParamCreator = function (configuration?: Confi
          * @param {number} [$skip] Number of elements (not pages) to be skipped
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
-         * @param {Array<string>} [classes] 
+         * @param {Array<string>} [classes] Filter by class IDs for unique identification
          * @param {object} [createdAt] 
          * @param {object} [lastLoginSystemChange] 
          * @param {object} [outdatedSince] 
@@ -12186,7 +12186,7 @@ export const AdminStudentsApiFp = function(configuration?: Configuration) {
          * @param {number} [$skip] Number of elements (not pages) to be skipped
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
-         * @param {Array<string>} [classes] 
+         * @param {Array<string>} [classes] Filter by class IDs for unique identification
          * @param {object} [createdAt] 
          * @param {object} [lastLoginSystemChange] 
          * @param {object} [outdatedSince] 
@@ -12228,7 +12228,7 @@ export const AdminStudentsApiFactory = function (configuration?: Configuration, 
          * @param {number} [$skip] Number of elements (not pages) to be skipped
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
-         * @param {Array<string>} [classes] 
+         * @param {Array<string>} [classes] Filter by class IDs for unique identification
          * @param {object} [createdAt] 
          * @param {object} [lastLoginSystemChange] 
          * @param {object} [outdatedSince] 
@@ -12268,7 +12268,7 @@ export interface AdminStudentsApiInterface {
      * @param {number} [$skip] Number of elements (not pages) to be skipped
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
-     * @param {Array<string>} [classes] 
+     * @param {Array<string>} [classes] Filter by class IDs for unique identification
      * @param {object} [createdAt] 
      * @param {object} [lastLoginSystemChange] 
      * @param {object} [outdatedSince] 
@@ -12310,7 +12310,7 @@ export class AdminStudentsApi extends BaseAPI implements AdminStudentsApiInterfa
      * @param {number} [$skip] Number of elements (not pages) to be skipped
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
-     * @param {Array<string>} [classes] 
+     * @param {Array<string>} [classes] Filter by class IDs for unique identification
      * @param {object} [createdAt] 
      * @param {object} [lastLoginSystemChange] 
      * @param {object} [outdatedSince] 
@@ -12379,7 +12379,7 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
          * @param {number} [$skip] Number of elements (not pages) to be skipped
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
-         * @param {Array<string>} [classes] 
+         * @param {Array<string>} [classes] Filter by class IDs for unique identification
          * @param {object} [createdAt] 
          * @param {object} [lastLoginSystemChange] 
          * @param {object} [outdatedSince] 
@@ -12494,7 +12494,7 @@ export const AdminTeachersApiFp = function(configuration?: Configuration) {
          * @param {number} [$skip] Number of elements (not pages) to be skipped
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
-         * @param {Array<string>} [classes] 
+         * @param {Array<string>} [classes] Filter by class IDs for unique identification
          * @param {object} [createdAt] 
          * @param {object} [lastLoginSystemChange] 
          * @param {object} [outdatedSince] 
@@ -12536,7 +12536,7 @@ export const AdminTeachersApiFactory = function (configuration?: Configuration, 
          * @param {number} [$skip] Number of elements (not pages) to be skipped
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
-         * @param {Array<string>} [classes] 
+         * @param {Array<string>} [classes] Filter by class IDs for unique identification
          * @param {object} [createdAt] 
          * @param {object} [lastLoginSystemChange] 
          * @param {object} [outdatedSince] 
@@ -12576,7 +12576,7 @@ export interface AdminTeachersApiInterface {
      * @param {number} [$skip] Number of elements (not pages) to be skipped
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
-     * @param {Array<string>} [classes] 
+     * @param {Array<string>} [classes] Filter by class IDs for unique identification
      * @param {object} [createdAt] 
      * @param {object} [lastLoginSystemChange] 
      * @param {object} [outdatedSince] 
@@ -12618,7 +12618,7 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
      * @param {number} [$skip] Number of elements (not pages) to be skipped
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
-     * @param {Array<string>} [classes] 
+     * @param {Array<string>} [classes] Filter by class IDs for unique identification
      * @param {object} [createdAt] 
      * @param {object} [lastLoginSystemChange] 
      * @param {object} [outdatedSince] 

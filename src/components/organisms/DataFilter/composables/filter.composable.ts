@@ -12,10 +12,13 @@ import {
 } from "../types";
 import { useFilterLocalStorage } from "./localStorage.composable";
 import { printDate } from "@/plugins/datetime";
-import { computed, onMounted, ref } from "vue";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useDataTableFilter = (userType: string) => {
+export const useDataTableFilter = (
+	userType: string,
+	classNames: ComputedRef<SelectOptionsType[]> | SelectOptionsType[] = []
+) => {
 	const { t } = useI18n();
 	const { setFilterState, getFilterStorage, initializeUserType } = useFilterLocalStorage();
 	initializeUserType(userType);
@@ -137,7 +140,14 @@ export const useDataTableFilter = (userType: string) => {
 			return status.join(` ${t("common.words.and")} `);
 		}
 
-		if (chipItem[0] == FilterOption.CLASSES) return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
+		if (chipItem[0] == FilterOption.CLASSES) {
+			const classDisplayNames = chipItem[1].map((classId) => {
+				const classNameList = Array.isArray(classNames) ? classNames : classNames.value;
+				const classItem = classNameList.find((item: SelectOptionsType) => item.value === classId);
+				return classItem ? classItem.label : classId;
+			});
+			return `${t("utils.adminFilter.class.title")} = ${classDisplayNames.join(", ")}`;
+		}
 
 		if (chipItem[0] == FilterOption.CREATION_DATE)
 			return `${t("utils.adminFilter.date.created")} ${printDate(

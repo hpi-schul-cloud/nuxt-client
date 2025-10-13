@@ -609,12 +609,10 @@ export default {
 			this.classNameList = this.$store.state["classes"].list.reduce((acc, item) => {
 				const schoolYears = this.$store.state["schoolsModule"].school.years.schoolYears;
 				const itemSchoolYear = schoolYears.find((year) => year.id === item.year);
-
 				const displayName = `${item.displayName} (${itemSchoolYear.name})`;
-
 				acc.push({
 					label: displayName,
-					value: displayName,
+					value: item._id,
 				});
 
 				return acc;
