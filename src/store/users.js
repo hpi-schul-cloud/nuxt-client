@@ -10,6 +10,30 @@ const studentEndpoint = "/v1/users/admin/students";
 const getTeacherEndpoint = "/v3/users/admin/teachers";
 const getStudentEndpoint = "/v3/users/admin/students";
 
+// Helper function to enrich class names with school year information
+const enrichClassNamesWithYear = (classNames, allClasses, schoolYears) => {
+	if (!classNames || classNames.length === 0) {
+		return classNames;
+	}
+
+	return classNames.map((className) => {
+		// Find the class object by displayName
+		const classObj = allClasses.find((cls) => cls.displayName === className);
+
+		if (classObj) {
+			// Find the corresponding school year
+			const itemSchoolYear = schoolYears.find((year) => year.id === classObj.year);
+
+			if (itemSchoolYear) {
+				return `${className} (${itemSchoolYear.name})`;
+			}
+		}
+
+		// Fallback to original name if no year found
+		return className;
+	});
+};
+
 const usersModule = mergeDeep(base, {
 	state: () =>
 		mergeDeep(baseState, {
@@ -44,6 +68,18 @@ const usersModule = mergeDeep(base, {
 		setRegistrationLinks(state, payload) {
 			state.registrationLinks = payload;
 		},
+		enrichUserClassNames(state, { allClasses, schoolYears }) {
+			// Enrich class names for all users in the list (teachers and students)
+			state.list = state.list.map((user) => {
+				if (user.classes && user.classes.length > 0) {
+					return {
+						...user,
+						classes: enrichClassNamesWithYear(user.classes, allClasses, schoolYears),
+					};
+				}
+				return user;
+			});
+		},
 	},
 	getters: {
 		getPagination(state) {
@@ -66,7 +102,7 @@ const usersModule = mergeDeep(base, {
 		},
 	},
 	actions: {
-		async findStudents({ commit }, payload = {}) {
+		async findStudents({ commit, rootState }, payload = {}) {
 			const { qid = "default", query } = payload;
 			commit("setStatus", "pending");
 			const res = (
@@ -85,9 +121,22 @@ const usersModule = mergeDeep(base, {
 			commit("set", {
 				items: res.data,
 			});
+
+			// Enrich student class names with year information if we have the required data
+			try {
+				const allClasses = rootState.classes?.list || [];
+				const schoolYears = rootState.schoolsModule?.school?.years?.schoolYears || [];
+
+				if (allClasses.length > 0 && schoolYears.length > 0) {
+					commit("enrichUserClassNames", { allClasses, schoolYears });
+				}
+			} catch {
+				// Silently fail if enrichment fails, student data is still usable without year info
+			}
+
 			commit("setStatus", "completed");
 		},
-		async findTeachers({ commit }, payload = {}) {
+		async findTeachers({ commit, rootState }, payload = {}) {
 			const { qid = "default", query } = payload;
 			commit("setStatus", "pending");
 			const res = (
@@ -106,6 +155,19 @@ const usersModule = mergeDeep(base, {
 			commit("set", {
 				items: res.data,
 			});
+
+			// Enrich teacher class names with year information if we have the required data
+			try {
+				const allClasses = rootState.classes?.list || [];
+				const schoolYears = rootState.schoolsModule?.school?.years?.schoolYears || [];
+
+				if (allClasses.length > 0 && schoolYears.length > 0) {
+					commit("enrichUserClassNames", { allClasses, schoolYears });
+				}
+			} catch {
+				// Silently fail if enrichment fails, teacher data is still usable without year info
+			}
+
 			commit("setStatus", "completed");
 		},
 		async findConsentUsers({ commit }, query) {
