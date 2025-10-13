@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex flex-row">
+	<div class="d-flex flex-row" @click.stop @keydown.enter.stop>
 		<slot />
 		<div class="align-self-center pl-2">
 			<button data-testid="save-input" @click.prevent.stop="onConfirm" @keydown.enter.stop="onConfirm">

@@ -41,44 +41,6 @@ describe("CaptionText", () => {
 		expect(wrapper.emitted("update:caption")?.[0][0]).toBe(newText);
 	});
 
-	describe("DOM events", () => {
-		it("should stop click event", async () => {
-			const { wrapper } = mountSetup();
-			const textField = wrapper.findComponent(VTextarea);
-
-			const parent = document.createElement("div");
-			document.body.appendChild(parent);
-			parent.appendChild(wrapper.element);
-
-			let bubbled = false;
-			parent.addEventListener("click", () => {
-				bubbled = true;
-			});
-
-			await textField.trigger("click");
-
-			expect(bubbled).toBe(false);
-		});
-
-		it("should stop keydown enter event", async () => {
-			const { wrapper } = mountSetup();
-			const textField = wrapper.findComponent(VTextarea);
-
-			const parent = document.createElement("div");
-			document.body.appendChild(parent);
-			parent.appendChild(wrapper.element);
-
-			let bubbled = false;
-			parent.addEventListener("keydown", (e) => {
-				if (e.key === "Enter") {
-					bubbled = true;
-				}
-			});
-			await textField.trigger("keydown", { key: "Enter" });
-			expect(bubbled).toBe(false);
-		});
-	});
-
 	it("should pass the caption prop to the text area", async () => {
 		const { wrapper, caption } = mountSetup();
 

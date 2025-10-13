@@ -7,8 +7,6 @@
 			auto-grow
 			:label="t('components.cardElement.fileElement.caption')"
 			:rules="rules"
-			@click.stop
-			@keydown.enter.stop
 		/>
 	</InputWrapperWithCheckmark>
 </template>

@@ -41,7 +41,7 @@ describe("InputWrapperWithCheckmark", () => {
 	});
 
 	describe("DOM events", () => {
-		it("should stop click event", async () => {
+		it("should stop click event propagation", async () => {
 			const wrapper = setup();
 			const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
 
@@ -59,7 +59,7 @@ describe("InputWrapperWithCheckmark", () => {
 			expect(bubbled).toBe(false);
 		});
 
-		it("should stop keydown enter event", async () => {
+		it("should stop keydown enter event propagation", async () => {
 			const wrapper = setup();
 			const btn = wrapper.findComponent(InputWrapperWithCheckmark).find("button");
 
