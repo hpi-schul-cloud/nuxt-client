@@ -1515,6 +1515,7 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.registrationExternalMembers.pageTitle": "Registro de miembros externos",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",

@@ -3,11 +3,14 @@
 </template>
 
 <script setup lang="ts">
+import { buildPageTitle } from "@/utils/pageTitle";
 import { Registration } from "@feature-room";
+import { useTitle } from "@vueuse/core";
 import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const i18n = useI18n();
+const { t } = i18n;
 
 const language: Ref<string | undefined> = ref(undefined);
 
@@ -27,6 +30,9 @@ const setSelectedLanguage = (value: string) => {
 	language.value = value;
 	i18n.locale.value = value;
 };
+
+const pageTitle = buildPageTitle(t("pages.registrationExternalMembers.pageTitle"));
+useTitle(pageTitle);
 
 onMounted(() => {
 	language.value = getCookieValue() || "de";
