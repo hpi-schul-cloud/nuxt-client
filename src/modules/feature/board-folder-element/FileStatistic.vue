@@ -1,14 +1,12 @@
 <template>
 	<span v-if="fileStatistics" class="text-caption" data-testid="file-statistic">
-		{{
-			`${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}`
-		}}
+		{{ `${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}` }}
 	</span>
 </template>
 
 <script setup lang="ts">
 import { FileRecordParent } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import { formatFileSize } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
@@ -19,8 +17,7 @@ interface FileStatisticProps {
 
 const props = defineProps<FileStatisticProps>();
 
-const { tryGetParentStatisticFromApi, getStatisticByParentId } =
-	useFileStorageApi();
+const { tryGetParentStatisticFromApi, getStatisticByParentId } = useFileStorageApi();
 
 const fileStatistics = computed(() => {
 	const statistics = getStatisticByParentId(props.elementId);
@@ -28,14 +25,10 @@ const fileStatistics = computed(() => {
 	return statistics;
 });
 
-const { n, t } = useI18n();
+const { t } = useI18n();
 
 const humanReadableFileSize = computed(() => {
-	const { convertedSize, unit } = convertFileSize(
-		fileStatistics.value?.totalSizeInBytes || 0
-	);
-	const localizedFileSize = n(convertedSize, "fileSize");
-	const localizedString = localizedFileSize + " " + unit;
+	const localizedString = formatFileSize(fileStatistics.value?.totalSizeInBytes || 0);
 
 	return localizedString;
 });
@@ -51,9 +44,6 @@ const fileTranslation = computed(() => {
 });
 
 onMounted(async () => {
-	await tryGetParentStatisticFromApi(
-		props.elementId,
-		FileRecordParent.BOARDNODES
-	);
+	await tryGetParentStatisticFromApi(props.elementId, FileRecordParent.BOARDNODES);
 });
 </script>

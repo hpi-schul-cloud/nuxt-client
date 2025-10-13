@@ -1,46 +1,43 @@
 <template>
-	<label id="room-color-label" class="d-flex mb-2">{{ $t(label) }}</label>
-	<div
-		class="d-flex flex-wrap"
-		role="radiogroup"
-		aria-labelledby="room-color-label"
-	>
-		<template v-for="swatchColor in RoomColor" :key="swatchColor">
-			<RoomColorPickerSwatch
-				:color="swatchColor"
-				:is-selected="isSelected(swatchColor)"
-				@update:color="onUpdateColor($event)"
-			/>
-		</template>
+	<div :id="roomColorLabelId" class="d-flex mb-2">
+		{{ t("common.words.color") }}
 	</div>
+	<VRadioGroup v-model="currentColor" :aria-labelledby="roomColorLabelId" inline>
+		<VRadio
+			v-for="swatchColor in RoomColor"
+			:key="swatchColor"
+			:value="swatchColor"
+			:aria-label="t(`common.words.color.${swatchColor}`)"
+			:data-testid="`color-swatch-${swatchColor}`"
+			class="color-swatch-option rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center"
+			:class="`room-color--${swatchColor}`"
+			color="white"
+			:true-icon="mdiCheckCircleOutline"
+			false-icon=""
+		/>
+	</VRadioGroup>
 </template>
 
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
-import { PropType } from "vue";
-import RoomColorPickerSwatch from "./RoomColorPickerSwatch.vue";
 import { RoomColor } from "@/types/room/Room";
+import { mdiCheckCircleOutline } from "@icons/material";
+import { PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-	color: {
-		type: String as PropType<RoomColor>,
-		default: RoomColor.BlueGrey,
-	},
-	label: {
-		type: String,
-		default: "common.words.color",
-	},
+const roomColorLabelId = "room-color-label";
+
+const currentColor = defineModel("color", {
+	type: String as PropType<RoomColor>,
+	default: RoomColor.BlueGrey,
 });
 
-const emit = defineEmits(["update:color"]);
-
-const currentColor = useVModel(props, "color", emit);
-
-const isSelected = (color: RoomColor) => {
-	return color === currentColor.value;
-};
-
-const onUpdateColor = (color: RoomColor) => {
-	emit("update:color", color);
-};
+const { t } = useI18n();
 </script>
+
+<style lang="scss" scoped>
+.color-swatch-option:has(input:focus) {
+	outline: 5px auto Highlight; // Firefox
+	outline: 5px auto -webkit-focus-ring-color; // Chrome/Safari
+	outline-offset: 2px;
+}
+</style>

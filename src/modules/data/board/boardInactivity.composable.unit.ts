@@ -1,28 +1,15 @@
-import type { Mock } from "vitest";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	boardResponseFactory,
-	envsFactory,
-	mountComposable,
-} from "@@/tests/test-utils";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { setActivePinia } from "pinia";
-import { computed, nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
 import { useBoardStore } from "./Board.store";
-import {
-	connectionOptions,
-	useBoardInactivity,
-} from "./boardInactivity.composable";
+import { connectionOptions, useBoardInactivity } from "./boardInactivity.composable";
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
+import { boardResponseFactory, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { useSharedLastCreatedElement } from "@util-board";
+import { setActivePinia } from "pinia";
+import type { Mock } from "vitest";
+import { computed, nextTick } from "vue";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -30,50 +17,32 @@ vi.mock("vue-i18n", () => ({
 	}),
 }));
 
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
-
 vi.mock("./socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
-vi.mock("@util-board/BoardNotifier.composable");
 vi.mock("@util-board/LastCreatedElement.composable");
-const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-let mockedSocketConnectionHandler: DeepMocked<
-	ReturnType<typeof useSocketConnection>
->;
-const envs = envsFactory.build({
-	BOARD_COLLABORATION_URI: "mockedUri",
-	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-});
+let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
 
 vi.useFakeTimers();
 
 describe("pageInactivity.composable", () => {
 	setActivePinia(createTestingPinia());
-	setupStores({ envConfigModule: EnvConfigModule });
-
-	envConfigModule.setEnvs(envs);
+	createTestEnvStore({
+		BOARD_COLLABORATION_URI: "mockedUri",
+		FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+	});
 
 	mockUseSharedLastCreatedElement.mockReturnValue({
 		lastCreatedElementId: computed(() => "element-id"),
 		resetLastCreatedElementId: vi.fn(),
 	});
 
-	mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-	mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
-
-	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-
-	mockedSocketConnectionHandler =
-		createMock<ReturnType<typeof useSocketConnection>>();
+	mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
 	mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 	const router = createMock<Router>();
@@ -85,16 +54,7 @@ describe("pageInactivity.composable", () => {
 		boardStore.board = boardResponseFactory.build();
 		cardStore.cards = {};
 
-		const useBoardInactivityComposable = mountComposable(
-			() => useBoardInactivity(timer),
-			{
-				global: {
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-					},
-				},
-			}
-		);
+		const useBoardInactivityComposable = mountComposable(() => useBoardInactivity(timer));
 
 		return { useBoardInactivityComposable, boardStore, cardStore };
 	};
@@ -117,8 +77,7 @@ describe("pageInactivity.composable", () => {
 		});
 
 		it("should not call the store functions when isTimeoutReached value false", async () => {
-			const { useBoardInactivityComposable, boardStore, cardStore } =
-				setup(3000);
+			const { useBoardInactivityComposable, boardStore, cardStore } = setup(3000);
 			connectionOptions.isTimeoutReached = false;
 			useBoardInactivityComposable.visibility.value = "hidden";
 			await nextTick();
@@ -139,14 +98,14 @@ describe("pageInactivity.composable", () => {
 		afterEach(() => {
 			vi.clearAllTimers();
 		});
-		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
+		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
 			vi.advanceTimersByTime(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(true);
 		});
 
-		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", async () => {
+		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
 			vi.advanceTimersByTime(1000);

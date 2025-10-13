@@ -14,24 +14,23 @@ const props = withDefaults(defineProps<Props>(), {
 	columnWidth: "15rem",
 });
 
-const col = computed(() => {
-	return `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`;
-});
+const col = computed(() => `grid-template-columns: repeat(auto-fill, minmax(${props.columnWidth}, 1fr));`);
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .grid {
 	display: grid;
 	grid-gap: 16px;
 	width: 100%;
 
-	@include breakpoint(tablet) {
-		grid-gap: calc(9 * var(--border-width-bold)); /* 18px */
+	@media #{map.get($display-breakpoints, 'sm')} {
+		grid-gap: 18px;
 	}
 
-	@include breakpoint(desktop) {
+	@media #{map.get($display-breakpoints, 'md-and-up')} {
 		grid-gap: 24px;
 	}
 }

@@ -7,14 +7,13 @@
 </template>
 
 <script setup lang="ts">
-import { Layouts } from "@/layouts/types";
-import { computed } from "vue";
-import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
-import { useRoute } from "vue-router";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
+import { Layouts } from "@/layouts/types";
+import { useAppStore } from "@data-app";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
-const authModule = injectStrict(AUTH_MODULE_KEY);
 const route = useRoute();
 
 setComputedScrollbarWidthAsCssVar();
@@ -22,7 +21,7 @@ setComputedScrollbarWidthAsCssVar();
 const layout = computed(() => {
 	let layoutName = (route.meta.layout as string) || Layouts.LOGGED_IN;
 
-	if (!authModule.isLoggedIn) {
+	if (!useAppStore().isLoggedIn) {
 		layoutName = Layouts.LOGGED_OUT;
 	}
 

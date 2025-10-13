@@ -1,4 +1,4 @@
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 export const checkFolderFeature = (
@@ -6,9 +6,7 @@ export const checkFolderFeature = (
 	from: RouteLocationNormalized,
 	next: NavigationGuardNext
 ) => {
-	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
-	if (envConfigModule.getEnv["FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED"]) {
+	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 		next();
 	} else {
 		next("/");

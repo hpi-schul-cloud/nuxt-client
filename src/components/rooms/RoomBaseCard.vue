@@ -1,13 +1,7 @@
 <template>
-	<v-card
-		class="card d-flex align-items-center"
-		:aria-label="title"
-		hover
-		:data-testId="testId"
-		@click="onClick"
-	>
+	<v-card class="card d-flex align-center" :aria-label="title" hover :data-testId="testId" @click="onClick">
 		<div class="w-100">
-			<div class="d-flex align-content align-items-center">
+			<div class="d-flex align-content align-center">
 				<div v-if="logoUrl" class="logo-container my-auto mr-4">
 					<v-img
 						height="100%"
@@ -19,14 +13,10 @@
 				</div>
 				<div class="d-flex flex-column w-100 min-width-0">
 					<div class="d-flex">
-						<h2 class="text-h5 my-auto">
+						<h2 class="text-h4 my-auto">
 							{{ title }}
 						</h2>
-						<v-icon
-							v-if="openInNewTab"
-							class="ml-1 my-auto text-no-wrap"
-							data-testId="card-new-tab-icon"
-						>
+						<v-icon v-if="openInNewTab" class="ml-1 my-auto text-no-wrap" data-testId="card-new-tab-icon">
 							{{ mdiOpenInNew }}
 						</v-icon>
 						<div class="mx-auto" />

@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
+import { FileAlert } from "../../../shared/types/FileAlert.enum";
 import { AudioPlayer } from "@ui-audio-player";
 import { ContentElementBar } from "@ui-board";
-import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 type Props = {
 	src: string;

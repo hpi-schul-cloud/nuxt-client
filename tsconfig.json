@@ -20,10 +20,12 @@
 		"types": ["node", "vitest/globals"],
 		"typeRoots": ["./node_modules/@types", "./types", "./node_modules"],
 		"paths": {
+            "@data-app": ["src/modules/data/application"],
 			"@data-board": ["src/modules/data/board"],
 			"@data-external-tool": ["src/modules/data/external-tool"],
 			"@data-group": ["src/modules/data/group"],
 			"@data-system": ["src/modules/data/system"],
+            "@data-env": ["src/modules/data/env"],
 			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
 			"@data-room": ["src/modules/data/room"],
 			"@data-file": ["src/modules/data/file"],

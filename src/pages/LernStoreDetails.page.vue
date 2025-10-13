@@ -1,15 +1,8 @@
 <template>
 	<span>
 		<template v-if="status === 'completed'">
-			<lernstore-collection-detail-view
-				v-if="isCollection"
-				:resource="resource"
-			/>
-			<lernstore-detail-view
-				v-else
-				:id="$route.params.id"
-				:resource="resource"
-			/>
+			<lernstore-collection-detail-view v-if="isCollection" :resource="resource" />
+			<lernstore-detail-view v-else :id="$route.params.id" :resource="resource" />
 		</template>
 		<div v-else class="d-flex justify-center align-center min-height-screen">
 			<v-progress-circular indeterminate size="115" />
@@ -18,9 +11,9 @@
 </template>
 
 <script>
-import { contentModule } from "@/store";
-import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@/components/lern-store/LernstoreCollectionDetailView";
+import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView";
+import { contentModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {

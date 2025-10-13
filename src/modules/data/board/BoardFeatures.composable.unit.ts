@@ -1,7 +1,7 @@
+import { useBoardStore } from "./Board.store";
+import { useBoardFeatures } from "./BoardFeatures.composable";
 import { BoardFeature } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils";
-import { useBoardFeatures } from "./BoardFeatures.composable";
-import { useBoardStore } from "./Board.store";
 import { createMock } from "@golevelup/ts-vitest";
 
 vi.mock("./Board.store");
@@ -9,9 +9,7 @@ const mockedUseBoardStore = vi.mocked(useBoardStore);
 
 describe("useBoardFeatures", () => {
 	const setup = (props: BoardFeature[] | []) => {
-		const mockedUseBoardStoreFeatures = createMock<
-			ReturnType<typeof useBoardStore>
-		>({
+		const mockedUseBoardStoreFeatures = createMock<ReturnType<typeof useBoardStore>>({
 			getFeatures: props,
 		});
 		mockedUseBoardStore.mockReturnValue(mockedUseBoardStoreFeatures);

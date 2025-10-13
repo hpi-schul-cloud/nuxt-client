@@ -1,8 +1,5 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import FileStatusLegend from "./FileStatusLegend.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("FileStatusLegend", () => {
 	const setupWrapper = () => {
@@ -24,26 +21,19 @@ describe("FileStatusLegend", () => {
 		it("should exists", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper.find('[data-testid="legend-file-status-scan-pending"]').exists()
-			).toBe(true);
+			expect(wrapper.find('[data-testid="legend-file-status-scan-pending"]').exists()).toBe(true);
 		});
 
 		it("should have correct text", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper.find('[data-testid="legend-file-status-scan-pending"]').text()
-			).toBe("common.file.awaitingScan");
+			expect(wrapper.find('[data-testid="legend-file-status-scan-pending"]').text()).toBe("common.file.awaitingScan");
 		});
 
 		it("should have correct icon", () => {
 			const { wrapper } = setupWrapper();
 
-			const icon = wrapper
-				.find('[data-testid="legend-file-status-scan-pending"]')
-				.findComponent(".v-icon")
-				.exists();
+			const icon = wrapper.find('[data-testid="legend-file-status-scan-pending"]').findComponent(".v-icon").exists();
 			expect(icon).toBe(true);
 		});
 	});
@@ -52,30 +42,21 @@ describe("FileStatusLegend", () => {
 		it("should exists", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper
-					.find('[data-testid="legend-file-status-scan-wont-check"]')
-					.exists()
-			).toBe(true);
+			expect(wrapper.find('[data-testid="legend-file-status-scan-wont-check"]').exists()).toBe(true);
 		});
 
 		it("should have correct text", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper
-					.find('[data-testid="legend-file-status-scan-wont-check"]')
-					.text()
-			).toBe("common.file.scanWontCheck");
+			expect(wrapper.find('[data-testid="legend-file-status-scan-wont-check"]').text()).toBe(
+				"common.file.scanWontCheck"
+			);
 		});
 
 		it("should have correct icon", () => {
 			const { wrapper } = setupWrapper();
 
-			const icon = wrapper
-				.find('[data-testid="legend-file-status-scan-wont-check"]')
-				.findComponent(".v-icon")
-				.exists();
+			const icon = wrapper.find('[data-testid="legend-file-status-scan-wont-check"]').findComponent(".v-icon").exists();
 			expect(icon).toBe(true);
 		});
 	});
@@ -84,26 +65,19 @@ describe("FileStatusLegend", () => {
 		it("should exists", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper.find('[data-testid="legend-file-status-scan-error"]').exists()
-			).toBe(true);
+			expect(wrapper.find('[data-testid="legend-file-status-scan-error"]').exists()).toBe(true);
 		});
 
 		it("should have correct text", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper.find('[data-testid="legend-file-status-scan-error"]').text()
-			).toBe("common.file.scanError");
+			expect(wrapper.find('[data-testid="legend-file-status-scan-error"]').text()).toBe("common.file.scanError");
 		});
 
 		it("should have correct icon", () => {
 			const { wrapper } = setupWrapper();
 
-			const icon = wrapper
-				.find('[data-testid="legend-file-status-scan-error"]')
-				.findComponent(".v-icon")
-				.exists();
+			const icon = wrapper.find('[data-testid="legend-file-status-scan-error"]').findComponent(".v-icon").exists();
 			expect(icon).toBe(true);
 		});
 	});
@@ -112,21 +86,15 @@ describe("FileStatusLegend", () => {
 		it("should exists", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper
-					.find('[data-testid="legend-file-status-scan-virus-detected"]')
-					.exists()
-			).toBe(true);
+			expect(wrapper.find('[data-testid="legend-file-status-scan-virus-detected"]').exists()).toBe(true);
 		});
 
 		it("should have correct text", () => {
 			const { wrapper } = setupWrapper();
 
-			expect(
-				wrapper
-					.find('[data-testid="legend-file-status-scan-virus-detected"]')
-					.text()
-			).toBe("common.file.virusDetected");
+			expect(wrapper.find('[data-testid="legend-file-status-scan-virus-detected"]').text()).toBe(
+				"common.file.virusDetected"
+			);
 		});
 
 		it("should have correct icon", () => {

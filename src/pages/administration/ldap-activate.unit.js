@@ -1,17 +1,14 @@
+import { SchulcloudTheme } from "../../serverApi/v3";
+import { default as ldapActivate } from "./LDAPActivate.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { envsFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { createStore } from "vuex";
-import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import { SchulcloudTheme } from "../../serverApi/v3";
 
 const mockResponseData = {
 	ok: true,
@@ -47,14 +44,6 @@ const getStoreOptions = () => {
 
 	const storeOptions = {
 		modules: {
-			auth: {
-				namespaced: true,
-				state: () => ({
-					user: {
-						permissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-					},
-				}),
-			},
 			"ldap-config": {
 				namespaced: true,
 				actions: {
@@ -103,11 +92,10 @@ describe("ldap/activate", () => {
 
 	beforeEach(() => {
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 		});
-		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: false });
-		envConfigModule.setEnvs(envs);
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: false });
 	});
 
 	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
@@ -178,9 +166,7 @@ describe("ldap/activate", () => {
 		});
 
 		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
-		const confirmBtn = confirmModal
-			.findComponent({ name: "v-card" })
-			.find('[data-testid="ldapOkButton"]');
+		const confirmBtn = confirmModal.findComponent({ name: "v-card" }).find('[data-testid="ldapOkButton"]');
 		expect(confirmBtn.exists()).toBe(true);
 		await confirmBtn.trigger("click");
 
@@ -209,7 +195,7 @@ describe("ldap/activate", () => {
 		expect(infoMessage.exists()).toBe(true);
 	});
 
-	it("should not show checkbox for user migration", async () => {
+	it("should not show checkbox for user migration", () => {
 		const { storeOptions } = getStoreOptions();
 
 		const { wrapper } = setup({
@@ -223,9 +209,8 @@ describe("ldap/activate", () => {
 		expect(checkbox.exists()).toBe(false);
 	});
 
-	it("should show checkbox for user migration", async () => {
-		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: true });
-		envConfigModule.setEnvs(envs);
+	it("should show checkbox for user migration", () => {
+		createTestEnvStore({ FEATURE_USER_MIGRATION_ENABLED: true });
 
 		const { storeOptions } = getStoreOptions();
 
@@ -242,11 +227,10 @@ describe("ldap/activate", () => {
 
 	describe("when the instance is NBC", () => {
 		const setupNbc = () => {
-			const envs = envsFactory.build({
+			createTestEnvStore({
 				SC_THEME: SchulcloudTheme.N21,
 				FEATURE_USER_MIGRATION_ENABLED: true,
 			});
-			envConfigModule.setEnvs(envs);
 
 			const { storeOptions } = getStoreOptions();
 

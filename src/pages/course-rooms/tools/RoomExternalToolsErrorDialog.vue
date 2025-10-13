@@ -8,7 +8,7 @@
 		@dialog-closed="onCloseCustomDialog"
 	>
 		<template #title>
-			<h2 class="text-h4 my-2">
+			<h2 class="my-2">
 				{{ t(getTitle, { toolName: selectedItem.name }) }}
 			</h2>
 		</template>
@@ -19,10 +19,7 @@
 </template>
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import {
-	ExternalToolDisplayData,
-	useContextExternalToolConfigurationStatus,
-} from "@data-external-tool";
+import { ExternalToolDisplayData, useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { computed, ComputedRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -41,11 +38,8 @@ const emit = defineEmits<{
 	(e: "closed"): void;
 }>();
 
-const {
-	determineDeactivatedTranslationKey,
-	determineToolStatusTranslationKey,
-	determineNotLicensedTranslationKey,
-} = useContextExternalToolConfigurationStatus();
+const { determineDeactivatedTranslationKey, determineToolStatusTranslationKey, determineNotLicensedTranslationKey } =
+	useContextExternalToolConfigurationStatus();
 
 const { t } = useI18n();
 
@@ -53,16 +47,11 @@ const onCloseCustomDialog = () => {
 	emit("closed");
 };
 
-const isToolOutdated: ComputedRef<boolean> = computed(() => {
-	return (
-		props.selectedItem.status.isOutdatedOnScopeContext ||
-		props.selectedItem.status.isOutdatedOnScopeSchool
-	);
-});
+const isToolOutdated: ComputedRef<boolean> = computed(
+	() => props.selectedItem.status.isOutdatedOnScopeContext || props.selectedItem.status.isOutdatedOnScopeSchool
+);
 
-const isToolIncomplete: ComputedRef<boolean> = computed(() => {
-	return props.selectedItem.status.isIncompleteOnScopeContext;
-});
+const isToolIncomplete: ComputedRef<boolean> = computed(() => props.selectedItem.status.isIncompleteOnScopeContext);
 
 const getTitle: ComputedRef<string> = computed(() => {
 	if (props.selectedItem.status.isDeactivated) {

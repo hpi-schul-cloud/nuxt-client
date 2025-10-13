@@ -1,12 +1,7 @@
 <template>
 	<v-dialog v-model="isLightBoxOpen" fullscreen data-testid="light-box">
 		<v-toolbar>
-			<v-btn
-				:aria-label="t('common.labels.close')"
-				:icon="mdiClose"
-				data-testid="light-box-close-btn"
-				@click="close"
-			/>
+			<v-btn :aria-label="t('common.labels.close')" :icon="mdiClose" data-testid="light-box-close-btn" @click="close" />
 
 			<v-toolbar-title v-if="lightBoxOptions">
 				{{ lightBoxOptions.name }}
@@ -20,39 +15,21 @@
 			/>
 		</v-toolbar>
 		<v-row class="ma-0" style="overflow: auto" @click="close">
-			<v-col
-				class="d-flex align-items-center justify-center"
-				style="height: 100%"
-			>
+			<v-col class="d-flex align-center justify-center" style="height: 100%">
 				<PreviewImage
-					v-if="
-						isLightBoxImageType() &&
-						lightBoxOptions &&
-						lightBoxOptions.previewUrl &&
-						lightBoxOptions.alt
-					"
+					v-if="isLightBoxImageType() && lightBoxOptions && lightBoxOptions.previewUrl && lightBoxOptions.alt"
 					:src="lightBoxOptions.previewUrl"
 					:alt="lightBoxOptions.alt"
 				/>
 				<AudioPlayer
-					v-else-if="
-						isLightBoxAudioType() &&
-						lightBoxOptions &&
-						!hasAudioError &&
-						isLightBoxOpen
-					"
+					v-else-if="isLightBoxAudioType() && lightBoxOptions && !hasAudioError && isLightBoxOpen"
 					:src="lightBoxOptions?.downloadUrl"
 					class="audio-player bg-grey-darken-3"
 					@click.stop
 					@error="handleAudioError"
 				/>
 				<video
-					v-if="
-						isLightBoxVideoType() &&
-						lightBoxOptions &&
-						!hasVideoError &&
-						isLightBoxOpen
-					"
+					v-if="isLightBoxVideoType() && lightBoxOptions && !hasVideoError && isLightBoxOpen"
 					controls
 					controlsList="nodownload"
 					class="video"
@@ -75,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+import { LightBoxContentType, useLightBox } from "./LightBox.composable";
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiTrayArrowDown } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
@@ -83,7 +61,6 @@ import { PreviewImage } from "@ui-preview-image";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { LightBoxContentType, useLightBox } from "./LightBox.composable";
 
 const { t } = useI18n();
 
@@ -114,15 +91,9 @@ watch(isLightBoxOpen, () => {
 	hasVideoError.value = false;
 });
 
-const isLightBoxImageType = () => {
-	return lightBoxOptions.value?.type === LightBoxContentType.IMAGE;
-};
-const isLightBoxAudioType = () => {
-	return lightBoxOptions.value?.type === LightBoxContentType.AUDIO;
-};
-const isLightBoxVideoType = () => {
-	return lightBoxOptions.value?.type === LightBoxContentType.VIDEO;
-};
+const isLightBoxImageType = () => lightBoxOptions.value?.type === LightBoxContentType.IMAGE;
+const isLightBoxAudioType = () => lightBoxOptions.value?.type === LightBoxContentType.AUDIO;
+const isLightBoxVideoType = () => lightBoxOptions.value?.type === LightBoxContentType.VIDEO;
 </script>
 
 <style scoped>

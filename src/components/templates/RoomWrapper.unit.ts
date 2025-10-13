@@ -1,33 +1,25 @@
-import {
-	authModule,
-	commonCartridgeImportModule,
-	envConfigModule,
-	courseRoomListModule,
-} from "@/store";
-import AuthModule from "@/store/auth";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import EnvConfigModule from "@/store/env-config";
-import CourseRoomListModule from "@/store/course-room-list";
-import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { FabAction } from "./default-wireframe.types";
 import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
+import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
+import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import CourseRoomListModule from "@/store/course-room-list";
+import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
-import { CourseMetadataResponse } from "@/serverApi/v3";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
 		props: { hasRooms: true },
 	}
-) => {
-	return mount(RoomWrapper, {
+) =>
+	mount(RoomWrapper, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
@@ -37,7 +29,6 @@ const getWrapper = (
 		},
 		...options,
 	});
-};
 
 const mockData: CourseMetadataResponse[] = [
 	{
@@ -80,10 +71,15 @@ const mockData: CourseMetadataResponse[] = [
 
 describe("@templates/RoomWrapper.vue", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestEnvStore({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
+		});
+		createTestAppStoreWithPermissions([Permission.CourseCreate]);
+
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
-			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
@@ -97,15 +93,13 @@ describe("@templates/RoomWrapper.vue", () => {
 				props: { hasRooms: false },
 			});
 
-			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(true);
 		});
 	});
 
 	describe("when data is loaded", () => {
 		describe("when data is empty", () => {
-			it("should display empty state", async () => {
+			it("should display empty state", () => {
 				const wrapper = getWrapper({
 					props: { hasRooms: false },
 				});
@@ -129,13 +123,6 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when user has course create permission", () => {
-		beforeEach(() => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["COURSE_CREATE"],
-			});
-			authModule.setMe(mockMe);
-		});
-
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
@@ -144,59 +131,33 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		describe("when course synchronization is active", () => {
-			beforeEach(() => {
-				envConfigModule.setEnvs(
-					envsFactory.build({ FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true })
-				);
-			});
-
-			it("should have the course sync sub menu action", async () => {
+			it("should have the course sync sub menu action", () => {
 				const wrapper = getWrapper();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined =
-					defaultWireframe.props().fabItems?.actions;
+				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
 
-				expect(
-					fabActions?.some(
-						(action: FabAction) =>
-							action.dataTestId === "fab_button_add_synced_course"
-					)
-				).toEqual(true);
+				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_add_synced_course")).toEqual(
+					true
+				);
 			});
 		});
 
 		describe("when course synchronization is active", () => {
-			beforeEach(() => {
-				envConfigModule.setEnvs(
-					envsFactory.build({
-						FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
-					})
-				);
-			});
-
-			it("should have the common cartridge sub menu action", async () => {
+			it("should have the common cartridge sub menu action", () => {
 				const wrapper = getWrapper();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined =
-					defaultWireframe.props().fabItems?.actions;
+				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
 
-				expect(
-					fabActions?.some(
-						(action: FabAction) =>
-							action.dataTestId === "fab_button_import_course"
-					)
-				).toEqual(true);
+				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_import_course")).toEqual(true);
 			});
 		});
 	});
 
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
-			const mockMe = meResponseFactory.build();
-			authModule.setMe(mockMe);
-
+			createTestAppStoreWithPermissions([]);
 			const wrapper = getWrapper();
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
@@ -205,20 +166,18 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the course sync fab action", () => {
-		it("should open the course sync dialog", async () => {
+		it("should open the course sync dialog", () => {
 			const wrapper = getWrapper();
 
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
 
-			expect(
-				(wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen
-			).toEqual(true);
+			expect((wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen).toEqual(true);
 		});
 	});
 
 	describe("when clicking on the common cartridge fab action", () => {
-		it("should open the common cartridge dialog", async () => {
+		it("should open the common cartridge dialog", () => {
 			const wrapper = getWrapper();
 
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);

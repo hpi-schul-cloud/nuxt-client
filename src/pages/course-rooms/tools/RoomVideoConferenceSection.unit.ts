@@ -1,30 +1,25 @@
-import { VideoConferenceScope } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
+import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
+import { Permission, RoleName, VideoConferenceScope } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
-import {
-	AUTH_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
-} from "@/utils/inject";
+import { COURSE_ROOM_DETAILS_MODULE_KEY, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { VDialog } from "vuetify/lib/components/index";
-import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import { VDialog } from "vuetify/lib/components/index";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
 
 	const getWrapper = (
 		props: { roomId: string },
-		userPermissions: ("join_meeting" | "start_meeting")[],
+		userPermissions: (Permission.JoinMeeting | Permission.StartMeeting)[],
 		isExpert: boolean,
 		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
 	) => {
@@ -35,9 +30,12 @@ describe("RoomVideoConferenceSection", () => {
 			writable: true, // possibility to override
 		});
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: userPermissions,
-			getUserRoles: isExpert ? ["expert"] : [],
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStore({
+			me: {
+				permissions: userPermissions,
+				roles: isExpert ? [{ id: "expert", name: RoleName.Expert }] : [],
+			},
 		});
 
 		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {
@@ -68,7 +66,6 @@ describe("RoomVideoConferenceSection", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
@@ -81,7 +78,6 @@ describe("RoomVideoConferenceSection", () => {
 
 		return {
 			wrapper,
-			authModule,
 			videoConferenceModule,
 			courseRoomDetailsModule,
 		};
@@ -97,7 +93,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -131,7 +127,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -165,7 +161,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -200,7 +196,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				true,
 				{
 					getVideoConferenceInfo: {
@@ -235,7 +231,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				true,
 				{
 					getVideoConferenceInfo: {
@@ -270,7 +266,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["join_meeting"],
+				[Permission.JoinMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -305,7 +301,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["start_meeting"],
+				[Permission.StartMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -403,9 +399,7 @@ describe("RoomVideoConferenceSection", () => {
 
 			card.vm.$emit("refresh");
 
-			expect(
-				videoConferenceModule.fetchVideoConferenceInfo
-			).toHaveBeenCalledWith({
+			expect(videoConferenceModule.fetchVideoConferenceInfo).toHaveBeenCalledWith({
 				scope: VideoConferenceScope.Course,
 				scopeId: "roomId",
 			});
@@ -419,7 +413,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["join_meeting"],
+					[Permission.JoinMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {
@@ -460,7 +454,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["start_meeting"],
+					[Permission.StartMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {
@@ -486,9 +480,7 @@ describe("RoomVideoConferenceSection", () => {
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
 				await card.trigger("click");
 
-				const configurationDialog = wrapper.findComponent(
-					VideoConferenceConfigurationDialog
-				);
+				const configurationDialog = wrapper.findComponent(VideoConferenceConfigurationDialog);
 
 				expect(configurationDialog.props("isOpen")).toBe(true);
 			});
@@ -503,7 +495,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId,
 				},
-				["start_meeting"],
+				[Permission.StartMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -534,9 +526,7 @@ describe("RoomVideoConferenceSection", () => {
 		it("should call start with correct options", () => {
 			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
-			const configurationDialog = wrapper.findComponent(
-				VideoConferenceConfigurationDialog
-			);
+			const configurationDialog = wrapper.findComponent(VideoConferenceConfigurationDialog);
 			configurationDialog.vm.$emit("start-video-conference");
 
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
@@ -554,9 +544,7 @@ describe("RoomVideoConferenceSection", () => {
 		it("should call start and join videoconference function of store", async () => {
 			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
-			const configurationDialog = wrapper.findComponent<typeof VDialog>(
-				VideoConferenceConfigurationDialog
-			);
+			const configurationDialog = wrapper.findComponent<typeof VDialog>(VideoConferenceConfigurationDialog);
 			configurationDialog.vm.$emit("start-video-conference");
 			await nextTick();
 
@@ -568,8 +556,7 @@ describe("RoomVideoConferenceSection", () => {
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
 				scopeId: params.scopeId,
-				videoConferenceOptions:
-					videoConferenceModule.getVideoConferenceInfo.options,
+				videoConferenceOptions: videoConferenceModule.getVideoConferenceInfo.options,
 				logoutUrl: `${mockUrl}/rooms/${roomId}?tab=tools`,
 			});
 			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
@@ -585,7 +572,7 @@ describe("RoomVideoConferenceSection", () => {
 				{
 					roomId: "roomId",
 				},
-				["start_meeting"],
+				[Permission.StartMeeting],
 				false,
 				{
 					getVideoConferenceInfo: {
@@ -609,9 +596,7 @@ describe("RoomVideoConferenceSection", () => {
 		it("should close the videoconference configuration dialog", async () => {
 			const { wrapper, videoConferenceModule } = setup();
 
-			const configurationDialog = wrapper.findComponent<typeof VDialog>(
-				VideoConferenceConfigurationDialog
-			);
+			const configurationDialog = wrapper.findComponent<typeof VDialog>(VideoConferenceConfigurationDialog);
 			configurationDialog.vm.$emit("close");
 			await nextTick();
 
@@ -636,7 +621,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["join_meeting"],
+					[Permission.JoinMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {
@@ -676,7 +661,7 @@ describe("RoomVideoConferenceSection", () => {
 					{
 						roomId: "roomId",
 					},
-					["join_meeting"],
+					[Permission.JoinMeeting],
 					false,
 					{
 						getVideoConferenceInfo: {

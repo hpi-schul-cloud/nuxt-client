@@ -53,10 +53,10 @@
 </template>
 
 <script>
+import BaseModal from "../base/BaseModal.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import { contentModule } from "@/store";
 import { mapGetters } from "vuex";
-import BaseModal from "../base/BaseModal.vue";
 
 export default {
 	components: {
@@ -96,12 +96,10 @@ export default {
 			return this.selectedLesson?._id !== undefined;
 		},
 		lessonsOptions() {
-			return this.lessons?.data?.map((lesson) => {
-				return {
-					_id: lesson._id,
-					name: lesson.name,
-				};
-			});
+			return this.lessons?.data?.map((lesson) => ({
+				_id: lesson._id,
+				name: lesson.name,
+			}));
 		},
 		showModal: {
 			get() {
@@ -186,8 +184,5 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
-}
-:deep(.v-input__icon .v-icon) {
-	font-size: var(--text-base-size);
 }
 </style>

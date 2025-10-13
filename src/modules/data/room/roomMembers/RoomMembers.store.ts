@@ -1,46 +1,55 @@
-import { computed, Ref, ref } from "vue";
 import { RoomMember } from "./types";
 import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
 	RoomApiFactory,
-	SchoolApiFactory,
 	RoomMemberResponse,
+	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
-	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { useI18n } from "vue-i18n";
-import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
-import { authModule } from "@/store/store-accessor";
+import { $axios } from "@/utils/api";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
-import { useRoomDetailsStore } from "@data-room";
+import { computed, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
-	const { showFailure, showSuccess } = useBoardNotifier();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
 	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
-	const potentialRoomMembers: Ref<
-		Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]
-	> = ref([]);
+	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
 
-	const roomMembersWithoutApplicants = computed(() => {
-		return roomMembers.value.filter(
-			(member) => member.roomRoleName !== RoleName.Roomapplicant
-		);
-	});
+	const roomMembersWithoutApplicants = computed(() =>
+		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.Roomapplicant)
+	);
 
-	const roomApplicants = computed(() => {
-		return roomMembers.value.filter(
-			(member) => member.roomRoleName === RoleName.Roomapplicant
-		);
-	});
+	const roomApplicants = computed(() =>
+		roomMembers.value.filter((member) => member.roomRoleName === RoleName.Roomapplicant)
+	);
+
+	const roomMembersForAdmins = computed(() =>
+		roomMembersWithoutApplicants.value.map((member) => {
+			const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
+			if (!isAnonymizedMember) return member;
+
+			const anonymizedName = t("pages.rooms.administration.roomDetail.anonymized");
+
+			return {
+				...member,
+				isSelectable: !isAnonymizedMember,
+				firstName: anonymizedName,
+				lastName: anonymizedName,
+				fullName: anonymizedName,
+			};
+		})
+	);
 
 	const isLoading = ref<boolean>(false);
 	const ownSchool = {
@@ -48,7 +57,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		name: schoolsModule.getSchool.name,
 	};
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([ownSchool]);
-	const currentUserId = authModule.getUser?.id ?? "";
+	const currentUserId = computed(() => useAppStore().user?.id);
+
 	const selectedIds = ref<string[]>([]);
 	const confirmationSelectedIds = ref<string[]>([]);
 
@@ -85,23 +95,17 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
-				.data;
-			roomMembers.value = data.map((member: RoomMemberResponse) => {
-				return {
-					...member,
-					fullName: `${member.firstName} ${member.lastName}`,
-					isSelectable: !(
-						member.userId === currentUserId ||
-						member.roomRoleName === RoleName.Roomowner
-					),
-					displayRoomRole: roomRole[member.roomRoleName],
-					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
-				};
-			});
-			isLoading.value = false;
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId())).data;
+			roomMembers.value = data.map((member: RoomMemberResponse) => ({
+				...member,
+				fullName: `${member.firstName} ${member.lastName}`,
+				isSelectable: !(member.userId === currentUserId.value || member.roomRoleName === RoleName.Roomowner),
+				displayRoomRole: roomRole[member.roomRoleName],
+				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+			}));
 		} catch {
-			showFailure(t("pages.rooms.members.error.load"));
+			notifyError(t("pages.rooms.members.error.load"));
+		} finally {
 			isLoading.value = false;
 		}
 	};
@@ -116,49 +120,38 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const getPotentialMembers = async (
-		schoolRoleName: RoleName,
-		schoolId: string = ownSchool.id
-	) => {
+	const getPotentialMembers = async (schoolRoleName: RoleName, schoolId: string = ownSchool.id) => {
 		if (schoolId === null) return;
 
 		try {
 			const endpointMap = {
-				[RoleName.Teacher]: () =>
-					schoolApi.schoolControllerGetTeachers(schoolId),
-				[RoleName.Student]: () =>
-					schoolApi.schoolControllerGetStudents(schoolId),
+				[RoleName.Teacher]: () => schoolApi.schoolControllerGetTeachers(schoolId),
+				[RoleName.Student]: () => schoolApi.schoolControllerGetStudents(schoolId),
 			};
 
-			const result = (
-				await endpointMap[schoolRoleName as keyof typeof endpointMap]()
-			).data;
+			const result = (await endpointMap[schoolRoleName as keyof typeof endpointMap]()).data;
 
 			potentialRoomMembers.value = result.data
-				.map((user) => {
-					return {
-						...user,
-						userId: user.id,
-						fullName: `${user.lastName}, ${user.firstName}`,
-						schoolRoleNames: [schoolRoleName],
-						displaySchoolRole: schoolRoleMap[schoolRoleName],
-					};
-				})
-				.filter((user) => {
-					return (
+				.map((user) => ({
+					...user,
+					userId: user.id,
+					fullName: `${user.lastName}, ${user.firstName}`,
+					schoolRoleNames: [schoolRoleName],
+					displaySchoolRole: schoolRoleMap[schoolRoleName],
+					schoolId,
+				}))
+				.filter(
+					(user) =>
 						user.schoolRoleNames.includes(schoolRoleName) &&
 						!roomMembers.value.some((member) => member.userId === user.id)
-					);
-				})
+				)
 				.sort((a, b) => a.fullName.localeCompare(b.fullName));
 		} catch {
-			showFailure(t("pages.rooms.members.error.load"));
+			notifyError(t("pages.rooms.members.error.load"));
 		}
 	};
 
-	const getMemberById = (userId: string) => {
-		return roomMembers.value.find((member) => member.userId === userId);
-	};
+	const getMemberById = (userId: string) => roomMembers.value.find((member) => member.userId === userId);
 
 	const getMemberFullName = (userId = "") => {
 		const member = getMemberById(userId);
@@ -168,10 +161,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		return member.fullName;
 	};
 
+	const getRoomOwnerFullName = () => {
+		const owner = roomMembers.value.find((member) => member.roomRoleName === RoleName.Roomowner);
+		return owner?.fullName;
+	};
+
 	const isCurrentUserStudent = computed(() => {
-		const member = roomMembers.value.find(
-			(member) => member.userId === currentUserId
-		);
+		const member = roomMembers.value.find((member) => member.userId === currentUserId.value);
 
 		return member?.schoolRoleNames.includes(RoleName.Student);
 	});
@@ -189,16 +185,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const loadSchoolListPage = async (skip = 0, limit = 1000) => {
 		try {
-			const response = await schoolApi.schoolControllerGetSchoolList(
-				skip,
-				limit
-			);
+			const response = await schoolApi.schoolControllerGetSchoolList(skip, limit);
 			if (response.data.data.length === 0) {
 				return;
 			}
-			const additionalSchools = response.data.data.filter(
-				(school) => school.id !== ownSchool.id
-			);
+			const additionalSchools = response.data.data.filter((school) => school.id !== ownSchool.id);
 			schools.value = [...schools.value, ...additionalSchools];
 			if (schools.value.length < response.data.total) {
 				await loadSchoolListPage(skip + limit, limit);
@@ -209,9 +200,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const addMembers = async (userIds: string[]) => {
-		const newMembers = potentialRoomMembers.value.filter((member) =>
-			userIds.includes(member.userId)
-		);
+		const newMembers = potentialRoomMembers.value.filter((member) => userIds.includes(member.userId));
 
 		try {
 			const { roomRoleName } = (
@@ -226,10 +215,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 					roomRoleName: roomRoleName as RoleName,
 					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
+					schoolId: member.schoolId,
 				}))
 			);
 		} catch {
-			showFailure(t("pages.rooms.members.error.add"));
+			notifyError(t("pages.rooms.members.error.add"));
 		}
 	};
 
@@ -238,12 +228,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			await roomApi.roomControllerRemoveMembers(getRoomId(), {
 				userIds,
 			});
-			roomMembers.value = roomMembers.value.filter(
-				(member) => !userIds.includes(member.userId)
-			);
+			roomMembers.value = roomMembers.value.filter((member) => !userIds.includes(member.userId));
 			selectedIds.value = [];
 		} catch {
-			showFailure(t("pages.rooms.members.error.remove"));
+			notifyError(t("pages.rooms.members.error.remove"));
 		}
 	};
 
@@ -252,16 +240,13 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		try {
 			await roomApi.roomControllerLeaveRoom(getRoomId());
 		} catch {
-			showFailure(t("pages.rooms.members.error.remove"));
+			notifyError(t("pages.rooms.members.error.remove"));
 		} finally {
 			isLoading.value = false;
 		}
 	};
 
-	const updateMembersRole = async (
-		roleName: ChangeRoomRoleBodyParamsRoleNameEnum,
-		id?: string
-	) => {
+	const updateMembersRole = async (roleName: ChangeRoomRoleBodyParamsRoleNameEnum, id?: string) => {
 		try {
 			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
 				userIds: id ? [id] : selectedIds.value,
@@ -285,7 +270,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 				}
 			});
 		} catch {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
 	};
 
@@ -296,24 +281,23 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			});
 			setRoomOwner(userId);
 		} catch {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
 	};
 
-	const setRoomOwner = async (userId: string) => {
-		const currentOwner = roomMembers.value.find(
-			(member) => member.roomRoleName === RoleName.Roomowner
-		);
-		const memberToBeOwner = roomMembers.value.find(
-			(member) => member.userId === userId
-		);
-		if (!currentOwner || !memberToBeOwner) {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+	const setRoomOwner = (userId: string) => {
+		const currentOwner = roomMembers.value.find((member) => member.roomRoleName === RoleName.Roomowner);
+		if (currentOwner) {
+			updateMemberRole(currentOwner, RoleName.Roomadmin);
+		}
+
+		const memberToBeOwner = roomMembers.value.find((member) => member.userId === userId);
+		if (!memberToBeOwner) {
+			notifyError(t("pages.rooms.members.error.updateRole"));
 			return;
 		}
 
 		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
-		updateMemberRole(currentOwner, RoleName.Roomadmin);
 	};
 
 	const confirmInvitations = async (ids: string[]) => {
@@ -326,14 +310,12 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			showNotification(ids, "confirm");
 
 			roomMembers.value
-				.filter((member) => {
-					return ids.includes(member.userId);
-				})
+				.filter((member) => ids.includes(member.userId))
 				.forEach((member) => {
 					updateMemberRole(member, RoleName.Roomviewer, true);
 				});
 		} catch {
-			showFailure(t("pages.rooms.members.error.updateRole"));
+			notifyError(t("pages.rooms.members.error.updateRole"));
 		}
 
 		confirmationSelectedIds.value = [];
@@ -347,39 +329,25 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 			showNotification(ids, "reject");
 
-			roomMembers.value = roomMembers.value.filter((member) => {
-				return !ids.includes(member.userId);
-			});
+			roomMembers.value = roomMembers.value.filter((member) => !ids.includes(member.userId));
 		} catch {
-			showFailure(t("pages.rooms.members.error.remove"));
+			notifyError(t("pages.rooms.members.error.remove"));
 		}
 
 		confirmationSelectedIds.value = [];
 	};
 
-	const showNotification = (
-		ids: string[],
-		actionType: "confirm" | "reject"
-	) => {
+	const showNotification = (ids: string[], actionType: "confirm" | "reject") => {
 		const successMessage =
 			ids.length > 1
-				? t(
-						`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`
-					)
-				: t(
-						`pages.rooms.members.confirmationTable.notification.${actionType}`,
-						{
-							fullName: getMemberFullName(ids[0]),
-						}
-					);
-		showSuccess(successMessage);
+				? t(`pages.rooms.members.confirmationTable.notification.${actionType}.multiple`)
+				: t(`pages.rooms.members.confirmationTable.notification.${actionType}`, {
+						fullName: getMemberFullName(ids[0]),
+					});
+		notifySuccess(successMessage);
 	};
 
-	const updateMemberRole = (
-		member: RoomMember,
-		roleName: RoleName,
-		isSelectable = false
-	) => {
+	const updateMemberRole = (member: RoomMember, roleName: RoleName, isSelectable = false) => {
 		member.roomRoleName = roleName;
 		member.displayRoomRole = roomRole[roleName];
 		member.isSelectable = isSelectable;
@@ -397,6 +365,26 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		selectedIds.value = [];
 	};
 
+	const baseTableHeaders = computed(() => [
+		{
+			title: t("common.labels.firstName"),
+			key: "firstName",
+		},
+		{
+			title: t("common.labels.lastName"),
+			key: "lastName",
+		},
+		{
+			title: t("pages.rooms.members.tableHeader.roomRole"),
+			key: "displayRoomRole",
+		},
+		{
+			title: t("pages.rooms.members.tableHeader.schoolRole"),
+			key: "displaySchoolRole",
+		},
+		{ title: t("common.words.mainSchool"), key: "schoolName" },
+	]);
+
 	return {
 		addMembers,
 		isRoomOwner,
@@ -409,15 +397,18 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		loadSchoolList,
 		getMemberById,
 		getMemberFullName,
+		getRoomOwnerFullName,
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
 		updateMembersRole,
+		baseTableHeaders,
 		confirmationList,
 		confirmationSelectedIds,
 		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
+		roomMembersForAdmins,
 		roomMembersWithoutApplicants,
 		roomApplicants,
 		potentialRoomMembers,

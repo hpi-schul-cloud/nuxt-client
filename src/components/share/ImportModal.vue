@@ -12,91 +12,44 @@
 		@dialog-canceled="onCancel"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2">
+			<h2 class="mt-2">
 				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</div>
+			</h2>
 		</template>
 
 		<template #content>
 			<div>
-				<div
-					v-if="showAlertInfo"
-					class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
-				>
+				<div v-if="showAlertInfo" class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
 					</div>
 					<div data-testid="import-options-table-header">
 						{{ t("components.molecules.import.options.tableHeader.InfoText") }}
 						<ul class="ml-6">
-							<li
-								v-if="showCourseInfo"
-								data-testid="import-options-personal-data-text"
-							>
-								{{
-									t(
-										"components.molecules.shareImport.options.restrictions.infoText.personalData"
-									)
-								}}
+							<li v-if="showCourseInfo" data-testid="import-options-personal-data-text">
+								{{ t("components.molecules.shareImport.options.restrictions.infoText.personalData") }}
 							</li>
 							<li v-if="showCourseInfo || showLessonInfo">
-								{{
-									t(
-										"components.molecules.shareImport.options.restrictions.infoText.geogebra"
-									)
-								}}
+								{{ t("components.molecules.shareImport.options.restrictions.infoText.geogebra") }}
 							</li>
 							<li v-if="showCourseInfo || showBoardInfo || showLessonInfo">
-								{{
-									t(
-										"components.molecules.shareImport.options.restrictions.infoText.etherpad"
-									)
-								}}
+								{{ t("components.molecules.shareImport.options.restrictions.infoText.etherpad") }}
 							</li>
 							<li v-if="showCourseInfo || showBoardInfo">
-								{{
-									t(
-										"components.molecules.shareImport.options.restrictions.infoText.whiteboard"
-									)
-								}}
+								{{ t("components.molecules.shareImport.options.restrictions.infoText.whiteboard") }}
 							</li>
-							<li
-								v-if="showCtlToolsInfo"
-								data-testid="import-modal-external-tools-info"
-							>
-								{{
-									t(
-										"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-									)
-								}}
+							<li v-if="showCtlToolsInfo" data-testid="import-modal-external-tools-info">
+								{{ t("components.molecules.shareImport.options.ctlTools.infoText.unavailable") }}
 							</li>
-							<li
-								v-if="showCtlToolsInfo"
-								data-testid="import-modal-external-tools-protected-parameter-info"
-							>
-								{{
-									t(
-										"components.molecules.shareImport.options.ctlTools.infoText.protected"
-									)
-								}}
+							<li v-if="showCtlToolsInfo" data-testid="import-modal-external-tools-protected-parameter-info">
+								{{ t("components.molecules.shareImport.options.ctlTools.infoText.protected") }}
 							</li>
-							<li
-								v-if="showCourseInfo"
-								data-testid="import-modal-coursefiles-info"
-							>
-								{{
-									t(
-										"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
-									)
-								}}
+							<li v-if="showCourseInfo" data-testid="import-modal-coursefiles-info">
+								{{ t("components.molecules.shareImport.options.restrictions.infoText.courseFiles") }}
 							</li>
 
 							<li v-if="showCourseInfo">
-								{{
-									t(
-										"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
-									)
-								}}
+								{{ t("components.molecules.shareImport.options.restrictions.infoText.courseGroups") }}
 							</li>
 						</ul>
 					</div>
@@ -136,9 +89,7 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
-	validateOnOpeningTag: (value: string) => {
-		return validateOnOpeningTag(value);
-	},
+	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
 });
 
 const newName = computed({
@@ -146,12 +97,9 @@ const newName = computed({
 	set: (value) => (nameInput.value = value),
 });
 
-const isTitleValid = computed(() => {
-	return (
-		rules.required(newName.value) === true &&
-		rules.validateOnOpeningTag(newName.value) === true
-	);
-});
+const isTitleValid = computed(
+	() => rules.required(newName.value) === true && rules.validateOnOpeningTag(newName.value) === true
+);
 
 const onConfirm = () => {
 	if (isTitleValid.value) {
@@ -160,27 +108,15 @@ const onConfirm = () => {
 };
 const onCancel = () => emit("cancel");
 
-const showCtlToolsInfo = computed(() => {
-	return props.parentType === "courses" || props.parentType === "columnBoard";
-});
+const showCtlToolsInfo = computed(() => props.parentType === "courses" || props.parentType === "columnBoard");
 
-const showAlertInfo = computed(() => {
-	return (
-		props.parentType === "courses" ||
-		props.parentType === "columnBoard" ||
-		props.parentType === "lessons"
-	);
-});
+const showAlertInfo = computed(
+	() => props.parentType === "courses" || props.parentType === "columnBoard" || props.parentType === "lessons"
+);
 
-const showCourseInfo = computed(() => {
-	return props.parentType === "courses";
-});
+const showCourseInfo = computed(() => props.parentType === "courses");
 
-const showBoardInfo = computed(() => {
-	return props.parentType === "columnBoard";
-});
+const showBoardInfo = computed(() => props.parentType === "columnBoard");
 
-const showLessonInfo = computed(() => {
-	return props.parentType === "lessons";
-});
+const showLessonInfo = computed(() => props.parentType === "lessons");
 </script>

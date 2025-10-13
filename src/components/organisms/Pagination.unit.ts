@@ -1,17 +1,13 @@
 import Pagination from "./Pagination.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
-const getWrapper = (props = {}) => {
-	return mount(Pagination, {
+const getWrapper = (props = {}) =>
+	mount(Pagination, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		props,
 	});
-};
 
 describe("@/components/organisms/Pagination", () => {
 	it("should only render a next page link on the first page", () => {

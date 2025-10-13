@@ -23,10 +23,10 @@
 	/>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, PropType } from "vue";
+import { DateSelection } from "../types";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import { DatePicker } from "@ui-date-time-picker";
-import { DateSelection } from "../types";
+import { onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -55,18 +55,13 @@ const onUpdateDate = (date: string, fromUntil: "$gte" | "$lte") => {
 };
 
 const onUpdateFilter = () => {
-	if (
-		dateSelection.value.$gte == undefined ||
-		dateSelection.value.$lte == undefined
-	) {
+	if (dateSelection.value.$gte == undefined || dateSelection.value.$lte == undefined) {
 		emit("remove:filter");
 		emit("dialog-closed", false);
 		return;
 	}
-	if (dateSelection.value.$gte == "")
-		dateSelection.value.$gte = defaultDates.$gte;
-	if (dateSelection.value.$lte == "")
-		dateSelection.value.$lte = defaultDates.$lte;
+	if (dateSelection.value.$gte == "") dateSelection.value.$gte = defaultDates.$gte;
+	if (dateSelection.value.$lte == "") dateSelection.value.$lte = defaultDates.$lte;
 	emit("update:filter", dateSelection.value);
 };
 

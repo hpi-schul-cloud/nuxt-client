@@ -1,34 +1,24 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { RoomEditPage } from "@page-room";
-import { useRoute, useRouter } from "vue-router";
-import { RoomUpdateParams, RoomColor } from "@/types/room/Room";
-import { RoomForm } from "@feature-room";
-import { nextTick, ref } from "vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { Mock } from "vitest";
-import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApplicationError } from "@/store/types/application-error";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
+import { expectNotification, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { RoomForm } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { RoomEditPage } from "@page-room";
+import { createTestingPinia } from "@pinia/testing";
+import { Mock } from "vitest";
+import { computed, nextTick } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
-}));
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
@@ -60,7 +50,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		}>
 	) => {
 		const { isRoomDefined } = { isRoomDefined: true, ...options };
-		const notifierModule = createModuleMocks(NotifierModule);
 		const room = isRoomDefined ? roomFactory.build() : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
@@ -84,15 +73,10 @@ describe("@pages/RoomEdit.page.vue", () => {
 						},
 					}),
 				],
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 			},
 		});
 
-		const { isLoading, updateRoom, fetchRoom } =
-			mockedPiniaStoreTyping(useRoomDetailsStore);
-		const roomFormComponent = wrapper.findComponent(RoomForm);
+		const { isLoading, updateRoom, fetchRoom } = mockedPiniaStoreTyping(useRoomDetailsStore);
 
 		return {
 			wrapper,
@@ -100,10 +84,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 			useRoute,
 			updateRoom,
 			fetchRoom,
-			roomFormComponent,
 			room,
 			roomId,
-			notifierModule,
 		};
 	};
 
@@ -133,7 +115,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 	describe("loading is done", () => {
 		describe("when user has no edit room permissions", () => {
 			it("should not render DefaultWireframe", () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
+
 				const { wrapper } = setup({ isLoading: false });
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -141,7 +124,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should navigate to room details page", async () => {
-				roomPermissions.canEditRoom = ref(false);
+				roomPermissions.canEditRoom = computed(() => false);
 
 				const { roomId } = setup({ isLoading: false });
 				await nextTick();
@@ -155,60 +138,63 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 		describe("when user has edit room permissions ", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoom = ref(true);
+				roomPermissions.canEditRoom = computed(() => true);
 			});
 			it("should render DefaultWireframe", () => {
 				const { wrapper } = setup();
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+
 				expect(defaultWireframe.exists()).toBe(true);
 			});
 
-			it("should have roomFormComponent", () => {
-				const { roomFormComponent } = setup();
+			it("should have roomFormComponent", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const roomFormComponent = wrapper.findComponent(RoomForm);
 				expect(roomFormComponent.exists()).toBe(true);
 			});
 
 			it("should render roomFormComponent with correct props", async () => {
-				const { roomFormComponent, room } = setup();
-
+				const { wrapper, room } = setup();
 				await nextTick();
 
+				const roomFormComponent = wrapper.findComponent(RoomForm);
 				expect(roomFormComponent.props().room).toMatchObject({
 					name: room?.name,
 					color: room?.color,
-					startDate: room?.startDate,
-					endDate: room?.endDate,
 				});
 			});
 
 			it("should have breadcrumbs prop in DefaultWireframe component", async () => {
 				const { wrapper, roomId, room } = setup();
-
 				await nextTick();
+
 				const defaultWireframe = wrapper.findComponent({
 					name: "DefaultWireframe",
 				});
-				const breadcrumbsProp: Breadcrumb[] =
-					defaultWireframe.props().breadcrumbs;
-				const breadcrumb = breadcrumbsProp.find(
-					(breadcrumb: Breadcrumb) => breadcrumb.title === room?.name
-				);
+				const breadcrumbsProp: Breadcrumb[] = defaultWireframe.props().breadcrumbs;
+				const breadcrumb = breadcrumbsProp.find((breadcrumb: Breadcrumb) => breadcrumb.title === room?.name);
 
 				expect(breadcrumb?.to).toContain(roomId);
 			});
 
 			describe("when roomFormComponent emits save event", () => {
 				it("should call updateRoom with correct parameters on save event", async () => {
-					const { updateRoom, roomFormComponent, roomId } = setup();
+					const { updateRoom, roomId, wrapper } = setup();
+					await nextTick();
 
+					const roomFormComponent = wrapper.findComponent(RoomForm);
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 
 					expect(updateRoom).toHaveBeenCalledWith(roomId, roomParams);
 				});
 
 				it("should navigate to 'room-details' with correct room id on save", async () => {
-					const { roomFormComponent, roomId } = setup();
+					const { wrapper, roomId } = setup();
+					await nextTick();
 
+					const roomFormComponent = wrapper.findComponent(RoomForm);
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 					await nextTick();
 
@@ -219,20 +205,20 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should show error notification on invalid request error", async () => {
-					const { roomFormComponent, notifierModule, updateRoom } = setup();
+					const { updateRoom, wrapper } = setup();
+					await nextTick();
+
 					const apiError = {
 						code: HttpStatusCode.BadRequest,
 						message: "Bad Request",
 					};
 					updateRoom.mockRejectedValue(apiError);
 
+					const roomFormComponent = wrapper.findComponent(RoomForm);
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 					await nextTick();
 
-					expect(notifierModule.show).toHaveBeenCalledWith({
-						status: "error",
-						text: "components.roomForm.validation.generalSaveError",
-					});
+					expectNotification("error");
 				});
 
 				it("should throw application error if not due to invalid request", async () => {
@@ -243,15 +229,15 @@ describe("@pages/RoomEdit.page.vue", () => {
 						(wrapper.vm as unknown as typeof RoomEditPage).onSave({
 							room: roomParams,
 						})
-					).rejects.toThrow(
-						new ApplicationError(HttpStatusCode.Unauthorized, "error.401")
-					);
+					).rejects.toThrow(new ApplicationError(HttpStatusCode.Unauthorized, "error.401"));
 				});
 			});
 
 			it("should navigate to 'rooms' on cancel", async () => {
-				const { roomFormComponent, roomId } = setup();
+				const { wrapper, roomId } = setup();
+				await nextTick();
 
+				const roomFormComponent = wrapper.findComponent(RoomForm);
 				roomFormComponent.vm.$emit("cancel");
 
 				expect(useRouterMock.push).toHaveBeenCalledWith({

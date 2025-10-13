@@ -1,28 +1,20 @@
-import { BusinessError } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import {
-	axiosErrorFactory,
-	contextExternalToolFactory,
-} from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolState } from "./contextExternalToolState.composable";
 import { ContextExternalTool } from "./types";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory, contextExternalToolFactory } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 
 vi.mock("@data-external-tool/contextExternalToolApi.composable");
 
 describe("contextExternalToolState.composable", () => {
-	let useContextExternalToolApiMock: DeepMocked<
-		ReturnType<typeof useContextExternalToolApi>
-	>;
+	let useContextExternalToolApiMock: DeepMocked<ReturnType<typeof useContextExternalToolApi>>;
 
 	beforeEach(() => {
-		useContextExternalToolApiMock =
-			createMock<ReturnType<typeof useContextExternalToolApi>>();
+		useContextExternalToolApiMock = createMock<ReturnType<typeof useContextExternalToolApi>>();
 
-		vi.mocked(useContextExternalToolApi).mockReturnValue(
-			useContextExternalToolApiMock
-		);
+		vi.mocked(useContextExternalToolApi).mockReturnValue(useContextExternalToolApiMock);
 	});
 
 	afterEach(() => {
@@ -40,12 +32,9 @@ describe("contextExternalToolState.composable", () => {
 	describe("fetchContextExternalTool", () => {
 		describe("when data is loaded", () => {
 			const setup = () => {
-				const contextExternalTool: ContextExternalTool =
-					contextExternalToolFactory.build();
+				const contextExternalTool: ContextExternalTool = contextExternalToolFactory.build();
 
-				useContextExternalToolApiMock.fetchContextExternalToolCall.mockResolvedValue(
-					contextExternalTool
-				);
+				useContextExternalToolApiMock.fetchContextExternalToolCall.mockResolvedValue(contextExternalTool);
 
 				const composable = useContextExternalToolState();
 
@@ -73,9 +62,9 @@ describe("contextExternalToolState.composable", () => {
 
 				await composable.fetchContextExternalTool("contextExternalToolId");
 
-				expect(
-					useContextExternalToolApiMock.fetchContextExternalToolCall
-				).toHaveBeenCalledWith("contextExternalToolId");
+				expect(useContextExternalToolApiMock.fetchContextExternalToolCall).toHaveBeenCalledWith(
+					"contextExternalToolId"
+				);
 			});
 
 			it("should set the context external tool in the state", async () => {
@@ -83,9 +72,7 @@ describe("contextExternalToolState.composable", () => {
 
 				await composable.fetchContextExternalTool("contextExternalToolId");
 
-				expect(composable.contextExternalTool.value).toEqual(
-					contextExternalTool
-				);
+				expect(composable.contextExternalTool.value).toEqual(contextExternalTool);
 			});
 		});
 
@@ -94,9 +81,7 @@ describe("contextExternalToolState.composable", () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useContextExternalToolApiMock.fetchContextExternalToolCall.mockRejectedValueOnce(
-					errorResponse
-				);
+				useContextExternalToolApiMock.fetchContextExternalToolCall.mockRejectedValueOnce(errorResponse);
 
 				const composable = useContextExternalToolState();
 
@@ -124,12 +109,9 @@ describe("contextExternalToolState.composable", () => {
 	describe("createContextExternalTool", () => {
 		describe("when data is loaded", () => {
 			const setup = () => {
-				const contextExternalTool: ContextExternalTool =
-					contextExternalToolFactory.build();
+				const contextExternalTool: ContextExternalTool = contextExternalToolFactory.build();
 
-				useContextExternalToolApiMock.createContextExternalToolCall.mockResolvedValue(
-					contextExternalTool
-				);
+				useContextExternalToolApiMock.createContextExternalToolCall.mockResolvedValue(contextExternalTool);
 
 				const composable = useContextExternalToolState();
 
@@ -152,16 +134,13 @@ describe("contextExternalToolState.composable", () => {
 
 				await composable.createContextExternalTool(contextExternalTool);
 
-				expect(
-					useContextExternalToolApiMock.createContextExternalToolCall
-				).toHaveBeenCalledWith(contextExternalTool);
+				expect(useContextExternalToolApiMock.createContextExternalToolCall).toHaveBeenCalledWith(contextExternalTool);
 			});
 
 			it("should return the context external tool", async () => {
 				const { composable, contextExternalTool } = setup();
 
-				const result =
-					await composable.createContextExternalTool(contextExternalTool);
+				const result = await composable.createContextExternalTool(contextExternalTool);
 
 				expect(result).toEqual(contextExternalTool);
 			});
@@ -169,14 +148,11 @@ describe("contextExternalToolState.composable", () => {
 
 		describe("when an error occurs during loading", () => {
 			const setup = () => {
-				const contextExternalTool: ContextExternalTool =
-					contextExternalToolFactory.build();
+				const contextExternalTool: ContextExternalTool = contextExternalToolFactory.build();
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useContextExternalToolApiMock.createContextExternalToolCall.mockRejectedValueOnce(
-					errorResponse
-				);
+				useContextExternalToolApiMock.createContextExternalToolCall.mockRejectedValueOnce(errorResponse);
 
 				const composable = useContextExternalToolState();
 
@@ -203,8 +179,7 @@ describe("contextExternalToolState.composable", () => {
 			it("should return undefined", async () => {
 				const { composable, contextExternalTool } = setup();
 
-				const result =
-					await composable.createContextExternalTool(contextExternalTool);
+				const result = await composable.createContextExternalTool(contextExternalTool);
 
 				expect(result).toBeUndefined();
 			});
@@ -214,12 +189,9 @@ describe("contextExternalToolState.composable", () => {
 	describe("updateContextExternalTool", () => {
 		describe("when data is loaded", () => {
 			const setup = () => {
-				const contextExternalTool: ContextExternalTool =
-					contextExternalToolFactory.build();
+				const contextExternalTool: ContextExternalTool = contextExternalToolFactory.build();
 
-				useContextExternalToolApiMock.updateContextExternalToolCall.mockResolvedValue(
-					contextExternalTool
-				);
+				useContextExternalToolApiMock.updateContextExternalToolCall.mockResolvedValue(contextExternalTool);
 
 				const composable = useContextExternalToolState();
 
@@ -232,10 +204,7 @@ describe("contextExternalToolState.composable", () => {
 			it("should reset the error", async () => {
 				const { composable, contextExternalTool } = setup();
 
-				await composable.updateContextExternalTool(
-					contextExternalTool.id,
-					contextExternalTool
-				);
+				await composable.updateContextExternalTool(contextExternalTool.id, contextExternalTool);
 
 				expect(composable.error.value).toBeUndefined();
 			});
@@ -243,23 +212,18 @@ describe("contextExternalToolState.composable", () => {
 			it("should call the api to update context external tools", async () => {
 				const { composable, contextExternalTool } = setup();
 
-				await composable.updateContextExternalTool(
+				await composable.updateContextExternalTool(contextExternalTool.id, contextExternalTool);
+
+				expect(useContextExternalToolApiMock.updateContextExternalToolCall).toHaveBeenCalledWith(
 					contextExternalTool.id,
 					contextExternalTool
 				);
-
-				expect(
-					useContextExternalToolApiMock.updateContextExternalToolCall
-				).toHaveBeenCalledWith(contextExternalTool.id, contextExternalTool);
 			});
 
 			it("should return the context external tool", async () => {
 				const { composable, contextExternalTool } = setup();
 
-				const result = await composable.updateContextExternalTool(
-					contextExternalTool.id,
-					contextExternalTool
-				);
+				const result = await composable.updateContextExternalTool(contextExternalTool.id, contextExternalTool);
 
 				expect(result).toEqual(contextExternalTool);
 			});
@@ -267,14 +231,11 @@ describe("contextExternalToolState.composable", () => {
 
 		describe("when an error occurs during loading", () => {
 			const setup = () => {
-				const contextExternalTool: ContextExternalTool =
-					contextExternalToolFactory.build();
+				const contextExternalTool: ContextExternalTool = contextExternalToolFactory.build();
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useContextExternalToolApiMock.updateContextExternalToolCall.mockRejectedValueOnce(
-					errorResponse
-				);
+				useContextExternalToolApiMock.updateContextExternalToolCall.mockRejectedValueOnce(errorResponse);
 
 				const composable = useContextExternalToolState();
 
@@ -289,10 +250,7 @@ describe("contextExternalToolState.composable", () => {
 			it("should set the error", async () => {
 				const { composable, apiError, contextExternalTool } = setup();
 
-				await composable.updateContextExternalTool(
-					contextExternalTool.id,
-					contextExternalTool
-				);
+				await composable.updateContextExternalTool(contextExternalTool.id, contextExternalTool);
 
 				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,
@@ -304,10 +262,7 @@ describe("contextExternalToolState.composable", () => {
 			it("should return undefined", async () => {
 				const { composable, contextExternalTool } = setup();
 
-				const result = await composable.updateContextExternalTool(
-					contextExternalTool.id,
-					contextExternalTool
-				);
+				const result = await composable.updateContextExternalTool(contextExternalTool.id, contextExternalTool);
 
 				expect(result).toBeUndefined();
 			});
@@ -337,9 +292,9 @@ describe("contextExternalToolState.composable", () => {
 
 				await composable.deleteContextExternalTool("contextExternalToolId");
 
-				expect(
-					useContextExternalToolApiMock.deleteContextExternalToolCall
-				).toHaveBeenCalledWith("contextExternalToolId");
+				expect(useContextExternalToolApiMock.deleteContextExternalToolCall).toHaveBeenCalledWith(
+					"contextExternalToolId"
+				);
 			});
 		});
 
@@ -348,9 +303,7 @@ describe("contextExternalToolState.composable", () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useContextExternalToolApiMock.deleteContextExternalToolCall.mockRejectedValueOnce(
-					errorResponse
-				);
+				useContextExternalToolApiMock.deleteContextExternalToolCall.mockRejectedValueOnce(errorResponse);
 
 				const composable = useContextExternalToolState();
 
@@ -376,9 +329,7 @@ describe("contextExternalToolState.composable", () => {
 			it("should return undefined", async () => {
 				const { composable } = setup();
 
-				const result = await composable.deleteContextExternalTool(
-					"contextExternalToolId"
-				);
+				const result = await composable.deleteContextExternalTool("contextExternalToolId");
 
 				expect(result).toBeUndefined();
 			});

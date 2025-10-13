@@ -1,5 +1,5 @@
 <template>
-	<div class="pa-4 d-flex flex-column align-items-center max-width">
+	<div class="pa-4 d-flex flex-column align-center max-width">
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
@@ -14,13 +14,7 @@
 			>
 				{{ $t("global.topbar.MenuQrCode.print") }}
 			</VBtn>
-			<VBtn
-				variant="outlined"
-				:prepend-icon="mdiContentCopy"
-				class="ml-2"
-				data-testid="qr-code-copy"
-				@click="onCopy"
-			>
+			<VBtn variant="outlined" :prepend-icon="mdiContentCopy" class="ml-2" data-testid="qr-code-copy" @click="onCopy">
 				{{ $t("common.actions.shareLink") }}
 			</VBtn>
 		</div>

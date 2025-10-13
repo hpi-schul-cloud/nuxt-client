@@ -13,9 +13,7 @@ export const initializeAxios = (axios: AxiosInstance) => {
 	}
 };
 
-export const mapAxiosErrorToResponseError = (
-	error: unknown
-): ApiResponseError | ApiValidationError => {
+export const mapAxiosErrorToResponseError = (error: unknown): ApiResponseError | ApiValidationError => {
 	let apiError: ApiResponseError | ApiValidationError = {
 		message: "UNKNOWN_ERROR",
 		code: 1,
@@ -23,12 +21,7 @@ export const mapAxiosErrorToResponseError = (
 		type: "Unknown error",
 	};
 
-	if (
-		isAxiosError<
-			ApiValidationError | ApiResponseError,
-			Record<string, unknown>
-		>(error)
-	) {
+	if (isAxiosError<ApiValidationError | ApiResponseError, Record<string, unknown>>(error)) {
 		const errorPayload = error.response?.data;
 		if (errorPayload && isObject(errorPayload)) {
 			apiError = errorPayload;

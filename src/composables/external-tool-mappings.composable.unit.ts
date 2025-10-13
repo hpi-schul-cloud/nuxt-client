@@ -27,8 +27,7 @@ describe("useExternalToolMappings", () => {
 			it("should return translation key", () => {
 				const { getBusinessErrorTranslationKey, businessError, key } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 				expect(translationKey).toEqual(key);
 			});
 		});
@@ -55,8 +54,7 @@ describe("useExternalToolMappings", () => {
 			it("should return original error message", () => {
 				const { getBusinessErrorTranslationKey, businessError } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 				expect(translationKey).toEqual(businessError.message);
 			});
 		});
@@ -77,8 +75,7 @@ describe("useExternalToolMappings", () => {
 			it("should return original error message", () => {
 				const { getBusinessErrorTranslationKey, businessError } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 
 				expect(translationKey).toEqual(businessError.message);
 			});
@@ -105,8 +102,7 @@ describe("useExternalToolMappings", () => {
 			it("should return original error message", () => {
 				const { getBusinessErrorTranslationKey, businessError } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(businessError);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(businessError);
 				expect(translationKey).toEqual(businessError.message);
 			});
 		});
@@ -123,8 +119,7 @@ describe("useExternalToolMappings", () => {
 			it("should return undefined", () => {
 				const { getBusinessErrorTranslationKey } = setup();
 
-				const translationKey: string | undefined =
-					getBusinessErrorTranslationKey(undefined);
+				const translationKey: string | undefined = getBusinessErrorTranslationKey(undefined);
 				expect(translationKey).toBeUndefined();
 			});
 		});

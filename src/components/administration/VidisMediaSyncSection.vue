@@ -1,12 +1,10 @@
 <template>
 	<div class="mb-4">
-		<h5>
+		<h3>
 			{{ $t("components.administration.externalToolsSection.vidis.title") }}
-		</h5>
+		</h3>
 		<p>
-			{{
-				$t("components.administration.externalToolsSection.vidis.description")
-			}}
+			{{ $t("components.administration.externalToolsSection.vidis.description") }}
 		</p>
 		<div class="d-flex mt-8" data-testid="external-tool-section-table-actions">
 			<VSpacer />
@@ -24,15 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import NotifierModule from "@/store/notifier";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useSchoolLicenseApi } from "@data-license";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 const { updateSchoolLicenses } = useSchoolLicenseApi();
 
@@ -44,27 +40,14 @@ const updateVidisLicenses = async () => {
 	try {
 		await updateSchoolLicenses();
 
-		notifierModule.show({
-			status: "success",
-			text: t(
-				"components.administration.externalToolsSection.vidis.notification.success"
-			),
-		});
+		notifySuccess(t("components.administration.externalToolsSection.vidis.notification.success"));
 	} catch (errorResponse: unknown) {
 		const apiError = mapAxiosErrorToResponseError(errorResponse);
 
 		if (apiError.code === HttpStatusCode.RequestTimeout) {
-			notifierModule.show({
-				status: "info",
-				text: t(
-					"components.administration.externalToolsSection.vidis.notification.timeout"
-				),
-			});
+			notifyInfo(t("components.administration.externalToolsSection.vidis.notification.timeout"));
 		} else {
-			notifierModule.show({
-				status: "error",
-				text: t("common.notification.error"),
-			});
+			notifyError(t("common.notification.error"));
 		}
 	}
 

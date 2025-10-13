@@ -1,24 +1,15 @@
 <template>
 	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="mb-4 h3">
+			<h1>
 				{{ title }}
 			</h1>
-			<i18n-t
-				v-if="isConsentNecessary"
-				keypath="pages.administration.students.consent.info"
-				scope="global"
-				tag="p"
-			>
+			<i18n-t v-if="isConsentNecessary" keypath="pages.administration.students.consent.info" scope="global" tag="p">
 				<template #dataProtection>
-					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{
-						$t("common.words.privacyPolicy")
-					}}</a>
+					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{ $t("common.words.privacyPolicy") }}</a>
 				</template>
 				<template #terms>
-					<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{
-						$t("components.legacy.footer.terms")
-					}}</a>
+					<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{ $t("components.legacy.footer.terms") }}</a>
 				</template>
 				<template #handout>
 					<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
@@ -38,9 +29,9 @@
 			</div>
 
 			<section v-if="currentStep === 0">
-				<h4>
+				<h2>
 					{{ $t("pages.administration.students.consent.steps.complete") }}
-				</h4>
+				</h2>
 				{{ $t("pages.administration.students.consent.steps.complete.info") }}
 
 				<backend-data-table
@@ -95,23 +86,16 @@
 					<v-btn variant="text" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
-					<v-btn
-						color="primary"
-						variant="flat"
-						data-testid="button-next"
-						@click="next"
-					>
-						{{
-							$t("pages.administration.students.consent.steps.complete.next")
-						}}
+					<v-btn color="primary" variant="flat" data-testid="button-next" @click="next">
+						{{ $t("pages.administration.students.consent.steps.complete.next") }}
 					</v-btn>
 				</div>
 			</section>
 
 			<section v-if="currentStep === 1">
-				<h4>
+				<h2>
 					{{ $t("pages.administration.students.consent.steps.register") }}
-				</h4>
+				</h2>
 				<p v-if="isConsentNecessary">
 					{{ $t("pages.administration.students.consent.steps.register.info") }}
 				</p>
@@ -133,23 +117,12 @@
 				</backend-data-table>
 
 				<div v-if="isConsentNecessary" id="consent-checkbox">
-					<base-input
-						v-model="check"
-						type="checkbox"
-						name="switch"
-						label=""
-						data-testid="check-confirm"
-					/>
+					<base-input v-model="check" type="checkbox" name="switch" label="" data-testid="check-confirm" />
 					<label @click="check = !check">
-						<i18n-t
-							keypath="pages.administration.students.consent.steps.register.confirm"
-							scope="global"
-						>
+						<i18n-t keypath="pages.administration.students.consent.steps.register.confirm" scope="global">
 							<template #analogConsent>
 								<a class="link" :href="fileLinks.analogConsent" target="_">{{
-									$t(
-										"pages.administration.students.consent.steps.register.analog-consent"
-									)
+									$t("pages.administration.students.consent.steps.register.analog-consent")
 								}}</a>
 							</template>
 						</i18n-t>
@@ -158,34 +131,23 @@
 
 				<p v-if="checkWarning" class="text-error" data-testid="confirm-error">
 					<v-icon color="error">{{ mdiAlert }} </v-icon>
-					{{
-						$t(
-							"pages.administration.students.consent.steps.register.confirm.warn"
-						)
-					}}
+					{{ $t("pages.administration.students.consent.steps.register.confirm.warn") }}
 				</p>
 
 				<div class="d-flex justify-end">
 					<v-btn variant="text" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
-					<v-btn
-						color="primary"
-						variant="flat"
-						data-testid="button-next-2"
-						@click="register"
-					>
-						{{
-							$t("pages.administration.students.consent.steps.register.next")
-						}}
+					<v-btn color="primary" variant="flat" data-testid="button-next-2" @click="register">
+						{{ $t("pages.administration.students.consent.steps.register.next") }}
 					</v-btn>
 				</div>
 			</section>
 
 			<section v-if="currentStep === 2">
-				<h4>
+				<h2>
 					{{ $t("pages.administration.students.consent.steps.download") }}
-				</h4>
+				</h2>
 				{{ $t("pages.administration.students.consent.steps.download.info") }}
 				<backend-data-table
 					v-model:sort-by="sortBy"
@@ -210,23 +172,19 @@
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn color="primary" variant="flat" @click="download">
-						{{
-							$t("pages.administration.students.consent.steps.download.next")
-						}}
+						{{ $t("pages.administration.students.consent.steps.download.next") }}
 					</v-btn>
 				</div>
 			</section>
 
 			<section v-if="currentStep === 3">
-				<h4 class="centered">
+				<h2 class="centered">
 					{{ successMessage }}
-				</h4>
+				</h2>
 				<img
 					class="success-image mb-4"
 					:src="image"
-					:alt="
-						$t('pages.administration.students.consent.steps.success.image.alt')
-					"
+					:alt="$t('pages.administration.students.consent.steps.success.image.alt')"
 				/>
 
 				<div class="d-flex justify-end">
@@ -239,21 +197,13 @@
 			<base-modal v-model:active="cancelWarning">
 				<template #header />
 				<template #body>
-					<modal-body-info
-						:title="
-							$t('pages.administration.students.consent.cancel.modal.title')
-						"
-					>
+					<modal-body-info :title="$t('pages.administration.students.consent.cancel.modal.title')">
 						<template #icon>
 							<v-icon color="error" size="60">{{ mdiAlert }}</v-icon>
 						</template>
 					</modal-body-info>
 					<span v-if="currentStep === 2">
-						{{
-							$t(
-								"pages.administration.students.consent.cancel.modal.download.info"
-							)
-						}}
+						{{ $t("pages.administration.students.consent.cancel.modal.download.info") }}
 					</span>
 					<span v-else>
 						{{ $t("pages.administration.students.consent.cancel.modal.info") }}
@@ -261,50 +211,27 @@
 				</template>
 				<template #footerRight>
 					<v-btn variant="text" @click="cancel">
-						{{
-							$t("pages.administration.students.consent.cancel.modal.confirm")
-						}}
+						{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
 					</v-btn>
-					<v-btn
-						v-if="currentStep === 2"
-						color="error"
-						variant="flat"
-						@click="download"
-					>
-						{{
-							$t(
-								"pages.administration.students.consent.cancel.modal.download.continue"
-							)
-						}}
+					<v-btn v-if="currentStep === 2" color="error" variant="flat" @click="download">
+						{{ $t("pages.administration.students.consent.cancel.modal.download.continue") }}
 					</v-btn>
-					<v-btn
-						v-else
-						color="primary"
-						variant="flat"
-						@click="cancelWarning = false"
-					>
-						{{
-							$t("pages.administration.students.consent.cancel.modal.continue")
-						}}
+					<v-btn v-else color="primary" variant="flat" @click="cancelWarning = false">
+						{{ $t("pages.administration.students.consent.cancel.modal.continue") }}
 					</v-btn>
 				</template>
 			</base-modal>
 
 			<div hidden>
 				<div id="tableStudentsForPrint">
-					<h3 class="print-title">
+					<h3 class="text-h1">
 						{{ $t("pages.administration.students.consent.print.title") }}
 					</h3>
 					<p>
 						{{ printPageInfo }}
 					</p>
 
-					<backend-data-table
-						:columns="tableColumnsForPrint"
-						:data="tableData"
-						track-by="_id"
-						:paginated="false"
-					/>
+					<backend-data-table :columns="tableColumnsForPrint" :data="tableData" track-by="_id" :paginated="false" />
 				</div>
 			</div>
 		</section>
@@ -312,19 +239,17 @@
 </template>
 
 <script>
-import { envConfigModule, filePathsModule, notifierModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import StepProgress from "@/components/organisms/StepProgress";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
-import {
-	inputDateFormat,
-	inputDateFromDeUTC,
-	printDateFromDeUTC,
-} from "@/plugins/datetime";
-import { mdiAlert } from "@icons/material";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import StepProgress from "@/components/organisms/StepProgress";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
+import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifyError, notifySuccess } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { mdiAlert } from "@icons/material";
 
 export default {
 	components: {
@@ -395,17 +320,14 @@ export default {
 			currentStep: 0,
 			birthdayWarning: false,
 			cancelWarning: false,
-			inputError: this.$t(
-				"pages.administration.students.consent.input.missing"
-			),
+			inputError: this.$t("pages.administration.students.consent.input.missing"),
 			check: false,
 			checkWarning: false,
 			tableTimeOut: null,
 			printTimeOut: null,
-			printPageInfo: this.$t(
-				"pages.administration.students.consent.steps.register.print",
-				{ hostName: window.location.origin }
-			),
+			printPageInfo: this.$t("pages.administration.students.consent.steps.register.print", {
+				hostName: window.location.origin,
+			}),
 			sortBy: "fullName",
 			sortOrder: "asc",
 			tableData: [],
@@ -429,10 +351,7 @@ export default {
 			];
 		},
 		isConsentNecessary() {
-			return (
-				envConfigModule.getEnv &&
-				envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY
-			);
+			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
 		},
 		title() {
 			return this.isConsentNecessary
@@ -441,19 +360,13 @@ export default {
 		},
 		passwordHint() {
 			return this.isConsentNecessary
-				? this.$t(
-						"pages.administration.students.consent.steps.download.explanation"
-					)
-				: this.$t(
-						"pages.administration.students.manualRegistration.steps.download.explanation"
-					);
+				? this.$t("pages.administration.students.consent.steps.download.explanation")
+				: this.$t("pages.administration.students.manualRegistration.steps.download.explanation");
 		},
 		successMessage() {
 			return this.isConsentNecessary
 				? this.$t("pages.administration.students.consent.steps.success")
-				: this.$t(
-						"pages.administration.students.manualRegistration.steps.success"
-					);
+				: this.$t("pages.administration.students.manualRegistration.steps.success");
 		},
 	},
 	async created() {
@@ -478,8 +391,7 @@ export default {
 			};
 			await this.$store.dispatch("bulkConsent/findConsentUsers", query);
 
-			this.tableData =
-				this.$store.getters["bulkConsent/getSelectedStudentsData"];
+			this.tableData = this.$store.getters["bulkConsent/getSelectedStudentsData"];
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
@@ -503,18 +415,15 @@ export default {
 		},
 		checkBirthdays() {
 			return !this.tableData.some(
-				(element) =>
-					element.birthday === "" ||
-					element.birthday === null ||
-					!element.birthday
+				(element) => element.birthday === "" || element.birthday === null || !element.birthday
 			);
 		},
 		register() {
 			if (this.isConsentNecessary && this.check === false) {
 				this.checkWarning = true;
 			} else {
-				const users = this.tableData.map((student) => {
-					return {
+				const users = this.tableData.map(
+					(student) => ({
 						_id: student._id,
 						birthday: inputDateFromDeUTC(student.birthday),
 						password: student.password,
@@ -532,37 +441,24 @@ export default {
 								},
 							],
 						},
-					};
-				}, this);
+					}),
+					this
+				);
 				this.$store.dispatch("bulkConsent/register", users);
 
-				notifierModule.show({
-					text: this.$t(
-						"pages.administration.students.consent.steps.register.success"
-					),
-					status: "success",
-					timeout: 5000,
-				});
+				notifySuccess(this.$t("pages.administration.students.consent.steps.register.success"));
 				this.next();
 			}
 		},
 		download() {
-			const prtHtml = document.getElementById(
-				"tableStudentsForPrint"
-			).innerHTML;
+			const prtHtml = document.getElementById("tableStudentsForPrint").innerHTML;
 			let stylesHtml = "";
 
-			for (const node of [
-				...document.querySelectorAll("link[rel='stylesheet'], style"),
-			]) {
+			for (const node of [...document.querySelectorAll("link[rel='stylesheet'], style")]) {
 				stylesHtml += node.outerHTML;
 			}
 
-			const winPrint = window.open(
-				"",
-				"",
-				"left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0"
-			);
+			const winPrint = window.open("", "", "left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0");
 
 			winPrint.document.write(`<!DOCTYPE html>
 				<html>
@@ -599,11 +495,7 @@ export default {
 		checkTableData() {
 			this.tableTimeOut = setTimeout(() => {
 				if (this.tableData.length === 0) {
-					notifierModule.show({
-						text: this.$t("pages.administration.students.consent.table.empty"),
-						status: "error",
-						timeout: 5000,
-					});
+					notifyError(this.$t("pages.administration.students.consent.table.empty"));
 
 					this.$router.push({
 						path: `/administration/students`,

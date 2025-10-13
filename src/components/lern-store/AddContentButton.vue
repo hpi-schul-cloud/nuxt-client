@@ -6,9 +6,7 @@
 			:icon="round ? true : false"
 			:color="btnColor"
 			:class="btnClass"
-			:aria-label="
-				btnLabel ? btnLabel : $t('components.molecules.AddContentModal')
-			"
+			:aria-label="btnLabel ? btnLabel : $t('components.molecules.AddContentModal')"
 			:disabled="disabled"
 			@click.prevent="addResource"
 		>
@@ -36,11 +34,7 @@
 		<notification-modal
 			v-model:show-notification-modal="notificationModal.visible"
 			:is-success="notificationModal.isSuccess"
-			:backgroundcolor="
-				notificationModal.isSuccess
-					? 'rgba(var(--v-theme-success))'
-					: 'rgba(var(--v-theme-error))'
-			"
+			:backgroundcolor="notificationModal.isSuccess ? 'rgba(var(--v-theme-success))' : 'rgba(var(--v-theme-error))'"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
 			@close="addResourceAndClose"
@@ -49,20 +43,13 @@
 </template>
 
 <script>
-import { contentModule } from "@/store";
 import AddContentModal from "@/components/lern-store/AddContentModal";
-import NotificationModal from "@/components/lern-store/NotificationModal";
 import LoadingModal from "@/components/lern-store/LoadingModal";
-import { mdiPlusCircleOutline } from "@icons/material";
-import {
-	getMerlinReference,
-	getMetadataAttribute,
-	getTitle,
-	getUrl,
-	getMediatype,
-	getID,
-} from "@/utils/helpers";
+import NotificationModal from "@/components/lern-store/NotificationModal";
+import { contentModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { getID, getMediatype, getMerlinReference, getMetadataAttribute, getTitle, getUrl } from "@/utils/helpers";
+import { mdiPlusCircleOutline } from "@icons/material";
 
 let slowAPICall;
 
@@ -110,10 +97,7 @@ export default {
 		},
 		itemId() {
 			return this.resource?.properties
-				? getMetadataAttribute(
-						this.resource.properties,
-						"ccm:replicationsourceuuid"
-					)
+				? getMetadataAttribute(this.resource.properties, "ccm:replicationsourceuuid")
 				: null;
 		},
 		title() {
@@ -127,14 +111,7 @@ export default {
 				} else {
 					baseUrlH5p = $axios.defaults.baseURL;
 				}
-				return (
-					baseUrlH5p +
-					"/content/" +
-					getMetadataAttribute(
-						this.resource.properties,
-						"ccm:replicationsourceuuid"
-					)
-				);
+				return baseUrlH5p + "/content/" + getMetadataAttribute(this.resource.properties, "ccm:replicationsourceuuid");
 			}
 			return getUrl(this.resource);
 		},
@@ -145,9 +122,7 @@ export default {
 	watch: {
 		selected() {
 			if (this.multiple) {
-				const selectedElements = this.elements.data.filter(
-					(element) => element.stateSelected === true
-				);
+				const selectedElements = this.elements.data.filter((element) => element.stateSelected === true);
 
 				this.selectedElements = selectedElements.map((element) => {
 					let elementUrl = getUrl(element);
@@ -200,9 +175,7 @@ export default {
 				if (window.opener.addResource) {
 					if (this.selectedElements.length > 0) {
 						const elements = await Promise.all(
-							this.selectedElements.map(async (element) => {
-								return await getElementInfo(element);
-							})
+							this.selectedElements.map(async (element) => await getElementInfo(element))
 						);
 						elements.forEach((element) => {
 							window.opener.addResource(element);

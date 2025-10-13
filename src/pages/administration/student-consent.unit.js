@@ -1,19 +1,15 @@
+import ConsentPage from "./StudentConsent.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import { envConfigModule, notifierModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import NotifierModule from "@/store/notifier";
-import { envsFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
-import ConsentPage from "./StudentConsent.page.vue";
 
 const mockData = [
 	{
@@ -51,8 +47,7 @@ const specificFilesMock = {
 		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	termsOfUse:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
-	analogConsent:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
+	analogConsent: "https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
 const createMockStore = () => {
@@ -68,10 +63,7 @@ const createMockStore = () => {
 				},
 				getters: {
 					getSelectedStudentsData: () => mockData,
-					getSelectedStudents: () => [
-						"60c220e2d03a60006502f272",
-						"60c220f4d03a60006502f500",
-					],
+					getSelectedStudents: () => ["60c220e2d03a60006502f272", "60c220f4d03a60006502f500"],
 				},
 
 				mutations: {
@@ -118,10 +110,10 @@ const setup = () => {
 
 describe("students/consent", () => {
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 		setupStores({
 			filePathsModule: FilePathsModule,
-			envConfigModule: EnvConfigModule,
-			notifierModule: NotifierModule,
 		});
 	});
 
@@ -244,8 +236,7 @@ describe("students/consent", () => {
 	});
 
 	it("confirm consent form should appear if consent is required", async () => {
-		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: true });
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ FEATURE_CONSENT_NECESSARY: true });
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -258,8 +249,7 @@ describe("students/consent", () => {
 	});
 
 	it("confirm consent form shouldn't appear if consent is not required", async () => {
-		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: false });
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -272,8 +262,8 @@ describe("students/consent", () => {
 	});
 
 	it("should not progress next step if checkBox is not checked and consent is required", async () => {
-		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: true });
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ FEATURE_CONSENT_NECESSARY: true });
+
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -290,9 +280,8 @@ describe("students/consent", () => {
 	});
 
 	it("should progress next step if consent is not required", async () => {
-		const notifierModuleMock = vi.spyOn(notifierModule, "show");
-		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: false });
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -304,6 +293,6 @@ describe("students/consent", () => {
 
 		await nextButton2.trigger("click");
 
-		expect(notifierModuleMock).toHaveBeenCalled();
+		expectNotification("success");
 	});
 });

@@ -1,43 +1,32 @@
-import { io, type Socket } from "socket.io-client";
-import { Action } from "@/types/board/ActionFactory";
-import { envConfigModule } from "@/store";
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
-import { useBoardNotifier } from "@util-board";
-import { useI18n } from "vue-i18n";
-import { useTimeoutFn } from "@vueuse/shared";
-import { ref } from "vue";
-import { logger } from "@util-logger";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
+import { Action } from "@/types/board/ActionFactory";
 import { $axios } from "@/utils/api";
+import { notifyError, notifySuccess } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { logger } from "@util-logger";
+import { useTimeoutFn } from "@vueuse/shared";
+import { io, type Socket } from "socket.io-client";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
 
-export const useSocketConnection = (
-	dispatch: (action: Action) => void,
-	options?: { isInitialConnection: boolean }
-) => {
+export const useSocketConnection = (dispatch: (action: Action) => void, options?: { isInitialConnection: boolean }) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
-	const { showFailure, showSuccess } = useBoardNotifier();
 	const { t } = useI18n();
 
-	const boardErrorReportApi = BoardErrorReportApiFactory(
-		undefined,
-		"/v3",
-		$axios
-	);
+	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
 
-	isInitialConnection.value =
-		options?.isInitialConnection !== undefined
-			? options.isInitialConnection
-			: true;
+	isInitialConnection.value = options?.isInitialConnection !== undefined ? options.isInitialConnection : true;
 
 	if (instance === null) {
-		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
+		instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 			path: "/board-collaboration",
 			withCredentials: true,
 			reconnectionAttempts: 20,
@@ -46,10 +35,7 @@ export const useSocketConnection = (
 		instance.on("connect", async function () {
 			logger.log("connected");
 			if (retryCount > 0) {
-				reportBoardError(
-					"connect after retry",
-					"Connection restored after retry"
-				);
+				reportBoardError("connect after retry", "Connection restored after retry");
 				retryCount = 0;
 			}
 
@@ -58,7 +44,7 @@ export const useSocketConnection = (
 				timeoutFn.stop();
 				return;
 			}
-			showSuccess(t("common.notification.connection.restored"));
+			notifySuccess(t("common.notification.connection.restored"));
 
 			if (!(boardStore.board && cardStore.cards)) return;
 			await boardStore.reloadBoard();
@@ -72,7 +58,7 @@ export const useSocketConnection = (
 			logger.log(reason, details);
 			isInitialConnection.value = false;
 			timeoutFn = useTimeoutFn(() => {
-				showFailure(t("error.4500"));
+				notifyError(t("error.4500"));
 			}, 1000);
 		});
 
@@ -86,7 +72,7 @@ export const useSocketConnection = (
 
 			if (retryCount > 20) {
 				reportBoardError("connect_error", "Max reconnection attempts reached");
-				showFailure(t("error.4500"));
+				notifyError(t("error.4500"));
 				retryCount = 0;
 				return;
 			}
@@ -132,11 +118,9 @@ export const useSocketConnection = (
 			retryCount,
 		};
 
-		boardErrorReportApi
-			.boardErrorReportControllerReportError(dataWithBoardId)
-			.catch((err) => {
-				logger.error("Failed to report error", err);
-			});
+		boardErrorReportApi.boardErrorReportControllerReportError(dataWithBoardId).catch((err) => {
+			logger.error("Failed to report error", err);
+		});
 	};
 
 	return {

@@ -15,9 +15,9 @@
 		<div class="content">
 			<div class="wrapper">
 				<div class="content-container">
-					<h3>
+					<h1>
 						{{ resource.title || resource.name }}
-					</h3>
+					</h1>
 					<div class="author-provider">
 						<span v-if="hasAuthor">
 							<base-link :href="'/content/?q=' + author" class="content-link">
@@ -33,11 +33,7 @@
 							({{ $t("pages.content._id.metadata.provider") }})
 						</span>
 					</div>
-					<RenderHTML
-						v-if="description"
-						class="description text-wrap"
-						:html="description"
-					/>
+					<RenderHTML v-if="description" class="description text-wrap" :html="description" />
 					<div class="metadata">
 						<div v-if="createdAt || updatedAt" class="meta-container">
 							<div class="meta-icon">
@@ -60,14 +56,8 @@
 							</div>
 							<template v-if="tags.length > 0">
 								<div class="text-wrap">
-									<span
-										v-for="(tag, index) in tags"
-										:key="index"
-										class="meta-text"
-									>
-										<base-link :href="'/content/?q=' + tag" class="tag link">
-											#{{ tag }}
-										</base-link>
+									<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+										<base-link :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </base-link>
 									</span>
 								</div>
 							</template>
@@ -79,9 +69,9 @@
 						</div>
 					</div>
 					<div class="element-cards">
-						<h4 class="h4">
+						<h2>
 							{{ $t("pages.content._id.collection.selectElements") }}
-						</h4>
+						</h2>
 						<transition name="fade">
 							<div v-if="true" class="content__container">
 								<lern-store-grid
@@ -90,22 +80,12 @@
 									class="cards"
 									data-testid="lernStoreCardsContainer"
 								>
-									<content-card
-										v-for="(element, i) of elements.data"
-										:key="i"
-										:selectable="true"
-										:resource="element"
-									/>
+									<content-card v-for="(element, i) of elements.data" :key="i" :selectable="true" :resource="element" />
 								</lern-store-grid>
 							</div>
 						</transition>
 					</div>
-					<v-progress-circular
-						v-show="loading"
-						indeterminate
-						size="115"
-						class="spinner mt-16"
-					/>
+					<v-progress-circular v-show="loading" indeterminate size="115" class="spinner mt-16" />
 				</div>
 				<div class="buttons">
 					<user-has-role class="floating-buttons" :role="isNotStudent">
@@ -125,26 +105,21 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import {
-	getAuthor,
-	getDescription,
-	getMetadataAttribute,
-	getProvider,
-	getTags,
-} from "@/utils/helpers";
-import { printDateFromTimestamp } from "@/plugins/datetime";
-import contentMeta from "@/mixins/contentMeta";
-import infiniteScrolling from "@/mixins/infiniteScrolling";
-import { contentModule, notifierModule } from "@/store";
+import BaseLink from "../base/BaseLink";
+import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
 import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
-import UserHasRole from "@/components/helpers/UserHasRole";
-import BaseLink from "../base/BaseLink";
-import { RenderHTML } from "@feature-render-html";
+import contentMeta from "@/mixins/contentMeta";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
+import { printDateFromTimestamp } from "@/plugins/datetime";
+import { contentModule } from "@/store";
+import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags } from "@/utils/helpers";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifyError } from "@data-app";
+import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiChevronLeft, mdiPound } from "@icons/material";
+import { defineComponent } from "vue";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -201,19 +176,13 @@ export default defineComponent({
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
 		description() {
-			return getDescription(
-				this.resource.description,
-				this.resource.properties
-			);
+			return getDescription(this.resource.description, this.resource.properties);
 		},
 		tags() {
 			return getTags(this.resource.properties);
 		},
 		collectionUUID() {
-			return getMetadataAttribute(
-				this.resource.properties,
-				"ccm:replicationsourceuuid"
-			);
+			return getMetadataAttribute(this.resource.properties, "ccm:replicationsourceuuid");
 		},
 		query() {
 			const query = {
@@ -234,9 +203,7 @@ export default defineComponent({
 		selected(selectedElements) {
 			const counterLabel = selectedElements > 0 ? ` (${selectedElements})` : "";
 
-			this.btnLabel = `${this.$t(
-				"pages.content._id.addToTopic"
-			)}${counterLabel}`;
+			this.btnLabel = `${this.$t("pages.content._id.addToTopic")}${counterLabel}`;
 		},
 		elements() {
 			return this.elements;
@@ -268,11 +235,7 @@ export default defineComponent({
 				contentModule.clearElements();
 				await contentModule.getElements(this.query);
 			} catch {
-				notifierModule.show({
-					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
-					status: "error",
-					timeout: 5000,
-				});
+				notifyError(this.$t("pages.content.notification.lernstoreNotAvailable"));
 			}
 		},
 		async addElements() {
@@ -282,9 +245,7 @@ export default defineComponent({
 			}
 		},
 		isNotStudent(roles) {
-			return this.role === ""
-				? roles.some((role) => !role.startsWith("student"))
-				: this.role;
+			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role;
 		},
 	},
 });
@@ -300,12 +261,12 @@ $tablet-portrait-width: 768px;
 
 .resource {
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - 60px);
 	margin-top: 8px;
 
 	.arrow__back {
 		margin-top: 8px;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
@@ -335,9 +296,9 @@ $tablet-portrait-width: 768px;
 					position: -webkit-sticky;
 					position: sticky;
 					top: 32px;
-					z-index: var(--layer-fab);
+					z-index: 100;
 					margin-top: 32px;
-					border-radius: var(--radius-md);
+					border-radius: 8px;
 
 					@media (max-width: $tablet-portrait-width) {
 						padding-bottom: 8px;
@@ -358,7 +319,7 @@ $tablet-portrait-width: 768px;
 
 			.external-content-title {
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 		}
 
@@ -381,7 +342,7 @@ $tablet-portrait-width: 768px;
 
 		.author-provider {
 			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
+			font-weight: bold;
 		}
 
 		.description {
@@ -414,6 +375,11 @@ $tablet-portrait-width: 768px;
 				.icon {
 					max-height: var(--text-lg);
 				}
+			}
+
+			.material-icon {
+				width: calc(1em + 4px);
+				height: calc(1em + 4px);
 			}
 
 			.link {

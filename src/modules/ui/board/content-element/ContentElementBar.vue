@@ -22,9 +22,7 @@
 		</div>
 
 		<div
-			v-if="
-				$slots.title || $slots.element || $slots.subtitle || $slots.description
-			"
+			v-if="$slots.title || $slots.element || $slots.subtitle || $slots.description"
 			:class="{
 				'bg-surface-light': props.hasGreyBackground === true,
 				'content-element-bar-texts-list-board': hasRowStyle,
@@ -44,27 +42,16 @@
 
 				<v-icon v-if="icon" :icon="icon" size="20" class="mr-2" />
 
-				<LineClamp
-					class="content-element-title min-width-0"
-					data-testid="content-element-title-slot"
-				>
+				<LineClamp class="content-element-title min-width-0" data-testid="content-element-title-slot">
 					<slot name="title" />
 				</LineClamp>
 
-				<div
-					v-if="$slots.statusInfo"
-					class="statusInfo"
-					data-testid="status-info-slot"
-				>
+				<div v-if="$slots.statusInfo" class="statusInfo" data-testid="status-info-slot">
 					<slot name="statusInfo" />
 				</div>
 			</div>
 
-			<div
-				v-if="$slots.element"
-				class="pl-2 pr-3 mt-n1"
-				:class="{ 'mr-10': hasSlotContent($slots.menu) }"
-			>
+			<div v-if="$slots.element" class="pl-2 pr-3 mt-n1" :class="{ 'mr-10': hasSlotContent($slots.menu) }">
 				<slot name="element" />
 			</div>
 

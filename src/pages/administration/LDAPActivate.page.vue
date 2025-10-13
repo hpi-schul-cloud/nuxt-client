@@ -7,25 +7,22 @@
 		<section class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<v-icon class="material-icon" :icon="mdiAccountSchoolOutline" />
+					<v-icon :icon="mdiAccountSchoolOutline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="custom-icon">$teacher</v-icon>
+					<v-icon>$teacher</v-icon>
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon
-						class="material-icon"
-						:icon="mdiShieldAccountVariantOutline"
-					/>
+					<v-icon :icon="mdiShieldAccountVariantOutline" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="custom-icon">$class</v-icon>
+					<v-icon>$class</v-icon>
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -95,33 +92,17 @@
 				</div>
 			</div>
 		</section>
-		<div
-			v-for="(error, index) in activationErrors"
-			:key="index"
-			class="errors-container"
-		>
-			<info-message
-				data-testid="errorInfoMessage"
-				:message="error"
-				type="bc-error"
-			/>
+		<div v-for="(error, index) in activationErrors" :key="index" class="errors-container">
+			<info-message data-testid="errorInfoMessage" :message="error" type="bc-error" />
 		</div>
-		<section
-			v-if="showUserMigrationOption"
-			class="section"
-			data-testid="migrateUsersSection"
-		>
-			<h3 class="title-class">
-				{{
-					$t("pages.administration.ldap.activate.migrateExistingUsers.title")
-				}}
-			</h3>
+		<section v-if="showUserMigrationOption" class="section" data-testid="migrateUsersSection">
+			<h2 class="title-class">
+				{{ $t("pages.administration.ldap.activate.migrateExistingUsers.title") }}
+			</h2>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"
-				:label="
-					$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')
-				"
+				:label="$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')"
 				data-testid="migrateUsersCheckbox"
 			/>
 			<p>
@@ -131,18 +112,12 @@
 		<div v-if="schoolErrors" class="errors-container">
 			<info-message
 				data-testid="school-migration-activation-error"
-				:message="
-					$t('pages.administration.ldap.activate.migrateExistingUsers.error')
-				"
+				:message="$t('pages.administration.ldap.activate.migrateExistingUsers.error')"
 				type="bc-error"
 			/>
 		</div>
 		<div class="bottom-buttons">
-			<v-btn
-				variant="text"
-				data-testid="ldapBackButton"
-				@click="backButtonHandler"
-			>
+			<v-btn variant="text" data-testid="ldapBackButton" @click="backButtonHandler">
 				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
 				{{ $t("common.actions.back") }}
 			</v-btn>
@@ -156,22 +131,12 @@
 				{{ $t("pages.administration.ldap.save.example.synchronize") }}
 			</v-btn>
 		</div>
-		<base-modal
-			v-model:active="submitted.ok"
-			:background-click-disabled="true"
-			data-testid="confirmModal"
-		>
+		<base-modal v-model:active="submitted.ok" :background-click-disabled="true" data-testid="confirmModal">
 			<template #header />
 			<template #body>
-				<modal-body-info
-					:title="$t('pages.administration.ldap.activate.message')"
-				>
+				<modal-body-info :title="$t('pages.administration.ldap.activate.message')">
 					<template #icon>
-						<v-icon
-							color="rgba(var(--v-theme-success))"
-							class="material-icon"
-							:icon="mdiCheckCircle"
-						/>
+						<v-icon color="rgba(var(--v-theme-success))" :icon="mdiCheckCircle" />
 					</template>
 				</modal-body-info>
 			</template>
@@ -188,22 +153,23 @@
 </template>
 
 <script>
-import { envConfigModule, schoolsModule } from "@/store";
-import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
-import { unchangedPassword } from "@/utils/ldapConstants";
+import InfoMessage from "@/components/atoms/InfoMessage";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import { unchangedPassword } from "@/utils/ldapConstants";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,
 	mdiChevronLeft,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -239,8 +205,8 @@ export default {
 		}),
 		showUserMigrationOption() {
 			return (
-				envConfigModule.getTheme !== SchulcloudTheme.N21 &&
-				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED &&
+				useEnvConfig().value.SC_THEME !== SchulcloudTheme.N21 &&
+				useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED &&
 				!this.$route?.query?.id
 			);
 		},
@@ -287,9 +253,7 @@ export default {
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
 
-		document.title = buildPageTitle(
-			this.$t("pages.administration.ldap.save.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.ldap.save.title"));
 	},
 	methods: {
 		backButtonHandler() {
@@ -316,10 +280,7 @@ export default {
 					systemId: id,
 				});
 			} else {
-				await this.$store.dispatch(
-					"ldap-config/submitData",
-					temporaryConfigData
-				);
+				await this.$store.dispatch("ldap-config/submitData", temporaryConfigData);
 			}
 		},
 		okButtonHandler() {
@@ -358,13 +319,13 @@ export default {
 .icon-text-unit {
 	margin-top: 12px;
 	margin-right: 24px;
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	white-space: nowrap;
 }
 
 .category-title {
 	margin: 40px 0 24px 0;
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 }
 
 table {

@@ -9,9 +9,9 @@
 		@dialog-canceled="onCancel"
 	>
 		<template #title>
-			<div ref="textTitle" class="text-h4 my-2">
+			<h2 class="mt-2">
 				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</div>
+			</h2>
 		</template>
 
 		<template #content>
@@ -44,11 +44,11 @@
 
 <script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { ImportDestinationItem } from "@/store/types/rooms";
 import { mdiInformation } from "@icons/material";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { ImportDestinationItem } from "@/store/types/rooms";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
 
 const emit = defineEmits(["import", "cancel", "next"]);
 const props = defineProps({
@@ -72,8 +72,7 @@ const showErrorOnEmpty = ref(false);
 const showError = () => !selectedReference.value && showErrorOnEmpty.value;
 
 const rules = reactive({
-	required: (value: string | undefined) =>
-		!!value || t("common.validation.required"),
+	required: (value: string | undefined) => !!value || t("common.validation.required"),
 });
 
 const infoText = computed(() =>
@@ -93,11 +92,7 @@ const selectionPlaceholder = computed(() =>
 );
 
 const selectionHint = computed(() =>
-	t(
-		props.destinationType === BoardExternalReferenceType.Room
-			? "common.labels.room"
-			: "common.labels.course"
-	)
+	t(props.destinationType === BoardExternalReferenceType.Room ? "common.labels.room" : "common.labels.course")
 );
 
 const onNext = () => {

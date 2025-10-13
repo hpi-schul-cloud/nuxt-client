@@ -12,7 +12,8 @@
 </template>
 
 <style lang="scss">
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .edusharing-footer {
 	display: flex;
@@ -20,7 +21,7 @@
 	width: 100%;
 	margin-top: 24px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin-top: 32px;
 	}
 
@@ -33,7 +34,7 @@
 	&__logo {
 		width: 100px;
 		height: 40px;
-		margin-top: calc(15 * var(--border-width));
+		margin-top: 15px;
 	}
 }
 </style>

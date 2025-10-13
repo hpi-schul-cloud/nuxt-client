@@ -1,21 +1,23 @@
-import { PreviewStatus } from "@/fileStorageApi/v3";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { envsFactory, fileElementResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import CollaboraDisplay from "./collabora-display/CollaboraDisplay.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
+import { PreviewStatus } from "@/fileStorageApi/v3";
+import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("FileDisplay", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
+	});
+
 	describe("when previewUrl is defined", () => {
 		describe("when mimeType is not a video type", () => {
 			const setup = () => {
@@ -35,21 +37,10 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 					showMenu: true,
 				};
-
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
-
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -99,21 +90,10 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 					showMenu: true,
 				};
-
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
-
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -164,21 +144,10 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 					showMenu: true,
 				};
-
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
-
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -224,20 +193,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -285,20 +246,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -345,20 +298,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -380,7 +325,7 @@ describe("FileDisplay", () => {
 			});
 		});
 
-		describe("when mimeType is office type and collabora feaure enabled", () => {
+		describe("when mimeType is office type and collabora feature enabled", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 				const props = {
@@ -392,28 +337,19 @@ describe("FileDisplay", () => {
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
-						mimeType:
-							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 						isCollaboraEditable: true,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true });
 
 				const wrapper = mount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -431,7 +367,7 @@ describe("FileDisplay", () => {
 			});
 		});
 
-		describe("when mimeType is office type and collabora feaure disabled", () => {
+		describe("when mimeType is office type and collabora feature disabled", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 				const props = {
@@ -443,28 +379,19 @@ describe("FileDisplay", () => {
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
-						mimeType:
-							"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+						mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 						isCollaboraEditable: true,
 					},
 					isEditMode: true,
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = mount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 
@@ -501,20 +428,12 @@ describe("FileDisplay", () => {
 					showMenu: true,
 				};
 
-				const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-					getEnv: {
-						...envsFactory.build(),
-						FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false,
-					},
-				});
+				createTestEnvStore({ FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: false });
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
 					global: {
 						plugins: [createTestingVuetify(), createTestingI18n()],
-						provide: {
-							[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-						},
 					},
 				});
 

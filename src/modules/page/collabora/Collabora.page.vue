@@ -1,5 +1,6 @@
 <template>
 	<iframe
+		ref="iframeRef"
 		allow="clipboard-read *; clipboard-write *"
 		allowfullscreen
 		:src="url"
@@ -9,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
+import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import { EditorMode } from "@/types/file/File";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useAppStoreRefs } from "@data-app";
 import { useFileStorageApi } from "@data-file";
 import { computed, onMounted, ref } from "vue";
-import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 
 interface Props {
 	fileRecordId: string;
@@ -22,13 +23,15 @@ interface Props {
 
 const props = defineProps<Props>();
 const url = ref<string>("");
-const authModule = injectStrict(AUTH_MODULE_KEY);
+const iframeRef = ref<HTMLIFrameElement>();
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
-const { documentHasUnsavedChanges } = useCollaboraPostMessageApi();
+const { setupPostMessageAPI } = useCollaboraPostMessageApi();
+
+const { user, locale } = useAppStoreRefs();
 
 const userName = computed(() => {
-	const firstName = authModule.getUser?.firstName;
-	const lastName = authModule.getUser?.lastName;
+	const firstName = user.value?.firstName;
+	const lastName = user.value?.lastName;
 
 	if (firstName && lastName) {
 		return `${firstName} ${lastName}`;
@@ -38,26 +41,19 @@ const userName = computed(() => {
 });
 
 onMounted(async () => {
-	const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
+	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
 		props.editorMode,
 		userName.value
 	);
 
-	const locale = authModule.getLocale;
+	const collaboraUrl = new URL(responseCollaboraUrl);
+	collaboraUrl.searchParams.set("lang", locale.value);
 
-	url.value = collaboraUrl + `&lang=${locale}`;
-});
+	url.value = collaboraUrl.toString();
 
-window.addEventListener("beforeunload", (event) =>
-	openUnloadConfirmation(event)
-);
-const openUnloadConfirmation = (event: BeforeUnloadEvent) => {
-	if (documentHasUnsavedChanges.value) {
-		// Opens confirmation dialog in firefox
-		event.preventDefault();
-		// Opens confirmation dialog in chrome
-		event.returnValue = "";
+	if (iframeRef.value) {
+		setupPostMessageAPI(iframeRef.value, collaboraUrl.origin);
 	}
-};
+});
 </script>

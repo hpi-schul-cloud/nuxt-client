@@ -14,6 +14,4 @@ const useLastCreatedElement = () => {
 	};
 };
 
-export const useSharedLastCreatedElement = createSharedComposable(
-	useLastCreatedElement
-);
+export const useSharedLastCreatedElement = createSharedComposable(useLastCreatedElement);

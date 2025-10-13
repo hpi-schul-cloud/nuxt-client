@@ -1,11 +1,8 @@
 <template>
 	<div class="impressum-container">
 		<div class="impressum-max-width">
-			<h1 class="h2">Impressum nach § 5 TMG</h1>
-			<h2 class="h4">
-				Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien
-				(Thillm)
-			</h2>
+			<h1>Impressum nach § 5 TMG</h1>
+			<h2>Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien (Thillm)</h2>
 			<p>
 				Heinrich-Heine-Allee 2-4 <br />
 				99438 Bad Berka <br />

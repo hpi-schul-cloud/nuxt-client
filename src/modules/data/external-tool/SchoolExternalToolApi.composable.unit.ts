@@ -1,12 +1,9 @@
+import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { SchoolExternalToolMetadataResponse } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
-import {
-	mockApiResponse,
-	schoolExternalToolMetadataResponseFactory,
-} from "@@/tests/test-utils";
+import { mockApiResponse, schoolExternalToolMetadataResponseFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 
 describe("SchoolExternalToolApi.composable", () => {
 	let toolApi: DeepMocked<serverApi.ToolApiInterface>;
@@ -23,12 +20,9 @@ describe("SchoolExternalToolApi.composable", () => {
 
 	describe("fetchSchoolExternalToolMetadata", () => {
 		const setup = () => {
-			const request: SchoolExternalToolMetadataResponse =
-				schoolExternalToolMetadataResponseFactory.build();
+			const request: SchoolExternalToolMetadataResponse = schoolExternalToolMetadataResponseFactory.build();
 
-			toolApi.toolSchoolControllerGetMetaDataForExternalTool.mockResolvedValue(
-				mockApiResponse({ data: request })
-			);
+			toolApi.toolSchoolControllerGetMetaDataForExternalTool.mockResolvedValue(mockApiResponse({ data: request }));
 
 			return {
 				request,
@@ -38,22 +32,16 @@ describe("SchoolExternalToolApi.composable", () => {
 		it("should call the api for metadata of schoolExternalTool", async () => {
 			setup();
 
-			await useSchoolExternalToolApi().fetchSchoolExternalToolMetadata(
-				"schoolExternalToolId"
-			);
+			await useSchoolExternalToolApi().fetchSchoolExternalToolMetadata("schoolExternalToolId");
 
-			expect(
-				toolApi.toolSchoolControllerGetMetaDataForExternalTool
-			).toHaveBeenCalledWith("schoolExternalToolId");
+			expect(toolApi.toolSchoolControllerGetMetaDataForExternalTool).toHaveBeenCalledWith("schoolExternalToolId");
 		});
 
 		it("should return metadata", async () => {
 			setup();
 
 			const result: SchoolExternalToolMetadata =
-				await useSchoolExternalToolApi().fetchSchoolExternalToolMetadata(
-					"schoolExternalToolId"
-				);
+				await useSchoolExternalToolApi().fetchSchoolExternalToolMetadata("schoolExternalToolId");
 
 			expect(result).toEqual<SchoolExternalToolMetadata>({
 				course: 5,

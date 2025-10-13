@@ -1,12 +1,12 @@
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { VImg } from "vuetify/components";
 import CollaboraDisplay from "./CollaboraDisplay.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { VImg } from "vuetify/components";
 
 describe("CollaboraDisplay", () => {
 	const setup = () => {
 		const wrapper = mount(CollaboraDisplay, {
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 

@@ -1,5 +1,5 @@
-import { ref } from "vue";
 import { useViewportOffsetTop } from "./ViewportOffsetCalculation.composable";
+import { ref } from "vue";
 
 describe("ViewportOffsetCalculation.composable", () => {
 	beforeEach(() => {

@@ -1,46 +1,34 @@
-import { courseRoomListModule } from "@/store";
-import { mount } from "@vue/test-utils";
 import CourseRoomList from "./CourseRoomList.page.vue";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { CourseMetadataResponse } from "@/serverApi/v3";
+import { courseRoomListModule } from "@/store";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
+import LoadingStateModule from "@/store/loading-state";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import { CourseMetadataResponse } from "@/serverApi/v3";
 
 vi.mock("vue-router");
 
-const getWrapper = () => {
-	return mount(CourseRoomList, {
+const getWrapper = () =>
+	mount(CourseRoomList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				[LOADING_STATE_MODULE_KEY.valueOf()]:
-					createModuleMocks(LoadingStateModule),
-				[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
-					createModuleMocks(CourseRoomListModule),
-				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
-					CommonCartridgeImportModule
-				),
+				[LOADING_STATE_MODULE_KEY.valueOf()]: createModuleMocks(LoadingStateModule),
+				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: createModuleMocks(CourseRoomListModule),
+				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 			},
 		},
 	});
-};
 
 const mockData: CourseMetadataResponse[] = [
 	{
@@ -88,11 +76,13 @@ describe("@/pages/CourseRoomListPage", () => {
 		return { wrapper };
 	};
 
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
+
 	beforeEach(() => {
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
-			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
 		courseRoomListModule.fetchAllElements = vi.fn();
@@ -123,7 +113,7 @@ describe("@/pages/CourseRoomListPage", () => {
 
 	describe("when data is loaded", () => {
 		describe("and data is not empty", () => {
-			it("should search elements on list", async () => {
+			it("should search elements on list", () => {
 				const { wrapper } = setup();
 
 				expect(wrapper.vm.rooms.length).toEqual(4);

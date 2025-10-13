@@ -34,8 +34,7 @@ describe("useAriaLiveNotifier", () => {
 	describe("ensurePoliteNotifications", () => {
 		describe("when politeNotifications are ensured", () => {
 			it("should notify all collected messages after some time without user interaction", () => {
-				const { notifyOnScreenReader, ensurePoliteNotifications } =
-					useAriaLiveNotifier();
+				const { notifyOnScreenReader, ensurePoliteNotifications } = useAriaLiveNotifier();
 				const element = document.getElementById("notify-screen-reader-polite");
 				const message1 = "Polite screen reader message 1";
 				const message2 = "Polite screen reader message 2";
@@ -48,9 +47,7 @@ describe("useAriaLiveNotifier", () => {
 
 				vi.advanceTimersByTime(3000);
 
-				expect(element?.innerHTML).toBe(
-					`<span>${message1}</span><span>${message2}</span>`
-				);
+				expect(element?.innerHTML).toBe(`<span>${message1}</span><span>${message2}</span>`);
 			});
 		});
 	});

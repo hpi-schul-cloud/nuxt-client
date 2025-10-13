@@ -10,9 +10,7 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4 px-4">
-				<v-btn variant="flat" block :color="design" @click="close">{{
-					btn
-				}}</v-btn>
+				<v-btn variant="flat" block :color="design" @click="close">{{ btn }}</v-btn>
 			</div>
 		</template>
 	</base-modal>
@@ -56,6 +54,6 @@ const close = () => {
 }
 
 .modal-container {
-	max-width: calc(0.6 * var(--size-content-width-max)) !important;
+	max-width: calc(0.6 * var(--content-max-width)) !important;
 }
 </style>

@@ -1,16 +1,13 @@
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ref } from "vue";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-
-const notifierModule = createModuleMocks(NotifierModule);
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { ref } from "vue";
 
 const mockedSubmissionsResponse = submissionsResponseFactory.build();
 
@@ -18,13 +15,11 @@ vi.mock("./SubmissionItemApi.composable");
 const mockedUseSubmissionItemApi = vi.mocked(useSubmissionItemApi);
 
 describe("SubmissionContentElementState.composable", () => {
-	let mockedUseSubmissionItemApiCalls: DeepMocked<
-		ReturnType<typeof useSubmissionItemApi>
-	>;
+	let mockedUseSubmissionItemApiCalls: DeepMocked<ReturnType<typeof useSubmissionItemApi>>;
 
 	beforeEach(() => {
-		mockedUseSubmissionItemApiCalls =
-			createMock<ReturnType<typeof useSubmissionItemApi>>();
+		setActivePinia(createTestingPinia());
+		mockedUseSubmissionItemApiCalls = createMock<ReturnType<typeof useSubmissionItemApi>>();
 		mockedUseSubmissionItemApi.mockReturnValue(mockedUseSubmissionItemApiCalls);
 	});
 
@@ -32,35 +27,23 @@ describe("SubmissionContentElementState.composable", () => {
 		vi.resetAllMocks();
 	});
 
-	const setup = (
-		contentElementId = "123123",
-		dueDate = ref({ dueDate: "2100-12-31T00:00:00.000Z" })
-	) => {
-		return mountComposable(
-			() => useSubmissionContentElementState(contentElementId, dueDate),
-			{
-				global: {
-					plugins: [createTestingI18n()],
-					provide: {
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					},
-				},
-			}
-		);
-	};
+	const setup = (contentElementId = "123123", dueDate = ref({ dueDate: "2100-12-31T00:00:00.000Z" })) =>
+		mountComposable(() => useSubmissionContentElementState(contentElementId, dueDate), {
+			global: {
+				plugins: [createTestingI18n()],
+			},
+		});
 
-	it("should fetch submission items on mount", async () => {
+	it("should fetch submission items on mount", () => {
 		const contentElementId = "123124";
 
 		setup(contentElementId);
 
-		expect(
-			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
-		).toHaveBeenCalledWith(contentElementId);
+		expect(mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall).toHaveBeenCalledWith(contentElementId);
 	});
 
 	describe("isOverdue state", () => {
-		it("should be true if dueDate is in past", async () => {
+		it("should be true if dueDate is in past", () => {
 			const contentElementId = "123124";
 			const dueDateInPast = ref({ dueDate: "2000-12-31T00:00:00.000Z" });
 
@@ -69,7 +52,7 @@ describe("SubmissionContentElementState.composable", () => {
 			expect(isOverdue.value).toBe(true);
 		});
 
-		it("should be false if dueDate is in future", async () => {
+		it("should be false if dueDate is in future", () => {
 			const contentElementId = "123124";
 			const dueDateInFuture = ref({ dueDate: "2100-12-31T00:00:00.000Z" });
 
@@ -85,21 +68,16 @@ describe("SubmissionContentElementState.composable", () => {
 			mockedSubmissionsResponse as unknown as Promise<SubmissionsResponse>
 		);
 
-		const { fetchSubmissionItems, loading, submissions } =
-			setup(contentElementId);
+		const { fetchSubmissionItems, loading, submissions } = setup(contentElementId);
 
 		expect(loading.value).toBe(true);
 		expect(submissions.value.length).toBe(0);
 
 		await fetchSubmissionItems(contentElementId);
 
-		expect(
-			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
-		).toHaveBeenCalledWith(contentElementId);
+		expect(mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall).toHaveBeenCalledWith(contentElementId);
 		expect(loading.value).toBe(false);
-		expect(submissions.value.length).toEqual(
-			mockedSubmissionsResponse.submissionItemsResponse.length
-		);
+		expect(submissions.value.length).toEqual(mockedSubmissionsResponse.submissionItemsResponse.length);
 	});
 
 	describe("if the student created a submission item before", () => {
@@ -109,16 +87,13 @@ describe("SubmissionContentElementState.composable", () => {
 				mockedSubmissionsResponse as unknown as Promise<SubmissionsResponse>
 			);
 
-			const { fetchSubmissionItems, updateSubmissionItem } =
-				setup(contentElementId);
+			const { fetchSubmissionItems, updateSubmissionItem } = setup(contentElementId);
 
 			await fetchSubmissionItems(contentElementId);
 
 			const completed = true;
 			await updateSubmissionItem(completed);
-			expect(
-				mockedUseSubmissionItemApiCalls.updateSubmissionItemCall
-			).toHaveBeenLastCalledWith(
+			expect(mockedUseSubmissionItemApiCalls.updateSubmissionItemCall).toHaveBeenLastCalledWith(
 				mockedSubmissionsResponse.submissionItemsResponse[0].id,
 				completed
 			);
@@ -134,16 +109,16 @@ describe("SubmissionContentElementState.composable", () => {
 				submissions as unknown as Promise<SubmissionsResponse>
 			);
 
-			const { fetchSubmissionItems, updateSubmissionItem } =
-				setup(contentElementId);
+			const { fetchSubmissionItems, updateSubmissionItem } = setup(contentElementId);
 
 			await fetchSubmissionItems(contentElementId);
 
 			const completed = true;
 			await updateSubmissionItem(completed);
-			expect(
-				mockedUseSubmissionItemApiCalls.createSubmissionItemCall
-			).toHaveBeenLastCalledWith(contentElementId, completed);
+			expect(mockedUseSubmissionItemApiCalls.createSubmissionItemCall).toHaveBeenLastCalledWith(
+				contentElementId,
+				completed
+			);
 		});
 	});
 });

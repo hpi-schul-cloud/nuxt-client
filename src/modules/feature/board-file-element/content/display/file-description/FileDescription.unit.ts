@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import FileDescription from "./FileDescription.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiFileDocumentOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { mount, shallowMount } from "@vue/test-utils";
-import FileDescription from "./FileDescription.vue";
 
 describe("FileDescription", () => {
 	const shallowMountSetup = (props: {
@@ -98,7 +95,7 @@ describe("FileDescription", () => {
 				expect(text).not.toContain(caption);
 			});
 
-			it("should pass false to hasGreyBackground prop", () => {
+			it("should pass true to hasGreyBackground prop", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
 					showTitle: true,
@@ -107,7 +104,7 @@ describe("FileDescription", () => {
 
 				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
-				expect(contentElementBar.props("hasGreyBackground")).toBe(false);
+				expect(contentElementBar.props("hasGreyBackground")).toBe(true);
 			});
 
 			it("should pass mdiFileDocumentOutline to icon prop", () => {
@@ -147,9 +144,7 @@ describe("FileDescription", () => {
 					});
 					const link = wrapper.find("a");
 
-					expect(link.attributes("aria-label")).toBe(
-						`${name}, common.ariaLabel.newTab`
-					);
+					expect(link.attributes("aria-label")).toBe(`${name}, common.ariaLabel.newTab`);
 				});
 			});
 

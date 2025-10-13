@@ -1,6 +1,6 @@
 <template>
 	<div v-if="numberOfSelectedItems > 0" class="row-selection-info">
-		<div class="d-flex align-items-center content-wrapper">
+		<div class="d-flex align-center content-wrapper">
 			<div v-if="allRowsOfAllPagesSelected">
 				{{ $t("pages.administration.all") }}
 				{{ totalNumberOfItems }}
@@ -12,11 +12,7 @@
 					{{ $t("pages.administration.selected") }}
 				</span>
 			</div>
-			<div
-				v-if="actions && actions.length"
-				class="actions"
-				style="position: relative"
-			>
+			<div v-if="actions && actions.length" class="actions" style="position: relative">
 				<v-btn
 					variant="tonal"
 					data-test-id="context-menu-open"
@@ -26,21 +22,10 @@
 				>
 					{{ $t("pages.administration.actions") }}
 				</v-btn>
-				<context-menu
-					v-model:show="actionsMenuOpen"
-					anchor="top-left"
-					:actions="contextActions"
-					@action="fireAction"
-				/>
+				<context-menu v-model:show="actionsMenuOpen" anchor="top-left" :actions="contextActions" @action="fireAction" />
 			</div>
 		</div>
-		<v-btn
-			variant="text"
-			:icon="mdiClose"
-			width="40"
-			height="40"
-			@click="closeBanner"
-		/>
+		<v-btn variant="text" :icon="mdiClose" width="40" height="40" @click="closeBanner" />
 	</div>
 </template>
 
@@ -110,7 +95,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .row-selection-info {
 	display: flex;
@@ -125,7 +111,7 @@ export default {
 .actions {
 	margin-top: 12px;
 
-	@include breakpoint(tablet) {
+	@media #{map.get($display-breakpoints, 'sm-and-up')} {
 		margin-top: 0;
 		margin-left: 16px;
 	}

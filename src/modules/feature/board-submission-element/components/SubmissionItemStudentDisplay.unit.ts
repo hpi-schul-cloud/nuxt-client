@@ -1,17 +1,10 @@
-import { mount } from "@vue/test-utils";
-import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { StudentSubmission } from "../types/submission";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("SubmissionItemStudentDisplay", () => {
-	const setup = (
-		loading = false,
-		studentSubmission = { completed: true },
-		isOverdue = false
-	) => {
+	const setup = (loading = false, studentSubmission = { completed: true }, isOverdue = false) => {
 		const props = {
 			isOverdue,
 			loading,
@@ -90,9 +83,7 @@ describe("SubmissionItemStudentDisplay", () => {
 				};
 				const { wrapper } = setup(loading, studentSubmission);
 
-				const checked = wrapper
-					.findComponent({ name: "v-checkbox" })
-					.get("input").element.checked;
+				const checked = wrapper.findComponent({ name: "v-checkbox" }).get("input").element.checked;
 
 				expect(checked).toBe(false);
 			});
@@ -103,9 +94,7 @@ describe("SubmissionItemStudentDisplay", () => {
 				const loading = false;
 				const { wrapper } = setup(loading);
 
-				const checked = wrapper
-					.findComponent({ name: "v-checkbox" })
-					.get("input").element.checked;
+				const checked = wrapper.findComponent({ name: "v-checkbox" }).get("input").element.checked;
 
 				expect(checked).toBe(true);
 			});
@@ -116,9 +105,7 @@ describe("SubmissionItemStudentDisplay", () => {
 				const loading = false;
 				const { wrapper } = setup(loading);
 
-				const disabled = wrapper
-					.findComponent({ name: "v-checkbox" })
-					.props("disabled");
+				const disabled = wrapper.findComponent({ name: "v-checkbox" }).props("disabled");
 
 				expect(disabled).toBe(false);
 			});
@@ -130,9 +117,7 @@ describe("SubmissionItemStudentDisplay", () => {
 				const isOverdue = true;
 				const { wrapper } = setup(loading, { completed: true }, isOverdue);
 
-				const disabled = wrapper
-					.findComponent({ name: "v-checkbox" })
-					.props("disabled");
+				const disabled = wrapper.findComponent({ name: "v-checkbox" }).props("disabled");
 
 				expect(disabled).toBe(true);
 			});
@@ -143,9 +128,7 @@ describe("SubmissionItemStudentDisplay", () => {
 				const loading = false;
 				const { wrapper } = setup(loading);
 
-				const disabled = wrapper
-					.findComponent({ name: "v-checkbox" })
-					.props("disabled");
+				const disabled = wrapper.findComponent({ name: "v-checkbox" }).props("disabled");
 
 				expect(disabled).toBe(false);
 			});

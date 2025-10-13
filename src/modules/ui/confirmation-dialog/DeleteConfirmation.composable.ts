@@ -5,10 +5,7 @@ export const useDeleteConfirmationDialog = () => {
 	const { t } = useI18n();
 	const { askConfirmation, isDialogOpen } = useConfirmationDialog();
 
-	const askDeleteConfirmation = async (
-		title: string | undefined,
-		typeLanguageKey: string
-	): Promise<boolean> => {
+	const askDeleteConfirmation = async (title: string | undefined, typeLanguageKey: string): Promise<boolean> => {
 		const titleString = title ? ` "${title}"` : "";
 		const typeString = t(typeLanguageKey);
 

@@ -57,9 +57,7 @@
 		:sort-desc-icon="mdiMenuUp"
 		@update:model-value="$emit('update:selected-ids', selectedIds)"
 	>
-		<template
-			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
-		>
+		<template #[`header.data-table-select`]="{ someSelected, allSelected, selectAll }">
 			<VCheckboxBtn
 				:model-value="allSelected"
 				:indeterminate="someSelected && !allSelected"
@@ -94,11 +92,11 @@
 </template>
 
 <script setup lang="ts">
+import BatchActionMenu from "./BatchActionMenu.vue";
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import BatchActionMenu from "./BatchActionMenu.vue";
 
 const props = defineProps({
 	tableHeaders: {
@@ -135,7 +133,7 @@ const props = defineProps({
 	},
 });
 
-defineEmits<{
+const emit = defineEmits<{
 	(e: "update:selected-ids", selectedIds: string[]): void;
 }>();
 
@@ -147,14 +145,13 @@ const search = ref("");
 watch(
 	() => props.items,
 	(newItems) => {
-		selectedIds.value = selectedIds.value.filter((id) =>
-			newItems.some((item) => item[props.selectItemKey] === id)
-		);
+		selectedIds.value = selectedIds.value.filter((id) => newItems.some((item) => item[props.selectItemKey] === id));
 	}
 );
 
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];
+	emit("update:selected-ids", selectedIds.value);
 };
 
 const stickyStyle = computed(() => ({

@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { EmptyState, ContentInitialSvg } from "@ui-empty-state";
+import { ContentInitialSvg, EmptyState } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -44,6 +44,6 @@ const { t } = useI18n();
 <style scoped>
 .initial-state-description {
 	text-align: left;
-	width: calc(2 * var(--size-content-width-min));
+	width: calc(2 * var(--content-min-width));
 }
 </style>

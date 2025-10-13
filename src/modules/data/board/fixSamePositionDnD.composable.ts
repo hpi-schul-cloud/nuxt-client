@@ -2,9 +2,7 @@ import { reactive } from "vue";
 
 const renderKeyList = reactive<Record<string, number>>({});
 
-const getMaxRenderKey = () => {
-	return Object.values(renderKeyList).reduce((a, b) => Math.max(a, b), 0);
-};
+const getMaxRenderKey = () => Object.values(renderKeyList).reduce((a, b) => Math.max(a, b), 0);
 
 /*
  * This artificial generating renderKey forces a component to re-render by changing the element key.

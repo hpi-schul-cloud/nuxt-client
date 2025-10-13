@@ -14,12 +14,15 @@
 						:board-id="board.id"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
+						:is-editable-chip-visible="isEditableChipVisible"
+						:has-readers-edit-permission="hasReadersEditPermission"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
 						@share:board="onShareBoard"
 						@delete:board="openDeleteBoardDialog(boardId)"
 						@change-layout="onUpdateBoardLayout"
+						@edit:settings="onEditBoardSettings"
 					/>
 				</template>
 				<div :class="boardClasses" :style="boardStyle">
@@ -95,12 +98,25 @@
 					:current-layout="board.layout"
 					@select="onSelectBoardLayout"
 				/>
+				<EditSettingsDialog
+					:model-value="isEditSettingsDialogOpen"
+					:is-draft-mode="!isBoardVisible"
+					:is-editable-selected="isEditableChipVisible"
+					@save="onSaveEditBoardSettings"
+					@close="onEditBoardSettingsClose"
+				/>
 			</DefaultWireframe>
 		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
+import AddElementDialog from "../shared/AddElementDialog.vue";
+import { useBodyScrolling } from "../shared/BodyScrolling.composable";
+import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
+import BoardColumn from "./BoardColumn.vue";
+import BoardColumnGhost from "./BoardColumnGhost.vue";
+import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
@@ -108,58 +124,28 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
-import {
-	BoardLayout,
-	ShareTokenBodyParamsParentTypeEnum,
-	ToolContextType,
-} from "@/serverApi/v3";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
 import { applicationErrorModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import {
-	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	useBoardInactivity,
-	useBoardPermissions,
-	useCardStore,
-	useSharedBoardPageInformation,
-} from "@data-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { useNotificationStore } from "@data-app";
+import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
+import { useEnvConfig } from "@data-env";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
-import {
-	BOARD_IS_LIST_LAYOUT,
-	extractDataAttribute,
-	useBoardNotifier,
-	useElementFocus,
-} from "@util-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import {
-	computed,
-	onMounted,
-	onUnmounted,
-	PropType,
-	provide,
-	ref,
-	watch,
-} from "vue";
+import { computed, onMounted, onUnmounted, PropType, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import AddElementDialog from "../shared/AddElementDialog.vue";
-import { useBodyScrolling } from "../shared/BodyScrolling.composable";
-import BoardColumn from "./BoardColumn.vue";
-import BoardColumnGhost from "./BoardColumnGhost.vue";
-import BoardHeader from "./BoardHeader.vue";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -167,16 +153,15 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifierModule } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-const { createPageInformation, contextType, roomId, resetPageInformation } =
-	useSharedBoardPageInformation();
+const { createPageInformation, contextType, roomId, resetPageInformation } = useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
+const isEditSettingsDialogOpen = ref(false);
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -187,9 +172,7 @@ const route = useRoute();
 watch(
 	() => route.params.id,
 	() => {
-		const boardId = Array.isArray(route.params.id)
-			? route.params.id[0]
-			: route.params.id;
+		const boardId = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 		boardStore.fetchBoardRequest({ boardId });
 	},
 	{ immediate: true }
@@ -204,18 +187,20 @@ const {
 	hasCreateToolPermission,
 	hasDeletePermission,
 	hasEditPermission,
+	hasManageReadersCanEditPermission,
 	arePermissionsLoaded,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
+const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
+const hasReadersEditPermission = ref(false);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission.value)
-		boardStore.createColumnRequest({ boardId: props.boardId });
+	if (hasCreateCardPermission.value) boardStore.createColumnRequest({ boardId: props.boardId });
 };
 
 const onDeleteCard = async (cardId: string) => {
@@ -237,11 +222,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 	if (!hasMovePermission.value) return;
 
 	const columnId = extractDataAttribute(columnPayload.item, "columnId");
-	if (
-		columnId &&
-		columnPayload.newIndex !== undefined &&
-		columnPayload.oldIndex !== undefined
-	) {
+	if (columnId && columnPayload.newIndex !== undefined && columnPayload.oldIndex !== undefined) {
 		const columnMove: ColumnMove = {
 			addedIndex: columnPayload.newIndex,
 			removedIndex: columnPayload.oldIndex,
@@ -288,16 +269,21 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		boardId: props.boardId,
 		isVisible,
 	});
+
+	if (board.value?.readersCanEdit) {
+		boardStore.updateReaderCanEditRequest({
+			boardId: props.boardId,
+			readersCanEdit: false,
+		});
+	}
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-	if (hasEditPermission.value)
-		boardStore.updateColumnTitleRequest({ columnId, newTitle });
+	if (hasEditPermission.value) boardStore.updateColumnTitleRequest({ columnId, newTitle });
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission.value)
-		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
+	if (hasEditPermission.value) boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
 const { focusNodeFromHash } = useElementFocus();
@@ -322,31 +308,36 @@ onUnmounted(() => {
 	boardStore.disconnectSocketRequest();
 	boardStore.setBoard(undefined);
 	cardStore.resetState();
-	resetNotifierModule();
+	useNotificationStore().clearAll();
 });
 
 watch(
 	() => route.hash,
-	() => focusNodeFromHash()
+	() => focusNodeFromHash(),
+	{ immediate: true }
 );
 
-watch([isBoardVisible, arePermissionsLoaded], () => {
-	const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+watch(
+	[isBoardVisible, arePermissionsLoaded],
+	() => {
+		const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
 
-	if (arePermissionsLoaded?.value && !canAccessBoard) {
-		router.replace({ name: "room-details", params: { id: roomId.value } });
-		applicationErrorModule.setError(
-			createApplicationError(
-				HttpStatusCode.Forbidden,
-				t("components.board.error.403")
-			)
-		);
-	}
-});
+		if (arePermissionsLoaded?.value && !canAccessBoard) {
+			router.replace({ name: "room-details", params: { id: roomId.value } });
+			applicationErrorModule.setError(
+				createApplicationError(HttpStatusCode.Forbidden, t("components.board.error.403"))
+			);
+		}
 
-const { isLoadingDialogOpen } = useLoadingState(
-	t("components.molecules.copyResult.title.loading")
+		hasReadersEditPermission.value =
+			arePermissionsLoaded?.value &&
+			hasManageReadersCanEditPermission?.value &&
+			useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
+	},
+	{ immediate: true }
 );
+
+const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
 
 const { copy } = useCopy(isLoadingDialogOpen);
 
@@ -355,16 +346,12 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
 const isListBoard = computed(
-	() =>
-		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
-		board.value?.layout === BoardLayout.List
+	() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED && board.value?.layout === BoardLayout.List
 );
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
-const copyResultModalItems = computed(
-	() => copyModule.getCopyResultFailedItems
-);
+const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
@@ -408,11 +395,10 @@ const onCopyBoard = async () => {
 	router.push({ name: "boards-id", params: { id: copyId } });
 };
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const onShareBoard = () => {
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
@@ -442,6 +428,23 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 		boardId: props.boardId,
 		layout,
 	});
+};
+
+const onEditBoardSettings = () => {
+	isEditSettingsDialogOpen.value = true;
+};
+
+const onEditBoardSettingsClose = () => {
+	isEditSettingsDialogOpen.value = false;
+};
+
+const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
+	await boardStore.updateReaderCanEditRequest({
+		boardId: props.boardId,
+		readersCanEdit: isEditableForEveryone,
+	});
+
+	isEditSettingsDialogOpen.value = false;
 };
 </script>
 

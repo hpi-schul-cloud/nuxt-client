@@ -2,12 +2,7 @@
 	<base-modal v-model:active="showDialog">
 		<template #body>
 			<div class="wrapper">
-				<img
-					:src="image"
-					class="sloth"
-					role="presentation"
-					:alt="t('feature-autoLogout.component.image.alt')"
-				/>
+				<img :src="image" class="sloth" role="presentation" :alt="t('feature-autoLogout.component.image.alt')" />
 				<p v-if="isSessionEnded" class="sloth-text">
 					{{ t("feature-autoLogout.message.error.401") }}
 				</p>
@@ -15,13 +10,9 @@
 					<i18n-t keypath="feature-autoLogout.warning" scope="global">
 						<span class="text-error">
 							{{
-								t(
-									"feature-autoLogout.warning.remainingTime",
-									remainingTimeInMinutes,
-									{
-										named: { remainingTime: remainingTimeInMinutes },
-									}
-								)
+								t("feature-autoLogout.warning.remainingTime", remainingTimeInMinutes, {
+									named: { remainingTime: remainingTimeInMinutes },
+								})
 							}}
 						</span>
 					</i18n-t>
@@ -39,38 +30,29 @@
 </template>
 
 <script lang="ts" setup>
+import SlothSvg from "@/assets/img/logout/Sloth.svg";
+import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import SlothSvg from "@/assets/img/logout/Sloth.svg";
-import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const { t } = useI18n();
 
-const {
-	remainingTimeInMinutes,
-	showDialog,
-	errorOnExtend,
-	sessionStatus,
-	extendSession,
-	createSession,
-} = useAutoLogout();
+const { remainingTimeInMinutes, showDialog, errorOnExtend, sessionStatus, extendSession, createSession } =
+	useAutoLogout();
 
 const image = computed(() => {
 	if (errorOnExtend.value) return SlothErrorSvg;
 	return SlothSvg;
 });
 
-const isSessionEnded = computed(() => {
-	return sessionStatus.value === SessionStatus.Ended;
-});
+const isSessionEnded = computed(() => sessionStatus.value === SessionStatus.Ended);
 
 const confirmButtonText = computed(() => {
-	if (isSessionEnded.value)
-		return t("feature-autoLogout.button.confirm.returnToLogin");
+	if (isSessionEnded.value) return t("feature-autoLogout.button.confirm.returnToLogin");
 	return t("feature-autoLogout.button.confirm");
 });
 
@@ -95,7 +77,8 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins" as *;
+@use "sass:map";
+@use "@/styles/settings.scss" as *;
 
 .wrapper {
 	width: 100%;
@@ -109,7 +92,7 @@ watch(
 		vertical-align: top;
 		opacity: 0.9;
 
-		@include breakpoint(tablet) {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			float: right;
 		}
 	}
@@ -119,7 +102,7 @@ watch(
 		width: 100%;
 		font-size: var(--text-lg);
 
-		@include breakpoint(tablet) {
+		@media #{map.get($display-breakpoints, 'md-and-up')} {
 			width: 60%;
 			margin-top: 84px;
 			text-align: left;

@@ -1,10 +1,5 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { AnyContentElementSchema } from "@/types/board/ContentElement.schema";
-import { useDebounceFn } from "@vueuse/core";
-import { chunk } from "lodash";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
 import { useSocketConnection } from "../socket/socket";
 import {
@@ -18,6 +13,12 @@ import {
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
+import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { AnyContentElementSchema } from "@/types/board/ContentElement.schema";
+import { useDebounceFn } from "@vueuse/core";
+import { chunk } from "lodash-es";
+import { storeToRefs } from "pinia";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
@@ -26,7 +27,6 @@ export const useCardSocketApi = () => {
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 	let cardIdsToFetch: string[] = [];
 
-	const { notifySocketError } = useErrorHandler();
 	const {
 		notifyUpdateCardTitleSuccess,
 		notifyCreateElementSuccess,
@@ -35,9 +35,7 @@ export const useCardSocketApi = () => {
 		notifyUpdateElementSuccess,
 	} = useBoardAriaNotification();
 
-	const dispatch = async (
-		action: PermittedStoreActions<typeof CardActions>
-	) => {
+	const dispatch = async (action: PermittedStoreActions<typeof CardActions>) => {
 		const successActions = [
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
@@ -46,21 +44,17 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
-			on(
-				CardActions.updateCardHeightSuccess,
-				cardStore.updateCardHeightSuccess
-			),
+			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
 		];
 
 		const failureActions = [
-			on(CardActions.createElementFailure, createElementFailure),
-			on(CardActions.deleteElementFailure, deleteElementFailure),
-			on(CardActions.moveElementFailure, moveElementFailure),
-			on(CardActions.updateElementFailure, updateElementFailure),
-			on(CardActions.deleteCardFailure, deleteCardFailure),
-			on(CardActions.fetchCardFailure, fetchCardFailure),
-			on(CardActions.updateCardTitleFailure, updateCardTitleFailure),
-			on(CardActions.updateCardHeightFailure, updateCardHeightFailure),
+			on(CardActions.createElementFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.deleteElementFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.moveElementFailure, () => reloadBoard()),
+			on(CardActions.updateElementFailure, () => reloadBoard()),
+			on(CardActions.fetchCardFailure, ({ cardIds }) => reloadBoard(cardIds[0])),
+			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
 		];
 
 		const ariaLiveNotification = [
@@ -80,8 +74,7 @@ export const useCardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, disconnectSocket, emitWithAck } =
-		useSocketConnection(dispatch);
+	const { emitOnSocket, disconnectSocket, emitWithAck } = useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = () => {
 		disconnectSocket();
@@ -95,22 +88,15 @@ export const useCardSocketApi = () => {
 	const _debouncedFetchCardEmit = useDebounceFn(
 		() => {
 			const batches = chunk(cardIdsToFetch, 50);
-			batches.forEach((cardIds) =>
-				emitOnSocket("fetch-card-request", { cardIds })
-			);
+			batches.forEach((cardIds) => emitOnSocket("fetch-card-request", { cardIds }));
 			cardIdsToFetch = [];
 		},
 		WAIT_AFTER_LAST_CALL_IN_MS,
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
-	const createElementRequest = async (
-		payload: CreateElementRequestPayload
-	): Promise<AnyContentElement | undefined> => {
-		const response = (await emitWithAck(
-			"create-element-request",
-			payload
-		)) as unknown;
+	const createElementRequest = async (payload: CreateElementRequestPayload): Promise<AnyContentElement | undefined> => {
+		const response = (await emitWithAck("create-element-request", payload)) as unknown;
 
 		const anyContentElement = AnyContentElementSchema.parse(response);
 
@@ -125,9 +111,7 @@ export const useCardSocketApi = () => {
 		emitOnSocket("move-element-request", payload);
 	};
 
-	const updateElementRequest = async ({
-		element,
-	}: UpdateElementRequestPayload) => {
+	const updateElementRequest = async ({ element }: UpdateElementRequestPayload) => {
 		emitOnSocket("update-element-request", {
 			elementId: element.id,
 			data: {
@@ -149,27 +133,19 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
-	const createElementFailure = () =>
-		notifySocketError("notCreated", "boardElement");
-
-	const deleteElementFailure = () =>
-		notifySocketError("notDeleted", "boardElement");
-
-	const moveElementFailure = () =>
-		notifySocketError("notUpdated", "boardElement");
-
-	const updateElementFailure = () =>
-		notifySocketError("notUpdated", "boardElement");
-
-	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
-
-	const fetchCardFailure = () => notifySocketError("notLoaded", "boardCard");
-
-	const updateCardTitleFailure = () =>
-		notifySocketError("notUpdated", "boardCard");
-
-	const updateCardHeightFailure = () =>
-		notifySocketError("notUpdated", "boardCard");
+	const reloadBoard = (cardId = "") => {
+		const boardStore = useBoardStore();
+		const { board } = storeToRefs(boardStore);
+		if (cardId) {
+			const location = boardStore.getCardLocation(cardId);
+			const { columnIndex, cardIndex } = location ?? {};
+			if (board?.value && columnIndex !== undefined && cardIndex !== undefined && columnIndex > -1 && cardIndex > -1) {
+				// remove card so that reloading data results in rerender
+				board.value.columns[columnIndex].cards.splice(cardIndex, 1);
+			}
+		}
+		boardStore.reloadBoard();
+	};
 
 	return {
 		dispatch,

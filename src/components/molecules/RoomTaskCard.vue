@@ -29,11 +29,7 @@
 					/>
 				</div>
 			</div>
-			<h2
-				class="text-h6 mt-1 mb-2 task-name"
-				tabindex="-1"
-				:data-testid="`task-title-${taskCardIndex}`"
-			>
+			<h2 class="text-h4 mt-1 mb-2 task-name" tabindex="-1" :data-testid="`task-title-${taskCardIndex}`">
 				{{ task.name }}
 			</h2>
 			<RenderHTML
@@ -56,13 +52,7 @@
 					size="small"
 					:data-testid="[chip.testid]"
 				>
-					<v-icon
-						v-if="chip.icon"
-						start
-						size="small"
-						class="fill"
-						color="rgba(0, 0, 0, 0.87)"
-					>
+					<v-icon v-if="chip.icon" start size="small" class="fill" color="rgba(0, 0, 0, 0.87)">
 						{{ chip.icon }}
 					</v-icon>
 					{{ chip.name }}
@@ -95,15 +85,15 @@
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
 import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiContentCopy,
 	mdiPencilOutline,
 	mdiShareVariantOutline,
+	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-	mdiTextBoxCheckOutline,
 } from "@icons/material";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ref } from "vue";
@@ -113,10 +103,7 @@ const props = defineProps({
 	task: {
 		type: Object,
 		required: true,
-		validator: (task) =>
-			["createdAt", "id", "name"].every(
-				(key) => key in (task as Record<string, unknown>)
-			),
+		validator: (task) => ["createdAt", "id", "name"].every((key) => key in (task as Record<string, unknown>)),
 	},
 	room: {
 		type: Object,
@@ -163,23 +150,15 @@ const isCloseToDueDate = computed(() => {
 });
 const isGraded = computed(() => props.task.status.graded);
 const isSubmitted = computed(() => props.task.status.submitted);
-const isSubmittedNotGraded = computed(
-	() => props.task.status.submitted && !props.task.status.graded
-);
+const isSubmittedNotGraded = computed(() => props.task.status.submitted && !props.task.status.graded);
 const isPlanned = computed(() => {
 	const scheduledDate = props.task.availableDate;
 	const delay = 5 * 1000;
-	return (
-		scheduledDate &&
-		new Date(scheduledDate).getTime() - delay > new Date().getTime()
-	);
+	return scheduledDate && new Date(scheduledDate).getTime() - delay > new Date().getTime();
 });
 const titleIcon = computed(() => "$tasks");
 const cardActions = computed(() => {
-	const roleBasedActions: Record<
-		string,
-		Array<{ action: () => void; name: string; testid: string }>
-	> = {
+	const roleBasedActions: Record<string, Array<{ action: () => void; name: string; testid: string }>> = {
 		[Roles.Teacher]: [],
 		[Roles.Student]: [],
 	};
@@ -215,10 +194,7 @@ const cardActions = computed(() => {
 });
 
 const chipItems = computed(() => {
-	const roleBasedChips: Record<
-		string,
-		Array<{ name: string; class?: string; icon?: string; testid?: string }>
-	> = {
+	const roleBasedChips: Record<string, Array<{ name: string; class?: string; icon?: string; testid?: string }>> = {
 		[Roles.Teacher]: [],
 		[Roles.Student]: [],
 	};
@@ -298,15 +274,12 @@ const moreActionsMenuItems = computed(() => {
 	if (props.userRole === Roles.Teacher) {
 		roleBasedMoreActions[Roles.Teacher].push({
 			icon: mdiPencilOutline,
-			action: () =>
-				redirectAction(
-					`/homework/${props.task.id}/edit?returnUrl=rooms/${props.room.roomId}`
-				),
+			action: () => redirectAction(`/homework/${props.task.id}/edit?returnUrl=rooms/${props.room.roomId}`),
 			name: t("pages.room.taskCard.label.edit"),
 			dataTestId: `room-task-card-menu-edit-${props.taskCardIndex}`,
 		});
 
-		if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+		if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
 			roleBasedMoreActions[Roles.Teacher].push({
 				icon: mdiContentCopy,
 				action: () => copyCard(),
@@ -315,7 +288,7 @@ const moreActionsMenuItems = computed(() => {
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
+		if (useEnvConfig().value.FEATURE_TASK_SHARE) {
 			roleBasedMoreActions[Roles.Teacher].push({
 				icon: mdiShareVariantOutline,
 				action: () => emit("share-task", props.task.id),
@@ -370,12 +343,8 @@ const cardTitle = (dueDate: string | undefined) => {
 		titleSuffix = t("common.words.draft");
 	} else if (dueDate) {
 		titleSuffix = isPlanned.value
-			? `${t("pages.tasks.labels.planned")} ${printDateFromStringUTC(
-					props.task.availableDate
-				)}`
-			: `${t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(
-					dueDate
-				)}`;
+			? `${t("pages.tasks.labels.planned")} ${printDateFromStringUTC(props.task.availableDate)}`
+			: `${t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(dueDate)}`;
 	} else {
 		titleSuffix = t("pages.room.taskCard.label.noDueDate");
 	}
@@ -419,23 +388,17 @@ const onKeyPress = (e: KeyboardEvent) => {
 			emit("on-drag");
 			break;
 		case 38: // Up Arrow
-			if (props.keyDrag)
-				emit("move-element", { id: props.task.id, moveIndex: -1 });
+			if (props.keyDrag) emit("move-element", { id: props.task.id, moveIndex: -1 });
 			break;
 		case 40: // Down Arrow
-			if (props.keyDrag)
-				emit("move-element", { id: props.task.id, moveIndex: 1 });
+			if (props.keyDrag) emit("move-element", { id: props.task.id, moveIndex: 1 });
 			break;
 		default:
 			break;
 	}
 };
 
-const getStyleClasses = () => {
-	return isPlanned.value || (isDraft.value && !isFinished.value)
-		? "task-hidden"
-		: "";
-};
+const getStyleClasses = () => (isPlanned.value || (isDraft.value && !isFinished.value) ? "task-hidden" : "");
 </script>
 
 <style lang="scss" scoped>

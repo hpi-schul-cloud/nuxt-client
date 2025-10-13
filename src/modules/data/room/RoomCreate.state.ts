@@ -1,5 +1,5 @@
 import { RoomApiFactory } from "@/serverApi/v3";
-import { RoomCreateParams, RoomItem, RoomColor } from "@/types/room/Room";
+import { RoomColor, RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref } from "vue";
 
@@ -10,8 +10,6 @@ export const useRoomCreateState = () => {
 	const roomData = ref<RoomCreateParams>({
 		name: "",
 		color: RoomColor.BlueGrey,
-		startDate: undefined,
-		endDate: undefined,
 		features: [],
 	});
 

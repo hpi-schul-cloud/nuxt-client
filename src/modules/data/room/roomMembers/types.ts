@@ -24,10 +24,7 @@ export type RoomInvitationFormData = {
 	id: string;
 };
 
-export type CreateRoomInvitationLinkDto = Omit<
-	CreateRoomInvitationLinkBodyParams,
-	"roomId"
->;
+export type CreateRoomInvitationLinkDto = Omit<CreateRoomInvitationLinkBodyParams, "roomId">;
 
 export type UpdateRoomInvitationLinkDto = UpdateRoomInvitationLinkBodyParams & {
 	id: string;

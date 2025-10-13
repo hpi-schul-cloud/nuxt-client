@@ -1,4 +1,4 @@
-import { authModule } from "@/store";
+import { useAppStore } from "@data-app";
 
 export default {
 	props: {
@@ -9,10 +9,7 @@ export default {
 	},
 	computed: {
 		userPermissions() {
-			return authModule.getUserPermissions;
-		},
-		$_hasPermission() {
-			return this.$_userHasPermission(this.permission);
+			return useAppStore().userPermissions;
 		},
 	},
 	methods: {
@@ -21,7 +18,7 @@ export default {
 				throw new Error("parameter permission is missing");
 			}
 			return typeof permission === "string"
-				? !permission || this.userPermissions.includes(permission.toLowerCase())
+				? !permission || this.userPermissions.includes(permission)
 				: !permission() || permission(this.userPermissions);
 		},
 	},

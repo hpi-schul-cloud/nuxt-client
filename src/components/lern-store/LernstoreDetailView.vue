@@ -4,10 +4,7 @@
 			<v-btn
 				icon
 				size="small"
-				:class="[
-					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
-					'icon',
-				]"
+				:class="[closeButtonStyleSelector ? 'close-transparent' : 'close-icon', 'icon']"
 				aria-label="close detail view"
 				data-testid="learningstore-close-details-icon"
 				@click="goBack"
@@ -17,11 +14,7 @@
 		</div>
 		<div class="content">
 			<div class="preview">
-				<lern-store-player
-					v-if="shouldShowPlayer"
-					class="preview preview-player"
-					:node-id="resource.ref.id"
-				/>
+				<lern-store-player v-if="shouldShowPlayer" class="preview preview-player" :node-id="resource.ref.id" />
 				<div v-else>
 					<div
 						class="preview-background"
@@ -29,12 +22,7 @@
 							backgroundImage: `url(${backgroundImage})`,
 						}"
 					/>
-					<img
-						:src="backgroundImage"
-						class="preview-img"
-						:alt="$t('pages.content.preview_img.alt')"
-						role="img"
-					/>
+					<img :src="backgroundImage" class="preview-img" :alt="$t('pages.content.preview_img.alt')" role="img" />
 				</div>
 			</div>
 		</div>
@@ -128,14 +116,8 @@
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
-								<span
-									v-for="(tag, index) in tags"
-									:key="index"
-									class="meta-text"
-								>
-									<base-link :href="'/content/?q=' + tag" class="tag link">
-										#{{ tag }}
-									</base-link>
+								<span v-for="(tag, index) in tags" :key="index" class="meta-text">
+									<base-link :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </base-link>
 								</span>
 							</div>
 						</template>
@@ -149,12 +131,7 @@
 						<div class="meta-icon">
 							<v-icon class="custom-icon meta-icon">$ic_collection</v-icon>
 						</div>
-						<base-link
-							design="none"
-							type="button"
-							class="meta-text link"
-							:to="collectionLink"
-						>
+						<base-link design="none" type="button" class="meta-text link" :to="collectionLink">
 							<span>{{ $t("pages.content.card.collection") }}</span>
 						</base-link>
 					</div>
@@ -174,12 +151,14 @@
 </template>
 
 <script>
+import BaseLink from "@/components/base/BaseLink.vue";
 import UserHasRole from "@/components/helpers/UserHasRole.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton.vue";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
 import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { SchulcloudTheme } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 import {
 	getAuthor,
 	getDescription,
@@ -193,8 +172,6 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiClose, mdiOpenInNew, mdiPound } from "@icons/material";
-import BaseLink from "@/components/base/BaseLink.vue";
-import { $axios } from "@/utils/api";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -240,10 +217,7 @@ export default {
 			return this.$vuetify.display.xs;
 		},
 		collectionLink() {
-			let relation = getMetadataAttribute(
-				this.resource.properties,
-				"ccm:hpi_lom_relation"
-			);
+			let relation = getMetadataAttribute(this.resource.properties, "ccm:hpi_lom_relation");
 			if (relation) {
 				relation = JSON.parse(relation.replace(/'/g, '"'));
 				if (relation.kind === "ispartof") {
@@ -263,10 +237,7 @@ export default {
 			return printDateFromTimestamp(this.resource.properties["cm:created"][0]);
 		},
 		description() {
-			return getDescription(
-				this.resource.description,
-				this.resource.properties
-			);
+			return getDescription(this.resource.description, this.resource.properties);
 		},
 		downloadUrl() {
 			return getMetadataAttribute(this.resource.properties, "ccm:wwwurl");
@@ -331,9 +302,7 @@ export default {
 			window.open(url, "_blank");
 		},
 		isNotStudent(roles) {
-			return this.role === ""
-				? roles.some((role) => !role.startsWith("student"))
-				: this.role;
+			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role;
 		},
 		handleResize() {
 			this.window.width = window.innerWidth;
@@ -353,7 +322,6 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-@use "@/styles/mixins" as *;
 $tablet-portrait-width: 768px;
 
 .resource {
@@ -379,7 +347,7 @@ $tablet-portrait-width: 768px;
 		position: fixed;
 		top: 0;
 		right: 0;
-		z-index: var(--layer-modal);
+		z-index: 1000;
 		display: flex;
 		justify-content: flex-end;
 		padding: 16px;
@@ -431,7 +399,7 @@ $tablet-portrait-width: 768px;
 				right: 0;
 				bottom: 0;
 				left: 0;
-				z-index: var(--layer-page);
+				z-index: 1;
 				filter: blur(0.7rem);
 				background-repeat: no-repeat;
 				background-position: center;
@@ -440,11 +408,11 @@ $tablet-portrait-width: 768px;
 			}
 
 			img {
-				z-index: var(--layer-page);
+				z-index: 1;
 				object-position: center;
 				object-fit: contain;
 
-				@include breakpoint(tablet) {
+				@media #{map.get($display-breakpoints, 'sm-and-up')} {
 					min-height: auto;
 				}
 			}
@@ -454,8 +422,8 @@ $tablet-portrait-width: 768px;
 	.floating-buttons {
 		position: sticky;
 		bottom: 0;
-		z-index: var(--layer-page);
-		border-radius: var(--radius-md);
+		z-index: 1;
+		border-radius: 8px;
 
 		@media (max-width: $tablet-portrait-width) {
 			padding-bottom: 8px;
@@ -499,13 +467,13 @@ $tablet-portrait-width: 768px;
 
 			.external-content-title {
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 
 			.external-content-title-mobile {
 				display: none;
 				margin-top: 16px;
-				font-weight: var(--font-weight-bold);
+				font-weight: bold;
 			}
 		}
 
@@ -520,7 +488,7 @@ $tablet-portrait-width: 768px;
 
 		.author-provider {
 			font-size: var(--text-xs);
-			font-weight: var(--font-weight-bold);
+			font-weight: bold;
 		}
 
 		.description {
@@ -538,8 +506,8 @@ $tablet-portrait-width: 768px;
 			display: flex;
 			justify-content: space-between;
 			margin: 40px 0 12px 0;
-			font-size: var(--heading-5);
-			font-weight: var(--font-weight-bold);
+			font-size: var(--heading-3);
+			font-weight: bold;
 			line-height: var(--line-height-md);
 		}
 
@@ -560,6 +528,23 @@ $tablet-portrait-width: 768px;
 
 					.icon {
 						max-height: var(--text-lg);
+					}
+				}
+
+				.material-icon {
+					width: calc(1em + 4px);
+					height: calc(1em + 4px);
+				}
+
+				.custom-icon {
+					width: 1em;
+					font-size: calc(1em + 4px);
+					line-height: 100%;
+					vertical-align: middle;
+					fill: currentColor;
+
+					svg {
+						fill: currentColor;
 					}
 				}
 

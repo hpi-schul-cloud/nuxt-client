@@ -1,17 +1,13 @@
 // This test is necessary to ensure that the real Vuex course-store is functioning correctly.
 // The course-store is only invoked at this point, making it crucial to test it here.
 import AddContentModal from "./AddContentModal.vue";
-
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
-import { VSelect } from "vuetify/lib/components/index";
-import courses from "@/store/courses";
-import { createStore } from "vuex";
 import ContentModule from "@/store/content";
+import courses from "@/store/courses";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
+import { VSelect } from "vuetify/lib/components/index";
+import { createStore } from "vuex";
 
 const testProps = {
 	showCopyModal: true,

@@ -19,10 +19,7 @@
 			<div class="top-row-container mb-0">
 				<div class="d-flex align-center mb-3 tagline">
 					<VIcon size="14" class="mr-1" :icon="titleIcon" />
-					<span
-						class="title-board-card"
-						:data-testid="`board-card-title-${boardCardIndex}`"
-					>
+					<span class="title-board-card" :data-testid="`board-card-title-${boardCardIndex}`">
 						{{ cardTitle }}
 					</span>
 				</div>
@@ -34,17 +31,11 @@
 					/>
 				</div>
 			</div>
-			<h2
-				class="text-h6 board-title mt-2"
-				:data-testid="`board-title-${boardCardIndex}`"
-			>
+			<h2 class="text-h4 board-title mt-2" :data-testid="`board-title-${boardCardIndex}`">
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
-		<VCardActions
-			v-if="isDraft && userRole === Roles.Teacher"
-			data-testid="board-card-actions"
-		>
+		<VCardActions v-if="isDraft && userRole === Roles.Teacher" data-testid="board-card-actions">
 			<VBtn
 				v-for="(action, index) in cardActions"
 				:key="index"
@@ -61,6 +52,9 @@
 </template>
 
 <script setup lang="ts">
+import RoomDotMenu from "./RoomDotMenu.vue";
+import { BoardLayout, ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,
 	mdiPencilOutline,
@@ -70,15 +64,9 @@ import {
 	mdiViewAgendaOutline,
 	mdiViewDashboardOutline,
 } from "@icons/material";
-import {
-	BoardLayout,
-	ImportUserResponseRoleNamesEnum as Roles,
-} from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import RoomDotMenu from "./RoomDotMenu.vue";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
@@ -106,8 +94,6 @@ const emit = defineEmits([
 const router = useRouter();
 const { t } = useI18n();
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
 const cardTitle = computed(() => {
 	const titlePrefix = isListBoard.value
 		? t("pages.room.boardCard.label.listBoard")
@@ -121,18 +107,12 @@ const cardTitle = computed(() => {
 	return titlePrefix;
 });
 
-const isDraft = computed(() => {
-	return !props.columnBoardItem.published;
-});
+const isDraft = computed(() => !props.columnBoardItem.published);
 
-const isListBoard = computed(() => {
-	return props.columnBoardItem.layout === BoardLayout.List;
-});
+const isListBoard = computed(() => props.columnBoardItem.layout === BoardLayout.List);
 
 const titleIcon = computed(() => {
-	const icon = isListBoard.value
-		? mdiViewAgendaOutline
-		: mdiViewDashboardOutline;
+	const icon = isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline;
 	return icon;
 });
 
@@ -168,19 +148,17 @@ const onMoveCardUp = () => {
 	}
 };
 
-const boardTitle = computed(() => {
-	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
+const boardTitle = computed(() =>
+	props.columnBoardItem.title && props.columnBoardItem.title !== ""
 		? props.columnBoardItem.title
-		: t("pages.room.boardCard.label.courseBoard").toString();
-});
+		: t("pages.room.boardCard.label.courseBoard").toString()
+);
 
 const cardActions = [
 	{
 		action: onPublish,
 		name: t("common.action.publish"),
-		dataTestId: `board-card-action-publish-${
-			toRef(props, "boardCardIndex").value
-		}`,
+		dataTestId: `board-card-action-publish-${toRef(props, "boardCardIndex").value}`,
 	},
 ];
 
@@ -191,27 +169,21 @@ const actionsMenuItems = computed(() => {
 		icon: mdiPencilOutline,
 		action: openBoard,
 		name: t("common.actions.edit"),
-		dataTestId: `board-card-menu-action-edit-${
-			toRef(props, "boardCardIndex").value
-		}`,
+		dataTestId: `board-card-menu-action-edit-${toRef(props, "boardCardIndex").value}`,
 	});
 	actions.push({
 		icon: mdiContentCopy,
 		action: () => emit("copy-board"),
 		name: t("common.actions.duplicate"),
-		dataTestId: `board-card-menu-action-copy-${
-			toRef(props, "boardCardIndex").value
-		}`,
+		dataTestId: `board-card-menu-action-copy-${toRef(props, "boardCardIndex").value}`,
 	});
 
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("share-board"),
 			name: t("common.actions.shareCopy"),
-			dataTestId: `board-card-menu-action-share-${
-				toRef(props, "boardCardIndex").value
-			}`,
+			dataTestId: `board-card-menu-action-share-${toRef(props, "boardCardIndex").value}`,
 		});
 	}
 
@@ -220,9 +192,7 @@ const actionsMenuItems = computed(() => {
 			icon: mdiUndoVariant,
 			action: onUnpublish,
 			name: t("pages.room.cards.label.revert"),
-			dataTestId: `board-card-menu-action-unpublish-${
-				toRef(props, "boardCardIndex").value
-			}`,
+			dataTestId: `board-card-menu-action-unpublish-${toRef(props, "boardCardIndex").value}`,
 		});
 	}
 
@@ -230,9 +200,7 @@ const actionsMenuItems = computed(() => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-board"),
 		name: t("common.actions.delete"),
-		dataTestId: `board-card-menu-action-remove-${
-			toRef(props, "boardCardIndex").value
-		}`,
+		dataTestId: `board-card-menu-action-remove-${toRef(props, "boardCardIndex").value}`,
 	});
 
 	return actions;

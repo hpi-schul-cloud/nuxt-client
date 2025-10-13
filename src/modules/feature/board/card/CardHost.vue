@@ -41,14 +41,8 @@
 							has-background
 							:data-testid="boardMenuTestId"
 						>
-							<KebabMenuActionEdit
-								v-if="hasDeletePermission && !isEditMode"
-								@click="onStartEditMode"
-							/>
-							<KebabMenuActionShareLink
-								:scope="BoardMenuScope.CARD"
-								@click="onCopyShareLink"
-							/>
+							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
+							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
 								:name="card.title"
@@ -97,34 +91,25 @@
 </template>
 
 <script setup lang="ts">
-import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
-import { delay } from "@/utils/helpers";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useCardStore,
-} from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionEdit,
-	KebabMenuActionShareLink,
-} from "@ui-kebab-menu";
-import { useShareBoardLink } from "@util-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
-import { computed, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
-
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
+import { delay } from "@/utils/helpers";
+import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
+import { BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import { useShareBoardLink } from "@util-board";
+import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
+import { computed, onMounted, ref, toRef } from "vue";
 
 type Props = {
 	height: number;
@@ -142,10 +127,7 @@ const emit = defineEmits<{
 
 const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
-const { isFocusContained, isFocusedById } = useBoardFocusHandler(
-	cardId.value,
-	cardHost
-);
+const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
 
 const isHovered = useElementHover(cardHost);
 const isDetailView = ref(false);
@@ -157,26 +139,16 @@ const isLoadingCard = computed(() => card.value === undefined);
 
 const hasCardTitle = computed(() => card.value?.title);
 
-const boardMenuTestId = computed(
-	() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`
-);
-const cardTestId = computed(
-	() => `board-card-${props.columnIndex}-${props.rowIndex}`
-);
+const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`);
+const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
-	cardId.value
-);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
-const { askType } = useAddElementDialog(
-	cardStore.createElementRequest,
-	cardId.value
-);
+const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
-const onMoveCardKeyboard = (event: KeyboardEvent) =>
-	emit("move:card-keyboard", event.code);
+const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
 
 const _updateCardTitle = (newTitle: string, cardId: string) => {
 	cardStore.updateCardTitleRequest({ newTitle, cardId });
@@ -194,8 +166,7 @@ const onDeleteCard = async (confirmation: Promise<boolean>) => {
 
 const onAddElement = () => askType();
 
-const onDeleteElement = (elementId: string) =>
-	cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
+const onDeleteElement = (elementId: string) => cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
 
 const onStartEditMode = () => startEditMode();
 
@@ -210,32 +181,18 @@ const onEndEditMode = async () => {
 
 const onCloseDetailView = () => (isDetailView.value = false);
 
-const onMoveContentElementDown = async ({
-	payload: elementId,
-	elementIndex,
-}: ElementMove) =>
+const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
 	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
-const onMoveContentElementUp = async ({
-	payload: elementId,
-	elementIndex,
-}: ElementMove) =>
+const onMoveContentElementUp = async ({ payload: elementId, elementIndex }: ElementMove) =>
 	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
-const onMoveContentElementKeyboard = async (
-	{ payload: elementId, elementIndex }: ElementMove,
-	key: string
-) => {
+const onMoveContentElementKeyboard = async ({ payload: elementId, elementIndex }: ElementMove, key: string) => {
 	if (!verticalCursorKeys.includes(key)) return;
 
 	const delta = key === "ArrowUp" ? -1 : 1;
 
-	await cardStore.moveElementRequest(
-		props.cardId,
-		elementId,
-		elementIndex,
-		delta
-	);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, delta);
 };
 
 const onEnter = () => {

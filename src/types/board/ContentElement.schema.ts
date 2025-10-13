@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { ContentElementType } from "./ContentElement";
+import { z } from "zod";
 
 const ExternalToolElementContentSchema = z.object({
 	contextExternalToolId: z.string().nullable(),

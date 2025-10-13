@@ -21,14 +21,14 @@ import datetime, {
 	setDefaultFormats,
 	setDefaultTimezone,
 } from "@/plugins/datetime";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
+import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestingPinia } from "@pinia/testing";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import setupStores from "../../tests/test-utils/setupStores";
+import { setActivePinia } from "pinia";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -74,6 +74,11 @@ const localizedFormats = {
 setDefaultTimezone(TEST_DATETIME_TIMEZONE);
 
 describe("@/plugins/datetime", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
+	});
+
 	const dateString = "2019-01-25T02:00:00.000Z";
 	const dateUTC = dayjs.tz(dateString, "UTC");
 	const dateLocalFromUTC = dateUTC.tz();
@@ -82,21 +87,13 @@ describe("@/plugins/datetime", () => {
 
 	const dateUTCString = dateUTC.format("DD.MM.YYYY");
 	const dateLocalString = dateLocal.format("DD.MM.YYYY");
-	const dateLocalStringYY = dateUTC
-		.tz(TEST_DATETIME_TIMEZONE)
-		.format("DD.MM.YY");
-	const dateTimeLocalStringYY = dateUTC
-		.tz(TEST_DATETIME_TIMEZONE)
-		.format("DD.MM.YY HH:mm");
+	const dateLocalStringYY = dateUTC.tz(TEST_DATETIME_TIMEZONE).format("DD.MM.YY");
+	const dateTimeLocalStringYY = dateUTC.tz(TEST_DATETIME_TIMEZONE).format("DD.MM.YY HH:mm");
 
 	const dateLocalFromUTCString = dateLocalFromUTC.format("YYYY-MM-DD");
 	const timeLocalFromUTCString = dateLocalFromUTC.format("HH:mm");
 	const dateFormat = dateLocal.format("YYYY-MM-DD");
 	const timeLocalString = dateLocal.format("HH:mm");
-
-	beforeEach(() => {
-		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
-	});
 
 	it("getUtcOffset", () => {
 		const result = getUtcOffset();
@@ -206,9 +203,7 @@ describe("@/plugins/datetime", () => {
 		const hours = date.getHours().toString().padStart(2, "0");
 		const minutes = date.getMinutes().toString().padStart(2, "0");
 
-		expect(getTimeFromISOString(ISOString)).toStrictEqual(
-			`${hours}:${minutes}`
-		);
+		expect(getTimeFromISOString(ISOString)).toStrictEqual(`${hours}:${minutes}`);
 	});
 
 	const mockApp = {
@@ -229,11 +224,6 @@ describe("@/plugins/datetime", () => {
 
 	const mockStore = {
 		state: { schools: { school: { timezone: TEST_DATETIME_TIMEZONE } } },
-		getters: {
-			"auth/getLocale": () => {
-				return TEST_CURRENT_LOCALE;
-			},
-		},
 	};
 
 	it("init", () => {
@@ -279,11 +269,7 @@ describe("@/plugins/datetime", () => {
 	});
 
 	it("setDefaultFormats", () => {
-		expect(setDefaultFormats(mockApp)).toStrictEqual(
-			localizedFormats[TEST_CURRENT_LOCALE]
-		);
-		expect(setDefaultFormats({ ...mockApp, i18n: null })).toStrictEqual(
-			localizedFormats[TEST_CURRENT_LOCALE]
-		);
+		expect(setDefaultFormats(mockApp)).toStrictEqual(localizedFormats[TEST_CURRENT_LOCALE]);
+		expect(setDefaultFormats({ ...mockApp, i18n: null })).toStrictEqual(localizedFormats[TEST_CURRENT_LOCALE]);
 	});
 });

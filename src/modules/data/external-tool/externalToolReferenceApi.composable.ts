@@ -1,3 +1,4 @@
+import { ExternalToolDisplayData } from "./types";
 import {
 	ToolApiFactory,
 	ToolApiInterface,
@@ -8,21 +9,15 @@ import {
 import { ExternalToolMapper } from "@/store/external-tool/mapper";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { ExternalToolDisplayData } from "./types";
 
 export const useExternalToolReferenceApi = () => {
 	const toolApi: ToolApiInterface = ToolApiFactory(undefined, "/v3", $axios);
 
-	const fetchDisplayDataCall = async (
-		contextExternalToolId: string
-	): Promise<ExternalToolDisplayData> => {
+	const fetchDisplayDataCall = async (contextExternalToolId: string): Promise<ExternalToolDisplayData> => {
 		const response: AxiosResponse<ToolReferenceResponse> =
-			await toolApi.toolReferenceControllerGetToolReference(
-				contextExternalToolId
-			);
+			await toolApi.toolReferenceControllerGetToolReference(contextExternalToolId);
 
-		const mapped: ExternalToolDisplayData =
-			ExternalToolMapper.mapToExternalToolDisplayData(response.data);
+		const mapped: ExternalToolDisplayData = ExternalToolMapper.mapToExternalToolDisplayData(response.data);
 
 		return mapped;
 	};
@@ -32,13 +27,9 @@ export const useExternalToolReferenceApi = () => {
 		contextType: ToolContextType
 	): Promise<ExternalToolDisplayData[]> => {
 		const response: AxiosResponse<ToolReferenceListResponse> =
-			await toolApi.toolReferenceControllerGetToolReferencesForContext(
-				contextId,
-				contextType
-			);
+			await toolApi.toolReferenceControllerGetToolReferencesForContext(contextId, contextType);
 
-		const mapped: ExternalToolDisplayData[] =
-			ExternalToolMapper.mapToExternalToolDisplayDataList(response.data);
+		const mapped: ExternalToolDisplayData[] = ExternalToolMapper.mapToExternalToolDisplayDataList(response.data);
 
 		return mapped;
 	};

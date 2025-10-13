@@ -1,14 +1,9 @@
-import EnvConfigModule from "@/store/env-config";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
-import setupStores from "@@/tests/test-utils/setupStores";
-import NotifierModule from "@/store/notifier";
-import AuthModule from "@/store/auth";
-import { envConfigModule } from "@/store";
-import { envsFactory, mountComposable } from "@@/tests/test-utils";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { nextTick } from "vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -33,11 +28,6 @@ const mockEndpointResponse = () => {
 		},
 	});
 };
-
-const envs = envsFactory.build({
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
-	JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
-});
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -74,24 +64,13 @@ describe("useAutoLogout", () => {
 		vi.clearAllTimers();
 	});
 
-	setupStores({
-		envConfigModule: EnvConfigModule,
-		notifierModule: NotifierModule,
-		authModule: AuthModule,
+	setActivePinia(createTestingPinia());
+	createTestEnvStore({
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
+		JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
 	});
-
-	envConfigModule.setEnvs(envs);
-	const notifierModuleMock = createModuleMocks(NotifierModule);
-
 	const setup = (options?: { remainingTimeInSeconds?: number }) => {
-		const composable = mountComposable(() => useAutoLogout(), {
-			global: {
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				},
-			},
-		});
+		const composable = mountComposable(() => useAutoLogout());
 
 		composable.remainingTimeInSeconds = options?.remainingTimeInSeconds ?? 0;
 
@@ -112,9 +91,7 @@ describe("useAutoLogout", () => {
 		describe("when the timer is below the warning time", () => {
 			it("should set 'showDialog' true", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue - 10;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
 				const { showDialog } = setup();
 
 				vi.advanceTimersByTime(timeToAdvance);
@@ -133,9 +110,7 @@ describe("useAutoLogout", () => {
 
 			it("should be true when the session is extended", async () => {
 				jwtTimerResponse.ttl = 100;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
 				const { isTTLUpdated } = setup();
 				vi.advanceTimersByTime(timeToAdvance);
 				await nextTick();
@@ -147,9 +122,7 @@ describe("useAutoLogout", () => {
 		describe("when the timer is above the warning time", () => {
 			it("should set 'showDialog' to false", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue + 10;
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) *
-					1000;
+				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) * 1000;
 				const { showDialog } = setup();
 
 				vi.advanceTimersByTime(timeToAdvance);
@@ -170,7 +143,7 @@ describe("useAutoLogout", () => {
 		it("should be true when an error occurs", async () => {
 			jwtTimerResponse.rejected = true;
 			const { errorOnExtend, extendSession } = setup();
-			extendSession();
+			await extendSession();
 			await flushPromises();
 
 			expect(errorOnExtend.value).toBe(true);
@@ -180,8 +153,8 @@ describe("useAutoLogout", () => {
 	describe("remainingTimeInMinutes", () => {
 		it("should return the correct value", () => {
 			jwtTimerResponse.ttl = 120;
-			envConfigModule.setEnvs({
-				...envs,
+			createTestEnvStore({
+				JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
 			});
 			const { remainingTimeInMinutes } = setup();
@@ -199,8 +172,8 @@ describe("useAutoLogout", () => {
 
 		it("should be 'Ended' when the session ends", async () => {
 			jwtTimerResponse.ttl = 120;
-			envConfigModule.setEnvs({
-				...envs,
+			createTestEnvStore({
+				JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
 				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
 			});
 			const { sessionStatus } = setup();
@@ -213,7 +186,7 @@ describe("useAutoLogout", () => {
 		it("should be 'Error' when an error occurs", async () => {
 			jwtTimerResponse.rejected = true;
 			const { sessionStatus, extendSession } = setup();
-			extendSession();
+			await extendSession();
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Error);
@@ -224,7 +197,7 @@ describe("useAutoLogout", () => {
 			jwtTimerResponse.rejected = false;
 
 			const { sessionStatus, extendSession } = setup();
-			extendSession();
+			await extendSession();
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Continued);

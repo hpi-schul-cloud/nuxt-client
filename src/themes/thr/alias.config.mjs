@@ -10,7 +10,6 @@ const config = {
 		"assets/img/logo/logo-transparent-mono-48-48.svg",
 		"components/legacy/TheFooter.vue",
 		"components/templates/impressum.vue",
-		"styles/legacy.scss",
 	],
 };
 

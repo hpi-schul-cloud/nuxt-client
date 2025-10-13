@@ -1,20 +1,11 @@
 <template>
-	<DefaultWireframe
-		ref="main"
-		max-width="short"
-		:fab-items="fabItems"
-		@on-fab-item-click="fabItemClickHandler"
-	>
+	<DefaultWireframe ref="main" max-width="short" :fab-items="fabItems" @on-fab-item-click="fabItemClickHandler">
 		<template #header>
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
 			<VContainer class="loader">
-				<VSkeletonLoader
-					ref="skeleton-loader"
-					type="date-picker-days"
-					class="mt-6"
-				/>
+				<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
 			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
@@ -33,20 +24,18 @@
 </template>
 
 <script setup lang="ts">
+import { Fab, FabAction } from "./default-wireframe.types";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	authModule,
-	commonCartridgeImportModule,
-	envConfigModule,
-	courseRoomListModule,
-} from "@/store";
+import { Permission } from "@/serverApi/v3";
+import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { Fab, FabAction } from "./default-wireframe.types";
-import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 
 enum RoomFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",
@@ -68,8 +57,10 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
+const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
+
 const fabItems: ComputedRef<Fab | undefined> = computed(() => {
-	if (authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())) {
+	if (canCreateCourse.value) {
 		const actions: FabAction[] = [
 			{
 				icon: mdiSchoolOutline,
@@ -80,7 +71,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 			},
 		];
 
-		if (envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
+		if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
 			actions.push({
 				icon: mdiSync,
 				label: t("pages.rooms.fab.add.syncedCourse"),
@@ -90,7 +81,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 			});
 		}
 
-		if (envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
+		if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
 			actions.push({
 				icon: mdiImport,
 				label: t("pages.rooms.fab.import.course"),
@@ -119,15 +110,9 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	return undefined;
 });
 
-const isLoading: ComputedRef<boolean> = computed(() => {
-	return courseRoomListModule.getLoading;
-});
+const isLoading = computed(() => courseRoomListModule.getLoading);
 
-const isEmptyState: ComputedRef<boolean> = computed(() => {
-	return (
-		!courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken
-	);
-});
+const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken);
 
 const fabItemClickHandler = (event: string | undefined): void => {
 	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {
@@ -154,7 +139,7 @@ const fabItemClickHandler = (event: string | undefined): void => {
 }
 
 .loader {
-	max-width: var(--size-content-width-max);
+	max-width: var(--content-max-width);
 }
 
 @media #{map.get($display-breakpoints, 'sm-and-up')} {

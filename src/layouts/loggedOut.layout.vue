@@ -12,20 +12,19 @@
 </template>
 
 <script setup lang="ts">
+import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting.vue";
-import Logo from "@/assets/img/logo/logo-image-mono.svg";
-import { injectStrict, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const ghostBaseUrl = computed(() => envConfigModule.getEnv.GHOST_BASE_URL);
+const ghostBaseUrl = computed(() => useEnvConfig().value.GHOST_BASE_URL);
 
 const navbarItems = computed(() => [
 	{
@@ -45,9 +44,7 @@ const navbarItems = computed(() => [
 	},
 ]);
 
-const isMobile = computed(() => {
-	return xs.value;
-});
+const isMobile = computed(() => xs.value);
 </script>
 
 <style lang="scss" scoped>
@@ -80,8 +77,8 @@ const isMobile = computed(() => {
 .wrapper {
 	grid-area: content;
 	min-height: calc(100vh - var(--legacy-topbar-height));
-	padding-right: calc(15 * var(--border-width));
-	padding-left: calc(15 * var(--border-width));
+	padding-right: 15px;
+	padding-left: 15px;
 	margin: 24px auto;
 }
 

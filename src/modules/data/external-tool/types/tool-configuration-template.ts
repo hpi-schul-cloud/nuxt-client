@@ -15,12 +15,10 @@ export interface ExternalToolConfigurationTemplate {
 	medium?: ExternalToolMediumResponse;
 }
 
-export interface SchoolExternalToolConfigurationTemplate
-	extends ExternalToolConfigurationTemplate {
+export interface SchoolExternalToolConfigurationTemplate extends ExternalToolConfigurationTemplate {
 	isDeactivated: boolean;
 }
 
-export interface ContextExternalToolConfigurationTemplate
-	extends ExternalToolConfigurationTemplate {
+export interface ContextExternalToolConfigurationTemplate extends ExternalToolConfigurationTemplate {
 	schoolExternalToolId: string;
 }

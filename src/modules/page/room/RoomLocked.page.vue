@@ -2,7 +2,7 @@
 	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<div class="d-flex mt-3">
-				<h1 class="text-h3 pb-2 ma-0" data-testid="locked-room-title">
+				<h1 class="pb-2 ma-0" data-testid="locked-room-title">
 					{{ title }}
 				</h1>
 			</div>
@@ -15,19 +15,19 @@
 				data-testid="img-permission"
 			/>
 			<div>
-				<h3 class="ml-4 text-center text-h4 error-msg pl-4 pr-4">
+				<h2 class="ml-4 text-center px-4">
 					{{ t("pages.room.locked") }}
-				</h3>
+				</h2>
 			</div>
 		</div>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
+import PermissionErrorSvg from "../../../assets/img/PermissionErrorSvg.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import PermissionErrorSvg from "../../../assets/img/PermissionErrorSvg.vue";
 
 interface Props {
 	title: string;

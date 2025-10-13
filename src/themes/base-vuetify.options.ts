@@ -1,7 +1,7 @@
-import * as materialAliases from "@/components/icons/material";
-import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
-import { type ThemeDefinition } from "vuetify";
 import { customAliases } from "@/components/icons/custom";
+import * as materialAliases from "@/components/icons/material";
+import { type ThemeDefinition } from "vuetify";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 
 declare global {
 	interface Window {
@@ -23,7 +23,7 @@ const baseTheme: ThemeDefinition = {
 		"success-darken-1": "#0e8c71",
 		warning: "#ff8311",
 		"warning-lighten-1": "#fff0e2",
-		error: "#ff1134",
+		error: "#ed0122",
 		"error-darken-1": "#bf0d26",
 		"surface-variant": "#4E555D",
 		"on-surface-variant": "#F7F7F8",

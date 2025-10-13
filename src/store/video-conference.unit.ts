@@ -1,24 +1,20 @@
+import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
+import VideoConferenceModule from "./video-conference";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	VideoConferenceApiInterface,
+	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-	VideoConferenceJoinResponse,
 } from "@/serverApi/v3/api";
 import {
 	videoConferenceInfoFactory,
 	videoConferenceInfoResponseFactory,
 	videoConferenceJoinResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { AxiosError } from "axios";
-import {
-	VideoConferenceInfo,
-	VideoConferenceOptions,
-	VideoConferenceState,
-} from "./types/video-conference";
-import VideoConferenceModule from "./video-conference";
-import { createMock } from "@golevelup/ts-vitest";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { createMock } from "@golevelup/ts-vitest";
+import { AxiosError } from "axios";
 
 describe("VideoConferenceModule", () => {
 	let module: VideoConferenceModule;
@@ -145,9 +141,7 @@ describe("VideoConferenceModule", () => {
 					state: VideoConferenceState.RUNNING,
 				});
 
-				videoconferenceApi.videoConferenceControllerInfo.mockResolvedValue(
-					mockApiResponse({ data: response })
-				);
+				videoconferenceApi.videoConferenceControllerInfo.mockResolvedValue(mockApiResponse({ data: response }));
 
 				return {
 					state,
@@ -194,9 +188,7 @@ describe("VideoConferenceModule", () => {
 
 				const error = new AxiosError();
 
-				videoconferenceApi.videoConferenceControllerInfo.mockRejectedValue(
-					error
-				);
+				videoconferenceApi.videoConferenceControllerInfo.mockRejectedValue(error);
 
 				return {
 					error,
@@ -243,14 +235,11 @@ describe("VideoConferenceModule", () => {
 			const setup = () => {
 				const { videoconferenceApi } = mockApi();
 
-				const mockResponse: VideoConferenceJoinResponse =
-					videoConferenceJoinResponseFactory.build({
-						url: "VideoConferenceUrl",
-					});
+				const mockResponse: VideoConferenceJoinResponse = videoConferenceJoinResponseFactory.build({
+					url: "VideoConferenceUrl",
+				});
 
-				videoconferenceApi.videoConferenceControllerJoin.mockResolvedValue(
-					mockApiResponse({ data: mockResponse })
-				);
+				videoconferenceApi.videoConferenceControllerJoin.mockResolvedValue(mockApiResponse({ data: mockResponse }));
 
 				return {
 					mockResponse,
@@ -260,11 +249,10 @@ describe("VideoConferenceModule", () => {
 			it("should return a response in course scope", async () => {
 				const { mockResponse } = setup();
 
-				const response: VideoConferenceJoinResponse | undefined =
-					await module.joinVideoConference({
-						scopeId: "scopeId",
-						scope: VideoConferenceScope.Course,
-					});
+				const response: VideoConferenceJoinResponse | undefined = await module.joinVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Course,
+				});
 
 				expect(response).toEqual(mockResponse);
 			});
@@ -272,11 +260,10 @@ describe("VideoConferenceModule", () => {
 			it("should return a response in room scope", async () => {
 				const { mockResponse } = setup();
 
-				const response: VideoConferenceJoinResponse | undefined =
-					await module.joinVideoConference({
-						scopeId: "scopeId",
-						scope: VideoConferenceScope.Room,
-					});
+				const response: VideoConferenceJoinResponse | undefined = await module.joinVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Room,
+				});
 
 				expect(response).toEqual(mockResponse);
 			});
@@ -284,11 +271,10 @@ describe("VideoConferenceModule", () => {
 			it("should return a response in video conference element scope", async () => {
 				const { mockResponse } = setup();
 
-				const response: VideoConferenceJoinResponse | undefined =
-					await module.joinVideoConference({
-						scopeId: "scopeId",
-						scope: VideoConferenceScope.VideoConferenceElement,
-					});
+				const response: VideoConferenceJoinResponse | undefined = await module.joinVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.VideoConferenceElement,
+				});
 
 				expect(response).toEqual(mockResponse);
 			});
@@ -300,9 +286,7 @@ describe("VideoConferenceModule", () => {
 
 				const error = new AxiosError();
 
-				videoconferenceApi.videoConferenceControllerJoin.mockRejectedValue(
-					error
-				);
+				videoconferenceApi.videoConferenceControllerJoin.mockRejectedValue(error);
 
 				return {
 					error,
@@ -373,12 +357,14 @@ describe("VideoConferenceModule", () => {
 					logoutUrl: "mockUrl",
 				});
 
-				expect(
-					videoconferenceApi.videoConferenceControllerStart
-				).toHaveBeenCalledWith(VideoConferenceScope.Course, "scopeId", {
-					...videoConferenceOptions,
-					logoutUrl: "mockUrl",
-				});
+				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
+					VideoConferenceScope.Course,
+					"scopeId",
+					{
+						...videoConferenceOptions,
+						logoutUrl: "mockUrl",
+					}
+				);
 			});
 
 			it("should call apiMock.videoConferenceControllerStart in room scope", async () => {
@@ -391,12 +377,14 @@ describe("VideoConferenceModule", () => {
 					logoutUrl: "mockUrl",
 				});
 
-				expect(
-					videoconferenceApi.videoConferenceControllerStart
-				).toHaveBeenCalledWith(VideoConferenceScope.Room, "scopeId", {
-					...videoConferenceOptions,
-					logoutUrl: "mockUrl",
-				});
+				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
+					VideoConferenceScope.Room,
+					"scopeId",
+					{
+						...videoConferenceOptions,
+						logoutUrl: "mockUrl",
+					}
+				);
 			});
 
 			it("should call apiMock.videoConferenceControllerStart in video conference element scope", async () => {
@@ -409,9 +397,7 @@ describe("VideoConferenceModule", () => {
 					logoutUrl: "mockUrl",
 				});
 
-				expect(
-					videoconferenceApi.videoConferenceControllerStart
-				).toHaveBeenCalledWith(
+				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
 					VideoConferenceScope.VideoConferenceElement,
 					"scopeId",
 					{
@@ -434,9 +420,7 @@ describe("VideoConferenceModule", () => {
 					everybodyJoinsAsModerator: false,
 				};
 
-				videoconferenceApi.videoConferenceControllerStart.mockRejectedValue(
-					error
-				);
+				videoconferenceApi.videoConferenceControllerStart.mockRejectedValue(error);
 
 				return {
 					error,
