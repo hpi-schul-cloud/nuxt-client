@@ -1,6 +1,6 @@
 <template>
 	<VSelect
-		ref="languageSelect"
+		ref="languageSelectElement"
 		v-model="lang"
 		aria-labelledby="language-heading"
 		:items="languages"
@@ -27,7 +27,7 @@ const emit = defineEmits<{
 
 const i18n = useI18n();
 const { t } = i18n;
-const languageSelect = useTemplateRef("languageSelect");
+const languageSelectElement = useTemplateRef("languageSelectElement");
 const lang = toRef(props, "selectedLanguage");
 
 const onUpdateLanguage = (value: LanguageType) => {
@@ -36,7 +36,7 @@ const onUpdateLanguage = (value: LanguageType) => {
 };
 
 onMounted(() => {
-	languageSelect.value?.focus();
+	languageSelectElement.value?.focus();
 });
 
 const languages = [

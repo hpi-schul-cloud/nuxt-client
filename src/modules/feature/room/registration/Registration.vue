@@ -13,7 +13,7 @@
 						<h2 class="mb-10">{{ step.subtitle }}</h2>
 						<LanguageSelection
 							v-if="step.value === 1"
-							:selected-language="selectedLanguage"
+							:selected-language="lang"
 							@update:selected-language="onUpdateSelectedLanguage"
 						/>
 					</VStepperWindowItem>
@@ -44,29 +44,20 @@
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import { LanguageType } from "@/serverApi/v3";
-import { computed, ref } from "vue";
+import { useRegistration } from "@data-room";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
-type Props = {
-	selectedLanguage?: LanguageType;
-};
-
-withDefaults(defineProps<Props>(), {
-	selectedLanguage: LanguageType.De,
-});
-
-const emit = defineEmits<{
-	(e: "update:selectedLanguage", value: LanguageType): void;
-}>();
-
 const { t } = useI18n();
 const { xs, sm } = useDisplay();
-
 const mobileView = computed(() => xs.value || sm.value);
 
+const { selectedLanguage, setSelectedLanguage, initializeLanguage } = useRegistration();
+const lang = computed(() => selectedLanguage.value || LanguageType.De);
+
 const onUpdateSelectedLanguage = (value: string) => {
-	emit("update:selectedLanguage", value as LanguageType);
+	setSelectedLanguage(value as LanguageType);
 };
 
 const stepValue = ref(1);
@@ -74,6 +65,10 @@ const stepValue = ref(1);
 const onStepperClick = (value: number) => {
 	stepValue.value = value;
 };
+
+onMounted(() => {
+	initializeLanguage();
+});
 
 const steps = computed(() => [
 	{

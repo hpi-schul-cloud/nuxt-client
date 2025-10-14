@@ -1,27 +1,23 @@
 <template>
 	<h1 ref="registrationTitle" tabindex="0">{{ t("pages.registrationExternalMembers.steps.registration.title") }}</h1>
-	<Registration :selected-language="selectedLanguage" @update:selected-language="setSelectedLanguage" />
+	<Registration />
 </template>
 
 <script setup lang="ts">
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useRegistration } from "@data-room";
 import { Registration } from "@feature-room";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { selectedLanguage, setSelectedLanguage, getLanguageFromCookie } = useRegistration();
-
 const { t } = useI18n();
-
-const registrationTitle = useTemplateRef("registrationTitle");
 
 const pageTitle = computed(() => buildPageTitle(t("common.labels.registration")));
 useTitle(pageTitle);
 
+const registrationTitle = useTemplateRef("registrationTitle");
+
 onMounted(() => {
-	getLanguageFromCookie();
 	registrationTitle.value?.focus();
 });
 </script>

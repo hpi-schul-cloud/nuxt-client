@@ -7,7 +7,7 @@ export const useRegistration = () => {
 	const selectedLanguage = ref<LanguageType | undefined>(undefined);
 	// extend this composable with more registration related logic in the future
 
-	const getLanguageFromCookie = () => {
+	const initializeLanguage = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
 		if (match) {
 			selectedLanguage.value = match[1] as LanguageType;
@@ -27,5 +27,5 @@ export const useRegistration = () => {
 		i18n.locale.value = value;
 	};
 
-	return { selectedLanguage, setCookie, setSelectedLanguage, getLanguageFromCookie };
+	return { selectedLanguage, setCookie, setSelectedLanguage, initializeLanguage };
 };

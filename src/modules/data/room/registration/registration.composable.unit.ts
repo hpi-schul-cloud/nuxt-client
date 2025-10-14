@@ -11,8 +11,8 @@ vi.mock("vue-i18n", () => ({
 
 describe("useRegistration", () => {
 	const setup = () => {
-		const { selectedLanguage, setCookie, setSelectedLanguage, getLanguageFromCookie } = useRegistration();
-		return { selectedLanguage, setCookie, setSelectedLanguage, getLanguageFromCookie };
+		const { selectedLanguage, setCookie, setSelectedLanguage, initializeLanguage } = useRegistration();
+		return { selectedLanguage, setCookie, setSelectedLanguage, initializeLanguage };
 	};
 
 	it("should initialize with undefined selectedLanguage", () => {
@@ -25,8 +25,8 @@ describe("useRegistration", () => {
 			writable: true,
 			value: "",
 		});
-		const { selectedLanguage, getLanguageFromCookie } = setup();
-		getLanguageFromCookie();
+		const { selectedLanguage, initializeLanguage } = setup();
+		initializeLanguage();
 
 		expect(selectedLanguage.value).toBeUndefined();
 	});
@@ -36,8 +36,8 @@ describe("useRegistration", () => {
 			writable: true,
 			value: `USER_LANG=${LanguageType.En}`,
 		});
-		const { selectedLanguage, getLanguageFromCookie } = setup();
-		getLanguageFromCookie();
+		const { selectedLanguage, initializeLanguage } = setup();
+		initializeLanguage();
 
 		expect(selectedLanguage.value).toBe(LanguageType.En);
 	});
