@@ -177,7 +177,9 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 					});
 
 					if (element) {
-						const emptyDocUrl = new URL("@/assets/emptyDoc.docx", import.meta.url).toString();
+						const emptyDocUrl = new URL("@/assets/empty-doc.docx", import.meta.url).toString();
+						// const emptyDocUrl = new URL("@/assets/emptySpreadsheet.xlsx", import.meta.url).toString();
+
 						// eslint-disable-next-line no-console
 						console.log(emptyDocUrl);
 						uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES);
