@@ -1,5 +1,5 @@
 <template>
-	<h1 ref="registrationTitle" tabindex="0">{{ t("pages.registrationExternalMembers.steps.registration.title") }}</h1>
+	<h1 ref="registrationTitle" tabindex="-1">{{ t("pages.registrationExternalMembers.steps.registration.title") }}</h1>
 	<Registration />
 </template>
 
@@ -21,3 +21,9 @@ onMounted(() => {
 	registrationTitle.value?.focus();
 });
 </script>
+
+<style scoped>
+h1:focus {
+	outline: none;
+}
+</style>
