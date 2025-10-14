@@ -400,7 +400,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "registration-external-members",
 		meta: {
 			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
 		},
 	},
 	{
