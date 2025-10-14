@@ -69,12 +69,6 @@ describe("Registration.vue", () => {
 					expect(backButton.exists()).toBe(false);
 					expect(nextButton.exists()).toBe(true);
 				});
-
-				it("should have 'Language Selection' component", () => {
-					const { wrapper } = setup();
-					const languageSelectionComponent = wrapper.findComponent({ name: "LanguageSelection" });
-					expect(languageSelectionComponent.exists()).toBe(true);
-				});
 			});
 
 			describe("when step is greater than 1", () => {
@@ -91,14 +85,24 @@ describe("Registration.vue", () => {
 			});
 		});
 
-		it("should call setSelectedLanguage when language is updated", async () => {
-			const { wrapper, useRegistration } = setup();
-			const languageSelectionComponent = wrapper.findComponent({ name: "LanguageSelection" });
+		describe("Language Selection Component", () => {
+			it("should call setSelectedLanguage when language is updated", async () => {
+				const { wrapper, useRegistration } = setup();
+				const languageSelectionComponent = wrapper.findComponent({ name: "LanguageSelection" });
 
-			languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.En);
-			await nextTick();
+				languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.En);
+				await nextTick();
 
-			expect(useRegistration.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.En);
+				expect(useRegistration.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.En);
+			});
+
+			it("should have default language as German even if the selectedLanguage's value is undefined", () => {
+				const { wrapper, useRegistration } = setup();
+				useRegistration.selectedLanguage.value = undefined;
+				const languageSelectionComponent = wrapper.findComponent({ name: "LanguageSelection" });
+
+				expect(languageSelectionComponent.props("selectedLanguage")).toBe(LanguageType.De);
+			});
 		});
 	});
 });
