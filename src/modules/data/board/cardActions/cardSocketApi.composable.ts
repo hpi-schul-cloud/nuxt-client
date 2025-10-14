@@ -98,9 +98,12 @@ export const useCardSocketApi = () => {
 	const createElementRequest = async (payload: CreateElementRequestPayload): Promise<AnyContentElement | undefined> => {
 		const response = (await emitWithAck("create-element-request", payload)) as unknown;
 
-		const anyContentElement = AnyContentElementSchema.parse(response);
-
-		return anyContentElement;
+		try {
+			const anyContentElement = AnyContentElementSchema.parse(response);
+			return anyContentElement;
+		} catch {
+			return undefined;
+		}
 	};
 
 	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
