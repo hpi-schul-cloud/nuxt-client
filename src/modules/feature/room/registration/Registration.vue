@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<VStepper v-model="stepValue" alt-labels non-linear :mobile="mobileView">
+		<VStepper v-model="stepValue" alt-labels :mobile="mobileView">
 			<VStepperHeader>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperItem :value="step.value" :step="step.value" color="primary" :title="step.title" />
@@ -19,34 +19,45 @@
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
-			<div class="v-stepper-actions">
-				<VBtn text :disabled="stepValue === 1" @click="onStepperClick(stepValue - 1)">
-					{{ t("common.actions.back") }}
-				</VBtn>
-				<VBtn text color="primary" :disabled="stepValue === steps.length" @click="onStepperClick(stepValue + 1)">
-					{{ t("common.actions.continue") }}
-				</VBtn>
-			</div>
+			<VStepperActions>
+				<template #prev>
+					<VBtn v-if="stepValue > 1" @click="onStepperClick(stepValue - 1)">
+						{{ t("common.actions.back") }}
+					</VBtn>
+				</template>
+				<template #next>
+					<VSpacer v-if="stepValue === 1" />
+					<VBtn
+						variant="flat"
+						color="primary"
+						:disabled="stepValue === steps.length"
+						@click="onStepperClick(stepValue + 1)"
+					>
+						{{ t("common.actions.continue") }}
+					</VBtn>
+				</template>
+			</VStepperActions>
 		</VStepper>
 	</div>
 </template>
 
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
+import { LanguageType } from "@/serverApi/v3";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 type Props = {
-	selectedLanguage?: string;
+	selectedLanguage?: LanguageType;
 };
 
 withDefaults(defineProps<Props>(), {
-	selectedLanguage: "de",
+	selectedLanguage: LanguageType.De,
 });
 
 const emit = defineEmits<{
-	(e: "update:selectedLanguage", value: string): void;
+	(e: "update:selectedLanguage", value: LanguageType): void;
 }>();
 
 const { t } = useI18n();
@@ -55,7 +66,7 @@ const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
 
 const onUpdateSelectedLanguage = (value: string) => {
-	emit("update:selectedLanguage", value);
+	emit("update:selectedLanguage", value as LanguageType);
 };
 
 const stepValue = ref(1);
