@@ -21,7 +21,7 @@
 			</VStepperWindow>
 			<VStepperActions>
 				<template #prev>
-					<VBtn v-if="stepValue > 1" @click="onStepperClick(stepValue - 1)">
+					<VBtn v-if="stepValue > 1" data-testid="registration-back-button" @click="onStepperClick(stepValue - 1)">
 						{{ t("common.actions.back") }}
 					</VBtn>
 				</template>
@@ -30,6 +30,7 @@
 					<VBtn
 						variant="flat"
 						color="primary"
+						data-testid="registiration-continue-button"
 						:disabled="stepValue === steps.length"
 						@click="onStepperClick(stepValue + 1)"
 					>
