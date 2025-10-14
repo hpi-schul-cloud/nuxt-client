@@ -18,6 +18,7 @@ import {
 	mdiTrayArrowUp,
 	mdiVideoOutline,
 } from "@icons/material";
+import { useSharedFileSelect } from "@util-board";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -34,6 +35,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { t } = useI18n();
 
 	const { uploadFromUrl } = useFileStorageApi();
+	const { triggerFileSelect } = useSharedFileSelect();
 
 	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
 		useSharedElementTypeSelection();
@@ -168,18 +170,20 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				icon: mdiFileDocumentOutline,
 				label: t("Textdokument"),
 				action: async () => {
+					triggerFileSelect.value = false;
 					const element = await createElementRequestFn({
 						type: ContentElementType.File,
 						cardId,
 					});
 
 					if (element) {
-						uploadFromUrl(
-							"https://www.dsv.org/downloads/musterausschreibung/",
-							element.id,
-							FileRecordParentType.BOARDNODES
-						);
+						const emptyDocUrl = new URL("@/assets/emptyDoc.docx", import.meta.url).toString();
+						// eslint-disable-next-line no-console
+						console.log(emptyDocUrl);
+						uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES);
 					}
+
+					closeDialog();
 				},
 				testId: "create-element-collabora",
 			});
