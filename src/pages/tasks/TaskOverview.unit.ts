@@ -47,7 +47,7 @@ describe("TaskOverview", () => {
 
 	it("should set title to tasks", () => {
 		getWrapper(RoleName.Superhero);
-		expect(document.title).toBe(`common.words.tasks`);
+		expect(document.title).toBe(`common.words.tasks - dBildungscloud`);
 	});
 
 	it("should fetchAllTasks on mount", () => {

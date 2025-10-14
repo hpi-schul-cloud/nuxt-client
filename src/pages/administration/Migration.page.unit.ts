@@ -116,10 +116,11 @@ describe("User Migration / Index", () => {
 	it("should set page title", () => {
 		const wrapper = getWrapperShallow();
 
-		const title = wrapper.vm.t?.("pages.administration.migration.title", {
-			source: "LDAP",
-			instance: $theme.name,
-		});
+		const title =
+			wrapper.vm.t?.("pages.administration.migration.title", {
+				source: "LDAP",
+				instance: $theme.name,
+			}) + " - dBildungscloud";
 		expect(document.title).toBe(title);
 	});
 

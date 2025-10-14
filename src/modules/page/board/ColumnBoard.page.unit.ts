@@ -1,6 +1,8 @@
 import ColumnBoardPage from "./ColumnBoard.page.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 vi.mock(
 	"@/utils/pageTitle",
@@ -13,6 +15,7 @@ vi.mock(
 
 describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {
+		setActivePinia(createTestingPinia());
 		const boardId = "test-board-id";
 
 		const wrapper = shallowMount(ColumnBoardPage, {

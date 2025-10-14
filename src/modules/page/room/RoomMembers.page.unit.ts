@@ -208,12 +208,13 @@ describe("RoomMembersPage", () => {
 		it("should set correct title when user can add members", () => {
 			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { room } = setup();
-			expect(document.title).toContain(`${room?.name} - pages.rooms.members.manage`);
+			expect(document.title).toContain(`pages.rooms.members.management - ${room?.name}`);
 		});
+
 		it("should set correct title when user can not add members", () => {
 			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { room } = setup();
-			expect(document.title).toContain(`${room?.name} - pages.rooms.members.label`);
+			expect(document.title).toContain(`pages.rooms.members.label - ${room?.name}`);
 		});
 	});
 
