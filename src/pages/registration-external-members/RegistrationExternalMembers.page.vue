@@ -4,7 +4,6 @@
 </template>
 
 <script setup lang="ts">
-import { LanguageType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRegistration } from "@data-room";
 import { Registration } from "@feature-room";
@@ -12,7 +11,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, onMounted, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { selectedLanguage, getCookieValue, setSelectedLanguage } = useRegistration();
+const { selectedLanguage, setSelectedLanguage, getLanguageFromCookie } = useRegistration();
 
 const { t } = useI18n();
 
@@ -22,7 +21,7 @@ const pageTitle = computed(() => buildPageTitle(t("common.labels.registration"))
 useTitle(pageTitle);
 
 onMounted(() => {
-	selectedLanguage.value = getCookieValue() || LanguageType.De;
+	getLanguageFromCookie();
 	registrationTitle.value?.focus();
 });
 </script>
