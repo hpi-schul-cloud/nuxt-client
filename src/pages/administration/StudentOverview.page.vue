@@ -56,7 +56,7 @@
 					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
 				<template #datacolumn-classes="{ data }">
-					{{ (data || []).join(", ") }}
+					{{ (data || []).map((cls) => `${cls.gradeLevel}${cls.name} (${cls.yearName})`).join(", ") }}
 				</template>
 				<template #headcolumn-consent />
 				<template #columnlabel-consent />

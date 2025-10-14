@@ -50,7 +50,7 @@
 				@update:rows-per-page="onUpdateRowsPerPage"
 			>
 				<template #datacolumn-classes="{ data }">
-					{{ (data || []).join(", ") }}
+					{{ (data || []).map((cls) => `${cls.gradeLevel}${cls.name} (${cls.yearName})`).join(", ") }}
 				</template>
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
