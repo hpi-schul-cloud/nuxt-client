@@ -4,6 +4,7 @@
 		aria-labelledby="language-heading"
 		:items="languages"
 		:label="t('pages.administration.school.index.generalSettings.labels.language')"
+		data-testid="language-selection"
 		@update:model-value="onUpdateLanguage"
 	/>
 </template>
