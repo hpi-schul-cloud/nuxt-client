@@ -6,15 +6,7 @@
 			</VCardTitle>
 			<VCardText class="d-flex flex-row flex-wrap align-center">
 				<ExtendedIconBtn
-					v-for="(item, key) in staticElementTypeOptions"
-					:key="key"
-					:data-testid="item.testId"
-					:icon="item.icon"
-					:label="item.label"
-					@click.stop="item.action"
-				/>
-				<ExtendedIconBtn
-					v-for="(item, key) in dynamicElementTypeOptions"
+					v-for="(item, key) in elementTypeOptions"
 					:key="key"
 					:data-testid="item.testId"
 					:icon="item.icon"
@@ -37,13 +29,13 @@ import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
-	useSharedElementTypeSelection();
+const { isDialogOpen, isDialogLoading, closeDialog, elementTypeOptions } = useSharedElementTypeSelection();
 
 const { t } = useI18n();
 
 const dialogWidth: ComputedRef<number> = computed(() => {
-	const totalOptions = staticElementTypeOptions.value.length + dynamicElementTypeOptions.value.length;
+	const totalOptions = elementTypeOptions.value.length;
+
 	return totalOptions >= 3 ? 426 : 320;
 });
 </script>
