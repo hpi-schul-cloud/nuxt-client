@@ -391,7 +391,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "licenses",
 		meta: {
 			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
 		},
 	},
 	{
