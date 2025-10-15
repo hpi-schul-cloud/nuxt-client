@@ -78,7 +78,7 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersWithoutApplicants, roomMembersForAdmins, selectedIds, baseTableHeaders } =
+const { currentUserId, roomMembersWithoutApplicants, roomMembersForAdmins, selectedIds, baseTableHeaders } =
 	storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers, fetchMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
@@ -163,6 +163,11 @@ const canRemoveMember = (item: RoomMember | string[]) => {
 		const members = membersByIds(item);
 		return members.every(canRemoveMember);
 	}
+
+	if (currentUserId.value && isRoomOwner(currentUserId.value)) {
+		return !isRoomOwner(item.userId);
+	}
+
 	return !isRoomOwner(item.userId) && belongsToOwnSchool(item.userId);
 };
 

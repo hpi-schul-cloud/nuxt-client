@@ -389,6 +389,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		addMembers,
 		isRoomOwner,
 		changeRoomOwner,
+		currentUserId,
 		confirmInvitations,
 		fetchMembers,
 		resetPotentialMembers,
