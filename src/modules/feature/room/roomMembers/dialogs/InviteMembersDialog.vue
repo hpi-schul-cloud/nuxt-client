@@ -201,8 +201,8 @@ const isInviteExternalPersonsFeatureEnabled = computed(
 const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
-	isValidForStudents: false,
-	isValidForExternalPersons: false,
+	isUsableByStudents: false,
+	isUsableByExternalPersons: undefined,
 	activeUntilChecked: false,
 	activeUntil: undefined,
 	requiresConfirmation: true,
@@ -270,8 +270,8 @@ const onContinue = async () => {
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
 				: DEFAULT_EXPIRED_DATE.value,
-		isOnlyForTeachers: !formData.value.isValidForStudents,
-		isValidForExternalPersons: formData.value.isValidForExternalPersons,
+		isUsableByStudents: formData.value.isUsableByStudents,
+		isUsableByExternalPersons: formData.value.isUsableByExternalPersons,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
@@ -303,7 +303,7 @@ watch(
 	() => formData.value.restrictedToCreatorSchool,
 	(isRestrictedToCreatorSchool: boolean) => {
 		if (isRestrictedToCreatorSchool === false) {
-			formData.value.isValidForStudents = false;
+			formData.value.isUsableByStudents = false;
 		}
 	}
 );
@@ -315,7 +315,8 @@ watch(
 			formData.value.id = newVal.id;
 			formData.value.title = newVal.title;
 			formData.value.restrictedToCreatorSchool = newVal.restrictedToCreatorSchool;
-			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
+			formData.value.isUsableByStudents = newVal.isUsableByStudents;
+			formData.value.isUsableByExternalPersons = newVal.isUsableByExternalPersons;
 			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
 			formData.value.activeUntil = newVal.activeUntil ? new Date(newVal.activeUntil) : undefined;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;

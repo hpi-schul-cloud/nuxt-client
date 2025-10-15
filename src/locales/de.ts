@@ -1671,6 +1671,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Beschreibung",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Nur schulintern gültig",
 	"pages.rooms.members.tableHeader.validForStudents": "Auch für Lernende gültig",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "Auch für externe Personen gültig",
 	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Bestätigung erforderlich",
 	"pages.rooms.members.tableHeader.status": "Status",
