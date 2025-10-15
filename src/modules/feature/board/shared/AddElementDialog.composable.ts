@@ -37,8 +37,16 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { uploadFromUrl } = useFileStorageApi();
 	const { triggerFileSelect } = useSharedFileSelect();
 
-	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
-		useSharedElementTypeSelection();
+	const {
+		isDialogOpen,
+		isDialogLoading,
+		isCollaboraDialogOpen,
+		closeDialog,
+		closeCollaboraDialog,
+		staticElementTypeOptions,
+		dynamicElementTypeOptions,
+		collaboraElementTypeOptions,
+	} = useSharedElementTypeSelection();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -168,67 +176,11 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
 			options.push({
 				icon: mdiFileDocumentOutline,
-				label: t("Textdokument"),
+				label: t("Dokument erstellen"),
 				action: async () => {
-					triggerFileSelect.value = false;
-					const element = await createElementRequestFn({
-						type: ContentElementType.File,
-						cardId,
-					});
-
-					if (element) {
-						const emptyDocUrl = new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString();
-
-						uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.docx");
-					}
-
+					askTypeCollabora();
 					closeDialog();
-				},
-				testId: "create-element-collabora",
-			});
-			options.push({
-				icon: mdiFileDocumentOutline,
-				label: t("Tabelle"),
-				action: async () => {
-					triggerFileSelect.value = false;
-					const element = await createElementRequestFn({
-						type: ContentElementType.File,
-						cardId,
-					});
-
-					if (element) {
-						const emptySpreadsheetUrl = new URL(
-							"@/assets/collabora/empty-spreadsheet.xlsx",
-							import.meta.url
-						).toString();
-
-						uploadFromUrl(emptySpreadsheetUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.xlsx");
-					}
-
-					closeDialog();
-				},
-				testId: "create-element-collabora",
-			});
-			options.push({
-				icon: mdiFileDocumentOutline,
-				label: t("Präsentation"),
-				action: async () => {
-					triggerFileSelect.value = false;
-					const element = await createElementRequestFn({
-						type: ContentElementType.File,
-						cardId,
-					});
-
-					if (element) {
-						const emptyPresentationUrl = new URL(
-							"@/assets/collabora/empty-presentation.pptx",
-							import.meta.url
-						).toString();
-
-						uploadFromUrl(emptyPresentationUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.pptx");
-					}
-
-					closeDialog();
+					isCollaboraDialogOpen.value = true;
 				},
 				testId: "create-element-collabora",
 			});
@@ -261,13 +213,81 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		dynamicElementTypeOptions.value = options;
 	};
 
+	const getCollaboraElementOptions = (): ElementTypeSelectionOptions[] => [
+		{
+			icon: mdiFileDocumentOutline,
+			label: t("Word Dokument"),
+			action: async () => {
+				triggerFileSelect.value = false;
+				const element = await createElementRequestFn({
+					type: ContentElementType.File,
+					cardId,
+				});
+
+				if (element) {
+					const emptyDocUrl = new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString();
+					uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.docx");
+				}
+
+				closeCollaboraDialog();
+			},
+			testId: "create-element-collabora",
+		},
+		{
+			icon: mdiFileDocumentOutline,
+			label: t("Excel Dokument"),
+			action: async () => {
+				triggerFileSelect.value = false;
+				const element = await createElementRequestFn({
+					type: ContentElementType.File,
+					cardId,
+				});
+
+				if (element) {
+					const emptySpreadsheetUrl = new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString();
+					uploadFromUrl(emptySpreadsheetUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.xlsx");
+				}
+
+				closeCollaboraDialog();
+			},
+			testId: "create-element-collabora",
+		},
+		{
+			icon: mdiFileDocumentOutline,
+			label: t("Powerpoint Dokument"),
+			action: async () => {
+				triggerFileSelect.value = false;
+				const element = await createElementRequestFn({
+					type: ContentElementType.File,
+					cardId,
+				});
+
+				if (element) {
+					const emptyPresentationUrl = new URL(
+						"@/assets/collabora/empty-presentation.pptx",
+						import.meta.url
+					).toString();
+					uploadFromUrl(emptyPresentationUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.pptx");
+				}
+
+				closeCollaboraDialog();
+			},
+			testId: "create-element-collabora",
+		},
+	];
+
 	const staticOptions = getStaticElementOptions();
+	const collaboraOptions = getCollaboraElementOptions();
 
 	const askType = () => {
 		staticElementTypeOptions.value = staticOptions;
 		loadDynamicElementOptions();
 
 		isDialogOpen.value = true;
+	};
+
+	const askTypeCollabora = () => {
+		collaboraElementTypeOptions.value = collaboraOptions;
 	};
 
 	watch(

@@ -4,6 +4,7 @@ import { computed, ComputedRef, Ref, ref } from "vue";
 
 interface Props {
 	closeDialogMock?: Mock;
+	closeCollaboraDialogMock?: Mock;
 }
 
 interface ElementTypeSelectionOptions {
@@ -14,14 +15,17 @@ interface ElementTypeSelectionOptions {
 }
 
 export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
-	const { closeDialogMock } = props;
+	const { closeDialogMock, closeCollaboraDialogMock } = props;
 	const mockedSharedElementTypeSelection = vi.mocked(useSharedElementTypeSelection);
 
 	const closeDialog = closeDialogMock ?? vi.fn();
+	const closeCollaboraDialog = closeCollaboraDialogMock ?? vi.fn();
 	const isDialogOpen = ref(false);
 	const isDialogLoading = ref(false);
+	const isCollaboraDialogOpen = ref(false);
 
 	const staticElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
+	const collaboraElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
 	const dynamicElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
 	const elementTypeOptions: ComputedRef<Array<ElementTypeSelectionOptions>> = computed(() => [
 		...staticElementTypeOptions.value,
@@ -30,11 +34,14 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 
 	const mocks = {
 		closeDialog,
+		closeCollaboraDialog,
 		isDialogOpen,
 		isDialogLoading,
+		isCollaboraDialogOpen,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,
 		elementTypeOptions,
+		collaboraElementTypeOptions,
 	};
 
 	mockedSharedElementTypeSelection.mockReturnValue(mocks);
