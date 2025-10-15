@@ -58,10 +58,15 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const uploadFromUrl = async (imageUrl: string, parentId: string, parentType: FileRecordParent): Promise<void> => {
+	const uploadFromUrl = async (
+		imageUrl: string,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName?: string
+	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1) ?? "name.docx";
+			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1) ?? "name.docx"; // ToDo recheck default name
 			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
