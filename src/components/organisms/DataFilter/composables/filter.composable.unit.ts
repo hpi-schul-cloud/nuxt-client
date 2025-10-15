@@ -1,6 +1,8 @@
 import { FilterOption, Registration, UpdateFilterParamType } from "../types";
 import { useDataTableFilter } from "./filter.composable";
+import SchoolsModule from "@/store/schools";
 import { mountComposable } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 vi.mock("@vueuse/core", async (importOriginal) => {
 	const defaultState = {
@@ -28,7 +30,15 @@ vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
-const setup = (userType: string) => mountComposable(() => useDataTableFilter(userType));
+const setup = (userType: string) =>
+	mountComposable(() => {
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
+		const dataTableFilter = useDataTableFilter(userType);
+
+		return dataTableFilter;
+	});
 
 const removeAllFilters = () => {
 	const { removeFilter, selectedFilterType, filterQuery } = setup("student");
