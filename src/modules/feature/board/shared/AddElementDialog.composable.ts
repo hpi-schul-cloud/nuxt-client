@@ -1,4 +1,8 @@
-import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import {
+	CollaboraElementTypeSelectionOptions,
+	ElementTypeSelectionOptions,
+	useSharedElementTypeSelection,
+} from "./SharedElementTypeSelection.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -213,11 +217,11 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		dynamicElementTypeOptions.value = options;
 	};
 
-	const getCollaboraElementOptions = (): ElementTypeSelectionOptions[] => [
+	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => [
 		{
 			icon: mdiFileDocumentOutline,
 			label: t("Word Dokument"),
-			action: async () => {
+			action: async (fileName: string) => {
 				triggerFileSelect.value = false;
 				const element = await createElementRequestFn({
 					type: ContentElementType.File,
@@ -226,7 +230,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 				if (element) {
 					const emptyDocUrl = new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString();
-					uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.docx");
+					uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES, fileName + ".docx");
 				}
 
 				closeCollaboraDialog();
@@ -236,7 +240,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		{
 			icon: mdiFileDocumentOutline,
 			label: t("Excel Dokument"),
-			action: async () => {
+			action: async (fileName: string) => {
 				triggerFileSelect.value = false;
 				const element = await createElementRequestFn({
 					type: ContentElementType.File,
@@ -245,7 +249,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 				if (element) {
 					const emptySpreadsheetUrl = new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString();
-					uploadFromUrl(emptySpreadsheetUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.xlsx");
+					uploadFromUrl(emptySpreadsheetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + ".xlsx");
 				}
 
 				closeCollaboraDialog();
@@ -255,7 +259,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		{
 			icon: mdiFileDocumentOutline,
 			label: t("Powerpoint Dokument"),
-			action: async () => {
+			action: async (fileName: string) => {
 				triggerFileSelect.value = false;
 				const element = await createElementRequestFn({
 					type: ContentElementType.File,
@@ -267,7 +271,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 						"@/assets/collabora/empty-presentation.pptx",
 						import.meta.url
 					).toString();
-					uploadFromUrl(emptyPresentationUrl, element.id, FileRecordParentType.BOARDNODES, "Dokument.pptx");
+					uploadFromUrl(emptyPresentationUrl, element.id, FileRecordParentType.BOARDNODES, fileName + ".pptx");
 				}
 
 				closeCollaboraDialog();

@@ -12,7 +12,7 @@
 				:data-testid="item.testId"
 				:icon="item.icon"
 				:label="item.label"
-				@click.stop="item.action"
+				@click.stop="item.action('myFile')"
 			/>
 		</template>
 	</Dialog>

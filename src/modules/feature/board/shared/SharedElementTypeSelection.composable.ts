@@ -7,6 +7,12 @@ export interface ElementTypeSelectionOptions {
 	action: () => Promise<void>;
 	testId: string;
 }
+export interface CollaboraElementTypeSelectionOptions {
+	icon: string;
+	label: string;
+	action: (fileName: string) => Promise<void>;
+	testId: string;
+}
 
 export const useSharedElementTypeSelection = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
@@ -14,7 +20,7 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 	const isCollaboraDialogOpen = ref<boolean>(false);
 	const staticElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
 	const dynamicElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
-	const collaboraElementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
+	const collaboraElementTypeOptions = ref<Array<CollaboraElementTypeSelectionOptions>>([]);
 
 	const elementTypeOptions = computed(() => {
 		const combined = [...staticElementTypeOptions.value, ...dynamicElementTypeOptions.value];
