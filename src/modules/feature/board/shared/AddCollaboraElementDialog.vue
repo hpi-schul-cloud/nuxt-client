@@ -8,7 +8,8 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<VForm ref="form" validate-on="submit" @submit.prevent.stop="onConfirm">
+			<VForm id="createCollaboraFileForm" ref="form" validate-on="submit" @submit.prevent.stop="onConfirm">
+				<!-- Attach the select to the form so that we can use focusTrap in the dialog -->
 				<VSelect
 					v-model="selectedDocType"
 					:items="collaboraElementTypeOptions"
@@ -17,6 +18,7 @@
 					persistent-hint
 					:label="t('Dokumententyp')"
 					:rules="docTypeRules"
+					:menu-props="{ attach: '#createCollaboraFileForm' }"
 				/>
 				<VTextField
 					v-model="fileName"
