@@ -42,6 +42,7 @@
 							:data-testid="boardMenuTestId"
 						>
 							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
+							<KebabMenuActionCopy v-if="hasEditPermission" @click="duplicateCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -106,7 +107,12 @@ import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
 import { BoardMenuScope } from "@ui-board";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionCopy,
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
@@ -211,6 +217,12 @@ const boardMenuClasses = computed(() => {
 	}
 	return "hidden";
 });
+
+const duplicateCard = async () => {
+	if (!card.value) return;
+	await cardStore.duplicateCardRequest(card.value.id);
+	emit("reload:board");
+};
 
 onMounted(async () => {
 	if (card.value === undefined) {

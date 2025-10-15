@@ -54,6 +54,7 @@ export const useCardRestApi = () => {
 		moveElementCall,
 		updateCardTitle,
 		updateCardHeightCall,
+		duplicateCardCall,
 	} = useBoardApi();
 
 	const { fetchPreferredTools } = useContextExternalToolApi();
@@ -255,6 +256,21 @@ export const useCardRestApi = () => {
 		}
 	};
 
+	const duplicateCardRequest = async (cardId: string) => {
+		const card = cardStore.getCard(cardId);
+		if (card === undefined) return;
+
+		try {
+			const newCard = await duplicateCardCall(cardId);
+
+			if (newCard.id) {
+				cardStore.duplicateCardSuccess({ newCard });
+			}
+		} catch (error) {
+			handleError(error, {});
+		}
+	};
+
 	const notifyWithTemplateAndReload: ApiErrorHandlerFactory =
 		(errorType: ErrorType, boardObjectType?: BoardObjectType) => () => {
 			notifyWithTemplate(errorType, boardObjectType)();
@@ -275,6 +291,7 @@ export const useCardRestApi = () => {
 		deleteElementRequest,
 		moveElementRequest,
 		updateElementRequest,
+		duplicateCardRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

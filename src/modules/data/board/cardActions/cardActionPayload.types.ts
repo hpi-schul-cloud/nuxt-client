@@ -1,4 +1,4 @@
-import { CardResponse, ContentElementType } from "@/serverApi/v3";
+import { CardResponse, ContentElementType, CopyApiResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 
 export type FetchCardRequestPayload = {
@@ -56,6 +56,13 @@ export type DeleteElementSuccessPayload = {
 	isOwnAction: boolean;
 };
 export type DeleteElementFailurePayload = DeleteElementRequestPayload;
+
+export type DuplicateCardRequestPayload = {
+	cardId: string;
+};
+export type DuplicateCardSuccessPayload = {
+	newCard: CopyApiResponse;
+};
 
 export type DeleteCardRequestPayload = {
 	cardId: string;

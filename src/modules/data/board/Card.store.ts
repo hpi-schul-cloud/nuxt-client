@@ -5,6 +5,7 @@ import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
+	DuplicateCardSuccessPayload,
 	FetchCardSuccessPayload,
 	MoveElementSuccessPayload,
 	UpdateCardHeightSuccessPayload,
@@ -70,6 +71,25 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		card.height = payload.newHeight;
+	};
+
+	// TODO - socketOrRest
+	const duplicateCardRequest = restApi.copyCardRequest;
+
+	const duplicateCardSuccess = async (payload: DuplicateCardSuccessPayload) => {
+		if (payload.newCard.id) {
+			const now = new Date().toISOString();
+
+			const card: CardResponse = {
+				id: payload.newCard.id,
+				title: payload.newCard.title || undefined,
+				elements: [],
+				height: 0,
+				visibilitySettings: { publishedAt: now },
+				timestamps: { createdAt: now, lastUpdatedAt: now },
+			};
+			cards.value[card.id!] = card;
+		}
 	};
 
 	const deleteCardRequest = socketOrRest.deleteCardRequest;
@@ -226,6 +246,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		fetchCardRequest,
 		fetchCardSuccess,
 		cards,
+		duplicateCardRequest,
+		duplicateCardSuccess,
 		deleteCardRequest,
 		deleteCardSuccess,
 		getCard,
