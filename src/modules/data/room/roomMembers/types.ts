@@ -18,7 +18,7 @@ export type RoomInvitationFormData = {
 	activeUntil: Date | undefined;
 	activeUntilChecked: boolean;
 	isUsableByStudents: boolean;
-	isUsableByExternalPersons: boolean | undefined;
+	isUsableByExternalPersons: boolean;
 	requiresConfirmation: boolean;
 	restrictedToCreatorSchool: boolean;
 	title: string;

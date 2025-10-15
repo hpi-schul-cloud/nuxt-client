@@ -1549,7 +1549,8 @@ export default {
 		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.expired": "Der Einladungslink ist leider nicht mehr gültig",
 	"pages.rooms.invitationLinkStatus.invalidLink": "Der Einladungslink existiert leider nicht",
-	"pages.rooms.invitationLinkStatus.onlyForTeachers": "Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Der Einladungslink ist leider nicht für diese Schulrolle gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.confirmationPending":

@@ -51,7 +51,7 @@
 						</VCheckbox>
 
 						<VCheckbox
-							v-model="formData.isValidForStudents"
+							v-model="formData.isUsableByStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
 							:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
 							hide-details
@@ -60,7 +60,7 @@
 
 						<VCheckbox
 							v-if="isInviteExternalPersonsFeatureEnabled"
-							v-model="formData.isValidForExternalPersons"
+							v-model="formData.isUsableByExternalPersons"
 							:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
 							hide-details
 							data-testid="input-invite-participants-valid-for-external-persons"
@@ -202,7 +202,7 @@ const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isUsableByStudents: false,
-	isUsableByExternalPersons: undefined,
+	isUsableByExternalPersons: false,
 	activeUntilChecked: false,
 	activeUntil: undefined,
 	requiresConfirmation: true,

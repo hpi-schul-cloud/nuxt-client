@@ -144,12 +144,12 @@ const tableHeaders = [
 	},
 	{
 		title: t("pages.rooms.members.tableHeader.validForStudents"),
-		key: "isValidForStudents",
+		key: "isUsableByStudents",
 	},
 	isInviteExternalPersonsFeatureEnabled.value
 		? {
 				title: t("pages.rooms.members.tableHeader.validForExternalPersons"),
-				key: "isValidForExternalPersons",
+				key: "isUsableByExternalPersons",
 			}
 		: null,
 	{

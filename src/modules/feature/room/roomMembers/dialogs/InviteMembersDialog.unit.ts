@@ -320,7 +320,8 @@ describe("InviteMembersDialog", () => {
 			const expectedFormValues = {
 				title: "invitation link",
 				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
-				isOnlyForTeachers: true,
+				isUsableByStudents: false,
+				isUsableByExternalPersons: false,
 				restrictedToCreatorSchool: true,
 				requiresConfirmation: true,
 			};
@@ -344,7 +345,8 @@ describe("InviteMembersDialog", () => {
 				id: "",
 				title: "invitation link",
 				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
-				isOnlyForTeachers: true,
+				isUsableByStudents: false,
+				isUsableByExternalPersons: false,
 				restrictedToCreatorSchool: true,
 				requiresConfirmation: true,
 			};
