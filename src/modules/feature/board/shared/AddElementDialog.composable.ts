@@ -44,7 +44,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const {
 		isDialogOpen,
 		isDialogLoading,
-		isCollaboraDialogOpen,
+		openCollaboraDialog,
 		closeDialog,
 		closeCollaboraDialog,
 		staticElementTypeOptions,
@@ -184,7 +184,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				action: async () => {
 					askTypeCollabora();
 					closeDialog();
-					isCollaboraDialogOpen.value = true;
+					openCollaboraDialog();
 				},
 				testId: "create-element-collabora",
 			});

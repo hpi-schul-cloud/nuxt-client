@@ -37,11 +37,16 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 		isCollaboraDialogOpen.value = false;
 	};
 
+	const openCollaboraDialog = () => {
+		isCollaboraDialogOpen.value = true;
+	};
+
 	return {
 		isDialogOpen,
 		isDialogLoading,
-		isCollaboraDialogOpen,
 		closeDialog,
+		isCollaboraDialogOpen,
+		openCollaboraDialog,
 		closeCollaboraDialog,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,

@@ -22,10 +22,10 @@ import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.comp
 import { Dialog } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
-const { isCollaboraDialogOpen, collaboraElementTypeOptions } = useSharedElementTypeSelection();
+const { isCollaboraDialogOpen, closeCollaboraDialog, collaboraElementTypeOptions } = useSharedElementTypeSelection();
 
 const onCancel = () => {
-	isCollaboraDialogOpen.value = false;
+	closeCollaboraDialog();
 };
 
 const onConfirm = async () => {
