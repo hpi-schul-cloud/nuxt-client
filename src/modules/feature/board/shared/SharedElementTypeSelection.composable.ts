@@ -8,7 +8,7 @@ export interface ElementTypeSelectionOptions {
 	testId: string;
 }
 export interface CollaboraElementTypeSelectionOptions {
-	icon: string;
+	id: string;
 	label: string;
 	action: (fileName: string) => Promise<void>;
 	testId: string;

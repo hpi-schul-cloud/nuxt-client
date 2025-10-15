@@ -219,8 +219,8 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => [
 		{
-			icon: mdiFileDocumentOutline,
-			label: t("Word Dokument"),
+			id: "1",
+			label: t(".docx (Text)"),
 			action: async (fileName: string) => {
 				triggerFileSelect.value = false;
 				const element = await createElementRequestFn({
@@ -235,11 +235,11 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 				closeCollaboraDialog();
 			},
-			testId: "create-element-collabora",
+			testId: "create-element-collabora-text",
 		},
 		{
-			icon: mdiFileDocumentOutline,
-			label: t("Excel Dokument"),
+			id: "2",
+			label: t(".xlsx (Tabelle)"),
 			action: async (fileName: string) => {
 				triggerFileSelect.value = false;
 				const element = await createElementRequestFn({
@@ -254,11 +254,11 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 				closeCollaboraDialog();
 			},
-			testId: "create-element-collabora",
+			testId: "create-element-collabora-spreadsheet",
 		},
 		{
-			icon: mdiFileDocumentOutline,
-			label: t("Powerpoint Dokument"),
+			id: "3",
+			label: t(".pptx (Präsentation)"),
 			action: async (fileName: string) => {
 				triggerFileSelect.value = false;
 				const element = await createElementRequestFn({
@@ -276,7 +276,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 				closeCollaboraDialog();
 			},
-			testId: "create-element-collabora",
+			testId: "create-element-collabora-presentation",
 		},
 	];
 

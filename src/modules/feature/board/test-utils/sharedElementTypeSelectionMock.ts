@@ -15,6 +15,13 @@ interface ElementTypeSelectionOptions {
 	testId: string;
 }
 
+interface CollaboraElementTypeSelectionOptions {
+	id: string;
+	label: string;
+	action: (fileName: string) => Promise<void>;
+	testId: string;
+}
+
 export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 	const { closeDialogMock, openCollaboraDialogMock, closeCollaboraDialogMock } = props;
 	const mockedSharedElementTypeSelection = vi.mocked(useSharedElementTypeSelection);
@@ -27,7 +34,7 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 	const isCollaboraDialogOpen = ref(false);
 
 	const staticElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
-	const collaboraElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
+	const collaboraElementTypeOptions: Ref<Array<CollaboraElementTypeSelectionOptions>> = ref([]);
 	const dynamicElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
 	const elementTypeOptions: ComputedRef<Array<ElementTypeSelectionOptions>> = computed(() => [
 		...staticElementTypeOptions.value,

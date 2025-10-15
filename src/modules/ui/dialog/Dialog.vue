@@ -1,47 +1,44 @@
 <template>
 	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`modal-${uid}-title`">
-		<UseFocusTrap>
-			<VCard>
-				<template #title>
-					<h2 :id="`modal-${uid}-title`" class="ma-0 dialog-title" data-testid="dialog-title">
-						{{ message }}
-					</h2>
-				</template>
-				<template #text>
-					<div :id="`modal-${uid}-body`">
-						<slot name="content" />
-					</div>
-				</template>
-				<template #actions>
-					<VSpacer />
-					<div class="d-flex ga-2">
-						<VBtn
-							data-testid="dialog-cancel"
-							:aria-label="t('common.actions.cancel')"
-							variant="text"
-							:text="t('common.actions.cancel')"
-							@click="onCancel"
-						/>
-						<VBtn
-							data-testid="dialog-confirm"
-							:aria-label="t('common.actions.confirm')"
-							class="px-6"
-							color="primary"
-							variant="flat"
-							:text="t(confirmBtnLangKey)"
-							:disabled="confirmBtnDisabled"
-							@click="onConfirm"
-						/>
-					</div>
-				</template>
-			</VCard>
-		</UseFocusTrap>
+		<VCard>
+			<template #title>
+				<h2 :id="`modal-${uid}-title`" class="ma-0 dialog-title" data-testid="dialog-title">
+					{{ message }}
+				</h2>
+			</template>
+			<template #text>
+				<div :id="`modal-${uid}-body`">
+					<slot name="content" />
+				</div>
+			</template>
+			<template #actions>
+				<VSpacer />
+				<div class="d-flex ga-2">
+					<VBtn
+						data-testid="dialog-cancel"
+						:aria-label="t('common.actions.cancel')"
+						variant="text"
+						:text="t('common.actions.cancel')"
+						@click="onCancel"
+					/>
+					<VBtn
+						data-testid="dialog-confirm"
+						:aria-label="t('common.actions.confirm')"
+						class="px-6"
+						color="primary"
+						variant="flat"
+						:text="t(confirmBtnLangKey)"
+						:disabled="confirmBtnDisabled"
+						@click="onConfirm"
+					/>
+				</div>
+			</template>
+		</VCard>
 	</VDialog>
 </template>
 
 <script setup lang="ts">
 import { useUid } from "@/utils/uid";
-import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
