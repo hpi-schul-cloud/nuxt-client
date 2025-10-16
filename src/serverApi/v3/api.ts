@@ -14758,7 +14758,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCopyCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+        async cardControllerCopyCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCopyCard(cardId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14849,7 +14849,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCopyCard(cardId: string, options?: any): AxiosPromise<CopyApiResponse> {
+        cardControllerCopyCard(cardId: string, options?: any): AxiosPromise<CardResponse> {
             return localVarFp.cardControllerCopyCard(cardId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14933,7 +14933,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCopyCard(cardId: string, options?: any): AxiosPromise<CopyApiResponse>;
+    cardControllerCopyCard(cardId: string, options?: any): AxiosPromise<CardResponse>;
 
     /**
      * 
