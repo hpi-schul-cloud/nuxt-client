@@ -1,110 +1,78 @@
 <template>
 	<div class="text-centered mt-8">
-		<error-content :status-code="appErrorStatusCode" :error-text="translatedErrorMessage" data-testid="error-content" />
+		<ErrorContent :status-code="error.statusCode" :error-text="translatedErrorMessage" data-testid="error-content" />
 		<v-btn ref="btn-back" class="mt-4" color="primary" variant="flat" data-testid="btn-back" @click="onBackClick">
 			{{ $t("error.action.back") }}
 		</v-btn>
 	</div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useStorage } from "@/composables/locale-storage.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useTitle } from "@vueuse/core";
-import { computed, defineComponent, onUnmounted } from "vue";
+import { computed, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "ErrorPage",
-	components: {
-		ErrorContent,
-	},
-	setup() {
-		const storage = useStorage();
-		const permissionErrors: Array<HttpStatusCode> = [
-			HttpStatusCode.BadRequest,
-			HttpStatusCode.Unauthorized,
-			HttpStatusCode.Forbidden,
-		];
-		const { t } = useI18n();
-		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
-		const performanceNavigation = window.performance.getEntriesByType("navigation")[0];
+const { clearApplicationError } = useAppStore();
+const { applicationError } = useAppStoreRefs();
+const storage = useStorage();
+const { t } = useI18n();
+const performanceNavigation = window.performance.getEntriesByType("navigation")[0];
 
-		const getError = () => {
-			const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
-				"applicationErrorStatusCode",
-				"applicationErrorTranslationKey",
-				"applicationErrorTldraw",
-			]);
+const error = computed(() => {
+	const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
+		"applicationErrorStatusCode",
+		"applicationErrorTranslationKey",
+		"applicationErrorTldraw",
+	]);
 
-			if (
-				performanceNavigation.entryType === "reload" ||
-				(performanceNavigation.entryType === "navigate" && isTldrawError)
-			) {
-				return {
-					statusCode: Number(statusCode),
-					translationKey,
-				};
-			}
+	const isReloadOrNavigate =
+		performanceNavigation.entryType === "reload" || (performanceNavigation.entryType === "navigate" && isTldrawError);
 
-			storage.remove("applicationErrorStatusCode");
-			storage.remove("applicationErrorTranslationKey");
-			storage.remove("applicationErrorTldraw");
-
-			return {
-				statusCode: Number(applicationErrorModule.getStatusCode),
-				translationKey: applicationErrorModule.getTranslationKey,
-			};
-		};
-
-		addEventListener("pagehide", (event) => {
-			storage.remove("applicationErrorTldraw");
-			if (event.persisted) return;
-
-			if (applicationErrorModule.getStatusCode) {
-				storage.set("applicationErrorStatusCode", JSON.stringify(applicationErrorModule.getStatusCode));
-
-				storage.set("applicationErrorTranslationKey", applicationErrorModule.getTranslationKey);
-			}
-		});
-
-		useTitle(buildPageTitle(t("error.generic")));
-
-		const onBackClick = () => {
-			window.location.assign("/dashboard");
-		};
-
-		const appErrorTranslationKey = computed(() => getError().translationKey);
-		const appErrorStatusCode = computed(() => getError().statusCode);
-
-		const isPermissionError = computed(() => permissionErrors.includes(Number(appErrorStatusCode.value)));
-
-		const isGenericError = computed(() => appErrorStatusCode.value === 500 || appErrorStatusCode.value === null);
-
-		const translatedErrorMessage = computed(() => {
-			const translationKey = appErrorTranslationKey.value || "";
-
-			const translatedError = t(translationKey);
-
-			const result = translatedError !== translationKey ? translatedError : t("error.generic");
-			return result;
-		});
-
-		onUnmounted(() => {
-			applicationErrorModule.resetError();
-		});
-
+	if (isReloadOrNavigate) {
 		return {
-			onBackClick,
-			appErrorStatusCode,
-			translatedErrorMessage,
-			isPermissionError,
-			isGenericError,
+			statusCode: Number(statusCode),
+			translationKey,
 		};
-	},
-	head: {},
+	}
+
+	storage.remove("applicationErrorStatusCode");
+	storage.remove("applicationErrorTranslationKey");
+	storage.remove("applicationErrorTldraw");
+
+	return {
+		statusCode: Number(applicationError.value?.status),
+		translationKey: applicationError.value?.translationKeyOrText,
+	};
+});
+
+addEventListener("pagehide", (event) => {
+	storage.remove("applicationErrorTldraw");
+	if (event.persisted) return;
+
+	if (applicationError.value?.status) {
+		storage.set("applicationErrorStatusCode", JSON.stringify(applicationError.value?.status));
+		storage.set("applicationErrorTranslationKey", applicationError.value.translationKeyOrText ?? "");
+	}
+});
+
+useTitle(buildPageTitle(t("error.generic")));
+
+const onBackClick = () => {
+	window.location.assign("/dashboard");
+};
+
+const translatedErrorMessage = computed(() => {
+	const translationKey = error.value.translationKey ?? "";
+	const translatedError = t(translationKey);
+
+	return translatedError !== translationKey ? translatedError : t("error.generic");
+});
+
+onUnmounted(() => {
+	clearApplicationError();
 });
 </script>
 
