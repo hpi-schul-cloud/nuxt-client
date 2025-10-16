@@ -155,8 +155,7 @@ import {
 } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
-import { useOpeningTagValidator } from "@util-validators";
-import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { storeToRefs } from "pinia";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";

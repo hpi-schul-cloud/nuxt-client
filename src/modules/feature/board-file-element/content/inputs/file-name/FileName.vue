@@ -11,8 +11,7 @@
 
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
-import { useOpeningTagValidator } from "@util-validators";
-import { isRequired } from "@util-validators";
+import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
