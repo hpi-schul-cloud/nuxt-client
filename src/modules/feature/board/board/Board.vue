@@ -12,6 +12,7 @@
 				<template #header>
 					<BoardHeader
 						:board-id="board.id"
+						:board-context-type="contextType"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
 						:is-editable-chip-visible="isEditableChipVisible"
