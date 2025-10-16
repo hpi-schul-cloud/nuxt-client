@@ -160,7 +160,9 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 			title: link.title,
 			isUsableByStudents: link.isUsableByStudents ? commonTranslationsMap.YES : commonTranslationsMap.NO,
 			...(link.isUsableByExternalPersons !== undefined && {
-				isUsableByExternalPersons: link.isUsableByExternalPersons,
+				isUsableByExternalPersons: link.isUsableByExternalPersons
+					? commonTranslationsMap.YES
+					: commonTranslationsMap.NO,
 			}),
 			activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : commonTranslationsMap.NO,
 			isExpired: isExpired(link.activeUntil!),

@@ -33,9 +33,11 @@ describe("InviteMembersDialog", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		createTestEnvStore();
-	});
-	beforeEach(() => {
+		// createTestEnvStore();
+		createTestEnvStore({
+			FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false,
+		});
+
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
@@ -64,7 +66,6 @@ describe("InviteMembersDialog", () => {
 			schoolName: string;
 			preDefinedStep: string;
 			editedLink: RoomInvitationLink | null;
-			isExternalPersonInvitationActive?: boolean;
 		}>
 	) => {
 		const { modelValue, schoolName, preDefinedStep } = {
@@ -106,9 +107,6 @@ describe("InviteMembersDialog", () => {
 
 		return { wrapper, roomInvitationLinkStore };
 	};
-
-	// TODO add test for external person invitation
-	// and different permutations
 
 	it("should render correctly", () => {
 		const { wrapper } = setup();
@@ -169,6 +167,29 @@ describe("InviteMembersDialog", () => {
 				[
 					"pages.rooms.members.inviteMember.form.onlySchoolMembers.label",
 					"pages.rooms.members.inviteMember.form.validForStudents.label",
+					"pages.rooms.members.inviteMember.form.linkExpires.label",
+					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
+				].forEach((label) => {
+					expect(checkboxes.some((checkbox) => checkbox.text().includes(label))).toBe(true);
+				});
+			});
+
+			it("should have the correct checkbox labels when inviting external persons feature is enabled", async () => {
+				const { wrapper } = setup();
+				createTestEnvStore({
+					FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+				});
+
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+
+				expect(checkboxes.length).toBe(5);
+
+				[
+					"pages.rooms.members.inviteMember.form.onlySchoolMembers.label",
+					"pages.rooms.members.inviteMember.form.validForStudents.label",
+					"pages.rooms.members.inviteMember.form.validForExternalPersons.label",
 					"pages.rooms.members.inviteMember.form.linkExpires.label",
 					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
 				].forEach((label) => {

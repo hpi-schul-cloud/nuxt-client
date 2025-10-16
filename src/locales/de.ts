@@ -1712,6 +1712,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint": "Wird in der Link-Übersicht angezeigt",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label": "Link nur für Nutzende der folgenden Schule gültig:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Link auch für Lernende gültig",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link auch für externe Personen gültig",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",

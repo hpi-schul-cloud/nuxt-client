@@ -1659,6 +1659,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Опис",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Діє тільки в межах школи",
 	"pages.rooms.members.tableHeader.validForStudents": "Діє також для студентів",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "Діє також для зовнішніх осіб",
 	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Потрібне підтвердження",
 	"pages.rooms.members.tableHeader.status": "Статус",
@@ -1699,6 +1700,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
 		"Посилання дійсне лише для користувачів наступної школи:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Посилання також дійсне для студентів",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Посилання також дійсне для зовнішніх осіб",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
