@@ -11,7 +11,6 @@
 			<VForm
 				id="createCollaboraFileForm"
 				ref="form"
-				validate-on="submit"
 				data-testid="collabora-element-form"
 				@submit.prevent.stop="onConfirm"
 			>
@@ -37,6 +36,7 @@
 				<VTextarea
 					v-model="caption"
 					rows="1"
+					:rules="captionRules"
 					auto-grow
 					:label="$t('components.cardElement.fileElement.caption')"
 					data-testid="collabora-element-form-caption"
@@ -47,6 +47,7 @@
 </template>
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { useOpeningTagValidator } from "@/utils/validation";
 import { Dialog } from "@ui-dialog";
 import { isRequired } from "@util-validators";
 import { ref } from "vue";
@@ -57,6 +58,7 @@ type VuetifyForm = {
 };
 
 const { isCollaboraDialogOpen, closeCollaboraDialog, collaboraElementTypeOptions } = useSharedElementTypeSelection();
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 
@@ -67,7 +69,8 @@ const fileName = ref<string>("");
 const caption = ref<string>("");
 
 const docTypeRules = [isRequired(t("common.validation.required2"))];
-const fileNameRules = [isRequired(t("common.validation.required2"))];
+const fileNameRules = [(value: string) => validateOnOpeningTag(value), isRequired(t("common.validation.required2"))];
+const captionRules = [(value: string) => validateOnOpeningTag(value)];
 
 const onConfirm = async () => {
 	if (form?.value) {
