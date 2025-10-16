@@ -150,17 +150,32 @@ const belongsToOwnSchool = (userId: string) => {
 const membersByIds = (ids: string[]) =>
 	roomMembersWithoutApplicants.value.filter((member) => ids.includes(member.userId));
 
+// If the current user (as an admin) is the room owner, they can change the role of any member except themselves, other room owners, and students
+const canRoomOwnerAsAdminChangeRole = (item: RoomMember) => {
+	if (!currentUserId.value) return false;
+
+	return isRoomOwner(currentUserId?.value) && !isRoomOwner(item.userId) && !checkIsStudent(item);
+};
+
+// If the current user (as an admin) is the room owner, they can remove any member except themselves and other room owners
+const canRoomOwnerAsAdminRemoveMember = (item: RoomMember) => {
+	if (!currentUserId.value) return false;
+
+	return isRoomOwner(currentUserId.value) && !isRoomOwner(item.userId);
+};
+
 const canChangeRole = (item: RoomMember | string[]) => {
 	if (Array.isArray(item)) {
 		const members = membersByIds(item);
 		return members.every(canChangeRole);
 	}
+
+	if (canRoomOwnerAsAdminChangeRole(item)) {
+		return true;
+	}
+
 	return isOwnSchool.value && !checkIsStudent(item) && !isRoomOwner(item.userId) && belongsToOwnSchool(item.userId);
 };
-
-// If the current user (as an admin) is the room owner, they can remove any member except themselves and other room owners
-const canRoomOwnerAsAdminRemoveMember = (item: RoomMember) =>
-	currentUserId.value && isRoomOwner(currentUserId.value) && !isRoomOwner(item.userId);
 
 const canRemoveMember = (item: RoomMember | string[]) => {
 	if (Array.isArray(item)) {
