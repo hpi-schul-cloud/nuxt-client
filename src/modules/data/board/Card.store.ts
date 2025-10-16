@@ -74,7 +74,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	// TODO - socketOrRest
-	const duplicateCardRequest = restApi.copyCardRequest;
+	const duplicateCardRequest = restApi.duplicateCardRequest;
 
 	const duplicateCardSuccess = async (payload: DuplicateCardSuccessPayload) => {
 		if (payload.newCard.id) {
@@ -84,7 +84,7 @@ export const useCardStore = defineStore("cardStore", () => {
 				id: payload.newCard.id,
 				title: payload.newCard.title || undefined,
 				elements: [],
-				height: 0,
+				height: 120,
 				visibilitySettings: { publishedAt: now },
 				timestamps: { createdAt: now, lastUpdatedAt: now },
 			};
