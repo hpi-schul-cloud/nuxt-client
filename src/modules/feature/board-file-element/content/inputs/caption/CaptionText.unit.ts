@@ -1,6 +1,5 @@
 import CaptionText from "./CaptionText.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { InputWrapperWithCheckmark } from "@ui-input";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VTextarea } from "vuetify/components";
@@ -28,14 +27,13 @@ describe("CaptionText", () => {
 		expect(captionText.exists()).toBe(true);
 	});
 
-	it("should emit update:caption on confirm", async () => {
+	it("should emit update:caption on caption change", async () => {
 		const { wrapper } = mountSetup();
 
-		const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
 		const textarea = wrapper.findComponent(VTextarea);
 		const newText = "new text";
 		await textarea.setValue(newText);
-		inputWrapperWithCheckmark.vm.$emit("confirm");
+		await nextTick();
 
 		expect(wrapper.emitted("update:caption")).toHaveLength(1);
 		expect(wrapper.emitted("update:caption")?.[0][0]).toBe(newText);
@@ -64,13 +62,12 @@ describe("CaptionText", () => {
 		it("should not emit update:caption", async () => {
 			const { wrapper } = mountSetup();
 
-			const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
 			const textField = wrapper.findComponent(VTextarea);
 			const newText = "<abc123";
 			await textField.setValue(newText);
-			inputWrapperWithCheckmark.vm.$emit("confirm");
+			await nextTick();
 
-			expect(wrapper.emitted("update:alternativeText")).toBeUndefined();
+			expect(wrapper.emitted("update:caption")).toBeUndefined();
 		});
 	});
 });

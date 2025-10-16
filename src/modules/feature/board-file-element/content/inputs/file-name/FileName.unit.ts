@@ -1,6 +1,5 @@
 import FileName from "./FileName.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { InputWrapperWithCheckmark } from "@ui-input";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
@@ -30,26 +29,13 @@ describe("FileName", () => {
 		expect(fileName.exists()).toBe(true);
 	});
 
-	it("should emit update:name on confirm", async () => {
-		const { wrapper, fileExtension } = mountSetup();
-
-		const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
-		const textField = wrapper.findComponent(VTextField);
-		const newFileName = "myNewImage";
-		await textField.setValue(newFileName);
-		inputWrapperWithCheckmark.vm.$emit("confirm");
-
-		expect(wrapper.emitted("update:name")).toHaveLength(1);
-		expect(wrapper.emitted("update:name")?.[0][0]).toBe(newFileName + fileExtension);
-	});
-
-	it("should emit update:name on keydown enter", async () => {
+	it("should emit update:name on file name change", async () => {
 		const { wrapper, fileExtension } = mountSetup();
 
 		const textField = wrapper.findComponent(VTextField);
 		const newFileName = "myNewImage";
 		await textField.setValue(newFileName);
-		textField.trigger("keydown.enter");
+		await nextTick();
 
 		expect(wrapper.emitted("update:name")).toHaveLength(1);
 		expect(wrapper.emitted("update:name")?.[0][0]).toBe(newFileName + fileExtension);
@@ -69,11 +55,10 @@ describe("FileName", () => {
 		it("should not emit update:name", async () => {
 			const { wrapper } = mountSetup();
 
-			const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
 			const textField = wrapper.findComponent(VTextField);
 			const newFileName = "my<NewImage";
 			await textField.setValue(newFileName);
-			inputWrapperWithCheckmark.vm.$emit("confirm");
+			await nextTick();
 
 			expect(wrapper.emitted("update:name")).toBeUndefined();
 		});
@@ -83,11 +68,10 @@ describe("FileName", () => {
 		it("should not emit update:name", async () => {
 			const { wrapper } = mountSetup();
 
-			const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
 			const textField = wrapper.findComponent(VTextField);
 			const newFileName = "";
 			await textField.setValue(newFileName);
-			inputWrapperWithCheckmark.vm.$emit("confirm");
+			await nextTick();
 
 			expect(wrapper.emitted("update:name")).toBeUndefined();
 		});

@@ -1,6 +1,5 @@
 import AlternativeText from "./AlternativeText.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { InputWrapperWithCheckmark } from "@ui-input";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
@@ -28,26 +27,13 @@ describe("AlternativeText", () => {
 		expect(alternativeText.exists()).toBe(true);
 	});
 
-	it("should emit update:alternativeText on confirm", async () => {
-		const { wrapper } = mountSetup();
-
-		const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
-		const textField = wrapper.findComponent(VTextField);
-		const newText = "new text";
-		await textField.setValue(newText);
-		inputWrapperWithCheckmark.vm.$emit("confirm");
-
-		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
-		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
-	});
-
-	it("should emit update:alternativeText on keydown enter", async () => {
+	it("should emit update:alternativeText if text changes", async () => {
 		const { wrapper } = mountSetup();
 
 		const textField = wrapper.findComponent(VTextField);
 		const newText = "new text";
 		await textField.setValue(newText);
-		await textField.trigger("keydown", { key: "Enter" });
+		await nextTick();
 
 		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
@@ -85,11 +71,10 @@ describe("AlternativeText", () => {
 		it("should not emit update:alternativeText", async () => {
 			const { wrapper } = mountSetup();
 
-			const inputWrapperWithCheckmark = wrapper.findComponent(InputWrapperWithCheckmark);
 			const textField = wrapper.findComponent(VTextField);
 			const newText = "<abc123";
 			await textField.setValue(newText);
-			inputWrapperWithCheckmark.vm.$emit("confirm");
+			await nextTick();
 
 			expect(wrapper.emitted("update:alternativeText")).toBeUndefined();
 		});

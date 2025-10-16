@@ -1,19 +1,15 @@
 <template>
-	<InputWrapperWithCheckmark @confirm="onConfirm">
-		<VTextField
-			v-model="nameRef"
-			data-testid="file-name-input"
-			:label="t('common.labels.fileName')"
-			:rules="[rules.isRequired, rules.validateOnOpeningTag]"
-			@keydown.enter="onConfirm"
-		/>
-	</InputWrapperWithCheckmark>
+	<VTextField
+		v-model="nameRef"
+		data-testid="file-name-input"
+		:label="t('common.labels.fileName')"
+		:rules="[rules.isRequired, rules.validateOnOpeningTag]"
+	/>
 </template>
 
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
 import { useOpeningTagValidator } from "@/utils/validation";
-import { InputWrapperWithCheckmark } from "@ui-input";
 import { isRequired } from "@util-validators";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -63,14 +59,13 @@ const addFileExtension = (name: string) => {
 	return nameWithExtension;
 };
 
-const onConfirm = () => {
-	const nameWithExtension = addFileExtension(nameRef.value);
+watch(nameRef, (newValue) => {
+	const nameWithExtension = addFileExtension(newValue);
 
-	const isNameValid =
-		rules.validateOnOpeningTag(nameWithExtension) === true && rules.isRequired(nameRef.value) === true;
+	const isNameValid = rules.validateOnOpeningTag(nameWithExtension) === true && rules.isRequired(newValue) === true;
 
 	if (isNameValid) {
 		emit("update:name", nameWithExtension);
 	}
-};
+});
 </script>

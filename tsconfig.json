@@ -93,7 +93,6 @@
 				"src/modules/ui/video-conference-configuration-dialog"
 			],
 			"@ui-empty-state": ["src/modules/ui/empty-state"],
-			"@ui-input": ["src/modules/ui/input"],
 			"@util-axios-error": ["src/modules/util/axios-error"],
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
