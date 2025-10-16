@@ -30,9 +30,9 @@ describe("CaptionText", () => {
 	it("should emit update:caption on caption change", async () => {
 		const { wrapper } = mountSetup();
 
-		const textarea = wrapper.findComponent(VTextarea);
+		const textArea = wrapper.findComponent(VTextarea);
 		const newText = "new text";
-		await textarea.setValue(newText);
+		await textArea.setValue(newText);
 		await nextTick();
 
 		expect(wrapper.emitted("update:caption")).toHaveLength(1);
@@ -62,12 +62,51 @@ describe("CaptionText", () => {
 		it("should not emit update:caption", async () => {
 			const { wrapper } = mountSetup();
 
-			const textField = wrapper.findComponent(VTextarea);
+			const textArea = wrapper.findComponent(VTextarea);
 			const newText = "<abc123";
-			await textField.setValue(newText);
+			await textArea.setValue(newText);
 			await nextTick();
 
 			expect(wrapper.emitted("update:caption")).toBeUndefined();
+		});
+	});
+
+	describe("DOM events", () => {
+		it("should stop click event propagation", async () => {
+			const { wrapper } = mountSetup();
+			const textArea = wrapper.findComponent(VTextarea);
+
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("click", () => {
+				bubbled = true;
+			});
+
+			await textArea.trigger("click");
+
+			expect(bubbled).toBe(false);
+		});
+
+		it("should stop keydown enter event propagation", async () => {
+			const { wrapper } = mountSetup();
+			const textArea = wrapper.findComponent(VTextarea);
+
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("keydown", (e) => {
+				if (e.key === "Enter") {
+					bubbled = true;
+				}
+			});
+
+			await textArea.trigger("keydown", { key: "Enter" });
+			expect(bubbled).toBe(false);
 		});
 	});
 });

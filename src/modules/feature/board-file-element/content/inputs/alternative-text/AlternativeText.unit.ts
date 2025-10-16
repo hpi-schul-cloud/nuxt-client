@@ -79,4 +79,43 @@ describe("AlternativeText", () => {
 			expect(wrapper.emitted("update:alternativeText")).toBeUndefined();
 		});
 	});
+
+	describe("DOM events", () => {
+		it("should stop click event propagation", async () => {
+			const { wrapper } = mountSetup();
+			const textField = wrapper.findComponent(VTextField);
+
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("click", () => {
+				bubbled = true;
+			});
+
+			await textField.trigger("click");
+
+			expect(bubbled).toBe(false);
+		});
+
+		it("should stop keydown enter event propagation", async () => {
+			const { wrapper } = mountSetup();
+			const textField = wrapper.findComponent(VTextField);
+
+			const parent = document.createElement("div");
+			document.body.appendChild(parent);
+			parent.appendChild(wrapper.element);
+
+			let bubbled = false;
+			parent.addEventListener("keydown", (e) => {
+				if (e.key === "Enter") {
+					bubbled = true;
+				}
+			});
+
+			await textField.trigger("keydown", { key: "Enter" });
+			expect(bubbled).toBe(false);
+		});
+	});
 });
