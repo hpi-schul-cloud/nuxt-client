@@ -1,4 +1,3 @@
-import { useApplicationError } from "../composables/application-error.composable";
 import { ApplicationError } from "./types/application-error";
 import { School } from "./types/schools";
 import {
@@ -17,6 +16,7 @@ import {
 	UserImportApiInterface,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -191,7 +191,7 @@ export default class SchoolsModule extends VuexModule {
 			} catch (error: unknown) {
 				if (error instanceof AxiosError) {
 					this.setError(
-						useApplicationError().createApplicationError(
+						createApplicationError(
 							error.response?.status ?? 500,
 							"pages.administration.school.index.error",
 							error.message
@@ -214,7 +214,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -237,7 +237,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -260,7 +260,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -284,7 +284,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -313,7 +313,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message

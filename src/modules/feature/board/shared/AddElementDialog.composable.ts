@@ -106,7 +106,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			translationKey = translationKeyDrawing;
 		}
 		if (translationKey !== "") {
-			notifyInfo(t(translationKey));
+			notifyInfo(translationKey);
 		}
 	};
 

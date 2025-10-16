@@ -1,4 +1,4 @@
-import lernStoreLayout from "./lernStore.layout.vue";
+import LernStoreLayout from "./LernStore.layout.vue";
 import ContentModule from "@/store/content";
 import { CONTENT_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -31,7 +31,7 @@ const setup = (options?: {
 		getCollectionsFeatureFlag: options?.collectionEnabled,
 	});
 
-	const wrapper = shallowMount(lernStoreLayout, {
+	const wrapper = shallowMount(LernStoreLayout, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -46,7 +46,7 @@ const setup = (options?: {
 	return { wrapper };
 };
 
-describe("layouts/lernStoreLayout", () => {
+describe("layouts/LernStoreLayout", () => {
 	describe("when 'feature flag' is set", () => {
 		it("should render 'logged-in' layout if feature flag set true", () => {
 			const { wrapper } = setup({ collectionEnabled: true });

@@ -2,13 +2,10 @@ import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
-import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { apiValidationResponseErrorFactory, axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -39,16 +36,11 @@ describe("H5PEditorPage", () => {
 			contentId: undefined,
 		}
 	) => {
-		const applicationErrorModule = createModuleMocks(ApplicationErrorModule);
-
 		const saveFn = vi.fn();
 
 		const wrapper = mount(H5pEditorPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
-				},
 				stubs: {
 					H5PEditorComponent: {
 						template: "<div></div>",
@@ -63,7 +55,6 @@ describe("H5PEditorPage", () => {
 
 		return {
 			wrapper,
-			applicationErrorModule,
 			saveFn,
 		};
 	};
@@ -96,28 +87,26 @@ describe("H5PEditorPage", () => {
 
 			describe("when onCreate hook fails", () => {
 				const setup = () => {
-					const error = createApplicationError(HttpStatusCode.NotFound);
-					const axiosError = axiosErrorFactory.withStatusCode(error.statusCode).build();
+					const errorCode = HttpStatusCode.NotFound;
+					const axiosError = axiosErrorFactory.withStatusCode(errorCode).build();
 
 					useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
 
-					const { applicationErrorModule } = getWrapper({
+					getWrapper({
 						parentType: H5PContentParentType.BOARD_ELEMENT,
 						parentId: "parentId",
 					});
 
 					return {
-						applicationErrorModule,
-						error,
+						errorCode,
 					};
 				};
 
 				it("should set an application error", async () => {
-					const { applicationErrorModule, error } = setup();
-
+					const { errorCode } = setup();
 					await flushPromises();
 
-					expect(applicationErrorModule.setError).toHaveBeenCalledWith(error);
+					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(errorCode);
 				});
 			});
 		});
@@ -126,31 +115,30 @@ describe("H5PEditorPage", () => {
 	describe("H5P Editor", () => {
 		describe("when the editor has a loading error", () => {
 			const setup = () => {
-				const error = createApplicationError(HttpStatusCode.BadRequest);
-				const axiosError = axiosErrorFactory.withStatusCode(error.statusCode).build();
+				const errorCode = HttpStatusCode.BadRequest;
+				const axiosError = axiosErrorFactory.withStatusCode(errorCode).build();
 
 				useH5pEditorBoardHooksMock.onCreate.mockRejectedValueOnce(axiosError);
 
-				const { wrapper, applicationErrorModule } = getWrapper({
+				const { wrapper } = getWrapper({
 					parentType: H5PContentParentType.BOARD_ELEMENT,
 					parentId: "parentId",
 				});
 
 				return {
 					wrapper,
-					applicationErrorModule,
-					error,
+					errorCode,
 				};
 			};
 
 			it("should set an application error", async () => {
-				const { wrapper, applicationErrorModule, error } = setup();
+				const { wrapper, errorCode } = setup();
 
 				const h5pEditor = wrapper.getComponent(H5PEditorComponent);
-				h5pEditor.vm.$emit("load-error", error);
+				h5pEditor.vm.$emit("load-error", errorCode);
 				await nextTick();
 
-				expect(applicationErrorModule.setError).toHaveBeenCalledWith(error);
+				expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(errorCode);
 			});
 		});
 
