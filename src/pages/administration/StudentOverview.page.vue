@@ -120,7 +120,7 @@ import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
@@ -599,7 +599,7 @@ export default {
 			this.find();
 		},
 		async getClassNameList() {
-			const { currentYear } = useAppStore().school;
+			const currentYear = schoolsModule.getCurrentYear;
 			await this.$store.dispatch("classes/find", {
 				query: {
 					$limit: 1000,
