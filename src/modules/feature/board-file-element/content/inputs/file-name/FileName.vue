@@ -4,6 +4,8 @@
 		data-testid="file-name-input"
 		:label="t('common.labels.fileName')"
 		:rules="[rules.isRequired, rules.validateOnOpeningTag]"
+		@click.stop
+		@keydown.enter.stop
 	/>
 </template>
 

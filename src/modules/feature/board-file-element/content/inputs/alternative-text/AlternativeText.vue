@@ -6,6 +6,8 @@
 		:hint="t('components.cardElement.fileElement.altDescription')"
 		:label="t('components.cardElement.fileElement.alternativeText')"
 		:rules="rules"
+		@click.stop
+		@keydown.enter.stop
 	/>
 </template>
 
