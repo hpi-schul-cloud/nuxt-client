@@ -5,7 +5,7 @@ const ExternalToolElementContentSchema = z.object({
 	contextExternalToolId: z.string().nullable(),
 });
 
-const FileElementContentSchema = z.object({
+export const FileElementContentSchema = z.object({
 	caption: z.string(),
 	alternativeText: z.string(),
 });

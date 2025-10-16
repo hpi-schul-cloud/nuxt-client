@@ -3,12 +3,18 @@
 		v-model:is-dialog-open="isCollaboraDialogOpen"
 		:message="t('components.elementTypeSelection.dialog.title')"
 		:confirm-btn-lang-key="t('common.actions.create')"
-		data-testid="collabora-element-type-selection"
+		data-testid="collabora-element-dialog"
 		@cancel="closeCollaboraDialog"
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<VForm id="createCollaboraFileForm" ref="form" validate-on="submit" @submit.prevent.stop="onConfirm">
+			<VForm
+				id="createCollaboraFileForm"
+				ref="form"
+				validate-on="submit"
+				data-testid="collabora-element-form"
+				@submit.prevent.stop="onConfirm"
+			>
 				<!-- Attach the select to the form so that we can use focusTrap in the dialog -->
 				<VSelect
 					v-model="selectedDocType"
@@ -19,12 +25,21 @@
 					:label="t('Dokumententyp')"
 					:rules="docTypeRules"
 					:menu-props="{ attach: '#createCollaboraFileForm' }"
+					data-testid="collabora-element-form-type"
 				/>
 				<VTextField
 					v-model="fileName"
 					:label="t('Name des Dokuments')"
 					:rules="fileNameRules"
 					:placeholder="t('Unbenanntes Dokument')"
+					data-testid="collabora-element-form-filename"
+				/>
+				<VTextarea
+					v-model="caption"
+					rows="1"
+					auto-grow
+					:label="$t('components.cardElement.fileElement.caption')"
+					data-testid="collabora-element-form-caption"
 				/>
 			</VForm>
 		</template>
@@ -37,19 +52,19 @@ import { isRequired } from "@util-validators";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-type VuetifyFormApi = {
-	validate: () => { valid: boolean };
-	resetValidation: () => void;
+type VuetifyForm = {
+	validate: () => Promise<{ valid: boolean }>;
 };
 
 const { isCollaboraDialogOpen, closeCollaboraDialog, collaboraElementTypeOptions } = useSharedElementTypeSelection();
 
 const { t } = useI18n();
 
-const form = ref<VuetifyFormApi | null>(null);
+const form = ref<VuetifyForm | null>(null);
 
 const selectedDocType = ref<string | null>(null);
 const fileName = ref<string>("");
+const caption = ref<string>("");
 
 const docTypeRules = [isRequired(t("common.validation.required2"))];
 const fileNameRules = [isRequired(t("common.validation.required2"))];
@@ -58,7 +73,9 @@ const onConfirm = async () => {
 	if (form?.value) {
 		const { valid } = await form.value.validate();
 		if (valid) {
-			collaboraElementTypeOptions.value.find((item) => item.id === selectedDocType.value)?.action(fileName.value);
+			collaboraElementTypeOptions.value
+				.find((item) => item.id === selectedDocType.value)
+				?.action(fileName.value, caption.value);
 		}
 	}
 };

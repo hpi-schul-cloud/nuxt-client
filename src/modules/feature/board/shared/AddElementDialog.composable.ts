@@ -6,6 +6,7 @@ import {
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { AnyContentElementSchema, FileElementContentSchema } from "@/types/board/ContentElement.schema";
 import { notifyInfo } from "@data-app";
 import { type CreateElementRequestPayload, useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -65,6 +66,32 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 		showNotificationByElementType(elementType);
 	};
+
+	const onCollaboraElementClick =
+		(assetUrl: string, fileExtension: string) => async (fileName: string, caption: string) => {
+			triggerFileSelect.value = false;
+			const response = await createElementRequestFn({
+				type: ContentElementType.File,
+				cardId,
+			});
+
+			try {
+				const element = AnyContentElementSchema.parse(response);
+				const elementContent = FileElementContentSchema.parse(element.content);
+
+				await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);
+
+				if (caption && caption.trim().length > 0) {
+					elementContent.caption = caption.trim();
+					element.content = elementContent;
+					await cardStore.updateElementRequest({ element });
+				}
+
+				closeCollaboraDialog();
+			} catch {
+				return;
+			}
+		};
 
 	const showNotificationByElementType = (elementType: ContentElementType) => {
 		const translationKeyCollaborativeTextEditor =
@@ -181,11 +208,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiFileDocumentOutline,
 				label: t("Dokument erstellen"),
-				action: async () => {
-					askTypeCollabora();
-					closeDialog();
-					openCollaboraDialog();
-				},
+				action: async () => askTypeCollabora(),
 				testId: "create-element-collabora",
 			});
 		}
@@ -221,62 +244,26 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		{
 			id: "1",
 			label: t(".docx (Text)"),
-			action: async (fileName: string) => {
-				triggerFileSelect.value = false;
-				const element = await createElementRequestFn({
-					type: ContentElementType.File,
-					cardId,
-				});
-
-				if (element) {
-					const emptyDocUrl = new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString();
-					uploadFromUrl(emptyDocUrl, element.id, FileRecordParentType.BOARDNODES, fileName + ".docx");
-				}
-
-				closeCollaboraDialog();
-			},
-			testId: "create-element-collabora-text",
+			action: onCollaboraElementClick(
+				new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString(),
+				".docx"
+			),
 		},
 		{
 			id: "2",
 			label: t(".xlsx (Tabelle)"),
-			action: async (fileName: string) => {
-				triggerFileSelect.value = false;
-				const element = await createElementRequestFn({
-					type: ContentElementType.File,
-					cardId,
-				});
-
-				if (element) {
-					const emptySpreadsheetUrl = new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString();
-					uploadFromUrl(emptySpreadsheetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + ".xlsx");
-				}
-
-				closeCollaboraDialog();
-			},
-			testId: "create-element-collabora-spreadsheet",
+			action: onCollaboraElementClick(
+				new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString(),
+				".xlsx"
+			),
 		},
 		{
 			id: "3",
 			label: t(".pptx (Präsentation)"),
-			action: async (fileName: string) => {
-				triggerFileSelect.value = false;
-				const element = await createElementRequestFn({
-					type: ContentElementType.File,
-					cardId,
-				});
-
-				if (element) {
-					const emptyPresentationUrl = new URL(
-						"@/assets/collabora/empty-presentation.pptx",
-						import.meta.url
-					).toString();
-					uploadFromUrl(emptyPresentationUrl, element.id, FileRecordParentType.BOARDNODES, fileName + ".pptx");
-				}
-
-				closeCollaboraDialog();
-			},
-			testId: "create-element-collabora-presentation",
+			action: onCollaboraElementClick(
+				new URL("@/assets/collabora/empty-presentation.pptx", import.meta.url).toString(),
+				".pptx"
+			),
 		},
 	];
 
@@ -292,6 +279,9 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	const askTypeCollabora = () => {
 		collaboraElementTypeOptions.value = collaboraOptions;
+
+		closeDialog();
+		openCollaboraDialog();
 	};
 
 	watch(
