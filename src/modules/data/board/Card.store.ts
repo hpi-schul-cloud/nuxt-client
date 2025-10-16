@@ -73,8 +73,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.height = payload.newHeight;
 	};
 
-	// TODO - socketOrRest
-	const duplicateCardRequest = restApi.duplicateCardRequest;
+	const duplicateCardRequest = socketOrRest.duplicateCardRequest;
 
 	const duplicateCardSuccess = async (payload: DuplicateCardSuccessPayload) => {
 		if (payload.newCard.id) {

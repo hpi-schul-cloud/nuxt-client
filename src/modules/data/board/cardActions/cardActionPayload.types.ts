@@ -63,6 +63,7 @@ export type DuplicateCardRequestPayload = {
 export type DuplicateCardSuccessPayload = {
 	newCard: CardResponse;
 };
+export type DuplicateCardFailurePayload = DuplicateCardRequestPayload;
 
 export type DeleteCardRequestPayload = {
 	cardId: string;

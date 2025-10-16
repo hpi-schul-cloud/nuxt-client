@@ -43,6 +43,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
 			on(CardActions.updateCardHeightSuccess, cardStore.updateCardHeightSuccess),
+			on(CardActions.duplicateCardSuccess, cardStore.duplicateCardSuccess),
 		];
 
 		const failureActions = [
@@ -53,6 +54,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.fetchCardFailure, ({ cardIds }) => reloadBoard(cardIds[0])),
 			on(CardActions.updateCardTitleFailure, ({ cardId }) => reloadBoard(cardId)),
 			on(CardActions.deleteCardFailure, ({ cardId }) => reloadBoard(cardId)),
+			on(CardActions.duplicateCardFailure, ({ cardId }) => reloadBoard(cardId)),
 		];
 
 		const ariaLiveNotification = [
@@ -61,6 +63,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
 			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
 			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
+			// TODO - add duplication notification
 		];
 
 		handle(
@@ -127,6 +130,10 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
+	const duplicateCardRequest = (cardId: string) => {
+		emitOnSocket("duplicate-card-request", { cardId });
+	};
+
 	const reloadBoard = (cardId = "") => {
 		const boardStore = useBoardStore();
 		const { board } = storeToRefs(boardStore);
@@ -152,5 +159,6 @@ export const useCardSocketApi = () => {
 		fetchCardRequest,
 		updateCardTitleRequest,
 		updateCardHeightRequest,
+		duplicateCardRequest,
 	};
 };
