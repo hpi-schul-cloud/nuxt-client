@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -31,17 +31,16 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 
-const nameRef = ref<string>("");
-
-watch(
-	() => props.name,
-	(newName) => {
-		if (newName !== "") {
-			nameRef.value = removeFileExtension(newName);
+const nameInput = ref<string | undefined>(undefined);
+const nameRef = computed({
+	get: () => {
+		if (nameInput.value !== undefined) {
+			return removeFileExtension(nameInput.value);
 		}
+		return removeFileExtension(props.name);
 	},
-	{ immediate: true }
-);
+	set: (value) => (nameInput.value = value),
+});
 
 const rules = {
 	validateOnOpeningTag: (value: string) => {
