@@ -15,11 +15,10 @@ import {
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
+import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { useSharedEditMode } from "@util-board";
-import { useI18n } from "vue-i18n";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -38,8 +37,6 @@ export const useBoardRestApi = () => {
 		updateBoardLayoutCall,
 		updateReadersCanEditCall,
 	} = useBoardApi();
-
-	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 
@@ -67,7 +64,7 @@ export const useBoardRestApi = () => {
 			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess(board);
 		} catch {
-			applicationErrorModule.setError(createApplicationError(HttpStatusCode.NotFound, t("components.board.error.404")));
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 		}
 		boardStore.setLoading(false);
 	};
