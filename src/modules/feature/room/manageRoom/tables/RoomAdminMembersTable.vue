@@ -158,14 +158,18 @@ const canChangeRole = (item: RoomMember | string[]) => {
 	return isOwnSchool.value && !checkIsStudent(item) && !isRoomOwner(item.userId) && belongsToOwnSchool(item.userId);
 };
 
+// If the current user (as an admin) is the room owner, they can remove any member except themselves and other room owners
+const canRoomOwnerAsAdminRemoveMember = (item: RoomMember) =>
+	currentUserId.value && isRoomOwner(currentUserId.value) && !isRoomOwner(item.userId);
+
 const canRemoveMember = (item: RoomMember | string[]) => {
 	if (Array.isArray(item)) {
 		const members = membersByIds(item);
 		return members.every(canRemoveMember);
 	}
 
-	if (currentUserId.value && isRoomOwner(currentUserId.value)) {
-		return !isRoomOwner(item.userId);
+	if (canRoomOwnerAsAdminRemoveMember(item)) {
+		return true;
 	}
 
 	return !isRoomOwner(item.userId) && belongsToOwnSchool(item.userId);
