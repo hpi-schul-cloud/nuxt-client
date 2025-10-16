@@ -144,7 +144,6 @@
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -156,6 +155,7 @@ import {
 } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
+import { useOpeningTagValidator } from "@util-validators";
 import { isNonEmptyString, isOfMaxLength } from "@util-validators";
 import { storeToRefs } from "pinia";
 import { computed, ref, useTemplateRef, watch } from "vue";

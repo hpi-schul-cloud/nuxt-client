@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { Dialog } from "@ui-dialog";
+import { useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

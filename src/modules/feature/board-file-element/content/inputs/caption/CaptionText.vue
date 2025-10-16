@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { useOpeningTagValidator } from "@/utils/validation";
+import { useOpeningTagValidator } from "@util-validators";
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
