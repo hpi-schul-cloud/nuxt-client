@@ -1,7 +1,7 @@
 import BorderlessLayout from "./Borderless.layout.vue";
 import LernStoreLayout from "./LernStore.layout.vue";
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import LoggedOutLayout from "./loggedOut.layout.vue";
+import LoggedOutLayout from "./LoggedOut.layout.vue";
 import { Layouts } from "./types";
 
 type AnyLayout = typeof LoggedInLayout | typeof LoggedOutLayout | typeof LernStoreLayout | typeof BorderlessLayout;
