@@ -4,7 +4,7 @@
 		:message="t('components.elementTypeSelection.dialog.title')"
 		:confirm-btn-lang-key="t('common.actions.create')"
 		data-testid="collabora-element-dialog"
-		@cancel="closeCollaboraDialog"
+		@cancel="onCancel"
 		@confirm="onConfirm"
 	>
 		<template #content>
@@ -72,6 +72,17 @@ const docTypeRules = [isRequired(t("common.validation.required2"))];
 const fileNameRules = [(value: string) => validateOnOpeningTag(value), isRequired(t("common.validation.required2"))];
 const captionRules = [(value: string) => validateOnOpeningTag(value)];
 
+const resetForm = () => {
+	selectedDocType.value = null;
+	fileName.value = "";
+	caption.value = "";
+};
+
+const onCancel = () => {
+	resetForm();
+	closeCollaboraDialog();
+};
+
 const onConfirm = async () => {
 	if (form?.value) {
 		const { valid } = await form.value.validate();
@@ -79,6 +90,7 @@ const onConfirm = async () => {
 			collaboraElementTypeOptions.value
 				.find((item) => item.id === selectedDocType.value)
 				?.action(fileName.value, caption.value);
+			resetForm();
 		}
 	}
 };
