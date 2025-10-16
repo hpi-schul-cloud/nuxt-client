@@ -87,7 +87,7 @@ const onConfirm = async () => {
 	if (form?.value) {
 		const { valid } = await form.value.validate();
 		if (valid) {
-			collaboraElementTypeOptions.value
+			await collaboraElementTypeOptions.value
 				.find((item) => item.id === selectedDocType.value)
 				?.action(fileName.value, caption.value);
 			resetForm();

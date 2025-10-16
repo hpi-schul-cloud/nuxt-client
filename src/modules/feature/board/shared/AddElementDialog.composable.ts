@@ -67,32 +67,6 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		showNotificationByElementType(elementType);
 	};
 
-	const onCollaboraElementClick =
-		(assetUrl: string, fileExtension: string) => async (fileName: string, caption: string) => {
-			triggerFileSelect.value = false;
-			const response = await createElementRequestFn({
-				type: ContentElementType.File,
-				cardId,
-			});
-
-			try {
-				const element = AnyContentElementSchema.parse(response);
-				const elementContent = FileElementContentSchema.parse(element.content);
-
-				await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);
-
-				if (caption && caption.trim().length > 0) {
-					elementContent.caption = caption.trim();
-					element.content = elementContent;
-					await cardStore.updateElementRequest({ element });
-				}
-
-				closeCollaboraDialog();
-			} catch {
-				return;
-			}
-		};
-
 	const showNotificationByElementType = (elementType: ContentElementType) => {
 		const translationKeyCollaborativeTextEditor =
 			"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
@@ -244,26 +218,101 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		{
 			id: "1",
 			label: t(".docx (Text)"),
-			action: onCollaboraElementClick(
-				new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString(),
-				".docx"
-			),
+			action: async (fileName: string, caption: string) => {
+				triggerFileSelect.value = false;
+				const response = await createElementRequestFn({
+					type: ContentElementType.File,
+					cardId,
+				});
+
+				try {
+					const element = AnyContentElementSchema.parse(response);
+					const elementContent = FileElementContentSchema.parse(element.content);
+
+					await uploadFromUrl(
+						new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString(),
+						element.id,
+						FileRecordParentType.BOARDNODES,
+						fileName + ".docx"
+					);
+
+					if (caption && caption.trim().length > 0) {
+						elementContent.caption = caption.trim();
+						element.content = elementContent;
+						await cardStore.updateElementRequest({ element });
+					}
+
+					closeCollaboraDialog();
+				} catch {
+					return;
+				}
+			},
 		},
 		{
 			id: "2",
 			label: t(".xlsx (Tabelle)"),
-			action: onCollaboraElementClick(
-				new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString(),
-				".xlsx"
-			),
+			action: async (fileName: string, caption: string) => {
+				triggerFileSelect.value = false;
+				const response = await createElementRequestFn({
+					type: ContentElementType.File,
+					cardId,
+				});
+
+				try {
+					const element = AnyContentElementSchema.parse(response);
+					const elementContent = FileElementContentSchema.parse(element.content);
+
+					await uploadFromUrl(
+						new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString(),
+						element.id,
+						FileRecordParentType.BOARDNODES,
+						fileName + ".xlsx"
+					);
+
+					if (caption && caption.trim().length > 0) {
+						elementContent.caption = caption.trim();
+						element.content = elementContent;
+						await cardStore.updateElementRequest({ element });
+					}
+
+					closeCollaboraDialog();
+				} catch {
+					return;
+				}
+			},
 		},
 		{
 			id: "3",
 			label: t(".pptx (Präsentation)"),
-			action: onCollaboraElementClick(
-				new URL("@/assets/collabora/empty-presentation.pptx", import.meta.url).toString(),
-				".pptx"
-			),
+			action: async (fileName: string, caption: string) => {
+				triggerFileSelect.value = false;
+				const response = await createElementRequestFn({
+					type: ContentElementType.File,
+					cardId,
+				});
+
+				try {
+					const element = AnyContentElementSchema.parse(response);
+					const elementContent = FileElementContentSchema.parse(element.content);
+
+					await uploadFromUrl(
+						new URL("@/assets/collabora/empty-presentation.pptx", import.meta.url).toString(),
+						element.id,
+						FileRecordParentType.BOARDNODES,
+						fileName + ".pptx"
+					);
+
+					if (caption && caption.trim().length > 0) {
+						elementContent.caption = caption.trim();
+						element.content = elementContent;
+						await cardStore.updateElementRequest({ element });
+					}
+
+					closeCollaboraDialog();
+				} catch {
+					return;
+				}
+			},
 		},
 	];
 

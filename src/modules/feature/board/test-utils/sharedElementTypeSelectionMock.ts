@@ -18,8 +18,7 @@ interface ElementTypeSelectionOptions {
 interface CollaboraElementTypeSelectionOptions {
 	id: string;
 	label: string;
-	action: (fileName: string) => Promise<void>;
-	testId: string;
+	action: (fileName: string, caption: string) => Promise<void>;
 }
 
 export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
