@@ -448,6 +448,7 @@ export default {
 		"A card was created by another user in column {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "A column was created by another user.",
 	"components.board.screenReader.notification.cardDeleted.success": "A card was deleted by another user.",
+	"components.board.screenReader.notification.cardDuplicated.success": "A card was duplicated by another user.",
 	"components.board.screenReader.notification.columnDeleted.success": "A column was deleted by another user.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"In column {columnPosition}, a card was moved to position {newPosition}.",

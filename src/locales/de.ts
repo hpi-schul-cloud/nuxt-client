@@ -454,6 +454,8 @@ export default {
 		"Ein Abschnitt wurde von einem anderen Benutzer erstellt.",
 	"components.board.screenReader.notification.cardDeleted.success":
 		"Eine Karte wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.cardDuplicated.success":
+		"Eine Karte wurde von einem anderen Benutzer dupliziert.",
 	"components.board.screenReader.notification.columnDeleted.success":
 		"Ein Abschnitt wurde von einem anderen Benutzer gelöscht.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":

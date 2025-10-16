@@ -456,6 +456,7 @@ export default {
 		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Una columna fue creada por otro usuario.",
 	"components.board.screenReader.notification.cardDeleted.success": "Una tarjeta fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.cardDuplicated.success": "Una tarjeta fue duplicada por otro usuario.",
 	"components.board.screenReader.notification.columnDeleted.success": "Una columna fue eliminada por otro usuario.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",

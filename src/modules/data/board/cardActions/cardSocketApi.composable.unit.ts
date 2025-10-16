@@ -4,6 +4,7 @@ import {
 	DeleteCardFailurePayload,
 	DeleteCardRequestPayload,
 	DeleteElementFailurePayload,
+	DuplicateCardFailurePayload,
 	FetchCardFailurePayload,
 	MoveElementFailurePayload,
 	UpdateCardHeightFailurePayload,
@@ -155,6 +156,19 @@ describe("useCardSocketApi", () => {
 				expect(cardStore.deleteCardSuccess).toHaveBeenCalledWith(payload);
 			});
 
+			it("should call duplicateCardSuccess for corresponding action", () => {
+				const cardStore = mockedPiniaStoreTyping(useCardStore);
+				const { dispatch } = useCardSocketApi();
+
+				const payload = {
+					newCard: cardResponseFactory.build(),
+					isOwnAction: true,
+				};
+				dispatch(CardActions.duplicateCardSuccess(payload));
+
+				expect(cardStore.duplicateCardSuccess).toHaveBeenCalledWith(payload);
+			});
+
 			it("should call fetchCardSuccess for corresponding action", () => {
 				const cardStore = mockedPiniaStoreTyping(useCardStore);
 				const { dispatch } = useCardSocketApi();
@@ -274,6 +288,17 @@ describe("useCardSocketApi", () => {
 					cardId: "cardId",
 				};
 				dispatch(CardActions.deleteCardFailure(payload));
+
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
+			});
+
+			it("should reload the board for duplicateCardFailure action", () => {
+				const { dispatch, boardStore } = setupWithFakeBoard();
+
+				const payload: DuplicateCardFailurePayload = {
+					cardId: "cardId",
+				};
+				dispatch(CardActions.duplicateCardFailure(payload));
 
 				expect(boardStore.reloadBoard).toHaveBeenCalled();
 			});
@@ -398,6 +423,18 @@ describe("useCardSocketApi", () => {
 			deleteCardRequest(payload);
 
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("delete-card-request", payload);
+		});
+	});
+
+	describe("duplicateCardRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { duplicateCardRequest } = useCardSocketApi();
+
+			duplicateCardRequest("card-id");
+
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-card-request", {
+				cardId: "card-id",
+			});
 		});
 	});
 

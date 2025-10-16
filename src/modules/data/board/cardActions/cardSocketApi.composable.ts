@@ -29,6 +29,7 @@ export const useCardSocketApi = () => {
 		notifyUpdateCardTitleSuccess,
 		notifyCreateElementSuccess,
 		notifyDeleteElementSuccess,
+		notifyDuplicateCardSuccess,
 		notifyMoveElementSuccess,
 		notifyUpdateElementSuccess,
 	} = useBoardAriaNotification();
@@ -63,7 +64,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
 			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
 			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
-			// TODO - add duplication notification
+			on(CardActions.duplicateCardSuccess, notifyDuplicateCardSuccess),
 		];
 
 		handle(
