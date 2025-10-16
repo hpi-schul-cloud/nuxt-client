@@ -28,7 +28,7 @@ import {
 import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
-import { notifyError } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
@@ -264,7 +264,11 @@ export const useCardRestApi = () => {
 			const newCard = await duplicateCardCall(cardId);
 
 			if (newCard.id) {
-				cardStore.duplicateCardSuccess({ newCard });
+				cardStore.duplicateCardSuccess({ newCard, isOwnAction: true });
+				notifyInfo(
+					"Inhalte aus Etherpags und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen."
+				);
+				notifySuccess("Karte erfolgreich dupliziert");
 			}
 		} catch (error) {
 			handleError(error, {});
