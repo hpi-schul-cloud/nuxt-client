@@ -15,9 +15,8 @@ import {
 	TaskApiFactory,
 	TaskApiInterface,
 } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { isAxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -305,7 +304,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			HttpStatusCode.InternalServerError,
 		];
 		if (error === null) {
-			applicationErrorModule.resetError();
+			useAppStore().clearApplicationError();
 			return;
 		}
 
@@ -313,7 +312,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 
 		const errorCode = apiError.code;
 		if (errorCode && handledApplicationErrors.includes(errorCode)) {
-			applicationErrorModule.setError(createApplicationError(errorCode));
+			useAppStore().handleApplicationError(errorCode);
 		}
 	}
 
