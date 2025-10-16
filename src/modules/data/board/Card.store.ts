@@ -78,17 +78,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const duplicateCardSuccess = async (payload: DuplicateCardSuccessPayload) => {
 		if (payload.newCard.id) {
-			const now = new Date().toISOString();
-
-			const card: CardResponse = {
-				id: payload.newCard.id,
-				title: payload.newCard.title || undefined,
-				elements: [],
-				height: 120,
-				visibilitySettings: { publishedAt: now },
-				timestamps: { createdAt: now, lastUpdatedAt: now },
-			};
-			cards.value[card.id!] = card;
+			cards.value[payload.newCard.id] = payload.newCard;
 		}
 	};
 
