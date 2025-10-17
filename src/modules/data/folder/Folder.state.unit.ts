@@ -109,7 +109,7 @@ describe("useFolderState", () => {
 
 			describe("when root parent node is a course", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "course-id",
@@ -143,7 +143,7 @@ describe("useFolderState", () => {
 						},
 						{
 							disabled: true,
-							title: "title 3",
+							title,
 						},
 					]);
 				});
@@ -151,7 +151,7 @@ describe("useFolderState", () => {
 
 			describe("when root parent node is a room", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "room-id",
@@ -176,7 +176,7 @@ describe("useFolderState", () => {
 						},
 						{
 							disabled: true,
-							title: "title 4",
+							title,
 						},
 					]);
 				});
