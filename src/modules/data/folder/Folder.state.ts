@@ -11,11 +11,10 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
-import { createSharedComposable } from "@vueuse/core";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useFolderState = createSharedComposable(() => {
+export const useFolderState = () => {
 	const boardElementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 	const { t } = useI18n();
 
@@ -127,4 +126,4 @@ export const useFolderState = createSharedComposable(() => {
 		mapNodeTypeToPathType,
 		renameFolder,
 	};
-});
+};
