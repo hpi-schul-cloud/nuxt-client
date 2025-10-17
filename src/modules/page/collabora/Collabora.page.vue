@@ -11,11 +11,10 @@
 
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
-import { BoardElementApiFactory } from "@/serverApi/v3";
 import { EditorMode } from "@/types/file/File";
-import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
+import { useBoardApi } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
@@ -32,7 +31,7 @@ const url = ref<URL>(new URL("about:blank"));
 const iframeRef = ref<HTMLIFrameElement>();
 const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
 const { setupPostMessageAPI } = useCollaboraPostMessageApi();
-const boardElementApi = BoardElementApiFactory(undefined, "/v3", $axios);
+const { getElementWithParentHierarchyCall } = useBoardApi();
 
 const { user, locale } = useAppStoreRefs();
 
@@ -88,7 +87,7 @@ const getFirstPartOfPageTitle = (parentName?: string) => {
 
 const getParentName = async () => {
 	if (props.parentId) {
-		const response = await boardElementApi.elementControllerGetElementWithParentHierarchy(props.parentId);
+		const response = await getElementWithParentHierarchyCall(props.parentId);
 		const indexOfDirectParent = response.data.parentHierarchy.length - 1;
 
 		return response.data.parentHierarchy[indexOfDirectParent].name;
