@@ -1,6 +1,6 @@
 <template>
 	<VTextField
-		v-model="altTexRef"
+		v-model="altTextRef"
 		data-testid="file-alttext-input"
 		:persistent-hint="true"
 		:hint="t('components.cardElement.fileElement.altDescription')"
@@ -33,7 +33,7 @@ const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const altTextInput = ref<string | undefined>(undefined);
-const altTexRef = computed({
+const altTextRef = computed({
 	get: () => {
 		if (altTextInput.value !== undefined) {
 			return altTextInput.value;
@@ -45,7 +45,7 @@ const altTexRef = computed({
 
 const rules = [(value: string) => validateOnOpeningTag(value)];
 
-watch(altTexRef, (newValue) => {
+watch(altTextRef, (newValue) => {
 	const isValid = rules.every((rule) => rule(newValue) === true);
 
 	if (isValid) {
