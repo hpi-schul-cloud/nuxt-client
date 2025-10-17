@@ -22,7 +22,7 @@ const layout = computed(() => {
 	let layoutName = (route.meta.layout as string) || Layouts.LOGGED_IN;
 
 	if (!useAppStore().isLoggedIn) {
-		layoutName = Layouts.LOGGED_OUT;
+		layoutName = (route.meta.layout as string) || Layouts.LOGGED_OUT;
 	}
 
 	if (isLayout(layoutName)) {
