@@ -1,6 +1,6 @@
 <template>
 	<VTextarea
-		v-model="modelValue"
+		v-model="captionRef"
 		data-testid="file-caption-input"
 		rows="1"
 		auto-grow
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@util-validators";
-import { onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -31,17 +31,20 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
-const modelValue = ref("");
-
-onMounted(() => {
-	if (props.caption !== undefined) {
-		modelValue.value = props.caption;
-	}
+const captionInput = ref<string | undefined>(undefined);
+const captionRef = computed({
+	get: () => {
+		if (captionInput.value !== undefined) {
+			return captionInput.value;
+		}
+		return props.caption ?? "";
+	},
+	set: (value) => (captionInput.value = value),
 });
 
 const rules = [(value: string) => validateOnOpeningTag(value)];
 
-watch(modelValue, (newValue) => {
+watch(captionRef, (newValue) => {
 	const isValid = rules.every((rule) => rule(newValue) === true);
 
 	if (isValid) {

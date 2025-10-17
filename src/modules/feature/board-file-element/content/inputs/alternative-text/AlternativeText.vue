@@ -1,6 +1,6 @@
 <template>
 	<VTextField
-		v-model="modelValue"
+		v-model="altTexRef"
 		data-testid="file-alttext-input"
 		:persistent-hint="true"
 		:hint="t('components.cardElement.fileElement.altDescription')"
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useOpeningTagValidator } from "@util-validators";
-import { onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -32,17 +32,20 @@ const { t } = useI18n();
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
-const modelValue = ref("");
-
-onMounted(() => {
-	if (props.alternativeText !== undefined) {
-		modelValue.value = props.alternativeText;
-	}
+const altTextInput = ref<string | undefined>(undefined);
+const altTexRef = computed({
+	get: () => {
+		if (altTextInput.value !== undefined) {
+			return altTextInput.value;
+		}
+		return props.alternativeText ?? "";
+	},
+	set: (value) => (altTextInput.value = value),
 });
 
 const rules = [(value: string) => validateOnOpeningTag(value)];
 
-watch(modelValue, (newValue) => {
+watch(altTexRef, (newValue) => {
 	const isValid = rules.every((rule) => rule(newValue) === true);
 
 	if (isValid) {
