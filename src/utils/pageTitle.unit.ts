@@ -14,12 +14,14 @@ describe("pageTitle", () => {
 		});
 	});
 
-	it("should set default page title", () => {
-		const pageTitle = buildPageTitle();
-		expect(pageTitle).toBe(instanceTitle);
+	describe("when no titles are passed", () => {
+		it("should set default page title", () => {
+			const pageTitle = buildPageTitle();
+			expect(pageTitle).toBe(instanceTitle);
+		});
 	});
 
-	describe("when parent title is passed", () => {
+	describe("when only parent title is passed", () => {
 		it("should set page title with parent title", () => {
 			const parentTitle = "parentTitle";
 			const pageTitle = buildPageTitle(undefined, parentTitle);
@@ -27,8 +29,8 @@ describe("pageTitle", () => {
 		});
 	});
 
-	describe("when custom page title is passed", () => {
-		it("should add prefix to default page title", () => {
+	describe("when only custom page title is passed", () => {
+		it("should set page title with custom page title", () => {
 			const customPageTitle = "customPageTitle";
 			const pageTitle = buildPageTitle(customPageTitle);
 			expect(pageTitle).toEqual(`${customPageTitle} - ${instanceTitle}`);
