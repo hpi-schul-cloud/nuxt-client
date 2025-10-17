@@ -249,10 +249,7 @@ export default {
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
 
-		document.title = buildPageTitle(
-			this.$t("pages.administration.ldap.save.title"),
-			this.$t("pages.administration.school.index.title")
-		);
+		document.title = buildPageTitle(this.$t("pages.administration.ldap.save.title"));
 	},
 	methods: {
 		backButtonHandler() {
