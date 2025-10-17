@@ -92,7 +92,7 @@ describe("App.vue", () => {
 			expect(wrapper.findComponent(LoggedInLayout).exists()).toBe(true);
 		});
 
-		it("should not render loggedOut layout", () => {
+		it("should render loggedOut layout", () => {
 			useAppStore().isLoggedIn = false;
 			const { wrapper } = setup({ layout: Layouts.LOGGED_OUT });
 
