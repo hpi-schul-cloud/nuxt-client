@@ -71,13 +71,13 @@ const setCollaboraUrl = async () => {
 
 const setPageTitle = async () => {
 	const parentName = await getParentName();
-	const firstPartOfPageTitle = getFirstPartOfPageTitle(parentName);
+	const firstPartOfPageTitle = formatePageTitlePrefix(parentName);
 	const pageTitle = buildPageTitle(firstPartOfPageTitle);
 
 	useTitle(pageTitle);
 };
 
-const getFirstPartOfPageTitle = (parentName?: string) => {
+const formatePageTitlePrefix = (parentName?: string) => {
 	if (props.fileName) {
 		return parentName ? `${props.fileName} - ${parentName}` : props.fileName;
 	}
