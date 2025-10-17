@@ -630,7 +630,6 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:alternativeText");
-			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		});
@@ -641,7 +640,6 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:name");
-			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:name")).toHaveLength(1);
 		});
@@ -652,7 +650,6 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:caption");
-			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:caption")).toHaveLength(1);
 		});

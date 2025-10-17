@@ -35,7 +35,7 @@ describe("FileName", () => {
 		const textField = wrapper.findComponent(VTextField);
 		const newFileName = "myNewImage";
 		await textField.setValue(newFileName);
-		await nextTick();
+		vi.runAllTimers();
 
 		expect(wrapper.emitted("update:name")).toHaveLength(1);
 		expect(wrapper.emitted("update:name")?.[0][0]).toBe(newFileName + fileExtension);

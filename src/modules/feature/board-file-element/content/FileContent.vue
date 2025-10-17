@@ -56,7 +56,6 @@ import { isAudioMimeType, isPdfMimeType, isVideoMimeType } from "@/utils/fileHel
 import { injectStrict } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useDebounceFn } from "@vueuse/core";
 import { computed, PropType, ref } from "vue";
 import { useDisplay } from "vuetify";
 
@@ -75,17 +74,17 @@ const onFetchFile = () => {
 	emit("fetch:file");
 };
 
-const onUpdateCaption = useDebounceFn((value: string) => {
+const onUpdateCaption = (value: string) => {
 	emit("update:caption", value);
-}, 600);
+};
 
-const onUpdateText = useDebounceFn((value: string) => {
+const onUpdateText = (value: string) => {
 	emit("update:alternativeText", value);
-}, 600);
+};
 
-const onUpdateName = useDebounceFn((value: string) => {
+const onUpdateName = (value: string) => {
 	emit("update:name", value);
-}, 600);
+};
 
 const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
