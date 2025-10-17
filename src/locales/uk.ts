@@ -448,6 +448,9 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
+	"components.board.notifications.info.cardDuplicated":
+		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
+	"components.board.notifications.success.cardDuplicated": "Картка успішно продубльована.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Картку було створено іншим користувачем у колонці {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Колонку створив інший користувач.",

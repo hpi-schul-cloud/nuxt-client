@@ -265,10 +265,9 @@ export const useCardRestApi = () => {
 
 			if (newCard.id) {
 				cardStore.duplicateCardSuccess({ newCard, isOwnAction: true });
-				notifyInfo(
-					"Inhalte aus Etherpags und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen."
-				);
-				notifySuccess("Karte erfolgreich dupliziert");
+
+				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
+				notifySuccess(t("components.board.notifications.success.cardDuplicated"));
 			}
 		} catch (error) {
 			handleError(error, {});
