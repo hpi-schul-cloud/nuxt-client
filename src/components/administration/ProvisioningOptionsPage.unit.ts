@@ -17,15 +17,6 @@ import { VCheckboxBtn } from "vuetify/lib/components/index";
 
 vi.mock("@data-provisioning-options");
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 

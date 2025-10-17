@@ -4,15 +4,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {
 		setActivePinia(createTestingPinia());

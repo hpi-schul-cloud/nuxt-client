@@ -31,15 +31,6 @@ vi.mock("@data-room", () => ({
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 describe("RoomsOverview", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 

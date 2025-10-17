@@ -27,15 +27,6 @@ vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 describe("BoardPageInformation.composable", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 
