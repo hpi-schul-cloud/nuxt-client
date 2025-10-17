@@ -6,7 +6,6 @@
 import { useFolderState } from "@data-folder";
 import { Folder } from "@feature-folder";
 import { useTitle } from "@vueuse/core";
-import { watch } from "vue";
 
 defineProps({
 	folderId: {
@@ -16,8 +15,5 @@ defineProps({
 });
 
 const { pageTitle } = useFolderState();
-
-watch(pageTitle, (newPageTitle: string) => {
-	useTitle(newPageTitle);
-});
+useTitle(pageTitle);
 </script>
