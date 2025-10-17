@@ -214,105 +214,69 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		dynamicElementTypeOptions.value = options;
 	};
 
+	const onCollaboraElementClick = async (
+		assetUrl: string,
+		fileExtension: string,
+		fileName: string,
+		caption: string
+	) => {
+		triggerFileSelect.value = false;
+		const response = await createElementRequestFn({
+			type: ContentElementType.File,
+			cardId,
+		});
+
+		try {
+			const element = AnyContentElementSchema.parse(response);
+			const elementContent = FileElementContentSchema.parse(element.content);
+
+			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);
+
+			if (caption && caption.trim().length > 0) {
+				elementContent.caption = caption.trim();
+				element.content = elementContent;
+				await cardStore.updateElementRequest({ element });
+			}
+
+			closeCollaboraDialog();
+		} catch {
+			return;
+		}
+	};
+
 	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => [
 		{
 			id: "1",
 			label: t("components.elementTypeSelection.elements.collabora.option.text"),
-			action: async (fileName: string, caption: string) => {
-				triggerFileSelect.value = false;
-				const response = await createElementRequestFn({
-					type: ContentElementType.File,
-					cardId,
-				});
-
-				try {
-					const element = AnyContentElementSchema.parse(response);
-					const elementContent = FileElementContentSchema.parse(element.content);
-
-					await uploadFromUrl(
-						new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString(),
-						element.id,
-						FileRecordParentType.BOARDNODES,
-						fileName + ".docx"
-					);
-
-					if (caption && caption.trim().length > 0) {
-						elementContent.caption = caption.trim();
-						element.content = elementContent;
-						await cardStore.updateElementRequest({ element });
-					}
-
-					closeCollaboraDialog();
-				} catch {
-					return;
-				}
-			},
+			action: async (fileName: string, caption: string) =>
+				onCollaboraElementClick(
+					new URL("@/assets/collabora/empty-doc.docx", import.meta.url).toString(),
+					".docx",
+					fileName,
+					caption
+				),
 		},
 		{
 			id: "2",
 			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-			action: async (fileName: string, caption: string) => {
-				triggerFileSelect.value = false;
-				const response = await createElementRequestFn({
-					type: ContentElementType.File,
-					cardId,
-				});
-
-				try {
-					const element = AnyContentElementSchema.parse(response);
-					const elementContent = FileElementContentSchema.parse(element.content);
-
-					await uploadFromUrl(
-						new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString(),
-						element.id,
-						FileRecordParentType.BOARDNODES,
-						fileName + ".xlsx"
-					);
-
-					if (caption && caption.trim().length > 0) {
-						elementContent.caption = caption.trim();
-						element.content = elementContent;
-						await cardStore.updateElementRequest({ element });
-					}
-
-					closeCollaboraDialog();
-				} catch {
-					return;
-				}
-			},
+			action: async (fileName: string, caption: string) =>
+				onCollaboraElementClick(
+					new URL("@/assets/collabora/empty-spreadsheet.xlsx", import.meta.url).toString(),
+					".xlsx",
+					fileName,
+					caption
+				),
 		},
 		{
 			id: "3",
 			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
-			action: async (fileName: string, caption: string) => {
-				triggerFileSelect.value = false;
-				const response = await createElementRequestFn({
-					type: ContentElementType.File,
-					cardId,
-				});
-
-				try {
-					const element = AnyContentElementSchema.parse(response);
-					const elementContent = FileElementContentSchema.parse(element.content);
-
-					await uploadFromUrl(
-						new URL("@/assets/collabora/empty-presentation.pptx", import.meta.url).toString(),
-						element.id,
-						FileRecordParentType.BOARDNODES,
-						fileName + ".pptx"
-					);
-
-					if (caption && caption.trim().length > 0) {
-						elementContent.caption = caption.trim();
-						element.content = elementContent;
-						await cardStore.updateElementRequest({ element });
-					}
-
-					closeCollaboraDialog();
-				} catch {
-					return;
-				}
-			},
+			action: async (fileName: string, caption: string) =>
+				onCollaboraElementClick(
+					new URL("@/assets/collabora/empty-presentation.pptx", import.meta.url).toString(),
+					".pptx",
+					fileName,
+					caption
+				),
 		},
 	];
 
