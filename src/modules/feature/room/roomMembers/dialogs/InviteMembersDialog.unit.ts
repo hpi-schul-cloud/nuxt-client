@@ -33,7 +33,6 @@ describe("InviteMembersDialog", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		// createTestEnvStore();
 		createTestEnvStore({
 			FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false,
 		});

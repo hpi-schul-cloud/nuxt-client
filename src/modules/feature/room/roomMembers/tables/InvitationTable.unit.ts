@@ -257,7 +257,6 @@ describe("InvitationTable", () => {
 			const headers = dataTable.props("tableHeaders").map((header: { title: string }) => header.title);
 			const fourthHeader = headers[3];
 			expect(fourthHeader).toBe("pages.rooms.members.tableHeader.validForExternalPersons");
-			// expect(headers).toContain("pages.rooms.members.tableHeader.validForExternalPersons");
 		});
 
 		it("does not render external persons header when feature flag is disabled", async () => {
