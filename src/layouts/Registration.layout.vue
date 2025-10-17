@@ -3,7 +3,7 @@
 		<header class="topbar" data-testid="registration-layout-top-bar">
 			<NavigationBar :img="Logo" :hide-buttons="true" />
 		</header>
-		<main :class="isMobile ? 'small-wrapper' : 'wrapper'">
+		<main :class="isExtraSmallDevice ? 'small-wrapper' : 'wrapper'">
 			<slot />
 		</main>
 		<TheFooter />
@@ -18,7 +18,7 @@ import { computed } from "vue";
 import { useDisplay } from "vuetify";
 
 const { xs } = useDisplay();
-const isMobile = computed(() => xs.value);
+const isExtraSmallDevice = computed(() => xs.value);
 </script>
 
 <style lang="scss" scoped>
