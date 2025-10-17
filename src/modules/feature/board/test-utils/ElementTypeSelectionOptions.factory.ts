@@ -1,5 +1,4 @@
 import type { ElementTypeSelectionOptions } from "../shared/SharedElementTypeSelection.composable";
-import { vi } from "vitest";
 
 export const elementTypeSelectionOptionsFactory = {
 	create: (options: Partial<ElementTypeSelectionOptions> = {}): ElementTypeSelectionOptions => ({
@@ -45,4 +44,22 @@ export const elementTypeSelectionOptionsFactory = {
 				testId: "etherpad-element",
 			},
 		]),
+
+	createCollaboraElementList: () => [
+		{
+			id: "1",
+			label: "Text Document",
+			action: vi.fn(),
+		},
+		{
+			id: "2",
+			label: "Table Document",
+			action: vi.fn(),
+		},
+		{
+			id: "3",
+			label: "Presentation Document",
+			action: vi.fn(),
+		},
+	],
 };
