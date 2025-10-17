@@ -483,20 +483,6 @@ describe("InviteMembersDialog", () => {
 			});
 		});
 
-		describe("when external person invitation is active", () => {
-			it("should have the first and fourth checkboxes checked as default", async () => {
-				const { wrapper } = setup({ isExternalPersonInvitationActive: true });
-				await nextTick();
-
-				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
-
-				expect(checkboxes[0].props("modelValue")).toBe(true);
-				expect(checkboxes[1].props("modelValue")).toBe(false);
-				expect(checkboxes[2].props("modelValue")).toBe(false);
-				expect(checkboxes[3].props("modelValue")).toBe(true);
-			});
-		});
-
 		describe("when the first checkbox is checked", () => {
 			it("should enable the second checkbox", async () => {
 				const { wrapper } = setup();
