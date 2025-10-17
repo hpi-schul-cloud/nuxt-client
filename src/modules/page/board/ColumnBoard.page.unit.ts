@@ -6,7 +6,6 @@ import { setActivePinia } from "pinia";
 
 describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {
-		setActivePinia(createTestingPinia());
 		const boardId = "test-board-id";
 
 		const wrapper = shallowMount(ColumnBoardPage, {
@@ -23,6 +22,10 @@ describe("@pages/ColumnBoard.page.vue", () => {
 			boardId,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should be rendered in DOM", () => {
 		const { wrapper } = setup();
