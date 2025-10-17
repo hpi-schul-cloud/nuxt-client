@@ -5,6 +5,7 @@ import {
 	FileRecordVirusScanStatus,
 	PreviewOutputMimeTypes,
 } from "@/types/file/File";
+import { useI18n } from "vue-i18n";
 
 export const toBase64 = (file: File) =>
 	new Promise((resolve, reject) => {
@@ -75,6 +76,14 @@ export function convertFileSize(fileSize: number): {
 	return { convertedSize, unit };
 }
 
+export function formatFileSize(sizeInBytes: number) {
+	const { n } = useI18n();
+	const { convertedSize, unit } = convertFileSize(sizeInBytes);
+	const localizedFileSize = n(convertedSize, "fileSize");
+
+	return `${localizedFileSize} ${unit}`;
+}
+
 export function getFileExtension(fileName: string): string {
 	const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
@@ -95,10 +104,7 @@ export function removeFileExtension(str: string): string {
 	return stringWithoutExtension;
 }
 
-export function convertDownloadToPreviewUrl(
-	downloadUrl: string,
-	width?: FilePreviewWidth
-): string {
+export function convertDownloadToPreviewUrl(downloadUrl: string, width?: FilePreviewWidth): string {
 	const previewUrl =
 		downloadUrl.replace("download", "preview") +
 		`?outputFormat=${PreviewOutputMimeTypes.IMAGE_WEBP}` +
@@ -112,20 +118,14 @@ export function isScanStatusPending(scanStatus: FilePreviewStatus): boolean {
 }
 
 export function isScanStatusWontCheck(scanStatus: FilePreviewStatus): boolean {
-	return (
-		scanStatus === FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
-	);
+	return scanStatus === FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK;
 }
 
 export function isScanStatusError(scanStatus: FilePreviewStatus): boolean {
-	return (
-		scanStatus === FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
-	);
+	return scanStatus === FilePreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR;
 }
 
-export function isScanStatusBlocked(
-	scanStatus: FileRecordVirusScanStatus
-): boolean {
+export function isScanStatusBlocked(scanStatus: FileRecordVirusScanStatus): boolean {
 	return scanStatus !== FileRecordVirusScanStatus.BLOCKED;
 }
 

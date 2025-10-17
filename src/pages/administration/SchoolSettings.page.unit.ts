@@ -1,27 +1,21 @@
-import { useApplicationError } from "@/composables/application-error.composable";
-import {
-	ConfigResponse,
-	SchoolSystemResponse,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
+import SchoolSettings from "./SchoolSettings.page.vue";
+import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
-import { ENV_CONFIG_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { envsFactory, maintenanceStatusFactory } from "@@/tests/test-utils";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import type { Mock, Mocked } from "vitest";
 import { nextTick, reactive } from "vue";
 import { useRoute } from "vue-router";
-import SchoolSettings from "./SchoolSettings.page.vue";
-import type { Mock, Mocked } from "vitest";
 
 vi.mock("vue-router");
 
@@ -38,20 +32,15 @@ vi.mock(
 vi.mock("@data-school/schoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {
-	let useSharedSchoolYearChangeApiMock: DeepMocked<
-		ReturnType<typeof useSharedSchoolYearChange>
-	>;
+	let useSharedSchoolYearChangeApiMock: DeepMocked<ReturnType<typeof useSharedSchoolYearChange>>;
 
 	beforeEach(() => {
-		useSharedSchoolYearChangeApiMock =
-			createMock<ReturnType<typeof useSharedSchoolYearChange>>();
+		setActivePinia(createTestingPinia());
+		useSharedSchoolYearChangeApiMock = createMock<ReturnType<typeof useSharedSchoolYearChange>>();
 
-		vi.mocked(useSharedSchoolYearChange).mockReturnValue(
-			useSharedSchoolYearChangeApiMock
-		);
+		vi.mocked(useSharedSchoolYearChange).mockReturnValue(useSharedSchoolYearChangeApiMock);
 	});
 
-	let envConfigModule: Mocked<EnvConfigModule>;
 	let schoolsModule: Mocked<SchoolsModule>;
 
 	const mockFederalState: FederalState = {
@@ -76,9 +65,7 @@ describe("SchoolSettingsPage", () => {
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/354px-Brandenburg_Wappen.svg.png",
 	};
 
-	const mockSystems: SchoolSystemResponse[] = [
-		{ id: "123", type: "itslearning" },
-	];
+	const mockSystems: SchoolSystemResponse[] = [{ id: "123", type: "itslearning" }];
 
 	const getWrapper = (
 		envConfig: Partial<ConfigResponse> = {
@@ -104,20 +91,15 @@ describe("SchoolSettingsPage", () => {
 			...schoolGetters,
 		});
 
-		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build(envConfig),
-		});
+		createTestEnvStore(envConfig);
 
-		useRouteMock.mockImplementation(() =>
-			reactive({ path: "home", query: {} })
-		);
+		useRouteMock.mockImplementation(() => reactive({ path: "home", query: {} }));
 
 		const wrapper = shallowMount(SchoolSettings, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 		});
@@ -129,9 +111,7 @@ describe("SchoolSettingsPage", () => {
 		it("should fetch maintenance status of school", () => {
 			getWrapper();
 
-			expect(
-				useSharedSchoolYearChangeApiMock.fetchSchoolYearStatus
-			).toHaveBeenCalledWith(mockSchool.id);
+			expect(useSharedSchoolYearChangeApiMock.fetchSchoolYearStatus).toHaveBeenCalledWith(mockSchool.id);
 		});
 	});
 
@@ -175,9 +155,7 @@ describe("SchoolSettingsPage", () => {
 		it("should render admin migration expansion panel", () => {
 			const { wrapper } = getWrapper();
 
-			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
-				true
-			);
+			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(true);
 		});
 	});
 
@@ -187,17 +165,16 @@ describe("SchoolSettingsPage", () => {
 				FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 			});
 
-			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
-				false
-			);
+			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(false);
 		});
 	});
 
 	describe("school year change", () => {
 		describe("when school has an active ldap", () => {
 			const setup = () => {
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({ schoolUsesLdap: true });
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					schoolUsesLdap: true,
+				});
 
 				const { wrapper } = getWrapper();
 
@@ -209,16 +186,15 @@ describe("SchoolSettingsPage", () => {
 			it("should show school year change panel", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="school-year-change-panel"]').exists()
-				).toBe(true);
+				expect(wrapper.find('[data-testid="school-year-change-panel"]').exists()).toBe(true);
 			});
 		});
 
 		describe("when school does not have an active ldap", () => {
 			const setup = () => {
-				useSharedSchoolYearChangeApiMock.maintenanceStatus.value =
-					maintenanceStatusFactory.build({ schoolUsesLdap: false });
+				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = maintenanceStatusFactory.build({
+					schoolUsesLdap: false,
+				});
 
 				const { wrapper } = getWrapper();
 
@@ -230,9 +206,7 @@ describe("SchoolSettingsPage", () => {
 			it("should hide school year change panel", () => {
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="school-year-change-panel"]').exists()
-				).toBe(false);
+				expect(wrapper.find('[data-testid="school-year-change-panel"]').exists()).toBe(false);
 			});
 		});
 
@@ -241,57 +215,7 @@ describe("SchoolSettingsPage", () => {
 				useSharedSchoolYearChangeApiMock.maintenanceStatus.value = undefined;
 				const { wrapper } = getWrapper();
 
-				expect(
-					wrapper.find('[data-testid="school-year-change-panel"]').exists()
-				).toBe(false);
-			});
-		});
-	});
-
-	describe("institute title", () => {
-		describe("when the theme is default", () => {
-			it("should render default title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.Default,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual("Dataport");
-			});
-		});
-
-		describe("when the theme is brb", () => {
-			it("should render brb title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.Brb,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual(
-					"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"
-				);
-			});
-		});
-
-		describe("when the theme is thr", () => {
-			it("should render thr title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.Thr,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual(
-					"Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien"
-				);
-			});
-		});
-
-		describe("when the theme is n21", () => {
-			it("should render n21 title", () => {
-				const { wrapper } = getWrapper({
-					SC_THEME: SchulcloudTheme.N21,
-				});
-
-				expect(wrapper.vm.instituteTitle).toEqual(
-					"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"
-				);
+				expect(wrapper.find('[data-testid="school-year-change-panel"]').exists()).toBe(false);
 			});
 		});
 	});
@@ -308,14 +232,12 @@ describe("SchoolSettingsPage", () => {
 			getLoading: true,
 		});
 
-		expect(
-			wrapper.find('[data-testid="systems-panel-skeleton"]').exists()
-		).toBe(true);
+		expect(wrapper.find('[data-testid="systems-panel-skeleton"]').exists()).toBe(true);
 	});
 
 	it("should render alert on error", () => {
 		const { wrapper } = getWrapper(undefined, {
-			getError: useApplicationError().createApplicationError(500, "someKey"),
+			getError: createApplicationError(500, "someKey"),
 		});
 
 		const noError = wrapper.findComponent('[data-testid="no-error"]');

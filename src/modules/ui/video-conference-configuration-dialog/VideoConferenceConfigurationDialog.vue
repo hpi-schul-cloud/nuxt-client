@@ -4,14 +4,12 @@
 		max-width="480"
 		data-testid="video-conference-config-dialog"
 		@keydown.esc="$emit('close')"
+		@click:outside="$emit('close')"
 	>
 		<UseFocusTrap>
 			<VCard :ripple="false">
 				<VCardTitle>
-					<h2
-						class="text-h4 my-2"
-						data-testid="video-conference-config-dialog-title"
-					>
+					<h2 class="my-2" data-testid="video-conference-config-dialog-title">
 						{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
 					</h2>
 				</VCardTitle>
@@ -19,39 +17,25 @@
 					<VCheckbox
 						v-model="localOptions.everyAttendeeJoinsMuted"
 						data-testid="every-attendee-joins-muted"
-						:label="
-							t('pages.common.tools.configureVideoconferenceDialog.text.mute')
-						"
+						:label="t('pages.common.tools.configureVideoconferenceDialog.text.mute')"
 						:hide-details="true"
 					/>
 					<VCheckbox
 						v-model="localOptions.moderatorMustApproveJoinRequests"
 						data-testid="moderator-must-approve-join-requests"
-						:label="
-							t(
-								'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
-							)
-						"
+						:label="t('pages.common.tools.configureVideoconferenceDialog.text.waitingRoom')"
 						:hide-details="true"
 					/>
 					<VCheckbox
 						v-model="localOptions.everybodyJoinsAsModerator"
 						data-testid="everybody-joins-as-moderator"
-						:label="
-							t(
-								'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
-							)
-						"
+						:label="t('pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission')"
 						:hide-details="true"
 					/>
 				</VCardText>
 				<VCardActions>
 					<VSpacer />
-					<VBtn
-						data-testid="dialog-cancel"
-						variant="text"
-						@click="$emit('close')"
-					>
+					<VBtn data-testid="dialog-cancel" variant="text" @click="$emit('close')">
 						{{ t("common.actions.cancel") }}
 					</VBtn>
 					<VBtn
@@ -70,10 +54,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, ModelRef, PropType } from "vue";
-import { useI18n } from "vue-i18n";
 import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import { computed, ComputedRef, ModelRef, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	options: {
@@ -91,7 +75,5 @@ const { t } = useI18n();
 
 defineEmits(["close", "start-video-conference"]);
 
-const localOptions: ComputedRef<VideoConferenceOptions> = computed(
-	() => props.options
-);
+const localOptions: ComputedRef<VideoConferenceOptions> = computed(() => props.options);
 </script>

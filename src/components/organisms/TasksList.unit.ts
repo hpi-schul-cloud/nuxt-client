@@ -1,17 +1,17 @@
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
-import FinishedTasksModule from "@/store/finished-tasks";
-import NotifierModule from "@/store/notifier";
-import TasksModule from "@/store/tasks";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import { mount } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { RoleName } from "@/serverApi/v3";
+import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import FinishedTasksModule from "@/store/finished-tasks";
+import TasksModule from "@/store/tasks";
+import { COPY_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import mocks from "@@/tests/test-utils/mockDataTasks";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
 
 const { tasks } = mocks;
 
@@ -19,7 +19,6 @@ describe("@/components/organisms/TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
-	let notifierModuleMock: NotifierModule;
 
 	const mountComponent = (options = {}) => {
 		const wrapper = mount(TasksList, {
@@ -29,7 +28,6 @@ describe("@/components/organisms/TasksList", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
 			},
 			...options,
@@ -44,6 +42,10 @@ describe("@/components/organisms/TasksList", () => {
 		hasTasks: true,
 	};
 
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	beforeEach(() => {
 		copyModuleMock = createModuleMocks(CopyModule);
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
@@ -51,7 +53,6 @@ describe("@/components/organisms/TasksList", () => {
 			getTasks: [],
 			tasksIsEmpty: true,
 		});
-		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	describe("props", () => {
@@ -167,9 +168,7 @@ describe("@/components/organisms/TasksList", () => {
 			});
 
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
-			expect(
-				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
-			).toBe(true);
+			expect(wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()).toBe(true);
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(false);
 			expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 			expect(wrapper.props()).toStrictEqual({
@@ -201,9 +200,7 @@ describe("@/components/organisms/TasksList", () => {
 
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(true);
 			expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(false);
-			expect(
-				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
-			).toBe(false);
+			expect(wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()).toBe(false);
 		});
 
 		it("Should compute correct status", () => {
@@ -219,7 +216,7 @@ describe("@/components/organisms/TasksList", () => {
 			const wrapper = mountComponent({
 				propsData: {
 					tasks,
-					userRole: "student",
+					userRole: RoleName.Student,
 				},
 			});
 
@@ -227,11 +224,11 @@ describe("@/components/organisms/TasksList", () => {
 		});
 	});
 
-	it("should passthrough copy-task event", async () => {
+	it("should passthrough copy-task event", () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tasks,
-				userRole: "teacher",
+				userRole: RoleName.Teacher,
 			},
 		});
 
@@ -244,8 +241,6 @@ describe("@/components/organisms/TasksList", () => {
 		const oneTaskItemTeacher = wrapper.findComponent(TaskItemTeacher);
 		oneTaskItemTeacher.vm.$emit("copy-task", payload);
 
-		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(
-			expect.arrayContaining([payload])
-		);
+		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(expect.arrayContaining([payload]));
 	});
 });

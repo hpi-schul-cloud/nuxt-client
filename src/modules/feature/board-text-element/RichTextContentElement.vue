@@ -20,12 +20,12 @@
 </template>
 
 <script setup lang="ts">
-import { RichTextElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { computed, PropType, ref, toRef } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { RichTextElementResponse } from "@/serverApi/v3";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { computed, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
@@ -64,6 +64,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 const isFirstElement = computed(() => props.elementIndex === 0);
 </script>
+
 <style lang="scss" scoped>
 :deep(.ck-content) {
 	overflow: hidden; // prevent margin collapse
@@ -75,9 +76,8 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 
 	h4 {
-		font-size: var(--heading-6);
 		letter-spacing: 0.01em;
-		font-weight: var(--font-weight-bold);
+		font-weight: bold;
 	}
 
 	h5 {
@@ -129,9 +129,7 @@ const isFirstElement = computed(() => props.elementIndex === 0);
 	}
 }
 
-:deep(
-	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around
-) {
+:deep(.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around) {
 	> .ck-widget__type-around__button_before {
 		top: 8px;
 		left: 8px;

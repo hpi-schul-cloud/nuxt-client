@@ -1,22 +1,11 @@
-import { applicationErrorModule, authModule } from "@/store";
-import {
-	NavigationGuard,
-	NavigationGuardNext,
-	RouteLocationNormalized,
-} from "vue-router";
-import { useApplicationError } from "@/composables/application-error.composable";
+import { Permission } from "@/serverApi/v3";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useAppStore } from "@data-app";
+import { NavigationGuard } from "vue-router";
 
-const { createApplicationError } = useApplicationError();
-export function createPermissionGuard(
-	permissions: string[],
-	fallbackRoute?: string
-): NavigationGuard {
-	return (
-		to: RouteLocationNormalized,
-		from: RouteLocationNormalized,
-		next: NavigationGuardNext
-	) => {
-		if (permissions.every((p) => authModule.getUserPermissions.includes(p))) {
+export function createPermissionGuard(permissions: Permission[], fallbackRoute?: string): NavigationGuard {
+	return (to, from, next) => {
+		if (permissions.every((p) => useAppStore().userPermissions.includes(p))) {
 			return next();
 		}
 
@@ -24,6 +13,6 @@ export function createPermissionGuard(
 			return next(fallbackRoute);
 		}
 
-		applicationErrorModule.setError(createApplicationError(401));
+		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized);
 	};
 }

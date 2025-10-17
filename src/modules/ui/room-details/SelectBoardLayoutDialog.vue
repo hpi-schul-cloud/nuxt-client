@@ -2,15 +2,10 @@
 	<VDialog v-model="isOpen" width="360">
 		<UseFocusTrap :options="{ immediate: true }">
 			<VCard data-testid="board-layout-dialog">
-				<VCardTitle
-					class="text-h4 text-break px-6 pt-4"
-					data-testid="board-layout-dialog-title"
-				>
+				<VCardTitle class="text-h2 text-break px-6 pt-4" data-testid="board-layout-dialog-title">
 					{{ t("pages.room.dialog.boardLayout.title") }}
 				</VCardTitle>
-				<VCardText
-					class="d-flex flex-row flex-wrap align-center justify-space-around"
-				>
+				<VCardText class="d-flex flex-row flex-wrap align-center justify-space-around pt-4 pb-6">
 					<ExtendedIconBtn
 						v-for="(item, key) in boardLayouts"
 						:key="key"
@@ -21,13 +16,9 @@
 						@click.stop="$emit('select', item.type)"
 					/>
 				</VCardText>
-				<VCardActions class="mb-2 px-6">
-					<VBtn
-						data-testid="dialog-close"
-						variant="outlined"
-						@click="$emit('update:modelValue', false)"
-					>
-						{{ t("common.labels.close") }}
+				<VCardActions class="mb-2 px-6 justify-end">
+					<VBtn data-testid="dialog-close" variant="outlined" @click="$emit('update:modelValue', false)">
+						{{ t("common.actions.cancel") }}
 					</VBtn>
 				</VCardActions>
 			</VCard>
@@ -36,14 +27,13 @@
 </template>
 
 <script setup lang="ts">
+import { PickerOption } from "./types";
 import { BoardLayout } from "@/serverApi/v3";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { PickerOption } from "./types";
-import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 
 const isOpen = defineModel({
 	type: Boolean,

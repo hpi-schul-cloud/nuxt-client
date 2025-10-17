@@ -1,18 +1,27 @@
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { ref } from "vue";
+import { appLoadingStatusValueSchema, CollaboraMessage, collaboraMessageSchema } from "./CollaboraPostMessage.schema";
+import { notifyError } from "@data-app";
 import { useI18n } from "vue-i18n";
-import {
-	CollaboraMessage,
-	collaboraMessageSchema,
-	modifiedStatusValueSchema,
-} from "./CollaboraPostMessage.schema";
+
+export enum CollaboraEvents {
+	APP_LOADING_STATUS = "App_LoadingStatus",
+	HOST_POSTMESSAGE_READY = "Host_PostmessageReady",
+	REMOVE_BUTTON = "Remove_Button",
+	FEEDBACK_NEVER = "feedback-never",
+	HIDE_MENU_ITEM = "Hide_Menu_Item",
+	UI_CLOSE = "UI_Close",
+}
 
 export const useCollaboraPostMessageApi = () => {
-	const documentHasUnsavedChanges = ref<boolean>(false);
 	const { t } = useI18n();
-	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	let collaboraWindow: Window | null = null;
+	let targetOrigin = "";
 
 	window.addEventListener("message", (event) => listenForMessages(event.data));
+
+	const setupPostMessageAPI = (iframeRef: HTMLIFrameElement, iframeOrigin: string) => {
+		targetOrigin = iframeOrigin;
+		collaboraWindow = iframeRef?.contentWindow;
+	};
 
 	const listenForMessages = (data: string) => {
 		const json = parseJson(data);
@@ -20,46 +29,80 @@ export const useCollaboraPostMessageApi = () => {
 		try {
 			const message = collaboraMessageSchema.parse(json);
 
-			handleModifiedStatusMessage(message);
+			handleCollaboraMessages(message);
 		} catch {
-			showMessageError();
+			notifyError(t("pages.collabora.messageError"));
 		}
 	};
 
-	const showMessageError = () =>
-		notifierModule.show({
-			text: t("pages.collabora.messageError"),
-			status: "error",
-			timeout: 5000,
-		});
-
-	const handleModifiedStatusMessage = (message: CollaboraMessage) => {
-		if (hasModifiedStatusMessageId(message.MessageId)) {
-			const value = modifiedStatusValueSchema.parse(message.Values);
-
-			documentHasUnsavedChanges.value = value.Modified;
+	const handleCollaboraMessages = (message: CollaboraMessage) => {
+		if (hasLoadingStatusMessageId(message.MessageId)) {
+			handleLoadingStatusUpdate(message);
 		}
+
+		if (hasUICloseMessageId(message.MessageId)) {
+			window.close();
+		}
+	};
+
+	const handleLoadingStatusUpdate = (message: CollaboraMessage) => {
+		const { Status } = appLoadingStatusValueSchema.parse(message.Values);
+
+		if (Status === "Initialized") {
+			postMessage(CollaboraEvents.HOST_POSTMESSAGE_READY);
+			postMessage(CollaboraEvents.FEEDBACK_NEVER);
+		}
+
+		if (Status === "Document_Loaded") {
+			sendRemoveButtonsMessage();
+			sendHideMenuItemsMessage();
+		}
+	};
+
+	const postMessage = (messageId: string, values?: unknown) => {
+		if (!collaboraWindow || !targetOrigin) {
+			throw new Error("Collabora iframe not setup properly, please call setupPostMessageAPI first.");
+		}
+
+		collaboraWindow.postMessage(
+			JSON.stringify({
+				MessageId: messageId,
+				SendTime: Date.now(),
+				Values: values,
+			}),
+			targetOrigin
+		);
+	};
+
+	const sendRemoveButtonsMessage = () => {
+		const buttonIds = ["feedback-button", "about-button", "latestupdates", "signature-button"];
+
+		buttonIds.forEach((buttonId) => {
+			postMessage(CollaboraEvents.REMOVE_BUTTON, { id: buttonId });
+		});
+	};
+
+	const sendHideMenuItemsMessage = () => {
+		const menuItemIds = ["report-an-issue", "feedback", "about", "latestupdates", "serveraudit", "signature"];
+
+		menuItemIds.forEach((menuItemId) => {
+			postMessage(CollaboraEvents.HIDE_MENU_ITEM, { id: menuItemId });
+		});
 	};
 
 	const parseJson = (data: string): unknown => {
 		try {
 			return JSON.parse(data);
 		} catch {
-			notifierModule.show({
-				text: t("pages.collabora.jsonError"),
-				status: "error",
-				timeout: 5000,
-			});
+			notifyError(t("pages.collabora.jsonError"));
 		}
 	};
 
-	const hasModifiedStatusMessageId = (messageId: string): boolean => {
-		const isModifiedStatusMessage = messageId === "Doc_ModifiedStatus";
+	const hasLoadingStatusMessageId = (messageId: string): boolean => messageId === CollaboraEvents.APP_LOADING_STATUS;
 
-		return isModifiedStatusMessage;
-	};
+	const hasUICloseMessageId = (messageId: string): boolean => messageId === CollaboraEvents.UI_CLOSE;
 
 	return {
-		documentHasUnsavedChanges,
+		setupPostMessageAPI,
 	};
 };

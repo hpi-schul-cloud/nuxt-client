@@ -1,11 +1,6 @@
 import { FilterOption, User } from "./enums";
 
-type FilterOptionsType =
-	| "consentStatus"
-	| "classes"
-	| "createdAt"
-	| "lastLoginSystemChange"
-	| "outdatedSince";
+type FilterOptionsType = "consentStatus" | "classes" | "createdAt" | "lastLoginSystemChange" | "outdatedSince";
 
 type ChipTitle = {
 	item: string;

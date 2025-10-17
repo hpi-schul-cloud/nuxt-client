@@ -5,11 +5,7 @@
 				<v-text-field
 					v-model="localSchool.name"
 					class="school-name"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.nameOfSchool'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.nameOfSchool')"
 					density="compact"
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
@@ -23,16 +19,10 @@
 				<v-text-field
 					:model-value="localSchool.currentYear?.name"
 					class="school-year"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.schoolYear'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.schoolYear')"
 					density="compact"
 					readonly
-					:hint="
-						t('pages.administration.school.index.generalSettings.disabledHint')
-					"
+					:hint="t('pages.administration.school.index.generalSettings.disabledHint')"
 					persistent-hint
 					data-testid="school-year"
 				/>
@@ -44,18 +34,10 @@
 					v-model="localSchool.officialSchoolNumber"
 					class="school-number"
 					data-testid="school-number"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.schoolNumber'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.schoolNumber')"
 					density="compact"
 					:disabled="!!school.officialSchoolNumber"
-					:hint="
-						t(
-							'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
-						)
-					"
+					:hint="t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')"
 					persistent-hint
 					:readonly="!hasSchoolEditPermission"
 				/>
@@ -67,21 +49,13 @@
 					v-model="localSchool.county"
 					class="school-counties"
 					data-testid="school-counties"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.chooseACounty'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.chooseACounty')"
 					:items="federalState?.counties"
 					item-title="name"
 					item-value="id"
 					return-object
 					:disabled="!!localSchool.county"
-					:hint="
-						t(
-							'pages.administration.school.index.generalSettings.changeSchoolValueWarning'
-						)
-					"
+					:hint="t('pages.administration.school.index.generalSettings.changeSchoolValueWarning')"
 					persistent-hint
 				/>
 			</v-col>
@@ -92,11 +66,7 @@
 					v-model="logoFile"
 					class="school-logo truncate-file-input"
 					data-testid="school-logo-input"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.uploadSchoolLogo'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.uploadSchoolLogo')"
 					density="compact"
 					prepend-icon=""
 					prepend-inner-icon="$file"
@@ -109,16 +79,10 @@
 					v-model="localSchool.timezone"
 					class="timezone-input"
 					data-testid="timezone-input"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.timezone'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.timezone')"
 					density="compact"
 					disabled
-					:hint="
-						t('pages.administration.school.index.generalSettings.timezoneHint')
-					"
+					:hint="t('pages.administration.school.index.generalSettings.timezoneHint')"
 					persistent-hint
 				/>
 			</v-col>
@@ -129,11 +93,7 @@
 					v-model="localSchool.language"
 					class="language-select"
 					data-testid="language-select"
-					:label="
-						t(
-							'pages.administration.school.index.generalSettings.labels.language'
-						)
-					"
+					:label="t('pages.administration.school.index.generalSettings.labels.language')"
 					:items="languages"
 					item-title="name"
 					item-value="abbreviation"
@@ -168,48 +128,39 @@
 </template>
 
 <script setup lang="ts">
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import PrivacySettings from "./PrivacySettings.vue";
+import { LanguageType, Permission, SchoolFeature, SchoolUpdateBodyParams } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { useOpeningTagValidator } from "@/utils/validation";
-import PrivacySettings from "./PrivacySettings.vue";
-import {
-	LanguageType,
-	SchoolFeature,
-	SchoolUpdateBodyParams,
-} from "@/serverApi/v3";
-import { School } from "@/store/types/schools";
+import { notifySuccess, useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { t } = useI18n();
-
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const localSchool = ref<School>();
 
 const logoFile = ref<File | null>(null);
 
-const availableLanguages = computed(
-	() => envConfigModule.getAvailableLanguages
-);
+const availableLanguages = computed(() => useEnvConfig().value.I18N__AVAILABLE_LANGUAGES);
 const federalState = computed(() => schoolsModule.getFederalState);
 const isSyncedSchool = computed(() => schoolsModule.schoolIsSynced);
 const school = computed(() => schoolsModule.getSchool);
 const loading = computed(() => schoolsModule.getLoading);
-const languages = computed(() => {
-	return availableLanguages.value.map((lang) => {
+const languages = computed(() =>
+	availableLanguages.value.map((lang) => {
 		const name = t(`common.words.languages.${lang}`);
 		const flagIcon = "$langIcon" + lang.charAt(0).toUpperCase() + lang.slice(1);
 		return { name, abbreviation: lang, flagIcon };
-	});
-});
+	})
+);
 
-const hasSchoolEditPermission = computed(() => {
-	return authModule.getUserPermissions.includes("school_edit");
-});
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
 
 const convertDataUrlToFile = (dataURL: string, fileName: string) => {
 	const dataUrlParts = dataURL.split(",");
@@ -218,8 +169,7 @@ const convertDataUrlToFile = (dataURL: string, fileName: string) => {
 	let binaryStringLength = binaryString.length;
 	const uint8Array = new Uint8Array(binaryStringLength);
 	while (binaryStringLength--) {
-		uint8Array[binaryStringLength] =
-			binaryString.charCodeAt(binaryStringLength);
+		uint8Array[binaryStringLength] = binaryString.charCodeAt(binaryStringLength);
 	}
 	const logoFile = new File([uint8Array], fileName, {
 		type: mimeType,
@@ -260,10 +210,7 @@ onMounted(async () => {
 	await copyToLocalSchool();
 });
 
-const onUpdateFeatureSettings = (
-	value: boolean,
-	settingName: SchoolFeature
-) => {
+const onUpdateFeatureSettings = (value: boolean, settingName: SchoolFeature) => {
 	if (!localSchool.value) {
 		return;
 	}
@@ -297,17 +244,12 @@ const save = async () => {
 		permissions: localSchool.value.permissions,
 		features: mapSchoolFeatureObjectToArray(localSchool.value.featureObject),
 		logo: {
-			dataUrl: logoFile.value
-				? ((await toBase64(logoFile.value)) as string)
-				: "",
+			dataUrl: logoFile.value ? ((await toBase64(logoFile.value)) as string) : "",
 			name: logoFile.value ? logoFile.value.name : "",
 		},
 	};
 
-	if (
-		!school.value.officialSchoolNumber &&
-		localSchool.value.officialSchoolNumber
-	) {
+	if (!school.value.officialSchoolNumber && localSchool.value.officialSchoolNumber) {
 		updatedSchool.officialSchoolNumber = localSchool.value.officialSchoolNumber;
 	}
 	if (!school.value.county && localSchool.value.county?.id) {
@@ -319,10 +261,7 @@ const save = async () => {
 		props: updatedSchool,
 	});
 
-	notifierModule.show({
-		text: t("pages.administration.school.index.generalSettings.save.success"),
-		status: "success",
-	});
+	notifySuccess(t("pages.administration.school.index.generalSettings.save.success"));
 
 	if (updatedSchool.logo) {
 		schoolsModule.setSchoolLogo({

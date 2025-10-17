@@ -1,9 +1,5 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.administration.ldap.title')"
-		:breadcrumbs="breadcrumbs"
-		max-width="short"
-	>
+	<default-wireframe :headline="$t('pages.administration.ldap.title')" :breadcrumbs="breadcrumbs" max-width="short">
 		<section class="section">
 			<p class="subtitle-text">
 				{{ $t("pages.administration.ldap.subtitle.one") }}
@@ -53,21 +49,13 @@
 				/>
 			</div>
 			<div class="errors-container">
-				<info-message
-					v-if="validationError"
-					:message="validationError"
-					type="bc-error"
-				/>
+				<info-message v-if="validationError" :message="validationError" type="bc-error" />
 				<span v-for="(error, index) in verificationErrors" :key="index">
 					<info-message :message="error" type="bc-error" />
 				</span>
 			</div>
 			<div class="buttons-container">
-				<v-btn
-					variant="text"
-					data-testid="ldapResetInputsButton"
-					@click="clearInputsHandler"
-				>
+				<v-btn variant="text" data-testid="ldapResetInputsButton" @click="clearInputsHandler">
 					{{ $t("pages.administration.ldap.index.buttons.reset") }}
 				</v-btn>
 				<v-btn
@@ -85,17 +73,17 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
-import { unchangedPassword } from "@/utils/ldapConstants";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
-import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
-import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
-import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { notifierModule } from "@/store";
+import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
+import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
+import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
+import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { unchangedPassword } from "@/utils/ldapConstants";
+import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { notifySuccess } from "@data-app";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
@@ -147,9 +135,7 @@ export default {
 		isInvalid() {
 			if (
 				!Object.keys(this.isInvalidData).some(
-					(section) =>
-						this.isInvalidData[section] === true ||
-						this.isInvalidData[section] === null
+					(section) => this.isInvalidData[section] === true || this.isInvalidData[section] === null
 				)
 			) {
 				return false;
@@ -193,19 +179,13 @@ export default {
 							systemData: this.systemData,
 						});
 					} else {
-						await this.$store.dispatch(
-							"ldap-config/verifyData",
-							this.systemData
-						);
+						await this.$store.dispatch("ldap-config/verifyData", this.systemData);
 					}
 
 					if (!this.verified.ok) {
 						return;
 					} else {
-						notifierModule.show({
-							text: this.$t("pages.administration.ldap.index.verified"),
-							status: "success",
-						});
+						notifySuccess(this.$t("pages.administration.ldap.index.verified"));
 						if (systemId) {
 							this.$router.push({
 								path: `/administration/ldap/activate?id=${systemId}`,

@@ -1,13 +1,8 @@
+import ContentElementList from "./ContentElementList.vue";
 import { ContentElementType } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
-import EnvConfigModule from "@/store/env-config";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -19,36 +14,34 @@ import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
-import ContentElementList from "./ContentElementList.vue";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("ContentElementList", () => {
 	describe("when feature flags are true", () => {
-		const setup = (props: {
-			elements: AnyContentElement[];
-			isEditMode: boolean;
-			isDetailView: boolean;
-		}) => {
-			document.body.setAttribute("data-app", "true");
-
-			const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-				getEnv: createMock<ConfigResponse>({
-					FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-					FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
-					FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
-					FEATURE_TEAMS_ENABLED: true,
-				}),
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+				FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
+				FEATURE_TEAMS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
+				FEATURE_TLDRAW_ENABLED: true,
+				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 			});
+		});
+
+		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
+			document.body.setAttribute("data-app", "true");
 
 			const wrapper = shallowMount(ContentElementList, {
 				global: {
 					plugins: [createTestingI18n(), createTestingVuetify()],
-					provide: {
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-					},
 				},
 				props: { ...props, rowIndex: 0, columnIndex: 0 },
 			});
@@ -113,17 +106,14 @@ describe("ContentElementList", () => {
 				},
 			];
 
-			it.each(elementComponents)(
-				"should render $elementType-elements",
-				({ elementType, component }) => {
-					const { wrapper } = setup({
-						elements: [{ type: elementType } as AnyContentElement],
-						isEditMode: false,
-						isDetailView: false,
-					});
-					expect(wrapper.findComponent(component).exists()).toBe(true);
-				}
-			);
+			it.each(elementComponents)("should render $elementType-elements", ({ elementType, component }) => {
+				const { wrapper } = setup({
+					elements: [{ type: elementType } as AnyContentElement],
+					isEditMode: false,
+					isDetailView: false,
+				});
+				expect(wrapper.findComponent(component).exists()).toBe(true);
+			});
 
 			it.each(elementComponents)(
 				"should propagate isEditMode to children of $elementType-elements",
@@ -146,29 +136,23 @@ describe("ContentElementList", () => {
 	});
 
 	describe("when FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED is false", () => {
-		const setup = (props: {
-			elements: AnyContentElement[];
-			isEditMode: boolean;
-			isDetailView: boolean;
-		}) => {
-			document.body.setAttribute("data-app", "true");
-
-			const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-				getEnv: createMock<ConfigResponse>({
-					FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-					FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
-					FEATURE_TEAMS_ENABLED: true,
-				}),
+		beforeEach(() => {
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
+				FEATURE_TEAMS_ENABLED: true,
 			});
+		});
+
+		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
+			document.body.setAttribute("data-app", "true");
 
 			const wrapper = shallowMount(ContentElementList, {
 				global: {
 					plugins: [createTestingI18n(), createTestingVuetify()],
-					provide: {
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-					},
 				},
 				props: { ...props, rowIndex: 0, columnIndex: 0 },
 			});
@@ -178,9 +162,7 @@ describe("ContentElementList", () => {
 
 		it("should not render FolderContentElement", () => {
 			const { wrapper } = setup({
-				elements: [
-					{ type: ContentElementType.FileFolder } as AnyContentElement,
-				],
+				elements: [{ type: ContentElementType.FileFolder } as AnyContentElement],
 				isEditMode: false,
 				isDetailView: false,
 			});

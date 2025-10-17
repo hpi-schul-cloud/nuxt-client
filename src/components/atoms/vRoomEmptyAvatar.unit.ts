@@ -1,9 +1,6 @@
-import { mount } from "@vue/test-utils";
 import vRoomEmptyAvatar from "./vRoomEmptyAvatar.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 describe("vRoomEmptyAvatar", () => {

@@ -1,8 +1,5 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiArrowDown"
-		data-testid="kebab-menu-action-move-down"
-	>
+	<KebabMenuAction :icon="mdiArrowDown" data-testid="kebab-menu-action-move-down">
 		{{ t("components.board.action.moveDown") }}
 	</KebabMenuAction>
 </template>

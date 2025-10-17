@@ -1,26 +1,14 @@
+import RoomMembersPage from "./RoomMembers.page.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import {
-	envsFactory,
-	mockedPiniaStoreTyping,
-	roomMemberFactory,
-	schoolFactory,
-} from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	InvitationStep,
@@ -29,25 +17,18 @@ import {
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
+import { AddMembersDialog, Confirmations, Invitations, Members } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
-import { useBoardNotifier } from "@util-board";
-import { ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
-import {
-	VBtn,
-	VDialog,
-	VSkeletonLoader,
-	VTab,
-	VTabs,
-} from "vuetify/components";
-import RoomMembersPage from "./RoomMembers.page.vue";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { Mock } from "vitest";
+import { computed, nextTick, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
+import { VBtn, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -59,15 +40,19 @@ const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
 
-vi.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+vi.mock("@vueuse/integrations/useFocusTrap", () => ({
+	useFocusTrap: vi.fn(),
+}));
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let askConfirmationMock: Mock;
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	const routeRoomId = "room-id";
 
@@ -78,9 +63,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		setupStores({
-			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -107,64 +90,52 @@ describe("RoomMembersPage", () => {
 		});
 
 		roomPermissions = {
-			canAddRoomMembers: ref(true),
-			canCreateRoom: ref(false),
-			canChangeOwner: ref(false),
-			canCopyRoom: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(false),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
-			canShareRoom: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canListDrafts: ref(false),
-			canManageVideoconferences: ref(false),
+			canAddRoomMembers: computed(() => true),
+			canAddAllStudents: computed(() => false),
+			canCreateRoom: computed(() => false),
+			canChangeOwner: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canViewRoom: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canLeaveRoom: computed(() => false),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
+			canSeeAllStudents: computed(() => false),
+			canShareRoom: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(boardNotifierCalls);
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
 	});
 
-	const setup = (options?: {
-		createRoom?: boolean;
-		isFeatureRoomMembersTabsEnabled?: boolean;
-		activeTab?: Tab;
-		isLoading?: boolean;
-	}) => {
-		const {
-			createRoom,
-			isFeatureRoomMembersTabsEnabled,
-			activeTab,
-			isLoading,
-		} = {
+	const setup = (options?: { createRoom?: boolean; activeTab?: Tab; isLoading?: boolean }) => {
+		const { createRoom, activeTab, isLoading } = {
 			createRoom: true,
-			isFeatureRoomMembersTabsEnabled: true,
 			activeTab: Tab.Members,
 			isLoading: false,
 
 			...options,
 		};
 
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: {
-				...envsFactory.build(),
-				FEATURE_ROOM_MEMBERS_TABS_ENABLED: isFeatureRoomMembersTabsEnabled,
-			},
-		});
-
 		const room = createRoom ? roomFactory.build() : undefined;
 
-		const members = roomMemberFactory
-			.buildList(3, { roomRoleName: RoleName.Roomeditor })
-			.map((member) => ({
-				...member,
-				displayRoomRole: "",
-				displaySchoolRole: "",
-			}));
+		const members = roomMemberFactory.buildList(3, { roomRoleName: RoleName.Roomeditor }).map((member) => ({
+			...member,
+			displayRoomRole: "",
+			displaySchoolRole: "",
+		}));
 
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 
@@ -188,15 +159,12 @@ describe("RoomMembersPage", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-				},
 				stubs: {
 					LeaveRoomProhibitedDialog: true,
-					AddMembers: true,
+					// Do not stub AddMembersDialog so that VDialog is accessible in tests
 					Members: true,
 					InviteMembersDialog: true,
+					UseFocusTrap: true,
 				},
 			},
 
@@ -207,9 +175,7 @@ describe("RoomMembersPage", () => {
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 
 		return {
 			wrapper,
@@ -227,9 +193,8 @@ describe("RoomMembersPage", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should fetch members on mount", async () => {
+	it("should fetch members on mount", () => {
 		const { roomMembersStore } = setup();
-
 		expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
 	});
 
@@ -241,31 +206,27 @@ describe("RoomMembersPage", () => {
 
 	describe("page title", () => {
 		it("should set correct title when user can add members", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { room } = setup();
-			expect(document.title).toContain(
-				`${room?.name} - pages.rooms.members.manage`
-			);
+			expect(document.title).toContain(`${room?.name} - pages.rooms.members.manage`);
 		});
 		it("should set correct title when user can not add members", () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { room } = setup();
-			expect(document.title).toContain(
-				`${room?.name} - pages.rooms.members.label`
-			);
+			expect(document.title).toContain(`${room?.name} - pages.rooms.members.label`);
 		});
 	});
 
 	describe("heading", () => {
 		it("should set the correct heading when user can add members", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup({});
 			const heading = wrapper.get("h1");
 			expect(heading.text()).toBe("pages.rooms.members.management");
 		});
 
 		it("should set the correct heading when user can not add members", () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { wrapper } = setup({});
 			const heading = wrapper.get("h1");
 			expect(heading.text()).toBe("pages.rooms.members.label");
@@ -276,9 +237,7 @@ describe("RoomMembersPage", () => {
 		it("should render kebab menu with leave room menu item", async () => {
 			const { wrapper } = setup();
 
-			const roomMemberMenu = wrapper.findComponent(
-				'[data-testid="room-member-menu"]'
-			);
+			const roomMemberMenu = wrapper.findComponent('[data-testid="room-member-menu"]');
 			expect(roomMemberMenu.exists()).toBe(true);
 
 			await roomMemberMenu.trigger("click");
@@ -289,18 +248,14 @@ describe("RoomMembersPage", () => {
 
 		describe("when user can leave the room", () => {
 			it("should open confirmation dialog when member can leave room", async () => {
-				roomPermissions.canLeaveRoom.value = true;
+				roomPermissions.canLeaveRoom = computed(() => true);
 				const { wrapper } = setup();
 				askConfirmationMock.mockResolvedValue(true);
 
-				const menuBtn = wrapper.findComponent(
-					'[data-testid="room-member-menu"]'
-				);
+				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
 
-				const leaveMenu = wrapper.findComponent(
-					'[data-testid="kebab-menu-action-leave-room"]'
-				);
+				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
 
 				expect(askConfirmationMock).toHaveBeenCalledWith({
@@ -310,19 +265,16 @@ describe("RoomMembersPage", () => {
 			});
 
 			it("should call remove method after confirmation", async () => {
-				roomPermissions.canLeaveRoom.value = true;
+				roomPermissions.canLeaveRoom = computed(() => true);
+
 				const { wrapper, roomMembersStore } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
-				const menuBtn = wrapper.findComponent(
-					'[data-testid="room-member-menu"]'
-				);
+				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
 
-				const leaveMenu = wrapper.findComponent(
-					'[data-testid="kebab-menu-action-leave-room"]'
-				);
+				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
 
 				expect(roomMembersStore.leaveRoom).toHaveBeenCalled();
@@ -333,14 +285,10 @@ describe("RoomMembersPage", () => {
 
 				askConfirmationMock.mockResolvedValue(false);
 
-				const menuBtn = wrapper.findComponent(
-					'[data-testid="room-member-menu"]'
-				);
+				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
 
-				const leaveMenu = wrapper.findComponent(
-					'[data-testid="kebab-menu-action-leave-room"]'
-				);
+				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
 
 				expect(roomMembersStore.removeMembers).not.toHaveBeenCalled();
@@ -351,17 +299,13 @@ describe("RoomMembersPage", () => {
 			it("should open leave room prohibited dialog", async () => {
 				const { wrapper } = setup();
 
-				const menuBtn = wrapper.findComponent(
-					'[data-testid="room-member-menu"]'
-				);
+				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
 
 				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
 				await leaveMenuItem.trigger("click");
 
-				const leaveRoomProhibitedDialogDialog = wrapper.findComponent(
-					LeaveRoomProhibitedDialog
-				);
+				const leaveRoomProhibitedDialogDialog = wrapper.findComponent(LeaveRoomProhibitedDialog);
 
 				expect(leaveRoomProhibitedDialogDialog.isVisible()).toBe(true);
 				expect(leaveRoomProhibitedDialogDialog.props("modelValue")).toBe(true);
@@ -370,9 +314,7 @@ describe("RoomMembersPage", () => {
 			it("should not call leaveRoom", async () => {
 				const { wrapper, roomMembersStore } = setup();
 
-				const menuBtn = wrapper.findComponent(
-					'[data-testid="room-member-menu"]'
-				);
+				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
 
 				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
@@ -384,13 +326,8 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("DefaultWireframe", () => {
-		const buildBreadcrumbs = (
-			room: RoomDetailsResponse,
-			canAddRoomMembers: boolean
-		) => {
-			const membersBreadcrumb = canAddRoomMembers
-				? "pages.rooms.members.management"
-				: "pages.rooms.members.label";
+		const buildBreadcrumbs = (room: RoomDetailsResponse, canAddRoomMembers: boolean) => {
+			const membersBreadcrumb = canAddRoomMembers ? "pages.rooms.members.management" : "pages.rooms.members.label";
 			return [
 				{
 					title: "pages.rooms.title",
@@ -407,7 +344,7 @@ describe("RoomMembersPage", () => {
 			];
 		};
 
-		it("should render DefaultWireframe", async () => {
+		it("should render DefaultWireframe", () => {
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -434,21 +371,18 @@ describe("RoomMembersPage", () => {
 						dataTestId: "fab-invite-members",
 					},
 				},
-			])(
-				"should set correct fab items when active tab is $activeTab",
-				async ({ activeTab, expectedFabItems }) => {
-					roomPermissions.canAddRoomMembers.value = true;
-					const { wrapper } = setup({ activeTab });
-					const wireframe = wrapper.findComponent(DefaultWireframe);
+			])("should set correct fab items when active tab is $activeTab", ({ activeTab, expectedFabItems }) => {
+				roomPermissions.canAddRoomMembers = computed(() => true);
+				const { wrapper } = setup({ activeTab });
+				const wireframe = wrapper.findComponent(DefaultWireframe);
 
-					expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
-				}
-			);
+				expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
+			});
 		});
 
 		describe("breadcrumbs", () => {
 			it("should set correct breadcrumbs when user can add members", () => {
-				roomPermissions.canAddRoomMembers.value = true;
+				roomPermissions.canAddRoomMembers = computed(() => true);
 				const { wrapper, room } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 				const expectedBreadcrumbs = buildBreadcrumbs(room!, true);
@@ -457,7 +391,7 @@ describe("RoomMembersPage", () => {
 			});
 
 			it("should set correct breadcrumbs when user can not add members", () => {
-				roomPermissions.canAddRoomMembers.value = false;
+				roomPermissions.canAddRoomMembers = computed(() => false);
 				const { wrapper, room } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 				const expectedBreadcrumbs = buildBreadcrumbs(room!, false);
@@ -469,34 +403,28 @@ describe("RoomMembersPage", () => {
 
 	describe("add members fab", () => {
 		it("should render when user can add members", () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberButton = wireframe.findComponent(
-				"[data-testid=fab-add-members]"
-			);
+			const addMemberButton = wireframe.findComponent("[data-testid=fab-add-members]");
 			expect(addMemberButton.exists()).toBe(true);
 		});
 
 		it("should not render when user can not add members", () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canAddRoomMembers = computed(() => false);
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberButton = wireframe.findComponent(
-				"[data-testid=fab-add-members]"
-			);
+			const addMemberButton = wireframe.findComponent("[data-testid=fab-add-members]");
 			expect(addMemberButton.exists()).toBe(false);
 			expect(wireframe.props("fabItems")).toBe(null);
 		});
 
 		it("should call loadSchoolList method", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper, roomMembersStore } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 
-			const addMemberButton = wireframe
-				.getComponent("[data-testid=fab-add-members]")
-				.getComponent(VBtn);
+			const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
 
 			await addMemberButton.trigger("click");
 
@@ -504,34 +432,30 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should open Dialog", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup({
 				activeTab: Tab.Members,
-				isFeatureRoomMembersTabsEnabled: true,
 			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberDialogBeforeClick = wrapper.findComponent(AddMembers);
+			const addMemberDialogBeforeClick = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
 
-			expect(addMemberDialogBeforeClick.exists()).toBe(false);
+			expect(addMemberDialogBeforeClick.vm.modelValue).toBe(false);
 
-			const addMemberButton = wireframe
-				.getComponent("[data-testid=fab-add-members]")
-				.getComponent(VBtn);
+			const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
 
 			await addMemberButton.trigger("click");
 
-			const addMemberDialogAfterClick = wrapper.findComponent(AddMembers);
+			const addMemberDialogAfterClick = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
 
-			expect(addMemberDialogAfterClick.exists()).toBe(true);
+			expect(addMemberDialogAfterClick.vm.modelValue).toBe(true);
 		});
 	});
 
 	describe("invite members fab", () => {
 		it("should open Dialog", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper, roomInvitationLinkStore } = setup({
 				activeTab: Tab.Invitations,
-				isFeatureRoomMembersTabsEnabled: true,
 			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const dialogBeforeClick = wrapper.findComponent({
@@ -541,9 +465,7 @@ describe("RoomMembersPage", () => {
 			expect(dialogBeforeClick.props("modelValue")).toBe(false);
 			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
 
-			const addMemberButton = wireframe
-				.getComponent("[data-testid=fab-invite-members]")
-				.getComponent(VBtn);
+			const addMemberButton = wireframe.getComponent("[data-testid=fab-invite-members]").getComponent(VBtn);
 
 			await addMemberButton.trigger("click");
 
@@ -553,36 +475,46 @@ describe("RoomMembersPage", () => {
 
 			expect(dialogAfterClick.props("modelValue")).toBe(true);
 			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
-			expect(roomInvitationLinkStore.invitationStep).toBe(
-				InvitationStep.PREPARE
-			);
+			expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 		});
 	});
 
 	describe("add members dialog", () => {
 		it("should set isMembersDialogOpen to false on @close", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent(VDialog);
+			const dialog = wrapper.findComponent(AddMembersDialog);
 			await dialog.setValue(true);
 			expect(dialog.props("modelValue")).toBe(true);
 
-			const addMemberComponent = dialog.findComponent(AddMembers);
-			await addMemberComponent.vm.$emit("close");
+			await dialog.vm.$emit("close");
 
 			expect(dialog.props("modelValue")).toBe(false);
 		});
 
 		it("should close dialog on escape key", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canAddRoomMembers = computed(() => true);
 			const { wrapper } = setup();
 
 			const dialog = wrapper.getComponent(VDialog);
 			await dialog.setValue(true);
+			expect(dialog.props("modelValue")).toBe(true);
 
-			const dialogContent = dialog.getComponent(AddMembers);
-			await dialogContent.trigger("keydown.escape");
+			window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", keyCode: 27 }));
+			await nextTick();
+
+			expect(dialog.props("modelValue")).toBe(false);
+		});
+
+		it("should close dialog on close", async () => {
+			roomPermissions.canAddRoomMembers = computed(() => true);
+			const { wrapper } = setup();
+
+			const dialog = wrapper.getComponent(AddMembersDialog);
+			await dialog.setValue(true);
+
+			await dialog.vm.$emit("close");
 
 			expect(dialog.props("modelValue")).toBe(false);
 		});
@@ -590,8 +522,8 @@ describe("RoomMembersPage", () => {
 
 	describe("Tabnavigation", () => {
 		it("should not render tabs when isVisibleTabNavigation is false", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = true;
-			const { wrapper } = setup({ isFeatureRoomMembersTabsEnabled: false });
+			roomPermissions.canManageRoomInvitationLinks = computed(() => false);
+			const { wrapper } = setup();
 
 			const tabs = wrapper.findComponent(VTabs);
 
@@ -599,10 +531,8 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should render all tabs when isVisibleTabNavigation is true", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = true;
-			const { wrapper } = setup({
-				isFeatureRoomMembersTabsEnabled: true,
-			});
+			roomPermissions.canManageRoomInvitationLinks = computed(() => true);
+			const { wrapper } = setup();
 
 			const tabs = wrapper.findComponent(VTabs);
 			expect(tabs.exists()).toBe(true);
@@ -625,41 +555,23 @@ describe("RoomMembersPage", () => {
 			{ activeTab: Tab.Members, component: Members },
 			{ activeTab: Tab.Invitations, component: Invitations },
 			{ activeTab: Tab.Confirmations, component: Confirmations },
-		])(
-			"should render the correct component for the tab %s",
-			({ activeTab, component }) => {
-				const { wrapper } = setup({ activeTab });
+		])("should render the correct component for the tab %s", ({ activeTab, component }) => {
+			const { wrapper } = setup({ activeTab });
 
-				const tabContent = wrapper.findComponent(component);
-				expect(tabContent.exists()).toBe(true);
-			}
-		);
+			const tabContent = wrapper.findComponent(component);
+			expect(tabContent.exists()).toBe(true);
+		});
 	});
 
 	describe("active tab behaviour", () => {
-		it.each(Object.values(Tab))(
-			"should default to members tab if the feature is not enabled, regardless of the active tab (%s)",
-			(activeTab) => {
-				roomPermissions.canManageRoomInvitationLinks.value = true;
-				setup({
-					isFeatureRoomMembersTabsEnabled: false,
-					activeTab,
-				});
-
-				expect(router.replace).toHaveBeenCalledWith({
-					query: { tab: Tab.Members },
-				});
-			}
-		);
-
-		it("should set the active tab to the one passed in props if the feature is enabled", () => {
-			roomPermissions.canManageRoomInvitationLinks.value = true;
+		it.each(Object.values(Tab))("should set the active tab to the one passed in props (%s)", (activeTab) => {
+			roomPermissions.canManageRoomInvitationLinks = computed(() => true);
 			const { wrapper } = setup({
-				activeTab: Tab.Invitations,
+				activeTab,
 			});
 
 			const tabs = wrapper.findComponent(VTabs);
-			expect(tabs.props("modelValue")).toBe(Tab.Invitations);
+			expect(tabs.props("modelValue")).toBe(activeTab);
 		});
 	});
 

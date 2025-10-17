@@ -1,6 +1,6 @@
+import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 
 let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
 let submissionItemApi: DeepMocked<serverApi.BoardSubmissionApiInterface>;
@@ -11,9 +11,7 @@ describe("SubmissionItemApi.composable", () => {
 		submissionItemApi = createMock<serverApi.BoardSubmissionApiInterface>();
 
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
-		vi.spyOn(serverApi, "BoardSubmissionApiFactory").mockReturnValue(
-			submissionItemApi
-		);
+		vi.spyOn(serverApi, "BoardSubmissionApiFactory").mockReturnValue(submissionItemApi);
 	});
 
 	afterEach(() => {
@@ -27,9 +25,7 @@ describe("SubmissionItemApi.composable", () => {
 			const completed = true;
 
 			await createSubmissionItemCall(elementId, completed);
-			expect(
-				elementApi.elementControllerCreateSubmissionItem
-			).toHaveBeenCalledWith(elementId, {
+			expect(elementApi.elementControllerCreateSubmissionItem).toHaveBeenCalledWith(elementId, {
 				completed: completed,
 			});
 		});
@@ -42,9 +38,7 @@ describe("SubmissionItemApi.composable", () => {
 			const completed = true;
 
 			await updateSubmissionItemCall(submissionItemId, completed);
-			expect(
-				submissionItemApi.boardSubmissionControllerUpdateSubmissionItem
-			).toHaveBeenCalledWith(submissionItemId, {
+			expect(submissionItemApi.boardSubmissionControllerUpdateSubmissionItem).toHaveBeenCalledWith(submissionItemId, {
 				completed: completed,
 			});
 		});
@@ -56,9 +50,7 @@ describe("SubmissionItemApi.composable", () => {
 			const elementId = "123124";
 
 			await fetchSubmissionItemsCall(elementId);
-			expect(
-				submissionItemApi.boardSubmissionControllerGetSubmissionItems
-			).toHaveBeenCalledWith(elementId);
+			expect(submissionItemApi.boardSubmissionControllerGetSubmissionItems).toHaveBeenCalledWith(elementId);
 		});
 	});
 });

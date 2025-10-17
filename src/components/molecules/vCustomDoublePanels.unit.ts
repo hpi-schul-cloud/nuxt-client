@@ -1,10 +1,7 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import vCustomDoublePanels from "./vCustomDoublePanels.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VExpansionPanels } from "vuetify/lib/components/index";
-import vCustomDoublePanels from "./vCustomDoublePanels.vue";
 
 describe("@/components/molecules/vCustomDoublePanels", () => {
 	const propsData = {
@@ -131,12 +128,8 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0)?.classes()).toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(1)?.classes()).not.toContain(
-			"v-expansion-panel--disabled"
-		);
+		expect(expansionPanels.at(0)?.classes()).toContain("v-expansion-panel--disabled");
+		expect(expansionPanels.at(1)?.classes()).not.toContain("v-expansion-panel--disabled");
 	});
 
 	it("Should render only panel 2 disabled, if panel 1 has data", () => {
@@ -149,12 +142,8 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0)?.classes()).not.toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(1)?.classes()).toContain(
-			"v-expansion-panel--disabled"
-		);
+		expect(expansionPanels.at(0)?.classes()).not.toContain("v-expansion-panel--disabled");
+		expect(expansionPanels.at(1)?.classes()).toContain("v-expansion-panel--disabled");
 	});
 
 	it("Should open panel 2, if panel 1 disabled", () => {
@@ -167,15 +156,9 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0)?.classes()).toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(1)?.classes()).not.toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(1)?.classes()).toContain(
-			"v-expansion-panel--active"
-		);
+		expect(expansionPanels.at(0)?.classes()).toContain("v-expansion-panel--disabled");
+		expect(expansionPanels.at(1)?.classes()).not.toContain("v-expansion-panel--disabled");
+		expect(expansionPanels.at(1)?.classes()).toContain("v-expansion-panel--active");
 	});
 
 	it("Should open panel 1, if panel 2 disabled", () => {
@@ -188,15 +171,9 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0)?.classes()).not.toContain(
-			"v-expansion-panel--disabled"
-		);
-		expect(expansionPanels.at(0)?.classes()).toContain(
-			"v-expansion-panel--active"
-		);
-		expect(expansionPanels.at(1)?.classes()).toContain(
-			"v-expansion-panel--disabled"
-		);
+		expect(expansionPanels.at(0)?.classes()).not.toContain("v-expansion-panel--disabled");
+		expect(expansionPanels.at(0)?.classes()).toContain("v-expansion-panel--active");
+		expect(expansionPanels.at(1)?.classes()).toContain("v-expansion-panel--disabled");
 	});
 
 	it("Shouldn't render headers, if it's empty", () => {

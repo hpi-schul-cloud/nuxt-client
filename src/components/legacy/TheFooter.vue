@@ -26,15 +26,16 @@
 </template>
 
 <script setup lang="ts">
-import { envConfigModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const theme = injectStrict(THEME_KEY);
 
-const currentYear = computed(() => new Date().getFullYear());
+const currentYear = new Date().getFullYear();
+
 const links = computed(() => {
 	const baseLinks = [
 		{
@@ -63,9 +64,9 @@ const links = computed(() => {
 		},
 	];
 
-	if (envConfigModule.getEnv.ALERT_STATUS_URL) {
+	if (useEnvConfig().value.ALERT_STATUS_URL) {
 		baseLinks.push({
-			href: envConfigModule.getEnv.ALERT_STATUS_URL,
+			href: useEnvConfig().value.ALERT_STATUS_URL as string,
 			text: t("components.legacy.footer.status"),
 			target: "_blank",
 			rel: "noopener",
@@ -86,18 +87,6 @@ const links = computed(() => {
 	padding: 0 16px;
 	margin: 24px 0 16px;
 	text-align: center;
-}
-
-.top-line {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	.hpi-logo {
-		display: block;
-		height: var(--heading-3);
-		margin: 0;
-	}
 }
 
 .bottom-line {

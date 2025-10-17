@@ -1,41 +1,29 @@
-import { mountComposable } from "@@/tests/test-utils";
 import { useEditorConfig } from "./EditorConfig.composable";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { LanguageType } from "@/serverApi/v3";
+import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import type { Mocked } from "vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 describe("useEditorConfig", () => {
 	const setup = () => {
-		const envConfigModule: Mocked<EnvConfigModule> = createModuleMocks(
-			EnvConfigModule,
-			{
-				getFallbackLanguage: "en",
-			}
-		);
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			// Using updating state instead of mocking store computed to do integration test.
+			I18N__FALLBACK_LANGUAGE: "en" as LanguageType,
+		});
 
 		const composable = mountComposable(() => useEditorConfig(), {
 			global: {
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
 				plugins: [createTestingI18n()],
 			},
 		});
 
 		return {
 			composable,
-			envConfigModule,
 		};
 	};
-
-	it("should be defined", () => {
-		const { composable } = setup();
-
-		expect(composable).toBeDefined();
-	});
 
 	it("should set language correctly", () => {
 		const { composable } = setup();
@@ -47,16 +35,11 @@ describe("useEditorConfig", () => {
 
 		const fontColorOliveGreen = composable.generalConfig.fontColor.colors[0];
 
-		expect(fontColorOliveGreen.label).toBe(
-			"components.editor.fonts.colors.oliveGreen"
-		);
+		expect(fontColorOliveGreen.label).toBe("components.editor.fonts.colors.oliveGreen");
 
-		const fontBackgroundColorIndigo =
-			composable.generalConfig.fontBackgroundColor.colors[4];
+		const fontBackgroundColorIndigo = composable.generalConfig.fontBackgroundColor.colors[4];
 
-		expect(fontBackgroundColorIndigo.label).toBe(
-			"components.editor.fonts.colors.indigo"
-		);
+		expect(fontBackgroundColorIndigo.label).toBe("components.editor.fonts.colors.indigo");
 	});
 
 	describe("when keydown event is triggered", () => {

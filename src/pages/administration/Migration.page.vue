@@ -1,9 +1,5 @@
 <template>
-	<DefaultWireframe
-		:headline="t('pages.administration.migration.title')"
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-	>
+	<DefaultWireframe :headline="t('pages.administration.migration.title')" max-width="full" :breadcrumbs="breadcrumbs">
 		<VSnackbar
 			v-if="businessError && businessError.statusCode !== '200'"
 			:model-value="!!businessError"
@@ -19,7 +15,7 @@
 		</VSnackbar>
 
 		<template #header>
-			<h1 class="text-h3">
+			<h1>
 				{{
 					t("pages.administration.migration.title", {
 						source: sourceSystemName,
@@ -47,12 +43,7 @@
 						{{ t("pages.administration.migration.step2") }}
 					</VStepperItem>
 					<VDivider />
-					<VStepperItem
-						:complete="isMigrationFinished"
-						:value="3"
-						color="primary"
-						data-testid="migration_summary_head"
-					>
+					<VStepperItem :complete="isMigrationFinished" :value="3" color="primary" data-testid="migration_summary_head">
 						{{ t("pages.administration.migration.step3") }}
 					</VStepperItem>
 					<VDivider />
@@ -84,18 +75,10 @@
 					@dialog-confirmed="confirmCancelMigration()"
 				>
 					<template #title>
-						{{
-							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
-							)
-						}}
+						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Title") }}
 					</template>
 					<template #content>
-						{{
-							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
-							)
-						}}
+						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Description") }}
 					</template>
 				</VCustomDialog>
 
@@ -108,25 +91,17 @@
 					@dialog-confirmed="clearAllAutoMatches()"
 				>
 					<template #title>
-						{{
-							t(
-								"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
-							)
-						}}
+						{{ t("components.administration.adminMigrationSection.clearAutoMatchesDialog.title") }}
 					</template>
 					<template #content>
 						<p>
 							{{
-								t(
-									"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
-								)
+								t("components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph")
 							}}
 						</p>
 						<p>
 							{{
-								t(
-									"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
-								)
+								t("components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph")
 							}}
 							>
 						</p>
@@ -140,16 +115,8 @@
 				<VStepperWindow :model-value="migrationStep">
 					<VStepperWindowItem :value="1" data-testid="migration_tutorial">
 						<VContainer>
-							<VCard
-								:ripple="false"
-								elevation="2"
-								class="pa-5 mb-10"
-								color="grey-lighten-5"
-							>
-								<VProgressLinear
-									v-if="school.inUserMigration && isLoading"
-									indeterminate
-								/>
+							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
+								<VProgressLinear v-if="school.inUserMigration && isLoading" indeterminate />
 								<VCardText>
 									<iframe class="full" :src="helpPageUri" />
 									<v-alert
@@ -166,11 +133,7 @@
 											<VSwitch
 												v-show="isNbc && isMigrationNotStarted"
 												v-model="matchByPreferredName"
-												:label="
-													t(
-														'pages.administration.migration.matchByPreferredName'
-													)
-												"
+												:label="t('pages.administration.migration.matchByPreferredName')"
 												:disabled="isLoading"
 												:true-value="true"
 												:false-value="false"
@@ -186,15 +149,8 @@
 												:disabled="isLoading"
 												@click="setSchoolInUserMigration"
 											>
-												<VProgressCircular
-													v-if="isLoading"
-													:size="20"
-													indeterminate
-													class="mr-1"
-												/>
-												{{
-													t("pages.administration.migration.startUserMigration")
-												}}
+												<VProgressCircular v-if="isLoading" :size="20" indeterminate class="mr-1" />
+												{{ t("pages.administration.migration.startUserMigration") }}
 											</VBtn>
 											<VBtn
 												v-else-if="canPerformMigration"
@@ -236,10 +192,7 @@
 						<ImportUsers ref="importUsersRef" />
 						<div class="d-flex justify-space-between pa-3">
 							<div>
-								<VBtn
-									data-testid="import-users-cancel-migration-btn"
-									@click="cancelMigration()"
-								>
+								<VBtn data-testid="import-users-cancel-migration-btn" @click="cancelMigration()">
 									{{ t("common.actions.cancel") }}
 								</VBtn>
 								<VBtn
@@ -275,25 +228,12 @@
 						data-testid="migration_summary"
 					>
 						<VContainer>
-							<VCard
-								:ripple="false"
-								elevation="2"
-								class="pa-5 mb-10"
-								color="grey-lighten-5"
-							>
+							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
 								<div v-if="!isLoading">
 									<VCardText>
 										<div>
-											<p
-												v-for="(
-													paragraph, index
-												) in migrationSummaryParagraphItems"
-												:key="index"
-											>
-												<span
-													v-if="paragraph.boldText"
-													class="font-weight-bold"
-												>
+											<p v-for="(paragraph, index) in migrationSummaryParagraphItems" :key="index">
+												<span v-if="paragraph.boldText" class="font-weight-bold">
 													{{ paragraph.boldText }}
 												</span>
 												{{
@@ -305,18 +245,12 @@
 											</p>
 										</div>
 										<VRow>
-											<VCheckbox
-												v-model="isMigrationConfirm"
-												:label="t('pages.administration.migration.confirm')"
-											/>
+											<VCheckbox v-model="isMigrationConfirm" :label="t('pages.administration.migration.confirm')" />
 										</VRow>
 									</VCardText>
 									<div class="d-flex justify-space-between">
 										<div>
-											<VBtn
-												data-testid="summary-cancel-migration-btn"
-												@click="cancelMigration()"
-											>
+											<VBtn data-testid="summary-cancel-migration-btn" @click="cancelMigration()">
 												{{ t("common.actions.cancel") }}
 											</VBtn>
 										</div>
@@ -332,11 +266,7 @@
 												data-testid="migration_performMigration"
 												@click="performMigration"
 											>
-												<VProgressCircular
-													v-if="isLoading"
-													:size="20"
-													indeterminate
-												/>
+												<VProgressCircular v-if="isLoading" :size="20" indeterminate />
 												{{
 													isNbc
 														? t("pages.administration.migration.nbc.migrate")
@@ -357,103 +287,65 @@
 					<VStepperWindowItem :value="4" data-testid="migration_finish">
 						<div v-if="canFinishMaintenance">
 							<VContainer>
-								<VCard
-									:ripple="false"
-									elevation="2"
-									class="pa-5 mb-10"
-									color="grey-lighten-5"
-								>
+								<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
 									<VCardText>
 										<VRow>
 											<template v-if="isNbc">
 												<p>
 													{{
-														t(
-															"pages.administration.migration.step4.nbc.linkingFinished",
-															{
-																source: sourceSystemName,
-																instance: theme.name,
-																totalMatched: totalMatched,
-															}
-														)
+														t("pages.administration.migration.step4.nbc.linkingFinished", {
+															source: sourceSystemName,
+															instance: theme.name,
+															totalMatched: totalMatched,
+														})
 													}}
 												</p>
 											</template>
 											<template v-else>
 												<p>
 													{{
-														t(
-															"pages.administration.migration.step4.linkingFinished",
-															{
-																source: sourceSystemName,
-																instance: theme.name,
-															}
-														)
+														t("pages.administration.migration.step4.linkingFinished", {
+															source: sourceSystemName,
+															instance: theme.name,
+														})
 													}}
 												</p>
 												<p>
-													{{
-														t(
-															"pages.administration.migration.step4.transferphase"
-														)
-													}}
+													{{ t("pages.administration.migration.step4.transferphase") }}
 												</p>
 												<ul class="mb-2">
 													<li>
 														{{
-															t(
-																"pages.administration.migration.step4.bullets.linkedUsers",
-																{ source: sourceSystemName }
-															)
+															t("pages.administration.migration.step4.bullets.linkedUsers", {
+																source: sourceSystemName,
+															})
 														}}
 													</li>
 													<li>
-														{{
-															t(
-																"pages.administration.migration.step4.bullets.newUsers",
-																{ instance: theme.name }
-															)
-														}}
+														{{ t("pages.administration.migration.step4.bullets.newUsers", { instance: theme.name }) }}
 													</li>
 													<li>
 														{{
-															t(
-																"pages.administration.migration.step4.bullets.classes",
-																{ source: sourceSystemName }
-															)
+															t("pages.administration.migration.step4.bullets.classes", { source: sourceSystemName })
 														}}
 													</li>
 													<li>
-														{{
-															t(
-																"pages.administration.migration.step4.bullets.oldUsers"
-															)
-														}}
+														{{ t("pages.administration.migration.step4.bullets.oldUsers") }}
 													</li>
 												</ul>
 												<p class="font-weight-bold">
-													{{
-														t(
-															"pages.administration.migration.step4.endTransferphase"
-														)
-													}}
+													{{ t("pages.administration.migration.step4.endTransferphase") }}
 												</p>
 											</template>
 										</VRow>
 									</VCardText>
 
 									<div class="text-right">
-										<VBtn
-											class="bg-primary"
-											data-testid="migration_endMaintenance"
-											@click="endMaintenance"
-										>
+										<VBtn class="bg-primary" data-testid="migration_endMaintenance" @click="endMaintenance">
 											{{
 												isNbc
 													? t("pages.administration.migration.finishWizard")
-													: t(
-															"pages.administration.migration.finishTransferPhase"
-														)
+													: t("pages.administration.migration.finishTransferPhase")
 											}}
 										</VBtn>
 									</div>
@@ -464,42 +356,27 @@
 
 					<VStepperWindowItem :value="5" data-testid="migration_waitForSync">
 						<VContainer>
-							<VCard
-								:ripple="false"
-								elevation="2"
-								class="pa-5 mb-10"
-								color="grey-lighten-5"
-							>
+							<VCard :ripple="false" elevation="2" class="pa-5 mb-10" color="grey-lighten-5">
 								<VCardText>
 									<template v-if="isNbc">
 										<p>
 											{{
-												t(
-													"pages.administration.migration.step5.nbc.linkingFinished",
-													{
-														source: sourceSystemName,
-														instance: theme.name,
-													}
-												)
+												t("pages.administration.migration.step5.nbc.linkingFinished", {
+													source: sourceSystemName,
+													instance: theme.name,
+												})
 											}}
 										</p>
 										<ul class="mb-4">
 											<li>
 												{{
-													t(
-														"pages.administration.migration.step5.nbc.bullet1",
-														{
-															source: sourceSystemName,
-														}
-													)
+													t("pages.administration.migration.step5.nbc.bullet1", {
+														source: sourceSystemName,
+													})
 												}}
 											</li>
 											<li>
-												{{
-													t(
-														"pages.administration.migration.step4.bullets.oldUsers"
-													)
-												}}
+												{{ t("pages.administration.migration.step4.bullets.oldUsers") }}
 											</li>
 										</ul>
 									</template>
@@ -526,26 +403,13 @@
 										</p>
 										<ul>
 											<li>
-												{{
-													t(
-														"pages.administration.migration.step5.afterSync.bullet1",
-														{ source: sourceSystemName }
-													)
-												}}
+												{{ t("pages.administration.migration.step5.afterSync.bullet1", { source: sourceSystemName }) }}
 											</li>
 											<li>
-												{{
-													t(
-														"pages.administration.migration.step5.afterSync.bullet2"
-													)
-												}}
+												{{ t("pages.administration.migration.step5.afterSync.bullet2") }}
 											</li>
 											<li>
-												{{
-													t(
-														"pages.administration.migration.step4.bullets.oldUsers"
-													)
-												}}
+												{{ t("pages.administration.migration.step4.bullets.oldUsers") }}
 											</li>
 										</ul>
 									</template>
@@ -556,9 +420,7 @@
 										data-testid="migration_backToAdministration"
 										to="/administration/school-settings"
 									>
-										{{
-											t("pages.administration.migration.backToAdministration")
-										}}
+										{{ t("pages.administration.migration.backToAdministration") }}
 									</VBtn>
 								</div>
 							</VCard>
@@ -575,21 +437,14 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useEnvConfig } from "@data-env";
 import { mdiClose } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import {
-	computed,
-	ComputedRef,
-	onMounted,
-	onUnmounted,
-	Ref,
-	ref,
-	watch,
-} from "vue";
+import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -609,8 +464,7 @@ const isLoading: Ref<boolean> = ref(false);
 
 const matchByPreferredName: Ref<boolean> = ref(false);
 
-const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
-	ref(undefined);
+const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
 
 const isCancelDialogOpen: Ref<boolean> = ref(false);
 
@@ -618,53 +472,29 @@ const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
-const isMigrationNotStarted = computed(() => {
-	return school.value.inUserMigration === undefined;
-});
+const isMigrationNotStarted = computed(() => school.value.inUserMigration === undefined);
 
-const canPerformMigration = computed(() => {
-	return school.value.inUserMigration && school.value.inMaintenance;
-});
+const canPerformMigration = computed(() => school.value.inUserMigration && school.value.inMaintenance);
 
-const isMigrationFinished = computed(() => {
-	return school.value.inUserMigration === false;
-});
+const isMigrationFinished = computed(() => school.value.inUserMigration === false);
 
-const canFinishMaintenance = computed(() => {
-	return isMigrationConfirm.value || isMigrationFinished.value;
-});
+const canFinishMaintenance = computed(() => isMigrationConfirm.value || isMigrationFinished.value);
 
-const isMaintenanceFinished = computed(() => {
-	return !school.value.inMaintenance;
-});
+const isMaintenanceFinished = computed(() => !school.value.inMaintenance);
 
-const school = computed(() => {
-	return schoolsModule.getSchool;
-});
+const school = computed(() => schoolsModule.getSchool);
 
-const businessError: ComputedRef<BusinessError | null> = computed(() => {
-	return importUsersModule.getBusinessError;
-});
+const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersModule.getBusinessError);
 
-const totalMatched = computed(() => {
-	return importUsersModule.getTotalMatched;
-});
+const totalMatched = computed(() => importUsersModule.getTotalMatched);
 
-const totalUnmatched = computed(() => {
-	return importUsersModule.getTotalUnmatched;
-});
+const totalUnmatched = computed(() => importUsersModule.getTotalUnmatched);
 
-const totalImportUsers = computed(() => {
-	return importUsersModule.getTotal;
-});
+const totalImportUsers = computed(() => importUsersModule.getTotal);
 
-const isBrb = computed(() => {
-	return envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb;
-});
+const isBrb = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb);
 
-const isNbc = computed(() => {
-	return envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21;
-});
+const isNbc = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21);
 
 const sourceSystemName = computed(() => {
 	if (isBrb.value) {
@@ -690,9 +520,7 @@ const breadcrumbs: Ref<Breadcrumb[]> = ref([
 	},
 ]);
 
-const helpPageUri = computed(() => {
-	return envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK;
-});
+const helpPageUri = computed(() => useEnvConfig().value.MIGRATION_WIZARD_DOCUMENTATION_LINK);
 
 useTitle(
 	buildPageTitle(
@@ -704,7 +532,7 @@ useTitle(
 );
 
 const isAllowed = async () => {
-	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED) {
+	if (useEnvConfig().value.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
 	if (school.value.id === "") {
@@ -749,9 +577,7 @@ const setSchoolInUserMigration = async () => {
 	isLoading.value = true;
 
 	if (isNbc.value) {
-		await importUsersModule.populateImportUsersFromExternalSystem(
-			matchByPreferredName.value
-		);
+		await importUsersModule.populateImportUsersFromExternalSystem(matchByPreferredName.value);
 
 		if (importUsersModule.getBusinessError) {
 			isLoading.value = false;

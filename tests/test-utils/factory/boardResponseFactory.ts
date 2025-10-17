@@ -12,5 +12,6 @@ export const boardResponseFactory = Factory.define<BoardResponse>(
 		layout: BoardLayout.Columns,
 		features: [],
 		permissions: [],
+		readersCanEdit: false,
 	})
 );

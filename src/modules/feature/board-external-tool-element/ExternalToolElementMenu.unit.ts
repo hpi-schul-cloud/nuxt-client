@@ -1,11 +1,8 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 describe("ExternalToolElementMenu", () => {
 	const getWrapper = (propsData: {

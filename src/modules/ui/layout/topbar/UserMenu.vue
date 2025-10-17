@@ -10,13 +10,11 @@
 				size="small"
 				@click="onMenuBtnClicked"
 			>
-				<span class="text-h6">{{ initials }}</span>
+				<span class="text-h4">{{ initials }}</span>
 			</VBtn>
 		</template>
 		<VList>
-			<VListItem data-testid="active-user">
-				{{ user.firstName }} {{ user.lastName }} ({{ userRole }})
-			</VListItem>
+			<VListItem data-testid="active-user"> {{ user.firstName }} {{ user.lastName }} ({{ userRole }}) </VListItem>
 			<VDivider />
 			<LanguageMenu />
 			<VListItem href="/account" data-testid="account-link">
@@ -28,37 +26,24 @@
 				:disabled="isSessionTokenExpired"
 				@click="externalLogout"
 			>
-				{{ $t("common.labels.logout")
-				}}{{ isExternalLogoutAllowed ? ` Bildungscloud & ${systemName}` : "" }}
+				{{ $t("common.labels.logout") }}{{ isExternalLogoutAllowed ? ` Bildungscloud & ${systemName}` : "" }}
 			</VListItem>
 			<VListItem data-testid="logout" @click="logout">
-				{{ $t("common.labels.logout")
-				}}{{ isExternalLogoutAllowed ? " Bildungscloud" : "" }}
+				{{ $t("common.labels.logout") }}{{ isExternalLogoutAllowed ? " Bildungscloud" : "" }}
 			</VListItem>
 		</VList>
 	</VMenu>
 </template>
 
 <script setup lang="ts">
-import {
-	computed,
-	ComputedRef,
-	PropType,
-	toRef,
-	ref,
-	Ref,
-	onMounted,
-} from "vue";
-import { useI18n } from "vue-i18n";
+import LanguageMenu from "./LanguageMenu.vue";
+import { MeUserResponse } from "@/serverApi/v3";
+import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
-import { MeUserResponse } from "@/serverApi/v3";
-import {
-	injectStrict,
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-} from "@/utils/inject";
-import LanguageMenu from "./LanguageMenu.vue";
+import { computed, onMounted, PropType, Ref, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	user: {
@@ -71,45 +56,38 @@ const props = defineProps({
 	},
 });
 
+const { systemId } = useAppStoreRefs();
+
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { getSystem } = useSystemApi();
 const { getSessionTokenExpiration } = useOAuthApi();
 
-const userRole = computed(() => {
-	return t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString();
-});
+const userRole = computed(() => t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString());
 
-const initials = computed(() => {
-	return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
-});
+const initials = computed(() => props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1));
 
 const system: Ref<System | undefined> = ref();
 
-const isExternalLogoutAllowed: ComputedRef<boolean> = computed(
+const isExternalLogoutAllowed = computed(
 	() =>
-		envConfigModule.getEnv.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
-		!!authModule.loginSystem &&
+		useEnvConfig().value.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
+		!!systemId.value &&
 		!!system.value?.hasEndSessionEndpoint
 );
 
-const systemName: ComputedRef<string> = computed(() => {
-	return system.value?.displayName ?? "";
-});
+const systemName = computed(() => system.value?.displayName ?? "");
 
-const now: Ref<Date> = ref(new Date());
+const now = ref(new Date());
 
 const sessionTokenExpiration: Ref<Date | undefined> = ref();
 
-const isSessionTokenExpired: ComputedRef<boolean> = computed(
-	() =>
-		!sessionTokenExpiration.value || now.value >= sessionTokenExpiration.value
+const isSessionTokenExpired = computed(
+	() => !sessionTokenExpiration.value || now.value >= sessionTokenExpiration.value
 );
 
 onMounted(async () => {
-	if (authModule.loginSystem) {
-		system.value = await getSystem(authModule.loginSystem);
+	if (systemId.value) {
+		system.value = await getSystem(systemId.value);
 	}
 	if (isExternalLogoutAllowed.value) {
 		sessionTokenExpiration.value = await getSessionTokenExpiration();
@@ -121,11 +99,11 @@ const onMenuBtnClicked = () => {
 };
 
 const logout = () => {
-	authModule.logout();
+	useAppStore().logout();
 };
 
 const externalLogout = () => {
-	authModule.externalLogout();
+	useAppStore().externalLogout();
 };
 </script>
 

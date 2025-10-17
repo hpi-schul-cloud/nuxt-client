@@ -26,12 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	mdiAlert,
-	mdiAlertCircle,
-	mdiClockTimeFour,
-	mdiImageOff,
-} from "@icons/material";
+import { mdiAlert, mdiAlertCircle, mdiClockTimeFour, mdiImageOff } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

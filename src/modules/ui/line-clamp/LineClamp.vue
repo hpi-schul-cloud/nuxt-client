@@ -32,8 +32,7 @@ const tooltipText = computed<string>(() => textElement.value?.innerText ?? "");
 
 const checkOverflow = () => {
 	if (textElement.value) {
-		isOverflowingLongText.value =
-			textElement.value.offsetWidth < textElement.value.scrollWidth;
+		isOverflowingLongText.value = textElement.value.offsetWidth < textElement.value.scrollWidth;
 		tooltipWidth = `${textElement.value.offsetWidth * 0.8}px`;
 	}
 };

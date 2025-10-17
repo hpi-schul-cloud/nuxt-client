@@ -1,15 +1,12 @@
 import { default as ldapConfig } from "./LDAPConfig.page.vue";
-import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { createStore } from "vuex";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { RouterLinkStub } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import { createStore } from "vuex";
 
 const mockInputData = {
 	url: "ldaps://ldap.hpi-schul-cloud.de",
@@ -34,14 +31,6 @@ const mockInputData = {
 
 const getStoreOptions = () => ({
 	modules: {
-		auth: {
-			namespaced: true,
-			state: () => ({
-				user: {
-					permissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-				},
-			}),
-		},
 		"ldap-config": {
 			namespaced: true,
 			actions: {
@@ -92,10 +81,8 @@ describe("ldap/config", () => {
 		return { wrapper };
 	};
 
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
 	});
 
 	it("should call 'getData' action if $route.query.id is defined", async () => {
@@ -106,9 +93,7 @@ describe("ldap/config", () => {
 		});
 		await nextTick();
 
-		expect(
-			storeOptions.modules["ldap-config"].actions.getData
-		).toHaveBeenCalled();
+		expect(storeOptions.modules["ldap-config"].actions.getData).toHaveBeenCalled();
 	});
 
 	it("should set 'systemData' as 'data' if $route.query.id is defined", async () => {
@@ -124,11 +109,9 @@ describe("ldap/config", () => {
 
 	it("should not call 'getData' action if 'temp' is defined", async () => {
 		const storeOptions = getStoreOptions();
-		storeOptions.modules["ldap-config"].getters.getTemp = vi
-			.fn()
-			.mockReturnValue({
-				testKey: "test",
-			});
+		storeOptions.modules["ldap-config"].getters.getTemp = vi.fn().mockReturnValue({
+			testKey: "test",
+		});
 
 		setup({
 			route: { query: { id: "mockId" } },
@@ -136,18 +119,14 @@ describe("ldap/config", () => {
 		});
 		await nextTick();
 
-		expect(
-			storeOptions.modules["ldap-config"].actions.getData
-		).not.toHaveBeenCalled();
+		expect(storeOptions.modules["ldap-config"].actions.getData).not.toHaveBeenCalled();
 	});
 
 	it("should set 'systemData' as 'temp' if 'temp' exists", async () => {
 		const storeOptions = getStoreOptions();
-		storeOptions.modules["ldap-config"].getters.getTemp = vi
-			.fn()
-			.mockReturnValue({
-				testKey: "test",
-			});
+		storeOptions.modules["ldap-config"].getters.getTemp = vi.fn().mockReturnValue({
+			testKey: "test",
+		});
 
 		const { wrapper } = setup({
 			route: { query: { id: "mockId" } },
@@ -155,9 +134,7 @@ describe("ldap/config", () => {
 		});
 		await nextTick();
 
-		expect(
-			storeOptions.modules["ldap-config"].actions.getData
-		).not.toHaveBeenCalled();
+		expect(storeOptions.modules["ldap-config"].actions.getData).not.toHaveBeenCalled();
 		expect(Object.keys(wrapper.vm.temp)).toHaveLength(1);
 		expect(wrapper.vm.systemData.testKey).toStrictEqual("test");
 	});
@@ -250,9 +227,7 @@ describe("ldap/config", () => {
 		});
 		await nextTick();
 
-		const clearInputsButton = wrapper.find(
-			`[data-testid="ldapResetInputsButton"]`
-		);
+		const clearInputsButton = wrapper.find(`[data-testid="ldapResetInputsButton"]`);
 		expect(clearInputsButton.exists()).toBeTruthy();
 		await clearInputsButton.trigger("click");
 

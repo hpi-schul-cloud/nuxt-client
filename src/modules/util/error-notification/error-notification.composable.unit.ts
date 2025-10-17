@@ -1,62 +1,56 @@
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mountComposable } from "@@/tests/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { nextTick, ref } from "vue";
 import { useErrorNotification } from "./error-notification.composable";
+import { expectNotification, mountComposable } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useNotificationStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
+import { nextTick, ref } from "vue";
 
 describe("useErrorNotification.composable", () => {
-	afterEach(() => {
-		vi.clearAllMocks();
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 	});
 
 	const setupComposable = () => {
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		const error = ref();
 
 		mountComposable(() => useErrorNotification(error), {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
 			},
 		});
 
 		return {
 			error,
-			notifierModule,
 		};
 	};
 
 	describe("when no error is set", () => {
 		it("should not show a notification", async () => {
-			const { error, notifierModule } = setupComposable();
+			const { error } = setupComposable();
 
 			error.value = null;
 			await nextTick();
 
-			expect(notifierModule.show).not.toHaveBeenCalled();
+			expect(useNotificationStore().notify).not.toHaveBeenCalled();
 		});
 	});
 
 	describe("when an error is set", () => {
 		it("should show a notification", async () => {
-			const { error, notifierModule } = setupComposable();
+			const { error } = setupComposable();
 
 			error.value = new Error("test");
 			await nextTick();
 
-			expect(notifierModule.show).toHaveBeenCalledWith({
-				status: "error",
-				text: "error.generic",
-			});
+			expectNotification("error");
 		});
 	});
 
 	describe("when the error changes", () => {
 		it("should show a notification", async () => {
-			const { error, notifierModule } = setupComposable();
+			const { error } = setupComposable();
 
 			error.value = new Error("test1");
 			await nextTick();
@@ -64,7 +58,7 @@ describe("useErrorNotification.composable", () => {
 			error.value = new Error("test2");
 			await nextTick();
 
-			expect(notifierModule.show).toHaveBeenCalledTimes(2);
+			expect(useNotificationStore().notify).toHaveBeenCalledTimes(2);
 		});
 	});
 });

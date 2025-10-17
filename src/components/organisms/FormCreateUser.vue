@@ -39,21 +39,16 @@
 		>
 			{{ $t("common.actions.add") }}
 		</v-btn>
-		<v-btn
-			class="w-100 mt-6"
-			variant="text"
-			data-testid="button_create-user_abort"
-			@click.prevent="$router.go(-1)"
-		>
+		<v-btn class="w-100 mt-6" variant="text" data-testid="button_create-user_abort" @click.prevent="$router.go(-1)">
 			{{ $t("common.actions.back") }}
 		</v-btn>
 	</form>
 </template>
 
 <script setup>
-import { reactive, unref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
+import { reactive, unref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const emit = defineEmits(["create-user"]);
@@ -74,9 +69,7 @@ const validations = {
 const v$ = useVuelidate(validations, userData);
 
 const getErrorMessages = (validationModel) => {
-	const messages = validationModel.$errors.map((e) =>
-		t(`common.validation.${e.$validator}`)
-	);
+	const messages = validationModel.$errors.map((e) => t(`common.validation.${e.$validator}`));
 	return messages;
 };
 

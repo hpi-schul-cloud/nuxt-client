@@ -1,74 +1,52 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
-import { nextTick, Ref, ref } from "vue";
+import { RoleName } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
 import {
-	mdiMenuDown,
-	mdiMenuUp,
-	mdiMagnify,
-	mdiAccountOutline,
-	mdiAccountSchoolOutline,
-} from "@icons/material";
-import {
-	meResponseFactory,
+	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import { DOMWrapper, VueWrapper } from "@vue/test-utils";
-import {
-	VDataTable,
-	VDialog,
-	VIcon,
-	VTextField,
-} from "vuetify/lib/components/index";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { RoleName } from "@/serverApi/v3";
-import {
-	RoomMember,
-	useRoomMembersStore,
-	useRoomAuthorization,
-} from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import ActionMenu from "./ActionMenu.vue";
-import {
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-} from "@ui-kebab-menu";
-import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { authModule, schoolsModule } from "@/store";
+import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
+import { createMock } from "@golevelup/ts-vitest";
+import { mdiAccountOutline, mdiAccountSchoolOutline, mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
+import { DOMWrapper, VueWrapper } from "@vue/test-utils";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { Mock } from "vitest";
+import { computed, nextTick, Ref, ref } from "vue";
+import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/lib/components/index";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-
-vi.mock("@util-board/BoardNotifier.composable");
-const boardNotifier = vi.mocked(useBoardNotifier);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
+vi.mock("@vueuse/integrations/useFocusTrap");
+
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
 
-type RoomAuthorizationRefs = RefPropertiesOnly<
-	ReturnType<typeof useRoomAuthorization>
->;
+type RoomAuthorizationRefs = RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>;
 
 describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
-	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	let pauseMock: Mock;
+	let unpauseMock: Mock;
+	let deactivateMock: Mock;
 
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
@@ -80,12 +58,18 @@ describe("MembersTable", () => {
 			isDialogOpen: ref(false),
 		});
 
-		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
-		boardNotifier.mockReturnValue(boardNotifierCalls);
+		pauseMock = vi.fn();
+		unpauseMock = vi.fn();
+		deactivateMock = vi.fn();
+
+		(useFocusTrap as Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
 
 		setupStores({
 			schoolsModule: SchoolsModule,
-			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -132,21 +116,14 @@ describe("MembersTable", () => {
 			...roomAuthDefaults,
 			...options?.customRoomAuthorization,
 		};
-		const authorizationPermissions =
-			createMock<ReturnType<typeof useRoomAuthorization>>();
+		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
 
 		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
-				value ?? false
-			);
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(() => value ?? false);
 		}
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
 		const currentUser = roomMemberFactory.build({});
-		const mockMe = meResponseFactory.build({
-			user: { id: options?.currentUserId ?? currentUser.userId },
-		});
-		authModule.setMe(mockMe);
 
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -154,21 +131,23 @@ describe("MembersTable", () => {
 			value: windowWidth,
 		});
 
+		createTestingPinia({
+			initialState: {
+				roomMembersStore: {
+					roomMembers: [...members, currentUser],
+					isRoomOwner: vi.fn(),
+				},
+			},
+		});
+		createTestAppStoreWithUser(options?.currentUserId ?? currentUser.userId);
+
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								roomMembers: [...members, currentUser],
-								isRoomOwner: vi.fn(),
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			stubs: {
+				ChangeRole: true,
 			},
 		});
 
@@ -209,7 +188,7 @@ describe("MembersTable", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should have column style for extra small display sizes", async () => {
+	it("should have column style for extra small display sizes", () => {
 		const { wrapper } = setup({ windowWidth: 599 });
 
 		const dataTable = wrapper.get(".table-title-header");
@@ -217,7 +196,7 @@ describe("MembersTable", () => {
 		expect(dataTable.classes()).toContain("flex-column");
 	});
 
-	it("should not have column style when display size is over 599px", async () => {
+	it("should not have column style when display size is over 599px", () => {
 		const { wrapper } = setup({ windowWidth: 800 });
 
 		const dataTable = wrapper.get(".table-title-header");
@@ -232,17 +211,14 @@ describe("MembersTable", () => {
 
 		const dataTable = wrapper.getComponent(VDataTable);
 
-		expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(
-			tableHeaders
-		);
+		expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(tableHeaders);
 		expect(dataTable.props("items")).toEqual(roomMembers);
 		expect(dataTable.props("sortAscIcon")).toEqual(mdiMenuDown);
 		expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
 	});
 
 	describe("school role column", () => {
-		const getSchoolRoleCell = (row: DOMWrapper<Element>) =>
-			row.findAll("td")[4];
+		const getSchoolRoleCell = (row: DOMWrapper<Element>) => row.findAll("td")[4];
 
 		it.each([
 			{
@@ -273,13 +249,11 @@ describe("MembersTable", () => {
 			const row = dataTable.find("tbody tr");
 
 			const schoolRoleCell = getSchoolRoleCell(row);
-			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(
-				expectedIcon
-			);
+			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(expectedIcon);
 		});
 	});
 
-	it("should render checkboxes if user can add members", async () => {
+	it("should render checkboxes if user can add members", () => {
 		const { wrapper, roomMembers } = setup({
 			customRoomAuthorization: { canAddRoomMembers: true },
 		});
@@ -290,7 +264,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(roomMembers.length + 1); // all checkboxes including header checkbox
 	});
 
-	it("should not render checkboxes if user can not add members", async () => {
+	it("should not render checkboxes if user can not add members", () => {
 		const { wrapper } = setup({
 			customRoomAuthorization: { canAddRoomMembers: false },
 		});
@@ -300,7 +274,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(0);
 	});
 
-	it("non-selectable members should have their checkboxes disabled", async () => {
+	it("non-selectable members should have their checkboxes disabled", () => {
 		const nonSelectableMembers = roomMemberFactory.buildList(3, {
 			isSelectable: false,
 		});
@@ -309,14 +283,12 @@ describe("MembersTable", () => {
 			members: nonSelectableMembers,
 		});
 
-		const checkboxes = wrapper
-			.getComponent(VDataTable)
-			.findAll("input[type='checkbox']:disabled");
+		const checkboxes = wrapper.getComponent(VDataTable).findAll("input[type='checkbox']:disabled");
 
 		expect(checkboxes.length).toEqual(nonSelectableMembers.length);
 	});
 
-	it("should not show room applicants", async () => {
+	it("should not show room applicants", () => {
 		const roomAdmins = roomMemberFactory.buildList(3, {
 			roomRoleName: RoleName.Roomadmin,
 			displayRoomRole: RoleName.Roomadmin,
@@ -331,12 +303,8 @@ describe("MembersTable", () => {
 			members,
 		});
 
-		expect(wrapper.text()).not.toEqual(
-			expect.stringContaining(roomApplicant.firstName)
-		);
-		expect(wrapper.text()).not.toEqual(
-			expect.stringContaining(roomApplicant.lastName)
-		);
+		expect(wrapper.text()).not.toEqual(expect.stringContaining(roomApplicant.firstName));
+		expect(wrapper.text()).not.toEqual(expect.stringContaining(roomApplicant.lastName));
 	});
 
 	describe("when selecting members", () => {
@@ -345,10 +313,7 @@ describe("MembersTable", () => {
 
 			const { checkboxes } = await selectCheckboxes([0], wrapper);
 			const checkedIndices = getCheckedIndices(checkboxes);
-			const expectedIndices = Array.from(
-				{ length: roomMembers.length + 1 },
-				(_, i) => i
-			);
+			const expectedIndices = Array.from({ length: roomMembers.length + 1 }, (_, i) => i);
 
 			expect(checkedIndices).toEqual(expectedIndices);
 		});
@@ -365,7 +330,7 @@ describe("MembersTable", () => {
 	});
 
 	describe("when no members are selected", () => {
-		it("should not render action menu when no members are selected", async () => {
+		it("should not render action menu when no members are selected", () => {
 			const { wrapper } = setup();
 			const actionMenu = wrapper.findComponent(ActionMenu);
 
@@ -384,14 +349,9 @@ describe("MembersTable", () => {
 		});
 
 		describe("when the remove button in the user row is clicked", () => {
-			const triggerMemberRemoval = async (
-				index: number,
-				wrapper: VueWrapper
-			) => {
+			const triggerMemberRemoval = async (index: number, wrapper: VueWrapper) => {
 				const dataTable = wrapper.getComponent(VDataTable);
-				const menuButton = dataTable.findComponent(
-					`[data-testid=kebab-menu-${index}]`
-				);
+				const menuButton = dataTable.findComponent(`[data-testid=kebab-menu-${index}]`);
 				await menuButton.trigger("click");
 				await nextTick();
 
@@ -419,9 +379,7 @@ describe("MembersTable", () => {
 				askConfirmationMock.mockResolvedValue(true);
 
 				await triggerMemberRemoval(2, wrapper);
-				expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([
-					roomMembers[2].userId,
-				]);
+				expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([roomMembers[2].userId]);
 			});
 
 			it("should not call removeMembers when dialog is cancelled", async () => {
@@ -446,7 +404,7 @@ describe("MembersTable", () => {
 			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
 		});
 
-		it("should render search component with flex order 1 for extra small display sizes", async () => {
+		it("should render search component with flex order 1 for extra small display sizes", () => {
 			const { wrapper } = setup({
 				windowWidth: 599,
 			});
@@ -456,7 +414,7 @@ describe("MembersTable", () => {
 			expect(search.classes()).toContain("order-1");
 		});
 
-		it("should not render search component with flex order 1 for display sizes greater than 599px", async () => {
+		it("should not render search component with flex order 1 for display sizes greater than 599px", () => {
 			const { wrapper } = setup({
 				windowWidth: 800,
 			});
@@ -531,9 +489,7 @@ describe("MembersTable", () => {
 				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
 				await menuBtn.trigger("click");
 
-				const changeRoleButton = wrapper.findComponent(
-					KebabMenuActionChangePermission
-				);
+				const changeRoleButton = wrapper.findComponent(KebabMenuActionChangePermission);
 
 				expect(changeRoleButton.exists()).toBe(true);
 			});
@@ -547,9 +503,7 @@ describe("MembersTable", () => {
 				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
 				await menuBtn.trigger("click");
 
-				const changeRoleButton = wrapper.findComponent(
-					KebabMenuActionChangePermission
-				);
+				const changeRoleButton = wrapper.findComponent(KebabMenuActionChangePermission);
 				await changeRoleButton.trigger("click");
 
 				const changeRoleDialog = wrapper.findComponent(VDialog);
@@ -560,26 +514,36 @@ describe("MembersTable", () => {
 
 	describe("change role dialog", () => {
 		it("should close dialog on @cancel", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				customRoomAuthorization: { canAddRoomMembers: true },
+			});
 
-			const changeRoleDialog = wrapper.findComponent(VDialog);
-			await changeRoleDialog.setValue(true);
+			const dataTable = wrapper.getComponent(VDataTable);
+
+			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+			await menuBtn.trigger("click");
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			const changeRoleButton = wrapper.findComponent(KebabMenuActionChangePermission);
+			await changeRoleButton.trigger("click");
 			expect(changeRoleDialog.props("modelValue")).toBe(true);
 
-			const addMemberComponent = changeRoleDialog.findComponent(ChangeRole);
-			await addMemberComponent.vm.$emit("close");
-
+			await changeRoleDialog.vm.$emit("close");
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});
 
 		it("should close dialog on escape key", async () => {
 			const { wrapper } = setup();
+			const dataTable = wrapper.getComponent(VDataTable);
+			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+			await menuBtn.trigger("click");
 
-			const changeRoleDialog = wrapper.findComponent(VDialog);
-			await changeRoleDialog.setValue(true);
+			const changeRoleButton = wrapper.findComponent(KebabMenuActionChangePermission);
+			await changeRoleButton.trigger("click");
 
-			const dialogContent = changeRoleDialog.getComponent(ChangeRole);
-			await dialogContent.trigger("keydown.escape");
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			const card = wrapper.findComponent(VCard);
+			await card.trigger("keydown.esc");
 
 			expect(changeRoleDialog.props("modelValue")).toBe(false);
 		});

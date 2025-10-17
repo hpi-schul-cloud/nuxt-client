@@ -6,20 +6,13 @@
 			:model-value="generateLoginLink()"
 			class="school-login-link"
 			:color="getCopyStatus(0) ? 'success' : 'primary'"
-			:label="
-				$t('pages.administration.school.index.authSystems.loginLinkLabel')
-			"
+			:label="$t('pages.administration.school.index.authSystems.loginLinkLabel')"
 			readonly
 			density="compact"
 			@blur="linkCopyFinished(0)"
 		>
 			<template #append>
-				<v-btn
-					icon
-					variant="text"
-					:aria-label="$t('common.actions.shareLink')"
-					@click="copyLoginLink(0)"
-				>
+				<v-btn icon variant="text" :aria-label="$t('common.actions.shareLink')" @click="copyLoginLink(0)">
 					<v-icon>
 						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
 					</v-icon>
@@ -37,11 +30,7 @@
 							{{ $t("pages.administration.school.index.authSystems.type") }}
 						</th>
 						<th v-if="customLoginLinkEnabled" class="text-left">
-							{{
-								$t(
-									"pages.administration.school.index.authSystems.loginLinkLabel"
-								)
-							}}
+							{{ $t("pages.administration.school.index.authSystems.loginLinkLabel") }}
 						</th>
 						<th class="text-left" />
 					</tr>
@@ -68,13 +57,7 @@
 										:aria-label="$t('common.actions.shareLink')"
 										@click="copyLoginLink(system.id)"
 									>
-										<v-icon
-											>{{
-												getCopyStatus(system.id)
-													? iconMdiCheckCircle
-													: iconMdiContentCopy
-											}}
-										</v-icon>
+										<v-icon>{{ getCopyStatus(system.id) ? iconMdiCheckCircle : iconMdiContentCopy }} </v-icon>
 									</v-btn>
 								</template>
 							</v-text-field>
@@ -124,19 +107,13 @@
 			@dialog-confirmed="removeSystem(confirmDeleteDialog.systemId)"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
-					{{
-						$t("pages.administration.school.index.authSystems.deleteAuthSystem")
-					}}
+				<h2 class="my-2">
+					{{ $t("pages.administration.school.index.authSystems.deleteAuthSystem") }}
 				</h2>
 			</template>
 			<template #content>
 				<p class="text-md mt-2">
-					{{
-						$t(
-							"pages.administration.school.index.authSystems.confirmDeleteText"
-						)
-					}}
+					{{ $t("pages.administration.school.index.authSystems.confirmDeleteText") }}
 				</p>
 			</template>
 		</v-custom-dialog>
@@ -145,13 +122,11 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
-import {
-	mdiCheckCircle,
-	mdiContentCopy,
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-} from "@icons/material";
+import { Permission } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
+import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 
 export default {
 	components: {
@@ -180,36 +155,23 @@ export default {
 		hasSystems() {
 			return this.systems.length > 0;
 		},
-		customLoginLinkEnabled: () =>
-			envConfigModule.getEnv.FEATURE_LOGIN_LINK_ENABLED,
-		hasSystemCreatePermission: () => {
-			return authModule.getUserPermissions.includes("system_create");
-		},
-		hasSystemEditPermission: () => {
-			return authModule.getUserPermissions.includes("system_edit");
-		},
+		customLoginLinkEnabled: () => useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
+		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SystemCreate),
+		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SystemEdit),
 	},
 	methods: {
 		ariaLabels(system) {
-			const systemName =
-				system.alias ||
-				this.$t("pages.administration.school.index.authSystems.title");
+			const systemName = system.alias || this.$t("pages.administration.school.index.authSystems.title");
 
 			return {
 				edit: this.$t("pages.administration.school.index.authSystems.edit", {
 					system: systemName,
 				}),
-				delete: this.$t(
-					"pages.administration.school.index.authSystems.delete",
-					{ system: systemName }
-				),
+				delete: this.$t("pages.administration.school.index.authSystems.delete", { system: systemName }),
 			};
 		},
 		isEditable(system) {
-			return (
-				system.ldapConfig?.provider === "general" ||
-				system.alias === "moin.schule"
-			);
+			return system.ldapConfig?.provider === "general" || system.alias === "moin.schule";
 		},
 		isRemovable(system) {
 			return system.ldapConfig?.provider === "general";

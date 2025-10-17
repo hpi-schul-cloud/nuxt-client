@@ -33,14 +33,8 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<KebabMenuActionMoveUp
-						v-if="isNotFirstElement"
-						@click="onMoveElementUp"
-					/>
-					<KebabMenuActionMoveDown
-						v-if="isNotLastElement"
-						@click="onMoveElementDown"
-					/>
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveElementUp" />
+					<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveElementDown" />
 					<KebabMenuActionDelete
 						scope-language-key="components.cardElement.submissionElement"
 						@click="onDeleteElement"
@@ -52,21 +46,17 @@
 </template>
 
 <script lang="ts">
-import { SubmissionContainerElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
-import { defineComponent, PropType, ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
+import { SubmissionContainerElementResponse } from "@/serverApi/v3";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { defineComponent, PropType, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
@@ -90,12 +80,7 @@ export default defineComponent({
 		rowIndex: { type: Number, required: true },
 		elementIndex: { type: Number, required: true },
 	},
-	emits: [
-		"move-keyboard:edit",
-		"move-down:edit",
-		"move-up:edit",
-		"delete:element",
-	],
+	emits: ["move-keyboard:edit", "move-down:edit", "move-up:edit", "delete:element"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const submissionContentElement = ref(null);
@@ -104,13 +89,8 @@ export default defineComponent({
 
 		const { modelValue } = useContentElementState(props);
 
-		const {
-			loading,
-			submissions,
-			studentSubmission,
-			isOverdue,
-			updateSubmissionItem,
-		} = useSubmissionContentElementState(element.value.id, modelValue);
+		const { loading, submissions, studentSubmission, isOverdue, updateSubmissionItem } =
+			useSubmissionContentElementState(element.value.id, modelValue);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {

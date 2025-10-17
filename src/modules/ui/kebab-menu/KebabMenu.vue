@@ -1,9 +1,5 @@
 <template>
-	<VMenu
-		v-if="hasSlotContent($slots.default)"
-		location="bottom end"
-		min-width="250"
-	>
+	<VMenu v-if="hasSlotContent($slots.default)" location="bottom end" min-width="250">
 		<template #activator="{ props }">
 			<VBtn
 				v-bind="props"
@@ -24,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Slot, VNode } from "vue";
-import { Comment, Fragment } from "vue";
 import { mdiDotsVertical } from "@icons/material";
 import { KebabMenuList } from "@ui-kebab-menu";
+import type { Slot, VNode } from "vue";
+import { Comment, Fragment } from "vue";
 
-const isVnodeEmpty = (vnodes: Array<VNode>) => {
-	return vnodes.every((node: VNode) => {
+const isVnodeEmpty = (vnodes: Array<VNode>) =>
+	vnodes.every((node: VNode) => {
 		if (node.type === Fragment && isVnodeEmpty(node.children as Array<VNode>)) {
 			return true;
 		}
@@ -39,17 +35,12 @@ const isVnodeEmpty = (vnodes: Array<VNode>) => {
 			return true;
 		}
 
-		if (
-			node.type === Text &&
-			typeof node.children === "string" &&
-			!node.children.trim()
-		) {
+		if (node.type === Text && typeof node.children === "string" && !node.children.trim()) {
 			return true;
 		}
 
 		return false;
 	});
-};
 
 const hasSlotContent = (slot: Slot | undefined) => {
 	if (!slot) {

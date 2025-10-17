@@ -1,2 +1,2 @@
-export * from "./injection-keys";
 export * from "./inject-strict";
+export * from "./injection-keys";

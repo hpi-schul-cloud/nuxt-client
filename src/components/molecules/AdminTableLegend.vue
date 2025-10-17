@@ -43,7 +43,8 @@
 
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { useEnvConfig, useEnvStore } from "@data-env";
+import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
 type Props = {
@@ -54,20 +55,9 @@ type Props = {
 
 defineProps<Props>();
 
-const instituteTitle = computed(() => {
-	switch (envConfigModule.getTheme) {
-		case SchulcloudTheme.N21:
-			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-		case SchulcloudTheme.Thr:
-			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case SchulcloudTheme.Brb:
-			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-		default:
-			return "Dataport";
-	}
-});
+const { instituteTitle } = storeToRefs(useEnvStore());
 
-const isThr = computed(() => envConfigModule.getTheme === SchulcloudTheme.Thr);
+const isThr = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr);
 </script>
 
 <style lang="scss" scoped>

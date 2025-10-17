@@ -1,13 +1,9 @@
 <template>
-	<VDialog
-		v-model="isDialogOpen"
-		data-testid="delete-dialog-item"
-		:max-width="480"
-	>
+	<VDialog v-model="isDialogOpen" data-testid="delete-dialog-item" :max-width="480">
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<h2 class="text-h4 ma-2 dialog-title" data-testid="dialog-title">
+					<h2 class="ma-2 dialog-title" data-testid="dialog-title">
 						{{ message }}
 					</h2>
 				</template>
@@ -19,12 +15,7 @@
 				<template #actions>
 					<v-spacer />
 					<div class="d-flex mb-2 gap-2 mx-4">
-						<VBtn
-							data-testid="dialog-cancel"
-							variant="text"
-							:text="t('common.actions.cancel')"
-							@click="cancel"
-						/>
+						<VBtn data-testid="dialog-cancel" variant="text" :text="t('common.actions.cancel')" @click="cancel" />
 						<VBtn
 							data-testid="dialog-confirm"
 							class="px-6"
@@ -41,22 +32,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
-import { useI18n } from "vue-i18n";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const { confirm, cancel, dialogOptions, isDialogOpen } =
-	useInternalConfirmationDialog();
+const { confirm, cancel, dialogOptions, isDialogOpen } = useInternalConfirmationDialog();
 
-const message = computed(() =>
-	dialogOptions.value ? dialogOptions.value.message : ""
-);
+const message = computed(() => (dialogOptions.value ? dialogOptions.value.message : ""));
 
-const confirmBtnLangKey = computed(
-	() => dialogOptions.value?.confirmActionLangKey ?? "common.actions.confirm"
-);
+const confirmBtnLangKey = computed(() => dialogOptions.value?.confirmActionLangKey ?? "common.actions.confirm");
 </script>
 
 <style scoped>

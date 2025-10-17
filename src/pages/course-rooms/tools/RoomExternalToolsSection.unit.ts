@@ -1,23 +1,20 @@
-import { ToolContextType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	contextExternalToolConfigurationStatusFactory,
-	externalToolDisplayDataFactory,
-} from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { ExternalToolDisplayData } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-vitest";
-import { mount, MountingOptions } from "@vue/test-utils";
-import { nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { Mock } from "vitest";
+import { Permission, RoleName, ToolContextType } from "@/serverApi/v3";
+import {
+	contextExternalToolConfigurationStatusFactory,
+	createTestAppStore,
+	externalToolDisplayDataFactory,
+} from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ExternalToolDisplayData } from "@data-external-tool";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { mount, MountingOptions } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach, Mock } from "vitest";
+import { nextTick } from "vue";
+import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
@@ -26,39 +23,32 @@ vi.mock("vue-router", () => ({
 const useRouterMock = <Mock>useRouter;
 
 describe("RoomExternalToolsSection", () => {
-	const getWrapper = (props: {
-		tools: ExternalToolDisplayData[];
-		roomId: string;
-	}) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
-			getUserRoles: ["teacher"],
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+		createTestAppStore({
+			me: {
+				roles: [{ id: "teacher-id", name: RoleName.Teacher }],
+				permissions: [Permission.ContextToolAdmin],
+			},
 		});
+	});
 
-		const wrapper = mount(
-			RoomExternalToolsSection as MountingOptions<
-				typeof RoomExternalToolsSection
-			>,
-			{
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[AUTH_MODULE_KEY.valueOf()]: authModule,
-					},
-					stubs: {
-						RoomExternalToolCard: true,
-						RoomExternalToolsErrorDialog: true,
-					},
+	const getWrapper = (props: { tools: ExternalToolDisplayData[]; roomId: string }) => {
+		const wrapper = mount(RoomExternalToolsSection as MountingOptions<typeof RoomExternalToolsSection>, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					RoomExternalToolCard: true,
+					RoomExternalToolsErrorDialog: true,
 				},
-				props: {
-					...props,
-				},
-			}
-		);
+			},
+			props: {
+				...props,
+			},
+		});
 
 		return {
 			wrapper,
-			authModule,
 		};
 	};
 
@@ -68,8 +58,7 @@ describe("RoomExternalToolsSection", () => {
 
 	describe("when there are tools in the list", () => {
 		const setup = () => {
-			const tools: ExternalToolDisplayData[] =
-				externalToolDisplayDataFactory.buildList(2);
+			const tools: ExternalToolDisplayData[] = externalToolDisplayDataFactory.buildList(2);
 
 			const { wrapper } = getWrapper({ tools, roomId: "roomId" });
 
@@ -91,8 +80,7 @@ describe("RoomExternalToolsSection", () => {
 
 	describe("when clicking the delete button on a tool", () => {
 		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
 
@@ -119,8 +107,7 @@ describe("RoomExternalToolsSection", () => {
 
 	describe("when clicking the edit button on a tool", () => {
 		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
 
 			const roomId = "roomId";
 
@@ -158,9 +145,8 @@ describe("RoomExternalToolsSection", () => {
 	});
 
 	describe("when clicking on confirm button of delete dialog", () => {
-		const setup = async () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		const setup = () => {
+			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
 
 			const { wrapper } = getWrapper({
 				tools: [tool],
@@ -174,7 +160,7 @@ describe("RoomExternalToolsSection", () => {
 		};
 
 		it("should call delete function of store", async () => {
-			const { wrapper, tool } = await setup();
+			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
@@ -182,9 +168,7 @@ describe("RoomExternalToolsSection", () => {
 
 			await card.vm.$emit("delete", tool);
 
-			const confirmBtn = wrapper.findComponent(
-				'[data-testId="dialog-confirm"]'
-			);
+			const confirmBtn = wrapper.findComponent('[data-testId="dialog-confirm"]');
 
 			await confirmBtn.trigger("click");
 
@@ -193,9 +177,8 @@ describe("RoomExternalToolsSection", () => {
 	});
 
 	describe("when clicking on cancel button of delete dialog", () => {
-		const setup = async () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		const setup = () => {
+			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
 
 			const { wrapper } = getWrapper({
 				tools: [tool],
@@ -209,7 +192,7 @@ describe("RoomExternalToolsSection", () => {
 		};
 
 		it("should close dialog", async () => {
-			const { wrapper, tool } = await setup();
+			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
@@ -224,11 +207,10 @@ describe("RoomExternalToolsSection", () => {
 	});
 
 	describe("when a card reports an error", () => {
-		const setup = async () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build({
-					status: contextExternalToolConfigurationStatusFactory.build(),
-				});
+		const setup = () => {
+			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build({
+				status: contextExternalToolConfigurationStatusFactory.build(),
+			});
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
 
@@ -239,7 +221,7 @@ describe("RoomExternalToolsSection", () => {
 		};
 
 		it("should open up the error dialog", async () => {
-			const { wrapper, tool } = await setup();
+			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",

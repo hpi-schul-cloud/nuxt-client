@@ -1,57 +1,50 @@
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
 import NavigationBar from "./NavigationBar.vue";
-
-const navbarLinks = [
-	{
-		title: "global.topbar.loggedOut.actions.blog",
-		href: "https://blog.hpi-schul-cloud.de/",
-	},
-	{
-		title: "global.topbar.loggedOut.actions.steps",
-		href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
-	},
-	{
-		title: "global.topbar.loggedOut.actions.faq",
-		href: "https://blog.hpi-schul-cloud.de/faqs",
-	},
-];
-
-const getWrapper = () => {
-	const img = "@/assets/img/logo/logo-dBildungscloud.svg";
-	const wrapper = mount(NavigationBar, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			stubs: ["base-link"],
-		},
-		props: {
-			links: navbarLinks,
-			img,
-			buttons: true,
-		},
-	});
-
-	return { wrapper, img };
-};
+import { SchulcloudTheme } from "@/serverApi/v3";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 describe("@/components/legacy/NavigationBar", () => {
+	const navbarLinks = [
+		{
+			title: "global.topbar.loggedOut.actions.blog",
+			href: "https://blog.hpi-schul-cloud.de/",
+		},
+		{
+			title: "global.topbar.loggedOut.actions.steps",
+			href: "https://blog.hpi-schul-cloud.de/erste-schritte/",
+		},
+		{
+			title: "global.topbar.loggedOut.actions.faq",
+			href: "https://blog.hpi-schul-cloud.de/faqs",
+		},
+	];
+
 	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
+		setActivePinia(createTestingPinia());
 	});
 
+	const getWrapper = () => {
+		const img = "@/assets/img/logo/logo-dBildungscloud.svg";
+		const wrapper = mount(NavigationBar, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: ["base-link"],
+			},
+			props: {
+				links: navbarLinks,
+				img,
+				buttons: true,
+			},
+		});
+
+		return { wrapper, img };
+	};
+
 	it("renders logo, links and buttons for default theme", () => {
-		const envs = envsFactory.build({ SC_THEME: SchulcloudTheme.Default });
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
 		const { wrapper, img } = getWrapper();
 
 		const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
@@ -69,8 +62,7 @@ describe("@/components/legacy/NavigationBar", () => {
 	it.each([SchulcloudTheme.N21, SchulcloudTheme.Brb])(
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
-			const envs = envsFactory.build({ SC_THEME: theme });
-			envConfigModule.setEnvs(envs);
+			createTestEnvStore({ SC_THEME: theme });
 			const { wrapper, img } = getWrapper();
 			const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
 

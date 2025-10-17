@@ -1,9 +1,6 @@
+import { isMediaBoardColor, MediaBoardColorMapper } from "./mediaBoardColorMapper";
 import { MediaBoardColors } from "@/serverApi/v3";
 import colors from "vuetify/lib/util/colors";
-import {
-	isMediaBoardColor,
-	MediaBoardColorMapper,
-} from "./mediaBoardColorMapper";
 
 describe(MediaBoardColorMapper.name, () => {
 	describe("isMediaBoardColor", () => {
@@ -27,10 +24,7 @@ describe(MediaBoardColorMapper.name, () => {
 	describe("mapColorToHex", () => {
 		describe("when the color is a vuetify color", () => {
 			it("should return the hex value for the vuetify color", () => {
-				const result = MediaBoardColorMapper.mapColorToHex(
-					MediaBoardColors.Red,
-					"lighten5"
-				);
+				const result = MediaBoardColorMapper.mapColorToHex(MediaBoardColors.Red, "lighten5");
 
 				expect(result).toEqual(colors.red.lighten5);
 			});
@@ -38,10 +32,7 @@ describe(MediaBoardColorMapper.name, () => {
 
 		describe("when the color is transparent", () => {
 			it("should return white", () => {
-				const result = MediaBoardColorMapper.mapColorToHex(
-					MediaBoardColors.Transparent,
-					"lighten5"
-				);
+				const result = MediaBoardColorMapper.mapColorToHex(MediaBoardColors.Transparent, "lighten5");
 
 				expect(result).toEqual(colors.shades.white);
 			});

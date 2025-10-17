@@ -1,12 +1,6 @@
 <template>
 	<div class="rounded-b border-top">
-		<v-skeleton-loader
-			v-if="loading"
-			class="mt-5 ml-5 mb-6"
-			type="image"
-			width="120"
-			height="22"
-		/>
+		<v-skeleton-loader v-if="loading" class="mt-5 ml-5 mb-6" type="image" width="120" height="22" />
 		<v-checkbox
 			v-else
 			v-model="modelValue"
@@ -19,9 +13,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
-import { useI18n } from "vue-i18n";
 import { StudentSubmission } from "../types/submission";
+import { computed, defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionItemStudentDisplay",

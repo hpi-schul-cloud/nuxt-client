@@ -1,60 +1,35 @@
 <template>
 	<v-card data-testid="migration-warning-card">
-		<v-card-title
-			data-testid="migration-warning-card-title"
-			class="card-title text-wrap"
-			>{{ t(title) }}
-		</v-card-title>
+		<v-card-title data-testid="migration-warning-card-title" class="card-title text-wrap">{{ t(title) }} </v-card-title>
 		<v-card-text>
 			<div data-testid="migration-warning-card-info-text">
 				<p>
 					{{
 						isEndWarningCard
-							? t(
-									"components.administration.adminMigrationSection.endWarningCard.text"
-								)
-							: t(
-									"components.administration.adminMigrationSection.startWarningCard.text"
-								)
+							? t("components.administration.adminMigrationSection.endWarningCard.text")
+							: t("components.administration.adminMigrationSection.startWarningCard.text")
 					}}
 				</p>
 				<template v-if="isEndWarningCard">
 					<p class="text-red">
-						{{
-							t(
-								"components.administration.adminMigrationSection.endWarningCard.text.warning"
-							)
-						}}
+						{{ t("components.administration.adminMigrationSection.endWarningCard.text.warning") }}
 					</p>
 					<ul>
-						<li
-							v-for="item in endWarningCardListItems"
-							:key="item.text"
-							:class="item.class"
-							class="ml-4 my-4"
-						>
+						<li v-for="item in endWarningCardListItems" :key="item.text" :class="item.class" class="ml-4 my-4">
 							{{ t(item.text) }}
 							<p v-if="item.warning" class="text-red mb-0">
 								{{ t(item.warning) }}
 							</p>
 						</li>
 					</ul>
-					<i18n-t
-						keypath="components.administrationSection.description.moreInformation"
-						scope="global"
-						tag="p"
-					>
+					<i18n-t keypath="components.administrationSection.description.moreInformation" scope="global" tag="p">
 						<a
 							data-testid="end-warningcard-migration-blog-link"
 							href="https://blog.niedersachsen.cloud/umzug"
 							target="_blank"
 							rel="noopener"
 						>
-							{{
-								t(
-									"components.administrationSection.description.moreInformation.link"
-								)
-							}}
+							{{ t("components.administrationSection.description.moreInformation.link") }}
 						</a>
 					</i18n-t>
 				</template>
@@ -71,11 +46,7 @@
 			/>
 		</v-card-text>
 		<v-card-actions>
-			<v-btn
-				data-testid="disagree-btn"
-				variant="flat"
-				@click="$emit(eventName)"
-			>
+			<v-btn data-testid="disagree-btn" variant="flat" @click="$emit(eventName)">
 				{{ t(disagree) }}
 			</v-btn>
 			<v-btn
@@ -94,7 +65,7 @@
 	</v-card>
 </template>
 <script lang="ts">
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useEnvConfig } from "@data-env";
 import { computed, ComputedRef, defineComponent, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -115,8 +86,7 @@ const END_WARNING_CARD_LIST_ITEMS = [
 	},
 	{
 		text: "components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement",
-		warning:
-			"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning",
+		warning: "components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning",
 	},
 	{
 		text: "components.administration.adminMigrationSection.endWarningCard.text.list.lastElement",
@@ -132,8 +102,7 @@ export default defineComponent({
 			required: true,
 			validator(value: unknown) {
 				return (
-					(typeof value === "string" &&
-						value === MigrationWarningCardTypeEnum.START) ||
+					(typeof value === "string" && value === MigrationWarningCardTypeEnum.START) ||
 					value === MigrationWarningCardTypeEnum.END
 				);
 			},
@@ -141,43 +110,31 @@ export default defineComponent({
 	},
 	emits: ["start", "set", "end"],
 	setup(props) {
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const type = toRef(props, "value");
 		const isConfirmed: Ref<boolean> = ref(false);
 		const { t } = useI18n();
 
-		let title =
-			"components.administration.adminMigrationSection.startWarningCard.title";
-		let agree =
-			"components.administration.adminMigrationSection.startWarningCard.agree";
-		let disagree =
-			"components.administration.adminMigrationSection.startWarningCard.disagree";
-		let eventName: MigrationWarningCardTypeEnum =
-			MigrationWarningCardTypeEnum.START;
+		let title = "components.administration.adminMigrationSection.startWarningCard.title";
+		let agree = "components.administration.adminMigrationSection.startWarningCard.agree";
+		let disagree = "components.administration.adminMigrationSection.startWarningCard.disagree";
+		let eventName: MigrationWarningCardTypeEnum = MigrationWarningCardTypeEnum.START;
 		let check: string | undefined;
 
-		const isEndWarningCard = computed(
-			() => type.value === MigrationWarningCardTypeEnum.END
-		);
+		const isEndWarningCard = computed(() => type.value === MigrationWarningCardTypeEnum.END);
 
 		if (isEndWarningCard.value) {
-			title =
-				"components.administration.adminMigrationSection.endWarningCard.title";
-			agree =
-				"components.administration.adminMigrationSection.endWarningCard.agree";
-			disagree =
-				"components.administration.adminMigrationSection.endWarningCard.disagree";
-			check =
-				"components.administration.adminMigrationSection.endWarningCard.check";
+			title = "components.administration.adminMigrationSection.endWarningCard.title";
+			agree = "components.administration.adminMigrationSection.endWarningCard.agree";
+			disagree = "components.administration.adminMigrationSection.endWarningCard.disagree";
+			check = "components.administration.adminMigrationSection.endWarningCard.check";
 			eventName = MigrationWarningCardTypeEnum.END;
 		}
 
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {
 			const days: number | undefined = undefined;
-			if (envConfigModule.getMigrationEndGracePeriod) {
+			if (useEnvConfig().value.MIGRATION_END_GRACE_PERIOD_MS) {
 				const dayInMilliSeconds = 86400000;
-				const days =
-					envConfigModule.getMigrationEndGracePeriod / dayInMilliSeconds;
+				const days = useEnvConfig().value.MIGRATION_END_GRACE_PERIOD_MS / dayInMilliSeconds;
 				return days;
 			}
 			return days;

@@ -1,20 +1,15 @@
-import { envsFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { System, useSystemApi } from "@data-system";
-import { useOAuthApi } from "@data-oauth";
-import { DeepMocked, createMock } from "@golevelup/ts-vitest";
+import UserMenu from "./UserMenu.vue";
 import { LanguageType } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useOAuthApi } from "@data-oauth";
+import { System, useSystemApi } from "@data-system";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VBtn, VListItem } from "vuetify/lib/components/index";
-import UserMenu from "./UserMenu.vue";
 
 vi.mock("@data-system");
 vi.mock("@data-oauth");
@@ -23,25 +18,15 @@ describe("@ui-layout/UserMenu", () => {
 	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
 	let useOAuthApiMock: DeepMocked<ReturnType<typeof useOAuthApi>>;
 
-	const setupWrapper = (
-		isExternalFeatureEnabled = false,
-		mockedSystem?: System,
-		mockedTokenExpiration?: Date
-	) => {
-		const authModule = createModuleMocks(AuthModule, {
-			getLocale: "de",
-			logout: vi.fn(),
-			externalLogout: vi.fn(),
-			get loginSystem(): string | undefined {
-				return mockedSystem?.id;
-			},
+	const setupWrapper = (isExternalFeatureEnabled = false, mockedSystem?: System, mockedTokenExpiration?: Date) => {
+		setActivePinia(createTestingPinia());
+		const { appStore } = createTestAppStore({
+			me: { systemId: mockedSystem?.id },
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAvailableLanguages: [LanguageType.De, LanguageType.En],
-			getEnv: envsFactory.build({
-				FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
-			}),
+		createTestEnvStore({
+			FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
 		});
 
 		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
@@ -51,17 +36,11 @@ describe("@ui-layout/UserMenu", () => {
 		vi.mocked(useOAuthApi).mockReturnValue(useOAuthApiMock);
 
 		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
-		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(
-			mockedTokenExpiration
-		);
+		useOAuthApiMock.getSessionTokenExpiration.mockResolvedValue(mockedTokenExpiration);
 
 		const wrapper = mount(UserMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
 			},
 			props: {
 				user: {
@@ -73,14 +52,14 @@ describe("@ui-layout/UserMenu", () => {
 			},
 		});
 
-		return { wrapper, authModule };
+		return { wrapper, appStore };
 	};
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("should render with correct user initials", async () => {
+	it("should render with correct user initials", () => {
 		const { wrapper } = setupWrapper();
 
 		const initials = wrapper.findComponent("[data-testid=user-menu-btn]");
@@ -94,13 +73,11 @@ describe("@ui-layout/UserMenu", () => {
 		await menuBtn.trigger("click");
 
 		const userName = wrapper.findComponent("[data-testid=active-user]");
-		expect(userName.html()).toMatch(
-			"Arthur Dent (common.roleName.administrator)"
-		);
+		expect(userName.html()).toMatch("Arthur Dent (common.roleName.administrator)");
 	});
 
 	it("should trigger logout function on logout item click", async () => {
-		const { wrapper, authModule } = setupWrapper();
+		const { wrapper, appStore } = setupWrapper();
 
 		const menuBtn = wrapper.findComponent({ name: "VBtn" });
 		await menuBtn.trigger("click");
@@ -109,7 +86,7 @@ describe("@ui-layout/UserMenu", () => {
 		expect(logoutBtn.exists()).toBe(true);
 		await logoutBtn.trigger("click");
 
-		expect(authModule.logout).toHaveBeenCalled();
+		expect(appStore.logout).toHaveBeenCalled();
 	});
 
 	describe("external logout", () => {
@@ -121,9 +98,9 @@ describe("@ui-layout/UserMenu", () => {
 					hasEndSessionEndpoint: true,
 				};
 
-				const { wrapper, authModule } = setupWrapper(true, mockedSystem);
+				const { wrapper, appStore } = setupWrapper(true, mockedSystem);
 
-				return { wrapper, authModule, mockedSystem };
+				return { wrapper, appStore, mockedSystem };
 			};
 
 			it("should show the external logout button", async () => {
@@ -132,30 +109,24 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
-				expect(externalLogoutBtn.text()).toEqual(
-					`common.labels.logout Bildungscloud & ${mockedSystem.displayName}`
-				);
+				expect(externalLogoutBtn.text()).toEqual(`common.labels.logout Bildungscloud & ${mockedSystem.displayName}`);
 			});
 
 			it("should trigger external logout function on logout item click", async () => {
-				const { wrapper, authModule } = setup();
+				const { wrapper, appStore } = setup();
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				await externalLogoutBtn.trigger("click");
 
-				expect(authModule.externalLogout).toHaveBeenCalled();
+				expect(appStore.externalLogout).toHaveBeenCalled();
 			});
 
 			it("should show the correct text for the logout button", async () => {
@@ -190,9 +161,7 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(false);
 			});
@@ -229,9 +198,7 @@ describe("@ui-layout/UserMenu", () => {
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const externalLogoutBtn = wrapper.findComponent(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(false);
 			});
@@ -258,11 +225,7 @@ describe("@ui-layout/UserMenu", () => {
 				};
 				const mockedTokenExpiration = new Date(Date.now() + 3 * 3600 * 1000);
 
-				const { wrapper } = setupWrapper(
-					true,
-					mockedSystem,
-					mockedTokenExpiration
-				);
+				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
 
 				return { wrapper };
 			};
@@ -275,9 +238,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.props().disabled).toBe(false);
@@ -293,11 +254,7 @@ describe("@ui-layout/UserMenu", () => {
 				};
 				const mockedTokenExpiration = new Date(Date.now() - 3 * 3600 * 1000);
 
-				const { wrapper } = setupWrapper(
-					true,
-					mockedSystem,
-					mockedTokenExpiration
-				);
+				const { wrapper } = setupWrapper(true, mockedSystem, mockedTokenExpiration);
 
 				return { wrapper };
 			};
@@ -310,9 +267,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.props().disabled).toBe(true);
@@ -340,9 +295,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				await nextTick();
 
-				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>(
-					"[data-testid=external-logout]"
-				);
+				const externalLogoutBtn = wrapper.findComponent<typeof VListItem>("[data-testid=external-logout]");
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.props().disabled).toBe(true);

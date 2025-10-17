@@ -1,11 +1,8 @@
-import { mount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem } from "../types";
+import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 
 const groupItem: SidebarGroupItem = {

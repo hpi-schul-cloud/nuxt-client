@@ -1,13 +1,6 @@
 <template>
-	<KebabMenu
-		class="mx-2"
-		:aria-label="t('pages.folder.ariaLabels.menu')"
-		data-testid="folder-menu"
-	>
-		<KebabMenuActionRename
-			:aria-label="t('pages.folder.ariaLabels.menu.action.edit')"
-			@click="() => $emit('rename')"
-		/>
+	<KebabMenu class="mx-2" :aria-label="t('pages.folder.ariaLabels.menu')" data-testid="folder-menu">
+		<KebabMenuActionRename :aria-label="t('pages.folder.ariaLabels.menu.action.edit')" @click="() => $emit('rename')" />
 		<KebabMenuActionDelete
 			:aria-label="t('pages.folder.ariaLabels.menu.action.delete')"
 			:name="folderName"
@@ -18,11 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	KebabMenu,
-	KebabMenuActionDelete,
-	KebabMenuActionRename,
-} from "@ui-kebab-menu";
+import { KebabMenu, KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

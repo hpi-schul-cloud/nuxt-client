@@ -1,52 +1,25 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { authModule } from "@/store";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
-
-import {
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
-import {
-	envsFactory,
-	meResponseFactory,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import {
-	roomBoardTileListFactory,
-	roomFactory,
-} from "@@/tests/test-utils/factory/room";
+import { roomBoardTileListFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	RoomVariant,
-	useRoomAuthorization,
-	useRoomDetailsStore,
-	useRoomsState,
-} from "@data-room";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
-import {
-	LeaveRoomProhibitedDialog,
-	SelectBoardLayoutDialog,
-} from "@ui-room-details";
+import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
@@ -70,10 +43,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	beforeEach(() => {
 		vi.useFakeTimers();
-		setupStores({
-			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
-		});
 
 		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
 			isLoading: ref(false),
@@ -82,30 +51,28 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 		vi.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
 
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
-
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
 
 		roomPermissions = {
-			canAddRoomMembers: ref(false),
-			canChangeOwner: ref(false),
-			canCreateRoom: ref(false),
-			canViewRoom: ref(false),
-			canEditRoom: ref(false),
-			canDeleteRoom: ref(false),
-			canLeaveRoom: ref(true),
-			canRemoveRoomMembers: ref(false),
-			canEditRoomContent: ref(false),
-			canSeeAllStudents: ref(false),
-			canCopyRoom: ref(false),
-			canShareRoom: ref(false),
-			canManageRoomInvitationLinks: ref(false),
-			canListDrafts: ref(false),
-			canManageVideoconferences: ref(false),
+			canAddRoomMembers: computed(() => false),
+			canCreateRoom: computed(() => false),
+			canChangeOwner: computed(() => false),
+			canViewRoom: computed(() => false),
+			canAddAllStudents: computed(() => false),
+			canEditRoom: computed(() => false),
+			canDeleteRoom: computed(() => false),
+			canCopyRoom: computed(() => false),
+			canLeaveRoom: computed(() => true),
+			canRemoveRoomMembers: computed(() => false),
+			canEditRoomContent: computed(() => false),
+			canSeeAllStudents: computed(() => false),
+			canShareRoom: computed(() => false),
+			canListDrafts: computed(() => false),
+			canManageRoomInvitationLinks: computed(() => false),
+			canManageVideoconferences: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -124,15 +91,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomBoards: [],
 			...options,
 		};
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: envsFactory.build({
-				FEATURE_BOARD_LAYOUT_ENABLED: true,
-				FEATURE_ROOMS_ENABLED: true,
-				...envs,
-			}),
-		});
 
-		const notifierModule = createModuleMocks(NotifierModule);
 		const shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 			getParentType: serverApi.ShareTokenBodyParamsParentTypeEnum.Room,
@@ -140,26 +99,26 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const room = roomFactory.build({});
 
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			FEATURE_BOARD_LAYOUT_ENABLED: true,
+			...envs,
+		});
+
+		useRoomDetailsStore().$patch({
+			isLoading: false,
+			room,
+			roomVariant: RoomVariant.ROOM,
+			roomBoards,
+		});
+
+		createTestAppStore();
+
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomDetailsStore: {
-								isLoading: false,
-								room,
-								roomVariant: RoomVariant.ROOM,
-								roomBoards,
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { LeaveRoomProhibitedDialog: true, UseFocusTrap: true },
 				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
 			},
@@ -180,12 +139,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	};
 
 	describe("when page is mounted", () => {
-		it("should set the page title", async () => {
+		it("should set the page title", () => {
 			const { room } = setup();
 
-			expect(document.title).toContain(
-				`${room.name} - ${"pages.roomDetails.title"}`
-			);
+			expect(document.title).toContain(`${room.name} - ${"pages.roomDetails.title"}`);
 		});
 
 		it("should render DefaultWireframe", () => {
@@ -232,8 +189,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when user deletes the room", () => {
 		it("should reroute to rooms overview page", async () => {
-			roomPermissions.canDeleteRoom.value = true;
-			roomPermissions.canViewRoom.value = true;
+			roomPermissions.canDeleteRoom = computed(() => true);
+			roomPermissions.canViewRoom = computed(() => true);
 
 			const { wrapper, router } = setup();
 
@@ -248,12 +205,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when using the menu", () => {
 		beforeEach(() => {
-			roomPermissions.canEditRoomContent.value = true;
-			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canEditRoomContent = computed(() => true);
+			roomPermissions.canDeleteRoom = computed(() => true);
 		});
 
 		describe("and user clicks on edit room", () => {
-			it("should navigate to the edit room page", async () => {
+			it("should navigate to the edit room page", () => {
 				const { wrapper, router, room } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
@@ -269,7 +226,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on manage members", () => {
-			it("should navigate to the member management page", async () => {
+			it("should navigate to the member management page", () => {
 				const { wrapper, router, room } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
@@ -296,12 +253,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					expect(useRoomsStateMock.leaveRoom).toHaveBeenCalled();
 				});
 
-				it("should not call leaveRoom when dialog canceled", async () => {
+				it("should not call leaveRoom when dialog canceled", () => {
 					askConfirmationMock.mockResolvedValue(false);
 					const { wrapper, useRoomsStateMock } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
-					await menu.vm.$emit("room:leave");
+					menu.vm.$emit("room:leave");
 
 					expect(useRoomsStateMock.leaveRoom).not.toHaveBeenCalled();
 				});
@@ -309,15 +266,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			describe("when user has not the permission to leave the room", () => {
 				it("should open leave room prohibited dialog", async () => {
-					roomPermissions.canLeaveRoom.value = false;
+					roomPermissions.canLeaveRoom = computed(() => false);
 
 					const { wrapper } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:leave");
-					const leaveRoomProhibitedDialog = wrapper.getComponent(
-						LeaveRoomProhibitedDialog
-					);
+					const leaveRoomProhibitedDialog = wrapper.getComponent(LeaveRoomProhibitedDialog);
 
 					expect(leaveRoomProhibitedDialog.isVisible()).toBe(true);
 					expect(leaveRoomProhibitedDialog.props("modelValue")).toEqual(true);
@@ -336,12 +291,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and user does not have permission to edit room content", () => {
 			it("should not render speed dial menu", () => {
-				roomPermissions.canEditRoomContent.value = false;
+				roomPermissions.canEditRoomContent = computed(() => false);
 				const { wrapper } = setup();
 
-				const fabButton = wrapper.findComponent(
-					"[data-testid='add-content-button']"
-				);
+				const fabButton = wrapper.findComponent("[data-testid='add-content-button']");
 
 				expect(fabButton.exists()).toBe(false);
 			});
@@ -349,15 +302,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and multiple board layouts are enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoomContent.value = true;
+				roomPermissions.canEditRoomContent = computed(() => true);
 			});
 
 			const openDialog = async (wrapper: VueWrapper) => {
 				await openSpeedDialMenu(wrapper);
 
-				const boardCreateDialogBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_board']"
-				);
+				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 				await boardCreateDialogBtn.trigger("click");
 			};
 
@@ -368,9 +319,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const actions = wrapper.findAllComponents({
 					name: "SpeedDialMenuAction",
 				});
-				const boardCreateDialogBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_board']"
-				);
+				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 
 				expect(actions).toHaveLength(1);
 				expect(boardCreateDialogBtn.exists()).toBe(true);
@@ -425,7 +374,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
-				roomPermissions.canEditRoomContent.value = true;
+				roomPermissions.canEditRoomContent = computed(() => true);
 			});
 
 			it("should not render dialog", () => {
@@ -449,9 +398,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const actions = wrapper.findAllComponents({
 					name: "SpeedDialMenuAction",
 				});
-				const boardCreateBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_column_board']"
-				);
+				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
 
 				expect(actions).toHaveLength(1);
 				expect(boardCreateBtn.exists()).toBe(true);
@@ -463,9 +410,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 				await openSpeedDialMenu(wrapper);
 
-				const boardCreateBtn = wrapper.findComponent(
-					"[data-testid='fab_button_add_column_board']"
-				);
+				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
 
 				await boardCreateBtn.trigger("click");
 
@@ -481,7 +426,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	describe("room boards", () => {
 		describe("when user can view room", () => {
 			beforeEach(() => {
-				roomPermissions.canViewRoom.value = true;
+				roomPermissions.canViewRoom = computed(() => true);
 			});
 
 			it("should render room boards", () => {
@@ -497,8 +442,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			describe("when some boards are in draft mode", () => {
 				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
 					const visibleCount = totalCount - inDraftMode;
-					const visibleBoards =
-						roomBoardTileListFactory.buildList(visibleCount);
+					const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
 					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
 						isVisible: false,
 					});
@@ -514,7 +458,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				describe("when user can see drafts", () => {
 					it("should render board tiles in draft mode", () => {
-						roomPermissions.canListDrafts.value = true;
+						roomPermissions.canListDrafts = computed(() => true);
+
 						const { wrapper, totalCount } = setupWithBoards();
 
 						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
@@ -525,7 +470,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				describe("when user cannot see draft content", () => {
 					it("should not render board tiles in draft mode", () => {
-						roomPermissions.canListDrafts.value = false;
+						roomPermissions.canListDrafts = computed(() => false);
+
 						const { wrapper, visibleCount } = setupWithBoards();
 
 						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
@@ -538,7 +484,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("when user cannot view room", () => {
 			it("should not render room boards", () => {
-				roomPermissions.canViewRoom.value = false;
+				roomPermissions.canViewRoom = computed(() => false);
 				const { wrapper } = setup({
 					roomBoards: roomBoardTileListFactory.buildList(3),
 				});

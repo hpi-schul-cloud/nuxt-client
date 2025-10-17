@@ -1,8 +1,8 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { CreateNewsParams, NewsApiFactory } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
 import { News, PatchNewsPayload } from "./types/news";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
 	name: "newsModule",
@@ -55,11 +55,7 @@ export default class NewsModule extends VuexModule {
 	}
 
 	private get newsApi() {
-		return NewsApiFactory(
-			undefined,
-			"/v3", //`${envConfigModule.getApiUrl}/v3`,
-			$axios
-		);
+		return NewsApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Mutation

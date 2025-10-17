@@ -1,19 +1,12 @@
+import { LightBoxContentType, LightBoxOptions, useLightBox } from "./LightBox.composable";
+import LightBox from "./LightBox.vue";
 import { downloadFile } from "@/utils/fileHelper";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ErrorAlert } from "@ui-alert";
 import { AudioPlayer } from "@ui-audio-player";
 import { PreviewImage } from "@ui-preview-image";
 import { nextTick, ref } from "vue";
 import { VCol, VRow, VToolbarTitle } from "vuetify/lib/components/index";
-import {
-	LightBoxContentType,
-	LightBoxOptions,
-	useLightBox,
-} from "./LightBox.composable";
-import LightBox from "./LightBox.vue";
 
 vi.mock("./LightBox.composable");
 vi.mock("@/utils/fileHelper");
@@ -65,9 +58,7 @@ describe("LightBox", () => {
 		it("should not render it", () => {
 			const { wrapper } = setup({ isLightBoxOpen: false });
 
-			const closeButton = wrapper.findComponent(
-				"[data-testid=light-box-close-btn]"
-			);
+			const closeButton = wrapper.findComponent("[data-testid=light-box-close-btn]");
 
 			expect(closeButton.exists()).toBe(false);
 		});
@@ -77,9 +68,7 @@ describe("LightBox", () => {
 		it("should show close button", () => {
 			const { wrapper } = setup({});
 
-			const closeButton = wrapper.findComponent(
-				"[data-testid=light-box-close-btn]"
-			);
+			const closeButton = wrapper.findComponent("[data-testid=light-box-close-btn]");
 
 			expect(closeButton.exists()).toBe(true);
 		});
@@ -95,9 +84,7 @@ describe("LightBox", () => {
 		it("should show download button", () => {
 			const { wrapper } = setup({});
 
-			const downloadButton = wrapper.findComponent(
-				"[data-testid=light-box-download-btn]"
-			);
+			const downloadButton = wrapper.findComponent("[data-testid=light-box-download-btn]");
 
 			expect(downloadButton.exists()).toBe(true);
 		});
@@ -106,9 +93,7 @@ describe("LightBox", () => {
 			it("should call close function", async () => {
 				const { close, wrapper } = setup({});
 
-				const closeButton = wrapper.findComponent(
-					"[data-testid=light-box-close-btn]"
-				);
+				const closeButton = wrapper.findComponent("[data-testid=light-box-close-btn]");
 				await closeButton.trigger("click");
 
 				expect(close).toHaveBeenCalled();
@@ -119,15 +104,10 @@ describe("LightBox", () => {
 			it("should call downloadFile function", async () => {
 				const { lightBoxOptions, mockedDownloadFile, wrapper } = setup({});
 
-				const downloadButton = wrapper.findComponent(
-					"[data-testid=light-box-download-btn]"
-				);
+				const downloadButton = wrapper.findComponent("[data-testid=light-box-download-btn]");
 				await downloadButton.trigger("click");
 
-				expect(mockedDownloadFile).toHaveBeenCalledWith(
-					lightBoxOptions.value.downloadUrl,
-					lightBoxOptions.value.name
-				);
+				expect(mockedDownloadFile).toHaveBeenCalledWith(lightBoxOptions.value.downloadUrl, lightBoxOptions.value.name);
 			});
 		});
 
@@ -161,9 +141,7 @@ describe("LightBox", () => {
 				const previewImage = wrapper.findComponent(PreviewImage);
 
 				expect(previewImage.exists()).toBe(true);
-				expect(previewImage.props("src")).toEqual(
-					lightBoxOptions.value.previewUrl
-				);
+				expect(previewImage.props("src")).toEqual(lightBoxOptions.value.previewUrl);
 				expect(previewImage.props("alt")).toEqual(lightBoxOptions.value.alt);
 			});
 		});
@@ -178,9 +156,7 @@ describe("LightBox", () => {
 				const audioPlayer = wrapper.findComponent(AudioPlayer);
 
 				expect(audioPlayer.exists()).toBe(true);
-				expect(audioPlayer.props("src")).toEqual(
-					lightBoxOptions.value.downloadUrl
-				);
+				expect(audioPlayer.props("src")).toEqual(lightBoxOptions.value.downloadUrl);
 			});
 
 			describe("when audio player emits error", () => {

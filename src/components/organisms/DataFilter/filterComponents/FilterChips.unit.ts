@@ -1,16 +1,14 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import FilterChips from "./FilterChips.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
 describe("@components/DataFilter/filterComponents/FilterChips.vue", () => {
 	const mockProps = [
 		{ item: "classes", title: "Klasse(n) = 1C, 1D" },
 		{ item: "consentStatus", title: "Schülereinverständnis fehlt" },
 	];
-	const mountComponent = (
-		options: ComponentMountingOptions<typeof FilterChips> = {}
-	) => {
-		return mount(FilterChips, {
+	const mountComponent = (options: ComponentMountingOptions<typeof FilterChips> = {}) =>
+		mount(FilterChips, {
 			global: {
 				plugins: [createTestingVuetify()],
 			},
@@ -19,7 +17,6 @@ describe("@components/DataFilter/filterComponents/FilterChips.vue", () => {
 			},
 			...options,
 		});
-	};
 
 	describe("should render the component", () => {
 		it("should render the chips", async () => {
@@ -41,9 +38,7 @@ describe("@components/DataFilter/filterComponents/FilterChips.vue", () => {
 			await chipComponent.vm.$emit("click:close");
 
 			expect(wrapper.emitted()).toHaveProperty("remove:filter");
-			expect(wrapper.emitted()["remove:filter"]).toStrictEqual([
-				[mockProps[0].item],
-			]);
+			expect(wrapper.emitted()["remove:filter"]).toStrictEqual([[mockProps[0].item]]);
 		});
 
 		it("should emit click:filter on click event", async () => {
@@ -54,9 +49,7 @@ describe("@components/DataFilter/filterComponents/FilterChips.vue", () => {
 			await chips[1].trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("click:filter");
-			expect(wrapper.emitted()["click:filter"]).toStrictEqual([
-				[mockProps[1].item],
-			]);
+			expect(wrapper.emitted()["click:filter"]).toStrictEqual([[mockProps[1].item]]);
 		});
 	});
 });

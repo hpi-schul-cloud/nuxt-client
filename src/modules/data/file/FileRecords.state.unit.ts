@@ -1,6 +1,6 @@
+import { useFileRecordsStore } from "./FileRecords.state";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import { useFileRecordsStore } from "./FileRecords.state";
 
 describe("FileRecords Store", () => {
 	beforeEach(() => {
@@ -36,10 +36,7 @@ describe("FileRecords Store", () => {
 
 				expect(records).toHaveLength(2);
 				expect(records).toEqual(
-					expect.arrayContaining([
-						expect.objectContaining(record1),
-						expect.objectContaining(record2),
-					])
+					expect.arrayContaining([expect.objectContaining(record1), expect.objectContaining(record2)])
 				);
 			});
 		});
@@ -90,10 +87,7 @@ describe("FileRecords Store", () => {
 
 				expect(records).toHaveLength(2);
 				expect(records).toEqual(
-					expect.arrayContaining([
-						expect.objectContaining(record),
-						expect.objectContaining(newRecord),
-					])
+					expect.arrayContaining([expect.objectContaining(record), expect.objectContaining(newRecord)])
 				);
 			});
 		});
@@ -124,14 +118,10 @@ describe("FileRecords Store", () => {
 				const records2 = store.getFileRecordsByParentId(parentId2);
 
 				expect(records1).toHaveLength(1);
-				expect(records1).toEqual(
-					expect.arrayContaining([expect.objectContaining(record1)])
-				);
+				expect(records1).toEqual(expect.arrayContaining([expect.objectContaining(record1)]));
 
 				expect(records2).toHaveLength(1);
-				expect(records2).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records2).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 	});
@@ -163,9 +153,7 @@ describe("FileRecords Store", () => {
 				const records = store.getFileRecordsByParentId(parentId);
 
 				expect(records).toHaveLength(1);
-				expect(records).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 
@@ -187,9 +175,7 @@ describe("FileRecords Store", () => {
 
 				expect(records1).toHaveLength(0);
 				expect(records2).toHaveLength(1);
-				expect(records2).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records2).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 
@@ -209,9 +195,7 @@ describe("FileRecords Store", () => {
 				const records = store.getFileRecordsByParentId(parentId);
 
 				expect(records).toHaveLength(1);
-				expect(records).toEqual(
-					expect.arrayContaining([expect.objectContaining(record2)])
-				);
+				expect(records).toEqual(expect.arrayContaining([expect.objectContaining(record2)]));
 			});
 		});
 	});

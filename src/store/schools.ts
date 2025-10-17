@@ -1,3 +1,5 @@
+import { ApplicationError } from "./types/application-error";
+import { School } from "./types/schools";
 import {
 	FederalStateResponse,
 	SchoolApiFactory,
@@ -13,14 +15,13 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { authModule, envConfigModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { useApplicationError } from "../composables/application-error.composable";
-import { ApplicationError } from "./types/application-error";
-import { School } from "./types/schools";
 
 @Module({
 	name: "schoolsModule",
@@ -158,7 +159,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get schoolIsExternallyManaged(): boolean {
-		const isThr = envConfigModule.getTheme === SchulcloudTheme.Thr;
+		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr;
 		const result = this.school.isExternal || isThr;
 
 		return result;
@@ -179,13 +180,10 @@ export default class SchoolsModule extends VuexModule {
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
-		if (authModule.getSchool?.id) {
+		const schoolId = useAppStore().school?.id;
+		if (schoolId) {
 			try {
-				const school = (
-					await this.schoolApi.schoolControllerGetSchoolById(
-						authModule.getSchool?.id
-					)
-				).data;
+				const school = (await this.schoolApi.schoolControllerGetSchoolById(schoolId)).data;
 
 				this.setSchool(school);
 
@@ -193,7 +191,7 @@ export default class SchoolsModule extends VuexModule {
 			} catch (error: unknown) {
 				if (error instanceof AxiosError) {
 					this.setError(
-						useApplicationError().createApplicationError(
+						createApplicationError(
 							error.response?.status ?? 500,
 							"pages.administration.school.index.error",
 							error.message
@@ -209,16 +207,14 @@ export default class SchoolsModule extends VuexModule {
 	async fetchSystems(): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await this.schoolApi.schoolControllerGetSchoolSystems(
-				this.school.id
-			);
+			const { data } = await this.schoolApi.schoolControllerGetSchoolSystems(this.school.id);
 
 			this.setSystems(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -230,24 +226,18 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async update(payload: {
-		id: string;
-		props: SchoolUpdateBodyParams;
-	}): Promise<void> {
+	async update(payload: { id: string; props: SchoolUpdateBodyParams }): Promise<void> {
 		const { id, props } = payload;
 		this.setLoading(true);
 		try {
-			const { data } = await this.schoolApi.schoolControllerUpdateSchool(
-				id,
-				props
-			);
+			const { data } = await this.schoolApi.schoolControllerUpdateSchool(id, props);
 
 			this.setSchool(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -270,7 +260,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -294,7 +284,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message
@@ -313,9 +303,7 @@ export default class SchoolsModule extends VuexModule {
 		this.setLoading(true);
 		this.setError(null);
 		try {
-			await this.importUserApi.importUserControllerStartSchoolInUserMigration(
-				useCentralLdap
-			);
+			await this.importUserApi.importUserControllerStartSchoolInUserMigration(useCentralLdap);
 			this.setSchool({
 				...this.school,
 				inUserMigration: true,
@@ -325,7 +313,7 @@ export default class SchoolsModule extends VuexModule {
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
 				this.setError(
-					useApplicationError().createApplicationError(
+					createApplicationError(
 						error.response?.status ?? 500,
 						"pages.administration.school.index.error",
 						error.message

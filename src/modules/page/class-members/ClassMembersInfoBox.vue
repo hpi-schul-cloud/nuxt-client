@@ -9,18 +9,12 @@
 				}}
 			</div>
 		</v-alert>
-		<h2 class="text-h4">
+		<h2>
 			{{ $t("page-class-members.classMembersInfoBox.title") }}
 		</h2>
 		<div data-testid="class-members-info-box-text">
-			<i18n-t
-				keypath="pages.classMembers.infoBox.text.firstParagraph"
-				scope="global"
-				tag="p"
-			>
-				<span class="font-weight-bold">
-					{{ t("pages.classMembers.infoBox.text.firstParagraph.bold") }}</span
-				>
+			<i18n-t keypath="pages.classMembers.infoBox.text.firstParagraph" scope="global" tag="p">
+				<span class="font-weight-bold"> {{ t("pages.classMembers.infoBox.text.firstParagraph.bold") }}</span>
 			</i18n-t>
 			<p>{{ t("pages.classMembers.infoBox.text.secondParagraph") }}</p>
 			<p>{{ t("pages.classMembers.infoBox.text.thirdParagraph") }}</p>
@@ -34,15 +28,7 @@
 </template>
 <script lang="ts">
 import { System, useSystemApi } from "@data-system";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	ref,
-	Ref,
-	watch,
-} from "vue";
+import { computed, ComputedRef, defineComponent, onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -82,9 +68,7 @@ export default defineComponent({
 
 		const hasSystem: ComputedRef<boolean> = computed(() => !!system.value);
 
-		const systemName: ComputedRef<string> = computed(() => {
-			return system.value?.displayName ?? "";
-		});
+		const systemName: ComputedRef<string> = computed(() => system.value?.displayName ?? "");
 
 		return {
 			hasSystem,

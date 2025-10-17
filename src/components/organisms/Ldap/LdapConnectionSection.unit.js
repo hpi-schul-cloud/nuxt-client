@@ -1,14 +1,16 @@
-import { mount } from "@vue/test-utils";
 import LdapConnectionSection from "./LdapConnectionSection";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
 
 describe("@/components/organisms/LdapConnectionSection", () => {
-	const getWrapper = (props = {}) => {
-		return mount(LdapConnectionSection, {
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
+
+	const getWrapper = (props = {}) =>
+		mount(LdapConnectionSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				components: {
@@ -26,25 +28,14 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 				...props,
 			},
 		});
-	};
 
 	it("has correct child components", () => {
 		const wrapper = getWrapper();
 
-		expect(wrapper.find("[data-testid=ldapDataConnectionUrl]").exists()).toBe(
-			true
-		);
-		expect(
-			wrapper.find("[data-testid=ldapDataConnectionBasisPath]").exists()
-		).toBe(true);
-		expect(
-			wrapper.find("[data-testid=ldapDataConnectionSearchUser]").exists()
-		).toBe(true);
-		expect(
-			wrapper
-				.find("[data-testid=ldapDataConnectionSearchUserPassword]")
-				.exists()
-		).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataConnectionUrl]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataConnectionBasisPath]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataConnectionSearchUser]").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=ldapDataConnectionSearchUserPassword]").exists()).toBe(true);
 	});
 
 	it("loads the validator", () => {
@@ -130,9 +121,7 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 
 		await inputUrl.trigger("blur"); // without this the error is not displayed
 
-		errorMessageComponent = wrapper.find(
-			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
-		);
+		errorMessageComponent = wrapper.find("div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();
 	});
 });

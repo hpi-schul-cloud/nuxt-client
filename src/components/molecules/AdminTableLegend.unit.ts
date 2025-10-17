@@ -1,14 +1,11 @@
-import { mount } from "@vue/test-utils";
 import AdminTableLegend from "./AdminTableLegend.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils/factory";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 
 const icons = [
@@ -17,10 +14,9 @@ const icons = [
 ];
 
 describe("AdminTableLegend", () => {
-	beforeAll(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		createTestEnvStore();
 	});
 
 	afterEach(() => {
@@ -32,9 +28,8 @@ describe("AdminTableLegend", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$t: (key: string, placeholders: Record<string, string> = {}) => {
-						return `${key}|${Object.values(placeholders || {}).join("|")}`;
-					},
+					$t: (key: string, placeholders: Record<string, string> = {}) =>
+						`${key}|${Object.values(placeholders || {}).join("|")}`,
 				},
 			},
 			props: {
@@ -45,7 +40,7 @@ describe("AdminTableLegend", () => {
 			},
 		});
 
-		return { wrapper, envConfigModule };
+		return { wrapper };
 	};
 
 	it("renders icons and labels when showIcons is true", () => {
@@ -62,32 +57,18 @@ describe("AdminTableLegend", () => {
 	});
 
 	it("renders THR-specific text if isThr is true", () => {
-		const envs = envsFactory.build({
-			SC_THEME: SchulcloudTheme.Thr,
-		});
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.Thr });
 		const { wrapper } = setup();
 
-		expect(wrapper.text()).toContain(
-			"components.molecules.admintablelegend.thr"
-		);
+		expect(wrapper.text()).toContain("components.molecules.admintablelegend.thr");
 	});
 
 	it.each([
 		[SchulcloudTheme.Default, "Dataport"],
-		[
-			SchulcloudTheme.Brb,
-			"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
-		],
-		[
-			SchulcloudTheme.N21,
-			"Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)",
-		],
+		[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+		[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 	])("uses %s-instance specific text placeholders", async (theme, expected) => {
-		const envs = envsFactory.build({
-			SC_THEME: theme,
-		});
-		envConfigModule.setEnvs(envs);
+		createTestEnvStore({ SC_THEME: theme });
 		const { wrapper } = setup();
 
 		await nextTick();

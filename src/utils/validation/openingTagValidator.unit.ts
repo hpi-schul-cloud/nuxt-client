@@ -1,7 +1,4 @@
-import {
-	containsOpeningTagFollowedByString,
-	useOpeningTagValidator,
-} from "@/utils/validation/openingTagValidator";
+import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
 import { mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
@@ -20,9 +17,7 @@ describe("OpeningTagValidator", () => {
 		});
 
 		it("should return true when < is followed by multiple non-whitespace characters", () => {
-			expect(
-				containsOpeningTagFollowedByString("<multipleNonWhitespaceChars")
-			).toBe(true);
+			expect(containsOpeningTagFollowedByString("<multipleNonWhitespaceChars")).toBe(true);
 		});
 
 		it("should return true when < is followed by a string with special characters", () => {
@@ -58,9 +53,7 @@ describe("OpeningTagValidator", () => {
 		});
 
 		it("should return false when there is no < in the string", () => {
-			expect(
-				containsOpeningTagFollowedByString("No special character here")
-			).toBe(false);
+			expect(containsOpeningTagFollowedByString("No special character here")).toBe(false);
 		});
 
 		it("should return false when < is followed by only spaces", () => {
@@ -103,9 +96,7 @@ describe("OpeningTagValidator", () => {
 			it("should return error message when < is followed directly by a string", () => {
 				const { validateOnOpeningTag } = setup();
 
-				expect(validateOnOpeningTag("Hello <world")).toBe(
-					"common.validation.containsOpeningTag"
-				);
+				expect(validateOnOpeningTag("Hello <world")).toBe("common.validation.containsOpeningTag");
 			});
 		});
 

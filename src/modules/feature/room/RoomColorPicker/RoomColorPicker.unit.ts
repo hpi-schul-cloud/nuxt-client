@@ -1,14 +1,11 @@
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
-import { ComponentProps } from "vue-component-type-helpers";
 import RoomColorPicker from "./RoomColorPicker.vue";
 import { RoomColor } from "@/types/room/Room";
-import { VIcon, VRadio, VRadioGroup } from "vuetify/components";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiCheckCircleOutline } from "@icons/material";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
+import { VIcon, VRadio, VRadioGroup } from "vuetify/components";
 
 describe("@feature-room/RoomColorPicker", () => {
 	const setup = (props?: ComponentProps<typeof RoomColorPicker>) => {
@@ -50,9 +47,7 @@ describe("@feature-room/RoomColorPicker", () => {
 		const radioGroup = wrapper.getComponent(VRadioGroup);
 		const radioGroupAriaLabelledElement = radioGroup.get("[aria-labelledby]");
 
-		expect(radioGroupAriaLabelledElement.attributes("aria-labelledby")).toBe(
-			roomColorLabelId
-		);
+		expect(radioGroupAriaLabelledElement.attributes("aria-labelledby")).toBe(roomColorLabelId);
 	});
 
 	describe("when no color is given", () => {
@@ -78,9 +73,7 @@ describe("@feature-room/RoomColorPicker", () => {
 			const { wrapper } = setup({ color: RoomColor.Red });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
-			const redRadioButton = radioGroup.getComponent(
-				`[data-testid=color-swatch-${RoomColor.Red}]`
-			);
+			const redRadioButton = radioGroup.getComponent(`[data-testid=color-swatch-${RoomColor.Red}]`);
 			const trueIcon = redRadioButton.getComponent(VIcon);
 
 			expect(trueIcon.props("icon")).toEqual(mdiCheckCircleOutline);
@@ -90,9 +83,7 @@ describe("@feature-room/RoomColorPicker", () => {
 			const { wrapper } = setup({ color: RoomColor.Orange });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
-			const redRadioButton = radioGroup.getComponent(
-				`[data-testid=color-swatch-${RoomColor.Red}]`
-			);
+			const redRadioButton = radioGroup.getComponent(`[data-testid=color-swatch-${RoomColor.Red}]`);
 			const trueIcon = redRadioButton.findComponent(VIcon);
 
 			expect(trueIcon.exists()).toBe(false);

@@ -6,21 +6,19 @@
 		data-testid="admin-course-title"
 	>
 		<template #header>
-			<h1 class="text-h3 pl-2">
+			<h1>
 				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
-			<div class="mt-n6 mb-n3">
-				<v-switch
-					v-model="withoutTeacher"
-					:label="t('pages.administration.courses.withoutTeacher')"
-					:true-icon="mdiCheck"
-					data-testid="admin-course-without-teacher-checkbox"
-					hide-details
-					:true-value="true"
-					:false-value="false"
-					@update:model-value="onUpdateWithoutTeacherFilter"
-				/>
-			</div>
+			<v-switch
+				v-model="withoutTeacher"
+				:label="t('pages.administration.courses.withoutTeacher')"
+				:true-icon="mdiCheck"
+				data-testid="admin-course-without-teacher-checkbox"
+				hide-details
+				:true-value="true"
+				:false-value="false"
+				@update:model-value="onUpdateWithoutTeacherFilter"
+			/>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
 					<v-tab value="current" data-testid="admin-course-current-tab">
@@ -64,10 +62,7 @@
 				</span>
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
-				<span
-					v-if="item.teacherNames.length > 0"
-					data-testid="admin-rooms-table-teacher-names"
-				>
+				<span v-if="item.teacherNames.length > 0" data-testid="admin-rooms-table-teacher-names">
 					{{ joinNamesList(item.teacherNames) }}
 				</span>
 				<span v-else data-testid="admin-rooms-table-teacher-names-empty">
@@ -146,7 +141,7 @@
 			@dialog-confirmed="onConfirmCourseDeletion"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
+				<h2 class="my-2">
 					{{ t("pages.administration.courses.delete") }}
 				</h2>
 			</template>
@@ -201,36 +196,17 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	CourseInfoDataResponse,
-	CourseSortProps,
-	CourseStatus,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStore } from "@data-app";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { useCourseList } from "@data-room";
-import {
-	EndCourseSyncDialog,
-	StartExistingCourseSyncDialog,
-} from "@feature-course-sync";
-import {
-	mdiAlert,
-	mdiCheck,
-	mdiPencilOutline,
-	mdiSync,
-	mdiSyncOff,
-	mdiTrashCanOutline,
-} from "@icons/material";
+import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
+import { mdiAlert, mdiCheck, mdiPencilOutline, mdiSync, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
@@ -248,9 +224,6 @@ const props = defineProps({
 		default: "current",
 	},
 });
-
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -312,18 +285,13 @@ const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	}
 });
 
-const hasPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
-);
+const hasPermission = useAppStore().hasPermission(Permission.CourseAdministration);
 
-const showRoomAction = (item: CourseInfoDataResponse) =>
-	hasPermission.value && item.id;
+const showRoomAction = (item: CourseInfoDataResponse) => hasPermission.value && item.id;
 
-const showSyncAction = (item: CourseInfoDataResponse) =>
-	hasPermission.value && !item.syncedGroup;
+const showSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && !item.syncedGroup;
 
-const showEndSyncAction = (item: CourseInfoDataResponse) =>
-	hasPermission.value && item.syncedGroup;
+const showEndSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && item.syncedGroup;
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -335,9 +303,7 @@ const isEndSyncDialogOpen: Ref<boolean> = ref(false);
 
 const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
 
-const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.name || "???"
-);
+const selectedItemName: ComputedRef<string> = computed(() => selectedItem.value?.name || "???");
 
 const joinNamesList = (names: string[]) => {
 	if (names.length === 0) return;
@@ -365,9 +331,7 @@ const onCancelCourseDeletion = () => {
 	isDeleteDialogOpen.value = false;
 };
 
-const courseSyncEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
-);
+const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
 
 const headers = computed(() => {
 	const headerList: DataTableHeader<CourseInfoDataResponse>[] = [
@@ -434,13 +398,10 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 	const fieldToSortBy: CourseSortItem = sortBy[0];
-	const key: CourseSortProps | undefined = fieldToSortBy
-		? fieldToSortBy.key
-		: undefined;
+	const key: CourseSortProps | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
 	setSortBy(key);
 
-	const sortOrder =
-		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
+	const sortOrder = fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 	setSortOrder(sortOrder);
 
 	await loadCourseList();
@@ -463,18 +424,7 @@ onMounted(() => {
 	onTabsChange(activeTab.value);
 });
 
-const instituteTitle: ComputedRef<string> = computed(() => {
-	switch (envConfigModule.getTheme) {
-		case SchulcloudTheme.N21:
-			return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-		case SchulcloudTheme.Thr:
-			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case SchulcloudTheme.Brb:
-			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
-		default:
-			return "Dataport";
-	}
-});
+const { instituteTitle } = storeToRefs(useEnvStore());
 </script>
 
 <style scoped>

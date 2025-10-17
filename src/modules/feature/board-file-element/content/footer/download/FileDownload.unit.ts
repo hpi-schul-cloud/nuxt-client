@@ -1,12 +1,9 @@
+import FileDownload from "./FileDownload.vue";
 import { downloadFile } from "@/utils/fileHelper";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiTrayArrowDown } from "@icons/material";
 import { mount, shallowMount } from "@vue/test-utils";
 import { VBtn, VIcon } from "vuetify/components";
-import FileDownload from "./FileDownload.vue";
 
 vi.mock("@/utils/fileHelper");
 
@@ -58,9 +55,7 @@ describe("FileDownload", () => {
 
 		const button = wrapper.find("v-btn-stub");
 
-		expect(button.attributes("aria-label")).toBe(
-			"components.board.action.download"
-		);
+		expect(button.attributes("aria-label")).toBe("components.board.action.download");
 	});
 
 	describe("when download is allowed", () => {

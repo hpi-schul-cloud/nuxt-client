@@ -1,9 +1,6 @@
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 describe("BoardColumnGhost", () => {
 	const setup = () => {

@@ -21,12 +21,7 @@
 					{{ route.title }}
 				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
-					<v-btn
-						color="primary"
-						variant="outlined"
-						to="/loginRedirect"
-						class="mx-2"
-					>
+					<v-btn color="primary" variant="outlined" to="/loginRedirect" class="mx-2">
 						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
 						{{ $t("common.labels.login") }}
 					</v-btn>
@@ -41,7 +36,7 @@
 
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
 import { computed, ref } from "vue";
 
@@ -63,15 +58,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const activeLink = ref(window.location.pathname);
 
-const hasButtons = computed(() => {
-	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
-});
+const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default);
 
-const linksToDisplay = computed(() => {
-	return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
-		? props.links
-		: [];
-});
+const hasButtons = computed(() => isDefaultTheme.value);
+
+const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
 
 const setActive = (idx: number) => {
 	activeLink.value = props.links[idx].href;
@@ -105,14 +96,14 @@ const setActive = (idx: number) => {
 	}
 
 	@media (min-width: 991px) {
-		padding: 0 calc(5 * var(--border-width));
+		padding: 0 5px;
 		margin: auto;
 	}
 }
 
 .logo-container {
 	@media (min-width: 750px) {
-		height: calc(45 * var(--border-width));
+		height: 45px;
 
 		> a > img {
 			height: 40px;
@@ -146,7 +137,7 @@ const setActive = (idx: number) => {
 	}
 
 	> a {
-		padding: calc(9 * var(--border-width));
+		padding: 9px;
 		margin-right: 0;
 		margin-bottom: 8px;
 
@@ -157,7 +148,7 @@ const setActive = (idx: number) => {
 }
 
 .icon {
-	font-size: var(--radius-lg);
+	font-size: 16px;
 }
 
 @media (min-width: 576px) {
@@ -219,20 +210,20 @@ const setActive = (idx: number) => {
 
 	&:hover {
 		background-color: map.get($grey, lighten-3);
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 	}
 }
 
 a.active {
-	font-weight: var(--font-weight-bold);
+	font-weight: bold;
 	color: rgba(var(--v-theme-white));
 	background-color: rgba(var(--v-theme-accent));
-	border-radius: var(--radius-sm);
+	border-radius: 4px;
 
 	&:hover {
 		color: rgba(var(--v-theme-white));
 		background-color: rgba(var(--v-theme-accent));
-		border-radius: var(--radius-sm);
+		border-radius: 4px;
 	}
 }
 </style>

@@ -2,18 +2,12 @@
 	<div>
 		<SkipLink />
 		<Sidebar v-model="sidebarExpanded" />
-		<Topbar
-			:sidebar-expanded="sidebarExpanded"
-			@sidebar-toggled="onToggleSidebar"
-		/>
-		<v-main
-			id="main-content"
-			:class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }"
-		>
-			<application-error-wrapper>
+		<Topbar :sidebar-expanded="sidebarExpanded" @sidebar-toggled="onToggleSidebar" />
+		<v-main id="main-content" :class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }">
+			<ApplicationError>
 				<AlertContainer />
 				<router-view />
-			</application-error-wrapper>
+			</ApplicationError>
 		</v-main>
 		<loading-state-dialog />
 		<keep-alive>
@@ -24,10 +18,10 @@
 
 <script setup lang="ts">
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
+import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
-import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { Sidebar, Topbar } from "@ui-layout";
+import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
 import { computed, watch } from "vue";
@@ -35,9 +29,7 @@ import { useDisplay } from "vuetify";
 
 const { lgAndUp } = useDisplay();
 
-const isDesktop = computed(() => {
-	return lgAndUp.value;
-});
+const isDesktop = computed(() => lgAndUp.value);
 
 const sidebarExpanded = useStorage("sidebarExpanded", isDesktop.value);
 

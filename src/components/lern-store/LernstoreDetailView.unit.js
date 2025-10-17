@@ -1,9 +1,6 @@
 import LernstoreDetailView from "./LernstoreDetailView";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -35,12 +32,8 @@ describe("@/components/molecules/LernstoreDetailView", () => {
 	it("Renders Lernstore img", () => {
 		expect(wrapper.find(".preview").exists()).toBe(true);
 		expect(wrapper.find(".preview-img").exists()).toBe(true);
-		expect(wrapper.find(".preview-img").attributes("src")).toBe(
-			Resource.preview.url
-		);
-		expect(wrapper.find(".preview-img").attributes("alt")).toBe(
-			"pages.content.preview_img.alt"
-		);
+		expect(wrapper.find(".preview-img").attributes("src")).toBe(Resource.preview.url);
+		expect(wrapper.find(".preview-img").attributes("alt")).toBe("pages.content.preview_img.alt");
 	});
 
 	it("Renders sidebar with data", () => {

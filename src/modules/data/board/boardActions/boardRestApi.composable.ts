@@ -1,13 +1,3 @@
-import {
-	BoardObjectType,
-	ErrorType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
-import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { useSharedEditMode } from "@util-board";
-import { useI18n } from "vue-i18n";
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import {
@@ -21,8 +11,14 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
+	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
+import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { courseRoomDetailsModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useAppStore } from "@data-app";
+import { useSharedEditMode } from "@util-board";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -39,9 +35,8 @@ export const useBoardRestApi = () => {
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
 		updateBoardLayoutCall,
+		updateReadersCanEditCall,
 	} = useBoardApi();
-
-	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 
@@ -63,20 +58,13 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const fetchBoardRequest = async (
-		payload: FetchBoardRequestPayload
-	): Promise<void> => {
+	const fetchBoardRequest = async (payload: FetchBoardRequestPayload): Promise<void> => {
 		boardStore.setLoading(true);
 		try {
 			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess(board);
 		} catch {
-			applicationErrorModule.setError(
-				createApplicationError(
-					HttpStatusCode.NotFound,
-					t("components.board.error.404")
-				)
-			);
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 		}
 		boardStore.setLoading(false);
 	};
@@ -120,9 +108,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const moveCardRequest = async (
-		payload: MoveCardRequestPayload
-	): Promise<void> => {
+	const moveCardRequest = async (payload: MoveCardRequestPayload): Promise<void> => {
 		if (boardStore.board === undefined) return;
 
 		try {
@@ -175,9 +161,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const updateColumnTitleRequest = async (
-		payload: UpdateColumnTitleRequestPayload
-	) => {
+	const updateColumnTitleRequest = async (payload: UpdateColumnTitleRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { columnId, newTitle } = payload;
 
@@ -192,9 +176,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const updateBoardTitleRequest = async (
-		payload: UpdateBoardTitleRequestPayload
-	) => {
+	const updateBoardTitleRequest = async (payload: UpdateBoardTitleRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { boardId, newTitle } = payload;
 
@@ -213,9 +195,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const updateBoardVisibilityRequest = async (
-		payload: UpdateBoardVisibilityRequestPayload
-	) => {
+	const updateBoardVisibilityRequest = async (payload: UpdateBoardVisibilityRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { boardId, isVisible } = payload;
 
@@ -233,9 +213,25 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const updateBoardLayoutRequest = async (
-		payload: UpdateBoardLayoutRequestPayload
-	) => {
+	const updateReaderCanEditRequest = async (payload: UpdateReaderCanEditRequestPayload) => {
+		if (boardStore.board === undefined) return;
+		const { boardId, readersCanEdit } = payload;
+
+		try {
+			await updateReadersCanEditCall(boardId, readersCanEdit);
+			boardStore.updateReaderCanEditSuccess({
+				boardId,
+				readersCanEdit,
+				isOwnAction: true,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
+	const updateBoardLayoutRequest = async (payload: UpdateBoardLayoutRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { boardId, layout } = payload;
 
@@ -253,17 +249,12 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const notifyWithTemplateAndReload = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
-		return () => {
-			if (boardStore.board === undefined) return;
+	const notifyWithTemplateAndReload = (errorType: ErrorType, boardObjectType?: BoardObjectType) => () => {
+		if (boardStore.board === undefined) return;
 
-			notifyWithTemplate(errorType, boardObjectType)();
-			reloadBoard();
-			setEditModeId(undefined);
-		};
+		notifyWithTemplate(errorType, boardObjectType)();
+		reloadBoard();
+		setEditModeId(undefined);
 	};
 
 	const reloadBoard = async () => {
@@ -273,13 +264,10 @@ export const useBoardRestApi = () => {
 	};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
-	const reloadBoardSuccess = (
-		action: ReturnType<typeof BoardActions.reloadBoardSuccess>
-	) => {
-		return action;
-	};
+	const reloadBoardSuccess = (action: ReturnType<typeof BoardActions.reloadBoardSuccess>) => action;
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
+	// eslint-disable-next-line arrow-body-style
 	const disconnectSocketRequest = (): void => {
 		return;
 	};
@@ -295,6 +283,7 @@ export const useBoardRestApi = () => {
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
+		updateReaderCanEditRequest,
 		updateBoardLayoutRequest,
 		reloadBoard,
 		reloadBoardSuccess,

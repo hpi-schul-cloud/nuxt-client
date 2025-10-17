@@ -1,17 +1,13 @@
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-vitest";
-import { mount } from "@vue/test-utils";
-import { VCard } from "vuetify/lib/components/index";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import { LessonData } from "./types";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-vitest";
+import { mount } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
+import { VCard } from "vuetify/lib/components/index";
 
 const baseTestLesson = {
 	id: "123",
@@ -50,8 +46,7 @@ const setup = (
 		roomId: "456",
 		displayColor: "#54616e",
 	};
-	const ariaLabel =
-		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken";
+	const ariaLabel = "lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken";
 
 	const wrapper = mount(RoomLessonCard, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
@@ -71,9 +66,9 @@ const setup = (
 };
 
 describe("@/components/molecules/RoomLessonCard", () => {
-	beforeEach(() => {
+	beforeAll(() => {
 		window.location.pathname = "";
-		setupStores({ envConfigModule: EnvConfigModule });
+		setActivePinia(createPinia());
 	});
 
 	describe("common behaviors and actions", () => {
@@ -151,9 +146,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 		it("should show information about the visibility of tasks for hidden lesson card", async () => {
 			const { wrapper } = setup({ lesson: hiddenTestLesson, userRole });
 			const chipElement = wrapper.find(".chip-value");
-			expect(chipElement.element.textContent).toContain(
-				"pages.room.lessonCard.label.notVisible"
-			);
+			expect(chipElement.element.textContent).toContain("pages.room.lessonCard.label.notVisible");
 		});
 	});
 
@@ -192,9 +185,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="lesson-card-menu-action-edit-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="lesson-card-menu-action-edit-0"]`);
 				await moreActionButton.trigger("click");
 
 				expect(window.location.href).toEqual(url);
@@ -210,56 +201,35 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'copy' more action if copying feature is enabled", async () => {
-				const envs = envsFactory.build({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
-				const threeDotButton = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-0]"
-				);
+				const threeDotButton = wrapper.findComponent("[data-testid=lesson-card-menu-0]");
 				await threeDotButton.trigger("click");
 
-				const copyItem = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-action-copy-0]"
-				);
+				const copyItem = wrapper.findComponent("[data-testid=lesson-card-menu-action-copy-0]");
 				expect(copyItem.exists()).toBe(true);
 			});
 
 			it("should not have 'copy' more action if copying feature is not enabled", async () => {
-				const envs = envsFactory.build({
-					FEATURE_COPY_SERVICE_ENABLED: false,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: false });
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
-				const threeDotButton = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-0]"
-				);
+				const threeDotButton = wrapper.findComponent("[data-testid=lesson-card-menu-0]");
 				await threeDotButton.trigger("click");
 
-				const copyItem = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-action-copy-0]"
-				);
+				const copyItem = wrapper.findComponent("[data-testid=lesson-card-menu-action-copy-0]");
 				expect(copyItem.exists()).toBe(false);
 			});
 
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-				const envs = envsFactory.build({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
-				const threeDotButton = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-0]"
-				);
+				const threeDotButton = wrapper.findComponent("[data-testid=lesson-card-menu-0]");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="lesson-card-menu-action-copy-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="lesson-card-menu-action-copy-0"]`);
 				await moreActionButton.trigger("click");
 
 				expect(wrapper.emitted("copy-lesson")).toHaveLength(1);
@@ -268,48 +238,33 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
-				const threeDotButton = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-0]"
-				);
+				const threeDotButton = wrapper.findComponent("[data-testid=lesson-card-menu-0]");
 				await threeDotButton.trigger("click");
 
-				const moreActionButton = wrapper.findComponent(
-					`[data-testid="lesson-card-menu-action-revert-0"]`
-				);
+				const moreActionButton = wrapper.findComponent(`[data-testid="lesson-card-menu-action-revert-0"]`);
 				await moreActionButton.trigger("click");
 
 				expect(wrapper.emitted("update-visibility")).toStrictEqual([[false]]);
 			});
 
 			it("should have 'share' more action if env flag is set", async () => {
-				const envs = envsFactory.build({
-					FEATURE_LESSON_SHARE: true,
-				});
-				envConfigModule.setEnvs(envs);
+				createTestEnvStore({ FEATURE_LESSON_SHARE: true });
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
-				const threeDotButton = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-0]"
-				);
+				const threeDotButton = wrapper.findComponent("[data-testid=lesson-card-menu-0]");
 				await threeDotButton.trigger("click");
 
-				const shareButton = wrapper.findComponent(
-					`[data-testid="lesson-card-menu-action-share-0"]`
-				);
+				const shareButton = wrapper.findComponent(`[data-testid="lesson-card-menu-action-share-0"]`);
 				expect(shareButton.exists()).toBe(true);
 			});
 
 			it("should emit 'delete-lesson' when delete action button clicked'", async () => {
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
-				const threeDotButton = wrapper.findComponent(
-					"[data-testid=lesson-card-menu-0]"
-				);
+				const threeDotButton = wrapper.findComponent("[data-testid=lesson-card-menu-0]");
 				await threeDotButton.trigger("click");
 
-				const removeButton = wrapper.findComponent(
-					`[data-testid="lesson-card-menu-action-remove-0"]`
-				);
+				const removeButton = wrapper.findComponent(`[data-testid="lesson-card-menu-action-remove-0"]`);
 				await removeButton.trigger("click");
 
 				expect(wrapper.emitted("delete-lesson")).toHaveLength(1);

@@ -102,8 +102,7 @@ export const mutations = {
 				state[key][identifier] = mergeDeep(state[key][identifier] || {}, value);
 			}
 		} else {
-			if (key in getDefaultState())
-				throw new Error("Overwriting the default state is not permitted!");
+			if (key in getDefaultState()) throw new Error("Overwriting the default state is not permitted!");
 
 			if (value && typeof value === "object" && !Array.isArray(value)) {
 				state[key] = mergeDeep(state[key] || {}, value);

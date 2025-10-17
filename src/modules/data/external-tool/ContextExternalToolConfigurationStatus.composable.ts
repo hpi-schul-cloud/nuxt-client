@@ -1,21 +1,16 @@
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useI18n } from "vue-i18n";
 import { ContextExternalToolConfigurationStatus } from "./types";
+import { RoleName } from "@/serverApi/v3";
+import { useAppStore } from "@data-app";
+import { useI18n } from "vue-i18n";
 
 export const useContextExternalToolConfigurationStatus = () => {
-	const authModule = injectStrict(AUTH_MODULE_KEY);
 	const { t } = useI18n();
 
-	const determineToolStatusTranslationKey = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): string => {
-		const userRoles = authModule.getUserRoles;
+	const determineToolStatusTranslationKey = (toolConfigStatus: ContextExternalToolConfigurationStatus): string => {
+		const userRoles = useAppStore().userRoles;
 
-		if (userRoles.includes("teacher")) {
-			if (
-				toolConfigStatus.isOutdatedOnScopeSchool &&
-				toolConfigStatus.isOutdatedOnScopeContext
-			) {
+		if (userRoles.includes(RoleName.Teacher)) {
+			if (toolConfigStatus.isOutdatedOnScopeSchool && toolConfigStatus.isOutdatedOnScopeContext) {
 				return "common.tool.information.incomplete.outdated.schoolAndContext.teacher";
 			} else if (toolConfigStatus.isOutdatedOnScopeSchool) {
 				return "common.tool.information.outdatedOnSchool.teacher";
@@ -37,7 +32,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
 		let statusString: string;
-		const userRoles = authModule.getUserRoles;
+		const userRoles = useAppStore().userRoles;
 
 		if (toolConfigStatus.isDeactivated) {
 			statusString = t("common.medium.alert.deactivated") + " ";
@@ -47,9 +42,9 @@ export const useContextExternalToolConfigurationStatus = () => {
 			statusString = t("common.medium.alert.incomplete") + " ";
 		}
 
-		if (userRoles.includes("administrator")) {
+		if (userRoles.includes(RoleName.Administrator)) {
 			return statusString + t("common.medium.information.admin");
-		} else if (userRoles.includes("teacher")) {
+		} else if (userRoles.includes(RoleName.Teacher)) {
 			return statusString + t("common.medium.information.teacher");
 		} else {
 			return statusString + t("common.medium.information.student");
@@ -57,8 +52,9 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineDeactivatedTranslationKey = (): string => {
-		const userRoles = authModule.getUserRoles;
-		if (userRoles.includes("student")) {
+		const userRoles = useAppStore().userRoles;
+
+		if (userRoles.includes(RoleName.Student)) {
 			return "common.tool.information.deactivated.student";
 		} else {
 			return "common.tool.information.deactivated.teacher";
@@ -66,17 +62,16 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineNotLicensedTranslationKey = (): string => {
-		const userRoles = authModule.getUserRoles;
-		if (userRoles.includes("student")) {
+		const userRoles = useAppStore().userRoles;
+
+		if (userRoles.includes(RoleName.Student)) {
 			return "common.tool.information.notLicensed.student";
 		} else {
 			return "common.tool.information.notLicensed.teacher";
 		}
 	};
 
-	const isOperational = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): boolean => {
+	const isOperational = (toolConfigStatus: ContextExternalToolConfigurationStatus): boolean => {
 		if (
 			toolConfigStatus.isIncompleteOnScopeContext ||
 			toolConfigStatus.isOutdatedOnScopeContext ||
@@ -89,9 +84,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		return true;
 	};
 
-	const isTeacher = (): boolean => {
-		return authModule.getUserRoles.includes("teacher");
-	};
+	const isTeacher = () => useAppStore().userRoles.includes(RoleName.Teacher);
 
 	return {
 		determineToolStatusTranslationKey,

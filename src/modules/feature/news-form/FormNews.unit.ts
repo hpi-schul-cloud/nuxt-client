@@ -1,18 +1,15 @@
+import FormNews from "./FormNews.vue";
 import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
-import { notifierModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { News } from "@/store/types/news";
+import { expectNotification } from "@@/tests/test-utils";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { Dayjs } from "dayjs";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
-import FormNews from "./FormNews.vue";
-import { News } from "@/store/types/news";
 
 const date = "2022-07-05";
 const time = "11:00";
@@ -97,10 +94,8 @@ describe("FormNews", () => {
 	};
 
 	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-			notifierModule: NotifierModule,
-		});
+		setActivePinia(createTestingPinia());
+		setupStores({});
 	});
 
 	it("should render component", () => {
@@ -108,19 +103,15 @@ describe("FormNews", () => {
 		expect(wrapper.findComponent(FormNews).exists()).toBe(true);
 	});
 
-	it("passes date and time to input fields", async () => {
+	it("passes date and time to input fields", () => {
 		const { wrapper } = setup(testNews);
 
 		const dateInput = wrapper.find('[data-testid="news_date"]');
 
-		expect(dateInput.attributes("modelvalue")).toStrictEqual(
-			testDate.format(DATETIME_FORMAT.inputDate)
-		);
+		expect(dateInput.attributes("modelvalue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputDate));
 
 		const timeInput = wrapper.find('[data-testid="news_time"]');
-		expect(timeInput.attributes("modelvalue")).toStrictEqual(
-			testDate.format(DATETIME_FORMAT.inputTime)
-		);
+		expect(timeInput.attributes("modelvalue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
 	});
 
 	describe("save", () => {
@@ -135,23 +126,17 @@ describe("FormNews", () => {
 		});
 
 		it("shows validation error on empty title", async () => {
-			const notifierMock = vi.spyOn(notifierModule, "show");
-
 			const { wrapper } = setup({ ...testNews, title: "" });
 
 			await wrapper.find("form").trigger("submit");
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
+			expectNotification("error");
 		});
 
 		it("shows validation error on empty content", async () => {
-			const notifierMock = vi.spyOn(notifierModule, "show");
-
 			const { wrapper } = setup({ ...testNews, content: "" });
 
 			await wrapper.find("form").trigger("submit");
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
+			expectNotification("error");
 		});
 
 		it("does not emit save event on empty title", async () => {

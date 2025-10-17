@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<VDialog
-			v-model="dialogEdit"
-			large
-			max-width="900px"
-			@click:outside="closeEdit"
-		>
+		<VDialog v-model="dialogEdit" large max-width="900px" @click:outside="closeEdit">
 			<vImportUsersMatchSearch
 				v-if="dialogEdit"
 				:edited-item="editedItem"
@@ -18,12 +13,7 @@
 			/>
 		</VDialog>
 
-		<VAlert
-			v-if="!canStartMigration"
-			type="error"
-			:icon="mdiAlertCircle"
-			elevation="2"
-		>
+		<VAlert v-if="!canStartMigration" type="error" :icon="mdiAlertCircle" elevation="2">
 			{{ $t("pages.administration.migration.cannotStart") }}
 		</VAlert>
 
@@ -40,11 +30,7 @@
 				@update:options="onUpdateOptions"
 			>
 				<template #loading>
-					<VSkeletonLoader
-						class="mx-auto"
-						width="100%"
-						type="table-thead, table-tbody"
-					/>
+					<VSkeletonLoader class="mx-auto" width="100%" type="table-thead, table-tbody" />
 				</template>
 				<template #[`body.prepend`]>
 					<tr class="head">
@@ -101,17 +87,11 @@
 									icon
 									variant="text"
 									:value="MatchedBy.None"
-									:title="
-										$t('components.organisms.importUsers.searchUnMatched')
-									"
+									:title="$t('components.organisms.importUsers.searchUnMatched')"
 									data-testid="search-matched-by-none"
 								>
 									<VIcon
-										:color="
-											searchMatchedBy.includes(MatchedBy.None)
-												? 'primary'
-												: 'rgba(var(--v-theme-on-background))'
-										"
+										:color="searchMatchedBy.includes(MatchedBy.None) ? 'primary' : 'rgba(var(--v-theme-on-background))'"
 									>
 										{{ mdiAccountPlus }}
 									</VIcon>
@@ -120,16 +100,12 @@
 									icon
 									variant="text"
 									:value="MatchedBy.Admin"
-									:title="
-										$t('components.organisms.importUsers.searchAdminMatched')
-									"
+									:title="$t('components.organisms.importUsers.searchAdminMatched')"
 									data-testid="search-matched-by-admin"
 								>
 									<VIcon
 										:color="
-											searchMatchedBy.includes(MatchedBy.Admin)
-												? 'primary'
-												: 'rgba(var(--v-theme-on-background))'
+											searchMatchedBy.includes(MatchedBy.Admin) ? 'primary' : 'rgba(var(--v-theme-on-background))'
 										"
 									>
 										{{ mdiAccountSwitch }}
@@ -139,17 +115,11 @@
 									icon
 									variant="text"
 									:value="MatchedBy.Auto"
-									:title="
-										$t('components.organisms.importUsers.searchAutoMatched')
-									"
+									:title="$t('components.organisms.importUsers.searchAutoMatched')"
 									data-testid="search-matched-by-auto"
 								>
 									<VIcon
-										:color="
-											searchMatchedBy.includes(MatchedBy.Auto)
-												? 'primary'
-												: 'rgba(var(--v-theme-on-background))'
-										"
+										:color="searchMatchedBy.includes(MatchedBy.Auto) ? 'primary' : 'rgba(var(--v-theme-on-background))'"
 									>
 										{{ mdiAccountSwitchOutline }}
 									</VIcon>
@@ -166,13 +136,7 @@
 									class="mx-auto"
 									data-testid="search-flagged"
 								>
-									<VIcon
-										:color="
-											searchFlagged
-												? 'primary'
-												: 'rgba(var(--v-theme-on-background))'
-										"
-									>
+									<VIcon :color="searchFlagged ? 'primary' : 'rgba(var(--v-theme-on-background))'">
 										{{ searchFlagged ? mdiFlag : mdiFlagOutline }}
 									</VIcon>
 								</VBtn>
@@ -270,6 +234,11 @@
 </template>
 
 <script>
+import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch.vue";
+import { ImportUserResponseRoleNamesEnum, SchulcloudTheme } from "@/serverApi/v3";
+import { importUsersModule, schoolsModule } from "@/store";
+import { MatchedBy } from "@/store/import-users";
+import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -279,13 +248,6 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
-import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch.vue";
-import {
-	ImportUserResponseRoleNamesEnum,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-import { MatchedBy } from "@/store/import-users";
 
 export default {
 	components: {
@@ -393,21 +355,15 @@ export default {
 			return tableHeaders;
 		},
 		isNbc() {
-			return (
-				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
-			);
+			return useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21;
 		},
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
 		sourceSystemName() {
-			if (
-				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb
-			) {
+			if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb) {
 				return this.$t("pages.administration.migration.brbSchulportal");
-			} else if (
-				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
-			) {
+			} else if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21) {
 				return "moin.schule";
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
@@ -529,7 +485,7 @@ export default {
 				this.loading = false;
 			}
 		},
-		async savedFlag() {
+		savedFlag() {
 			this.loading = true;
 			this.reloadData();
 		},
@@ -562,13 +518,9 @@ export default {
 			importUsersModule.setFlagged(this.searchFlagged);
 
 			importUsersModule.setLimit(this.options.itemsPerPage);
-			importUsersModule.setSkip(
-				(this.options.page - 1) * this.options.itemsPerPage
-			);
+			importUsersModule.setSkip((this.options.page - 1) * this.options.itemsPerPage);
 
-			const sortBy = this.options.sortBy?.length
-				? this.options.sortBy[0]
-				: { key: "", order: "" };
+			const sortBy = this.options.sortBy?.length ? this.options.sortBy[0] : { key: "", order: "" };
 
 			importUsersModule.setSortBy(sortBy.key);
 			importUsersModule.setSortOrder(sortBy.order);
@@ -585,8 +537,7 @@ export default {
 $rounded: 50%;
 
 tr.head td {
-	border-bottom: calc(2 * var(--border-width)) solid
-		rgba(var(--v-theme-on-background)) !important;
+	border-bottom: 2px solid rgba(var(--v-theme-on-background)) !important;
 }
 
 .v-btn--round {

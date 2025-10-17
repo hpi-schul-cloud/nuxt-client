@@ -1,22 +1,19 @@
+import { useSchoolLicenseStore } from "./SchoolLicense.store";
+import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 import { MediaSchoolLicenseListResponse } from "@/serverApi/v3";
 import { mediaSchoolLicenseResponseFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createPinia, setActivePinia } from "pinia";
-import { useSchoolLicenseStore } from "./SchoolLicense.store";
-import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 
 vi.mock("./schoolLicenseApi.composable");
 
 describe("SchoolLicenseStore", () => {
-	let useSchoolLicenseApiMock: DeepMocked<
-		ReturnType<typeof useSchoolLicenseApi>
-	>;
+	let useSchoolLicenseApiMock: DeepMocked<ReturnType<typeof useSchoolLicenseApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
 
-		useSchoolLicenseApiMock =
-			createMock<ReturnType<typeof useSchoolLicenseApi>>();
+		useSchoolLicenseApiMock = createMock<ReturnType<typeof useSchoolLicenseApi>>();
 		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
 	});
 
@@ -52,17 +49,14 @@ describe("SchoolLicenseStore", () => {
 	describe("fetchMediaSchoolLicenses", () => {
 		describe("when loading all media licenses for a school", () => {
 			const setup = () => {
-				const mediaSchoolLicenseResponse =
-					mediaSchoolLicenseResponseFactory.build();
+				const mediaSchoolLicenseResponse = mediaSchoolLicenseResponseFactory.build();
 				const mediaSchoolLicenseListResponse: MediaSchoolLicenseListResponse = {
 					data: [mediaSchoolLicenseResponse],
 				};
 
 				const store = useSchoolLicenseStore();
 
-				useSchoolLicenseApiMock.getMediaSchoolLicensesForSchool.mockResolvedValueOnce(
-					mediaSchoolLicenseListResponse
-				);
+				useSchoolLicenseApiMock.getMediaSchoolLicensesForSchool.mockResolvedValueOnce(mediaSchoolLicenseListResponse);
 
 				return {
 					store,
@@ -77,10 +71,7 @@ describe("SchoolLicenseStore", () => {
 
 				expect(store.mediaSchoolLicenses).toEqual(
 					new Set([
-						store.getLicenseIdentifier(
-							mediaSchoolLicenseResponse.mediumId,
-							mediaSchoolLicenseResponse.mediaSourceId
-						),
+						store.getLicenseIdentifier(mediaSchoolLicenseResponse.mediumId, mediaSchoolLicenseResponse.mediaSourceId),
 					])
 				);
 			});
@@ -106,9 +97,7 @@ describe("SchoolLicenseStore", () => {
 				const mediaSourceId = "mediaSource1";
 
 				const store = useSchoolLicenseStore();
-				store.mediaSchoolLicenses.add(
-					store.getLicenseIdentifier(mediumId, mediaSourceId)
-				);
+				store.mediaSchoolLicenses.add(store.getLicenseIdentifier(mediumId, mediaSourceId));
 
 				return {
 					store,
@@ -128,10 +117,7 @@ describe("SchoolLicenseStore", () => {
 
 		describe("when a there is no license for a medium", () => {
 			it("should return false", () => {
-				const result = useSchoolLicenseStore().isLicensed(
-					"medium1",
-					"mediaSource1"
-				);
+				const result = useSchoolLicenseStore().isLicensed("medium1", "mediaSource1");
 
 				expect(result).toEqual(false);
 			});

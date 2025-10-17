@@ -1,20 +1,13 @@
-import {
-	ContextExternalToolBodyParams,
-	LaunchType,
-	ToolContextType,
-} from "@/serverApi/v3";
-import {
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
+import { useExternalToolApi } from "./ExternalToolApi.composable";
+import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
+import { ContextExternalToolBodyParams, LaunchType, ToolContextType } from "@/serverApi/v3";
+import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { axiosErrorFactory, mountComposable } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useExternalToolApi } from "./ExternalToolApi.composable";
-import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 import { nextTick } from "vue";
 
 vi.mock("@data-external-tool/ExternalToolApi.composable");
@@ -23,8 +16,7 @@ describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
 
 	beforeEach(() => {
-		useExternalToolApiMock =
-			createMock<ReturnType<typeof useExternalToolApi>>();
+		useExternalToolApiMock = createMock<ReturnType<typeof useExternalToolApi>>();
 
 		vi.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
 	});
@@ -38,12 +30,11 @@ describe("ExternalToolLaunchState.composable", () => {
 			const setup = () => {
 				const response = toolLaunchRequestFactory.build();
 
-				useExternalToolApiMock.fetchContextLaunchDataCall.mockResolvedValue(
-					response
-				);
+				useExternalToolApiMock.fetchContextLaunchDataCall.mockResolvedValue(response);
 
-				const { fetchContextLaunchRequest, toolLaunchRequest, error } =
-					mountComposable(() => useExternalToolLaunchState());
+				const { fetchContextLaunchRequest, toolLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
 
 				return {
 					fetchContextLaunchRequest,
@@ -58,14 +49,11 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				await fetchContextLaunchRequest("contextExternalToolId");
 
-				expect(
-					useExternalToolApiMock.fetchContextLaunchDataCall
-				).toHaveBeenCalledWith("contextExternalToolId");
+				expect(useExternalToolApiMock.fetchContextLaunchDataCall).toHaveBeenCalledWith("contextExternalToolId");
 			});
 
 			it("should save the loaded request in a state", async () => {
-				const { fetchContextLaunchRequest, toolLaunchRequest, response } =
-					setup();
+				const { fetchContextLaunchRequest, toolLaunchRequest, response } = setup();
 
 				await fetchContextLaunchRequest("contextExternalToolId");
 
@@ -92,13 +80,9 @@ describe("ExternalToolLaunchState.composable", () => {
 				const axiosError = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(axiosError);
 
-				useExternalToolApiMock.fetchContextLaunchDataCall.mockRejectedValue(
-					axiosError
-				);
+				useExternalToolApiMock.fetchContextLaunchDataCall.mockRejectedValue(axiosError);
 
-				const { fetchContextLaunchRequest, error } = mountComposable(() =>
-					useExternalToolLaunchState()
-				);
+				const { fetchContextLaunchRequest, error } = mountComposable(() => useExternalToolLaunchState());
 
 				return {
 					fetchContextLaunchRequest,
@@ -131,16 +115,11 @@ describe("ExternalToolLaunchState.composable", () => {
 					contextType: ToolContextType.MediaBoard,
 				};
 
-				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockResolvedValue(
-					response
-				);
+				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockResolvedValue(response);
 
-				const {
-					fetchContextLaunchRequest,
-					fetchSchoolLaunchRequest,
-					toolLaunchRequest,
-					error,
-				} = mountComposable(() => useExternalToolLaunchState());
+				const { fetchContextLaunchRequest, fetchSchoolLaunchRequest, toolLaunchRequest, error } = mountComposable(() =>
+					useExternalToolLaunchState()
+				);
 
 				return {
 					fetchContextLaunchRequest,
@@ -157,18 +136,14 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
 
-				expect(
-					useExternalToolApiMock.fetchSchoolLaunchDataCall
-				).toHaveBeenCalledWith("schoolExternalToolId", bodyParams);
+				expect(useExternalToolApiMock.fetchSchoolLaunchDataCall).toHaveBeenCalledWith(
+					"schoolExternalToolId",
+					bodyParams
+				);
 			});
 
 			it("should save the loaded request in a state", async () => {
-				const {
-					fetchSchoolLaunchRequest,
-					toolLaunchRequest,
-					response,
-					bodyParams,
-				} = setup();
+				const { fetchSchoolLaunchRequest, toolLaunchRequest, response, bodyParams } = setup();
 
 				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
 
@@ -200,13 +175,9 @@ describe("ExternalToolLaunchState.composable", () => {
 					contextType: ToolContextType.MediaBoard,
 				};
 
-				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockRejectedValue(
-					axiosError
-				);
+				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockRejectedValue(axiosError);
 
-				const { fetchSchoolLaunchRequest, error } = mountComposable(() =>
-					useExternalToolLaunchState()
-				);
+				const { fetchSchoolLaunchRequest, error } = mountComposable(() => useExternalToolLaunchState());
 
 				return {
 					fetchSchoolLaunchRequest,
@@ -217,8 +188,7 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			it("should load the launch data from the store", async () => {
-				const { fetchSchoolLaunchRequest, error, apiError, bodyParams } =
-					setup();
+				const { fetchSchoolLaunchRequest, error, apiError, bodyParams } = setup();
 
 				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
 
@@ -236,9 +206,7 @@ describe("ExternalToolLaunchState.composable", () => {
 			const setup = () => {
 				window.open = vi.fn();
 
-				const { launchTool } = mountComposable(() =>
-					useExternalToolLaunchState()
-				);
+				const { launchTool } = mountComposable(() => useExternalToolLaunchState());
 
 				return {
 					launchTool,
@@ -262,9 +230,7 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: false,
 					});
 
-					const { toolLaunchRequest, launchTool } = mountComposable(() =>
-						useExternalToolLaunchState()
-					);
+					const { toolLaunchRequest, launchTool } = mountComposable(() => useExternalToolLaunchState());
 
 					toolLaunchRequest.value = launchRequest;
 
@@ -292,9 +258,7 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: true,
 					});
 
-					const { toolLaunchRequest, launchTool } = mountComposable(() =>
-						useExternalToolLaunchState()
-					);
+					const { toolLaunchRequest, launchTool } = mountComposable(() => useExternalToolLaunchState());
 
 					toolLaunchRequest.value = launchRequest;
 
@@ -328,9 +292,7 @@ describe("ExternalToolLaunchState.composable", () => {
 						payload: "",
 					});
 
-					const { toolLaunchRequest, launchTool } = mountComposable(() =>
-						useExternalToolLaunchState()
-					);
+					const { toolLaunchRequest, launchTool } = mountComposable(() => useExternalToolLaunchState());
 					toolLaunchRequest.value = launchRequest;
 
 					return {
@@ -362,9 +324,7 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: false,
 					});
 
-					const { launchTool, toolLaunchRequest } = mountComposable(() =>
-						useExternalToolLaunchState()
-					);
+					const { launchTool, toolLaunchRequest } = mountComposable(() => useExternalToolLaunchState());
 					toolLaunchRequest.value = launchRequest;
 
 					return {
@@ -396,9 +356,7 @@ describe("ExternalToolLaunchState.composable", () => {
 						openNewTab: false,
 					});
 
-					const { launchTool, toolLaunchRequest } = mountComposable(() =>
-						useExternalToolLaunchState()
-					);
+					const { launchTool, toolLaunchRequest } = mountComposable(() => useExternalToolLaunchState());
 					toolLaunchRequest.value = launchRequest;
 
 					return {
@@ -427,9 +385,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					method: "unknown" as unknown as ToolLaunchRequestMethodEnum,
 				});
 
-				const { launchTool, toolLaunchRequest, error } = mountComposable(() =>
-					useExternalToolLaunchState()
-				);
+				const { launchTool, toolLaunchRequest, error } = mountComposable(() => useExternalToolLaunchState());
 				toolLaunchRequest.value = launchRequest;
 
 				window.open = vi.fn();
@@ -470,9 +426,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					launchType: LaunchType.Lti11ContentItemSelection,
 				});
 
-				const { launchTool, toolLaunchRequest } = mountComposable(() =>
-					useExternalToolLaunchState(refreshCallback)
-				);
+				const { launchTool, toolLaunchRequest } = mountComposable(() => useExternalToolLaunchState(refreshCallback));
 				toolLaunchRequest.value = launchRequest;
 
 				const mockWindow = {
@@ -480,9 +434,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				};
 
 				HTMLFormElement.prototype.submit = vi.fn();
-				vi.spyOn(window, "open").mockReturnValue(
-					mockWindow as unknown as Window
-				);
+				vi.spyOn(window, "open").mockReturnValue(mockWindow as unknown as Window);
 
 				const setInterval = vi.spyOn(window, "setInterval");
 				const clearInterval = vi.spyOn(window, "clearInterval");
@@ -503,13 +455,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 			it("should call refreshCallback", async () => {
 				vi.useFakeTimers();
-				const {
-					launchTool,
-					refreshCallback,
-					mockWindow,
-					setInterval,
-					clearInterval,
-				} = setup();
+				const { launchTool, refreshCallback, mockWindow, setInterval, clearInterval } = setup();
 
 				launchTool();
 

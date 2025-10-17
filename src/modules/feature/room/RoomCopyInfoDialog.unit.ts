@@ -1,8 +1,5 @@
-import {
-	createTestingVuetify,
-	createTestingI18n,
-} from "@@/tests/test-utils/setup";
 import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@feature-room/RoomCopyInfoDialog", () => {
 	const setup = () => {
@@ -24,18 +21,14 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 
 		expect(dialog.exists()).toBe(true);
 		expect(dialog.text()).toContain("feature-room.CopyInfoDialog.title");
-		expect(dialog.text()).toContain(
-			"feature-room.CopyInfoDialog.text.alert.membersPermissions"
-		);
+		expect(dialog.text()).toContain("feature-room.CopyInfoDialog.text.alert.membersPermissions");
 	});
 
 	describe("when clicking the cancel button", () => {
 		it("should emit cancel event", async () => {
 			const { dialog, wrapper } = setup();
 
-			const cancelButton = dialog.findComponent(
-				'[data-testid="copy-info-dialog-cancel"]'
-			);
+			const cancelButton = dialog.findComponent('[data-testid="copy-info-dialog-cancel"]');
 			await cancelButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("copy:cancel");
@@ -46,9 +39,7 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 		it("should emit confirm event", async () => {
 			const { dialog, wrapper } = setup();
 
-			const cancelButton = dialog.findComponent(
-				'[data-testid="copy-info-dialog-confirm"]'
-			);
+			const cancelButton = dialog.findComponent('[data-testid="copy-info-dialog-confirm"]');
 			await cancelButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("copy:confirm");

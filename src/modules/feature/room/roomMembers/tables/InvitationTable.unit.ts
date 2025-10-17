@@ -1,24 +1,15 @@
-import { createTestingPinia } from "@pinia/testing";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import InvitationTable from "./InvitationTable.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
-import { nextTick, ref } from "vue";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import {
-	useConfirmationDialog,
-	useDeleteConfirmationDialog,
-} from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
-import { useI18n } from "vue-i18n";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
+import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog, useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { Mock } from "vitest";
+import { nextTick, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -38,7 +29,6 @@ vi.mocked(useDeleteConfirmationDialog);
 describe("InvitationTable", () => {
 	let askConfirmationMock: Mock;
 	let askDeleteConfirmationMock: Mock;
-	const notifierModule = createModuleMocks(NotifierModule);
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -64,9 +54,6 @@ describe("InvitationTable", () => {
 	const setup = () => {
 		const wrapper = mount(InvitationTable, {
 			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
 				plugins: [
 					createTestingI18n(),
 					createTestingVuetify(),
@@ -87,9 +74,7 @@ describe("InvitationTable", () => {
 			},
 		});
 
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 
 		roomInvitationLinkStore.roomInvitationLinks = roomInvitationLinks;
 
@@ -120,11 +105,7 @@ describe("InvitationTable", () => {
 			const { wrapper } = setup();
 			const dataTable = wrapper.getComponent({ name: "DataTable" });
 
-			expect(
-				dataTable
-					.props("tableHeaders")!
-					.map((header: { title: string }) => header.title)
-			).toEqual(headers);
+			expect(dataTable.props("tableHeaders")!.map((header: { title: string }) => header.title)).toEqual(headers);
 			headers.forEach((header) => {
 				expect(mockI18n.t).toHaveBeenCalledWith(header);
 			});
@@ -147,14 +128,12 @@ describe("InvitationTable", () => {
 			{
 				description: "single link",
 				selectedLinks: [roomInvitationLinks[0].id],
-				expectedMessage:
-					"pages.rooms.members.invitationTable.delete.confirmation",
+				expectedMessage: "pages.rooms.members.invitationTable.delete.confirmation",
 			},
 			{
 				description: "multiple links",
 				selectedLinks: [roomInvitationLinks[0].id, roomInvitationLinks[1].id],
-				expectedMessage:
-					"pages.rooms.members.invitationTable.multipleDelete.confirmation",
+				expectedMessage: "pages.rooms.members.invitationTable.multipleDelete.confirmation",
 			},
 		])(
 			"should render confirmation dialog with text for $description when delete action is clicked",
@@ -171,9 +150,7 @@ describe("InvitationTable", () => {
 				const deleteButton = wrapper.findComponent(".v-list-item");
 				await deleteButton.trigger("click");
 
-				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith(
-					selectedLinks
-				);
+				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith(selectedLinks);
 				expect(askConfirmationMock).toHaveBeenCalledWith({
 					confirmActionLangKey: "common.actions.delete",
 					message: expectedMessage,
@@ -187,21 +164,15 @@ describe("InvitationTable", () => {
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.PREPARE
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 
-				const shareButton = wrapper.findComponent(
-					`[data-testid="share-button-${roomInvitationLinks[0].id}"]`
-				);
+				const shareButton = wrapper.findComponent(`[data-testid="share-button-${roomInvitationLinks[0].id}"]`);
 				await shareButton.trigger("click");
 				await nextTick();
 				const expectedLink = `/rooms/invitation-link/${roomInvitationLinks[0].id}`;
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.SHARE
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.SHARE);
 				expect(roomInvitationLinkStore.sharedUrl).toContain(expectedLink);
 			});
 		});
@@ -214,26 +185,18 @@ describe("InvitationTable", () => {
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.PREPARE
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 
 				const dataTable = wrapper.findComponent({ name: "DataTable" });
-				const kebabMenu = dataTable.findComponent(
-					`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`
-				);
+				const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`);
 				await kebabMenu.trigger("click");
 
-				const editButton = wrapper.findComponent(
-					`[data-testid="menu-edit-button-${roomInvitationLinks[0].id}"]`
-				);
+				const editButton = wrapper.findComponent(`[data-testid="menu-edit-button-${roomInvitationLinks[0].id}"]`);
 				await editButton.trigger("click");
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.EDIT
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.EDIT);
 			});
 		});
 
@@ -243,26 +206,18 @@ describe("InvitationTable", () => {
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.PREPARE
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 
 				const dataTable = wrapper.findComponent({ name: "DataTable" });
-				const kebabMenu = dataTable.findComponent(
-					`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`
-				);
+				const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`);
 				await kebabMenu.trigger("click");
 
-				const shareButton = wrapper.findComponent(
-					`[data-testid="menu-share-button-${roomInvitationLinks[0].id}"]`
-				);
+				const shareButton = wrapper.findComponent(`[data-testid="menu-share-button-${roomInvitationLinks[0].id}"]`);
 				await shareButton.trigger("click");
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.SHARE
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.SHARE);
 			});
 		});
 
@@ -273,27 +228,19 @@ describe("InvitationTable", () => {
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
-				expect(roomInvitationLinkStore.invitationStep).toBe(
-					InvitationStep.PREPARE
-				);
+				expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 
 				const dataTable = wrapper.findComponent({ name: "DataTable" });
-				const kebabMenu = dataTable.findComponent(
-					`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`
-				);
+				const kebabMenu = dataTable.findComponent(`[data-testid="kebab-menu-${roomInvitationLinks[0].id}"]`);
 				await kebabMenu.trigger("click");
 
-				const deleteButton = wrapper.findComponent(
-					`[data-testid="menu-delete-button-${roomInvitationLinks[0].id}"]`
-				);
+				const deleteButton = wrapper.findComponent(`[data-testid="menu-delete-button-${roomInvitationLinks[0].id}"]`);
 
 				await deleteButton.trigger("click");
 				await nextTick();
 				await nextTick();
 
-				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith([
-					roomInvitationLinks[0].id,
-				]);
+				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith([roomInvitationLinks[0].id]);
 			});
 		});
 	});

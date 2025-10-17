@@ -4,9 +4,7 @@
 			<VTextField
 				v-model="data.title"
 				:focus="true"
-				:placeholder="
-					$t('components.organisms.FormNews.input.title.placeholder')
-				"
+				:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
 				name="title"
 				type="text"
 				:required="true"
@@ -19,9 +17,7 @@
 					<ClassicEditor
 						v-model="data.content"
 						class="mb-4 mt-13"
-						:placeholder="
-							$t('components.organisms.FormNews.editor.placeholder')
-						"
+						:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
 						@update:value="onUpdateValue"
 					/>
 
@@ -60,12 +56,7 @@
 								<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
 								{{ $t("common.actions.save") }}
 							</v-btn>
-							<v-btn
-								v-if="news && news.id"
-								variant="text"
-								color="error"
-								@click="remove"
-							>
+							<v-btn v-if="news && news.id" variant="text" color="error" @click="remove">
 								<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
 								{{ $t("common.actions.delete") }}
 							</v-btn>
@@ -88,15 +79,16 @@
 </template>
 
 <script lang="ts">
+import FormActions from "./FormActions.vue";
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
-import { newsModule, notifierModule } from "@/store";
+import { newsModule } from "@/store";
+import { News } from "@/store/types/news";
 import { useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
+import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
-import { defineComponent, PropType } from "vue";
-import FormActions from "./FormActions.vue";
-import { News } from "@/store/types/news";
 import { Dayjs } from "dayjs";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	components: {
@@ -161,19 +153,14 @@ export default defineComponent({
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const dateTimeCombined = fromInputDateTime(
-				this.data.date.date,
-				this.data.date.time
-			);
+			const dateTimeCombined = fromInputDateTime(this.data.date.date, this.data.date.time);
 			const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
 			return dateTimeCombinedString.toISOString();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
 				? undefined
-				: this.$t(
-						"components.organisms.FormNews.errors.missing_title"
-					).toString();
+				: this.$t("components.organisms.FormNews.errors.missing_title").toString();
 
 			const titleOpeningTag =
 				this.validateOnOpeningTag(this.data.title) === true
@@ -182,9 +169,7 @@ export default defineComponent({
 
 			const content = this.data.content
 				? undefined
-				: this.$t(
-						"components.organisms.FormNews.errors.missing_content"
-					).toString();
+				: this.$t("components.organisms.FormNews.errors.missing_content").toString();
 
 			return {
 				title: title || titleOpeningTag,
@@ -220,10 +205,7 @@ export default defineComponent({
 		save() {
 			const errors = Object.values(this.errors).filter((a) => a);
 			if (errors.length && errors[0]) {
-				notifierModule.show({
-					text: String(errors[0]),
-					status: "error",
-				});
+				notifyError(String(errors[0]));
 				return errors[0];
 			}
 			this.$emit("save", { ...this.data, displayAt: this.displayAt });
@@ -232,8 +214,7 @@ export default defineComponent({
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {
-				[this.data.date.date, this.data.date.time] =
-					createInputDateTime(displayAt);
+				[this.data.date.date, this.data.date.time] = createInputDateTime(displayAt);
 			}
 		},
 		onUpdateValue(newValue: string) {
@@ -243,28 +224,18 @@ export default defineComponent({
 			this.dialogConfirm({
 				icon: mdiAlert,
 				iconColor: "rgba(var(--v-theme-error))",
-				message: this.$t(
-					"components.organisms.FormNews.remove.confirm.message"
-				),
-				confirmText: this.$t(
-					"components.organisms.FormNews.remove.confirm.confirm"
-				),
-				cancelText: this.$t(
-					"components.organisms.FormNews.remove.confirm.cancel"
-				),
+				message: this.$t("components.organisms.FormNews.remove.confirm.message"),
+				confirmText: this.$t("components.organisms.FormNews.remove.confirm.confirm"),
+				cancelText: this.$t("components.organisms.FormNews.remove.confirm.cancel"),
 				onConfirm: () => this.$emit("delete"),
 			});
 		},
 		async cancel() {
 			this.dialogConfirm({
-				message: this.$t(
-					"components.organisms.FormNews.cancel.confirm.message"
-				),
+				message: this.$t("components.organisms.FormNews.cancel.confirm.message"),
 				icon: mdiAlert,
 				cancelText: this.$t("common.actions.cancel"),
-				confirmText: this.$t(
-					"components.organisms.FormNews.cancel.confirm.confirm"
-				),
+				confirmText: this.$t("components.organisms.FormNews.cancel.confirm.confirm"),
 				iconColor: "rgba(var(--v-theme-error))",
 				onConfirm: () => this.$emit("cancel"),
 			});
