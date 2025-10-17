@@ -1,11 +1,11 @@
 <template>
 	<div class="page">
-		<div class="topbar" data-testid="registration-layout-top-bar">
-			<NavigationBar :img="Logo" />
-		</div>
-		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
+		<header class="topbar" data-testid="registration-layout-top-bar">
+			<NavigationBar :img="Logo" :hide-buttons="true" />
+		</header>
+		<main :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
-		</div>
+		</main>
 		<TheFooter />
 	</div>
 </template>
