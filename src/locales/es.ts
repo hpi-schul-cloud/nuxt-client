@@ -1561,6 +1561,8 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
 	"pages.rooms.invitationLinkStatus.expired": "Lamentablemente, el enlace de invitación ya no es válido",
 	"pages.rooms.invitationLinkStatus.invalidLink": "Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Este enlace de invitación no se puede usar con tu rol actual.",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":

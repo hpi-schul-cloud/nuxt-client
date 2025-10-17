@@ -1537,6 +1537,8 @@ export default {
 		"Посилання на запрошення, на жаль, дійсне лише для учнів школи «{schoolName}»",
 	"pages.rooms.invitationLinkStatus.expired": "Посилання на запрошення, на жаль, більше не дійсне",
 	"pages.rooms.invitationLinkStatus.invalidLink": "На жаль, посилання на запрошення не існує",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Це посилання на запрошення не можна використати з вашою поточною роллю.",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers": "Посилання на запрошення, на жаль, дійсне лише для вчителів",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «{schoolName}»",
