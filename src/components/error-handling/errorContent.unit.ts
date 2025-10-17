@@ -2,18 +2,15 @@ import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
+import { setActivePinia } from "pinia";
 
 describe("@/components/error-handling/ErrorContent.vue", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const getWrapper = (errorText: string, statusCode: HttpStatusCode) =>
 		mount(ErrorContent, {
 			propsData: {

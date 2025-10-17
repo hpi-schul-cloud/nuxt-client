@@ -5,17 +5,10 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
 
 vi.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({
@@ -27,6 +20,10 @@ vi.mock("@/composables/locale-storage.composable", () => ({
 }));
 
 describe("@pages/Error.page.vue", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const mountComponent = (statusCode: HttpStatusCode | null = 400, translationKey = "error.400") => {
 		vi.spyOn(window.performance, "getEntriesByType").mockReturnValue([
 			{
