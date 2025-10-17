@@ -218,6 +218,24 @@ export const useCardRestApi = () => {
 		}
 	};
 
+	const duplicateCardRequest = async (payload: DuplicateCardRequestPayload) => {
+		const card = cardStore.getCard(payload.cardId);
+		if (card === undefined) return;
+
+		try {
+			const newCard = await duplicateCardCall(payload.cardId);
+
+			if (newCard.id) {
+				cardStore.duplicateCardSuccess({ newCard, isOwnAction: true });
+
+				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
+				notifySuccess(t("components.board.notifications.success.cardDuplicated"));
+			}
+		} catch (error) {
+			handleError(error, {});
+		}
+	};
+
 	const fetchCardRequest = async (payload: FetchCardRequestPayload): Promise<void> => {
 		await delay(100);
 		try {
@@ -252,24 +270,6 @@ export const useCardRestApi = () => {
 		try {
 			await updateCardHeightCall(payload.cardId, payload.newHeight);
 			cardStore.updateCardHeightSuccess({ ...payload, isOwnAction: true });
-		} catch (error) {
-			handleError(error, {});
-		}
-	};
-
-	const duplicateCardRequest = async (payload: DuplicateCardRequestPayload) => {
-		const card = cardStore.getCard(payload.cardId);
-		if (card === undefined) return;
-
-		try {
-			const newCard = await duplicateCardCall(payload.cardId);
-
-			if (newCard.id) {
-				cardStore.duplicateCardSuccess({ newCard, isOwnAction: true });
-
-				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
-				notifySuccess(t("components.board.notifications.success.cardDuplicated"));
-			}
 		} catch (error) {
 			handleError(error, {});
 		}
