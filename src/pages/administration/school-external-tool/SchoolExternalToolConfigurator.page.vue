@@ -71,7 +71,7 @@ const { school } = useAppStoreRefs();
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
 const { t } = useI18n();
 
-const pageTitle = buildPageTitle(t("pages.tool.title"));
+const pageTitle = buildPageTitle(t("pages.tool.title"), t("pages.administration.school.index.title"));
 useTitle(pageTitle);
 
 const schoolSettingPath = "/administration/school-settings";
