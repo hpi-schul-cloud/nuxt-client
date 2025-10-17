@@ -23,7 +23,7 @@ interface Props {
 	fileRecordId: string;
 	parentId?: string;
 	fileName?: string;
-	editorMode: EditorMode;
+	editorMode?: EditorMode;
 }
 
 const props = defineProps<Props>();
@@ -59,7 +59,7 @@ onMounted(async () => {
 const setCollaboraUrl = async () => {
 	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
-		props.editorMode,
+		props.editorMode ?? EditorMode.VIEW,
 		userName.value
 	);
 
