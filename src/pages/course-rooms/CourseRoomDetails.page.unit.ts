@@ -30,7 +30,7 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import { VBtn } from "vuetify/lib/components/index";
+import { VBtn, VDialog } from "vuetify/lib/components/index";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -510,9 +510,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			const modalView = wrapper.findComponent({
 				name: "share-modal",
 			});
-			const shareDialog = modalView.findComponent({ name: "v-custom-dialog" });
+			const shareDialog = modalView.findComponent(VDialog);
 
-			expect(shareDialog.props("isOpen")).toBe(true);
+			expect(shareDialog.isVisible()).toBeTruthy();
 		});
 	});
 

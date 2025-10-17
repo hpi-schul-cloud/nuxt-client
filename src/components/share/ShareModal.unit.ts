@@ -1,5 +1,4 @@
 import ShareModal from "./ShareModal.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
@@ -13,6 +12,8 @@ import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { nextTick } from "vue";
+import { VDialog } from "vuetify/components/VDialog";
 
 describe("@/components/share/ShareModal", () => {
 	beforeEach(() => {
@@ -29,6 +30,7 @@ describe("@/components/share/ShareModal", () => {
 					provide: {
 						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					},
+					stubs: { UseFocusTrap: true },
 				},
 				props: {
 					type: ShareTokenBodyParamsParentTypeEnum.Courses,
@@ -66,31 +68,56 @@ describe("@/components/share/ShareModal", () => {
 
 		it("should call 'createShareUrl' store method when next button clicked", () => {
 			const { wrapper } = setup();
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(VDialog);
 
-			dialog.vm.$emit("next");
+			const buttons = dialog.findAllComponents({
+				name: "v-btn",
+				props: { variant: "flat" },
+			});
+			expect(buttons.length).toBe(2);
+			expect(buttons[0].text()).toBe("common.actions.cancel");
+			expect(buttons[1].text()).toBe("common.actions.continue");
+
+			buttons[1].vm.$emit("click");
 
 			expect(shareModuleMock.createShareUrl).toHaveBeenCalled();
 		});
 
 		it("should call 'resetShareFlow' store method when dialog closed", () => {
 			const { wrapper } = setup();
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(VDialog);
 
-			dialog.vm.$emit("dialog-closed");
+			dialog.vm.$emit("after-leave");
 
 			expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
 		});
 
-		it("should call 'resetShareFlow' store method when sub component emits 'done'", () => {
+		it("should return the component state to firstStep when dialog closes", () => {
+			const { wrapper } = setup();
+			const dialog = wrapper.findComponent(VDialog);
+
+			expect((wrapper.vm as unknown as typeof ShareModal).step).toBe("firstStep");
+
+			(wrapper.vm as unknown as typeof ShareModal).onNext();
+			expect((wrapper.vm as unknown as typeof ShareModal).step).toBe("secondStep");
+
+			dialog.vm.$emit("after-leave");
+			wrapper.vm.$nextTick();
+			expect((wrapper.vm as unknown as typeof ShareModal).step).toBe("firstStep");
+		});
+
+		it("should call 'resetShareFlow' store method when sub component emits 'done'", async () => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
 				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 				getShareUrl: "http://example.com",
 			});
 			const { wrapper } = setup();
-			const form = wrapper.findComponent(ShareModalResult);
 
+			(wrapper.vm as unknown as typeof ShareModal).step = "secondStep";
+			await nextTick();
+
+			const form = wrapper.findComponent(ShareModalResult);
 			form.vm.$emit("done");
 
 			expect(shareModuleMock.resetShareFlow).toHaveBeenCalled();
@@ -106,13 +133,17 @@ describe("@/components/share/ShareModal", () => {
 			expect((wrapper.vm as unknown as typeof ShareModal).shareOptions).toStrictEqual(payload);
 		});
 
-		it("should call 'onCopy' method when sub component emits 'copied'", () => {
+		it("should call 'onCopy' method when 'onNext' is called'", async () => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
 				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 				getShareUrl: "http://example.com",
 			});
 			const { wrapper } = setup();
+
+			(wrapper.vm as unknown as typeof ShareModal).onNext();
+			await wrapper.vm.$nextTick();
+
 			const form = wrapper.findComponent(ShareModalResult);
 
 			form.vm.$emit("copied");
@@ -127,181 +158,182 @@ describe("@/components/share/ShareModal", () => {
 		});
 
 		describe("ctl tool info", () => {
-			it("should have the correct title", () => {
+			it("should have the correct title", async () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
-				const cardText = dialog.findComponent({ name: "v-card-text" });
-
+				const cardText = wrapper.findComponent({ name: "v-card-text" });
 				const infotext = cardText.find(`[data-testid="share-modal-external-tools-info"]`);
 
-				expect(infotext.isVisible()).toBe(true);
-				expect(infotext.text()).toEqual("components.molecules.shareImport.options.ctlTools.infoText.unavailable");
+				expect(infotext.text()).toContain("components.molecules.shareImport.options.ctlTools.infoText.unavailable");
 			});
 		});
-	});
 
-	describe("when room is shared", () => {
-		const setup = () => {
-			const shareModuleMock = createModuleMocks(ShareModule, {
-				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Room,
-				createShareUrl: vi.fn(),
-				resetShareFlow: vi.fn(),
-			});
+		describe("when room is shared", () => {
+			const setup = () => {
+				const shareModuleMock = createModuleMocks(ShareModule, {
+					getIsShareModalOpen: true,
+					getParentType: ShareTokenBodyParamsParentTypeEnum.Room,
+					createShareUrl: vi.fn(),
+					resetShareFlow: vi.fn(),
+				});
 
-			const wrapper = mount(ShareModal, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+				const wrapper = mount(ShareModal, {
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+						},
+						stubs: { UseFocusTrap: true },
 					},
-				},
-				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Room,
-				},
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
-		it("should show copyright and privacy info alert", () => {
-			const { wrapper } = setup();
-			const infoAlert = wrapper.findComponent(InfoAlert);
-
-			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
-		});
-
-		it("should show warning alert", () => {
-			const { wrapper } = setup();
-			const warningAlert = wrapper.findComponent(WarningAlert);
-
-			expect(warningAlert.exists()).toBe(true);
-		});
-	});
-
-	describe("when column board is shared", () => {
-		const setup = () => {
-			const shareModuleMock = createModuleMocks(ShareModule, {
-				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
-				createShareUrl: vi.fn(),
-				resetShareFlow: vi.fn(),
-			});
-
-			const wrapper = mount(ShareModal, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+					props: {
+						type: ShareTokenBodyParamsParentTypeEnum.Room,
 					},
-				},
-				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
-				},
-			});
+				});
 
-			return {
-				wrapper,
+				return {
+					wrapper,
+				};
 			};
-		};
 
-		it("should show copyright and privacy info alert", () => {
-			const { wrapper } = setup();
-			const infoAlert = wrapper.findComponent(InfoAlert);
+			it("should show copyright and privacy info alert", () => {
+				const { wrapper } = setup();
+				const infoAlert = wrapper.findComponent(InfoAlert);
 
-			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
-		});
-
-		it("should show warning alert", () => {
-			const { wrapper } = setup();
-			const warningAlert = wrapper.findComponent(WarningAlert);
-
-			expect(warningAlert.exists()).toBe(true);
-		});
-	});
-
-	describe("when lesson is shared", () => {
-		const setup = () => {
-			const shareModuleMock = createModuleMocks(ShareModule, {
-				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
-				createShareUrl: vi.fn(),
-				resetShareFlow: vi.fn(),
+				expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 			});
 
-			const wrapper = mount(ShareModal, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+			it("should show warning alert", () => {
+				const { wrapper } = setup();
+				const warningAlert = wrapper.findComponent(WarningAlert);
+
+				expect(warningAlert.exists()).toBe(true);
+			});
+		});
+
+		describe("when column board is shared", () => {
+			const setup = () => {
+				const shareModuleMock = createModuleMocks(ShareModule, {
+					getIsShareModalOpen: true,
+					getParentType: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+					createShareUrl: vi.fn(),
+					resetShareFlow: vi.fn(),
+				});
+
+				const wrapper = mount(ShareModal, {
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+						},
+						stubs: { UseFocusTrap: true },
 					},
-				},
-				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
-				},
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
-		it("should show copyright and privacy info alert", () => {
-			const { wrapper } = setup();
-			const infoAlert = wrapper.findComponent(InfoAlert);
-
-			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
-		});
-
-		it("should show warning alert", () => {
-			const { wrapper } = setup();
-			const warningAlert = wrapper.findComponent(WarningAlert);
-
-			expect(warningAlert.exists()).toBe(true);
-		});
-	});
-
-	describe("when task is shared", () => {
-		const setup = () => {
-			const shareModuleMock = createModuleMocks(ShareModule, {
-				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Tasks,
-				createShareUrl: vi.fn(),
-				resetShareFlow: vi.fn(),
-			});
-
-			const wrapper = mount(ShareModal, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+					props: {
+						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
 					},
-				},
-				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
-				},
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show copyright and privacy info alert", () => {
+				const { wrapper } = setup();
+				const infoAlert = wrapper.findComponent(InfoAlert);
+
+				expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
 			});
 
-			return {
-				wrapper,
-			};
-		};
+			it("should show warning alert", () => {
+				const { wrapper } = setup();
+				const warningAlert = wrapper.findComponent(WarningAlert);
 
-		it("should not show copyright and privacy info alert", () => {
-			const { wrapper } = setup();
-			const infoAlert = wrapper.findComponent(InfoAlert);
-
-			expect(infoAlert.exists()).toBe(false);
+				expect(warningAlert.exists()).toBe(true);
+			});
 		});
 
-		it("should not show warning alert", () => {
-			const { wrapper } = setup();
-			const warningAlert = wrapper.findComponent(WarningAlert);
+		describe("when lesson is shared", () => {
+			const setup = () => {
+				const shareModuleMock = createModuleMocks(ShareModule, {
+					getIsShareModalOpen: true,
+					getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
+					createShareUrl: vi.fn(),
+					resetShareFlow: vi.fn(),
+				});
 
-			expect(warningAlert.exists()).toBe(false);
+				const wrapper = mount(ShareModal, {
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+						},
+						stubs: { UseFocusTrap: true },
+					},
+					props: {
+						type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+					},
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show copyright and privacy info alert", () => {
+				const { wrapper } = setup();
+				const infoAlert = wrapper.findComponent(InfoAlert);
+
+				expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
+			});
+
+			it("should show warning alert", () => {
+				const { wrapper } = setup();
+				const warningAlert = wrapper.findComponent(WarningAlert);
+
+				expect(warningAlert.exists()).toBe(true);
+			});
+		});
+
+		describe("when task is shared", () => {
+			const setup = () => {
+				const shareModuleMock = createModuleMocks(ShareModule, {
+					getIsShareModalOpen: true,
+					getParentType: ShareTokenBodyParamsParentTypeEnum.Tasks,
+					createShareUrl: vi.fn(),
+					resetShareFlow: vi.fn(),
+				});
+
+				const wrapper = mount(ShareModal, {
+					global: {
+						plugins: [createTestingVuetify(), createTestingI18n()],
+						provide: {
+							[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+						},
+						stubs: { UseFocusTrap: true },
+					},
+					props: {
+						type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+					},
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not show copyright and privacy info alert", () => {
+				const { wrapper } = setup();
+				const infoAlert = wrapper.findComponent(InfoAlert);
+
+				expect(infoAlert.exists()).toBe(false);
+			});
+
+			it("should not show warning alert", () => {
+				const { wrapper } = setup();
+				const warningAlert = wrapper.findComponent(WarningAlert);
+
+				expect(warningAlert.exists()).toBe(false);
+			});
 		});
 	});
 });

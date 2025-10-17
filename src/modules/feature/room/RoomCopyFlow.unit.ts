@@ -51,6 +51,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 				provide: {
 					["loadingStateModule"]: loadingStateModuleMock,
 				},
+				stubs: { UseFocusTrap: true },
 			},
 			props: {
 				room,

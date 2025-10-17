@@ -6,6 +6,8 @@ describe("@feature-room/RoomCopyInfoDialog", () => {
 		const wrapper = mount(RoomCopyInfoDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { UseFocusTrap: true }, // unfortuantely it is not as straightward to test the focus trap
+				renderStubDefaultSlot: true,
 			},
 		});
 
