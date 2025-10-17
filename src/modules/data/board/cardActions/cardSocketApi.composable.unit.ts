@@ -5,6 +5,7 @@ import {
 	DeleteCardRequestPayload,
 	DeleteElementFailurePayload,
 	DuplicateCardFailurePayload,
+	DuplicateCardRequestPayload,
 	FetchCardFailurePayload,
 	MoveElementFailurePayload,
 	UpdateCardHeightFailurePayload,
@@ -428,13 +429,12 @@ describe("useCardSocketApi", () => {
 
 	describe("duplicateCardRequest", () => {
 		it("should call emitOnSocket with correct parameters", () => {
+			const payload: DuplicateCardRequestPayload = { cardId: "cardId" };
 			const { duplicateCardRequest } = useCardSocketApi();
 
-			duplicateCardRequest("card-id");
+			duplicateCardRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-card-request", {
-				cardId: "card-id",
-			});
+			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("duplicate-card-request", payload);
 		});
 	});
 

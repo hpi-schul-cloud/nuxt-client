@@ -220,7 +220,7 @@ const boardMenuClasses = computed(() => {
 
 const duplicateCard = async () => {
 	if (!card.value) return;
-	await cardStore.duplicateCardRequest(card.value.id);
+	await cardStore.duplicateCardRequest({ cardId: card.value.id });
 	emit("reload:board");
 };
 

@@ -6,6 +6,7 @@ import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
+	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
@@ -256,12 +257,12 @@ export const useCardRestApi = () => {
 		}
 	};
 
-	const duplicateCardRequest = async (cardId: string) => {
-		const card = cardStore.getCard(cardId);
+	const duplicateCardRequest = async (payload: DuplicateCardRequestPayload) => {
+		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
 
 		try {
-			const newCard = await duplicateCardCall(cardId);
+			const newCard = await duplicateCardCall(payload.cardId);
 
 			if (newCard.id) {
 				cardStore.duplicateCardSuccess({ newCard, isOwnAction: true });

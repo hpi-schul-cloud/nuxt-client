@@ -6,6 +6,7 @@ import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
+	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
@@ -131,8 +132,8 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
-	const duplicateCardRequest = (cardId: string) => {
-		emitOnSocket("duplicate-card-request", { cardId });
+	const duplicateCardRequest = (payload: DuplicateCardRequestPayload) => {
+		emitOnSocket("duplicate-card-request", payload);
 	};
 
 	const reloadBoard = (cardId = "") => {
