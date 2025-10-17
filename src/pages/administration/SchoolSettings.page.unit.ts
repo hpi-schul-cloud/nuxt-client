@@ -1,8 +1,8 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { useApplicationError } from "@/composables/application-error.composable";
 import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -237,7 +237,7 @@ describe("SchoolSettingsPage", () => {
 
 	it("should render alert on error", () => {
 		const { wrapper } = getWrapper(undefined, {
-			getError: useApplicationError().createApplicationError(500, "someKey"),
+			getError: createApplicationError(500, "someKey"),
 		});
 
 		const noError = wrapper.findComponent('[data-testid="no-error"]');
