@@ -1,8 +1,8 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isCollaboraDialogOpen"
-		:message="t('components.elementTypeSelection.dialog.title')"
-		:confirm-btn-lang-key="t('common.actions.create')"
+		:message="t('components.elementTypeSelection.elements.collabora.subtitle')"
+		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-element-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
@@ -21,16 +21,16 @@
 					item-title="label"
 					item-value="id"
 					persistent-hint
-					:label="t('Dokumententyp')"
+					:label="t('components.cardElement.fileElement.collaboraFile.types')"
 					:rules="docTypeRules"
 					:menu-props="{ attach: '#createCollaboraFileForm' }"
 					data-testid="collabora-element-form-type"
 				/>
 				<VTextField
 					v-model="fileName"
-					:label="t('Name des Dokuments')"
+					:label="t('common.labels.fileName')"
 					:rules="fileNameRules"
-					:placeholder="t('Unbenanntes Dokument')"
+					:placeholder="t('components.cardElement.fileElement.collaboraFile.untitled')"
 					data-testid="collabora-element-form-filename"
 				/>
 				<VTextarea

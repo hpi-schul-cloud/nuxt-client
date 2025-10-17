@@ -181,8 +181,8 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
 			options.push({
 				icon: mdiFileDocumentOutline,
-				label: t("Dokument erstellen"),
-				action: async () => askTypeCollabora(),
+				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
+				action: () => askTypeCollabora(),
 				testId: "create-element-collabora",
 			});
 		}
@@ -217,7 +217,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => [
 		{
 			id: "1",
-			label: t(".docx (Text)"),
+			label: t("components.elementTypeSelection.elements.collabora.option.text"),
 			action: async (fileName: string, caption: string) => {
 				triggerFileSelect.value = false;
 				const response = await createElementRequestFn({
@@ -250,7 +250,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		},
 		{
 			id: "2",
-			label: t(".xlsx (Tabelle)"),
+			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
 			action: async (fileName: string, caption: string) => {
 				triggerFileSelect.value = false;
 				const response = await createElementRequestFn({
@@ -283,7 +283,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		},
 		{
 			id: "3",
-			label: t(".pptx (Präsentation)"),
+			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
 			action: async (fileName: string, caption: string) => {
 				triggerFileSelect.value = false;
 				const response = await createElementRequestFn({
@@ -326,7 +326,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		isDialogOpen.value = true;
 	};
 
-	const askTypeCollabora = () => {
+	const askTypeCollabora = async () => {
 		collaboraElementTypeOptions.value = collaboraOptions;
 
 		closeDialog();
