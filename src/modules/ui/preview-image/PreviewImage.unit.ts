@@ -60,6 +60,7 @@ describe("PreviewImage", () => {
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 		expect(image.attributes("cover")).toBe("true");
 		expect(image.attributes("maxheight")).toBe("336");
+		expect(image.attributes("position")).toBe("top");
 	});
 
 	it("should set max-width with correct value", async () => {
