@@ -1,11 +1,12 @@
 import ErrorPage from "./Error.page.vue";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
-import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { APPLICATION_ERROR_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock(
@@ -26,7 +27,11 @@ vi.mock("@/composables/locale-storage.composable", () => ({
 }));
 
 describe("@pages/Error.page.vue", () => {
-	const mountComponent = (statusCode: HttpStatusCode | null = 400, translationKey = "error.400") => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ stubActions: false }));
+	});
+
+	const mountComponent = () => {
 		vi.spyOn(window.performance, "getEntriesByType").mockReturnValue([
 			{
 				entryType: "navigate",
@@ -59,26 +64,20 @@ describe("@pages/Error.page.vue", () => {
 						},
 					}),
 				],
-				provide: {
-					[APPLICATION_ERROR_KEY.valueOf()]: createModuleMocks(ApplicationErrorModule, {
-						getStatusCode: statusCode,
-						getTranslationKey: translationKey,
-					}),
-				},
 			},
 		});
 	};
+	describe("@/components/error-handling/ErrorPage.vue", () => {
+		it("should assign 'window.location' when back button is clicked", async () => {
+			const wrapper = mountComponent();
+			const btnElement = wrapper.findComponent({ ref: "btn-back" });
+			await btnElement.trigger("click");
+			expect(window.location.assign).toHaveBeenCalledWith("/dashboard");
+		});
 
-	it("should assign 'window.location' when back button is clicked", async () => {
-		const wrapper = mountComponent();
-		const btnElement = wrapper.findComponent({ ref: "btn-back" });
-		await btnElement.trigger("click");
-		expect(window.location.assign).toHaveBeenCalledWith("/dashboard");
-	});
-
-	describe("when the '/error' route has been called", () => {
 		it("should pass error-message and statuscode to content component", async () => {
-			const wrapper = mountComponent(401, "error.401");
+			useAppStore().handleApplicationError(HttpStatusCode.Unauthorized, "error.401");
+			const wrapper = mountComponent();
 			await nextTick();
 			const errorComponent = wrapper.findComponent(ErrorContent);
 			expect(errorComponent.props("statusCode")).toBe(401);

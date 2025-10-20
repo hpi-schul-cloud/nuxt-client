@@ -1,82 +1,79 @@
-import AlternativeText from "./AlternativeText.vue";
+import FileName from "./FileName.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
-describe("AlternativeText", () => {
+describe("FileName", () => {
 	const mountSetup = () => {
-		const alternativeText: string | undefined = "test text";
+		const fileName = "myImage";
+		const fileExtension = ".png";
 
-		const wrapper = mount(AlternativeText, {
-			props: { alternativeText },
+		const wrapper = mount(FileName, {
+			props: { name: fileName + fileExtension },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
 			wrapper,
-			alternativeText,
+			fileName,
+			fileExtension,
 		};
 	};
 
 	it("should be found in dom", () => {
 		const { wrapper } = mountSetup();
 
-		const alternativeText = wrapper.findComponent(AlternativeText);
+		const fileName = wrapper.findComponent(FileName);
 
-		expect(alternativeText.exists()).toBe(true);
+		expect(fileName.exists()).toBe(true);
 	});
 
-	it("should emit update:alternativeText if text changes", async () => {
-		const { wrapper } = mountSetup();
+	it("should emit update:name on file name change", async () => {
+		const { wrapper, fileExtension } = mountSetup();
 
 		const textField = wrapper.findComponent(VTextField);
-		const newText = "new text";
-		await textField.setValue(newText);
-		await nextTick();
+		const newFileName = "myNewImage";
+		await textField.setValue(newFileName);
+		vi.runAllTimers();
 
-		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
-		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
+		expect(wrapper.emitted("update:name")).toHaveLength(1);
+		expect(wrapper.emitted("update:name")?.[0][0]).toBe(newFileName + fileExtension);
 	});
 
-	it("should pass the alternativeText prop to the text field", async () => {
-		const { wrapper, alternativeText } = mountSetup();
+	it("should pass the name prop without extension to the text field", async () => {
+		const { wrapper, fileName } = mountSetup();
 
 		const textField = wrapper.findComponent(VTextField);
 		await nextTick();
 		const modelValue = textField.props("modelValue");
 
-		expect(modelValue).toBe(alternativeText);
-	});
-
-	it("should have a hint translation", async () => {
-		const { wrapper } = mountSetup();
-
-		const textField = wrapper.findComponent(VTextField);
-		const hint = textField.props("hint");
-
-		expect(hint).toBe("components.cardElement.fileElement.altDescription");
-	});
-
-	it("should have a label translation", async () => {
-		const { wrapper } = mountSetup();
-
-		const textField = wrapper.findComponent(VTextField);
-		const label = textField.props("label");
-
-		expect(label).toBe("components.cardElement.fileElement.alternativeText");
+		expect(modelValue).toBe(fileName);
 	});
 
 	describe("when a value containing a < directly followed by a string is entered", () => {
-		it("should not emit update:alternativeText", async () => {
+		it("should not emit update:name", async () => {
 			const { wrapper } = mountSetup();
 
 			const textField = wrapper.findComponent(VTextField);
-			const newText = "<abc123";
-			await textField.setValue(newText);
+			const newFileName = "my<NewImage";
+			await textField.setValue(newFileName);
 			await nextTick();
 
-			expect(wrapper.emitted("update:alternativeText")).toBeUndefined();
+			expect(wrapper.emitted("update:name")).toBeUndefined();
+		});
+	});
+
+	describe("when an empty value is entered", () => {
+		it("should not emit update:name", async () => {
+			const { wrapper } = mountSetup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const newFileName = "";
+			await textField.setValue(newFileName);
+			await nextTick();
+
+			expect(wrapper.emitted("update:name")).toBeUndefined();
 		});
 	});
 

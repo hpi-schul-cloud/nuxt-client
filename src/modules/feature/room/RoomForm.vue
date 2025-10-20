@@ -54,9 +54,8 @@
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { VCheckbox, VForm } from "vuetify/components";
