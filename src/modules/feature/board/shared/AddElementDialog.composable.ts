@@ -33,7 +33,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { hasManageVideoConferencePermission } = useBoardPermissions();
 
 	const cardStore = useCardStore();
-	const { triggerFileSelect } = useSharedFileSelect();
+	const { disableFileSelectOnMount } = useSharedFileSelect();
 	const { uploadFromUrl } = useFileStorageApi();
 
 	const { t } = useI18n();
@@ -172,10 +172,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiFileDocumentOutline,
 				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
-				action: async () => {
-					closeDialog();
-					openOfficeFileDialog();
-				},
+				action: () => prepareOfficeFileSelectionOption(),
 				testId: "create-element-collabora-file",
 			});
 		}
@@ -217,10 +214,10 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	};
 
 	const onOfficeFileClick = async (assetUrl: string, fileExtension: string, fileName: string, caption: string) => {
-		triggerFileSelect.value = false;
+		disableFileSelectOnMount();
 		const response = await createElementRequestFn({
 			type: ContentElementType.File,
-			cardId: cardId,
+			cardId,
 		});
 
 		try {
@@ -242,26 +239,31 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		}
 	};
 
-	officeFileSelectionOptions.value = [
-		{
-			id: "1",
-			label: t("components.elementTypeSelection.elements.collabora.option.text"),
-			action: async (fileName: string, caption: string) =>
-				onOfficeFileClick(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
-		},
-		{
-			id: "2",
-			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-			action: async (fileName: string, caption: string) =>
-				onOfficeFileClick(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
-		},
-		{
-			id: "3",
-			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
-			action: async (fileName: string, caption: string) =>
-				onOfficeFileClick(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
-		},
-	];
+	const prepareOfficeFileSelectionOption = async () => {
+		officeFileSelectionOptions.value = [
+			{
+				id: "1",
+				label: t("components.elementTypeSelection.elements.collabora.option.text"),
+				action: async (fileName: string, caption: string) =>
+					onOfficeFileClick(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
+			},
+			{
+				id: "2",
+				label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+				action: async (fileName: string, caption: string) =>
+					onOfficeFileClick(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
+			},
+			{
+				id: "3",
+				label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+				action: async (fileName: string, caption: string) =>
+					onOfficeFileClick(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
+			},
+		];
+
+		closeDialog();
+		openOfficeFileDialog();
+	};
 
 	watch(
 		() => cardStore.preferredTools,
