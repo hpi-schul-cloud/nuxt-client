@@ -5,7 +5,6 @@ import { useI18n } from "vue-i18n";
 export const useRegistration = () => {
 	const i18n = useI18n();
 	const selectedLanguage = ref<LanguageType | undefined>(undefined);
-	// extend this composable with more registration related logic in the future
 
 	const initializeLanguage = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
