@@ -107,7 +107,7 @@ watch(
 		}
 
 		if (newVal && !oldVal) {
-			if (modelValue.value.trim().length < 1 && props.emptyValueFallback.length > 0) {
+			if (modelValue.value !== null && modelValue.value.trim().length < 1 && props.emptyValueFallback.length > 0) {
 				modelValue.value = props.emptyValueFallback;
 			}
 
