@@ -185,14 +185,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
-		path: "/error/proxy",
-		component: () => import("@/pages/ProxyError.page.vue"),
-		name: "error-proxy",
-		meta: {
-			isPublic: true,
-		},
-	},
-	{
 		path: `/folder/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-folder")).FolderPage,
 		beforeEnter: [checkFolderFeature],

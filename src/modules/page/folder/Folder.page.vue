@@ -1,12 +1,10 @@
 <template>
-	<Folder :folder-id="folderId" />
+	<Folder :folder-id="folderId" @update:folder-name="handleFolderNameUpdate" />
 </template>
 
 <script setup lang="ts">
-import { useFolderState } from "@data-folder";
 import { Folder } from "@feature-folder";
 import { useTitle } from "@vueuse/core";
-import { watch } from "vue";
 
 defineProps({
 	folderId: {
@@ -15,9 +13,7 @@ defineProps({
 	},
 });
 
-const { pageTitle } = useFolderState();
-
-watch(pageTitle, (newPageTitle: string) => {
-	useTitle(newPageTitle);
-});
+const handleFolderNameUpdate = (pageTitle: string) => {
+	useTitle(pageTitle);
+};
 </script>

@@ -22,15 +22,6 @@ import { beforeEach, Mock } from "vitest";
 import { Component, nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));

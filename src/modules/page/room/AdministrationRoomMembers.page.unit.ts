@@ -22,15 +22,6 @@ import { Router, useRoute } from "vue-router";
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({
 		t: vi.fn().mockImplementation((key: string) => key),

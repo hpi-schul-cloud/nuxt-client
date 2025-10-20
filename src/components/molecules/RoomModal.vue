@@ -38,7 +38,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
-import { useOpeningTagValidator } from "@/utils/validation";
+import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";
 
 type ItemType = {

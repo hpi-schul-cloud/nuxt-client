@@ -19,15 +19,6 @@ import { NamedValue } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
@@ -95,6 +86,7 @@ describe("User Migration / Index", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
+			SC_TITLE: "dBildungscloud",
 			SC_THEME: SchulcloudTheme.Default,
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",

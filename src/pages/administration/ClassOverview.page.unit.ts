@@ -32,15 +32,6 @@ vi.mock("vue-router", () => ({
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
-
 type Tab = "current" | "next" | "archive";
 
 type CreateWrapperOptions = {

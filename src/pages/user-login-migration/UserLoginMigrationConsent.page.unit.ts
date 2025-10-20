@@ -7,17 +7,10 @@ import { SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inj
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle?: string, parentTitle?: string) =>
-				[pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-		}) as typeof import("@/utils/pageTitle")
-);
 
 describe("UserLoginMigrationConsent", () => {
 	let systemsModule: Mocked<SystemsModule>;
@@ -61,6 +54,10 @@ describe("UserLoginMigrationConsent", () => {
 			userLoginMigrationMock,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("Rendering", () => {
 		describe("when all mandatory props are defined", () => {

@@ -10,6 +10,7 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useAppStore } from "@data-app";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -96,10 +97,10 @@ export const useFolderState = () => {
 		}
 	};
 
-	const throwApplicationError = (error: unknown): never => {
+	const throwApplicationError = (error: unknown) => {
 		const responseError = mapAxiosErrorToResponseError(error);
 
-		throw createApplicationError(responseError.code);
+		useAppStore().handleApplicationError(responseError.code);
 	};
 
 	const mapNodeTypeToPathType = (nodeType: string): string => {

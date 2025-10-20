@@ -12,6 +12,7 @@
 				<template #header>
 					<BoardHeader
 						:board-id="board.id"
+						:board-context-type="contextType"
 						:title="board.title"
 						:is-draft="!isBoardVisible"
 						:is-editable-chip-visible="isEditableChipVisible"
@@ -120,7 +121,6 @@ import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -128,12 +128,11 @@ import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULA
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
-import { useNotificationStore } from "@data-app";
+import { useAppStore, useNotificationStore } from "@data-app";
 import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
@@ -158,7 +157,6 @@ const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
 const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInformation } =
 	useSharedBoardPageInformation();
-const { createApplicationError } = useApplicationError();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
 
@@ -323,9 +321,7 @@ watch(
 
 		if (arePermissionsLoaded?.value && !canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.Forbidden, t("components.board.error.403"))
-			);
+			useAppStore().handleApplicationError(HttpStatusCode.Forbidden, "components.board.error.403");
 		}
 
 		hasReadersEditPermission.value =

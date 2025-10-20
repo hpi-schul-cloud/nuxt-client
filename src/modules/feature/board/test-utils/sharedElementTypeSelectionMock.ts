@@ -1,6 +1,6 @@
 import { useSharedElementTypeSelection } from "../shared/SharedElementTypeSelection.composable";
 import { Mock } from "vitest";
-import { Ref, ref } from "vue";
+import { computed, ComputedRef, Ref, ref } from "vue";
 
 interface Props {
 	closeDialogMock?: Mock;
@@ -23,6 +23,10 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 
 	const staticElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
 	const dynamicElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
+	const elementTypeOptions: ComputedRef<Array<ElementTypeSelectionOptions>> = computed(() => [
+		...staticElementTypeOptions.value,
+		...dynamicElementTypeOptions.value,
+	]);
 
 	const mocks = {
 		closeDialog,
@@ -30,8 +34,10 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 		isDialogLoading,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,
+		elementTypeOptions,
 	};
 
 	mockedSharedElementTypeSelection.mockReturnValue(mocks);
+
 	return mocks;
 };
