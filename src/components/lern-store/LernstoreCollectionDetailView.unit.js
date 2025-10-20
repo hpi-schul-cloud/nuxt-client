@@ -4,11 +4,9 @@ import { initializeAxios } from "@/utils/api";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
 import { RouterLinkStub } from "@vue/test-utils";
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle, parentTitle) => [pageTitle, parentTitle, "dBildungscloud"].filter(Boolean).join(" - "),
-}));
+import { setActivePinia } from "pinia";
 
 initializeAxios({
 	get: async () => ({ data: [] }),
@@ -25,6 +23,10 @@ setupStores({
 describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 	window.scrollTo = vi.fn();
 	let wrapper;
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	beforeEach(() => {
 		wrapper = shallowMount(LernstoreCollectionDetailView, {
