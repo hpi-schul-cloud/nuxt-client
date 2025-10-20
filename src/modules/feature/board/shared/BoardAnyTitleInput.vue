@@ -23,7 +23,7 @@
 	</template>
 	<template v-else>
 		<component :is="`h${headingLevel}`" class="title" :class="scope === 'board' ? 'board-title' : 'other-title'">
-			{{ modelValue && modelValue.trim() ? modelValue : emptyValueFallback }}
+			{{ modelValue?.trim() ? modelValue : emptyValueFallback }}
 		</component>
 	</template>
 </template>
@@ -107,7 +107,7 @@ watch(
 		}
 
 		if (newVal && !oldVal) {
-			if (modelValue.value !== null && modelValue.value.trim().length < 1 && props.emptyValueFallback.length > 0) {
+			if (modelValue.value?.trim().length < 1 && props.emptyValueFallback.length > 0) {
 				modelValue.value = props.emptyValueFallback;
 			}
 

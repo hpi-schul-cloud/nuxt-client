@@ -69,13 +69,11 @@ export const useErrorHandler = () => {
 		if (handlerFunction) {
 			handlerFunction(responseError);
 		} else {
-			console.error(error);
 			logger.error(error);
 		}
 	};
 
 	const handleAnyError = (error: unknown, handlerFunction: ApiErrorHandler) => {
-		console.error(error);
 		const responseError = mapAxiosErrorToResponseError(error);
 
 		handlerFunction(responseError);
