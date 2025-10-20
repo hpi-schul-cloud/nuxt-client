@@ -23,7 +23,7 @@
 	</template>
 	<template v-else>
 		<component :is="`h${headingLevel}`" class="title" :class="scope === 'board' ? 'board-title' : 'other-title'">
-			{{ modelValue.trim() ? modelValue : emptyValueFallback }}
+			{{ modelValue && modelValue.trim() ? modelValue : emptyValueFallback }}
 		</component>
 	</template>
 </template>
