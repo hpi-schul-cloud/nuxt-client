@@ -21,15 +21,13 @@ import { computed, onMounted, ref } from "vue";
 
 interface Props {
 	fileRecordId: string;
-	parentId?: string;
-	fileName?: string;
 	editorMode?: EditorMode;
 }
 
 const props = defineProps<Props>();
 const url = ref<URL>(new URL("about:blank"));
 const iframeRef = ref<HTMLIFrameElement>();
-const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
+const { getAuthorizedCollaboraDocumentUrl, fetchFileById, getFileRecordById } = useFileStorageApi();
 const { setupPostMessageAPI } = useCollaboraPostMessageApi();
 const { getElementWithParentHierarchyCall } = useBoardApi();
 
@@ -70,27 +68,31 @@ const setCollaboraUrl = async () => {
 };
 
 const setPageTitle = async () => {
-	const parentName = await getParentName();
-	const firstPartOfPageTitle = formatePageTitlePrefix(parentName);
+	await fetchFileById(props.fileRecordId);
+
+	const fileRecord = getFileRecordById(props.fileRecordId);
+	const parentName = await getParentName(fileRecord?.parentId);
+
+	const firstPartOfPageTitle = formatePageTitlePrefix(parentName, fileRecord?.name);
 	const pageTitle = buildPageTitle(firstPartOfPageTitle);
 
 	useTitle(pageTitle);
 };
 
-const formatePageTitlePrefix = (parentName?: string) => {
-	if (props.fileName) {
-		return parentName ? `${props.fileName} - ${parentName}` : props.fileName;
+const formatePageTitlePrefix = (fileName?: string, parentName?: string) => {
+	if (fileName) {
+		return parentName ? `${fileName} - ${parentName}` : fileName;
 	}
 
 	return parentName || "";
 };
 
-const getParentName = async () => {
-	if (props.parentId) {
-		const response = await getElementWithParentHierarchyCall(props.parentId);
+const getParentName = async (parentId?: string): Promise<string | undefined> => {
+	if (parentId) {
+		const response = await getElementWithParentHierarchyCall(parentId);
 		const indexOfDirectParent = response.data.parentHierarchy.length - 1;
 
-		return response.data.parentHierarchy[indexOfDirectParent].name;
+		return response.data.parentHierarchy[indexOfDirectParent]?.name;
 	}
 };
 </script>
