@@ -42,8 +42,8 @@
 </template>
 <script setup lang="ts">
 import { useOfficeFileSelection } from "./office-file-selection.composable";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { Dialog } from "@ui-dialog";
+import { useOpeningTagValidator } from "@util-validators";
 import { isRequired } from "@util-validators";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
