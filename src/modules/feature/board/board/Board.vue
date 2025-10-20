@@ -86,7 +86,7 @@
 				</div>
 				<ConfirmationDialog />
 				<AddElementDialog />
-				<AddCollaboraElementDialog />
+				<AddOfficeFileDialog />
 				<LightBox />
 				<CopyResultModal
 					:is-open="isCopyModalOpen"
@@ -113,8 +113,8 @@
 </template>
 
 <script setup lang="ts">
-import AddCollaboraElementDialog from "../shared/AddCollaboraElementDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
+import AddOfficeFileDialog from "../shared/AddOfficeFileDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
 import BoardColumn from "./BoardColumn.vue";

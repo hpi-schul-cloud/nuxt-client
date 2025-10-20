@@ -1,34 +1,35 @@
 import { elementTypeSelectionOptionsFactory } from "../test-utils/ElementTypeSelectionOptions.factory";
-import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
-import AddCollaboraElementDialog from "./AddCollaboraElementDialog.vue";
+import { setupOfficeFileSelectionMock } from "../test-utils/office-file-selection-mock";
+import AddOfficeFileDialog from "./AddOfficeFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VForm, VSelect } from "vuetify/lib/components/index";
 
-vi.mock("./SharedElementTypeSelection.composable");
+vi.mock("./office-file-selection.composable");
 
-describe("CollaboraElementTypeSelection", () => {
+describe("OfficeFileFileDialog", () => {
 	const setupMocks = () => {
-		const { closeCollaboraDialog, isCollaboraDialogOpen, collaboraElementTypeOptions } =
-			setupSharedElementTypeSelectionMock();
+		const { closeOfficeFileDialog, isOfficeFileDialogOpen, officeFileSelectionOptions } =
+			setupOfficeFileSelectionMock();
 
-		collaboraElementTypeOptions.value = elementTypeSelectionOptionsFactory.createCollaboraElementList();
+		officeFileSelectionOptions.value = elementTypeSelectionOptionsFactory.createCollaboraElementList();
+
 		return {
-			isCollaboraDialogOpen,
-			closeCollaboraDialog,
-			collaboraElementTypeOptions,
+			isOfficeFileDialogOpen,
+			closeOfficeFileDialog,
+			officeFileSelectionOptions,
 		};
 	};
 
-	describe("when isCollaboraDialogOpen is false", () => {
+	describe("when isOfficeFileDialogOpen is false", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
 			setupMocks();
 
-			const wrapper = mount(AddCollaboraElementDialog, {
+			const wrapper = mount(AddOfficeFileDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					stubs: { UseFocusTrap: true },
@@ -55,9 +56,9 @@ describe("CollaboraElementTypeSelection", () => {
 		const setup = async () => {
 			document.body.setAttribute("data-app", "true");
 
-			const { isCollaboraDialogOpen, closeCollaboraDialog, collaboraElementTypeOptions } = setupMocks();
+			const { isOfficeFileDialogOpen, closeOfficeFileDialog, officeFileSelectionOptions } = setupMocks();
 
-			const wrapper = mount(AddCollaboraElementDialog, {
+			const wrapper = mount(AddOfficeFileDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
 					stubs: { UseFocusTrap: true },
@@ -65,10 +66,10 @@ describe("CollaboraElementTypeSelection", () => {
 				attachTo: document.body,
 			});
 
-			isCollaboraDialogOpen.value = true;
+			isOfficeFileDialogOpen.value = true;
 			await nextTick();
 
-			return { isCollaboraDialogOpen, closeCollaboraDialog, collaboraElementTypeOptions, wrapper };
+			return { isOfficeFileDialogOpen, closeOfficeFileDialog, officeFileSelectionOptions, wrapper };
 		};
 
 		it("should make modal visible", async () => {
@@ -79,17 +80,17 @@ describe("CollaboraElementTypeSelection", () => {
 		});
 
 		it("should render options", async () => {
-			const { collaboraElementTypeOptions, wrapper } = await setup();
+			const { officeFileSelectionOptions, wrapper } = await setup();
 
 			const typeSelect = wrapper.findComponent(VSelect);
-			expect(typeSelect.props("items")).toBe(collaboraElementTypeOptions.value);
+			expect(typeSelect.props("items")).toBe(officeFileSelectionOptions.value);
 		});
 
 		describe("when form is valid", () => {
 			it("should call item action", async () => {
-				const { collaboraElementTypeOptions, wrapper } = await setup();
+				const { officeFileSelectionOptions, wrapper } = await setup();
 
-				const selectOption = collaboraElementTypeOptions.value[0];
+				const selectOption = officeFileSelectionOptions.value[0];
 				const FILENAME = "myDocument";
 
 				const typeSelect = wrapper.findComponent(VSelect);
@@ -112,8 +113,8 @@ describe("CollaboraElementTypeSelection", () => {
 
 		describe("when filetype is not selected", () => {
 			it("should not call item action", async () => {
-				const { collaboraElementTypeOptions, wrapper } = await setup();
-				const selectOption = collaboraElementTypeOptions.value[0];
+				const { officeFileSelectionOptions, wrapper } = await setup();
+				const selectOption = officeFileSelectionOptions.value[0];
 
 				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
 				await fileNameInput.find("input").setValue("myDocument");
@@ -129,9 +130,9 @@ describe("CollaboraElementTypeSelection", () => {
 
 		describe("when filename is empty", () => {
 			it("should not call item action", async () => {
-				const { collaboraElementTypeOptions, wrapper } = await setup();
+				const { officeFileSelectionOptions, wrapper } = await setup();
 
-				const selectOption = collaboraElementTypeOptions.value[0];
+				const selectOption = officeFileSelectionOptions.value[0];
 
 				const typeSelect = wrapper.findComponent(VSelect);
 				typeSelect.vm.$emit("update:modelValue", selectOption.id);
@@ -150,14 +151,14 @@ describe("CollaboraElementTypeSelection", () => {
 		});
 
 		it("should close modal on close button click", async () => {
-			const { closeCollaboraDialog, wrapper } = await setup();
+			const { closeOfficeFileDialog, wrapper } = await setup();
 
 			const dialog = wrapper.findComponent(Dialog);
 			dialog.vm.$emit("cancel");
 
 			await nextTick();
 
-			expect(closeCollaboraDialog).toHaveBeenCalled();
+			expect(closeOfficeFileDialog).toHaveBeenCalled();
 		});
 	});
 });

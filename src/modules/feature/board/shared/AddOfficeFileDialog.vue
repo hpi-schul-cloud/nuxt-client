@@ -1,6 +1,6 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isCollaboraDialogOpen"
+		v-model:is-dialog-open="isOfficeFileDialogOpen"
 		:message="t('components.elementTypeSelection.elements.collabora.subtitle')"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-element-dialog"
@@ -8,22 +8,17 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<VForm
-				id="createCollaboraFileForm"
-				ref="form"
-				data-testid="collabora-element-form"
-				@submit.prevent.stop="onConfirm"
-			>
+			<VForm id="officeFileForm" ref="form" data-testid="collabora-element-form" @submit.prevent="onConfirm">
 				<!-- Attach the select to the form so that we can use focusTrap in the dialog -->
 				<VSelect
 					v-model="selectedDocType"
-					:items="collaboraElementTypeOptions"
+					:items="officeFileSelectionOptions"
 					item-title="label"
 					item-value="id"
 					persistent-hint
 					:label="t('components.cardElement.fileElement.collaboraFile.types')"
 					:rules="docTypeRules"
-					:menu-props="{ attach: '#createCollaboraFileForm' }"
+					:menu-props="{ attach: '#officeFileForm' }"
 					data-testid="collabora-element-form-type"
 				/>
 				<VTextField
@@ -46,7 +41,7 @@
 	</Dialog>
 </template>
 <script setup lang="ts">
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { useOfficeFileSelection } from "./office-file-selection.composable";
 import { useOpeningTagValidator } from "@/utils/validation";
 import { Dialog } from "@ui-dialog";
 import { isRequired } from "@util-validators";
@@ -57,7 +52,7 @@ type VuetifyForm = {
 	validate: () => Promise<{ valid: boolean }>;
 };
 
-const { isCollaboraDialogOpen, closeCollaboraDialog, collaboraElementTypeOptions } = useSharedElementTypeSelection();
+const { isOfficeFileDialogOpen, closeOfficeFileDialog, officeFileSelectionOptions } = useOfficeFileSelection();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
@@ -80,14 +75,14 @@ const resetForm = () => {
 
 const onCancel = () => {
 	resetForm();
-	closeCollaboraDialog();
+	closeOfficeFileDialog();
 };
 
 const onConfirm = async () => {
 	if (form?.value) {
 		const { valid } = await form.value.validate();
 		if (valid) {
-			await collaboraElementTypeOptions.value
+			await officeFileSelectionOptions.value
 				.find((item) => item.id === selectedDocType.value)
 				?.action(fileName.value, caption.value);
 			resetForm();

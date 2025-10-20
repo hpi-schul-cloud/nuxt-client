@@ -1,8 +1,5 @@
-import {
-	CollaboraElementTypeSelectionOptions,
-	ElementTypeSelectionOptions,
-	useSharedElementTypeSelection,
-} from "./SharedElementTypeSelection.composable";
+import { useOfficeFileSelection } from "./office-file-selection.composable";
+import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -36,22 +33,15 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { hasManageVideoConferencePermission } = useBoardPermissions();
 
 	const cardStore = useCardStore();
+	const { triggerFileSelect } = useSharedFileSelect();
+	const { uploadFromUrl } = useFileStorageApi();
 
 	const { t } = useI18n();
 
-	const { uploadFromUrl } = useFileStorageApi();
-	const { triggerFileSelect } = useSharedFileSelect();
+	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
+		useSharedElementTypeSelection();
 
-	const {
-		isDialogOpen,
-		isDialogLoading,
-		openCollaboraDialog,
-		closeDialog,
-		closeCollaboraDialog,
-		staticElementTypeOptions,
-		dynamicElementTypeOptions,
-		collaboraElementTypeOptions,
-	} = useSharedElementTypeSelection();
+	const { openOfficeFileDialog, closeOfficeFileDialog, officeFileSelectionOptions } = useOfficeFileSelection();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -182,8 +172,11 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiFileDocumentOutline,
 				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
-				action: () => askTypeCollabora(),
-				testId: "create-element-collabora",
+				action: async () => {
+					closeDialog();
+					openOfficeFileDialog();
+				},
+				testId: "create-element-collabora-file",
 			});
 		}
 
@@ -214,16 +207,20 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		dynamicElementTypeOptions.value = options;
 	};
 
-	const onCollaboraElementClick = async (
-		assetUrl: string,
-		fileExtension: string,
-		fileName: string,
-		caption: string
-	) => {
+	const staticOptions = getStaticElementOptions();
+
+	const askType = () => {
+		staticElementTypeOptions.value = staticOptions;
+		loadDynamicElementOptions();
+
+		isDialogOpen.value = true;
+	};
+
+	const onOfficeFileClick = async (assetUrl: string, fileExtension: string, fileName: string, caption: string) => {
 		triggerFileSelect.value = false;
 		const response = await createElementRequestFn({
 			type: ContentElementType.File,
-			cardId,
+			cardId: cardId,
 		});
 
 		try {
@@ -238,49 +235,33 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				await cardStore.updateElementRequest({ element });
 			}
 
-			closeCollaboraDialog();
+			closeOfficeFileDialog();
 		} catch {
+			// delete element if parsing or upload fails
 			return;
 		}
 	};
 
-	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => [
+	officeFileSelectionOptions.value = [
 		{
 			id: "1",
 			label: t("components.elementTypeSelection.elements.collabora.option.text"),
 			action: async (fileName: string, caption: string) =>
-				onCollaboraElementClick(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
+				onOfficeFileClick(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
 		},
 		{
 			id: "2",
 			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
 			action: async (fileName: string, caption: string) =>
-				onCollaboraElementClick(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
+				onOfficeFileClick(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
 		},
 		{
 			id: "3",
 			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
 			action: async (fileName: string, caption: string) =>
-				onCollaboraElementClick(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
+				onOfficeFileClick(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
 		},
 	];
-
-	const staticOptions = getStaticElementOptions();
-	const collaboraOptions = getCollaboraElementOptions();
-
-	const askType = () => {
-		staticElementTypeOptions.value = staticOptions;
-		loadDynamicElementOptions();
-
-		isDialogOpen.value = true;
-	};
-
-	const askTypeCollabora = async () => {
-		collaboraElementTypeOptions.value = collaboraOptions;
-
-		closeDialog();
-		openCollaboraDialog();
-	};
 
 	watch(
 		() => cardStore.preferredTools,
