@@ -20,7 +20,6 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 	const closeDialog = closeDialogMock ?? vi.fn();
 	const isDialogOpen = ref(false);
 	const isDialogLoading = ref(false);
-	const isCollaboraDialogOpen = ref(false);
 
 	const staticElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
 	const dynamicElementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);
@@ -33,7 +32,6 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 		closeDialog,
 		isDialogOpen,
 		isDialogLoading,
-		isCollaboraDialogOpen,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,
 		elementTypeOptions,
