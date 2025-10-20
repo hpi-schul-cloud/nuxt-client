@@ -157,13 +157,12 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	const invitationTableData = computed(() =>
 		roomInvitationLinks.value.map((link) => {
 			const { YES, NO, EXPIRED, ACTIVE } = commonTranslationsMap;
-			const isUsableByExternalPersons = link.isUsableByExternalPersons ? YES : NO;
 
 			return {
 				id: link.id,
 				title: link.title,
 				isUsableByStudents: link.isUsableByStudents ? YES : NO,
-				isUsableByExternalPersons,
+				isUsableByExternalPersons: link.isUsableByExternalPersons ? YES : NO,
 				activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : NO,
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!) ? EXPIRED : ACTIVE,
