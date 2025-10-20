@@ -1562,6 +1562,8 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
 	"pages.rooms.invitationLinkStatus.expired": "Lamentablemente, el enlace de invitación ya no es válido",
 	"pages.rooms.invitationLinkStatus.invalidLink": "Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Este enlace de invitación no se puede usar con tu rol actual.",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
@@ -1687,6 +1689,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Descripción",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Sólo válido dentro de la escuela",
 	"pages.rooms.members.tableHeader.validForStudents": "También válido para estudiantes",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "También válido para personas externas",
 	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Confirmación obligatoria",
 	"pages.rooms.members.tableHeader.status": "Estado",
@@ -1730,6 +1733,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
 		"Enlace sólo válido para usuarios de la siguiente escuela:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Enlace válido también para personas externas",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",

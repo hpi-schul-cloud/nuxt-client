@@ -150,8 +150,8 @@ describe("RoomInvitationLinkStatusPage", () => {
 				expectedMessage: "pages.rooms.invitationLinkStatus.expired",
 			},
 			{
-				message: RoomInvitationLinkValidationError.OnlyForTeachers,
-				expectedMessage: "pages.rooms.invitationLinkStatus.onlyForTeachers",
+				message: RoomInvitationLinkValidationError.NotUsableForCurrentRole,
+				expectedMessage: "pages.rooms.invitationLinkStatus.notUsableForCurrentRole",
 			},
 			{
 				message: RoomInvitationLinkValidationError.RestrictedToCreatorSchool,
