@@ -1558,7 +1558,8 @@ export default {
 		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.expired": "Der Einladungslink ist leider nicht mehr gültig",
 	"pages.rooms.invitationLinkStatus.invalidLink": "Der Einladungslink existiert leider nicht",
-	"pages.rooms.invitationLinkStatus.onlyForTeachers": "Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Der Einladungslink ist leider nicht für diese Schulrolle gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.confirmationPending":
@@ -1680,6 +1681,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Beschreibung",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Nur schulintern gültig",
 	"pages.rooms.members.tableHeader.validForStudents": "Auch für Lernende gültig",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "Auch für externe Personen gültig",
 	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Bestätigung erforderlich",
 	"pages.rooms.members.tableHeader.status": "Status",
@@ -1719,6 +1721,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint": "Wird in der Link-Übersicht angezeigt",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label": "Link nur für Nutzende der folgenden Schule gültig:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Link auch für Lernende gültig",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link auch für externe Personen gültig",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",

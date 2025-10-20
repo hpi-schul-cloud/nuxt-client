@@ -1537,6 +1537,8 @@ export default {
 		"The invitation link is unfortunately only valid for students of the school “{schoolName}”",
 	"pages.rooms.invitationLinkStatus.expired": "The invitation link is unfortunately no longer valid",
 	"pages.rooms.invitationLinkStatus.invalidLink": "Unfortunately the invitation link does not exist",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"This invitation link cannot be used with your current role.",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers": "The invitation link is unfortunately only valid for teachers",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"The invitation link is unfortunately only valid for users of the school “{schoolName}”",
@@ -1658,6 +1660,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Description",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Only valid within the school",
 	"pages.rooms.members.tableHeader.validForStudents": "Also valid for students",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "Also valid for external persons",
 	"pages.rooms.members.tableHeader.expirationDate": "Expiration date",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Confirmation required",
 	"pages.rooms.members.tableHeader.status": "Status",
@@ -1696,6 +1699,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint": "Is displayed in the link overview",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label": "Link only valid for users of the following school:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Link also valid for students",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link also valid for external persons",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Entry to the room only possible after confirmation ({0})",
