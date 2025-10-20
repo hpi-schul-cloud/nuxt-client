@@ -79,6 +79,7 @@ describe("CardStore", () => {
 			updateElementRequest: vi.fn(),
 			moveElementRequest: vi.fn(),
 			deleteCardRequest: vi.fn(),
+			duplicateCardRequest: vi.fn(),
 			updateCardTitleRequest: vi.fn(),
 			updateCardHeightRequest: vi.fn(),
 			disconnectSocketRequest: vi.fn(),
@@ -94,6 +95,7 @@ describe("CardStore", () => {
 			updateElementRequest: vi.fn(),
 			moveElementRequest: vi.fn(),
 			deleteCardRequest: vi.fn(),
+			duplicateCardRequest: vi.fn(),
 			updateCardTitleRequest: vi.fn(),
 			updateCardHeightRequest: vi.fn(),
 			disconnectSocketRequest: vi.fn(),
@@ -230,6 +232,32 @@ describe("CardStore", () => {
 			});
 
 			expect(mockedCardRestApiActions.deleteCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+	});
+
+	describe("duplicateCardRequest", () => {
+		it("should call socket Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup(true);
+
+			cardStore.duplicateCardRequest({
+				cardId,
+			});
+
+			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+
+		it("should call rest Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup();
+
+			cardStore.duplicateCardRequest({
+				cardId,
+			});
+
+			expect(mockedCardRestApiActions.duplicateCardRequest).toHaveBeenCalledWith({
 				cardId,
 			});
 		});

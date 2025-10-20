@@ -454,7 +454,6 @@ export default {
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
 	"components.board.notifications.info.cardDuplicated":
 		"No se transferirán los contenidos de Etherpads y pizarras blancas, ni tampoco los ajustes protegidos de herramientas externas.",
-	"components.board.notifications.success.cardDuplicated": "Tarjeta duplicada correctamente.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Una columna fue creada por otro usuario.",

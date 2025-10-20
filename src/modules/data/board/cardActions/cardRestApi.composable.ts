@@ -29,7 +29,7 @@ import {
 import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
-import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { notifyError, notifyInfo } from "@data-app";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
@@ -229,7 +229,6 @@ export const useCardRestApi = () => {
 				cardStore.duplicateCardSuccess({ newCard, isOwnAction: true });
 
 				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
-				notifySuccess(t("components.board.notifications.success.cardDuplicated"));
 			}
 		} catch (error) {
 			handleError(error, {});
