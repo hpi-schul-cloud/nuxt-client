@@ -244,43 +244,26 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		}
 	};
 
-	const getCollaboraElementOption = (id: string, label: string, assetUrl: string, fileExtension: string) => ({
-		id: id,
-		label: label,
-		action: async (fileName: string, caption: string) =>
-			onCollaboraElementClick(assetUrl, fileExtension, fileName, caption),
-	});
-
-	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => {
-		const options: CollaboraElementTypeSelectionOptions[] = [];
-
-		options.push(
-			getCollaboraElementOption(
-				"1",
-				t("components.elementTypeSelection.elements.collabora.option.text"),
-				"https://github.com/hpi-schul-cloud/nuxt-client/raw/refs/heads/BC-9862/src/assets/collabora/empty-doc.docx",
-				".docx"
-			)
-		);
-		options.push(
-			getCollaboraElementOption(
-				"2",
-				t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-				"https://github.com/hpi-schul-cloud/nuxt-client/raw/refs/heads/BC-9862/src/assets/collabora/empty-spreadsheet.xlsx",
-				".xlsx"
-			)
-		);
-		options.push(
-			getCollaboraElementOption(
-				"3",
-				t("components.elementTypeSelection.elements.collabora.option.presentation"),
-				"https://github.com/hpi-schul-cloud/nuxt-client/raw/refs/heads/BC-9862/src/assets/collabora/empty-presentation.pptx",
-				".pptx"
-			)
-		);
-
-		return options;
-	};
+	const getCollaboraElementOptions = (): CollaboraElementTypeSelectionOptions[] => [
+		{
+			id: "1",
+			label: t("components.elementTypeSelection.elements.collabora.option.text"),
+			action: async (fileName: string, caption: string) =>
+				onCollaboraElementClick(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
+		},
+		{
+			id: "2",
+			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+			action: async (fileName: string, caption: string) =>
+				onCollaboraElementClick(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
+		},
+		{
+			id: "3",
+			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+			action: async (fileName: string, caption: string) =>
+				onCollaboraElementClick(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
+		},
+	];
 
 	const staticOptions = getStaticElementOptions();
 	const collaboraOptions = getCollaboraElementOptions();
