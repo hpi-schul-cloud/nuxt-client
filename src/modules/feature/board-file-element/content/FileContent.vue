@@ -36,6 +36,7 @@
 				:is-edit-mode="isEditMode"
 				@update:alternative-text="onUpdateText"
 				@update:caption="onUpdateCaption"
+				@update:name="onUpdateName"
 			/>
 			<ContentElementFooter :file-properties="fileProperties" />
 			<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
@@ -55,7 +56,6 @@ import { isAudioMimeType, isPdfMimeType, isVideoMimeType } from "@/utils/fileHel
 import { injectStrict } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useDebounceFn } from "@vueuse/core";
 import { computed, PropType, ref } from "vue";
 import { useDisplay } from "vuetify";
 
@@ -68,18 +68,23 @@ const props = defineProps({
 	alerts: { type: Array as PropType<FileAlert[]>, required: true },
 });
 
-const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "add:alert"]);
+const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);
 
 const onFetchFile = () => {
 	emit("fetch:file");
 };
-const onUpdateCaption = useDebounceFn((value: string) => {
-	emit("update:caption", value);
-}, 600);
 
-const onUpdateText = useDebounceFn((value: string) => {
+const onUpdateCaption = (value: string) => {
+	emit("update:caption", value);
+};
+
+const onUpdateText = (value: string) => {
 	emit("update:alternativeText", value);
-}, 600);
+};
+
+const onUpdateName = (value: string) => {
+	emit("update:name", value);
+};
 
 const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);

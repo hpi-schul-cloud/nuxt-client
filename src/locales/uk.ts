@@ -108,6 +108,7 @@ export default {
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
 	"common.labels.welcome": "Ласкаво просимо",
+	"common.labels.fileName": "Ім'я файлу",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
 	"common.medium.alert.notLicensed": "Середній не уповноважений.",
