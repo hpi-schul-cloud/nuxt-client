@@ -66,7 +66,7 @@ export const useFileStorageApi = () => {
 	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1) ?? "name.docx"; // ToDo recheck default name
+			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
 			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
