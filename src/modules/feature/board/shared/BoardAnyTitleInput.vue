@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { useInlineEditInteractionHandler } from "@util-board";
+import { containsOpeningTagFollowedByString } from "@util-validators";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
 import { computed, nextTick, onMounted, ref, unref, watch } from "vue";

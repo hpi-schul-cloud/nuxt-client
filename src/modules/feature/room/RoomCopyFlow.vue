@@ -58,7 +58,7 @@ const onConfirmCopy = async () => {
 			emit("copy:success", copyResult.id);
 		}
 	} catch (error) {
-		notifyInfo(t("components.molecules.copyResult.timeoutCopy"), false);
+		notifyInfo("components.molecules.copyResult.timeoutCopy", false);
 		const responseError = mapAxiosErrorToResponseError(error);
 		throw createApplicationError(responseError.code);
 	} finally {
