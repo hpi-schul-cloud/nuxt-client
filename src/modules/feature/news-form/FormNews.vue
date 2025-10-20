@@ -83,10 +83,10 @@ import FormActions from "./FormActions.vue";
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { newsModule } from "@/store";
 import { News } from "@/store/types/news";
-import { useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
+import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import { defineComponent, PropType } from "vue";
 
