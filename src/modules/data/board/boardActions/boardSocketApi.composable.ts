@@ -48,6 +48,7 @@ export const useBoardSocketApi = () => {
 		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
+			on(CardActions.duplicateCardSuccess, boardStore.duplicateCardSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
