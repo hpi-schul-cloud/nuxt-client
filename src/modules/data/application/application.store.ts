@@ -107,6 +107,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const handleUnknownError = (err: unknown) => {
+		console.error(err);
 		const applicationError = err as ApplicationError;
 		if (applicationError.name === "ApplicationError") {
 			handleApplicationError(applicationError.statusCode, applicationError.translationKey);
