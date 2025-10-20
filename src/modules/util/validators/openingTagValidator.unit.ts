@@ -1,6 +1,6 @@
-import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
 import { mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "@util-validators";
 
 describe("OpeningTagValidator", () => {
 	describe("containsOpeningTagFollowedByString", () => {
