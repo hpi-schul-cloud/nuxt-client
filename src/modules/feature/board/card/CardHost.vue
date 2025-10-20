@@ -188,10 +188,10 @@ const onEndEditMode = async () => {
 const onCloseDetailView = () => (isDetailView.value = false);
 
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
-	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
 const onMoveContentElementUp = async ({ payload: elementId, elementIndex }: ElementMove) =>
-	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
 const onMoveContentElementKeyboard = async ({ payload: elementId, elementIndex }: ElementMove, key: string) => {
 	if (!verticalCursorKeys.includes(key)) return;
@@ -220,6 +220,7 @@ const boardMenuClasses = computed(() => {
 
 const duplicateCard = async () => {
 	if (!card.value) return;
+
 	await cardStore.duplicateCardRequest({ cardId: card.value.id });
 	emit("reload:board");
 };

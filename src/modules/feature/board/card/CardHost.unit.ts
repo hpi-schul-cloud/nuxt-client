@@ -12,7 +12,12 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionCopy,
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode, useShareBoardLink, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
@@ -129,11 +134,12 @@ describe("CardHost", () => {
 			},
 		});
 
-		mockedPiniaStoreTyping(useCardStore);
+		const cardStore = mockedPiniaStoreTyping(useCardStore);
 
 		return {
 			wrapper,
 			cardId,
+			cardStore,
 		};
 	};
 
@@ -191,6 +197,19 @@ describe("CardHost", () => {
 	});
 
 	describe("card menus", () => {
+		describe("when users clicks duplicate menu btn", () => {
+			it("should call cardStore.duplicateCardRequest", async () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper, cardId, cardStore } = setup();
+
+				const duplicateButton = wrapper.findComponent(KebabMenuActionCopy);
+
+				await duplicateButton.trigger("click");
+
+				expect(cardStore.duplicateCardRequest).toHaveBeenCalledWith({ cardId });
+			});
+		});
+
 		describe("when users clicks share link menu", () => {
 			it("should copy a share link", async () => {
 				mockedBoardPermissions.hasDeletePermission.value = true;
