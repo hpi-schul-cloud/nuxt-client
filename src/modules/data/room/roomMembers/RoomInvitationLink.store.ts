@@ -155,21 +155,22 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	};
 
 	const invitationTableData = computed(() =>
-		roomInvitationLinks.value.map((link) => ({
-			id: link.id,
-			title: link.title,
-			isUsableByStudents: link.isUsableByStudents ? commonTranslationsMap.YES : commonTranslationsMap.NO,
-			...(link.isUsableByExternalPersons !== undefined && {
-				isUsableByExternalPersons: link.isUsableByExternalPersons
-					? commonTranslationsMap.YES
-					: commonTranslationsMap.NO,
-			}),
-			activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : commonTranslationsMap.NO,
-			isExpired: isExpired(link.activeUntil!),
-			status: isExpired(link.activeUntil!) ? commonTranslationsMap.EXPIRED : commonTranslationsMap.ACTIVE,
-			restrictedToCreatorSchool: link.restrictedToCreatorSchool ? commonTranslationsMap.YES : commonTranslationsMap.NO,
-			requiresConfirmation: link.requiresConfirmation ? commonTranslationsMap.YES : commonTranslationsMap.NO,
-		}))
+		roomInvitationLinks.value.map((link) => {
+			const { YES, NO, EXPIRED, ACTIVE } = commonTranslationsMap;
+			const isUsableByExternalPersons = link.isUsableByExternalPersons ? YES : NO;
+
+			return {
+				id: link.id,
+				title: link.title,
+				isUsableByStudents: link.isUsableByStudents ? YES : NO,
+				isUsableByExternalPersons,
+				activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : NO,
+				isExpired: isExpired(link.activeUntil!),
+				status: isExpired(link.activeUntil!) ? EXPIRED : ACTIVE,
+				restrictedToCreatorSchool: link.restrictedToCreatorSchool ? YES : NO,
+				requiresConfirmation: link.requiresConfirmation ? YES : NO,
+			};
+		})
 	);
 
 	const isExpired = (linkExpireDate: string) => new Date(linkExpireDate) < new Date();
