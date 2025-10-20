@@ -231,7 +231,9 @@ export const useCardRestApi = () => {
 				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
 			}
 		} catch (error) {
-			handleError(error, {});
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDuplicated", "boardCard"),
+			});
 		}
 	};
 

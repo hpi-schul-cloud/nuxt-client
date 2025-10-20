@@ -446,6 +446,7 @@ export default {
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
+	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.info.cardDuplicated":

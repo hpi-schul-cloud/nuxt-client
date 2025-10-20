@@ -442,6 +442,7 @@ export default {
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
+	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.notifications.info.cardDuplicated":
