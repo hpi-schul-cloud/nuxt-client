@@ -76,8 +76,8 @@ export const useCardStore = defineStore("cardStore", () => {
 	const duplicateCardRequest = socketOrRest.duplicateCardRequest;
 
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
-		if (payload.newCard.id) {
-			cards.value[payload.newCard.id] = payload.newCard;
+		if (payload.copiedCard.id) {
+			cards.value[payload.copiedCard.id] = payload.copiedCard;
 		}
 	};
 

@@ -162,7 +162,8 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload = {
-					newCard: cardResponseFactory.build(),
+					cardId: "unknown-id",
+					copiedCard: cardResponseFactory.build(),
 					isOwnAction: true,
 				};
 				dispatch(CardActions.duplicateCardSuccess(payload));

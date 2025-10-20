@@ -95,7 +95,7 @@ describe("useBoardAriaNotification", () => {
 		const { notifyDuplicateCardSuccess } = useBoardAriaNotification();
 		const element = document.getElementById("notify-screen-reader-polite");
 
-		notifyDuplicateCardSuccess({ newCard: cardResponseFactory.build(), isOwnAction: false });
+		notifyDuplicateCardSuccess({ cardId: "unknown-id", copiedCard: cardResponseFactory.build(), isOwnAction: false });
 		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_DUPLICATED_SUCCESS);
 	});

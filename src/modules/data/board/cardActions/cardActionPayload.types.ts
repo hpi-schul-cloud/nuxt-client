@@ -61,7 +61,8 @@ export type DuplicateCardRequestPayload = {
 	cardId: string;
 };
 export type DuplicateCardSuccessPayload = {
-	newCard: CardResponse;
+	cardId: string;
+	copiedCard: CardResponse;
 	isOwnAction: boolean;
 };
 export type DuplicateCardFailurePayload = DuplicateCardRequestPayload;

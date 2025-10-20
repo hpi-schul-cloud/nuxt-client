@@ -722,13 +722,14 @@ describe("useCardRestApi", () => {
 			const cardId = card.id;
 
 			cardStore.getCard.mockReturnValue(card);
-			const newCard = { ...card, id: "newCardId" };
-			mockedBoardApiCalls.duplicateCardCall.mockResolvedValue(newCard);
+			const copiedCard = { ...card, id: "newCardId" };
+			mockedBoardApiCalls.duplicateCardCall.mockResolvedValue(copiedCard);
 
 			await duplicateCardRequest({ cardId });
 
 			expect(cardStore.duplicateCardSuccess).toHaveBeenCalledWith({
-				newCard,
+				cardId,
+				copiedCard,
 				isOwnAction: true,
 			});
 		});
