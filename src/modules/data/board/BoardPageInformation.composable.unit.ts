@@ -6,7 +6,6 @@ import { boardResponseFactory } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 
 vi.mock("./BoardApi.composable");
@@ -90,7 +89,6 @@ describe("BoardPageInformation.composable", () => {
 				const fakeId = "abc123-2";
 
 				await createPageInformation(fakeId);
-				logger.log("pageTitle", pageTitle.value);
 
 				expect(pageTitle.value).toContain("Course #1");
 			});
