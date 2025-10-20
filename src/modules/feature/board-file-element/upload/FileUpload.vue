@@ -17,8 +17,7 @@
 <script lang="ts">
 import FilePicker from "./file-picker/FilePicker.vue";
 import { ContentElementBar } from "@ui-board";
-import { useSharedLastCreatedElement } from "@util-board";
-import { useSharedFileSelect } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
 
 export default defineComponent({
