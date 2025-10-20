@@ -1,4 +1,5 @@
 import type { ElementTypeSelectionOptions } from "../shared/SharedElementTypeSelection.composable";
+import { vi } from "vitest";
 
 export const elementTypeSelectionOptionsFactory = {
 	create: (options: Partial<ElementTypeSelectionOptions> = {}): ElementTypeSelectionOptions => ({
