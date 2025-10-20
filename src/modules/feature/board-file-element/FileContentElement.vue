@@ -1,5 +1,5 @@
 <template>
-	<v-card
+	<VCard
 		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
@@ -20,6 +20,7 @@
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@update:name="onUpdateName"
 			@add:alert="onAddAlert"
 		>
 			<BoardMenu
@@ -50,7 +51,7 @@
 				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
-	</v-card>
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -102,7 +103,7 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
-const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { fetchFiles, upload, getFileRecordsByParentId, rename } = useFileStorageApi();
 const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0]);
@@ -177,6 +178,10 @@ const onUpdateAlternativeText = (value: string) => {
 
 const onUpdateCaption = (value: string) => {
 	modelValue.value.caption = value;
+};
+
+const onUpdateName = (value: string) => {
+	rename(fileRecord.value.id, { fileName: value });
 };
 
 const onAddAlert = (alert: FileAlert) => {
