@@ -75,6 +75,7 @@ export const useErrorHandler = () => {
 	};
 
 	const handleAnyError = (error: unknown, handlerFunction: ApiErrorHandler) => {
+		console.error(error);
 		const responseError = mapAxiosErrorToResponseError(error);
 
 		handlerFunction(responseError);
