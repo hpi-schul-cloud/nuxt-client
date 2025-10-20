@@ -1,6 +1,6 @@
 <template>
 	<VSelect
-		v-model="lang"
+		:model-value="selectedLanguage"
 		aria-labelledby="language-heading"
 		:items="languages"
 		:label="t('pages.administration.school.index.generalSettings.labels.language')"
@@ -11,13 +11,12 @@
 
 <script setup lang="ts">
 import { LanguageType } from "@/serverApi/v3";
-import { toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
 	selectedLanguage: LanguageType;
 };
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "update:selectedLanguage", value: LanguageType): void;
@@ -25,10 +24,8 @@ const emit = defineEmits<{
 
 const i18n = useI18n();
 const { t } = i18n;
-const lang = toRef(props, "selectedLanguage");
 
 const onUpdateLanguage = (value: LanguageType) => {
-	lang.value = value;
 	emit("update:selectedLanguage", value);
 };
 
