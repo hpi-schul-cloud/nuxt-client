@@ -71,8 +71,8 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiInformation } from "@icons/material";
+import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
