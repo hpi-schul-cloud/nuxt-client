@@ -52,7 +52,7 @@ describe("OfficeFileFileDialog", () => {
 		});
 	});
 
-	describe("when isCollaboraDialogOpen is changed from false to true", () => {
+	describe("when isOfficeFileDialogOpen is changed from false to true", () => {
 		const setup = async () => {
 			document.body.setAttribute("data-app", "true");
 
