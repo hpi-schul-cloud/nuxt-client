@@ -34,7 +34,7 @@ export default defineComponent({
 		const fileWasPicked = ref(false);
 
 		const { lastCreatedElementId, resetLastCreatedElementId } = useSharedLastCreatedElement();
-		const { triggerFileSelect, resetTriggerFileSelect } = useSharedFileSelect();
+		const { isFileSelectOnMountEnabled, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
 			if (fileWasPicked.value || props.isUploading) {
@@ -50,9 +50,9 @@ export default defineComponent({
 			if (lastCreatedElementId.value !== props.elementId) {
 				return;
 			}
-			isFilePickerOpen.value = triggerFileSelect.value;
+			isFilePickerOpen.value = isFileSelectOnMountEnabled.value;
 			resetLastCreatedElementId();
-			resetTriggerFileSelect();
+			resetFileSelectOnMountEnabled();
 		});
 
 		onBeforeUnmount(() => {

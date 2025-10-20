@@ -2,15 +2,20 @@ import { createSharedComposable } from "@vueuse/core";
 import { Ref, ref } from "vue";
 
 const useFileSelect = () => {
-	const triggerFileSelect: Ref<boolean> = ref(true);
+	const isFileSelectOnMountEnabled: Ref<boolean> = ref(true);
 
-	const resetTriggerFileSelect = () => {
-		triggerFileSelect.value = true;
+	const resetFileSelectOnMountEnabled = () => {
+		isFileSelectOnMountEnabled.value = true;
+	};
+
+	const disableFileSelectOnMount = () => {
+		isFileSelectOnMountEnabled.value = false;
 	};
 
 	return {
-		triggerFileSelect,
-		resetTriggerFileSelect,
+		isFileSelectOnMountEnabled,
+		resetFileSelectOnMountEnabled,
+		disableFileSelectOnMount,
 	};
 };
 

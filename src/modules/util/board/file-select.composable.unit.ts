@@ -1,19 +1,28 @@
 import { useSharedFileSelect } from "./file-select.composable";
 
 describe("SharedFileSelectComposable", () => {
-	describe("triggerFileSelect", () => {
+	describe("isFileSelectOnMountEnabled", () => {
 		it("should be true as default", () => {
-			const { triggerFileSelect } = useSharedFileSelect();
-			expect(triggerFileSelect.value).toBe(true);
+			const { isFileSelectOnMountEnabled } = useSharedFileSelect();
+			expect(isFileSelectOnMountEnabled.value).toBe(true);
 		});
 	});
 
 	describe("resetTriggerFileSelect", () => {
-		it("should set 'triggerFileSelect' to be true again", () => {
-			const { triggerFileSelect, resetTriggerFileSelect } = useSharedFileSelect();
-			triggerFileSelect.value = false;
-			resetTriggerFileSelect();
-			expect(triggerFileSelect.value).toBe(true);
+		it("should set 'isFileSelectOnMountEnabled' to be true again", () => {
+			const { isFileSelectOnMountEnabled, resetFileSelectOnMountEnabled } = useSharedFileSelect();
+			isFileSelectOnMountEnabled.value = false;
+			resetFileSelectOnMountEnabled();
+			expect(isFileSelectOnMountEnabled.value).toBe(true);
+		});
+	});
+
+	describe("disableFileSelectOnMount", () => {
+		it("should set 'isFileSelectOnMountEnabled' to false", () => {
+			const { isFileSelectOnMountEnabled, disableFileSelectOnMount } = useSharedFileSelect();
+			isFileSelectOnMountEnabled.value = true;
+			disableFileSelectOnMount();
+			expect(isFileSelectOnMountEnabled.value).toBe(false);
 		});
 	});
 });
