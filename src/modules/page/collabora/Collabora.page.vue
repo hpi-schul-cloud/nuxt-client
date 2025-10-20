@@ -73,7 +73,7 @@ const setPageTitle = async () => {
 	const fileRecord = getFileRecordById(props.fileRecordId);
 	const parentName = await getParentName(fileRecord?.parentId);
 
-	const firstPartOfPageTitle = formatePageTitlePrefix(parentName, fileRecord?.name);
+	const firstPartOfPageTitle = formatePageTitlePrefix(fileRecord?.name, parentName);
 	const pageTitle = buildPageTitle(firstPartOfPageTitle);
 
 	useTitle(pageTitle);
