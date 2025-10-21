@@ -1,5 +1,5 @@
-import { elementTypeSelectionOptionsFactory } from "../test-utils/ElementTypeSelectionOptions.factory";
 import { setupOfficeFileSelectionMock } from "../test-utils/office-file-selection-mock";
+import { officeFileSelectionOptionsFactory } from "../test-utils/office-file-selection-options.factory";
 import AddOfficeFileDialog from "./AddOfficeFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
@@ -14,7 +14,7 @@ describe("OfficeFileFileDialog", () => {
 		const { closeOfficeFileDialog, isOfficeFileDialogOpen, officeFileSelectionOptions } =
 			setupOfficeFileSelectionMock();
 
-		officeFileSelectionOptions.value = elementTypeSelectionOptionsFactory.createCollaboraElementList();
+		officeFileSelectionOptions.value = officeFileSelectionOptionsFactory.createOfficeFileSelectionOptionsList();
 
 		return {
 			isOfficeFileDialogOpen,
