@@ -223,10 +223,10 @@ export const useCardRestApi = () => {
 		if (card === undefined) return;
 
 		try {
-			const copiedCard = await duplicateCardCall(payload.cardId);
+			const duplicatedCard = await duplicateCardCall(payload.cardId);
 
-			if (copiedCard.id) {
-				cardStore.duplicateCardSuccess({ cardId: payload.cardId, copiedCard, isOwnAction: true });
+			if (duplicatedCard.id) {
+				cardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
 
 				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
 			}

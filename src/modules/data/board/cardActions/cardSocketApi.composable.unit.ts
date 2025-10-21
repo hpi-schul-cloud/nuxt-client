@@ -163,7 +163,7 @@ describe("useCardSocketApi", () => {
 
 				const payload = {
 					cardId: "unknown-id",
-					copiedCard: cardResponseFactory.build(),
+					duplicatedCard: cardResponseFactory.build(),
 					isOwnAction: true,
 				};
 				dispatch(CardActions.duplicateCardSuccess(payload));

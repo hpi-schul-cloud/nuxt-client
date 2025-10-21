@@ -310,7 +310,7 @@ describe("CardStore", () => {
 
 			cardStore.duplicateCardSuccess({
 				cardId: "unknownId",
-				copiedCard: cardResponseFactory.build({ id: undefined }),
+				duplicatedCard: cardResponseFactory.build({ id: undefined }),
 				isOwnAction: true,
 			});
 
@@ -321,14 +321,14 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 
 			const cardId = "newCardId";
-			const copiedCard = cardResponseFactory.build({ id: cardId });
+			const duplicatedCard = cardResponseFactory.build({ id: cardId });
 			cardStore.duplicateCardSuccess({
 				cardId: "unknownId",
-				copiedCard,
+				duplicatedCard,
 				isOwnAction: true,
 			});
 
-			expect(cardStore.cards[cardId]).toEqual(copiedCard);
+			expect(cardStore.cards[cardId]).toEqual(duplicatedCard);
 		});
 	});
 
