@@ -68,6 +68,7 @@ export default {
 	"common.labels.firstName": "Ім'я",
 	"common.labels.fullName": "Ім'я та Прізвище",
 	"common.labels.greeting": "Вітаємо, {name}",
+	"common.labels.language": "Мова",
 	"common.labels.lastName.new": "Нове прізвище",
 	"common.labels.lastName": "Прізвище",
 	"common.labels.login": "Увійти",
@@ -106,6 +107,7 @@ export default {
 	"common.labels.updateAt": "Оновлено:",
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
+	"common.labels.welcome": "Ласкаво просимо",
 	"common.labels.fileName": "Ім'я файлу",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
@@ -1494,6 +1496,12 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
+	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
+	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
+	"pages.registrationExternalMembers.steps.registration.subtitle": "Реєстрація успішна",
+	"pages.registrationExternalMembers.steps.language.subtitle": "Будь ласка, виберіть свою мову",
+	"pages.registrationExternalMembers.steps.password.subtitle": "Встановіть пароль",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
@@ -1542,6 +1550,8 @@ export default {
 		"Посилання на запрошення, на жаль, дійсне лише для учнів школи «{schoolName}»",
 	"pages.rooms.invitationLinkStatus.expired": "Посилання на запрошення, на жаль, більше не дійсне",
 	"pages.rooms.invitationLinkStatus.invalidLink": "На жаль, посилання на запрошення не існує",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Це посилання на запрошення не можна використати з вашою поточною роллю.",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers": "Посилання на запрошення, на жаль, дійсне лише для вчителів",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
 		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «{schoolName}»",
@@ -1664,6 +1674,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Опис",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Діє тільки в межах школи",
 	"pages.rooms.members.tableHeader.validForStudents": "Діє також для студентів",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "Діє також для зовнішніх осіб",
 	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Потрібне підтвердження",
 	"pages.rooms.members.tableHeader.status": "Статус",
@@ -1704,6 +1715,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
 		"Посилання дійсне лише для користувачів наступної школи:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Посилання також дійсне для студентів",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Посилання також дійсне для зовнішніх осіб",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Вхід до кімнати можливий тільки після підтвердження ({0})",
