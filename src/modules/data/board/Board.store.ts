@@ -145,7 +145,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		board.value.columns[columnIndex].cards.splice(cardIndex + 1, 0, {
 			cardId: duplicatedCard.id,
-			height: 120,
+			height: duplicatedCard.height,
 		});
 	};
 
