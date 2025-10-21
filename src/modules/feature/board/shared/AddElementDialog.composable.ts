@@ -173,7 +173,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				icon: mdiFileDocumentOutline,
 				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
 				action: () => onOfficeFileClick(),
-				testId: "create-element-collabora-file",
+				testId: "create-element-office-file",
 			});
 		}
 
@@ -239,28 +239,28 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		}
 	};
 
-	const onOfficeFileClick = async () => {
-		officeFileSelectionOptions.value = [
-			{
-				id: "1",
-				label: t("components.elementTypeSelection.elements.collabora.option.text"),
-				action: async (fileName: string, caption: string) =>
-					onOfficeFileCreate(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
-			},
-			{
-				id: "2",
-				label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-				action: async (fileName: string, caption: string) =>
-					onOfficeFileCreate(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
-			},
-			{
-				id: "3",
-				label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
-				action: async (fileName: string, caption: string) =>
-					onOfficeFileCreate(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
-			},
-		];
+	officeFileSelectionOptions.value = [
+		{
+			id: "1",
+			label: t("components.elementTypeSelection.elements.collabora.option.text"),
+			action: async (fileName: string, caption: string) =>
+				onOfficeFileCreate(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
+		},
+		{
+			id: "2",
+			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+			action: async (fileName: string, caption: string) =>
+				onOfficeFileCreate(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
+		},
+		{
+			id: "3",
+			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+			action: async (fileName: string, caption: string) =>
+				onOfficeFileCreate(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
+		},
+	];
 
+	const onOfficeFileClick = async () => {
 		closeDialog();
 		openOfficeFileDialog();
 	};
