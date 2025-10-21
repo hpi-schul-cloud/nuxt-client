@@ -39,7 +39,7 @@ import { VTextarea } from "vuetify/components";
 
 type Props = {
 	isEditMode: boolean;
-	value: string;
+	value: string | undefined;
 	scope: "card" | "column" | "board";
 	isFocused?: boolean;
 	maxLength?: number | null;
