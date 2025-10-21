@@ -16,11 +16,11 @@ export const useFileRecordsStore = defineStore("fileRecords", {
 			return parentRecords ? Array.from(parentRecords.values()) : [];
 		},
 
-		getFileRecordById(id: string): FileRecord | undefined {
+		getFileRecordById(fileRecordId: string): FileRecord | undefined {
 			for (const parentRecords of this.recordsByParent.values()) {
-				for (const [recordId, record] of parentRecords) {
-					if (recordId === id) return record;
-				}
+				const record = parentRecords.get(fileRecordId);
+
+				if (record) return record;
 			}
 		},
 
