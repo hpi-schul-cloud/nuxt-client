@@ -15,6 +15,11 @@
 			</template>
 			<template #text>
 				<template v-if="invitationStep !== InvitationStep.SHARE">
+					<VRadioGroup v-model="selectedUxOption" label="UX test options (Datepicker not adjusted)" inline>
+						<VRadio label="Negative Margins" value="currentState" />
+						<VRadio label="Default Vuetify" value="vuetify" />
+						<VRadio label="Without Negative Margins" value="withoutNegativeMargins" />
+					</VRadioGroup>
 					<p>
 						{{ subTitle }}
 					</p>
@@ -27,7 +32,7 @@
 						<VTextField
 							ref="descriptionField"
 							v-model="formData.title"
-							class="mb-2"
+							:class="{ 'mb-2': selectedUxOption === 'currentState', 'mb-8': selectedUxOption !== 'currentState' }"
 							:rules="validationRules"
 							:label="t('pages.rooms.members.inviteMember.form.description.label')"
 							:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
@@ -35,76 +40,224 @@
 							data-testid="invite-participant-description-input"
 						/>
 
-						<VCheckbox
-							v-model="formData.restrictedToCreatorSchool"
-							hide-details
-							data-testid="input-invite-participants-restricted-to-creator-school"
-						>
-							<template #label>
-								<div class="mt-6">
-									{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
-									<span class="d-inline-block">
-										{{ schoolName }}
-									</span>
-								</div>
-							</template>
-						</VCheckbox>
-
-						<VCheckbox
-							v-model="formData.isUsableByStudents"
-							:disabled="!formData.restrictedToCreatorSchool"
-							:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
-							hide-details
-							data-testid="input-invite-participants-valid-for-students"
-						/>
-
-						<VCheckbox
-							v-if="isInviteExternalPersonsFeatureEnabled"
-							v-model="formData.isUsableByExternalPersons"
-							:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
-							hide-details
-							data-testid="input-invite-participants-valid-for-external-persons"
-						/>
-
-						<div class="d-flex align-center justify-start my-n4 pr-0">
+						<template v-if="selectedUxOption === 'currentState'">
 							<VCheckbox
-								v-model="formData.activeUntilChecked"
-								:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+								v-model="formData.restrictedToCreatorSchool"
 								hide-details
-								class="mr-2"
-								data-testid="input-invite-participants-link-expires"
-							/>
-							<DatePicker
-								ref="datePicker"
-								v-model="formData.activeUntil"
-								:disabled="isDatePickerDisabled"
-								:required="!isDatePickerDisabled"
-								:min-date="new Date().toString()"
-								:date="datePickerDate"
-								class="mt-1"
-								data-testid="date-picker-until"
-								@click.prevent="pause"
-								@keydown.space.enter.prevent="pause"
-								@update:date="onUpdateDate"
-							/>
-						</div>
+								data-testid="input-invite-participants-restricted-to-creator-school"
+							>
+								<template #label>
+									<div class="mt-6">
+										{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
+										<span class="d-inline-block">
+											{{ schoolName }}
+										</span>
+									</div>
+								</template>
+							</VCheckbox>
 
-						<VCheckbox
-							v-model="formData.requiresConfirmation"
-							hide-details
-							class="my-n6"
-							data-testid="input-invite-participants-requires-confirmation"
-						>
-							<template #label>
-								<div class="mt-6">
-									<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
-										<a :href="informationLink!" target="_blank" rel="noopener">
-											{{ t("pages.rooms.members.infoText.moreInformation") }}
-										</a>
-									</i18n-t>
+							<VCheckbox
+								v-model="formData.isUsableByStudents"
+								:disabled="!formData.restrictedToCreatorSchool"
+								:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
+								hide-details
+								data-testid="input-invite-participants-valid-for-students"
+							/>
+
+							<VCheckbox
+								v-if="isInviteExternalPersonsFeatureEnabled"
+								v-model="formData.isUsableByExternalPersons"
+								:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+								hide-details
+								data-testid="input-invite-participants-valid-for-external-persons"
+							/>
+
+							<div class="d-flex align-center justify-start my-n4 pr-0">
+								<VCheckbox
+									v-model="formData.activeUntilChecked"
+									:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+									hide-details
+									class="mr-2"
+									data-testid="input-invite-participants-link-expires"
+								/>
+								<DatePicker
+									ref="datePicker"
+									v-model="formData.activeUntil"
+									:disabled="isDatePickerDisabled"
+									:required="!isDatePickerDisabled"
+									:min-date="new Date().toString()"
+									:date="datePickerDate"
+									class="mt-1"
+									data-testid="date-picker-until"
+									@click.prevent="pause"
+									@keydown.space.enter.prevent="pause"
+									@update:date="onUpdateDate"
+								/>
+							</div>
+
+							<VCheckbox
+								v-model="formData.requiresConfirmation"
+								hide-details
+								class="my-n6"
+								data-testid="input-invite-participants-requires-confirmation"
+							>
+								<template #label>
+									<div class="mt-6">
+										<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
+											<a :href="informationLink!" target="_blank" rel="noopener">
+												{{ t("pages.rooms.members.infoText.moreInformation") }}
+											</a>
+										</i18n-t>
+									</div>
+								</template>
+							</VCheckbox>
+						</template>
+
+						<template v-if="selectedUxOption === 'withoutNegativeMargins'">
+							<div class="d-flex flex-column ga-0">
+								<VCheckbox
+									v-model="formData.restrictedToCreatorSchool"
+									hide-details
+									data-testid="input-invite-participants-restricted-to-creator-school"
+									class="checkbox-align-start"
+								>
+									<template #label>
+										<div class="mt-2">
+											{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
+											<span class="d-inline-block">
+												{{ schoolName }}
+											</span>
+										</div>
+									</template>
+								</VCheckbox>
+
+								<VCheckbox
+									v-model="formData.isUsableByStudents"
+									:disabled="!formData.restrictedToCreatorSchool"
+									:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
+									hide-details
+									data-testid="input-invite-participants-valid-for-students"
+								/>
+
+								<VCheckbox
+									v-if="isInviteExternalPersonsFeatureEnabled"
+									v-model="formData.isUsableByExternalPersons"
+									:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+									hide-details
+									data-testid="input-invite-participants-valid-for-external-persons"
+								/>
+
+								<div class="d-flex align-center justify-start">
+									<VCheckbox
+										v-model="formData.activeUntilChecked"
+										:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+										hide-details
+										class="mr-2"
+										data-testid="input-invite-participants-link-expires"
+									/>
+									<DatePicker
+										ref="datePicker"
+										v-model="formData.activeUntil"
+										:disabled="isDatePickerDisabled"
+										:required="!isDatePickerDisabled"
+										:min-date="new Date().toString()"
+										:date="datePickerDate"
+										data-testid="date-picker-until"
+										@click.prevent="pause"
+										@keydown.space.enter.prevent="pause"
+										@update:date="onUpdateDate"
+									/>
 								</div>
-							</template>
-						</VCheckbox>
+
+								<VCheckbox
+									v-model="formData.requiresConfirmation"
+									hide-details
+									data-testid="input-invite-participants-requires-confirmation"
+									class="checkbox-align-start"
+								>
+									<template #label>
+										<div class="mt-2">
+											<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
+												<a :href="informationLink!" target="_blank" rel="noopener">
+													{{ t("pages.rooms.members.infoText.moreInformation") }}
+												</a>
+											</i18n-t>
+										</div>
+									</template>
+								</VCheckbox>
+							</div>
+						</template>
+
+						<template v-if="selectedUxOption === 'vuetify'">
+							<VCheckbox
+								v-model="formData.restrictedToCreatorSchool"
+								hide-details
+								data-testid="input-invite-participants-restricted-to-creator-school"
+							>
+								<template #label>
+									<div class="">
+										{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
+										<span class="d-inline-block">
+											{{ schoolName }}
+										</span>
+									</div>
+								</template>
+							</VCheckbox>
+
+							<VCheckbox
+								v-model="formData.isUsableByStudents"
+								:disabled="!formData.restrictedToCreatorSchool"
+								:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
+								hide-details
+								data-testid="input-invite-participants-valid-for-students"
+							/>
+
+							<VCheckbox
+								v-if="isInviteExternalPersonsFeatureEnabled"
+								v-model="formData.isUsableByExternalPersons"
+								:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+								hide-details
+								data-testid="input-invite-participants-valid-for-external-persons"
+							/>
+
+							<div class="d-flex align-center justify-start">
+								<VCheckbox
+									v-model="formData.activeUntilChecked"
+									:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+									hide-details
+									class="mr-2"
+									data-testid="input-invite-participants-link-expires"
+								/>
+								<DatePicker
+									ref="datePicker"
+									v-model="formData.activeUntil"
+									:disabled="isDatePickerDisabled"
+									:required="!isDatePickerDisabled"
+									:min-date="new Date().toString()"
+									:date="datePickerDate"
+									data-testid="date-picker-until"
+									@click.prevent="pause"
+									@keydown.space.enter.prevent="pause"
+									@update:date="onUpdateDate"
+								/>
+							</div>
+
+							<VCheckbox
+								v-model="formData.requiresConfirmation"
+								hide-details
+								data-testid="input-invite-participants-requires-confirmation"
+							>
+								<template #label>
+									<div class="">
+										<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
+											<a :href="informationLink!" target="_blank" rel="noopener">
+												{{ t("pages.rooms.members.infoText.moreInformation") }}
+											</a>
+										</i18n-t>
+									</div>
+								</template>
+							</VCheckbox>
+						</template>
 					</div>
 				</template>
 				<template v-else>
@@ -192,6 +345,7 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+const selectedUxOption = ref("currentState");
 
 const isInviteExternalPersonsFeatureEnabled = computed(
 	() => useEnvConfig().value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED
@@ -325,3 +479,8 @@ watch(
 
 const informationLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
 </script>
+<style scoped lang="scss">
+.checkbox-align-start :deep(.v-selection-control) {
+	align-items: flex-start !important;
+}
+</style>
