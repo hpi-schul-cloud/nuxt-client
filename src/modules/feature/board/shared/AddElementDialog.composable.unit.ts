@@ -4,11 +4,14 @@ import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
+import * as FileStorageApi from "@data-file";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
@@ -701,13 +704,36 @@ describe("ElementTypeSelection Composable", () => {
 				askOfficeFileType();
 
 				const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
-				option?.action("test-office-file", "Some caption");
+				await option?.action("test-office-file", "Some caption");
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.File,
 					cardId,
 				});
+			});
+
+			it("should call uploadFromUrlt", async () => {
+				const { officeFileSelectionOptions, cardId } = setup();
+				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+				const addElementMock = vi.fn(() =>
+					Promise.resolve({
+						id: "new-element-id",
+						type: ContentElementType.File,
+						content: {},
+						timestamps: {},
+					} as AnyContentElement)
+				);
+				const { askOfficeFileType } = useAddElementDialog(addElementMock, cardId);
+
+				askOfficeFileType();
+
+				const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
+				await option?.action("test-office-file", "Some caption");
+
+				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
