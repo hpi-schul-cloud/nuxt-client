@@ -542,6 +542,7 @@ export default {
 	"components.editor.fonts.colors.indigo": "Індиго",
 	"components.editor.fonts.colors.darkPurple": "Темно-фіолетовий",
 	"components.editor.fonts.colors.pink": "Рожевий",
+	"components.elementTypeSelection.messageError": "Повідомлення елемента недійсне.",
 	"components.elementTypeSelection.dialog.title": "Додати елемент",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",

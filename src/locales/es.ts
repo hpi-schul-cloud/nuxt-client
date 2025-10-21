@@ -548,6 +548,7 @@ export default {
 	"components.editor.fonts.colors.indigo": "Índigo",
 	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",
 	"components.editor.fonts.colors.pink": "Rosa",
+	"components.elementTypeSelection.messageError": "El mensaje del elemento no es válido.",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Herramientas externas",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
