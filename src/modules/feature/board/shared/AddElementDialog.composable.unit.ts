@@ -356,7 +356,7 @@ describe("ElementTypeSelection Composable", () => {
 				closeDialogMock,
 			});
 			const openOfficeFileDialogMock = vi.fn();
-			setupOfficeFileSelectionMock({ openOfficeFileDialogMock });
+			const { officeFileSelectionOptions } = setupOfficeFileSelectionMock({ openOfficeFileDialogMock });
 
 			mockedUseBoardPermissions.mockReturnValue({
 				hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
@@ -367,6 +367,7 @@ describe("ElementTypeSelection Composable", () => {
 
 			return {
 				elementTypeOptions: staticElementTypeOptions,
+				officeFileSelectionOptions,
 				addElementMock,
 				closeDialogMock,
 				openOfficeFileDialogMock,
@@ -666,23 +667,7 @@ describe("ElementTypeSelection Composable", () => {
 			});
 		});
 
-		describe("when the OffileFile element is clicked", () => {
-			// it("should call add element function with right argument", () => {
-			// 	const { elementTypeOptions, addElementMock, cardId } = setup();
-			// 	const { askType } = useAddElementDialog(addElementMock, cardId);
-
-			// 	askType();
-
-			// 	const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-h5p");
-			// 	option?.action();
-
-			// 	expect(addElementMock).toHaveBeenCalledTimes(1);
-			// 	expect(addElementMock).toHaveBeenCalledWith({
-			// 		type: ContentElementType.H5p,
-			// 		cardId,
-			// 	});
-			// });
-
+		describe("when the OfficeFile element is clicked", () => {
 			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, cardId, closeDialogMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
@@ -705,6 +690,24 @@ describe("ElementTypeSelection Composable", () => {
 				option?.action();
 
 				expect(openOfficeFileDialogMock).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("when the office file action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { addElementMock, officeFileSelectionOptions, cardId } = setup();
+				const { askOfficeFileType } = useAddElementDialog(addElementMock, cardId);
+
+				askOfficeFileType();
+
+				const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
+				option?.action("test-office-file", "Some caption");
+
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
+					type: ContentElementType.File,
+					cardId,
+				});
 			});
 		});
 	});

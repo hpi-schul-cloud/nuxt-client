@@ -221,7 +221,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		await cardStore.updateElementRequest({ element });
 	};
 
-	const onOfficeFileCreate = async (assetUrl: string, fileExtension: string, fileName: string, caption: string) => {
+	const addOfficeFile = async (assetUrl: string, fileExtension: string, fileName: string, caption: string) => {
 		const element = await createElementRequestFn({
 			type: ContentElementType.File,
 			cardId,
@@ -245,28 +245,31 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		}
 	};
 
-	officeFileSelectionOptions.value = [
-		{
-			id: "1",
-			label: t("components.elementTypeSelection.elements.collabora.option.text"),
-			action: async (fileName: string, caption: string) =>
-				onOfficeFileCreate(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
-		},
-		{
-			id: "2",
-			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-			action: async (fileName: string, caption: string) =>
-				onOfficeFileCreate(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
-		},
-		{
-			id: "3",
-			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
-			action: async (fileName: string, caption: string) =>
-				onOfficeFileCreate(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
-		},
-	];
+	const askOfficeFileType = () => {
+		officeFileSelectionOptions.value = [
+			{
+				id: "1",
+				label: t("components.elementTypeSelection.elements.collabora.option.text"),
+				action: async (fileName: string, caption: string) =>
+					addOfficeFile(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
+			},
+			{
+				id: "2",
+				label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+				action: async (fileName: string, caption: string) =>
+					addOfficeFile(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
+			},
+			{
+				id: "3",
+				label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+				action: async (fileName: string, caption: string) =>
+					addOfficeFile(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
+			},
+		];
+	};
 
 	const onOfficeFileClick = async () => {
+		askOfficeFileType();
 		closeDialog();
 		openOfficeFileDialog();
 	};
@@ -278,6 +281,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	return {
 		askType,
+		askOfficeFileType,
 		isDialogOpen,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,
