@@ -64,6 +64,7 @@ const vueRoutes = [
 	`^/tasks/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
+	`^/registration-external-members/?$`,
 	`^/@`,
 	`^/src/`,
 	`^/node_modules/`,

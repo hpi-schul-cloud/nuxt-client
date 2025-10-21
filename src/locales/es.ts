@@ -68,6 +68,7 @@ export default {
 	"common.labels.firstName": "Nombre",
 	"common.labels.fullName": "Nombre y apellidos",
 	"common.labels.greeting": "Hola, {name}",
+	"common.labels.language": "Idioma",
 	"common.labels.lastName.new": "Nuevo apellido",
 	"common.labels.lastName": "Apellidos",
 	"common.labels.login": "Iniciar sesión",
@@ -106,6 +107,7 @@ export default {
 	"common.labels.updateAt": "Actualizado:",
 	"common.labels.visibility": "Visibilidad",
 	"common.labels.visible": "Visible",
+	"common.labels.welcome": "Bienvenido",
 	"common.labels.fileName": "Nombre del archivo",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
@@ -1521,6 +1523,12 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
+	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
+	"pages.registrationExternalMembers.steps.registration.title": "Registro",
+	"pages.registrationExternalMembers.steps.registration.subtitle": "Registro exitoso",
+	"pages.registrationExternalMembers.steps.language.subtitle": "Por favor seleccione su idioma",
+	"pages.registrationExternalMembers.steps.password.subtitle": "Establecer contraseña",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",
@@ -1569,6 +1577,8 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
 	"pages.rooms.invitationLinkStatus.expired": "Lamentablemente, el enlace de invitación ya no es válido",
 	"pages.rooms.invitationLinkStatus.invalidLink": "Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.notUsableForCurrentRole":
+		"Este enlace de invitación no se puede usar con tu rol actual.",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
@@ -1694,6 +1704,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Descripción",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Sólo válido dentro de la escuela",
 	"pages.rooms.members.tableHeader.validForStudents": "También válido para estudiantes",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "También válido para personas externas",
 	"pages.rooms.members.tableHeader.expirationDate": "Fecha de caducidad",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Confirmación obligatoria",
 	"pages.rooms.members.tableHeader.status": "Estado",
@@ -1737,6 +1748,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
 		"Enlace sólo válido para usuarios de la siguiente escuela:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Enlace válido también para personas externas",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
