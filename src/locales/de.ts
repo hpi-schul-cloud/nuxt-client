@@ -62,6 +62,7 @@ export default {
 	"common.labels.expand": "expandieren",
 	"common.labels.expanded": "geöffnet",
 	"common.labels.externalsource": "Quelle",
+	"common.labels.externalExpert": "Externe Person",
 	"common.labels.failure": "fehler",
 	"common.labels.name.new": "Neuer Name",
 	"common.labels.firstName.new": "Neuer Vorname",

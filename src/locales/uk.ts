@@ -62,6 +62,7 @@ export default {
 	"common.labels.expand": "розширити",
 	"common.labels.expanded": "розгорнуто",
 	"common.labels.externalsource": "Джерело",
+	"common.labels.externalExpert": "Extern",
 	"common.labels.failure": "невдача",
 	"common.labels.name.new": "нова назва",
 	"common.labels.firstName.new": "Нове ім'я",

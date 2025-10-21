@@ -60,6 +60,7 @@ export default {
 	"common.labels.expand": "expand",
 	"common.labels.expanded": "expanded",
 	"common.labels.externalsource": "Source",
+	"common.labels.externalExpert": "Extern",
 	"common.labels.failure": "failure",
 	"common.labels.name.new": "New name",
 	"common.labels.firstName.new": "New first name",
