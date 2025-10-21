@@ -218,8 +218,6 @@ const openCollabora = () => {
 			id: fileRecord.value.id,
 		},
 		query: {
-			parentId: element.value.id,
-			fileName: fileRecord.value.name,
 			editorMode,
 		},
 	}).href;
