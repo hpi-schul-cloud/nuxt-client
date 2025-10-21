@@ -3,7 +3,7 @@ import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./Sh
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { AnyContentElementSchema, FileElementContentSchema } from "@/types/board/ContentElement.schema";
+import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
 import { notifyInfo } from "@data-app";
 import { type CreateElementRequestPayload, useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -33,7 +33,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { hasManageVideoConferencePermission } = useBoardPermissions();
 
 	const cardStore = useCardStore();
-	const { disableFileSelectOnMount } = useSharedFileSelect();
+	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 	const { uploadFromUrl } = useFileStorageApi();
 
 	const { t } = useI18n();
@@ -213,29 +213,35 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		isDialogOpen.value = true;
 	};
 
+	const updateFileElementCaption = async (element: AnyContentElement, caption: string) => {
+		const elementContent = FileElementContentSchema.parse(element.content);
+
+		elementContent.caption = caption;
+		element.content = elementContent;
+		await cardStore.updateElementRequest({ element });
+	};
+
 	const onOfficeFileCreate = async (assetUrl: string, fileExtension: string, fileName: string, caption: string) => {
-		disableFileSelectOnMount();
-		const response = await createElementRequestFn({
+		const element = await createElementRequestFn({
 			type: ContentElementType.File,
 			cardId,
 		});
+		if (!element) {
+			return;
+		}
 
 		try {
-			const element = AnyContentElementSchema.parse(response);
-			const elementContent = FileElementContentSchema.parse(element.content);
-
+			disableFileSelectOnMount();
 			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);
 
 			if (caption && caption.trim().length > 0) {
-				elementContent.caption = caption.trim();
-				element.content = elementContent;
-				await cardStore.updateElementRequest({ element });
+				await updateFileElementCaption(element, caption.trim());
 			}
-
-			closeOfficeFileDialog();
 		} catch {
-			// delete element if parsing or upload fails
-			return;
+			await cardStore.deleteElementRequest({ elementId: element.id, cardId });
+		} finally {
+			resetFileSelectOnMountEnabled();
+			closeOfficeFileDialog();
 		}
 	};
 
