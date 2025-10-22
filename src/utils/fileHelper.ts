@@ -114,10 +114,9 @@ export function convertDownloadToPreviewUrl(downloadUrl: string, width?: FilePre
 }
 
 export function isScanStatusPending(scanStatus: FilePreviewStatus): boolean {
-	// eslint-disable-next-line no-console
-	console.log(scanStatus);
-	return true;
-	// return scanStatus === FilePreviewStatus.AWAITING_SCAN_STATUS;
+	// console.log(scanStatus);
+	// return true;
+	return scanStatus === FilePreviewStatus.AWAITING_SCAN_STATUS;
 }
 
 export function isScanStatusWontCheck(scanStatus: FilePreviewStatus): boolean {
@@ -129,10 +128,9 @@ export function isScanStatusError(scanStatus: FilePreviewStatus): boolean {
 }
 
 export function isScanStatusBlocked(scanStatus: FileRecordVirusScanStatus): boolean {
-	// eslint-disable-next-line no-console
-	console.log(scanStatus);
-	return false;
-	// return scanStatus !== FileRecordVirusScanStatus.BLOCKED;
+	// console.log(scanStatus);
+	// return false;
+	return scanStatus !== FileRecordVirusScanStatus.BLOCKED;
 }
 
 export function isPreviewPossible(previewStatus: FilePreviewStatus): boolean {
