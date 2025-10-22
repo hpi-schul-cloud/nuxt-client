@@ -82,8 +82,8 @@ const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 		case RoomInvitationLinkValidationError.Expired:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
 			break;
-		case RoomInvitationLinkValidationError.OnlyForTeachers:
-			infoMessage.value = t("pages.rooms.invitationLinkStatus.onlyForTeachers");
+		case RoomInvitationLinkValidationError.NotUsableForCurrentRole:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.notUsableForCurrentRole");
 			break;
 		case RoomInvitationLinkValidationError.RestrictedToCreatorSchool:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.restrictedToCreatorSchool", { schoolName });
