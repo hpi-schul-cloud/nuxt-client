@@ -31,8 +31,7 @@ const useBoardPageInformation = () => {
 
 		if (isCourse.value) {
 			fallback = t("pages.room.boardCard.label.courseBoard");
-		}
-		if (isRoom.value) {
+		} else if (isRoom.value) {
 			fallback = t("pages.roomDetails.board.defaultName");
 		}
 
@@ -60,9 +59,7 @@ const useBoardPageInformation = () => {
 				title: t("common.words.courses"),
 				to: "/rooms/courses-overview",
 			});
-		}
-
-		if (isRoom.value) {
+		} else if (isRoom.value) {
 			crumbs.unshift({
 				title: t("pages.rooms.title"),
 				to: "/rooms",
