@@ -105,12 +105,12 @@ import ProgressModal from "@/components/molecules/ProgressModal";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { printQrCodes } from "@/utils/qr-code.utils";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -137,7 +137,7 @@ export default {
 		ProgressModal,
 		DataFilter,
 	},
-	mixins: [print, UserHasPermission],
+	mixins: [UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
@@ -309,13 +309,6 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 
-			// filters out the QR bulk action is user is not an admin
-			if (!useAppStore().userRoles.some((name) => name === RoleName.Administrator)) {
-				editedActions = editedActions.filter(
-					(action) => action.label !== this.$t("pages.administration.teachers.index.tableActions.qr")
-				);
-			}
-
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
@@ -467,7 +460,7 @@ export default {
 					roleName: "teacher",
 				});
 				if (this.qrLinks.length) {
-					this.$_printQRs(this.qrLinks);
+					printQrCodes(this.qrLinks);
 				} else {
 					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}

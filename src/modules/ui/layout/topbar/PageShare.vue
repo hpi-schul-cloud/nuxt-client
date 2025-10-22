@@ -3,7 +3,8 @@
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
-		<QRCode ref="qrCode" :url="url" />
+
+		<QRCode :url />
 		<div>
 			<VBtn
 				variant="outlined"
@@ -22,29 +23,16 @@
 </template>
 
 <script setup lang="ts">
+import { printQrCodes } from "@/utils/qr-code.utils";
 import { mdiContentCopy, mdiPrinter } from "@icons/material";
 import { QRCode } from "@ui-qr-code";
-import { ComponentPublicInstance, ref } from "vue";
 
-const props = defineProps({
-	url: {
-		type: String,
-		default: window.location.href,
-	},
-});
-const qrCode = ref<ComponentPublicInstance<HTMLDivElement>>();
-
+const url = window.location.href;
 const openPrintMenu = () => {
-	const win = window.open();
-
-	if (qrCode.value) {
-		win?.document.write(qrCode.value.$el.innerHTML);
-		win?.print();
-		win?.close();
-	}
+	printQrCodes([{ url, title: document.title }]);
 };
 
-const onCopy = () => navigator.clipboard.writeText(props.url);
+const onCopy = () => navigator.clipboard.writeText(url);
 </script>
 
 <style scoped>
