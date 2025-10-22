@@ -95,5 +95,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		isCollaboraFileDialogOpen,
 		collaboraFileSelectionOptions,
 		initializeFileElementWithCollaboraFile,
+		getAssetUrl,
 	};
 });

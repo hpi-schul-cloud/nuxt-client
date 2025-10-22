@@ -21,6 +21,7 @@ export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
 	const initializeFileElementWithCollaboraFile = initializeFileElementWithCollaboraFileMock ?? vi.fn();
 	const isCollaboraFileDialogOpen = ref(false);
 	const collaboraFileSelectionOptions: Ref<Array<CollaboraFileSelectionOptions>> = ref([]);
+	const getAssetUrl = vi.fn();
 
 	const mocks = {
 		openCollaboraFileDialog,
@@ -28,6 +29,7 @@ export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
 		collaboraFileSelectionOptions,
 		isCollaboraFileDialogOpen,
 		initializeFileElementWithCollaboraFile,
+		getAssetUrl,
 	};
 
 	mockedCollaboraFileSelection.mockReturnValue(mocks);

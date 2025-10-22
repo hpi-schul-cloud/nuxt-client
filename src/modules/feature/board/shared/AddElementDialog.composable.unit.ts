@@ -700,23 +700,23 @@ describe("ElementTypeSelection Composable", () => {
 		});
 
 		describe("when the collabora file action is called", () => {
-			it("should call add element function with right argument", async () => {
+			it("should call add element function with right argument for all collabora options", async () => {
 				const { addElementMock, collaboraFileSelectionOptions, cardId } = setup();
 				const { askCollaboraFileType } = useAddElementDialog(addElementMock, cardId);
 
 				askCollaboraFileType();
 
-				const option = collaboraFileSelectionOptions.value.find((opt) => opt.id === "1");
-				await option?.action("test-office-file", "Some caption");
-
-				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.File,
-					cardId,
-				});
+				for (const option of collaboraFileSelectionOptions.value) {
+					await option.action("test-office-file", "Some caption");
+					expect(addElementMock).toHaveBeenLastCalledWith({
+						type: ContentElementType.File,
+						cardId,
+					});
+				}
+				expect(addElementMock).toHaveBeenCalledTimes(collaboraFileSelectionOptions.value.length);
 			});
 
-			it("should call the initialize element function", async () => {
+			it("should call the initialize element function for all collabora options", async () => {
 				const { collaboraFileSelectionOptions, initializeFileElementWithCollaboraFileMock, cardId } = setup();
 				const addElementMock = vi.fn(() =>
 					Promise.resolve({
@@ -730,10 +730,12 @@ describe("ElementTypeSelection Composable", () => {
 
 				askCollaboraFileType();
 
-				const option = collaboraFileSelectionOptions.value.find((opt) => opt.id === "1");
-				await option?.action("test-office-file", "Some caption");
-
-				expect(initializeFileElementWithCollaboraFileMock).toHaveBeenCalledTimes(1);
+				for (const option of collaboraFileSelectionOptions.value) {
+					await option.action("test-office-file", "Some caption");
+				}
+				expect(initializeFileElementWithCollaboraFileMock).toHaveBeenCalledTimes(
+					collaboraFileSelectionOptions.value.length
+				);
 			});
 		});
 	});
