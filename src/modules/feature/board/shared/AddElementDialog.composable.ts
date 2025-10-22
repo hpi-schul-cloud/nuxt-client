@@ -168,7 +168,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				icon: mdiFileDocumentOutline,
 				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
 				action: () => onOfficeFileClick(),
-				testId: "create-element-office-file",
+				testId: "create-element-file-with-collabora",
 			});
 		}
 

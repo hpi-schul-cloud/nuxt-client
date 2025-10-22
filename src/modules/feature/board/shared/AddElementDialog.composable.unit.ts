@@ -680,7 +680,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				askType();
 
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-office-file");
+				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
 				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
@@ -692,7 +692,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				askType();
 
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-office-file");
+				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
 				option?.action();
 
 				expect(openCollaboraFileDialogMock).toHaveBeenCalledTimes(1);
