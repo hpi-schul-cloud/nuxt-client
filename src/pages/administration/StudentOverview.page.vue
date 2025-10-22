@@ -119,7 +119,6 @@ import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { printQrCodes } from "@/utils/qr-code.utils";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -136,6 +135,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { printQrCodes } from "@util-browser";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";
 

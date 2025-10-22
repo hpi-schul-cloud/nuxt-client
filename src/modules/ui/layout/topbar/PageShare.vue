@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import { printQrCodes } from "@/utils/qr-code.utils";
 import { mdiContentCopy, mdiPrinter } from "@icons/material";
 import { QRCode } from "@ui-qr-code";
+import { printQrCodes } from "@util-browser";
 
 const url = window.location.href;
 const openPrintMenu = () => {

@@ -1156,6 +1156,7 @@ export default {
 		"¡La migración no puede comenzar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión actual de su escuela son el mismo!",
 	"pages.administration.migration.moin_schule_system_not_found": "¡No puedo encontrar el sistema moin.schule!",
 	"pages.administration.or": "o",
+	"pages.administration.printQr.printTabTitle": "Compartir códigos QR",
 	"pages.administration.printQr.printPageTitle": "Por favor, escanea el código QR para registrarte.",
 	"pages.administration.printQr.emptyUser": "L{'@'}s usuari{'@'}s seleccionad{'@'}s ya han sido registrad{'@'}s",
 	"pages.administration.printQr.error": "No se han podido generar los enlaces de registro",

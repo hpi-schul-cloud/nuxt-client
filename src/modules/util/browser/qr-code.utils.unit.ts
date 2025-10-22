@@ -1,5 +1,7 @@
 import { printQrCodes } from "./qr-code.utils";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("printQrCodes", () => {
@@ -16,6 +18,7 @@ describe("printQrCodes", () => {
 	});
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		vi.spyOn(window, "open").mockReturnValue(mockWindow);
 	});
 

@@ -1,15 +1,17 @@
+import { useI18nGlobal } from "@/plugins/i18n";
 import { logger } from "@util-logger";
 import QrcodeVue from "qrcode.vue";
 import { h, render } from "vue";
 
 export const printQrCodes = (qrCodeItems: { title?: string; url: string }[], pageTitle?: string) => {
 	const printWindow = window.open("", "_blank");
+	const { t } = useI18nGlobal();
 
 	if (printWindow) {
 		printWindow.document.documentElement.innerHTML = `
   <html>
     <head>
-      <title>Share QR-Codes</title>
+      <title>${t("pages.administration.printQr.printTabTitle")}</title>
       <style>   
           @media print {
               @page {

@@ -33,7 +33,6 @@
 		"@vueuse/core": "^13.3.0",
 		"@vueuse/integrations": "^13.3.0",
 		"axios": "^1.12.2",
-		"canvas": "^3.1.0",
 		"dayjs": "^1.11.10",
 		"focus-trap": "^7.6.5",
 		"katex": "^0.16.21",
@@ -98,8 +97,7 @@
 	"overrides": {
 		"@openapitools/openapi-generator-cli": {
 			"axios": "$axios"
-		},
-		"canvas": "^3.1.0"
+		}
 	},
 	"engines": {
 		"node": "22",
