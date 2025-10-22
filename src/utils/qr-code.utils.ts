@@ -2,7 +2,7 @@ import { logger } from "@util-logger";
 import QrcodeVue from "qrcode.vue";
 import { h, render } from "vue";
 
-export const printQrCodes = (qrCodeItems: { title?: string; url: string }[]) => {
+export const printQrCodes = (qrCodeItems: { title?: string; url: string }[], pageTitle?: string) => {
 	const printWindow = window.open("", "_blank");
 
 	if (printWindow) {
@@ -10,19 +10,31 @@ export const printQrCodes = (qrCodeItems: { title?: string; url: string }[]) => 
   <html>
     <head>
       <title>Share QR-Codes</title>
-      <style>        
-          @page {
-            size: A4;
-            margin: 16px;
+      <style>   
+          @media print {
+              @page {
+                size: A4;
+                margin: 24px;               
+                
+                @top-left {
+                  content: "${pageTitle ?? ""}";
+                  margin-top: 24px;
+                  font-size: 20px;
+                }
+              }
           }
         
           body {
             padding: 10px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, 220px);
-            grid-auto-rows: min-content;
-            gap: 20px;
             font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
+          }
+          
+          .qrcode-list {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, 220px);
+              grid-auto-rows: min-content;
+              gap: 20px;
+              padding: 0;
           }
           
           .qr-item {
@@ -33,6 +45,7 @@ export const printQrCodes = (qrCodeItems: { title?: string; url: string }[]) => 
             padding: 20px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
+            margin-top: 20px;
             break-inside: avoid;
           }
           
@@ -53,29 +66,32 @@ export const printQrCodes = (qrCodeItems: { title?: string; url: string }[]) => 
     <body></body>
   </html>
 `;
+		const qrCodeList = document.createElement("ul");
+		qrCodeList.classList.add("qrcode-list");
+		printWindow.document.body.appendChild(qrCodeList);
 
 		qrCodeItems.forEach(({ url, title }) => {
-			const wrapper = document.createElement("div");
-			wrapper.className = "qr-item";
+			const qrCodeListItem = document.createElement("li");
+			qrCodeListItem.className = "qr-item";
 
-			const qrWrapper = document.createElement("div");
-			qrWrapper.className = "qr-code";
+			const qrCodeWrapper = document.createElement("div");
+			qrCodeWrapper.className = "qr-code";
 			const vnode = h(QrcodeVue, {
 				value: url,
 				size: 200,
 				level: "H",
 				renderAs: "svg",
 			});
-			render(vnode, qrWrapper);
-			wrapper.appendChild(qrWrapper);
+			render(vnode, qrCodeWrapper);
+			qrCodeListItem.appendChild(qrCodeWrapper);
 
-			wrapper.innerHTML += `
+			qrCodeListItem.innerHTML += `
     ${title ? `<div class="qr-title">${title}</div>` : ""}
   `;
 
-			printWindow.document.body.appendChild(wrapper);
+			qrCodeList.appendChild(qrCodeListItem);
 		});
-
+		printWindow.document.body.appendChild(qrCodeList);
 		printWindow.print();
 		printWindow.close();
 	} else {

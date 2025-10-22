@@ -511,7 +511,7 @@ export default {
 					roleName: "student",
 				});
 				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks);
+					printQrCodes(this.qrLinks, this.$t("pages.administration.printQr.printPageTitle"));
 				} else {
 					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}
