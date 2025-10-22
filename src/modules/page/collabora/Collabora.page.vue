@@ -68,15 +68,30 @@ const setCollaboraUrl = async () => {
 };
 
 const setPageTitle = async () => {
-	await fetchFileById(props.fileRecordId);
+	let fileRecord;
+	let parentName;
 
-	const fileRecord = getFileRecordById(props.fileRecordId);
-	const parentName = await getParentName(fileRecord?.parentId);
+	try {
+		fileRecord = await getFileRecord(props.fileRecordId);
+		parentName = await getParentName(fileRecord?.parentId);
+	} catch {
+		// Ignore errors here, because not critical
+	}
 
 	const firstPartOfPageTitle = formatePageTitlePrefix(fileRecord?.name, parentName);
 	const pageTitle = buildPageTitle(firstPartOfPageTitle);
-
 	useTitle(pageTitle);
+};
+
+const getFileRecord = async (fileId: string) => {
+	let fileRecord = getFileRecordById(fileId);
+
+	if (!fileRecord) {
+		await fetchFileById(fileId);
+		fileRecord = getFileRecordById(fileId);
+	}
+
+	return fileRecord;
 };
 
 const formatePageTitlePrefix = (fileName?: string, parentName?: string) => {
