@@ -119,7 +119,7 @@
 									v-model="formData.restrictedToCreatorSchool"
 									hide-details
 									data-testid="input-invite-participants-restricted-to-creator-school"
-									class="checkbox-align-start"
+									class="checkbox-align-start mb-3"
 								>
 									<template #label>
 										<div class="mt-2">
