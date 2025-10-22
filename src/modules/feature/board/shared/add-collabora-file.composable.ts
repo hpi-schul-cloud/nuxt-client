@@ -13,6 +13,12 @@ interface CollaboraFileSelectionOptions {
 	action: (fileName: string, caption: string) => Promise<void>;
 }
 
+export enum CollaboraFileType {
+	Text = "text",
+	Spreadsheet = "spreadsheet",
+	Presentation = "presentation",
+}
+
 export const useAddCollaboraFile = createSharedComposable(() => {
 	const isCollaboraFileDialogOpen = ref<boolean>(false);
 	const collaboraFileSelectionOptions = ref<Array<CollaboraFileSelectionOptions>>([]);
@@ -37,14 +43,41 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		await cardStore.updateElementRequest({ element });
 	};
 
+	const getAssetUrl = (collaboraFileType: CollaboraFileType): string | undefined => {
+		const base = `${window.location.origin}/collabora`;
+
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return `${base}/doc.docx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return `${base}/spreadsheet.xlsx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Presentation) {
+			return `${base}/presentation.pptx`;
+		}
+	};
+
+	const getFileExtension = (fileName: string): string | undefined => {
+		const match = fileName.match(/\.([^.]+)$/);
+		return match ? `.${match[1]}` : undefined;
+	};
+
 	const initializeFileElementWithCollaboraFile = async (
 		cardId: string,
 		element: AnyContentElement,
-		assetUrl: string,
-		fileExtension: string,
+		collaboraFileType: CollaboraFileType,
 		fileName: string,
 		caption: string
 	) => {
+		const assetUrl = getAssetUrl(collaboraFileType);
+		if (!assetUrl) {
+			return;
+		}
+		const fileExtension = getFileExtension(fileName);
+		if (!fileExtension) {
+			return;
+		}
+
 		try {
 			disableFileSelectOnMount();
 			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);

@@ -1,4 +1,4 @@
-import { useAddCollaboraFile } from "./add-collabora-file.composable";
+import { CollaboraFileType, useAddCollaboraFile } from "./add-collabora-file.composable";
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -221,14 +221,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 					if (!element) {
 						return;
 					}
-					initializeFileElementWithCollaboraFile(
-						cardId,
-						element,
-						`${window.location.origin}/collabora/doc.docx`,
-						".docx",
-						fileName,
-						caption
-					);
+					initializeFileElementWithCollaboraFile(cardId, element, CollaboraFileType.Text, fileName, caption);
 				},
 			},
 			{
@@ -242,14 +235,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 					if (!element) {
 						return;
 					}
-					initializeFileElementWithCollaboraFile(
-						cardId,
-						element,
-						`${window.location.origin}/collabora/spreadsheet.xlsx`,
-						".xlsx",
-						fileName,
-						caption
-					);
+					initializeFileElementWithCollaboraFile(cardId, element, CollaboraFileType.Spreadsheet, fileName, caption);
 				},
 			},
 			{
@@ -263,14 +249,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 					if (!element) {
 						return;
 					}
-					initializeFileElementWithCollaboraFile(
-						cardId,
-						element,
-						`${window.location.origin}/presentation.pptx`,
-						".pptx",
-						fileName,
-						caption
-					);
+					initializeFileElementWithCollaboraFile(cardId, element, CollaboraFileType.Presentation, fileName, caption);
 				},
 			},
 		];
