@@ -78,15 +78,15 @@ const onCancel = () => {
 };
 
 const onConfirm = async () => {
-	if (form?.value) {
-		const { valid } = await form.value.validate();
-		if (valid) {
-			closeCollaboraFileDialog();
-			await collaboraFileSelectionOptions.value
-				.find((item) => item.id === selectedDocType.value)
-				?.action(fileName.value, caption.value);
-			resetForm();
-		}
-	}
+	if (!form?.value) return;
+
+	const { valid } = await form.value.validate();
+	if (!valid) return;
+
+	closeCollaboraFileDialog();
+	await collaboraFileSelectionOptions.value
+		.find((item) => item.id === selectedDocType.value)
+		?.action(fileName.value, caption.value);
+	resetForm();
 };
 </script>
