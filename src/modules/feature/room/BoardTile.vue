@@ -2,7 +2,6 @@
 	<VCard
 		:class="isDraft ? 'opacity-80' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
-		draggable="false"
 		:data-testid="`board-tile-${index}`"
 		:to="boardPath"
 	>

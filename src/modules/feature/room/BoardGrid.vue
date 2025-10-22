@@ -1,14 +1,51 @@
 <template>
-	<v-row class="mt-4 board-grid" data-testid="board-grid">
-		<v-col v-for="(board, index) in boards" :key="board.id" cols="12" sm="6" md="4" xl="3">
-			<BoardTile :board="board" :index="index" />
-		</v-col>
-	</v-row>
+	<Sortable
+		:list="boards"
+		class="board-grid mt-8"
+		item-key="id"
+		:options="{
+			delayOnTouchOnly: true,
+			delay: 300,
+			touchStartThreshold: 3, // needed for sensitive touch devices
+			fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
+			ghostClass: 'sortable-drag-ghost',
+			easing: 'cubic-bezier(1, 0, 0, 1)',
+			dragClass: 'sortable-drag-board-card',
+			dragoverBubble: true,
+			animation: 250,
+			forceFallback: true,
+		}"
+	>
+		<template #item="{ element, index }">
+			<BoardTile :board="element" :index="index" />
+
+			<!--			<BoardColumn-->
+			<!--				:key="element.id"-->
+			<!--				:data-column-id="element.id"-->
+			<!--				:column="element"-->
+			<!--				:index="index"-->
+			<!--				:column-count="board.columns.length"-->
+			<!--				:class="{ 'my-0': isListBoard, 'user-select-none': isDragging }"-->
+			<!--				:is-list-board="isListBoard"-->
+			<!--				:data-testid="`board-column-${index}`"-->
+			<!--				@reload:board="onReloadBoard"-->
+			<!--				@create:card="onCreateCard"-->
+			<!--				@delete:card="onDeleteCard"-->
+			<!--				@delete:column="onDeleteColumn"-->
+			<!--				@update:column-title="onUpdateColumnTitle(element.id, $event)"-->
+			<!--				@move:column-down="onMoveColumnForward(index, element.id)"-->
+			<!--				@move:column-left="onMoveColumnBackward(index, element.id)"-->
+			<!--				@move:column-right="onMoveColumnForward(index, element.id)"-->
+			<!--				@move:column-up="onMoveColumnBackward(index, element.id)"-->
+			<!--			/>-->
+		</template>
+	</Sortable>
 </template>
 
 <script setup lang="ts">
 import BoardTile from "./BoardTile.vue";
 import { RoomBoardItem } from "@/types/room/Room";
+import { Sortable } from "sortablejs-vue3";
 import { PropType, toRef } from "vue";
 
 const props = defineProps({
@@ -17,3 +54,11 @@ const props = defineProps({
 
 const boards = toRef(props, "boards");
 </script>
+<style>
+.board-grid {
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: repeat(3, 1fr);
+	transition: all 0.5s ease;
+}
+</style>
