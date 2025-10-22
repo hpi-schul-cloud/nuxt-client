@@ -1,12 +1,13 @@
 <template>
-	<v-tooltip v-if="isScanStatusPending(fileRecord.previewStatus)" location="top">
-		<template #activator="{ props }">
-			<v-icon v-bind="props" data-testid="file-status-scan-pending">
-				{{ mdiClockTimeFour }}
-			</v-icon>
-		</template>
+	<VChip
+		v-if="isScanStatusPending(fileRecord.previewStatus)"
+		color="info"
+		class="ms-2"
+		:prepend-icon="mdiClockTimeFour"
+		data-testid="file-status-scan-pending"
+	>
 		{{ t("common.file.awaitingScan") }}
-	</v-tooltip>
+	</VChip>
 	<v-tooltip v-if="isScanStatusWontCheck(fileRecord.previewStatus)" location="top">
 		<template #activator="{ props }">
 			<v-icon v-bind="props" data-testid="file-status-scan-wont-check">
@@ -23,14 +24,15 @@
 		</template>
 		{{ t("common.file.scanError") }}
 	</v-tooltip>
-	<v-tooltip v-if="!isScanStatusBlocked(fileRecord.securityCheckStatus)" location="top">
-		<template #activator="{ props }">
-			<v-icon v-bind="props" color="error" data-testid="file-status-scan-virus-detected">
-				{{ mdiAlertCircle }}
-			</v-icon>
-		</template>
+	<VChip
+		v-if="!isScanStatusBlocked(fileRecord.securityCheckStatus)"
+		color="error"
+		class="ms-2"
+		:prepend-icon="mdiAlertCircle"
+		data-testid="file-status-scan-virus-detected"
+	>
 		{{ t("common.file.virusDetected") }}
-	</v-tooltip>
+	</VChip>
 </template>
 
 <script setup lang="ts">
