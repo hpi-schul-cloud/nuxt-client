@@ -1,6 +1,7 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
+import { getFileExtension } from "@/utils/fileHelper";
 import { useCardStore } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useSharedFileSelect } from "@util-board";
@@ -14,9 +15,9 @@ interface CollaboraFileSelectionOptions {
 }
 
 export enum CollaboraFileType {
-	Text = "text",
-	Spreadsheet = "spreadsheet",
-	Presentation = "presentation",
+	Text,
+	Spreadsheet,
+	Presentation,
 }
 
 export const useAddCollaboraFile = createSharedComposable(() => {
@@ -57,11 +58,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		}
 	};
 
-	const getFileExtension = (fileName: string): string | undefined => {
-		const match = fileName.match(/\.([^.]+)$/);
-		return match ? `.${match[1]}` : undefined;
-	};
-
 	const initializeFileElementWithCollaboraFile = async (
 		cardId: string,
 		element: AnyContentElement,
@@ -73,14 +69,14 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		if (!assetUrl) {
 			return;
 		}
-		const fileExtension = getFileExtension(fileName);
+		const fileExtension = getFileExtension(assetUrl);
 		if (!fileExtension) {
 			return;
 		}
 
 		try {
 			disableFileSelectOnMount();
-			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);
+			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + "." + fileExtension);
 
 			if (caption && caption.trim().length > 0) {
 				await updateFileElementCaption(element, caption.trim());
