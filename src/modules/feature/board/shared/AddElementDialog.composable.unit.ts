@@ -716,7 +716,7 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should call the initiale element function", async () => {
+			it("should call the initialize element function", async () => {
 				const { collaboraFileSelectionOptions, initializeFileElementWithCollaboraFileMock, cardId } = setup();
 				const addElementMock = vi.fn(() =>
 					Promise.resolve({
