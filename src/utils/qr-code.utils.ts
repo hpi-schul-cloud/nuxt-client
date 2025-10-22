@@ -2,7 +2,7 @@ import { logger } from "@util-logger";
 import QrcodeVue from "qrcode.vue";
 import { h, render } from "vue";
 
-export const printQrCodes = (qrCodeItems: { title?: string; description?: string; url: string }[]) => {
+export const printQrCodes = (qrCodeItems: { title?: string; url: string }[]) => {
 	const printWindow = window.open("", "_blank");
 
 	if (printWindow) {
