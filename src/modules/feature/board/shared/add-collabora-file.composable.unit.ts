@@ -41,27 +41,4 @@ describe("AddCollaboraFileComposable", () => {
 			expect(isCollaboraFileDialogOpen.value).toBe(false);
 		});
 	});
-
-	// it("should call uploadFromUrlt", async () => {
-	// 	const { officeFileSelectionOptions, cardId, fileStorageApiMock } = setup();
-	// 	const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-	// 	vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
-
-	// 	const addElementMock = vi.fn(() =>
-	// 		Promise.resolve({
-	// 			id: "new-element-id",
-	// 			type: ContentElementType.File,
-	// 			content: {},
-	// 			timestamps: {},
-	// 		} as AnyContentElement)
-	// 	);
-	// 	const { askOfficeFileType } = useAddElementDialog(addElementMock, cardId);
-
-	// 	askOfficeFileType();
-
-	// 	const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
-	// 	await option?.action("test-office-file", "Some caption");
-
-	// 	expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(1);
-	// });
 });
