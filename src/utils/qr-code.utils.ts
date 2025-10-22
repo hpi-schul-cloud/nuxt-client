@@ -20,6 +20,7 @@ export const printQrCodes = (qrCodeItems: { title?: string; url: string }[], pag
                   content: "${pageTitle ?? ""}";
                   margin-top: 24px;
                   font-size: 20px;
+                  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
                 }
               }
           }
