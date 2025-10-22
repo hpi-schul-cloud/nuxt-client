@@ -31,12 +31,11 @@ export default {
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
-	"common.file.awaitingScan":
-		"Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
+	"common.file.awaitingScan": "Vorschau wird erstellt.",
 	"common.file.scanWontCheck": "Aufgrund der Größe kann keine Vorschau generiert werden.",
 	"common.file.scanError":
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
-	"common.file.virusDetected": "Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file.virusDetected": "Virenverdacht",
 	"common.file": "Datei",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
