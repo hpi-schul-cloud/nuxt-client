@@ -309,6 +309,13 @@ export default {
 				action.permission ? this.$_userHasPermission(action.permission) : true
 			);
 
+			// filters out the QR bulk action is user is not an admin
+			if (!useAppStore().userRoles.some((name) => name === RoleName.Administrator)) {
+				editedActions = editedActions.filter(
+					(action) => action.label !== this.$t("pages.administration.teachers.index.tableActions.qr")
+				);
+			}
+
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
