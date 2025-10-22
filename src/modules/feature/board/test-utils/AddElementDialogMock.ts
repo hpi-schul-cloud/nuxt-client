@@ -42,14 +42,14 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		}[]
 	> = ref([]);
 	const askTypeMock = props.askTypeMock || vi.fn();
-	const askOfficeFileTypeMock = vi.fn();
+	const askCollaboraFileTypeMock = vi.fn();
 	const onFileSelectMock = vi.fn();
 	const isFilePickerOpenMock = ref(false);
 	const isDialogOpenMock = ref(false);
 
 	const mocks = {
 		askType: askTypeMock,
-		askOfficeFileType: askOfficeFileTypeMock,
+		askCollaboraFileType: askCollaboraFileTypeMock,
 		isDialogOpen: isDialogOpenMock,
 		staticElementTypeOptions: staticElementTypeOptionsMock,
 		dynamicElementTypeOptions: dynamicElementTypeOptionsMock,

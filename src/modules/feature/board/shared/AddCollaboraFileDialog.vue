@@ -1,6 +1,6 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isOfficeFileDialogOpen"
+		v-model:is-dialog-open="isCollaboraFileDialogOpen"
 		:message="t('components.elementTypeSelection.elements.collabora.subtitle')"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-element-dialog"
@@ -12,7 +12,7 @@
 				<!-- Attach the select to the form so that we can use focusTrap in the dialog -->
 				<VSelect
 					v-model="selectedDocType"
-					:items="officeFileSelectionOptions"
+					:items="collaboraFileSelectionOptions"
 					item-title="label"
 					item-value="id"
 					persistent-hint
@@ -41,7 +41,7 @@
 	</Dialog>
 </template>
 <script setup lang="ts">
-import { useOfficeFileSelection } from "./office-file-selection.composable";
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { Dialog } from "@ui-dialog";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref } from "vue";
@@ -51,7 +51,7 @@ type VuetifyForm = {
 	validate: () => Promise<{ valid: boolean }>;
 };
 
-const { isOfficeFileDialogOpen, closeOfficeFileDialog, officeFileSelectionOptions } = useOfficeFileSelection();
+const { isCollaboraFileDialogOpen, closeCollaboraFileDialog, collaboraFileSelectionOptions } = useAddCollaboraFile();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
@@ -74,14 +74,14 @@ const resetForm = () => {
 
 const onCancel = () => {
 	resetForm();
-	closeOfficeFileDialog();
+	closeCollaboraFileDialog();
 };
 
 const onConfirm = async () => {
 	if (form?.value) {
 		const { valid } = await form.value.validate();
 		if (valid) {
-			await officeFileSelectionOptions.value
+			await collaboraFileSelectionOptions.value
 				.find((item) => item.id === selectedDocType.value)
 				?.action(fileName.value, caption.value);
 			resetForm();

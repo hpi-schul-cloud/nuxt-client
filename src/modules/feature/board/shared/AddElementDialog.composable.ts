@@ -1,13 +1,10 @@
-import { useOfficeFileSelection } from "./office-file-selection.composable";
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
 import { notifyInfo } from "@data-app";
 import { type CreateElementRequestPayload, useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
-import { useFileStorageApi } from "@data-file";
 import {
 	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
@@ -20,7 +17,6 @@ import {
 	mdiTrayArrowUp,
 	mdiVideoOutline,
 } from "@icons/material";
-import { useSharedFileSelect } from "@util-board";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -33,15 +29,14 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { hasManageVideoConferencePermission } = useBoardPermissions();
 
 	const cardStore = useCardStore();
-	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
-	const { uploadFromUrl } = useFileStorageApi();
 
 	const { t } = useI18n();
 
 	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const { openOfficeFileDialog, closeOfficeFileDialog, officeFileSelectionOptions } = useOfficeFileSelection();
+	const { openCollaboraFileDialog, collaboraFileSelectionOptions, initializeFileElementWithCollaboraFile } =
+		useAddCollaboraFile();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -213,65 +208,78 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		isDialogOpen.value = true;
 	};
 
-	const updateFileElementCaption = async (element: AnyContentElement, caption: string) => {
-		const elementContent = FileElementContentSchema.parse(element.content);
-
-		elementContent.caption = caption;
-		element.content = elementContent;
-		await cardStore.updateElementRequest({ element });
-	};
-
-	const addOfficeFile = async (assetUrl: string, fileExtension: string, fileName: string, caption: string) => {
-		const element = await createElementRequestFn({
-			type: ContentElementType.File,
-			cardId,
-		});
-		if (!element) {
-			return;
-		}
-
-		try {
-			disableFileSelectOnMount();
-			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + fileExtension);
-
-			if (caption && caption.trim().length > 0) {
-				await updateFileElementCaption(element, caption.trim());
-			}
-		} catch {
-			await cardStore.deleteElementRequest({ elementId: element.id, cardId });
-		} finally {
-			resetFileSelectOnMountEnabled();
-			closeOfficeFileDialog();
-		}
-	};
-
-	const askOfficeFileType = () => {
-		officeFileSelectionOptions.value = [
+	const askCollaboraFileType = () => {
+		collaboraFileSelectionOptions.value = [
 			{
 				id: "1",
 				label: t("components.elementTypeSelection.elements.collabora.option.text"),
-				action: async (fileName: string, caption: string) =>
-					addOfficeFile(`${window.location.origin}/collabora/doc.docx`, ".docx", fileName, caption),
+				action: async (fileName: string, caption: string) => {
+					const element = await createElementRequestFn({
+						type: ContentElementType.File,
+						cardId,
+					});
+					if (!element) {
+						return;
+					}
+					initializeFileElementWithCollaboraFile(
+						cardId,
+						element,
+						`${window.location.origin}/collabora/doc.docx`,
+						".docx",
+						fileName,
+						caption
+					);
+				},
 			},
 			{
 				id: "2",
 				label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-				action: async (fileName: string, caption: string) =>
-					addOfficeFile(`${window.location.origin}/collabora/spreadsheet.xlsx`, ".xlsx", fileName, caption),
+				action: async (fileName: string, caption: string) => {
+					const element = await createElementRequestFn({
+						type: ContentElementType.File,
+						cardId,
+					});
+					if (!element) {
+						return;
+					}
+					initializeFileElementWithCollaboraFile(
+						cardId,
+						element,
+						`${window.location.origin}/collabora/spreadsheet.xlsx`,
+						".xlsx",
+						fileName,
+						caption
+					);
+				},
 			},
 			{
 				id: "3",
 				label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
-				action: async (fileName: string, caption: string) =>
-					addOfficeFile(`${window.location.origin}/collabora/presentation.pptx`, ".pptx", fileName, caption),
+				action: async (fileName: string, caption: string) => {
+					const element = await createElementRequestFn({
+						type: ContentElementType.File,
+						cardId,
+					});
+					if (!element) {
+						return;
+					}
+					initializeFileElementWithCollaboraFile(
+						cardId,
+						element,
+						`${window.location.origin}/presentation.pptx`,
+						".pptx",
+						fileName,
+						caption
+					);
+				},
 			},
 		];
 	};
 
 	const onOfficeFileClick = async () => {
-		askOfficeFileType();
+		askCollaboraFileType();
 		closeDialog();
-		openOfficeFileDialog();
+		openCollaboraFileDialog();
 	};
 
 	watch(
@@ -281,7 +289,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	return {
 		askType,
-		askOfficeFileType,
+		askCollaboraFileType,
 		isDialogOpen,
 		staticElementTypeOptions,
 		dynamicElementTypeOptions,

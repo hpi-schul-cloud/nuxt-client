@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 
-export const officeFileSelectionOptionsFactory = {
-	createOfficeFileSelectionOptionsList: () => [
+export const collaboraFileSelectionOptionsFactory = {
+	createCollaboraFileSelectionOptionsList: () => [
 		{
 			id: "1",
 			label: "Text Document",

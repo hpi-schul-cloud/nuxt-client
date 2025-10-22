@@ -1,17 +1,14 @@
-import { setupOfficeFileSelectionMock } from "../test-utils/office-file-selection-mock";
+import { setupCollaboraFileSelectionMock } from "../test-utils/add-collabora-file-mock";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
-import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
@@ -20,7 +17,7 @@ import { ref } from "vue";
 
 vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
-vi.mock("./office-file-selection.composable");
+vi.mock("./add-collabora-file.composable");
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
@@ -67,7 +64,7 @@ describe("ElementTypeSelection Composable", () => {
 				const cardId = "cardId";
 
 				setupSharedElementTypeSelectionMock();
-				setupOfficeFileSelectionMock();
+				setupCollaboraFileSelectionMock();
 
 				const addElementMock = vi.fn();
 				const elementType = ContentElementType.RichText;
@@ -197,7 +194,7 @@ describe("ElementTypeSelection Composable", () => {
 			const { isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
 				setupSharedElementTypeSelectionMock();
 
-			setupOfficeFileSelectionMock();
+			setupCollaboraFileSelectionMock();
 
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
@@ -358,8 +355,8 @@ describe("ElementTypeSelection Composable", () => {
 			const { staticElementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
-			const openOfficeFileDialogMock = vi.fn();
-			const { officeFileSelectionOptions } = setupOfficeFileSelectionMock({ openOfficeFileDialogMock });
+			const openCollaboraFileDialogMock = vi.fn();
+			const { collaboraFileSelectionOptions } = setupCollaboraFileSelectionMock({ openCollaboraFileDialogMock });
 
 			mockedUseBoardPermissions.mockReturnValue({
 				hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
@@ -370,10 +367,10 @@ describe("ElementTypeSelection Composable", () => {
 
 			return {
 				elementTypeOptions: staticElementTypeOptions,
-				officeFileSelectionOptions,
+				collaboraFileSelectionOptions,
 				addElementMock,
 				closeDialogMock,
-				openOfficeFileDialogMock,
+				openCollaboraFileDialogMock,
 				cardId,
 			};
 		};
@@ -670,7 +667,7 @@ describe("ElementTypeSelection Composable", () => {
 			});
 		});
 
-		describe("when the OfficeFile element is clicked", () => {
+		describe("when the CollaboraFile element is clicked", () => {
 			it("should set isDialogOpen to false", () => {
 				const { elementTypeOptions, addElementMock, cardId, closeDialogMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
@@ -683,8 +680,8 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 
-			it("should set isOfficeFileDialogOpen to true", () => {
-				const { elementTypeOptions, addElementMock, cardId, openOfficeFileDialogMock } = setup();
+			it("should set isCollaboraFileDialogOpen to true", () => {
+				const { elementTypeOptions, addElementMock, cardId, openCollaboraFileDialogMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
@@ -692,18 +689,18 @@ describe("ElementTypeSelection Composable", () => {
 				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-office-file");
 				option?.action();
 
-				expect(openOfficeFileDialogMock).toHaveBeenCalledTimes(1);
+				expect(openCollaboraFileDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
-		describe("when the office file action is called", () => {
+		describe("when the collabora file action is called", () => {
 			it("should call add element function with right argument", async () => {
-				const { addElementMock, officeFileSelectionOptions, cardId } = setup();
-				const { askOfficeFileType } = useAddElementDialog(addElementMock, cardId);
+				const { addElementMock, collaboraFileSelectionOptions, cardId } = setup();
+				const { askCollaboraFileType } = useAddElementDialog(addElementMock, cardId);
 
-				askOfficeFileType();
+				askCollaboraFileType();
 
-				const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
+				const option = collaboraFileSelectionOptions.value.find((opt) => opt.id === "1");
 				await option?.action("test-office-file", "Some caption");
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
@@ -713,28 +710,28 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			it("should call uploadFromUrlt", async () => {
-				const { officeFileSelectionOptions, cardId } = setup();
-				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+			// it("should call uploadFromUrlt", async () => {
+			// 	const { officeFileSelectionOptions, cardId, fileStorageApiMock } = setup();
+			// 	const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			// 	vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-				const addElementMock = vi.fn(() =>
-					Promise.resolve({
-						id: "new-element-id",
-						type: ContentElementType.File,
-						content: {},
-						timestamps: {},
-					} as AnyContentElement)
-				);
-				const { askOfficeFileType } = useAddElementDialog(addElementMock, cardId);
+			// 	const addElementMock = vi.fn(() =>
+			// 		Promise.resolve({
+			// 			id: "new-element-id",
+			// 			type: ContentElementType.File,
+			// 			content: {},
+			// 			timestamps: {},
+			// 		} as AnyContentElement)
+			// 	);
+			// 	const { askOfficeFileType } = useAddElementDialog(addElementMock, cardId);
 
-				askOfficeFileType();
+			// 	askOfficeFileType();
 
-				const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
-				await option?.action("test-office-file", "Some caption");
+			// 	const option = officeFileSelectionOptions.value.find((opt) => opt.id === "1");
+			// 	await option?.action("test-office-file", "Some caption");
 
-				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(1);
-			});
+			// 	expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(1);
+			// });
 		});
 	});
 
