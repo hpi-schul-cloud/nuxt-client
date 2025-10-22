@@ -3008,11 +3008,17 @@ export interface CreateRoomInvitationLinkBodyParams {
      */
     activeUntil?: string;
     /**
-     * Indicates if the link is restricted to teachers only
+     * Indicates if the link is also usable by external persons
      * @type {boolean}
      * @memberof CreateRoomInvitationLinkBodyParams
      */
-    isOnlyForTeachers: boolean;
+    isUsableByExternalPersons: boolean;
+    /**
+     * Indicates if the link is also usable by students
+     * @type {boolean}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    isUsableByStudents: boolean;
     /**
      * Indicates if the link is restricted to the creators school
      * @type {boolean}
@@ -8256,6 +8262,7 @@ export enum RoleName {
     Expert = 'expert',
     GuestTeacher = 'guestTeacher',
     GuestStudent = 'guestStudent',
+    GuestExternalPerson = 'guestExternalPerson',
     Helpdesk = 'helpdesk',
     Roomapplicant = 'roomapplicant',
     Roomviewer = 'roomviewer',
@@ -8542,7 +8549,13 @@ export interface RoomInvitationLinkResponse {
      * @type {boolean}
      * @memberof RoomInvitationLinkResponse
      */
-    isOnlyForTeachers: boolean;
+    isUsableByExternalPersons: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomInvitationLinkResponse
+     */
+    isUsableByStudents: boolean;
     /**
      * 
      * @type {string}
@@ -8575,7 +8588,7 @@ export interface RoomInvitationLinkResponse {
  */
 export enum RoomInvitationLinkValidationError {
     Expired = 'EXPIRED',
-    OnlyForTeachers = 'ONLY_FOR_TEACHERS',
+    NotUsableForCurrentRole = 'NOT_USABLE_FOR_CURRENT_ROLE',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
     CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL',
     InvalidLink = 'INVALID_LINK',
@@ -10738,17 +10751,23 @@ export interface UpdateRoomInvitationLinkBodyParams {
      */
     activeUntil?: string;
     /**
-     * Indicates if the link is restricted to teachers only
+     * Indicates if the link is also usable by external persons
      * @type {boolean}
      * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    isOnlyForTeachers?: boolean;
+    isUsableByExternalPersons: boolean;
+    /**
+     * Indicates if the link is also usable by students
+     * @type {boolean}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    isUsableByStudents: boolean;
     /**
      * Indicates if the link is restricted to the creators school
      * @type {boolean}
      * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    restrictedToCreatorSchool?: boolean;
+    restrictedToCreatorSchool: boolean;
     /**
      * Indicates if the link requires confirmation by room admins / room owners
      * @type {boolean}

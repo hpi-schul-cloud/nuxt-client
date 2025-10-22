@@ -1,3 +1,4 @@
+import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "./openingTagValidator";
 import {
 	isNonEmptyString,
 	isOfMaxLength,
@@ -7,4 +8,13 @@ import {
 	isValidUrl,
 } from "./validators";
 
-export { isNonEmptyString, isOfMaxLength, isRequired, isValidDateFormat, isValidTimeFormat, isValidUrl };
+export {
+	containsOpeningTagFollowedByString,
+	isNonEmptyString,
+	isOfMaxLength,
+	isRequired,
+	isValidDateFormat,
+	isValidTimeFormat,
+	isValidUrl,
+	useOpeningTagValidator,
+};
