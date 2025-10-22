@@ -23,14 +23,14 @@
 	</template>
 	<template v-else>
 		<component :is="`h${headingLevel}`" class="title" :class="scope === 'board' ? 'board-title' : 'other-title'">
-			{{ modelValue.trim() ? modelValue : emptyValueFallback }}
+			{{ modelValue?.trim() ? modelValue : emptyValueFallback }}
 		</component>
 	</template>
 </template>
 
 <script setup lang="ts">
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { useInlineEditInteractionHandler } from "@util-board";
+import { containsOpeningTagFollowedByString } from "@util-validators";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
 import { computed, nextTick, onMounted, ref, unref, watch } from "vue";
@@ -107,7 +107,8 @@ watch(
 		}
 
 		if (newVal && !oldVal) {
-			if (modelValue.value.trim().length < 1 && props.emptyValueFallback.length > 0) {
+			const hasValue = modelValue.value && modelValue.value.trim().length > 0;
+			if (!hasValue && props.emptyValueFallback.trim().length > 0) {
 				modelValue.value = props.emptyValueFallback;
 			}
 
