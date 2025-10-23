@@ -1,5 +1,4 @@
 import { setupCollaboraFileSelectionMock } from "../test-utils/add-collabora-file-mock";
-import { collaboraFileSelectionOptionsFactory } from "../test-utils/collabora-file-selection-options.factory";
 import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
@@ -13,9 +12,6 @@ describe("CollaboraFileDialog", () => {
 	const setupMocks = () => {
 		const { closeCollaboraFileDialog, isCollaboraFileDialogOpen, collaboraFileSelectionOptions } =
 			setupCollaboraFileSelectionMock();
-
-		collaboraFileSelectionOptions.value =
-			collaboraFileSelectionOptionsFactory.createCollaboraFileSelectionOptionsList();
 
 		return {
 			isCollaboraFileDialogOpen,
@@ -84,14 +80,14 @@ describe("CollaboraFileDialog", () => {
 			const { collaboraFileSelectionOptions, wrapper } = await setup();
 
 			const typeSelect = wrapper.findComponent(VSelect);
-			expect(typeSelect.props("items")).toBe(collaboraFileSelectionOptions.value);
+			expect(typeSelect.props("items")).toBe(collaboraFileSelectionOptions);
 		});
 
 		describe("when form is valid", () => {
 			it("should call item action", async () => {
 				const { collaboraFileSelectionOptions, wrapper } = await setup();
 
-				const selectOption = collaboraFileSelectionOptions.value[0];
+				const selectOption = collaboraFileSelectionOptions[0];
 				const FILENAME = "myDocument";
 
 				const typeSelect = wrapper.findComponent(VSelect);
@@ -115,7 +111,7 @@ describe("CollaboraFileDialog", () => {
 		describe("when filetype is not selected", () => {
 			it("should not call item action", async () => {
 				const { collaboraFileSelectionOptions, wrapper } = await setup();
-				const selectOption = collaboraFileSelectionOptions.value[0];
+				const selectOption = collaboraFileSelectionOptions[0];
 
 				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
 				await fileNameInput.find("input").setValue("myDocument");
@@ -133,7 +129,7 @@ describe("CollaboraFileDialog", () => {
 			it("should not call item action", async () => {
 				const { collaboraFileSelectionOptions, wrapper } = await setup();
 
-				const selectOption = collaboraFileSelectionOptions.value[0];
+				const selectOption = collaboraFileSelectionOptions[0];
 
 				const typeSelect = wrapper.findComponent(VSelect);
 				typeSelect.vm.$emit("update:modelValue", selectOption.id);

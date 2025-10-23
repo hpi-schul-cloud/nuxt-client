@@ -7,14 +7,8 @@ import { type CreateElementRequestPayload, useCardStore } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useSharedFileSelect } from "@util-board";
 import { createSharedComposable } from "@vueuse/core";
-import { Ref, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-interface CollaboraFileSelectionOptions {
-	id: string;
-	label: string;
-	action: (fileName: string, caption: string) => Promise<void>;
-}
 
 export enum CollaboraFileType {
 	Text,
@@ -26,13 +20,13 @@ type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<
 
 export const useAddCollaboraFile = createSharedComposable(() => {
 	const { t } = useI18n();
+	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
+	const { uploadFromUrl } = useFileStorageApi();
+	const cardStore = useCardStore();
 
 	const cardId = ref("");
 	const createElementRequestFn = ref<CreateElementRequestFn>(() => Promise.resolve(undefined));
 	const isCollaboraFileDialogOpen = ref<boolean>(false);
-	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
-	const { uploadFromUrl } = useFileStorageApi();
-	const cardStore = useCardStore();
 
 	const closeCollaboraFileDialog = () => {
 		isCollaboraFileDialogOpen.value = false;
@@ -40,6 +34,14 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 
 	const openCollaboraFileDialog = () => {
 		isCollaboraFileDialogOpen.value = true;
+	};
+
+	const setCardId = (id: string) => {
+		cardId.value = id;
+	};
+
+	const setCreateElementRequestFn = (fn: CreateElementRequestFn) => {
+		createElementRequestFn.value = fn;
 	};
 
 	const updateFileElementCaption = async (element: AnyContentElement, caption: string) => {
@@ -106,7 +108,7 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		}
 	};
 
-	const collaboraFileSelectionOptions: Ref<Array<CollaboraFileSelectionOptions>> = ref([
+	const collaboraFileSelectionOptions = [
 		{
 			id: "1",
 			label: t("components.elementTypeSelection.elements.collabora.option.text"),
@@ -125,15 +127,7 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 			action: async (fileName: string, caption: string) =>
 				createFileElementWithCollaboraFile(CollaboraFileType.Presentation, fileName, caption),
 		},
-	]);
-
-	const setCardId = (id: string) => {
-		cardId.value = id;
-	};
-
-	const setCreateElementRequestFn = (fn: CreateElementRequestFn) => {
-		createElementRequestFn.value = fn;
-	};
+	];
 
 	return {
 		openCollaboraFileDialog,
@@ -142,6 +136,7 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		collaboraFileSelectionOptions,
 		getAssetUrl,
 		setCardId,
+		cardId,
 		setCreateElementRequestFn,
 	};
 });

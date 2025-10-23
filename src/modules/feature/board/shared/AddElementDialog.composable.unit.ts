@@ -4,7 +4,6 @@ import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
-// import { AnyContentElement } from "@/types/board/ContentElement";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
@@ -357,8 +356,9 @@ describe("ElementTypeSelection Composable", () => {
 				closeDialogMock,
 			});
 			const openCollaboraFileDialogMock = vi.fn();
-			const initializeFileElementWithCollaboraFileMock = vi.fn();
+			const setCardIdMock = vi.fn();
 			const { collaboraFileSelectionOptions } = setupCollaboraFileSelectionMock({
+				setCardIdMock,
 				openCollaboraFileDialogMock,
 			});
 
@@ -375,7 +375,7 @@ describe("ElementTypeSelection Composable", () => {
 				addElementMock,
 				closeDialogMock,
 				openCollaboraFileDialogMock,
-				initializeFileElementWithCollaboraFileMock,
+				setCardIdMock,
 				cardId,
 			};
 		};
@@ -685,6 +685,18 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 
+			it("should set cardId", () => {
+				const { elementTypeOptions, addElementMock, cardId, setCardIdMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
+				option?.action();
+
+				expect(setCardIdMock).toHaveBeenCalledTimes(1);
+			});
+
 			it("should set isCollaboraFileDialogOpen to true", () => {
 				const { elementTypeOptions, addElementMock, cardId, openCollaboraFileDialogMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
@@ -696,41 +708,6 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(openCollaboraFileDialogMock).toHaveBeenCalledTimes(1);
 			});
-		});
-
-		describe("when the collabora file action is called", () => {
-			// it("should call add element function with right argument for all collabora options", async () => {
-			// 	const { addElementMock, collaboraFileSelectionOptions, cardId } = setup();
-			// 	const { askCollaboraFileType } = useAddElementDialog(addElementMock, cardId);
-			// 	askCollaboraFileType();
-			// 	for (const option of collaboraFileSelectionOptions.value) {
-			// 		await option.action("test-office-file", "Some caption");
-			// 		expect(addElementMock).toHaveBeenLastCalledWith({
-			// 			type: ContentElementType.File,
-			// 			cardId,
-			// 		});
-			// 	}
-			// 	expect(addElementMock).toHaveBeenCalledTimes(collaboraFileSelectionOptions.value.length);
-			// });
-			// it("should call the initialize element function for all collabora options", async () => {
-			// 	const { collaboraFileSelectionOptions, initializeFileElementWithCollaboraFileMock, cardId } = setup();
-			// 	const addElementMock = vi.fn(() =>
-			// 		Promise.resolve({
-			// 			id: "new-element-id",
-			// 			type: ContentElementType.File,
-			// 			content: {},
-			// 			timestamps: {},
-			// 		} as AnyContentElement)
-			// 	);
-			// 	const { askCollaboraFileType } = useAddElementDialog(addElementMock, cardId);
-			// 	askCollaboraFileType();
-			// 	for (const option of collaboraFileSelectionOptions.value) {
-			// 		await option.action("test-office-file", "Some caption");
-			// 	}
-			// 	expect(initializeFileElementWithCollaboraFileMock).toHaveBeenCalledTimes(
-			// 		collaboraFileSelectionOptions.value.length
-			// 	);
-			// });
 		});
 	});
 

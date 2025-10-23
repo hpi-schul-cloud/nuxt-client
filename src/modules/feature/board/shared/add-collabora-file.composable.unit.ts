@@ -51,6 +51,19 @@ describe("AddCollaboraFileComposable", () => {
 		});
 	});
 
+	describe("setCardId", () => {
+		it("should set cardId", () => {
+			const { setCardId, cardId, isCollaboraFileDialogOpen } = useAddCollaboraFile();
+
+			isCollaboraFileDialogOpen.value = true;
+			expect(isCollaboraFileDialogOpen.value).toBe(true);
+
+			setCardId("test-card-id");
+
+			expect(cardId.value).toBe("test-card-id");
+		});
+	});
+
 	describe("getAssetUrl", () => {
 		it("returns correct URL for collabora types", () => {
 			const { getAssetUrl } = useAddCollaboraFile();
@@ -62,54 +75,88 @@ describe("AddCollaboraFileComposable", () => {
 		});
 	});
 
-	describe("initializeFileElementWithCollaboraFile", () => {
-		// it("should disable file select on mount", async () => {
-		// 	const { initializeFileElementWithCollaboraFile } = useAddCollaboraFile();
-		// 	const cardId = "test-card-id";
-		// 	const element = {
-		// 		id: "new-element-id",
-		// 		type: ContentElementType.File,
-		// 		content: {},
-		// 		timestamps: {},
-		// 	} as AnyContentElement;
-		// 	const collaboraFileType = CollaboraFileType.Text;
-		// 	const fileName = "test-file";
-		// 	const caption = "test-caption";
-		// 	await initializeFileElementWithCollaboraFile(cardId, element, collaboraFileType, fileName, caption);
-		// 	expect(disableFileSelectOnMountMock).toHaveBeenCalled();
-		// });
-		// it("should reset file select after initialization", async () => {
-		// 	useAddCollaboraFile();
-		// 	const cardId = "test-card-id";
-		// 	const element = {
-		// 		id: "new-element-id",
-		// 		type: ContentElementType.File,
-		// 		content: {},
-		// 		timestamps: {},
-		// 	} as AnyContentElement;
-		// 	const collaboraFileType = CollaboraFileType.Text;
-		// 	const fileName = "test-file";
-		// 	const caption = "test-caption";
-		// 	await initializeFileElementWithCollaboraFile(cardId, element, collaboraFileType, fileName, caption);
-		// 	expect(resetFileSelectOnMountEnabledMock).toHaveBeenCalled();
-		// });
-		// it("should close the dialog after initialization", async () => {
-		// 	const { openCollaboraFileDialog, isCollaboraFileDialogOpen } =
-		// 		useAddCollaboraFile();
-		// 	const cardId = "test-card-id";
-		// 	const element = {
-		// 		id: "new-element-id",
-		// 		type: ContentElementType.File,
-		// 		content: {},
-		// 		timestamps: {},
-		// 	} as AnyContentElement;
-		// 	const collaboraFileType = CollaboraFileType.Text;
-		// 	const fileName = "test-file";
-		// 	const caption = "test-caption";
-		// 	openCollaboraFileDialog();
-		// 	expect(isCollaboraFileDialogOpen.value).toBe(true);
-		// 	await initializeFileElementWithCollaboraFile(cardId, element, collaboraFileType, fileName, caption);
-		// 	expect(isCollaboraFileDialogOpen.value).toBe(false);
-		// });
-	});
+	// describe("initializeFileElementWithCollaboraFile", () => {
+	// 	it("should disable file select on mount", async () => {
+	// 		const { initializeFileElementWithCollaboraFile } = useAddCollaboraFile();
+	// 		const cardId = "test-card-id";
+	// 		const element = {
+	// 			id: "new-element-id",
+	// 			type: ContentElementType.File,
+	// 			content: {},
+	// 			timestamps: {},
+	// 		} as AnyContentElement;
+	// 		const collaboraFileType = CollaboraFileType.Text;
+	// 		const fileName = "test-file";
+	// 		const caption = "test-caption";
+	// 		await initializeFileElementWithCollaboraFile(cardId, element, collaboraFileType, fileName, caption);
+	// 		expect(disableFileSelectOnMountMock).toHaveBeenCalled();
+	// 	});
+	// 	it("should reset file select after initialization", async () => {
+	// 		useAddCollaboraFile();
+	// 		const cardId = "test-card-id";
+	// 		const element = {
+	// 			id: "new-element-id",
+	// 			type: ContentElementType.File,
+	// 			content: {},
+	// 			timestamps: {},
+	// 		} as AnyContentElement;
+	// 		const collaboraFileType = CollaboraFileType.Text;
+	// 		const fileName = "test-file";
+	// 		const caption = "test-caption";
+	// 		await initializeFileElementWithCollaboraFile(cardId, element, collaboraFileType, fileName, caption);
+	// 		expect(resetFileSelectOnMountEnabledMock).toHaveBeenCalled();
+	// 	});
+	// 	it("should close the dialog after initialization", async () => {
+	// 		const { openCollaboraFileDialog, isCollaboraFileDialogOpen } = useAddCollaboraFile();
+	// 		const cardId = "test-card-id";
+	// 		const element = {
+	// 			id: "new-element-id",
+	// 			type: ContentElementType.File,
+	// 			content: {},
+	// 			timestamps: {},
+	// 		} as AnyContentElement;
+	// 		const collaboraFileType = CollaboraFileType.Text;
+	// 		const fileName = "test-file";
+	// 		const caption = "test-caption";
+	// 		openCollaboraFileDialog();
+	// 		expect(isCollaboraFileDialogOpen.value).toBe(true);
+	// 		await initializeFileElementWithCollaboraFile(cardId, element, collaboraFileType, fileName, caption);
+	// 		expect(isCollaboraFileDialogOpen.value).toBe(false);
+	// 	});
+	// });
 });
+
+// describe("when the collabora file action is called", () => {
+// 	// it("should call add element function with right argument for all collabora options", async () => {
+// 	// 	const { addElementMock, collaboraFileSelectionOptions, cardId } = setup();
+// 	// 	const { askCollaboraFileType } = useAddElementDialog(addElementMock, cardId);
+// 	// 	askCollaboraFileType();
+// 	// 	for (const option of collaboraFileSelectionOptions.value) {
+// 	// 		await option.action("test-office-file", "Some caption");
+// 	// 		expect(addElementMock).toHaveBeenLastCalledWith({
+// 	// 			type: ContentElementType.File,
+// 	// 			cardId,
+// 	// 		});
+// 	// 	}
+// 	// 	expect(addElementMock).toHaveBeenCalledTimes(collaboraFileSelectionOptions.value.length);
+// 	// });
+// 	// it("should call the initialize element function for all collabora options", async () => {
+// 	// 	const { collaboraFileSelectionOptions, initializeFileElementWithCollaboraFileMock, cardId } = setup();
+// 	// 	const addElementMock = vi.fn(() =>
+// 	// 		Promise.resolve({
+// 	// 			id: "new-element-id",
+// 	// 			type: ContentElementType.File,
+// 	// 			content: {},
+// 	// 			timestamps: {},
+// 	// 		} as AnyContentElement)
+// 	// 	);
+// 	// 	const { askCollaboraFileType } = useAddElementDialog(addElementMock, cardId);
+// 	// 	askCollaboraFileType();
+// 	// 	for (const option of collaboraFileSelectionOptions.value) {
+// 	// 		await option.action("test-office-file", "Some caption");
+// 	// 	}
+// 	// 	expect(initializeFileElementWithCollaboraFileMock).toHaveBeenCalledTimes(
+// 	// 		collaboraFileSelectionOptions.value.length
+// 	// 	);
+// 	// });
+// });

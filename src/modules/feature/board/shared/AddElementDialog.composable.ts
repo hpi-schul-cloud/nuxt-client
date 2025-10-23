@@ -52,6 +52,12 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		showNotificationByElementType(elementType);
 	};
 
+	const onOfficeFileClick = async () => {
+		setCardId(cardId);
+		closeDialog();
+		openCollaboraFileDialog();
+	};
+
 	const showNotificationByElementType = (elementType: ContentElementType) => {
 		const translationKeyCollaborativeTextEditor =
 			"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
@@ -206,12 +212,6 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		loadDynamicElementOptions();
 
 		isDialogOpen.value = true;
-	};
-
-	const onOfficeFileClick = async () => {
-		setCardId(cardId);
-		closeDialog();
-		openCollaboraFileDialog();
 	};
 
 	watch(
