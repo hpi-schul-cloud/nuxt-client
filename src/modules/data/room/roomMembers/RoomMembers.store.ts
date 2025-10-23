@@ -27,29 +27,26 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
 
 	const roomMembersWithoutApplicants = computed(() =>
-		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.Roomapplicant)
+		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.Roomapplicant).map(mapAnonymizedMember)
 	);
 
 	const roomApplicants = computed(() =>
 		roomMembers.value.filter((member) => member.roomRoleName === RoleName.Roomapplicant)
 	);
 
-	const roomMembersForAdmins = computed(() =>
-		roomMembersWithoutApplicants.value.map((member) => {
-			const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
-			if (!isAnonymizedMember) return member;
+	const mapAnonymizedMember = (member: RoomMember) => {
+		const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
+		if (!isAnonymizedMember) return member;
 
-			const anonymizedName = t("pages.rooms.administration.roomDetail.anonymized");
+		const anonymizedName = t("pages.rooms.administration.roomDetail.anonymized");
 
-			return {
-				...member,
-				isSelectable: !isAnonymizedMember,
-				firstName: anonymizedName,
-				lastName: anonymizedName,
-				fullName: anonymizedName,
-			};
-		})
-	);
+		return {
+			...member,
+			firstName: anonymizedName,
+			lastName: anonymizedName,
+			fullName: anonymizedName,
+		};
+	};
 
 	const isLoading = ref<boolean>(false);
 	const ownSchool = {
@@ -408,7 +405,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
-		roomMembersForAdmins,
 		roomMembersWithoutApplicants,
 		roomApplicants,
 		potentialRoomMembers,

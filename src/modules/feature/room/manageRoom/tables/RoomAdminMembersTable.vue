@@ -78,15 +78,14 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersWithoutApplicants, roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
+const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers, fetchMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
-const tableData = computed(() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]);
+const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
 
 const checkIsStudent = (member?: RoomMember) =>
 	member?.schoolRoleNames.some((role) =>
