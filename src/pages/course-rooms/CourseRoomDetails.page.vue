@@ -458,7 +458,7 @@ export default defineComponent({
 				userId: useAppStore().user?.id,
 			});
 
-			document.title = buildPageTitle(this.roomData.title);
+			document.title = buildPageTitle(this.roomData.title, this.$t("common.words.courses"));
 		},
 		onLayoutSelected(layout) {
 			this.onCreateBoard(this.roomData.roomId, layout);

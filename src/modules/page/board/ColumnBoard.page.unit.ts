@@ -1,14 +1,8 @@
 import ColumnBoardPage from "./ColumnBoard.page.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
+import { setActivePinia } from "pinia";
 
 describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {
@@ -28,6 +22,10 @@ describe("@pages/ColumnBoard.page.vue", () => {
 			boardId,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should be rendered in DOM", () => {
 		const { wrapper } = setup();

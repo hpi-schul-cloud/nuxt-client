@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<default-wireframe
-			:headline="$t('pages.administration.students.index.title')"
-			:breadcrumbs="breadcrumbs"
-			max-width="full"
-			:fab-items="fab"
-		>
+		<default-wireframe :headline="$t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
 			<progress-modal
 				:active="isDeleting"
 				:percent="deletedPercent"
@@ -241,16 +236,6 @@ export default {
 			],
 			tableSelection: [],
 			tableSelectionType: "inclusive",
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
-					title: this.$t("pages.administration.students.index.title"),
-					disabled: true,
-				},
-			],
 			active: false,
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.students.index") &&

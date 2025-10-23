@@ -563,7 +563,7 @@ describe("Folder.vue", () => {
 				});
 
 				it("should emit 'update:folder-name' event", async () => {
-					const { wrapper, folderStateMock } = await setup();
+					const { wrapper, folderStateMock, parent } = await setup();
 
 					await flushPromises();
 
@@ -571,7 +571,10 @@ describe("Folder.vue", () => {
 					folderStateMock.folderName.value = "New Name";
 					await flushPromises();
 
-					expect(wrapper.emitted("update:folder-name")).toEqual([["Test Folder"], ["New Name"]]);
+					expect(wrapper.emitted("update:folder-name")).toEqual([
+						[`Test Folder - ${parent.name}`],
+						[`New Name - ${parent.name}`],
+					]);
 				});
 			});
 
