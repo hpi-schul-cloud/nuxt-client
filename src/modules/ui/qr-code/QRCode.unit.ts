@@ -7,6 +7,6 @@ describe("@ui-qr-code", () => {
 			props: { url: "https://example.com" },
 		});
 
-		expect(wrapper).toBeTruthy();
+		expect(wrapper.exists()).toBe(true);
 	});
 });
