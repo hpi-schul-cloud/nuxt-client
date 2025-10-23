@@ -21,7 +21,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
-import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { createRoomMembersStore, useRoomDetailsStore } from "@data-room";
 import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useElementBounding, useTitle } from "@vueuse/core";
@@ -36,7 +36,7 @@ const { t } = useI18n();
 const route = useRoute();
 const isMembersDialogOpen = ref(false);
 
-const roomMembersStore = useRoomMembersStore();
+const roomMembersStore = createRoomMembersStore({ asAdmin: true });
 const { fetchMembers, loadSchoolList, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);

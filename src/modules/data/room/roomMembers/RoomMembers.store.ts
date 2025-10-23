@@ -16,8 +16,15 @@ import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+export const createRoomMembersStore = (options: { asAdmin?: boolean } = {}) => {
+	const store = useRoomMembersStore();
+	store.init(options);
+	return store;
+};
+
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
+	let _asAdmin = false;
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const roomId = computed(() => room.value?.id);
@@ -25,6 +32,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomMembers: Ref<RoomMember[]> = ref([]);
 	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
+
+	const init = (options: { asAdmin?: boolean }) => {
+		_asAdmin = options.asAdmin ?? false;
+	};
 
 	const roomMembersWithoutApplicants = computed(() =>
 		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.Roomapplicant).map(mapAnonymizedMember)
@@ -92,7 +103,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(getRoomId())).data;
+			const getMembers = _asAdmin ? roomApi.roomControllerGetMembersRedacted : roomApi.roomControllerGetMembers;
+			const { data } = (await getMembers(getRoomId())).data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => ({
 				...member,
 				fullName: `${member.firstName} ${member.lastName}`,
@@ -385,6 +397,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	return {
 		addMembers,
 		isRoomOwner,
+		init,
 		changeRoomOwner,
 		confirmInvitations,
 		fetchMembers,
