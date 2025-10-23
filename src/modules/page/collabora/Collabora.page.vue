@@ -3,7 +3,7 @@
 		ref="iframeRef"
 		allow="clipboard-read *; clipboard-write *"
 		allowfullscreen
-		:src="url"
+		:src="url.toString()"
 		style="width: 100%; height: 100%; position: absolute"
 		:title="$t('pages.collabora.iframeTitle')"
 	/>
@@ -12,20 +12,24 @@
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import { EditorMode } from "@/types/file/File";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
+import { useBoardApi } from "@data-board";
 import { useFileStorageApi } from "@data-file";
+import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 
 interface Props {
 	fileRecordId: string;
-	editorMode: EditorMode;
+	editorMode?: EditorMode;
 }
 
 const props = defineProps<Props>();
-const url = ref<string>("");
+const url = ref<URL>(new URL("about:blank"));
 const iframeRef = ref<HTMLIFrameElement>();
-const { getAuthorizedCollaboraDocumentUrl } = useFileStorageApi();
+const { getAuthorizedCollaboraDocumentUrl, fetchFileById, getFileRecordById } = useFileStorageApi();
 const { setupPostMessageAPI } = useCollaboraPostMessageApi();
+const { getElementWithParentHierarchyCall } = useBoardApi();
 
 const { user, locale } = useAppStoreRefs();
 
@@ -41,19 +45,69 @@ const userName = computed(() => {
 });
 
 onMounted(async () => {
+	await setCollaboraUrl();
+
+	if (iframeRef.value) {
+		setupPostMessageAPI(iframeRef.value, url.value.origin);
+	}
+
+	await setPageTitle();
+});
+
+const setCollaboraUrl = async () => {
 	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 		props.fileRecordId,
-		props.editorMode,
+		props.editorMode ?? EditorMode.VIEW,
 		userName.value
 	);
 
 	const collaboraUrl = new URL(responseCollaboraUrl);
 	collaboraUrl.searchParams.set("lang", locale.value);
 
-	url.value = collaboraUrl.toString();
+	url.value = collaboraUrl;
+};
 
-	if (iframeRef.value) {
-		setupPostMessageAPI(iframeRef.value, collaboraUrl.origin);
+const setPageTitle = async () => {
+	let fileRecord;
+	let parentName;
+
+	try {
+		fileRecord = await getFileRecord(props.fileRecordId);
+		parentName = await getParentName(fileRecord?.parentId);
+	} catch {
+		// Ignore errors here, because not critical
 	}
-});
+
+	const firstPartOfPageTitle = formatePageTitlePrefix(fileRecord?.name, parentName);
+	const pageTitle = buildPageTitle(firstPartOfPageTitle);
+	useTitle(pageTitle);
+};
+
+const getFileRecord = async (fileId: string) => {
+	let fileRecord = getFileRecordById(fileId);
+
+	if (!fileRecord) {
+		await fetchFileById(fileId);
+		fileRecord = getFileRecordById(fileId);
+	}
+
+	return fileRecord;
+};
+
+const formatePageTitlePrefix = (fileName?: string, parentName?: string) => {
+	if (fileName) {
+		return parentName ? `${fileName} - ${parentName}` : fileName;
+	}
+
+	return parentName || "";
+};
+
+const getParentName = async (parentId?: string): Promise<string | undefined> => {
+	if (parentId) {
+		const response = await getElementWithParentHierarchyCall(parentId);
+		const indexOfDirectParent = response.data.parentHierarchy.length - 1;
+
+		return response.data.parentHierarchy[indexOfDirectParent]?.name;
+	}
+};
 </script>
