@@ -28,7 +28,7 @@
 			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu v-if="hasManageBoardPermission" :scope="BoardMenuScope.BOARD" data-testid="board-menu-btn">
 				<KebabMenuActionRename @click="onStartEditMode" />
-				<KebabMenuActionCopy @click="onCopyBoard" />
+				<KebabMenuActionCopy data-testid="kebab-menu-action-duplicate-board" @click="onCopyBoard" />
 				<KebabMenuActionShare v-if="isShareEnabled && hasShareBoardPermission" @click="onShareBoard" />
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />

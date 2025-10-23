@@ -42,7 +42,11 @@
 							:data-testid="boardMenuTestId"
 						>
 							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
-							<KebabMenuActionCopy v-if="hasEditPermission" @click="duplicateCard" />
+							<KebabMenuActionCopy
+								v-if="hasEditPermission"
+								data-testid="kebab-menu-action-duplicate-card"
+								@click="duplicateCard"
+							/>
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
