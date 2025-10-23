@@ -53,6 +53,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 		return {
 			...member,
+			isSelectable: false,
 			firstName: anonymizedName,
 			lastName: anonymizedName,
 			fullName: anonymizedName,
