@@ -14,14 +14,35 @@ describe("pageTitle", () => {
 		});
 	});
 
-	it("should set default page title", () => {
-		const pageTitle = buildPageTitle();
-		expect(pageTitle).toBe(instanceTitle);
+	describe("when no titles are passed", () => {
+		it("should set default page title", () => {
+			const pageTitle = buildPageTitle();
+			expect(pageTitle).toBe(instanceTitle);
+		});
 	});
 
-	it("should add prefix to default page title if custom page title is passed", () => {
-		const customPageTitle = "customPageTitle";
-		const pageTitle = buildPageTitle(customPageTitle);
-		expect(pageTitle).toEqual(`${customPageTitle} - ${instanceTitle}`);
+	describe("when only parent title is passed", () => {
+		it("should set page title with parent title", () => {
+			const parentTitle = "parentTitle";
+			const pageTitle = buildPageTitle(undefined, parentTitle);
+			expect(pageTitle).toEqual(`${parentTitle} - ${instanceTitle}`);
+		});
+	});
+
+	describe("when only custom page title is passed", () => {
+		it("should set page title with custom page title", () => {
+			const customPageTitle = "customPageTitle";
+			const pageTitle = buildPageTitle(customPageTitle);
+			expect(pageTitle).toEqual(`${customPageTitle} - ${instanceTitle}`);
+		});
+	});
+
+	describe("when custom page title and parent title are passed", () => {
+		it("should include both titles in the page title", () => {
+			const customPageTitle = "customPageTitle";
+			const parentTitle = "parentTitle";
+			const pageTitle = buildPageTitle(customPageTitle, parentTitle);
+			expect(pageTitle).toEqual(`${customPageTitle} - ${parentTitle} - ${instanceTitle}`);
+		});
 	});
 });
