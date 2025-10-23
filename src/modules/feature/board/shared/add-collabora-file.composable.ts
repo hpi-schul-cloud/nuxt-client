@@ -1,12 +1,14 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
 import { getFileExtension } from "@/utils/fileHelper";
-import { useCardStore } from "@data-board";
+import { type CreateElementRequestPayload, useCardStore } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useSharedFileSelect } from "@util-board";
 import { createSharedComposable } from "@vueuse/core";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 interface CollaboraFileSelectionOptions {
 	id: string;
@@ -20,9 +22,64 @@ export enum CollaboraFileType {
 	Presentation,
 }
 
+type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<AnyContentElement | undefined>;
+
 export const useAddCollaboraFile = createSharedComposable(() => {
+	const { t } = useI18n();
+
+	const cardId = ref("");
+	const createElementRequestFn = ref<CreateElementRequestFn>(() => Promise.resolve(undefined));
 	const isCollaboraFileDialogOpen = ref<boolean>(false);
-	const collaboraFileSelectionOptions = ref<Array<CollaboraFileSelectionOptions>>([]);
+	const collaboraFileSelectionOptions: Ref<Array<CollaboraFileSelectionOptions>> = ref([
+		{
+			id: "1",
+			label: t("components.elementTypeSelection.elements.collabora.option.text"),
+			action: async (fileName: string, caption: string) => {
+				const element = await createElementRequestFn.value({
+					type: ContentElementType.File,
+					cardId: cardId.value,
+				});
+				if (!element) {
+					return;
+				}
+				initializeFileElementWithCollaboraFile(cardId.value, element, CollaboraFileType.Text, fileName, caption);
+			},
+		},
+		{
+			id: "2",
+			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+			action: async (fileName: string, caption: string) => {
+				const element = await createElementRequestFn.value({
+					type: ContentElementType.File,
+					cardId: cardId.value,
+				});
+				if (!element) {
+					return;
+				}
+				initializeFileElementWithCollaboraFile(cardId.value, element, CollaboraFileType.Spreadsheet, fileName, caption);
+			},
+		},
+		{
+			id: "3",
+			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+			action: async (fileName: string, caption: string) => {
+				const element = await createElementRequestFn.value({
+					type: ContentElementType.File,
+					cardId: cardId.value,
+				});
+				if (!element) {
+					return;
+				}
+				initializeFileElementWithCollaboraFile(
+					cardId.value,
+					element,
+					CollaboraFileType.Presentation,
+					fileName,
+					caption
+				);
+			},
+		},
+	]);
 
 	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 	const { uploadFromUrl } = useFileStorageApi();
@@ -89,12 +146,24 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		}
 	};
 
+	const setCardId = (id: string) => {
+		cardId.value = id;
+
+		// eslint-disable-next-line no-console
+		console.log("Card ID set to:", cardId.value);
+	};
+
+	const setCreateElementRequestFn = (fn: CreateElementRequestFn) => {
+		createElementRequestFn.value = fn;
+	};
+
 	return {
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
 		isCollaboraFileDialogOpen,
 		collaboraFileSelectionOptions,
-		initializeFileElementWithCollaboraFile,
 		getAssetUrl,
+		setCardId,
+		setCreateElementRequestFn,
 	};
 });

@@ -4,7 +4,6 @@ import { Ref, ref } from "vue";
 
 interface Props {
 	openCollaboraFileDialogMock?: Mock;
-	initializeFileElementWithCollaboraFileMock?: Mock;
 }
 interface CollaboraFileSelectionOptions {
 	id: string;
@@ -13,23 +12,25 @@ interface CollaboraFileSelectionOptions {
 }
 
 export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
-	const { openCollaboraFileDialogMock, initializeFileElementWithCollaboraFileMock } = props;
+	const { openCollaboraFileDialogMock } = props;
 	const mockedCollaboraFileSelection = vi.mocked(useAddCollaboraFile);
 
 	const openCollaboraFileDialog = openCollaboraFileDialogMock ?? vi.fn();
 	const closeCollaboraFileDialog = vi.fn();
-	const initializeFileElementWithCollaboraFile = initializeFileElementWithCollaboraFileMock ?? vi.fn();
 	const isCollaboraFileDialogOpen = ref(false);
 	const collaboraFileSelectionOptions: Ref<Array<CollaboraFileSelectionOptions>> = ref([]);
 	const getAssetUrl = vi.fn();
+	const setCardId = vi.fn();
+	const setCreateElementRequestFn = vi.fn();
 
 	const mocks = {
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
 		collaboraFileSelectionOptions,
 		isCollaboraFileDialogOpen,
-		initializeFileElementWithCollaboraFile,
 		getAssetUrl,
+		setCardId,
+		setCreateElementRequestFn,
 	};
 
 	mockedCollaboraFileSelection.mockReturnValue(mocks);
