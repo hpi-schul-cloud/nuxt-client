@@ -15,11 +15,6 @@
 			</template>
 
 			<template #text>
-				<VRadioGroup v-model="selectedStyle">
-					<VRadio value="oneOptionOnly" label="Nur eine Option auswählbar" />
-					<VRadio value="disabled" label="Disabled" />
-					<VRadio value="readonly" label="Readonly" />
-				</VRadioGroup>
 				<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
 				<div class="mt-8" data-testid="add-participant-school">
 					<VAutocomplete
@@ -48,10 +43,11 @@
 						:item-props="schoolRoleListItemProps"
 						:items="schoolRoles"
 						:label="t('pages.rooms.members.tableHeader.schoolRole')"
-						:disabled="isItemListDisabled || selectedStyle === 'disabled'"
+						:disabled="isItemListDisabled"
 						:aria-disabled="isItemListDisabled"
-						:readonly="schoolRoles.length === 1 && selectedStyle === 'readonly'"
+						:readonly="schoolRoles.length === 1"
 						:data-testid="`role-item-${selectedSchoolRole}`"
+						v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
 						@update:model-value="onValueChange"
 						@update:menu="onItemListToggle"
 					>
@@ -134,7 +130,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { type VAutocomplete, type VCard, VRadioGroup, type VSelect } from "vuetify/components";
+import { type VAutocomplete, type VCard, type VSelect } from "vuetify/components";
 interface SchoolRoleItem {
 	id: RoleName;
 	name: string;
@@ -237,7 +233,6 @@ const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
 const autoCompleteSchool = ref<VAutocomplete>();
 const autoCompleteUsers = ref<VAutocomplete>();
 const selectRole = ref<VSelect>();
-const selectedStyle = ref<string>("oneOptionOnly");
 
 const onItemListToggle = () => {
 	const refs = [autoCompleteSchool, autoCompleteUsers, selectRole];
