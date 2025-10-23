@@ -5,19 +5,17 @@
 		item-key="id"
 		:options="{
 			delayOnTouchOnly: true,
-			delay: 300,
+			delay: 50,
 			touchStartThreshold: 3, // needed for sensitive touch devices
 			fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
-			ghostClass: 'sortable-drag-ghost',
 			easing: 'cubic-bezier(1, 0, 0, 1)',
-			dragClass: 'sortable-drag-board-card',
 			dragoverBubble: true,
 			animation: 250,
 			forceFallback: true,
 		}"
 	>
 		<template #item="{ element, index }">
-			<BoardTile :board="element" :index="index" />
+			<BoardTile :board="element" :index="index" @keydown.up.down.left.right="onKeyUp($event, index)" />
 
 			<!--			<BoardColumn-->
 			<!--				:key="element.id"-->
@@ -44,7 +42,10 @@
 
 <script setup lang="ts">
 import BoardTile from "./BoardTile.vue";
+import { useSafeTask, useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
+import { useRoomDetailsStore } from "@data-room";
+import { storeToRefs } from "pinia";
 import { Sortable } from "sortablejs-vue3";
 import { PropType, toRef } from "vue";
 
@@ -53,12 +54,36 @@ const props = defineProps({
 });
 
 const boards = toRef(props, "boards");
+
+const { updateRoom } = useRoomDetailsStore();
+const { room } = storeToRefs(useRoomDetailsStore());
+
+const { execute, error } = useSafeTask();
+
+const onKeyUp = (e: KeyboardEvent, currentIndex: number) => {
+	switch (e.key) {
+		case "ArrowUp":
+			break;
+		case "ArrowDown":
+			break;
+		case "ArrowLeft":
+			if (currentIndex > 0) {
+        // execute()
+				// await updateIndex(currentIndex, currentIndex - 1);
+				// await fetchRoom()
+				// updateRoom(room.value?.id, {});
+			}
+			break;
+		case "ArrowRight":
+			break;
+	}
+};
 </script>
 <style>
 .board-grid {
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 	transition: all 0.5s ease;
 }
 </style>
