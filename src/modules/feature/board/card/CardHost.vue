@@ -42,7 +42,7 @@
 							:data-testid="boardMenuTestId"
 						>
 							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
-							<KebabMenuActionCopy
+							<KebabMenuActionDuplicate
 								v-if="hasEditPermission"
 								data-testid="kebab-menu-action-duplicate-card"
 								@click="duplicateCard"
@@ -112,8 +112,8 @@ import { delay } from "@/utils/helpers";
 import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
 import { BoardMenuScope } from "@ui-board";
 import {
-	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";

@@ -13,8 +13,8 @@ import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
-	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
@@ -202,7 +202,7 @@ describe("CardHost", () => {
 				mockedBoardPermissions.hasEditPermission.value = true;
 				const { wrapper, cardId, cardStore } = setup();
 
-				const duplicateButton = wrapper.findComponent(KebabMenuActionCopy);
+				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 
 				await duplicateButton.trigger("click");
 
