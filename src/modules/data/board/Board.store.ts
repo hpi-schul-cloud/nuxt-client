@@ -140,10 +140,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const { cardId, duplicatedCard } = payload;
 		const { columnIndex, cardIndex } = getCardLocation(cardId) ?? { columnIndex: 0, cardIndex: 0 };
 
-		if (board.value.columns[columnIndex] === undefined) return;
-		if (board.value.columns[columnIndex].cards === undefined) return;
-
-		board.value.columns[columnIndex].cards.splice(cardIndex + 1, 0, {
+		board.value?.columns?.[columnIndex]?.cards?.splice(cardIndex + 1, 0, {
 			cardId: duplicatedCard.id,
 			height: duplicatedCard.height,
 		});
