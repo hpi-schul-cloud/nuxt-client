@@ -6,6 +6,7 @@
 		:prepend-icon="mdiClockTimeFour"
 		data-testid="file-status-scan-pending"
 	>
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.awaitingScan") }}
 	</VChip>
 	<v-tooltip v-if="isScanStatusWontCheck(fileRecord.previewStatus)" location="top">
@@ -31,6 +32,7 @@
 		:prepend-icon="mdiAlertCircle"
 		data-testid="file-status-scan-virus-detected"
 	>
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.virusDetected") }}
 	</VChip>
 </template>
