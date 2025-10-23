@@ -3,15 +3,21 @@ import { logger } from "@util-logger";
 import QrcodeVue from "qrcode.vue";
 import { h, render } from "vue";
 
-export const printQrCodes = (qrCodeItems: { title?: string; url: string }[], pageTitle?: string) => {
+export const printQrCodes = (
+	qrCodeItems: { title?: string; url: string }[],
+	options?: { printPageTitleKey?: string; printPageTabTitleKey?: string }
+) => {
 	const printWindow = window.open("", "_blank");
 	const { t } = useI18nGlobal();
+
+	const tabTitle = t(options?.printPageTitleKey ?? "pages.administration.printQr.printPageTabTitle");
+	const pageTitle = options?.printPageTabTitleKey ? t(options.printPageTabTitleKey) : undefined;
 
 	if (printWindow) {
 		printWindow.document.documentElement.innerHTML = `
   <html>
     <head>
-      <title>${t("pages.administration.printQr.printTabTitle")}</title>
+      <title>${tabTitle}</title>
       <style>   
           @media print {
               @page {
@@ -19,7 +25,7 @@ export const printQrCodes = (qrCodeItems: { title?: string; url: string }[], pag
                 margin: 24px;               
                 
                 @top-left {
-                  content: "${pageTitle ?? ""}";
+                  content: "${pageTitle}"
                   margin-top: 24px;
                   font-size: 20px;
                   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Ubuntu, Helvetica Neue, Arial, sans-serif;
