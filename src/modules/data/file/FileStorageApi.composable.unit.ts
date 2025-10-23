@@ -88,6 +88,116 @@ describe("FileStorageApi Composable", () => {
 		});
 	});
 
+	describe("fetchFileById", () => {
+		describe("when file api returns file record successfully", () => {
+			const setup = () => {
+				const fileRecord = fileRecordFactory.build();
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecord,
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.getFileRecord.mockResolvedValueOnce(response);
+
+				return {
+					fileRecord,
+					response,
+					fileApi,
+				};
+			};
+
+			it("should call FileApiFactory.getFileRecord", async () => {
+				const { fileApi, fileRecord } = setup();
+				const { fetchFileById } = useFileStorageApi();
+
+				await fetchFileById(fileRecord.id);
+
+				expect(fileApi.getFileRecord).toHaveBeenCalledWith(fileRecord.id);
+			});
+
+			it("should upsert filerecord", async () => {
+				const { fileRecord } = setup();
+				const { fetchFileById, getFileRecordById } = useFileStorageApi();
+
+				await fetchFileById(fileRecord.id);
+
+				const result = getFileRecordById(fileRecord.id);
+				expect(result).toStrictEqual(fileRecord);
+			});
+		});
+
+		describe("when file api returns error", () => {
+			const setup = (message?: string) => {
+				const fileRecordId = ObjectIdMock();
+
+				const { responseError, expectedPayload } = setupErrorResponse(message);
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.getFileRecord.mockRejectedValue(responseError);
+
+				return {
+					fileRecordId,
+					responseError,
+				};
+			};
+
+			it("should notify unauthorized and pass error", async () => {
+				const { fileRecordId, responseError } = setup(ErrorType.Unauthorized);
+
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.401" })
+				);
+			});
+
+			it("should notify forbidden error and pass error", async () => {
+				const { fileRecordId, responseError } = setup(ErrorType.Forbidden);
+
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.403" })
+				);
+			});
+
+			it("should notify file not found error and pass error", async () => {
+				const { fileRecordId, responseError } = setup(ErrorType.FILE_NOT_FOUND);
+
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
+					})
+				);
+			});
+
+			it("should notify internal server error and pass error", async () => {
+				const { fileRecordId, responseError } = setup();
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
+					})
+				);
+			});
+		});
+	});
+
 	describe("fetchFiles", () => {
 		describe("when file api returns list successfully", () => {
 			const setup = () => {

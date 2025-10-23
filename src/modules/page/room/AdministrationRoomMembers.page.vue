@@ -48,7 +48,7 @@ const headerText = computed(() =>
 	})
 );
 
-const pageTitle = computed(() => buildPageTitle(headerText.value));
+const pageTitle = computed(() => buildPageTitle(headerText.value, t("pages.rooms.administration.title")));
 useTitle(pageTitle);
 
 onMounted(async () => {
