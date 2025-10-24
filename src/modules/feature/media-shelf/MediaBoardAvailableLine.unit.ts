@@ -6,7 +6,7 @@ import { mediaAvailableLineElementResponseFactory, mediaAvailableLineResponseFac
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
@@ -111,7 +111,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should remove the element from the line", async () => {
 			const { wrapper, sortableEvent, element } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -122,7 +122,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should emit the create:element event", async () => {
 			const { wrapper, sortableEvent, toLineId, availableMedium } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -162,7 +162,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should not emit an event", async () => {
 			const { wrapper, sortableEvent } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();
@@ -175,7 +175,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should set the dragging state to true", async () => {
 			const { wrapper } = getWrapper();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("start");
 			await nextTick();
@@ -206,7 +206,7 @@ describe("MediaBoardAvailableLine", () => {
 		it("should set the dragging state to false", async () => {
 			const { wrapper, sortableEvent } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();

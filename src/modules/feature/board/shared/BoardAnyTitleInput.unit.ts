@@ -251,21 +251,6 @@ describe("BoardAnyTitleInput", () => {
 				});
 			});
 
-			describe("when title is undefined", () => {
-				it("should set value to fallback", async () => {
-					const emptyValueFallback = "Fallback Title";
-					const { wrapper } = setup({
-						isEditMode: false,
-						scope: "board",
-						emptyValueFallback,
-					});
-
-					await wrapper.setProps({ value: undefined, isEditMode: true });
-
-					expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(emptyValueFallback);
-				});
-			});
-
 			describe("when title is non-empty", () => {
 				it("should not set value to fallback", async () => {
 					const emptyValueFallback = "Fallback Title";

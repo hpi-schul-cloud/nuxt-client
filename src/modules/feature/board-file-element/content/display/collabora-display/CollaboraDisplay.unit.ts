@@ -8,6 +8,9 @@ describe("CollaboraDisplay", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			props: {
+				showMenu: false,
+			},
 		});
 
 		return { wrapper };
