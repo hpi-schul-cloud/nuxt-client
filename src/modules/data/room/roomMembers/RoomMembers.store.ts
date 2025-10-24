@@ -16,8 +16,15 @@ import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+export const createRoomMembersStore = (options: { asAdmin?: boolean } = {}) => {
+	const store = useRoomMembersStore();
+	store.init(options);
+	return store;
+};
+
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
+	let _asAdmin = false;
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const roomId = computed(() => room.value?.id);
@@ -26,30 +33,32 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const confirmationList: Ref<Record<string, unknown>[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
 
+	const init = (options: { asAdmin?: boolean }) => {
+		_asAdmin = options.asAdmin ?? false;
+	};
+
 	const roomMembersWithoutApplicants = computed(() =>
-		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.Roomapplicant)
+		roomMembers.value.filter((member) => member.roomRoleName !== RoleName.Roomapplicant).map(mapAnonymizedMember)
 	);
 
 	const roomApplicants = computed(() =>
 		roomMembers.value.filter((member) => member.roomRoleName === RoleName.Roomapplicant)
 	);
 
-	const roomMembersForAdmins = computed(() =>
-		roomMembersWithoutApplicants.value.map((member) => {
-			const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
-			if (!isAnonymizedMember) return member;
+	const mapAnonymizedMember = (member: RoomMember) => {
+		const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
+		if (!isAnonymizedMember) return member;
 
-			const anonymizedName = t("pages.rooms.administration.roomDetail.anonymized");
+		const anonymizedName = t("pages.rooms.administration.roomDetail.anonymized");
 
-			return {
-				...member,
-				isSelectable: !isAnonymizedMember,
-				firstName: anonymizedName,
-				lastName: anonymizedName,
-				fullName: anonymizedName,
-			};
-		})
-	);
+		return {
+			...member,
+			isSelectable: false,
+			firstName: anonymizedName,
+			lastName: anonymizedName,
+			fullName: anonymizedName,
+		};
+	};
 
 	const isLoading = ref<boolean>(false);
 	const ownSchool = {
@@ -93,13 +102,27 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const fetchMembers = async () => {
+		const isSelectable = (member: RoomMemberResponse) => {
+			const isRoomOwner = member.roomRoleName === RoleName.Roomowner;
+			if (isRoomOwner) return false;
+
+			const isUserHimself = member.userId === currentUserId.value;
+			if (isUserHimself && !_asAdmin) return false;
+
+			const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
+			if (isAnonymizedMember) return false;
+
+			return true;
+		};
+
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(getRoomId())).data;
+			const getMembers = _asAdmin ? roomApi.roomControllerGetMembersRedacted : roomApi.roomControllerGetMembers;
+			const { data } = (await getMembers(getRoomId())).data;
 			roomMembers.value = data.map((member: RoomMemberResponse) => ({
 				...member,
 				fullName: `${member.firstName} ${member.lastName}`,
-				isSelectable: !(member.userId === currentUserId.value || member.roomRoleName === RoleName.Roomowner),
+				isSelectable: isSelectable(member),
 				displayRoomRole: roomRole[member.roomRoleName],
 				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 			}));
@@ -388,6 +411,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	return {
 		addMembers,
 		isRoomOwner,
+		init,
 		changeRoomOwner,
 		confirmInvitations,
 		fetchMembers,
@@ -408,7 +432,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isCurrentUserStudent,
 		isLoading,
 		roomMembers,
-		roomMembersForAdmins,
 		roomMembersWithoutApplicants,
 		roomApplicants,
 		potentialRoomMembers,

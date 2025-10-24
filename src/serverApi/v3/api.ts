@@ -23141,6 +23141,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get a list of room members for admins where names are partially redacted.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetMembersRedacted: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerGetMembersRedacted', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/members-redacted`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get the boards of a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -23532,6 +23570,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of room members for admins where names are partially redacted.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetMembersRedacted(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomMemberListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetMembersRedacted(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get the boards of a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -23706,6 +23755,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get a list of room members for admins where names are partially redacted.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetMembersRedacted(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse> {
+            return localVarFp.roomControllerGetMembersRedacted(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get the boards of a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -23869,6 +23928,16 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerGetMembers(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse>;
+
+    /**
+     * 
+     * @summary Get a list of room members for admins where names are partially redacted.
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetMembersRedacted(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse>;
 
     /**
      * 
@@ -24050,6 +24119,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerGetMembers(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerGetMembers(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of room members for admins where names are partially redacted.
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetMembersRedacted(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetMembersRedacted(roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

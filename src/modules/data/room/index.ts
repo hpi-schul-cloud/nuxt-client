@@ -7,7 +7,7 @@ export { useRoomAuthorization } from "./roomAuthorization.composable";
 export { useRoomCreateState } from "./RoomCreate.state";
 export { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
-export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
+export { createRoomMembersStore, useRoomMembersStore } from "./roomMembers/RoomMembers.store";
 export type {
 	CreateRoomInvitationLinkDto,
 	RoomInvitationFormData,

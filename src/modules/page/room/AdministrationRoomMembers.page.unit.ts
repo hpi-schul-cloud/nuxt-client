@@ -85,6 +85,7 @@ describe("AdministrationRoomMembers.page", () => {
 
 		const adminRoomStore = mockedPiniaStoreTyping(useAdministrationRoomStore);
 		const memberStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		memberStore.init({ asAdmin: true });
 
 		return {
 			wrapper,
