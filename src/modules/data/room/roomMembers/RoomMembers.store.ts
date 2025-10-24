@@ -102,6 +102,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const fetchMembers = async () => {
+		const isSelectable = (member: RoomMemberResponse) => {
+			const isRoomOwner = member.roomRoleName === RoleName.Roomowner;
+			if (isRoomOwner) return false;
+
+			const isUserHimself = member.userId === currentUserId.value;
+			if (isUserHimself && !_asAdmin) return false;
+
+			const isAnonymizedMember = member.firstName === "---" && member.lastName === "---";
+			if (isAnonymizedMember) return false;
+
+			return true;
+		};
+
 		try {
 			isLoading.value = true;
 			const getMembers = _asAdmin ? roomApi.roomControllerGetMembersRedacted : roomApi.roomControllerGetMembers;
@@ -109,7 +122,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => ({
 				...member,
 				fullName: `${member.firstName} ${member.lastName}`,
-				isSelectable: !(member.userId === currentUserId.value || member.roomRoleName === RoleName.Roomowner),
+				isSelectable: isSelectable(member),
 				displayRoomRole: roomRole[member.roomRoleName],
 				displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 			}));
