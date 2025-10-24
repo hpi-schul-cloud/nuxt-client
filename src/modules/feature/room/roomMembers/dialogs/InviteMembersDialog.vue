@@ -23,7 +23,7 @@
 						{{ t("pages.rooms.members.inviteMember.infoAlert.text") }}
 					</InfoAlert>
 
-					<div class="mt-5">
+					<VForm ref="inviteMembersForm" class="mt-5">
 						<VTextField
 							ref="descriptionField"
 							v-model="formData.title"
@@ -105,7 +105,7 @@
 								</template>
 							</VCheckbox>
 						</div>
-					</div>
+					</VForm>
 				</template>
 				<template v-else>
 					<ShareModalResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
@@ -127,7 +127,6 @@
 						class="ms-auto"
 						color="primary"
 						variant="flat"
-						:disabled="isSubmitDisabled"
 						:text="t('common.actions.continue')"
 						data-testid="invite-participant-save-btn"
 						@click="onContinue"
@@ -209,6 +208,7 @@ const defaultFormData: RoomInvitationFormData = {
 };
 
 const formData = ref({ ...defaultFormData });
+const inviteMembersForm = useTemplateRef("inviteMembersForm");
 const descriptionField = useTemplateRef("descriptionField");
 
 const validationRules = [
@@ -218,8 +218,6 @@ const validationRules = [
 ];
 
 const isDatePickerDisabled = computed(() => !formData.value.activeUntilChecked);
-
-const isSubmitDisabled = computed(() => formData.value.activeUntilChecked && !formData.value.activeUntil);
 
 const modalTitle = computed(() => {
 	const titleMap = {
@@ -256,10 +254,15 @@ const onClose = () => {
 };
 
 const onContinue = async () => {
-	if (invitationStep.value === InvitationStep.SHARE) return;
+	if (invitationStep.value === InvitationStep.SHARE || inviteMembersForm.value === null) return;
 
-	const validationResult = await descriptionField.value?.validate?.();
-	if (validationResult && validationResult.length > 0) {
+	const { valid, errors } = await inviteMembersForm.value.validate();
+	if (!valid && errors.length > 0) {
+		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting,
+		// so we are focusing the first invalid input to announce the error.
+		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
 		return;
 	}
 
