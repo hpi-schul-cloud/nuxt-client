@@ -241,8 +241,8 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (date: Date) => {
-	formData.value.activeUntil = date;
+const onUpdateDate = (isoDate: string | null) => {
+	formData.value.activeUntil = isoDate ?? undefined;
 	unpause();
 };
 
@@ -317,7 +317,7 @@ watch(
 			formData.value.isUsableByStudents = newVal.isUsableByStudents;
 			formData.value.isUsableByExternalPersons = newVal.isUsableByExternalPersons;
 			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
-			formData.value.activeUntil = newVal.activeUntil ? new Date(newVal.activeUntil) : undefined;
+			formData.value.activeUntil = newVal.activeUntil;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}
