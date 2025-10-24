@@ -29,11 +29,10 @@ export const useFolderState = () => {
 	});
 
 	const folderName = computed(() => {
-		if (!fileFolderElement.value?.content.title) {
-			return t("pages.folder.untitled");
-		}
-		return fileFolderElement.value.content.title;
+		const title = fileFolderElement.value?.content.title;
+		return title || t("pages.folder.untitled");
 	});
+
 	const pageTitle = computed(() => buildPageTitle(folderName.value, parent.value?.name ?? t("pages.folder.title")));
 
 	const breadcrumbs = computed<Breadcrumb[]>(() => {
