@@ -1,5 +1,5 @@
 <template>
-	<date-picker
+	<DatePicker
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"
@@ -7,7 +7,7 @@
 		@update:date="onUpdateDate($event, '$gte')"
 	/>
 
-	<date-picker
+	<DatePicker
 		class="mr-2"
 		:date="dateSelection.$lte"
 		:label="t('utils.adminFilter.date.label.until')"
@@ -50,8 +50,8 @@ const dateSelection = ref<DateSelection>({
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const onUpdateDate = (date: string, fromUntil: "$gte" | "$lte") => {
-	dateSelection.value[fromUntil] = date;
+const onUpdateDate = (date: string | null, fromUntil: "$gte" | "$lte") => {
+	dateSelection.value[fromUntil] = date ?? "";
 };
 
 const onUpdateFilter = () => {
