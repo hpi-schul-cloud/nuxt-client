@@ -7,7 +7,7 @@
 		data-testid="file-status-scan-pending"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
-		{{ t("common.file.awaitingScan") }}
+		{{ t("common.file.awaitingScan.short") }}
 	</VChip>
 	<VChip
 		v-if="isScanStatusWontCheck(fileRecord.previewStatus)"
@@ -17,7 +17,7 @@
 		data-testid="file-status-scan-wont-check"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
-		{{ t("common.file.scanWontCheck") }}
+		{{ t("common.file.scanWontCheck.short") }}
 	</VChip>
 	<VChip
 		v-if="isScanStatusError(fileRecord.previewStatus)"
@@ -27,7 +27,7 @@
 		data-testid="file-status-scan-error"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
-		{{ t("common.file.scanError") }}
+		{{ t("common.file.scanError.short") }}
 	</VChip>
 	<VChip
 		v-if="!isScanStatusBlocked(fileRecord.securityCheckStatus)"
@@ -37,7 +37,7 @@
 		data-testid="file-status-scan-virus-detected"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
-		{{ t("common.file.virusDetected") }}
+		{{ t("common.file.virusDetected.short") }}
 	</VChip>
 </template>
 
