@@ -19,14 +19,6 @@ import { NamedValue } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
@@ -94,6 +86,7 @@ describe("User Migration / Index", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
+			SC_TITLE: "dBildungscloud",
 			SC_THEME: SchulcloudTheme.Default,
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
@@ -115,10 +108,11 @@ describe("User Migration / Index", () => {
 	it("should set page title", () => {
 		const wrapper = getWrapperShallow();
 
-		const title = wrapper.vm.t?.("pages.administration.migration.title", {
-			source: "LDAP",
-			instance: $theme.name,
-		});
+		const title =
+			wrapper.vm.t?.("pages.administration.migration.title", {
+				source: "LDAP",
+				instance: $theme.name,
+			}) + " - dBildungscloud";
 		expect(document.title).toBe(title);
 	});
 

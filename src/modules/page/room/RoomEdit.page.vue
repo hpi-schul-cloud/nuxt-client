@@ -39,7 +39,7 @@ const { canEditRoom } = useRoomAuthorization();
 
 const roomData = ref<RoomUpdateParams>();
 
-const pageTitle = computed(() => buildPageTitle(`${t("pages.roomEdit.title")}`));
+const pageTitle = computed(() => buildPageTitle(t("pages.roomEdit.title"), roomData.value?.name));
 useTitle(pageTitle);
 
 onMounted(async () => {

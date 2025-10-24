@@ -97,6 +97,7 @@
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
 			"@util-vue": ["src/modules/util/vue"],
+            "@util-browser": ["src/modules/util/browser"],
 			"@util-input-masks": ["src/modules/util/input-masks"],
 			"@util-device-detection": ["src/modules/util/device-detection"],
 			"@util-error-notification": ["src/modules/util/error-notification"],

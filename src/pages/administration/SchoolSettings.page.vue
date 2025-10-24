@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe :headline="headline" :breadcrumbs="breadcrumbs" max-width="nativ">
+	<default-wireframe :headline="headline" max-width="nativ">
 		<v-alert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
 				{{ $t(error.translationKey) }}
@@ -140,7 +140,6 @@ import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
 import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
@@ -175,17 +174,6 @@ export default defineComponent({
 		const pageTitle = buildPageTitle(headline.value);
 		useTitle(pageTitle);
 		const { fetchSchoolYearStatus, maintenanceStatus } = useSharedSchoolYearChange();
-
-		const breadcrumbs: Ref<Breadcrumb[]> = ref([
-			{
-				title: t("pages.administration.index.title"),
-				disabled: true,
-			},
-			{
-				title: t("pages.administration.school.index.title"),
-				disabled: true,
-			},
-		]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
@@ -227,7 +215,6 @@ export default defineComponent({
 
 		return {
 			headline,
-			breadcrumbs,
 			openedPanels,
 			school,
 			systems,
