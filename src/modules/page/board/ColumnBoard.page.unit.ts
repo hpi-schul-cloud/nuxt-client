@@ -4,6 +4,8 @@ import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
+vi.mock("vue-router");
+
 describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {
 		const boardId = "test-board-id";

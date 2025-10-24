@@ -82,7 +82,7 @@ describe("RoomsPage", () => {
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
 				},
-				stubs: { ImportFlow: true },
+				stubs: { ImportFlow: true, RouterLink: true },
 			},
 		});
 
