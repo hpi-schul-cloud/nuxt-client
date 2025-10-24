@@ -219,6 +219,11 @@ export const useBoardApi = () => {
 		return response.data;
 	};
 
+	const duplicateCardCall = async (cardId: string) => {
+		const response = await cardsApi.cardControllerCopyCard(cardId);
+		return response.data;
+	};
+
 	const moveCardCall = async (cardId: string, toColumnId: string, toPosition: number): Promise<void> => {
 		await cardsApi.cardControllerMoveCard(cardId, {
 			toColumnId,
@@ -304,6 +309,7 @@ export const useBoardApi = () => {
 		updateColumnTitleCall,
 		updateElementCall,
 		createCardCall,
+		duplicateCardCall,
 		getContextInfo,
 		updateBoardLayoutCall,
 		getElementWithParentHierarchyCall,

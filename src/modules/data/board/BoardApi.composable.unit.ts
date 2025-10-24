@@ -125,6 +125,18 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
+	describe("duplicateCardCall", () => {
+		it("should call cardControllerCopyCard api", async () => {
+			const { duplicateCardCall } = useBoardApi();
+
+			const id = "duplicate-card-id";
+
+			await duplicateCardCall(id);
+
+			expect(cardApi.cardControllerCopyCard).toHaveBeenCalledWith(id);
+		});
+	});
+
 	describe("updateColumnTitleCall", () => {
 		it("should call columnControllerUpdateColumnTitle api", async () => {
 			const { updateColumnTitleCall } = useBoardApi();

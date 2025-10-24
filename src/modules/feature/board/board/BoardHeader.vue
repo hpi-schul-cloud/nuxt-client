@@ -28,7 +28,7 @@
 			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu v-if="hasManageBoardPermission" :scope="BoardMenuScope.BOARD" data-testid="board-menu-btn">
 				<KebabMenuActionRename @click="onStartEditMode" />
-				<KebabMenuActionCopy @click="onCopyBoard" />
+				<KebabMenuActionDuplicate data-testid="kebab-menu-action-duplicate-board" @click="onCopyBoard" />
 				<KebabMenuActionShare v-if="isShareEnabled && hasShareBoardPermission" @click="onShareBoard" />
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
@@ -57,8 +57,8 @@ import { useEnvConfig } from "@data-env";
 import { BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionChangeLayout,
-	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
 	KebabMenuActionPublish,
 	KebabMenuActionRename,
 	KebabMenuActionRevert,

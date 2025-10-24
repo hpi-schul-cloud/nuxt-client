@@ -6,6 +6,7 @@ import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
+	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
@@ -28,7 +29,7 @@ import {
 import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
-import { notifyError } from "@data-app";
+import { notifyError, notifyInfo } from "@data-app";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
@@ -54,6 +55,7 @@ export const useCardRestApi = () => {
 		moveElementCall,
 		updateCardTitle,
 		updateCardHeightCall,
+		duplicateCardCall,
 	} = useBoardApi();
 
 	const { fetchPreferredTools } = useContextExternalToolApi();
@@ -216,6 +218,25 @@ export const useCardRestApi = () => {
 		}
 	};
 
+	const duplicateCardRequest = async (payload: DuplicateCardRequestPayload) => {
+		const card = cardStore.getCard(payload.cardId);
+		if (card === undefined) return;
+
+		try {
+			const duplicatedCard = await duplicateCardCall(payload.cardId);
+
+			if (duplicatedCard.id) {
+				cardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
+
+				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
+			}
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDuplicated", "boardCard"),
+			});
+		}
+	};
+
 	const fetchCardRequest = async (payload: FetchCardRequestPayload): Promise<void> => {
 		await delay(100);
 		try {
@@ -275,6 +296,7 @@ export const useCardRestApi = () => {
 		deleteElementRequest,
 		moveElementRequest,
 		updateElementRequest,
+		duplicateCardRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

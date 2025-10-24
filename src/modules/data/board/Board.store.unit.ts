@@ -419,6 +419,39 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("duplicateCardSuccess", () => {
+		it("should not duplicate card when a board is undefined", () => {
+			const { boardStore, cards } = setup({ createBoard: false });
+
+			boardStore.duplicateCardSuccess({
+				cardId: cards[0].cardId,
+				duplicatedCard: cardResponseFactory.build(),
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should duplicate a card", () => {
+			const { boardStore, cards } = setup();
+			const firstCardId = cards[0].cardId;
+
+			const duplicatedCard = cardResponseFactory.build();
+			boardStore.duplicateCardSuccess({
+				cardId: firstCardId,
+				duplicatedCard,
+				isOwnAction: true,
+			});
+
+			const secondCard = boardStore.board?.columns[0].cards[1];
+
+			expect(secondCard).toEqual({
+				cardId: duplicatedCard.id,
+				height: duplicatedCard.height,
+			});
+		});
+	});
+
 	describe("deleteColumnSuccess", () => {
 		it("should not delete a column when board value is undefined", () => {
 			const { boardStore, firstColumn } = setup({ createBoard: false });
