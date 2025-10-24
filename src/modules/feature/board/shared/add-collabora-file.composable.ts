@@ -45,13 +45,17 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 	};
 
 	const updateFileElementCaption = async (element: AnyContentElement, caption: string) => {
+		if (!(caption && caption.trim().length > 0)) {
+			return;
+		}
+
 		const elementContent = FileElementContentSchema.parse(element.content);
 		elementContent.caption = caption;
 		element.content = elementContent;
 		await cardStore.updateElementRequest({ element });
 	};
 
-	const getAssetUrl = (collaboraFileType: CollaboraFileType): string | undefined => {
+	const getAssetUrl = (collaboraFileType: CollaboraFileType): string => {
 		const base = `${window.location.origin}/collabora`;
 
 		if (collaboraFileType === CollaboraFileType.Text) {
@@ -60,9 +64,8 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
 			return `${base}/spreadsheet.xlsx`;
 		}
-		if (collaboraFileType === CollaboraFileType.Presentation) {
-			return `${base}/presentation.pptx`;
-		}
+
+		return `${base}/presentation.pptx`;
 	};
 
 	const createFileElementWithCollaboraFile = async (type: CollaboraFileType, fileName: string, caption: string) => {
@@ -75,22 +78,13 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		}
 
 		const assetUrl = getAssetUrl(type);
-		if (!assetUrl) {
-			return;
-		}
-
 		const fileExtension = getFileExtension(assetUrl);
-		if (!fileExtension) {
-			return;
-		}
 
 		try {
 			disableFileSelectOnMount();
-			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fileName + "." + fileExtension);
-
-			if (caption && caption.trim().length > 0) {
-				await updateFileElementCaption(element, caption.trim());
-			}
+			const fullFileName = fileExtension ? `${fileName}.${fileExtension}` : fileName;
+			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fullFileName);
+			await updateFileElementCaption(element, caption.trim());
 		} catch {
 			await cardStore.deleteElementRequest({ elementId: element.id, cardId: cardId.value });
 		} finally {
