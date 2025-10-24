@@ -40,7 +40,6 @@
 								v-model="formData.restrictedToCreatorSchool"
 								hide-details
 								data-testid="input-invite-participants-restricted-to-creator-school"
-								class="mb-3"
 							>
 								<template #label>
 									<div>
@@ -327,17 +326,14 @@ watch(
 const informationLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
 </script>
 <style scoped lang="scss">
-.checkbox-align-start :deep(.v-selection-control) {
-	align-items: flex-start !important;
-}
-
 .checkbox-container .v-checkbox {
 	:deep(.v-selection-control) {
-		align-items: flex-start !important;
+		align-items: flex-start;
 	}
 	:deep(.v-label) {
-		margin-top: 8px !important;
-		align-items: flex-start !important;
+		padding-bottom: 16px;
+		margin-top: 8px;
+		align-items: flex-start;
 	}
 }
 </style>
