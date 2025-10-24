@@ -336,7 +336,7 @@ describe("useCardSocketApi", () => {
 
 			createElementRequest(payload);
 
-			expect(socketMock.emitOnSocket).toHaveBeenCalledWith("create-element-request", payload);
+			expect(socketMock.emitWithAck).toHaveBeenCalledWith("create-element-request", payload);
 		});
 	});
 

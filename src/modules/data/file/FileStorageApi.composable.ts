@@ -69,14 +69,19 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const uploadFromUrl = async (imageUrl: string, parentId: string, parentType: FileRecordParent): Promise<void> => {
+	const uploadFromUrl = async (
+		imageUrl: string,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName?: string
+	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
+			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
 			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
-				fileName,
+				fileName: fileName === "" ? "file" : fileName,
 				headers: { "User-Agent": "Embed Request User Agent" },
 			};
 			const response = await fileApi.uploadFromUrl(
