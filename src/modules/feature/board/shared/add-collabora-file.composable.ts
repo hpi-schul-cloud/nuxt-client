@@ -46,7 +46,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 
 	const updateFileElementCaption = async (element: AnyContentElement, caption: string) => {
 		const elementContent = FileElementContentSchema.parse(element.content);
-
 		elementContent.caption = caption;
 		element.content = elementContent;
 		await cardStore.updateElementRequest({ element });
@@ -74,20 +73,12 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		if (!element) {
 			return;
 		}
-		initializeFileElementWithCollaboraFile(cardId.value, element, type, fileName, caption);
-	};
 
-	const initializeFileElementWithCollaboraFile = async (
-		cardId: string,
-		element: AnyContentElement,
-		collaboraFileType: CollaboraFileType,
-		fileName: string,
-		caption: string
-	) => {
-		const assetUrl = getAssetUrl(collaboraFileType);
+		const assetUrl = getAssetUrl(type);
 		if (!assetUrl) {
 			return;
 		}
+
 		const fileExtension = getFileExtension(assetUrl);
 		if (!fileExtension) {
 			return;
@@ -101,7 +92,7 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 				await updateFileElementCaption(element, caption.trim());
 			}
 		} catch {
-			await cardStore.deleteElementRequest({ elementId: element.id, cardId });
+			await cardStore.deleteElementRequest({ elementId: element.id, cardId: cardId.value });
 		} finally {
 			resetFileSelectOnMountEnabled();
 			closeCollaboraFileDialog();
@@ -130,13 +121,13 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 	];
 
 	return {
+		cardId,
+		collaboraFileSelectionOptions,
+		isCollaboraFileDialogOpen,
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
-		isCollaboraFileDialogOpen,
-		collaboraFileSelectionOptions,
 		getAssetUrl,
 		setCardId,
-		cardId,
 		setCreateElementRequestFn,
 	};
 });

@@ -28,14 +28,14 @@ export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
 	const cardId = ref("");
 
 	const mocks = {
-		openCollaboraFileDialog,
-		closeCollaboraFileDialog,
+		cardId,
 		collaboraFileSelectionOptions,
 		isCollaboraFileDialogOpen,
+		openCollaboraFileDialog,
+		closeCollaboraFileDialog,
 		getAssetUrl,
 		setCardId,
 		setCreateElementRequestFn,
-		cardId,
 	};
 
 	mockedCollaboraFileSelection.mockReturnValue(mocks);
