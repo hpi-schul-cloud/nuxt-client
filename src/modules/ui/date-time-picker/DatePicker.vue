@@ -117,4 +117,13 @@ watch(
 		}
 	}
 );
+
+watch(
+	() => props.required,
+	async (required) => {
+		if (required === false) {
+			await dateTextField.value?.resetValidation();
+		}
+	}
+);
 </script>
