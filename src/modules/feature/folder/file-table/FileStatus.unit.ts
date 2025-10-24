@@ -28,7 +28,7 @@ describe("FileStatus", () => {
 	});
 
 	describe("when status pending", () => {
-		it("sould shows v-icon", () => {
+		it("should show correct VChip", () => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: PreviewStatus.AWAITING_SCAN_STATUS,
 			});
@@ -40,7 +40,7 @@ describe("FileStatus", () => {
 	});
 
 	describe("when status wont check", () => {
-		it("sould shows v-icon", () => {
+		it("should show correctVChip", () => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK,
 			});
@@ -52,7 +52,7 @@ describe("FileStatus", () => {
 	});
 
 	describe("when status error", () => {
-		it("sould shows v-icon", () => {
+		it("should show correctVChip", () => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR,
 			});
@@ -64,7 +64,7 @@ describe("FileStatus", () => {
 	});
 
 	describe("when status virus detected", () => {
-		it("sould shows v-icon", () => {
+		it("should show correctVChip", () => {
 			const fileRecord = fileRecordFactory.build({
 				securityCheckStatus: FileRecordScanStatus.BLOCKED,
 			});
