@@ -16,6 +16,14 @@ export const useFileRecordsStore = defineStore("fileRecords", {
 			return parentRecords ? Array.from(parentRecords.values()) : [];
 		},
 
+		getFileRecordById(fileRecordId: string): FileRecord | undefined {
+			for (const parentRecords of this.recordsByParent.values()) {
+				const record = parentRecords.get(fileRecordId);
+
+				if (record) return record;
+			}
+		},
+
 		upsertFileRecords(updatedRecords: FileRecord[]): void {
 			updatedRecords.forEach((updatedRecord) => {
 				const { parentId, id } = updatedRecord;

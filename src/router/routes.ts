@@ -142,6 +142,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/boards/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-board")).ColumnBoardPage,
+		name: "boards-id",
+		props: (route: RouteLocationNormalized) => ({
+			boardId: route.params.id,
+		}),
+	},
+	{
 		path: `/collabora/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-collabora")).CollaboraPage,
 		name: "collabora",
@@ -174,6 +182,47 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "error",
 		meta: {
 			isPublic: true,
+		},
+	},
+	{
+		path: `/folder/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-folder")).FolderPage,
+		beforeEnter: [checkFolderFeature],
+		name: "folder-id",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
+	},
+	{
+		path: `/h5p/player/:contentId(${REGEX_ID})`,
+		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
+		name: "h5pPlayer",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+		}),
+		props: (to: RouteLocationNormalized) => ({
+			parentType: to.query.parentType,
+			contentId: to.params.contentId,
+		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
+	},
+	{
+		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
+		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
+		name: "h5pEditor",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+			parentId: isMongoId,
+		}),
+		props: (to: RouteLocationNormalized) => ({
+			parentId: to.query.parentId,
+			parentType: to.query.parentType,
+			contentId: to.params.contentId || undefined,
+		}),
+		meta: {
+			layout: Layouts.BORDERLESS,
 		},
 	},
 	{
@@ -211,6 +260,19 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: "/licenses",
+		component: async () => await import("@/pages/LicenseList.page.vue"),
+		name: "licenses",
+		meta: {
+			isPublic: true,
+		},
+	},
+	{
+		path: `/media-shelf`,
+		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
+		name: "media-shelf",
+	},
+	{
 		path: "/migration/success",
 		component: () => import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",
@@ -238,13 +300,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard([Permission.NewsEdit]),
 	},
 	{
-		path: `/folder/:id(${REGEX_ID})`,
-		component: async () => (await import("@page-folder")).FolderPage,
-		beforeEnter: [checkFolderFeature],
-		name: "folder-id",
-		props: (route: RouteLocationNormalized) => ({
-			folderId: route.params.id,
-		}),
+		path: "/registration-external-members",
+		component: () => import("@/pages/registration-external-members/RegistrationExternalMembers.page.vue"),
+		name: "registration-external-members",
+		beforeEnter: checkRegisterExternalPersonsFeature,
+		meta: {
+			isPublic: true,
+			layout: Layouts.REGISTRATION,
+		},
 	},
 	{
 		path: `/rooms`,
@@ -296,14 +359,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "rooms-board",
 	},
 	{
-		path: `/boards/:id(${REGEX_ID})`,
-		component: async () => (await import("@page-board")).ColumnBoardPage,
-		name: "boards-id",
-		props: (route: RouteLocationNormalized) => ({
-			boardId: route.params.id,
-		}),
-	},
-	{
 		path: `/rooms/invitation-link/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-room")).RoomInvitationLinkStatusPage,
 		name: "rooms-invitation-link-id",
@@ -339,61 +394,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			contextType: to.query.contextType,
 			configId: to.params.configId,
 		}),
-	},
-	{
-		path: `/h5p/player/:contentId(${REGEX_ID})`,
-		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
-		name: "h5pPlayer",
-		beforeEnter: validateQueryParameters({
-			parentType: isEnum(H5PContentParentType),
-		}),
-		props: (to: RouteLocationNormalized) => ({
-			parentType: to.query.parentType,
-			contentId: to.params.contentId,
-		}),
-		meta: {
-			layout: Layouts.BORDERLESS,
-		},
-	},
-	{
-		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
-		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
-		name: "h5pEditor",
-		beforeEnter: validateQueryParameters({
-			parentType: isEnum(H5PContentParentType),
-			parentId: isMongoId,
-		}),
-		props: (to: RouteLocationNormalized) => ({
-			parentId: to.query.parentId,
-			parentType: to.query.parentType,
-			contentId: to.params.contentId || undefined,
-		}),
-		meta: {
-			layout: Layouts.BORDERLESS,
-		},
-	},
-	{
-		path: `/media-shelf`,
-		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
-		name: "media-shelf",
-	},
-	{
-		path: "/licenses",
-		component: async () => await import("@/pages/LicenseList.page.vue"),
-		name: "licenses",
-		meta: {
-			isPublic: true,
-		},
-	},
-	{
-		path: "/registration-external-members",
-		component: () => import("@/pages/registration-external-members/RegistrationExternalMembers.page.vue"),
-		name: "registration-external-members",
-		beforeEnter: checkRegisterExternalPersonsFeature,
-		meta: {
-			isPublic: true,
-			layout: Layouts.REGISTRATION,
-		},
 	},
 	{
 		path: "/",
