@@ -62,8 +62,9 @@ describe("AddMembersDialog", () => {
 
 	const setup = (options?: {
 		customRoomAuthorization?: RoomAuthorizationRefs;
-		schoolRole?: RoleName.Teacher | RoleName.Student;
+		schoolRole?: RoleName.Teacher | RoleName.Student | RoleName.Administrator;
 		isOpen?: boolean;
+		isAdminMode?: boolean;
 	}) => {
 		const configDefaults = {
 			canAddRoomMembers: true,
@@ -96,6 +97,7 @@ describe("AddMembersDialog", () => {
 		wrapper = mount(AddMembersDialog, {
 			props: {
 				modelValue: options?.isOpen ?? true,
+				isAdminMode: options?.isAdminMode ?? false,
 			},
 			attachTo: document.body,
 			global: {
@@ -202,139 +204,6 @@ describe("AddMembersDialog", () => {
 
 				expect(userComponent.props("items")).toStrictEqual(potentialRoomMembers);
 				expect(userComponent.props("modelValue")).toHaveLength(0);
-			});
-		});
-	});
-
-	describe("when school is changed", () => {
-		it("should call resetPotentialMembers", async () => {
-			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-			const selectedSchool = roomMembersSchools[1].id;
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
-			await schoolComponent.setValue(selectedSchool);
-
-			expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
-		});
-
-		it("should reset selectedUsers", async () => {
-			const { wrapper } = setup();
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
-			const userComponent = wrapper.getComponent({
-				ref: "autoCompleteUsers",
-			});
-
-			await schoolComponent.setValue("schoolId");
-
-			expect(userComponent.props("modelValue")).toEqual([]);
-		});
-
-		it("should call getPotentialMembers for set role", async () => {
-			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-			const selectedSchool = roomMembersSchools[1].id;
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
-			});
-			const selectedRole = roleComponent.props("modelValue");
-
-			await schoolComponent.setValue(selectedSchool);
-
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, selectedSchool);
-		});
-	});
-
-	describe("when userRole is changed", () => {
-		it("should call resetPotentialMembers", async () => {
-			const { wrapper, roomMembersStore } = setup();
-			const selectedRole = RoleName.Student;
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
-			});
-
-			await roleComponent.setValue(selectedRole);
-
-			expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
-		});
-
-		it("should reset selectedUsers", async () => {
-			const { wrapper } = setup();
-			const roleComponent = wrapper.getComponent({
-				ref: "selectRole",
-			});
-
-			const userComponent = wrapper.getComponent({
-				ref: "autoCompleteUsers",
-			});
-
-			await roleComponent.setValue(RoleName.Roomeditor);
-
-			expect(userComponent.props("modelValue")).toEqual([]);
-		});
-
-		describe("and the role is set to student", () => {
-			it("should call getPotentialMembers for student role", async () => {
-				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-				const selectedRole = RoleName.Student;
-				const roleComponent = wrapper.getComponent({
-					ref: "selectRole",
-				});
-
-				await roleComponent.setValue(selectedRole);
-
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
-			});
-
-			it("should render an icon with text for student role", async () => {
-				const { wrapper } = setup();
-
-				const roleComponent = wrapper.getComponent({
-					ref: "selectRole",
-				});
-				await roleComponent.setValue(RoleName.Student);
-
-				const roleIcon = roleComponent.findComponent(VIcon);
-
-				expect(roleIcon.props("icon")).toBe(mdiAccountOutline);
-				expect(roleComponent.text()).toContain("common.labels.student.neutral");
-			});
-		});
-
-		describe("and the role is set to teacher", () => {
-			it("should call getPotentialMembers for teacher role", async () => {
-				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-				const selectedRole = RoleName.Teacher;
-				const roleComponent = wrapper.getComponent({
-					ref: "selectRole",
-				});
-
-				await roleComponent.setValue(selectedRole);
-
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
-			});
-
-			it("should render an icon with text for teacher role", async () => {
-				const { wrapper } = setup();
-
-				const roleComponent = wrapper.getComponent({
-					ref: "selectRole",
-				});
-
-				await roleComponent.setValue(RoleName.Teacher);
-				const roleIcon = roleComponent.findComponent(VIcon);
-
-				expect(roleIcon.props("icon")).toBe(mdiAccountSchoolOutline);
-				expect(roleComponent.text()).toContain("common.labels.teacher.neutral");
 			});
 		});
 	});
@@ -615,6 +484,171 @@ describe("AddMembersDialog", () => {
 
 				const infoAlert = wrapper.findComponent('[data-testid="student-admin-info-alert"]');
 				expect(infoAlert.text()).toBe("pages.rooms.members.add.students.studentAdmins");
+			});
+		});
+	});
+
+	describe("when it is used by an administrator in the room administration", () => {
+		it("should not allow the school role to be changed", () => {
+			const { wrapper } = setup({ schoolRole: RoleName.Administrator, isOpen: true, isAdminMode: true });
+			const roleSelect = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			expect(roleSelect.props("readonly")).toBe(true);
+			expect(roleSelect.props("menuIcon")).toBe("");
+		});
+		it("the school role should be set to teacher", () => {
+			const { wrapper } = setup({ schoolRole: RoleName.Administrator, isOpen: true, isAdminMode: true });
+			const roleSelect = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			expect(roleSelect.props("modelValue")).toBe(RoleName.Teacher);
+		});
+	});
+
+	describe("when it is used by a teacher in the room management", () => {
+		it("should allow the school role to be changed", () => {
+			const { wrapper } = setup({ schoolRole: RoleName.Teacher, isOpen: true, isAdminMode: false });
+			const roleSelect = wrapper.getComponent({
+				ref: "selectRole",
+			});
+
+			expect(roleSelect.props("readonly")).toBe(false);
+			expect(roleSelect.props("menuIcon")).not.toBe("");
+		});
+
+		describe("when school is changed", () => {
+			it("should call resetPotentialMembers", async () => {
+				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+				const selectedSchool = roomMembersSchools[1].id;
+				const schoolComponent = wrapper.getComponent({
+					ref: "autoCompleteSchool",
+				});
+
+				await schoolComponent.setValue(selectedSchool);
+
+				expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
+			});
+
+			it("should reset selectedUsers", async () => {
+				const { wrapper } = setup();
+				const schoolComponent = wrapper.getComponent({
+					ref: "autoCompleteSchool",
+				});
+
+				const userComponent = wrapper.getComponent({
+					ref: "autoCompleteUsers",
+				});
+
+				await schoolComponent.setValue("schoolId");
+
+				expect(userComponent.props("modelValue")).toEqual([]);
+			});
+
+			it("should call getPotentialMembers for set role", async () => {
+				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+				const selectedSchool = roomMembersSchools[1].id;
+				const schoolComponent = wrapper.getComponent({
+					ref: "autoCompleteSchool",
+				});
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+				const selectedRole = roleComponent.props("modelValue");
+
+				await schoolComponent.setValue(selectedSchool);
+
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, selectedSchool);
+			});
+		});
+
+		describe("when userRole is changed", () => {
+			it("should call resetPotentialMembers", async () => {
+				const { wrapper, roomMembersStore } = setup();
+				const selectedRole = RoleName.Student;
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				await roleComponent.setValue(selectedRole);
+
+				expect(roomMembersStore.resetPotentialMembers).toHaveBeenCalledTimes(1);
+			});
+
+			it("should reset selectedUsers", async () => {
+				const { wrapper } = setup();
+				const roleComponent = wrapper.getComponent({
+					ref: "selectRole",
+				});
+
+				const userComponent = wrapper.getComponent({
+					ref: "autoCompleteUsers",
+				});
+
+				await roleComponent.setValue(RoleName.Roomeditor);
+
+				expect(userComponent.props("modelValue")).toEqual([]);
+			});
+
+			describe("and the role is set to student", () => {
+				it("should call getPotentialMembers for student role", async () => {
+					const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+					const selectedRole = RoleName.Student;
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					await roleComponent.setValue(selectedRole);
+
+					expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+					expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
+				});
+
+				it("should render an icon with text for student role", async () => {
+					const { wrapper } = setup();
+
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+					await roleComponent.setValue(RoleName.Student);
+
+					const roleIcon = roleComponent.findComponent(VIcon);
+
+					expect(roleIcon.props("icon")).toBe(mdiAccountOutline);
+					expect(roleComponent.text()).toContain("common.labels.student.neutral");
+				});
+			});
+
+			describe("and the role is set to teacher", () => {
+				it("should call getPotentialMembers for teacher role", async () => {
+					const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+					const selectedRole = RoleName.Teacher;
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					await roleComponent.setValue(selectedRole);
+
+					expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+					expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(selectedRole, roomMembersSchools[0].id);
+				});
+
+				it("should render an icon with text for teacher role", async () => {
+					const { wrapper } = setup();
+
+					const roleComponent = wrapper.getComponent({
+						ref: "selectRole",
+					});
+
+					await roleComponent.setValue(RoleName.Teacher);
+					const roleIcon = roleComponent.findComponent(VIcon);
+
+					expect(roleIcon.props("icon")).toBe(mdiAccountSchoolOutline);
+					expect(roleComponent.text()).toContain("common.labels.teacher.neutral");
+				});
 			});
 		});
 	});

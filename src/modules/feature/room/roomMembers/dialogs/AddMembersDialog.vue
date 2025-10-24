@@ -25,8 +25,7 @@
 						item-value="id"
 						:items="schoolItems"
 						:label="t('global.sidebar.item.school')"
-						:disabled="isSchoolSelectionDisabled"
-						:aria-disabled="isSchoolSelectionDisabled"
+						:disabled="isSchoolSelectionDisabled && !isAdminMode"
 						v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
 						@update:model-value="onValueChange"
 						@update:menu="onItemListToggle"
@@ -43,9 +42,10 @@
 						:item-props="schoolRoleListItemProps"
 						:items="schoolRoles"
 						:label="t('pages.rooms.members.tableHeader.schoolRole')"
-						:disabled="isItemListDisabled"
-						:aria-disabled="isItemListDisabled"
+						:disabled="isItemListDisabled && !isAdminMode"
+						:readonly="schoolRoles.length === 1"
 						:data-testid="`role-item-${selectedSchoolRole}`"
+						v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
 						@update:model-value="onValueChange"
 						@update:menu="onItemListToggle"
 					>
@@ -128,7 +128,7 @@ import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import type { VAutocomplete, VCard, VSelect } from "vuetify/components";
+import { type VAutocomplete, type VCard, type VSelect } from "vuetify/components";
 interface SchoolRoleItem {
 	id: RoleName;
 	name: string;
@@ -176,25 +176,26 @@ const { canAddAllStudents } = useRoomAuthorization();
 
 const selectedSchool = ref(schools.value[0].id);
 
-const schoolRoles: SchoolRoleItem[] = [
-	{
-		id: RoleName.Student,
-		name: t("common.labels.student.neutral"),
-		icon: mdiAccountOutline,
-	},
-	{
-		id: RoleName.Teacher,
-		name: t("common.labels.teacher.neutral"),
-		icon: mdiAccountSchoolOutline,
-	},
-];
+const schoolRoleStudent: SchoolRoleItem = {
+	id: RoleName.Student,
+	name: t("common.labels.student.neutral"),
+	icon: mdiAccountOutline,
+};
+
+const schoolRoleTeacher: SchoolRoleItem = {
+	id: RoleName.Teacher,
+	name: t("common.labels.teacher.neutral"),
+	icon: mdiAccountSchoolOutline,
+};
+
+const schoolRoles = computed(() => (props.isAdminMode ? [schoolRoleTeacher] : [schoolRoleStudent, schoolRoleTeacher]));
 
 const schoolRoleListItemProps = (item: SchoolRoleItem) => ({
 	title: item.name,
 	prependIcon: item.icon,
 });
 
-const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
+const selectedSchoolRole = ref<RoleName>(schoolRoles.value[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const addMembersContent = ref<VCard>();
