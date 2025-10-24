@@ -43,12 +43,12 @@ describe("AddCollaboraFileComposable", () => {
 		const {
 			openCollaboraFileDialog,
 			closeCollaboraFileDialog,
-			collaboraFileSelectionOptions,
 			setCardId,
-			isCollaboraFileDialogOpen,
 			setCreateElementRequestFn,
-			cardId,
 			getAssetUrl,
+			collaboraFileSelectionOptions,
+			isCollaboraFileDialogOpen,
+			cardId,
 		} = useAddCollaboraFile();
 
 		const createElementRequestFnMock = vi.fn().mockResolvedValue(newElement);
@@ -214,6 +214,19 @@ describe("AddCollaboraFileComposable", () => {
 					}
 
 					expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(0);
+				});
+			});
+
+			describe("when file upload fails", () => {
+				it("should delete the created file element", async () => {
+					const { collaboraFileSelectionOptions } = setup();
+					fileStorageApiMock.uploadFromUrl.mockRejectedValue(new Error("Upload failed"));
+
+					for (const option of collaboraFileSelectionOptions) {
+						await option.action("test-office-file", "");
+					}
+
+					expect(cardStore.deleteElementRequest).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
 				});
 			});
 		});
