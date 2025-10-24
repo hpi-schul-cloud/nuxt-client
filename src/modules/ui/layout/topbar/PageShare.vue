@@ -29,7 +29,7 @@ import { printQrCodes } from "@util-browser";
 
 const url = window.location.href;
 const openPrintMenu = () => {
-	printQrCodes([{ url, title: document.title }]);
+	printQrCodes([{ qrContent: url, title: document.title }]);
 };
 
 const onCopy = () => navigator.clipboard.writeText(url);

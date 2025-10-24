@@ -4,7 +4,7 @@ import QrcodeVue from "qrcode.vue";
 import { h, render } from "vue";
 
 export const printQrCodes = (
-	qrCodeItems: { title?: string; url: string }[],
+	qrCodeItems: { title?: string; qrContent: string }[],
 	options?: { printPageTitleKey?: string; printPageTabTitleKey?: string }
 ) => {
 	const printWindow = window.open("", "_blank");
@@ -79,14 +79,14 @@ export const printQrCodes = (
 		qrCodeList.classList.add("qrcode-list");
 		printWindow.document.body.appendChild(qrCodeList);
 
-		qrCodeItems.forEach(({ url, title }) => {
+		qrCodeItems.forEach(({ qrContent, title }) => {
 			const qrCodeListItem = document.createElement("li");
 			qrCodeListItem.className = "qr-item";
 
 			const qrCodeWrapper = document.createElement("div");
 			qrCodeWrapper.className = "qr-code";
 			const vnode = h(QrcodeVue, {
-				value: url,
+				value: qrContent,
 				size: 200,
 				level: "H",
 				renderAs: "svg",

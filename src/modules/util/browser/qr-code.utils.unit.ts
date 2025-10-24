@@ -27,19 +27,19 @@ describe("printQrCodes", () => {
 	});
 
 	it("should open a new print window", () => {
-		printQrCodes([{ url: "https://example.com" }]);
+		printQrCodes([{ qrContent: "https://example.com" }]);
 
 		expect(window.open).toHaveBeenCalledWith("", "_blank");
 	});
 
 	it("should add QR code items to the document", () => {
-		printQrCodes([{ url: "https://example.com" }, { url: "https://test.com" }]);
+		printQrCodes([{ qrContent: "https://example.com" }, { qrContent: "https://test.com" }]);
 
 		expect(mockWindow.document.body.appendChild).toHaveBeenCalledTimes(2);
 	});
 
 	it("should trigger print and close the window", () => {
-		printQrCodes([{ url: "https://example.com" }]);
+		printQrCodes([{ qrContent: "https://example.com" }]);
 
 		expect(mockWindow.print).toHaveBeenCalled();
 		expect(mockWindow.close).toHaveBeenCalled();
@@ -54,6 +54,6 @@ describe("printQrCodes", () => {
 	it("should not throw when window.open fails", () => {
 		vi.spyOn(window, "open").mockReturnValue(null);
 
-		expect(() => printQrCodes([{ url: "https://example.com" }])).not.toThrow();
+		expect(() => printQrCodes([{ qrContent: "https://example.com" }])).not.toThrow();
 	});
 });
