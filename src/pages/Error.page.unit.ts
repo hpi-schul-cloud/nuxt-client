@@ -9,14 +9,6 @@ import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({
 		set: vi.fn(),

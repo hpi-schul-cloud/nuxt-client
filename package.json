@@ -33,16 +33,15 @@
 		"@vueuse/core": "^13.3.0",
 		"@vueuse/integrations": "^13.3.0",
 		"axios": "^1.12.2",
-		"canvas": "^3.1.0",
 		"dayjs": "^1.11.10",
 		"focus-trap": "^7.6.5",
 		"katex": "^0.16.21",
-		"kjua": "^0.10.0",
 		"lodash-es": "^4.17.21",
 		"maska": "^2.1.10",
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
 		"pinia": "^3.0.2",
+		"qrcode.vue": "^3.6.0",
 		"socket.io-client": "^4.8.1",
 		"sortablejs": "^1.15.6",
 		"sortablejs-vue3": "^1.2.11",
@@ -71,7 +70,7 @@
 		"@vue/test-utils": "^2.4.5",
 		"arg": "^5.0.2",
 		"connect": "^3.7.0",
-		"eslint": "^9.27.0",
+		"eslint": "^9.38.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-prettier": "^5.4.0",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
@@ -86,7 +85,7 @@
 		"sass-embedded": "^1.86.3",
 		"typescript": "^5.7.3",
 		"typescript-eslint": "^8.33.1",
-		"vite": "^7.1.5",
+		"vite": "^7.1.11",
 		"vite-plugin-checker": "^0.9.3",
 		"vite-plugin-vue-devtools": "^8.0.0",
 		"vite-plugin-vuetify": "^2.1.1",
@@ -98,8 +97,7 @@
 	"overrides": {
 		"@openapitools/openapi-generator-cli": {
 			"axios": "$axios"
-		},
-		"canvas": "^3.1.0"
+		}
 	},
 	"engines": {
 		"node": "22",

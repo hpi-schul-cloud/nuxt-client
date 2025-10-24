@@ -1146,6 +1146,8 @@ export default {
 		"Die Migration kann nicht gestartet werden, da das Ziel-Login-System und das derzeitige Login-System Ihrer Schule identisch sind!",
 	"pages.administration.migration.moin_schule_system_not_found": "Das moin.schule-System kann nicht gefunden werden!",
 	"pages.administration.or": "oder",
+	"pages.administration.printQr.printPageTabTitle": "QR-Codes teilen",
+	"pages.administration.printQr.printPageTitle": "Zum Registrieren bitte den QR Code scannen.",
 	"pages.administration.printQr.emptyUser": "Dieser Nutzer wurde bereits registriert",
 	"pages.administration.printQr.error":
 		"Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
