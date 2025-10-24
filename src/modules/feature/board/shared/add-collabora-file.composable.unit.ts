@@ -162,6 +162,33 @@ describe("AddCollaboraFileComposable", () => {
 
 				expect(resetFileSelectOnMountEnabledMock).toHaveBeenCalled();
 			});
+
+			describe("when element creation fails", () => {
+				const setup = () => {
+					const { collaboraFileSelectionOptions, setCardId, setCreateElementRequestFn } = useAddCollaboraFile();
+
+					const createElementRequestFnMock = vi.fn().mockResolvedValue(undefined);
+
+					setCreateElementRequestFn(createElementRequestFnMock);
+					setCardId("test-card-id");
+
+					return {
+						collaboraFileSelectionOptions,
+						createElementRequestFnMock,
+					};
+				};
+
+				it("should not upload collabora file", async () => {
+					const { collaboraFileSelectionOptions } = setup();
+
+					for (const option of collaboraFileSelectionOptions) {
+						await option.action("test-office-file", "");
+					}
+					await flushPromises();
+
+					expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(0);
+				});
+			});
 		});
 	});
 });
