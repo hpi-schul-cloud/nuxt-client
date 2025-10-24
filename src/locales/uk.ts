@@ -450,6 +450,7 @@ export default {
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
+	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Картку було створено іншим користувачем у колонці {columnPosition}.",

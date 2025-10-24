@@ -1,5 +1,5 @@
 <template>
-	<VForm ref="roomForm">
+	<VForm ref="roomForm" @submit.prevent.stop="onSave">
 		<div>
 			<VTextField
 				v-model="roomData.name"

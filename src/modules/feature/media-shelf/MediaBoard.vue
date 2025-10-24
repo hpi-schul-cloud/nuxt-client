@@ -15,7 +15,7 @@
 				:options="{
 					direction: 'vertical',
 					group: 'lines',
-					delay: 300,
+					delay: 200,
 					delayOnTouchOnly: true,
 					disabled: isInEditMode,
 					ghostClass: 'sortable-drag-ghost',

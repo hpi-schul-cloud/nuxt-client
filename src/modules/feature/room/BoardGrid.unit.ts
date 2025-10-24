@@ -1,5 +1,5 @@
 import BoardGrid from "./BoardGrid.vue";
-import BoardTile from "./BoardTile.vue";
+import BoardGridItem from "./BoardGridItem.vue";
 import { roomBoardTileListFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
@@ -21,9 +21,9 @@ describe("@feature-room/BoardGrid", () => {
 		return { wrapper };
 	};
 
-	it("should render BoardTile for each board", () => {
+	it("should render BoardGridItem for each board", () => {
 		const { wrapper } = setup();
-		const boardTiles = wrapper.findAllComponents(BoardTile);
+		const boardTiles = wrapper.findAllComponents(BoardGridItem);
 
 		expect(boardTiles).toHaveLength(3);
 	});

@@ -13,7 +13,7 @@
 			:options="{
 				group: 'elements',
 				direction: 'horizontal',
-				delay: 300,
+				delay: 200,
 				delayOnTouchOnly: true,
 				disabled: false,
 				ghostClass: 'sortable-drag-ghost',

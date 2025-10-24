@@ -19,7 +19,7 @@
 				:options="{
 					group: 'cards',
 					direction: 'vertical',
-					delay: 300, // isDesktop ? 0 : 300
+					delay: 200,
 					delayOnTouchOnly: true,
 					ghostClass: isListBoard ? 'list-layout' : 'column-layout',
 					easing: 'cubic-bezier(1, 0, 0, 1)',

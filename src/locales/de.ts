@@ -450,6 +450,7 @@ export default {
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
+	"components.board.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Eine Karte wurde von einem anderen Benutzer in Abschnitt {columnPosition} erstellt.",

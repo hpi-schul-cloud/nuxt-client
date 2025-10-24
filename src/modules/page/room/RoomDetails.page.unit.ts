@@ -9,7 +9,7 @@ import { roomBoardTileListFactory, roomFactory } from "@@/tests/test-utils/facto
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomMenu } from "@feature-room";
+import { BoardGrid, RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -21,6 +21,7 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
+import { VBreadcrumbsItem } from "vuetify/components";
 
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({
@@ -145,23 +146,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			expect(document.title).toContain(`${room.name} - ${"pages.roomDetails.title"}`);
 		});
 
-		it("should render DefaultWireframe", () => {
-			const { wrapper } = setup();
-
-			const defaultWireframe = wrapper.findComponent({
-				name: "DefaultWireframe",
-			});
-
-			expect(defaultWireframe.exists()).toBe(true);
-		});
-
-		it("should render BoardGrid", () => {
-			const { wrapper } = setup();
-
-			const boardGrid = wrapper.findComponent({ name: "BoardGrid" });
-			expect(boardGrid.exists()).toBe(true);
-		});
-
 		it("should render empty state when no visible boards are found", () => {
 			const { wrapper } = setup({
 				roomBoards: [],
@@ -176,10 +160,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper, room } = setup();
 
 				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
-
-				const breadcrumbItems = breadcrumbs.findAllComponents({
-					name: "v-breadcrumbs-item",
-				});
+				const breadcrumbItems = breadcrumbs.findAllComponents(VBreadcrumbsItem);
 
 				expect(breadcrumbItems).toHaveLength(2);
 				expect(breadcrumbItems[1].text()).toContain(room.name);
@@ -434,9 +415,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					roomBoards: roomBoardTileListFactory.buildList(3),
 				});
 
-				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
-
-				expect(boardTiles.length).toBe(3);
+				const boardGrid = wrapper.findComponent(BoardGrid);
+				expect(boardGrid.props("boards").length).toEqual(3);
 			});
 
 			describe("when some boards are in draft mode", () => {
@@ -461,10 +441,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomPermissions.canListDrafts = computed(() => true);
 
 						const { wrapper, totalCount } = setupWithBoards();
+						const boardGrid = wrapper.findComponent(BoardGrid);
 
-						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
-
-						expect(boardTiles.length).toStrictEqual(totalCount);
+						expect(boardGrid.props("boards").length).toStrictEqual(totalCount);
 					});
 				});
 
@@ -473,10 +452,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomPermissions.canListDrafts = computed(() => false);
 
 						const { wrapper, visibleCount } = setupWithBoards();
+						const boardGrid = wrapper.findComponent(BoardGrid);
 
-						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
-
-						expect(boardTiles.length).toStrictEqual(visibleCount);
+						expect(boardGrid.props("boards").length).toStrictEqual(visibleCount);
 					});
 				});
 			});
@@ -489,9 +467,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					roomBoards: roomBoardTileListFactory.buildList(3),
 				});
 
-				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+				const boardGrid = wrapper.findComponent(BoardGrid);
 
-				expect(boardTiles.length).toBe(0);
+				expect(boardGrid.props("boards").length).toBe(0);
 			});
 		});
 	});

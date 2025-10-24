@@ -446,6 +446,7 @@ export default {
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
+	"components.board.notifications.errors.notMoved": "{type} could not be moved.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"A card was created by another user in column {columnPosition}.",

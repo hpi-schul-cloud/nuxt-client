@@ -61,7 +61,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	/**
 	 * @throws ApiResponseError | ApiValidationError
 	 */
-	const updateRoom = async (id: string, params: RoomUpdateParams): Promise<void> => {
+	const updateRoom = async (id: string, params: RoomUpdateParams) => {
 		isLoading.value = true;
 		try {
 			await roomApi.roomControllerUpdateRoom(id, params);
