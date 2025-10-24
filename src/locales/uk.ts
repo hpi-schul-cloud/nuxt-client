@@ -37,6 +37,10 @@ export default {
 		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
 	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
 	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
+	"common.file.awaitingScan.short": "Створення прев'ю",
+	"common.file.scanWontCheck.short": "Попередній перегляд неможливий",
+	"common.file.scanError.short": "Попередній перегляд неможливий",
+	"common.file.virusDetected.short": "Підозра на вірус",
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",

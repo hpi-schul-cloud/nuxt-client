@@ -37,6 +37,10 @@ export default {
 	"common.file.scanError":
 		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
 	"common.file.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"common.file.awaitingScan.short": "Vista previa en creación",
+	"common.file.scanWontCheck.short": "Vista previa no posible",
+	"common.file.scanError.short": "Vista previa no posible",
+	"common.file.virusDetected.short": "Virus sospechado",
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
