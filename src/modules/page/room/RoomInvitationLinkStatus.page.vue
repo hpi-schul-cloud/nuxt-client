@@ -56,7 +56,7 @@ const useLink = async () => {
 	updateInfoMessage(validationMessage, schoolName);
 };
 
-const pageTitle = computed(() => buildPageTitle(`${t("pages.rooms.invitationLinkStatus.title")}`));
+const pageTitle = computed(() => buildPageTitle(t("pages.rooms.invitationLinkStatus.title")));
 useTitle(pageTitle);
 
 const breadcrumbs: Breadcrumb[] = [

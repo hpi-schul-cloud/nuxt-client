@@ -51,6 +51,7 @@ import { useBoardApi } from "@/modules/data/board/BoardApi.composable"; // FIX_C
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
@@ -75,7 +76,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-	(update: "update:folder-name", folderName: string): void;
+	(update: "update:folder-name", pageTitle: string): void;
 }>();
 
 const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
@@ -278,7 +279,7 @@ watch(
 watch(
 	() => folderName.value,
 	(newName) => {
-		emit("update:folder-name", newName);
+		emit("update:folder-name", buildPageTitle(newName, parent.value?.name));
 	},
 	{ immediate: true }
 );
