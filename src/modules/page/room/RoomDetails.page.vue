@@ -30,11 +30,7 @@
 		</EmptyState>
 		<BoardGrid :room-id="room.id" :boards="visibleBoards" />
 		<ConfirmationDialog />
-		<SelectBoardLayoutDialog
-			v-if="boardLayoutsEnabled && canEditRoomContent"
-			v-model="boardLayoutDialogIsOpen"
-			@select="onCreateBoard"
-		/>
+		<SelectBoardLayoutDialog v-if="canEditRoomContent" v-model="boardLayoutDialogIsOpen" @select="onCreateBoard" />
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.Room" />
@@ -51,10 +47,9 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
-import { useEnvConfig } from "@data-env";
 import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
-import { mdiPlus, mdiViewDashboardOutline, mdiViewGridPlusOutline } from "@icons/material";
+import { mdiPlus, mdiViewGridPlusOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -91,8 +86,6 @@ const visibleBoards = computed(() =>
 
 const roomTitle = computed(() => room.value.name);
 
-const boardLayoutsEnabled = computed(() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED);
-
 const boardLayoutDialogIsOpen = ref(false);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
@@ -113,21 +106,13 @@ const fabItems = computed(() =>
 				ariaLabel: t("common.actions.create"),
 				dataTestId: "add-content-button",
 				actions: [
-					boardLayoutsEnabled.value
-						? {
-								label: t("pages.courseRoomDetails.fab.add.board"),
-								icon: mdiViewGridPlusOutline,
-								customEvent: "board-type-dialog-open",
-								dataTestId: "fab_button_add_board",
-								ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
-							}
-						: {
-								label: t("pages.courseRoomDetails.fab.add.columnBoard"),
-								icon: mdiViewDashboardOutline,
-								customEvent: "board-create",
-								dataTestId: "fab_button_add_column_board",
-								ariaLabel: t("pages.courseRoomDetails.fab.add.columnBoard"),
-							},
+					{
+						label: t("pages.courseRoomDetails.fab.add.board"),
+						icon: mdiViewGridPlusOutline,
+						customEvent: "board-type-dialog-open",
+						dataTestId: "fab_button_add_board",
+						ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
+					},
 				],
 			}
 		: undefined

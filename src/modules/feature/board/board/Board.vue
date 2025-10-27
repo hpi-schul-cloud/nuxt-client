@@ -340,9 +340,7 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
-const isListBoard = computed(
-	() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED && board.value?.layout === BoardLayout.List
-);
+const isListBoard = computed(() => board.value?.layout === BoardLayout.List);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 

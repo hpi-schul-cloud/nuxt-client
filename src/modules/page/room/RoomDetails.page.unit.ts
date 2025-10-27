@@ -3,7 +3,7 @@ import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestAppStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -84,11 +84,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	const setup = (
 		options?: Partial<{
-			envs: Partial<serverApi.ConfigResponse>;
 			roomBoards: RoomBoardItem[];
 		}>
 	) => {
-		const { envs, roomBoards } = {
+		const { roomBoards } = {
 			roomBoards: [],
 			...options,
 		};
@@ -101,10 +100,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const room = roomFactory.build({});
 
 		setActivePinia(createTestingPinia());
-		createTestEnvStore({
-			FEATURE_BOARD_LAYOUT_ENABLED: true,
-			...envs,
-		});
 
 		useRoomDetailsStore().$patch({
 			isLoading: false,
@@ -281,123 +276,71 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 		});
 
-		describe("and multiple board layouts are enabled", () => {
-			beforeEach(() => {
-				roomPermissions.canEditRoomContent = computed(() => true);
-			});
-
-			const openDialog = async (wrapper: VueWrapper) => {
-				await openSpeedDialMenu(wrapper);
-
-				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
-				await boardCreateDialogBtn.trigger("click");
-			};
-
-			it("should render board create button, that opens a dialog", async () => {
-				const { wrapper } = setup();
-				await openSpeedDialMenu(wrapper);
-
-				const actions = wrapper.findAllComponents({
-					name: "SpeedDialMenuAction",
-				});
-				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
-
-				expect(actions).toHaveLength(1);
-				expect(boardCreateDialogBtn.exists()).toBe(true);
-			});
-
-			it("should open dialog", async () => {
-				const { wrapper } = setup();
-				await openDialog(wrapper);
-
-				const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
-
-				expect(dialog.isVisible()).toEqual(true);
-				expect(dialog.props("modelValue")).toEqual(true);
-			});
-
-			describe("and user selects a multi-column layout", () => {
-				it("should create a board with multi-column layout", async () => {
-					const { wrapper, roomDetailsStore, room } = setup();
-					await openDialog(wrapper);
-
-					const selectLayoutDialog = wrapper.findComponent({
-						name: "SelectBoardLayoutDialog",
-					});
-					await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
-
-					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
-						room.id,
-						serverApi.BoardLayout.Columns,
-						"pages.roomDetails.board.defaultName"
-					);
-				});
-			});
-
-			describe("and user selects a single-column layout", () => {
-				it("should create a board with single-column layout", async () => {
-					const { wrapper, roomDetailsStore, room } = setup();
-					await openDialog(wrapper);
-
-					const selectLayoutDialog = wrapper.findComponent({
-						name: "SelectBoardLayoutDialog",
-					});
-					await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
-
-					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
-						room.id,
-						serverApi.BoardLayout.List,
-						"pages.roomDetails.board.defaultName"
-					);
-				});
-			});
+		beforeEach(() => {
+			roomPermissions.canEditRoomContent = computed(() => true);
 		});
 
-		describe("and only column board is enabled", () => {
-			beforeEach(() => {
-				roomPermissions.canEditRoomContent = computed(() => true);
+		const openDialog = async (wrapper: VueWrapper) => {
+			await openSpeedDialMenu(wrapper);
+
+			const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
+			await boardCreateDialogBtn.trigger("click");
+		};
+
+		it("should render board create button, that opens a dialog", async () => {
+			const { wrapper } = setup();
+			await openSpeedDialMenu(wrapper);
+
+			const actions = wrapper.findAllComponents({
+				name: "SpeedDialMenuAction",
 			});
+			const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
 
-			it("should not render dialog", () => {
-				const { wrapper } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-				});
+			expect(actions).toHaveLength(1);
+			expect(boardCreateDialogBtn.exists()).toBe(true);
+		});
 
-				const dialog = wrapper.findComponent({
+		it("should open dialog", async () => {
+			const { wrapper } = setup();
+			await openDialog(wrapper);
+
+			const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
+
+			expect(dialog.isVisible()).toEqual(true);
+			expect(dialog.props("modelValue")).toEqual(true);
+		});
+
+		describe("and user selects a multi-column layout", () => {
+			it("should create a board with multi-column layout", async () => {
+				const { wrapper, roomDetailsStore, room } = setup();
+				await openDialog(wrapper);
+
+				const selectLayoutDialog = wrapper.findComponent({
 					name: "SelectBoardLayoutDialog",
 				});
-
-				expect(dialog.exists()).toBe(false);
-			});
-
-			it("should render board create button, that creates a multi-column board", async () => {
-				const { wrapper } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-				});
-				await openSpeedDialMenu(wrapper);
-
-				const actions = wrapper.findAllComponents({
-					name: "SpeedDialMenuAction",
-				});
-				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
-
-				expect(actions).toHaveLength(1);
-				expect(boardCreateBtn.exists()).toBe(true);
-			});
-
-			it("should create column board", async () => {
-				const { wrapper, roomDetailsStore, room } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-				});
-				await openSpeedDialMenu(wrapper);
-
-				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
-
-				await boardCreateBtn.trigger("click");
+				await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
 
 				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
 					room.id,
 					serverApi.BoardLayout.Columns,
+					"pages.roomDetails.board.defaultName"
+				);
+			});
+		});
+
+		describe("and user selects a single-column layout", () => {
+			it("should create a board with single-column layout", async () => {
+				const { wrapper, roomDetailsStore, room } = setup();
+				await openDialog(wrapper);
+
+				const selectLayoutDialog = wrapper.findComponent({
+					name: "SelectBoardLayoutDialog",
+				});
+				await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
+
+				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+					room.id,
+					serverApi.BoardLayout.List,
 					"pages.roomDetails.board.defaultName"
 				);
 			});

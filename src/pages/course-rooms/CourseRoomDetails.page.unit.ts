@@ -269,17 +269,6 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			expect(newTaskAction.props("href")).toStrictEqual("/courses/123/topics/add?returnUrl=rooms/123");
 		});
 
-		it("'add column board' button should be rendered", async () => {
-			const wrapper = getWrapper({ permissionData: [Permission.CourseEdit] });
-			const fabComponent = wrapper.findComponent(SpeedDialMenu);
-
-			// open menu
-			await fabComponent.findComponent(VBtn).trigger("click");
-			const btnDataTestIds = wrapper.findAllComponents(SpeedDialMenuAction).map((btn) => btn.props("dataTestId"));
-
-			expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(true);
-		});
-
 		describe("'add list board' button", () => {
 			describe("when user doesn't have course edit permission", () => {
 				it("should not render any board creation button", async () => {
@@ -299,7 +288,6 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 			describe("when feature is enabled", () => {
 				it("should render the button to open dialog", async () => {
-					createTestEnvStore({ FEATURE_BOARD_LAYOUT_ENABLED: true });
 					const wrapper = getWrapper({
 						permissionData: [Permission.CourseEdit],
 					});
@@ -313,7 +301,6 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 				});
 
 				it("should open layout dialog when button is clicked", async () => {
-					createTestEnvStore({ FEATURE_BOARD_LAYOUT_ENABLED: true });
 					const wrapper = getWrapper({
 						permissionData: [Permission.CourseEdit],
 					});
