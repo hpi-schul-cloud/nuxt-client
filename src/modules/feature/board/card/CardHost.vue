@@ -226,7 +226,6 @@ const duplicateCard = async () => {
 	if (!card.value) return;
 
 	await cardStore.duplicateCardRequest({ cardId: card.value.id });
-	emit("reload:board");
 };
 
 onMounted(async () => {
