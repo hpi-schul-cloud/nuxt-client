@@ -226,8 +226,8 @@ export const useCardRestApi = () => {
 			const duplicatedCard = await duplicateCardCall(payload.cardId);
 
 			if (duplicatedCard.id) {
+				boardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
 				cardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
-
 				notifyInfo(t("components.board.notifications.info.cardDuplicated"));
 			}
 		} catch (error) {
