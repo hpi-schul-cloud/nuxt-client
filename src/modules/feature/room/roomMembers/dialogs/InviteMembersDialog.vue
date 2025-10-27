@@ -76,6 +76,7 @@
 								<DatePicker
 									ref="datePicker"
 									v-model="formData.activeUntil"
+									:aria-label="t('pages.rooms.members.tableHeader.expirationDate')"
 									:disabled="isDatePickerDisabled"
 									:required="!isDatePickerDisabled"
 									:min-date="new Date().toString()"
@@ -209,7 +210,6 @@ const defaultFormData: RoomInvitationFormData = {
 
 const formData = ref({ ...defaultFormData });
 const inviteMembersForm = useTemplateRef("inviteMembersForm");
-const descriptionField = useTemplateRef("descriptionField");
 
 const validationRules = [
 	isNonEmptyString(t("common.validation.nonEmptyString")),

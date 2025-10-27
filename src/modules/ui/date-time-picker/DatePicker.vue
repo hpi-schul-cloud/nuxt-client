@@ -7,7 +7,7 @@
 		v-date-input-mask
 		:prepend-inner-icon="mdiCalendar"
 		:label="label"
-		:aria-label="ariaLabel"
+		:aria-label="ariaLabelWithFormat"
 		:placeholder="t('common.placeholder.dateformat')"
 		:rules="validationRules"
 		@keydown.space="showDatePicker = true"
@@ -57,8 +57,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
 	date: undefined,
-	label: "",
-	ariaLabel: "", // TODO: add aria-label
+	label: undefined,
+	ariaLabel: undefined,
 	required: false,
 	minDate: undefined,
 	maxDate: undefined,
@@ -99,6 +99,11 @@ const validationRules = computed(() => [
 	props.required ? isRequired(t("components.datePicker.validation.required")) : true,
 	isValidDateFormat(t("components.datePicker.validation.format")),
 ]);
+
+const ariaLabelWithFormat = computed(() => {
+	const prefix = props.ariaLabel || props.label || "common.labels.date";
+	return `${t(prefix)} (${t("common.placeholder.dateformat")})`;
+});
 
 watch(
 	() => dateTextField.value?.modelValue,
