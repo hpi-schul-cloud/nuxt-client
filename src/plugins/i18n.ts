@@ -57,4 +57,14 @@ const localCreateI18n = () => {
 	return i18n;
 };
 
-export { localCreateI18n as createI18n };
+let i18nInstance: ReturnType<typeof localCreateI18n>;
+
+const createTypedI18nInstance = () => {
+	if (!i18nInstance) {
+		i18nInstance = localCreateI18n();
+	}
+	return i18nInstance;
+};
+export { createTypedI18nInstance as createI18n };
+
+export const useI18nGlobal = () => createTypedI18nInstance()?.global;
