@@ -487,6 +487,7 @@ export default {
 		"El tablero fue establecida como no editable para todos los usuarios por otro usuario.",
 	"components.board.preferredTools.notification.error.notLoaded": "No se pudieron cargar las herramientas preferidas.",
 	"components.board.header.chip.editableForEveryone": "Editable para todos",
+	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",

@@ -7,9 +7,7 @@
 	>
 		<template #header>
 			<div class="d-flex align-center">
-				<h1 data-testid="room-title">
-					{{ roomTitle }}
-				</h1>
+				<h1 data-testid="room-title">{{ roomTitle }} {{ reorderError }}</h1>
 				<RoomMenu
 					:room-name="room.name"
 					@room:edit="onEdit"
@@ -81,7 +79,8 @@ const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { roomBoards } = storeToRefs(roomDetailsStore);
-const { createBoard, fetchRoomAndBoards } = roomDetailsStore;
+const { createBoard, fetchRoomAndBoards, moveBoard } = roomDetailsStore;
+const { generateErrorText } = useErrorHandler();
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
@@ -231,17 +230,28 @@ const onCreateBoard = async (layout: BoardLayout) => {
 
 const reorderRoom = (boardId: string, newIndex: number) => {
 	execute(async () => {
-		await moveBoard(room.value.id, boardId, newIndex);
-		await fetchRoomAndBoards(props.room.id);
+		if (document.startViewTransition) {
+			await document.startViewTransition(async () => {
+				await moveBoard(room.value.id, boardId, newIndex);
+				await fetchRoomAndBoards(props.room.id);
+			}).finished;
+		} else {
+			await moveBoard(room.value.id, boardId, newIndex);
+			await fetchRoomAndBoards(props.room.id);
+		}
 	});
 };
 
-watch(
-	() => reorderError,
-	(newError) => {
-		if (newError) {
-			notifyError(useErrorHandler().generateErrorText("notMoved", "board"));
-		}
+watch(reorderError, (newError) => {
+	if (newError) {
+		notifyError(generateErrorText("notMoved", "board"));
 	}
-);
+});
 </script>
+
+<style>
+::view-transition-group(board-*) {
+	animation-duration: 250ms;
+	animation-timing-function: cubic-bezier(1, 0, 0, 1);
+}
+</style>

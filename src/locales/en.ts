@@ -479,6 +479,7 @@ export default {
 		"The board was set as not editable for all users by another user.",
 	"components.board.preferredTools.notification.error.notLoaded": "Preferred tools could not be loaded.",
 	"components.board.header.chip.editableForEveryone": "Editable for everyone",
+	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",

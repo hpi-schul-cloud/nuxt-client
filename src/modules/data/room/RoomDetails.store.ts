@@ -58,6 +58,10 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		return boardId;
 	};
 
+	const moveBoard = async (roomId: string, boardId: string, toPosition: number) => {
+		await roomApi.roomControllerMoveBoard(roomId, { id: boardId, toPosition });
+	};
+
 	/**
 	 * @throws ApiResponseError | ApiValidationError
 	 */
@@ -81,6 +85,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		fetchRoomAndBoards,
 		fetchRoom,
 		createBoard,
+		moveBoard,
 		isLoading,
 		resetState,
 		room,

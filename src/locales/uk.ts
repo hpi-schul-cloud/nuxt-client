@@ -482,6 +482,7 @@ export default {
 		"Дошку було встановлено як не редаговану для всіх користувачів іншим користувачем.",
 	"components.board.preferredTools.notification.error.notLoaded": "Не вдалося завантажити бажані інструменти.",
 	"components.board.header.chip.editableForEveryone": "Редагується для всіх",
+	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

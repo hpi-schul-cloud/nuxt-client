@@ -486,6 +486,7 @@ export default {
 		"Der Bereich wurde von einem anderen Benutzer für alle Benutzer als nicht bearbeitbar festgelegt.",
 	"components.board.preferredTools.notification.error.notLoaded": "Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board.header.chip.editableForEveryone": "Für alle bearbeitbar",
+	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",

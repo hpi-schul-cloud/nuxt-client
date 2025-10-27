@@ -5,7 +5,7 @@
 		class="board-grid mt-8"
 		item-key="id"
 		:options="{
-			disabled: !hasMovePermission,
+			disabled: !canEditRoomContent,
 			delayOnTouchOnly: true,
 			delay: 200,
 			ghostClass: 'opacity-50',
@@ -22,13 +22,16 @@
 			<!-- the board tile is an a tag, which natively has draggable=true, which we need to suppress here -->
 			<BoardGridItem
 				class="draggable"
+				:style="{ viewTransitionName: `board-${element.id}` }"
 				draggable="false"
 				:board="element"
-				:index="index"
-				:style="{ viewTransitionName: `board-${element.id}` }"
+				:index
+				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onKeyDown($event, index)"
 			/>
 		</template>
+
+		{{ focusedBoard }}
 	</Sortable>
 </template>
 
@@ -38,7 +41,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { useRoomAuthorization } from "@data-room";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, PropType, useTemplateRef } from "vue";
+import { nextTick, PropType, ref, useTemplateRef, watch } from "vue";
 
 const props = defineProps({
 	boards: { type: Array as PropType<RoomBoardItem[]>, required: true },
@@ -49,6 +52,7 @@ const emit = defineEmits<{
 }>();
 
 const gridRef = useTemplateRef("gridRef");
+const focusedBoard = ref();
 
 const getColumnsCount = () => {
 	if (!gridRef.value) return 1;
@@ -56,8 +60,7 @@ const getColumnsCount = () => {
 	return style.gridTemplateColumns.split(" ").length;
 };
 
-const { canEditRoomContent, canChangeOwner } = useRoomAuthorization();
-const hasMovePermission = computed(() => canEditRoomContent.value || canChangeOwner.value);
+const { canEditRoomContent } = useRoomAuthorization();
 
 const updateBoardIndex = (newIndex: number | undefined, oldIndex: number | undefined) => {
 	if (newIndex !== oldIndex && newIndex !== undefined && oldIndex !== undefined) {
@@ -90,18 +93,13 @@ const onKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 	updateBoardIndex(newIndex, oldIndex);
 };
 
-// watch(
-// 	() => props.boards,
-// 	(newValue, oldValue) => {
-// 		if (newValue !== oldValue) {
-// 			document.startViewTransition?.(() => {}).finished.catch(logger.error);
-// 		}
-// 	}
-// );
-
-// Permission
-// transition when using arrows
-// opacity style franz
+watch(
+	() => props.boards,
+	async () => {
+		await nextTick();
+		focusedBoard.value?.focus();
+	}
+);
 </script>
 <style>
 .board-grid {
