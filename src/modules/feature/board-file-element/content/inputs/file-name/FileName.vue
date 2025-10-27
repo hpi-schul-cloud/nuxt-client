@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { useDebounceFn } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -60,9 +59,9 @@ const addFileExtension = (name: string) => {
 	return nameWithExtension;
 };
 
-const updateName = useDebounceFn((value: string) => {
+const updateName = (value: string) => {
 	emit("update:name", value);
-}, 600);
+};
 
 watch(nameRef, (newValue) => {
 	const nameWithExtension = addFileExtension(newValue);
