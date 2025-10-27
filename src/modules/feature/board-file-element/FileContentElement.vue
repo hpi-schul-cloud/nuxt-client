@@ -183,7 +183,7 @@ const onUpdateCaption = (value: string) => {
 
 const onUpdateName = useDebounceFn((value: string) => {
 	rename(fileRecord.value.id, { fileName: value });
-}, 600);
+}, 300);
 
 const onAddAlert = (alert: FileAlert) => {
 	addAlert(alert);
