@@ -136,7 +136,7 @@ watchEffect(() => {
 	}
 });
 
-const pageTitle = computed(() => buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`));
+const pageTitle = computed(() => buildPageTitle(membersInfoText.value, room.value?.name));
 useTitle(pageTitle);
 
 const isVisibleTabNavigation = computed(() => canManageRoomInvitationLinks.value);

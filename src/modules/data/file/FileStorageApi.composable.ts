@@ -31,9 +31,20 @@ export const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 
-	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } = useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, getFileRecordById } = useFileRecordsStore();
 
 	const { getStatisticByParentId, setStatisticForParent } = useParentStatisticsStore();
+
+	const fetchFileById = async (fileRecordId: string): Promise<void> => {
+		try {
+			const response = await fileApi.getFileRecord(fileRecordId);
+
+			upsertFileRecords([response.data]);
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
 
 	const fetchFiles = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
@@ -173,9 +184,11 @@ export const useFileStorageApi = () => {
 		upload,
 		uploadFromUrl,
 		getFileRecordsByParentId,
+		getFileRecordById,
 		deleteFiles,
 		getStatisticByParentId,
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
+		fetchFileById,
 	};
 };
