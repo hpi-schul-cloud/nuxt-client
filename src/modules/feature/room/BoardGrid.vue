@@ -36,19 +36,23 @@
 
 <script setup lang="ts">
 import BoardGridItem from "./BoardGridItem.vue";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
-import { useRoomAuthorization } from "@data-room";
+import { notifyError } from "@data-app";
+import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, PropType, ref, useTemplateRef, watch } from "vue";
 
 const props = defineProps({
+	roomId: { type: String, required: true },
 	boards: { type: Array as PropType<RoomBoardItem[]>, required: true },
 });
+const { execute, error: reorderError } = useSafeTask();
 
-const emit = defineEmits<{
-	(e: "reorder-room", boardId: string, newIndex: number): void;
-}>();
+const { fetchRoomAndBoards, moveBoard } = useRoomDetailsStore();
+const { generateErrorText } = useErrorHandler();
 
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
@@ -61,9 +65,23 @@ const getColumnsCount = () => {
 
 const { canEditRoomContent } = useRoomAuthorization();
 
+const reorderRoom = (boardId: string, newIndex: number) => {
+	execute(async () => {
+		if (document.startViewTransition) {
+			await document.startViewTransition(async () => {
+				await moveBoard(props.roomId, boardId, newIndex);
+				await fetchRoomAndBoards(props.roomId);
+			}).finished;
+		} else {
+			await moveBoard(props.roomId, boardId, newIndex);
+			await fetchRoomAndBoards(props.roomId);
+		}
+	});
+};
+
 const updateBoardIndex = (newIndex: number | undefined, oldIndex: number | undefined) => {
 	if (newIndex !== oldIndex && newIndex !== undefined && oldIndex !== undefined) {
-		emit("reorder-room", props.boards[oldIndex]?.id, newIndex);
+		reorderRoom(props.boards[oldIndex]?.id, newIndex);
 	}
 };
 
@@ -91,6 +109,12 @@ const onKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 	}
 	updateBoardIndex(newIndex, oldIndex);
 };
+
+watch(reorderError, (newError) => {
+	if (newError) {
+		notifyError(generateErrorText("notMoved", "board"));
+	}
+});
 
 watch(
 	() => props.boards,

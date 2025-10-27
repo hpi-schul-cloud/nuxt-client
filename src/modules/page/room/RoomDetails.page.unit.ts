@@ -5,7 +5,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { roomBoardTileListFactory, roomFactory } from "@@/tests/test-utils/factory/room";
+import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
@@ -412,7 +412,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			it("should render room boards", () => {
 				const { wrapper } = setup({
-					roomBoards: roomBoardTileListFactory.buildList(3),
+					roomBoards: roomBoardGridItemFactory.buildList(3),
 				});
 
 				const boardGrid = wrapper.findComponent(BoardGrid);
@@ -422,8 +422,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			describe("when some boards are in draft mode", () => {
 				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
 					const visibleCount = totalCount - inDraftMode;
-					const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
-					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
+					const visibleBoards = roomBoardGridItemFactory.buildList(visibleCount);
+					const draftBoards = roomBoardGridItemFactory.buildList(inDraftMode, {
 						isVisible: false,
 					});
 					const roomBoards = [...visibleBoards, ...draftBoards];
@@ -464,7 +464,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			it("should not render room boards", () => {
 				roomPermissions.canViewRoom = computed(() => false);
 				const { wrapper } = setup({
-					roomBoards: roomBoardTileListFactory.buildList(3),
+					roomBoards: roomBoardGridItemFactory.buildList(3),
 				});
 
 				const boardGrid = wrapper.findComponent(BoardGrid);

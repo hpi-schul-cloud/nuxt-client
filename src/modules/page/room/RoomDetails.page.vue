@@ -7,7 +7,7 @@
 	>
 		<template #header>
 			<div class="d-flex align-center">
-				<h1 data-testid="room-title">{{ roomTitle }} {{ reorderError }}</h1>
+				<h1 data-testid="room-title">{{ roomTitle }}</h1>
 				<RoomMenu
 					:room-name="room.name"
 					@room:edit="onEdit"
@@ -28,7 +28,7 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<BoardGrid :boards="visibleBoards" @reorder-room="reorderRoom" />
+		<BoardGrid :room-id="room.id" :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled && canEditRoomContent"
@@ -42,17 +42,15 @@
 </template>
 
 <script setup lang="ts">
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useSafeTask } from "@/composables/async-tasks.composable";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError, useAppStoreRefs } from "@data-app";
+import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
@@ -62,13 +60,12 @@ import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, ref, toRef, watch } from "vue";
+import { computed, ComputedRef, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const props = defineProps<{ room: RoomDetails }>();
 const room = toRef(props, "room");
-const { execute, error: reorderError } = useSafeTask();
 
 const router = useRouter();
 const { t } = useI18n();
@@ -79,8 +76,7 @@ const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { roomBoards } = storeToRefs(roomDetailsStore);
-const { createBoard, fetchRoomAndBoards, moveBoard } = roomDetailsStore;
-const { generateErrorText } = useErrorHandler();
+const { createBoard } = roomDetailsStore;
 
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
@@ -227,24 +223,4 @@ const onCreateBoard = async (layout: BoardLayout) => {
 
 	router.push(`/boards/${boardId}`);
 };
-
-const reorderRoom = (boardId: string, newIndex: number) => {
-	execute(async () => {
-		if (document.startViewTransition) {
-			await document.startViewTransition(async () => {
-				await moveBoard(room.value.id, boardId, newIndex);
-				await fetchRoomAndBoards(props.room.id);
-			}).finished;
-		} else {
-			await moveBoard(room.value.id, boardId, newIndex);
-			await fetchRoomAndBoards(props.room.id);
-		}
-	});
-};
-
-watch(reorderError, (newError) => {
-	if (newError) {
-		notifyError(generateErrorText("notMoved", "board"));
-	}
-});
 </script>
