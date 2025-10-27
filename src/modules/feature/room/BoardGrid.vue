@@ -21,8 +21,7 @@
 		<template #item="{ element, index }">
 			<!-- the board tile is an a tag, which natively has draggable=true, which we need to suppress here -->
 			<BoardGridItem
-				class="draggable"
-				:style="{ viewTransitionName: `board-${element.id}` }"
+				class="draggable board-item"
 				draggable="false"
 				:board="element"
 				:index
@@ -106,5 +105,14 @@ watch(
 	display: grid;
 	grid-gap: 10px;
 	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.board-item {
+	view-transition-name: match-element;
+}
+
+::view-transition-group(*) {
+	animation-duration: 250ms;
+	animation-timing-function: cubic-bezier(1, 0, 0, 1);
 }
 </style>

@@ -248,10 +248,3 @@ watch(reorderError, (newError) => {
 	}
 });
 </script>
-
-<style>
-::view-transition-group(board-*) {
-	animation-duration: 250ms;
-	animation-timing-function: cubic-bezier(1, 0, 0, 1);
-}
-</style>
