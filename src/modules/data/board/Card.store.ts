@@ -15,12 +15,16 @@ import {
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export const useCardStore = defineStore("cardStore", () => {
+	const { t } = useI18n();
+
 	const cards: Ref<Record<string, CardResponse>> = ref({});
 	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
@@ -78,6 +82,8 @@ export const useCardStore = defineStore("cardStore", () => {
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		if (payload.duplicatedCard.id) {
 			cards.value[payload.duplicatedCard.id] = payload.duplicatedCard;
+
+			notifyInfo(t("components.board.notifications.info.cardDuplicated"));
 		}
 	};
 
