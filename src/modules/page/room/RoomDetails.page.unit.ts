@@ -1,3 +1,4 @@
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import * as serverApi from "@/serverApi/v3/api";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
@@ -258,20 +259,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	describe("when user wants to create a board", () => {
-		const openSpeedDialMenu = async (wrapper: VueWrapper) => {
-			const speedDialMenu = wrapper.getComponent({ name: "speed-dial-menu" });
-			await speedDialMenu.getComponent({ name: "v-btn" }).trigger("click");
-			vi.advanceTimersByTime(1000); // speed dial renders items delayed
-			await flushPromises();
-		};
-
 		describe("and user does not have permission to edit room content", () => {
-			it("should not render speed dial menu", () => {
+			it("should not render fab button", () => {
 				roomPermissions.canEditRoomContent = computed(() => false);
 				const { wrapper } = setup();
 
 				const fabButton = wrapper.findComponent("[data-testid='add-content-button']");
-
 				expect(fabButton.exists()).toBe(false);
 			});
 		});
@@ -281,33 +274,27 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const openDialog = async (wrapper: VueWrapper) => {
-			await openSpeedDialMenu(wrapper);
-
-			const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
-			await boardCreateDialogBtn.trigger("click");
+			const wireframe = wrapper.getComponent(DefaultWireframe);
+			await wireframe.vm.$emit("fab:clicked");
 		};
 
-		it("should render board create button, that opens a dialog", async () => {
+		it("should render fab button when user has edit permissions", () => {
 			const { wrapper } = setup();
-			await openSpeedDialMenu(wrapper);
 
-			const actions = wrapper.findAllComponents({
-				name: "SpeedDialMenuAction",
-			});
-			const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
+			const wireframe = wrapper.getComponent(DefaultWireframe);
+			const fabItems = wireframe.props("fabItems");
 
-			expect(actions).toHaveLength(1);
-			expect(boardCreateDialogBtn.exists()).toBe(true);
+			expect(fabItems).toBeDefined();
 		});
 
-		it("should open dialog", async () => {
+		it("should open dialog when fab button is clicked", async () => {
 			const { wrapper } = setup();
 			await openDialog(wrapper);
 
 			const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
 
-			expect(dialog.isVisible()).toEqual(true);
-			expect(dialog.props("modelValue")).toEqual(true);
+			expect(dialog.isVisible()).toBe(true);
+			expect(dialog.props("modelValue")).toBe(true);
 		});
 
 		describe("and user selects a multi-column layout", () => {
@@ -315,9 +302,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper, roomDetailsStore, room } = setup();
 				await openDialog(wrapper);
 
-				const selectLayoutDialog = wrapper.findComponent({
-					name: "SelectBoardLayoutDialog",
-				});
+				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
 				await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
 
 				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
@@ -333,9 +318,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper, roomDetailsStore, room } = setup();
 				await openDialog(wrapper);
 
-				const selectLayoutDialog = wrapper.findComponent({
-					name: "SelectBoardLayoutDialog",
-				});
+				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
 				await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
 
 				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(

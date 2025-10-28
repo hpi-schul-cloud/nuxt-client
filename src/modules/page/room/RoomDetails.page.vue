@@ -2,8 +2,8 @@
 	<DefaultWireframe
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
-		:fab-items="fabItems"
-		@on-fab-item-click="fabItemClickHandler"
+		:fab-items="fabAction"
+		@fab:clicked="boardLayoutDialogIsOpen = true"
 	>
 		<template #header>
 			<div class="d-flex align-center">
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { Breadcrumb, Fab } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
@@ -49,7 +49,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
-import { mdiPlus, mdiViewGridPlusOutline } from "@icons/material";
+import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -98,33 +98,17 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 		disabled: true,
 	},
 ]);
-const fabItems = computed(() =>
+
+const fabAction = computed<Fab | undefined>(() =>
 	canEditRoomContent.value
 		? {
 				icon: mdiPlus,
 				title: t("common.actions.create"),
 				ariaLabel: t("common.actions.create"),
 				dataTestId: "add-content-button",
-				actions: [
-					{
-						label: t("pages.courseRoomDetails.fab.add.board"),
-						icon: mdiViewGridPlusOutline,
-						customEvent: "board-type-dialog-open",
-						dataTestId: "fab_button_add_board",
-						ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
-					},
-				],
 			}
 		: undefined
 );
-
-const fabItemClickHandler = (event: string | undefined) => {
-	if (event === "board-type-dialog-open") {
-		boardLayoutDialogIsOpen.value = true;
-	} else if (event === "board-create") {
-		onCreateBoard(BoardLayout.Columns);
-	}
-};
 
 const onEdit = () => {
 	router.push({
@@ -202,10 +186,7 @@ const onLeaveRoom = async () => {
 };
 
 const onCreateBoard = async (layout: BoardLayout) => {
-	if (!canEditRoomContent.value) return;
-
 	const boardId = await createBoard(room.value.id, layout, t("pages.roomDetails.board.defaultName"));
-
 	router.push(`/boards/${boardId}`);
 };
 </script>

@@ -16,6 +16,7 @@
 			animation: 250,
 			forceFallback: true,
 		}"
+		@start="isDragging = true"
 		@end="onDropEnd"
 	>
 		<template #item="{ element, index }">
@@ -25,6 +26,8 @@
 				draggable="false"
 				:board="element"
 				:index
+				@click.capture="onItemClick"
+				@contextmenu.prevent
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onKeyDown($event, index)"
 			/>
@@ -56,6 +59,7 @@ const { generateErrorText } = useErrorHandler();
 
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
+const isDragging = ref(false);
 
 const getColumnsCount = () => {
 	if (!gridRef.value) return 1;
@@ -87,6 +91,13 @@ const updateBoardIndex = (newIndex: number | undefined, oldIndex: number | undef
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
 	updateBoardIndex(newIndex, oldIndex);
+	isDragging.value = false;
+};
+
+const onItemClick = (evt: Event) => {
+	if (isDragging.value) {
+		evt.preventDefault();
+	}
 };
 
 const onKeyDown = (e: KeyboardEvent, oldIndex: number) => {
