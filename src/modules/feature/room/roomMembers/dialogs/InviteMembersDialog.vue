@@ -44,7 +44,7 @@
 								<template #label>
 									<div>
 										{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
-										{{ schoolName }}
+										<span class="d-inline-block"> {{ schoolName }} </span>
 									</div>
 								</template>
 							</VCheckbox>
@@ -75,7 +75,6 @@
 								/>
 								<DatePicker
 									ref="datePicker"
-									v-model="formData.activeUntil"
 									:aria-label="t('pages.rooms.members.tableHeader.expirationDate')"
 									:disabled="isDatePickerDisabled"
 									:required="!isDatePickerDisabled"

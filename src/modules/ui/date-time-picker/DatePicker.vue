@@ -9,6 +9,7 @@
 		:label="label"
 		:aria-label="ariaLabelWithFormat"
 		:placeholder="t('common.placeholder.dateformat')"
+		:disabled="disabled"
 		:rules="validationRules"
 		@keydown.space="showDatePicker = true"
 		@keydown.prevent.enter="showDatePicker = true"
@@ -51,6 +52,7 @@ interface Props {
 	label?: string;
 	ariaLabel?: string;
 	required?: boolean;
+	disabled?: boolean;
 	minDate?: string;
 	maxDate?: string;
 }
@@ -59,6 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
 	date: undefined,
 	label: undefined,
 	ariaLabel: undefined,
+	disabled: false,
 	required: false,
 	minDate: undefined,
 	maxDate: undefined,
