@@ -1,6 +1,6 @@
 <template>
 	<VChip
-		v-if="isScanStatusPending(fileRecord.previewStatus)"
+		v-if="isScanStatusPending"
 		color="info"
 		class="ms-2"
 		:prepend-icon="mdiClockTimeFour"
@@ -10,7 +10,7 @@
 		{{ t("common.file.awaitingScan.short") }}
 	</VChip>
 	<VChip
-		v-if="isScanStatusWontCheck(fileRecord.previewStatus)"
+		v-if="isScanStatusWontCheck"
 		color="warning"
 		class="ms-2"
 		:prepend-icon="mdiEyeOffOutline"
@@ -20,7 +20,7 @@
 		{{ t("common.file.scanWontCheck.short") }}
 	</VChip>
 	<VChip
-		v-if="isScanStatusError(fileRecord.previewStatus)"
+		v-if="isScanStatusError"
 		color="warning"
 		class="ms-2"
 		:prepend-icon="mdiEyeOffOutline"
@@ -30,7 +30,7 @@
 		{{ t("common.file.scanError.short") }}
 	</VChip>
 	<VChip
-		v-if="!isScanStatusBlocked(fileRecord.securityCheckStatus)"
+		v-if="isScanStatusBlocked"
 		color="error"
 		class="ms-2"
 		:prepend-icon="mdiAlertCircle"
@@ -43,17 +43,26 @@
 
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
-import { isScanStatusBlocked, isScanStatusError, isScanStatusPending, isScanStatusWontCheck } from "@/utils/fileHelper";
+import {
+	isScanStatusBlocked as isScanStatusBlockedFn,
+	isScanStatusError as isScanStatusErrorFn,
+	isScanStatusPending as isScanStatusPendingFn,
+	isScanStatusWontCheck as isScanStatusWontCheckFn,
+} from "@/utils/fileHelper";
 import { mdiAlertCircle, mdiClockTimeFour, mdiEyeOffOutline } from "@icons/material";
-import { PropType } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
-defineProps({
+const props = defineProps({
 	fileRecord: {
 		type: Object as PropType<FileRecord>,
 		required: true,
 	},
 });
+
+const isScanStatusPending = computed(() => isScanStatusPendingFn(props.fileRecord.previewStatus));
+const isScanStatusWontCheck = computed(() => isScanStatusWontCheckFn(props.fileRecord.previewStatus));
+const isScanStatusError = computed(() => isScanStatusErrorFn(props.fileRecord.previewStatus));
+const isScanStatusBlocked = computed(() => isScanStatusBlockedFn(props.fileRecord.securityCheckStatus));
 </script>
