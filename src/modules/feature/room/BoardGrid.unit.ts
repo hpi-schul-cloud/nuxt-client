@@ -39,7 +39,7 @@ describe("@feature-room/BoardGrid", () => {
 	it("should call reorderRoom when drag and drop changes position", async () => {
 		const { wrapper, boards } = setup();
 
-		const sortable = wrapper.findComponent(Sortable);
+		const sortable = wrapper.findComponent({ name: "Sortable" });
 		await sortable.vm.$emit("end", { oldIndex: 0, newIndex: 2 });
 
 		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 2);

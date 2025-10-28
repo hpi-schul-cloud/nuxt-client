@@ -63,8 +63,8 @@ const focusedBoard = ref();
 const isDragging = ref(false);
 
 const getColumnsCount = () => {
-	if (!gridRef.value) return 1;
-	const style = window.getComputedStyle(gridRef.value.$el);
+	if (!gridRef.value?.containerRef) return 1;
+	const style = window.getComputedStyle(gridRef.value.containerRef);
 	return style.gridTemplateColumns.split(" ").length;
 };
 
