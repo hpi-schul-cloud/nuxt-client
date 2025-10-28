@@ -7,7 +7,7 @@
 		:options="{
 			disabled: !canEditRoomContent,
 			delayOnTouchOnly: true,
-			delay: 200,
+			delay: 100,
 			ghostClass: 'opacity-50',
 			touchStartThreshold: 3, // needed for sensitive touch devices
 			fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
@@ -138,7 +138,7 @@ watch(
 .board-grid {
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
 .board-item {
