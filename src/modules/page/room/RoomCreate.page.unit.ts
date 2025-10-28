@@ -3,7 +3,9 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useRoomCreateState } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { useRouter } from "vue-router";
 
 vi.mock("vue-router", () => ({
@@ -27,14 +29,6 @@ vi.mock("@data-room/RoomCreate.state.ts", () => ({
 		},
 	}),
 }));
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
 
 const roomParams: RoomCreateParams = {
 	name: "test",
@@ -60,6 +54,10 @@ describe("@pages/RoomCreate.page.vue", () => {
 			roomFormComponent,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();

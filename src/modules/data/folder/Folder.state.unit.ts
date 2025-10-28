@@ -105,11 +105,28 @@ describe("useFolderState", () => {
 						timestamps: { createdAt, lastUpdatedAt },
 					});
 				});
+
+				describe("when file folder element has an empty title", () => {
+					it("should return default title", async () => {
+						const { testId } = setup({
+							element: {
+								...fileFolderElementResponseFactory.build(),
+								content: { title: "" },
+							},
+						});
+
+						const { fetchFileFolderElement, folderName } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+
+						expect(folderName.value).toEqual("pages.folder.untitled");
+					});
+				});
 			});
 
 			describe("when root parent node is a course", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "course-id",
@@ -141,13 +158,17 @@ describe("useFolderState", () => {
 							title: "Column Board",
 							to: "/boards/column-board-id",
 						},
+						{
+							disabled: true,
+							title,
+						},
 					]);
 				});
 			});
 
 			describe("when root parent node is a room", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "room-id",
@@ -169,6 +190,10 @@ describe("useFolderState", () => {
 						{
 							title: "Room",
 							to: "/rooms/room-id",
+						},
+						{
+							disabled: true,
+							title,
 						},
 					]);
 				});

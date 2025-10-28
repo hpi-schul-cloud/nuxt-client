@@ -17,14 +17,6 @@ import { VCheckboxBtn } from "vuetify/lib/components/index";
 
 vi.mock("@data-provisioning-options");
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
@@ -87,9 +79,8 @@ describe("ProvisioningOptionsPage", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs[0].text()).toEqual("pages.administration.index.title");
-			expect(breadcrumbs[1].text()).toEqual("pages.administration.school.index.title");
-			expect(breadcrumbs[2].text()).toEqual("components.administration.provisioningOptions.page.title");
+			expect(breadcrumbs[0].text()).toEqual("pages.administration.school.index.title");
+			expect(breadcrumbs[1].text()).toEqual("components.administration.provisioningOptions.page.title");
 		});
 	});
 

@@ -234,5 +234,38 @@ describe("BoardAnyTitleInput", () => {
 				expect(emitted["update:value"]).toBeUndefined();
 			});
 		});
+
+		describe("applyFallbackRuleOnEmptyValue", () => {
+			describe("when title is empty", () => {
+				it("should set value to fallback", async () => {
+					const emptyValueFallback = "Fallback Title";
+					const { wrapper } = setup({
+						isEditMode: false,
+						scope: "board",
+						emptyValueFallback,
+					});
+
+					await wrapper.setProps({ value: "", isEditMode: true });
+
+					expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(emptyValueFallback);
+				});
+			});
+
+			describe("when title is non-empty", () => {
+				it("should not set value to fallback", async () => {
+					const emptyValueFallback = "Fallback Title";
+					const title = "Some Title";
+					const { wrapper } = setup({
+						isEditMode: false,
+						scope: "board",
+						emptyValueFallback,
+					});
+
+					await wrapper.setProps({ value: title, isEditMode: true });
+
+					expect((wrapper.vm as unknown as typeof BoardAnyTitleInput).modelValue).toBe(title);
+				});
+			});
+		});
 	});
 });

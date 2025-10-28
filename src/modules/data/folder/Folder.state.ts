@@ -1,6 +1,5 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardElementApiFactory } from "@/serverApi/v3";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	AnyContentElement,
 	ContentElementType,
@@ -10,8 +9,9 @@ import {
 } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useFolderState = () => {
@@ -21,12 +21,46 @@ export const useFolderState = () => {
 	const fileFolderElement = ref<FileFolderElement | undefined>(undefined);
 	const parentNodeInfos = ref<ParentNodeInfo[]>([]);
 
+	const parent = computed(() => {
+		const indexOfDirectParent = parentNodeInfos.value.length - 1;
+		const parent = parentNodeInfos.value[indexOfDirectParent];
+
+		return parent;
+	});
+
+	const folderName = computed(() => {
+		const title = fileFolderElement.value?.content.title;
+		return title || t("pages.folder.untitled");
+	});
+
+	const pageTitle = computed(() => buildPageTitle(folderName.value, parent.value?.name ?? t("pages.folder.title")));
+
+	const breadcrumbs = computed<Breadcrumb[]>(() => {
+		const breadcrumbItems: Breadcrumb[] = [];
+
+		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0) return breadcrumbItems;
+
+		const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
+		if (rootItem) breadcrumbItems.push(rootItem);
+
+		parentNodeInfos.value.forEach((item) => {
+			breadcrumbItems.push({
+				title: item.name,
+				to: `/${mapNodeTypeToPathType(item.type)}/${item.id}`,
+			});
+		});
+
+		breadcrumbItems.push({ title: folderName.value, disabled: true });
+
+		return breadcrumbItems;
+	});
+
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
 		try {
-			const reponse = await boardElementApi.elementControllerGetElementWithParentHierarchy(fileFolderElementId);
+			const response = await boardElementApi.elementControllerGetElementWithParentHierarchy(fileFolderElementId);
 
-			fileFolderElement.value = castToFileFolderElement(reponse.data.element);
-			parentNodeInfos.value = reponse.data.parentHierarchy;
+			fileFolderElement.value = castToFileFolderElement(response.data.element);
+			parentNodeInfos.value = response.data.parentHierarchy;
 		} catch (error) {
 			throwApplicationError(error);
 		}
@@ -43,30 +77,6 @@ export const useFolderState = () => {
 		}
 	};
 
-	const folderName = computed(() => {
-		const title = fileFolderElement.value?.content.title;
-
-		return title ? title : t("pages.folder.untitled");
-	});
-
-	const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-		const breadcrumbItems: Breadcrumb[] = [];
-
-		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0) return breadcrumbItems;
-
-		const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
-		if (rootItem) breadcrumbItems.push(rootItem);
-
-		parentNodeInfos.value.forEach((item) => {
-			breadcrumbItems.push({
-				title: item.name,
-				to: `/${mapNodeTypeToPathType(item.type)}/${item.id}`,
-			});
-		});
-
-		return breadcrumbItems;
-	});
-
 	const buildRootBreadCrumbItem = (parentNodeInfos: Ref<ParentNodeInfo[]>) => {
 		if (!parentNodeInfos.value[0]) return;
 
@@ -82,46 +92,41 @@ export const useFolderState = () => {
 		}
 	};
 
-	const parent = computed(() => {
-		const indexOfDirectParent = parentNodeInfos.value.length - 1;
-		const parent = parentNodeInfos.value[indexOfDirectParent];
+	const castToFileFolderElement = (element: AnyContentElement): FileFolderElement => {
+		if (element.type === ContentElementType.FileFolder) {
+			return element as FileFolderElement;
+		} else {
+			throw createApplicationError(404);
+		}
+	};
 
-		return parent;
-	});
+	const throwApplicationError = (error: unknown) => {
+		const responseError = mapAxiosErrorToResponseError(error);
+
+		useAppStore().handleApplicationError(responseError.code);
+	};
+
+	const mapNodeTypeToPathType = (nodeType: string): string => {
+		switch (nodeType) {
+			case ParentNodeType.Course:
+				return "courses";
+			case ParentNodeType.Room:
+				return "rooms";
+			case ParentNodeType.Board:
+				return "boards";
+			default:
+				throw new Error(`Unknown node type: ${nodeType}`);
+		}
+	};
 
 	return {
 		breadcrumbs,
 		fileFolderElement,
 		folderName,
-		fetchFileFolderElement,
+		pageTitle,
 		parent,
+		fetchFileFolderElement,
 		mapNodeTypeToPathType,
 		renameFolder,
 	};
-};
-
-const castToFileFolderElement = (element: AnyContentElement): FileFolderElement => {
-	if (element.type === ContentElementType.FileFolder) {
-		return element as FileFolderElement;
-	} else {
-		throw createApplicationError(HttpStatusCode.NotFound);
-	}
-};
-
-const throwApplicationError = (error: unknown) => {
-	const responseError = mapAxiosErrorToResponseError(error);
-	useAppStore().handleApplicationError(responseError.code);
-};
-
-const mapNodeTypeToPathType = (nodeType: string): string => {
-	switch (nodeType) {
-		case ParentNodeType.Course:
-			return "courses";
-		case ParentNodeType.Room:
-			return "rooms";
-		case ParentNodeType.Board:
-			return "boards";
-		default:
-			throw new Error(`Unknown node type: ${nodeType}`);
-	}
 };

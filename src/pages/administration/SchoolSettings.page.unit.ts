@@ -21,14 +21,6 @@ vi.mock("vue-router");
 
 const useRouteMock = <Mock>useRoute;
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("@data-school/schoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {

@@ -1,16 +1,16 @@
 import LernstoreDetailView from "./LernstoreDetailView";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
-}));
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 const testProps = {
 	resource: Resource,
 };
 
 describe("@/components/molecules/LernstoreDetailView", () => {
+	setActivePinia(createTestingPinia());
+
 	const wrapper = shallowMount(LernstoreDetailView, {
 		props: { ...testProps },
 		global: {
