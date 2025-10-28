@@ -17,7 +17,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
-import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
@@ -317,7 +317,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			it("should create a board with single-column layout", async () => {
 				const { wrapper, roomDetailsStore, room } = setup();
 				await openDialog(wrapper);
-
 				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
 				await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
 

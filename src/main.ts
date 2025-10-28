@@ -72,6 +72,7 @@ mountBaseComponents(app);
 // app.config.productionTip = false;
 
 app.config.errorHandler = (err: unknown) => {
+	logger.error(err);
 	useAppStore().handleUnknownError(err);
 };
 

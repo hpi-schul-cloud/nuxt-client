@@ -22,14 +22,14 @@
 		<template #item="{ element, index }">
 			<!-- the board tile is an a tag, which natively has draggable=true, which we need to suppress here -->
 			<BoardGridItem
-				class="draggable board-item"
+				class="draggable user-select-none board-item"
 				draggable="false"
 				:board="element"
 				:index
 				@click.capture="onItemClick"
 				@contextmenu.prevent
 				@focusin="focusedBoard = $event.target"
-				@keydown.up.down.left.right="onKeyDown($event, index)"
+				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 			/>
 		</template>
 
@@ -56,6 +56,7 @@ const { execute, error: reorderError } = useSafeTask();
 
 const { fetchRoomAndBoards, moveBoard } = useRoomDetailsStore();
 const { generateErrorText } = useErrorHandler();
+const { canEditRoomContent } = useRoomAuthorization();
 
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
@@ -66,8 +67,6 @@ const getColumnsCount = () => {
 	const style = window.getComputedStyle(gridRef.value.$el);
 	return style.gridTemplateColumns.split(" ").length;
 };
-
-const { canEditRoomContent } = useRoomAuthorization();
 
 const reorderRoom = (boardId: string, newIndex: number) => {
 	execute(async () => {
@@ -90,8 +89,8 @@ const updateBoardIndex = (newIndex: number | undefined, oldIndex: number | undef
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
-	updateBoardIndex(newIndex, oldIndex);
 	isDragging.value = false;
+	updateBoardIndex(newIndex, oldIndex);
 };
 
 const onItemClick = (evt: Event) => {
@@ -100,7 +99,7 @@ const onItemClick = (evt: Event) => {
 	}
 };
 
-const onKeyDown = (e: KeyboardEvent, oldIndex: number) => {
+const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 	let newIndex = 0;
 	const cols = getColumnsCount();
 
@@ -135,7 +134,7 @@ watch(
 	}
 );
 </script>
-<style>
+<style scoped>
 .board-grid {
 	display: grid;
 	grid-gap: 10px;
