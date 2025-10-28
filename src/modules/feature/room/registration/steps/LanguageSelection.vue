@@ -19,14 +19,14 @@ type Props = {
 defineProps<Props>();
 
 const emit = defineEmits<{
-	(e: "update:selectedLanguage", value: LanguageType): void;
+	(e: "update:selected-language", value: LanguageType): void;
 }>();
 
 const i18n = useI18n();
 const { t } = i18n;
 
 const onUpdateLanguage = (value: LanguageType) => {
-	emit("update:selectedLanguage", value);
+	emit("update:selected-language", value);
 };
 
 const languages = [
