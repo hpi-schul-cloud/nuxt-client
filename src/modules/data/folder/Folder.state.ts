@@ -28,7 +28,10 @@ export const useFolderState = () => {
 		return parent;
 	});
 
-	const folderName = computed(() => fileFolderElement.value?.content.title ?? t("pages.folder.untitled"));
+	const folderName = computed(() => {
+		const title = fileFolderElement.value?.content.title;
+		return title || t("pages.folder.untitled");
+	});
 
 	const pageTitle = computed(() => buildPageTitle(folderName.value, parent.value?.name ?? t("pages.folder.title")));
 
