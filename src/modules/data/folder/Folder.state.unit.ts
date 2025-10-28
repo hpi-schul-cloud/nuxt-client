@@ -105,6 +105,23 @@ describe("useFolderState", () => {
 						timestamps: { createdAt, lastUpdatedAt },
 					});
 				});
+
+				describe("when file folder element has an empty title", () => {
+					it("should return default title", async () => {
+						const { testId } = setup({
+							element: {
+								...fileFolderElementResponseFactory.build(),
+								content: { title: "" },
+							},
+						});
+
+						const { fetchFileFolderElement, folderName } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+
+						expect(folderName.value).toEqual("pages.folder.untitled");
+					});
+				});
 			});
 
 			describe("when root parent node is a course", () => {
