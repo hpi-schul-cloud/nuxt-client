@@ -5,6 +5,7 @@ import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/room
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { InvitationStep, RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
+import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
@@ -54,7 +55,7 @@ describe("InviteMembersDialog", () => {
 	});
 
 	const setDescription = async (wrapper: VueWrapper, value: string) => {
-		const descriptionField = wrapper.findComponent({
+		const descriptionField = wrapper.getComponent({
 			ref: "descriptionField",
 		}) as VueWrapper<VTextField>;
 
@@ -110,7 +111,7 @@ describe("InviteMembersDialog", () => {
 
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
 
-		return { wrapper, roomInvitationLinkStore };
+		return { wrapper, roomInvitationLinkStore, schoolName };
 	};
 
 	it("should render correctly", async () => {
@@ -125,8 +126,8 @@ describe("InviteMembersDialog", () => {
 		describe("when the step is PREPARE", () => {
 			it("should have the correct title", async () => {
 				const { wrapper } = await setup();
-				const card = wrapper.findComponent(VCard);
-				const title = card.findComponent(VCardTitle);
+
+				const title = wrapper.getComponent(VCardTitle);
 
 				expect(title.text()).toBe("pages.rooms.members.inviteMember.step.prepare.title");
 			});
@@ -136,11 +137,11 @@ describe("InviteMembersDialog", () => {
 				const actionButtons = wrapper.findAllComponents(VBtn);
 				expect(actionButtons.length).toBe(2);
 
-				const cancelButton = actionButtons[0];
-				const nextButton = actionButtons[1];
+				const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
+				const continueButton = wrapper.getComponent({ ref: "continueButton" });
 
 				expect(cancelButton.text()).toBe("common.actions.cancel");
-				expect(nextButton.text()).toBe("common.actions.continue");
+				expect(continueButton.text()).toBe("common.actions.continue");
 			});
 
 			it("should not render the ShareModalResult component", async () => {
@@ -151,46 +152,45 @@ describe("InviteMembersDialog", () => {
 			});
 
 			it("should have the correct checkbox labels", async () => {
-				const { wrapper } = await setup();
-				const checkboxes = wrapper.findAllComponents(VCheckbox);
+				const { wrapper, schoolName } = await setup();
 
-				[
-					"pages.rooms.members.inviteMember.form.onlySchoolMembers.label",
+				const checkboxes = wrapper.findAllComponents(VCheckbox);
+				const checkboxLabels = checkboxes.map((checkbox) => checkbox.text());
+
+				const expectedLabels = [
+					`pages.rooms.members.inviteMember.form.onlySchoolMembers.label ${schoolName}`,
 					"pages.rooms.members.inviteMember.form.validForStudents.label",
 					"pages.rooms.members.inviteMember.form.linkExpires.label",
 					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
-				].forEach((label) => {
-					expect(checkboxes.some((checkbox) => checkbox.text().includes(label))).toBe(true);
-				});
+				];
+
+				expect(checkboxLabels).toEqual(expectedLabels);
 			});
 
 			it("should have the correct checkbox labels when inviting external persons feature is enabled", async () => {
 				createTestEnvStore({
 					FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
 				});
-				const { wrapper } = await setup();
+				const { wrapper, schoolName } = await setup();
 
 				const checkboxes = wrapper.findAllComponents(VCheckbox);
-				expect(checkboxes.length).toBe(5);
+				const checkboxLabels = checkboxes.map((checkbox) => checkbox.text());
 
-				[
-					"pages.rooms.members.inviteMember.form.onlySchoolMembers.label",
+				const expectedLabels = [
+					`pages.rooms.members.inviteMember.form.onlySchoolMembers.label ${schoolName}`,
 					"pages.rooms.members.inviteMember.form.validForStudents.label",
 					"pages.rooms.members.inviteMember.form.validForExternalPersons.label",
 					"pages.rooms.members.inviteMember.form.linkExpires.label",
 					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
-				].forEach((label) => {
-					expect(checkboxes.some((checkbox) => checkbox.text().includes(label))).toBe(true);
-				});
+				];
+				expect(checkboxLabels).toEqual(expectedLabels);
 			});
 		});
 
 		describe("when the step is EDIT", () => {
 			it("should have the correct title", async () => {
 				const { wrapper } = await setup({ preDefinedStep: InvitationStep.EDIT });
-
-				const card = wrapper.findComponent(VCard);
-				const title = card.findComponent(VCardTitle);
+				const title = wrapper.getComponent(VCardTitle);
 
 				expect(title.text()).toBe("pages.rooms.members.inviteMember.step.edit.title");
 			});
@@ -201,11 +201,11 @@ describe("InviteMembersDialog", () => {
 				const actionButtons = wrapper.findAllComponents(VBtn);
 				expect(actionButtons.length).toBe(2);
 
-				const cancelButton = actionButtons[0];
-				const nextButton = actionButtons[1];
+				const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
+				const continueButton = wrapper.getComponent({ ref: "continueButton" });
 
 				expect(cancelButton.text()).toBe("common.actions.cancel");
-				expect(nextButton.text()).toBe("common.actions.continue");
+				expect(continueButton.text()).toBe("common.actions.continue");
 			});
 
 			it("should set linkExpires-checkbox modelValue false if activeUntil value is default", async () => {
@@ -215,9 +215,12 @@ describe("InviteMembersDialog", () => {
 						activeUntil: "2900-01-01T00:00:00.000Z",
 					}),
 				});
-				const checkboxes = wrapper.findAllComponents(VCheckbox);
 
-				const linkExpiresCheckbox = checkboxes[2];
+				const linkExpiresCheckbox = wrapper
+					.getComponent(VCard)
+					.get("[data-testid=input-invite-participants-link-expires]")
+					.findComponent(VCheckbox);
+
 				expect(linkExpiresCheckbox.props("modelValue")).toBe(false);
 			});
 
@@ -230,7 +233,7 @@ describe("InviteMembersDialog", () => {
 					roomInvitationLinkStore.editedLink = roomInvitationLinkStore.roomInvitationLinks[0];
 					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
 
-					const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+					const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
 					await cancelButton.trigger("click");
 
 					expect(roomInvitationLinkStore.editedLink).toBeNull();
@@ -242,8 +245,7 @@ describe("InviteMembersDialog", () => {
 			it("should have the correct title", async () => {
 				const { wrapper } = await setup({ preDefinedStep: InvitationStep.SHARE });
 
-				const card = wrapper.findComponent(VCard);
-				const title = card.findComponent(VCardTitle);
+				const title = wrapper.getComponent(VCardTitle);
 
 				expect(title.text()).toBe("pages.rooms.members.inviteMember.step.share.title");
 			});
@@ -251,7 +253,7 @@ describe("InviteMembersDialog", () => {
 			it("should have the correct action button", async () => {
 				const { wrapper } = await setup({ preDefinedStep: InvitationStep.SHARE });
 
-				const closeButton = wrapper.findComponent({ ref: "closeButton" });
+				const closeButton = wrapper.getComponent({ ref: "closeButton" });
 				expect(closeButton.text()).toBe("common.labels.close");
 			});
 
@@ -268,7 +270,7 @@ describe("InviteMembersDialog", () => {
 						preDefinedStep: InvitationStep.SHARE,
 					});
 
-					const shareModalResult = wrapper.findComponent(ShareModalResult);
+					const shareModalResult = wrapper.getComponent(ShareModalResult);
 					await shareModalResult.vm.$emit("copied");
 					expectNotification("success");
 				});
@@ -280,7 +282,7 @@ describe("InviteMembersDialog", () => {
 						preDefinedStep: InvitationStep.SHARE,
 					});
 
-					const shareModalResult = wrapper.findComponent(ShareModalResult);
+					const shareModalResult = wrapper.getComponent(ShareModalResult);
 					await shareModalResult.vm.$emit("done");
 
 					expect(wrapper.emitted()).toHaveProperty("close");
@@ -290,72 +292,110 @@ describe("InviteMembersDialog", () => {
 	});
 
 	describe("Continue button behavior", () => {
-		it("should call createLink method if form is valid", async () => {
-			const { wrapper, roomInvitationLinkStore } = await setup({
-				preDefinedStep: InvitationStep.PREPARE,
+		describe("when form is valid", () => {
+			it("should call createLink method if form is in prepare step", async () => {
+				const { wrapper, roomInvitationLinkStore } = await setup({
+					preDefinedStep: InvitationStep.PREPARE,
+				});
+				const shareModalBefore = wrapper.findComponent(ShareModalResult);
+				expect(shareModalBefore.exists()).toBe(false);
+
+				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				await flushPromises();
+
+				const expectedFormValues = {
+					title: "invitation link",
+					activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
+					isUsableByStudents: false,
+					isUsableByExternalPersons: false,
+					restrictedToCreatorSchool: true,
+					requiresConfirmation: true,
+				};
+
+				expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(expectedFormValues);
 			});
-			await nextTick();
 
-			const shareModalBefore = wrapper.findComponent(ShareModalResult);
-			expect(shareModalBefore.exists()).toBe(false);
+			it("should call updateLink method if form is in edit step", async () => {
+				const { wrapper, roomInvitationLinkStore } = await setup({
+					preDefinedStep: InvitationStep.EDIT,
+				});
+				await nextTick();
 
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await flushPromises();
+				const shareModalBefore = wrapper.findComponent(ShareModalResult);
+				expect(shareModalBefore.exists()).toBe(false);
 
-			const expectedFormValues = {
-				title: "invitation link",
-				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
-				isUsableByStudents: false,
-				isUsableByExternalPersons: false,
-				restrictedToCreatorSchool: true,
-				requiresConfirmation: true,
-			};
+				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				await flushPromises();
 
-			expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(expectedFormValues);
+				const expectedFormValues = {
+					id: "",
+					title: "invitation link",
+					activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
+					isUsableByStudents: false,
+					isUsableByExternalPersons: false,
+					restrictedToCreatorSchool: true,
+					requiresConfirmation: true,
+				};
+
+				expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(expectedFormValues);
+			});
 		});
 
-		it("should call updateLink method if form is valid", async () => {
-			const { wrapper, roomInvitationLinkStore } = await setup({
-				preDefinedStep: InvitationStep.EDIT,
-			});
-			await nextTick();
+		describe("when form is invalid", () => {
+			it("should not call store method when form is invalid", async () => {
+				const { wrapper, roomInvitationLinkStore } = await setup();
+				await setDescription(wrapper, "  ");
 
-			const shareModalBefore = wrapper.findComponent(ShareModalResult);
-			expect(shareModalBefore.exists()).toBe(false);
+				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				await flushPromises();
 
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await flushPromises();
+				const descriptionField = wrapper.getComponent({
+					ref: "descriptionField",
+				});
 
-			const expectedFormValues = {
-				id: "",
-				title: "invitation link",
-				activeUntil: roomInvitationLinkStore.DEFAULT_EXPIRED_DATE,
-				isUsableByStudents: false,
-				isUsableByExternalPersons: false,
-				restrictedToCreatorSchool: true,
-				requiresConfirmation: true,
-			};
-
-			expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(expectedFormValues);
-		});
-
-		it("should not call store method when form is invalid", async () => {
-			const { wrapper, roomInvitationLinkStore } = await setup();
-			await setDescription(wrapper, "  ");
-
-			const nextButton = wrapper.findComponent({ ref: "continueButton" });
-			await nextButton.trigger("click");
-			await flushPromises();
-
-			const descriptionField = wrapper.findComponent({
-				ref: "descriptionField",
+				expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
+				expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
+				expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
 			});
 
-			expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
-			expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
-			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+			it("should focus the description field when it is the first invalid input", async () => {
+				const { wrapper } = await setup();
+				const descriptionField = wrapper.findComponent({
+					ref: "descriptionField",
+				});
+				const input = descriptionField.find("input").element;
+
+				await setDescription(wrapper, "  ");
+
+				const nextButton = wrapper.findComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				await flushPromises();
+
+				expect(document.activeElement).toBe(input);
+			});
+
+			it("should focus the date picker when it is the first invalid input", async () => {
+				const { wrapper } = await setup();
+
+				const expiryDateCheckbox = wrapper
+					.getComponent(VCard)
+					.get("[data-testid='input-invite-participants-link-expires']")
+					.getComponent(VCheckbox);
+				await expiryDateCheckbox.setValue(true);
+				await nextTick();
+
+				const datePicker = wrapper.getComponent('[data-testid="date-picker-until"]');
+				const input = datePicker.get("input").element;
+
+				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				await flushPromises();
+
+				expect(document.activeElement).toBe(input);
+			});
 		});
 	});
 
@@ -363,7 +403,7 @@ describe("InviteMembersDialog", () => {
 		it("should emit 'close' with false when cancel button is clicked", async () => {
 			const { wrapper } = await setup();
 
-			const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+			const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
 			await cancelButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
@@ -372,7 +412,7 @@ describe("InviteMembersDialog", () => {
 		it("should emit 'close' with false when close button is clicked", async () => {
 			const { wrapper } = await setup({ preDefinedStep: InvitationStep.SHARE });
 
-			const closeButton = wrapper.findComponent({ ref: "closeButton" });
+			const closeButton = wrapper.getComponent({ ref: "closeButton" });
 			await closeButton.trigger("click");
 
 			expect(wrapper.emitted()).toHaveProperty("close");
@@ -398,7 +438,6 @@ describe("InviteMembersDialog", () => {
 
 		it("should show error when description contains < followed by a string", async () => {
 			const { wrapper } = await setup();
-			await nextTick();
 
 			await setDescription(wrapper, "<abc123");
 
@@ -410,7 +449,6 @@ describe("InviteMembersDialog", () => {
 
 		it("should show error when description is longer then 100 characters", async () => {
 			const { wrapper } = await setup();
-			await nextTick();
 
 			const longDescription = "a".repeat(101);
 			await setDescription(wrapper, longDescription);
@@ -424,7 +462,7 @@ describe("InviteMembersDialog", () => {
 
 	describe("form rules", () => {
 		describe("default values of checkboxes", () => {
-			it("should have the first and fourth checkboxes checked as default", async () => {
+			it("should have the restricted-to-creator-school and requires-confirmation checkboxes checked as default", async () => {
 				const { wrapper } = await setup();
 
 				const checkboxes = wrapper.findAllComponents(VCheckbox);
@@ -443,56 +481,57 @@ describe("InviteMembersDialog", () => {
 			});
 		});
 
-		describe("when the first checkbox is checked", () => {
-			it("should enable the second checkbox", async () => {
+		describe("when the restricted-to-creator-school checkbox is checked", () => {
+			it("should enable the valid-for-students checkbox", async () => {
 				const { wrapper } = await setup();
+				const card = wrapper.getComponent(VCard);
 
-				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
-				const firstCheckbox = checkboxes[0];
-				const secondCheckbox = checkboxes[1];
+				const restrictedToCreatorSchoolCheckbox = card
+					.get('[data-testid="input-invite-participants-restricted-to-creator-school"]')
+					.findComponent(VCheckbox);
+				await restrictedToCreatorSchoolCheckbox.setValue(true);
 
-				await firstCheckbox.setValue(false);
-
-				expect(secondCheckbox.props("disabled")).toBe(true);
+				const validForStudentsCheckbox = card
+					.get('[data-testid="input-invite-participants-valid-for-students"]')
+					.findComponent(VCheckbox);
+				expect(validForStudentsCheckbox.props("disabled")).toBe(false);
 			});
 		});
 
-		describe("when the first checkbox is unchecked", () => {
-			it("should disable and uncheck the second checkbox", async () => {
+		describe("when the restricted-to-creator-school checkbox is unchecked", () => {
+			it("should disable and uncheck the valid-for-students checkbox", async () => {
 				const { wrapper } = await setup();
+				const card = wrapper.getComponent(VCard);
 
-				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
-				const firstCheckbox = checkboxes[0];
-				const secondCheckbox = checkboxes[1];
+				const restrictedToCreatorSchoolCheckbox = card
+					.get('[data-testid="input-invite-participants-restricted-to-creator-school"]')
+					.findComponent(VCheckbox);
+				await restrictedToCreatorSchoolCheckbox.setValue(false);
 
-				await firstCheckbox.setValue(true);
-				await secondCheckbox.setValue(true);
+				const validForStudentsCheckbox = card
+					.get('[data-testid="input-invite-participants-valid-for-students"]')
+					.findComponent(VCheckbox);
 
-				expect(secondCheckbox.props("disabled")).toBe(false);
-				expect(secondCheckbox.props("modelValue")).toBe(true);
-
-				await firstCheckbox.setValue(false);
-
-				expect(secondCheckbox.props("disabled")).toBe(true);
-				expect(secondCheckbox.props("modelValue")).toBe(false);
+				expect(validForStudentsCheckbox.props("disabled")).toBe(true);
+				expect(validForStudentsCheckbox.props("modelValue")).toBe(false);
 			});
 		});
 
-		describe("when the third checkbox is checked", () => {
+		describe("when the link-expires checkbox is checked", () => {
 			it("should enable date picker", async () => {
 				const { wrapper } = await setup();
 
-				const datePickerBefore = wrapper.findComponent('[data-testid="date-picker-until"]');
-				expect(datePickerBefore.classes().includes("v-input--disabled")).toBe(true);
+				const datePickerBefore = wrapper.getComponent(DatePicker);
+				expect(datePickerBefore.props().disabled).toBe(true);
 
-				const checkboxes = wrapper.findAllComponents(VCheckbox);
-				const thirdCheckbox = checkboxes[2];
+				const linkExpiresCheckbox = wrapper
+					.getComponent(VCard)
+					.get('[data-testid="input-invite-participants-link-expires"]')
+					.getComponent(VCheckbox);
+				await linkExpiresCheckbox.setValue(true);
 
-				await thirdCheckbox.setValue(true);
-
-				const datePicker = wrapper.findComponent('[data-testid="date-picker-until"]');
-
-				expect(datePicker.classes().includes("v-input--disabled")).toBe(false);
+				const datePicker = wrapper.getComponent(DatePicker);
+				expect(datePicker.props().disabled).toBe(false);
 			});
 		});
 	});
