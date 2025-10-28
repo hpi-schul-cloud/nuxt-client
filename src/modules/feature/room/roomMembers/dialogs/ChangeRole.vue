@@ -117,7 +117,7 @@
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum, RoleName } from "@/serverApi/v3";
 import { useAppStoreRefs } from "@data-app";
-import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { createRoomMembersStore, RoomMember, useRoomDetailsStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 import { computed, ModelRef, PropType, ref, toRef, watch } from "vue";
@@ -159,7 +159,7 @@ const { t } = useI18n();
 const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
-const roomMembersStore = useRoomMembersStore();
+const roomMembersStore = createRoomMembersStore();
 const { selectedIds } = storeToRefs(roomMembersStore);
 const { updateMembersRole, changeRoomOwner } = roomMembersStore;
 

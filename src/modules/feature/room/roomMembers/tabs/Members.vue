@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
-import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { createRoomMembersStore, useRoomAuthorization } from "@data-room";
 import { MembersTable } from "@feature-room";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
@@ -29,7 +29,7 @@ defineProps({
 
 const { t } = useI18n();
 
-const roomMembersStore = useRoomMembersStore();
+const roomMembersStore = createRoomMembersStore();
 const { isLoading } = storeToRefs(roomMembersStore);
 const { canAddRoomMembers } = useRoomAuthorization();
 
