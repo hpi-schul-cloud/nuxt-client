@@ -1685,7 +1685,7 @@ export default {
 	"pages.rooms.members.tableHeader.description": "Beschreibung",
 	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool": "Nur schulintern gültig",
 	"pages.rooms.members.tableHeader.validForStudents": "Auch für Lernende gültig",
-	"pages.rooms.members.tableHeader.validForExternalPersons": "Auch für externe Personen gültig",
+	"pages.rooms.members.tableHeader.validForExternalPersons": "Auch für Externe Personen gültig",
 	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
 	"pages.rooms.members.tableHeader.confirmationRequired": "Bestätigung erforderlich",
 	"pages.rooms.members.tableHeader.status": "Status",
@@ -1725,7 +1725,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint": "Wird in der Link-Übersicht angezeigt",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label": "Link nur für Nutzende der folgenden Schule gültig:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label": "Link auch für Lernende gültig",
-	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link auch für externe Personen gültig",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link auch für Externe Personen gültig",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"Betreten des Raums nur nach Bestätigung möglich ({0})",
