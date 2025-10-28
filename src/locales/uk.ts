@@ -137,6 +137,7 @@ export default {
 	"common.placeholder.repeat.email": "Повторно введіть адресу електронної пошти",
 	"common.roleName.administrator": "Адміністратор",
 	"common.roleName.expert": "Експерт",
+	"common.roleName.externalPerson": "Зовнішня особа",
 	"common.roleName.helpdesk": "Служба підтримки",
 	"common.roleName.student": "Учень",
 	"common.roleName.superhero": "Адміністратор Schul-Cloud",
