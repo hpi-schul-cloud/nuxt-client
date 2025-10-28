@@ -127,7 +127,7 @@ const fileProperties = computed(() => {
 		url: fileRecord.value.url,
 		previewUrl,
 		previewStatus: fileRecord.value.previewStatus,
-		isDownloadAllowed: isScanStatusBlocked(fileRecord.value.securityCheckStatus),
+		isDownloadAllowed: !isScanStatusBlocked(fileRecord.value.securityCheckStatus),
 		mimeType: fileRecord.value.mimeType,
 		element: props.element,
 		isCollaboraEditable: fileRecord.value.isCollaboraEditable,

@@ -186,7 +186,7 @@ const fileRecordsToDelete = ref<FileRecord[]>([]);
 const fileRecordItems = computed(() =>
 	props.fileRecords.map((item) => ({
 		...item,
-		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
+		isSelectable: !isScanStatusBlocked(item.securityCheckStatus),
 	}))
 );
 
