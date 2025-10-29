@@ -1,44 +1,30 @@
 <template>
-	<VChip
-		v-if="isScanStatusPending"
-		color="info"
-		class="ms-2"
-		:prepend-icon="mdiClockTimeFour"
-		data-testid="file-status-scan-pending"
-	>
+	<InfoChip v-if="isScanStatusPending" class="ms-2" :icon="mdiClockTimeFour" data-testid="file-status-scan-pending">
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.awaitingScan.short") }}
-	</VChip>
-	<VChip
+	</InfoChip>
+	<WarningChip
 		v-if="isScanStatusWontCheck"
-		color="warning"
 		class="ms-2"
-		:prepend-icon="mdiEyeOffOutline"
+		:icon="mdiEyeOffOutline"
 		data-testid="file-status-scan-wont-check"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.scanWontCheck.short") }}
-	</VChip>
-	<VChip
-		v-if="isScanStatusError"
-		color="warning"
-		class="ms-2"
-		:prepend-icon="mdiEyeOffOutline"
-		data-testid="file-status-scan-error"
-	>
+	</WarningChip>
+	<WarningChip v-if="isScanStatusError" class="ms-2" :icon="mdiEyeOffOutline" data-testid="file-status-scan-error">
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.scanError.short") }}
-	</VChip>
-	<VChip
+	</WarningChip>
+	<ErrorChip
 		v-if="isScanStatusBlocked"
-		color="error"
 		class="ms-2"
 		:prepend-icon="mdiAlertCircle"
 		data-testid="file-status-scan-virus-detected"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.virusDetected.short") }}
-	</VChip>
+	</ErrorChip>
 </template>
 
 <script setup lang="ts">
@@ -50,6 +36,7 @@ import {
 	isScanStatusWontCheck as isScanStatusWontCheckFn,
 } from "@/utils/fileHelper";
 import { mdiAlertCircle, mdiClockTimeFour, mdiEyeOffOutline } from "@icons/material";
+import { ErrorChip, InfoChip, WarningChip } from "@ui-chip";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
