@@ -9,6 +9,9 @@ const uuid = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-
 
 const vueRoutes = [
 	`^/favicon.png$`,
+	`^/collabora/doc.docx$`,
+	`^/collabora/presentation.pptx$`,
+	`^/collabora/spreadsheet.xlsx$`,
 	`^/_nuxt/*`,
 	`^/runtime.config.json`,
 	`^/activation/${activationCode}/?$`,
