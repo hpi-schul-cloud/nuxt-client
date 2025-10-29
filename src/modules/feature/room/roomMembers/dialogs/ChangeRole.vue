@@ -304,6 +304,11 @@ const radioOptions = computed(() => {
 		return [roomOwnerOption];
 	}
 
+	const isExpertMember = memberSchoolRoles.value.includes(RoleName.Expert);
+	if (isExpertMember) {
+		return [...baseRoles.slice(0, 2)];
+	}
+
 	if (isChangeOwnershipOptionVisible.value) {
 		return [...baseRoles, roomOwnerOption];
 	}
