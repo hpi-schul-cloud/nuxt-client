@@ -16,12 +16,7 @@
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.scanError.short") }}
 	</WarningChip>
-	<ErrorChip
-		v-if="isScanStatusBlocked"
-		class="ms-2"
-		:prepend-icon="mdiAlertCircle"
-		data-testid="file-status-scan-virus-detected"
-	>
+	<ErrorChip v-if="isScanStatusBlocked" class="ms-2" data-testid="file-status-scan-virus-detected">
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.virusDetected.short") }}
 	</ErrorChip>
@@ -35,7 +30,7 @@ import {
 	isScanStatusPending as isScanStatusPendingFn,
 	isScanStatusWontCheck as isScanStatusWontCheckFn,
 } from "@/utils/fileHelper";
-import { mdiAlertCircle, mdiClockTimeFour, mdiEyeOffOutline } from "@icons/material";
+import { mdiClockTimeFour, mdiEyeOffOutline } from "@icons/material";
 import { ErrorChip, InfoChip, WarningChip } from "@ui-chip";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
