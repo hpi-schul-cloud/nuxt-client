@@ -45,7 +45,7 @@ describe("DatePicker", () => {
 		const menu = wrapper.getComponent(VMenu);
 		const datePicker = menu.getComponent(VDatePicker);
 
-		const selectedDate = new Date("2025-10-30T00:00:00+01:00");
+		const selectedDate = new Date(2024, 0, 1);
 		vi.setSystemTime(selectedDate);
 
 		await datePicker.setValue(selectedDate);
