@@ -2,7 +2,7 @@
 	<PdfDisplay
 		v-if="hasPdfMimeType && fileProperties.previewUrl"
 		:src="fileProperties.url"
-		:preview-src="fileProperties.previewUrl"
+		:preview-src="fileProperties.url"
 		:name="fileProperties.name"
 		:is-edit-mode="isEditMode"
 		:element="fileProperties.element"
