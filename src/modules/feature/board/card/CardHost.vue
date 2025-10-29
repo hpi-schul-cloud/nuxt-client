@@ -225,7 +225,7 @@ const boardMenuClasses = computed(() => {
 const duplicateCard = async () => {
 	if (!card.value) return;
 
-	await cardStore.duplicateCardRequest({ cardId: card.value.id });
+	await cardStore.duplicateCard({ cardId: card.value.id });
 };
 
 onMounted(async () => {

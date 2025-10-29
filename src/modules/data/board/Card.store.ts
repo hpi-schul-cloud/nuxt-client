@@ -5,6 +5,7 @@ import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
+	DuplicateCardRequestPayload,
 	DuplicateCardSuccessPayload,
 	FetchCardSuccessPayload,
 	MoveElementSuccessPayload,
@@ -14,6 +15,7 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useLoadingState } from "@/composables/loadingState";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -24,6 +26,7 @@ import { useI18n } from "vue-i18n";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const { t } = useI18n();
+	const { isLoadingDialogOpen } = useLoadingState(t("components.board.loading.cardDuplication"));
 
 	const cards: Ref<Record<string, CardResponse>> = ref({});
 	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
@@ -79,10 +82,17 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const duplicateCardRequest = socketOrRest.duplicateCardRequest;
 
+	const duplicateCard = async (payload: DuplicateCardRequestPayload) => {
+		isLoadingDialogOpen.value = true;
+
+		await duplicateCardRequest(payload);
+	};
+
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		if (payload.duplicatedCard.id) {
 			cards.value[payload.duplicatedCard.id] = payload.duplicatedCard;
 
+			isLoadingDialogOpen.value = false;
 			notifyInfo(t("components.board.notifications.info.cardDuplicated"));
 		}
 	};
@@ -241,7 +251,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		fetchCardRequest,
 		fetchCardSuccess,
 		cards,
-		duplicateCardRequest,
+		duplicateCard,
 		duplicateCardSuccess,
 		deleteCardRequest,
 		deleteCardSuccess,

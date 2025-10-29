@@ -429,6 +429,7 @@ export default {
 	"components.board.dialog.readerCanEdit.options.defaultSetting": "Standardeinstellung",
 	"components.board.dialog.readerCanEdit.alert.text":
 		"Der Bereich muss zuerst veröffentlicht werden, bevor die Bearbeitungseinstellungen angepasst werden können.",
+	"components.board.loading.cardDuplication": "Karte wird dupliziert...",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad-Einstellungen",
