@@ -5,7 +5,6 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useRoomDetailsStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import { Sortable } from "sortablejs-vue3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("@feature-room/BoardGrid", () => {
