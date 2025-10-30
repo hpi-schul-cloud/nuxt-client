@@ -108,23 +108,22 @@ const ariaLabelWithFormat = computed(() => {
 	return `${t(prefix)} (${t("common.placeholder.dateformat")})`;
 });
 
-watch(
-	() => dateTextField.value?.modelValue,
-	async () => {
-		if (dateTextField.value === null) return;
+const validateAndEmitDate = async () => {
+	if (dateTextField.value === null) return;
 
-		await dateTextField.value.validate();
-		const isValid = dateTextField.value.isValid;
-		if (isValid) {
-			const isoDate = dateString.value ? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString() : null;
+	await dateTextField.value.validate();
+	const isValid = dateTextField.value.isValid;
+	if (isValid) {
+		const isoDate = dateString.value ? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString() : null;
 
-			emit("update:date", isoDate);
-		} else {
-			emit("update:date", null);
-			emit("error");
-		}
+		emit("update:date", isoDate);
+	} else {
+		emit("update:date", null);
+		emit("error");
 	}
-);
+};
+
+watch(() => dateTextField.value?.modelValue, validateAndEmitDate);
 
 watch(
 	() => props.required,
