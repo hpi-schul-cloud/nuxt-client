@@ -5,7 +5,6 @@ import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
-	DuplicateCardRequestPayload,
 	DuplicateCardSuccessPayload,
 	FetchCardSuccessPayload,
 	MoveElementSuccessPayload,
@@ -15,19 +14,14 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useLoadingState } from "@/composables/loadingState";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useCardStore = defineStore("cardStore", () => {
-	const { t } = useI18n();
-	const { isLoadingDialogOpen } = useLoadingState(t("components.board.loading.cardDuplication"));
-
 	const cards: Ref<Record<string, CardResponse>> = ref({});
 	const preferredTools: Ref<PreferredToolResponse[]> = ref([]);
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
@@ -80,20 +74,12 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.height = payload.newHeight;
 	};
 
-	const duplicateCardRequest = socketOrRest.duplicateCardRequest;
-
-	const duplicateCard = async (payload: DuplicateCardRequestPayload) => {
-		isLoadingDialogOpen.value = true;
-
-		await duplicateCardRequest(payload);
-	};
+	const duplicateCard = socketOrRest.duplicateCardRequest;
 
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		if (payload.duplicatedCard.id) {
 			cards.value[payload.duplicatedCard.id] = payload.duplicatedCard;
-
-			isLoadingDialogOpen.value = false;
-			notifyInfo(t("components.board.notifications.info.cardDuplicated"));
+			notifyInfo("components.board.notifications.info.cardDuplicated");
 		}
 	};
 

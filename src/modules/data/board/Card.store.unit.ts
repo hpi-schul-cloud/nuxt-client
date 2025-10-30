@@ -21,10 +21,6 @@ import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
-
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
@@ -280,7 +276,7 @@ describe("CardStore", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
 
-			cardStore.duplicateCardRequest({
+			cardStore.duplicateCard({
 				cardId,
 			});
 
@@ -292,7 +288,7 @@ describe("CardStore", () => {
 		it("should call rest Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup();
 
-			cardStore.duplicateCardRequest({
+			cardStore.duplicateCard({
 				cardId,
 			});
 
