@@ -37,6 +37,10 @@ export default {
 	"common.file.scanError":
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"common.file.virusDetected": "Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file.awaitingScan.short": "Vorschau wird erstellt",
+	"common.file.scanWontCheck.short": "Vorschau nicht möglich",
+	"common.file.scanError.short": "Vorschau nicht möglich",
+	"common.file.virusDetected.short": "Virenverdacht",
 	"common.file": "Datei",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
