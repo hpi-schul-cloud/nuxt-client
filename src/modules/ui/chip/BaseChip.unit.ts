@@ -1,18 +1,18 @@
 import BaseChip from "./BaseChip.vue";
-import InfoChip from "./InfoChip.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiInformation } from "@icons/material";
 import { VChip } from "vuetify/components";
 
-describe("InfoChip", () => {
+describe("BaseChip", () => {
 	const setup = () => {
 		const slotContent = "Slot content";
+		const color = "info";
 		const icon = "TestIcon";
-		const wrapper = mount(InfoChip, {
+		const wrapper = mount(BaseChip, {
 			global: {
 				plugins: [createTestingVuetify()],
 			},
 			props: {
+				color,
 				icon,
 			},
 			slots: { default: slotContent },
@@ -21,11 +21,12 @@ describe("InfoChip", () => {
 		return {
 			wrapper,
 			slotContent,
+			color,
 			icon,
 		};
 	};
 
-	it("should render the error chip", () => {
+	it("should render the chip", () => {
 		const { wrapper } = setup();
 
 		const chip = wrapper.findComponent(VChip);
@@ -33,36 +34,20 @@ describe("InfoChip", () => {
 		expect(chip.exists()).toBeTruthy();
 	});
 
-	describe("when icon is provided", () => {
-		it("should pass icon", () => {
-			const { wrapper, icon } = setup();
+	it("should pass color", () => {
+		const { wrapper, color } = setup();
 
-			const chip = wrapper.findComponent(BaseChip);
+		const chip = wrapper.findComponent(VChip);
 
-			expect(chip.props("icon")).toBe(icon);
-		});
+		expect(chip.props("color")).toBe(color);
 	});
 
-	describe("when icon is not provided", () => {
-		const setup = () => {
-			const wrapper = mount(InfoChip, {
-				global: {
-					plugins: [createTestingVuetify()],
-				},
-			});
+	it("should pass icon", () => {
+		const { wrapper, icon } = setup();
 
-			return {
-				wrapper,
-			};
-		};
+		const chip = wrapper.findComponent(VChip);
 
-		it("should pass default icon", () => {
-			const { wrapper } = setup();
-
-			const chip = wrapper.findComponent(BaseChip);
-
-			expect(chip.props("icon")).toBe(mdiInformation);
-		});
+		expect(chip.props("prependIcon")).toBe(icon);
 	});
 
 	describe("when default slot is defined", () => {
@@ -78,7 +63,7 @@ describe("InfoChip", () => {
 	describe("when default slot is not defined", () => {
 		const setup = () => {
 			const slotContent = "Slot content";
-			const wrapper = mount(InfoChip, {
+			const wrapper = mount(BaseChip, {
 				global: {
 					plugins: [createTestingVuetify()],
 				},

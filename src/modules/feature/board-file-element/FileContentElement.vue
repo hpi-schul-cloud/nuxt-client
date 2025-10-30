@@ -70,6 +70,7 @@ import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -127,7 +128,7 @@ const fileProperties = computed(() => {
 		url: fileRecord.value.url,
 		previewUrl,
 		previewStatus: fileRecord.value.previewStatus,
-		isDownloadAllowed: isScanStatusBlocked(fileRecord.value.securityCheckStatus),
+		isDownloadAllowed: !isScanStatusBlocked(fileRecord.value.securityCheckStatus),
 		mimeType: fileRecord.value.mimeType,
 		element: props.element,
 		isCollaboraEditable: fileRecord.value.isCollaboraEditable,
@@ -180,9 +181,9 @@ const onUpdateCaption = (value: string) => {
 	modelValue.value.caption = value;
 };
 
-const onUpdateName = (value: string) => {
+const onUpdateName = useDebounceFn((value: string) => {
 	rename(fileRecord.value.id, { fileName: value });
-};
+}, 300);
 
 const onAddAlert = (alert: FileAlert) => {
 	addAlert(alert);

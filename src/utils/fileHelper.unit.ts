@@ -389,17 +389,17 @@ describe("@/utils/fileHelper", () => {
 	});
 
 	describe("isScanStatusBlocked", () => {
-		describe("when scan status is not blocked", () => {
+		describe("when scan status is blocked", () => {
 			it("should return true", () => {
-				const result = isScanStatusBlocked(FileRecordVirusScanStatus.VERIFIED);
+				const result = isScanStatusBlocked(FileRecordVirusScanStatus.BLOCKED);
 
 				expect(result).toBe(true);
 			});
 		});
 
-		describe("when scan status is blocked", () => {
+		describe("when scan status is not blocked", () => {
 			it("should return false", () => {
-				const result = isScanStatusBlocked(FileRecordVirusScanStatus.BLOCKED);
+				const result = isScanStatusBlocked(FileRecordVirusScanStatus.VERIFIED);
 
 				expect(result).toBe(false);
 			});
