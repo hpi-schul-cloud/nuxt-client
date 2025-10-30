@@ -8,7 +8,7 @@
 	>
 		<div
 			:class="{
-				'w-33': hasRowStyle,
+				'flex-1-1-0': hasRowStyle,
 			}"
 		>
 			<FileDisplay
@@ -131,6 +131,7 @@ const isMenuShownOnFileDisplay = computed(() => {
 
 <style lang="scss" scoped>
 .file-information {
-	flex: 2 1 auto;
+	flex: 2;
+	min-width: 0;
 }
 </style>

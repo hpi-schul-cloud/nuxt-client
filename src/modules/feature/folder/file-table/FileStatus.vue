@@ -1,51 +1,50 @@
 <template>
-	<v-tooltip v-if="isScanStatusPending(fileRecord.previewStatus)" location="top">
-		<template #activator="{ props }">
-			<v-icon v-bind="props" data-testid="file-status-scan-pending">
-				{{ mdiClockTimeFour }}
-			</v-icon>
-		</template>
-		{{ t("common.file.awaitingScan") }}
-	</v-tooltip>
-	<v-tooltip v-if="isScanStatusWontCheck(fileRecord.previewStatus)" location="top">
-		<template #activator="{ props }">
-			<v-icon v-bind="props" data-testid="file-status-scan-wont-check">
-				{{ mdiImageOff }}
-			</v-icon>
-		</template>
-		{{ t("common.file.scanWontCheck") }}
-	</v-tooltip>
-	<v-tooltip v-if="isScanStatusError(fileRecord.previewStatus)" location="top">
-		<template #activator="{ props }">
-			<v-icon v-bind="props" color="warning" data-testid="file-status-scan-error">
-				{{ mdiAlert }}
-			</v-icon>
-		</template>
-		{{ t("common.file.scanError") }}
-	</v-tooltip>
-	<v-tooltip v-if="!isScanStatusBlocked(fileRecord.securityCheckStatus)" location="top">
-		<template #activator="{ props }">
-			<v-icon v-bind="props" color="error" data-testid="file-status-scan-virus-detected">
-				{{ mdiAlertCircle }}
-			</v-icon>
-		</template>
-		{{ t("common.file.virusDetected") }}
-	</v-tooltip>
+	<InfoChip v-if="isScanStatusPending" class="ms-2" :icon="mdiClockTimeFour" data-testid="file-status-scan-pending">
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
+		{{ t("common.file.awaitingScan.short") }}
+	</InfoChip>
+	<WarningChip
+		v-if="isScanStatusWontCheck"
+		class="ms-2"
+		:icon="mdiEyeOffOutline"
+		data-testid="file-status-scan-wont-check"
+	>
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
+		{{ t("common.file.scanWontCheck.short") }}
+	</WarningChip>
+	<WarningChip v-if="isScanStatusError" class="ms-2" :icon="mdiEyeOffOutline" data-testid="file-status-scan-error">
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
+		{{ t("common.file.scanError.short") }}
+	</WarningChip>
+	<ErrorChip v-if="isScanStatusBlocked" class="ms-2" data-testid="file-status-scan-virus-detected">
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
+		{{ t("common.file.virusDetected.short") }}
+	</ErrorChip>
 </template>
 
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
-import { isScanStatusBlocked, isScanStatusError, isScanStatusPending, isScanStatusWontCheck } from "@/utils/fileHelper";
-import { mdiAlert, mdiAlertCircle, mdiClockTimeFour, mdiImageOff } from "@icons/material";
-import { PropType } from "vue";
+import {
+	isScanStatusBlocked as isScanStatusBlockedFn,
+	isScanStatusError as isScanStatusErrorFn,
+	isScanStatusPending as isScanStatusPendingFn,
+	isScanStatusWontCheck as isScanStatusWontCheckFn,
+} from "@/utils/fileHelper";
+import { mdiClockTimeFour, mdiEyeOffOutline } from "@icons/material";
+import { ErrorChip, InfoChip, WarningChip } from "@ui-chip";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
-defineProps({
+const props = defineProps({
 	fileRecord: {
 		type: Object as PropType<FileRecord>,
 		required: true,
 	},
 });
+
+const isScanStatusPending = computed(() => isScanStatusPendingFn(props.fileRecord.previewStatus));
+const isScanStatusWontCheck = computed(() => isScanStatusWontCheckFn(props.fileRecord.previewStatus));
+const isScanStatusError = computed(() => isScanStatusErrorFn(props.fileRecord.previewStatus));
+const isScanStatusBlocked = computed(() => isScanStatusBlockedFn(props.fileRecord.securityCheckStatus));
 </script>
