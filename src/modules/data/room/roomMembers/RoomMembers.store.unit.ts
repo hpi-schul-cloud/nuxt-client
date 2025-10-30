@@ -140,6 +140,28 @@ describe("useRoomMembers", () => {
 					}))
 				);
 			});
+
+			it("should fetch expert members and map members with role names", async () => {
+				const { roomMembersStore } = setup();
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.Roomeditor,
+					schoolRoleNames: [RoleName.Expert],
+				});
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+				await roomMembersStore.fetchMembers();
+				expect(roomMembersStore.roomMembers).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.editor",
+						displaySchoolRole: "common.roleName.externalPerson",
+						isSelectable: true,
+					}))
+				);
+			});
 		});
 
 		describe("when the user is room owner", () => {

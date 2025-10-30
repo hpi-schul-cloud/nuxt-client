@@ -141,6 +141,7 @@ export default {
 	"common.placeholder.repeat.email": "Repetir la dirección de correo electrónico",
 	"common.roleName.administrator": "Administrador",
 	"common.roleName.expert": "Experto",
+	"common.roleName.externalPerson": "Persona externa",
 	"common.roleName.helpdesk": "Centro de ayuda",
 	"common.roleName.student": "Estudiante",
 	"common.roleName.superhero": "Administrador de Schul-Cloud",

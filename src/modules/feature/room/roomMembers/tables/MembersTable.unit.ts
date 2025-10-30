@@ -15,7 +15,14 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
-import { mdiAccountOutline, mdiAccountSchoolOutline, mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import {
+	mdiAccountClockOutline,
+	mdiAccountOutline,
+	mdiAccountSchoolOutline,
+	mdiMagnify,
+	mdiMenuDown,
+	mdiMenuUp,
+} from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
@@ -232,6 +239,11 @@ describe("MembersTable", () => {
 				expectedIcon: mdiAccountOutline,
 			},
 			{
+				description: "expert icon for external experts",
+				schoolRoleNames: [RoleName.Expert],
+				expectedIcon: mdiAccountClockOutline,
+			},
+			{
 				description: "teacher icon if teacher and admin roles are present",
 				schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
 				expectedIcon: mdiAccountSchoolOutline,
@@ -250,6 +262,22 @@ describe("MembersTable", () => {
 
 			const schoolRoleCell = getSchoolRoleCell(row);
 			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(expectedIcon);
+		});
+
+		it("should not render icon if no school role is present", () => {
+			const { wrapper } = setup({
+				members: [
+					roomMemberFactory.build({
+						schoolRoleNames: [],
+					}),
+				],
+			});
+
+			const dataTable = wrapper.getComponent(VDataTable);
+			const row = dataTable.find("tbody tr");
+
+			const schoolRoleCell = getSchoolRoleCell(row);
+			expect(schoolRoleCell.findComponent(VIcon).exists()).toBe(false);
 		});
 	});
 
