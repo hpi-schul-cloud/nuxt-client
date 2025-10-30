@@ -88,7 +88,6 @@
 					/>
 				</template>
 			</DataTable>
-			<FileStatusLegend />
 			<RenameFileDialog
 				v-model:is-dialog-open="isRenameDialogOpen"
 				:file-records="fileRecords"
@@ -113,7 +112,6 @@ import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FilePreview from "./FilePreview.vue";
 import FileStatus from "./FileStatus.vue";
-import FileStatusLegend from "./FileStatusLegend.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
@@ -188,7 +186,7 @@ const fileRecordsToDelete = ref<FileRecord[]>([]);
 const fileRecordItems = computed(() =>
 	props.fileRecords.map((item) => ({
 		...item,
-		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
+		isSelectable: !isScanStatusBlocked(item.securityCheckStatus),
 	}))
 );
 

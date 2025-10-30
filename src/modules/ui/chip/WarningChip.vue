@@ -1,16 +1,18 @@
 <template>
-	<v-chip size="small" class="warning-chip py-1" color="warning-lighten-1" variant="flat">
-		<v-icon size="small" class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
-		<slot />
-	</v-chip>
+	<BaseChip color="warning" :icon="icon"> <slot /> </BaseChip>
 </template>
 
 <script setup lang="ts">
-import { mdiAlert } from "@icons/material";
-</script>
+import BaseChip from "./BaseChip.vue";
+import { mdiAlertCircle } from "@icons/material";
+import { PropType } from "vue";
+import { IconProps } from "vuetify";
 
-<style scoped>
-.warning-chip {
-	width: fit-content;
-}
-</style>
+defineProps({
+	icon: {
+		type: String as PropType<IconProps["icon"]>,
+		required: false,
+		default: mdiAlertCircle,
+	},
+});
+</script>
