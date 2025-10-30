@@ -15,10 +15,10 @@ describe("DatePicker", () => {
 				},
 			},
 			props: {
-				date: options?.date || undefined,
-				required: options?.required || true,
-				ariaLabel: options?.ariaLabel || undefined,
-				label: options?.label || undefined,
+				date: options?.date ?? undefined,
+				required: options?.required ?? true,
+				ariaLabel: options?.ariaLabel ?? undefined,
+				label: options?.label ?? undefined,
 			},
 		});
 		const textField = wrapper.findComponent(VTextField);
@@ -65,6 +65,7 @@ describe("DatePicker", () => {
 
 				const updateDateEvent = wrapper.emitted("update:date");
 				expect(updateDateEvent).toEqual([[null]]);
+				expect(wrapper.emitted("error")).toBeUndefined();
 			});
 		});
 
@@ -138,7 +139,7 @@ describe("DatePicker", () => {
 		});
 	});
 
-	describe("aria label", () => {
+	describe("aria label date input", () => {
 		it("should set aria-label to aria label prop if provided", () => {
 			const ariaLabel = "Date Picker Aria ariaLabel";
 			const { textField } = setup({ ariaLabel });
