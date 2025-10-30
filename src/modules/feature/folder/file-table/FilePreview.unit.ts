@@ -1,9 +1,9 @@
+import FilePreview from "./FilePreview.vue";
 import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";
 import { mount } from "@vue/test-utils";
-import FilePreview from "./FilePreview.vue";
 
 describe("FilePreview", () => {
 	const setupWrapper = (fileRecord: FileRecord, viewportWidth = 1024) => {
@@ -167,7 +167,7 @@ describe("FilePreview", () => {
 			});
 
 			const { wrapper } = setupWrapper(fileRecord, 1024);
-			
+
 			const imageComponentTime1 = wrapper.findComponent({ name: "v-img" });
 			expect(imageComponentTime1.props("src")).toContain("width=50");
 
@@ -183,6 +183,7 @@ describe("FilePreview", () => {
 			const imageComponentTime2 = wrapper.findComponent({ name: "v-img" });
 			expect(imageComponentTime2.props("src")).toContain("width=150");
 		});
+	});
 
 	describe("when display size changes from mobile to desktop", () => {
 		it("should not downgrade srcWidth", async () => {
@@ -191,7 +192,7 @@ describe("FilePreview", () => {
 			});
 
 			const { wrapper } = setupWrapper(fileRecord, 400);
-			
+
 			const imageComponentTime1 = wrapper.findComponent({ name: "v-img" });
 			expect(imageComponentTime1.props("src")).toContain("width=150");
 
@@ -207,6 +208,5 @@ describe("FilePreview", () => {
 			const imageComponentTime2 = wrapper.findComponent({ name: "v-img" });
 			expect(imageComponentTime2.props("src")).toContain("width=150");
 		});
-	});
 	});
 });
