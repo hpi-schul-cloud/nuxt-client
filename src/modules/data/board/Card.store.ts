@@ -5,6 +5,7 @@ import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
+	DuplicateCardSuccessPayload,
 	FetchCardSuccessPayload,
 	MoveElementSuccessPayload,
 	UpdateCardHeightSuccessPayload,
@@ -14,6 +15,7 @@ import {
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
@@ -56,7 +58,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
 
-	const updateCardTitleSuccess = async (payload: UpdateCardTitleSuccessPayload) => {
+	const updateCardTitleSuccess = (payload: UpdateCardTitleSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -65,16 +67,25 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;
 
-	const updateCardHeightSuccess = async (payload: UpdateCardHeightSuccessPayload) => {
+	const updateCardHeightSuccess = (payload: UpdateCardHeightSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		card.height = payload.newHeight;
 	};
 
+	const duplicateCard = socketOrRest.duplicateCardRequest;
+
+	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
+		if (payload.duplicatedCard.id) {
+			cards.value[payload.duplicatedCard.id] = payload.duplicatedCard;
+			notifyInfo("components.board.notifications.info.cardDuplicated");
+		}
+	};
+
 	const deleteCardRequest = socketOrRest.deleteCardRequest;
 
-	const deleteCardSuccess = async (payload: DeleteCardSuccessPayload) => {
+	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -86,11 +97,11 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const createElementRequest = socketOrRest.createElementRequest;
 
-	const createPreferredElement = async (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
+	const createPreferredElement = (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
 		restApi.createPreferredElement(payload, tool);
 	};
 
-	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
+	const createElementSuccess = (payload: CreateElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -128,7 +139,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (toPosition < 0) return;
 		if (toPosition >= card.elements.length) return;
 
-		socketOrRest.moveElementRequest({
+		await socketOrRest.moveElementRequest({
 			elementId,
 			toCardId: cardId,
 			toPosition,
@@ -151,7 +162,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const deleteElementRequest = socketOrRest.deleteElementRequest;
 
-	const deleteElementSuccess = async (payload: DeleteElementSuccessPayload): Promise<void> => {
+	const deleteElementSuccess = (payload: DeleteElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -172,7 +183,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const updateElementRequest = socketOrRest.updateElementRequest;
 
-	const updateElementSuccess = async (payload: UpdateElementSuccessPayload) => {
+	const updateElementSuccess = (payload: UpdateElementSuccessPayload) => {
 		const cardToUpdate = Object.values(cards.value).find((c) => c.elements.some((e) => e.id === payload.elementId));
 		if (cardToUpdate === undefined) return;
 		const cardId = cardToUpdate.id;
@@ -201,7 +212,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		return previousElement.id;
 	};
 
-	const loadPreferredTools = async (contextType: ToolContextType): Promise<void> => {
+	const loadPreferredTools = async (contextType: ToolContextType) => {
 		isPreferredToolsLoading.value = true;
 
 		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];
@@ -226,6 +237,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		fetchCardRequest,
 		fetchCardSuccess,
 		cards,
+		duplicateCard,
+		duplicateCardSuccess,
 		deleteCardRequest,
 		deleteCardSuccess,
 		getCard,

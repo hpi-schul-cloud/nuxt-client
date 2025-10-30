@@ -704,6 +704,50 @@ describe("useCardRestApi", () => {
 		});
 	});
 
+	describe("duplicateCardRequest", () => {
+		it("should not call duplicateCardSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { duplicateCardRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await duplicateCardRequest({ cardId: "cardId" });
+
+			expect(cardStore.duplicateCardSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call duplicateCardSuccess action if the API call is successful", async () => {
+			const { cardStore, card } = setup();
+			const { duplicateCardRequest } = useCardRestApi();
+			const cardId = card.id;
+
+			cardStore.getCard.mockReturnValue(card);
+			const duplicatedCard = { ...card, id: "newCardId" };
+			mockedBoardApiCalls.duplicateCardCall.mockResolvedValue(duplicatedCard);
+
+			await duplicateCardRequest({ cardId });
+
+			expect(cardStore.duplicateCardSuccess).toHaveBeenCalledWith({
+				cardId,
+				duplicatedCard,
+				isOwnAction: true,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore, card } = setup();
+			const { duplicateCardRequest } = useCardRestApi();
+			const cardId = card.id;
+
+			cardStore.getCard.mockReturnValue(card);
+			mockedBoardApiCalls.duplicateCardCall.mockRejectedValue({});
+
+			await duplicateCardRequest({ cardId });
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("fetchCardRequest", () => {
 		it("should call fetchCardSuccess action if the API call is successful", async () => {
 			vi.useFakeTimers();

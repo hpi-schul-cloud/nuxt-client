@@ -37,6 +37,10 @@ export default {
 	"common.file.scanError":
 		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
 	"common.file.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"common.file.awaitingScan.short": "Vista previa en creación",
+	"common.file.scanWontCheck.short": "Vista previa no posible",
+	"common.file.scanError.short": "Vista previa no posible",
+	"common.file.virusDetected.short": "Virus sospechado",
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
@@ -453,12 +457,16 @@ export default {
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
+	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
 	"components.board.notifications.errors.notLoaded": "{type} no se ha podido cargar.",
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
+	"components.board.notifications.info.cardDuplicated":
+		"No se transferirán los contenidos de Etherpads y pizarras blancas, ni tampoco los ajustes protegidos de herramientas externas.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Una columna fue creada por otro usuario.",
 	"components.board.screenReader.notification.cardDeleted.success": "Una tarjeta fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.cardDuplicated.success": "Una tarjeta fue duplicada por otro usuario.",
 	"components.board.screenReader.notification.columnDeleted.success": "Una columna fue eliminada por otro usuario.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",

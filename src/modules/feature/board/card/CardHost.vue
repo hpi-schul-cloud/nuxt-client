@@ -42,6 +42,11 @@
 							:data-testid="boardMenuTestId"
 						>
 							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
+							<KebabMenuActionDuplicate
+								v-if="hasEditPermission"
+								data-testid="kebab-menu-action-duplicate-card"
+								@click="duplicateCard"
+							/>
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -106,7 +111,12 @@ import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
 import { BoardMenuScope } from "@ui-board";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
@@ -182,10 +192,10 @@ const onEndEditMode = async () => {
 const onCloseDetailView = () => (isDetailView.value = false);
 
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
-	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
 const onMoveContentElementUp = async ({ payload: elementId, elementIndex }: ElementMove) =>
-	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
 const onMoveContentElementKeyboard = async ({ payload: elementId, elementIndex }: ElementMove, key: string) => {
 	if (!verticalCursorKeys.includes(key)) return;
@@ -211,6 +221,12 @@ const boardMenuClasses = computed(() => {
 	}
 	return "hidden";
 });
+
+const duplicateCard = async () => {
+	if (!card.value) return;
+
+	await cardStore.duplicateCard({ cardId: card.value.id });
+};
 
 onMounted(async () => {
 	if (card.value === undefined) {
