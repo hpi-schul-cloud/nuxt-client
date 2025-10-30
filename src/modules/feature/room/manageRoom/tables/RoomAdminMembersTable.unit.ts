@@ -81,7 +81,7 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
-		roomMembersStore.init({ asAdmin: true });
+		roomMembersStore.setAdminMode(true);
 		roomMembersStore.roomMembers = members;
 		roomMembersStore.isRoomOwner.mockReturnValue(false);
 		const roomMembersWithoutApplicants = roomMembersStore.roomMembersWithoutApplicants;
