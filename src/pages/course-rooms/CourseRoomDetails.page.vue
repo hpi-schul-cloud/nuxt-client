@@ -85,7 +85,7 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
-		<SelectBoardLayoutDialog v-if="boardLayoutsEnabled" v-model="boardLayoutDialogIsOpen" @select="onLayoutSelected" />
+		<SelectBoardLayoutDialog v-model="boardLayoutDialogIsOpen" @select="onLayoutSelected" />
 	</default-wireframe>
 </template>
 
@@ -132,7 +132,6 @@ import {
 	mdiShareVariantOutline,
 	mdiSync,
 	mdiSyncOff,
-	mdiViewDashboardOutline,
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@icons/material";
@@ -214,9 +213,6 @@ export default defineComponent({
 				},
 			];
 		},
-		boardLayoutsEnabled() {
-			return useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED;
-		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},
@@ -296,23 +292,13 @@ export default defineComponent({
 			}
 
 			if (useAppStore().userPermissions.includes(Permission.CourseEdit) && useAppStore().isTeacher) {
-				if (this.boardLayoutsEnabled) {
-					actions.push({
-						label: this.$t("pages.courseRoomDetails.fab.add.board"),
-						icon: mdiViewGridPlusOutline,
-						customEvent: "board-type-dialog-open",
-						dataTestId: "fab_button_add_board",
-						ariaLabel: this.$t("pages.courseRoomDetails.fab.add.board"),
-					});
-				} else {
-					actions.push({
-						label: this.$t("pages.courseRoomDetails.fab.add.columnBoard"),
-						icon: mdiViewDashboardOutline,
-						customEvent: "board-create",
-						dataTestId: "fab_button_add_column_board",
-						ariaLabel: this.$t("pages.courseRoomDetails.fab.add.columnBoard"),
-					});
-				}
+				actions.push({
+					label: this.$t("pages.courseRoomDetails.fab.add.board"),
+					icon: mdiViewGridPlusOutline,
+					customEvent: "board-type-dialog-open",
+					dataTestId: "fab_button_add_board",
+					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.board"),
+				});
 			}
 
 			if (actions.length === 0) {

@@ -459,6 +459,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
 	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
 	"components.board.notifications.errors.notLoaded": "{type} no se ha podido cargar.",
+	"components.board.notifications.errors.notMoved": "{type} no se ha podido movido.",
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
 	"components.board.notifications.info.cardDuplicated":
 		"No se transferirán los contenidos de Etherpads y pizarras blancas, ni tampoco los ajustes protegidos de herramientas externas.",
@@ -494,6 +495,7 @@ export default {
 		"El tablero fue establecida como no editable para todos los usuarios por otro usuario.",
 	"components.board.preferredTools.notification.error.notLoaded": "No se pudieron cargar las herramientas preferidas.",
 	"components.board.header.chip.editableForEveryone": "Editable para todos",
+	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",

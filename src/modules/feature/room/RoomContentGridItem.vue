@@ -2,7 +2,6 @@
 	<VCard
 		:class="isDraft ? 'opacity-80' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
-		draggable="false"
 		:data-testid="`board-tile-${index}`"
 		:to="boardPath"
 	>
@@ -42,11 +41,7 @@ const isListBoard = computed(() => board.value.layout === BoardLayout.List);
 
 const isDraft = computed(() => board.value.isVisible === false);
 
-const subtitleIcon = computed(() => {
-	const icon = isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline;
-
-	return icon;
-});
+const subtitleIcon = computed(() => (isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline));
 
 const subtitleText = computed(() => {
 	const text = isListBoard.value

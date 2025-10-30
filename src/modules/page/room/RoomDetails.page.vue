@@ -2,14 +2,12 @@
 	<DefaultWireframe
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
-		:fab-items="fabItems"
-		@on-fab-item-click="fabItemClickHandler"
+		:fab-items="fabAction"
+		@fab:clicked="boardLayoutDialogIsOpen = true"
 	>
 		<template #header>
 			<div class="d-flex align-center">
-				<h1 data-testid="room-title">
-					{{ roomTitle }}
-				</h1>
+				<h1 data-testid="room-title">{{ roomTitle }}</h1>
 				<RoomMenu
 					:room-name="room.name"
 					@room:edit="onEdit"
@@ -30,13 +28,9 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<BoardGrid :boards="visibleBoards" />
+		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
 		<ConfirmationDialog />
-		<SelectBoardLayoutDialog
-			v-if="boardLayoutsEnabled && canEditRoomContent"
-			v-model="boardLayoutDialogIsOpen"
-			@select="onCreateBoard"
-		/>
+		<SelectBoardLayoutDialog v-if="canEditRoomContent" v-model="boardLayoutDialogIsOpen" @select="onCreateBoard" />
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.Room" />
@@ -45,7 +39,7 @@
 
 <script setup lang="ts">
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { Breadcrumb, Fab } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
@@ -53,10 +47,9 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
-import { useEnvConfig } from "@data-env";
 import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
-import { mdiPlus, mdiViewDashboardOutline, mdiViewGridPlusOutline } from "@icons/material";
+import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
+import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -85,16 +78,13 @@ const isLeaveRoomProhibitedDialogOpen = ref(false);
 const pageTitle = computed(() => buildPageTitle(room.value.name, t("pages.roomDetails.title")));
 useTitle(pageTitle);
 
-const { canDeleteRoom, canEditRoomContent, canLeaveRoom, canCopyRoom, canShareRoom, canListDrafts, canViewRoom } =
-	useRoomAuthorization();
+const { canEditRoomContent, canLeaveRoom, canListDrafts, canViewRoom } = useRoomAuthorization();
 
 const visibleBoards = computed(() =>
 	roomBoards.value?.filter((board) => (board.isVisible ? canViewRoom.value : canListDrafts.value))
 );
 
 const roomTitle = computed(() => room.value.name);
-
-const boardLayoutsEnabled = computed(() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED);
 
 const boardLayoutDialogIsOpen = ref(false);
 
@@ -109,47 +99,16 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const fabItems = computed(() => {
-	if (!canEditRoomContent.value) return undefined;
-
-	const actions = [];
-
-	if (boardLayoutsEnabled.value) {
-		actions.push({
-			label: t("pages.courseRoomDetails.fab.add.board"),
-			icon: mdiViewGridPlusOutline,
-			customEvent: "board-type-dialog-open",
-			dataTestId: "fab_button_add_board",
-			ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
-		});
-	} else {
-		actions.push({
-			label: t("pages.courseRoomDetails.fab.add.columnBoard"),
-			icon: mdiViewDashboardOutline,
-			customEvent: "board-create",
-			dataTestId: "fab_button_add_column_board",
-			ariaLabel: t("pages.courseRoomDetails.fab.add.columnBoard"),
-		});
-	}
-
-	const items = {
-		icon: mdiPlus,
-		title: t("common.actions.create"),
-		ariaLabel: t("common.actions.create"),
-		dataTestId: "add-content-button",
-		actions: actions,
-	};
-
-	return items;
-});
-
-const fabItemClickHandler = (event: string | undefined) => {
-	if (event === "board-type-dialog-open") {
-		boardLayoutDialogIsOpen.value = true;
-	} else if (event === "board-create") {
-		onCreateBoard(BoardLayout.Columns);
-	}
-};
+const fabAction = computed<Fab | undefined>(() =>
+	canEditRoomContent.value
+		? {
+				icon: mdiPlus,
+				title: t("common.actions.create"),
+				ariaLabel: t("common.actions.create"),
+				dataTestId: "add-content-button",
+			}
+		: undefined
+);
 
 const onEdit = () => {
 	router.push({
@@ -170,13 +129,9 @@ const onManageMembers = () => {
 };
 
 const hasRoomCopyStarted = ref(false);
-const isRoomCopyFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED);
-const isRoomShareFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_SHARE);
 
 const onCopy = () => {
-	if (isRoomCopyFeatureEnabled.value && canCopyRoom.value) {
-		hasRoomCopyStarted.value = true;
-	}
+	hasRoomCopyStarted.value = true;
 };
 
 const onCopySuccess = (copyId: string) => {
@@ -193,17 +148,13 @@ const onCopyEnded = () => {
 };
 
 const onShare = () => {
-	if (isRoomShareFeatureEnabled.value && canShareRoom.value) {
-		shareModule.startShareFlow({
-			id: room.value.id,
-			type: ShareTokenParentType.Room,
-		});
-	}
+	shareModule.startShareFlow({
+		id: room.value.id,
+		type: ShareTokenParentType.Room,
+	});
 };
 
 const onDelete = async () => {
-	if (!canDeleteRoom.value) return;
-
 	await deleteRoom(room.value.id);
 	router.push({ name: "rooms" });
 };
@@ -235,10 +186,7 @@ const onLeaveRoom = async () => {
 };
 
 const onCreateBoard = async (layout: BoardLayout) => {
-	if (!canEditRoomContent.value) return;
-
 	const boardId = await createBoard(room.value.id, layout, t("pages.roomDetails.board.defaultName"));
-
 	router.push(`/boards/${boardId}`);
 };
 </script>

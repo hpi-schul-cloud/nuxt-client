@@ -451,6 +451,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
+	"components.board.notifications.errors.notMoved": "{type} could not be moved.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.notifications.info.cardDuplicated":
 		"Content from Etherpads and whiteboards as well as protected settings from external tools will not be transferred.",
@@ -486,6 +487,7 @@ export default {
 		"The board was set as not editable for all users by another user.",
 	"components.board.preferredTools.notification.error.notLoaded": "Preferred tools could not be loaded.",
 	"components.board.header.chip.editableForEveryone": "Editable for everyone",
+	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",

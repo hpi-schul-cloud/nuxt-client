@@ -455,6 +455,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
 	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
+	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.info.cardDuplicated":
 		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
@@ -489,6 +490,7 @@ export default {
 		"Дошку було встановлено як не редаговану для всіх користувачів іншим користувачем.",
 	"components.board.preferredTools.notification.error.notLoaded": "Не вдалося завантажити бажані інструменти.",
 	"components.board.header.chip.editableForEveryone": "Редагується для всіх",
+	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",

@@ -1,4 +1,4 @@
-import RoomTile from "./RoomTile.vue";
+import RoomGridItem from "./RoomGridItem.vue";
 import { RoomColor, RoomItem } from "@/types/room/Room";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
@@ -14,9 +14,9 @@ const mockRoom: RoomItem = {
 	isLocked: false,
 };
 
-describe("@feature-room/RoomTile", () => {
-	const setup = (props?: ComponentProps<typeof RoomTile>) => {
-		const wrapper = mount(RoomTile, {
+describe("@feature-room/RoomGridItem", () => {
+	const setup = (props?: ComponentProps<typeof RoomGridItem>) => {
+		const wrapper = mount(RoomGridItem, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: ["RouterLink"],
