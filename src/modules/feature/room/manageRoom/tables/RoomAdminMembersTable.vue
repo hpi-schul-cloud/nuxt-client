@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store/store-accessor";
-import { createRoomMembersStore, RoomMember, useRoomDetailsStore } from "@data-room";
+import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -77,7 +77,8 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const roomMembersStore = createRoomMembersStore({ asAdmin: true });
+const roomMembersStore = useRoomMembersStore();
+roomMembersStore.setAdminMode(true);
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers, fetchMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();

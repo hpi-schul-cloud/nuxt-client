@@ -121,7 +121,7 @@
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { RoleName } from "@/serverApi/v3";
-import { createRoomMembersStore, useRoomAuthorization } from "@data-room";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
@@ -160,7 +160,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const roomMembersStore = createRoomMembersStore();
+const roomMembersStore = useRoomMembersStore();
 const { isCurrentUserStudent, potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
 const { addMembers, getPotentialMembers, resetPotentialMembers } = roomMembersStore;
 

@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { KebabMenuActionConfirmRequest, KebabMenuActionRejectRequest } from "../menus";
-import { createRoomMembersStore } from "@data-room";
+import { useRoomMembersStore } from "@data-room";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
@@ -61,7 +61,7 @@ defineProps({
 });
 
 const { t } = useI18n();
-const roomMembersStore = createRoomMembersStore();
+const roomMembersStore = useRoomMembersStore();
 const { roomApplicants: rawRoomApplicants, confirmationSelectedIds } = storeToRefs(roomMembersStore);
 const { confirmInvitations, rejectInvitations } = roomMembersStore;
 const roomApplicants = computed(() => rawRoomApplicants.value.map((applicant) => ({ ...applicant })));

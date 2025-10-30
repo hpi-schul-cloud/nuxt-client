@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { RoleName } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
-import { createRoomMembersStore, RoomMember, useRoomAuthorization } from "@data-room";
+import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -68,7 +68,7 @@ withDefaults(defineProps<Props>(), {
 const { t } = useI18n();
 const { canAddRoomMembers } = useRoomAuthorization();
 
-const roomMembersStore = createRoomMembersStore();
+const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 
 const { isRoomOwner, removeMembers } = roomMembersStore;

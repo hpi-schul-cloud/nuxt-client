@@ -62,11 +62,11 @@ import { Tab } from "@/types/room/RoomMembers";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import {
-	createRoomMembersStore,
 	InvitationStep,
 	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
+	useRoomMembersStore,
 } from "@data-room";
 import { AddMembersDialog, Confirmations, Invitations, InviteMembersDialog, Members } from "@feature-room";
 import { mdiAccountMultipleOutline, mdiAccountQuestionOutline, mdiLink, mdiPlus } from "@icons/material";
@@ -99,7 +99,8 @@ const membersInfoText = ref("");
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
-const roomMembersStore = createRoomMembersStore();
+const roomMembersStore = useRoomMembersStore();
+roomMembersStore.setAdminMode(false);
 const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
