@@ -306,7 +306,7 @@ const radioOptions = computed(() => {
 
 	const isExpertMember = memberToChangeRole?.value.some((member) => member.schoolRoleNames.includes(RoleName.Expert));
 	if (isExpertMember) {
-		return [...baseRoles.slice(0, 2)];
+		return baseRoles.filter((r) => r.role !== RoleName.Roomadmin);
 	}
 
 	if (isChangeOwnershipOptionVisible.value) {
