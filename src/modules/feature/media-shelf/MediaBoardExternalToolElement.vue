@@ -2,13 +2,13 @@
 	<MediaBoardElementDisplay :element="elementDisplayData" @click="onClick" @keyup.enter="onClick">
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
-				<WarningChip v-if="isToolDeactivated" data-testid="warning-chip-deactivated">
+				<WarningChip v-if="isToolDeactivated" data-testid="warning-chip-deactivated" class="mr-1">
 					{{ $t("common.medium.chip.deactivated") }}
 				</WarningChip>
-				<WarningChip v-if="isToolNotLicensed" data-testid="warning-chip-not-licensed">
+				<WarningChip v-if="isToolNotLicensed" data-testid="warning-chip-not-licensed" class="mr-1">
 					{{ $t("common.medium.chip.notLicensed") }}
 				</WarningChip>
-				<WarningChip v-if="isToolIncomplete" data-testid="warning-chip-incomplete">
+				<WarningChip v-if="isToolIncomplete" data-testid="warning-chip-incomplete" class="mr-1">
 					{{ $t("common.medium.chip.incomplete") }}
 				</WarningChip>
 			</div>

@@ -37,6 +37,10 @@ export default {
 		"Помилка під час перевірки на віруси. Неможливо створити попередній перегляд. Будь ласка, завантажте файл ще раз.",
 	"common.file.scanWontCheck": "Через розмір не може бути створено прев'ю.",
 	"common.file.virusDetected": "Файл було заблоковано через підозру на вірус.",
+	"common.file.awaitingScan.short": "Створення прев'ю",
+	"common.file.scanWontCheck.short": "Попередній перегляд неможливий",
+	"common.file.scanError.short": "Попередній перегляд неможливий",
+	"common.file.virusDetected.short": "Підозра на вірус",
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
@@ -449,12 +453,16 @@ export default {
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
+	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
+	"components.board.notifications.info.cardDuplicated":
+		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Картку було створено іншим користувачем у колонці {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Колонку створив інший користувач.",
 	"components.board.screenReader.notification.cardDeleted.success": "Картка була видалена іншим користувачем.",
+	"components.board.screenReader.notification.cardDuplicated.success": "Картка була дуплікована іншим користувачем.",
 	"components.board.screenReader.notification.columnDeleted.success": "Стовпець був видалений іншим користувачем.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",

@@ -28,7 +28,7 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
-import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload.types";
+import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardActions/cardActionPayload.types";
 import { ColumnResponse } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
@@ -132,6 +132,18 @@ export const useBoardStore = defineStore("boardStore", () => {
 			setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 		}
+	};
+
+	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
+		if (!board.value) return;
+
+		const { cardId, duplicatedCard } = payload;
+		const { columnIndex, cardIndex } = getCardLocation(cardId) ?? { columnIndex: 0, cardIndex: 0 };
+
+		board.value?.columns?.[columnIndex]?.cards?.splice(cardIndex + 1, 0, {
+			cardId: duplicatedCard.id,
+			height: duplicatedCard.height,
+		});
 	};
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
@@ -380,6 +392,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		createColumnSuccess,
 		deleteBoardRequest,
 		deleteBoardSuccess,
+		duplicateCardSuccess,
 		deleteCardSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,

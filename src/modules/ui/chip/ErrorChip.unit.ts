@@ -1,14 +1,14 @@
 import BaseChip from "./BaseChip.vue";
-import InfoChip from "./InfoChip.vue";
+import ErrorChip from "./ErrorChip.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiInformation } from "@icons/material";
+import { mdiAlertCircle } from "@icons/material";
 import { VChip } from "vuetify/components";
 
-describe("InfoChip", () => {
+describe("ErrorChip", () => {
 	const setup = () => {
 		const slotContent = "Slot content";
 		const icon = "TestIcon";
-		const wrapper = mount(InfoChip, {
+		const wrapper = mount(ErrorChip, {
 			global: {
 				plugins: [createTestingVuetify()],
 			},
@@ -45,7 +45,7 @@ describe("InfoChip", () => {
 
 	describe("when icon is not provided", () => {
 		const setup = () => {
-			const wrapper = mount(InfoChip, {
+			const wrapper = mount(ErrorChip, {
 				global: {
 					plugins: [createTestingVuetify()],
 				},
@@ -61,7 +61,7 @@ describe("InfoChip", () => {
 
 			const chip = wrapper.findComponent(BaseChip);
 
-			expect(chip.props("icon")).toBe(mdiInformation);
+			expect(chip.props("icon")).toBe(mdiAlertCircle);
 		});
 	});
 
@@ -78,7 +78,7 @@ describe("InfoChip", () => {
 	describe("when default slot is not defined", () => {
 		const setup = () => {
 			const slotContent = "Slot content";
-			const wrapper = mount(InfoChip, {
+			const wrapper = mount(ErrorChip, {
 				global: {
 					plugins: [createTestingVuetify()],
 				},

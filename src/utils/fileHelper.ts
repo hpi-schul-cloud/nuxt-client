@@ -126,7 +126,7 @@ export function isScanStatusError(scanStatus: FilePreviewStatus): boolean {
 }
 
 export function isScanStatusBlocked(scanStatus: FileRecordVirusScanStatus): boolean {
-	return scanStatus !== FileRecordVirusScanStatus.BLOCKED;
+	return scanStatus === FileRecordVirusScanStatus.BLOCKED;
 }
 
 export function isPreviewPossible(previewStatus: FilePreviewStatus): boolean {

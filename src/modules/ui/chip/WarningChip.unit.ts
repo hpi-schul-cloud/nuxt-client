@@ -1,18 +1,19 @@
+import BaseChip from "./BaseChip.vue";
 import WarningChip from "./WarningChip.vue";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiAlert } from "@icons/material";
-import { mount } from "@vue/test-utils";
-import { VChip, VIcon } from "vuetify/lib/components/index";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mdiAlertCircle } from "@icons/material";
+import { VChip } from "vuetify/components";
 
 describe("WarningChip", () => {
-	const getWrapper = () => {
-		const slotContent = "Slot Content";
+	const setup = () => {
+		const slotContent = "Slot content";
+		const icon = "TestIcon";
 		const wrapper = mount(WarningChip, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: {
-					VIcon: true,
-				},
+				plugins: [createTestingVuetify()],
+			},
+			props: {
+				icon,
 			},
 			slots: { default: slotContent },
 		});
@@ -20,34 +21,81 @@ describe("WarningChip", () => {
 		return {
 			wrapper,
 			slotContent,
+			icon,
 		};
 	};
 
-	describe("when warning chip is used", () => {
-		it("should render the warning chip", () => {
-			const { wrapper } = getWrapper();
+	it("should render the error chip", () => {
+		const { wrapper } = setup();
 
-			const chip = wrapper.findComponent(VChip);
+		const chip = wrapper.findComponent(VChip);
 
-			expect(chip.exists()).toBeTruthy();
+		expect(chip.exists()).toBeTruthy();
+	});
+
+	describe("when icon is provided", () => {
+		it("should pass icon", () => {
+			const { wrapper, icon } = setup();
+
+			const chip = wrapper.findComponent(BaseChip);
+
+			expect(chip.props("icon")).toBe(icon);
 		});
+	});
 
-		it("should contain an mdiAlert icon", () => {
-			const { wrapper } = getWrapper();
+	describe("when icon is not provided", () => {
+		const setup = () => {
+			const wrapper = mount(WarningChip, {
+				global: {
+					plugins: [createTestingVuetify()],
+				},
+			});
 
-			const icon = wrapper.findComponent(VIcon);
+			return {
+				wrapper,
+			};
+		};
 
-			expect(icon.exists()).toBeTruthy();
-			expect(icon.props("color")).toBe("warning");
-			expect(icon.text()).toBe(mdiAlert);
+		it("should pass default icon", () => {
+			const { wrapper } = setup();
+
+			const chip = wrapper.findComponent(BaseChip);
+
+			expect(chip.props("icon")).toBe(mdiAlertCircle);
 		});
+	});
 
+	describe("when default slot is defined", () => {
 		it("should render content passed in the default slot", () => {
-			const { wrapper, slotContent } = getWrapper();
+			const { wrapper, slotContent } = setup();
 
 			const text = wrapper.text();
 
 			expect(text).toContain(slotContent);
+		});
+	});
+
+	describe("when default slot is not defined", () => {
+		const setup = () => {
+			const slotContent = "Slot content";
+			const wrapper = mount(WarningChip, {
+				global: {
+					plugins: [createTestingVuetify()],
+				},
+			});
+
+			return {
+				wrapper,
+				slotContent,
+			};
+		};
+
+		it("should not render default slot", () => {
+			const { wrapper, slotContent } = setup();
+
+			const text = wrapper.text();
+
+			expect(text).not.toContain(slotContent);
 		});
 	});
 });
