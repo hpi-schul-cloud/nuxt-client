@@ -28,7 +28,7 @@
 				<LearningContentEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<BoardGrid :room-id="room.id" :boards="visibleBoards" />
+		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog v-if="canEditRoomContent" v-model="boardLayoutDialogIsOpen" @select="onCreateBoard" />
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
@@ -48,7 +48,7 @@ import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { BoardGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
+import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";

@@ -1,19 +1,13 @@
 <template>
 	<RouterLink :to="roomPath" class="room-link" :aria-label="avatarAriaLabel" draggable="false">
-		<VBadge
-			class="tile-badge"
-			bordered
-			:model-value="room.isLocked === true"
-			:icon="mdiLock"
-			data-testid="room-badge-lock"
-		>
-			<div class="tile-icon" :class="avatarColor">
+		<VBadge bordered :model-value="room.isLocked === true" :icon="mdiLock" data-testid="room-badge-lock">
+			<div class="grid-icon" :class="avatarColor">
 				<span class="text-h1 text-white" data-testid="room-short-title">
 					{{ roomShortName }}
 				</span>
 			</div>
 		</VBadge>
-		<div class="tile-label mb-2 mt-2" data-testid="room-title">
+		<div class="grid-label mb-2 mt-2" data-testid="room-title">
 			{{ room.name }}
 		</div>
 	</RouterLink>
@@ -55,7 +49,7 @@ a.room-link {
 	color: unset;
 }
 
-.tile-icon {
+.grid-icon {
 	width: 5em;
 	height: 5em;
 	border-radius: 8px;
@@ -74,7 +68,7 @@ a.room-link {
 	vertical-align: middle;
 }
 
-.tile-label {
+.grid-label {
 	line-height: var(--line-height-lg);
 	overflow-wrap: break-word;
 }

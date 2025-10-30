@@ -2,27 +2,16 @@
 	<Sortable
 		ref="gridRef"
 		:list="boards"
-		class="board-grid mt-8"
+		class="room-content-grid mt-8"
 		item-key="id"
-		:options="{
-			disabled: !canEditRoomContent,
-			delayOnTouchOnly: true,
-			delay: 100,
-			ghostClass: 'opacity-50',
-			touchStartThreshold: 3, // needed for sensitive touch devices
-			fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
-			easing: 'cubic-bezier(1, 0, 0, 1)',
-			draggable: '.draggable',
-			animation: 250,
-			forceFallback: true,
-		}"
+		:options="getSortableOptions({ disabled: !canEditRoomContent })"
 		@start="isDragging = true"
 		@end="onDropEnd"
 	>
 		<template #item="{ element, index }">
 			<!-- the board grid item is an a tag, which natively has draggable=true, which we need to suppress here -->
-			<BoardGridItem
-				class="draggable user-select-none board-item"
+			<RoomContentGridItem
+				class="draggable user-select-none room-content-grid-item"
 				draggable="false"
 				:board="element"
 				:index
@@ -36,12 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import BoardGridItem from "./BoardGridItem.vue";
+import RoomContentGridItem from "./RoomContentGridItem.vue";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
 import { notifyError } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { getGridContainerColumnsCount } from "@util-browser";
+import { getSortableOptions } from "@util-sorting";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, PropType, ref, useTemplateRef, watch } from "vue";
@@ -60,12 +51,6 @@ const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
 const isDragging = ref(false);
 
-const getColumnsCount = () => {
-	if (!gridRef.value?.containerRef) return 1;
-	const style = window.getComputedStyle(gridRef.value.containerRef);
-	return style.gridTemplateColumns.split(" ").length;
-};
-
 const reorderRoom = (boardId: string, newIndex: number) => {
 	execute(async () => {
 		if (document.startViewTransition) {
@@ -81,12 +66,14 @@ const reorderRoom = (boardId: string, newIndex: number) => {
 };
 
 const updateBoardIndex = (newIndex: number, oldIndex: number) => {
-	reorderRoom(props.boards[oldIndex]?.id, newIndex);
+	if (newIndex !== oldIndex) {
+		reorderRoom(props.boards[oldIndex]?.id, newIndex);
+	}
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
 	isDragging.value = false;
-	if (newIndex !== oldIndex && newIndex !== undefined && oldIndex !== undefined) {
+	if (newIndex !== undefined && oldIndex !== undefined) {
 		updateBoardIndex(newIndex, oldIndex);
 	}
 };
@@ -99,7 +86,7 @@ const onItemClick = (evt: Event) => {
 
 const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 	let newIndex = 0;
-	const cols = getColumnsCount();
+	const cols = getGridContainerColumnsCount(gridRef.value?.containerRef);
 
 	switch (e.key) {
 		case "ArrowUp":
@@ -133,13 +120,13 @@ watch(
 );
 </script>
 <style scoped>
-.board-grid {
+.room-content-grid {
 	display: grid;
 	grid-gap: 10px;
 	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
-.board-item {
+.room-content-grid-item {
 	view-transition-name: match-element;
 }
 

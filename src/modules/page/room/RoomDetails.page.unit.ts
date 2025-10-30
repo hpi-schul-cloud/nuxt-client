@@ -10,7 +10,7 @@ import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/facto
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { BoardGrid, RoomMenu } from "@feature-room";
+import { RoomContentGrid, RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -340,7 +340,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					roomBoards: roomBoardGridItemFactory.buildList(3),
 				});
 
-				const boardGrid = wrapper.findComponent(BoardGrid);
+				const boardGrid = wrapper.findComponent(RoomContentGrid);
 				expect(boardGrid.props("boards").length).toEqual(3);
 			});
 
@@ -366,7 +366,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomPermissions.canListDrafts = computed(() => true);
 
 						const { wrapper, totalCount } = setupWithBoards();
-						const boardGrid = wrapper.findComponent(BoardGrid);
+						const boardGrid = wrapper.findComponent(RoomContentGrid);
 
 						expect(boardGrid.props("boards").length).toStrictEqual(totalCount);
 					});
@@ -377,7 +377,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomPermissions.canListDrafts = computed(() => false);
 
 						const { wrapper, visibleCount } = setupWithBoards();
-						const boardGrid = wrapper.findComponent(BoardGrid);
+						const boardGrid = wrapper.findComponent(RoomContentGrid);
 
 						expect(boardGrid.props("boards").length).toStrictEqual(visibleCount);
 					});
@@ -392,7 +392,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					roomBoards: roomBoardGridItemFactory.buildList(3),
 				});
 
-				const boardGrid = wrapper.findComponent(BoardGrid);
+				const boardGrid = wrapper.findComponent(RoomContentGrid);
 
 				expect(boardGrid.props("boards").length).toBe(0);
 			});
