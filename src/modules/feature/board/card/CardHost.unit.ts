@@ -134,12 +134,9 @@ describe("CardHost", () => {
 			},
 		});
 
-		const cardStore = mockedPiniaStoreTyping(useCardStore);
-
 		return {
 			wrapper,
 			cardId,
-			cardStore,
 		};
 	};
 
@@ -200,13 +197,13 @@ describe("CardHost", () => {
 		describe("when users clicks duplicate menu btn", () => {
 			it("should call cardStore.duplicateCardRequest", async () => {
 				mockedBoardPermissions.hasEditPermission.value = true;
-				const { wrapper, cardId, cardStore } = setup();
+				const { wrapper, cardId } = setup();
 
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 
 				await duplicateButton.trigger("click");
 
-				expect(cardStore.duplicateCardRequest).toHaveBeenCalledWith({ cardId });
+				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
 			});
 		});
 
