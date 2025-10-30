@@ -39,7 +39,52 @@ describe("DatePicker", () => {
 		expect(textField.exists()).toBe(true);
 	});
 
+	describe("keyboard navigation", () => {
+		it("should open date picker menu on space key", async () => {
+			const { wrapper, textField } = setup();
+			const datePickerMenu = wrapper.findComponent(VMenu);
+
+			await textField.trigger("keydown.space");
+			await flushPromises();
+
+			expect(datePickerMenu.props().modelValue).toBe(true);
+		});
+
+		it("should open date picker menu on enter key", async () => {
+			const { wrapper, textField } = setup();
+			const datePickerMenu = wrapper.findComponent(VMenu);
+
+			await textField.trigger("keydown.enter");
+			await flushPromises();
+
+			expect(datePickerMenu.props().modelValue).toBe(true);
+		});
+
+		it("should close date picker menu on tab key", async () => {
+			const { wrapper, textField } = setup();
+			const datePickerMenu = wrapper.findComponent(VMenu);
+
+			await textField.trigger("click");
+			await textField.trigger("keydown.tab");
+			await flushPromises();
+
+			expect(datePickerMenu.props().modelValue).toBe(false);
+		});
+	});
+
 	describe("validation", () => {
+		it("should reset validation if required prop changes from true to false", async () => {
+			const { wrapper, textField } = setup({ required: true });
+
+			await textField.setValue("");
+			await flushPromises();
+			expect(textField.text()).toBe("components.datePicker.validation.required");
+
+			await wrapper.setProps({ required: false });
+			await flushPromises();
+			expect(textField.text()).toBe("");
+		});
+
 		describe("when input is valid", () => {
 			it("should emit update:date event", async () => {
 				const { wrapper, textField } = setup();
@@ -163,6 +208,4 @@ describe("DatePicker", () => {
 			expect(input.attributes("aria-label")).toBe(`common.labels.date (common.placeholder.dateformat)`);
 		});
 	});
-
-	// TODO: add more tests, e.g for keyboard navigation, when valid date, watchers, open menu
 });
