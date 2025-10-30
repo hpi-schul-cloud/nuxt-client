@@ -299,7 +299,7 @@ describe("ChangeRole.vue", () => {
 			expect(radioGroup.props("modelValue")).toBe(null);
 		});
 
-		describe("when the selected user's role is Expert", () => {
+		describe("when the selected user is 'RoleName.Expert'", () => {
 			it("should render only Viewer and Editor radio options", () => {
 				const members = roomMemberFactory.buildList(2, {
 					schoolRoleNames: [RoleName.Expert],
@@ -313,10 +313,12 @@ describe("ChangeRole.vue", () => {
 				const viewerOption = wrapper.findComponent('[data-testid="change-role-option-viewer"]');
 				const editorOption = wrapper.findComponent('[data-testid="change-role-option-editor"]');
 				const adminOption = wrapper.findComponent('[data-testid="change-role-option-admin"]');
+				const ownerOption = wrapper.findComponent('[data-testid="change-role-option-owner"]');
 
 				expect(viewerOption.exists()).toBe(true);
 				expect(editorOption.exists()).toBe(true);
 				expect(adminOption.exists()).toBe(false);
+				expect(ownerOption.exists()).toBe(false);
 			});
 		});
 	});
