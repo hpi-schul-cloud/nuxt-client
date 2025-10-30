@@ -132,7 +132,7 @@ describe("FileContent", () => {
 
 				const fileDisplayContainer = wrapper.getComponent(FileDisplay).element.parentElement;
 
-				expect(fileDisplayContainer.classList).toContain("w-33");
+				expect(fileDisplayContainer.classList).toContain("flex-1-1-0");
 			});
 
 			it("file display container should not have a width of 33% when display size is smaller than 600px", () => {
@@ -144,7 +144,7 @@ describe("FileContent", () => {
 
 				const fileDisplayContainer = wrapper.getComponent(FileDisplay).element.parentElement;
 
-				expect(fileDisplayContainer.classList).not.toContain("w-33");
+				expect(fileDisplayContainer.classList).not.toContain("flex-1-1-0");
 			});
 
 			it.each`
