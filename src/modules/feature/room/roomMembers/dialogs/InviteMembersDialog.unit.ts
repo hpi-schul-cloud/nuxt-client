@@ -114,6 +114,11 @@ describe("InviteMembersDialog", () => {
 		return { wrapper, roomInvitationLinkStore, schoolName };
 	};
 
+	const getCheckboxByTestid = (wrapper: VueWrapper, testId: string) => {
+		const checkbox = wrapper.getComponent(VCard).get(`[data-testid=${testId}]`).findComponent(VCheckbox);
+		return checkbox;
+	};
+
 	it("should render correctly", async () => {
 		const { wrapper } = await setup();
 		expect(wrapper.exists()).toBe(true);
@@ -216,21 +221,18 @@ describe("InviteMembersDialog", () => {
 					}),
 				});
 
-				const linkExpiresCheckbox = wrapper
-					.getComponent(VCard)
-					.get("[data-testid=input-invite-participants-link-expires]")
-					.findComponent(VCheckbox);
-
+				const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
 				expect(linkExpiresCheckbox.props("modelValue")).toBe(false);
 			});
 
 			describe("when close button is clicked", () => {
 				it("should set the editedLink value to null", async () => {
 					const { wrapper, roomInvitationLinkStore } = await setup({
-						preDefinedStep: InvitationStep.PREPARE,
+						preDefinedStep: InvitationStep.EDIT,
 					});
-
 					roomInvitationLinkStore.editedLink = roomInvitationLinkStore.roomInvitationLinks[0];
+
+					await nextTick();
 					expect(roomInvitationLinkStore.editedLink).not.toBeNull();
 
 					const cancelButton = wrapper.getComponent({ ref: "cancelButton" });
@@ -341,6 +343,28 @@ describe("InviteMembersDialog", () => {
 
 				expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(expectedFormValues);
 			});
+
+			it("should update activeUntil value when a date is selected", async () => {
+				const { wrapper, roomInvitationLinkStore } = await setup();
+
+				const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
+				await linkExpiresCheckbox.setValue(true);
+
+				const datePicker = wrapper.getComponent(DatePicker);
+				const selectedDateISO = new Date(2024, 0, 1).toISOString();
+				datePicker.vm.$emit("update:date", selectedDateISO);
+				await nextTick();
+
+				const nextButton = wrapper.getComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				await flushPromises();
+
+				expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
+					expect.objectContaining({
+						activeUntil: selectedDateISO,
+					})
+				);
+			});
 		});
 
 		describe("when form is invalid", () => {
@@ -379,11 +403,7 @@ describe("InviteMembersDialog", () => {
 
 			it("should focus the date picker when it is the first invalid input", async () => {
 				const { wrapper } = await setup();
-
-				const expiryDateCheckbox = wrapper
-					.getComponent(VCard)
-					.get("[data-testid='input-invite-participants-link-expires']")
-					.getComponent(VCheckbox);
+				const expiryDateCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
 				await expiryDateCheckbox.setValue(true);
 				await nextTick();
 
@@ -484,16 +504,14 @@ describe("InviteMembersDialog", () => {
 		describe("when the restricted-to-creator-school checkbox is checked", () => {
 			it("should enable the valid-for-students checkbox", async () => {
 				const { wrapper } = await setup();
-				const card = wrapper.getComponent(VCard);
 
-				const restrictedToCreatorSchoolCheckbox = card
-					.get('[data-testid="input-invite-participants-restricted-to-creator-school"]')
-					.findComponent(VCheckbox);
+				const restrictedToCreatorSchoolCheckbox = getCheckboxByTestid(
+					wrapper,
+					"input-invite-participants-restricted-to-creator-school"
+				);
 				await restrictedToCreatorSchoolCheckbox.setValue(true);
 
-				const validForStudentsCheckbox = card
-					.get('[data-testid="input-invite-participants-valid-for-students"]')
-					.findComponent(VCheckbox);
+				const validForStudentsCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-students");
 				expect(validForStudentsCheckbox.props("disabled")).toBe(false);
 			});
 		});
@@ -501,37 +519,48 @@ describe("InviteMembersDialog", () => {
 		describe("when the restricted-to-creator-school checkbox is unchecked", () => {
 			it("should disable and uncheck the valid-for-students checkbox", async () => {
 				const { wrapper } = await setup();
-				const card = wrapper.getComponent(VCard);
 
-				const restrictedToCreatorSchoolCheckbox = card
-					.get('[data-testid="input-invite-participants-restricted-to-creator-school"]')
-					.findComponent(VCheckbox);
+				const restrictedToCreatorSchoolCheckbox = getCheckboxByTestid(
+					wrapper,
+					"input-invite-participants-restricted-to-creator-school"
+				);
 				await restrictedToCreatorSchoolCheckbox.setValue(false);
 
-				const validForStudentsCheckbox = card
-					.get('[data-testid="input-invite-participants-valid-for-students"]')
-					.findComponent(VCheckbox);
+				const validForStudentsCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-students");
 
-				expect(validForStudentsCheckbox.props("disabled")).toBe(true);
-				expect(validForStudentsCheckbox.props("modelValue")).toBe(false);
+				expect(validForStudentsCheckbox.props().disabled).toBe(true);
+				expect(validForStudentsCheckbox.props().modelValue).toBe(false);
 			});
 		});
 
 		describe("when the link-expires checkbox is checked", () => {
-			it("should enable date picker", async () => {
+			it("should enable date picker and make it required", async () => {
 				const { wrapper } = await setup();
 
 				const datePickerBefore = wrapper.getComponent(DatePicker);
 				expect(datePickerBefore.props().disabled).toBe(true);
 
-				const linkExpiresCheckbox = wrapper
-					.getComponent(VCard)
-					.get('[data-testid="input-invite-participants-link-expires"]')
-					.getComponent(VCheckbox);
+				const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
 				await linkExpiresCheckbox.setValue(true);
 
 				const datePicker = wrapper.getComponent(DatePicker);
 				expect(datePicker.props().disabled).toBe(false);
+				expect(datePicker.props().required).toBe(true);
+			});
+
+			it("should unpause focus trap and update activeUntil value when a date is selected", async () => {
+				const { wrapper } = await setup();
+
+				const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
+				await linkExpiresCheckbox.setValue(true);
+
+				const datePicker = wrapper.getComponent(DatePicker);
+				const selectedDateISO = new Date(2024, 0, 1).toISOString();
+				datePicker.vm.$emit("update:date", selectedDateISO);
+				await nextTick();
+
+				expect(unpauseMock).toHaveBeenCalled();
+				expect(datePicker.props().date).toBe(selectedDateISO);
 			});
 		});
 	});
