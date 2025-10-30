@@ -454,14 +454,19 @@ export default {
 		"Die angehängte Datei überschreitet die maximal zulässige Größe von {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
+	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
+	"components.board.notifications.info.cardDuplicated":
+		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Eine Karte wurde von einem anderen Benutzer in Abschnitt {columnPosition} erstellt.",
 	"components.board.screenReader.notification.columnCreated.success":
 		"Ein Abschnitt wurde von einem anderen Benutzer erstellt.",
 	"components.board.screenReader.notification.cardDeleted.success":
 		"Eine Karte wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.cardDuplicated.success":
+		"Eine Karte wurde von einem anderen Benutzer dupliziert.",
 	"components.board.screenReader.notification.columnDeleted.success":
 		"Ein Abschnitt wurde von einem anderen Benutzer gelöscht.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":

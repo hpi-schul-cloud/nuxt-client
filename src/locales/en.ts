@@ -450,12 +450,16 @@ export default {
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
+	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
+	"components.board.notifications.info.cardDuplicated":
+		"Content from Etherpads and whiteboards as well as protected settings from external tools will not be transferred.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"A card was created by another user in column {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "A column was created by another user.",
 	"components.board.screenReader.notification.cardDeleted.success": "A card was deleted by another user.",
+	"components.board.screenReader.notification.cardDuplicated.success": "A card was duplicated by another user.",
 	"components.board.screenReader.notification.columnDeleted.success": "A column was deleted by another user.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"In column {columnPosition}, a card was moved to position {newPosition}.",
