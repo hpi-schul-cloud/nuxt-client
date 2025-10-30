@@ -37,6 +37,10 @@ export default {
 	"common.file.scanError":
 		"Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
 	"common.file.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"common.file.awaitingScan.short": "Vista previa en creación",
+	"common.file.scanWontCheck.short": "Vista previa no posible",
+	"common.file.scanError.short": "Vista previa no posible",
+	"common.file.virusDetected.short": "Virus sospechado",
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
@@ -511,6 +515,8 @@ export default {
 	"components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
 	"components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
 	"components.cardElement.fileElement.collaboraFile": "Archivo",
+	"components.cardElement.fileElement.collaboraFile.types": "Tipo de documento",
+	"components.cardElement.fileElement.collaboraFile.untitled": "Documento sin título",
 	"components.cardElement.fileElement.previewError": "No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
 	"components.cardElement.fileElement.videoFormatError":
@@ -550,6 +556,7 @@ export default {
 	"components.editor.fonts.colors.indigo": "Índigo",
 	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",
 	"components.editor.fonts.colors.pink": "Rosa",
+	"components.elementTypeSelection.messageError": "El mensaje del elemento no es válido.",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Herramientas externas",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
@@ -561,6 +568,10 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videoconferencia",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Elemento de aprendizaje interactivo",
+	"components.elementTypeSelection.elements.collabora.subtitle": "Crear documento",
+	"components.elementTypeSelection.elements.collabora.option.text": ".docx (Texto)",
+	"components.elementTypeSelection.elements.collabora.option.spreadsheet": ".xlsx (Hoja de cálculo)",
+	"components.elementTypeSelection.elements.collabora.option.presentation": ".pptx (Presentación)",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",

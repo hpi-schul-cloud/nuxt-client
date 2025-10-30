@@ -37,6 +37,10 @@ export default {
 	"common.file.scanError":
 		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
 	"common.file.virusDetected": "Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"common.file.awaitingScan.short": "Vorschau wird erstellt",
+	"common.file.scanWontCheck.short": "Vorschau nicht möglich",
+	"common.file.scanError.short": "Vorschau nicht möglich",
+	"common.file.virusDetected.short": "Virenverdacht",
 	"common.file": "Datei",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
@@ -510,6 +514,8 @@ export default {
 	"components.cardElement.fileElement.emptyAlt": "Hier ist ein Bild mit folgendem Namen",
 	"components.cardElement.fileElement.pdfAlt": "Vorschaubild für ",
 	"components.cardElement.fileElement.collaboraFile": "Dokument",
+	"components.cardElement.fileElement.collaboraFile.types": "Dokumententyp",
+	"components.cardElement.fileElement.collaboraFile.untitled": "Unbenanntes Dokument",
 	"components.cardElement.fileElement.previewError": "Laden der Vorschau fehlgeschlagen.",
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
 	"components.cardElement.fileElement.videoFormatError":
@@ -549,6 +555,7 @@ export default {
 	"components.editor.fonts.colors.indigo": "Indigo",
 	"components.editor.fonts.colors.darkPurple": "Dunkelviolett",
 	"components.editor.fonts.colors.pink": "Rosa",
+	"components.elementTypeSelection.messageError": "Element Nachricht ist nicht valide.",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
@@ -559,6 +566,10 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videokonferenz",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Interaktives Lernelement",
+	"components.elementTypeSelection.elements.collabora.subtitle": "Dokument erstellen",
+	"components.elementTypeSelection.elements.collabora.option.text": ".docx (Text)",
+	"components.elementTypeSelection.elements.collabora.option.spreadsheet": ".xlsx (Tabelle)",
+	"components.elementTypeSelection.elements.collabora.option.presentation": ".pptx (Präsentation)",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",
