@@ -3,7 +3,6 @@ import CardHost from "./CardHost.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { CardResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -12,7 +11,12 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode, useShareBoardLink, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
@@ -129,8 +133,6 @@ describe("CardHost", () => {
 			},
 		});
 
-		mockedPiniaStoreTyping(useCardStore);
-
 		return {
 			wrapper,
 			cardId,
@@ -191,6 +193,19 @@ describe("CardHost", () => {
 	});
 
 	describe("card menus", () => {
+		describe("when users clicks duplicate menu btn", () => {
+			it("should call cardStore.duplicateCardRequest", async () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper, cardId } = setup();
+
+				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+
+				await duplicateButton.trigger("click");
+
+				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
+			});
+		});
+
 		describe("when users clicks share link menu", () => {
 			it("should copy a share link", async () => {
 				mockedBoardPermissions.hasDeletePermission.value = true;

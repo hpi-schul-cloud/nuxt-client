@@ -21,10 +21,6 @@ import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
-
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
@@ -79,6 +75,7 @@ describe("CardStore", () => {
 			updateElementRequest: vi.fn(),
 			moveElementRequest: vi.fn(),
 			deleteCardRequest: vi.fn(),
+			duplicateCardRequest: vi.fn(),
 			updateCardTitleRequest: vi.fn(),
 			updateCardHeightRequest: vi.fn(),
 			disconnectSocketRequest: vi.fn(),
@@ -94,6 +91,7 @@ describe("CardStore", () => {
 			updateElementRequest: vi.fn(),
 			moveElementRequest: vi.fn(),
 			deleteCardRequest: vi.fn(),
+			duplicateCardRequest: vi.fn(),
 			updateCardTitleRequest: vi.fn(),
 			updateCardHeightRequest: vi.fn(),
 			disconnectSocketRequest: vi.fn(),
@@ -192,12 +190,12 @@ describe("CardStore", () => {
 
 	describe("createCardSuccess", () => {
 		describe("when card is provided", () => {
-			it("should add the card to the store", async () => {
+			it("should add the card to the store", () => {
 				const { cardStore } = setup();
 
 				const newCardId = "idNewCard";
 				const newCard = cardResponseFactory.build({ id: newCardId });
-				await cardStore.createCardSuccess({
+				cardStore.createCardSuccess({
 					newCard,
 					columnId: "any-column-id",
 					isOwnAction: true,
@@ -236,7 +234,7 @@ describe("CardStore", () => {
 	});
 
 	describe("deleteCardSuccess", () => {
-		it("should not delete any card when card is undefined", async () => {
+		it("should not delete any card when card is undefined", () => {
 			const { cardStore } = setup();
 
 			const oldCards = cloneDeep(cardStore.cards);
@@ -249,7 +247,7 @@ describe("CardStore", () => {
 			expect(cardStore.cards).toEqual(oldCards);
 		});
 
-		it("set editModeId to undefined if cardId is equal to editModeId", async () => {
+		it("set editModeId to undefined if cardId is equal to editModeId", () => {
 			const { cardStore, cardId } = setup();
 
 			editModeId.value = cardId;
@@ -262,7 +260,7 @@ describe("CardStore", () => {
 			expect(setEditModeId).toHaveBeenCalledWith(undefined);
 		});
 
-		it("should delete a card", async () => {
+		it("should delete a card", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.deleteCardSuccess({
@@ -271,6 +269,62 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards[cardId]).toBeUndefined();
+		});
+	});
+
+	describe("duplicateCardRequest", () => {
+		it("should call socket Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup(true);
+
+			cardStore.duplicateCard({
+				cardId,
+			});
+
+			expect(mockedCardSocketApiActions.duplicateCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+
+		it("should call rest Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup();
+
+			cardStore.duplicateCard({
+				cardId,
+			});
+
+			expect(mockedCardRestApiActions.duplicateCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+	});
+
+	describe("duplicateCardSuccess", () => {
+		it("should not duplicate card when card is undefined", () => {
+			const { cardStore } = setup();
+
+			const oldCards = cloneDeep(cardStore.cards);
+
+			cardStore.duplicateCardSuccess({
+				cardId: "unknownId",
+				duplicatedCard: cardResponseFactory.build({ id: undefined }),
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards).toEqual(oldCards);
+		});
+
+		it("should duplicate card", () => {
+			const { cardStore } = setup();
+
+			const cardId = "newCardId";
+			const duplicatedCard = cardResponseFactory.build({ id: cardId });
+			cardStore.duplicateCardSuccess({
+				cardId: "unknownId",
+				duplicatedCard,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId]).toEqual(duplicatedCard);
 		});
 	});
 
@@ -296,7 +350,7 @@ describe("CardStore", () => {
 
 	describe("updateCardTitleSuccess", () => {
 		const NEW_TITLE = "newTitle";
-		it("should not update card title when card is undefined", async () => {
+		it("should not update card title when card is undefined", () => {
 			const { cardStore } = setup();
 
 			const cardTitles = Object.values(cardStore.cards).map((card) => card.title);
@@ -310,7 +364,7 @@ describe("CardStore", () => {
 			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(cardTitles);
 		});
 
-		it("should update card title", async () => {
+		it("should update card title", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardTitleSuccess({
@@ -345,7 +399,7 @@ describe("CardStore", () => {
 
 	describe("updateCardHeightSuccess", () => {
 		const NEW_HEIGHT = 100;
-		it("should not update card height when card is undefined", async () => {
+		it("should not update card height when card is undefined", () => {
 			const { cardStore } = setup();
 
 			const cardHeights = Object.values(cardStore.cards).map((card) => card.height);
@@ -359,7 +413,7 @@ describe("CardStore", () => {
 			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(cardHeights);
 		});
 
-		it("should update card height", async () => {
+		it("should update card height", () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardHeightSuccess({
@@ -420,12 +474,12 @@ describe("CardStore", () => {
 
 	describe("createElementSuccess", () => {
 		describe("when element is provided", () => {
-			it("should add element to specified position", async () => {
+			it("should add element to specified position", () => {
 				const { cardStore, cardId } = setup();
 				const newElement = drawingElementResponseFactory.build();
 				const toPosition = 1;
 
-				await cardStore.createElementSuccess({
+				cardStore.createElementSuccess({
 					type: ContentElementType.Drawing,
 					cardId,
 					newElement,
