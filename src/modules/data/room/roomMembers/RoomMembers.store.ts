@@ -34,6 +34,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName" | "displayRoomRole">[]> = ref([]);
 
 	const init = (options: { asAdmin?: boolean }) => {
+		console.log("options", options);
 		_asAdmin = options.asAdmin ?? false;
 	};
 
@@ -116,6 +117,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		};
 
 		try {
+			console.log("fetchMembers asAdmin:", _asAdmin);
 			isLoading.value = true;
 			const getMembers = _asAdmin ? roomApi.roomControllerGetMembersRedacted : roomApi.roomControllerGetMembers;
 			const { data } = (await getMembers(getRoomId())).data;
