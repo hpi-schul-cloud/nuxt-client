@@ -3,9 +3,16 @@ import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";
+import { mount } from "@vue/test-utils";
 
 describe("FilePreview", () => {
-	const setupWrapper = (fileRecord: FileRecord) => {
+	const setupWrapper = (fileRecord: FileRecord, viewportWidth = 1024) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: viewportWidth,
+		});
+
 		const wrapper = mount(FilePreview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -80,6 +87,32 @@ describe("FilePreview", () => {
 
 			const includesIcon = wrapper.html().includes(mdiFileDocumentOutline);
 			expect(includesIcon).toBe(true);
+		});
+	});
+
+	describe("when display size is not xs", () => {
+		it("should use 50px preview width", () => {
+			const fileRecord = fileRecordFactory.build({
+				previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord, 1024);
+
+			const imageComponent = wrapper.findComponent({ name: "v-img" });
+			expect(imageComponent.props("src")).toContain("width=50");
+		});
+	});
+
+	describe("when display size is xs", () => {
+		it("should use 150px preview width", () => {
+			const fileRecord = fileRecordFactory.build({
+				previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord, 400);
+			const imageComponent = wrapper.findComponent({ name: "v-img" });
+
+			expect(imageComponent.props("src")).toContain("width=150");
 		});
 	});
 });
