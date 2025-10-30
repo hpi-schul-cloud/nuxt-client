@@ -20,7 +20,7 @@
 		@end="onDropEnd"
 	>
 		<template #item="{ element, index }">
-			<!-- the board tile is an a tag, which natively has draggable=true, which we need to suppress here -->
+			<!-- the board grid item is an a tag, which natively has draggable=true, which we need to suppress here -->
 			<BoardGridItem
 				class="draggable user-select-none board-item"
 				draggable="false"
@@ -32,8 +32,6 @@
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 			/>
 		</template>
-
-		{{ focusedBoard }}
 	</Sortable>
 </template>
 
@@ -82,15 +80,15 @@ const reorderRoom = (boardId: string, newIndex: number) => {
 	});
 };
 
-const updateBoardIndex = (newIndex: number | undefined, oldIndex: number | undefined) => {
-	if (newIndex !== oldIndex && newIndex !== undefined && oldIndex !== undefined) {
-		reorderRoom(props.boards[oldIndex]?.id, newIndex);
-	}
+const updateBoardIndex = (newIndex: number, oldIndex: number) => {
+	reorderRoom(props.boards[oldIndex]?.id, newIndex);
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
 	isDragging.value = false;
-	updateBoardIndex(newIndex, oldIndex);
+	if (newIndex !== oldIndex && newIndex !== undefined && oldIndex !== undefined) {
+		updateBoardIndex(newIndex, oldIndex);
+	}
 };
 
 const onItemClick = (evt: Event) => {

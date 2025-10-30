@@ -35,71 +35,71 @@ describe("@feature-room/BoardGrid", () => {
 		expect(boardItems).toHaveLength(3);
 	});
 
-	it("should call reorderRoom when drag and drop changes position", async () => {
+	it("should call reorderRoom when drag and drop changes position", () => {
 		const { wrapper, boards } = setup();
 
 		const sortable = wrapper.findComponent({ name: "Sortable" });
-		await sortable.vm.$emit("end", { oldIndex: 0, newIndex: 2 });
+		sortable.vm.$emit("end", { oldIndex: 0, newIndex: 2 });
 
 		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 2);
 	});
 
-	it("should not call reorderRoom when position unchanged", async () => {
+	it("should not call reorderRoom when position unchanged", () => {
 		const { wrapper } = setup();
 
 		const sortable = wrapper.findComponent({ name: "Sortable" });
-		await sortable.vm.$emit("end", { oldIndex: 1, newIndex: 1 });
+		sortable.vm.$emit("end", { oldIndex: 1, newIndex: 1 });
 
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
 	});
 
-	it("should handle keyboard navigation - ArrowRight", async () => {
+	it("should handle keyboard navigation - ArrowRight", () => {
 		const { wrapper, boards } = setup();
 
 		const boardItem = wrapper.findAllComponents(BoardGridItem).at(0);
-		await boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
+		boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
 
 		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
 	});
 
-	it("should handle keyboard navigation - ArrowLeft", async () => {
+	it("should handle keyboard navigation - ArrowLeft", () => {
 		const { wrapper, boards } = setup();
 
 		const boardItem = wrapper.findAllComponents(BoardGridItem).at(2);
-		await boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
+		boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
 
 		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
 	});
 
-	it("should handle keyboard navigation - ArrowDown", async () => {
+	it("should handle keyboard navigation - ArrowDown", () => {
 		const { wrapper, boards } = setup();
 
 		const boardItem = wrapper.findAllComponents(BoardGridItem)[0];
-		await boardItem.vm.$emit("keydown", { key: "ArrowDown" });
+		boardItem.vm.$emit("keydown", { key: "ArrowDown" });
 
 		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
 	});
 
-	it("should handle keyboard navigation - ArrowUp", async () => {
+	it("should handle keyboard navigation - ArrowUp", () => {
 		const { wrapper, boards } = setup();
 
 		const boardItem = wrapper.findAllComponents(BoardGridItem)[2];
-		await boardItem.vm.$emit("keydown", { key: "ArrowUp" });
+		boardItem.vm.$emit("keydown", { key: "ArrowUp" });
 
 		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
 	});
 
-	it("should respect board boundaries in keyboard navigation", async () => {
+	it("should respect board boundaries in keyboard navigation", () => {
 		const { wrapper } = setup();
 
 		const boardItems = wrapper.findAllComponents(BoardGridItem);
 
 		// Attempt to go left at first index
-		await boardItems[0].vm.$emit("keydown", { key: "ArrowLeft" });
+		boardItems[0].vm.$emit("keydown", { key: "ArrowLeft" });
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
 
 		// Attempt to go right at last index
-		await boardItems[2].vm.$emit("keydown", { key: "ArrowRight" }, 2);
+		boardItems[2].vm.$emit("keydown", { key: "ArrowRight" }, 2);
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
 	});
 
