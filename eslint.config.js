@@ -3,6 +3,7 @@ import js from "@eslint/js";
 import { configureVueProject, defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import unusedImports from "eslint-plugin-unused-imports";
 import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
 
@@ -48,6 +49,7 @@ export default defineConfigWithVueTs([
 		plugins: {
 			schulcloud,
 			"simple-import-sort": simpleImportSort,
+			"unused-imports": unusedImports,
 		},
 		rules: {
 			// "require-await": "warn", // Turn it on demand
@@ -96,14 +98,22 @@ export default defineConfigWithVueTs([
 					],
 				},
 			],
-			"@typescript-eslint/no-unused-vars": "warn",
 			"no-console": "error",
 			"no-debugger": "warn",
 			"no-empty": "error",
 			"no-irregular-whitespace": "error",
 			"no-prototype-builtins": "error",
 			"no-undef": "warn",
-			"no-unused-vars": "off", // disable the base rule for @typescript-eslint/no-unused-vars
+			"no-unused-vars": "off",
+			"@typescript-eslint/no-unused-vars": "off",
+			"unused-imports/no-unused-imports": "warn",
+			"unused-imports/no-unused-vars": [
+				"warn",
+				{
+					vars: "all",
+					args: "after-used",
+				},
+			],
 			"no-useless-escape": "error",
 			"no-var": "error",
 			"prefer-const": "error",
