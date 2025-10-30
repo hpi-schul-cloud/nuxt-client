@@ -57,6 +57,16 @@ export type DeleteElementSuccessPayload = {
 };
 export type DeleteElementFailurePayload = DeleteElementRequestPayload;
 
+export type DuplicateCardRequestPayload = {
+	cardId: string;
+};
+export type DuplicateCardSuccessPayload = {
+	cardId: string;
+	duplicatedCard: CardResponse;
+	isOwnAction: boolean;
+};
+export type DuplicateCardFailurePayload = DuplicateCardRequestPayload;
+
 export type DeleteCardRequestPayload = {
 	cardId: string;
 };
