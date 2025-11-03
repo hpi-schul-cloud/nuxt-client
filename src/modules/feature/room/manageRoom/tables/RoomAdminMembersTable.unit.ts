@@ -88,12 +88,13 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.setAdminMode(true);
 		roomMembersStore.roomMembers = members;
 		roomMembersStore.isRoomOwner.mockReturnValue(false);
-		const roomMembersForAdmins = roomMembersStore.roomMembersForAdmins;
+		const roomMembersWithoutApplicants = roomMembersStore.roomMembersWithoutApplicants;
 		const roomMembers = roomMembersStore.roomMembers;
 
-		return { wrapper, roomMembersStore, roomMembersForAdmins, roomMembers };
+		return { wrapper, roomMembersStore, roomMembersWithoutApplicants, roomMembers };
 	};
 
 	describe("rendering", () => {
@@ -113,10 +114,10 @@ describe("RoomAdminMembersTable", () => {
 				"pages.rooms.members.tableHeader.actions",
 			];
 
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
 			const dataTable = wrapper.getComponent(DataTable);
-			expect(dataTable.props("items")).toEqual(roomMembersForAdmins);
+			expect(dataTable.props("items")).toEqual(roomMembersWithoutApplicants);
 			expect(dataTable.props("tableHeaders")!.map((header) => header.title)).toEqual(tableHeaders);
 		});
 
@@ -180,9 +181,9 @@ describe("RoomAdminMembersTable", () => {
 
 	describe("Anonymization", () => {
 		it("should not render kebab menu for anonymized members", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const anonymizedMembers = roomMembersForAdmins.filter(
+			const anonymizedMembers = roomMembersWithoutApplicants.filter(
 				(member) => member.firstName === "pages.rooms.administration.roomDetail.anonymized"
 			);
 
@@ -198,9 +199,9 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		it("should render kebab menu only for users belonging to admin school", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			roomMembersForAdmins.forEach(async (member) => {
+			roomMembersWithoutApplicants.forEach(async (member) => {
 				await nextTick();
 				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
@@ -209,9 +210,9 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		it("should render kebab menu actions for same school members", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const sameSchoolMembers = roomMembersForAdmins.filter(
+			const sameSchoolMembers = roomMembersWithoutApplicants.filter(
 				(member) => member.schoolName === "Paul-Gerhardt-Gymnasium"
 			);
 
