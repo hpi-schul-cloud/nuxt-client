@@ -1523,6 +1523,10 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
 	"pages.registrationExternalMembers.steps.registration.subtitle": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.subtitle": "Por favor seleccione su idioma",
+	"pages.registrationExternalMembers.steps.welcome.subtitle":
+		"Al registrarse en dBildungscloud en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Información sobre protección de datos",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
 	"pages.registrationExternalMembers.steps.password.subtitle": "Establecer contraseña",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",

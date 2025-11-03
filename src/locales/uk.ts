@@ -1499,6 +1499,10 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.registration.subtitle": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.subtitle": "Будь ласка, виберіть свою мову",
+	"pages.registrationExternalMembers.steps.welcome.subtitle":
+		"Реєструючись у dBildungscloud на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Інформація про захист даних",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Умови використання",
 	"pages.registrationExternalMembers.steps.password.subtitle": "Встановіть пароль",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",

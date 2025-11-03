@@ -16,6 +16,20 @@
 							:selected-language="lang"
 							@update:selected-language="onUpdateSelectedLanguage"
 						/>
+						<div v-else-if="step.value === 2">
+							<i18n-t keypath="pages.registrationExternalMembers.steps.welcome.description" scope="global">
+								<template #dataProtection>
+									<strong>
+										{{ t("pages.registrationExternalMembers.steps.welcome.dataProtection") }}
+									</strong>
+								</template>
+								<template #tos>
+									<strong>
+										{{ t("pages.registrationExternalMembers.steps.welcome.tos") }}
+									</strong>
+								</template>
+							</i18n-t>
+						</div>
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
@@ -26,7 +40,7 @@
 					</VBtn>
 				</template>
 				<template #next>
-					<VSpacer v-if="stepValue === 1" />
+					<VSpacer v-if="stepValue < steps.length" />
 					<VBtn
 						variant="flat"
 						color="primary"
@@ -77,7 +91,11 @@ const steps = computed(() => [
 		title: t("common.labels.language"),
 		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
 	},
-	{ value: 2, title: t("common.labels.welcome"), subtitle: t("common.labels.welcome") },
+	{
+		value: 2,
+		title: t("common.labels.welcome"),
+		subtitle: t("pages.registrationExternalMembers.steps.welcome.subtitle"),
+	},
 	{
 		value: 3,
 		title: t("common.labels.password"),

@@ -1490,6 +1490,10 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
 	"pages.registrationExternalMembers.steps.registration.subtitle": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.subtitle": "Please select your language",
+	"pages.registrationExternalMembers.steps.welcome.subtitle":
+		"By registering in the dBildungscloud in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Data protection information",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Terms of use",
 	"pages.registrationExternalMembers.steps.password.subtitle": "Set password",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
