@@ -9,8 +9,8 @@ import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionChangeLayout,
-	KebabMenuActionCopy,
 	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
 	KebabMenuActionPublish,
 	KebabMenuActionRename,
 	KebabMenuActionRevert,
@@ -234,8 +234,8 @@ describe("BoardHeader", () => {
 		it("should emit 'copy:board'", async () => {
 			const { wrapper } = setup();
 
-			const copyButton = wrapper.findComponent(KebabMenuActionCopy);
-			await copyButton.trigger("click");
+			const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+			await duplicateButton.trigger("click");
 
 			expect(wrapper.emitted("copy:board")).toHaveLength(1);
 		});

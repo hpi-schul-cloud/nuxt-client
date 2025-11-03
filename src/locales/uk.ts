@@ -453,13 +453,17 @@ export default {
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
+	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
+	"components.board.notifications.info.cardDuplicated":
+		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Картку було створено іншим користувачем у колонці {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Колонку створив інший користувач.",
 	"components.board.screenReader.notification.cardDeleted.success": "Картка була видалена іншим користувачем.",
+	"components.board.screenReader.notification.cardDuplicated.success": "Картка була дуплікована іншим користувачем.",
 	"components.board.screenReader.notification.columnDeleted.success": "Стовпець був видалений іншим користувачем.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",

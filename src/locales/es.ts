@@ -457,13 +457,17 @@ export default {
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
+	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
 	"components.board.notifications.errors.notLoaded": "{type} no se ha podido cargar.",
 	"components.board.notifications.errors.notMoved": "{type} no se ha podido movido.",
 	"components.board.notifications.errors.notUpdated": "No se han podido guardar los cambios.",
+	"components.board.notifications.info.cardDuplicated":
+		"No se transferirán los contenidos de Etherpads y pizarras blancas, ni tampoco los ajustes protegidos de herramientas externas.",
 	"components.board.screenReader.notification.cardCreated.success":
 		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success": "Una columna fue creada por otro usuario.",
 	"components.board.screenReader.notification.cardDeleted.success": "Una tarjeta fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.cardDuplicated.success": "Una tarjeta fue duplicada por otro usuario.",
 	"components.board.screenReader.notification.columnDeleted.success": "Una columna fue eliminada por otro usuario.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
