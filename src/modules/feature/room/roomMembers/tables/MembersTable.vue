@@ -47,7 +47,7 @@ import { RoleName } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
-import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
@@ -144,6 +144,9 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	}
 	if (schoolRoleNames.includes(RoleName.Student)) {
 		return mdiAccountOutline;
+	}
+	if (schoolRoleNames.includes(RoleName.Expert)) {
+		return mdiAccountClockOutline;
 	}
 	return undefined;
 };
