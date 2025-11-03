@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<i18n-t keypath="pages.registrationExternalMembers.steps.welcome.description" scope="global">
+		<i18n-t keypath="pages.registrationExternalMembers.steps.welcome.subtitle" scope="global">
 			<template #dataProtection>
 				<strong>
 					{{ t("pages.registrationExternalMembers.steps.welcome.dataProtection") }}

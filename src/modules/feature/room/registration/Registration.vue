@@ -10,7 +10,7 @@
 			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
-						<h2 id="language-heading" class="mb-10">{{ step.subtitle }}</h2>
+						<h2 v-if="step.subtitle" id="language-heading" class="mb-10">{{ step.subtitle }}</h2>
 						<LanguageSelection
 							v-if="step.value === 1"
 							:selected-language="lang"
@@ -91,7 +91,6 @@ const steps = computed(() => [
 	{
 		value: RegistrationSteps.Welcome,
 		title: t("common.labels.welcome"),
-		subtitle: t("pages.registrationExternalMembers.steps.welcome.subtitle"),
 	},
 	{
 		value: RegistrationSteps.PasswordSetup,
