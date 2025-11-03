@@ -10,7 +10,7 @@
 			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
-						<h2 id="language-heading" class="mb-10">{{ step.subtitle }}</h2>
+						<h2 id="language-heading" class="mb-4">{{ step.subtitle }}</h2>
 						<LanguageSelection
 							v-if="step.value === RegistrationSteps.LanguageSelection"
 							:selected-language="lang"

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="mb-10">
 		<i18n-t keypath="pages.registrationExternalMembers.steps.welcome.subtitle" scope="global">
 			<template #dataProtection>
 				<strong>

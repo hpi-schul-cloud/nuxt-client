@@ -1,6 +1,6 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
+import { checkFolderFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Permission, ToolContextType } from "@/serverApi/v3";
 import {
@@ -303,7 +303,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/registration-external-members",
 		component: () => import("@/pages/registration-external-members/RegistrationExternalMembers.page.vue"),
 		name: "registration-external-members",
-		beforeEnter: checkRegisterExternalPersonsFeature,
+		// beforeEnter: checkRegisterExternalPersonsFeature,
 		meta: {
 			isPublic: true,
 			layout: Layouts.REGISTRATION,
