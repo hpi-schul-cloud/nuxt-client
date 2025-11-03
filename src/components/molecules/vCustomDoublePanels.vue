@@ -75,7 +75,7 @@ export default {
 			type: Number,
 			default: 0,
 			required: false,
-			validator: (val) => val == 0 || val == 1,
+			validator: (val) => val === 0 || val === 1,
 		},
 	},
 	data: function () {

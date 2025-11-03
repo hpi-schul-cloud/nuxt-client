@@ -38,7 +38,7 @@ export const useFolderState = () => {
 	const breadcrumbs = computed<Breadcrumb[]>(() => {
 		const breadcrumbItems: Breadcrumb[] = [];
 
-		if (!parentNodeInfos.value || parentNodeInfos.value.length == 0) return breadcrumbItems;
+		if (parentNodeInfos.value?.length === 0) return breadcrumbItems;
 
 		const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
 		if (rootItem) breadcrumbItems.push(rootItem);

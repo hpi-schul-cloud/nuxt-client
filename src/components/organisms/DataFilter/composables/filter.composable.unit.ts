@@ -77,8 +77,6 @@ describe("filter composable", () => {
 		const { registrationOptions } = setup("student");
 		const { student, teacher } = registrationOptions;
 
-		expect(1 == 1).toEqual(true);
-
 		expect(student.length).toEqual(3);
 		expect(teacher.length).toEqual(2);
 
@@ -133,7 +131,7 @@ describe("filter composable", () => {
 
 			expect(filterMenuItems.value.length).toEqual(4);
 
-			const found = filterMenuItems.value.find((item) => item.value == FilterOption.CLASSES);
+			const found = filterMenuItems.value.find((item) => item.value === FilterOption.CLASSES);
 			expect(found).toBeUndefined();
 		});
 	});

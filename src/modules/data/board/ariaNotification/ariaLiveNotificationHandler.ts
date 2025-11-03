@@ -132,7 +132,7 @@ export const useBoardAriaNotification = () => {
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
 
-		if (addedIndex == undefined || removedIndex == undefined) return;
+		if (addedIndex === undefined || removedIndex === undefined) return;
 
 		notifyOnScreenReader(
 			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS, {
@@ -235,7 +235,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		const cardId = getElementOwner(elementId);
-		if (cardId == undefined) return;
+		if (cardId === undefined) return;
 
 		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
 			columnIndex: number;
