@@ -52,6 +52,15 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
+enum RegistrationSteps {
+	LanguageSelection = 1,
+	Welcome,
+	PasswordSetup,
+	DeclarationOfConsent,
+	ConfirmationCode,
+	Registration,
+}
+
 const { t } = useI18n();
 const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
@@ -63,9 +72,9 @@ const onUpdateSelectedLanguage = (value: string) => {
 	setSelectedLanguage(value as LanguageType);
 };
 
-const stepValue = ref(1);
+const stepValue = ref(RegistrationSteps.LanguageSelection);
 
-const onStepperClick = (value: number) => {
+const onStepperClick = (value: RegistrationSteps) => {
 	stepValue.value = value;
 };
 
@@ -75,32 +84,32 @@ onMounted(() => {
 
 const steps = computed(() => [
 	{
-		value: 1,
+		value: RegistrationSteps.LanguageSelection,
 		title: t("common.labels.language"),
 		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
 	},
 	{
-		value: 2,
+		value: RegistrationSteps.Welcome,
 		title: t("common.labels.welcome"),
 		subtitle: t("pages.registrationExternalMembers.steps.welcome.subtitle"),
 	},
 	{
-		value: 3,
+		value: RegistrationSteps.PasswordSetup,
 		title: t("common.labels.password"),
 		subtitle: t("pages.registrationExternalMembers.steps.password.subtitle"),
 	},
 	{
-		value: 4,
+		value: RegistrationSteps.DeclarationOfConsent,
 		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
 		subtitle: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
 	},
 	{
-		value: 5,
+		value: RegistrationSteps.ConfirmationCode,
 		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
 		subtitle: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
 	},
 	{
-		value: 6,
+		value: RegistrationSteps.Registration,
 		title: t("pages.registrationExternalMembers.steps.registration.title"),
 		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
 	},
