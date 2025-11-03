@@ -36,5 +36,5 @@ function isVNodeEmpty(vNode: VNode | VNode[]) {
 
 function asArray(arg: unknown) {
 	if (Array.isArray(arg)) return arg;
-	return arg != null ? [arg] : [];
+	return arg !== null ? [arg] : [];
 }
