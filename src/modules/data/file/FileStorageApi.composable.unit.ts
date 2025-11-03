@@ -389,8 +389,8 @@ describe("FileStorageApi Composable", () => {
 
 	describe("uploadFromUrl", () => {
 		describe("when file api uploads file successfully", () => {
-			const setup = () => {
-				const fileName = "example-picture.jpg";
+			const setup = (fileNameParam?: string) => {
+				const fileName = fileNameParam ?? "example-picture.jpg";
 				const imageUrl = `https://www.example.com/${fileName}`;
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParent.BOARDNODES;
@@ -443,6 +443,28 @@ describe("FileStorageApi Composable", () => {
 
 				const fileRecord = getFileRecordsByParentId(parentId);
 				expect(fileRecord).toStrictEqual([fileRecordResponse]);
+			});
+
+			describe("when file name is empty", () => {
+				it("should upload file with default filename", async () => {
+					const emptyFileName = "";
+					const defaultFileName = "file";
+					const { parentId, parentType, fileApi, imageUrl } = setup(emptyFileName);
+					const { uploadFromUrl } = useFileStorageApi();
+
+					await uploadFromUrl(imageUrl, parentId, parentType);
+
+					expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+						"schoolId",
+						StorageLocation.SCHOOL,
+						parentId,
+						parentType,
+						expect.objectContaining({
+							url: imageUrl,
+							fileName: defaultFileName,
+						})
+					);
+				});
 			});
 		});
 

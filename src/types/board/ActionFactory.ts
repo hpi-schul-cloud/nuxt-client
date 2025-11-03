@@ -14,7 +14,7 @@ export function props<T extends Props>(): ActionProps<T> {
 
 export function createAction<T extends string, P extends Props>(
 	type: T,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line
 	props: ActionProps<P>
 ): ActionFactory<T, P> {
 	return (payload: P) => ({ type, payload }) as const;
