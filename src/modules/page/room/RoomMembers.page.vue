@@ -100,6 +100,7 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
+roomMembersStore.setAdminMode(false);
 const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
