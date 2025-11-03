@@ -243,7 +243,7 @@ export const createInputDateTime = (date) => {
  * @return {String} Date difference based on current timezone
  */
 export const fromNow = (date, isLocalTimeZone) => {
-	if (isLocalTimeZone == true) {
+	if (isLocalTimeZone === true) {
 		return dayjs(date).fromNow();
 	}
 	return fromUTC(date).fromNow();

@@ -105,6 +105,7 @@ export default defineConfigWithVueTs([
 			"no-prototype-builtins": "error",
 			"no-undef": "warn",
 			"no-unused-vars": "off",
+			"eqeqeq": ["error", "always"],
 			"@typescript-eslint/no-unused-vars": "off",
 			"unused-imports/no-unused-imports": "warn",
 			"unused-imports/no-unused-vars": [

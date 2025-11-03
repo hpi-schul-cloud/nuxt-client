@@ -667,7 +667,7 @@ describe("import-users store actions", () => {
 
 				expect(importUserModule.getImportUserList.data[0]).toEqual(expected);
 				expect(importUserModule.getImportUserList.data[1]).toEqual(oldImportUserList.data[1]);
-				expect(oldImportUserList == importUserModule.getImportUserList).toBe(false);
+				expect(oldImportUserList === importUserModule.getImportUserList).toBe(false);
 			});
 
 			it("should not do anything if user ID does not exist", () => {
@@ -680,7 +680,7 @@ describe("import-users store actions", () => {
 
 				importUserModule.deleteMatchMutation("extern.asdf");
 
-				expect(oldList == importUserModule.getImportUserList).toBe(true);
+				expect(oldList === importUserModule.getImportUserList).toBe(true);
 			});
 		});
 
@@ -700,7 +700,7 @@ describe("import-users store actions", () => {
 
 				expect(importUserModule.getImportUserList.data[0]).toEqual(expected);
 				expect(importUserModule.getImportUserList.data[1]).toEqual(oldImportUserList.data[1]);
-				expect(oldImportUserList == importUserModule.getImportUserList).toBe(false);
+				expect(oldImportUserList === importUserModule.getImportUserList).toBe(false);
 				importUserModule.setUserFlagged({
 					importUserId: "extern.1234",
 					flagged: false,
@@ -717,7 +717,7 @@ describe("import-users store actions", () => {
 					flagged: true,
 				});
 
-				expect(oldList == importUserModule.getImportUserList).toBe(true);
+				expect(oldList === importUserModule.getImportUserList).toBe(true);
 			});
 		});
 	});
