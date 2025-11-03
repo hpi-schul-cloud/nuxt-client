@@ -132,7 +132,7 @@ export const useBoardAriaNotification = () => {
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
 
-		if (addedIndex === undefined || removedIndex === undefined) return;
+		if (typeof addedIndex !== "number" || typeof removedIndex !== "number") return;
 
 		notifyOnScreenReader(
 			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS, {
