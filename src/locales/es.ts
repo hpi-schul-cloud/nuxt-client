@@ -1537,13 +1537,13 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registro exitoso",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Por favor seleccione su idioma",
-	"pages.registrationExternalMembers.steps.welcome.subtitle":
+	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
+	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
+	"pages.registrationExternalMembers.steps.welcome.heading":
 		"Al registrarse en dBildungscloud en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
 	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Política de privacidad",
 	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Establecer contraseña",
+	"pages.registrationExternalMembers.steps.password.heading": "Establecer contraseña",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",

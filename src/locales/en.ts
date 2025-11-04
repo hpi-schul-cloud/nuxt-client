@@ -1504,13 +1504,13 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registration successful",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Please select your language",
-	"pages.registrationExternalMembers.steps.welcome.subtitle":
+	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
+	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
+	"pages.registrationExternalMembers.steps.welcome.heading":
 		"By registering in the dBildungscloud in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
 	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Privacy policy",
 	"pages.registrationExternalMembers.steps.welcome.tos": "Terms of use",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Set password",
+	"pages.registrationExternalMembers.steps.password.heading": "Set password",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",

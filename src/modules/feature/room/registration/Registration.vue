@@ -10,7 +10,7 @@
 			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
-						<h2 id="language-heading" class="mb-4">{{ step.subtitle }}</h2>
+						<h2 :id="`step-heading-${step.id}`" class="mb-4">{{ step.heading }}</h2>
 						<LanguageSelection
 							v-if="step.value === RegistrationSteps.LanguageSelection"
 							:selected-language="lang"
@@ -86,32 +86,38 @@ const steps = computed(() => [
 	{
 		value: RegistrationSteps.LanguageSelection,
 		title: t("common.labels.language"),
-		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.language.heading"),
+		id: "language",
 	},
 	{
 		value: RegistrationSteps.Welcome,
 		title: t("common.labels.welcome"),
-		subtitle: t("common.labels.welcome"),
+		heading: t("common.labels.welcome"),
+		id: "welcome",
 	},
 	{
 		value: RegistrationSteps.PasswordSetup,
 		title: t("common.labels.password"),
-		subtitle: t("pages.registrationExternalMembers.steps.password.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.password.heading"),
+		id: "password",
 	},
 	{
 		value: RegistrationSteps.DeclarationOfConsent,
 		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+		heading: t("pages.registrationExternalMembers.steps.declarationOfConsent.heading"),
+		id: "consent",
 	},
 	{
 		value: RegistrationSteps.ConfirmationCode,
 		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
+		heading: t("pages.registrationExternalMembers.steps.confirmationCode.heading"),
+		id: "confirmation",
 	},
 	{
 		value: RegistrationSteps.Registration,
 		title: t("pages.registrationExternalMembers.steps.registration.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.registration.heading"),
+		id: "registration",
 	},
 ]);
 </script>
