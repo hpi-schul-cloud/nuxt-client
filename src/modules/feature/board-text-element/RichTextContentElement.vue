@@ -2,16 +2,17 @@
 	<div :class="{ 'first-element': isFirstElement }">
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
+			:is-edit-mode="isEditMode"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
+			:element="element"
+			:is-edit-mode="isEditMode"
 			:autofocus="autofocus"
-			:value="modelValue.text"
 			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			:column-index="columnIndex"
-			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
 			@keyup.capture="onKeyUp"
@@ -24,7 +25,7 @@ import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { RichTextElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardFocusHandler } from "@data-board";
 import { computed, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
@@ -39,7 +40,6 @@ const props = defineProps({
 
 const emit = defineEmits(["delete:element"]);
 
-const { modelValue } = useContentElementState(props);
 const { ensurePoliteNotifications } = useAriaLiveNotifier();
 
 const autofocus = ref(false);
@@ -50,10 +50,6 @@ useBoardFocusHandler(element.value.id, ref(null), () => {
 
 const onDeleteElement = () => {
 	emit("delete:element", element.value.id);
-};
-
-const onUpdateElement = (text: string) => {
-	modelValue.value.text = text;
 };
 
 const onBlur = () => {
