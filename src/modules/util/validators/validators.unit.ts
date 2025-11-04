@@ -111,14 +111,16 @@ describe("util-validators", () => {
 	});
 
 	describe("isValidDateFormat", () => {
+		const isValid = isValidDateFormat(ERROR);
+
 		it("should accept valid date format", () => {
-			expect(isValidDateFormat("12.12.2023")).toBe(true);
+			expect(isValid("12.12.2023")).toBe(true);
 		});
 
 		it("should not accept invalid date format", () => {
-			expect(isValidDateFormat("31.31.2023")).toBe(false);
-			expect(isValidDateFormat("1.1.2001")).toBe(false);
-			expect(isValidDateFormat("1.101")).toBe(false);
+			expect(isValid("31.31.2023")).toBe(ERROR);
+			expect(isValid("1.1.2001")).toBe(ERROR);
+			expect(isValid("1.101")).toBe(ERROR);
 		});
 	});
 });

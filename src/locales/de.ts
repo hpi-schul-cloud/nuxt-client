@@ -144,6 +144,7 @@ export default {
 	"common.placeholder.repeat.email": "E-Mail-Adresse wiederholen",
 	"common.roleName.administrator": "Administrator",
 	"common.roleName.expert": "Expert:in",
+	"common.roleName.externalPerson": "Externe Person",
 	"common.roleName.helpdesk": "Helpdesk",
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",

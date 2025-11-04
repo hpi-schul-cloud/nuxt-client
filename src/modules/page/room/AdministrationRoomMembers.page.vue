@@ -37,6 +37,7 @@ const route = useRoute();
 const isMembersDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
+roomMembersStore.setAdminMode(true);
 const { fetchMembers, loadSchoolList, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
