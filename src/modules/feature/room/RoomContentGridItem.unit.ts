@@ -30,7 +30,7 @@ describe("@feature-room/RoomContentGridItem", () => {
 		it("should compute correct subtitle", () => {
 			const { wrapper } = setup({ board: mockBoard, index: 0 });
 
-			const subtitle = wrapper.get("[data-testid='board-tile-subtitle-0']");
+			const subtitle = wrapper.get("[data-testid='board-grid-item-subtitle-0']");
 			expect(subtitle.text()).toStrictEqual("pages.room.boardCard.label.columnBoard - common.words.draft");
 		});
 

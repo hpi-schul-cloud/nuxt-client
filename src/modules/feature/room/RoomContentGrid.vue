@@ -1,12 +1,14 @@
 <template>
 	<Sortable
 		ref="gridRef"
+		role="application"
 		:list="boards"
 		class="room-content-grid mt-8"
 		item-key="id"
 		:options="getSortableOptions({ disabled: !canEditRoomContent })"
 		@start="isDragging = true"
 		@end="onDropEnd"
+		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>
 		<template #item="{ element, index }">
 			<!-- the board grid item is an a tag, which natively has draggable=true, which we need to suppress here -->
@@ -27,6 +29,7 @@
 <script setup lang="ts">
 import RoomContentGridItem from "./RoomContentGridItem.vue";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
 import { notifyError } from "@data-app";
@@ -36,11 +39,13 @@ import { getSortableOptions } from "@util-sorting";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, PropType, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	roomId: { type: String, required: true },
 	boards: { type: Array as PropType<RoomBoardItem[]>, required: true },
 });
+const { t } = useI18n();
 const { execute, error: reorderError } = useSafeTask();
 
 const { fetchRoomAndBoards, moveBoard } = useRoomDetailsStore();
@@ -50,31 +55,31 @@ const { canEditRoomContent } = useRoomAuthorization();
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
 const isDragging = ref(false);
+const { notifyOnScreenReader } = useAriaLiveNotifier();
 
-const reorderRoom = (boardId: string, newIndex: number) => {
-	execute(async () => {
-		if (document.startViewTransition) {
-			await document.startViewTransition(async () => {
-				await moveBoard(props.roomId, boardId, newIndex);
-				await fetchRoomAndBoards(props.roomId);
-			}).finished;
-		} else {
-			await moveBoard(props.roomId, boardId, newIndex);
-			await fetchRoomAndBoards(props.roomId);
-		}
-	});
-};
-
-const updateBoardIndex = (newIndex: number, oldIndex: number) => {
+const reorderRoom = (newIndex: number, oldIndex: number) => {
 	if (newIndex !== oldIndex) {
-		reorderRoom(props.boards[oldIndex]?.id, newIndex);
+		const board = props.boards[oldIndex];
+		execute(async () => {
+			if (document.startViewTransition) {
+				await document.startViewTransition(async () => {
+					await moveBoard(props.roomId, board.id, newIndex);
+					await fetchRoomAndBoards(props.roomId);
+				}).finished;
+			} else {
+				await moveBoard(props.roomId, board.id, newIndex);
+				await fetchRoomAndBoards(props.roomId);
+			}
+
+			notifyOnScreenReader(t("common.actions.moved", { elementName: board.title, position: newIndex + 1 }));
+		});
 	}
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
 	isDragging.value = false;
 	if (newIndex !== undefined && oldIndex !== undefined) {
-		updateBoardIndex(newIndex, oldIndex);
+		reorderRoom(newIndex, oldIndex);
 	}
 };
 
@@ -85,6 +90,8 @@ const onItemClick = (evt: Event) => {
 };
 
 const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
+	if (!canEditRoomContent.value) return;
+
 	let newIndex = 0;
 	const cols = getGridContainerColumnsCount(gridRef.value?.containerRef);
 
@@ -102,7 +109,7 @@ const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 			newIndex = Math.min(props.boards.length - 1, oldIndex + 1);
 			break;
 	}
-	updateBoardIndex(newIndex, oldIndex);
+	reorderRoom(newIndex, oldIndex);
 };
 
 watch(reorderError, (newError) => {

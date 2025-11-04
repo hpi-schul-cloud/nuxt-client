@@ -2,18 +2,19 @@
 	<VCard
 		:class="isDraft ? 'opacity-80' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
-		:data-testid="`board-tile-${index}`"
+		:data-testid="`board-grid-item-${index}`"
+		:aria-label="`${subtitleText}: ${board.title}`"
 		:to="boardPath"
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"
 			:class="{ 'opacity-100': isDraft }"
-			:data-testid="`board-tile-subtitle-${index}`"
+			:data-testid="`board-grid-item-subtitle-${index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VCardTitle class="board-tile-title text-body-1 font-weight-bold mb-2" :data-testid="`board-tile-title-${index}`">
+		<VCardTitle class="text-body-1 font-weight-bold mb-2" :data-testid="`board-grid-title-${index}`">
 			<LineClamp>
 				{{ board.title }}
 			</LineClamp>
@@ -26,7 +27,7 @@ import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { LineClamp } from "@ui-line-clamp";
-import { computed, PropType, toRef } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -35,11 +36,10 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const board = toRef(props, "board");
 
-const isListBoard = computed(() => board.value.layout === BoardLayout.List);
+const isListBoard = computed(() => props.board.layout === BoardLayout.List);
 
-const isDraft = computed(() => board.value.isVisible === false);
+const isDraft = computed(() => props.board.isVisible === false);
 
 const subtitleIcon = computed(() => (isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline));
 
@@ -56,5 +56,5 @@ const subtitleText = computed(() => {
 	return text;
 });
 
-const boardPath = computed(() => `/boards/${board.value.id}`);
+const boardPath = computed(() => `/boards/${props.board.id}`);
 </script>

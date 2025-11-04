@@ -28,6 +28,7 @@ export default {
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
+	"common.actions.moved": "{elementName} було переміщено на позицію {position}",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.ariaLabel.openImageInLightBox": "Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
@@ -44,6 +45,8 @@ export default {
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
+	"common.instructions.orderBy.arrowKeys":
+		"Список з елементами, які можна переміщувати. Використовуйте клавіші зі стрілками для переміщення.",
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -1479,7 +1482,6 @@ export default {
 	"pages.courseRoomDetails.fab.add.lesson": "Створити тему",
 	"pages.courseRoomDetails.fab.add.task": "Створити завдання",
 	"pages.courseRoomDetails.fab.add.board": "Нова дошка",
-	"pages.courseRoomDetails.fab.add.columnBoard": "Нова дошка",
 	"pages.courseRooms.groupName": "Курси",
 	"pages.courseRooms.headerSection.archived": "Архів",
 	"pages.courseRooms.headerSection.menu.ariaLabel": "Меню курсу",

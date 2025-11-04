@@ -28,6 +28,7 @@ export default {
 	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
+	"common.actions.moved": "{elementName} se movió a la posición {position}",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.openImageInLightBox": "Mostrar imagen en tamaño completo",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
@@ -45,6 +46,7 @@ export default {
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
 	"common.files": "Archivos",
+	"common.instructions.orderBy.arrowKeys": "Lista con elementos movibles. Use las teclas de flecha para moverlos.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -1501,7 +1503,6 @@ export default {
 	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
 	"pages.content.preview_img.alt": "Vista previa de la imagen",
 	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
-	"pages.courseRoomDetails.fab.add.columnBoard": "Nuevo tablero de columna",
 	"pages.courseRoomDetails.fab.add.lesson": "Nuevo tema",
 	"pages.courseRoomDetails.fab.add.task": "Nuevo tarea",
 	"pages.courseRooms.groupName": "Cursos",

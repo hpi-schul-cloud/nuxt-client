@@ -260,7 +260,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when user wants to create a board", () => {
 		describe("and user does not have permission to edit room content", () => {
-			it("should not render fab button", () => {
+			it("should not render fa button", () => {
 				roomPermissions.canEditRoomContent = computed(() => false);
 				const { wrapper } = setup();
 
