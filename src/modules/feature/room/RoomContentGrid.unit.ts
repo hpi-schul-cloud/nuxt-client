@@ -54,7 +54,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
 	});
 
-	describe("Using arrow key reorder features.", () => {
+	describe("when using arrow key reorder features", () => {
 		beforeEach(() => {
 			useRoomDetailsStore().$patch({ room: { permissions: [Permission.RoomEditContent] } });
 		});
