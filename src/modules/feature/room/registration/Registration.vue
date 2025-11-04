@@ -16,6 +16,7 @@
 							:selected-language="lang"
 							@update:selected-language="onUpdateSelectedLanguage"
 						/>
+						<Password v-else-if="step.value === 3" />
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
@@ -44,6 +45,7 @@
 
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
+import Password from "./steps/Password.vue";
 import { LanguageType } from "@/serverApi/v3";
 import { useRegistration } from "@data-room";
 import { computed, onMounted, ref } from "vue";
