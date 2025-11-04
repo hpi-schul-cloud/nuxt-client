@@ -31,7 +31,7 @@ const RichTextElementContentSchema = z.object({
 	inputFormat: z.string(),
 });
 
-const SubmissionContainerElementContentSchema = z.object({
+const SubmissionElementContentSchema = z.object({
 	dueDate: z.string().nullable(),
 });
 
@@ -65,7 +65,7 @@ export const AnyContentElementSchema = z.object({
 		H5pElementContentSchema,
 		LinkElementContentSchema,
 		RichTextElementContentSchema,
-		SubmissionContainerElementContentSchema,
+		SubmissionElementContentSchema,
 		DrawingElementContentSchema,
 		DeletedElementContentSchema,
 		VideoConferenceElementContentSchema,
