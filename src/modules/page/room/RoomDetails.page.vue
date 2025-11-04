@@ -78,7 +78,8 @@ const isLeaveRoomProhibitedDialogOpen = ref(false);
 const pageTitle = computed(() => buildPageTitle(room.value.name, t("pages.roomDetails.title")));
 useTitle(pageTitle);
 
-const { canEditRoomContent, canLeaveRoom, canListDrafts, canViewRoom } = useRoomAuthorization();
+const { canDeleteRoom, canEditRoomContent, canLeaveRoom, canCopyRoom, canShareRoom, canListDrafts, canViewRoom } =
+	useRoomAuthorization();
 
 const visibleBoards = computed(() =>
 	roomBoards.value?.filter((board) => (board.isVisible ? canViewRoom.value : canListDrafts.value))
@@ -130,7 +131,9 @@ const onManageMembers = () => {
 const hasRoomCopyStarted = ref(false);
 
 const onCopy = () => {
-	hasRoomCopyStarted.value = true;
+	if (canCopyRoom.value) {
+		hasRoomCopyStarted.value = true;
+	}
 };
 
 const onCopySuccess = (copyId: string) => {
@@ -147,13 +150,17 @@ const onCopyEnded = () => {
 };
 
 const onShare = () => {
-	shareModule.startShareFlow({
-		id: room.value.id,
-		type: ShareTokenParentType.Room,
-	});
+	if (canShareRoom.value) {
+		shareModule.startShareFlow({
+			id: room.value.id,
+			type: ShareTokenParentType.Room,
+		});
+	}
 };
 
 const onDelete = async () => {
+	if (!canDeleteRoom.value) return;
+
 	await deleteRoom(room.value.id);
 	router.push({ name: "rooms" });
 };
