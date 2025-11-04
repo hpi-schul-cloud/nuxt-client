@@ -22,7 +22,10 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useEventListener } from "@vueuse/core";
 import { computed, PropType } from "vue";
 
-const emit = defineEmits(["update:value", "delete:element", "blur"]); // TODO: define interfaces
+const emit = defineEmits<{
+	(e: "delete:element"): void;
+	(e: "blur"): void;
+}>();
 
 const props = defineProps({
 	element: {
@@ -59,10 +62,7 @@ const onFocus = () => {
 	}
 };
 
-const onBlur = () => {
-	emit("update:value", modelValue.value);
-	emit("blur");
-};
+const onBlur = () => emit("blur");
 
 const onDelete = () => emit("delete:element");
 </script>
