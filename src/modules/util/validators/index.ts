@@ -2,6 +2,7 @@ import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "./op
 import {
 	isNonEmptyString,
 	isOfMaxLength,
+	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
 	isValidTimeFormat,
@@ -12,6 +13,7 @@ export {
 	containsOpeningTagFollowedByString,
 	isNonEmptyString,
 	isOfMaxLength,
+	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
 	isValidTimeFormat,

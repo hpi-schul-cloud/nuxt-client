@@ -1,6 +1,7 @@
 import {
 	isNonEmptyString,
 	isOfMaxLength,
+	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
 	isValidTimeFormat,
@@ -28,6 +29,22 @@ describe("util-validators", () => {
 		it("should accept values of null or undefined", () => {
 			const maxLength = 5;
 			const isValid = isOfMaxLength(maxLength)(ERROR);
+			expect(isValid(null)).toBe(true);
+			expect(isValid(undefined)).toBe(true);
+		});
+	});
+
+	describe("isOfMinLength", () => {
+		it("should not accept string of less length than parameter given", () => {
+			const minLength = 5;
+			const tooShortValue = "1234";
+			const isValid = isOfMinLength(minLength)(ERROR);
+			expect(isValid(tooShortValue)).toBe(ERROR);
+		});
+
+		it("should accept values of null or undefined", () => {
+			const minLength = 5;
+			const isValid = isOfMinLength(minLength)(ERROR);
 			expect(isValid(null)).toBe(true);
 			expect(isValid(undefined)).toBe(true);
 		});

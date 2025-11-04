@@ -82,3 +82,21 @@ export const isOfMaxLength =
 		}
 		return true;
 	};
+
+/**
+ * Checks if given value is of given min length
+ */
+export const isOfMinLength =
+	(minLength: number): FormValidatorFn<string | null | undefined> =>
+	(errMsg) =>
+	(value) => {
+		if (value === null || value === undefined) {
+			return true;
+		}
+
+		if (typeof value === "string" && value.length < minLength) {
+			return errMsg;
+		}
+
+		return true;
+	};
