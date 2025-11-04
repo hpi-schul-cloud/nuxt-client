@@ -1,14 +1,14 @@
 <template>
 	<InlineEditor
 		v-model="modelValue.text"
+		class="cursor-text"
 		:autofocus="autofocus"
 		:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-		class="cursor-text"
 		:viewport-offset-top="offsetTop"
-		@update:value="onUpdateValue"
-		@focus="onFocus"
 		@blur="onBlur"
+		@focus="onFocus"
 		@keyboard:delete="onDelete"
+		@update:value="onUpdateValue"
 	/>
 </template>
 
@@ -22,17 +22,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useEventListener } from "@vueuse/core";
 import { computed, PropType } from "vue";
 
-const emit = defineEmits<{
-	(e: "delete:element"): void;
-	(e: "blur"): void;
-}>();
-
 const props = defineProps({
-	element: {
-		type: Object as PropType<RichTextElementResponse>,
-		required: true,
-	},
-	isEditMode: { type: Boolean, required: true },
 	autofocus: {
 		type: Boolean,
 		required: true,
@@ -41,16 +31,26 @@ const props = defineProps({
 		type: Number,
 		required: true,
 	},
+	element: {
+		type: Object as PropType<RichTextElementResponse>,
+		required: true,
+	},
+	isEditMode: { type: Boolean, required: true },
 });
+
+const emit = defineEmits<{
+	(e: "delete:element"): void;
+	(e: "blur"): void;
+}>();
 
 const { modelValue } = useContentElementState(props);
 
 const isListLayout = injectStrict(BOARD_IS_LIST_LAYOUT);
 const offsetTop = computed(() => useViewportOffsetTop(props.columnIndex, isListLayout).offsetTop.value);
 
-const onUpdateValue = (newValue: string) => {
-	modelValue.value.text = newValue;
-};
+const onBlur = () => emit("blur");
+
+const onDelete = () => emit("delete:element");
 
 const onFocus = () => {
 	const ckBalloonPanelElements = document.getElementsByClassName("ck-balloon-panel");
@@ -62,7 +62,7 @@ const onFocus = () => {
 	}
 };
 
-const onBlur = () => emit("blur");
-
-const onDelete = () => emit("delete:element");
+const onUpdateValue = (newValue: string) => {
+	modelValue.value.text = newValue;
+};
 </script>

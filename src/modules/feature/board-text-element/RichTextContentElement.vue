@@ -2,19 +2,19 @@
 	<div :class="{ 'first-element': isFirstElement }">
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
-			:is-edit-mode="isEditMode"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
+			:is-edit-mode="isEditMode"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"
+			:autofocus="autofocus"
+			:column-index="columnIndex"
+			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			:element="element"
 			:is-edit-mode="isEditMode"
-			:autofocus="autofocus"
-			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
-			:column-index="columnIndex"
-			@delete:element="onDeleteElement"
 			@blur="onBlur"
+			@delete:element="onDeleteElement"
 			@keyup.capture="onKeyUp"
 		/>
 	</div>
@@ -42,19 +42,16 @@ const emit = defineEmits(["delete:element"]);
 
 const { ensurePoliteNotifications } = useAriaLiveNotifier();
 
-const autofocus = ref(false);
 const element = toRef(props, "element");
+
+const autofocus = ref(false);
 useBoardFocusHandler(element.value.id, ref(null), () => {
 	autofocus.value = true;
 });
 
-const onDeleteElement = () => {
-	emit("delete:element", element.value.id);
-};
+const onBlur = () => (autofocus.value = false);
 
-const onBlur = () => {
-	autofocus.value = false;
-};
+const onDeleteElement = () => emit("delete:element", element.value.id);
 
 const onKeyUp = () => ensurePoliteNotifications();
 
