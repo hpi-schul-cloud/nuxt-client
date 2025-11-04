@@ -1,5 +1,6 @@
 import RoomContentGrid from "./RoomContentGrid.vue";
 import RoomContentGridItem from "./RoomContentGridItem.vue";
+import { Permission } from "@/serverApi/v3";
 import { roomBoardGridItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomDetailsStore } from "@data-room";
@@ -53,40 +54,46 @@ describe("@feature-room/RoomContentGrid", () => {
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
 	});
 
-	it("should handle keyboard navigation - ArrowRight", () => {
-		const { wrapper, boards } = setup();
+	describe("Using arrow key reorder features.", () => {
+		beforeEach(() => {
+			useRoomDetailsStore().$patch({ room: { permissions: [Permission.RoomEditContent] } });
+		});
 
-		const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(0);
-		boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
+		it("should handle keyboard navigation - ArrowRight", () => {
+			const { wrapper, boards } = setup();
 
-		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
-	});
+			const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(0);
+			boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
 
-	it("should handle keyboard navigation - ArrowLeft", () => {
-		const { wrapper, boards } = setup();
+			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
+		});
 
-		const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(2);
-		boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
+		it("should handle keyboard navigation - ArrowLeft", () => {
+			const { wrapper, boards } = setup();
 
-		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
-	});
+			const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(2);
+			boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
 
-	it("should handle keyboard navigation - ArrowDown", () => {
-		const { wrapper, boards } = setup();
+			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
+		});
 
-		const boardItem = wrapper.findAllComponents(RoomContentGridItem)[0];
-		boardItem.vm.$emit("keydown", { key: "ArrowDown" });
+		it("should handle keyboard navigation - ArrowDown", () => {
+			const { wrapper, boards } = setup();
 
-		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
-	});
+			const boardItem = wrapper.findAllComponents(RoomContentGridItem)[0];
+			boardItem.vm.$emit("keydown", { key: "ArrowDown" });
 
-	it("should handle keyboard navigation - ArrowUp", () => {
-		const { wrapper, boards } = setup();
+			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[0].id, 1);
+		});
 
-		const boardItem = wrapper.findAllComponents(RoomContentGridItem)[2];
-		boardItem.vm.$emit("keydown", { key: "ArrowUp" });
+		it("should handle keyboard navigation - ArrowUp", () => {
+			const { wrapper, boards } = setup();
 
-		expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
+			const boardItem = wrapper.findAllComponents(RoomContentGridItem)[2];
+			boardItem.vm.$emit("keydown", { key: "ArrowUp" });
+
+			expect(useRoomDetailsStore().moveBoard).toHaveBeenCalledWith("test-room", boards[2].id, 1);
+		});
 	});
 
 	it("should respect board boundaries in keyboard navigation", () => {
