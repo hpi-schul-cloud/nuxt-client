@@ -79,7 +79,7 @@ import { mdiPuzzleOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { useSharedLastCreatedElement } from "@util-board";
-import { computed, ComputedRef, onMounted, onUnmounted, PropType, Ref, ref, toRef } from "vue";
+import { computed, ComputedRef, onMounted, onUnmounted, PropType, Ref, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -128,7 +128,9 @@ const getIcon: ComputedRef<string | undefined> = computed(() => {
 
 const { lastCreatedElementId, resetLastCreatedElementId } = useSharedLastCreatedElement();
 
-const hasLinkedTool: ComputedRef<boolean> = computed(() => !!modelValue.value.contextExternalToolId);
+const hasLinkedTool: ComputedRef<boolean> = computed(
+	() => modelValue.value.contextExternalToolId !== null || props.element.content.contextExternalToolId !== null
+);
 
 const isDeepLinkingTool: ComputedRef<boolean> = computed(() => !!displayData.value?.isLtiDeepLinkingTool);
 
@@ -192,19 +194,13 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 	}
 };
 
-const onMoveElementDown = () => {
-	emit("move-down:edit");
-};
+const onMoveElementDown = () => emit("move-down:edit");
 
-const onMoveElementUp = () => {
-	emit("move-up:edit");
-};
+const onMoveElementUp = () => emit("move-up:edit");
 
 const onDeleteElement = () => emit("delete:element", element.value.id);
 
-const onEditElement = () => {
-	isConfigurationDialogOpen.value = true;
-};
+const onEditElement = () => (isConfigurationDialogOpen.value = true);
 
 const onClickElement = async () => {
 	if (hasLinkedTool.value && (!props.isEditMode || (props.isEditMode && isDeepLinkingTool.value))) {
@@ -220,9 +216,7 @@ const onClickElement = async () => {
 	}
 };
 
-const onConfigurationDialogClose = () => {
-	isConfigurationDialogOpen.value = false;
-};
+const onConfigurationDialogClose = () => (isConfigurationDialogOpen.value = false);
 
 const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
 	modelValue.value.contextExternalToolId = tool.id;
@@ -231,11 +225,11 @@ const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
 };
 
 const loadCardData = async () => {
-	if (modelValue.value.contextExternalToolId) {
-		await fetchDisplayData(modelValue.value.contextExternalToolId);
+	if (element.value.content.contextExternalToolId) {
+		await fetchDisplayData(element.value.content.contextExternalToolId);
 
 		if (isToolLaunchable.value) {
-			await fetchContextLaunchRequest(modelValue.value.contextExternalToolId);
+			await fetchContextLaunchRequest(element.value.content.contextExternalToolId);
 		}
 	}
 };
@@ -257,6 +251,13 @@ const timer = setInterval(async () => {
 onUnmounted(() => {
 	clearInterval(timer);
 });
+
+watch(
+	() => element.value.content.contextExternalToolId,
+	async () => {
+		await loadCardData();
+	}
+);
 
 const ariaLabel = computed(() => {
 	const elementName = t("components.cardElement.externalToolElement");
