@@ -255,7 +255,10 @@ onUnmounted(() => {
 watch(
 	() => element.value.content.contextExternalToolId,
 	async () => {
-		await loadCardData();
+		if (element.value.content.contextExternalToolId !== null) {
+			modelValue.value.contextExternalToolId = element.value.content.contextExternalToolId;
+			await loadCardData();
+		}
 	}
 );
 
