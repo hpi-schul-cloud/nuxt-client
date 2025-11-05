@@ -73,7 +73,6 @@ const getItemsForUser = (items: SidebarItems) => {
 				(child) => userHasPermission(child) && hasFeatureEnabled(child) && isEnabledForTheme(child)
 			);
 		}
-
 		return userHasPermission(item) && hasFeatureEnabled(item) && isEnabledForTheme(item);
 	});
 
