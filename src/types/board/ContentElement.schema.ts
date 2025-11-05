@@ -22,6 +22,8 @@ const LinkElementContentSchema = z.object({
 	url: z.string(),
 	title: z.string(),
 	description: z.string().optional(),
+	originalImageUrl: z.string().optional(),
+	imageUrl: z.string().optional(),
 });
 
 const RichTextElementContentSchema = z.object({
@@ -29,9 +31,25 @@ const RichTextElementContentSchema = z.object({
 	inputFormat: z.string(),
 });
 
-const SubmissionContainerElementContentSchema = z.object({
-	dueDate: z.string(),
+const SubmissionElementContentSchema = z.object({
+	dueDate: z.string().nullable(),
 });
+
+const DrawingElementContentSchema = z.object({
+	description: z.string(),
+});
+
+const DeletedElementContentSchema = z.object({
+	title: z.string(),
+	deletedElementType: z.enum(ContentElementType),
+	description: z.string().optional(),
+});
+
+const VideoConferenceElementContentSchema = z.object({
+	title: z.string(),
+});
+
+const CollaborativeTextEditorElementContentSchema = z.object({});
 
 export const AnyContentElementSchema = z.object({
 	id: z.string(),
@@ -47,6 +65,10 @@ export const AnyContentElementSchema = z.object({
 		H5pElementContentSchema,
 		LinkElementContentSchema,
 		RichTextElementContentSchema,
-		SubmissionContainerElementContentSchema,
+		SubmissionElementContentSchema,
+		DrawingElementContentSchema,
+		DeletedElementContentSchema,
+		VideoConferenceElementContentSchema,
+		CollaborativeTextEditorElementContentSchema,
 	]),
 });
