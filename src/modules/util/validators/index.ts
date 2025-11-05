@@ -1,5 +1,9 @@
 import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "./openingTagValidator";
 import {
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
 	isNonEmptyString,
 	isOfMaxLength,
 	isOfMinLength,
@@ -11,6 +15,10 @@ import {
 
 export {
 	containsOpeningTagFollowedByString,
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
 	isNonEmptyString,
 	isOfMaxLength,
 	isOfMinLength,

@@ -28,7 +28,14 @@
 </template>
 
 <script setup lang="ts">
-import { isOfMinLength, isRequired } from "@util-validators";
+import {
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
+	isOfMinLength,
+	isRequired,
+} from "@util-validators";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextField } from "vuetify/components";
@@ -39,5 +46,9 @@ const { t } = useI18n();
 const passwordRules = computed(() => [
 	isRequired("Bitte ein Passwort eingeben"),
 	isOfMinLength(8)("Das Passwort muss mindestens 8 Zeichen lang sein."),
+	hasUppercaseLetter("Das Passwort muss mindestens einen Großbuchstaben enthalten."),
+	hasLowercaseLetter("Das Passwort muss mindestens einen Kleinbuchstaben enthalten."),
+	hasNumber("Das Passwort muss mindestens eine Zahl enthalten."),
+	hasSpecialCharacter("Das Passwort muss mindestens ein Sonderzeichen enthalten."),
 ]);
 </script>
