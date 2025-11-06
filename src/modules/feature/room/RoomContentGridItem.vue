@@ -20,7 +20,9 @@
 			</LineClamp>
 		</VCardTitle>
 		<VCardActions class="justify-end">
-			<VBtn variant="elevated" color="primary" :to="boardPath">{{ t("pages.room.boardCard.label.openItem") }}</VBtn>
+			<VBtn variant="text" color="primary" :to="boardPath">
+				{{ t("pages.room.boardCard.label.openItem") }}
+			</VBtn>
 		</VCardActions>
 	</VCard>
 </template>
