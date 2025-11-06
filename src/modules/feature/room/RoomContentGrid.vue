@@ -5,7 +5,7 @@
 		:list="boards"
 		class="room-content-grid mt-8"
 		item-key="id"
-		:options="getSortableOptions({ disabled: !canEditRoomContent, delayOnTouchOnly: false, delay: 0 })"
+		:options="getSortableOptions({ disabled: !canEditRoomContent })"
 		@end="onDropEnd"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>

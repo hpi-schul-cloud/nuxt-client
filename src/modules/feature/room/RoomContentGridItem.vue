@@ -13,12 +13,18 @@
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VCardTitle class="text-body-1 font-weight-bold mb-2" :data-testid="`board-grid-title-${index}`">
-			<LineClamp>
-				{{ board.title }}
-			</LineClamp>
+		<VCardTitle
+			class="text-body-1 font-weight-bold"
+			style="max-width: max-content"
+			:data-testid="`board-grid-title-${index}`"
+		>
+			<RouterLink :to="boardPath" class="text-decoration-none" style="color: inherit">
+				<LineClamp>
+					{{ board.title }}
+				</LineClamp>
+			</RouterLink>
 		</VCardTitle>
-		<VCardActions class="justify-end">
+		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`board-open-button-${index}`"
 				variant="text"
