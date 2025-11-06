@@ -57,5 +57,12 @@ describe("Password.vue", () => {
 			expect(password.props("label")).toBe("common.labels.password");
 			expect(confirmPassword.props("label")).toBe("Passwort wiederholen");
 		});
+
+		it("should associate the password field with the password instructions for accessibility", () => {
+			const { wrapper } = setup();
+			const password = getTextFieldByTestId(wrapper, "password");
+
+			expect(password.attributes("aria-describedby")).toBe("password-instructions");
+		});
 	});
 });

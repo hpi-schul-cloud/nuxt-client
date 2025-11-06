@@ -138,6 +138,7 @@ export const hasSpecialCharacter: FormValidatorFn<string> = (errMsg) => (value) 
 	// TODO: clarify which special characters are allowed
 	// according to legacy client: ! § $ % & ( ) = ? ; : , . # + * ~ -
 	// according to figma: ! § $ % / ( ) = ? \ ; : , . # + * ~ -
+	// password language key legacy: !§$%&/()=?\\;:,.#+*~-
 	if (!/[!§$%&()=?;:,.#+*~-]/.test(value)) {
 		return errMsg;
 	}

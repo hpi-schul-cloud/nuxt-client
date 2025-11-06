@@ -18,14 +18,22 @@
 		<li>erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \ ; : , . # + * ~ -</li>
 	</ul>
 	<VTextField
+		v-model="password"
 		aria-describedby="password-instructions"
+		autocomplete="new-password"
 		data-testid="password"
 		counter
 		type="password"
 		:label="t('common.labels.password')"
 		:rules="passwordRules"
 	/>
-	<VTextField data-testid="confirm-password" type="password" label="Passwort wiederholen" />
+	<VTextField
+		data-testid="confirm-password"
+		autocomplete="new-password"
+		type="password"
+		label="Passwort wiederholen"
+		:rules="passwordConfirmationRules"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -42,8 +50,8 @@ import { useI18n } from "vue-i18n";
 import { VTextField } from "vuetify/components";
 
 const { t } = useI18n();
+const password = defineModel<string>();
 
-// TODO: add rules for min one uppercase, one lowercase, one number, one special character
 const passwordRules = computed(() => [
 	isRequired("Bitte ein Passwort eingeben"),
 	isOfMinLength(8)("Das Passwort muss mindestens 8 Zeichen lang sein."),
@@ -51,5 +59,15 @@ const passwordRules = computed(() => [
 	hasLowercaseLetter("Das Passwort muss mindestens einen Kleinbuchstaben enthalten."),
 	hasNumber("Das Passwort muss mindestens eine Zahl enthalten."),
 	hasSpecialCharacter("Das Passwort muss mindestens ein Sonderzeichen enthalten."),
+]);
+
+const passwordConfirmationRules = computed(() => [
+	isRequired("Bitte das Passwort wiederholen"),
+	(value: string) => {
+		if (value !== password.value) {
+			return "Die Passwörter stimmen nicht überein.";
+		}
+		return true;
+	},
 ]);
 </script>
