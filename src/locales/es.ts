@@ -1546,6 +1546,7 @@ export default {
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",
+	"pages.room.boardCard.label.openItem": "Abrir",
 	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
 	"pages.room.cards.aria": "{itemType}, enlace, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",

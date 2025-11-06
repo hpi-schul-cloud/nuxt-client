@@ -1,10 +1,10 @@
 <template>
 	<VCard
+		class="room-content-grid-item"
 		:class="isDraft ? 'opacity-80' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
 		:aria-label="`${subtitleText}: ${board.title}`"
-		:to="boardPath"
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"
@@ -19,6 +19,9 @@
 				{{ board.title }}
 			</LineClamp>
 		</VCardTitle>
+		<VCardActions class="justify-end">
+			<VBtn variant="elevated" color="primary" :to="boardPath">{{ t("pages.room.boardCard.label.openItem") }}</VBtn>
+		</VCardActions>
 	</VCard>
 </template>
 
@@ -58,3 +61,8 @@ const subtitleText = computed(() => {
 
 const boardPath = computed(() => `/boards/${props.board.id}`);
 </script>
+<style>
+.room-content-grid-item:focus-within {
+	outline: auto;
+}
+</style>

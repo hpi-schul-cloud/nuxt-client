@@ -44,8 +44,7 @@ export default {
 	"common.file": "file",
 	"common.file.exceedsCollaboraEditableFileSize": "Documents larger than {sizeInMb} cannot be edited online.",
 	"common.files": "files",
-	"common.instructions.orderBy.arrowKeys":
-		"Liste mit verschiebbaren Items. Nutzen Sie die Pfeiltasten zum Verschieben.",
+	"common.instructions.orderBy.arrowKeys": "List with movable items. Use the arrow keys to move them.",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -1514,6 +1513,7 @@ export default {
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
+	"pages.room.boardCard.label.openItem": "Open",
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
 	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",

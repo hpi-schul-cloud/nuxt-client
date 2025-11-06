@@ -5,20 +5,17 @@
 		:list="boards"
 		class="room-content-grid mt-8"
 		item-key="id"
-		:options="getSortableOptions({ disabled: !canEditRoomContent })"
-		@start="isDragging = true"
+		:options="getSortableOptions({ disabled: !canEditRoomContent, delayOnTouchOnly: false, delay: 0 })"
 		@end="onDropEnd"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>
 		<template #item="{ element, index }">
 			<!-- the board grid item is an a tag, which natively has draggable=true, which we need to suppress here -->
 			<RoomContentGridItem
-				class="draggable user-select-none room-content-grid-item"
+				class="draggable user-select-none room-content-grid-item cursor-grab"
 				draggable="false"
 				:board="element"
 				:index
-				@click.capture="onItemClick"
-				@contextmenu.prevent
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 			/>
@@ -54,38 +51,30 @@ const { canEditRoomContent } = useRoomAuthorization();
 
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
-const isDragging = ref(false);
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 
 const reorderRoom = (newIndex: number, oldIndex: number) => {
-	if (newIndex !== oldIndex) {
-		const board = props.boards[oldIndex];
-		execute(async () => {
-			if (document.startViewTransition) {
-				await document.startViewTransition(async () => {
-					await moveBoard(props.roomId, board.id, newIndex);
-					await fetchRoomAndBoards(props.roomId);
-				}).finished;
-			} else {
+	if (newIndex === oldIndex) return;
+
+	const board = props.boards[oldIndex];
+	execute(async () => {
+		if (document.startViewTransition) {
+			await document.startViewTransition(async () => {
 				await moveBoard(props.roomId, board.id, newIndex);
 				await fetchRoomAndBoards(props.roomId);
-			}
+			}).finished;
+		} else {
+			await moveBoard(props.roomId, board.id, newIndex);
+			await fetchRoomAndBoards(props.roomId);
+		}
 
-			notifyOnScreenReader(t("common.actions.moved", { elementName: board.title, position: newIndex + 1 }));
-		});
-	}
+		notifyOnScreenReader(t("common.actions.moved", { elementName: board.title, position: newIndex + 1 }));
+	});
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
-	isDragging.value = false;
 	if (newIndex !== undefined && oldIndex !== undefined) {
 		reorderRoom(newIndex, oldIndex);
-	}
-};
-
-const onItemClick = (evt: Event) => {
-	if (isDragging.value) {
-		evt.preventDefault();
 	}
 };
 
