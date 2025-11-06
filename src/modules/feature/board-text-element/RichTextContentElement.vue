@@ -3,7 +3,6 @@
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
-			:is-edit-mode="isEditMode"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
