@@ -10,10 +10,8 @@
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>
 		<template #item="{ element, index }">
-			<!-- the board grid item is an a tag, which natively has draggable=true, which we need to suppress here -->
 			<RoomContentGridItem
 				class="draggable user-select-none room-content-grid-item cursor-grab"
-				draggable="false"
 				:board="element"
 				:index
 				@focusin="focusedBoard = $event.target"

@@ -46,8 +46,7 @@ export default {
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
 	"common.files": "Dateien",
-	"common.instructions.orderBy.arrowKeys":
-		"Liste mit verschiebbaren Elementen. Nutzen Sie die Pfeiltasten zum Verschieben.",
+	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",

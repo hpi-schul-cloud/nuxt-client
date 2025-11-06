@@ -4,7 +4,6 @@
 		:class="isDraft ? 'opacity-80' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
-		:aria-label="`${subtitleText}: ${board.title}`"
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"
@@ -20,7 +19,13 @@
 			</LineClamp>
 		</VCardTitle>
 		<VCardActions class="justify-end">
-			<VBtn variant="text" color="primary" :to="boardPath">
+			<VBtn
+				:data-testid="`board-open-button-${index}`"
+				variant="text"
+				color="primary"
+				:to="boardPath"
+				:aria-label="`${subtitleText}: ${board.title}`"
+			>
 				{{ t("pages.room.boardCard.label.openItem") }}
 			</VBtn>
 		</VCardActions>

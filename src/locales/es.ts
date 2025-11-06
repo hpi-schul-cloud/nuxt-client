@@ -46,7 +46,7 @@ export default {
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
 	"common.files": "Archivos",
-	"common.instructions.orderBy.arrowKeys": "Lista con elementos movibles. Use las teclas de flecha para moverlos.",
+	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",

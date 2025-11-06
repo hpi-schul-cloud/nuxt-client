@@ -44,7 +44,7 @@ export default {
 	"common.file": "file",
 	"common.file.exceedsCollaboraEditableFileSize": "Documents larger than {sizeInMb} cannot be edited online.",
 	"common.files": "files",
-	"common.instructions.orderBy.arrowKeys": "List with movable items. Use the arrow keys to move them.",
+	"common.instructions.orderBy.arrowKeys": "The items in this list can be moved using the arrow keys.",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",

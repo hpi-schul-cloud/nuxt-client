@@ -45,8 +45,7 @@ export default {
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
-	"common.instructions.orderBy.arrowKeys":
-		"Список з елементами, які можна переміщувати. Використовуйте клавіші зі стрілками для переміщення.",
+	"common.instructions.orderBy.arrowKeys": "Елементи цього списку можна переміщати за допомогою клавіш зі стрілками.",
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
