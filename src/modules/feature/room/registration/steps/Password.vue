@@ -7,9 +7,9 @@
 		Die folgenden Daten hat eine Lehrkraft oder ein Schul-Admin eingetragen (falls Anpassungen notwendig sind, bitte an
 		die entsprechende Person wenden):
 	</p>
-	<VTextField readonly :label="t('common.labels.firstName')" model-value="Vorname" />
-	<VTextField readonly :label="t('common.labels.lastName')" model-value="Nachname" />
-	<VTextField readonly :label="t('common.labels.email')" model-value="Email" />
+	<VTextField readonly :label="t('common.labels.firstName')" model-value="Vorname" data-testid="first-name" />
+	<VTextField readonly :label="t('common.labels.lastName')" model-value="Nachname" data-testid="last-name" />
+	<VTextField readonly :label="t('common.labels.email')" model-value="Email" data-testid="email" />
 
 	<p class="font-weight-bold mt-4">Bitte ein Passwort vergeben</p>
 	<ul id="password-instructions" class="pl-4">
@@ -19,12 +19,13 @@
 	</ul>
 	<VTextField
 		aria-describedby="password-instructions"
+		data-testid="password"
 		counter
 		type="password"
 		:label="t('common.labels.password')"
 		:rules="passwordRules"
 	/>
-	<VTextField type="password" label="Passwort wiederholen" />
+	<VTextField data-testid="confirm-password" type="password" label="Passwort wiederholen" />
 </template>
 
 <script setup lang="ts">
