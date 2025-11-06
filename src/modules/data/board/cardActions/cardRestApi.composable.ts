@@ -220,11 +220,17 @@ export const useCardRestApi = () => {
 
 	const duplicateCardRequest = async (payload: DuplicateCardRequestPayload) => {
 		const card = cardStore.getCard(payload.cardId);
+		// TODO: Why not if (!card) ?
 		if (card === undefined) return;
+		boardStore.duplicateCardStart({ cardId: payload.cardId, height: card.height });
+
+		// TODO: Remove delay after testing
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 
 		try {
 			const duplicatedCard = await duplicateCardCall(payload.cardId);
 
+			// TODO: unnecessary if?
 			if (duplicatedCard.id) {
 				boardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
 				cardStore.duplicateCardSuccess({ cardId: payload.cardId, duplicatedCard, isOwnAction: true });
