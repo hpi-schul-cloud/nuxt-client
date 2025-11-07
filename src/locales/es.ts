@@ -1563,7 +1563,6 @@ export default {
 		"La contraseña debe contener al menos un número.",
 	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
 		"La contraseña debe contener al menos un carácter especial.",
-	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Por favor, repite la contraseña.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Las contraseñas no coinciden.",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",

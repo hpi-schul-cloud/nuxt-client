@@ -1538,7 +1538,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.number": "Пароль повинен містити щонайменше одну цифру.",
 	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
 		"Пароль повинен містити щонайменше один спеціальний символ.",
-	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Будь ласка, повторіть пароль.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Паролі не співпадають.",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",

@@ -1530,7 +1530,6 @@ export default {
 		"The password must contain at least one number.",
 	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
 		"The password must contain at least one special character.",
-	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Please confirm the password.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "The passwords do not match.",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",

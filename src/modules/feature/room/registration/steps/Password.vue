@@ -13,7 +13,7 @@
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter") }}</li>
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters") }}</li>
 	</ul>
-	<div class="d-flex ga-6 mt-4" :class="{ 'flex-column': xs }">
+	<div class="d-flex mt-4" :class="{ 'flex-column ga-4': xs, 'ga-6': !xs }">
 		<VTextField
 			v-model="password"
 			aria-describedby="password-instructions"
@@ -50,7 +50,7 @@ import {
 	isOfMinLength,
 	isRequired,
 } from "@util-validators";
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VTextField } from "vuetify/components";
@@ -72,7 +72,6 @@ const passwordRules = computed(() => [
 ]);
 
 const passwordConfirmationRules = computed(() => [
-	isRequired(t("pages.registrationExternalMembers.steps.password.validation.confirmPassword")),
 	(value: string) => {
 		if (value !== password.value) {
 			return t("pages.registrationExternalMembers.steps.password.validation.passwordsMatch");
@@ -81,9 +80,10 @@ const passwordConfirmationRules = computed(() => [
 	},
 ]);
 
-const onUpdatePassword = () => {
+const onUpdatePassword = async () => {
 	if (confirmPassword.value === "") return;
-	confirmPasswordField.value?.validate();
+	await nextTick();
+	await confirmPasswordField.value?.validate();
 };
 </script>
 

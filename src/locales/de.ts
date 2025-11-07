@@ -1552,7 +1552,6 @@ export default {
 		"Das Passwort muss mindestens eine Zahl enthalten.",
 	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
 		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Bitte das Passwort wiederholen.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
