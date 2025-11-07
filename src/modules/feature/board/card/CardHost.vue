@@ -21,7 +21,7 @@
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
-					<CardSkeleton :height="height" />
+					<CardSkeleton :height />
 				</template>
 				<template v-if="card">
 					<CardTitle
@@ -76,7 +76,7 @@
 			</VCard>
 		</CardHostInteractionHandler>
 		<VCard v-if="isDuplicating" class="mt-3">
-			<CardSkeleton :height="height" />
+			<CardSkeleton :height />
 		</VCard>
 
 		<!-- Detail View -->
