@@ -79,7 +79,6 @@ const setFocusOnEdit = async () => {
 };
 
 watch(modelValue, (newValue) => {
-	console.log("modelValue changed:", newValue);
 	const inputIsValid = v$.value.modelValue.$errors.length === 0;
 
 	if (newValue !== props.value && inputIsValid) {
