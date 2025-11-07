@@ -10,7 +10,7 @@
 			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
-						<h2 :id="`step-heading-${step.id}`" class="mb-4">{{ step.heading }}</h2>
+						<h2 :id="`step-heading-${step.id}`" class="mb-4 heading" :tabindex="-1">{{ step.heading }}</h2>
 						<LanguageSelection
 							v-if="step.value === RegistrationSteps.LanguageSelection"
 							:selected-language="lang"
@@ -127,3 +127,8 @@ const steps = computed(() => [
 	},
 ]);
 </script>
+<style scoped>
+.heading:focus {
+	outline: none;
+}
+</style>
