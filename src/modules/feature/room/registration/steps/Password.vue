@@ -7,8 +7,10 @@
 		Die folgenden Daten hat eine Lehrkraft oder ein Schul-Admin eingetragen (falls Anpassungen notwendig sind, bitte an
 		die entsprechende Person wenden):
 	</p>
-	<VTextField readonly :label="t('common.labels.firstName')" model-value="Vorname" data-testid="first-name" />
-	<VTextField readonly :label="t('common.labels.lastName')" model-value="Nachname" data-testid="last-name" />
+	<div class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
+		<VTextField readonly :label="t('common.labels.firstName')" model-value="Vorname" data-testid="first-name" />
+		<VTextField readonly :label="t('common.labels.lastName')" model-value="Nachname" data-testid="last-name" />
+	</div>
 	<VTextField readonly :label="t('common.labels.email')" model-value="Email" data-testid="email" />
 
 	<p class="font-weight-bold mt-4">Bitte ein Passwort vergeben</p>
@@ -17,23 +19,28 @@
 		<li>davon jeweils mindestens eine Zahl und ein Sonderzeichen</li>
 		<li>erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \ ; : , . # + * ~ -</li>
 	</ul>
-	<VTextField
-		v-model="password"
-		aria-describedby="password-instructions"
-		autocomplete="new-password"
-		data-testid="password"
-		counter
-		type="password"
-		:label="t('common.labels.password')"
-		:rules="passwordRules"
-	/>
-	<VTextField
-		data-testid="confirm-password"
-		autocomplete="new-password"
-		type="password"
-		label="Passwort wiederholen"
-		:rules="passwordConfirmationRules"
-	/>
+	<div class="d-flex ga-6 mt-4" :class="{ 'flex-column': xs }">
+		<VTextField
+			v-model="password"
+			aria-describedby="password-instructions"
+			autocomplete="new-password"
+			data-testid="password"
+			class="flex-fill"
+			type="password"
+			:width="xs ? '100%' : '50%'"
+			:label="t('common.labels.password')"
+			:rules="passwordRules"
+		/>
+		<VTextField
+			data-testid="confirm-password"
+			autocomplete="new-password"
+			class="flex-fill"
+			type="password"
+			label="Passwort wiederholen"
+			:width="xs ? '100%' : '50%'"
+			:rules="passwordConfirmationRules"
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -47,9 +54,11 @@ import {
 } from "@util-validators";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 import { VTextField } from "vuetify/components";
 
 const { t } = useI18n();
+const { xs } = useDisplay();
 const password = defineModel<string>();
 
 const passwordRules = computed(() => [
