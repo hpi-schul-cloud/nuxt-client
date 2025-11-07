@@ -128,6 +128,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 	};
 
 	return {
+		getConnectedSocket,
 		emitOnSocket,
 		emitWithAck,
 		disconnectSocket,
