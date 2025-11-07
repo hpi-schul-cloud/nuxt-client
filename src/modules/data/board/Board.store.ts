@@ -29,7 +29,7 @@ import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardActions/cardActionPayload.types";
-import { CardSkeletonResponse, ColumnResponse } from "@/serverApi/v3";
+import { ColumnResponse } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { useAppStore } from "@data-app";
@@ -134,25 +134,13 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 	};
 
-	const duplicateCardStart = (payload: CardSkeletonResponse) => {
-		const { cardId, height } = payload;
-
-		const { columnIndex, cardIndex } = getCardLocation(cardId) ?? { columnIndex: 0, cardIndex: 0 };
-
-		board.value?.columns?.[columnIndex]?.cards?.splice(cardIndex + 1, 0, {
-			// TODO: Must the temporary ID be unique?
-			cardId: `temporaryFakeId`,
-			height: height,
-		});
-	};
-
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		if (!board.value) return;
 
 		const { cardId, duplicatedCard } = payload;
 		const { columnIndex, cardIndex } = getCardLocation(cardId) ?? { columnIndex: 0, cardIndex: 0 };
 
-		board.value?.columns?.[columnIndex]?.cards?.splice(cardIndex + 1, 1, {
+		board.value?.columns?.[columnIndex]?.cards?.splice(cardIndex + 1, 0, {
 			cardId: duplicatedCard.id,
 			height: duplicatedCard.height,
 		});
@@ -405,7 +393,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		deleteBoardRequest,
 		deleteBoardSuccess,
 		duplicateCardSuccess,
-		duplicateCardStart,
 		deleteCardSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,
