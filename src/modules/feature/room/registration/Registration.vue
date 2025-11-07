@@ -11,7 +11,7 @@
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
 						<VForm ref="stepForms">
-							<h2 id="language-heading" class="mb-10">{{ step.subtitle }}</h2>
+							<h2 :id="`step-heading-${step.id}`" class="mb-10" tabindex="-1">{{ step.subtitle }}</h2>
 							<LanguageSelection
 								v-if="step.value === 1"
 								:selected-language="lang"
@@ -51,7 +51,7 @@ import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
 import { LanguageType } from "@/serverApi/v3";
 import { useRegistration } from "@data-room";
-import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VForm } from "vuetify/components";
@@ -87,6 +87,10 @@ const onContinue = async () => {
 		return;
 	}
 	stepValue.value += 1;
+	await nextTick();
+
+	const heading = document.getElementById(`step-heading-${steps.value[stepValue.value - 1].id}`);
+	heading?.focus();
 };
 
 onMounted(() => {
@@ -98,27 +102,37 @@ const steps = computed(() => [
 		value: 1,
 		title: t("common.labels.language"),
 		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
+		id: "language",
 	},
-	{ value: 2, title: t("common.labels.welcome"), subtitle: t("common.labels.welcome") },
+	{ value: 2, title: t("common.labels.welcome"), subtitle: t("common.labels.welcome"), id: "welcome" },
 	{
 		value: 3,
 		title: t("common.labels.password"),
 		subtitle: t("pages.registrationExternalMembers.steps.password.subtitle"),
+		id: "password",
 	},
 	{
 		value: 4,
 		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
 		subtitle: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+		id: "consent",
 	},
 	{
 		value: 5,
 		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
 		subtitle: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
+		id: "confirmation",
 	},
 	{
 		value: 6,
 		title: t("pages.registrationExternalMembers.steps.registration.title"),
 		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
+		id: "registration",
 	},
 ]);
 </script>
+<style scoped>
+h2:focus {
+	outline: none;
+}
+</style>
