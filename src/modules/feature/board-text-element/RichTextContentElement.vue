@@ -8,12 +8,12 @@
 		<RichTextContentElementEdit
 			v-if="isEditMode"
 			:autofocus="autofocus"
-			:value="modelValue.text"
-			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			:column-index="columnIndex"
-			@update:value="onUpdateElement"
-			@delete:element="onDeleteElement"
+			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
+			:element="element"
+			:is-edit-mode="isEditMode"
 			@blur="onBlur"
+			@delete:element="onDeleteElement"
 			@keyup.capture="onKeyUp"
 		/>
 	</div>
@@ -24,7 +24,7 @@ import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { RichTextElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardFocusHandler } from "@data-board";
 import { computed, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
@@ -39,26 +39,18 @@ const props = defineProps({
 
 const emit = defineEmits(["delete:element"]);
 
-const { modelValue } = useContentElementState(props);
 const { ensurePoliteNotifications } = useAriaLiveNotifier();
 
-const autofocus = ref(false);
 const element = toRef(props, "element");
+
+const autofocus = ref(false);
 useBoardFocusHandler(element.value.id, ref(null), () => {
 	autofocus.value = true;
 });
 
-const onDeleteElement = () => {
-	emit("delete:element", element.value.id);
-};
+const onBlur = () => (autofocus.value = false);
 
-const onUpdateElement = (text: string) => {
-	modelValue.value.text = text;
-};
-
-const onBlur = () => {
-	autofocus.value = false;
-};
+const onDeleteElement = () => emit("delete:element", element.value.id);
 
 const onKeyUp = () => ensurePoliteNotifications();
 

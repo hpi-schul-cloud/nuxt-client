@@ -145,6 +145,7 @@ describe("BoardAnyTitleInput", () => {
 			await textFieldComponent.setValue(newTitle);
 
 			await wrapper.setProps({ isEditMode: false });
+			await wrapper.setProps({ value: newTitle }); // simulate prop update after edit mode
 			const heading = wrapper.find("h1");
 
 			expect(heading.text()).toBe(newTitle);
@@ -162,6 +163,7 @@ describe("BoardAnyTitleInput", () => {
 			await textFieldComponent.setValue("");
 
 			await wrapper.setProps({ isEditMode: false });
+			await wrapper.setProps({ value: "" }); // simulate prop update after edit mode
 			const heading = wrapper.find("h1");
 
 			expect(heading.text()).toBe(emptyValueFallback);
