@@ -1,5 +1,6 @@
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
+import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { CardResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
@@ -212,9 +213,8 @@ describe("CardHost", () => {
 				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 
 				await duplicateButton.trigger("click");
-				await wrapper.vm.$nextTick();
 
-				const cardSkeletons = wrapper.findAllComponents({ name: "CardSkeleton" });
+				const cardSkeletons = wrapper.findAllComponents(CardSkeleton);
 				expect(cardSkeletons).toHaveLength(1);
 			});
 		});
