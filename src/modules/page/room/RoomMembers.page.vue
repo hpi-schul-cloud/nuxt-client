@@ -40,7 +40,7 @@
 		</template>
 
 		<VContainer v-if="isLoading">
-			<VSkeletonLoader type="table" class="mt-6" />
+			<VSkeletonLoader v-if="canViewRoom" type="table" class="mt-6" />
 		</VContainer>
 
 		<VTabsWindow v-else v-model="activeTab" class="room-members-tabs-window" :class="{ 'mt-12': canAddRoomMembers }">
@@ -106,7 +106,7 @@ const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } = useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks, canViewRoom } = useRoomAuthorization();
 
 const { isInvitationDialogOpen, invitationStep } = storeToRefs(useRoomInvitationLinkStore());
 
@@ -225,10 +225,14 @@ const onLeaveRoom = async () => {
 
 onMounted(async () => {
 	activeTab.value = Object.values(Tab).includes(props.tab) ? props.tab : Tab.Members;
-
 	const roomId = route.params.id.toString();
+
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
+	}
+	if (canViewRoom.value === false) {
+		router.replace("/rooms");
+		return;
 	}
 	await fetchMembers();
 });
