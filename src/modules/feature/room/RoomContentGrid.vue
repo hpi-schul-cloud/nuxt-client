@@ -11,7 +11,8 @@
 	>
 		<template #item="{ element, index }">
 			<RoomContentGridItem
-				class="draggable user-select-none room-content-grid-item cursor-grab"
+				class="draggable user-select-none room-content-grid-item"
+				:class="{ 'cursor-grab': canEditRoomContent }"
 				:board="element"
 				:index
 				@contextmenu.prevent
