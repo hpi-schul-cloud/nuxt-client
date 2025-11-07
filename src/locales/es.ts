@@ -86,6 +86,7 @@ export default {
 	"common.labels.partial": "parcial",
 	"common.labels.password.new": "Nueva contraseña",
 	"common.labels.password": "Contraseña",
+	"common.labels.password.confirmation": "Confirmar contraseña",
 	"common.labels.readmore": "Leer más",
 	"common.labels.register": "Registrarse",
 	"common.labels.registration": "Registro",
@@ -1540,6 +1541,30 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.subtitle": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.subtitle": "Por favor seleccione su idioma",
 	"pages.registrationExternalMembers.steps.password.subtitle": "Establecer contraseña",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"La {instance} almacena los datos de los usuarios de forma segura y no los comparte con terceros. El tratamiento de los datos se realiza conforme a los altos requisitos legales de protección de datos.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"Los siguientes datos han sido introducidos por un docente o un administrador escolar (si es necesario realizar ajustes, por favor, dirígete a la persona correspondiente):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Por favor, establece una contraseña",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"mínimo 8 caracteres, una letra mayúscula y una minúscula",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"debe contener al menos un número y un carácter especial",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"los caracteres especiales permitidos son: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Por favor, introduce una contraseña.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"La contraseña debe tener al menos 8 caracteres.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"La contraseña debe contener al menos una letra mayúscula.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"La contraseña debe contener al menos una letra minúscula.",
+	"pages.registrationExternalMembers.steps.password.validation.number":
+		"La contraseña debe contener al menos un número.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"La contraseña debe contener al menos un carácter especial.",
+	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Por favor, repite la contraseña.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Las contraseñas no coinciden.",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",

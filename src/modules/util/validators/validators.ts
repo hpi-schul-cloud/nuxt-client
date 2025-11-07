@@ -135,11 +135,7 @@ export const hasNumber: FormValidatorFn<string> = (errMsg) => (value) => {
  * Checks if given value has min one special character
  */
 export const hasSpecialCharacter: FormValidatorFn<string> = (errMsg) => (value) => {
-	// TODO: clarify which special characters are allowed
-	// according to legacy client: ! § $ % & ( ) = ? ; : , . # + * ~ -
-	// according to figma: ! § $ % / ( ) = ? \ ; : , . # + * ~ -
-	// password language key legacy: !§$%&/()=?\\;:,.#+*~-
-	if (!/[!§$%&()=?;:,.#+*~-]/.test(value)) {
+	if (!/[!§$%&/()=?\\;:,.#+*~-]/.test(value)) {
 		return errMsg;
 	}
 	return true;

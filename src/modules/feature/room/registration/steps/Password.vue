@@ -1,23 +1,17 @@
 <template>
-	<p>
-		Die dBildungscloud bewahrt die Nutzenden-Daten sicher auf und gibt sie nicht an Dritte weiter. Die Verarbeitung der
-		Daten erfolgt entsprechend der hohen gesetzlichen Datenschutz-Anforderungen.
-	</p>
-	<p>
-		Die folgenden Daten hat eine Lehrkraft oder ein Schul-Admin eingetragen (falls Anpassungen notwendig sind, bitte an
-		die entsprechende Person wenden):
-	</p>
+	<p>{{ t("pages.registrationExternalMembers.steps.password.firstParagraph", { instance }) }}</p>
+	<p>{{ t("pages.registrationExternalMembers.steps.password.secondParagraph") }}</p>
 	<div class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
 		<VTextField readonly :label="t('common.labels.firstName')" model-value="Vorname" data-testid="first-name" />
 		<VTextField readonly :label="t('common.labels.lastName')" model-value="Nachname" data-testid="last-name" />
 	</div>
 	<VTextField readonly :label="t('common.labels.email')" model-value="Email" data-testid="email" />
 
-	<p class="font-weight-bold mt-4">Bitte ein Passwort vergeben</p>
+	<p class="font-weight-bold mt-4">{{ t("pages.registrationExternalMembers.steps.password.setPassword") }}</p>
 	<ul id="password-instructions" class="pl-4">
-		<li>mindestens 8 Zeichen mit Groß-und Kleinschreibung</li>
-		<li>davon jeweils mindestens eine Zahl und ein Sonderzeichen</li>
-		<li>erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \ ; : , . # + * ~ -</li>
+		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase") }}</li>
+		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter") }}</li>
+		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters") }}</li>
 	</ul>
 	<div class="d-flex ga-6 mt-4" :class="{ 'flex-column': xs }">
 		<VTextField
@@ -36,7 +30,7 @@
 			autocomplete="new-password"
 			class="flex-fill"
 			type="password"
-			label="Passwort wiederholen"
+			:label="t('common.labels.password.confirmation')"
 			:width="xs ? '100%' : '50%'"
 			:rules="passwordConfirmationRules"
 		/>
@@ -44,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { useEnvConfig } from "@data-env";
 import {
 	hasLowercaseLetter,
 	hasNumber,
@@ -60,21 +55,22 @@ import { VTextField } from "vuetify/components";
 const { t } = useI18n();
 const { xs } = useDisplay();
 const password = defineModel<string>();
+const instance = computed(() => useEnvConfig().value.SC_TITLE);
 
 const passwordRules = computed(() => [
-	isRequired("Bitte ein Passwort eingeben"),
-	isOfMinLength(8)("Das Passwort muss mindestens 8 Zeichen lang sein."),
-	hasUppercaseLetter("Das Passwort muss mindestens einen Großbuchstaben enthalten."),
-	hasLowercaseLetter("Das Passwort muss mindestens einen Kleinbuchstaben enthalten."),
-	hasNumber("Das Passwort muss mindestens eine Zahl enthalten."),
-	hasSpecialCharacter("Das Passwort muss mindestens ein Sonderzeichen enthalten."),
+	isRequired(t("pages.registrationExternalMembers.steps.password.validation.required")),
+	isOfMinLength(8)(t("pages.registrationExternalMembers.steps.password.validation.minLength")),
+	hasUppercaseLetter(t("pages.registrationExternalMembers.steps.password.validation.upperCase")),
+	hasLowercaseLetter(t("pages.registrationExternalMembers.steps.password.validation.lowerCase")),
+	hasNumber(t("pages.registrationExternalMembers.steps.password.validation.number")),
+	hasSpecialCharacter(t("pages.registrationExternalMembers.steps.password.validation.specialCharacter")),
 ]);
 
 const passwordConfirmationRules = computed(() => [
-	isRequired("Bitte das Passwort wiederholen"),
+	isRequired(t("pages.registrationExternalMembers.steps.password.validation.confirmPassword")),
 	(value: string) => {
 		if (value !== password.value) {
-			return "Die Passwörter stimmen nicht überein.";
+			return t("pages.registrationExternalMembers.steps.password.validation.passwordsMatch");
 		}
 		return true;
 	},

@@ -84,6 +84,7 @@ export default {
 	"common.labels.partial": "partial",
 	"common.labels.password.new": "New password",
 	"common.labels.password": "Password",
+	"common.labels.password.confirmation": "Confirm password",
 	"common.labels.readmore": "Read more",
 	"common.labels.register": "Register",
 	"common.labels.registration": "Registration",
@@ -1507,6 +1508,30 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.subtitle": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.subtitle": "Please select your language",
 	"pages.registrationExternalMembers.steps.password.subtitle": "Set password",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"The {instance} stores user data securely and does not share it with third parties. Data is processed in accordance with strict legal data protection requirements.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"The following data has been entered by a teacher or school administrator (if adjustments are necessary, please contact the relevant person):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Please set a password",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"at least 8 characters, one uppercase and one lowercase letter",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"at least one number and one special character",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"allowed special characters are: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Please enter a password.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"The password must be at least 8 characters long.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"The password must contain at least one uppercase letter.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"The password must contain at least one lowercase letter.",
+	"pages.registrationExternalMembers.steps.password.validation.number":
+		"The password must contain at least one number.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"The password must contain at least one special character.",
+	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Please confirm the password.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "The passwords do not match.",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",

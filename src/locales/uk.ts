@@ -86,6 +86,7 @@ export default {
 	"common.labels.partial": "частковий",
 	"common.labels.password.new": "Новий пароль",
 	"common.labels.password": "Пароль",
+	"common.labels.password.confirmation": "Підтвердження пароля",
 	"common.labels.readmore": "Додаткові відомості",
 	"common.labels.register": "Реєстрація",
 	"common.labels.registration": "Реєстрація",
@@ -1516,6 +1517,29 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.subtitle": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.subtitle": "Будь ласка, виберіть свою мову",
 	"pages.registrationExternalMembers.steps.password.subtitle": "Встановіть пароль",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"{instance} надійно зберігає дані користувачів і не передає їх третім особам. Обробка даних здійснюється відповідно до високих законодавчих вимог щодо захисту даних.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"Наступні дані були введені вчителем або адміністратором школи (якщо потрібні зміни, будь ласка, зверніться до відповідної особи):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Будь ласка, задайте пароль",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"мінімум 8 символів, одна велика та одна мала буква",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"мінімум одна цифра та один спеціальний символ",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"дозволені спеціальні символи: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Будь ласка, введіть пароль.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"Пароль повинен містити щонайменше 8 символів.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"Пароль повинен містити щонайменше одну велику літеру.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"Пароль повинен містити щонайменше одну малу літеру.",
+	"pages.registrationExternalMembers.steps.password.validation.number": "Пароль повинен містити щонайменше одну цифру.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"Пароль повинен містити щонайменше один спеціальний символ.",
+	"pages.registrationExternalMembers.steps.password.validation.confirmPassword": "Будь ласка, повторіть пароль.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Паролі не співпадають.",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
