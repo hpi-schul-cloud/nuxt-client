@@ -14,6 +14,7 @@
 				class="draggable user-select-none room-content-grid-item cursor-grab"
 				:board="element"
 				:index
+				@contextmenu.prevent
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 			/>
