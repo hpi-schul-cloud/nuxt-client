@@ -86,7 +86,6 @@ const onStepperClick = (value: RegistrationSteps) => {
 
 onMounted(() => {
 	initializeLanguage();
-	focusHeading();
 });
 
 const steps = computed(() => [
