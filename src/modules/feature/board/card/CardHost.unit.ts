@@ -204,6 +204,19 @@ describe("CardHost", () => {
 
 				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
 			});
+
+			it("should show card skeleton of duplicated card", async () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+
+				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+
+				await duplicateButton.trigger("click");
+				await wrapper.vm.$nextTick();
+
+				const cardSkeletons = wrapper.findAllComponents({ name: "CardSkeleton" });
+				expect(cardSkeletons).toHaveLength(1);
+			});
 		});
 
 		describe("when users clicks share link menu", () => {
