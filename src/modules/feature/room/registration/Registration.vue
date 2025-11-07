@@ -74,12 +74,19 @@ const onUpdateSelectedLanguage = (value: string) => {
 
 const stepValue = ref(RegistrationSteps.LanguageSelection);
 
+const focusHeading = () => {
+	const headingElement = document.getElementById(`step-heading-${stepValue.value - 1}`);
+	headingElement?.focus();
+};
+
 const onStepperClick = (value: RegistrationSteps) => {
 	stepValue.value = value;
+	focusHeading();
 };
 
 onMounted(() => {
 	initializeLanguage();
+	focusHeading();
 });
 
 const steps = computed(() => [
