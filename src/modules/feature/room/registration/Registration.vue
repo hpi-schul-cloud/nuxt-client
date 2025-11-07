@@ -34,7 +34,7 @@
 					<VBtn
 						variant="flat"
 						color="primary"
-						data-testid="registiration-continue-button"
+						data-testid="registration-continue-button"
 						:disabled="stepValue === steps.length"
 						@click="onContinue"
 					>
