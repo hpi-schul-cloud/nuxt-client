@@ -13,10 +13,12 @@ import { useI18n } from "vue-i18n";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
+const dispatchHandlers = Array<(action: Action) => void>();
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
 
 export const useSocketConnection = (dispatch: (action: Action) => void, options?: { isInitialConnection: boolean }) => {
+	dispatchHandlers.push(dispatch);
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { t } = useI18n();
@@ -25,84 +27,86 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 
 	isInitialConnection.value = options?.isInitialConnection !== undefined ? options.isInitialConnection : true;
 
-	if (instance === null) {
-		instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
-			path: "/board-collaboration",
-			withCredentials: true,
-			reconnectionAttempts: 20,
-		});
-
-		instance.on("connect", async function () {
-			logger.log("connected");
-			if (retryCount > 0) {
-				reportBoardError("connect after retry", "Connection restored after retry");
-				retryCount = 0;
-			}
-
-			if (isInitialConnection.value) return;
-			if (timeoutFn.isPending?.value) {
-				timeoutFn.stop();
-				return;
-			}
-			notifySuccess(t("common.notification.connection.restored"));
-
-			if (!(boardStore.board && cardStore.cards)) return;
-			await boardStore.reloadBoard();
-			await cardStore.fetchCardRequest({
-				cardIds: Object.keys(cardStore.cards),
+	const getConnectedSocket = () => {
+		if (instance === null) {
+			instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
+				path: "/board-collaboration",
+				withCredentials: true,
+				reconnectionAttempts: 20,
 			});
-		});
 
-		instance.on("disconnect", (reason, details) => {
-			logger.log("disconnected");
-			logger.log(reason, details);
-			isInitialConnection.value = false;
-			timeoutFn = useTimeoutFn(() => {
-				notifyError(t("error.4500"));
-			}, 1000);
-		});
+			instance.on("connect", async function () {
+				logger.log("connected");
+				if (retryCount > 0) {
+					reportBoardError("connect after retry", "Connection restored after retry");
+					retryCount = 0;
+				}
 
-		instance.on("connect_error", (error: Error) => {
-			const { type, message } = error as unknown as {
-				type: string;
-				message: string;
-			};
+				if (isInitialConnection.value) return;
+				if (timeoutFn.isPending?.value) {
+					timeoutFn.stop();
+					return;
+				}
+				notifySuccess(t("common.notification.connection.restored"));
 
-			reportBoardError("connect_error", message ?? type);
+				if (!(boardStore.board && cardStore.cards)) return;
+				await boardStore.reloadBoard();
+				await cardStore.fetchCardRequest({
+					cardIds: Object.keys(cardStore.cards),
+				});
+			});
 
-			if (retryCount > 20) {
-				reportBoardError("connect_error", "Max reconnection attempts reached");
-				notifyError(t("error.4500"));
-				retryCount = 0;
-				return;
-			}
+			instance.on("disconnect", (reason, details) => {
+				logger.log("disconnected");
+				logger.log(reason, details);
+				isInitialConnection.value = false;
+				timeoutFn = useTimeoutFn(() => {
+					notifyError(t("error.4500"));
+				}, 1000);
+			});
 
-			retryCount++;
-		});
-	}
+			instance.on("connect_error", (error: Error) => {
+				const { type, message } = error as unknown as {
+					type: string;
+					message: string;
+				};
 
-	const socket = instance;
+				reportBoardError("connect_error", message ?? type);
 
-	socket.onAny((event, ...args) => {
-		dispatch({ type: event, payload: args[0] });
-	});
+				if (retryCount > 20) {
+					reportBoardError("connect_error", "Max reconnection attempts reached");
+					notifyError(t("error.4500"));
+					retryCount = 0;
+					return;
+				}
+
+				retryCount++;
+			});
+
+			instance.onAny((event, ...args) => {
+				dispatchHandlers.forEach((handler) => handler({ type: event, payload: args[0] }));
+			});
+		}
+		if (!instance.connected) {
+			instance.connect();
+		}
+
+		return instance;
+	};
 
 	const emitOnSocket = (action: string, data: unknown) => {
-		if (!socket.connected) {
-			socket.connect();
-		}
+		const socket = getConnectedSocket();
 		socket.emit(action, data);
 	};
 
 	const emitWithAck = (action: string, data: unknown) => {
-		if (!socket.connected) {
-			socket.connect();
-		}
+		const socket = getConnectedSocket();
 		return socket.timeout(30000).emitWithAck(action, data);
 	};
 
 	const disconnectSocket = () => {
-		socket.disconnect();
+		if (!instance) return;
+		instance.disconnect();
 		isInitialConnection.value = true;
 		if (timeoutFn.isPending.value) timeoutFn.stop();
 	};
