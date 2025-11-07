@@ -23,7 +23,7 @@
 	</template>
 	<template v-else>
 		<component :is="`h${headingLevel}`" class="title" :class="scope === 'board' ? 'board-title' : 'other-title'">
-			{{ modelValue?.trim() ? modelValue : emptyValueFallback }}
+			{{ externalValue?.trim() ? externalValue : emptyValueFallback }}
 		</component>
 	</template>
 </template>
@@ -33,7 +33,7 @@ import { useInlineEditInteractionHandler } from "@util-board";
 import { containsOpeningTagFollowedByString } from "@util-validators";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
-import { computed, nextTick, onMounted, ref, unref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, toRef, unref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/components";
 
@@ -59,6 +59,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const modelValue = ref("");
+const externalValue = toRef(props, "value");
 
 const internalIsFocused = ref(false);
 
@@ -78,6 +79,7 @@ const setFocusOnEdit = async () => {
 };
 
 watch(modelValue, (newValue) => {
+	console.log("modelValue changed:", newValue);
 	const inputIsValid = v$.value.modelValue.$errors.length === 0;
 
 	if (newValue !== props.value && inputIsValid) {
@@ -107,10 +109,8 @@ watch(
 		}
 
 		if (newVal && !oldVal) {
-			const hasValue = modelValue.value && modelValue.value.trim().length > 0;
-			if (!hasValue && props.emptyValueFallback.trim().length > 0) {
-				modelValue.value = props.emptyValueFallback;
-			}
+			const text = externalValue.value.length > 0 ? externalValue.value : props.emptyValueFallback;
+			modelValue.value = text;
 
 			await nextTick();
 			await setFocusOnEdit();
