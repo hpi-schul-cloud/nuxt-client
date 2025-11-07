@@ -19,16 +19,19 @@
 			aria-describedby="password-instructions"
 			autocomplete="new-password"
 			data-testid="password"
-			class="flex-fill"
+			class="flex-fill password-error-message"
 			type="password"
 			:width="xs ? '100%' : '50%'"
 			:label="t('common.labels.password')"
 			:rules="passwordRules"
+			@update:model-value="onUpdatePassword"
 		/>
 		<VTextField
+			ref="confirmPasswordField"
+			v-model="confirmPassword"
 			data-testid="confirm-password"
 			autocomplete="new-password"
-			class="flex-fill"
+			class="flex-fill password-error-message"
 			type="password"
 			:label="t('common.labels.password.confirmation')"
 			:width="xs ? '100%' : '50%'"
@@ -47,7 +50,7 @@ import {
 	isOfMinLength,
 	isRequired,
 } from "@util-validators";
-import { computed } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VTextField } from "vuetify/components";
@@ -56,6 +59,8 @@ const { t } = useI18n();
 const { xs } = useDisplay();
 const password = defineModel<string>();
 const instance = computed(() => useEnvConfig().value.SC_TITLE);
+const confirmPasswordField = useTemplateRef("confirmPasswordField");
+const confirmPassword = ref("");
 
 const passwordRules = computed(() => [
 	isRequired(t("pages.registrationExternalMembers.steps.password.validation.required")),
@@ -75,4 +80,18 @@ const passwordConfirmationRules = computed(() => [
 		return true;
 	},
 ]);
+
+const onUpdatePassword = () => {
+	if (confirmPassword.value === "") return;
+	confirmPasswordField.value?.validate();
+};
 </script>
+
+<style scoped lang="scss">
+.password-error-message {
+	:deep(.v-input__details) {
+		min-height: 30px;
+		align-items: flex-start;
+	}
+}
+</style>
