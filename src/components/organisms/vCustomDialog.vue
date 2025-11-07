@@ -116,7 +116,7 @@ const closeDialog = () => {
 	emit("dialog-closed");
 };
 
-const checkButtons = (buttonName: string) => props.buttons.some((button) => button == buttonName);
+const checkButtons = (buttonName: string) => props.buttons.some((button) => button === buttonName);
 </script>
 
 <style lang="scss" scoped>
