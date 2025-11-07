@@ -228,9 +228,7 @@ const boardMenuClasses = computed(() => {
 });
 
 const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
-	if (!card.value) return;
-
-	await cardStore.duplicateCard({ cardId: card.value.id });
+	await cardStore.duplicateCard({ cardId: props.cardId });
 });
 
 onMounted(async () => {
