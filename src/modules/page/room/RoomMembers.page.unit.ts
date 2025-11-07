@@ -81,6 +81,7 @@ describe("RoomMembersPage", () => {
 
 		router = createMock<Router>({
 			currentRoute: ref({ query: { tab: "" } }),
+			replace: vi.fn(),
 		});
 		useRouterMock.mockReturnValue(router);
 
@@ -95,7 +96,7 @@ describe("RoomMembersPage", () => {
 			canCreateRoom: computed(() => false),
 			canChangeOwner: computed(() => false),
 			canCopyRoom: computed(() => false),
-			canViewRoom: computed(() => false),
+			canViewRoom: computed(() => true),
 			canEditRoom: computed(() => false),
 			canDeleteRoom: computed(() => false),
 			canLeaveRoom: computed(() => false),
@@ -191,6 +192,27 @@ describe("RoomMembersPage", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
+	});
+
+	describe("when user has no permission to view the room", () => {
+		it("should not render content", () => {
+			roomPermissions.canViewRoom = computed(() => false);
+			const { wrapper } = setup();
+			const wireframe = wrapper.findComponent(DefaultWireframe);
+			expect(wireframe.exists()).toBe(false);
+		});
+
+		it("should not fetch members on mount", () => {
+			roomPermissions.canViewRoom = computed(() => false);
+			const { roomMembersStore } = setup();
+			expect(roomMembersStore.fetchMembers).not.toHaveBeenCalled();
+		});
+
+		it("should replace the route to /rooms", () => {
+			roomPermissions.canViewRoom = computed(() => false);
+			setup();
+			expect(router.replace).toHaveBeenCalledWith("/rooms");
+		});
 	});
 
 	it("should fetch members on mount", () => {
