@@ -1,5 +1,11 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
+	<DefaultWireframe
+		v-if="canViewRoom"
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabAction"
+		@fab:clicked="onFabClick"
+	>
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -40,7 +46,7 @@
 		</template>
 
 		<VContainer v-if="isLoading">
-			<VSkeletonLoader v-if="canViewRoom" type="table" class="mt-6" />
+			<VSkeletonLoader type="table" class="mt-6" />
 		</VContainer>
 
 		<VTabsWindow v-else v-model="activeTab" class="room-members-tabs-window" :class="{ 'mt-12': canAddRoomMembers }">
