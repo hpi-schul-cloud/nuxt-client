@@ -79,13 +79,13 @@ export const useDataTableFilter = (userType: string) => {
 
 	const isDateFiltering = computed(
 		() =>
-			selectedFilterType.value == FilterOption.CREATION_DATE ||
-			selectedFilterType.value == FilterOption.LAST_MIGRATION_ON ||
-			selectedFilterType.value == FilterOption.OBSOLOTE_SINCE
+			selectedFilterType.value === FilterOption.CREATION_DATE ||
+			selectedFilterType.value === FilterOption.LAST_MIGRATION_ON ||
+			selectedFilterType.value === FilterOption.OBSOLOTE_SINCE
 	);
 
 	const isSelectFiltering = computed(
-		() => selectedFilterType.value == FilterOption.CLASSES || selectedFilterType.value == FilterOption.REGISTRATION
+		() => selectedFilterType.value === FilterOption.CLASSES || selectedFilterType.value === FilterOption.REGISTRATION
 	);
 
 	const filterMenuItems = ref<SelectOptionsType[]>([]);
@@ -128,7 +128,7 @@ export const useDataTableFilter = (userType: string) => {
 	};
 
 	const prepareChipTitles = (chipItem: FilterItem) => {
-		if (chipItem[0] == FilterOption.REGISTRATION) {
+		if (chipItem[0] === FilterOption.REGISTRATION) {
 			const statusKeyMap = {
 				[Registration.COMPLETE]: t("pages.administration.students.legend.icon.success"),
 				[Registration.MISSING]: t("utils.adminFilter.consent.label.missing"),
@@ -139,19 +139,20 @@ export const useDataTableFilter = (userType: string) => {
 			return status.join(` ${t("common.words.and")} `);
 		}
 
-		if (chipItem[0] == FilterOption.CLASSES) return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
+		if (chipItem[0] === FilterOption.CLASSES)
+			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
 
-		if (chipItem[0] == FilterOption.CREATION_DATE)
+		if (chipItem[0] === FilterOption.CREATION_DATE)
 			return `${t("utils.adminFilter.date.created")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
 
-		if (chipItem[0] == FilterOption.LAST_MIGRATION_ON)
+		if (chipItem[0] === FilterOption.LAST_MIGRATION_ON)
 			return `${t("utils.adminFilter.lastMigration.title")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
 
-		if (chipItem[0] == FilterOption.OBSOLOTE_SINCE)
+		if (chipItem[0] === FilterOption.OBSOLOTE_SINCE)
 			return `${t("utils.adminFilter.outdatedSince.title")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
