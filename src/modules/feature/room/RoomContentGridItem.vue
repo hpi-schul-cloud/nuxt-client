@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		class="room-content-grid-item"
-		:class="isDraft ? 'opacity-80' : 'bg-surface-light'"
+		:class="isDraft ? 'opacity-80 bg-white' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
 	>
@@ -18,7 +18,7 @@
 			style="max-width: max-content"
 			:data-testid="`board-grid-title-${index}`"
 		>
-			<RouterLink :to="boardPath" class="text-decoration-none" style="color: inherit">
+			<RouterLink tabindex="-1" :to="boardPath" class="text-decoration-none" style="color: inherit">
 				<LineClamp>
 					{{ board.title }}
 				</LineClamp>

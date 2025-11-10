@@ -104,7 +104,7 @@ const fabAction = computed<Fab | undefined>(() =>
 	canEditRoomContent.value
 		? {
 				icon: mdiPlus,
-				title: t("pages.courseRoomDetails.fab.add.board"),
+				title: t("pages.roomDetails.fab.add.board"),
 				dataTestId: "add-content-button",
 			}
 		: undefined
