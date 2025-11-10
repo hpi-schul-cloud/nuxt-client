@@ -258,14 +258,14 @@ export default defineComponent({
 			return roomObject.groupElements !== undefined;
 		},
 		isEmptyGroup(row, col) {
-			return this.findDataByPos(row, col).groupElements?.length == 0;
+			return this.findDataByPos(row, col).groupElements?.length === 0;
 		},
 		openDialog(groupId) {
-			this.groupDialog.groupData = this.rooms.find((item) => item.groupId == groupId);
+			this.groupDialog.groupData = this.rooms.find((item) => item.groupId === groupId);
 			this.groupDialog.isOpen = true;
 		},
 		findDataByPos(row, col) {
-			return this.rooms.find((item) => item.xPosition == col && item.yPosition == row);
+			return this.rooms.find((item) => item.xPosition === col && item.yPosition === row);
 		},
 		onStartDrag(element, pos) {
 			this.draggedElement.from = pos;
@@ -280,9 +280,9 @@ export default defineComponent({
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos)) return;
+			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
-			if (toElementName == "vRoomEmptyAvatar") {
+			if (toElementName === "vRoomEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -295,11 +295,11 @@ export default defineComponent({
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos)) return;
+			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" || this.draggedElementName == "groupItem") &&
-				toElementName == "vRoomAvatar"
+				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "vRoomAvatar"
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
@@ -310,11 +310,11 @@ export default defineComponent({
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
-			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos)) return;
+			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" || this.draggedElementName == "groupItem") &&
-				toElementName == "vRoomGroupAvatar"
+				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "vRoomGroupAvatar"
 			) {
 				this.savePosition();
 			}
@@ -325,8 +325,8 @@ export default defineComponent({
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
 				groupIndex: courseRoomListModule.roomsData
-					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
-					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
+					.find((item) => item.groupId === this.groupDialog.groupData.groupId)
+					.groupElements.findIndex((groupItem) => groupItem.id === element.id),
 			};
 			this.draggedElement.item = element;
 			this.draggedElementName = "groupItem";

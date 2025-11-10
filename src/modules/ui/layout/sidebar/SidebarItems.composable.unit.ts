@@ -59,7 +59,7 @@ describe("SidebarItems Composable", () => {
 	it("should have correct amount of legal links", () => {
 		const { legalLinks } = setup();
 
-		expect(legalLinks.value).toHaveLength(5);
+		expect(legalLinks.value).toHaveLength(6);
 	});
 
 	it("should have correct amount of meta links", () => {
