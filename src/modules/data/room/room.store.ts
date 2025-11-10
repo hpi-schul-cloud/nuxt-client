@@ -1,16 +1,18 @@
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomApiFactory } from "@/serverApi/v3";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { $axios } from "@/utils/api";
+import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { notifyError } from "@data-app";
+import { useI18n } from "vue-i18n";
 
 export const useRoomStore = defineStore("room-store", () => {
+	const { t } = useI18n();
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const rooms = ref<RoomItem[]>([]);
+	const isEmpty = computed(() => rooms.value.length === 0);
 
 	const { execute, isRunning: isLoading } = useSafeTask();
 
@@ -19,66 +21,25 @@ export const useRoomStore = defineStore("room-store", () => {
 		if (success) {
 			rooms.value = result.data.data;
 		} else {
-      notifyError()
+			notifyError(t("common.notifications.errors.notLoaded", { type: t("pages.rooms.title") }));
 		}
-		// rooms.value = (await roomApi.roomControllerGetRooms()).data.data;
-		// const responseError = mapAxiosErrorToResponseError(error);
-
-		// throw createApplicationError(responseError.code);
 	};
 
 	const deleteRoom = async (roomId: string) => {
-		isLoading.value = true;
-		try {
-			await roomApi.roomControllerDeleteRoom(roomId);
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
+		await roomApi.roomControllerDeleteRoom(roomId);
 	};
 
 	const leaveRoom = async (roomId: string) => {
-		isLoading.value = true;
-		try {
-			await roomApi.roomControllerLeaveRoom(roomId);
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
+		await roomApi.roomControllerLeaveRoom(roomId);
 	};
 
 	const copyRoom = async (roomId: string) => {
-		isLoading.value = true;
-		try {
-			const response = await roomApi.roomControllerCopyRoom(roomId);
-			return response.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
+		const response = await roomApi.roomControllerCopyRoom(roomId);
 	};
 
-	const createRoom = async (params: RoomCreateParams): Promise<RoomItem> => {
-		isLoading.value = true;
-		try {
-			return (await roomApi.roomControllerCreateRoom(params)).data;
-		} catch (error) {
-			throw mapAxiosErrorToResponseError(error);
-		} finally {
-			isLoading.value = false;
-		}
+	const createRoom = async (params: RoomCreateParams) => {
+		const response = (await roomApi.roomControllerCreateRoom(params)).data;
 	};
-
-	const isEmpty = computed(() => rooms.value.length === 0);
 
 	return {
 		rooms,
