@@ -7,7 +7,6 @@ import { computed } from "vue";
 export const useRoomAuthorization = () => {
 	const { room } = storeToRefs(useRoomDetailsStore());
 	const { hasPermission } = useAppStore();
-	const { isExpert } = storeToRefs(useAppStore());
 	const roomPermissions = computed(() => room.value?.permissions ?? []);
 
 	const checkRoomPermission = (permission: Permission) => roomPermissions.value.includes(permission);
@@ -25,32 +24,33 @@ export const useRoomAuthorization = () => {
 	const canEditRoomContent = computed(() => checkRoomPermission(Permission.RoomEditContent));
 	const canLeaveRoom = computed(() => checkRoomPermission(Permission.RoomLeaveRoom));
 	const canRemoveRoomMembers = computed(() => checkRoomPermission(Permission.RoomRemoveMembers));
-	const canViewRoom = computed(() => checkRoomPermission(Permission.RoomListContent) && !isExpert.value);
+	const canViewRoom = computed(() => checkRoomPermission(Permission.RoomListContent));
 	const canListDrafts = computed(() => checkRoomPermission(Permission.RoomListDrafts));
 	const canManageVideoconferences = computed(() => checkRoomPermission(Permission.RoomManageVideoconferences));
 	const canSeeAllStudents = hasPermission(Permission.StudentList);
 	const canManageRoomInvitationLinks = computed(
 		() => userCanManageRoomInvitationLinks.value && checkRoomPermission(Permission.RoomManageInvitationlinks)
 	);
-
 	const canAddAllStudents = computed(() => canAddRoomMembers.value && canSeeAllStudents.value);
+	const canSeeMembersList = computed(() => false); // TODO: implement when permission is available
 
 	return {
+		canAddAllStudents,
 		canAddRoomMembers,
 		canChangeOwner,
+		canCopyRoom,
 		canCreateRoom,
 		canDeleteRoom,
-		canCopyRoom,
-		canShareRoom,
 		canEditRoom,
 		canEditRoomContent,
 		canLeaveRoom,
-		canRemoveRoomMembers,
-		canAddAllStudents,
-		canSeeAllStudents,
-		canViewRoom,
-		canManageRoomInvitationLinks,
 		canListDrafts,
+		canManageRoomInvitationLinks,
 		canManageVideoconferences,
+		canRemoveRoomMembers,
+		canSeeAllStudents,
+		canSeeMembersList,
+		canShareRoom,
+		canViewRoom,
 	};
 };

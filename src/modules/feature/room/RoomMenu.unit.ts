@@ -48,6 +48,7 @@ describe("@feature-room/RoomMenu", () => {
 			canListDrafts: computed(() => false),
 			canManageRoomInvitationLinks: computed(() => false),
 			canManageVideoconferences: computed(() => false),
+			canSeeMembersList: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
