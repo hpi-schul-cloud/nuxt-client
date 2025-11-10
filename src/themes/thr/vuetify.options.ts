@@ -5,14 +5,14 @@ import { type ThemeDefinition } from "vuetify";
 const thrTheme: ThemeDefinition = {
 	dark: false,
 	colors: {
-		primary: "#2371CB",
+		primary: "#2370CB",
 		"primary-darken-1": "#1e599c",
 		"primary-lighten": "#e9f1fa",
 		accent: "#f56b00",
 		"on-surface": "#0f3551",
 		"on-background": "#0f3551",
 		"on-white": "#0f3551",
-		"surface-light": "#f3f7fc",
+		"surface-light": "#f2f5f9",
 		"on-surface-light": "#0f3551",
 	},
 };
