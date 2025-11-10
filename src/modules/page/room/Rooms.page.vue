@@ -57,9 +57,8 @@ const fabAction = computed(() => {
 
 	return {
 		icon: mdiPlus,
-		title: t("common.actions.create"),
+		title: t("pages.rooms.fab.title"),
 		to: "/rooms/new",
-		ariaLabel: t("pages.rooms.fab.title"),
 		dataTestId: "fab-add-room",
 	};
 });

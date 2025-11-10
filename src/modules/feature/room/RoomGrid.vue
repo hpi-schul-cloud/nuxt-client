@@ -113,7 +113,7 @@ watch(
 <style scoped>
 .room-grid {
 	display: grid;
-	grid-gap: 10px;
+	grid-gap: 16px;
 	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 

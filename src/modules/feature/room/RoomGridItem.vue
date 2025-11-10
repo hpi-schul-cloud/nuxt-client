@@ -1,5 +1,5 @@
 <template>
-	<VCard class="room-grid-item" :data-testid="`board-grid-item-${index}`">
+	<VCard class="room-grid-item" :data-testid="`board-grid-item-${index}`" variant="elevated">
 		<VCardTitle class="text-body-1" style="max-width: max-content" :data-testid="`board-grid-title-${index}`">
 			<RouterLink :to="roomPath" class="room-link-item text-decoration-none" style="color: inherit">
 				<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" data-testid="room-badge-lock">

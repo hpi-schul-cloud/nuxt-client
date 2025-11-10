@@ -1,27 +1,30 @@
+import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomApiFactory } from "@/serverApi/v3";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { notifyError } from "@data-app";
 
 export const useRoomStore = defineStore("room-store", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const rooms = ref<RoomItem[]>([]);
-	const isLoading = ref(true);
+
+	const { execute, isRunning: isLoading } = useSafeTask();
 
 	const fetchRooms = async () => {
-		isLoading.value = true;
-		try {
-			rooms.value = (await roomApi.roomControllerGetRooms()).data.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
+		const { result, success } = await execute(roomApi.roomControllerGetRooms);
+		if (success) {
+			rooms.value = result.data.data;
+		} else {
+      notifyError()
 		}
+		// rooms.value = (await roomApi.roomControllerGetRooms()).data.data;
+		// const responseError = mapAxiosErrorToResponseError(error);
+
+		// throw createApplicationError(responseError.code);
 	};
 
 	const deleteRoom = async (roomId: string) => {
