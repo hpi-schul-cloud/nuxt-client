@@ -36,16 +36,16 @@ export const useFilterLocalStorage = () => {
 	const state = useStorage("uiState", defaultState);
 
 	const getFilterStorage = () =>
-		userType.value == User.STUDENT
+		userType.value === User.STUDENT
 			? state.value.filter["pages.administration.students.index"]?.query
 			: state.value.filter["pages.administration.teachers.index"]?.query;
 
 	const setFilterState = (val: object) => {
-		if (userType.value == User.STUDENT)
+		if (userType.value === User.STUDENT)
 			state.value.filter["pages.administration.students.index"] = {
 				query: val,
 			};
-		if (userType.value == User.TEACHER)
+		if (userType.value === User.TEACHER)
 			state.value.filter["pages.administration.teachers.index"] = {
 				query: val,
 			};

@@ -91,12 +91,12 @@ export default {
 	},
 	computed: {
 		hasNotifications() {
-			return this.data.groupElements.some((item) => item.notification == true);
+			return this.data.groupElements.some((item) => item.notification === true);
 		},
 		itemSpecs() {
 			return {
-				columnCount: this.device == "large" || this.device == "desktop" ? 3 : 4,
-				maxItem: this.device == "large" || this.device == "desktop" ? 16 : 9,
+				columnCount: this.device === "large" || this.device === "desktop" ? 3 : 4,
+				maxItem: this.device === "large" || this.device === "desktop" ? 16 : 9,
 			};
 		},
 	},
