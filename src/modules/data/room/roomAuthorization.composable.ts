@@ -32,7 +32,7 @@ export const useRoomAuthorization = () => {
 		() => userCanManageRoomInvitationLinks.value && checkRoomPermission(Permission.RoomManageInvitationlinks)
 	);
 	const canAddAllStudents = computed(() => canAddRoomMembers.value && canSeeAllStudents.value);
-	const canSeeMembersList = computed(() => false); // TODO: implement when permission is available
+	const canSeeMembersList = hasPermission(Permission.SchoolListRoomMembers);
 
 	return {
 		canAddAllStudents,
