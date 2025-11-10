@@ -1,12 +1,9 @@
 import RoomGrid from "./RoomGrid.vue";
 import RoomGridItem from "./RoomGridItem.vue";
-import { RoomItem } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { EmptyState } from "@ui-empty-state";
 import { mount, RouterLinkStub } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-import { VSkeletonLoader } from "vuetify/lib/components/index";
 
 vi.mock("@data-room");
 
@@ -29,39 +26,14 @@ describe("@feature-room/RoomGrid", () => {
 		vi.clearAllMocks();
 	});
 
-	it("should render loading state when rooms are loading", () => {
-		const { wrapper } = setup({
-			isLoading: true,
-			isEmpty: false,
-			rooms: [] as Array<RoomItem>,
-		});
-
-		const loader = wrapper.findComponent(VSkeletonLoader);
-		expect(loader.exists()).toBe(true);
-	});
-
-	it("should render empty state when no rooms were found", () => {
-		const { wrapper } = setup({
-			isLoading: false,
-			isEmpty: true,
-			rooms: [] as Array<RoomItem>,
-		});
-
-		const emptyState = wrapper.findComponent(EmptyState);
-		expect(emptyState.exists()).toBe(true);
-		expect(emptyState.props("title")).toBe("pages.rooms.emptyState");
-	});
-
-	it("should render tiles for each room", () => {
+	it("should render grid items for each room", () => {
 		const mockRooms = roomItemFactory.buildList(2);
 
 		const { wrapper } = setup({
-			isLoading: false,
-			isEmpty: false,
 			rooms: mockRooms,
 		});
 
-		const tiles = wrapper.findAllComponents(RoomGridItem);
-		expect(tiles.length).toEqual(2);
+		const gridItems = wrapper.findAllComponents(RoomGridItem);
+		expect(gridItems.length).toEqual(2);
 	});
 });

@@ -3,8 +3,19 @@
 		<template #header>
 			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
+
 		<RoomsWelcomeInfo />
-		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
+
+		<VContainer v-if="isLoading" class="loader">
+			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
+		</VContainer>
+		<EmptyState v-else-if="isEmpty" :title="t('pages.rooms.emptyState')">
+			<template #media>
+				<RoomsEmptyStateSvg />
+			</template>
+		</EmptyState>
+		<RoomGrid v-else :rooms />
+
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
@@ -21,10 +32,12 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { useRoomAuthorization, useRoomsState } from "@data-room";
+import { useRoomAuthorization, useRoomStore } from "@data-room";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -32,7 +45,8 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
+const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
+const { fetchRooms } = useRoomStore();
 const { canCreateRoom } = useRoomAuthorization();
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));

@@ -1,10 +1,11 @@
 import { RoomApiFactory } from "@/serverApi/v3";
-import { RoomItem } from "@/types/room/Room";
+import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-export const useRoomsState = () => {
+export const useRoomStore = defineStore("room-store", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const rooms = ref<RoomItem[]>([]);
@@ -53,12 +54,22 @@ export const useRoomsState = () => {
 		isLoading.value = true;
 		try {
 			const response = await roomApi.roomControllerCopyRoom(roomId);
-			const copyStatus = response.data;
-			return copyStatus;
+			return response.data;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
 			throw createApplicationError(responseError.code);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
+	const createRoom = async (params: RoomCreateParams): Promise<RoomItem> => {
+		isLoading.value = true;
+		try {
+			return (await roomApi.roomControllerCreateRoom(params)).data;
+		} catch (error) {
+			throw mapAxiosErrorToResponseError(error);
 		} finally {
 			isLoading.value = false;
 		}
@@ -71,8 +82,9 @@ export const useRoomsState = () => {
 		isLoading,
 		isEmpty,
 		fetchRooms,
+		createRoom,
 		deleteRoom,
 		leaveRoom,
 		copyRoom,
 	};
-};
+});

@@ -28,14 +28,14 @@ describe("@feature-room/RoomGridItem", () => {
 	};
 
 	it("should render in correct color", () => {
-		const { wrapper } = setup({ room: mockRoom });
+		const { wrapper } = setup({ room: mockRoom, index: 0 });
 
 		const avatar = wrapper.find(".room-color--magenta");
 		expect(avatar.exists()).toStrictEqual(true);
 	});
 
 	it("should compute short title correctly", () => {
-		const { wrapper } = setup({ room: mockRoom });
+		const { wrapper } = setup({ room: mockRoom, index: 0 });
 
 		const shortTitle = wrapper.find("[data-testid=room-short-title]");
 		expect(shortTitle.text()).toStrictEqual("A1");

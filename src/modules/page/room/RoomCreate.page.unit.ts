@@ -1,6 +1,6 @@
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
+import { createTestRoomStore, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRoomCreateState } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -11,22 +11,6 @@ import { useRouter } from "vue-router";
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({
 		push: vi.fn(),
-	}),
-}));
-
-vi.mock("@data-room/RoomCreate.state.ts", () => ({
-	useRoomCreateState: vi.fn().mockReturnValue({
-		createRoom: vi.fn().mockResolvedValue({
-			id: "123",
-			name: "test",
-			color: "blue",
-			features: [],
-		}),
-		roomData: {
-			name: "test-room-data",
-			color: "blue",
-			features: [],
-		},
 	}),
 }));
 
@@ -44,13 +28,13 @@ describe("@pages/RoomCreate.page.vue", () => {
 			},
 		});
 
-		const { createRoom } = useRoomCreateState();
+		const { roomStore } = createTestRoomStore();
 		const roomFormComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
 			router: useRouter(),
-			createRoom,
+			roomStore,
 			roomFormComponent,
 		};
 	};
@@ -65,15 +49,16 @@ describe("@pages/RoomCreate.page.vue", () => {
 	});
 
 	it("should call createRoom with correct parameters on save", async () => {
-		const { createRoom, roomFormComponent } = setup();
+		const { roomStore, roomFormComponent } = setup();
 		roomFormComponent.vm.$emit("save", { room: roomParams });
 		await flushPromises();
-		expect(createRoom).toHaveBeenCalledWith(roomParams);
+		expect(roomStore.createRoom).toHaveBeenCalledWith(roomParams);
 	});
 
-	it("should navigate to 'room-details' with correct room id on save", () => {
-		const { roomFormComponent, router } = setup();
-		roomFormComponent.vm.$emit("save", roomParams);
+	it("should navigate to 'room-details' with correct room id on save", async () => {
+		const { roomFormComponent, router, roomStore } = setup();
+		roomStore.createRoom.mockResolvedValue(roomItemFactory.build({ id: "123" }));
+		await roomFormComponent.vm.$emit("save", roomParams);
 		expect(router.push).toHaveBeenCalledWith({
 			name: "room-details",
 			params: { id: "123" },

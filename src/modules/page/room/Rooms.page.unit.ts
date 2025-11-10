@@ -5,25 +5,25 @@ import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
-import { expectNotification, roomItemFactory } from "@@/tests/test-utils";
+import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRoomAuthorization, useRoomsState } from "@data-room";
+import { useRoomAuthorization } from "@data-room";
 import { RoomGrid } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
+import { EmptyState } from "@ui-empty-state";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
+import { VSkeletonLoader } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouteMock = useRoute as Mock;
 const useRouterMock = useRouter as Mock;
-
-vi.mock("@data-room/Rooms.state");
-const useRoomsStateMock = useRoomsState as Mock;
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -53,7 +53,11 @@ describe("RoomsPage", () => {
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
-	const setup = (routeQuery: RouteLocation["query"] = {}) => {
+	const setup = (
+		routeQuery: RouteLocation["query"] = {},
+		isLoading = false,
+		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })]
+	) => {
 		const copyModule = createModuleMocks(CopyModule);
 		const loadingState = createModuleMocks(LoadingStateModule);
 
@@ -65,19 +69,12 @@ describe("RoomsPage", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
-		const roomItems = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })];
-
-		useRoomsStateMock.mockReturnValue({
-			rooms: ref(roomItems),
-			isLoading: ref(false),
-			isEmpty: ref(false),
-			fetchRooms: vi.fn(),
-			deleteRoom: vi.fn(),
-		});
+		setActivePinia(createTestingPinia());
+		const { roomStore } = createTestRoomStore(isLoading, roomItems);
 
 		const wrapper = mount(RoomsPage, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
@@ -89,6 +86,7 @@ describe("RoomsPage", () => {
 		return {
 			wrapper,
 			router,
+			roomStore,
 		};
 	};
 
@@ -221,6 +219,21 @@ describe("RoomsPage", () => {
 		});
 
 		describe("RoomGrid", () => {
+			it("should render loading state when rooms are loading", () => {
+				const { wrapper } = setup({}, true);
+
+				const loader = wrapper.findComponent(VSkeletonLoader);
+				expect(loader.exists()).toBe(true);
+			});
+
+			it("should render empty state when no rooms were found", () => {
+				const { wrapper } = setup({}, false, []);
+
+				const emptyState = wrapper.findComponent(EmptyState);
+				expect(emptyState.exists()).toBe(true);
+				expect(emptyState.props("title")).toBe("pages.rooms.emptyState");
+			});
+
 			it("should be found in the dom", () => {
 				const { wrapper } = setup();
 				const roomGrid = wrapper.findComponent(RoomGrid);
