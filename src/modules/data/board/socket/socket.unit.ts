@@ -347,4 +347,28 @@ describe("socket.ts", () => {
 			});
 		});
 	});
+
+	describe("when adding multiple handlers", () => {
+		it("should call all handlers on event", async () => {
+			const anotherDispatchMock = vi.fn();
+			await setup();
+
+			useSocketConnection(anotherDispatchMock);
+
+			const { eventCallbacks } = getEventCallbacks() as {
+				[event: string]: (arg?: unknown) => void;
+			};
+
+			const mockPayload = { data: "test" };
+			if (mockSocket?.on !== undefined) {
+				mockSocket.on("connect");
+			}
+
+			expect(dispatchMock).toHaveBeenCalledWith({ type: "connect", payload: undefined });
+			expect(dispatchMock).toHaveBeenCalledWith({ type: "disconnect", payload: mockPayload });
+
+			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: "connect", payload: undefined });
+			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: "disconnect", payload: mockPayload });
+		});
+	});
 });

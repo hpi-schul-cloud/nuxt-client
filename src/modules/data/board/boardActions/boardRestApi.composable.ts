@@ -69,6 +69,13 @@ export const useBoardRestApi = () => {
 		boardStore.setLoading(false);
 	};
 
+	// TODO: remove
+	const killSessionRequest = (payload: FetchBoardRequestPayload): void => {
+		boardStore.setLoading(true);
+		console.log("Killing session for board:", payload.boardId, "not implemented for REST-API");
+		boardStore.setLoading(false);
+	};
+
 	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload) => {
 		try {
 			await courseRoomDetailsModule.deleteBoard(payload.boardId);
@@ -273,6 +280,7 @@ export const useBoardRestApi = () => {
 	};
 
 	return {
+		killSessionRequest, // TODO: remove
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,

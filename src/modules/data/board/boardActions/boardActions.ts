@@ -42,6 +42,11 @@ import { createAction, props } from "@/types/board/ActionFactory";
 
 export const disconnectSocket = createAction("disconnect-socket", props<DisconnectSocketRequestPayload>());
 
+// TODO: remove
+export const killSessionRequest = createAction("kill-session-request", props<FetchBoardRequestPayload>());
+export const killSessionSuccess = createAction("kill-session-success", props<FetchBoardRequestPayload>());
+export const killSessionFailure = createAction("kill-session-failure", props<FetchBoardRequestPayload>());
+
 export const createCardRequest = createAction("create-card-request", props<CreateCardRequestPayload>());
 export const createCardSuccess = createAction("create-card-success", props<CreateCardSuccessPayload>());
 export const createCardFailure = createAction("create-card-failure", props<CreateCardFailurePayload>());

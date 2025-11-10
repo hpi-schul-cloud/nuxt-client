@@ -8,7 +8,7 @@ import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const isInitialConnection = ref(true);
@@ -16,6 +16,7 @@ let instance: Socket | null = null;
 const dispatchHandlers = Array<(action: Action) => void>();
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
+const _connected = ref(false);
 
 export const useSocketConnection = (dispatch: (action: Action) => void, options?: { isInitialConnection: boolean }) => {
 	dispatchHandlers.push(dispatch);
@@ -33,9 +34,11 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 				path: "/board-collaboration",
 				withCredentials: true,
 				reconnectionAttempts: 20,
+				closeOnBeforeunload: true,
 			});
 
 			instance.on("connect", async function () {
+				_connected.value = true;
 				logger.log("connected");
 				if (retryCount > 0) {
 					reportBoardError("connect after retry", "Connection restored after retry");
@@ -57,6 +60,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			});
 
 			instance.on("disconnect", (reason, details) => {
+				_connected.value = false;
 				logger.log("disconnected");
 				logger.log(reason, details);
 				isInitialConnection.value = false;
@@ -65,11 +69,29 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 				}, 1000);
 			});
 
-			instance.on("connect_error", (error: Error) => {
+			instance.on("connect_error", (error: Error & { data?: unknown }) => {
 				const { type, message } = error as unknown as {
 					type: string;
 					message: string;
+					data?: { code?: number; message?: string; status?: number };
 				};
+
+				// TODO: check
+				// Prüfe auf Session-ID-Fehler
+				if (
+					error &&
+					(error.data as unknown) &&
+					(error.data as { code?: number; message?: string; status?: number }).code === 1 &&
+					(error.data as { code?: number; message?: string; status?: number }).message === "Session ID unknown" &&
+					(error.data as { code?: number; message?: string; status?: number }).status === 400
+				) {
+					notifyError(t("error.sessionIdUnknown"));
+					reportBoardError("session_id_unknown", "Session ID unknown - please reload or re-authenticate.");
+					// Optional: Automatisch disconnecten oder neu verbinden
+					disconnectSocket();
+					instance = null;
+					return;
+				}
 
 				reportBoardError("connect_error", message ?? type);
 
@@ -105,8 +127,9 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 	};
 
 	const disconnectSocket = () => {
-		if (!instance) return;
-		instance.disconnect();
+		if (instance && instance.connected) {
+			instance.disconnect();
+		}
 		isInitialConnection.value = true;
 		if (timeoutFn.isPending.value) timeoutFn.stop();
 	};
@@ -127,7 +150,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 		});
 	};
 
+	const connected = computed(() => _connected.value);
+
 	return {
+		connected,
 		getConnectedSocket,
 		emitOnSocket,
 		emitWithAck,
