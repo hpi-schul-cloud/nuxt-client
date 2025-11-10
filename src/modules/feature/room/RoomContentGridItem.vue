@@ -13,12 +13,8 @@
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VCardTitle
-			class="text-body-1 font-weight-bold"
-			style="max-width: max-content"
-			:data-testid="`board-grid-title-${index}`"
-		>
-			<RouterLink tabindex="-1" :to="boardPath" class="text-decoration-none" style="color: inherit">
+		<VCardTitle class="grid-item-card-title text-body-1 font-weight-bold" :data-testid="`board-grid-title-${index}`">
+			<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link text-decoration-none">
 				<LineClamp>
 					{{ board.title }}
 				</LineClamp>
@@ -77,5 +73,13 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 <style>
 .room-content-grid-item:focus-within {
 	outline: auto;
+}
+
+.grid-item-card-title {
+	max-width: max-content;
+}
+
+.grid-item-router-link {
+	color: inherit;
 }
 </style>
