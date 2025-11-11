@@ -88,7 +88,6 @@ describe("socket.ts", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		Object.defineProperty(window, "location", { value: vi.fn(), configurable: true });
 		mockSocket.connected = true;
 	});
 
@@ -122,6 +121,7 @@ describe("socket.ts", () => {
 		options: {
 			isInitialConnection?: boolean;
 			doInitializeTimeout?: boolean;
+			url?: string;
 		} = {}
 	) => {
 		const { isInitialConnection, doInitializeTimeout } = {
@@ -146,6 +146,12 @@ describe("socket.ts", () => {
 			const listener = calls.length > 0 ? calls[0][0] : vi.fn();
 			listener(event, payload);
 		};
+
+		if (options.url) {
+			global.window.location = {
+				href: options.url,
+			} as unknown as string & Location;
+		}
 
 		return {
 			socket,
@@ -387,8 +393,7 @@ describe("socket.ts", () => {
 	describe("reportBoardError", () => {
 		describe("when url does not contain board id", () => {
 			it("should report board error with correct parameters and boardId:unknown", async () => {
-				const { eventCallbacks } = await setup();
-				window.location.href = "http://test.com/boards/noid";
+				const { eventCallbacks } = await setup({ url: "http://test.com/boards/noid" });
 
 				const mockError = { type: "test_error", message: "Test error message" };
 				eventCallbacks.connect_error(mockError);
@@ -406,8 +411,7 @@ describe("socket.ts", () => {
 
 		describe("when url contains board id", () => {
 			it("should report board error with correct parameters and extracted boardId", async () => {
-				window.location.href = "http://localhost:4000/boards/69121555fd38bab102439ff8";
-				const { eventCallbacks } = await setup();
+				const { eventCallbacks } = await setup({ url: "http://localhost:4000/boards/69121555fd38bab102439ff8" });
 
 				const mockError = { type: "test_error", message: "Test error message" };
 				eventCallbacks.connect_error(mockError);
