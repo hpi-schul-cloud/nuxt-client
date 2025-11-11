@@ -86,9 +86,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 
 				if (
 					error &&
-					(error.data as { code?: number; message?: string; status?: number }).code === 1 &&
-					(error.data as { code?: number; message?: string; status?: number }).message === "Session ID unknown" &&
-					(error.data as { code?: number; message?: string; status?: number }).status === 400
+					(error.data as unknown as { code?: number; message?: string; status?: number }).code === 1 &&
+					(error.data as unknown as { code?: number; message?: string; status?: number }).message ===
+						"Session ID unknown" &&
+					(error.data as unknown as { code?: number; message?: string; status?: number }).status === 400
 				) {
 					reportBoardError("session_id_unknown", "Session ID unknown - automaticly reseted connection.");
 					disconnectSocket();
