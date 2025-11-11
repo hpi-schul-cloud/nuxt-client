@@ -91,13 +91,13 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 					(error.data as { code?: number; message?: string; status?: number }).message === "Session ID unknown" &&
 					(error.data as { code?: number; message?: string; status?: number }).status === 400
 				) {
-					reportBoardError("session_id_unknown", "Session ID unknown - automaticly reset connection.");
+					reportBoardError("session_id_unknown", "Session ID unknown - automaticly reseted connection.");
 					disconnectSocket();
 					instance = null;
 					return;
+				} else {
+					reportBoardError("connect_error", message ?? type);
 				}
-
-				reportBoardError("connect_error", message ?? type);
 
 				if (retryCount > 20) {
 					reportBoardError("connect_error", "Max reconnection attempts reached");

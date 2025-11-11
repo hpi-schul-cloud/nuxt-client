@@ -6,6 +6,7 @@ import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
 import { Mock } from "vitest";
@@ -392,27 +393,51 @@ describe("socket.ts", () => {
 
 	describe("when connect_error happens", () => {
 		describe("when session ID became unknown", () => {
+			const getSessionIdUnknownError = () => ({
+				type: "connect_error",
+				message: "Session ID unknown",
+				data: {
+					code: 1,
+					message: "Session ID unknown",
+					status: 400,
+				},
+			});
+
 			it("should notify error, report board error and disconnect socket", async () => {
 				const { eventCallbacks, socket } = await setup();
 
-				const mockError = {
-					type: "connect_error",
-					message: "Session ID unknown",
-					data: {
-						code: 1,
-						message: "Session ID unknown",
-						status: 400,
-					},
-				};
+				const mockError = getSessionIdUnknownError();
 				eventCallbacks.connect_error(mockError);
 
 				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 					expect.objectContaining({
 						type: "session_id_unknown",
-						message: "Session ID unknown - please reload or re-authenticate.",
+						message: "Session ID unknown - automaticly reseted connection.",
 					})
 				);
 				expect(socket.disconnect).toHaveBeenCalled();
+			});
+
+			describe("when reporting the board error fails", () => {
+				it("should not throw error", async () => {
+					const { eventCallbacks } = await setup();
+					boardErrorReportApi.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
+
+					const mockError = getSessionIdUnknownError();
+					expect(() => eventCallbacks.connect_error(mockError)).not.toThrow();
+				});
+
+				it("should call logger.error", async () => {
+					const { eventCallbacks } = await setup();
+
+					logger.error = vi.fn();
+					boardErrorReportApi.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
+
+					const mockError = getSessionIdUnknownError();
+					await eventCallbacks.connect_error(mockError);
+
+					expect(logger.error).toHaveBeenCalledWith("Failed to report error", expect.any(Error));
+				});
 			});
 		});
 
