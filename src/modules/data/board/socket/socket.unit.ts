@@ -390,40 +390,67 @@ describe("socket.ts", () => {
 		});
 	});
 
-	describe("reportBoardError", () => {
-		describe("when url does not contain board id", () => {
-			it("should report board error with correct parameters and boardId:unknown", async () => {
-				const { eventCallbacks } = await setup({ url: "http://test.com/boards/noid" });
+	describe("when connect_error happens", () => {
+		describe("when session ID became unknown", () => {
+			it("should notify error, report board error and disconnect socket", async () => {
+				const { eventCallbacks, socket } = await setup();
 
-				const mockError = { type: "test_error", message: "Test error message" };
+				const mockError = {
+					type: "connect_error",
+					message: "Session ID unknown",
+					data: {
+						code: 1,
+						message: "Session ID unknown",
+						status: 400,
+					},
+				};
 				eventCallbacks.connect_error(mockError);
 
 				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 					expect.objectContaining({
-						boardId: "unknown",
-						type: "connect_error",
-						message: "Test error message",
-						retryCount: 0,
+						type: "session_id_unknown",
+						message: "Session ID unknown - please reload or re-authenticate.",
 					})
 				);
+				expect(socket.disconnect).toHaveBeenCalled();
 			});
 		});
 
-		describe("when url contains board id", () => {
-			it("should report board error with correct parameters and extracted boardId", async () => {
-				const { eventCallbacks } = await setup({ url: "http://localhost:4000/boards/69121555fd38bab102439ff8" });
+		describe("when error is general connection error", () => {
+			describe("when url does not contain board id", () => {
+				it("should report board error with correct parameters and boardId:unknown", async () => {
+					const { eventCallbacks } = await setup({ url: "http://test.com/boards/noid" });
 
-				const mockError = { type: "test_error", message: "Test error message" };
-				eventCallbacks.connect_error(mockError);
+					const mockError = { type: "test_error", message: "Test error message" };
+					eventCallbacks.connect_error(mockError);
 
-				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
-					expect.objectContaining({
-						boardId: "69121555fd38bab102439ff8",
-						type: "connect_error",
-						message: "Test error message",
-						retryCount: 0,
-					})
-				);
+					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+						expect.objectContaining({
+							boardId: "unknown",
+							type: "connect_error",
+							message: "Test error message",
+							retryCount: 0,
+						})
+					);
+				});
+			});
+
+			describe("when url contains board id", () => {
+				it("should report board error with correct parameters and extracted boardId", async () => {
+					const { eventCallbacks } = await setup({ url: "http://localhost:4000/boards/69121555fd38bab102439ff8" });
+
+					const mockError = { type: "test_error", message: "Test error message" };
+					eventCallbacks.connect_error(mockError);
+
+					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+						expect.objectContaining({
+							boardId: "69121555fd38bab102439ff8",
+							type: "connect_error",
+							message: "Test error message",
+							retryCount: 0,
+						})
+					);
+				});
 			});
 		});
 	});

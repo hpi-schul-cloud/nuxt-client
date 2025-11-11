@@ -84,8 +84,6 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 					data?: { code?: number; message?: string; status?: number };
 				};
 
-				// TODO: check
-				// Prüfe auf Session-ID-Fehler
 				if (
 					error &&
 					(error.data as unknown) &&
@@ -93,9 +91,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 					(error.data as { code?: number; message?: string; status?: number }).message === "Session ID unknown" &&
 					(error.data as { code?: number; message?: string; status?: number }).status === 400
 				) {
-					notifyError(t("error.sessionIdUnknown"));
-					reportBoardError("session_id_unknown", "Session ID unknown - please reload or re-authenticate.");
-					// Optional: Automatisch disconnecten oder neu verbinden
+					reportBoardError("session_id_unknown", "Session ID unknown - automaticly reset connection.");
 					disconnectSocket();
 					instance = null;
 					return;
