@@ -78,6 +78,7 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 
 .grid-item-card-title {
 	max-width: max-content;
+	line-height: 1.5 !important;
 }
 
 .grid-item-router-link {
