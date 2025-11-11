@@ -10,12 +10,13 @@
 			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
-						<h2 id="language-heading" class="mb-10">{{ step.subtitle }}</h2>
+						<h2 :id="`step-heading-${step.id}`" class="mb-4 heading" :tabindex="-1">{{ step.heading }}</h2>
 						<LanguageSelection
-							v-if="step.value === 1"
+							v-if="step.value === RegistrationSteps.LanguageSelection"
 							:selected-language="lang"
 							@update:selected-language="onUpdateSelectedLanguage"
 						/>
+						<Welcome v-else-if="step.value === RegistrationSteps.Welcome" />
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
@@ -26,7 +27,7 @@
 					</VBtn>
 				</template>
 				<template #next>
-					<VSpacer v-if="stepValue === 1" />
+					<VSpacer v-if="stepValue < steps.length" />
 					<VBtn
 						variant="flat"
 						color="primary"
@@ -44,11 +45,21 @@
 
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
+import Welcome from "./steps/Welcome.vue";
 import { LanguageType } from "@/serverApi/v3";
 import { useRegistration } from "@data-room";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
+
+enum RegistrationSteps {
+	LanguageSelection = 1,
+	Welcome,
+	PasswordSetup,
+	DeclarationOfConsent,
+	ConfirmationCode,
+	Registration,
+}
 
 const { t } = useI18n();
 const { xs, sm } = useDisplay();
@@ -61,10 +72,16 @@ const onUpdateSelectedLanguage = (value: string) => {
 	setSelectedLanguage(value as LanguageType);
 };
 
-const stepValue = ref(1);
+const stepValue = ref(RegistrationSteps.LanguageSelection);
 
-const onStepperClick = (value: number) => {
+const focusHeading = () => {
+	const headingElement = document.getElementById(`step-heading-${stepValue.value - 1}`);
+	headingElement?.focus();
+};
+
+const onStepperClick = (value: RegistrationSteps) => {
 	stepValue.value = value;
+	focusHeading();
 };
 
 onMounted(() => {
@@ -73,30 +90,45 @@ onMounted(() => {
 
 const steps = computed(() => [
 	{
-		value: 1,
+		value: RegistrationSteps.LanguageSelection,
 		title: t("common.labels.language"),
-		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.language.heading"),
+		id: "language",
 	},
-	{ value: 2, title: t("common.labels.welcome"), subtitle: t("common.labels.welcome") },
 	{
-		value: 3,
+		value: RegistrationSteps.Welcome,
+		title: t("common.labels.welcome"),
+		heading: t("common.labels.welcome"),
+		id: "welcome",
+	},
+	{
+		value: RegistrationSteps.PasswordSetup,
 		title: t("common.labels.password"),
-		subtitle: t("pages.registrationExternalMembers.steps.password.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.password.heading"),
+		id: "password",
 	},
 	{
-		value: 4,
+		value: RegistrationSteps.DeclarationOfConsent,
 		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+		heading: t("pages.registrationExternalMembers.steps.declarationOfConsent.heading"),
+		id: "consent",
 	},
 	{
-		value: 5,
+		value: RegistrationSteps.ConfirmationCode,
 		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
+		heading: t("pages.registrationExternalMembers.steps.confirmationCode.heading"),
+		id: "confirmation",
 	},
 	{
-		value: 6,
+		value: RegistrationSteps.Registration,
 		title: t("pages.registrationExternalMembers.steps.registration.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.registration.heading"),
+		id: "registration",
 	},
 ]);
 </script>
+<style scoped>
+.heading:focus {
+	outline: none;
+}
+</style>

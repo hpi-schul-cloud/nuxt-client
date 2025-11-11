@@ -1540,9 +1540,13 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registrierung erfolgreich",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Bitte Sprache wählen",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Passwort vergeben",
+	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
+	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
+	"pages.registrationExternalMembers.steps.welcome.heading":
+		"Mit der Registrierung in der dBildungscloud im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Datenschutzerklärung",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Nutzungsordnung",
+	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
 	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
@@ -1659,7 +1663,7 @@ export default {
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
 		"Räume werden weiter ausgebaut. Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
-		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
+		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.", // tada
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
