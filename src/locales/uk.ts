@@ -138,6 +138,8 @@ export default {
 		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
 	"common.notifications.errors.notMoved":
 		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
+	"common.notifications.errors.notExited":
+		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",

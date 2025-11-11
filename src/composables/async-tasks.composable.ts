@@ -2,16 +2,19 @@ import { Status } from "@/store/types/commons";
 import { AsyncFunction } from "@/types/async.types";
 import { useTryCatch } from "@/utils/try-catch.utils";
 import { notifyError } from "@data-app";
+import { logger } from "@util-logger";
 import { computed, readonly, ref } from "vue";
 
-type TaskResult<T> = { success: true; result: T } | { success: false; result: undefined };
+type TaskResult<T> =
+	| { success: true; result: T; error?: undefined }
+	| { success: false; result?: undefined; error: Error };
 
 export const useSafeTask = () => {
 	const error = ref<Error>();
 	const status = ref<Status>("");
 	const isRunning = computed(() => status.value === "pending");
 
-	const execute = async <T>(fn: AsyncFunction<T>): Promise<TaskResult<T>> => {
+	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
 		error.value = undefined;
 		status.value = "pending";
 
@@ -20,12 +23,17 @@ export const useSafeTask = () => {
 		if (err) {
 			error.value = err;
 			status.value = "error";
-			return { success: false, result: undefined };
+			logger.error(err);
+
+			if (onErrorNotifyMessage) {
+				notifyError(onErrorNotifyMessage);
+			}
+			return { success: false, result: undefined, error: error.value };
 		}
 
 		status.value = "completed";
 
-		return { success: true, result };
+		return { success: true, result, error: undefined };
 	};
 
 	const reset = () => {
@@ -53,18 +61,4 @@ export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>) => {
 		return { result, success };
 	};
 	return { error, status, data, isRunning, run, reset };
-};
-
-export const useApiQuery = <T>(fetcher: () => Promise<T>, options?: { errorMessage?: string }) => {
-	const { execute, error, isRunning } = useSafeTask();
-
-	const fetch = async () => {
-		const { result, success } = await execute(fetcher);
-		if (success) {
-		} else if (options?.errorMessage) {
-			notifyError(options.errorMessage);
-		}
-	};
-
-	return { data, error, isRunning, fetch };
 };

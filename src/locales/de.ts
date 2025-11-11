@@ -95,7 +95,7 @@ export default {
 	"common.labels.repeat": "Wiederholung",
 	"common.labels.restore": "Wiederherstellen",
 	"common.labels.role": "Rolle",
-	"common.labels.room": "Raum",
+	"common.labels.room": "Raum | Räume",
 	"common.labels.search": "Suche",
 	"common.labels.settings": "Einstellungen",
 	"common.labels.size": "Größe",
@@ -138,6 +138,8 @@ export default {
 	"common.notifications.errors.notLoaded": "{type} konnte nicht geladen werden. | {type} konnten nicht geladen werden.",
 	"common.notifications.errors.notMoved":
 		"{type} konnte nicht verschoben werden. | {type} konnten nicht verschoben werden.",
+	"common.notifications.errors.notExited":
+		"{type} konnte nicht verlassen werden. | {type} konnten nicht verlassen werden.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",

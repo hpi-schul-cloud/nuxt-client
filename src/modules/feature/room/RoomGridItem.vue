@@ -68,6 +68,7 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	white-space: normal;
 	color: inherit;
 	text-decoration: none;
+	line-height: 1.5 !important;
 }
 
 .room-link-item:hover span {

@@ -131,6 +131,7 @@ export default {
 	"common.notifications.errors.notDuplicated": "{type} could not be duplicated.",
 	"common.notifications.errors.notLoaded": "{type} could not be loaded.",
 	"common.notifications.errors.notMoved": "{type} could not be moved.",
+	"common.notifications.errors.notExited": "{type} could not be exited.",
 	"common.notification.connection.restored": "The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",

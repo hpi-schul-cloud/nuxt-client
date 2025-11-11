@@ -133,6 +133,7 @@ export default {
 	"common.notifications.errors.notDuplicated": "{type} no se ha podido duplicar. | {type} no se han podido duplicar.",
 	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
 	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
+	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",

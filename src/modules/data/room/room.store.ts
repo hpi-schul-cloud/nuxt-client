@@ -18,29 +18,35 @@ export const useRoomStore = defineStore("room-store", () => {
 	const { execute, isRunning: isLoading } = useSafeTask();
 
 	const fetchRooms = async () => {
-		const { result, success } = await execute(roomApi.roomControllerGetRooms);
-		if (success) {
-			rooms.value = result.data.data;
-		} else {
-			notifyError(t("common.notifications.errors.notLoaded", { type: t("pages.rooms.title") }, PLURAL_COUNT));
+		const { result, error } = await execute(roomApi.roomControllerGetRooms);
+		if (error) {
+			notifyError(
+				t("common.notifications.errors.notLoaded", { type: t("common.labels.room", PLURAL_COUNT) }, PLURAL_COUNT)
+			);
+			return;
 		}
+		rooms.value = result.data.data;
 	};
 
-	const deleteRoom = async (roomId: string) => {
-		await roomApi.roomControllerDeleteRoom(roomId);
-	};
+	const createRoom = async (params: RoomCreateParams) =>
+		await execute(
+			() => roomApi.roomControllerCreateRoom(params),
+			t("common.notifications.errors.notCreated", { type: t("common.labels.room") })
+		);
 
-	const leaveRoom = async (roomId: string) => {
-		await roomApi.roomControllerLeaveRoom(roomId);
-	};
+	const deleteRoom = async (roomId: string) =>
+		await execute(
+			() => roomApi.roomControllerDeleteRoom(roomId),
+			t("common.notifications.errors.notDeleted", { type: t("common.labels.room") })
+		);
 
-	const copyRoom = async (roomId: string) => {
-		const response = await roomApi.roomControllerCopyRoom(roomId);
-	};
+	const leaveRoom = async (roomId: string) =>
+		await execute(
+			() => roomApi.roomControllerLeaveRoom(roomId),
+			t("common.notifications.errors.notExited", { type: t("common.labels.room") })
+		);
 
-	const createRoom = async (params: RoomCreateParams) => {
-		const response = (await roomApi.roomControllerCreateRoom(params)).data;
-	};
+	// TODO: copy room is currently not used via store, but directly in RoomCopyFlow.vue
 
 	return {
 		rooms,
@@ -50,6 +56,5 @@ export const useRoomStore = defineStore("room-store", () => {
 		createRoom,
 		deleteRoom,
 		leaveRoom,
-		copyRoom,
 	};
 });

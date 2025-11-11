@@ -15,7 +15,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApiResponseError } from "@/store/types/commons";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError, useAppStore } from "@data-app";
+import { notifyError } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
@@ -50,16 +50,12 @@ const breadcrumbs: Breadcrumb[] = [
 ];
 
 const onSave = async (payload: { room: RoomCreateParams }) => {
-	try {
-		const room = await createRoom(payload.room);
+	const { result: room, error } = await createRoom(payload.room);
 
-		router.push({ name: "room-details", params: { id: room.id } });
-	} catch (error: unknown) {
-		if (isInvalidRequestError(error)) {
-			notifyError(t("components.roomForm.validation.generalSaveError"));
-		} else {
-			useAppStore().handleApplicationError((error as ApiResponseError).code);
-		}
+	if (error && isInvalidRequestError(error)) {
+		notifyError(t("components.roomForm.validation.generalSaveError"));
+	} else if (room) {
+		router.push({ name: "room-details", params: { id: room.data.id } });
 	}
 };
 

@@ -1,5 +1,5 @@
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
-import { createTestRoomStore, roomItemFactory } from "@@/tests/test-utils";
+import { createTestRoomStore, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
@@ -57,7 +57,10 @@ describe("@pages/RoomCreate.page.vue", () => {
 
 	it("should navigate to 'room-details' with correct room id on save", async () => {
 		const { roomFormComponent, router, roomStore } = setup();
-		roomStore.createRoom.mockResolvedValue(roomItemFactory.build({ id: "123" }));
+		roomStore.createRoom.mockResolvedValue({
+			result: mockApiResponse({ data: roomItemFactory.build({ id: "123" }) }),
+			success: true,
+		});
 		await roomFormComponent.vm.$emit("save", roomParams);
 		expect(router.push).toHaveBeenCalledWith({
 			name: "room-details",
