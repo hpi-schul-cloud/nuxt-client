@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="nativ" :fab-items="fabAction">
+	<DefaultWireframe max-width="full" :fab-items="fabAction">
 		<template #header>
 			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
