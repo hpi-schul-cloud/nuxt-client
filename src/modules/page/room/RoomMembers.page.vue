@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe
-		v-if="canViewRoom"
+		v-if="canSeeMembersList"
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
@@ -112,7 +112,7 @@ const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks, canViewRoom } = useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks, canSeeMembersList } = useRoomAuthorization();
 
 const { isInvitationDialogOpen, invitationStep } = storeToRefs(useRoomInvitationLinkStore());
 
@@ -236,7 +236,7 @@ onMounted(async () => {
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
-	if (canViewRoom.value === false) {
+	if (canSeeMembersList.value === false) {
 		router.replace("/rooms");
 		return;
 	}

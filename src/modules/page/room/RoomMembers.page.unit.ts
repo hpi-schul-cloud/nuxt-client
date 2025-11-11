@@ -107,7 +107,7 @@ describe("RoomMembersPage", () => {
 			canManageRoomInvitationLinks: computed(() => false),
 			canListDrafts: computed(() => false),
 			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => false),
+			canSeeMembersList: computed(() => true),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -195,22 +195,20 @@ describe("RoomMembersPage", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	describe("when user has no permission to view the room", () => {
+	describe("when user has no permission to see members list", () => {
+		beforeEach(() => (roomPermissions.canSeeMembersList = computed(() => false)));
 		it("should not render content", () => {
-			roomPermissions.canViewRoom = computed(() => false);
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			expect(wireframe.exists()).toBe(false);
 		});
 
 		it("should not fetch members on mount", () => {
-			roomPermissions.canViewRoom = computed(() => false);
 			const { roomMembersStore } = setup();
 			expect(roomMembersStore.fetchMembers).not.toHaveBeenCalled();
 		});
 
 		it("should replace the route to /rooms", () => {
-			roomPermissions.canViewRoom = computed(() => false);
 			setup();
 			expect(router.replace).toHaveBeenCalledWith("/rooms");
 		});
