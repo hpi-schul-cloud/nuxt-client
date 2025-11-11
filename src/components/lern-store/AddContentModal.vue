@@ -67,7 +67,6 @@ export default {
 		title: { type: String, default: "" },
 		url: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },
-		merlinReference: { type: String, default: "" },
 		items: { type: Array, default: () => [] },
 		showCopyModal: {
 			type: Boolean,
@@ -140,7 +139,6 @@ export default {
 						title: element.title,
 						client: element.client,
 						url: element.url,
-						merlinReference: element.merlinReference,
 					});
 				});
 			} else {
@@ -148,7 +146,6 @@ export default {
 					title: this.title,
 					client: this.client,
 					url: this.url,
-					merlinReference: this.merlinReference,
 				};
 			}
 			contentModule.addToLesson(payload);
