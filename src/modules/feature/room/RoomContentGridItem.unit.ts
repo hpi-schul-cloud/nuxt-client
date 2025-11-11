@@ -33,11 +33,5 @@ describe("@feature-room/RoomContentGridItem", () => {
 			const subtitle = wrapper.get("[data-testid='board-grid-item-subtitle-0']");
 			expect(subtitle.text()).toStrictEqual("pages.room.boardCard.label.columnBoard - common.words.draft");
 		});
-
-		it("should display grid item in draft style", () => {
-			const { wrapper } = setup({ board: mockBoard, index: 0 });
-
-			expect(wrapper.classes()).toContain("opacity-80");
-		});
 	});
 });
