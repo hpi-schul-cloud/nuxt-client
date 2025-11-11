@@ -1,8 +1,9 @@
+import { __resetSocketStateForTesting, useSocketConnection } from "./socket";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { boardResponseFactory, expectNotification, mockApiResponse, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
+import { useBoardStore, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -65,11 +66,6 @@ describe("socket.ts", () => {
 	let cardStore: ReturnType<typeof useCardStore>;
 	let boardErrorReportApi: DeepMocked<ReturnType<typeof BoardErrorReportApiFactory>>;
 
-	const triggerServerEvent = (event: string, payload?: unknown) => {
-		const listener = (mockSocket.onAny as Mock).mock.calls[0][0];
-		listener(event, payload);
-	};
-
 	beforeAll(() => {
 		timeoutResponseMock = { emitWithAck: vi.fn() };
 		mockSocket = {
@@ -92,11 +88,14 @@ describe("socket.ts", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		Object.defineProperty(window, "location", { value: vi.fn(), configurable: true });
 		mockSocket.connected = true;
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
+		// Reset the global socket state to ensure test isolation
+		__resetSocketStateForTesting();
 	});
 
 	const getEventCallback = (eventName: string) => {
@@ -142,12 +141,19 @@ describe("socket.ts", () => {
 			initializeTimeout(doInitializeTimeout);
 		}
 
+		const triggerServerEvent = (event: string, payload?: unknown) => {
+			const calls = (mockSocket.onAny as Mock).mock.calls;
+			const listener = calls.length > 0 ? calls[0][0] : vi.fn();
+			listener(event, payload);
+		};
+
 		return {
 			socket,
 			eventCallbacks,
 			emitOnSocket,
 			emitWithAck,
 			disconnectSocket,
+			triggerServerEvent,
 		};
 	};
 
@@ -331,6 +337,15 @@ describe("socket.ts", () => {
 		});
 
 		describe("disconnectSocket", () => {
+			it("should do nothing if socket is not connected", async () => {
+				mockSocket.connected = false;
+				const { disconnectSocket } = await setup({ doInitializeTimeout: true });
+
+				disconnectSocket();
+
+				expect(mockSocket.disconnect).not.toHaveBeenCalled();
+			});
+
 			it("should call disconnect", async () => {
 				const { disconnectSocket } = await setup();
 
@@ -355,7 +370,7 @@ describe("socket.ts", () => {
 
 	describe("when adding multiple handlers", () => {
 		it("should call all handlers on incoming event", async () => {
-			await setup();
+			const { triggerServerEvent } = await setup();
 
 			const anotherDispatchMock = vi.fn();
 			useSocketConnection(anotherDispatchMock);
@@ -366,6 +381,46 @@ describe("socket.ts", () => {
 
 			expect(dispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
 			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
+		});
+	});
+
+	describe("reportBoardError", () => {
+		describe("when url does not contain board id", () => {
+			it("should report board error with correct parameters and boardId:unknown", async () => {
+				const { eventCallbacks } = await setup();
+				window.location.href = "http://test.com/boards/noid";
+
+				const mockError = { type: "test_error", message: "Test error message" };
+				eventCallbacks.connect_error(mockError);
+
+				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+					expect.objectContaining({
+						boardId: "unknown",
+						type: "connect_error",
+						message: "Test error message",
+						retryCount: 0,
+					})
+				);
+			});
+		});
+
+		describe("when url contains board id", () => {
+			it("should report board error with correct parameters and extracted boardId", async () => {
+				window.location.href = "http://localhost:4000/boards/69121555fd38bab102439ff8";
+				const { eventCallbacks } = await setup();
+
+				const mockError = { type: "test_error", message: "Test error message" };
+				eventCallbacks.connect_error(mockError);
+
+				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
+					expect.objectContaining({
+						boardId: "69121555fd38bab102439ff8",
+						type: "connect_error",
+						message: "Test error message",
+						retryCount: 0,
+					})
+				);
+			});
 		});
 	});
 });

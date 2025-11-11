@@ -13,10 +13,18 @@ import { useI18n } from "vue-i18n";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
+const _connected = ref(false);
 const dispatchHandlers = Array<(action: Action) => void>();
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
-const _connected = ref(false);
+
+export const __resetSocketStateForTesting = () => {
+	instance = null;
+	_connected.value = false;
+	dispatchHandlers.length = 0;
+	isInitialConnection.value = true;
+	retryCount = 0;
+};
 
 export const useSocketConnection = (dispatch: (action: Action) => void, options?: { isInitialConnection: boolean }) => {
 	dispatchHandlers.push(dispatch);
@@ -131,7 +139,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			instance.disconnect();
 		}
 		isInitialConnection.value = true;
-		if (timeoutFn.isPending.value) timeoutFn.stop();
+		if (timeoutFn?.isPending.value) timeoutFn.stop();
 	};
 
 	const reportBoardError = (type: string, message: string) => {
@@ -158,5 +166,6 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 		emitOnSocket,
 		emitWithAck,
 		disconnectSocket,
+		__resetSocketStateForTesting,
 	};
 };
