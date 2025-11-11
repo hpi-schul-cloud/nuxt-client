@@ -1,23 +1,25 @@
 <template>
 	<VCard
-		class="room-content-grid-item"
-		:class="isDraft ? 'opacity-80 bg-white' : 'bg-surface-light'"
+		class="room-content-grid-item d-flex flex-column"
+		:class="isDraft ? 'bg-white' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		:data-testid="`board-grid-item-${index}`"
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"
-			:class="{ 'opacity-100': isDraft }"
+			:class="{ 'opacity-80': isDraft }"
 			:data-testid="`board-grid-item-subtitle-${index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VCardTitle class="grid-item-card-title text-body-1 font-weight-bold" :data-testid="`board-grid-title-${index}`">
-			<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link text-decoration-none">
-				<LineClamp>
-					{{ board.title }}
-				</LineClamp>
+		<VCardTitle
+			:class="{ 'opacity-80': isDraft }"
+			class="grid-item-card-title text-body-1 font-weight-bold flex-grow-1"
+			:data-testid="`board-grid-title-${index}`"
+		>
+			<RouterLink tabindex="-1" :to="boardPath" class="grid-item-router-link text-break">
+				{{ board.title }}
 			</RouterLink>
 		</VCardTitle>
 		<VCardActions class="justify-end pr-4">
@@ -38,7 +40,6 @@
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
-import { LineClamp } from "@ui-line-clamp";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -80,6 +81,12 @@ const boardPath = computed(() => `/boards/${props.board.id}`);
 }
 
 .grid-item-router-link {
+	text-decoration: none;
 	color: inherit;
+	white-space: normal;
+}
+
+.grid-item-router-link:hover {
+	text-decoration: underline;
 }
 </style>
