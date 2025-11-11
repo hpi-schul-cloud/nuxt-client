@@ -65,6 +65,11 @@ describe("socket.ts", () => {
 	let cardStore: ReturnType<typeof useCardStore>;
 	let boardErrorReportApi: DeepMocked<ReturnType<typeof BoardErrorReportApiFactory>>;
 
+	const triggerServerEvent = (event: string, payload?: unknown) => {
+		const listener = (mockSocket.onAny as Mock).mock.calls[0][0];
+		listener(event, payload);
+	};
+
 	beforeAll(() => {
 		timeoutResponseMock = { emitWithAck: vi.fn() };
 		mockSocket = {
@@ -349,26 +354,18 @@ describe("socket.ts", () => {
 	});
 
 	describe("when adding multiple handlers", () => {
-		it("should call all handlers on event", async () => {
-			const anotherDispatchMock = vi.fn();
+		it("should call all handlers on incoming event", async () => {
 			await setup();
 
+			const anotherDispatchMock = vi.fn();
 			useSocketConnection(anotherDispatchMock);
 
-			const { eventCallbacks } = getEventCallbacks() as {
-				[event: string]: (arg?: unknown) => void;
-			};
+			const eventName = "cardUpdated";
+			const payload = { id: "123", title: "Neu" };
+			triggerServerEvent(eventName, payload);
 
-			const mockPayload = { data: "test" };
-			if (mockSocket?.on !== undefined) {
-				mockSocket.on("connect");
-			}
-
-			expect(dispatchMock).toHaveBeenCalledWith({ type: "connect", payload: undefined });
-			expect(dispatchMock).toHaveBeenCalledWith({ type: "disconnect", payload: mockPayload });
-
-			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: "connect", payload: undefined });
-			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: "disconnect", payload: mockPayload });
+			expect(dispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
+			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
 		});
 	});
 });
