@@ -108,13 +108,6 @@ export const useBoardSocketApi = () => {
 		});
 	};
 
-	// TODO: remove
-	const killSessionRequest = (payload: FetchBoardRequestPayload): void => {
-		emitOnSocket("kill-session-request", payload);
-		disconnectSocket();
-		console.log("Kill session request sent for board:", payload.boardId);
-	};
-
 	const fetchBoardRequest = (payload: FetchBoardRequestPayload, loading = true) => {
 		boardStore.setLoading(loading);
 		emitOnSocket("fetch-board-request", payload);
@@ -209,7 +202,6 @@ export const useBoardSocketApi = () => {
 
 	return {
 		dispatch,
-		killSessionRequest, // TODO: remove
 		createCardRequest,
 		createColumnRequest,
 		disconnectSocketRequest,

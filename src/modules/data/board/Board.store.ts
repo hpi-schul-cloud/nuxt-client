@@ -97,9 +97,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
-	// TODO: remove
-	const killSessionRequest = (payload: FetchBoardRequestPayload) => socketOrRest.killSessionRequest(payload);
-
 	const createCardRequest = (payload: CreateCardRequestPayload) => socketOrRest.createCardRequest(payload);
 
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
@@ -389,7 +386,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		getLastColumnIndex,
 		setBoard,
 		setLoading,
-		killSessionRequest, // TODO: remove
 		createCardRequest,
 		createCardSuccess,
 		createColumnRequest,

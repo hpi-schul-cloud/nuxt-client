@@ -36,8 +36,6 @@
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionDelete :name="title" scope-language-key="common.words.board" @click="onDeleteBoard" />
 			</BoardMenu>
-			<VBtn @click="onKillSession">Kill Session</VBtn>
-			{{ connected }}
 		</div>
 	</div>
 </template>
@@ -54,7 +52,7 @@ import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPEND
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { upperCaseFirstChar } from "@/utils/textFormatting";
-import { useBoardFocusHandler, useBoardPermissions, useSocketConnection } from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { BoardMenuScope } from "@ui-board";
 import {
@@ -90,7 +88,6 @@ const emit = defineEmits([
 	"change-layout",
 	"edit:settings",
 ]);
-import { useBoardStore } from "@/modules/data/board/Board.store"; // TODO: remove
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
@@ -98,9 +95,6 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(board
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { hasEditPermission, hasManageBoardPermission, hasShareBoardPermission } = useBoardPermissions();
-
-const boardStore = useBoardStore(); // TODO: remove
-const { connected } = useSocketConnection(() => null); // TODO: remove
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -150,11 +144,6 @@ const onBoardTitleBlur = () => {
 	if (boardTitle.value.length < 1) {
 		updateBoardTitle(boardTitleFallback.value);
 	}
-};
-
-// TODO: remove
-const onKillSession = () => {
-	boardStore.killSessionRequest({ boardId: props.boardId });
 };
 
 const updateBoardTitle = async (value: string) => {
