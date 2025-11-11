@@ -86,7 +86,6 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 
 				if (
 					error &&
-					(error.data as unknown) &&
 					(error.data as { code?: number; message?: string; status?: number }).code === 1 &&
 					(error.data as { code?: number; message?: string; status?: number }).message === "Session ID unknown" &&
 					(error.data as { code?: number; message?: string; status?: number }).status === 400
