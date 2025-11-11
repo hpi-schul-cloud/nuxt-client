@@ -128,11 +128,16 @@ export default {
 	"common.medium.information.teacher": "Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
-	"common.notifications.errors.notCreated": "{type}: Не вдалося створити.",
-	"common.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
-	"common.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
-	"common.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
-	"common.notifications.errors.notMoved": "{type} не вдалося позицію.",
+	"common.notifications.errors.notCreated":
+		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notDeleted":
+		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
+	"common.notifications.errors.notDuplicated":
+		"{type} не вдалося дублювати. | {type} не вдалося дублювати. | {type} не вдалося дублювати.",
+	"common.notifications.errors.notLoaded":
+		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
+	"common.notifications.errors.notMoved":
+		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",

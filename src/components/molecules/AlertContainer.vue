@@ -19,7 +19,7 @@
 				@click:close="removeNotifier(notification.id)"
 			>
 				<div class="alert-text mr-2" data-testId="alert-text">
-					{{ t(notification.text) ?? notification.text }}
+					{{ getNotificationText(notification.text) }}
 				</div>
 			</v-alert>
 		</transition-group>
@@ -39,7 +39,7 @@ const { removeNotifier } = useNotificationStore();
 
 const { xs: isMobile } = useDisplay();
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 
 const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 
@@ -49,6 +49,8 @@ const statusIcons: { [status in AlertStatus]: string } = {
 	error: mdiAlertCircle,
 	info: mdiInformation,
 };
+
+const getNotificationText = (text: string) => (te(text) ? t(text) : text);
 </script>
 
 <style lang="scss" scoped>

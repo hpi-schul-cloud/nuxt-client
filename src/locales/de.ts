@@ -129,11 +129,15 @@ export default {
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
-	"common.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
-	"common.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
-	"common.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
-	"common.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
-	"common.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
+	"common.notifications.errors.notCreated":
+		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
+	"common.notifications.errors.notDeleted":
+		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
+	"common.notifications.errors.notDuplicated":
+		"{type} konnte nicht dupliziert werden. | {type} konnten nicht dupliziert werden.",
+	"common.notifications.errors.notLoaded": "{type} konnte nicht geladen werden. | {type} konnten nicht geladen werden.",
+	"common.notifications.errors.notMoved":
+		"{type} konnte nicht verschoben werden. | {type} konnten nicht verschoben werden.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",

@@ -1,6 +1,7 @@
 import { Status } from "@/store/types/commons";
 import { AsyncFunction } from "@/types/async.types";
 import { useTryCatch } from "@/utils/try-catch.utils";
+import { notifyError } from "@data-app";
 import { computed, readonly, ref } from "vue";
 
 type TaskResult<T> = { success: true; result: T } | { success: false; result: undefined };
@@ -52,4 +53,18 @@ export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>) => {
 		return { result, success };
 	};
 	return { error, status, data, isRunning, run, reset };
+};
+
+export const useApiQuery = <T>(fetcher: () => Promise<T>, options?: { errorMessage?: string }) => {
+	const { execute, error, isRunning } = useSafeTask();
+
+	const fetch = async () => {
+		const { result, success } = await execute(fetcher);
+		if (success) {
+		} else if (options?.errorMessage) {
+			notifyError(options.errorMessage);
+		}
+	};
+
+	return { data, error, isRunning, fetch };
 };

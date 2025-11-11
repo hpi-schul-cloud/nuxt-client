@@ -1,17 +1,22 @@
 <template>
-	<VCard class="room-grid-item" :data-testid="`board-grid-item-${index}`" variant="elevated">
-		<VCardTitle class="text-body-1" style="max-width: max-content" :data-testid="`board-grid-title-${index}`">
-			<RouterLink :to="roomPath" class="room-link-item text-decoration-none" style="color: inherit">
-				<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" data-testid="room-badge-lock">
+	<VCard class="room-grid-item d-flex flex-column" :data-testid="`board-grid-item-${index}`" variant="elevated">
+		<VCardTitle
+			class="text-body-1 flex-grow-1"
+			style="max-width: max-content"
+			:data-testid="`board-grid-title-${index}`"
+		>
+			<RouterLink :to="roomPath" class="room-link-item">
+				<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<div class="room-grid-icon" :class="avatarColor">
-						<span class="text-h1 text-white" data-testid="room-short-title">
+						<span class="text-h1 text-white text-decoration-none" :data-testid="`room-short-title-${index}`">
 							{{ roomShortName }}
 						</span>
 					</div>
 				</VBadge>
-				<div class="text-break" style="white-space: normal">
+
+				<span class="text-break" :data-testid="`room--title-${index}`">
 					{{ room.name }}
-				</div>
+				</span>
 			</RouterLink>
 		</VCardTitle>
 
@@ -60,6 +65,13 @@ const roomAriaLabel = computed(() => `${t("common.labels.room")} ${props.room.na
 	display: flex;
 	flex-direction: row;
 	gap: 16px;
+	white-space: normal;
+	color: inherit;
+	text-decoration: none;
+}
+
+.room-link-item:hover span {
+	text-decoration: underline;
 }
 
 .room-grid-icon {

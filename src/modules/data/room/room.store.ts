@@ -8,6 +8,7 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useRoomStore = defineStore("room-store", () => {
+	const PLURAL_COUNT = 2;
 	const { t } = useI18n();
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
@@ -21,7 +22,7 @@ export const useRoomStore = defineStore("room-store", () => {
 		if (success) {
 			rooms.value = result.data.data;
 		} else {
-			notifyError(t("common.notifications.errors.notLoaded", { type: t("pages.rooms.title") }));
+			notifyError(t("common.notifications.errors.notLoaded", { type: t("pages.rooms.title") }, PLURAL_COUNT));
 		}
 	};
 
