@@ -46,6 +46,7 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
+
 const { fetchRooms } = useRoomStore();
 const { canCreateRoom } = useRoomAuthorization();
 

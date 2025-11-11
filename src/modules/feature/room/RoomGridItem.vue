@@ -5,7 +5,7 @@
 			style="max-width: max-content"
 			:data-testid="`board-grid-title-${index}`"
 		>
-			<RouterLink :to="roomPath" class="room-link-item">
+			<RouterLink tabindex="-1" :to="roomPath" class="room-link-item">
 				<VBadge bordered :model-value="room.isLocked" :icon="mdiLock" :data-testid="`room-badge-lock-${index}`">
 					<div class="room-grid-icon" :class="avatarColor">
 						<span class="text-h1 text-white text-decoration-none" :data-testid="`room-short-title-${index}`">

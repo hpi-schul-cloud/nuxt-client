@@ -92,7 +92,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const room = roomFactory.build({});
 
 		setActivePinia(createTestingPinia());
-		const { roomStore } = createTestRoomStore(false);
+		const { roomStore } = createTestRoomStore();
 
 		useRoomDetailsStore().$patch({
 			isLoading: false,

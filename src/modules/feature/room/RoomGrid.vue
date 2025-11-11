@@ -7,6 +7,7 @@
 		item-key="id"
 		:options="getSortableOptions()"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
+		@end="onDropEnd"
 	>
 		<template #item="{ element, index }">
 			<RoomGridItem
@@ -30,6 +31,7 @@ import { notifyError } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { getGridContainerColumnsCount } from "@util-browser";
 import { getSortableOptions } from "@util-sorting";
+import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -41,7 +43,7 @@ const gridRef = useTemplateRef("gridRef");
 const { t } = useI18n();
 
 const { execute, error: reorderError } = useSafeTask();
-const { fetchRooms } = useRoomStore();
+const { fetchRooms, moveRoom } = useRoomStore();
 
 const props = defineProps({
 	rooms: {
@@ -57,11 +59,11 @@ const reorderRoom = (newIndex: number, oldIndex: number) => {
 	execute(async () => {
 		if (document.startViewTransition) {
 			await document.startViewTransition(async () => {
-				// await moveRoom(board.id, newIndex);
+				await moveRoom({ id: room.id, toPosition: newIndex });
 				await fetchRooms();
 			}).finished;
 		} else {
-			// await moveRoom(props.roomId, board.id, newIndex);
+			await moveRoom({ id: room.id, toPosition: newIndex });
 			await fetchRooms();
 		}
 
@@ -72,6 +74,12 @@ const reorderRoom = (newIndex: number, oldIndex: number) => {
 			})
 		);
 	});
+};
+
+const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
+	if (newIndex !== undefined && oldIndex !== undefined) {
+		reorderRoom(newIndex, oldIndex);
+	}
 };
 
 const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {

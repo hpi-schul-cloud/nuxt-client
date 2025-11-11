@@ -1,15 +1,15 @@
 import { useSafeTask } from "@/composables/async-tasks.composable";
-import { RoomApiFactory } from "@/serverApi/v3";
+import { useI18nGlobal } from "@/plugins/i18n";
+import { MoveItemBodyParams, RoomApiFactory } from "@/serverApi/v3";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useRoomStore = defineStore("room-store", () => {
 	const PLURAL_COUNT = 2;
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
 	const rooms = ref<RoomItem[]>([]);
@@ -34,6 +34,12 @@ export const useRoomStore = defineStore("room-store", () => {
 			t("common.notifications.errors.notCreated", { type: t("common.labels.room") })
 		);
 
+	const moveRoom = async (params: MoveItemBodyParams) =>
+		await execute(
+			() => roomApi.roomControllerMoveRoom(params),
+			t("common.notifications.errors.notMoved", { type: t("common.labels.room") })
+		);
+
 	const deleteRoom = async (roomId: string) =>
 		await execute(
 			() => roomApi.roomControllerDeleteRoom(roomId),
@@ -54,6 +60,7 @@ export const useRoomStore = defineStore("room-store", () => {
 		isEmpty,
 		fetchRooms,
 		createRoom,
+		moveRoom,
 		deleteRoom,
 		leaveRoom,
 	};
