@@ -41,6 +41,7 @@
 							has-background
 							:data-testid="boardMenuTestId"
 						>
+							<KebabMenuAction :icon="mdiOpenInNew" @click="onOpenCard"> Öffnen </KebabMenuAction>
 							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
 							<KebabMenuActionDuplicate
 								v-if="hasEditPermission"
@@ -110,8 +111,10 @@ import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
+import { mdiOpenInNew } from "@icons/material";
 import { BoardMenuScope } from "@ui-board";
 import {
+	KebabMenuAction,
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
@@ -226,6 +229,10 @@ const duplicateCard = async () => {
 	if (!card.value) return;
 
 	await cardStore.duplicateCard({ cardId: card.value.id });
+};
+
+const onOpenCard = () => {
+	isDetailView.value = true;
 };
 
 onMounted(async () => {
