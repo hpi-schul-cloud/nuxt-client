@@ -13,6 +13,7 @@ import {
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
+import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils/factory/collaborativeTextEditorElementResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
 import { CreateElementRequestPayload, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -43,6 +44,10 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
+
+vi.mock("@data-app", () => ({
+	notifyInfo: vi.fn(),
+}));
 
 describe("CardStore", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
@@ -325,6 +330,179 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards[cardId]).toEqual(duplicatedCard);
+		});
+
+		describe("notification behavior", () => {
+			beforeEach(() => {
+				vi.clearAllMocks();
+			});
+
+			it("should show notification when duplicating card with collaborative text editor (Etherpad)", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
+					type: ContentElementType.CollaborativeTextEditor,
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [collaborativeTextElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: true,
+				});
+
+				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+			});
+
+			it("should show notification when duplicating card with drawing element (Whiteboard)", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const drawingElement = drawingElementResponseFactory.build({
+					type: ContentElementType.Drawing,
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [drawingElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: true,
+				});
+
+				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+			});
+
+			it("should show notification when duplicating card with external tool having contextExternalToolId", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const externalToolElement = externalToolElementResponseFactory.build({
+					type: ContentElementType.ExternalTool,
+					content: { contextExternalToolId: "some-tool-id" },
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [externalToolElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: true,
+				});
+
+				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+			});
+
+			it("should not show notification when duplicating card with external tool having null contextExternalToolId", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const externalToolElement = externalToolElementResponseFactory.build({
+					type: ContentElementType.ExternalTool,
+					content: { contextExternalToolId: null },
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [externalToolElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: true,
+				});
+
+				expect(notifyInfo).not.toHaveBeenCalled();
+			});
+
+			it("should not show notification when duplicating card with only regular elements (text, files)", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const textElement = richTextElementResponseFactory.build({
+					type: ContentElementType.RichText,
+				});
+				const fileElement = fileElementResponseFactory.build({
+					type: ContentElementType.File,
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [textElement, fileElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: true,
+				});
+
+				expect(notifyInfo).not.toHaveBeenCalled();
+			});
+
+			it("should not show notification when isOwnAction is false", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
+					type: ContentElementType.CollaborativeTextEditor,
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [collaborativeTextElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: false,
+				});
+
+				expect(notifyInfo).not.toHaveBeenCalled();
+			});
+
+			it("should show notification when duplicating card with multiple relevant elements", async () => {
+				const { cardStore } = setup();
+				const { notifyInfo } = await import("@data-app");
+
+				const cardId = "newCardId";
+				const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
+					type: ContentElementType.CollaborativeTextEditor,
+				});
+				const drawingElement = drawingElementResponseFactory.build({
+					type: ContentElementType.Drawing,
+				});
+				const externalToolElement = externalToolElementResponseFactory.build({
+					type: ContentElementType.ExternalTool,
+					content: { contextExternalToolId: "some-tool-id" },
+				});
+				const duplicatedCard = cardResponseFactory.build({
+					id: cardId,
+					elements: [collaborativeTextElement, drawingElement, externalToolElement],
+				});
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard,
+					isOwnAction: true,
+				});
+
+				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+				expect(notifyInfo).toHaveBeenCalledTimes(1); // Should only be called once, not multiple times
+			});
 		});
 	});
 
