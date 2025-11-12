@@ -14,14 +14,14 @@
 	<template v-else>
 		<v-row>
 			<v-col v-for="(room, index) in rooms" :key="room.id" cols="6" md="4" lg="3">
-				<RoomTile :room="room" class="px-5 mb-5" :data-testid="`room-tile-${index}`" />
+				<RoomGridItem :room="room" class="px-5 mb-5" :data-testid="`room-tile-${index}`" />
 			</v-col>
 		</v-row>
 	</template>
 </template>
 
 <script setup lang="ts">
-import RoomTile from "./RoomTile.vue";
+import RoomGridItem from "./RoomGridItem.vue";
 import { RoomItem } from "@/types/room/Room";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";

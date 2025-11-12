@@ -1,26 +1,28 @@
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import * as serverApi from "@/serverApi/v3/api";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestAppStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { roomBoardTileListFactory, roomFactory } from "@@/tests/test-utils/factory/room";
+import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomMenu } from "@feature-room";
+import { RoomContentGrid, RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
-import { flushPromises, VueWrapper } from "@vue/test-utils";
+import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
+import { VBreadcrumbsItem } from "vuetify/components";
 
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({
@@ -83,11 +85,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	const setup = (
 		options?: Partial<{
-			envs: Partial<serverApi.ConfigResponse>;
 			roomBoards: RoomBoardItem[];
 		}>
 	) => {
-		const { envs, roomBoards } = {
+		const { roomBoards } = {
 			roomBoards: [],
 			...options,
 		};
@@ -100,10 +101,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const room = roomFactory.build({});
 
 		setActivePinia(createTestingPinia());
-		createTestEnvStore({
-			FEATURE_BOARD_LAYOUT_ENABLED: true,
-			...envs,
-		});
 
 		useRoomDetailsStore().$patch({
 			isLoading: false,
@@ -145,23 +142,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			expect(document.title).toContain(`${room.name} - ${"pages.roomDetails.title"}`);
 		});
 
-		it("should render DefaultWireframe", () => {
-			const { wrapper } = setup();
-
-			const defaultWireframe = wrapper.findComponent({
-				name: "DefaultWireframe",
-			});
-
-			expect(defaultWireframe.exists()).toBe(true);
-		});
-
-		it("should render BoardGrid", () => {
-			const { wrapper } = setup();
-
-			const boardGrid = wrapper.findComponent({ name: "BoardGrid" });
-			expect(boardGrid.exists()).toBe(true);
-		});
-
 		it("should render empty state when no visible boards are found", () => {
 			const { wrapper } = setup({
 				roomBoards: [],
@@ -176,10 +156,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper, room } = setup();
 
 				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
-
-				const breadcrumbItems = breadcrumbs.findAllComponents({
-					name: "v-breadcrumbs-item",
-				});
+				const breadcrumbItems = breadcrumbs.findAllComponents(VBreadcrumbsItem);
 
 				expect(breadcrumbItems).toHaveLength(2);
 				expect(breadcrumbItems[1].text()).toContain(room.name);
@@ -282,141 +259,70 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	describe("when user wants to create a board", () => {
-		const openSpeedDialMenu = async (wrapper: VueWrapper) => {
-			const speedDialMenu = wrapper.getComponent({ name: "speed-dial-menu" });
-			await speedDialMenu.getComponent({ name: "v-btn" }).trigger("click");
-			vi.advanceTimersByTime(1000); // speed dial renders items delayed
-			await flushPromises();
-		};
-
 		describe("and user does not have permission to edit room content", () => {
-			it("should not render speed dial menu", () => {
+			it("should not render fa button", () => {
 				roomPermissions.canEditRoomContent = computed(() => false);
 				const { wrapper } = setup();
 
 				const fabButton = wrapper.findComponent("[data-testid='add-content-button']");
-
 				expect(fabButton.exists()).toBe(false);
 			});
 		});
 
-		describe("and multiple board layouts are enabled", () => {
-			beforeEach(() => {
-				roomPermissions.canEditRoomContent = computed(() => true);
-			});
-
-			const openDialog = async (wrapper: VueWrapper) => {
-				await openSpeedDialMenu(wrapper);
-
-				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
-				await boardCreateDialogBtn.trigger("click");
-			};
-
-			it("should render board create button, that opens a dialog", async () => {
-				const { wrapper } = setup();
-				await openSpeedDialMenu(wrapper);
-
-				const actions = wrapper.findAllComponents({
-					name: "SpeedDialMenuAction",
-				});
-				const boardCreateDialogBtn = wrapper.findComponent("[data-testid='fab_button_add_board']");
-
-				expect(actions).toHaveLength(1);
-				expect(boardCreateDialogBtn.exists()).toBe(true);
-			});
-
-			it("should open dialog", async () => {
-				const { wrapper } = setup();
-				await openDialog(wrapper);
-
-				const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
-
-				expect(dialog.isVisible()).toEqual(true);
-				expect(dialog.props("modelValue")).toEqual(true);
-			});
-
-			describe("and user selects a multi-column layout", () => {
-				it("should create a board with multi-column layout", async () => {
-					const { wrapper, roomDetailsStore, room } = setup();
-					await openDialog(wrapper);
-
-					const selectLayoutDialog = wrapper.findComponent({
-						name: "SelectBoardLayoutDialog",
-					});
-					await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
-
-					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
-						room.id,
-						serverApi.BoardLayout.Columns,
-						"pages.roomDetails.board.defaultName"
-					);
-				});
-			});
-
-			describe("and user selects a single-column layout", () => {
-				it("should create a board with single-column layout", async () => {
-					const { wrapper, roomDetailsStore, room } = setup();
-					await openDialog(wrapper);
-
-					const selectLayoutDialog = wrapper.findComponent({
-						name: "SelectBoardLayoutDialog",
-					});
-					await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
-
-					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
-						room.id,
-						serverApi.BoardLayout.List,
-						"pages.roomDetails.board.defaultName"
-					);
-				});
-			});
+		beforeEach(() => {
+			roomPermissions.canEditRoomContent = computed(() => true);
 		});
 
-		describe("and only column board is enabled", () => {
-			beforeEach(() => {
-				roomPermissions.canEditRoomContent = computed(() => true);
-			});
+		const openDialog = async (wrapper: VueWrapper) => {
+			const wireframe = wrapper.getComponent(DefaultWireframe);
+			await wireframe.vm.$emit("fab:clicked");
+		};
 
-			it("should not render dialog", () => {
-				const { wrapper } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-				});
+		it("should render fab button when user has edit permissions", () => {
+			const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent({
-					name: "SelectBoardLayoutDialog",
-				});
+			const wireframe = wrapper.getComponent(DefaultWireframe);
+			const fabItems = wireframe.props("fabItems");
 
-				expect(dialog.exists()).toBe(false);
-			});
+			expect(fabItems).toBeDefined();
+		});
 
-			it("should render board create button, that creates a multi-column board", async () => {
-				const { wrapper } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-				});
-				await openSpeedDialMenu(wrapper);
+		it("should open dialog when fab button is clicked", async () => {
+			const { wrapper } = setup();
+			await openDialog(wrapper);
 
-				const actions = wrapper.findAllComponents({
-					name: "SpeedDialMenuAction",
-				});
-				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
+			const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
 
-				expect(actions).toHaveLength(1);
-				expect(boardCreateBtn.exists()).toBe(true);
-			});
+			expect(dialog.isVisible()).toBe(true);
+			expect(dialog.props("modelValue")).toBe(true);
+		});
 
-			it("should create column board", async () => {
-				const { wrapper, roomDetailsStore, room } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-				});
-				await openSpeedDialMenu(wrapper);
+		describe("and user selects a multi-column layout", () => {
+			it("should create a board with multi-column layout", async () => {
+				const { wrapper, roomDetailsStore, room } = setup();
+				await openDialog(wrapper);
 
-				const boardCreateBtn = wrapper.findComponent("[data-testid='fab_button_add_column_board']");
-
-				await boardCreateBtn.trigger("click");
+				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
+				await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
 
 				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
 					room.id,
 					serverApi.BoardLayout.Columns,
+					"pages.roomDetails.board.defaultName"
+				);
+			});
+		});
+
+		describe("and user selects a single-column layout", () => {
+			it("should create a board with single-column layout", async () => {
+				const { wrapper, roomDetailsStore, room } = setup();
+				await openDialog(wrapper);
+				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
+				await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
+
+				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+					room.id,
+					serverApi.BoardLayout.List,
 					"pages.roomDetails.board.defaultName"
 				);
 			});
@@ -431,19 +337,18 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			it("should render room boards", () => {
 				const { wrapper } = setup({
-					roomBoards: roomBoardTileListFactory.buildList(3),
+					roomBoards: roomBoardGridItemFactory.buildList(3),
 				});
 
-				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
-
-				expect(boardTiles.length).toBe(3);
+				const boardGrid = wrapper.findComponent(RoomContentGrid);
+				expect(boardGrid.props("boards").length).toEqual(3);
 			});
 
 			describe("when some boards are in draft mode", () => {
 				const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
 					const visibleCount = totalCount - inDraftMode;
-					const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
-					const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
+					const visibleBoards = roomBoardGridItemFactory.buildList(visibleCount);
+					const draftBoards = roomBoardGridItemFactory.buildList(inDraftMode, {
 						isVisible: false,
 					});
 					const roomBoards = [...visibleBoards, ...draftBoards];
@@ -461,10 +366,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomPermissions.canListDrafts = computed(() => true);
 
 						const { wrapper, totalCount } = setupWithBoards();
+						const boardGrid = wrapper.findComponent(RoomContentGrid);
 
-						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
-
-						expect(boardTiles.length).toStrictEqual(totalCount);
+						expect(boardGrid.props("boards").length).toStrictEqual(totalCount);
 					});
 				});
 
@@ -473,10 +377,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomPermissions.canListDrafts = computed(() => false);
 
 						const { wrapper, visibleCount } = setupWithBoards();
+						const boardGrid = wrapper.findComponent(RoomContentGrid);
 
-						const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
-
-						expect(boardTiles.length).toStrictEqual(visibleCount);
+						expect(boardGrid.props("boards").length).toStrictEqual(visibleCount);
 					});
 				});
 			});
@@ -486,12 +389,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			it("should not render room boards", () => {
 				roomPermissions.canViewRoom = computed(() => false);
 				const { wrapper } = setup({
-					roomBoards: roomBoardTileListFactory.buildList(3),
+					roomBoards: roomBoardGridItemFactory.buildList(3),
 				});
 
-				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+				const boardGrid = wrapper.findComponent(RoomContentGrid);
 
-				expect(boardTiles.length).toBe(0);
+				expect(boardGrid.props("boards").length).toBe(0);
 			});
 		});
 	});

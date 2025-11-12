@@ -25,7 +25,7 @@
 					bubbleScroll: true,
 					direction: 'vertical',
 					delayOnTouchOnly: true,
-					delay: 300,
+					delay: 200,
 					touchStartThreshold: 3, // needed for sensitive touch devices
 					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 					disabled: !hasMovePermission,
