@@ -62,9 +62,11 @@ export default class ShareModule extends VuexModule {
 		try {
 			const shareTokenResult = await this.shareApi.shareTokenControllerCreateShareToken(shareTokenPayload);
 			if (!shareTokenResult) return undefined;
+
 			const sharePath = getSharePath(this.parentType, this.destinationType);
 			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}`;
 			this.setShareUrl(shareUrl);
+
 			return shareTokenResult.data;
 		} catch {
 			return undefined;

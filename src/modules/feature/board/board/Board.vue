@@ -67,6 +67,7 @@
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
+								@share:card="onShareCard"
 								@delete:column="onDeleteColumn"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
 								@move:column-down="onMoveColumnForward(index, element.id)"
@@ -94,7 +95,7 @@
 					:copy-result-root-item-type="copyResultRootItemType"
 					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
-				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+				<ShareModal :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -161,6 +162,7 @@ const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInform
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
+const shareModalContextType = ref();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -206,6 +208,18 @@ const onDeleteCard = async (cardId: string) => {
 	if (hasCreateCardPermission.value) {
 		cardStore.deleteCardRequest({ cardId });
 	}
+};
+
+const onShareCard = async (cardId: string) => {
+	// TODO - permission check
+
+	shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.Card;
+
+	shareModule.startShareFlow({
+		id: cardId,
+		type: ShareTokenBodyParamsParentTypeEnum.Card,
+		destinationType: contextType.value,
+	});
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -396,6 +410,8 @@ const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const onShareBoard = () => {
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
+		shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
+
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
