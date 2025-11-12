@@ -84,20 +84,18 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 					data?: { code?: number; message?: string; status?: number };
 				};
 
-				if (
-					error &&
-					error.data &&
-					(error.data as { code?: number; message?: string; status?: number }).code === 1 &&
-					(error.data as { code?: number; message?: string; status?: number }).message === "Session ID unknown" &&
-					(error.data as { code?: number; message?: string; status?: number }).status === 400
-				) {
-					reportBoardError("session_id_unknown", "Session ID unknown - automaticly reseted connection.");
+				const errorData = error.data as { code?: number; message?: string; status?: number } | undefined;
+				const isSessionIdUnknownError =
+					errorData?.code === 1 && errorData?.message === "Session ID unknown" && errorData?.status === 400;
+
+				if (isSessionIdUnknownError) {
+					reportBoardError("session_id_unknown", "Session ID unknown - automatically reset connection.");
 					disconnectSocket();
 					instance = null;
 					return;
-				} else {
-					reportBoardError("connect_error", message ?? type);
 				}
+
+				reportBoardError("connect_error", message ?? type);
 
 				if (retryCount > 20) {
 					reportBoardError("connect_error", "Max reconnection attempts reached");

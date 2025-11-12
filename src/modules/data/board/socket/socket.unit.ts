@@ -412,7 +412,7 @@ describe("socket.ts", () => {
 				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 					expect.objectContaining({
 						type: "session_id_unknown",
-						message: "Session ID unknown - automaticly reseted connection.",
+						message: "Session ID unknown - automatically reset connection.",
 					})
 				);
 				expect(socket.disconnect).toHaveBeenCalled();
