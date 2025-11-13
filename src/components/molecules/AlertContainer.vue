@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import { i18nKeyExists } from "@/plugins/i18n";
 import { AlertStatus, useNotificationStore } from "@data-app";
 import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
 import { storeToRefs } from "pinia";
@@ -39,7 +40,7 @@ const { removeNotifier } = useNotificationStore();
 
 const { xs: isMobile } = useDisplay();
 
-const { t, te } = useI18n();
+const { t } = useI18n();
 
 const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 
@@ -50,7 +51,7 @@ const statusIcons: { [status in AlertStatus]: string } = {
 	info: mdiInformation,
 };
 
-const getNotificationText = (text: string) => (te(text) ? t(text) : text);
+const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : text);
 </script>
 
 <style lang="scss" scoped>

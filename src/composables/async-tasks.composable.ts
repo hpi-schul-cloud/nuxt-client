@@ -1,5 +1,7 @@
+import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 import { Status } from "@/store/types/commons";
 import { AsyncFunction } from "@/types/async.types";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useTryCatch } from "@/utils/try-catch.utils";
 import { notifyError } from "@data-app";
 import { logger } from "@util-logger";
@@ -50,13 +52,45 @@ export const useSafeTask = () => {
 	};
 };
 
-export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>) => {
+export const useSafeAxiosTask = () => {
+	const { execute: safeExec, isRunning, reset, status, error } = useSafeTask();
+	const { t } = useI18nGlobal();
+
+	const execute = async <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string): Promise<TaskResult<T>> => {
+		const { result, success, error } = await safeExec<T>(fn);
+
+		if (error && onErrorNotifyMessage) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			if (apiError.code) {
+				const statusKey = `error.${apiError.code}`;
+				const errorKeyExists = i18nKeyExists(statusKey);
+
+				if (errorKeyExists) {
+					notifyError(`${onErrorNotifyMessage} ${t(statusKey)}`);
+				} else {
+					notifyError(onErrorNotifyMessage);
+				}
+			}
+		}
+
+		if (success) {
+			return { result, error, success: true };
+		} else {
+			return { result: undefined, error, success: false };
+		}
+	};
+
+	return { execute, isRunning, reset, status, error };
+};
+
+export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?: string) => {
 	const { error, status, isRunning, execute, reset } = useSafeTask();
 
 	const data = ref<T>();
 
 	const run = async () => {
-		const { result, success } = await execute(fn);
+		const { result, success } = await execute(fn, onErrorNotifyMessage);
 		data.value = result;
 		return { result, success };
 	};

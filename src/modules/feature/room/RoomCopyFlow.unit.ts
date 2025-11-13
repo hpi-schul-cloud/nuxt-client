@@ -1,24 +1,14 @@
-import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum, RoomApiFactory } from "@/serverApi/v3";
+import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import LoadingStateModule from "@/store/loading-state";
-import { ApplicationError } from "@/store/types/application-error";
-import { expectNotification, mockApiResponse, roomFactory } from "@@/tests/test-utils";
+import { createTestRoomStore, expectNotification, mockApiResponse, roomFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomCopyFlow } from "@feature-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
-
-vi.mock("@/serverApi/v3", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@/serverApi/v3")>();
-	return {
-		...actual,
-		RoomApiFactory: vi.fn(),
-	};
-});
 
 describe("@feature-room/RoomCopyFlow", () => {
 	beforeEach(() => {
@@ -26,27 +16,24 @@ describe("@feature-room/RoomCopyFlow", () => {
 	});
 
 	const mountComponent = async () => {
-		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-		const room = roomFactory.build();
-		const errorHandler = vi.fn();
+		const { roomStore } = createTestRoomStore();
 
-		const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
-		(RoomApiFactory as Mock).mockReturnValue(roomApiMock);
-		roomApiMock.roomControllerCopyRoom.mockResolvedValue(
-			mockApiResponse({
+		roomStore.copyRoom.mockResolvedValue({
+			result: mockApiResponse({
 				data: {
 					id: "copyId",
 					type: CopyApiResponseTypeEnum.Room,
 					status: CopyApiResponseStatusEnum.Success,
 				},
-			})
-		);
+			}),
+			success: true,
+		});
+
+		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
+		const room = roomFactory.build();
 
 		const wrapper = mount(RoomCopyFlow, {
 			global: {
-				config: {
-					errorHandler,
-				},
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					["loadingStateModule"]: loadingStateModuleMock,
@@ -56,20 +43,18 @@ describe("@feature-room/RoomCopyFlow", () => {
 				room,
 			},
 		});
+
 		// allow components to render
 		await nextTick();
 
-		const infoDialog = wrapper.findComponent({
-			name: "RoomCopyInfoDialog",
-		});
+		const infoDialog = wrapper.findComponent({ name: "RoomCopyInfoDialog" });
 
 		return {
 			wrapper,
-			errorHandler,
 			infoDialog,
 			loadingStateModuleMock,
+			roomStore,
 			room,
-			roomApiMock,
 		};
 	};
 
@@ -133,9 +118,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 		});
 
 		it("should call the api", async () => {
-			const { room, roomApiMock } = await setupWithConfirm();
-
-			expect(roomApiMock.roomControllerCopyRoom).toHaveBeenCalledWith(room.id);
+			const { room, roomStore } = await setupWithConfirm();
+			expect(roomStore.copyRoom).toHaveBeenCalledWith(room.id);
 		});
 	});
 
@@ -175,22 +159,23 @@ describe("@feature-room/RoomCopyFlow", () => {
 
 	describe("when the api call fails by status", () => {
 		const setupWithFailure = async () => {
-			const { infoDialog, roomApiMock, ...rest } = await mountComponent();
+			const { infoDialog, roomStore, ...rest } = await mountComponent();
 
-			roomApiMock.roomControllerCopyRoom.mockResolvedValue(
-				mockApiResponse({
+			roomStore.copyRoom.mockResolvedValue({
+				result: mockApiResponse({
 					data: {
 						id: "copyId",
 						type: CopyApiResponseTypeEnum.Room,
 						status: CopyApiResponseStatusEnum.Failure,
 					},
-				})
-			);
+				}),
+				success: true,
+			});
 
 			await infoDialog.vm.$emit("copy:confirm");
 			await flushPromises(); // wait for ref to be updated
 
-			return { infoDialog, roomApiMock, ...rest };
+			return { infoDialog, roomStore, ...rest };
 		};
 
 		it("should close the loading dialog", async () => {
@@ -219,22 +204,23 @@ describe("@feature-room/RoomCopyFlow", () => {
 
 	describe("when the api returns no id", () => {
 		const setupWithNoId = async () => {
-			const { infoDialog, roomApiMock, ...rest } = await mountComponent();
+			const { infoDialog, roomStore, ...rest } = await mountComponent();
 
-			roomApiMock.roomControllerCopyRoom.mockResolvedValue(
-				mockApiResponse({
+			roomStore.copyRoom.mockResolvedValue({
+				result: mockApiResponse({
 					data: {
 						id: undefined,
 						type: CopyApiResponseTypeEnum.Room,
 						status: CopyApiResponseStatusEnum.Success,
 					},
-				})
-			);
+				}),
+				success: true,
+			});
 
 			await infoDialog.vm.$emit("copy:confirm");
 			await flushPromises(); // wait for ref to be updated
 
-			return { infoDialog, roomApiMock, ...rest };
+			return { infoDialog, roomStore, ...rest };
 		};
 
 		it("should close the loading dialog", async () => {
@@ -263,14 +249,14 @@ describe("@feature-room/RoomCopyFlow", () => {
 
 	describe("when the api throws an error", () => {
 		const setupWithError = async () => {
-			const { infoDialog, roomApiMock, ...rest } = await mountComponent();
+			const { infoDialog, roomStore, ...rest } = await mountComponent();
 
-			roomApiMock.roomControllerCopyRoom.mockRejectedValue(new Error("API call failed"));
+			roomStore.copyRoom.mockResolvedValue({ error: new Error("API call failed"), success: false });
 
 			await infoDialog.vm.$emit("copy:confirm");
 			await flushPromises(); // wait for ref to be updated
 
-			return { infoDialog, roomApiMock, ...rest };
+			return { infoDialog, roomStore, ...rest };
 		};
 
 		it("should close the loading dialog", async () => {
@@ -282,14 +268,6 @@ describe("@feature-room/RoomCopyFlow", () => {
 		it("should show a timeout info notification", async () => {
 			await setupWithError();
 			expectNotification("info");
-		});
-
-		it("should throw an application error", async () => {
-			const { errorHandler } = await setupWithError();
-
-			expect(errorHandler).toHaveBeenCalled();
-			const firstCallArgs = errorHandler.mock.calls[0];
-			expect(firstCallArgs[0]).toBeInstanceOf(ApplicationError);
 		});
 
 		it("should emit 'copy:ended' event", async () => {

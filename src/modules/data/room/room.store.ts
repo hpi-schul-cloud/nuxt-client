@@ -1,4 +1,4 @@
-import { useSafeTask } from "@/composables/async-tasks.composable";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { MoveItemBodyParams, RoomApiFactory } from "@/serverApi/v3";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
@@ -15,7 +15,7 @@ export const useRoomStore = defineStore("room-store", () => {
 	const rooms = ref<RoomItem[]>([]);
 	const isEmpty = computed(() => rooms.value.length === 0);
 
-	const { execute, isRunning: isLoading } = useSafeTask();
+	const { execute, isRunning: isLoading } = useSafeAxiosTask();
 
 	const fetchRooms = async () => {
 		const { result, error } = await execute(roomApi.roomControllerGetRooms);
@@ -46,13 +46,17 @@ export const useRoomStore = defineStore("room-store", () => {
 			t("common.notifications.errors.notDeleted", { type: t("common.labels.room") })
 		);
 
+	const copyRoom = async (roomId: string) =>
+		await execute(
+			() => roomApi.roomControllerCopyRoom("roomId"),
+			t("common.notifications.errors.notDuplicated", { type: t("common.labels.room") })
+		);
+
 	const leaveRoom = async (roomId: string) =>
 		await execute(
 			() => roomApi.roomControllerLeaveRoom(roomId),
 			t("common.notifications.errors.notExited", { type: t("common.labels.room") })
 		);
-
-	// TODO: copy room is currently not used via store, but directly in RoomCopyFlow.vue
 
 	return {
 		rooms,
@@ -60,6 +64,7 @@ export const useRoomStore = defineStore("room-store", () => {
 		isEmpty,
 		fetchRooms,
 		createRoom,
+		copyRoom,
 		moveRoom,
 		deleteRoom,
 		leaveRoom,
