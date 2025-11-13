@@ -77,19 +77,13 @@ export const useCardStore = defineStore("cardStore", () => {
 	const duplicateCard = socketOrRest.duplicateCardRequest;
 
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
-		card.elements.some((element) => {
-			const contentType = element.type;
-			if (contentType === ContentElementType.CollaborativeTextEditor) {
-				return true;
-			}
-			if (contentType === ContentElementType.Drawing) {
-				return true;
-			}
-			if (contentType === ContentElementType.ExternalTool) {
-				return true;
-			}
-			return false;
-		});
+		card.elements.some((element) =>
+			[
+				ContentElementType.CollaborativeTextEditor,
+				ContentElementType.Drawing,
+				ContentElementType.ExternalTool,
+			].includes(element.type)
+		);
 
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		const { duplicatedCard } = payload;
