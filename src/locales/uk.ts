@@ -1517,9 +1517,6 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Реєстрація успішна",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Будь ласка, виберіть свою мову",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Встановіть пароль",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
 		"{instance} надійно зберігає дані користувачів і не передає їх третім особам. Обробка даних здійснюється відповідно до високих законодавчих вимог щодо захисту даних.",
 	"pages.registrationExternalMembers.steps.password.secondParagraph":

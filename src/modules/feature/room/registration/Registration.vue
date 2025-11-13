@@ -11,7 +11,7 @@
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
 						<VForm ref="stepForms">
-							<h2 :id="`step-heading-${step.id}`" class="mb-10" tabindex="-1">{{ step.subtitle }}</h2>
+							<h2 :id="`step-heading-${step.id}`" class="mb-10" tabindex="-1">{{ step.heading }}</h2>
 							<LanguageSelection
 								v-if="step.value === 1"
 								:selected-language="lang"

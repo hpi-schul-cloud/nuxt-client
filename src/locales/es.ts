@@ -1541,9 +1541,6 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registro exitoso",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Por favor seleccione su idioma",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Establecer contraseña",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
 		"La {instance} almacena los datos de los usuarios de forma segura y no los comparte con terceros. El tratamiento de los datos se realiza conforme a los altos requisitos legales de protección de datos.",
 	"pages.registrationExternalMembers.steps.password.secondParagraph":

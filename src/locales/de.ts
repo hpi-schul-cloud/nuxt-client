@@ -1530,9 +1530,6 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registrierung erfolgreich",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Bitte Sprache wählen",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Passwort vergeben",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
 		"Die {instance} bewahrt die Nutzenden-Daten sicher auf und gibt sie nicht an Dritte weiter. Die Verarbeitung der Daten erfolgt entsprechend der hohen gesetzlichen Datenschutz-Anforderungen.",
 	"pages.registrationExternalMembers.steps.password.secondParagraph":
