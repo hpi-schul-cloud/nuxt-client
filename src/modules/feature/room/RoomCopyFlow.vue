@@ -7,7 +7,7 @@ import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
-import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { notifyError, notifySuccess } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -46,11 +46,9 @@ const onConfirmCopy = async () => {
 	isRoomCopyInfoDialogOpen.value = false;
 	isLoadingDialogOpen.value = true;
 
-	const { result, error } = await copyRoom(props.room?.id);
+	const { result } = await copyRoom(props.room?.id);
 
-	if (error) {
-		notifyInfo("components.molecules.copyResult.timeoutCopy", false);
-	} else {
+	if (result) {
 		const copyResult = result.data;
 		if (copyResult.status === CopyApiResponseStatusEnum.Failure || copyResult.id === undefined) {
 			notifyError(t("data-room.copy.alert.error"), false);
@@ -60,6 +58,7 @@ const onConfirmCopy = async () => {
 			emit("copy:success", copyResult.id);
 		}
 	}
+
 	isLoadingDialogOpen.value = false;
 	await nextTick();
 	emit("copy:ended");

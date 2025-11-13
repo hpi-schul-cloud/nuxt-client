@@ -48,7 +48,7 @@ export const useRoomStore = defineStore("room-store", () => {
 
 	const copyRoom = async (roomId: string) =>
 		await execute(
-			() => roomApi.roomControllerCopyRoom("roomId"),
+			() => roomApi.roomControllerCopyRoom(roomId),
 			t("common.notifications.errors.notDuplicated", { type: t("common.labels.room") })
 		);
 
