@@ -381,14 +381,13 @@ describe("CardStore", () => {
 				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
 			});
 
-			it("should show notification when duplicating card with external tool having contextExternalToolId", async () => {
+			it("should show notification when duplicating card with external tool", async () => {
 				const { cardStore } = setup();
 				const { notifyInfo } = await import("@data-app");
 
 				const cardId = "newCardId";
 				const externalToolElement = externalToolElementResponseFactory.build({
 					type: ContentElementType.ExternalTool,
-					content: { contextExternalToolId: "some-tool-id" },
 				});
 				const duplicatedCard = cardResponseFactory.build({
 					id: cardId,
@@ -402,29 +401,6 @@ describe("CardStore", () => {
 				});
 
 				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
-			});
-
-			it("should not show notification when duplicating card with external tool having null contextExternalToolId", async () => {
-				const { cardStore } = setup();
-				const { notifyInfo } = await import("@data-app");
-
-				const cardId = "newCardId";
-				const externalToolElement = externalToolElementResponseFactory.build({
-					type: ContentElementType.ExternalTool,
-					content: { contextExternalToolId: null },
-				});
-				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
-					elements: [externalToolElement],
-				});
-
-				cardStore.duplicateCardSuccess({
-					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: true,
-				});
-
-				expect(notifyInfo).not.toHaveBeenCalled();
 			});
 
 			it("should not show notification when duplicating card with only regular elements (text, files)", async () => {
@@ -474,7 +450,7 @@ describe("CardStore", () => {
 				expect(notifyInfo).not.toHaveBeenCalled();
 			});
 
-			it("should show notification when duplicating card with multiple relevant elements", async () => {
+			it("should show notification only once when duplicating card with multiple relevant elements", async () => {
 				const { cardStore } = setup();
 				const { notifyInfo } = await import("@data-app");
 
@@ -487,7 +463,6 @@ describe("CardStore", () => {
 				});
 				const externalToolElement = externalToolElementResponseFactory.build({
 					type: ContentElementType.ExternalTool,
-					content: { contextExternalToolId: "some-tool-id" },
 				});
 				const duplicatedCard = cardResponseFactory.build({
 					id: cardId,
@@ -501,7 +476,7 @@ describe("CardStore", () => {
 				});
 
 				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
-				expect(notifyInfo).toHaveBeenCalledTimes(1); // Should only be called once, not multiple times
+				expect(notifyInfo).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
