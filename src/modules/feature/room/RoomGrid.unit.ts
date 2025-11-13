@@ -1,5 +1,5 @@
 import RoomGrid from "./RoomGrid.vue";
-import RoomTile from "./RoomTile.vue";
+import RoomGridItem from "./RoomGridItem.vue";
 import { RoomItem } from "@/types/room/Room";
 import { roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -61,7 +61,7 @@ describe("@feature-room/RoomGrid", () => {
 			rooms: mockRooms,
 		});
 
-		const tiles = wrapper.findAllComponents(RoomTile);
+		const tiles = wrapper.findAllComponents(RoomGridItem);
 		expect(tiles.length).toEqual(2);
 	});
 });

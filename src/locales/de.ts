@@ -28,6 +28,7 @@ export default {
 	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.shareLink": "Link kopieren",
 	"common.actions.update": "Aktualisieren",
+	"common.actions.moved": "{elementName} wurde verschoben an Position {position}",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
@@ -45,6 +46,7 @@ export default {
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
 	"common.files": "Dateien",
+	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -457,6 +459,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
 	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
+	"components.board.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.notifications.info.cardDuplicated":
 		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
@@ -496,6 +499,7 @@ export default {
 		"Der Bereich wurde von einem anderen Benutzer für alle Benutzer als nicht bearbeitbar festgelegt.",
 	"components.board.preferredTools.notification.error.notLoaded": "Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board.header.chip.editableForEveryone": "Für alle bearbeitbar",
+	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
@@ -1490,7 +1494,6 @@ export default {
 	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
 	"pages.content.preview_img.alt": "Bildvorschau",
 	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
-	"pages.courseRoomDetails.fab.add.columnBoard": "Neuer Bereich {'|'} mehrspaltig",
 	"pages.courseRoomDetails.fab.add.lesson": "Neues Thema",
 	"pages.courseRoomDetails.fab.add.task": "Neue Aufgabe",
 	"pages.courseRooms.groupName": "Kurse",
@@ -1553,9 +1556,17 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
 		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
+	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
+	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
+	"pages.registrationExternalMembers.steps.welcome.heading":
+		"Mit der Registrierung in der dBildungscloud im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Datenschutzerklärung",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Nutzungsordnung",
+	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
 	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
+	"pages.room.boardCard.label.openItem": "Öffnen",
 	"pages.room.boardCard.menu.ariaLabel": "Bereich-Menü",
 	"pages.room.cards.aria": "{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
@@ -1657,6 +1668,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Raum-Menü",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
+	"pages.roomDetails.fab.add.board": "Bereich erstellen",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.roomDetails.emptyState": "Aktuell gibt es keine Lerninhalte in diesem Raum",
 	"pages.rooms.emptyState": "Aktuell gibt es keine Räume",
@@ -1667,7 +1679,7 @@ export default {
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
 		"Räume werden weiter ausgebaut. Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
-		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
+		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.", // tada
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
