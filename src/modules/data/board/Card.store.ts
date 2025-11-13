@@ -85,7 +85,6 @@ export const useCardStore = defineStore("cardStore", () => {
 				return true;
 			}
 			if (element.type === ContentElementType.ExternalTool) {
-				console.log("element", element);
 				const externalToolElement = element as { content: { contextExternalToolId: string | null } };
 				return externalToolElement.content.contextExternalToolId !== null;
 			}
