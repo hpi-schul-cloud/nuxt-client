@@ -21,7 +21,7 @@
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
-					<CardSkeleton :height="height" />
+					<CardSkeleton :height />
 				</template>
 				<template v-if="card">
 					<CardTitle
@@ -75,6 +75,10 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
+		<VCard v-if="isDuplicating" class="mt-3">
+			<CardSkeleton :height />
+		</VCard>
+
 		<!-- Detail View -->
 		<CardHostDetailView
 			v-if="card"
@@ -103,6 +107,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -222,11 +227,9 @@ const boardMenuClasses = computed(() => {
 	return "hidden";
 });
 
-const duplicateCard = async () => {
-	if (!card.value) return;
-
-	await cardStore.duplicateCard({ cardId: card.value.id });
-};
+const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
+	await cardStore.duplicateCard({ cardId: props.cardId });
+});
 
 onMounted(async () => {
 	if (card.value === undefined) {
