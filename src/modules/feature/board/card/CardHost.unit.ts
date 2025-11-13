@@ -1,8 +1,10 @@
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
+import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { CardResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -203,6 +205,24 @@ describe("CardHost", () => {
 				await duplicateButton.trigger("click");
 
 				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
+			});
+
+			it("should show card skeleton while duplicating", async () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+				const cardStore = mockedPiniaStoreTyping(useCardStore);
+				cardStore.duplicateCard.mockResolvedValueOnce();
+
+				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+				await duplicateButton.trigger("click");
+
+				const cardSkeletons = wrapper.findAllComponents(CardSkeleton);
+				expect(cardSkeletons).toHaveLength(1);
+
+				await wrapper.vm.$nextTick();
+
+				const cardSkeletonsAfterDuplicationFinished = wrapper.findAllComponents(CardSkeleton);
+				expect(cardSkeletonsAfterDuplicationFinished).toHaveLength(0);
 			});
 		});
 
