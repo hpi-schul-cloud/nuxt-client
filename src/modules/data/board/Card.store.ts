@@ -78,15 +78,15 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
 		card.elements.some((element) => {
-			if (element.type === ContentElementType.CollaborativeTextEditor) {
+			const contentType = element.type;
+			if (contentType === ContentElementType.CollaborativeTextEditor) {
 				return true;
 			}
-			if (element.type === ContentElementType.Drawing) {
+			if (contentType === ContentElementType.Drawing) {
 				return true;
 			}
-			if (element.type === ContentElementType.ExternalTool) {
-				const externalToolElement = element as { content: { contextExternalToolId: string | null } };
-				return externalToolElement.content.contextExternalToolId !== null;
+			if (contentType === ContentElementType.ExternalTool) {
+				return true;
 			}
 			return false;
 		});
