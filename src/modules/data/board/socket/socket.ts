@@ -12,8 +12,8 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const isInitialConnection = ref(true);
-let instance: Socket | null = null;
 const dispatchHandlers: Array<(action: Action) => void> = [];
+let instance: Socket | null = null;
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
 
@@ -40,6 +40,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 				withCredentials: true,
 				reconnectionAttempts: 20,
 				closeOnBeforeunload: true,
+			});
+
+			instance.onAny((event, payload) => {
+				dispatchHandlers.forEach((handler) => handler({ type: event, payload }));
 			});
 
 			instance.on("connect", async function () {
@@ -73,37 +77,18 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			});
 
 			instance.on("connect_error", (error: Error & { data?: unknown }) => {
-				const { type, message } = error as unknown as {
-					type: string;
-					message: string;
-					data?: { code?: number; message?: string; status?: number };
-				};
-
 				const errorData = error.data as { code?: number; message?: string; status?: number } | undefined;
-				const isSessionIdUnknownError =
-					errorData?.code === 1 && errorData?.message === "Session ID unknown" && errorData?.status === 400;
-
-				if (isSessionIdUnknownError) {
+				if (errorData?.message === "Session ID unknown") {
 					reportBoardError("session_id_unknown", "Session ID unknown - automatically reset connection.");
 					disconnectSocket();
-					instance = null;
-					return;
-				}
-
-				reportBoardError("connect_error", message ?? type);
-
-				if (retryCount > 20) {
+				} else if (retryCount > 20) {
 					reportBoardError("connect_error", "Max reconnection attempts reached");
 					notifyError(t("error.4500"));
 					retryCount = 0;
-					return;
+				} else {
+					reportBoardError("connect_error", errorData?.message ?? error.message);
 				}
-
 				retryCount++;
-			});
-
-			instance.onAny((event, payload) => {
-				dispatchHandlers.forEach((handler) => handler({ type: event, payload }));
 			});
 		}
 		if (!instance.connected) {
@@ -127,6 +112,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 		if (instance && instance.connected) {
 			instance.disconnect();
 		}
+		instance = null;
 		isInitialConnection.value = true;
 		if (timeoutFn?.isPending.value) timeoutFn.stop();
 	};

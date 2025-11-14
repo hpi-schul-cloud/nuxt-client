@@ -120,27 +120,18 @@ describe("socket.ts", () => {
 
 	const setup = async (
 		options: {
-			isInitialConnection?: boolean;
 			doInitializeTimeout?: boolean;
 			url?: string;
 		} = {}
 	) => {
-		const { isInitialConnection, doInitializeTimeout } = {
-			isInitialConnection: true,
+		const { doInitializeTimeout } = {
 			doInitializeTimeout: false,
 			...options,
 		};
-		// const { useSocketConnection } = await import("./socket");
 		getOrInitialiseBoardStore().boardStore.board = boardResponseFactory.build();
 
-		// useSocketConnection(dispatchMock, { isInitialConnection });
-		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket, connected } = useSocketConnection(
-			dispatchMock,
-			{
-				isInitialConnection,
-			}
-		);
-		// resetConnectionState();
+		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket, connected } =
+			useSocketConnection(dispatchMock);
 		const socket = await getConnectedSocket();
 
 		const eventCallbacks = getEventCallbacks();
@@ -184,7 +175,7 @@ describe("socket.ts", () => {
 
 		describe("when the client connects for the first time", () => {
 			it("should not show 'connection restored' notification", async () => {
-				const { eventCallbacks } = await setup({ isInitialConnection: true });
+				const { eventCallbacks } = await setup();
 				eventCallbacks.connect();
 
 				expect(useNotificationStore().notify).not.toHaveBeenCalled();
@@ -195,9 +186,7 @@ describe("socket.ts", () => {
 
 		describe("when the client reconnects", () => {
 			it("should show 'connection restored' notification", async () => {
-				const { eventCallbacks } = await setup({
-					isInitialConnection: false,
-				});
+				const { eventCallbacks } = await setup();
 
 				eventCallbacks.disconnect();
 				eventCallbacks.connect();
@@ -457,6 +446,20 @@ describe("socket.ts", () => {
 		});
 
 		describe("when error is general connection error", () => {
+			it("should increment retry count", async () => {
+				const { eventCallbacks } = await setup();
+
+				const mockError = { type: "test_error", message: "Test error message" };
+				for (let i = 0; i <= 5; i++) {
+					eventCallbacks.connect_error(mockError);
+					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
+						expect.objectContaining({
+							retryCount: i,
+						})
+					);
+				}
+			});
+
 			describe("when url does not contain board id", () => {
 				it("should report board error with correct parameters and boardId:unknown", async () => {
 					const { eventCallbacks } = await setup({ url: "http://test.com/boards/noid" });
@@ -491,6 +494,24 @@ describe("socket.ts", () => {
 						})
 					);
 				});
+			});
+		});
+
+		describe("when connection is re-established", () => {
+			it("should reset retry count", async () => {
+				const { eventCallbacks } = await setup();
+
+				const mockError = { type: "test_error", message: "Test error message" };
+				eventCallbacks.connect_error(mockError);
+				eventCallbacks.connect_error(mockError);
+				eventCallbacks.connect();
+
+				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
+					expect.objectContaining({
+						type: "connect after retry",
+						retryCount: 2,
+					})
+				);
 			});
 		});
 	});
