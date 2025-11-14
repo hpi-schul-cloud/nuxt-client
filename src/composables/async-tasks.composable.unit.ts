@@ -170,10 +170,10 @@ describe("useSafeAxiosTask", () => {
 		const mockFn = vi.fn().mockRejectedValue(axiosError);
 
 		const { execute } = useSafeAxiosTask();
-		await execute(mockFn, "Request failed");
+		await execute(mockFn, "Request failed.");
 
 		expect(useNotificationStore().notify).toHaveBeenCalledWith(
-			expect.objectContaining({ status: "error", text: "Request failed 400 – Fehlerhafte Anfrage" })
+			expect.objectContaining({ status: "error", text: "Request failed. Fehlerhafte Anfrage" })
 		);
 	});
 });
