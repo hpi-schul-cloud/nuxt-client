@@ -313,7 +313,6 @@ describe("content module", () => {
 				event: {},
 				material: {
 					client: "",
-					merlinReference: "",
 					title: "",
 					url: "",
 				},
@@ -337,7 +336,6 @@ describe("content module", () => {
 				event: {},
 				material: {
 					client: "",
-					merlinReference: "",
 					title: "",
 					url: "",
 				},
@@ -355,7 +353,6 @@ describe("content module", () => {
 				event: {},
 				material: {
 					client: "",
-					merlinReference: "",
 					title: "",
 					url: "",
 				},

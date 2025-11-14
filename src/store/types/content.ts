@@ -124,7 +124,6 @@ export type AddToLessonQuery = {
 	event: object;
 	material: {
 		client: string;
-		merlinReference: string;
 		title: string;
 		url: string;
 	};
