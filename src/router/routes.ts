@@ -226,6 +226,10 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: "/import",
+		component: () => import("@/pages/Import.page.vue"),
+	},
+	{
 		path: "/imprint",
 		component: () => import("@/pages/Imprint.page.vue"),
 		name: "imprint",

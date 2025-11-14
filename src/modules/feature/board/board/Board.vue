@@ -130,7 +130,12 @@ import { useLoadingState } from "@/composables/loadingState";
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
+import {
+	BoardExternalReferenceType,
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
@@ -218,7 +223,7 @@ const onShareCard = async (cardId: string) => {
 	shareModule.startShareFlow({
 		id: cardId,
 		type: ShareTokenBodyParamsParentTypeEnum.Card,
-		destinationType: contextType.value,
+		destinationType: BoardExternalReferenceType.Room,
 	});
 };
 

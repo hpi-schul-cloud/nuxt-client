@@ -21,6 +21,10 @@ export interface StartFlow {
 }
 
 const getSharePath = (parentType: ShareTokenBodyParamsParentTypeEnum, destinationType: BoardExternalReferenceType) => {
+	if (parentType === ShareTokenBodyParamsParentTypeEnum.Card) {
+		return "import";
+	}
+
 	if (parentType === ShareTokenBodyParamsParentTypeEnum.ColumnBoard) {
 		if (destinationType === BoardExternalReferenceType.Room) {
 			return "rooms";
