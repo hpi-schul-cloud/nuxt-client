@@ -8,7 +8,7 @@
 		</template>
 	</i18n-t>
 	<div class="d-flex flex-column ga-5 checkbox-container">
-		<VCheckbox :rules="validationRules">
+		<VCheckbox v-model="isPrivacyPolicyAccepted" :rules="validationRules">
 			<template #label>
 				<div class="d-flex flex-column ga-1">
 					<strong>
@@ -28,7 +28,7 @@
 				</div>
 			</template>
 		</VCheckbox>
-		<VCheckbox :rules="validationRules">
+		<VCheckbox v-model="isTermsOfUseAccepted" :rules="validationRules">
 			<template #label>
 				<i18n-t
 					keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse"
@@ -51,6 +51,9 @@ import { useEnvConfig } from "@data-env";
 import { isRequired } from "@util-validators";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+
+const isTermsOfUseAccepted = defineModel("isTermsOfUseAccepted", { type: Boolean, required: true });
+const isPrivacyPolicyAccepted = defineModel("isPrivacyPolicyAccepted", { type: Boolean, required: true });
 
 const { t } = useI18n();
 const instance = computed(() => useEnvConfig().value.SC_TITLE);

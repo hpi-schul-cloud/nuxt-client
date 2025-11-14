@@ -19,7 +19,11 @@
 							/>
 							<Welcome v-else-if="step.value === RegistrationSteps.Welcome" />
 							<Password v-else-if="step.value === RegistrationSteps.PasswordSetup" v-model="password" />
-							<Consent v-if="step.value === RegistrationSteps.DeclarationOfConsent" />
+							<Consent
+								v-if="step.value === RegistrationSteps.DeclarationOfConsent"
+								v-model:is-terms-of-use-accepted="isTermsOfUseAccepted"
+								v-model:is-privacy-policy-accepted="isPrivacyPolicyAccepted"
+							/>
 						</VForm>
 					</VStepperWindowItem>
 				</template>
@@ -72,7 +76,14 @@ const { t } = useI18n();
 const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
 
-const { selectedLanguage, password, setSelectedLanguage, initializeLanguage } = useRegistration();
+const {
+	selectedLanguage,
+	password,
+	isTermsOfUseAccepted,
+	isPrivacyPolicyAccepted,
+	setSelectedLanguage,
+	initializeLanguage,
+} = useRegistration();
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");
 
