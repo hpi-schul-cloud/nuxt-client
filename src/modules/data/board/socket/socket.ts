@@ -13,16 +13,13 @@ import { useI18n } from "vue-i18n";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
-const _connected = ref(false);
-const dispatchHandlers = Array<(action: Action) => void>();
+const dispatchHandlers: Array<(action: Action) => void> = [];
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
 
-export const __resetSocketStateForTesting = () => {
+export const resetSocketStateForTesting = () => {
 	instance = null;
-	_connected.value = false;
 	dispatchHandlers.length = 0;
-	isInitialConnection.value = true;
 	retryCount = 0;
 };
 
@@ -46,7 +43,6 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			});
 
 			instance.on("connect", async function () {
-				_connected.value = true;
 				logger.log("connected");
 				if (retryCount > 0) {
 					reportBoardError("connect after retry", "Connection restored after retry");
@@ -68,7 +64,6 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			});
 
 			instance.on("disconnect", (reason, details) => {
-				_connected.value = false;
 				logger.log("disconnected");
 				logger.log(reason, details);
 				isInitialConnection.value = false;
@@ -107,8 +102,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 				retryCount++;
 			});
 
-			instance.onAny((event, ...args) => {
-				dispatchHandlers.forEach((handler) => handler({ type: event, payload: args[0] }));
+			instance.onAny((event, payload) => {
+				dispatchHandlers.forEach((handler) => handler({ type: event, payload }));
 			});
 		}
 		if (!instance.connected) {
@@ -152,7 +147,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 		});
 	};
 
-	const connected = computed(() => _connected.value);
+	const connected = computed(() => instance?.connected ?? false);
 
 	return {
 		connected,
@@ -160,6 +155,5 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 		emitOnSocket,
 		emitWithAck,
 		disconnectSocket,
-		__resetSocketStateForTesting,
 	};
 };

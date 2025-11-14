@@ -1,9 +1,9 @@
-import { __resetSocketStateForTesting, useSocketConnection } from "./socket";
+import { resetSocketStateForTesting } from "./socket";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { boardResponseFactory, expectNotification, mockApiResponse, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { useBoardStore, useCardStore } from "@data-board";
+import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
@@ -23,6 +23,7 @@ const mockSocketIOClient = vi.mocked(socketModule);
 
 vi.mock("../boardActions/boardSocketApi.composable");
 vi.mock("../boardActions/boardRestApi.composable");
+vi.mock("@/serverApi/v3/api");
 
 vi.mock("@vueuse/shared", () => ({
 	useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
@@ -94,8 +95,7 @@ describe("socket.ts", () => {
 
 	afterEach(() => {
 		vi.clearAllMocks();
-		// Reset the global socket state to ensure test isolation
-		__resetSocketStateForTesting();
+		resetSocketStateForTesting();
 	});
 
 	const getEventCallback = (eventName: string) => {
@@ -130,10 +130,17 @@ describe("socket.ts", () => {
 			doInitializeTimeout: false,
 			...options,
 		};
+		// const { useSocketConnection } = await import("./socket");
 		getOrInitialiseBoardStore().boardStore.board = boardResponseFactory.build();
 
-		useSocketConnection(dispatchMock, { isInitialConnection });
-		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket } = useSocketConnection(dispatchMock);
+		// useSocketConnection(dispatchMock, { isInitialConnection });
+		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket, connected } = useSocketConnection(
+			dispatchMock,
+			{
+				isInitialConnection,
+			}
+		);
+		// resetConnectionState();
 		const socket = await getConnectedSocket();
 
 		const eventCallbacks = getEventCallbacks();
@@ -156,10 +163,12 @@ describe("socket.ts", () => {
 
 		return {
 			socket,
+			connected,
 			eventCallbacks,
 			emitOnSocket,
 			emitWithAck,
 			disconnectSocket,
+			getConnectedSocket,
 			triggerServerEvent,
 		};
 	};
@@ -212,10 +221,10 @@ describe("socket.ts", () => {
 		});
 
 		it("should report successful connection restoration after retry", async () => {
+			boardErrorReportApi.boardErrorReportControllerReportError.mockResolvedValue(mockApiResponse({ data: {} }));
 			const { eventCallbacks } = await setup({
 				doInitializeTimeout: true,
 			});
-			boardErrorReportApi.boardErrorReportControllerReportError.mockResolvedValue(mockApiResponse({ data: {} }));
 
 			const mockError = { type: "connect_error", message: "Connection failed" };
 			eventCallbacks.connect_error(mockError);
@@ -354,8 +363,11 @@ describe("socket.ts", () => {
 			});
 
 			it("should call disconnect", async () => {
-				const { disconnectSocket } = await setup();
+				const { eventCallbacks, disconnectSocket, getConnectedSocket } = await setup({
+					doInitializeTimeout: true,
+				});
 
+				await getConnectedSocket();
 				disconnectSocket();
 
 				expect(mockSocket.disconnect).toHaveBeenCalled();
@@ -377,17 +389,19 @@ describe("socket.ts", () => {
 
 	describe("when adding multiple handlers", () => {
 		it("should call all handlers on incoming event", async () => {
-			const { triggerServerEvent } = await setup();
+			const { triggerServerEvent, getConnectedSocket, connected } = await setup();
 
+			await getConnectedSocket();
 			const anotherDispatchMock = vi.fn();
 			useSocketConnection(anotherDispatchMock);
+			expect(connected.value).toBe(true);
 
 			const eventName = "cardUpdated";
 			const payload = { id: "123", title: "Neu" };
 			triggerServerEvent(eventName, payload);
 
-			expect(dispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
 			expect(anotherDispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
+			expect(dispatchMock).toHaveBeenCalledWith({ type: eventName, payload });
 		});
 	});
 
@@ -404,8 +418,9 @@ describe("socket.ts", () => {
 			});
 
 			it("should notify error, report board error and disconnect socket", async () => {
-				const { eventCallbacks, socket } = await setup();
+				const { eventCallbacks, socket, getConnectedSocket } = await setup();
 
+				await getConnectedSocket();
 				const mockError = getSessionIdUnknownError();
 				eventCallbacks.connect_error(mockError);
 
