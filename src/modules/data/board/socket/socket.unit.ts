@@ -352,11 +352,11 @@ describe("socket.ts", () => {
 			});
 
 			it("should call disconnect", async () => {
-				const { eventCallbacks, disconnectSocket, getConnectedSocket } = await setup({
+				const { eventCallbacks, disconnectSocket } = await setup({
 					doInitializeTimeout: true,
 				});
 
-				await getConnectedSocket();
+				eventCallbacks.connect();
 				disconnectSocket();
 
 				expect(mockSocket.disconnect).toHaveBeenCalled();
