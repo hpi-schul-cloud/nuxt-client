@@ -88,6 +88,7 @@ export default {
 	"common.labels.partial": "teilweise",
 	"common.labels.password.new": "Neues Passwort",
 	"common.labels.password": "Passwort",
+	"common.labels.password.confirmation": "Passwort wiederholen",
 	"common.labels.readmore": "Weiterlesen",
 	"common.labels.register": "Registrieren",
 	"common.labels.registration": "Registrierung",
@@ -702,9 +703,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
 	"components.molecules.share.columnBoard.mail.subject": "Bereich zum Importieren",
 	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
-	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Link zum Raum: ",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
+	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Raum-Einladung",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Link zum Raum: ",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Geschützte Einstellungen externer Tools",
@@ -1529,6 +1531,29 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"Die {instance} bewahrt die Nutzenden-Daten sicher auf und gibt sie nicht an Dritte weiter. Die Verarbeitung der Daten erfolgt entsprechend der hohen gesetzlichen Datenschutz-Anforderungen.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"Die folgenden Daten hat eine Lehrkraft oder ein Schul-Admin eingetragen (falls Anpassungen notwendig sind, bitte an die entsprechende Person wenden):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Bitte ein Passwort vergeben",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"mindestens 8 Zeichen, einen Groß- und einen Kleinbuchstaben",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"davon jeweils mindestens eine Zahl und ein Sonderzeichen",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"Das Passwort muss mindestens 8 Zeichen lang sein.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"Das Passwort muss mindestens einen Großbuchstaben enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.number":
+		"Das Passwort muss mindestens eine Zahl enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
 	"pages.registrationExternalMembers.steps.welcome.heading":
