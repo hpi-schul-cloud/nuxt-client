@@ -359,9 +359,8 @@ describe("CardStore", () => {
 				const { cardStore, collaborativeTextElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
-				const cardId = "newCardId";
 				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
+					id: "newCardId",
 					elements: [collaborativeTextElement],
 				});
 
@@ -378,9 +377,8 @@ describe("CardStore", () => {
 				const { cardStore, drawingElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
-				const cardId = "newCardId";
 				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
+					id: "newCardId",
 					elements: [drawingElement],
 				});
 
