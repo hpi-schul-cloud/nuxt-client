@@ -8,11 +8,11 @@ import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const isInitialConnection = ref(true);
 const dispatchHandlers: Array<(action: Action) => void> = [];
+let isInitialConnection = true;
 let instance: Socket | null = null;
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
@@ -23,15 +23,13 @@ export const resetSocketStateForTesting = () => {
 	retryCount = 0;
 };
 
-export const useSocketConnection = (dispatch: (action: Action) => void, options?: { isInitialConnection: boolean }) => {
+export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	dispatchHandlers.push(dispatch);
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { t } = useI18n();
 
 	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
-
-	isInitialConnection.value = options?.isInitialConnection !== undefined ? options.isInitialConnection : true;
 
 	const getConnectedSocket = () => {
 		if (instance === null) {
@@ -53,7 +51,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 					retryCount = 0;
 				}
 
-				if (isInitialConnection.value) return;
+				if (isInitialConnection) return;
 				if (timeoutFn.isPending?.value) {
 					timeoutFn.stop();
 					return;
@@ -70,7 +68,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			instance.on("disconnect", (reason, details) => {
 				logger.log("disconnected");
 				logger.log(reason, details);
-				isInitialConnection.value = false;
+				isInitialConnection = false;
 				timeoutFn = useTimeoutFn(() => {
 					notifyError(t("error.4500"));
 				}, 1000);
@@ -113,7 +111,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void, options?
 			instance.disconnect();
 		}
 		instance = null;
-		isInitialConnection.value = true;
+		isInitialConnection = true;
 		if (timeoutFn?.isPending.value) timeoutFn.stop();
 	};
 
