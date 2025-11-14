@@ -28,6 +28,7 @@ export default {
 	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.shareLink": "Link kopieren",
 	"common.actions.update": "Aktualisieren",
+	"common.actions.moved": "{elementName} wurde verschoben an Position {position}",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.openImageInLightBox": "Bild in voller Größe anzeigen",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
@@ -45,6 +46,7 @@ export default {
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
 	"common.files": "Dateien",
+	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -86,6 +88,7 @@ export default {
 	"common.labels.partial": "teilweise",
 	"common.labels.password.new": "Neues Passwort",
 	"common.labels.password": "Passwort",
+	"common.labels.password.confirmation": "Passwort wiederholen",
 	"common.labels.readmore": "Weiterlesen",
 	"common.labels.register": "Registrieren",
 	"common.labels.registration": "Registrierung",
@@ -456,6 +459,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
 	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
 	"components.board.notifications.errors.notLoaded": "{type} konnte nicht geladen werden.",
+	"components.board.notifications.errors.notMoved": "{type} konnte nicht verschoben werden.",
 	"components.board.notifications.errors.notUpdated": "Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.notifications.info.cardDuplicated":
 		"Inhalte aus Etherpads und Whiteboards sowie geschützte Einstellungen externer Tools werden nicht übernommen.",
@@ -495,6 +499,7 @@ export default {
 		"Der Bereich wurde von einem anderen Benutzer für alle Benutzer als nicht bearbeitbar festgelegt.",
 	"components.board.preferredTools.notification.error.notLoaded": "Bevorzugte Tools konnten nicht geladen werden.",
 	"components.board.header.chip.editableForEveryone": "Für alle bearbeitbar",
+	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
@@ -698,9 +703,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
 	"components.molecules.share.columnBoard.mail.subject": "Bereich zum Importieren",
 	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
-	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Link zum Raum: ",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
+	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Raum-Einladung",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Link zum Raum: ",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Geschützte Einstellungen externer Tools",
@@ -1489,7 +1495,6 @@ export default {
 	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
 	"pages.content.preview_img.alt": "Bildvorschau",
 	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
-	"pages.courseRoomDetails.fab.add.columnBoard": "Neuer Bereich {'|'} mehrspaltig",
 	"pages.courseRoomDetails.fab.add.lesson": "Neues Thema",
 	"pages.courseRoomDetails.fab.add.task": "Neue Aufgabe",
 	"pages.courseRooms.groupName": "Kurse",
@@ -1526,12 +1531,40 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registrierung erfolgreich",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Bitte Sprache wählen",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Passwort vergeben",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"Die {instance} bewahrt die Nutzenden-Daten sicher auf und gibt sie nicht an Dritte weiter. Die Verarbeitung der Daten erfolgt entsprechend der hohen gesetzlichen Datenschutz-Anforderungen.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"Die folgenden Daten hat eine Lehrkraft oder ein Schul-Admin eingetragen (falls Anpassungen notwendig sind, bitte an die entsprechende Person wenden):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Bitte ein Passwort vergeben",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"mindestens 8 Zeichen, einen Groß- und einen Kleinbuchstaben",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"davon jeweils mindestens eine Zahl und ein Sonderzeichen",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"Das Passwort muss mindestens 8 Zeichen lang sein.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"Das Passwort muss mindestens einen Großbuchstaben enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.number":
+		"Das Passwort muss mindestens eine Zahl enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
+	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
+	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
+	"pages.registrationExternalMembers.steps.welcome.heading":
+		"Mit der Registrierung in der dBildungscloud im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Datenschutzerklärung",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Nutzungsordnung",
+	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
 	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
+	"pages.room.boardCard.label.openItem": "Öffnen",
 	"pages.room.boardCard.menu.ariaLabel": "Bereich-Menü",
 	"pages.room.cards.aria": "{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
@@ -1633,6 +1666,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Raum-Menü",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
+	"pages.roomDetails.fab.add.board": "Bereich erstellen",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.roomDetails.emptyState": "Aktuell gibt es keine Lerninhalte in diesem Raum",
 	"pages.rooms.emptyState": "Aktuell gibt es keine Räume",
@@ -1643,7 +1677,7 @@ export default {
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
 		"Räume werden weiter ausgebaut. Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
 	"pages.rooms.infoAlert.welcome.furtherInformation":
-		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
+		"Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.", // tada
 	"pages.rooms.infoAlert.welcome.furtherInformation.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.furtherInformation.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',

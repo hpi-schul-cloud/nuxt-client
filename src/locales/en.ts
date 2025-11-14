@@ -28,6 +28,7 @@ export default {
 	"common.actions.shareCopy": "Share copy",
 	"common.actions.shareLink": "Copy link",
 	"common.actions.update": "Update",
+	"common.actions.moved": "{elementName} was moved to position {position}",
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.openImageInLightBox": "Display image in full size",
 	"common.ariaLabel.sameTab": "opens in the same tab",
@@ -43,6 +44,7 @@ export default {
 	"common.file": "file",
 	"common.file.exceedsCollaboraEditableFileSize": "Documents larger than {sizeInMb} cannot be edited online.",
 	"common.files": "files",
+	"common.instructions.orderBy.arrowKeys": "The items in this list can be moved using the arrow keys.",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -84,6 +86,7 @@ export default {
 	"common.labels.partial": "partial",
 	"common.labels.password.new": "New password",
 	"common.labels.password": "Password",
+	"common.labels.password.confirmation": "Confirm password",
 	"common.labels.readmore": "Read more",
 	"common.labels.register": "Register",
 	"common.labels.registration": "Registration",
@@ -452,6 +455,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
 	"components.board.notifications.errors.notLoaded": "{type} could not be loaded.",
+	"components.board.notifications.errors.notMoved": "{type} could not be moved.",
 	"components.board.notifications.errors.notUpdated": "Your changes could not be saved.",
 	"components.board.notifications.info.cardDuplicated":
 		"Content from Etherpads and whiteboards as well as protected settings from external tools will not be transferred.",
@@ -487,6 +491,7 @@ export default {
 		"The board was set as not editable for all users by another user.",
 	"components.board.preferredTools.notification.error.notLoaded": "Preferred tools could not be loaded.",
 	"components.board.header.chip.editableForEveryone": "Editable for everyone",
+	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",
@@ -684,9 +689,10 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organizational Administrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
-	"components.molecules.share.courses.mail.body": "Link to the course:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Link to the Room: ",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
+	"components.molecules.share.courses.mail.body": "Link to the course:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Room invitation",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Link to the Room: ",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Protected settings of external tools",
@@ -1467,7 +1473,6 @@ export default {
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
 	"pages.courseRoomDetails.fab.add.board": "New board",
-	"pages.courseRoomDetails.fab.add.columnBoard": "New column board",
 	"pages.courseRoomDetails.fab.add.lesson": "New topic",
 	"pages.courseRoomDetails.fab.add.task": "New task",
 	"pages.courseRooms.groupName": "Courses",
@@ -1504,12 +1509,40 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Registration successful",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Please select your language",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Set password",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"The {instance} stores user data securely and does not share it with third parties. Data is processed in accordance with strict legal data protection requirements.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"The following data has been entered by a teacher or school administrator (if adjustments are necessary, please contact the relevant person):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Please set a password",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"at least 8 characters, one uppercase and one lowercase letter",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"at least one number and one special character",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"allowed special characters are: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Please enter a password.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"The password must be at least 8 characters long.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"The password must contain at least one uppercase letter.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"The password must contain at least one lowercase letter.",
+	"pages.registrationExternalMembers.steps.password.validation.number":
+		"The password must contain at least one number.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"The password must contain at least one special character.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "The passwords do not match.",
+	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
+	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
+	"pages.registrationExternalMembers.steps.welcome.heading":
+		"By registering in the dBildungscloud in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Privacy policy",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Terms of use",
+	"pages.registrationExternalMembers.steps.password.heading": "Set password",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
+	"pages.room.boardCard.label.openItem": "Open",
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
 	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
@@ -1612,6 +1645,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Room menu",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
+	"pages.roomDetails.fab.add.board": "Add board",
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.roomDetails.emptyState": "Currently there is no learning content in this room",
 	"pages.rooms.emptyState": "Currently there are no rooms",
