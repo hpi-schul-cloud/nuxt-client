@@ -8,7 +8,7 @@
 	<VTextField readonly :label="t('common.labels.email')" model-value="Email" data-testid="email" />
 
 	<p class="font-weight-bold mt-4">{{ t("pages.registrationExternalMembers.steps.password.setPassword") }}</p>
-	<ul id="password-instructions" class="pl-4">
+	<ul id="password-instructions" class="pl-5">
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase") }}</li>
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter") }}</li>
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters") }}</li>
