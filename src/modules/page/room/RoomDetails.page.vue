@@ -47,7 +47,7 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
-import { useRoomAuthorization, useRoomDetailsStore, useRoomsState } from "@data-room";
+import { useRoomAuthorization, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -66,10 +66,11 @@ const router = useRouter();
 const { t } = useI18n();
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
-const { deleteRoom, leaveRoom } = useRoomsState();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
+const { leaveRoom, deleteRoom } = useRoomStore();
+
 const { roomBoards } = storeToRefs(roomDetailsStore);
 const { createBoard } = roomDetailsStore;
 

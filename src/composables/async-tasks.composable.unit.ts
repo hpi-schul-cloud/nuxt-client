@@ -1,4 +1,8 @@
-import { useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
+import { useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
+import { useNotificationStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
+import { createAxiosError } from "@util-axios-error";
+import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
 describe("useSafeTask", () => {
@@ -121,5 +125,55 @@ describe("useSafeSingleTask", () => {
 		await task.run();
 		expect(task.error.value).toBeUndefined();
 		expect(task.status.value).toBe("completed");
+	});
+});
+
+describe("useSafeAxiosTask", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
+	it("should not notify when task succeeds", async () => {
+		const mockFn = vi.fn().mockResolvedValue("success");
+
+		const { execute } = useSafeAxiosTask();
+		await execute(mockFn, "Error message");
+
+		expect(useNotificationStore().notify).not.toHaveBeenCalled();
+	});
+
+	it("should not notify when task fails but no error message provided", async () => {
+		const mockFn = vi.fn().mockRejectedValue(new Error("Test error"));
+
+		const { execute } = useSafeAxiosTask();
+		await execute(mockFn);
+
+		expect(useNotificationStore().notify).not.toHaveBeenCalled();
+	});
+
+	it("should notify with custom message when error occurs and message provided", async () => {
+		const mockFn = vi.fn().mockRejectedValue(new Error("Test error"));
+
+		const { execute } = useSafeAxiosTask();
+		await execute(mockFn, "Something went wrong");
+
+		expect(useNotificationStore().notify).toHaveBeenCalledWith(
+			expect.objectContaining({ status: "error", text: "Something went wrong" })
+		);
+	});
+
+	it("should notify with translated error code when axios error has matching translation", async () => {
+		const axiosError = createAxiosError({
+			data: { message: "Validation failed", code: 400, title: "", type: "" },
+		});
+
+		const mockFn = vi.fn().mockRejectedValue(axiosError);
+
+		const { execute } = useSafeAxiosTask();
+		await execute(mockFn, "Request failed.");
+
+		expect(useNotificationStore().notify).toHaveBeenCalledWith(
+			expect.objectContaining({ status: "error", text: "Request failed. Fehlerhafte Anfrage" })
+		);
 	});
 });

@@ -3,8 +3,8 @@ export { useCourseInfoApi } from "./courseInfoApi.composable";
 export { useCourseList } from "./courseList.composable";
 export { useAdministrationRoomStore } from "./manageRoom/AdministrationRoom.store";
 export { useRegistration } from "./registration/registration.composable";
+export * from "./room.store";
 export { useRoomAuthorization } from "./roomAuthorization.composable";
-export { useRoomCreateState } from "./RoomCreate.state";
 export { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
 export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
@@ -17,4 +17,3 @@ export type {
 	UseLinkResult,
 } from "./roomMembers/types";
 export { InvitationStep, RoomInvitationLinkValidationError } from "./roomMembers/types";
-export { useRoomsState } from "./Rooms.state";
