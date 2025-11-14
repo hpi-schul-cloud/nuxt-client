@@ -688,9 +688,10 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organizational Administrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
-	"components.molecules.share.courses.mail.body": "Link to the course:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Link to the Room: ",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
+	"components.molecules.share.courses.mail.body": "Link to the course:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Room invitation",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Link to the Room: ",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Protected settings of external tools",
