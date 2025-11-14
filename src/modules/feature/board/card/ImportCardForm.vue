@@ -70,8 +70,8 @@ const selectedColumnId = ref<string>();
 
 const onConfirm = () => {
 	emit("confirm", {
-		boardId: selectedBoardId.value,
-		columnId: selectedColumnId.value,
+		redirectId: selectedBoardId.value,
+		destinantionId: selectedColumnId.value,
 	});
 };
 
