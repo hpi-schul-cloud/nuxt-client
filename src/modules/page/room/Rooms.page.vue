@@ -6,7 +6,7 @@
 
 		<RoomsWelcomeInfo />
 
-		<VContainer v-if="isLoading" class="loader">
+		<VContainer v-if="isLoading && isEmpty" class="loader">
 			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
 		</VContainer>
 		<EmptyState v-else-if="isEmpty" :title="t('pages.rooms.emptyState')">

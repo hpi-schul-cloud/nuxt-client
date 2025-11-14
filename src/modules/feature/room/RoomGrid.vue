@@ -45,10 +45,7 @@ const { execute } = useSafeTask();
 const { fetchRooms, moveRoom } = useRoomStore();
 
 const props = defineProps({
-	rooms: {
-		type: Array<RoomItem>,
-		required: true,
-	},
+	rooms: { type: Array<RoomItem>, required: true },
 });
 
 const reorderRoom = (newIndex: number, oldIndex: number) => {
