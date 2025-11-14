@@ -1540,6 +1540,12 @@ export default {
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instance}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
+		"Yo, {userName}, declaro lo siguiente:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"He leído las {termsOfUse} de la {instance} y las acepto.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":

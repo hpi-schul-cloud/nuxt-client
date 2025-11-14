@@ -1529,6 +1529,11 @@ export default {
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instance} genutzt werden kann.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Ich, {userName}, erkläre Folgendes:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Ich habe die {termsOfUse} der {instance} gelesen und stimme ihr zu.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1541,7 +1546,7 @@ export default {
 	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
 		"davon jeweils mindestens eine Zahl und ein Sonderzeichen",
 	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
-		"erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+		"erlaubte Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
 	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Das Passwort muss mindestens 8 Zeichen lang sein.",

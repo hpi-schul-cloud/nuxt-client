@@ -1,17 +1,23 @@
 <template>
-	<div class="d-flex flex-column pa-2 ga-4">
-		<span> Bitte die folgenden Einwilligungserklärung bestätigen, damit die dBildungscloud genutzt werden kann. </span>
-		<span>Ich, Teresa Tischlerin, erkläre Folgendes:</span>
-		<VCheckbox class="">
+	<p>
+		{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph", { instance }) }}
+	</p>
+	<i18n-t keypath="pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph" scope="global" tag="p">
+		<template #userName>
+			<strong>Teresa Tischlerin</strong>
+		</template>
+	</i18n-t>
+	<div class="d-flex flex-column ga-5 checkbox-container">
+		<VCheckbox :rules="validationRules">
 			<template #label>
-				<div class="d-flex flex-column ga-2 mt-16">
-					<span>
+				<div class="d-flex flex-column ga-1">
+					<strong>
 						Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten zum Zwecke der Registrierung und
 						Nutzung der dBildungscloud verarbeitet und gespeichert werden. Ich habe die Datenschutzerklärung und die
 						Nutzungsbedingungen gelesen und akzeptiere diese.
-					</span>
+					</strong>
 
-					<span>
+					<span class="text-medium-emphasis">
 						Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim
 						justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
 						tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
@@ -22,11 +28,47 @@
 				</div>
 			</template>
 		</VCheckbox>
-		<VCheckbox>
+		<VCheckbox :rules="validationRules">
 			<template #label>
-				<span>Ich habe die Nutzungsordnung der dBildungscloud gelesen und stimme ihr zu.</span>
+				<i18n-t
+					keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse"
+					scope="global"
+					tag="strong"
+				>
+					<template #termsOfUse>
+						<a href="/termsofuse" target="_blank"> {{ t("common.words.termsOfUse") }}</a>
+					</template>
+					<template #instance>
+						{{ instance }}
+					</template>
+				</i18n-t>
 			</template>
 		</VCheckbox>
 	</div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useEnvConfig } from "@data-env";
+import { isRequired } from "@util-validators";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const instance = computed(() => useEnvConfig().value.SC_TITLE);
+
+const validationRules = [
+	isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")),
+];
+</script>
+
+<style scoped lang="scss">
+.checkbox-container .v-checkbox {
+	:deep(.v-selection-control) {
+		align-items: flex-start;
+	}
+
+	:deep(.v-label) {
+		margin-top: 8px;
+		align-items: flex-start;
+	}
+}
+</style>

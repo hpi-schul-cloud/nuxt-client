@@ -1507,6 +1507,12 @@ export default {
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Please confirm the following declaration of consent so that the {instance} can be used.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
+		"I, {userName}, declare the following:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"I have read the {termsOfUse} of the {instance} and agree to them.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
