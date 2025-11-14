@@ -4864,12 +4864,6 @@ export interface LernstoreResources {
      */
     description: string;
     /**
-     * merlinReference
-     * @type {string}
-     * @memberof LernstoreResources
-     */
-    merlinReference?: string;
-    /**
      * title
      * @type {string}
      * @memberof LernstoreResources
@@ -5806,12 +5800,6 @@ export interface MaterialResponse {
      * @memberof MaterialResponse
      */
     license: Array<string>;
-    /**
-     * For material from Merlin, the Merlin reference
-     * @type {string}
-     * @memberof MaterialResponse
-     */
-    merlinReference: string;
 }
 /**
  * 
