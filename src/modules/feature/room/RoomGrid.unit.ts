@@ -6,16 +6,11 @@ import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("@feature-room/RoomGrid", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: true }));
-		vi.clearAllMocks();
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
 	});
 
 	const setup = () => {

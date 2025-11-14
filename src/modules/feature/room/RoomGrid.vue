@@ -27,7 +27,6 @@ import RoomGridItem from "./RoomGridItem.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomItem } from "@/types/room/Room";
-import { notifyError } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { getGridContainerColumnsCount } from "@util-browser";
 import { getSortableOptions } from "@util-sorting";
@@ -42,7 +41,7 @@ const gridRef = useTemplateRef("gridRef");
 
 const { t } = useI18n();
 
-const { execute, error: reorderError } = useSafeTask();
+const { execute } = useSafeTask();
 const { fetchRooms, moveRoom } = useRoomStore();
 
 const props = defineProps({
@@ -102,12 +101,6 @@ const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
 	}
 	reorderRoom(newIndex, oldIndex);
 };
-
-watch(reorderError, (newError) => {
-	if (newError) {
-		notifyError(t("components.board.notifications.errors.notMoved", { type: t("common.labels.room") }));
-	}
-});
 
 watch(
 	() => props.rooms,

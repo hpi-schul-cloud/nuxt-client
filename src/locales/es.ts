@@ -95,7 +95,7 @@ export default {
 	"common.labels.repeat": "Repetición",
 	"common.labels.restore": "Restaurar",
 	"common.labels.role": "Papel",
-	"common.labels.room": "Sala",
+	"common.labels.room": "Sala | Salas",
 	"common.labels.search": "Buscar",
 	"common.labels.settings": "Ajustes",
 	"common.labels.size": "Tamaño",

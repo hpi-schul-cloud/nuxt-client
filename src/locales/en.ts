@@ -93,7 +93,7 @@ export default {
 	"common.labels.repeat": "Repetition",
 	"common.labels.restore": "Restore",
 	"common.labels.role": "Role",
-	"common.labels.room": "Room",
+	"common.labels.room": "Room | Rooms",
 	"common.labels.search": "Search",
 	"common.labels.settings": "Setting",
 	"common.labels.size": "Size",

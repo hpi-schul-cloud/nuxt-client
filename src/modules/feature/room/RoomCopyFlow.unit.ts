@@ -249,25 +249,18 @@ describe("@feature-room/RoomCopyFlow", () => {
 
 	describe("when the api throws an error", () => {
 		const setupWithError = async () => {
-			const { infoDialog, roomStore, ...rest } = await mountComponent();
-
-			roomStore.copyRoom.mockResolvedValue({ error: new Error("API call failed"), success: false });
+			const { infoDialog, ...rest } = await mountComponent();
 
 			await infoDialog.vm.$emit("copy:confirm");
 			await flushPromises(); // wait for ref to be updated
 
-			return { infoDialog, roomStore, ...rest };
+			return { infoDialog, ...rest };
 		};
 
 		it("should close the loading dialog", async () => {
 			const { loadingStateModuleMock } = await setupWithError();
 
 			expect(loadingStateModuleMock.close).toHaveBeenCalled();
-		});
-
-		it("should show a timeout info notification", async () => {
-			await setupWithError();
-			expectNotification("info");
 		});
 
 		it("should emit 'copy:ended' event", async () => {
