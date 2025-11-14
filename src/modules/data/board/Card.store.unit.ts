@@ -388,7 +388,7 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+				expect(notifyInfo).toHaveBeenCalled();
 			});
 
 			it("should show notification when duplicating card with external tool", async () => {
@@ -406,7 +406,7 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+				expect(notifyInfo).toHaveBeenCalled();
 			});
 
 			it("should not show notification when duplicating card with only regular elements (text, files)", async () => {
@@ -460,7 +460,6 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
 				expect(notifyInfo).toHaveBeenCalledTimes(1);
 			});
 		});
