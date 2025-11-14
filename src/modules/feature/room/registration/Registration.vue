@@ -11,21 +11,21 @@
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
 						<VForm ref="stepForms">
-							<h2 :id="`step-heading-${step.id}`" class="mb-10" tabindex="-1">{{ step.heading }}</h2>
+							<h2 :id="`step-heading-${step.id}`" class="mb-4 heading" tabindex="-1">{{ step.heading }}</h2>
 							<LanguageSelection
-								v-if="step.value === 1"
+								v-if="step.value === RegistrationSteps.LanguageSelection"
 								:selected-language="lang"
 								@update:selected-language="onUpdateSelectedLanguage"
 							/>
-							<Welcome v-else-if="step.value === 2" />
-							<Password v-else-if="step.value === 3" v-model="password" />
+							<Welcome v-else-if="step.value === RegistrationSteps.Welcome" />
+							<Password v-else-if="step.value === RegistrationSteps.PasswordSetup" v-model="password" />
 						</VForm>
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
 			<VStepperActions>
 				<template #prev>
-					<VBtn v-if="stepValue > 1" data-testid="registration-back-button" @click="onStepperClick(stepValue - 1)">
+					<VBtn v-if="stepValue > 1" data-testid="registration-back-button" @click="onBack(stepValue - 1)">
 						{{ t("common.actions.back") }}
 					</VBtn>
 				</template>
@@ -80,14 +80,18 @@ const onUpdateSelectedLanguage = (value: string) => {
 
 const stepValue = ref(RegistrationSteps.LanguageSelection);
 
-const focusHeading = () => {
-	const headingElement = document.getElementById(`step-heading-${stepValue.value - 1}`);
-	headingElement?.focus();
+const focusHeadingForStep = async (stepIndex: number) => {
+	const step = steps.value[stepIndex];
+	if (!step) return;
+
+	const heading = document.getElementById(`step-heading-${step.id}`);
+	await nextTick();
+	heading?.focus();
 };
 
-const onStepperClick = (value: RegistrationSteps) => {
+const onBack = async (value: RegistrationSteps) => {
 	stepValue.value = value;
-	focusHeading();
+	await focusHeadingForStep(stepValue.value - 1);
 };
 
 const onContinue = async () => {
@@ -105,8 +109,7 @@ const onContinue = async () => {
 	stepValue.value += 1;
 	await nextTick();
 
-	const heading = document.getElementById(`step-heading-${steps.value[stepValue.value - 1].id}`);
-	heading?.focus();
+	focusHeadingForStep(stepValue.value - 1);
 };
 
 onMounted(() => {
@@ -153,7 +156,7 @@ const steps = computed(() => [
 ]);
 </script>
 <style scoped>
-h2:focus {
+.heading:focus {
 	outline: none;
 }
 </style>

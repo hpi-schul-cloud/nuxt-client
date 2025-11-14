@@ -38,6 +38,7 @@ describe("Registration.vue", () => {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify()],
+				stubs: { Welcome: true },
 			},
 		});
 
@@ -98,6 +99,31 @@ describe("Registration.vue", () => {
 				});
 			});
 
+			describe("back button", () => {
+				it("should go to previous step on click", async () => {
+					const { wrapper } = setup();
+					const stepper = wrapper.findComponent(VStepper);
+					await stepper.setValue(2);
+					expect(stepper.props("modelValue")).toBe(2);
+
+					const backButton = wrapper.get("[data-testid='registration-back-button']");
+					await backButton.trigger("click");
+					expect(stepper.props("modelValue")).toBe(1);
+				});
+
+				it("should focus heading of previous step on click", async () => {
+					const { wrapper } = setup();
+					const stepper = wrapper.findComponent(VStepper);
+					await stepper.setValue(2);
+
+					const backButton = wrapper.get("[data-testid='registration-back-button']");
+					await backButton.trigger("click");
+
+					const welcomeStepHeading = wrapper.get("#step-heading-language");
+					expect(document.activeElement).toEqual(welcomeStepHeading.element);
+				});
+			});
+
 			describe("continue button", () => {
 				it("should go to next step on click", async () => {
 					const { wrapper } = setup();
@@ -147,7 +173,7 @@ describe("Registration.vue", () => {
 			it("should render Password component at password step (3)", async () => {
 				const { wrapper } = setup();
 				const stepper = wrapper.findComponent(VStepper);
-				await stepper.setValue(3); //replace with enum when BC-10340 is merged
+				await stepper.setValue(3);
 
 				const passwordComponent = wrapper.findComponent(Password);
 				expect(passwordComponent.exists()).toBe(true);
