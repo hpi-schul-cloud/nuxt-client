@@ -397,9 +397,8 @@ describe("CardStore", () => {
 				const { cardStore, externalToolElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
-				const cardId = "newCardId";
 				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
+					id: "newCardId",
 					elements: [externalToolElement],
 				});
 
