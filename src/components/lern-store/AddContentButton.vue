@@ -21,7 +21,6 @@
 			:url="url"
 			:client="client"
 			:title="title"
-			:merlin-reference="merlinReference"
 			:items="selectedElements"
 			@close="performAPICall"
 		/>
@@ -48,7 +47,7 @@ import LoadingModal from "@/components/lern-store/LoadingModal";
 import NotificationModal from "@/components/lern-store/NotificationModal";
 import { contentModule } from "@/store";
 import { $axios } from "@/utils/api";
-import { getID, getMediatype, getMerlinReference, getMetadataAttribute, getTitle, getUrl } from "@/utils/helpers";
+import { getID, getMediatype, getMetadataAttribute, getTitle, getUrl } from "@/utils/helpers";
 import { mdiPlusCircleOutline } from "@icons/material";
 
 let slowAPICall;
@@ -115,9 +114,6 @@ export default {
 			}
 			return getUrl(this.resource);
 		},
-		merlinReference() {
-			return getMerlinReference(this.resource);
-		},
 	},
 	watch: {
 		selected() {
@@ -140,7 +136,6 @@ export default {
 						url: elementUrl,
 						title: getTitle(element),
 						client: this.client,
-						merlinReference: getMerlinReference(element),
 					};
 				});
 			}
@@ -158,16 +153,11 @@ export default {
 	methods: {
 		async addResourceAndClose() {
 			const getElementInfo = async (element) => {
-				let url = element.url;
-				if (element.merlinReference) {
-					const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${element.merlinReference}`;
-					url = (await $axios.get(requestUrl)).data || element.url;
-				}
+				const url = element.url;
 				return {
 					title: element.title,
 					client: element.client,
 					url,
-					merlinReference: element.merlinReference,
 				};
 			};
 
