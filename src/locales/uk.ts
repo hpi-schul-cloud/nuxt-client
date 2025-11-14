@@ -1516,6 +1516,11 @@ export default {
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instance}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Я, {userName}, заявляю наступне:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Я прочитав(ла) {termsOfUse} {instance} і погоджуюся з ними.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":

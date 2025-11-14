@@ -6,6 +6,8 @@ export const useRegistration = () => {
 	const i18n = useI18n();
 	const selectedLanguage = ref<LanguageType | undefined>(undefined);
 	const password = ref<string>("");
+	const isTermsOfUseAccepted = ref<boolean>(false);
+	const isPrivacyPolicyAccepted = ref<boolean>(false);
 
 	const initializeLanguage = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
@@ -27,5 +29,13 @@ export const useRegistration = () => {
 		i18n.locale.value = value;
 	};
 
-	return { selectedLanguage, setCookie, setSelectedLanguage, initializeLanguage, password };
+	return {
+		selectedLanguage,
+		setCookie,
+		setSelectedLanguage,
+		initializeLanguage,
+		password,
+		isTermsOfUseAccepted,
+		isPrivacyPolicyAccepted,
+	};
 };
