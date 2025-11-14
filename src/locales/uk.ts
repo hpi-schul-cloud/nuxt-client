@@ -696,9 +696,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
 	"components.molecules.share.columnBoard.mail.subject": "Дошка для імпорту",
 	"components.molecules.share.columnBoard.mail.body": "Посилання на дошку: ",
-	"components.molecules.share.courses.mail.body": "Посилання на курс:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
+	"components.molecules.share.courses.mail.body": "Посилання на курс:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Запрошення в кімнату",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":

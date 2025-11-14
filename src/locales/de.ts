@@ -703,9 +703,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
 	"components.molecules.share.columnBoard.mail.subject": "Bereich zum Importieren",
 	"components.molecules.share.columnBoard.mail.body": "Link zum Bereich: ",
-	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Link zum Raum: ",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
+	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Raum-Einladung",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Link zum Raum: ",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Geschützte Einstellungen externer Tools",
