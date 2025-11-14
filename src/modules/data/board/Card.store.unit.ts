@@ -124,8 +124,17 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
+		const textElement = richTextElementResponseFactory.build({
+			type: ContentElementType.RichText,
+		});
 		const fileElement = fileElementResponseFactory.build();
 		const externalToolElement = externalToolElementResponseFactory.build();
+		const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
+			type: ContentElementType.CollaborativeTextEditor,
+		});
+		const drawingElement = drawingElementResponseFactory.build({
+			type: ContentElementType.Drawing,
+		});
 
 		const cardId = cards[0].id;
 		const card = cards[0];
@@ -139,7 +148,16 @@ describe("CardStore", () => {
 
 		cardStore.preferredTools = [];
 
-		return { cardStore, cardId, elements };
+		return {
+			cardStore,
+			cardId,
+			elements,
+			textElement,
+			fileElement,
+			externalToolElement,
+			collaborativeTextElement,
+			drawingElement,
+		};
 	};
 
 	const focusSetup = (id: string) => {
@@ -338,13 +356,10 @@ describe("CardStore", () => {
 			});
 
 			it("should show notification when duplicating card with collaborative text editor (Etherpad)", async () => {
-				const { cardStore } = setup();
+				const { cardStore, collaborativeTextElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
 				const cardId = "newCardId";
-				const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
-					type: ContentElementType.CollaborativeTextEditor,
-				});
 				const duplicatedCard = cardResponseFactory.build({
 					id: cardId,
 					elements: [collaborativeTextElement],
@@ -360,13 +375,10 @@ describe("CardStore", () => {
 			});
 
 			it("should show notification when duplicating card with drawing element (Whiteboard)", async () => {
-				const { cardStore } = setup();
+				const { cardStore, drawingElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
 				const cardId = "newCardId";
-				const drawingElement = drawingElementResponseFactory.build({
-					type: ContentElementType.Drawing,
-				});
 				const duplicatedCard = cardResponseFactory.build({
 					id: cardId,
 					elements: [drawingElement],
@@ -382,13 +394,10 @@ describe("CardStore", () => {
 			});
 
 			it("should show notification when duplicating card with external tool", async () => {
-				const { cardStore } = setup();
+				const { cardStore, externalToolElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
 				const cardId = "newCardId";
-				const externalToolElement = externalToolElementResponseFactory.build({
-					type: ContentElementType.ExternalTool,
-				});
 				const duplicatedCard = cardResponseFactory.build({
 					id: cardId,
 					elements: [externalToolElement],
@@ -404,18 +413,11 @@ describe("CardStore", () => {
 			});
 
 			it("should not show notification when duplicating card with only regular elements (text, files)", async () => {
-				const { cardStore } = setup();
+				const { cardStore, textElement, fileElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
-				const cardId = "newCardId";
-				const textElement = richTextElementResponseFactory.build({
-					type: ContentElementType.RichText,
-				});
-				const fileElement = fileElementResponseFactory.build({
-					type: ContentElementType.File,
-				});
 				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
+					id: "newCardId",
 					elements: [textElement, fileElement],
 				});
 
@@ -429,15 +431,11 @@ describe("CardStore", () => {
 			});
 
 			it("should not show notification when isOwnAction is false", async () => {
-				const { cardStore } = setup();
+				const { cardStore, collaborativeTextElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
-				const cardId = "newCardId";
-				const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
-					type: ContentElementType.CollaborativeTextEditor,
-				});
 				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
+					id: "newCardId",
 					elements: [collaborativeTextElement],
 				});
 
@@ -451,21 +449,11 @@ describe("CardStore", () => {
 			});
 
 			it("should show notification only once when duplicating card with multiple relevant elements", async () => {
-				const { cardStore } = setup();
+				const { cardStore, collaborativeTextElement, drawingElement, externalToolElement } = setup();
 				const { notifyInfo } = await import("@data-app");
 
-				const cardId = "newCardId";
-				const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
-					type: ContentElementType.CollaborativeTextEditor,
-				});
-				const drawingElement = drawingElementResponseFactory.build({
-					type: ContentElementType.Drawing,
-				});
-				const externalToolElement = externalToolElementResponseFactory.build({
-					type: ContentElementType.ExternalTool,
-				});
 				const duplicatedCard = cardResponseFactory.build({
-					id: cardId,
+					id: "newCardId",
 					elements: [collaborativeTextElement, drawingElement, externalToolElement],
 				});
 
