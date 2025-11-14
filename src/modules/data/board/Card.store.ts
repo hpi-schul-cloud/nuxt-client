@@ -79,7 +79,9 @@ export const useCardStore = defineStore("cardStore", () => {
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
 		if (payload.duplicatedCard.id) {
 			cards.value[payload.duplicatedCard.id] = payload.duplicatedCard;
-			notifyInfo("components.board.notifications.info.cardDuplicated");
+			if (payload.isOwnAction === true) {
+				notifyInfo("components.board.notifications.info.cardDuplicated");
+			}
 		}
 	};
 

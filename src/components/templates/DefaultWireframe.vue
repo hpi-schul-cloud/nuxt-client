@@ -128,7 +128,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 @use "@/styles/settings.scss" as *;
 
 .wireframe-container-flex {
-	height: calc(100vh - var(--topbar-height));
+	height: calc(100svh - var(--topbar-height));
 	display: flex;
 	flex-direction: column;
 }

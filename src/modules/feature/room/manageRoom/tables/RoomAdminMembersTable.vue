@@ -58,7 +58,7 @@ import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store/store-accessor";
 import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
-import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
@@ -78,15 +78,15 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const roomMembersStore = useRoomMembersStore();
-const { roomMembersWithoutApplicants, roomMembersForAdmins, selectedIds, baseTableHeaders } =
-	storeToRefs(roomMembersStore);
+roomMembersStore.setAdminMode(true);
+const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 const { isRoomOwner, removeMembers, fetchMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
-const tableData = computed(() => roomMembersForAdmins.value as unknown as Record<string, unknown>[]);
+const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
 
 const checkIsStudent = (member?: RoomMember) =>
 	member?.schoolRoleNames.some((role) =>
@@ -120,6 +120,9 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	}
 	if (schoolRoleNames.includes(RoleName.Student)) {
 		return mdiAccountOutline;
+	}
+	if (schoolRoleNames.includes(RoleName.Expert)) {
+		return mdiAccountClockOutline;
 	}
 	return undefined;
 };

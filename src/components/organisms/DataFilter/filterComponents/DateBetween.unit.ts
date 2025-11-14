@@ -1,5 +1,7 @@
 import DateBetween from "./DateBetween.vue";
+import FilterActionButtons from "./FilterActionButtons.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { DatePicker } from "@ui-date-time-picker";
 import { ComponentMountingOptions, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
@@ -20,23 +22,23 @@ const mountComponent = (options: ComponentMountingOptions<typeof DateBetween> = 
 
 describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 	describe("should render the component", () => {
-		it("should render the date picker components", async () => {
+		it("should render the date picker components", () => {
 			vi.useFakeTimers();
 			const testDate = new Date(2024, 0, 1);
 			vi.setSystemTime(testDate);
 
 			const wrapper = mountComponent();
 
-			const datePickerFromComponent = wrapper.findAllComponents({
-				name: "date-picker",
-			});
+			const datePickers = wrapper.findAllComponents(DatePicker);
+			const datePickerFromComponent = wrapper.get("[data-testid=date-picker-from]").getComponent(DatePicker);
+			const datePickerUntilComponent = wrapper.get("[data-testid=date-picker-until]").getComponent(DatePicker);
 
-			expect(datePickerFromComponent).toHaveLength(2);
-			expect(datePickerFromComponent[0].props("date")).toStrictEqual(testDate.toISOString());
-			expect(datePickerFromComponent[0].props("label")).toStrictEqual("utils.adminFilter.date.label.from");
+			expect(datePickers).toHaveLength(2);
+			expect(datePickerFromComponent.props("date")).toStrictEqual(testDate.toISOString());
+			expect(datePickerFromComponent.props("label")).toStrictEqual("utils.adminFilter.date.label.from");
 
-			expect(datePickerFromComponent[1].props("date")).toStrictEqual("");
-			expect(datePickerFromComponent[1].props("label")).toStrictEqual("utils.adminFilter.date.label.until");
+			expect(datePickerUntilComponent.props("date")).toStrictEqual("");
+			expect(datePickerUntilComponent.props("label")).toStrictEqual("utils.adminFilter.date.label.until");
 		});
 
 		it("should render the date picker components with the selected date", async () => {
@@ -45,80 +47,87 @@ describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 			});
 			await nextTick();
 
-			const datePickerFromComponent = wrapper.findAllComponents({
-				name: "date-picker",
-			});
+			const datePickers = wrapper.findAllComponents(DatePicker);
+			const datePickerFromComponent = wrapper.get("[data-testid=date-picker-from]").getComponent(DatePicker);
+			const datePickerUntilComponent = wrapper.get("[data-testid=date-picker-until]").getComponent(DatePicker);
 
-			expect(datePickerFromComponent).toHaveLength(2);
-			expect(datePickerFromComponent[0].props("date")).toStrictEqual(mockProps.selectedDate.$gte);
-			expect(datePickerFromComponent[0].props("label")).toStrictEqual("utils.adminFilter.date.label.from");
+			expect(datePickers).toHaveLength(2);
+			expect(datePickerFromComponent.props("date")).toStrictEqual(mockProps.selectedDate.$gte);
+			expect(datePickerFromComponent.props("label")).toStrictEqual("utils.adminFilter.date.label.from");
 
-			expect(datePickerFromComponent[1].props("date")).toStrictEqual(mockProps.selectedDate.$lte);
-			expect(datePickerFromComponent[1].props("label")).toStrictEqual("utils.adminFilter.date.label.until");
+			expect(datePickerUntilComponent.props("date")).toStrictEqual(mockProps.selectedDate.$lte);
+			expect(datePickerUntilComponent.props("label")).toStrictEqual("utils.adminFilter.date.label.until");
 		});
 
-		it("should render the filter action buttons component", async () => {
+		it("should render the filter action buttons component", () => {
 			const wrapper = mountComponent();
 
-			const filterActionButtonsComponent = wrapper.getComponent({
-				name: "FilterActionButtons",
-			});
+			const filterActionButtonsComponent = wrapper.findComponent(FilterActionButtons);
 
-			expect(filterActionButtonsComponent).toBeDefined();
+			expect(filterActionButtonsComponent.exists()).toBe(true);
 		});
 	});
 
 	describe("should emit the events", () => {
 		describe("when add button is clicked", () => {
-			it("should emit 'update:filter'", async () => {
+			it("should emit 'update:filter'", () => {
 				const wrapper = mountComponent();
 
-				const actionButtonComponent = wrapper.getComponent({
-					name: "FilterActionButtons",
-				});
+				const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
 
-				await actionButtonComponent.vm.$emit("update:filter");
+				actionButtonComponent.vm.$emit("update:filter");
 				expect(wrapper.emitted()).toHaveProperty("update:filter");
 			});
 
-			it("should emit 'remove:filter' if dateSelection value is undefined", async () => {
+			it("should emit 'remove:filter' if dateSelection value is null", () => {
 				const wrapper = mountComponent();
-				const datePickerComponent = wrapper.findAllComponents({
-					name: "date-picker",
-				});
 
-				await datePickerComponent[0].vm.$emit("update:date", undefined);
+				const datePickerFrom = wrapper.get("[data-testid=date-picker-from]").getComponent(DatePicker);
+				datePickerFrom.vm.$emit("update:date", null);
 
-				const actionButtonComponent = wrapper.getComponent({
-					name: "FilterActionButtons",
-				});
-
-				await actionButtonComponent.vm.$emit("update:filter");
+				const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
+				actionButtonComponent.vm.$emit("update:filter");
 
 				expect(wrapper.emitted()).not.toHaveProperty("update:filter");
 				expect(wrapper.emitted()).toHaveProperty("remove:filter");
 			});
+
+			it.each(["date-picker-from", "date-picker-until"])(
+				"should emit 'update:filter' if only %s value is set",
+				(datePickerTestId) => {
+					const wrapper = mountComponent();
+					const selectedDate = new Date(2024, 0, 1);
+					vi.setSystemTime(selectedDate);
+
+					const datePickerFrom = wrapper.get(`[data-testid=date-picker-from]`).getComponent(DatePicker);
+					datePickerFrom.vm.$emit("update:date", null); // reset default for from date picker
+
+					const datePicker = wrapper.get(`[data-testid=${datePickerTestId}]`).getComponent(DatePicker);
+					datePicker.vm.$emit("update:date", selectedDate.toISOString());
+
+					const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
+					actionButtonComponent.vm.$emit("update:filter");
+
+					expect(wrapper.emitted()).toHaveProperty("update:filter");
+				}
+			);
 		});
 
-		it("should emit 'remove:filter 'when remove button is clicked", async () => {
+		it("should emit 'remove:filter 'when remove button is clicked", () => {
 			const wrapper = mountComponent();
 
-			const actionButtonComponent = wrapper.getComponent({
-				name: "FilterActionButtons",
-			});
+			const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
 
-			await actionButtonComponent.vm.$emit("remove:filter");
+			actionButtonComponent.vm.$emit("remove:filter");
 			expect(wrapper.emitted()).toHaveProperty("remove:filter");
 		});
 
-		it("should emit 'dialog-closed' when remove button is clicked", async () => {
+		it("should emit 'dialog-closed' when remove button is clicked", () => {
 			const wrapper = mountComponent();
 
-			const actionButtonComponent = wrapper.getComponent({
-				name: "FilterActionButtons",
-			});
+			const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
 
-			await actionButtonComponent.vm.$emit("dialog-closed");
+			actionButtonComponent.vm.$emit("dialog-closed");
 			expect(wrapper.emitted()).toHaveProperty("dialog-closed");
 		});
 	});

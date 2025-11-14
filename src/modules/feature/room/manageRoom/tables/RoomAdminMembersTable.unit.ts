@@ -11,12 +11,15 @@ import {
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomMembersStore } from "@data-room";
+import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
+import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
+import { DOMWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import { VDataTable, VIcon } from "vuetify/components";
 
 describe("RoomAdminMembersTable", () => {
 	beforeEach(() => {
@@ -38,11 +41,15 @@ describe("RoomAdminMembersTable", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = () => {
+	const setup = (
+		options?: Partial<{
+			members: RoomMember[];
+		}>
+	) => {
 		const currentUser = roomMemberFactory.build({});
 		createTestAppStoreWithUser(currentUser.userId);
 
-		const members = [
+		const members = options?.members ?? [
 			...roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.Roomadmin,
 			}),
@@ -81,12 +88,13 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.setAdminMode(true);
 		roomMembersStore.roomMembers = members;
 		roomMembersStore.isRoomOwner.mockReturnValue(false);
-		const roomMembersForAdmins = roomMembersStore.roomMembersForAdmins;
+		const roomMembersWithoutApplicants = roomMembersStore.roomMembersWithoutApplicants;
 		const roomMembers = roomMembersStore.roomMembers;
 
-		return { wrapper, roomMembersStore, roomMembersForAdmins, roomMembers };
+		return { wrapper, roomMembersStore, roomMembersWithoutApplicants, roomMembers };
 	};
 
 	describe("rendering", () => {
@@ -106,19 +114,76 @@ describe("RoomAdminMembersTable", () => {
 				"pages.rooms.members.tableHeader.actions",
 			];
 
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
 			const dataTable = wrapper.getComponent(DataTable);
-			expect(dataTable.props("items")).toEqual(roomMembersForAdmins);
+			expect(dataTable.props("items")).toEqual(roomMembersWithoutApplicants);
 			expect(dataTable.props("tableHeaders")!.map((header) => header.title)).toEqual(tableHeaders);
+		});
+
+		describe("school role column", () => {
+			const getSchoolRoleCell = (row: DOMWrapper<Element>) => row.findAll("td")[4];
+
+			it.each([
+				{
+					description: "teacher icon for teacher",
+					schoolRoleNames: [RoleName.Teacher],
+					expectedIcon: mdiAccountSchoolOutline,
+				},
+				{
+					description: "student icon for students",
+					schoolRoleNames: [RoleName.Student],
+					expectedIcon: mdiAccountOutline,
+				},
+				{
+					description: "expert icon for external experts",
+					schoolRoleNames: [RoleName.Expert],
+					expectedIcon: mdiAccountClockOutline,
+				},
+				{
+					description: "teacher icon if teacher and admin roles are present",
+					schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
+					expectedIcon: mdiAccountSchoolOutline,
+				},
+			])("should render $description", ({ schoolRoleNames, expectedIcon }) => {
+				const { wrapper } = setup({
+					members: [
+						roomMemberFactory.build({
+							schoolRoleNames,
+						}),
+					],
+				});
+
+				const dataTable = wrapper.getComponent(VDataTable);
+				const row = dataTable.find("tbody tr");
+
+				const schoolRoleCell = getSchoolRoleCell(row);
+				expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(expectedIcon);
+			});
+
+			it("should not render icon if no school role is present", () => {
+				const { wrapper } = setup({
+					members: [
+						roomMemberFactory.build({
+							schoolRoleNames: [],
+						}),
+					],
+				});
+
+				const dataTable = wrapper.getComponent(VDataTable);
+				const row = dataTable.find("tbody tr");
+
+				const schoolRoleCell = getSchoolRoleCell(row);
+				expect(schoolRoleCell.findComponent(VIcon).exists()).toBe(false);
+			});
 		});
 	});
 
 	describe("Anonymization", () => {
 		it("should not render kebab menu for anonymized members", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const anonymizedMembers = roomMembersForAdmins.filter(
+			const anonymizedMembers = roomMembersWithoutApplicants.filter(
 				(member) => member.firstName === "pages.rooms.administration.roomDetail.anonymized"
 			);
 
@@ -134,9 +199,9 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		it("should render kebab menu only for users belonging to admin school", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			roomMembersForAdmins.forEach(async (member) => {
+			roomMembersWithoutApplicants.forEach(async (member) => {
 				await nextTick();
 				const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-${member.userId}"]`);
 
@@ -145,9 +210,9 @@ describe("RoomAdminMembersTable", () => {
 		});
 
 		it("should render kebab menu actions for same school members", () => {
-			const { wrapper, roomMembersForAdmins } = setup();
+			const { wrapper, roomMembersWithoutApplicants } = setup();
 
-			const sameSchoolMembers = roomMembersForAdmins.filter(
+			const sameSchoolMembers = roomMembersWithoutApplicants.filter(
 				(member) => member.schoolName === "Paul-Gerhardt-Gymnasium"
 			);
 

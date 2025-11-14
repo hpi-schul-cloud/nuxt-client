@@ -20,6 +20,8 @@
  * @enum {string}
  */
 export enum PreviewWidth {
+    _50 = '50',
+    _150 = '150',
     _500 = '500'
 }
 

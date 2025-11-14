@@ -81,11 +81,11 @@ const {
 } = useDataTableFilter(userType.value);
 
 const modalTitle = computed(
-	() => defaultFilterMenuItems.find((item: SelectOptionsType) => item.value == selectedFilterType.value)?.label
+	() => defaultFilterMenuItems.find((item: SelectOptionsType) => item.value === selectedFilterType.value)?.label
 );
 
 const selectionProps = computed(() =>
-	selectedFilterType.value == FilterOption.CLASSES ? props.classNames : registrationOptions[userType.value as User]
+	selectedFilterType.value === FilterOption.CLASSES ? props.classNames : registrationOptions[userType.value as User]
 );
 
 const filteredValues = computed(() => {
