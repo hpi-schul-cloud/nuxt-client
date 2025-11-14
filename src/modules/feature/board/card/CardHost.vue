@@ -47,6 +47,7 @@
 								data-testid="kebab-menu-action-duplicate-card"
 								@click="duplicateCard"
 							/>
+							<KebabMenuActionShare v-if="hasManageBoardPermission" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -120,6 +121,7 @@ import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
+	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
@@ -138,6 +140,7 @@ const emit = defineEmits<{
 	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "reload:board"): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const cardHost = ref(null);
@@ -159,7 +162,7 @@ const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIn
 
 const { height: cardHostHeight } = useElementSize(cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const { hasEditPermission, hasDeletePermission, hasManageBoardPermission } = useBoardPermissions();
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
@@ -230,6 +233,10 @@ const boardMenuClasses = computed(() => {
 const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
 	await cardStore.duplicateCard({ cardId: props.cardId });
 });
+
+const onShareCard = () => {
+	emit("share:card", props.cardId);
+};
 
 onMounted(async () => {
 	if (card.value === undefined) {

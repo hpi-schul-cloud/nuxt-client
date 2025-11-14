@@ -226,6 +226,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		},
 	},
 	{
+		path: "/import",
+		component: () => import("@/pages/Import.page.vue"),
+		meta: {
+			layout: Layouts.BORDERLESS,
+		},
+	},
+	{
 		path: "/imprint",
 		component: () => import("@/pages/Imprint.page.vue"),
 		name: "imprint",
