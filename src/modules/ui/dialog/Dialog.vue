@@ -1,6 +1,6 @@
 <template>
-	<UseFocusTrap>
-		<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`modal-${uid}-title`">
+	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`modal-${uid}-title`">
+		<UseFocusTrap>
 			<VCard>
 				<template #title>
 					<h2 :id="`modal-${uid}-title`" class="ma-0 dialog-title" data-testid="dialog-title">
@@ -35,8 +35,8 @@
 					</div>
 				</template>
 			</VCard>
-		</VDialog>
-	</UseFocusTrap>
+		</UseFocusTrap>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
