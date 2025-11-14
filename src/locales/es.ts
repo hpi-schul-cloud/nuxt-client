@@ -707,9 +707,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
 	"components.molecules.share.columnBoard.mail.subject": "Tablero para importar",
 	"components.molecules.share.columnBoard.mail.body": "Enlace al tablero: ",
-	"components.molecules.share.courses.mail.body": "Enlace al curso:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Enlace a la Sala: ",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
+	"components.molecules.share.courses.mail.body": "Enlace al curso:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Invitación a la sala",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Enlace a la Sala: ",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
