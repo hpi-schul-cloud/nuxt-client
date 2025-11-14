@@ -1,5 +1,5 @@
 <template>
-	<VAppBar flat :height="appBarHeight">
+	<VToolbar flat :height="appBarHeight" :class="!props.sidebarExpanded && isFixed ? 'toolbar--fixed' : ''">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -43,7 +43,13 @@
 			data-testid="school-logo"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
-	</VAppBar>
+	</VToolbar>
+	<div
+		v-if="!props.sidebarExpanded && isFixed"
+		aria-hidden="true"
+		class="toolbar-placeholder"
+		:style="{ height: appBarHeight + 'px' }"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -55,10 +61,42 @@ import UserMenu from "./UserMenu.vue";
 import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { useAppStoreRefs } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useDisplay } from "vuetify";
 
-defineProps({
+const SCROLL_THRESHOLD = 100;
+const SCROLL_DISTANCE = 10;
+const isFixed = ref(false);
+let lastScrollY = window.scrollY;
+
+const handleScroll = () => {
+	if (props.sidebarExpanded) {
+		isFixed.value = false;
+		lastScrollY = window.scrollY;
+		return;
+	}
+	const currentScrollY = window.scrollY;
+	const scrollDistance = Math.abs(currentScrollY - lastScrollY);
+
+	if (currentScrollY <= 0) {
+		isFixed.value = false;
+	} else if (currentScrollY < lastScrollY && currentScrollY > SCROLL_THRESHOLD && scrollDistance > SCROLL_DISTANCE) {
+		isFixed.value = true;
+	} else if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD && scrollDistance > SCROLL_DISTANCE) {
+		isFixed.value = false;
+	}
+	lastScrollY = currentScrollY;
+};
+
+onMounted(() => {
+	window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+	window.removeEventListener("scroll", handleScroll);
+});
+
+const props = defineProps({
 	sidebarExpanded: {
 		type: Boolean,
 		required: true,
@@ -104,6 +142,9 @@ const appBarHeight = computed(() => {
 </script>
 
 <style scoped>
+.toolbar-placeholder {
+	width: 100%;
+}
 .school-name {
 	max-width: 280px;
 	text-overflow: ellipsis;
@@ -114,5 +155,19 @@ const appBarHeight = computed(() => {
 .school-logo {
 	max-height: 40px;
 	max-width: 160px;
+}
+
+.v-toolbar {
+	background-color: #fff !important;
+}
+
+.toolbar--fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	opacity: 1;
+	border-bottom: 1px solid rgba(128, 128, 128, 0.25);
 }
 </style>
