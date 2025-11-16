@@ -85,8 +85,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 					retryCount = 0;
 				} else {
 					reportBoardError("connect_error", errorData?.message ?? error.message);
+					retryCount++;
 				}
-				retryCount++;
 			});
 		}
 		if (!instance.connected) {
