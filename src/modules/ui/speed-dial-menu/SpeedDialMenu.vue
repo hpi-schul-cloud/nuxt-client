@@ -1,34 +1,32 @@
 <template>
-	<OnClickOutside @trigger="onClickOutside">
-		<div v-if="isMenu" role="menu" class="position-relative d-inline-block overflow-visible">
-			<!-- TODO - size transition not working when using extended prop -->
-			<VFab color="primary" size="large" :icon="isCollapsed" :extended="!isCollapsed" @click="onFabItemClick">
-				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
-				<span v-if="!isCollapsed" class="d-block"><slot /></span>
-				<span v-else class="d-sr-only"><slot /></span>
-			</VFab>
-			<div v-if="isMenuOpen" ref="outlet" class="position-absolute overflow-visible" :class="classes">
+	<!-- TODO - size transition not working when using extended prop -->
+	<VFab
+		absolute
+		color="primary"
+		size="large"
+		:icon="isCollapsed"
+		:extended="!isCollapsed"
+		:to="to"
+		:href="href"
+		@click="onFabClick"
+	>
+		<VIcon v-if="icon">{{ isMenuOpen && isMenu ? mdiClose : icon }}</VIcon>
+		<span v-if="!isCollapsed" class="d-block"><slot /></span>
+		<span v-else class="d-sr-only"><slot /></span>
+		<template v-if="isMenu">
+			<VSpeedDial v-model="isMenuOpen" activator="parent">
 				<template v-for="(actionNode, i) in actions" :key="i">
 					<component :is="actionNode" :speed-dial-index="i" />
 				</template>
-			</div>
-		</div>
-		<div v-else>
-			<VFab
-				color="primary"
-				size="large"
-				:icon="isCollapsed"
-				:extended="!isCollapsed"
-				:to="to"
-				:href="href"
-				@click="onFabClick"
-			>
-				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
-				<span v-if="!isCollapsed" class="d-block"><slot /></span>
-				<span v-else class="d-sr-only"><slot /></span>
-			</VFab>
-		</div>
-	</OnClickOutside>
+			</VSpeedDial>
+		</template>
+	</VFab>
+
+	<!-- <div v-if="isMenuOpen" ref="outlet" class="position-absolute overflow-visible" :class="classes">
+				<template v-for="(actionNode, i) in actions" :key="i">
+					<component :is="actionNode" :speed-dial-index="i" />
+				</template>
+			</div> -->
 </template>
 
 <script lang="ts" setup>
@@ -38,7 +36,6 @@ import {
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
 import { mdiClose } from "@icons/material";
-import { OnClickOutside } from "@vueuse/components";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import { computed, provide, ref, toRef, useSlots, VNode } from "vue";
 import { useDisplay } from "vuetify";
@@ -117,11 +114,13 @@ const classes = computed(() => {
 	return classList.join(" ");
 });
 
-const onFabItemClick = () => (isMenuOpen.value = !isMenuOpen.value);
 const onFabClick = () => {
-	emit("fab:clicked");
+	if (isMenu.value) {
+		isMenuOpen.value = !isMenuOpen.value;
+	} else {
+		emit("fab:clicked");
+	}
 };
-const onClickOutside = () => (isMenuOpen.value = false);
 
 /**
  * Returns true if the actions in actions-slot are wrapped by a pseudo element.

@@ -11,38 +11,36 @@
 				</h1>
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
-				<slot name="fab">
-					<speed-dial-menu
-						:class="{
-							'wireframe-fab-relative': lgAndUp,
-							'wireframe-fab-fixed': mdAndDown,
-						}"
-						:direction="mdAndDown ? 'top' : 'bottom'"
-						:orientation="'right'"
-						:icon="fabItems.icon"
-						:href="fabItems.href"
-						:to="fabItems.to"
-						:aria-label="fabItems.ariaLabel"
-						:data-testid="fabItems.dataTestId"
-						@fab:clicked="onFabClicked"
-					>
-						{{ fabItems.title }}
-						<template #actions>
-							<template v-for="(action, index) in fabItems.actions" :key="index">
-								<speed-dial-menu-action
-									:data-test-id="action.dataTestId"
-									:icon="action.icon"
-									:href="action.href"
-									:to="action.to"
-									:aria-label="action.ariaLabel"
-									@click="$emit('onFabItemClick', action.customEvent)"
-								>
-									{{ action.label }}
-								</speed-dial-menu-action>
-							</template>
+				<speed-dial-menu
+					:class="{
+						'wireframe-fab-relative': lgAndUp,
+						'wireframe-fab-fixed': mdAndDown,
+					}"
+					:direction="mdAndDown ? 'top' : 'bottom'"
+					:orientation="'right'"
+					:icon="fabItems.icon"
+					:href="fabItems.href"
+					:to="fabItems.to"
+					:aria-label="fabItems.ariaLabel"
+					:data-testid="fabItems.dataTestId"
+					@fab:clicked="onFabClicked"
+				>
+					{{ fabItems.title }}
+					<template #actions>
+						<template v-for="(action, index) in fabItems.actions" :key="index">
+							<speed-dial-menu-action
+								:data-test-id="action.dataTestId"
+								:icon="action.icon"
+								:href="action.href"
+								:to="action.to"
+								:aria-label="action.ariaLabel"
+								@click="$emit('onFabItemClick', action.customEvent)"
+							>
+								{{ action.label }}
+							</speed-dial-menu-action>
 						</template>
-					</speed-dial-menu>
-				</slot>
+					</template>
+				</speed-dial-menu>
 			</div>
 			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
