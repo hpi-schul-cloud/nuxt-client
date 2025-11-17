@@ -635,6 +635,7 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.import.columnBoard.rename": "If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText": "The board can be renamed below.",

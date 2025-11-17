@@ -1,7 +1,8 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isDialogOpen"
-		message="Importieren einer Karte"
+		:message="t('components.molecules.import.card.options.title')"
+		confirm-btn-lang-key="common.actions.import"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>
@@ -12,7 +13,7 @@
 					:items="rooms"
 					item-value="id"
 					item-title="name"
-					placeholder="Raum"
+					:placeholder="t('common.labels.room')"
 					:menu-props="{ attach: '#importCardForm' }"
 				/>
 				<VSelect
@@ -20,7 +21,7 @@
 					:disabled="!selectedRoomId"
 					:items="boards"
 					item-value="id"
-					placeholder="Bereich"
+					:placeholder="t('common.words.board')"
 					:menu-props="{ attach: '#importCardForm' }"
 				/>
 				<VSelect
@@ -28,7 +29,7 @@
 					:disabled="!selectedBoardId"
 					:items="columns"
 					item-value="id"
-					placeholder="Abschnitt"
+					:placeholder="t('components.boardSection')"
 					:menu-props="{ attach: '#importCardForm' }"
 				/>
 			</VForm>
@@ -46,13 +47,16 @@ import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardApi } from "@data-board";
 import { Dialog } from "@ui-dialog";
 import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const router = useRouter();
 
-const { isLoadingDialogOpen } = useLoadingState("Importiere Karte...");
+const { t } = useI18n();
+
+const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.import.options.loadingMessage"));
 
 const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 const { fetchBoardCall } = useBoardApi();

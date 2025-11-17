@@ -642,6 +642,7 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Folgendes wurde nicht kopiert:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.card.options.title": "Karte importieren",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText": "Der Bereich kann im Folgenden umbenannt werden. ",

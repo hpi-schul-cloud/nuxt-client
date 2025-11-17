@@ -638,6 +638,7 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Наступне не було скопійовано:",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.card.options.title": "Імпортувати картку",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.import.columnBoard.rename": "При необхідності назву дошки можна змінити: ",
 	"components.molecules.import.columnBoard.options.infoText": "Ви можете перейменувати дошку нижче",
