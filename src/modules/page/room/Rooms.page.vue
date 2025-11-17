@@ -4,7 +4,7 @@
 			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
 
-		<RoomsWelcomeInfo />
+		<RoomsWelcomeInfo class="mt-8" />
 
 		<VContainer v-if="isLoading && isEmpty" class="loader">
 			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
