@@ -60,7 +60,7 @@ watch(
 	() => route.query.import,
 	() => {
 		if (route.query.import) {
-			importedType.value = route.query.type as string;
+			importedType.value = route.query.importedType as string;
 			importToken.value = route.query.import as string;
 		} else {
 			importToken.value = undefined;
