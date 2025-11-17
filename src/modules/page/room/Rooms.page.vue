@@ -8,6 +8,7 @@
 		<ImportCardDialog
 			v-if="importToken && importedType === ShareTokenBodyParamsParentTypeEnum.Card"
 			:token="importToken"
+			:rooms="importFlowDestinations"
 		/>
 		<ImportFlow
 			:is-active="!!importToken && importedType !== ShareTokenBodyParamsParentTypeEnum.Card"

@@ -40,12 +40,12 @@
 import { ColumnResponse, RoomApiFactory, RoomBoardItemResponse } from "../../../../serverApi/v3/api";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { useLoadingState } from "@/composables/loadingState";
+import { RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardApi } from "@data-board";
-import { useRoomsState } from "@data-room";
 import { Dialog } from "@ui-dialog";
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const copyModule = injectStrict(COPY_MODULE_KEY);
@@ -56,10 +56,10 @@ const { isLoadingDialogOpen } = useLoadingState("Importiere Karte...");
 
 const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 const { fetchBoardCall } = useBoardApi();
-const { rooms, fetchRooms } = useRoomsState();
 
 const { token } = defineProps<{
 	token: string;
+	rooms: Array<RoomItem>;
 }>();
 
 const isDialogOpen = defineModel("is-dialog-open", {
@@ -97,10 +97,6 @@ const onConfirm = async () => {
 const onCancel = () => {
 	router.push("/rooms");
 };
-
-onMounted(async () => {
-	fetchRooms();
-});
 
 watch(selectedRoomId, async (newRoomId) => {
 	if (newRoomId) {
