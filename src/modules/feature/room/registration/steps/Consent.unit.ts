@@ -20,6 +20,7 @@ describe("Consent.vue", () => {
 			props: {
 				isTermsOfUseAccepted: false,
 				isPrivacyPolicyAccepted: false,
+				userName: "Max Mustermann",
 			},
 		});
 		return { wrapper };

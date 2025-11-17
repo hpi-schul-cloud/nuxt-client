@@ -23,6 +23,7 @@
 								v-if="step.value === RegistrationSteps.DeclarationOfConsent"
 								v-model:is-terms-of-use-accepted="isTermsOfUseAccepted"
 								v-model:is-privacy-policy-accepted="isPrivacyPolicyAccepted"
+								:user-name="userName"
 							/>
 						</VForm>
 					</VStepperWindowItem>
@@ -77,12 +78,13 @@ const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
 
 const {
-	selectedLanguage,
-	password,
-	isTermsOfUseAccepted,
-	isPrivacyPolicyAccepted,
-	setSelectedLanguage,
 	initializeLanguage,
+	isPrivacyPolicyAccepted,
+	isTermsOfUseAccepted,
+	password,
+	selectedLanguage,
+	setSelectedLanguage,
+	userName,
 } = useRegistration();
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");

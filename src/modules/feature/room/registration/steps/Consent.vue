@@ -4,7 +4,7 @@
 	</p>
 	<i18n-t keypath="pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph" scope="global" tag="p">
 		<template #userName>
-			<strong>Teresa Tischlerin</strong>
+			<strong>{{ userName }}</strong>
 		</template>
 	</i18n-t>
 	<div class="d-flex flex-column ga-5 checkbox-container">
@@ -47,6 +47,12 @@ import { useI18n } from "vue-i18n";
 
 const isTermsOfUseAccepted = defineModel("isTermsOfUseAccepted", { type: Boolean, required: true });
 const isPrivacyPolicyAccepted = defineModel("isPrivacyPolicyAccepted", { type: Boolean, required: true });
+
+type Props = {
+	userName: string;
+};
+
+defineProps<Props>();
 
 const { t } = useI18n();
 const instance = computed(() => useEnvConfig().value.SC_TITLE);

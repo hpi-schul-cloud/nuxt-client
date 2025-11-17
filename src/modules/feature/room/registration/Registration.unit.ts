@@ -39,6 +39,7 @@ describe("Registration.vue", () => {
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
+			userName: ref("Max Mustermann"),
 		});
 
 		const wrapper = mount(Registration, {

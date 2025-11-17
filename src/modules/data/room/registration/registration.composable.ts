@@ -8,6 +8,7 @@ export const useRegistration = () => {
 	const password = ref<string>("");
 	const isTermsOfUseAccepted = ref<boolean>(false);
 	const isPrivacyPolicyAccepted = ref<boolean>(false);
+	const userName = ref<string>("Max Mustermann");
 
 	const initializeLanguage = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
@@ -30,12 +31,13 @@ export const useRegistration = () => {
 	};
 
 	return {
+		initializeLanguage,
+		isPrivacyPolicyAccepted,
+		isTermsOfUseAccepted,
+		password,
 		selectedLanguage,
 		setCookie,
 		setSelectedLanguage,
-		initializeLanguage,
-		password,
-		isTermsOfUseAccepted,
-		isPrivacyPolicyAccepted,
+		userName,
 	};
 };
