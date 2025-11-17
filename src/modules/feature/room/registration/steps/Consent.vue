@@ -1,6 +1,6 @@
 <template>
 	<p>
-		{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph", { instance }) }}
+		{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph", { instanceTitle }) }}
 	</p>
 	<i18n-t keypath="pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph" scope="global" tag="p">
 		<template #userName>
@@ -12,11 +12,39 @@
 			<template #label>
 				<div class="d-flex flex-column ga-1">
 					<strong>
-						{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent") }}
+						<i18n-t
+							keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent"
+							scope="global"
+						>
+							<template #dataProtectionLink>
+								<a :href="currentInstanceTexts.privacyPolicyLink" target="_blank" rel="noopener">
+									{{ t("common.words.privacyPolicy") }}
+								</a>
+							</template>
+						</i18n-t>
 					</strong>
-
 					<span class="text-medium-emphasis">
-						{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext") }}
+						<i18n-t
+							keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext"
+							scope="global"
+						>
+							<template #instanceTitle>{{ currentInstanceTexts.title }}</template>
+							<template #email>
+								<a
+									:href="`mailto:${currentInstanceTexts.email}?subject=${currentInstanceTexts.emailSubject}`"
+									target="_blank"
+									rel="noopener"
+								>
+									{{ currentInstanceTexts.email }}
+								</a>
+							</template>
+							<template #faqLink>
+								<a :href="currentInstanceTexts.faqLink" target="_blank" rel="noopener">
+									{{ t("global.topbar.loggedOut.actions.faq") }}
+								</a>
+							</template>
+						</i18n-t>
+						<!-- {{ t("pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext") }} -->
 					</span>
 				</div>
 			</template>
@@ -31,8 +59,8 @@
 					<template #termsOfUse>
 						<a href="/termsofuse" target="_blank" rel="noopener"> {{ t("common.words.termsOfUse") }}</a>
 					</template>
-					<template #instance>
-						{{ instance }}
+					<template #instanceTitle>
+						{{ instanceTitle }}
 					</template>
 				</i18n-t>
 			</template>
@@ -40,6 +68,7 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { isRequired } from "@util-validators";
 import { computed } from "vue";
@@ -55,7 +84,46 @@ type Props = {
 defineProps<Props>();
 
 const { t } = useI18n();
-const instance = computed(() => useEnvConfig().value.SC_TITLE);
+const envConfig = useEnvConfig();
+const instanceTitle = computed(() => envConfig.value.SC_TITLE);
+const instance = computed<SchulcloudTheme>(() => envConfig.value.SC_THEME);
+
+const instanceTextsMap: Record<SchulcloudTheme, Record<string, string>> = {
+	[SchulcloudTheme.N21]: {
+		title: "Niedersächsische Bildungscloud",
+		termOfUseLink: "https://niedersachsen.cloud/termsofuse",
+		email: "ticketsystem@niedersachsen.support",
+		emailSubject: "Niedersächsische Bildungscloud Anfrage",
+		privacyPolicyLink: "https://niedersachsen.cloud/privacypolicy",
+		faqLink: "https://blog.dbildungscloud.de/faq-zum-datenschutz/",
+	},
+	[SchulcloudTheme.Brb]: {
+		title: "Brandenburgische Bildungscloud",
+		termOfUseLink: "/terms-of-use-brandenburg",
+		email: "brb@xxx.de",
+		emailSubject: "Brandenburgische Bildungscloud Anfrage",
+		privacyPolicyLink: "/privacy-policy-brandenburg",
+		faqLink: "/faq-brandenburg",
+	},
+	[SchulcloudTheme.Default]: {
+		title: "Default Bildungscloud",
+		termOfUseLink: "/terms-of-use-default",
+		email: "default@xxx.de",
+		emailSubject: "Default Bildungscloud Anfrage",
+		privacyPolicyLink: "/privacy-policy-default",
+		faqLink: "/faq-default",
+	},
+	[SchulcloudTheme.Thr]: {
+		title: "Thüringer Bildungscloud",
+		termOfUseLink: "/terms-of-use-thueringen",
+		email: "thueringen@xxx.de",
+		emailSubject: "Thüringer Bildungscloud Anfrage",
+		privacyPolicyLink: "/privacy-policy-thueringen",
+		faqLink: "/faq-thueringen",
+	},
+};
+
+const currentInstanceTexts = computed(() => instanceTextsMap[instance.value]);
 
 const validationRules = [
 	isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")), // Talk to UX about error message

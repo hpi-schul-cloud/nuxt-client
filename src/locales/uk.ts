@@ -1517,14 +1517,14 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
-		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instance}.",
+		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Я, {userName}, заявляю наступне:",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
-		"Я прочитав(ла) {termsOfUse} {instance} і погоджуюся з ними.",
+		"Я прочитав(ла) {termsOfUse} {instanceTitle} і погоджуюся з ними.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
 		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der {dataProtectionLink} der Schule in der {title} sowie bei den von der Schule ausgewählten und weisungsgebundenen Lernmittelanbieter verarbeitet werden.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
-		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {title}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: widerruf--dbildungscloud.de. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren FAQ entnehmen.",
+		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {instanceTitle}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: {email}. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren {faqLink} entnehmen.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":

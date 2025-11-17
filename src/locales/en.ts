@@ -1508,15 +1508,15 @@ export default {
 	"pages.news.title": "News",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
-		"Please confirm the following declaration of consent so that the {instance} can be used.",
+		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
 		"I, {userName}, declare the following:",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
 		"I agree that my personal data may be processed in accordance with the {dataProtectionLink} of the school in the {title} as well as by the learning material providers selected and bound by the school's instructions.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
-		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {title}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: widerruf--dbildungscloud.de. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren FAQ entnehmen.",
+		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {instanceTitle}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: {email}. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren {faqLink} entnehmen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
-		"I have read the {termsOfUse} of the {instance} and agree to them.",
+		"I have read the {termsOfUse} of the {instanceTitle} and agree to them.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
