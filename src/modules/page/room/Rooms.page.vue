@@ -5,8 +5,12 @@
 		</template>
 		<RoomsWelcomeInfo />
 		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
+		<ImportCardDialog
+			v-if="importToken && importedType === ShareTokenBodyParamsParentTypeEnum.Card"
+			:token="importToken"
+		/>
 		<ImportFlow
-			:is-active="isImportMode"
+			:is-active="!!importToken && importedType !== ShareTokenBodyParamsParentTypeEnum.Card"
 			:token="importToken"
 			:destinations="importFlowDestinations"
 			:destination-type="BoardExternalReferenceType.Room"
@@ -18,7 +22,9 @@
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import ImportCardDialog from "@/modules/feature/board/card/ImportCardDialog.vue";
+import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { useRoomAuthorization, useRoomsState } from "@data-room";
@@ -50,17 +56,16 @@ const fabAction = computed(() => {
 	};
 });
 
-const isImportMode = ref(false);
+const importedType = ref<string>();
 const importToken = ref<string>();
 
 watch(
 	() => route.query.import,
 	() => {
-		if (route.query.import !== undefined) {
-			isImportMode.value = true;
+		if (route.query.import) {
+			importedType.value = route.query.type as string;
 			importToken.value = route.query.import as string;
 		} else {
-			isImportMode.value = false;
 			importToken.value = undefined;
 		}
 	},
@@ -85,7 +90,6 @@ const onImportSuccess = (newName: string, destinationId?: string) => {
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();
-		isImportMode.value = false;
 		importToken.value = undefined;
 	}
 };

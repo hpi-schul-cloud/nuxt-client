@@ -41,7 +41,6 @@ const vueRoutes = [
 	`^/h5p/player/${h5pId}/?$`,
 	`^/h5p/editor/?$`,
 	`^/h5p/editor/${h5pId}/?$`,
-	`^/import/?$`,
 	`^/imprint/?$`,
 	`^/licenses/?$`,
 	`^/migration/?$`,
