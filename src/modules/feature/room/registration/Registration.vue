@@ -69,7 +69,6 @@ enum RegistrationSteps {
 	Welcome,
 	PasswordSetup,
 	DeclarationOfConsent,
-	ConfirmationCode,
 	Registration,
 }
 
