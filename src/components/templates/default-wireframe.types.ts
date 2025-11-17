@@ -17,7 +17,7 @@ export type FabAction = {
 	customEvent?: string;
 };
 
-export type Fab = {
+export type FabOptions = {
 	actions?: FabAction[];
 	icon: string;
 	title: string;

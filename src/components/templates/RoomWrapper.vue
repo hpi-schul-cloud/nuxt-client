@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { Fab, FabAction } from "./default-wireframe.types";
+import { FabAction, FabOptions } from "./default-wireframe.types";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Permission } from "@/serverApi/v3";
@@ -59,7 +59,7 @@ const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
 const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
 
-const fabItems: ComputedRef<Fab | undefined> = computed(() => {
+const fabItems: ComputedRef<FabOptions | undefined> = computed(() => {
 	if (canCreateCourse.value) {
 		const actions: FabAction[] = [
 			{
@@ -91,7 +91,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 			});
 		}
 
-		const fab: Fab = {
+		const fab: FabOptions = {
 			icon: mdiPlus,
 			title: t("common.actions.create"),
 			ariaLabel: t("pages.rooms.fab.ariaLabel"),

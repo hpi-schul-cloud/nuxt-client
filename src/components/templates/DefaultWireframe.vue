@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb, Fab } from "./default-wireframe.types";
+import { Breadcrumb, FabOptions } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
@@ -84,7 +84,7 @@ const props = defineProps({
 		required: true,
 	},
 	fabItems: {
-		type: Object as PropType<Fab>,
+		type: Object as PropType<FabOptions>,
 		required: false,
 		default: null,
 	},

@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb, Fab } from "@/components/templates/default-wireframe.types";
+import { Breadcrumb, FabOptions } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
@@ -100,7 +100,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const fabAction = computed<Fab | undefined>(() =>
+const fabAction = computed<FabOptions | undefined>(() =>
 	canEditRoomContent.value
 		? {
 				icon: mdiPlus,
