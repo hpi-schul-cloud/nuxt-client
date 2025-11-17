@@ -44,6 +44,7 @@ import { useLoadingState } from "@/composables/loadingState";
 import { RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifySuccess } from "@data-app";
 import { useBoardApi } from "@data-board";
 import { Dialog } from "@ui-dialog";
 import { ref, watch } from "vue";
@@ -96,6 +97,12 @@ const onConfirm = async () => {
 	isLoadingDialogOpen.value = false;
 
 	router.push("/boards/" + selectedBoardId.value);
+
+	notifySuccess(
+		t("components.molecules.import.options.success", {
+			name: t("components.boardCard"),
+		})
+	);
 };
 
 const onCancel = () => {
