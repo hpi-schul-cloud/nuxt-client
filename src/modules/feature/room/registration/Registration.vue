@@ -157,12 +157,6 @@ const steps = computed(() => [
 		id: "consent",
 	},
 	{
-		value: RegistrationSteps.ConfirmationCode,
-		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
-		heading: t("pages.registrationExternalMembers.steps.confirmationCode.heading"),
-		id: "confirmation",
-	},
-	{
 		value: RegistrationSteps.Registration,
 		title: t("pages.registrationExternalMembers.steps.registration.title"),
 		heading: t("pages.registrationExternalMembers.steps.registration.heading"),
