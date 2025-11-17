@@ -5,13 +5,9 @@
 		</template>
 		<RoomsWelcomeInfo />
 		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
-		<ImportCardDialog
-			v-if="importToken && importedType === ShareTokenBodyParamsParentTypeEnum.Card"
-			:token="importToken"
-			:rooms="importFlowDestinations"
-		/>
+		<ImportCardDialog v-if="showImportCardDialog" :token="importToken!" :rooms="importFlowDestinations" />
 		<ImportFlow
-			:is-active="!!importToken && importedType !== ShareTokenBodyParamsParentTypeEnum.Card"
+			:is-active="showGenericImportDialog"
 			:token="importToken"
 			:destinations="importFlowDestinations"
 			:destination-type="BoardExternalReferenceType.Room"
@@ -71,6 +67,13 @@ watch(
 		}
 	},
 	{ immediate: true }
+);
+
+const showImportCardDialog = computed(
+	() => importToken.value && importedType.value === ShareTokenBodyParamsParentTypeEnum.Card
+);
+const showGenericImportDialog = computed(
+	() => !!importToken.value && importedType.value !== ShareTokenBodyParamsParentTypeEnum.Card
 );
 
 onMounted(() => {
