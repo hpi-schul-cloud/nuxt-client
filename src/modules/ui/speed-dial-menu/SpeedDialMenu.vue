@@ -1,21 +1,12 @@
 <template>
 	<OnClickOutside @trigger="onClickOutside">
 		<div v-if="isMenu" role="menu" class="position-relative d-inline-block overflow-visible">
-			<v-btn
-				id="fab"
-				:rounded="!isCollapsed ? 'xl' : 'circle'"
-				class="size-transition"
-				:class="!isCollapsed ? 'default-width' : ''"
-				:icon="isCollapsed"
-				color="primary"
-				size="large"
-				@click="onFabItemClick"
-			>
-				<v-icon v-if="icon && !isMenuOpen">{{ icon }}</v-icon>
-				<v-icon v-if="isMenuOpen">{{ mdiClose }}</v-icon>
+			<!-- TODO - size transition not working when using extended prop -->
+			<VFab color="primary" size="large" :icon="isCollapsed" :extended="!isCollapsed" @click="onFabItemClick">
+				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>
 				<span v-else class="d-sr-only"><slot /></span>
-			</v-btn>
+			</VFab>
 			<div v-if="isMenuOpen" ref="outlet" class="position-absolute overflow-visible" :class="classes">
 				<template v-for="(actionNode, i) in actions" :key="i">
 					<component :is="actionNode" :speed-dial-index="i" />
@@ -23,22 +14,19 @@
 			</div>
 		</div>
 		<div v-else>
-			<v-btn
-				id="fab"
-				:rounded="!isCollapsed ? 'xl' : 'circle'"
-				class="size-transition"
-				:class="!isCollapsed ? 'default-width' : ''"
-				:icon="isCollapsed"
+			<VFab
 				color="primary"
 				size="large"
-				:href="href"
+				:icon="isCollapsed"
+				:extended="!isCollapsed"
 				:to="to"
+				:href="href"
 				@click="onFabClick"
 			>
 				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>
 				<span v-else class="d-sr-only"><slot /></span>
-			</v-btn>
+			</VFab>
 		</div>
 	</OnClickOutside>
 </template>
