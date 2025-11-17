@@ -1,6 +1,7 @@
 <template>
 	<DefaultWireframe
 		max-width="full"
+		main-with-bottom-padding
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
 		@fab:clicked="boardLayoutDialogIsOpen = true"
