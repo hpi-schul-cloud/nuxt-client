@@ -91,7 +91,7 @@ const onUpdateSelectedLanguage = (value: string) => {
 	setSelectedLanguage(value as LanguageType);
 };
 
-const stepValue = ref(RegistrationSteps.LanguageSelection);
+const stepValue = ref(RegistrationSteps.DeclarationOfConsent); // TODO: remove before merging, only for testing purposes
 
 const focusHeadingForStep = async (stepIndex: number) => {
 	const step = steps.value[stepIndex];

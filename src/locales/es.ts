@@ -1544,6 +1544,10 @@ export default {
 		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instance}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
 		"Yo, {userName}, declaro lo siguiente:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der {dataProtectionLink} der Schule in der {title} sowie bei den von der Schule ausgewählten und weisungsgebundenen Lernmittelanbieter verarbeitet werden.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
+		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {title}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: widerruf--dbildungscloud.de. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren FAQ entnehmen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"He leído las {termsOfUse} de la {instance} y las acepto.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",

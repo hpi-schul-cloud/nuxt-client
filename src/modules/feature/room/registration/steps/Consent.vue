@@ -12,18 +12,11 @@
 			<template #label>
 				<div class="d-flex flex-column ga-1">
 					<strong>
-						Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten zum Zwecke der Registrierung und
-						Nutzung der dBildungscloud verarbeitet und gespeichert werden. Ich habe die Datenschutzerklärung und die
-						Nutzungsbedingungen gelesen und akzeptiere diese.
+						{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent") }}
 					</strong>
 
 					<span class="text-medium-emphasis">
-						Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim
-						justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
-						tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
-						porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a,
-						tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies
-						nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus..
+						{{ t("pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext") }}
 					</span>
 				</div>
 			</template>
