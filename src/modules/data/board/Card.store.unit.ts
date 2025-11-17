@@ -4,8 +4,11 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import {
+	collaborativeTextEditorElementResponseFactory,
 	createTestEnvStore,
+	expectNotification,
 	externalToolElementResponseFactory,
 	fileElementResponseFactory,
 	ObjectIdMock,
@@ -13,10 +16,11 @@ import {
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils/factory/collaborativeTextEditorElementResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
+import { useNotificationStore } from "@data-app";
 import { CreateElementRequestPayload, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
@@ -45,10 +49,6 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-vi.mock("@data-app", () => ({
-	notifyInfo: vi.fn(),
-}));
-
 describe("CardStore", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -62,6 +62,7 @@ describe("CardStore", () => {
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
+		useNotificationStore(createTestingPinia({ stubActions: false }));
 		createTestEnvStore();
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
@@ -124,17 +125,8 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
-		const textElement = richTextElementResponseFactory.build({
-			type: ContentElementType.RichText,
-		});
 		const fileElement = fileElementResponseFactory.build();
 		const externalToolElement = externalToolElementResponseFactory.build();
-		const collaborativeTextElement = collaborativeTextEditorElementResponseFactory.build({
-			type: ContentElementType.CollaborativeTextEditor,
-		});
-		const drawingElement = drawingElementResponseFactory.build({
-			type: ContentElementType.Drawing,
-		});
 
 		const cardId = cards[0].id;
 		const card = cards[0];
@@ -152,11 +144,6 @@ describe("CardStore", () => {
 			cardStore,
 			cardId,
 			elements,
-			textElement,
-			fileElement,
-			externalToolElement,
-			collaborativeTextElement,
-			drawingElement,
 		};
 	};
 
@@ -355,112 +342,69 @@ describe("CardStore", () => {
 				vi.clearAllMocks();
 			});
 
-			it("should show notification when duplicating card with collaborative text editor (Etherpad)", async () => {
-				const { cardStore, collaborativeTextElement } = setup();
-				const { notifyInfo } = await import("@data-app");
-
-				const duplicatedCard = cardResponseFactory.build({
-					id: "newCardId",
-					elements: [collaborativeTextElement],
-				});
+			const setupDuplicate = (elements: AnyContentElement[], isOwnAction = true) => {
+				const { cardStore } = setup();
 
 				cardStore.duplicateCardSuccess({
 					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: true,
+					duplicatedCard: cardResponseFactory.build({
+						id: "newCardId",
+						elements,
+					}),
+					isOwnAction,
 				});
+			};
 
-				expect(notifyInfo).toHaveBeenCalledWith("components.board.notifications.info.cardDuplicated");
+			const testCases = [
+				{
+					description: "collaborative text editor (Etherpad)",
+					element: collaborativeTextEditorElementResponseFactory.build({
+						type: ContentElementType.CollaborativeTextEditor,
+					}),
+				},
+				{
+					description: "drawing element (Whiteboard)",
+					element: drawingElementResponseFactory.build({
+						type: ContentElementType.Drawing,
+					}),
+				},
+				{
+					description: "external tool",
+					element: externalToolElementResponseFactory.build({
+						type: ContentElementType.ExternalTool,
+					}),
+				},
+			];
+
+			testCases.forEach(({ description, element }) => {
+				it(`should show notification when duplicating card with ${description}`, () => {
+					setupDuplicate([element]);
+					expectNotification("info");
+				});
 			});
 
-			it("should show notification when duplicating card with drawing element (Whiteboard)", async () => {
-				const { cardStore, drawingElement } = setup();
-				const { notifyInfo } = await import("@data-app");
+			it("should not show notification when duplicating card with only regular elements (text, files)", () => {
+				setupDuplicate([
+					fileElementResponseFactory.build(),
+					richTextElementResponseFactory.build({
+						type: ContentElementType.RichText,
+					}),
+				]);
 
-				const duplicatedCard = cardResponseFactory.build({
-					id: "newCardId",
-					elements: [drawingElement],
-				});
-
-				cardStore.duplicateCardSuccess({
-					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: true,
-				});
-
-				expect(notifyInfo).toHaveBeenCalled();
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
 			});
 
-			it("should show notification when duplicating card with external tool", async () => {
-				const { cardStore, externalToolElement } = setup();
-				const { notifyInfo } = await import("@data-app");
+			it("should not show notification when isOwnAction is false", () => {
+				setupDuplicate(
+					[
+						collaborativeTextEditorElementResponseFactory.build({
+							type: ContentElementType.CollaborativeTextEditor,
+						}),
+					],
+					false
+				);
 
-				const duplicatedCard = cardResponseFactory.build({
-					id: "newCardId",
-					elements: [externalToolElement],
-				});
-
-				cardStore.duplicateCardSuccess({
-					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: true,
-				});
-
-				expect(notifyInfo).toHaveBeenCalled();
-			});
-
-			it("should not show notification when duplicating card with only regular elements (text, files)", async () => {
-				const { cardStore, textElement, fileElement } = setup();
-				const { notifyInfo } = await import("@data-app");
-
-				const duplicatedCard = cardResponseFactory.build({
-					id: "newCardId",
-					elements: [textElement, fileElement],
-				});
-
-				cardStore.duplicateCardSuccess({
-					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: true,
-				});
-
-				expect(notifyInfo).not.toHaveBeenCalled();
-			});
-
-			it("should not show notification when isOwnAction is false", async () => {
-				const { cardStore, collaborativeTextElement } = setup();
-				const { notifyInfo } = await import("@data-app");
-
-				const duplicatedCard = cardResponseFactory.build({
-					id: "newCardId",
-					elements: [collaborativeTextElement],
-				});
-
-				cardStore.duplicateCardSuccess({
-					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: false,
-				});
-
-				expect(notifyInfo).not.toHaveBeenCalled();
-			});
-
-			it("should show notification only once when duplicating card with multiple relevant elements", async () => {
-				const { cardStore, collaborativeTextElement, drawingElement, externalToolElement } = setup();
-				const { notifyInfo } = await import("@data-app");
-
-				const duplicatedCard = cardResponseFactory.build({
-					id: "newCardId",
-					elements: [collaborativeTextElement, drawingElement, externalToolElement],
-				});
-
-				cardStore.duplicateCardSuccess({
-					cardId: "originalCardId",
-					duplicatedCard,
-					isOwnAction: true,
-				});
-
-				expect(notifyInfo).toHaveBeenCalledTimes(1);
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
 			});
 		});
 	});
