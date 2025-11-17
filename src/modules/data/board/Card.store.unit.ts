@@ -140,11 +140,7 @@ describe("CardStore", () => {
 
 		cardStore.preferredTools = [];
 
-		return {
-			cardStore,
-			cardId,
-			elements,
-		};
+		return { cardStore, cardId, elements };
 	};
 
 	const focusSetup = (id: string) => {
