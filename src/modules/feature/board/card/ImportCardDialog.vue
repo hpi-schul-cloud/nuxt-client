@@ -39,6 +39,7 @@
 <script setup lang="ts">
 import { ColumnResponse, RoomApiFactory, RoomBoardItemResponse } from "../../../../serverApi/v3/api";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
+import { useLoadingState } from "@/composables/loadingState";
 import { $axios } from "@/utils/api";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardApi } from "@data-board";
@@ -50,6 +51,8 @@ import { useRouter } from "vue-router";
 const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const router = useRouter();
+
+const { isLoadingDialogOpen } = useLoadingState("Importiere Karte...");
 
 const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 const { fetchBoardCall } = useBoardApi();
@@ -71,9 +74,11 @@ const columns = ref<Array<ColumnResponse>>();
 const selectedColumnId = ref<string>();
 
 const onConfirm = async () => {
+	isLoadingDialogOpen.value = true;
+
 	const shareTokenInfo = await copyModule.validateShareToken(token);
 
-	useSafeTaskRunner(() =>
+	const { run } = useSafeTaskRunner(() =>
 		copyModule.copyByShareToken({
 			token: shareTokenInfo.token,
 			type: shareTokenInfo.parentType,
@@ -81,6 +86,10 @@ const onConfirm = async () => {
 			destinationId: selectedColumnId.value,
 		})
 	);
+
+	await run();
+
+	isLoadingDialogOpen.value = false;
 
 	router.push("/boards/" + selectedBoardId.value);
 };
