@@ -17,7 +17,7 @@
 							scope="global"
 						>
 							<template #dataProtectionLink>
-								<a :href="currentInstanceTexts.privacyPolicyLink" target="_blank" rel="noopener">
+								<a href="/privacypolicy" target="_blank" rel="noopener">
 									{{ t("common.words.privacyPolicy") }}
 								</a>
 							</template>
@@ -28,7 +28,7 @@
 							keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext"
 							scope="global"
 						>
-							<template #instanceTitle>{{ currentInstanceTexts.title }}</template>
+							<template #instanceTitle>{{ instituteTitle }}</template>
 							<template #email>
 								<a
 									:href="`mailto:${currentInstanceTexts.email}?subject=${currentInstanceTexts.emailSubject}`"
@@ -39,12 +39,11 @@
 								</a>
 							</template>
 							<template #faqLink>
-								<a :href="currentInstanceTexts.faqLink" target="_blank" rel="noopener">
+								<a href="https://blog.dbildungscloud.de/faq-zum-datenschutz/" target="_blank" rel="noopener">
 									{{ t("global.topbar.loggedOut.actions.faq") }}
 								</a>
 							</template>
 						</i18n-t>
-						<!-- {{ t("pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext") }} -->
 					</span>
 				</div>
 			</template>
@@ -69,8 +68,9 @@
 </template>
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { useEnvConfig } from "@data-env";
+import { useEnvConfig, useEnvStore } from "@data-env";
 import { isRequired } from "@util-validators";
+import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -87,39 +87,24 @@ const { t } = useI18n();
 const envConfig = useEnvConfig();
 const instanceTitle = computed(() => envConfig.value.SC_TITLE);
 const instance = computed<SchulcloudTheme>(() => envConfig.value.SC_THEME);
+const { instituteTitle } = storeToRefs(useEnvStore());
 
 const instanceTextsMap: Record<SchulcloudTheme, Record<string, string>> = {
 	[SchulcloudTheme.N21]: {
-		title: "Niedersächsische Bildungscloud",
-		termOfUseLink: "https://niedersachsen.cloud/termsofuse",
 		email: "ticketsystem@niedersachsen.support",
 		emailSubject: "Niedersächsische Bildungscloud Anfrage",
-		privacyPolicyLink: "https://niedersachsen.cloud/privacypolicy",
-		faqLink: "https://blog.dbildungscloud.de/faq-zum-datenschutz/",
 	},
 	[SchulcloudTheme.Brb]: {
-		title: "Brandenburgische Bildungscloud",
-		termOfUseLink: "/terms-of-use-brandenburg",
 		email: "brb@xxx.de",
 		emailSubject: "Brandenburgische Bildungscloud Anfrage",
-		privacyPolicyLink: "/privacy-policy-brandenburg",
-		faqLink: "/faq-brandenburg",
 	},
 	[SchulcloudTheme.Default]: {
-		title: "Default Bildungscloud",
-		termOfUseLink: "/terms-of-use-default",
 		email: "default@xxx.de",
 		emailSubject: "Default Bildungscloud Anfrage",
-		privacyPolicyLink: "/privacy-policy-default",
-		faqLink: "/faq-default",
 	},
 	[SchulcloudTheme.Thr]: {
-		title: "Thüringer Bildungscloud",
-		termOfUseLink: "/terms-of-use-thueringen",
 		email: "thueringen@xxx.de",
 		emailSubject: "Thüringer Bildungscloud Anfrage",
-		privacyPolicyLink: "/privacy-policy-thueringen",
-		faqLink: "/faq-thueringen",
 	},
 };
 
