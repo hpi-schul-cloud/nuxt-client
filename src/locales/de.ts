@@ -96,7 +96,7 @@ export default {
 	"common.labels.repeat": "Wiederholung",
 	"common.labels.restore": "Wiederherstellen",
 	"common.labels.role": "Rolle",
-	"common.labels.room": "Raum",
+	"common.labels.room": "Raum | Räume",
 	"common.labels.search": "Suche",
 	"common.labels.settings": "Einstellungen",
 	"common.labels.size": "Größe",
@@ -130,6 +130,17 @@ export default {
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.notification.connection.restored": "Die Verbindung wurde wieder hergestellt.",
+	"common.notifications.errors.notCreated":
+		"{type} konnte nicht erstellt werden. | {type} konnten nicht erstellt werden.",
+	"common.notifications.errors.notDeleted":
+		"{type} konnte nicht gelöscht werden. | {type} konnten nicht gelöscht werden.",
+	"common.notifications.errors.notDuplicated":
+		"{type} konnte nicht dupliziert werden. | {type} konnten nicht dupliziert werden.",
+	"common.notifications.errors.notLoaded": "{type} konnte nicht geladen werden. | {type} konnten nicht geladen werden.",
+	"common.notifications.errors.notMoved":
+		"{type} konnte nicht verschoben werden. | {type} konnten nicht verschoben werden.",
+	"common.notifications.errors.notExited":
+		"{type} konnte nicht verlassen werden. | {type} konnten nicht verlassen werden.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
@@ -845,11 +856,11 @@ export default {
 	"data-room.copy.alert.success": "Raum erfolgreich dupliziert.",
 	"data-room.copy.alert.error": "Der Dupliziervorgang konnte nicht abgeschlossen werden.",
 	"data-room.copy.loading": "Raum wird dupliziert...",
-	"error.400": "400 – Fehlerhafte Anfrage",
-	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
-	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
-	"error.404": "404 – Seite nicht gefunden",
-	"error.408": "408 – Zeitüberschreitung bei der Serververbindung",
+	"error.400": "Fehlerhafte Anfrage",
+	"error.401": "Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
+	"error.403": "Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
+	"error.404": "Seite nicht gefunden",
+	"error.408": "Zeitüberschreitung bei der Serververbindung",
 	"error.action.back": "Zur Startseite",
 	"error.generic": "Ein Fehler ist aufgetreten",
 	"error.load": "Fehler beim Laden der Daten.",
