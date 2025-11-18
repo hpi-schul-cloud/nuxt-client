@@ -1,10 +1,20 @@
 <template>
-	<DefaultWireframe max-width="nativ" :fab-items="fabAction">
+	<DefaultWireframe max-width="full" :fab-items="fabAction" main-with-bottom-padding>
 		<template #header>
 			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
-		<RoomsWelcomeInfo />
-		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
+
+		<RoomsWelcomeInfo class="mt-8" />
+
+		<VContainer v-if="isLoading && isEmpty" class="loader">
+			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
+		</VContainer>
+		<EmptyState v-else-if="isEmpty" :title="t('pages.rooms.emptyState')">
+			<template #media>
+				<RoomsEmptyStateSvg />
+			</template>
+		</EmptyState>
+		<RoomGrid v-else :rooms />
 		<ImportCardDialog v-if="showImportCardDialog" :token="importToken!" :rooms="importFlowDestinations" />
 		<ImportFlow
 			:is-active="showGenericImportDialog"
@@ -24,10 +34,12 @@ import ImportCardDialog from "@/modules/feature/board/card/ImportCardDialog.vue"
 import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { useRoomAuthorization, useRoomsState } from "@data-room";
+import { useRoomAuthorization, useRoomStore } from "@data-room";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -35,7 +47,9 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
+const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
+
+const { fetchRooms } = useRoomStore();
 const { canCreateRoom } = useRoomAuthorization();
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
@@ -46,9 +60,8 @@ const fabAction = computed(() => {
 
 	return {
 		icon: mdiPlus,
-		title: t("common.actions.create"),
+		title: t("pages.rooms.fab.title"),
 		to: "/rooms/new",
-		ariaLabel: t("pages.rooms.fab.title"),
 		dataTestId: "fab-add-room",
 	};
 });

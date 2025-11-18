@@ -96,7 +96,7 @@ export default {
 	"common.labels.repeat": "Повторення",
 	"common.labels.restore": "Відновити",
 	"common.labels.role": "Роль",
-	"common.labels.room": "Кімната",
+	"common.labels.room": "Кімната | Кімнати",
 	"common.labels.search": "Пошук",
 	"common.labels.settings": "Налаштування",
 	"common.labels.size": "Pозмір",
@@ -129,6 +129,18 @@ export default {
 	"common.medium.information.teacher": "Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
+	"common.notifications.errors.notCreated":
+		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notDeleted":
+		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
+	"common.notifications.errors.notDuplicated":
+		"{type} не вдалося дублювати. | {type} не вдалося дублювати. | {type} не вдалося дублювати.",
+	"common.notifications.errors.notLoaded":
+		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
+	"common.notifications.errors.notMoved":
+		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
+	"common.notifications.errors.notExited":
+		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
@@ -845,11 +857,11 @@ export default {
 	"data-room.copy.alert.success": "Кімнату успішно дубльовано.",
 	"data-room.copy.alert.error": "Не вдалося завершити процес копіювання.",
 	"data-room.copy.loading": "Кімната дублюється...",
-	"error.400": "400 – Неприпустимий запит",
-	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
-	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
-	"error.404": "404 – Не знайдено",
-	"error.408": "408 – Таймаут з'єднання з сервером",
+	"error.400": "Неприпустимий запит",
+	"error.401": "На жаль, у вас немає дозволу на перегляд цього контенту.",
+	"error.403": "На жаль, у вас немає дозволу на перегляд цього контенту.",
+	"error.404": "Не знайдено",
+	"error.408": "Таймаут з'єднання з сервером",
 	"error.action.back": "До Панелі керування",
 	"error.generic": "Виникла помилка",
 	"error.load": "Помилка під час завантаження даних.",
