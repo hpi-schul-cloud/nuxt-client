@@ -1,20 +1,14 @@
 import RoomGridItem from "./RoomGridItem.vue";
-import { RoomColor, RoomItem } from "@/types/room/Room";
+import { RoomColor } from "@/types/room/Room";
+import { roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
-
-const mockRoom: RoomItem = {
-	id: "123",
-	name: "A11Y for Beginners",
-	color: RoomColor.Magenta,
-	schoolId: "123",
-	createdAt: "2024-10-11T16:36:06.434Z",
-	updatedAt: "2024-10-11T16:36:06.434Z",
-	isLocked: false,
-};
+import { VBadge } from "vuetify/lib/components/index";
 
 describe("@feature-room/RoomGridItem", () => {
+	const mockRoom = roomItemFactory.build({ color: RoomColor.Magenta, isLocked: false, name: "Mathe" });
+
 	const setup = (props?: ComponentProps<typeof RoomGridItem>) => {
 		const wrapper = mount(RoomGridItem, {
 			global: {
@@ -23,21 +17,30 @@ describe("@feature-room/RoomGridItem", () => {
 			},
 			props,
 		});
-
 		return { wrapper };
 	};
 
-	it("should render in correct color", () => {
-		const { wrapper } = setup({ room: mockRoom });
-
-		const avatar = wrapper.find(".room-color--magenta");
-		expect(avatar.exists()).toStrictEqual(true);
+	it("should render avatar with correct color class", () => {
+		const { wrapper } = setup({ room: mockRoom, index: 0 });
+		const icon = wrapper.find(".room-color--magenta");
+		expect(icon.exists()).toBe(true);
 	});
 
-	it("should compute short title correctly", () => {
-		const { wrapper } = setup({ room: mockRoom });
+	it("should compute short title (first two characters of name)", () => {
+		const { wrapper } = setup({ room: mockRoom, index: 0 });
+		const shortTitleEl = wrapper.get("[data-testid=room-short-title-0]");
+		expect(shortTitleEl.text()).toEqual("Ma");
+	});
 
-		const shortTitle = wrapper.find("[data-testid=room-short-title]");
-		expect(shortTitle.text()).toStrictEqual("A1");
+	it("should render full title", () => {
+		const { wrapper } = setup({ room: mockRoom, index: 0 });
+		const fullTitleEl = wrapper.get("[data-testid=room--title-0]");
+		expect(fullTitleEl.text()).toBe(mockRoom.name);
+	});
+
+	it("should show locked badge when room is locked", () => {
+		const { wrapper } = setup({ room: { ...mockRoom, isLocked: true }, index: 0 });
+		const badge = wrapper.findComponent(VBadge);
+		expect(badge.props("modelValue")).toBe(true);
 	});
 });

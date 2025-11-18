@@ -1,5 +1,5 @@
 <template>
-	<InfoAlert class="mb-14">
+	<InfoAlert class="mt-4 mb-6">
 		{{ t("pages.rooms.infoAlert.welcome") }}
 
 		<ul class="mt-1 pl-4">
