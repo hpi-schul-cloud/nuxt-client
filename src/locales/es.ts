@@ -45,6 +45,7 @@ export default {
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Edición en línea no posible",
 	"common.files": "Archivos",
 	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",

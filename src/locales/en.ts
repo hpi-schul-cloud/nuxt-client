@@ -43,6 +43,7 @@ export default {
 	"common.file.virusDetected.short": "Virus suspected",
 	"common.file": "file",
 	"common.file.exceedsCollaboraEditableFileSize": "Documents larger than {sizeInMb} cannot be edited online.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Online editing not possible",
 	"common.files": "files",
 	"common.instructions.orderBy.arrowKeys": "The items in this list can be moved using the arrow keys.",
 	"common.labels.admin": "",
