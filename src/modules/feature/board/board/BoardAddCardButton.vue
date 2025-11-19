@@ -1,6 +1,7 @@
 <template>
-	<div v-if="showButton" ref="sticky" class="d-flex justify-center button-background pb-4 pt-2 sticky">
+	<div ref="sticky" class="d-flex justify-center button-background pb-4 pt-2 sticky">
 		<VBtn
+			v-if="showButton"
 			elevation="6"
 			class="bg-white"
 			icon
