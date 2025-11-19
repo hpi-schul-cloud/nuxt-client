@@ -33,7 +33,7 @@ const emit = defineEmits(["add-card"]);
 
 const { isInEditMode, editModeType } = useSharedEditMode();
 
-const showButton = computed(() => !(isInEditMode.value && editModeType.value === "card"));
+const showButton = computed(() => !(isInEditMode.value && editModeType?.value === "card"));
 
 const onAddCard = () => emit("add-card");
 </script>
