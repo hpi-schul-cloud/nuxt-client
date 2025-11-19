@@ -1988,6 +1988,7 @@ export default {
 	"pages.folder.title": "Ordner",
 	"pages.folder.columns.name": "Name",
 	"pages.folder.columns.createdat": "Erstellt am",
+	"pages.folder.columns.updatedat": "Zuletzt geändert",
 	"pages.folder.columns.size": "Größe",
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",

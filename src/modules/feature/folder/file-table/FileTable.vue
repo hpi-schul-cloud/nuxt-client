@@ -31,10 +31,10 @@
 						</span>
 					</FileInteractionHandler>
 				</template>
-				<template #[`item.createdAt`]="{ item }">
-					<span :data-testid="`created-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">{{
-						printDateFromStringUTC(item.createdAt)
-					}}</span>
+				<template #[`item.updatedAt`]="{ item }">
+					<span :data-testid="`updated-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
+						{{ d(item.updatedAt) }}
+					</span>
 				</template>
 				<template #[`item.size`]="{ item }">
 					<span :data-testid="`size-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }"
@@ -116,7 +116,6 @@ import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./RenameFileDialog.vue";
-import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
@@ -125,7 +124,7 @@ import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
+const { t, d } = useI18n();
 
 const props = defineProps({
 	isLoading: {
@@ -168,7 +167,7 @@ const emit = defineEmits([
 const headers = [
 	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
-	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
+	{ title: t("pages.folder.columns.updatedat"), key: "updatedAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{
 		title: t("ui.actionMenu.actions"),

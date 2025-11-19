@@ -1954,6 +1954,7 @@ export default {
 	"pages.folder.title": "Folder",
 	"pages.folder.columns.name": "Name",
 	"pages.folder.columns.createdat": "Created on",
+	"pages.folder.columns.updatedat": "Last updated",
 	"pages.folder.columns.size": "Size",
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
