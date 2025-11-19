@@ -31,12 +31,11 @@ describe("@feature-room/RoomContentGrid", () => {
 	};
 
 	it("should render RoomContentGridItem for each board", () => {
-		const { wrapper } = setup();
-		const boardItems = wrapper.findAllComponents(RoomContentGridItem);
-		expect(boardItems).toHaveLength(3);
+		const { wrapper, boards } = setup();
+		expect(wrapper.findAllComponents(RoomContentGridItem)).toHaveLength(boards.length);
 	});
 
-	it("should call reorderRoom when drag and drop changes position", () => {
+	it("should call moveBoard on drag and drop reorder", () => {
 		const { wrapper, boards } = setup();
 
 		const sortable = wrapper.findComponent({ name: "Sortable" });
@@ -98,13 +97,9 @@ describe("@feature-room/RoomContentGrid", () => {
 
 	it("should respect board boundaries in keyboard navigation", () => {
 		const { wrapper } = setup();
-
 		const boardItems = wrapper.findAllComponents(RoomContentGridItem);
-
 		// Attempt to go left at first index
 		boardItems[0].vm.$emit("keydown", { key: "ArrowLeft" });
-		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();
-
 		// Attempt to go right at last index
 		boardItems[2].vm.$emit("keydown", { key: "ArrowRight" }, 2);
 		expect(useRoomDetailsStore().moveBoard).not.toHaveBeenCalled();

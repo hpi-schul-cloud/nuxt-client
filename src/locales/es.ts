@@ -88,6 +88,7 @@ export default {
 	"common.labels.partial": "parcial",
 	"common.labels.password.new": "Nueva contraseña",
 	"common.labels.password": "Contraseña",
+	"common.labels.password.confirmation": "Confirmar contraseña",
 	"common.labels.readmore": "Leer más",
 	"common.labels.register": "Registrarse",
 	"common.labels.registration": "Registro",
@@ -95,7 +96,7 @@ export default {
 	"common.labels.repeat": "Repetición",
 	"common.labels.restore": "Restaurar",
 	"common.labels.role": "Papel",
-	"common.labels.room": "Sala",
+	"common.labels.room": "Sala | Salas",
 	"common.labels.search": "Buscar",
 	"common.labels.settings": "Ajustes",
 	"common.labels.size": "Tamaño",
@@ -128,6 +129,12 @@ export default {
 	"common.medium.information.teacher": "Por favor comuníquese con el administrador de la escuela.",
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
+	"common.notifications.errors.notCreated": "{type} no se ha podido crear. | {type} no se han podido crear.",
+	"common.notifications.errors.notDeleted": "{type} no se ha podido eliminar. | {type} no se han podido eliminar.",
+	"common.notifications.errors.notDuplicated": "{type} no se ha podido duplicar. | {type} no se han podido duplicar.",
+	"common.notifications.errors.notLoaded": "{type} no se ha podido cargar. | {type} no se han podido cargar.",
+	"common.notifications.errors.notMoved": "{type} no se ha podido mover. | {type} no se han podido mover.",
+	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
@@ -701,9 +708,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
 	"components.molecules.share.columnBoard.mail.subject": "Tablero para importar",
 	"components.molecules.share.columnBoard.mail.body": "Enlace al tablero: ",
-	"components.molecules.share.courses.mail.body": "Enlace al curso:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Enlace a la Sala: ",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
+	"components.molecules.share.courses.mail.body": "Enlace al curso:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Invitación a la sala",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Enlace a la Sala: ",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
@@ -851,11 +859,11 @@ export default {
 	"data-room.copy.alert.success": "Sala duplicada con éxito.",
 	"data-room.copy.alert.error": "No se pudo completar el proceso de duplicación.",
 	"data-room.copy.loading": "La sala se está duplicando...",
-	"error.400": "401 – Solicitud incorrecta",
-	"error.401": "401 – Lamentablemente, falta la autorización para ver este contenido.",
-	"error.403": "403 – Lamentablemente, falta la autorización para ver este contenido.",
-	"error.404": "404 – No encontrado",
-	"error.408": "408 – Tiempo de espera de la conexión al servidor",
+	"error.400": "Solicitud incorrecta",
+	"error.401": "Lamentablemente, falta la autorización para ver este contenido.",
+	"error.403": "Lamentablemente, falta la autorización para ver este contenido.",
+	"error.404": "No encontrado",
+	"error.408": "Tiempo de espera de la conexión al servidor",
 	"error.action.back": "Al panel",
 	"error.generic": "Se ha producido un error",
 	"error.load": "Error al cargar los datos.",
@@ -1540,6 +1548,29 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"La {instance} almacena los datos de los usuarios de forma segura y no los comparte con terceros. El tratamiento de los datos se realiza conforme a los altos requisitos legales de protección de datos.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"Los siguientes datos han sido introducidos por un docente o un administrador escolar (si es necesario realizar ajustes, por favor, dirígete a la persona correspondiente):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Por favor, establece una contraseña",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"mínimo 8 caracteres, una letra mayúscula y una minúscula",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"debe contener al menos un número y un carácter especial",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"los caracteres especiales permitidos son: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Por favor, introduce una contraseña.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"La contraseña debe tener al menos 8 caracteres.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"La contraseña debe contener al menos una letra mayúscula.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"La contraseña debe contener al menos una letra minúscula.",
+	"pages.registrationExternalMembers.steps.password.validation.number":
+		"La contraseña debe contener al menos un número.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"La contraseña debe contener al menos un carácter especial.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Las contraseñas no coinciden.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
 	"pages.registrationExternalMembers.steps.welcome.heading":
