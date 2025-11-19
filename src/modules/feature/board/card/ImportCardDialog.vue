@@ -3,6 +3,7 @@
 		v-model:is-dialog-open="isDialogOpen"
 		:message="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
+		:confirm-btn-disabled="!selectedColumnId"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>
