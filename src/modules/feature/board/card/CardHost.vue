@@ -183,7 +183,7 @@ const onAddElement = () => askType();
 
 const onDeleteElement = (elementId: string) => cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
 
-const onStartEditMode = () => startEditMode();
+const onStartEditMode = () => startEditMode("card");
 
 const onEndEditMode = async () => {
 	stopEditMode();

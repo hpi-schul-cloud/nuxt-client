@@ -111,7 +111,7 @@ const isRoomBoard = computed(() => props.boardContextType === BoardExternalRefer
 
 const onStartEditMode = () => {
 	if (!hasEditPermission.value) return;
-	startEditMode();
+	startEditMode("board");
 };
 
 const onEndEditMode = () => {

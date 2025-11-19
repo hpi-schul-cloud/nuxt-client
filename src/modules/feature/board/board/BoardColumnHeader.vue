@@ -89,7 +89,7 @@ const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
 
 const onStartEditMode = () => {
 	if (!hasEditPermission.value) return;
-	startEditMode();
+	startEditMode("column");
 };
 
 const onEndEditMode = () => {
