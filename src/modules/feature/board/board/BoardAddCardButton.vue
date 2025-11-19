@@ -1,7 +1,6 @@
 <template>
 	<div ref="sticky" class="d-flex justify-center button-background pb-4 pt-2 sticky">
 		<VBtn
-			v-if="!isEditMode"
 			elevation="6"
 			class="bg-white"
 			icon
