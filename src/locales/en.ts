@@ -703,6 +703,9 @@ export default {
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Protected settings of external tools",
+	"components.molecules.share.card.options.infoText":
+		"With the following link, the card can be imported by other people.",
+	"components.molecules.share.card.result.linkLabel": "Link card copy",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",

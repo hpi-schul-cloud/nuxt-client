@@ -710,6 +710,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organisationsadministrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.card.options.infoText":
+		"Mit dem folgenden Link kann diese Karte von anderen Personen importiert werden.",
+	"components.molecules.share.card.result.linkLabel": "Link Karten-Kopie",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
