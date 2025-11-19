@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { ColumnResponse, RoomBoardItemResponse } from "../../../../serverApi/v3/api";
-import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useLoadingState } from "@/composables/loadingState";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -84,26 +84,32 @@ const onConfirm = async () => {
 
 	const shareTokenInfo = await copyModule.validateShareToken(token);
 
-	const { run } = useSafeTaskRunner(() =>
-		copyModule.copyByShareToken({
-			token: shareTokenInfo.token,
-			type: shareTokenInfo.parentType,
-			newName: shareTokenInfo.parentName,
-			destinationId: selectedColumnId.value,
-		})
-	);
+	const { execute } = useSafeAxiosTask();
 
-	await run();
-
-	isLoadingDialogOpen.value = false;
-
-	router.push("/boards/" + selectedBoardId.value);
-
-	notifySuccess(
-		t("components.molecules.import.options.success", {
+	const { success } = await execute(
+		() =>
+			copyModule.copyByShareToken({
+				token: shareTokenInfo.token,
+				type: shareTokenInfo.parentType,
+				newName: shareTokenInfo.parentName,
+				destinationId: selectedColumnId.value,
+			}),
+		t("components.molecules.import.options.failure.backendError", {
 			name: t("components.boardCard"),
 		})
 	);
+
+	isLoadingDialogOpen.value = false;
+
+	if (success) {
+		router.push("/boards/" + selectedBoardId.value);
+
+		notifySuccess(
+			t("components.molecules.import.options.success", {
+				name: t("components.boardCard"),
+			})
+		);
+	}
 };
 
 const onCancel = () => {
