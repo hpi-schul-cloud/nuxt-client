@@ -17,6 +17,7 @@ import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
+	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode, useShareBoardLink, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
@@ -192,6 +193,28 @@ describe("CardHost", () => {
 				expect(deleteButton.exists()).toEqual(false);
 			});
 		});
+
+		describe("when user is not permitted to share", () => {
+			it("should not show share button", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = false;
+				const { wrapper } = setup();
+
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+
+				expect(shareButton.exists()).toEqual(false);
+			});
+		});
+
+		describe("when user is permitted to share", () => {
+			it("should show share button", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = true;
+				const { wrapper } = setup();
+
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+
+				expect(shareButton.exists()).toEqual(true);
+			});
+		});
 	});
 
 	describe("card menus", () => {
@@ -226,13 +249,24 @@ describe("CardHost", () => {
 			});
 		});
 
+		describe("when user clicks share button", () => {
+			it("should emit share:card event", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = true;
+				const { wrapper } = setup();
+
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				shareButton.vm.$emit("click");
+
+				expect(wrapper.emitted("share:card")).toHaveLength(1);
+			});
+		});
+
 		describe("when users clicks share link menu", () => {
 			it("should copy a share link", async () => {
 				mockedBoardPermissions.hasDeletePermission.value = true;
 				const { wrapper, cardId } = setup();
 
 				const shareLinkButton = wrapper.findComponent(KebabMenuActionShareLink);
-
 				await shareLinkButton.trigger("click");
 
 				expect(useShareBoardLinkMock.copyShareLink).toHaveBeenCalledWith(cardId, BoardMenuScope.CARD);
@@ -245,14 +279,9 @@ describe("CardHost", () => {
 				const { wrapper } = setup();
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
-
 				await deleteButton.vm.$emit("click", true);
 
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				const emitted = wrapper.emitted()["delete:card"] ?? [];
-
-				expect(emitted).toHaveLength(1);
+				expect(wrapper.emitted("delete:card")).toHaveLength(1);
 			});
 		});
 	});
