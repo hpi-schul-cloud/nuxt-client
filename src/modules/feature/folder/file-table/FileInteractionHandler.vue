@@ -21,6 +21,7 @@ import {
 	isPreviewPossible,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
+import { useEnvConfig } from "@data-env";
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
@@ -40,7 +41,8 @@ const isInteractive = computed(
 		(isPreviewPossible(fileRecordItem.previewStatus) ||
 			isAudioMimeType(fileRecordItem.mimeType) ||
 			isVideoMimeType(fileRecordItem.mimeType) ||
-			isPdfMimeType(fileRecordItem.mimeType))
+			isPdfMimeType(fileRecordItem.mimeType) ||
+			(isCollaboraEnabled.value && fileRecordItem.isCollaboraEditable))
 );
 
 const handleClick = () => {
@@ -48,6 +50,7 @@ const handleClick = () => {
 	const isAudio = isAudioMimeType(fileRecordItem.mimeType);
 	const isVideo = isVideoMimeType(fileRecordItem.mimeType);
 	const isPdf = isPdfMimeType(fileRecordItem.mimeType);
+	const isCollabora = fileRecordItem.isCollaboraEditable;
 
 	if (isPdf) {
 		window.open(fileRecordItem.url, "_blank");
@@ -57,8 +60,13 @@ const handleClick = () => {
 		openAudioPlayerInLightbox();
 	} else if (isVideo) {
 		openVideoInLightbox();
+	} else if (isCollabora) {
+		// eslint-disable-next-line no-console
+		console.log("Open in Collabora");
 	}
 };
+
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
 const openImageInLightbox = () => {
 	const previewUrl = convertDownloadToPreviewUrl(fileRecordItem.url);
