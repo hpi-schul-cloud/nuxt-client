@@ -1,5 +1,5 @@
 <template>
-	<div ref="sticky" class="d-flex justify-center button-background pb-4 pt-2 sticky">
+	<div v-if="!isInEditMode" ref="sticky" class="d-flex justify-center button-background pb-4 pt-2 sticky">
 		<VBtn
 			elevation="6"
 			class="bg-white"
@@ -20,7 +20,6 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { mdiPlus } from "@icons/material";
-import { computed } from "vue";
 
 defineProps({
 	dataTestid: {
@@ -31,10 +30,8 @@ defineProps({
 
 const emit = defineEmits(["add-card"]);
 
-const { editModeId } = useSharedEditMode();
+const { isInEditMode } = useSharedEditMode();
 const onAddCard = () => emit("add-card");
-
-const isEditMode = computed(() => editModeId.value !== undefined);
 </script>
 
 <style scoped>
