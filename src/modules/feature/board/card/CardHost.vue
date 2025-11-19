@@ -47,7 +47,7 @@
 								data-testid="kebab-menu-action-duplicate-card"
 								@click="duplicateCard"
 							/>
-							<KebabMenuActionShare v-if="hasManageBoardPermission" @click="onShareCard" />
+							<KebabMenuActionShare v-if="hasShareBoardPermission" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -162,7 +162,7 @@ const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIn
 
 const { height: cardHostHeight } = useElementSize(cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission, hasManageBoardPermission } = useBoardPermissions();
+const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
