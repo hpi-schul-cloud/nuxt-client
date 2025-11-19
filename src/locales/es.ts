@@ -186,7 +186,7 @@ export default {
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
-	"common.words.board": "tablero",
+	"common.words.board": "tablero | tableros",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",

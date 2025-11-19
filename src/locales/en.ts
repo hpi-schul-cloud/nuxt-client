@@ -184,7 +184,7 @@ export default {
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
 	"common.words.and": "and",
-	"common.words.board": "board",
+	"common.words.board": "board | boards",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",

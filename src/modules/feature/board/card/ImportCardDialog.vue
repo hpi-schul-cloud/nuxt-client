@@ -39,14 +39,14 @@
 </template>
 
 <script setup lang="ts">
-import { ColumnResponse, RoomApiFactory, RoomBoardItemResponse } from "../../../../serverApi/v3/api";
+import { ColumnResponse, RoomBoardItemResponse } from "../../../../serverApi/v3/api";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { useLoadingState } from "@/composables/loadingState";
 import { RoomItem } from "@/types/room/Room";
-import { $axios } from "@/utils/api";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { useBoardApi } from "@data-board";
+import { useRoomDetailsStore } from "@data-room";
 import { Dialog } from "@ui-dialog";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -60,8 +60,8 @@ const { t } = useI18n();
 
 const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.import.options.loadingMessage"));
 
-const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 const { fetchBoardCall } = useBoardApi();
+const { fetchBoardsOfRoom } = useRoomDetailsStore();
 
 const { token } = defineProps<{
 	token: string;
@@ -112,7 +112,7 @@ const onCancel = () => {
 
 watch(selectedRoomId, async (newRoomId) => {
 	if (newRoomId) {
-		boards.value = (await roomApi.roomControllerGetRoomBoards(newRoomId)).data.data;
+		boards.value = await fetchBoardsOfRoom(newRoomId);
 	}
 });
 

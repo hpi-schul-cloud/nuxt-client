@@ -192,7 +192,7 @@ export default {
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
-	"common.words.board": "Дошка",
+	"common.words.board": "Дошка | дошки",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",

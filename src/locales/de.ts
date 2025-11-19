@@ -191,7 +191,7 @@ export default {
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
-	"common.words.board": "Bereich",
+	"common.words.board": "Bereich | Bereiche",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
