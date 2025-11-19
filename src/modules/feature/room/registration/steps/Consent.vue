@@ -30,12 +30,8 @@
 						>
 							<template #instanceTitle>{{ instituteTitle }}</template>
 							<template #email>
-								<a
-									:href="`mailto:${currentInstanceTexts.email}?subject=${currentInstanceTexts.emailSubject}`"
-									target="_blank"
-									rel="noopener"
-								>
-									{{ currentInstanceTexts.email }}
+								<a :href="`mailto:${instituteSupportEmail}?subject=${EMAIL_SUBJECT}`" target="_blank" rel="noopener">
+									{{ instituteSupportEmail }}
 								</a>
 							</template>
 							<template #faqLink>
@@ -67,7 +63,6 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { isRequired } from "@util-validators";
 import { storeToRefs } from "pinia";
@@ -86,29 +81,8 @@ defineProps<Props>();
 const { t } = useI18n();
 const envConfig = useEnvConfig();
 const instanceTitle = computed(() => envConfig.value.SC_TITLE);
-const instance = computed<SchulcloudTheme>(() => envConfig.value.SC_THEME);
-const { instituteTitle } = storeToRefs(useEnvStore());
-
-const instanceTextsMap: Record<SchulcloudTheme, Record<string, string>> = {
-	[SchulcloudTheme.N21]: {
-		email: "ticketsystem@niedersachsen.support",
-		emailSubject: "Niedersächsische Bildungscloud Anfrage",
-	},
-	[SchulcloudTheme.Brb]: {
-		email: "brb@xxx.de",
-		emailSubject: "Brandenburgische Bildungscloud Anfrage",
-	},
-	[SchulcloudTheme.Default]: {
-		email: "default@xxx.de",
-		emailSubject: "Default Bildungscloud Anfrage",
-	},
-	[SchulcloudTheme.Thr]: {
-		email: "thueringen@xxx.de",
-		emailSubject: "Thüringer Bildungscloud Anfrage",
-	},
-};
-
-const currentInstanceTexts = computed(() => instanceTextsMap[instance.value]);
+const { instituteTitle, instituteSupportEmail } = storeToRefs(useEnvStore());
+const EMAIL_SUBJECT = "Bildungscloud Anfrage";
 
 const validationRules = [
 	isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")), // Talk to UX about error message
