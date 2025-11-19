@@ -14,7 +14,7 @@
 				flat
 				:aria-label="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
-				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames]"
+				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames, rules.checkInvalidCharacters]"
 			/>
 		</template>
 	</Dialog>
@@ -77,13 +77,16 @@ const rules = reactive({
 			t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
 		);
 	},
+	checkInvalidCharacters: (value: string) =>
+		!value.includes("/") || t("pages.folder.rename-file-dialog.validation.invalid-characters"),
 });
 
 const isNameValid = computed(
 	() =>
 		rules.required(nameRef.value) === true &&
 		rules.validateOnOpeningTag(nameRef.value) === true &&
-		rules.checkDuplicatedNames(nameRef.value) === true
+		rules.checkDuplicatedNames(nameRef.value) === true &&
+		rules.checkInvalidCharacters(nameRef.value) === true
 );
 
 const onCancel = () => {

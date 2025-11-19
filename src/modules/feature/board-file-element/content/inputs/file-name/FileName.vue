@@ -3,7 +3,7 @@
 		v-model="nameRef"
 		data-testid="file-name-input"
 		:label="t('common.labels.fileName')"
-		:rules="[rules.isRequired, rules.validateOnOpeningTag]"
+		:rules="[rules.isRequired, rules.validateOnOpeningTag, rules.invalidCharacters]"
 		@click.stop
 		@keydown.enter.stop
 	/>
@@ -50,6 +50,8 @@ const rules = {
 		return validateOnOpeningTag(nameWithExtension);
 	},
 	isRequired: (value: string) => isRequired(t("common.validation.required"))(value),
+	invalidCharacters: (value: string) =>
+		!value.includes("/") || t("pages.folder.rename-file-dialog.validation.invalid-characters"),
 };
 
 const addFileExtension = (name: string) => {
@@ -66,7 +68,10 @@ const updateName = (value: string) => {
 watch(nameRef, (newValue) => {
 	const nameWithExtension = addFileExtension(newValue);
 
-	const isNameValid = rules.validateOnOpeningTag(nameWithExtension) === true && rules.isRequired(newValue) === true;
+	const isNameValid =
+		rules.validateOnOpeningTag(nameWithExtension) === true &&
+		rules.isRequired(newValue) === true &&
+		rules.invalidCharacters(newValue) === true;
 
 	if (isNameValid) {
 		updateName(nameWithExtension);
