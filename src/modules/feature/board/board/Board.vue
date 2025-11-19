@@ -216,8 +216,6 @@ const onDeleteCard = async (cardId: string) => {
 };
 
 const onShareCard = async (cardId: string) => {
-	// TODO - permission check
-
 	shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.Card;
 
 	shareModule.startShareFlow({
