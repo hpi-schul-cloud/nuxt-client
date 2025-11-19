@@ -103,6 +103,7 @@ export default {
 	"common.labels.status": "Estado",
 	"common.labels.student": "Estudiante",
 	"common.labels.student.neutral": "Estudiante",
+	"common.labels.student.neutral.plural": "Estudiantes",
 	"common.labels.students": "Estudiantes",
 	"common.labels.success": "éxito",
 	"common.labels.teacher.plural": "Profesora(e)s",

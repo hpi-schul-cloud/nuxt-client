@@ -103,6 +103,7 @@ export default {
 	"common.labels.status": "Статус",
 	"common.labels.student": "Учень",
 	"common.labels.student.neutral": "Учень",
+	"common.labels.student.neutral.plural": "Учні",
 	"common.labels.students": "Учні",
 	"common.labels.success": "успіх",
 	"common.labels.teacher.plural": "Викладачі",

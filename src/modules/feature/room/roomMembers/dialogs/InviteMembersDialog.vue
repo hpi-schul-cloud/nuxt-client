@@ -19,11 +19,7 @@
 						{{ subTitle }}
 					</p>
 
-					<InfoAlert>
-						{{ t("pages.rooms.members.inviteMember.infoAlert.text") }}
-					</InfoAlert>
-
-					<VForm ref="inviteMembersForm" class="mt-5">
+					<VForm ref="inviteMembersForm" class="mt-2">
 						<VTextField
 							ref="descriptionField"
 							v-model="formData.title"
@@ -36,35 +32,39 @@
 						/>
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
+							<div id="school-radiogroup-label" class="d-flex mb-3">Link gültig für die folgende(n) Schule(n):</div>
+							<VRadioGroup v-model="formData.restrictedToCreatorSchool" aria-labelledby="school-radiogroup-label">
+								<VRadio :value="true">
+									<template #label> nur {{ schoolName }} </template>
+								</VRadio>
+								<VRadio label="alle Schulen" :value="false" />
+							</VRadioGroup>
+							<VDivider class="mb-4" />
+							<div>Link gültig für die folgenden Schulrollen:</div>
+							<VCheckbox label="Lernbegleitungen" disabled :model-value="true" hide-details />
 							<VCheckbox
-								v-model="formData.restrictedToCreatorSchool"
-								hide-details
-								data-testid="input-invite-participants-restricted-to-creator-school"
-							>
-								<template #label>
-									<div>
-										{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
-										<span class="d-inline-block"> {{ schoolName }} </span>
-									</div>
-								</template>
-							</VCheckbox>
-
-							<VCheckbox
+								v-if="formData.restrictedToCreatorSchool"
 								v-model="formData.isUsableByStudents"
 								:disabled="!formData.restrictedToCreatorSchool"
-								:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
+								:label="t('common.labels.student.neutral.plural')"
 								hide-details
 								data-testid="input-invite-participants-valid-for-students"
 							/>
-
 							<VCheckbox
-								v-if="isInviteExternalPersonsFeatureEnabled"
+								v-if="isInviteExternalPersonsFeatureEnabled && !formData.restrictedToCreatorSchool"
 								v-model="formData.isUsableByExternalPersons"
-								:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+								label="Externe Personen (ehemals: Externe/r Expert:in)"
 								hide-details
 								data-testid="input-invite-participants-valid-for-external-persons"
 							/>
-
+							<InfoAlert>
+								{{
+									formData.restrictedToCreatorSchool
+										? "Externe Personen können nur eingeladen werden, wenn der Link für alle Schulen gültig ist. "
+										: t("pages.rooms.members.inviteMember.infoAlert.text")
+								}}
+							</InfoAlert>
+							<VDivider class="mt-4 mb-4" />
 							<div class="d-flex">
 								<VCheckbox
 									v-model="formData.activeUntilChecked"
@@ -151,6 +151,7 @@
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -191,9 +192,11 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+const theme = computed(() => useEnvConfig().value.SC_THEME);
 
 const isInviteExternalPersonsFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED
+	() =>
+		useEnvConfig().value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
 );
 
 const defaultFormData: RoomInvitationFormData = {

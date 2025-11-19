@@ -103,6 +103,7 @@ export default {
 	"common.labels.status": "Status",
 	"common.labels.student": "Schüler:in",
 	"common.labels.student.neutral": "Lernend",
+	"common.labels.student.neutral.plural": "Lernende",
 	"common.labels.students": "Schüler:innen",
 	"common.labels.success": "erfolg",
 	"common.labels.teacher.plural": "Lehrkräfte",
