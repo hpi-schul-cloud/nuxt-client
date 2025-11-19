@@ -30,7 +30,7 @@
 						>
 							<template #instanceTitle>{{ instituteTitle }}</template>
 							<template #email>
-								<a :href="`mailto:${instituteSupportEmail}?subject=${EMAIL_SUBJECT}`" target="_blank" rel="noopener">
+								<a :href="sanitizedSupportEmail">
 									{{ instituteSupportEmail }}
 								</a>
 							</template>
@@ -63,6 +63,7 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { isRequired } from "@util-validators";
 import { storeToRefs } from "pinia";
@@ -83,6 +84,10 @@ const envConfig = useEnvConfig();
 const instanceTitle = computed(() => envConfig.value.SC_TITLE);
 const { instituteTitle, instituteSupportEmail } = storeToRefs(useEnvStore());
 const EMAIL_SUBJECT = "Bildungscloud Anfrage";
+
+const sanitizedSupportEmail = computed(() =>
+	sanitizeUrl(`mailto:${instituteSupportEmail.value}?subject=${EMAIL_SUBJECT}`)
+);
 
 const validationRules = [
 	isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")), // Talk to UX about error message
