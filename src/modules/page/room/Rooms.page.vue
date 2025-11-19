@@ -29,12 +29,11 @@
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import ImportCardDialog from "@/modules/feature/board/card/ImportCardDialog.vue";
 import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { useRoomAuthorization, useRoomStore } from "@data-room";
+import { ImportCardDialog } from "@feature-board";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
