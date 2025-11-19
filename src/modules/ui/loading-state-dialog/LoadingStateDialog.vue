@@ -3,7 +3,7 @@
 		<v-dialog
 			v-model="isDialogOpen"
 			width="300"
-			:scrim="!loadingState.hasOverlay"
+			:scrim="loadingState.hasOverlay"
 			:persistent="loadingState.isPersistent"
 		>
 			<v-card class="px-2 py-3">

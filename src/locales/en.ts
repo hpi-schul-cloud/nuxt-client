@@ -184,7 +184,7 @@ export default {
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
 	"common.words.and": "and",
-	"common.words.board": "board",
+	"common.words.board": "board | boards",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",
@@ -641,6 +641,7 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.import.columnBoard.rename": "If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText": "The board can be renamed below.",
@@ -702,6 +703,9 @@ export default {
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Protected settings of external tools",
+	"components.molecules.share.card.options.infoText":
+		"With the following link, the card can be imported by other people.",
+	"components.molecules.share.card.result.linkLabel": "Link card copy",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",

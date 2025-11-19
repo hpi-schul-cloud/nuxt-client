@@ -186,7 +186,7 @@ export default {
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
-	"common.words.board": "tablero",
+	"common.words.board": "tablero | tableros",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",
@@ -650,6 +650,7 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "No se ha copiado lo siguiente:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.card.options.title": "Importar tarjeta",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
 	"components.molecules.import.columnBoard.rename": "Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText": "Puede cambiar el nombre del tablero a continuación.",
@@ -703,6 +704,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Administrador de organización",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
+	"components.molecules.share.card.options.infoText":
+		"Con el siguiente enlace, la tarjeta puede ser importada como copia por otros personas.",
+	"components.molecules.share.card.result.linkLabel": "Enlace a la copia de la tarjeta",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",

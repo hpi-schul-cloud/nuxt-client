@@ -15,9 +15,9 @@
 			</template>
 		</EmptyState>
 		<RoomGrid v-else :rooms />
-
+		<ImportCardDialog v-if="showImportCardDialog" :token="importToken!" :rooms="importFlowDestinations" />
 		<ImportFlow
-			:is-active="isImportMode"
+			:is-active="showGenericImportDialog"
 			:token="importToken"
 			:destinations="importFlowDestinations"
 			:destination-type="BoardExternalReferenceType.Room"
@@ -29,10 +29,11 @@
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { useRoomAuthorization, useRoomStore } from "@data-room";
+import { ImportCardDialog } from "@feature-board";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
@@ -64,21 +65,27 @@ const fabAction = computed(() => {
 	};
 });
 
-const isImportMode = ref(false);
+const importedType = ref<string>();
 const importToken = ref<string>();
 
 watch(
 	() => route.query.import,
 	() => {
-		if (route.query.import !== undefined) {
-			isImportMode.value = true;
+		if (route.query.import) {
+			importedType.value = route.query.importedType as string;
 			importToken.value = route.query.import as string;
 		} else {
-			isImportMode.value = false;
 			importToken.value = undefined;
 		}
 	},
 	{ immediate: true }
+);
+
+const showImportCardDialog = computed(
+	() => importToken.value && importedType.value === ShareTokenBodyParamsParentTypeEnum.Card
+);
+const showGenericImportDialog = computed(
+	() => !!importToken.value && importedType.value !== ShareTokenBodyParamsParentTypeEnum.Card
 );
 
 onMounted(() => {
@@ -99,7 +106,6 @@ const onImportSuccess = (newName: string, destinationId?: string) => {
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();
-		isImportMode.value = false;
 		importToken.value = undefined;
 	}
 };
