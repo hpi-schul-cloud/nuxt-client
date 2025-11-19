@@ -29,10 +29,29 @@ describe("Consent.vue", () => {
 	const getCheckbpoxByTestId = (wrapper: VueWrapper, testId: string) =>
 		wrapper.get(`[data-testid=${testId}]`).getComponent(VCheckbox);
 
-	it(" should render", () => {
-		const { wrapper } = setup();
+	describe("Consent.vue", () => {
+		it("should render", () => {
+			const { wrapper } = setup();
 
-		expect(wrapper.exists()).toBe(true);
+			expect(wrapper.exists()).toBe(true);
+		});
+
+		describe("translation keys", () => {
+			it("should contain all necessary translation keys", () => {
+				const { wrapper } = setup();
+				const translationKeys = [
+					"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph",
+					"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent",
+					"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext",
+					"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse",
+					// "pages.registrationExternalMembers.steps.declarationOfConsent.validation.required",
+				];
+
+				translationKeys.forEach((key) => {
+					expect(wrapper.html()).toContain(key);
+				});
+			});
+		});
 	});
 
 	describe("privacy policy checkbox", () => {
@@ -41,7 +60,6 @@ describe("Consent.vue", () => {
 			const privacyPolicyCheckbox = getCheckbpoxByTestId(wrapper, "privacy-policy-checkbox");
 
 			expect(privacyPolicyCheckbox.props("modelValue")).toBe(false);
-			// expect(privacyPolicyCheckbox.props("label")).toBe(""); // add test when label is added
 		});
 
 		it("should show validation error when checkboxes are not checked", async () => {
@@ -64,7 +82,6 @@ describe("Consent.vue", () => {
 			const termsOfUseCheckbox = getCheckbpoxByTestId(wrapper, "terms-of-use-checkbox");
 
 			expect(termsOfUseCheckbox.props("modelValue")).toBe(false);
-			// expect(termsOfUseCheckbox.props("label")).toBe(""); // add test when label is added
 		});
 
 		it("should show validation error when checkboxes are not checked", async () => {

@@ -68,7 +68,7 @@ describe("Registration.vue", () => {
 			expect(stepperComponent.props("modelValue")).toBe(1);
 		});
 
-		it("should have 6 steps", () => {
+		it("should have 5 steps", () => {
 			const { wrapper } = setup();
 
 			const stepComponents = wrapper.findAllComponents(VStepperItem);

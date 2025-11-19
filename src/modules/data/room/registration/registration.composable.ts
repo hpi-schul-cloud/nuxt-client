@@ -14,7 +14,7 @@ export const useRegistration = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
 		if (match) {
 			selectedLanguage.value = match[1] as LanguageType;
-			i18n.locale.value = match[1] as LanguageType;
+			i18n.locale.value = selectedLanguage.value;
 		}
 	};
 

@@ -115,6 +115,40 @@ describe("useEnvStore", () => {
 		});
 	});
 
+	describe("instituteSupportEmail", () => {
+		it("should return default support email when theme is default", async () => {
+			await setup(true, {
+				SC_THEME: SchulcloudTheme.Default,
+			});
+
+			expect(useEnvStore().instituteSupportEmail).toBe("default@xxx.de");
+		});
+
+		it("should return brb support email when theme is brb", async () => {
+			await setup(true, {
+				SC_THEME: SchulcloudTheme.Brb,
+			});
+
+			expect(useEnvStore().instituteSupportEmail).toBe("brb@xxx.de");
+		});
+
+		it("should return thr support email when theme is thr", async () => {
+			await setup(true, {
+				SC_THEME: SchulcloudTheme.Thr,
+			});
+
+			expect(useEnvStore().instituteSupportEmail).toBe("thueringen@xxx.de");
+		});
+
+		it("should return n21 support email when theme is n21", async () => {
+			await setup(true, {
+				SC_THEME: SchulcloudTheme.N21,
+			});
+
+			expect(useEnvStore().instituteSupportEmail).toBe("ticketsystem@niedersachsen.support");
+		});
+	});
+
 	describe("loadConfiguration", () => {
 		it("should request, process and provide env data.", async () => {
 			const mockData: ConfigResponse = {
