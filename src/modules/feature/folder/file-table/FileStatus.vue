@@ -56,5 +56,7 @@ const isScanStatusPending = computed(() => isScanStatusPendingFn(props.fileRecor
 const isScanStatusWontCheck = computed(() => isScanStatusWontCheckFn(props.fileRecord.previewStatus));
 const isScanStatusError = computed(() => isScanStatusErrorFn(props.fileRecord.previewStatus));
 const isScanStatusBlocked = computed(() => isScanStatusBlockedFn(props.fileRecord.securityCheckStatus));
-const exceedsCollaboraEditableFileSize = computed(() => props.fileRecord.exceedsCollaboraEditableFileSize);
+const exceedsCollaboraEditableFileSize = computed(
+	() => props.fileRecord.exceedsCollaboraEditableFileSize && !isScanStatusBlocked.value
+);
 </script>
