@@ -4,8 +4,11 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import {
+	collaborativeTextEditorElementResponseFactory,
 	createTestEnvStore,
+	expectNotification,
 	externalToolElementResponseFactory,
 	fileElementResponseFactory,
 	ObjectIdMock,
@@ -14,8 +17,10 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
+import { useNotificationStore } from "@data-app";
 import { CreateElementRequestPayload, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
@@ -57,6 +62,7 @@ describe("CardStore", () => {
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
+		useNotificationStore(createTestingPinia({ stubActions: false }));
 		createTestEnvStore();
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
@@ -325,6 +331,77 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards[cardId]).toEqual(duplicatedCard);
+		});
+
+		describe("notification behavior", () => {
+			beforeEach(() => {
+				vi.clearAllMocks();
+			});
+
+			const setupDuplicate = (elements: AnyContentElement[], isOwnAction = true) => {
+				const { cardStore } = setup();
+
+				cardStore.duplicateCardSuccess({
+					cardId: "originalCardId",
+					duplicatedCard: cardResponseFactory.build({
+						id: "newCardId",
+						elements,
+					}),
+					isOwnAction,
+				});
+			};
+
+			const testCases = [
+				{
+					description: "collaborative text editor (Etherpad)",
+					element: collaborativeTextEditorElementResponseFactory.build({
+						type: ContentElementType.CollaborativeTextEditor,
+					}),
+				},
+				{
+					description: "drawing element (Whiteboard)",
+					element: drawingElementResponseFactory.build({
+						type: ContentElementType.Drawing,
+					}),
+				},
+				{
+					description: "external tool",
+					element: externalToolElementResponseFactory.build({
+						type: ContentElementType.ExternalTool,
+					}),
+				},
+			];
+
+			testCases.forEach(({ description, element }) => {
+				it(`should show notification when duplicating card with ${description}`, () => {
+					setupDuplicate([element]);
+					expectNotification("info");
+				});
+			});
+
+			it("should not show notification when duplicating card with only regular elements (text, files)", () => {
+				setupDuplicate([
+					fileElementResponseFactory.build(),
+					richTextElementResponseFactory.build({
+						type: ContentElementType.RichText,
+					}),
+				]);
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
+
+			it("should not show notification when isOwnAction is false", () => {
+				setupDuplicate(
+					[
+						collaborativeTextEditorElementResponseFactory.build({
+							type: ContentElementType.CollaborativeTextEditor,
+						}),
+					],
+					false
+				);
+
+				expect(useNotificationStore().notify).not.toHaveBeenCalled();
+			});
 		});
 	});
 

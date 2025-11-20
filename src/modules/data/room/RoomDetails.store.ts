@@ -58,10 +58,14 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		return boardId;
 	};
 
+	const moveBoard = async (roomId: string, boardId: string, toPosition: number) => {
+		await roomApi.roomControllerMoveBoard(roomId, { id: boardId, toPosition });
+	};
+
 	/**
 	 * @throws ApiResponseError | ApiValidationError
 	 */
-	const updateRoom = async (id: string, params: RoomUpdateParams): Promise<void> => {
+	const updateRoom = async (id: string, params: RoomUpdateParams) => {
 		isLoading.value = true;
 		try {
 			await roomApi.roomControllerUpdateRoom(id, params);
@@ -81,6 +85,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		fetchRoomAndBoards,
 		fetchRoom,
 		createBoard,
+		moveBoard,
 		isLoading,
 		resetState,
 		room,
