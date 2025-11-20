@@ -21,7 +21,6 @@ import {
 	isPreviewPossible,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
-import { useBoardPermissions } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
 import { mapEditBoardPermissionToEditorMode } from "@util-board";
@@ -29,16 +28,19 @@ import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-const { fileRecordItem } = defineProps({
+const { fileRecordItem, hasEditPermission } = defineProps({
 	fileRecordItem: {
 		type: Object as PropType<FileRecordItem>,
+		required: true,
+	},
+	hasEditPermission: {
+		type: Boolean,
 		required: true,
 	},
 });
 
 const { t } = useI18n();
 const router = useRouter();
-const { hasEditPermission } = useBoardPermissions();
 
 const isInteractive = computed(
 	() =>
@@ -115,7 +117,7 @@ const openVideoInLightbox = () => {
 };
 
 const openCollabora = () => {
-	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
+	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission);
 
 	const url = router.resolve({
 		name: "collabora",

@@ -15,7 +15,7 @@
 		<div class="mt-2">
 			<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
 				<template #[`item.preview`]="{ item }">
-					<FileInteractionHandler :file-record-item="item">
+					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<FilePreview
 							:file-record="item"
 							:data-testid="`file-preview-${item.name}`"
@@ -24,7 +24,7 @@
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<FileInteractionHandler :file-record-item="item">
+					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<span :data-testid="`name-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
 							{{ item.name }}
 							<FileStatus :file-record="item" />

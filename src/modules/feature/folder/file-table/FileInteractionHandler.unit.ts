@@ -3,7 +3,6 @@ import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
 import { createTestEnvStore, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { useBoardPermissions } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useLightBox } from "@ui-light-box";
@@ -14,7 +13,6 @@ import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 vi.mock("@ui-light-box");
-vi.mock("@data-board");
 
 const useRouterMock = <Mock>useRouter;
 
@@ -31,12 +29,6 @@ describe("FileInteractionHandler", () => {
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
 
-		const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions);
-		const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-			hasEditPermission: ref(true),
-		});
-		useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
-
 		return { useLightBoxMock };
 	};
 
@@ -47,6 +39,7 @@ describe("FileInteractionHandler", () => {
 			},
 			props: {
 				fileRecordItem,
+				hasEditPermission: true,
 			},
 		});
 		return { wrapper };
