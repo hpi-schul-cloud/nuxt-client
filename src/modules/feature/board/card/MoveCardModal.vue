@@ -5,6 +5,7 @@
 		:message="t('components.molecules.move.card.title')"
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
+		:loading="isMoving"
 		@confirm="onConfirm"
 		@cancel="isDialogOpen = false"
 	>
@@ -46,8 +47,6 @@
 					:menu-props="{ attach: '#moveCardForm' }"
 				/>
 			</VForm>
-
-			<VProgressCircular v-if="isMoving" color="primary" indeterminate :size="36" />
 		</template>
 	</Dialog>
 </template>
