@@ -54,14 +54,15 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { BoardCardApiFactory, ColumnResponse, RoomBoardItemResponse } from "@/serverApi/v3";
+import { BoardCardApiFactory, ColumnResponse, Permission, RoomBoardItemResponse } from "@/serverApi/v3";
 import { RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
 import { useNotificationStore } from "@data-app";
-import { useBoardApi } from "@data-board";
+import { useBoardApi, useBoardStore } from "@data-board";
+import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomStore } from "@data-room";
 import { Dialog } from "@ui-dialog";
-import { computed, onBeforeMount, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -73,6 +74,7 @@ const props = defineProps<{
 
 const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 const { fetchBoardCall } = useBoardApi();
+const { reloadBoard } = useBoardStore();
 
 const { execute, isRunning: isMoving } = useSafeAxiosTask();
 
@@ -91,27 +93,51 @@ const columns = ref<ColumnResponse[]>();
 const selectedBoard = computed(() => boards.value?.find((board) => board.id === selectedBoardId.value));
 const selectedColumn = computed(() => columns.value?.find((col) => col.id === selectedColumnId.value));
 
+const { getCardLocation, moveCardRequest } = useBoardStore();
+const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+
 const onConfirm = async () => {
+	const cardLocation = getCardLocation(props.cardId);
+	const payload = {
+		cardId: props.cardId,
+		fromColumnId: cardLocation?.columnId,
+		fromColumnIndex: cardLocation?.columnIndex,
+		oldIndex: cardLocation?.columnIndex,
+		newIndex: selectedColumn.value?.cards?.length,
+		toColumnId: selectedColumnId.value,
+		toColumnIndex: selectedColumn.value?.cards?.length,
+	};
+
 	const { success } = await execute(
-		() => cardsApi.cardControllerMoveCard(props.cardId, { toColumnId: selectedColumnId.value }),
-		t("common.notifications.errors.notMoved", { type: t("components.boardColumn") })
+		async () => {
+			if (isSocketEnabled) {
+				// @ts-expect-error Cause ts thinks it may be undefined.
+				await moveCardRequest(payload);
+			} else {
+				await cardsApi.cardControllerMoveCard(props.cardId, {
+					toColumnId: selectedColumnId.value as string,
+				});
+			}
+			await reloadBoard();
+		},
+		t("common.notifications.errors.notMoved", {
+			type: t("components.boardColumn"),
+		})
 	);
-	// if (success && selectedBoard.value) {
-
-	// , { column: selectedColumn.value?.title }
-
-	useNotificationStore().notify({
-		status: "success",
-		text: "components.molecules.move.card.message.success",
-		link: {
-			to: `/boards/${selectedBoardId.value}`,
-			text: selectedBoard.value?.title,
-		},
-		replace: {
-			column: selectedColumn.value?.title,
-		},
-	});
-	// }
+	if (success && selectedBoard.value && selectedColumn.value) {
+		useNotificationStore().notify({
+			status: "success",
+			text: "components.molecules.move.card.message.success",
+			link: {
+				to: `/boards/${selectedBoardId.value}`,
+				text: selectedBoard.value.title,
+			},
+			replace: {
+				column: selectedColumn.value.title,
+			},
+			duration: 10000,
+		});
+	}
 
 	isDialogOpen.value = false;
 };
@@ -121,10 +147,10 @@ const resetBoardSelection = () => {
 	selectedBoardId.value = undefined;
 };
 
-onBeforeMount(async () => {
+onMounted(async () => {
 	selectedRoomId.value = props.roomId;
 	const result = await useRoomStore().fetchRoomsPlain();
-	rooms.value = result?.data?.data;
+	rooms.value = result?.data?.data.filter((room) => room.permissions.includes(Permission.RoomEditContent));
 });
 
 watch(selectedRoomId, async (newRoomId) => {

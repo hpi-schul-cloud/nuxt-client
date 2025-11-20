@@ -90,6 +90,7 @@
 				<AddCollaboraFileDialog />
 				<LightBox />
 				<MoveCardModal
+					v-if="roomId"
 					v-model:is-dialog-open="moveCardOptions.isDialogOpen"
 					:room-id="roomId"
 					:card-id="moveCardOptions.cardId"
