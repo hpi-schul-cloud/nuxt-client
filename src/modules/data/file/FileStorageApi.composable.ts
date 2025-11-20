@@ -152,7 +152,6 @@ export const useFileStorageApi = () => {
 			return url;
 		} catch (error) {
 			showError(error);
-
 			throw error;
 		}
 	};

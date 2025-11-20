@@ -5,6 +5,7 @@ import { EditorMode } from "@/types/file/File";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	authorizedCollaboraDocumentUrlResponseFactory,
+	axiosErrorFactory,
 	createTestAppStoreWithUser,
 	expectNotification,
 	fileElementResponseFactory,
@@ -406,16 +407,17 @@ describe("Collabora.page", () => {
 			};
 		};
 
-		it("should call handleApplicationError with correct parameters", async () => {
-			setup();
+		it("should call useTitle with only file name", async () => {
+			const { expectedTitle } = setup();
 
 			await flushPromises();
 
-			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
+			expect(mockBuildPageTitle).toHaveBeenCalledWith("");
+			expect(mockUseTitle).toHaveBeenCalledWith(expectedTitle);
 		});
 	});
 
-	describe("when getAuthorizedCollaboraDocumentUrl rejects", () => {
+	describe("when getAuthorizedCollaboraDocumentUrl rejects with 403 Forbidden", () => {
 		const setup = () => {
 			const editorMode = EditorMode.EDIT;
 
@@ -423,7 +425,8 @@ describe("Collabora.page", () => {
 
 			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
-			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce();
+			const axiosError = axiosErrorFactory.withStatusCode(403).build();
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(axiosError);
 
 			const fileRecord = fileRecordFactory.build();
 			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(fileRecord);
@@ -456,6 +459,51 @@ describe("Collabora.page", () => {
 			await flushPromises();
 
 			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
+		});
+	});
+
+	describe("when getAuthorizedCollaboraDocumentUrl rejects with other error", () => {
+		const setup = () => {
+			const editorMode = EditorMode.EDIT;
+
+			createTestAppStoreWithUser("user-id");
+
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+			const axiosError = axiosErrorFactory.build();
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(axiosError);
+
+			const fileRecord = fileRecordFactory.build();
+			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(fileRecord);
+
+			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+
+			const expectedTitle = "standalone-file.pdf - Instance Title";
+			mockBuildPageTitle.mockReturnValueOnce(expectedTitle);
+
+			mount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				propsData: {
+					fileRecordId: fileRecord.id,
+					editorMode,
+				},
+			});
+
+			return {
+				fileRecord,
+				expectedTitle,
+			};
+		};
+
+		it("should call handleApplicationError with correct parameters", async () => {
+			setup();
+
+			await flushPromises();
+
+			expect(useAppStore().handleApplicationError).not.toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
 		});
 	});
 
