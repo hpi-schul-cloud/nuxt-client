@@ -425,7 +425,7 @@ describe("Collabora.page", () => {
 
 			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
-			const axiosError = axiosErrorFactory.withStatusCode(403).build();
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.Forbidden).build();
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(axiosError);
 
 			const fileRecord = fileRecordFactory.build();
@@ -458,7 +458,7 @@ describe("Collabora.page", () => {
 
 			await flushPromises();
 
-			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden);
 		});
 	});
 
@@ -470,7 +470,7 @@ describe("Collabora.page", () => {
 
 			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
-			const axiosError = axiosErrorFactory.build();
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.InternalServerError).build();
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(axiosError);
 
 			const fileRecord = fileRecordFactory.build();
@@ -503,7 +503,7 @@ describe("Collabora.page", () => {
 
 			await flushPromises();
 
-			expect(useAppStore().handleApplicationError).not.toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.InternalServerError);
 		});
 	});
 

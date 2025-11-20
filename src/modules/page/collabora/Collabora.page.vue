@@ -11,7 +11,6 @@
 
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { EditorMode } from "@/types/file/File";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -101,11 +100,7 @@ const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
 const handleError = (error: unknown) => {
 	const responseError = mapAxiosErrorToResponseError(error);
 
-	if (responseError.code === HttpStatusCode.Forbidden) {
-		handleApplicationError(HttpStatusCode.Forbidden, "error.403");
-	} else {
-		throw error;
-	}
+	handleApplicationError(responseError.code);
 };
 
 const getFileRecord = async (fileId: string) => {
