@@ -90,7 +90,8 @@ const sanitizedSupportEmail = computed(() =>
 );
 
 const validationRules = [
-	isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")), // Talk to UX about error message
+	// isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")), // Talk to UX about error message
+	isRequired(""),
 ];
 </script>
 
