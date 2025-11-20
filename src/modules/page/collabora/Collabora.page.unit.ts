@@ -1,5 +1,6 @@
 import CollaboraPage from "./Collabora.page.vue";
 import * as serverApi from "@/serverApi/v3/api";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { EditorMode } from "@/types/file/File";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
@@ -405,13 +406,56 @@ describe("Collabora.page", () => {
 			};
 		};
 
-		it("should call useTitle with only file name", async () => {
-			const { expectedTitle } = setup();
+		it("should call handleApplicationError with correct parameters", async () => {
+			setup();
 
 			await flushPromises();
 
-			expect(mockBuildPageTitle).toHaveBeenCalledWith("");
-			expect(mockUseTitle).toHaveBeenCalledWith(expectedTitle);
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
+		});
+	});
+
+	describe("when getAuthorizedCollaboraDocumentUrl rejects", () => {
+		const setup = () => {
+			const editorMode = EditorMode.EDIT;
+
+			createTestAppStoreWithUser("user-id");
+
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce();
+
+			const fileRecord = fileRecordFactory.build();
+			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(fileRecord);
+
+			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+
+			const expectedTitle = "standalone-file.pdf - Instance Title";
+			mockBuildPageTitle.mockReturnValueOnce(expectedTitle);
+
+			mount(CollaboraPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				propsData: {
+					fileRecordId: fileRecord.id,
+					editorMode,
+				},
+			});
+
+			return {
+				fileRecord,
+				expectedTitle,
+			};
+		};
+
+		it("should call handleApplicationError with correct parameters", async () => {
+			setup();
+
+			await flushPromises();
+
+			expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.Forbidden, "error.403");
 		});
 	});
 
