@@ -34,7 +34,7 @@
 						tag="div"
 						:options="{
 							direction: 'horizontal',
-							disabled: !hasMovePermission,
+							disabled: isEditMode || !hasMovePermission,
 							group: 'columns',
 							delayOnTouchOnly: true,
 							delay: 300,
@@ -127,6 +127,8 @@ import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -150,6 +152,8 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const { editModeId } = useSharedEditMode();
+const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);

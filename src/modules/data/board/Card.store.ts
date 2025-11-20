@@ -17,7 +17,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -34,6 +34,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
+	const { setEditModeId, editModeId } = useSharedEditMode();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -100,6 +101,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
+		if (payload.cardId === editModeId.value) {
+			setEditModeId(undefined);
+		}
 		delete cards.value[payload.cardId];
 	};
 
@@ -186,6 +190,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
+		setEditModeId(payload.cardId);
 	};
 
 	const updateElementRequest = socketOrRest.updateElementRequest;
@@ -209,6 +214,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (elementIndex <= 0) return cardId;
 
 		const previousElement = elements[elementIndex - 1];
+		const { setEditModeId } = useSharedEditMode();
+		setEditModeId(cardId);
 
 		if (previousElement.type === ContentElementType.RichText) {
 			return getPreviousElementId(previousElement.id, cardId);
