@@ -9,10 +9,15 @@ import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useLightBox } from "@ui-light-box";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { ref } from "vue";
+import { Router, useRouter } from "vue-router";
 
+vi.mock("vue-router");
 vi.mock("@ui-light-box");
 vi.mock("@data-board");
+
+const useRouterMock = <Mock>useRouter;
 
 describe("FileInteractionHandler", () => {
 	const setupMocks = () => {
@@ -23,6 +28,9 @@ describe("FileInteractionHandler", () => {
 			close: vi.fn(),
 			lightBoxOptions: ref(),
 		});
+
+		const router = createMock<Router>({});
+		useRouterMock.mockReturnValue(router);
 
 		const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions);
 		const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
@@ -47,12 +55,13 @@ describe("FileInteractionHandler", () => {
 
 	describe("when file is selectable", () => {
 		const setup = (
-			props: { previewStatus?: FilePreviewStatus; mimeType?: string },
+			props: { previewStatus?: FilePreviewStatus; mimeType?: string; isCollaboraEditable?: boolean },
 			options?: { isCollaboraEnabled?: boolean }
 		) => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: props.previewStatus,
 				mimeType: props.mimeType,
+				isCollaboraEditable: props.isCollaboraEditable,
 			});
 			const fileRecordItem = {
 				...fileRecord,
@@ -153,6 +162,32 @@ describe("FileInteractionHandler", () => {
 				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
 				expect(windowOpenSpy).toHaveBeenCalledWith(fileRecordItem.url, "_blank");
 				expect(useLightBoxMock().open).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when file is a collabora document", () => {
+			it("should render button", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: true },
+					{ isCollaboraEnabled: true }
+				);
+				const button = wrapper.find("button");
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should call open function", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: true },
+					{ isCollaboraEnabled: true }
+				);
+
+				const windowOpenSpy = vi.fn();
+				window.open = windowOpenSpy;
+
+				const button = wrapper.find("button");
+				button.trigger("click");
+
+				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
 			});
 		});
 
