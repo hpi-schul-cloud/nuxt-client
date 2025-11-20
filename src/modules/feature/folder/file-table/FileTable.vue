@@ -33,7 +33,7 @@
 				</template>
 				<template #[`item.updatedAt`]="{ item }">
 					<span :data-testid="`updated-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
-						{{ d(item.updatedAt) }}
+						{{ d(item.contentLastModifiedAt) }}
 					</span>
 				</template>
 				<template #[`item.size`]="{ item }">
