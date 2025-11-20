@@ -2,11 +2,17 @@ import { FileRecordItem } from "../types/filerecord-item";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
+import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useBoardPermissions } from "@data-board";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { useLightBox } from "@ui-light-box";
+import { setActivePinia } from "pinia";
 import { ref } from "vue";
 
 vi.mock("@ui-light-box");
+vi.mock("@data-board");
 
 describe("FileInteractionHandler", () => {
 	const setupMocks = () => {
@@ -17,6 +23,12 @@ describe("FileInteractionHandler", () => {
 			close: vi.fn(),
 			lightBoxOptions: ref(),
 		});
+
+		const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions);
+		const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
+			hasEditPermission: ref(true),
+		});
+		useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
 
 		return { useLightBoxMock };
 	};
@@ -34,7 +46,10 @@ describe("FileInteractionHandler", () => {
 	};
 
 	describe("when file is selectable", () => {
-		const setup = (props: { previewStatus?: FilePreviewStatus; mimeType?: string }) => {
+		const setup = (
+			props: { previewStatus?: FilePreviewStatus; mimeType?: string },
+			options?: { isCollaboraEnabled?: boolean }
+		) => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: props.previewStatus,
 				mimeType: props.mimeType,
@@ -44,8 +59,14 @@ describe("FileInteractionHandler", () => {
 				isSelectable: true,
 			};
 
-			const { wrapper } = setupWrapper(fileRecordItem);
 			const { useLightBoxMock } = setupMocks();
+
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: options?.isCollaboraEnabled ?? false,
+			});
+
+			const { wrapper } = setupWrapper(fileRecordItem);
 
 			return { wrapper, useLightBoxMock, fileRecordItem };
 		};
@@ -152,7 +173,7 @@ describe("FileInteractionHandler", () => {
 	});
 
 	describe("when file is not selectable", () => {
-		const setup = () => {
+		const setup = (options?: { isCollaboraEnabled?: boolean }) => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
 			});
@@ -160,6 +181,12 @@ describe("FileInteractionHandler", () => {
 				...fileRecord,
 				isSelectable: false,
 			};
+
+			setupMocks();
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: options?.isCollaboraEnabled ?? false,
+			});
 
 			const { wrapper } = setupWrapper(fileRecordItem);
 
