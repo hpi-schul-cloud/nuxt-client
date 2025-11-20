@@ -94,13 +94,17 @@ const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
 
 		return collaboraUrl;
 	} catch (error) {
-		const responseError = mapAxiosErrorToResponseError(error);
+		handleError(error);
+	}
+};
 
-		if (responseError.code === HttpStatusCode.Forbidden) {
-			handleApplicationError(HttpStatusCode.Forbidden, "error.403");
-		} else {
-			throw error;
-		}
+const handleError = (error: unknown) => {
+	const responseError = mapAxiosErrorToResponseError(error);
+
+	if (responseError.code === HttpStatusCode.Forbidden) {
+		handleApplicationError(HttpStatusCode.Forbidden, "error.403");
+	} else {
+		throw error;
 	}
 };
 
