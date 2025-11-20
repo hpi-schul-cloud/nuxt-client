@@ -2,7 +2,7 @@
 	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
 		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
 		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
-		<div class="wireframe-header sticky">
+		<div ref="wireframeHeader" class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -10,41 +10,23 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<div v-if="fabItems" class="fab-wrapper">
-				<speed-dial-menu
-					:class="{
-						'wireframe-fab-relative': lgAndUp,
-						'wireframe-fab-fixed': mdAndDown,
-					}"
-					:direction="mdAndDown ? 'top' : 'bottom'"
-					:orientation="'right'"
+			<div v-if="fabItems">
+				<SpeedDialMenu
 					:icon="fabItems.icon"
 					:href="fabItems.href"
 					:to="fabItems.to"
+					:actions="fabItems.actions"
 					:aria-label="fabItems.ariaLabel"
 					:data-testid="fabItems.dataTestId"
+					:fab-offset="fabOffset"
 					@fab:clicked="onFabClicked"
 				>
 					{{ fabItems.title }}
-					<template #actions>
-						<template v-for="(action, index) in fabItems.actions" :key="index">
-							<speed-dial-menu-action
-								:data-test-id="action.dataTestId"
-								:icon="action.icon"
-								:href="action.href"
-								:to="action.to"
-								:aria-label="action.ariaLabel"
-								@click="$emit('onFabItemClick', action.customEvent)"
-							>
-								{{ action.label }}
-							</speed-dial-menu-action>
-						</template>
-					</template>
-				</speed-dial-menu>
+				</SpeedDialMenu>
 			</div>
-			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
+			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
-		<v-container
+		<VContainer
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
@@ -56,15 +38,16 @@
 			}"
 		>
 			<slot />
-		</v-container>
+		</VContainer>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb, FabOptions } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
-import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { computed, PropType, useSlots } from "vue";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { useCssVar, useElementSize } from "@vueuse/core";
+import { computed, PropType, useSlots, useTemplateRef } from "vue";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -113,6 +96,14 @@ const emit = defineEmits({
 	"fab:clicked": () => true,
 });
 
+const wireframeHeader = useTemplateRef("wireframeHeader");
+const { height } = useElementSize(wireframeHeader);
+const topbarHeightValue = useCssVar("--topbar-height");
+const fabOffset = computed(() => {
+	const topbarHeight = topbarHeightValue.value ? parseInt(topbarHeightValue.value) : 64;
+	return height.value + topbarHeight;
+});
+
 const onFabClicked = () => {
 	emit("fab:clicked");
 };
@@ -122,7 +113,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
+const { smAndUp } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 </script>
@@ -187,33 +178,5 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	top: var(--topbar-height);
 	z-index: 20;
 	background-color: rgb(var(--v-theme-white));
-}
-
-.wireframe-fab-relative {
-	position: relative;
-	top: 0;
-}
-
-.wireframe-fab-fixed {
-	position: fixed;
-	bottom: 2rem;
-	right: 1rem;
-}
-
-$fab-wrapper-height: 80px;
-
-.fab-wrapper {
-	position: relative;
-	top: calc($fab-wrapper-height / 2);
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	height: $fab-wrapper-height;
-	margin-top: -#{$fab-wrapper-height};
-	pointer-events: none;
-
-	* {
-		pointer-events: auto;
-	}
 }
 </style>
