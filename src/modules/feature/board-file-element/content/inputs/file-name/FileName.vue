@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
-import { isRequired, useOpeningTagValidator } from "@util-validators";
+import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
+const { validateInvalidCharacters } = useInvalidCharactersValidator();
 
 const emit = defineEmits<{
 	(e: "update:name", name: string): void;
@@ -50,8 +51,7 @@ const rules = {
 		return validateOnOpeningTag(nameWithExtension);
 	},
 	isRequired: (value: string) => isRequired(t("common.validation.required"))(value),
-	invalidCharacters: (value: string) =>
-		!value.includes("/") || t("pages.folder.rename-file-dialog.validation.invalid-characters"),
+	invalidCharacters: (value: string) => validateInvalidCharacters(value, ["/"]),
 };
 
 const addFileExtension = (name: string) => {

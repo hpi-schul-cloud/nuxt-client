@@ -1,3 +1,4 @@
+import { containsInvalidCharacters, useInvalidCharactersValidator } from "./invalidCharactersValidator";
 import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "./openingTagValidator";
 import {
 	isNonEmptyString,
@@ -9,6 +10,7 @@ import {
 } from "./validators";
 
 export {
+	containsInvalidCharacters,
 	containsOpeningTagFollowedByString,
 	isNonEmptyString,
 	isOfMaxLength,
@@ -16,5 +18,6 @@ export {
 	isValidDateFormat,
 	isValidTimeFormat,
 	isValidUrl,
+	useInvalidCharactersValidator,
 	useOpeningTagValidator,
 };
