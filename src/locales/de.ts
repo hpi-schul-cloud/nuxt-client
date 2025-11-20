@@ -661,6 +661,7 @@ export default {
 	"components.molecules.move.card.label.section": "Abschnitt wählen",
 	"components.molecules.move.card.hint.restriction": `Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.`,
 	"components.molecules.move.card.message.success": `Karte erfolgreich in den Bereich {link} - {column} verschoben`,
+	"components.molecules.import.card.options.title": "Karte importieren",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText": "Der Bereich kann im Folgenden umbenannt werden. ",
@@ -717,6 +718,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organisationsadministrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.card.options.infoText":
+		"Mit dem folgenden Link kann diese Karte von anderen Personen importiert werden.",
+	"components.molecules.share.card.result.linkLabel": "Link Karten-Kopie",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",

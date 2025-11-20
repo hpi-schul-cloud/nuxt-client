@@ -48,6 +48,7 @@
 								@click="duplicateCard"
 							/>
 							<KebabMenuActionExport v-if="hasEditPermission" @click="onMoveCard(cardId)" />
+							<KebabMenuActionShare v-if="hasShareBoardPermission" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -122,6 +123,7 @@ import {
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
 	KebabMenuActionExport,
+	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
@@ -141,6 +143,7 @@ const emit = defineEmits<{
 	(e: "delete:card", cardId: string): void;
 	(e: "move:card", cardId: string): void;
 	(e: "reload:board"): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const cardHost = ref(null);
@@ -162,12 +165,15 @@ const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIn
 
 const { height: cardHostHeight } = useElementSize(cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
 const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
 const onMoveCard = (cardId: string) => emit("move:card", cardId);
+const onShareCard = () => {
+	emit("share:card", props.cardId);
+};
 
 const _updateCardTitle = (newTitle: string, cardId: string) => {
 	cardStore.updateCardTitleRequest({ newTitle, cardId });

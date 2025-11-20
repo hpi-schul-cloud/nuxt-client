@@ -61,6 +61,7 @@
 						@move:card-keyboard="onMoveCardKeyboard(elementIndex, element.cardId, $event)"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
+						@share:card="emit('share:card', $event)"
 						@move:card="emit('move:card', $event)"
 					/>
 				</template>
@@ -104,6 +105,7 @@ const emit = defineEmits<{
 	(e: "move:column-up"): void;
 	(e: "reload:board"): void;
 	(e: "update:column-title", newTitle: string): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const boardStore = useBoardStore();
@@ -129,11 +131,11 @@ const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
 const onCreateCard = () => emit("create:card", props.column.id);
 
-const onColumnDelete = (columnId: string): void => {
+const onColumnDelete = (columnId: string) => {
 	emit("delete:column", columnId);
 };
 
-const onDeleteCard = (cardId: string): void => {
+const onDeleteCard = (cardId: string) => {
 	emit("delete:card", cardId);
 };
 

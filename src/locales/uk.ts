@@ -651,6 +651,7 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Наступне не було скопійовано:",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.card.options.title": "Імпортувати картку",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.move.card.title": "Перемістити картку",
 	"components.molecules.move.card.question": "Куди слід перемістити картку?",
@@ -711,6 +712,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Організаційний адміністратор",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
+	"components.molecules.share.card.options.infoText":
+		"За наступним посиланням цю картка можуть імпортувати як копію інші особи.",
+	"components.molecules.share.card.result.linkLabel": "Посилання на копію картки",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",

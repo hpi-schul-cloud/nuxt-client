@@ -9844,7 +9844,8 @@ export enum ShareTokenBodyParamsParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9901,7 +9902,8 @@ export enum ShareTokenInfoResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9933,7 +9935,8 @@ export enum ShareTokenPayloadResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**

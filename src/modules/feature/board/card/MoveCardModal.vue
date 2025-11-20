@@ -61,6 +61,7 @@ import { useBoardApi, useBoardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomStore } from "@data-room";
 import { Dialog } from "@ui-dialog";
+import { sortBy } from "lodash-es";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -147,9 +148,18 @@ const resetBoardSelection = () => {
 };
 
 onMounted(async () => {
-	selectedRoomId.value = props.roomId;
 	const result = await useRoomStore().fetchRoomsPlain();
-	rooms.value = result?.data?.data.filter((room) => room.permissions.includes(Permission.RoomEditContent));
+
+	rooms.value = sortBy(
+		result?.data?.data.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
+		(r) => r.name
+	);
+
+	if (props.roomId && rooms.value?.find((r) => r.id === props.roomId)) {
+		selectedRoomId.value = props.roomId;
+	} else {
+		selectedRoomId.value = undefined;
+	}
 });
 
 watch(selectedRoomId, async (newRoomId) => {

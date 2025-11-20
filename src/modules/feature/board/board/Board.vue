@@ -67,6 +67,7 @@
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
+								@share:card="onShareCard"
 								@delete:column="onDeleteColumn"
 								@move:card="onMoveCard"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
@@ -101,7 +102,7 @@
 					:copy-result-root-item-type="copyResultRootItemType"
 					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
-				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+				<ShareModal :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -138,7 +139,12 @@ import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULA
 import MoveCardModal from "@/modules/feature/board/card/MoveCardModal.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
+import {
+	BoardExternalReferenceType,
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
@@ -170,6 +176,7 @@ const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInform
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
+const shareModalContextType = ref();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -226,6 +233,16 @@ const onMoveCard = (cardId: string) => {
 		isDialogOpen: true,
 		cardId,
 	};
+};
+
+const onShareCard = async (cardId: string) => {
+	shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.Card;
+
+	shareModule.startShareFlow({
+		id: cardId,
+		type: ShareTokenBodyParamsParentTypeEnum.Card,
+		destinationType: BoardExternalReferenceType.Room,
+	});
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -414,6 +431,8 @@ const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const onShareBoard = () => {
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
+		shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
+
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
