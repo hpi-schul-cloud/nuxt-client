@@ -22,7 +22,7 @@
 					item-value="id"
 					item-title="name"
 					:hint="t('components.molecules.move.card.hint.restriction')"
-					:label="t('components.molecules.import.columnBoard.options.selectRoom')"
+					:label="t('components.molecules.label.room')"
 					:placeholder="t('common.labels.room')"
 					:menu-props="{ attach: '#moveCardForm' }"
 					@update:menu="resetBoardSelection"
@@ -30,7 +30,7 @@
 				<VSelect
 					v-model="selectedBoardId"
 					:disabled="!selectedRoomId || isMoving"
-					:label="t('components.molecules.move.card.label.board')"
+					:label="t('components.molecules.label.board')"
 					:items="boards"
 					item-value="id"
 					:placeholder="t('common.words.board')"
@@ -40,7 +40,7 @@
 				<VSelect
 					v-model="selectedColumnId"
 					:disabled="!selectedBoardId || isMoving"
-					:label="t('components.molecules.move.card.label.section')"
+					:label="t('components.molecules.label.section')"
 					:items="columns"
 					item-value="id"
 					:placeholder="t('components.boardSection')"
@@ -52,17 +52,18 @@
 </template>
 
 <script setup lang="ts">
+import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { BoardCardApiFactory, ColumnResponse, Permission, RoomBoardItemResponse } from "@/serverApi/v3";
+import { BoardCardApiFactory, Permission } from "@/serverApi/v3";
 import { RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
 import { useNotificationStore } from "@data-app";
-import { useBoardApi, useBoardStore } from "@data-board";
+import { useBoardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
-import { useRoomDetailsStore, useRoomStore } from "@data-room";
+import { useRoomStore } from "@data-room";
 import { Dialog } from "@ui-dialog";
 import { sortBy } from "lodash-es";
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -72,26 +73,28 @@ const props = defineProps<{
 	roomId?: string;
 }>();
 
-const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
-const { fetchBoardCall } = useBoardApi();
-const { reloadBoard } = useBoardStore();
+const rooms = ref<RoomItem[]>();
 
-const { execute, isRunning: isMoving } = useSafeAxiosTask();
+const {
+	selectedBoardId,
+	selectedColumnId,
+	selectedRoomId,
+	resetBoardSelection,
+	columns,
+	boards,
+	selectedColumn,
+	selectedBoard,
+} = useCardDialogData();
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
 	default: false,
 });
-const selectedRoomId = ref<string>();
-const selectedBoardId = ref<string>();
-const selectedColumnId = ref<string>();
 
-const rooms = ref<RoomItem[]>();
-const boards = ref<RoomBoardItemResponse[]>();
-const columns = ref<ColumnResponse[]>();
+const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+const { reloadBoard } = useBoardStore();
 
-const selectedBoard = computed(() => boards.value?.find((board) => board.id === selectedBoardId.value));
-const selectedColumn = computed(() => columns.value?.find((col) => col.id === selectedColumnId.value));
+const { execute, isRunning: isMoving } = useSafeAxiosTask();
 
 const { getCardLocation, moveCardRequest } = useBoardStore();
 const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
@@ -142,11 +145,6 @@ const onConfirm = async () => {
 	isDialogOpen.value = false;
 };
 
-const resetBoardSelection = () => {
-	selectedColumnId.value = undefined;
-	selectedBoardId.value = undefined;
-};
-
 onMounted(async () => {
 	const result = await useRoomStore().fetchRoomsPlain();
 
@@ -160,15 +158,5 @@ onMounted(async () => {
 	} else {
 		selectedRoomId.value = undefined;
 	}
-});
-
-watch(selectedRoomId, async (newRoomId) => {
-	if (!newRoomId) return;
-	boards.value = (await useRoomDetailsStore().fetchBoardsOfRoom(newRoomId)).boards;
-});
-
-watch(selectedBoardId, async (newBoardId) => {
-	if (!newBoardId) return;
-	columns.value = (await fetchBoardCall(newBoardId)).columns;
 });
 </script>

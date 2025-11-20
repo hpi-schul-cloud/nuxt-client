@@ -90,7 +90,7 @@
 				<AddElementDialog />
 				<AddCollaboraFileDialog />
 				<LightBox />
-				<MoveCardModal
+				<MoveCardDialog
 					v-if="roomId"
 					v-model:is-dialog-open="moveCardOptions.isDialogOpen"
 					:room-id="roomId"
@@ -102,7 +102,7 @@
 					:copy-result-root-item-type="copyResultRootItemType"
 					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
-				<ShareModal :type="shareModalContextType" />
+				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -136,7 +136,7 @@ import { useLoadingState } from "@/composables/loadingState";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import MoveCardModal from "@/modules/feature/board/card/MoveCardModal.vue";
+import MoveCardDialog from "@/modules/feature/board/card/MoveCardDialog.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import {

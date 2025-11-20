@@ -1,6 +1,7 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isDialogOpen"
+		:loading="isImporting"
 		:message="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
@@ -8,28 +9,49 @@
 		@cancel="onCancel"
 	>
 		<template #content>
+			<InfoAlert data-testid="import-card-information">
+				{{ t("components.molecules.import.card.hint.restriction") }}
+				<ul class="ml-6">
+					<li>{{ t("components.molecules.import.card.hint.etherpad") }}</li>
+					<li>{{ t("components.molecules.import.card.hint.whiteboard") }}</li>
+					<li>{{ t("components.molecules.import.card.hint.ctltools") }}</li>
+				</ul>
+			</InfoAlert>
+
+			<p class="text-lg mt-2">
+				{{ t("components.molecules.import.card.question") }}
+			</p>
+
 			<VForm id="importCardForm" data-testid="import-card-form">
 				<VSelect
 					v-model="selectedRoomId"
 					:items="rooms"
+					:disabled="isImporting"
 					item-value="id"
 					item-title="name"
+					:label="t('components.molecules.label.room')"
 					:placeholder="t('common.labels.room')"
 					:menu-props="{ attach: '#importCardForm' }"
+					@update:menu="resetBoardSelection"
 				/>
+
 				<VSelect
 					v-model="selectedBoardId"
-					:disabled="!selectedRoomId"
+					:disabled="!selectedRoomId || isImporting"
 					:items="boards"
 					item-value="id"
+					:label="t('components.molecules.label.board')"
 					:placeholder="t('common.words.board')"
 					:menu-props="{ attach: '#importCardForm' }"
+					@update:menu="selectedColumnId = undefined"
 				/>
+
 				<VSelect
 					v-model="selectedColumnId"
-					:disabled="!selectedBoardId"
+					:disabled="!selectedBoardId || isImporting"
 					:items="columns"
 					item-value="id"
+					:label="t('components.molecules.label.section')"
 					:placeholder="t('components.boardSection')"
 					:menu-props="{ attach: '#importCardForm' }"
 				/>
@@ -39,67 +61,49 @@
 </template>
 
 <script setup lang="ts">
-import { ColumnResponse, RoomBoardItemResponse } from "../../../../serverApi/v3/api";
+import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { useLoadingState } from "@/composables/loadingState";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
-import { useBoardApi } from "@data-board";
-import { useRoomDetailsStore } from "@data-room";
+import { InfoAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
-import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const copyModule = injectStrict(COPY_MODULE_KEY);
-
 const router = useRouter();
-
 const { t } = useI18n();
 
-const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.import.options.loadingMessage"));
-
-const { fetchBoardCall } = useBoardApi();
-const { fetchBoardsOfRoom } = useRoomDetailsStore();
-
-const { token } = defineProps<{
+const props = defineProps<{
 	token: string;
 	rooms: Array<RoomItem>;
 }>();
 
+const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } = useCardDialogData();
+
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
-	default: true,
+	default: false,
 });
 
-const selectedRoomId = ref<string>();
-const boards = ref<Array<RoomBoardItemResponse>>();
-const selectedBoardId = ref<string>();
-const columns = ref<Array<ColumnResponse>>();
-const selectedColumnId = ref<string>();
+const { execute, isRunning: isImporting } = useSafeAxiosTask();
 
 const onConfirm = async () => {
-	isLoadingDialogOpen.value = true;
-
-	const shareTokenInfo = await copyModule.validateShareToken(token);
-
-	const { execute } = useSafeAxiosTask();
-
 	const { success } = await execute(
-		() =>
-			copyModule.copyByShareToken({
+		async () => {
+			const shareTokenInfo = await copyModule.validateShareToken(props.token);
+			await copyModule.copyByShareToken({
 				token: shareTokenInfo.token,
 				type: shareTokenInfo.parentType,
 				newName: shareTokenInfo.parentName,
 				destinationId: selectedColumnId.value,
-			}),
+			});
+		},
 		t("components.molecules.import.options.failure.backendError", {
 			name: t("components.boardCard"),
 		})
 	);
-
-	isLoadingDialogOpen.value = false;
 
 	if (success) {
 		router.push("/boards/" + selectedBoardId.value);
@@ -115,17 +119,4 @@ const onConfirm = async () => {
 const onCancel = () => {
 	router.push("/rooms");
 };
-
-watch(selectedRoomId, async (newRoomId) => {
-	if (newRoomId) {
-		boards.value = await fetchBoardsOfRoom(newRoomId);
-	}
-});
-
-watch(selectedBoardId, async (newBoardId) => {
-	if (newBoardId) {
-		const board = await fetchBoardCall(newBoardId);
-		columns.value = board.columns;
-	}
-});
 </script>
