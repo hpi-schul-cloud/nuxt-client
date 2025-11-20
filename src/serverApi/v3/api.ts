@@ -4864,12 +4864,6 @@ export interface LernstoreResources {
      */
     description: string;
     /**
-     * merlinReference
-     * @type {string}
-     * @memberof LernstoreResources
-     */
-    merlinReference?: string;
-    /**
      * title
      * @type {string}
      * @memberof LernstoreResources
@@ -5806,12 +5800,6 @@ export interface MaterialResponse {
      * @memberof MaterialResponse
      */
     license: Array<string>;
-    /**
-     * For material from Merlin, the Merlin reference
-     * @type {string}
-     * @memberof MaterialResponse
-     */
-    merlinReference: string;
 }
 /**
  * 
@@ -6591,6 +6579,25 @@ export interface MoveElementPositionParams {
      * @memberof MoveElementPositionParams
      */
     groupIndex?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MoveItemBodyParams
+ */
+export interface MoveItemBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof MoveItemBodyParams
+     */
+    id: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveItemBodyParams
+     */
+    toPosition: number;
 }
 /**
  * 
@@ -8663,29 +8670,11 @@ export interface RoomItemResponse {
  */
 export interface RoomListResponse {
     /**
-     * The items for the current page.
+     * 
      * @type {Array<RoomItemResponse>}
      * @memberof RoomListResponse
      */
     data: Array<RoomItemResponse>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof RoomListResponse
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof RoomListResponse
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof RoomListResponse
-     */
-    limit: number;
 }
 /**
  * 
@@ -14789,7 +14778,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | FileFolderElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14879,7 +14868,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | FileFolderElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14963,7 +14952,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | FileFolderElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>;
 
     /**
      * 
@@ -23381,12 +23370,10 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get a list of rooms.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetRooms: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        roomControllerGetRooms: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/rooms`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23402,14 +23389,6 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (skip !== undefined) {
-                localVarQueryParameter['skip'] = skip;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
 
 
     
@@ -23454,6 +23433,90 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Move a single board item.
+         * @param {string} roomId The id of the room.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveBoard: async (roomId: string, moveItemBodyParams: MoveItemBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerMoveBoard', 'roomId', roomId)
+            // verify required parameter 'moveItemBodyParams' is not null or undefined
+            assertParamExists('roomControllerMoveBoard', 'moveItemBodyParams', moveItemBodyParams)
+            const localVarPath = `/rooms/{roomId}/boards`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveItemBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Move a single room item.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveRoom: async (moveItemBodyParams: MoveItemBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'moveItemBodyParams' is not null or undefined
+            assertParamExists('roomControllerMoveRoom', 'moveItemBodyParams', moveItemBodyParams)
+            const localVarPath = `/rooms`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveItemBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23697,13 +23760,11 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a list of rooms.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerGetRooms(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRooms(skip, limit, options);
+        async roomControllerGetRooms(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRooms(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23715,6 +23776,29 @@ export const RoomApiFp = function(configuration?: Configuration) {
          */
         async roomControllerLeaveRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerLeaveRoom(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Move a single board item.
+         * @param {string} roomId The id of the room.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerMoveBoard(roomId, moveItemBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Move a single room item.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerMoveRoom(moveItemBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23878,13 +23962,11 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get a list of rooms.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse> {
-            return localVarFp.roomControllerGetRooms(skip, limit, options).then((request) => request(axios, basePath));
+        roomControllerGetRooms(options?: any): AxiosPromise<RoomListResponse> {
+            return localVarFp.roomControllerGetRooms(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -23895,6 +23977,27 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          */
         roomControllerLeaveRoom(roomId: string, options?: any): AxiosPromise<string> {
             return localVarFp.roomControllerLeaveRoom(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Move a single board item.
+         * @param {string} roomId The id of the room.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomControllerMoveBoard(roomId, moveItemBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Move a single room item.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomControllerMoveRoom(moveItemBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24054,13 +24157,11 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get a list of rooms.
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse>;
+    roomControllerGetRooms(options?: any): AxiosPromise<RoomListResponse>;
 
     /**
      * 
@@ -24071,6 +24172,27 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerLeaveRoom(roomId: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Move a single board item.
+     * @param {string} roomId The id of the room.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Move a single room item.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -24254,14 +24376,12 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get a list of rooms.
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
      */
-    public roomControllerGetRooms(skip?: number, limit?: number, options?: any) {
-        return RoomApiFp(this.configuration).roomControllerGetRooms(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public roomControllerGetRooms(options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetRooms(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -24274,6 +24394,31 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerLeaveRoom(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerLeaveRoom(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Move a single board item.
+     * @param {string} roomId The id of the room.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerMoveBoard(roomId, moveItemBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Move a single room item.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerMoveRoom(moveItemBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

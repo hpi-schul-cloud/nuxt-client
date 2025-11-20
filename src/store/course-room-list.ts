@@ -76,7 +76,7 @@ export default class CourseRoomListModule extends VuexModule {
 			let titleDate = untilDate;
 			if (difference !== 0) {
 				const symbol = difference > 1 ? "-" : "/";
-				titleDate = `${startDate}${symbol}${symbol == "/" ? shortenedUntilDate : untilDate}`;
+				titleDate = `${startDate}${symbol}${symbol === "/" ? shortenedUntilDate : untilDate}`;
 			}
 
 			return {
@@ -107,7 +107,7 @@ export default class CourseRoomListModule extends VuexModule {
 	@Mutation
 	setPosition(droppedComponent: DroppedObject): void {
 		const { to } = droppedComponent;
-		const itemToBeChanged = this.roomsData.find((item) => item.id == droppedComponent.item.id);
+		const itemToBeChanged = this.roomsData.find((item) => item.id === droppedComponent.item.id);
 
 		if (itemToBeChanged) {
 			itemToBeChanged.xPosition = to.x;

@@ -14,7 +14,7 @@ const getDefaultState = () => {
 
 	if (!initialized && localStorage.getItem(localStorageKey)) {
 		const uiState = JSON.parse(localStorage.getItem(localStorageKey));
-		if (uiState.version == version) {
+		if (uiState.version === version) {
 			Object.assign(defaultState, uiState);
 		} else {
 			uiState.version = version;

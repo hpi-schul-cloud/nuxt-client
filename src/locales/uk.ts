@@ -28,6 +28,7 @@ export default {
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
+	"common.actions.moved": "{elementName} було переміщено на позицію {position}",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.ariaLabel.openImageInLightBox": "Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
@@ -44,6 +45,7 @@ export default {
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
+	"common.instructions.orderBy.arrowKeys": "Елементи цього списку можна переміщати за допомогою клавіш зі стрілками.",
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -86,6 +88,7 @@ export default {
 	"common.labels.partial": "частковий",
 	"common.labels.password.new": "Новий пароль",
 	"common.labels.password": "Пароль",
+	"common.labels.password.confirmation": "Підтвердження пароля",
 	"common.labels.readmore": "Додаткові відомості",
 	"common.labels.register": "Реєстрація",
 	"common.labels.registration": "Реєстрація",
@@ -93,7 +96,7 @@ export default {
 	"common.labels.repeat": "Повторення",
 	"common.labels.restore": "Відновити",
 	"common.labels.role": "Роль",
-	"common.labels.room": "Кімната",
+	"common.labels.room": "Кімната | Кімнати",
 	"common.labels.search": "Пошук",
 	"common.labels.settings": "Налаштування",
 	"common.labels.size": "Pозмір",
@@ -126,6 +129,18 @@ export default {
 	"common.medium.information.teacher": "Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
+	"common.notifications.errors.notCreated":
+		"{type} не вдалося створити. | {type} не вдалося створити. | {type} не вдалося створити.",
+	"common.notifications.errors.notDeleted":
+		"{type} не вдалося видалити. | {type} не вдалося видалити. | {type} не вдалося видалити.",
+	"common.notifications.errors.notDuplicated":
+		"{type} не вдалося дублювати. | {type} не вдалося дублювати. | {type} не вдалося дублювати.",
+	"common.notifications.errors.notLoaded":
+		"{type} не вдалося завантажити. | {type} не вдалося завантажити. | {type} не вдалося завантажити.",
+	"common.notifications.errors.notMoved":
+		"{type} не вдалося перемістити. | {type} не вдалося перемістити. | {type} не вдалося перемістити.",
+	"common.notifications.errors.notExited":
+		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
@@ -456,6 +471,7 @@ export default {
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
 	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
 	"components.board.notifications.errors.notLoaded": "{type}: не вдалося завантажити.",
+	"components.board.notifications.errors.notMoved": "{type} не вдалося позицію.",
 	"components.board.notifications.errors.notUpdated": "Зберегти зміни не вдалося.",
 	"components.board.notifications.info.cardDuplicated":
 		"IВміст з Etherpads і Whiteboards, а також захищені налаштування зовнішніх інструментів не переносяться.",
@@ -490,6 +506,7 @@ export default {
 		"Дошку було встановлено як не редаговану для всіх користувачів іншим користувачем.",
 	"components.board.preferredTools.notification.error.notLoaded": "Не вдалося завантажити бажані інструменти.",
 	"components.board.header.chip.editableForEveryone": "Редагується для всіх",
+	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",
@@ -691,9 +708,10 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
 	"components.molecules.share.columnBoard.mail.subject": "Дошка для імпорту",
 	"components.molecules.share.columnBoard.mail.body": "Посилання на дошку: ",
-	"components.molecules.share.courses.mail.body": "Посилання на курс:",
-	"components.molecules.share.roomMemberInvitation.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
+	"components.molecules.share.courses.mail.body": "Посилання на курс:",
+	"components.molecules.share.roomMemberInvitation.mail.subject": "Запрошення в кімнату",
+	"components.molecules.share.roomMemberInvitation.mail.body": "Посилання на кімнату: ",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
@@ -838,11 +856,11 @@ export default {
 	"data-room.copy.alert.success": "Кімнату успішно дубльовано.",
 	"data-room.copy.alert.error": "Не вдалося завершити процес копіювання.",
 	"data-room.copy.loading": "Кімната дублюється...",
-	"error.400": "400 – Неприпустимий запит",
-	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
-	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
-	"error.404": "404 – Не знайдено",
-	"error.408": "408 – Таймаут з'єднання з сервером",
+	"error.400": "Неприпустимий запит",
+	"error.401": "На жаль, у вас немає дозволу на перегляд цього контенту.",
+	"error.403": "На жаль, у вас немає дозволу на перегляд цього контенту.",
+	"error.404": "Не знайдено",
+	"error.408": "Таймаут з'єднання з сервером",
 	"error.action.back": "До Панелі керування",
 	"error.generic": "Виникла помилка",
 	"error.load": "Помилка під час завантаження даних.",
@@ -1478,7 +1496,6 @@ export default {
 	"pages.courseRoomDetails.fab.add.lesson": "Створити тему",
 	"pages.courseRoomDetails.fab.add.task": "Створити завдання",
 	"pages.courseRoomDetails.fab.add.board": "Нова дошка",
-	"pages.courseRoomDetails.fab.add.columnBoard": "Нова дошка",
 	"pages.courseRooms.groupName": "Курси",
 	"pages.courseRooms.headerSection.archived": "Архів",
 	"pages.courseRooms.headerSection.menu.ariaLabel": "Меню курсу",
@@ -1513,12 +1530,39 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
-	"pages.registrationExternalMembers.steps.registration.subtitle": "Реєстрація успішна",
-	"pages.registrationExternalMembers.steps.language.subtitle": "Будь ласка, виберіть свою мову",
-	"pages.registrationExternalMembers.steps.password.subtitle": "Встановіть пароль",
+	"pages.registrationExternalMembers.steps.password.firstParagraph":
+		"{instance} надійно зберігає дані користувачів і не передає їх третім особам. Обробка даних здійснюється відповідно до високих законодавчих вимог щодо захисту даних.",
+	"pages.registrationExternalMembers.steps.password.secondParagraph":
+		"Наступні дані були введені вчителем або адміністратором школи (якщо потрібні зміни, будь ласка, зверніться до відповідної особи):",
+	"pages.registrationExternalMembers.steps.password.setPassword": "Будь ласка, задайте пароль",
+	"pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase":
+		"мінімум 8 символів, одна велика та одна мала буква",
+	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
+		"мінімум одна цифра та один спеціальний символ",
+	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
+		"дозволені спеціальні символи: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+	"pages.registrationExternalMembers.steps.password.validation.required": "Будь ласка, введіть пароль.",
+	"pages.registrationExternalMembers.steps.password.validation.minLength":
+		"Пароль повинен містити щонайменше 8 символів.",
+	"pages.registrationExternalMembers.steps.password.validation.upperCase":
+		"Пароль повинен містити щонайменше одну велику літеру.",
+	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
+		"Пароль повинен містити щонайменше одну малу літеру.",
+	"pages.registrationExternalMembers.steps.password.validation.number": "Пароль повинен містити щонайменше одну цифру.",
+	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
+		"Пароль повинен містити щонайменше один спеціальний символ.",
+	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Паролі не співпадають.",
+	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
+	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",
+	"pages.registrationExternalMembers.steps.welcome.heading":
+		"Реєструючись у dBildungscloud на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
+	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Політика конфіденційності",
+	"pages.registrationExternalMembers.steps.welcome.tos": "Умови використання",
+	"pages.registrationExternalMembers.steps.password.heading": "Встановіть пароль",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
+	"pages.room.boardCard.label.openItem": "Відкрити",
 	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
 	"pages.room.cards.aria": "{itemType}, посилання, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
@@ -1621,6 +1665,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Меню кімнати",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
+	"pages.roomDetails.fab.add.board": "Додати дошку",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.roomDetails.emptyState": "Наразі в цьому просторі немає навчальних матеріалів",
 	"pages.rooms.emptyState": "Наразі немає вільних кімнат",

@@ -137,6 +137,14 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
+			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
+			title: "components.legacy.footer.accessibility.statement",
+			testId: "sidebar-system-accessibilitystatement",
+			target: "_blank",
+			rel: "noopener",
+			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
+		},
+		{
 			to: "/imprint",
 			title: "components.legacy.footer.imprint",
 			testId: "sidebar-imprint",
@@ -173,14 +181,6 @@ export const useSidebarItems = () => {
 			rel: "noopener",
 			feature: "ALERT_STATUS_URL",
 			featureValue: `${useEnvConfig().value.ALERT_STATUS_URL}`,
-		},
-		{
-			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
-			title: "components.legacy.footer.accessibility.statement",
-			testId: "sidebar-system-accessibilitystatement",
-			target: "_blank",
-			rel: "noopener",
-			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
 			title: "global.sidebar.item.releaseNotes",

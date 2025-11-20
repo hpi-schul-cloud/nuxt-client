@@ -31,7 +31,7 @@
 						:options="{
 							group: 'elements',
 							direction: 'horizontal',
-							delay: 300,
+							delay: 200,
 							delayOnTouchOnly: true,
 							ghostClass: 'sortable-drag-ghost',
 							easing: 'cubic-bezier(1, 0, 0, 1)',
