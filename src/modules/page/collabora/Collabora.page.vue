@@ -11,10 +11,9 @@
 
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { EditorMode } from "@/types/file/File";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useAppStore, useAppStoreRefs } from "@data-app";
+import { useAppStoreRefs } from "@data-app";
 import { useBoardApi } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useTitle } from "@vueuse/core";
@@ -33,7 +32,6 @@ const { setupPostMessageAPI } = useCollaboraPostMessageApi();
 const { getElementWithParentHierarchyCall } = useBoardApi();
 
 const { user, locale } = useAppStoreRefs();
-const { handleApplicationError } = useAppStore();
 
 const userName = computed(() => {
 	const firstName = user.value?.firstName;
@@ -57,9 +55,11 @@ onMounted(async () => {
 });
 
 const setCollaboraUrl = async () => {
-	const responseCollaboraUrl = await tryGetCollaboraUrl(props.fileRecordId);
-
-	if (!responseCollaboraUrl) return;
+	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
+		props.fileRecordId,
+		props.editorMode ?? EditorMode.VIEW,
+		userName.value
+	);
 
 	const collaboraUrl = new URL(responseCollaboraUrl);
 	collaboraUrl.searchParams.set("lang", locale.value);
@@ -81,21 +81,6 @@ const setPageTitle = async () => {
 	const firstPartOfPageTitle = formatePageTitlePrefix(fileRecord?.name, parentName);
 	const pageTitle = buildPageTitle(firstPartOfPageTitle);
 	useTitle(pageTitle);
-};
-
-const tryGetCollaboraUrl = async (fileId: string): Promise<string | undefined> => {
-	try {
-		await getFileRecord(props.fileRecordId);
-		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
-			fileId,
-			props.editorMode ?? EditorMode.VIEW,
-			userName.value
-		);
-
-		return collaboraUrl;
-	} catch {
-		handleApplicationError(HttpStatusCode.Forbidden, "error.403");
-	}
 };
 
 const getFileRecord = async (fileId: string) => {
