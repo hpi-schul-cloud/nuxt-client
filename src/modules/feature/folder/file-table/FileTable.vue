@@ -31,8 +31,8 @@
 						</span>
 					</FileInteractionHandler>
 				</template>
-				<template #[`item.updatedAt`]="{ item }">
-					<span :data-testid="`updated-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
+				<template #[`item.contentLastModifiedAt`]="{ item }">
+					<span :data-testid="`content-modified-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
 						{{ d(item.contentLastModifiedAt) }}
 					</span>
 				</template>
@@ -167,7 +167,7 @@ const emit = defineEmits([
 const headers = [
 	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
-	{ title: t("pages.folder.columns.updatedat"), key: "updatedAt" },
+	{ title: t("pages.folder.columns.lastModifiedAt"), key: "contentLastModifiedAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{
 		title: t("ui.actionMenu.actions"),
