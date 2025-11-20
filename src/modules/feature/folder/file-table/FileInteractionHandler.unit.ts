@@ -1,8 +1,7 @@
 import { FileRecordItem } from "../types/filerecord-item";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
-import { fileRecordFactory } from "@@/tests/test-utils";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useBoardPermissions } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
