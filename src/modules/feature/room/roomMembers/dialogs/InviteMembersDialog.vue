@@ -33,14 +33,18 @@
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
 							<div id="school-radiogroup-label" class="d-flex mb-3">Link gültig für die folgende(n) Schule(n):</div>
-							<VRadioGroup v-model="formData.restrictedToCreatorSchool" aria-labelledby="school-radiogroup-label">
+							<VRadioGroup
+								v-model="formData.restrictedToCreatorSchool"
+								aria-labelledby="school-radiogroup-label"
+								@update:model-value="resetRoleSelection"
+							>
 								<VRadio :value="true">
 									<template #label> nur {{ schoolName }} </template>
 								</VRadio>
 								<VRadio label="alle Schulen" :value="false" />
 							</VRadioGroup>
 							<VDivider class="mb-4" />
-							<div>Link gültig für die folgenden Schulrollen:</div>
+							<div class="mb-4">Link gültig für die folgenden Schulrollen:</div>
 							<VCheckbox label="Lernbegleitungen" disabled :model-value="true" hide-details />
 							<VCheckbox
 								v-if="formData.restrictedToCreatorSchool"
@@ -254,6 +258,12 @@ const onClose = () => {
 		formData.value = { ...defaultFormData };
 	}, 1000);
 };
+
+const resetRoleSelection = () =>
+	Object.assign(formData.value, {
+		isUsableByStudents: defaultFormData.isUsableByStudents,
+		isUsableByExternalPersons: defaultFormData.isUsableByExternalPersons,
+	});
 
 const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE || inviteMembersForm.value === null) return;
