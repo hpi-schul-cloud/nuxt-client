@@ -18,6 +18,7 @@ import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-
 import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
+import { useSharedEditMode } from "@util-board";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -36,6 +37,8 @@ export const useBoardRestApi = () => {
 		updateBoardLayoutCall,
 		updateReadersCanEditCall,
 	} = useBoardApi();
+
+	const { setEditModeId } = useSharedEditMode();
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
@@ -251,6 +254,7 @@ export const useBoardRestApi = () => {
 
 		notifyWithTemplate(errorType, boardObjectType)();
 		reloadBoard();
+		setEditModeId(undefined);
 	};
 
 	const reloadBoard = async () => {

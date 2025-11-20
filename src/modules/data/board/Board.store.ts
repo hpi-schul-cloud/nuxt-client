@@ -34,6 +34,7 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -50,6 +51,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
+	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
 
 	const getLastColumnIndex = () => board.value!.columns.length - 1;
@@ -111,6 +113,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		});
 		if (payload.isOwnAction === true) {
 			setFocus(newCard.id);
+			setEditModeId(newCard.id);
 		}
 	};
 
@@ -127,6 +130,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		if (isOwnAction === true) {
 			setFocus(newColumn.id);
+			setEditModeId(newColumn.id);
 		}
 	};
 

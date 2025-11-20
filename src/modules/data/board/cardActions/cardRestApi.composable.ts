@@ -36,6 +36,7 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
+import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 
@@ -60,6 +61,8 @@ export const useCardRestApi = () => {
 	const { fetchPreferredTools } = useContextExternalToolApi();
 
 	const { createContextExternalToolCall, fetchAvailableToolsForContextCall } = useContextExternalToolApi();
+
+	const { setEditModeId } = useSharedEditMode();
 
 	const { t } = useI18n();
 
@@ -276,6 +279,7 @@ export const useCardRestApi = () => {
 		(errorType: ErrorType, boardObjectType?: BoardObjectType) => () => {
 			notifyWithTemplate(errorType, boardObjectType)();
 			boardStore.reloadBoard();
+			setEditModeId(undefined);
 		};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
