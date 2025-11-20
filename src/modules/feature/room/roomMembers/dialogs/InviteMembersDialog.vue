@@ -32,7 +32,7 @@
 						/>
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
-							<div id="school-radiogroup-label" class="d-flex mb-3">Link gültig für die folgende(n) Schule(n):</div>
+							<div id="school-radiogroup-label" class="d-flex mb-4">Link gültig für die folgende(n) Schule(n):</div>
 							<VRadioGroup
 								v-model="formData.restrictedToCreatorSchool"
 								aria-labelledby="school-radiogroup-label"
