@@ -17,7 +17,6 @@
 					group: 'lines',
 					delay: 200,
 					delayOnTouchOnly: true,
-					disabled: isInEditMode,
 					ghostClass: 'sortable-drag-ghost',
 					chosenClass: isDesktop ? '' : 'sortable-chosen',
 					easing: 'cubic-bezier(1, 0, 0, 1)',
@@ -57,8 +56,6 @@ import { lineLimit, LineMove, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
@@ -93,8 +90,6 @@ const {
 	deleteElement,
 	createElement,
 } = useSharedMediaBoardState();
-
-const { isInEditMode } = useSharedEditMode();
 
 const onLineDragEnd = async (event: SortableEvent) => {
 	const { newIndex, oldIndex, item } = event;
