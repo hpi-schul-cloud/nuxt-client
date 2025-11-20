@@ -59,21 +59,6 @@
 				</div>
 				<div v-else>
 					<v-btn
-						v-if="isMerlin"
-						variant="outlined"
-						class="content-button"
-						data-testid="learningstore-to-content-link"
-						@click="
-							() => {
-								goToMerlinContent(merlinTokenReference);
-							}
-						"
-					>
-						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
-						{{ $t("pages.content.material.toMaterial") }}
-					</v-btn>
-					<v-btn
-						v-else
 						variant="outlined"
 						:href="downloadUrl"
 						class="content-button"
@@ -158,17 +143,7 @@ import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
 import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import {
-	getAuthor,
-	getDescription,
-	getMerlinReference,
-	getMetadataAttribute,
-	getProvider,
-	getTags,
-	isMerlinContent,
-	isVideoContent,
-} from "@/utils/helpers";
+import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags, isVideoContent } from "@/utils/helpers";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiClose, mdiOpenInNew, mdiPound } from "@icons/material";
@@ -254,12 +229,6 @@ export default {
 		isInline() {
 			return !!this.$route.query.inline;
 		},
-		isMerlin() {
-			return isMerlinContent(this.resource);
-		},
-		merlinTokenReference() {
-			return getMerlinReference(this.resource);
-		},
 		provider() {
 			const provider = getProvider(this.resource.properties);
 			return provider ? provider.replace(/ {2,}/g, "") : undefined;
@@ -296,11 +265,6 @@ export default {
 		document.title = buildPageTitle(pageTitle);
 	},
 	methods: {
-		async goToMerlinContent(merlinReference) {
-			const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${merlinReference}`;
-			const url = (await $axios.get(requestUrl)).data;
-			window.open(url, "_blank");
-		},
 		isNotStudent(roles) {
 			return this.role === "" ? roles.some((role) => !role.startsWith("student")) : this.role;
 		},
