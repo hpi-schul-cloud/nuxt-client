@@ -8266,7 +8266,7 @@ export enum RoleName {
     Demo = 'demo',
     DemoStudent = 'demoStudent',
     DemoTeacher = 'demoTeacher',
-    Expert = 'expert',
+    ExternalPerson = 'externalPerson',
     GuestTeacher = 'guestTeacher',
     GuestStudent = 'guestStudent',
     GuestExternalPerson = 'guestExternalPerson',
