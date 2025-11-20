@@ -61,6 +61,7 @@
 						@move:card-keyboard="onMoveCardKeyboard(elementIndex, element.cardId, $event)"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
+						@move:card="emit('move:card', $event)"
 					/>
 				</template>
 			</Sortable>
@@ -94,6 +95,7 @@ const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "create:card", columnId: string): void;
+	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
 	(e: "move:column-down"): void;

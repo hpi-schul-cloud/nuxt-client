@@ -17,6 +17,7 @@
 					<div class="d-flex ga-2">
 						<VBtn
 							data-testid="dialog-cancel"
+							:disabled="areActionsDisabled"
 							:aria-label="t('common.actions.cancel')"
 							variant="text"
 							:text="t('common.actions.cancel')"
@@ -29,7 +30,7 @@
 							color="primary"
 							variant="flat"
 							:text="t(confirmBtnLangKey)"
-							:disabled="confirmBtnDisabled"
+							:disabled="confirmBtnDisabled || areActionsDisabled"
 							@click="onConfirm"
 						/>
 					</div>
@@ -48,6 +49,7 @@ import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 const props = defineProps({
 	message: { type: String, required: false, default: "" },
+	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, required: false, default: false },
 	confirmBtnLangKey: { type: String, required: false, default: "" },
 });

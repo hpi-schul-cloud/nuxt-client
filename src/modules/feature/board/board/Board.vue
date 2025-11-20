@@ -68,6 +68,7 @@
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@delete:column="onDeleteColumn"
+								@move:card="onMoveCard"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
 								@move:column-down="onMoveColumnForward(index, element.id)"
 								@move:column-left="onMoveColumnBackward(index, element.id)"
@@ -88,6 +89,11 @@
 				<AddElementDialog />
 				<AddCollaboraFileDialog />
 				<LightBox />
+				<MoveCardModal
+					v-model:is-dialog-open="moveCardOptions.isDialogOpen"
+					:room-id="roomId"
+					:card-id="moveCardOptions.cardId"
+				/>
 				<CopyResultModal
 					:is-open="isCopyModalOpen"
 					:copy-result-items="copyResultModalItems"
@@ -127,6 +133,8 @@ import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import MoveCardModal from "@/modules/feature/board/card/MoveCardModal.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
@@ -193,6 +201,10 @@ const {
 const isBoardVisible = computed(() => board.value?.isVisible);
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
+const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
+	isDialogOpen: false,
+	cardId: "",
+});
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
@@ -206,6 +218,13 @@ const onDeleteCard = async (cardId: string) => {
 	if (hasCreateCardPermission.value) {
 		cardStore.deleteCardRequest({ cardId });
 	}
+};
+
+const onMoveCard = (cardId: string) => {
+	moveCardOptions.value = {
+		isDialogOpen: true,
+		cardId,
+	};
 };
 
 const onDeleteColumn = async (columnId: string) => {

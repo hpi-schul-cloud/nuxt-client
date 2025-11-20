@@ -19,7 +19,25 @@
 				@click:close="removeNotifier(notification.id)"
 			>
 				<div class="alert-text mr-2" data-testId="alert-text">
-					{{ getNotificationText(notification.text) }}
+					<i18n-t
+						v-if="notification.link || notification.replace"
+						:keypath="notification.text"
+						tag="span"
+						scope="global"
+					>
+						<template v-if="notification.link" #link>
+							<router-link :to="notification.link.to">
+								{{ notification.link.text }}
+							</router-link>
+						</template>
+						<template v-for="(value, key) in notification.replace" #[key]>
+							{{ value }}
+						</template>
+					</i18n-t>
+
+					<template v-else>
+						{{ getNotificationText(notification.text) }}
+					</template>
 				</div>
 			</v-alert>
 		</transition-group>
