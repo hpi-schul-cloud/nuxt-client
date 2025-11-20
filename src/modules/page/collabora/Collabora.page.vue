@@ -57,8 +57,6 @@ onMounted(async () => {
 });
 
 const setCollaboraUrl = async () => {
-	await getFileRecord(props.fileRecordId);
-
 	const responseCollaboraUrl = await tryGetCollaboraUrl(props.fileRecordId);
 
 	if (!responseCollaboraUrl) return;
@@ -87,6 +85,7 @@ const setPageTitle = async () => {
 
 const tryGetCollaboraUrl = async (fileId: string): Promise<string | undefined> => {
 	try {
+		await getFileRecord(props.fileRecordId);
 		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
 			fileId,
 			props.editorMode ?? EditorMode.VIEW,
