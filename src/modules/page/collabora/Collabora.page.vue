@@ -11,9 +11,9 @@
 
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
-import { ApiResponseErrorSchema } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { EditorMode } from "@/types/file/File";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useBoardApi } from "@data-board";
@@ -94,17 +94,11 @@ const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
 
 		return collaboraUrl;
 	} catch (error) {
-		try {
-			const apiResponseError = ApiResponseErrorSchema.parse(error);
+		const responseError = mapAxiosErrorToResponseError(error);
 
-			if (apiResponseError.code === HttpStatusCode.Forbidden) {
-				handleApplicationError(HttpStatusCode.Forbidden, "error.403");
-			} else {
-				throw error;
-			}
-		} catch (zodError) {
-			// eslint-disable-next-line no-console
-			console.error(zodError);
+		if (responseError.code === HttpStatusCode.Forbidden) {
+			handleApplicationError(HttpStatusCode.Forbidden, "error.403");
+		} else {
 			throw error;
 		}
 	}
