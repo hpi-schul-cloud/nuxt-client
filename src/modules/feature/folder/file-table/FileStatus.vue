@@ -12,7 +12,7 @@
 		v-if="exceedsCollaboraEditableFileSize"
 		class="ms-2"
 		:icon="mdiPencilOffOutline"
-		data-testid="file-status-exceeds-collabora-editable-file-size"
+		data-testid="file-status-collabora-file-size-exceeded"
 	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.exceedsCollaboraEditableFileSize.short") }}
