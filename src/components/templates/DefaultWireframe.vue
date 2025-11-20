@@ -2,7 +2,7 @@
 	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
 		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
 		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
-		<div class="wireframe-header sticky">
+		<div class="wireframe-header">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -44,8 +44,8 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
+		<v-divider v-if="showDivider" role="presentation" />
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
@@ -154,6 +154,8 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
+	background-color: rgb(var(--v-theme-white));
+	z-index: 20;
 }
 
 :deep(.v-application__wrap) {
@@ -172,12 +174,6 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 .container-full-width {
 	max-width: none;
 	margin: 0;
-}
-
-.v-divider {
-	z-index: -1;
-	margin-right: -1.5rem;
-	margin-left: -1.5rem;
 }
 
 .breadcrumbs-placeholder {
@@ -213,6 +209,7 @@ $fab-wrapper-height: 80px;
 	height: $fab-wrapper-height;
 	margin-top: -#{$fab-wrapper-height};
 	pointer-events: none;
+	z-index: 100;
 
 	* {
 		pointer-events: auto;
