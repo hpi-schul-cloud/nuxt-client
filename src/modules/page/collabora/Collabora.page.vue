@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
+import { ApiResponseErrorSchema } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { EditorMode } from "@/types/file/File";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -57,7 +58,7 @@ onMounted(async () => {
 });
 
 const setCollaboraUrl = async () => {
-	const responseCollaboraUrl = await tryGetCollaboraUrl(props.fileRecordId);
+	const responseCollaboraUrl = await tryGetCollaboraUrl();
 
 	if (!responseCollaboraUrl) return;
 
@@ -83,18 +84,29 @@ const setPageTitle = async () => {
 	useTitle(pageTitle);
 };
 
-const tryGetCollaboraUrl = async (fileId: string): Promise<string | undefined> => {
+const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
 	try {
-		await getFileRecord(props.fileRecordId);
 		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
-			fileId,
+			props.fileRecordId,
 			props.editorMode ?? EditorMode.VIEW,
 			userName.value
 		);
 
 		return collaboraUrl;
-	} catch {
-		handleApplicationError(HttpStatusCode.Forbidden, "error.403");
+	} catch (error) {
+		try {
+			const apiResponseError = ApiResponseErrorSchema.parse(error);
+
+			if (apiResponseError.code === HttpStatusCode.Forbidden) {
+				handleApplicationError(HttpStatusCode.Forbidden, "error.403");
+			} else {
+				throw error;
+			}
+		} catch (zodError) {
+			// eslint-disable-next-line no-console
+			console.error(zodError);
+			throw error;
+		}
 	}
 };
 

@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type BusinessError = {
 	statusCode: string | number;
 	message: string;
@@ -10,6 +12,13 @@ export type ApiResponseError = {
 	title: string;
 	message: string;
 };
+
+export const ApiResponseErrorSchema = z.object({
+	code: z.number(),
+	type: z.string(),
+	title: z.string(),
+	message: z.string(),
+});
 
 export type ApiValidationError = {
 	code: number;

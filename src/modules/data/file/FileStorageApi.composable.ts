@@ -1,6 +1,7 @@
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
 import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/fileStorageApi/v3";
+import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import {
 	EditorMode,
 	FileRecord,
@@ -108,11 +109,13 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const showError = (error: unknown) => {
+	const showError = (error: unknown): ApiResponseError | ApiValidationError => {
 		const responseError = mapAxiosErrorToResponseError(error);
 		const { message } = responseError;
 
 		showMessageByType(message);
+
+		return responseError;
 	};
 
 	const deleteFiles = async (fileRecords: FileRecord[]): Promise<void> => {
@@ -151,8 +154,9 @@ export const useFileStorageApi = () => {
 
 			return url;
 		} catch (error) {
-			showError(error);
-			throw error;
+			const responseError = showError(error);
+
+			throw responseError;
 		}
 	};
 
