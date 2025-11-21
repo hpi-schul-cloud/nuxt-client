@@ -224,7 +224,7 @@ onMounted(async () => {
 
 	await fetchFileFolderElement(props.folderId);
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
-	if (!boardStore.board || boardStore.board.id !== parent.value.id) {
+	if (!boardStore.board) {
 		await boardStore.fetchBoardRequest({ boardId: parent.value.id });
 	}
 
