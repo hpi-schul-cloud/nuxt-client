@@ -32,7 +32,7 @@
 						/>
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
-							<div id="school-radiogroup-label" class="d-flex mb-4">Link gültig für die folgende(n) Schule(n):</div>
+							<div id="school-radiogroup-label" class="d-flex mb-2">Link gültig für die folgende(n) Schule(n):</div>
 							<VRadioGroup
 								v-model="formData.restrictedToCreatorSchool"
 								aria-labelledby="school-radiogroup-label"
@@ -44,7 +44,7 @@
 								<VRadio label="alle Schulen" :value="false" />
 							</VRadioGroup>
 							<VDivider class="mb-4" />
-							<div class="mb-4">Link gültig für die folgenden Schulrollen:</div>
+							<div class="mb-2">Link gültig für die folgenden Schulrollen:</div>
 							<VCheckbox label="Lernbegleitungen" disabled :model-value="true" hide-details />
 							<VCheckbox
 								v-if="formData.restrictedToCreatorSchool"
@@ -61,7 +61,7 @@
 								hide-details
 								data-testid="input-invite-participants-valid-for-external-persons"
 							/>
-							<InfoAlert>
+							<InfoAlert class="mb-1">
 								{{
 									formData.restrictedToCreatorSchool
 										? "Externe Personen können nur eingeladen werden, wenn der Link für alle Schulen gültig ist. "
@@ -344,6 +344,7 @@ const informationLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL
 .checkbox-container .v-checkbox {
 	:deep(.v-selection-control) {
 		align-items: flex-start;
+		min-height: auto;
 	}
 	:deep(.v-label) {
 		padding-bottom: 16px;
