@@ -309,8 +309,9 @@ describe("BoardHeader", () => {
 	describe("when board is a draft", () => {
 		it("should display draft label", () => {
 			const { wrapper } = setup({}, { isDraft: true });
+			const draftChip = wrapper.find('[data-testid="board-draft-chip"]');
 
-			expect(wrapper.findComponent({ name: "BoardDraftChip" }).exists()).toBe(true);
+			expect(draftChip.exists()).toBe(true);
 		});
 
 		it("should display 'publish' button instead of 'revert' button in menu", () => {
