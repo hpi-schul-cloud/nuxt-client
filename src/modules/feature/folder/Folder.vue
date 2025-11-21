@@ -1,5 +1,10 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="fabClickHandler">
+	<DefaultWireframe
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabAction"
+		@on-fab-item-click="fabItemClickHandler"
+	>
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
@@ -55,7 +60,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
-import { mdiPlus } from "@icons/material";
+import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import dayjs from "dayjs";
@@ -74,6 +79,11 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const enum FabEvent {
+	CREATE_DOCUMENT = "CREATE_DOCUMENT",
+	UPLOAD_FILE = "UPLOAD_FILE",
+}
 
 const emit = defineEmits<{
 	(update: "update:folder-name", pageTitle: string): void;
@@ -99,11 +109,29 @@ const isRenameDialogOpen = ref(false);
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;
 
+	const actions = [
+		{
+			icon: mdiFileDocumentPlusOutline,
+			label: "Dokument erstellen",
+			ariaLabel: "Dokument erstellen",
+			dataTestId: "fab_button_create_document",
+			customEvent: FabEvent.CREATE_DOCUMENT,
+		},
+		{
+			icon: mdiTrayArrowUp,
+			label: "Datei hochladen",
+			ariaLabel: "Datei hochladen",
+			dataTestId: "fab_button_upload_file",
+			customEvent: FabEvent.UPLOAD_FILE,
+		},
+	];
+
 	return {
 		icon: mdiPlus,
 		title: t("pages.folder.fab.title"),
 		ariaLabel: t("pages.folder.fab.title"),
 		dataTestId: "fab-add-files",
+		actions: actions,
 	};
 });
 
@@ -118,11 +146,15 @@ const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
-const fabClickHandler = () => {
-	if (fileInput.value) {
-		// Reset the file input to allow re-uploading the same file
-		fileInput.value.value = "";
-		fileInput.value.click();
+const fabItemClickHandler = (event: string | undefined): void => {
+	if (event === FabEvent.UPLOAD_FILE) {
+		if (fileInput.value) {
+			// Reset the file input to allow re-uploading the same file
+			fileInput.value.value = "";
+			fileInput.value.click();
+		}
+	} else if (event === FabEvent.CREATE_DOCUMENT) {
+		// Handle document creation logic here
 	}
 };
 
