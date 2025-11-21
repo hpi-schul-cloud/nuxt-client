@@ -1,5 +1,11 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
+	<DefaultWireframe
+		v-if="canSeeMembersList"
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabAction"
+		@fab:clicked="onFabClick"
+	>
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -106,7 +112,7 @@ const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } = useRoomAuthorization();
+const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks, canSeeMembersList } = useRoomAuthorization();
 
 const { isInvitationDialogOpen, invitationStep } = storeToRefs(useRoomInvitationLinkStore());
 
@@ -225,10 +231,14 @@ const onLeaveRoom = async () => {
 
 onMounted(async () => {
 	activeTab.value = Object.values(Tab).includes(props.tab) ? props.tab : Tab.Members;
-
 	const roomId = route.params.id.toString();
+
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
+	}
+	if (canSeeMembersList.value === false) {
+		router.replace("/rooms");
+		return;
 	}
 	await fetchMembers();
 });

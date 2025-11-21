@@ -43,6 +43,7 @@ describe("RoomsPage", () => {
 			canListDrafts: computed(() => false),
 			canManageRoomInvitationLinks: computed(() => false),
 			canManageVideoconferences: computed(() => false),
+			canSeeMembersList: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
