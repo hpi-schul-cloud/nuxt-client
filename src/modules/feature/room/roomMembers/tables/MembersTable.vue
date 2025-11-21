@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { RoleName } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
-import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { RoomMember, useRoomAuthorization, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -67,6 +67,7 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const { canAddRoomMembers } = useRoomAuthorization();
+const { room, fetchRoom } = useRoomDetailsStore();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
@@ -87,6 +88,9 @@ const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
 const onDialogClose = () => {
 	membersToChangeRole.value = [];
 	isChangeRoleDialogOpen.value = false;
+	if (room?.id) {
+		fetchRoom(room?.id);
+	}
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
