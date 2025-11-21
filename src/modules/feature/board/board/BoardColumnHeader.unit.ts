@@ -79,11 +79,13 @@ describe("BoardColumnHeader", () => {
 	});
 
 	describe("when the title updated", () => {
-		it("should emit 'update:title'", () => {
+		it("should emit 'update:title'", async () => {
+			vi.useFakeTimers();
 			const wrapper = setup();
 
 			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 			titleInput.vm.$emit("update:value");
+			await vi.advanceTimersByTimeAsync(3000);
 
 			const emitted = wrapper.emitted();
 			expect(emitted["update:title"]).toBeDefined();

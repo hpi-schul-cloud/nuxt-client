@@ -7,7 +7,7 @@
 			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
-			@keydown.enter.prevent="onStartEditMode"
+			@keydown.enter.prevent="onToggleEditMode"
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
@@ -118,6 +118,14 @@ const onStartEditMode = () => {
 const onEndEditMode = () => {
 	if (!hasEditPermission.value) return;
 	stopEditMode();
+};
+
+const onToggleEditMode = () => {
+	if (isEditMode.value) {
+		onEndEditMode();
+	} else {
+		onStartEditMode();
+	}
 };
 
 const onCopyBoard = () => {

@@ -36,14 +36,20 @@ describe("BoardHeader", () => {
 			permissions?: Partial<BoardPermissionChecks>;
 			envs?: Partial<ConfigResponse>;
 		},
-		props?: { isDraft?: boolean; hasReadersEditPermission?: boolean; boardContextType?: BoardExternalReferenceType }
+		props?: {
+			isDraft?: boolean;
+			hasReadersEditPermission?: boolean;
+			boardContextType?: BoardExternalReferenceType;
+			isEditMode?: boolean;
+		}
 	) => {
-		const isEditMode = computed(() => true);
-		const mockedStartEditMode = vi.fn();
+		const isEditMode = computed(() => props?.isEditMode ?? true);
+		const startEditMode = vi.fn();
+		const stopEditMode = vi.fn();
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
-			startEditMode: mockedStartEditMode,
-			stopEditMode: vi.fn(),
+			startEditMode,
+			stopEditMode,
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -76,7 +82,7 @@ describe("BoardHeader", () => {
 				...props,
 			},
 		});
-		return { startEditMode: mockedStartEditMode, wrapper };
+		return { startEditMode, stopEditMode, wrapper };
 	};
 
 	afterEach(() => {
@@ -189,6 +195,40 @@ describe("BoardHeader", () => {
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeDefined();
+			});
+		});
+	});
+
+	describe("when the user presses enter key", () => {
+		describe("when the title is in edit mode", () => {
+			it("should exit edit mode", async () => {
+				vi.useFakeTimers();
+
+				const { startEditMode, stopEditMode, wrapper } = setup({}, { isEditMode: true });
+
+				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+				await titleInput.trigger("keydown.enter");
+
+				vi.runAllTimers();
+
+				expect(startEditMode).not.toHaveBeenCalled();
+				expect(stopEditMode).toHaveBeenCalled();
+			});
+		});
+
+		describe("when the title is not in edit mode", () => {
+			it("should start edit mode", async () => {
+				vi.useFakeTimers();
+
+				const { startEditMode, stopEditMode, wrapper } = setup({}, { isEditMode: false });
+
+				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+				await titleInput.trigger("keydown.enter");
+
+				vi.runAllTimers();
+
+				expect(startEditMode).toHaveBeenCalled();
+				expect(stopEditMode).not.toHaveBeenCalled();
 			});
 		});
 	});

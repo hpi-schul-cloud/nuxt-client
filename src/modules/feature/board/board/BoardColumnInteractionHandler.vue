@@ -4,13 +4,12 @@
 		:tabindex="0"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
-		@keydown.enter="onKeydownEnter"
+		@keydown.enter.prevent="onKeydownEnter"
 	>
 		<div
 			data-testid="event-handle"
 			@keydown.left.right.capture="onKeydownArrow"
-			@keydown.tab.capture="onKeydownTab"
-			@keydown.enter.capture="onKeydownEnter"
+			@keydown.tab.capture.prevent="onKeydownTab"
 		>
 			<slot />
 		</div>
@@ -50,7 +49,8 @@ const onKeydownEnter = (event: KeyboardEvent) => {
 	}
 	if (!props.isEditMode) {
 		emit("start-edit-mode");
-		event.preventDefault();
+	} else {
+		emit("end-edit-mode");
 	}
 };
 
