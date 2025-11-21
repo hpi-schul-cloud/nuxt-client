@@ -2,7 +2,7 @@
 	<InfoAlert class="mt-4 mb-6">
 		{{ t("pages.rooms.infoAlert.welcome") }}
 
-		<ul class="mt-1 pl-4">
+		<ul class="mt-1 pl-5">
 			<li>{{ t("pages.rooms.infoAlert.welcome.collaboration") }}</li>
 			<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
 			<li>

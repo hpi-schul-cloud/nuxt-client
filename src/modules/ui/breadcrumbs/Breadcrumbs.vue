@@ -6,6 +6,7 @@
 		<template #item="{ item, index }">
 			<v-breadcrumbs-item
 				class="breadcrumbs-item"
+				:class="{ 'breadcrumbs-item-max-width': xs }"
 				color="primary"
 				exact
 				:href="item.href"
@@ -22,14 +23,13 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { mdiChevronRight } from "@icons/material";
-import { PropType } from "vue";
+import { useDisplay } from "vuetify";
 
-defineProps({
-	breadcrumbs: {
-		type: Array as PropType<Breadcrumb[]>,
-		required: true,
-	},
-});
+defineProps<{
+	breadcrumbs: Breadcrumb[];
+}>();
+
+const { xs } = useDisplay();
 </script>
 
 <style lang="scss" scoped>
@@ -37,5 +37,21 @@ defineProps({
 	display: inline-flex;
 	height: var(--breadcrumbs-height);
 	font-size: 14px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 100%;
+}
+
+.breadcrumbs-item {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.breadcrumbs-item-max-width {
+	max-width: 120px;
 }
 </style>
