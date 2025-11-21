@@ -64,6 +64,32 @@ describe("FileName", () => {
 		});
 	});
 
+	describe("when a value containing / is entered", () => {
+		it("should display an error message", async () => {
+			const { wrapper } = mountSetup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const input = textField.find("input[type='text']");
+			await input.setValue("invalid/name");
+			await nextTick();
+
+			expect(textField.text()).toContain(
+				wrapper.vm.$t("pages.folder.rename-file-dialog.validation.invalid-characters")
+			);
+		});
+
+		it("should not emit update:name", async () => {
+			const { wrapper } = mountSetup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const newFileName = "my/NewImage";
+			await textField.setValue(newFileName);
+			await nextTick();
+
+			expect(wrapper.emitted("update:name")).toBeUndefined();
+		});
+	});
+
 	describe("when an empty value is entered", () => {
 		it("should not emit update:name", async () => {
 			const { wrapper } = mountSetup();

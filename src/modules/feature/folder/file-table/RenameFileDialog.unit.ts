@@ -156,4 +156,44 @@ describe("RenameFileDialog", () => {
 			expect(textField.text()).toContain("common.validation.containsOpeningTag");
 		});
 	});
+
+	describe("when a value contains a /", () => {
+		const setup = () => {
+			const wrapper = mount(RenameFileDialog, {
+				props: {
+					isDialogOpen: true,
+					fileRecords: [],
+				},
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
+				},
+			});
+			return { wrapper };
+		};
+
+		it("should display invalid characters error message", async () => {
+			const { wrapper } = setup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const input = textField.find("input[type='text']");
+			await input.setValue("invalid/name");
+			await input.trigger("input");
+
+			expect(textField.text()).toContain("pages.folder.rename-file-dialog.validation.invalid-characters");
+		});
+
+		it("should disable confirm button", async () => {
+			const { wrapper } = setup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const input = textField.find("input[type='text']");
+			await input.setValue("invalid/name");
+			await input.trigger("input");
+
+			const dialog = wrapper.findComponent(Dialog);
+			expect(dialog.props("confirmBtnDisabled")).toBe(true);
+		});
+	});
 });

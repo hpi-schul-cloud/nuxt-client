@@ -76,6 +76,13 @@ describe("CollaboraFileDialog", () => {
 			expect(wrapper.findComponent(VForm).isVisible()).toBe(true);
 		});
 
+		it("should have confirm button disabled initially", async () => {
+			const { wrapper } = await setup();
+
+			const dialog = wrapper.findComponent(Dialog);
+			expect(dialog.props("confirmBtnDisabled")).toBe(true);
+		});
+
 		it("should render options", async () => {
 			const { collaboraFileSelectionOptions, wrapper } = await setup();
 
@@ -106,6 +113,24 @@ describe("CollaboraFileDialog", () => {
 				expect(selectOption.action).toHaveBeenCalled();
 				expect(selectOption.action).toHaveBeenCalledWith(FILENAME, "");
 			});
+
+			it("should have confirm button enabled", async () => {
+				const { collaboraFileSelectionOptions, wrapper } = await setup();
+
+				const selectOption = collaboraFileSelectionOptions[0];
+				const FILENAME = "myDocument";
+
+				const typeSelect = wrapper.findComponent(VSelect);
+				typeSelect.vm.$emit("update:modelValue", selectOption.id);
+				await nextTick();
+
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue(FILENAME);
+				await nextTick();
+
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(false);
+			});
 		});
 
 		describe("when filetype is not selected", () => {
@@ -122,6 +147,17 @@ describe("CollaboraFileDialog", () => {
 				await nextTick();
 				await flushPromises();
 				expect(selectOption.action).toHaveBeenCalledTimes(0);
+			});
+
+			it("should have confirm button disabled", async () => {
+				const { wrapper } = await setup();
+
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue("myDocument");
+				await nextTick();
+
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
 
@@ -144,6 +180,61 @@ describe("CollaboraFileDialog", () => {
 				await nextTick();
 				await flushPromises();
 				expect(selectOption.action).toHaveBeenCalledTimes(0);
+			});
+
+			it("should have confirm button disabled", async () => {
+				const { collaboraFileSelectionOptions, wrapper } = await setup();
+
+				const selectOption = collaboraFileSelectionOptions[0];
+
+				const typeSelect = wrapper.findComponent(VSelect);
+				typeSelect.vm.$emit("update:modelValue", selectOption.id);
+				await nextTick();
+
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
+			});
+		});
+
+		describe("when filename contains invalid characters", () => {
+			it("should have confirm button disabled", async () => {
+				const { collaboraFileSelectionOptions, wrapper } = await setup();
+
+				const selectOption = collaboraFileSelectionOptions[0];
+
+				const typeSelect = wrapper.findComponent(VSelect);
+				typeSelect.vm.$emit("update:modelValue", selectOption.id);
+				await nextTick();
+
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue("invalid/filename");
+				await nextTick();
+
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
+			});
+		});
+
+		describe("when caption contains opening tag", () => {
+			it("should have confirm button disabled", async () => {
+				const { collaboraFileSelectionOptions, wrapper } = await setup();
+
+				const selectOption = collaboraFileSelectionOptions[0];
+
+				const typeSelect = wrapper.findComponent(VSelect);
+				typeSelect.vm.$emit("update:modelValue", selectOption.id);
+				await nextTick();
+
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue("validFilename");
+				await nextTick();
+
+				const captionInput = wrapper.findComponent("[data-testid='collabora-element-form-caption']");
+				await captionInput.find("textarea").setValue("<script>alert('xss')</script>");
+				await nextTick();
+
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
 
