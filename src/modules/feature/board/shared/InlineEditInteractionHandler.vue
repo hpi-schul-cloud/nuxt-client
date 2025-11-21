@@ -1,5 +1,5 @@
 <template>
-	<OnClickOutside :options="{ capture: false }" @trigger="onClickOutside">
+	<OnClickOutside :options="{ capture: true }" @trigger="onClickOutside">
 		<div
 			ref="event-handle"
 			data-testid="event-handle"
@@ -39,7 +39,7 @@ const isFileElementLink = (target: HTMLElement | SVGElement): boolean => {
 const isListItem = (target: HTMLElement | SVGElement): boolean => {
 	if (target instanceof SVGElement) return false;
 
-	return target.className?.includes("v-list-item") && !target.className?.includes("v-list-item-title");
+	return target.className?.includes("v-list-item");
 };
 
 const isAllowedTarget = (event: MouseEvent): boolean => {
