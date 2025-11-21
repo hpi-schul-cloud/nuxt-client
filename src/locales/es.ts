@@ -1844,6 +1844,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",
+	"pages.rooms.invitationlinks.error.delete": "No se pudo eliminar la lista de invitaciones.",
 	"pages.rooms.title": "Salas",
 	"pages.rooms.administration.title": "Administración de salas",
 	"pages.rooms.administration.table.header.roomName": "Nombre de la sala",

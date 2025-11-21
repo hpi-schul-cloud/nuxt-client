@@ -102,7 +102,7 @@ onBeforeMount(async () => {
 		shareTokenInfo.value = result;
 	} else {
 		isDialogOpen.value = false;
-		router.push("/rooms");
+		onCancel();
 	}
 });
 

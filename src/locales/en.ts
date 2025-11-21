@@ -1797,6 +1797,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update": "Updating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.load": "The invitation list could not be loaded.",
+	"pages.rooms.invitationlinks.error.delete": "The invitation list could not be deleted.",
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.administration.title": "Room administration",
 	"pages.rooms.administration.table.header.roomName": "Room name",

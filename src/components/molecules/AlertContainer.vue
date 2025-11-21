@@ -26,9 +26,9 @@
 						scope="global"
 					>
 						<template v-if="notification.link" #link>
-							<router-link :to="notification.link.to">
+							<RouterLink data-testId="alert-link" :to="notification.link.to">
 								{{ notification.link.text }}
-							</router-link>
+							</RouterLink>
 						</template>
 						<template v-for="(value, key) in notification.replace" #[key]>
 							{{ value }}

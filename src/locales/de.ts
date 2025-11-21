@@ -1826,6 +1826,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",
+	"pages.rooms.invitationlinks.error.delete": "Die Einladungsliste konnte nicht gelöscht werden.",
 	"pages.rooms.title": "Räume",
 	"pages.rooms.administration.title": "Räume verwalten",
 	"pages.rooms.administration.table.header.roomName": "Raumname",

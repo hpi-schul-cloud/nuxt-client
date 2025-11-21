@@ -17,6 +17,7 @@ import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
+	KebabMenuActionExport,
 	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
@@ -191,6 +192,22 @@ describe("CardHost", () => {
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 
 				expect(deleteButton.exists()).toEqual(false);
+			});
+		});
+
+		describe("when user wants to move a card.", () => {
+			it("should show move button when allowed to edit", () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+				expect(moveButton.exists()).toEqual(true);
+			});
+
+			it("should not show move button when not allowed to edit", () => {
+				mockedBoardPermissions.hasEditPermission.value = false;
+				const { wrapper } = setup();
+				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+				expect(moveButton.exists()).toEqual(false);
 			});
 		});
 

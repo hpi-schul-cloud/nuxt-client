@@ -1814,6 +1814,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update": "Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.load": "Не вдалося завантажити список запрошень.",
+	"pages.rooms.invitationlinks.error.delete": "Не вдалося видалити список.",
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.administration.title": "Адміністрування кімнат",
 	"pages.rooms.administration.table.header.roomName": "Назва кімнати",
