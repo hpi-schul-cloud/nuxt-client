@@ -1528,6 +1528,15 @@ export default {
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Я, {userName}, заявляю наступне:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Я прочитав(ла) {termsOfUse} {instanceTitle} і погоджуюся з ними.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
+		"Я погоджуюсь з тим, що мої персональні дані оброблятимуться відповідно до {dataProtectionLink} школи {title}, а також із постачальниками навчальних матеріалів, обраними та проінструктованими школою.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
+		"Згода і, таким чином, використання є добровільними, а це означає, що якщо ви не дасте своєї згоди, це не призведе до шкоди для вас у класі. Участь в уроках поза {instanceTitle}, стане можливою завдяки школі. Відкликати цю згоду можна будь-коли. Досить короткого електронного листа із заявою про відкликання, який вказує ваше ім'я та прізвище, клас та школу на таку адресу: {email}. У разі відкликання ми негайно видалимо персональні дані, збережені на підставі згоди, якщо немає законної причини для зберігання або якщо ви не бажаєте отримати доступ до збережених даних заздалегідь. Знайти додаткову інформацію про захист даних також можна у наших {faqLink}.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":

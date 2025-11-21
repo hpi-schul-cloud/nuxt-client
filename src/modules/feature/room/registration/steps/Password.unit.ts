@@ -25,6 +25,9 @@ describe("Password.vue", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			propsData: {
+				userData: { name: "Max", surname: "Mustermann", email: "max@mustermann.com" },
+			},
 		});
 		return { wrapper };
 	};
@@ -44,7 +47,7 @@ describe("Password.vue", () => {
 			const firstName = getTextFieldByTestId(wrapper, "first-name");
 
 			expect(firstName.props("readonly")).toBe(true);
-			expect(firstName.props("modelValue")).toBe("Vorname");
+			expect(firstName.props("modelValue")).toBe("Max");
 		});
 
 		it("should render last name field", () => {
@@ -52,7 +55,7 @@ describe("Password.vue", () => {
 			const lastName = getTextFieldByTestId(wrapper, "last-name");
 
 			expect(lastName.props("readonly")).toBe(true);
-			expect(lastName.props("modelValue")).toBe("Nachname");
+			expect(lastName.props("modelValue")).toBe("Mustermann");
 		});
 
 		it("should render email field", () => {
@@ -60,7 +63,7 @@ describe("Password.vue", () => {
 			const email = getTextFieldByTestId(wrapper, "email");
 
 			expect(email.props("readonly")).toBe(true);
-			expect(email.props("modelValue")).toBe("Email");
+			expect(email.props("modelValue")).toBe("max@mustermann.com");
 		});
 
 		it("should render first and last name in a row on display sizes bigger than 600px", () => {
