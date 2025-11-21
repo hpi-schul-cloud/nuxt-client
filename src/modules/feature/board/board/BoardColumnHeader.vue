@@ -135,7 +135,7 @@ const onMoveColumnRight = () => emitIfNotListBoard("move:column-right");
 const onMoveColumnDown = () => emit("move:column-down");
 const onMoveColumnUp = () => emit("move:column-up");
 
-const onUpdateTitle = (newTitle: string) => updatedTitle.value = newTitle;
+const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
 
 const emitTitleUpdate = () => {
 	if (lastEmittedTitle.value !== updatedTitle.value) {
