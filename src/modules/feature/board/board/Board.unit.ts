@@ -3,7 +3,9 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
+import MoveCardDialog from "@/modules/feature/board/card/MoveCardDialog.vue";
 import {
+	BoardExternalReferenceType,
 	BoardLayout,
 	ConfigResponse,
 	CopyApiResponse,
@@ -449,11 +451,17 @@ describe("Board", () => {
 		});
 	});
 
-	describe("CopyResultModal", () => {
+	describe("Dialogs", () => {
 		it("should have a result modal component", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
+		});
+
+		it("should have a move dialog component", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
 	});
 
@@ -1000,6 +1008,21 @@ describe("Board", () => {
 					await boardHeader.vm.$emit("share:board");
 
 					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@share:card", () => {
+			it("should start the card share flow", async () => {
+				const { wrapper, shareModule } = setup();
+
+				const boardColumn = wrapper.findComponent(BoardColumn);
+				await boardColumn.vm.$emit("share:card", "card-id");
+
+				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					id: "card-id",
+					type: ShareTokenBodyParamsParentTypeEnum.Card,
+					destinationType: BoardExternalReferenceType.Room,
 				});
 			});
 		});

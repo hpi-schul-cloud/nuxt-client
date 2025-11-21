@@ -151,12 +151,17 @@ const showAlertInfo = computed(
 		props.type === ShareTokenBodyParamsParentTypeEnum.Courses ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.Room
+		props.type === ShareTokenBodyParamsParentTypeEnum.Room ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Card
 );
 
 const showCourseInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Courses);
 
-const showBoardInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard);
+const showBoardInfo = computed(
+	() =>
+		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Card
+);
 
 const showLessonInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Lessons);
 

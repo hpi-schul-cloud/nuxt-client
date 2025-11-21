@@ -3,7 +3,6 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { MoveItemBodyParams, RoomApiFactory } from "@/serverApi/v3";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
-import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -17,15 +16,19 @@ export const useRoomStore = defineStore("room-store", () => {
 
 	const { execute, isRunning: isLoading } = useSafeAxiosTask();
 
+	const fetchRoomsPlain = async () => {
+		const { result } = await execute(
+			roomApi.roomControllerGetRooms,
+			t("common.notifications.errors.notLoaded", { type: t("common.labels.room", PLURAL_COUNT) }, PLURAL_COUNT)
+		);
+		return result;
+	};
+
 	const fetchRooms = async () => {
-		const { result, error } = await execute(roomApi.roomControllerGetRooms);
-		if (error) {
-			notifyError(
-				t("common.notifications.errors.notLoaded", { type: t("common.labels.room", PLURAL_COUNT) }, PLURAL_COUNT)
-			);
-			return;
+		const result = await fetchRoomsPlain();
+		if (result) {
+			rooms.value = result?.data.data;
 		}
-		rooms.value = result.data.data;
 	};
 
 	const createRoom = async (params: RoomCreateParams) =>
@@ -63,6 +66,7 @@ export const useRoomStore = defineStore("room-store", () => {
 		isLoading,
 		isEmpty,
 		fetchRooms,
+		fetchRoomsPlain,
 		createRoom,
 		copyRoom,
 		moveRoom,
