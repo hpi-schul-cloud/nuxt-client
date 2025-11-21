@@ -12,8 +12,9 @@
 <script setup lang="ts">
 import { useCollaboraPostMessageApi } from "./CollaboraPostMessageApi.composable";
 import { EditorMode } from "@/types/file/File";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useAppStoreRefs } from "@data-app";
+import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useBoardApi } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useTitle } from "@vueuse/core";
@@ -32,6 +33,7 @@ const { setupPostMessageAPI } = useCollaboraPostMessageApi();
 const { getElementWithParentHierarchyCall } = useBoardApi();
 
 const { user, locale } = useAppStoreRefs();
+const { handleApplicationError } = useAppStore();
 
 const userName = computed(() => {
 	const firstName = user.value?.firstName;
@@ -55,11 +57,9 @@ onMounted(async () => {
 });
 
 const setCollaboraUrl = async () => {
-	const responseCollaboraUrl = await getAuthorizedCollaboraDocumentUrl(
-		props.fileRecordId,
-		props.editorMode ?? EditorMode.VIEW,
-		userName.value
-	);
+	const responseCollaboraUrl = await tryGetCollaboraUrl();
+
+	if (!responseCollaboraUrl) return;
 
 	const collaboraUrl = new URL(responseCollaboraUrl);
 	collaboraUrl.searchParams.set("lang", locale.value);
@@ -81,6 +81,26 @@ const setPageTitle = async () => {
 	const firstPartOfPageTitle = formatePageTitlePrefix(fileRecord?.name, parentName);
 	const pageTitle = buildPageTitle(firstPartOfPageTitle);
 	useTitle(pageTitle);
+};
+
+const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
+	try {
+		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
+			props.fileRecordId,
+			props.editorMode ?? EditorMode.VIEW,
+			userName.value
+		);
+
+		return collaboraUrl;
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+const handleError = (error: unknown) => {
+	const responseError = mapAxiosErrorToResponseError(error);
+
+	handleApplicationError(responseError.code);
 };
 
 const getFileRecord = async (fileId: string) => {
