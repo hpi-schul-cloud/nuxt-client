@@ -25,6 +25,7 @@
 							v-model="formData.title"
 							class="mb-8"
 							:rules="validationRules"
+							autofocus
 							:label="t('pages.rooms.members.inviteMember.form.description.label')"
 							:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
 							persistent-hint
@@ -96,7 +97,7 @@
 								/>
 								<DatePicker
 									ref="datePicker"
-									:aria-label="t('pages.rooms.members.tableHeader.expirationDate')"
+									aria-label="pages.rooms.members.tableHeader.expirationDate)"
 									:disabled="isDatePickerDisabled"
 									:required="!isDatePickerDisabled"
 									:min-date="new Date().toString()"
