@@ -1,5 +1,10 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="fabClickHandler">
+	<DefaultWireframe
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabAction"
+		@on-fab-item-click="fabItemClickHandler"
+	>
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
@@ -36,9 +41,12 @@
 	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
+	<AddCollaboraFileDialog />
 </template>
 
 <script setup lang="ts">
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
+import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
@@ -55,18 +63,13 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
-import { mdiPlus } from "@icons/material";
+import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-
-const boardApi = useBoardApi();
-
-const { t } = useI18n();
-const router = useRouter();
 
 const props = defineProps({
 	folderId: {
@@ -78,6 +81,20 @@ const props = defineProps({
 const emit = defineEmits<{
 	(update: "update:folder-name", pageTitle: string): void;
 }>();
+
+const enum FabEvent {
+	CREATE_DOCUMENT = "CREATE_DOCUMENT",
+	UPLOAD_FILE = "UPLOAD_FILE",
+}
+
+const folderId = toRef(props, "folderId");
+
+const boardApi = useBoardApi();
+const { openCollaboraFileDialog, setFolderId } = useAddCollaboraFile();
+setFolderId(folderId.value);
+
+const { t } = useI18n();
+const router = useRouter();
 
 const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
 	useFolderState();
@@ -91,7 +108,6 @@ const boardStore = useBoardStore();
 const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
-const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
@@ -99,11 +115,29 @@ const isRenameDialogOpen = ref(false);
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;
 
+	const actions = [
+		{
+			icon: mdiFileDocumentPlusOutline,
+			label: "Dokument erstellen",
+			ariaLabel: "Dokument erstellen",
+			dataTestId: "fab_button_create_document",
+			customEvent: FabEvent.CREATE_DOCUMENT,
+		},
+		{
+			icon: mdiTrayArrowUp,
+			label: "Datei hochladen",
+			ariaLabel: "Datei hochladen",
+			dataTestId: "fab_button_upload_file",
+			customEvent: FabEvent.UPLOAD_FILE,
+		},
+	];
+
 	return {
 		icon: mdiPlus,
 		title: t("pages.folder.fab.title"),
 		ariaLabel: t("pages.folder.fab.title"),
 		dataTestId: "fab-add-files",
+		actions: actions,
 	};
 });
 
@@ -118,11 +152,15 @@ const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
-const fabClickHandler = () => {
-	if (fileInput.value) {
-		// Reset the file input to allow re-uploading the same file
-		fileInput.value.value = "";
-		fileInput.value.click();
+const fabItemClickHandler = (event: string | undefined): void => {
+	if (event === FabEvent.UPLOAD_FILE) {
+		if (fileInput.value) {
+			// Reset the file input to allow re-uploading the same file
+			fileInput.value.value = "";
+			fileInput.value.click();
+		}
+	} else if (event === FabEvent.CREATE_DOCUMENT) {
+		openCollaboraFileDialog();
 	}
 };
 
