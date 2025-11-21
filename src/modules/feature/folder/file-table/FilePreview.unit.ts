@@ -90,6 +90,28 @@ describe("FilePreview", () => {
 		});
 	});
 
+	describe("when v-img emits error event", () => {
+		it("should show fallback icon instead of image", async () => {
+			const fileRecord = fileRecordFactory.build({
+				previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord);
+
+			const imageComponent = wrapper.findComponent({ name: "v-img" });
+			expect(imageComponent.exists()).toBe(true);
+
+			await imageComponent.vm.$emit("error");
+			await wrapper.vm.$nextTick();
+
+			expect(wrapper.findComponent({ name: "v-img" }).exists()).toBe(false);
+			expect(wrapper.findComponent({ name: "v-icon" }).exists()).toBe(true);
+
+			const includesIcon = wrapper.html().includes(mdiFileDocumentOutline);
+			expect(includesIcon).toBe(true);
+		});
+	});
+
 	describe("when display size is not xs", () => {
 		it("should use 50px preview width", () => {
 			const fileRecord = fileRecordFactory.build({
