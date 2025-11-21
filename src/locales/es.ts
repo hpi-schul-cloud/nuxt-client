@@ -237,6 +237,7 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
+	"common.alerts.room.not.available": "No hay sala disponible. | No hay salas disponibles.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":

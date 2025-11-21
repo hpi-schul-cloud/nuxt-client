@@ -235,6 +235,7 @@ export default {
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
 	"common.words.export": "Course export is downloading",
+	"common.alerts.room.not.available": "No room available. | No rooms available.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":

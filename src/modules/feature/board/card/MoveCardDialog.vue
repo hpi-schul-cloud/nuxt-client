@@ -10,6 +10,10 @@
 		@cancel="isDialogOpen = false"
 	>
 		<template #content>
+			<WarningAlert v-if="rooms?.length === 0" class="mb-2">
+				{{ t("common.alerts.room.not.available") }}
+			</WarningAlert>
+
 			<p class="text-lg mt-2">
 				{{ dialogQuestion }}
 			</p>
@@ -59,6 +63,7 @@ import { $axios } from "@/utils/api";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

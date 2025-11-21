@@ -243,6 +243,7 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
+	"common.alerts.room.not.available": "Kein Raum verfügbar. | Keine Räume verfügbar.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":

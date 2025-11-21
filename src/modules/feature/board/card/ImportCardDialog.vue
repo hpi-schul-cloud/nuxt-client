@@ -9,6 +9,9 @@
 		@cancel="onCancel"
 	>
 		<template #content>
+			<WarningAlert v-if="rooms?.length === 0" class="mb-2">
+				{{ t("common.alerts.room.not.available") }}
+			</WarningAlert>
 			<InfoAlert data-testid="import-card-information">
 				{{ t("components.molecules.import.card.hint.restriction") }}
 				<ul class="ml-6">
@@ -66,7 +69,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { ShareTokenInfoResponse } from "@/serverApi/v3";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
-import { InfoAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -105,7 +108,9 @@ onBeforeMount(async () => {
 
 const dialogQuestion = computed(() => {
 	const cardName = shareTokenInfo.value?.parentName;
-	return t("components.molecules.import.card.question", { title: cardName ? ` "${cardName}"` : "" });
+	return t("components.molecules.import.card.question", {
+		title: cardName ? ` "${cardName}"` : "",
+	});
 });
 
 const onConfirm = async () => {

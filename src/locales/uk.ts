@@ -243,6 +243,7 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
+	"common.alerts.room.not.available": "Нієї кімнати недоступно. | Немає доступних кімнат.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
