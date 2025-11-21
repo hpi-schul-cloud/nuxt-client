@@ -45,38 +45,47 @@
 								</VRadio>
 								<VRadio :label="t('common.labels.allSchools')" :value="false" />
 							</VRadioGroup>
-							<VDivider class="mb-6" />
-							<div class="mb-4">{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}</div>
-							<VCheckbox :label="t('common.labels.teacher.neutral.plural')" disabled :model-value="true" hide-details />
-							<template v-if="formData.restrictedToCreatorSchool">
+							<VDivider class="mb-6" role="presentation" />
+							<div id="valid-for-roles-label" class="mb-4">
+								{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}
+							</div>
+							<div role="group" aria-labelledby="valid-for-roles-label">
 								<VCheckbox
-									v-model="formData.isUsableByStudents"
-									:label="t('common.labels.students.neutral')"
+									:label="t('common.labels.teacher.neutral.plural')"
+									disabled
+									:model-value="true"
 									hide-details
-									data-testid="input-invite-participants-valid-for-students"
 								/>
-								<InfoAlert
-									v-if="isInviteExternalPersonsFeatureEnabled"
-									class="mt-2 mb-2"
-									data-testid="info-alert-external-persons"
-								>
-									{{ t("pages.rooms.members.inviteMember.infoAlert.text.externalPersons") }}
-								</InfoAlert>
-							</template>
-							<template v-else>
-								<VCheckbox
-									v-if="isInviteExternalPersonsFeatureEnabled"
-									v-model="formData.isUsableByExternalPersons"
-									:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
-									hide-details
-									data-testid="input-invite-participants-valid-for-external-persons"
-								/>
-								<InfoAlert class="mt-2 mb-2" data-testid="info-alert-students-from-other-schools">
-									{{ t("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools") }}
-								</InfoAlert>
-							</template>
+								<template v-if="formData.restrictedToCreatorSchool">
+									<VCheckbox
+										v-model="formData.isUsableByStudents"
+										:label="t('common.labels.students.neutral')"
+										hide-details
+										data-testid="input-invite-participants-valid-for-students"
+									/>
+									<InfoAlert
+										v-if="isInviteExternalPersonsFeatureEnabled"
+										class="mt-2 mb-2"
+										data-testid="info-alert-external-persons"
+									>
+										{{ t("pages.rooms.members.inviteMember.infoAlert.text.externalPersons") }}
+									</InfoAlert>
+								</template>
+								<template v-else>
+									<VCheckbox
+										v-if="isInviteExternalPersonsFeatureEnabled"
+										v-model="formData.isUsableByExternalPersons"
+										:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+										hide-details
+										data-testid="input-invite-participants-valid-for-external-persons"
+									/>
+									<InfoAlert class="mt-2 mb-2" data-testid="info-alert-students-from-other-schools">
+										{{ t("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools") }}
+									</InfoAlert>
+								</template>
+							</div>
 
-							<VDivider class="mt-4 mb-5" />
+							<VDivider class="mt-4 mb-5" role="presentation" />
 							<div class="d-flex">
 								<VCheckbox
 									v-model="formData.activeUntilChecked"
