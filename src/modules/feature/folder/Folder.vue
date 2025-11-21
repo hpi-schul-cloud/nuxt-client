@@ -41,9 +41,12 @@
 	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
+	<AddCollaboraFileDialog />
 </template>
 
 <script setup lang="ts">
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
+import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
@@ -68,11 +71,6 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-const boardApi = useBoardApi();
-
-const { t } = useI18n();
-const router = useRouter();
-
 const props = defineProps({
 	folderId: {
 		type: String,
@@ -80,14 +78,23 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits<{
+	(update: "update:folder-name", pageTitle: string): void;
+}>();
+
 const enum FabEvent {
 	CREATE_DOCUMENT = "CREATE_DOCUMENT",
 	UPLOAD_FILE = "UPLOAD_FILE",
 }
 
-const emit = defineEmits<{
-	(update: "update:folder-name", pageTitle: string): void;
-}>();
+const folderId = toRef(props, "folderId");
+
+const boardApi = useBoardApi();
+const { openCollaboraFileDialog, setFolderId } = useAddCollaboraFile();
+setFolderId(folderId.value);
+
+const { t } = useI18n();
+const router = useRouter();
 
 const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
 	useFolderState();
@@ -101,7 +108,6 @@ const boardStore = useBoardStore();
 const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
-const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
@@ -154,7 +160,7 @@ const fabItemClickHandler = (event: string | undefined): void => {
 			fileInput.value.click();
 		}
 	} else if (event === FabEvent.CREATE_DOCUMENT) {
-		// Handle document creation logic here
+		openCollaboraFileDialog();
 	}
 };
 
