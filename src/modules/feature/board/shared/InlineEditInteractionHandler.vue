@@ -39,7 +39,7 @@ const isFileElementLink = (target: HTMLElement | SVGElement): boolean => {
 const isListItem = (target: HTMLElement | SVGElement): boolean => {
 	if (target instanceof SVGElement) return false;
 
-	return target.className?.includes("v-list-item");
+	return target.className?.includes("v-list-item") && !target.className?.includes("v-list-item-title");
 };
 
 const isAllowedTarget = (event: MouseEvent): boolean => {
