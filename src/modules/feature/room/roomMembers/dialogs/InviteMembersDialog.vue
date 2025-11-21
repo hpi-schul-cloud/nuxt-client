@@ -32,7 +32,7 @@
 						/>
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
-							<div id="school-radiogroup-label" class="d-flex mb-3">
+							<div id="school-radiogroup-label" class="d-flex mb-2">
 								{{ t("pages.rooms.members.inviteMember.form.validForSchools.label") }}
 							</div>
 							<VRadioGroup
@@ -45,8 +45,8 @@
 								</VRadio>
 								<VRadio label="alle Schulen" :value="false" />
 							</VRadioGroup>
-							<VDivider class="mb-4" />
-							<div class="mb-3">{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}</div>
+							<VDivider class="mb-6" />
+							<div class="mb-4">{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}</div>
 							<VCheckbox label="Lernbegleitungen" disabled :model-value="true" hide-details />
 							<VCheckbox
 								v-if="formData.restrictedToCreatorSchool"
@@ -63,14 +63,14 @@
 								hide-details
 								data-testid="input-invite-participants-valid-for-external-persons"
 							/>
-							<InfoAlert class="mb-1">
+							<InfoAlert class="mt-2 mb-2">
 								{{
 									formData.restrictedToCreatorSchool
 										? "Externe Personen können nur eingeladen werden, wenn der Link für alle Schulen gültig ist. "
 										: t("pages.rooms.members.inviteMember.infoAlert.text")
 								}}
 							</InfoAlert>
-							<VDivider class="mt-4 mb-4" />
+							<VDivider class="mt-4 mb-5" />
 							<div class="d-flex">
 								<VCheckbox
 									v-model="formData.activeUntilChecked"
