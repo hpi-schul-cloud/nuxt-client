@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
@@ -70,6 +69,7 @@ import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { mapEditBoardPermissionToEditorMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";

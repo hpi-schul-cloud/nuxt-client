@@ -1,4 +1,5 @@
 import { BOARD_IS_LIST_LAYOUT } from "./board-injection-tokens";
+import { mapEditBoardPermissionToEditorMode } from "./collabora-editor-mode.mapper";
 import { useDragAndDrop } from "./dragAndDrop.composable";
 import {
 	type EditModePermissions,
@@ -17,6 +18,7 @@ export {
 	BOARD_IS_LIST_LAYOUT,
 	EditModePermissions,
 	extractDataAttribute,
+	mapEditBoardPermissionToEditorMode,
 	useCourseBoardEditMode,
 	useDragAndDrop,
 	useElementFocus,

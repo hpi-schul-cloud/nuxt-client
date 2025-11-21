@@ -1,6 +1,6 @@
 <template>
 	<VChip :color="color" :prepend-icon="icon" size="small" variant="tonal">
-		<slot />
+		<div class="chip-content"><slot /></div>
 	</VChip>
 </template>
 
@@ -21,3 +21,8 @@ defineProps({
 	},
 });
 </script>
+<style scoped>
+.chip-content {
+	color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+}
+</style>

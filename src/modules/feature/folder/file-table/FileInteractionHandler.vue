@@ -21,18 +21,26 @@ import {
 	isPreviewPossible,
 	isVideoMimeType,
 } from "@/utils/fileHelper";
+import { useEnvConfig } from "@data-env";
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
+import { mapEditBoardPermissionToEditorMode } from "@util-board";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
-const { fileRecordItem } = defineProps({
+const { fileRecordItem, hasEditPermission } = defineProps({
 	fileRecordItem: {
 		type: Object as PropType<FileRecordItem>,
+		required: true,
+	},
+	hasEditPermission: {
+		type: Boolean,
 		required: true,
 	},
 });
 
 const { t } = useI18n();
+const router = useRouter();
 
 const isInteractive = computed(
 	() =>
@@ -40,7 +48,8 @@ const isInteractive = computed(
 		(isPreviewPossible(fileRecordItem.previewStatus) ||
 			isAudioMimeType(fileRecordItem.mimeType) ||
 			isVideoMimeType(fileRecordItem.mimeType) ||
-			isPdfMimeType(fileRecordItem.mimeType))
+			isPdfMimeType(fileRecordItem.mimeType) ||
+			(isCollaboraEnabled.value && fileRecordItem.isCollaboraEditable))
 );
 
 const handleClick = () => {
@@ -48,6 +57,7 @@ const handleClick = () => {
 	const isAudio = isAudioMimeType(fileRecordItem.mimeType);
 	const isVideo = isVideoMimeType(fileRecordItem.mimeType);
 	const isPdf = isPdfMimeType(fileRecordItem.mimeType);
+	const isCollabora = fileRecordItem.isCollaboraEditable;
 
 	if (isPdf) {
 		window.open(fileRecordItem.url, "_blank");
@@ -57,8 +67,12 @@ const handleClick = () => {
 		openAudioPlayerInLightbox();
 	} else if (isVideo) {
 		openVideoInLightbox();
+	} else if (isCollabora) {
+		openCollabora();
 	}
 };
+
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
 const openImageInLightbox = () => {
 	const previewUrl = convertDownloadToPreviewUrl(fileRecordItem.url);
@@ -100,6 +114,22 @@ const openVideoInLightbox = () => {
 	const { open } = useLightBox();
 
 	open(options);
+};
+
+const openCollabora = () => {
+	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission);
+
+	const url = router.resolve({
+		name: "collabora",
+		params: {
+			id: fileRecordItem.id,
+		},
+		query: {
+			editorMode,
+		},
+	}).href;
+
+	window.open(url, "_blank");
 };
 </script>
 
