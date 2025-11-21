@@ -15,12 +15,7 @@
 			</template>
 		</EmptyState>
 		<RoomGrid v-else :rooms />
-		<ImportCardDialog
-			v-if="showImportCardDialog"
-			:is-dialog-open="showImportCardDialog"
-			:token="importToken!"
-			:rooms="importFlowDestinations"
-		/>
+		<ImportCardDialog v-if="showImportCardDialog" :is-dialog-open="showImportCardDialog" :token="importToken!" />
 		<ImportFlow
 			:is-active="showGenericImportDialog"
 			:token="importToken"
@@ -43,7 +38,6 @@ import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useTitle } from "@vueuse/core";
-import { sortBy } from "lodash-es";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -98,12 +92,7 @@ onMounted(() => {
 	fetchRooms();
 });
 
-const importFlowDestinations = computed(() =>
-	sortBy(
-		rooms.value.filter((room) => !room.isLocked),
-		(r) => r.name
-	)
-);
+const importFlowDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
 
 const onImportSuccess = (newName: string, destinationId?: string) => {
 	notifySuccess(

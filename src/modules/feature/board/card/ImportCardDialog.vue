@@ -19,7 +19,7 @@
 			</InfoAlert>
 
 			<p class="text-lg mt-2">
-				{{ t("components.molecules.import.card.question") }}
+				{{ dialogQuestion }}
 			</p>
 
 			<VForm id="importCardForm" data-testid="import-card-form">
@@ -63,11 +63,12 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { RoomItem } from "@/types/room/Room";
+import { ShareTokenInfoResponse } from "@/serverApi/v3";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { InfoAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
+import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -75,31 +76,47 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 const router = useRouter();
 const { t } = useI18n();
 
-const props = defineProps<{
-	token: string;
-	rooms: Array<RoomItem>;
-}>();
+const props = defineProps<{ token: string }>();
 
-const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } = useCardDialogData();
+const { execute, isRunning: isImporting } = useSafeAxiosTask();
+const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, rooms, columns, boards } =
+	useCardDialogData();
+const shareTokenInfo = ref<ShareTokenInfoResponse>();
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
 	default: false,
 });
 
-const { execute, isRunning: isImporting } = useSafeAxiosTask();
+onBeforeMount(async () => {
+	const { result, success } = await execute(
+		async () => await copyModule.validateShareToken(props.token),
+		t("components.molecules.import.options.failure.backendError", {
+			name: t("components.boardCard"),
+		})
+	);
+	if (success) {
+		shareTokenInfo.value = result;
+	} else {
+		isDialogOpen.value = false;
+		router.push("/rooms");
+	}
+});
+
+const dialogQuestion = computed(() => {
+	const cardName = shareTokenInfo.value?.parentName;
+	return t("components.molecules.import.card.question", { title: cardName ? ` "${cardName}"` : "" });
+});
 
 const onConfirm = async () => {
 	const { success } = await execute(
-		async () => {
-			const shareTokenInfo = await copyModule.validateShareToken(props.token);
+		async () =>
 			await copyModule.copyByShareToken({
-				token: shareTokenInfo.token,
-				type: shareTokenInfo.parentType,
-				newName: shareTokenInfo.parentName,
+				token: shareTokenInfo.value!.token,
+				type: shareTokenInfo.value!.parentType,
+				newName: shareTokenInfo.value!.parentName,
 				destinationId: selectedColumnId.value,
-			});
-		},
+			}),
 		t("components.molecules.import.options.failure.backendError", {
 			name: t("components.boardCard"),
 		})

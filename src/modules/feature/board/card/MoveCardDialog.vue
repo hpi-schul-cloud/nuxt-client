@@ -11,7 +11,7 @@
 	>
 		<template #content>
 			<p class="text-lg mt-2">
-				{{ t("components.molecules.move.card.question") }}
+				{{ dialogQuestion }}
 			</p>
 
 			<VForm id="moveCardForm" data-testid="move-card-form">
@@ -54,16 +54,13 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { BoardCardApiFactory, Permission } from "@/serverApi/v3";
-import { RoomItem } from "@/types/room/Room";
+import { BoardCardApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useNotificationStore } from "@data-app";
-import { useBoardStore } from "@data-board";
+import { useBoardStore, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
-import { useRoomStore } from "@data-room";
 import { Dialog } from "@ui-dialog";
-import { sortBy } from "lodash-es";
-import { onMounted, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -72,8 +69,6 @@ const props = defineProps<{
 	cardId: string;
 	roomId?: string;
 }>();
-
-const rooms = ref<RoomItem[]>();
 
 const {
 	selectedBoardId,
@@ -84,7 +79,9 @@ const {
 	boards,
 	selectedColumn,
 	selectedBoard,
-} = useCardDialogData();
+	rooms,
+	// eslint-disable-next-line
+} = useCardDialogData(props.roomId);
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
@@ -98,6 +95,13 @@ const { execute, isRunning: isMoving } = useSafeAxiosTask();
 
 const { getCardLocation, moveCardRequest } = useBoardStore();
 const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+
+const dialogQuestion = computed(() => {
+	const card = useCardStore().getCard(props.cardId);
+	return t("components.molecules.move.card.question", {
+		title: card?.title ? ` "${card.title}"` : "",
+	});
+});
 
 const onConfirm = async () => {
 	const cardLocation = getCardLocation(props.cardId);
@@ -144,19 +148,4 @@ const onConfirm = async () => {
 
 	isDialogOpen.value = false;
 };
-
-onMounted(async () => {
-	const result = await useRoomStore().fetchRoomsPlain();
-
-	rooms.value = sortBy(
-		result?.data?.data.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
-		(r) => r.name
-	);
-
-	if (props.roomId && rooms.value?.find((r) => r.id === props.roomId)) {
-		selectedRoomId.value = props.roomId;
-	} else {
-		selectedRoomId.value = undefined;
-	}
-});
 </script>
