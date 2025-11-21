@@ -1,5 +1,6 @@
 <template>
 	<InlineEditInteractionHandler
+		data-testid="inline-edit-interaction-handler"
 		:is-edit-mode="isEditMode"
 		:tabindex="0"
 		@start-edit-mode="onStartEditMode"
