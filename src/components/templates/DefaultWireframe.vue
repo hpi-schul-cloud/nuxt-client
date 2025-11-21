@@ -99,6 +99,7 @@ const emit = defineEmits({
 const wireframeHeader = useTemplateRef("wireframeHeader");
 const { height } = useElementSize(wireframeHeader);
 const topbarHeightValue = useCssVar("--topbar-height");
+
 const fabOffset = computed(() => {
 	const topbarHeight = topbarHeightValue.value ? parseInt(topbarHeightValue.value) : 64;
 	return height.value + topbarHeight;

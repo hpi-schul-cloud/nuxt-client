@@ -4,6 +4,7 @@
 		app
 		color="primary"
 		size="large"
+		:transition="false"
 		:style="{ top: fabOffset }"
 		:location="fabLocation"
 		:icon="isCollapsed"
@@ -16,15 +17,16 @@
 		<span v-if="!isCollapsed" class="d-block"><slot /></span>
 		<span v-else class="d-sr-only"><slot /></span>
 		<template v-if="isMenu">
-			<VSpeedDial v-model="isMenuOpen" activator="parent" :location="menuLocation">
+			<VSpeedDial v-model="isMenuOpen" activator="parent" attach=".wireframe-container" :location="menuLocation">
 				<template v-for="(action, index) in actions" :key="index">
 					<div class="d-flex justify-end align-center pr-2">
 						<VBtn
-							class="mr-2"
+							class="mr-2 text-on-surface"
 							:data-test-id="action.dataTestId"
 							:href="action.href"
 							:to="action.to"
-							:aria-label="action.ariaLabel"
+							:aria-hidden="true"
+							tabindex="-1"
 							@click="$emit('onFabItemClick', action.customEvent)"
 						>
 							{{ action.label }}
