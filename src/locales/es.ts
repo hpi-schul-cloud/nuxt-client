@@ -1797,9 +1797,8 @@ export default {
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
 	"pages.rooms.members.inviteMember.form.description.label": "Descripción",
 	"pages.rooms.members.inviteMember.form.description.hint": "Se muestra en el resumen del enlace",
-	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
-		"Enlace sólo válido para usuarios de la siguiente escuela:",
-	"pages.rooms.members.inviteMember.form.validForStudents.label": "Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.validForSchools.label": "Enlace válido para la(s) siguiente(s) escuela(s):",
+	"pages.rooms.members.inviteMember.form.validForRoles.label": "Enlace válido para los siguientes roles escolares:",
 	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Enlace válido también para personas externas",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":

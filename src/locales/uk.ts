@@ -1772,9 +1772,8 @@ export default {
 		"Учні з інших шкіл завжди повинні бути присутніми в кімнаті під наглядом вчителя з їхньої школи.",
 	"pages.rooms.members.inviteMember.form.description.label": "Опис",
 	"pages.rooms.members.inviteMember.form.description.hint": "Відображається в огляді посилань",
-	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
-		"Посилання дійсне лише для користувачів наступної школи:",
-	"pages.rooms.members.inviteMember.form.validForStudents.label": "Посилання також дійсне для студентів",
+	"pages.rooms.members.inviteMember.form.validForSchools.label": "Посилання дійсне для наступної(их) школи(ь):",
+	"pages.rooms.members.inviteMember.form.validForRoles.label": "Посилання дійсне для наступних ролей у школі:",
 	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Посилання також дійсне для зовнішніх осіб",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":

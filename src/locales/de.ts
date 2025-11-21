@@ -1784,8 +1784,8 @@ export default {
 		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
 	"pages.rooms.members.inviteMember.form.description.label": "Beschreibung",
 	"pages.rooms.members.inviteMember.form.description.hint": "Wird in der Link-Übersicht angezeigt",
-	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label": "Link nur für Nutzende der folgenden Schule gültig:",
-	"pages.rooms.members.inviteMember.form.validForStudents.label": "Link auch für Lernende gültig",
+	"pages.rooms.members.inviteMember.form.validForSchools.label": "Link gültig für die folgende(n) Schule(n):",
+	"pages.rooms.members.inviteMember.form.validForRoles.label": "Link gültig für die folgenden Schulrollen:",
 	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link auch für Externe Personen gültig",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":

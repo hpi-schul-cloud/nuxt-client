@@ -1756,8 +1756,8 @@ export default {
 		"Students from other schools must always be added to the room by a supervising teacher from their school.",
 	"pages.rooms.members.inviteMember.form.description.label": "Description",
 	"pages.rooms.members.inviteMember.form.description.hint": "Is displayed in the link overview",
-	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label": "Link only valid for users of the following school:",
-	"pages.rooms.members.inviteMember.form.validForStudents.label": "Link also valid for students",
+	"pages.rooms.members.inviteMember.form.validForSchools.label": "Link valid for the following school(s):",
+	"pages.rooms.members.inviteMember.form.validForRoles.label": "Link valid for the following school roles:",
 	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Link also valid for external persons",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":

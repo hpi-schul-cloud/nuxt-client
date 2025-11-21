@@ -32,7 +32,9 @@
 						/>
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
-							<div id="school-radiogroup-label" class="d-flex mb-2">Link gültig für die folgende(n) Schule(n):</div>
+							<div id="school-radiogroup-label" class="d-flex mb-3">
+								{{ t("pages.rooms.members.inviteMember.form.validForSchools.label") }}
+							</div>
 							<VRadioGroup
 								v-model="formData.restrictedToCreatorSchool"
 								aria-labelledby="school-radiogroup-label"
@@ -44,7 +46,7 @@
 								<VRadio label="alle Schulen" :value="false" />
 							</VRadioGroup>
 							<VDivider class="mb-4" />
-							<div class="mb-2">Link gültig für die folgenden Schulrollen:</div>
+							<div class="mb-3">{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}</div>
 							<VCheckbox label="Lernbegleitungen" disabled :model-value="true" hide-details />
 							<VCheckbox
 								v-if="formData.restrictedToCreatorSchool"
