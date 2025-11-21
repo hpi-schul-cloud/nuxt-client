@@ -102,7 +102,7 @@ const topbarHeightValue = useCssVar("--topbar-height");
 
 const fabOffset = computed(() => {
 	const topbarHeight = topbarHeightValue.value ? parseInt(topbarHeightValue.value) : 64;
-	return height.value + topbarHeight;
+	return height.value + topbarHeight / 2;
 });
 
 const onFabClicked = () => {

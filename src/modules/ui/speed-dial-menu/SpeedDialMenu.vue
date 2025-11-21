@@ -80,7 +80,7 @@ const { y: scrollOffsetY } = useWindowScroll();
 
 const fabLocation = computed(() => (mdAndDown.value ? "bottom right" : "top right"));
 const menuLocation = computed(() => (mdAndDown.value ? "top center" : "bottom center"));
-const fabOffset = computed(() => (props.fabOffset && !mdAndDown.value ? `${props.fabOffset}px` : undefined));
+const fabOffset = computed(() => (props.fabOffset && !mdAndDown.value ? `${props.fabOffset - 3}px` : undefined));
 
 const isMenu = computed(() => props.actions.length > 0);
 const isMenuOpen = ref(false);
