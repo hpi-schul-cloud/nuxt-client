@@ -17,6 +17,9 @@ import {
 	MoveCardFailurePayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardFailurePayload,
+	MoveCardToBoardRequestPayload,
+	MoveCardToBoardSuccessPayload,
 	MoveColumnFailurePayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
@@ -61,6 +64,19 @@ export const deleteColumnFailure = createAction("delete-column-failure", props<D
 export const moveCardRequest = createAction("move-card-request", props<MoveCardRequestPayload>());
 export const moveCardSuccess = createAction("move-card-success", props<MoveCardSuccessPayload>());
 export const moveCardFailure = createAction("move-card-failure", props<MoveCardFailurePayload>());
+
+export const moveCardToBoardRequest = createAction(
+	"move-card-ro-board-request",
+	props<MoveCardToBoardRequestPayload>()
+);
+export const moveCardToBoardSuccess = createAction(
+	"move-card-ro-board-success",
+	props<MoveCardToBoardSuccessPayload>()
+);
+export const moveCardToBoardFailure = createAction(
+	"move-card-ro-board-failure",
+	props<MoveCardToBoardFailurePayload>()
+);
 
 export const moveColumnRequest = createAction("move-column-request", props<MoveColumnRequestPayload>());
 export const moveColumnSuccess = createAction("move-column-success", props<MoveColumnSuccessPayload>());
