@@ -24,15 +24,11 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 	const uploadCollaboraFile = async (type: CollaboraFileType, folderId: string, fileName: string) => {
 		const assetUrl = getCollaboraAssetUrl(type);
 		const fileExtension = getFileExtension(assetUrl);
+		const fullFileName = `${fileName}.${fileExtension}`;
 
-		try {
-			const fullFileName = fileExtension ? `${fileName}.${fileExtension}` : fileName;
-			await uploadFromUrl(assetUrl, folderId, FileRecordParentType.BOARDNODES, fullFileName);
-		} catch {
-			// Handle error appropriately
-		} finally {
-			closeCollaboraFileDialog();
-		}
+		await uploadFromUrl(assetUrl, folderId, FileRecordParentType.BOARDNODES, fullFileName);
+
+		closeCollaboraFileDialog();
 	};
 
 	const collaboraFileSelectionOptions = [

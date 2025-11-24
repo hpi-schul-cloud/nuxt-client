@@ -91,6 +91,17 @@ describe("AddCollaboraFileComposable", () => {
 
 				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
 			});
+
+			it("should set isCollaboraFileDialogOpen to false", async () => {
+				const { collaboraFileSelectionOptions, closeCollaboraFileDialog, isCollaboraFileDialogOpen } = setup();
+
+				for (const option of collaboraFileSelectionOptions) {
+					await option.action("test-office-file", "");
+				}
+
+				expect(closeCollaboraFileDialog).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
+				expect(isCollaboraFileDialogOpen.value).toBe(false);
+			});
 		});
 	});
 });
