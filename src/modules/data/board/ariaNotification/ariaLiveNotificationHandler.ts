@@ -130,8 +130,7 @@ export const useBoardAriaNotification = () => {
 	};
 
 	const notifyMoveCardToBoardSuccess = (action: MoveCardToBoardSuccessPayload) => {
-		const { toColumnId, isOwnAction } = action;
-		if (isOwnAction) return;
+		const { toColumnId } = action;
 
 		notifyOnScreenReader(
 			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_TO_BOARD_SUCCESS, {
