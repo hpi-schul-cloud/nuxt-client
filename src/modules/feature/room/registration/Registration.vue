@@ -19,6 +19,7 @@
 							/>
 							<Welcome v-else-if="step.value === RegistrationSteps.Welcome" />
 							<Password v-else-if="step.value === RegistrationSteps.PasswordSetup" v-model="password" />
+							<Success v-else-if="step.value === RegistrationSteps.Success" />
 						</VForm>
 					</VStepperWindowItem>
 				</template>
@@ -49,6 +50,7 @@
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
+import Success from "./steps/Success.vue";
 import Welcome from "./steps/Welcome.vue";
 import { LanguageType } from "@/serverApi/v3";
 import { useRegistration } from "@data-room";
@@ -64,6 +66,7 @@ enum RegistrationSteps {
 	DeclarationOfConsent,
 	ConfirmationCode,
 	Registration,
+	Success,
 }
 
 const { t } = useI18n();
@@ -152,6 +155,12 @@ const steps = computed(() => [
 		title: t("pages.registrationExternalMembers.steps.registration.title"),
 		heading: t("pages.registrationExternalMembers.steps.registration.heading"),
 		id: "registration",
+	},
+	{
+		value: RegistrationSteps.Success,
+		title: t("pages.registrationExternalMembers.steps.success.title"),
+		heading: t("pages.registrationExternalMembers.steps.success.heading"),
+		id: "success",
 	},
 ]);
 </script>
