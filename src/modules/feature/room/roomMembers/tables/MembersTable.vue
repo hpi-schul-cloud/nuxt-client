@@ -86,8 +86,11 @@ const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
 };
 
 const onDialogClose = () => {
-	membersToChangeRole.value = [];
 	isChangeRoleDialogOpen.value = false;
+
+	setTimeout(() => {
+		membersToChangeRole.value = [];
+	}, 200);
 	if (room?.id) {
 		fetchRoom(room?.id);
 	}
