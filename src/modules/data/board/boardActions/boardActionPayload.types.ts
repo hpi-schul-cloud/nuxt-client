@@ -65,6 +65,19 @@ export type MoveCardSuccessPayload = {
 };
 export type MoveCardFailurePayload = MoveCardRequestPayload;
 
+export type MoveCardToBoardRequestPayload = {
+	cardId: string;
+	fromColumnId: string;
+	toColumnId: string;
+};
+export type MoveCardToBoardSuccessPayload = {
+	cardId: string;
+	fromColumnId: string;
+	toColumnId?: string;
+	isOwnAction: boolean;
+};
+export type MoveCardToBoardFailurePayload = MoveCardRequestPayload;
+
 export type MoveColumnRequestPayload = {
 	columnMove: ColumnMove;
 	targetBoardId?: string;

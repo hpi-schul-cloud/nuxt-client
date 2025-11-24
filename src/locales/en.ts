@@ -476,7 +476,9 @@ export default {
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"In column {columnPosition}, a card was moved to position {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"A card was moved from column {fromColumnPosition} to column {toColumnPosition}.",
+		"A card was moved to section {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Eine Karte wurde in Abschnitt {toColumnPosition} verschoben.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"A column was moved from position {oldPosition} to position {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":

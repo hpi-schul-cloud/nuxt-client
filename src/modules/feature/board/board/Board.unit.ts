@@ -1,9 +1,9 @@
+import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
-import MoveCardDialog from "@/modules/feature/board/card/MoveCardDialog.vue";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,

@@ -14,7 +14,7 @@
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
 
-			<p class="text-lg mt-2">
+			<p class="text-lg mt-2" data-testid="move-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
 
@@ -58,11 +58,8 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { BoardCardApiFactory } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore } from "@data-board";
-import { useEnvConfig } from "@data-env";
 import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
 import { computed } from "vue";
@@ -93,13 +90,9 @@ const isDialogOpen = defineModel("is-dialog-open", {
 	default: false,
 });
 
-const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
-const { reloadBoard } = useBoardStore();
+const { moveCardToBoardRequest, getCardLocation } = useBoardStore();
 
 const { execute, isRunning: isMoving } = useSafeAxiosTask();
-
-const { getCardLocation, moveCardRequest } = useBoardStore();
-const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 const dialogQuestion = computed(() => {
 	const card = useCardStore().getCard(props.cardId);
@@ -110,28 +103,14 @@ const dialogQuestion = computed(() => {
 
 const onConfirm = async () => {
 	const cardLocation = getCardLocation(props.cardId);
-	const payload = {
-		cardId: props.cardId,
-		fromColumnId: cardLocation?.columnId,
-		fromColumnIndex: cardLocation?.columnIndex,
-		oldIndex: cardLocation?.columnIndex,
-		newIndex: selectedColumn.value?.cards?.length,
-		toColumnId: selectedColumnId.value,
-		toColumnIndex: selectedColumn.value?.cards?.length,
-	};
 
 	const { success } = await execute(
-		async () => {
-			if (isSocketEnabled) {
-				// @ts-expect-error Cause ts thinks it may be undefined.
-				await moveCardRequest(payload);
-			} else {
-				await cardsApi.cardControllerMoveCard(props.cardId, {
-					toColumnId: selectedColumnId.value as string,
-				});
-			}
-			await reloadBoard();
-		},
+		async () =>
+			await moveCardToBoardRequest({
+				cardId: props.cardId,
+				toColumnId: selectedColumnId.value as string,
+				fromColumnId: cardLocation?.columnId as string,
+			}),
 		t("common.notifications.errors.notMoved", {
 			type: t("components.boardColumn"),
 		})

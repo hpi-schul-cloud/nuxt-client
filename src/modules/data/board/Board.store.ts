@@ -11,6 +11,8 @@ import {
 	FetchBoardSuccessPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardRequestPayload,
+	MoveCardToBoardSuccessPayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
 	UpdateBoardLayoutRequestPayload,
@@ -319,6 +321,28 @@ export const useBoardStore = defineStore("boardStore", () => {
 		toColumn.cards.splice(newIndex, 0, item);
 	};
 
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		await socketOrRest.moveCardToBoardRequest(payload);
+	};
+
+	const moveCardToBoardSuccess = async (payload: MoveCardToBoardSuccessPayload) => {
+		if (!board.value) return;
+		const fromColumn = board.value.columns.find((c) => c.id === payload.fromColumnId);
+		const toColumn = board.value.columns.find((c) => c.id === payload.toColumnId);
+
+		if (fromColumn) {
+			// card was moved from this board
+			const cardIndex = fromColumn.cards.findIndex((c) => c.cardId === payload.cardId);
+			fromColumn.cards.splice(cardIndex, 1);
+		}
+
+		if (toColumn) {
+			await cardStore.fetchCardRequest({ cardIds: [payload.cardId] });
+			const card = cardStore.getCard(payload.cardId);
+			toColumn.cards.push({ cardId: payload.cardId, height: card?.height as number });
+		}
+	};
+
 	const disconnectSocketRequest = () => {
 		socketOrRest.disconnectSocketRequest();
 	};
@@ -400,6 +424,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		moveCardToNewColumn,
 		moveCardRequest,
 		moveCardSuccess,
+		moveCardToBoardRequest,
+		moveCardToBoardSuccess,
 		moveColumnRequest,
 		moveColumnSuccess,
 		updateColumnTitleRequest,

@@ -485,6 +485,8 @@ export default {
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Se ha movido una tarjeta de la columna {fromColumnPosition} a la columna {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Una tarjeta se movió a la sección {toColumnPosition}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Se ha movido una columna de la posición {oldPosition} a la posición {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":

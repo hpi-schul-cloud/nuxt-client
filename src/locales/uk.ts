@@ -487,6 +487,8 @@ export default {
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Картку було переміщено зі стовпчика {fromColumnPosition} до стовпчика {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Картку переміщено до розділу {toColumnPosition}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Стовпець було переміщено з позиції {oldPosition} в позицію {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":

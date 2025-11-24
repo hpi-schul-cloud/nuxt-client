@@ -231,6 +231,10 @@ export const useBoardApi = () => {
 		});
 	};
 
+	const moveCardToBoardCall = async (cardId: string, fromColumnId: string, toColumnId: string) => {
+		await cardsApi.cardControllerMoveCard(cardId, { toColumnId });
+	};
+
 	const moveColumnCall = async (columnId: string, toBoardId: string, toPosition: number): Promise<void> => {
 		await boardColumnApi.columnControllerMoveColumn(columnId, {
 			toBoardId,
@@ -299,6 +303,7 @@ export const useBoardApi = () => {
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,
+		moveCardToBoardCall,
 		moveColumnCall,
 		moveElementCall,
 		updateBoardTitleCall,
