@@ -86,20 +86,20 @@ describe("AddCollaboraFileComposable", () => {
 				const { collaboraFileSelectionOptions } = setup();
 
 				for (const option of collaboraFileSelectionOptions) {
-					await option.action("test-office-file", "");
+					await option.action("folder-id", "test-office-file");
 				}
 
 				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
 			});
 
-			it("should set isCollaboraFileDialogOpen to false", async () => {
-				const { collaboraFileSelectionOptions, closeCollaboraFileDialog, isCollaboraFileDialogOpen } = setup();
+			it("should finally close dialog", async () => {
+				const { collaboraFileSelectionOptions, openCollaboraFileDialog, isCollaboraFileDialogOpen } = setup();
 
-				for (const option of collaboraFileSelectionOptions) {
-					await option.action("test-office-file", "");
-				}
+				openCollaboraFileDialog();
+				expect(isCollaboraFileDialogOpen.value).toBe(true);
 
-				expect(closeCollaboraFileDialog).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
+				await collaboraFileSelectionOptions[0].action("folder-id", "test-office-file");
+
 				expect(isCollaboraFileDialogOpen.value).toBe(false);
 			});
 		});
