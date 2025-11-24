@@ -13,16 +13,16 @@ describe("safeFocusTrap", () => {
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
 	let activateMock: Mock;
-	let mobileRef: Ref<boolean>;
+	let isMobile: Ref<boolean>;
 
 	beforeEach(() => {
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
 		activateMock = vi.fn();
-		mobileRef = ref(false);
+		isMobile = ref(false);
 
-		(useDisplay as Mock).mockReturnValue({ mobile: mobileRef });
+		(useDisplay as Mock).mockReturnValue({ mobile: isMobile });
 
 		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
@@ -34,7 +34,7 @@ describe("safeFocusTrap", () => {
 
 	it("should immediately call 'activate' when isActiveRef is true", async () => {
 		const isActiveRef = ref(true);
-		mobileRef.value = false;
+		isMobile.value = false;
 
 		useSafeFocusTrap(isActiveRef, "#some-element");
 		await nextTick();
@@ -44,7 +44,7 @@ describe("safeFocusTrap", () => {
 
 	it("should not call activate on mobile devices", async () => {
 		const isActiveRef = ref(true);
-		mobileRef.value = true;
+		isMobile.value = true;
 
 		useSafeFocusTrap(isActiveRef, "#some-element");
 		await nextTick();
@@ -62,7 +62,7 @@ describe("safeFocusTrap", () => {
 
 	it("should call activate when isActiveRef changes to true", async () => {
 		const isActiveRef = ref(false);
-		mobileRef.value = false;
+		isMobile.value = false;
 
 		useSafeFocusTrap(isActiveRef, "#some-element");
 		await nextTick();
@@ -75,7 +75,7 @@ describe("safeFocusTrap", () => {
 
 	it("should call deactivate when isActiveRef changes to false", async () => {
 		const isActiveRef = ref(true);
-		mobileRef.value = false;
+		isMobile.value = false;
 
 		useSafeFocusTrap(isActiveRef, "#some-element");
 		await nextTick();
