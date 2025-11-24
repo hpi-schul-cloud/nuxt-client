@@ -52,7 +52,7 @@ describe("safeFocusTrap", () => {
 		expect(activateMock).not.toHaveBeenCalled();
 	});
 
-	it("should be call immediately deactivate when isActiveRef is false", async () => {
+	it("should immediately call 'deactivate' when isActiveRef is false", async () => {
 		const isActiveRef = ref(false);
 		useSafeFocusTrap(isActiveRef, "#some-element");
 		await nextTick();
