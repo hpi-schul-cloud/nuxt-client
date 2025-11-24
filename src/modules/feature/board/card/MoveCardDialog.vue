@@ -10,7 +10,7 @@
 		@cancel="isDialogOpen = false"
 	>
 		<template #content>
-			<WarningAlert v-if="rooms?.length === 0" class="mb-2">
+			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
 
@@ -21,7 +21,7 @@
 			<VForm id="moveCardForm" data-testid="move-card-form">
 				<VSelect
 					v-model="selectedRoomId"
-					:items="rooms"
+					:items="availableRooms"
 					:disabled="isMoving"
 					item-value="id"
 					item-title="name"
@@ -58,20 +58,48 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { Permission } from "@/serverApi/v3";
+import { RoomItem } from "@/types/room/Room";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore } from "@data-board";
+import { useRoomStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
-import { computed } from "vue";
+import { sortBy } from "lodash-es";
+import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
 const props = defineProps<{
 	cardId: string;
+	hasBoardManagePermission: boolean;
 	roomId?: string;
 }>();
 
+const rooms = ref<RoomItem[]>();
+
+onBeforeMount(async () => {
+	const result = await useRoomStore().fetchRoomsPlain();
+	rooms.value = result?.data?.data;
+
+	if (props.roomId && availableRooms.value?.find((r) => r.id === props.roomId)) {
+		selectedRoomId.value = props.roomId;
+	} else {
+		selectedRoomId.value = undefined;
+	}
+});
+
+const availableRooms = computed(() => {
+	if (props.hasBoardManagePermission) {
+		return sortBy(
+			rooms.value?.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
+			(r) => r.name
+		);
+	} else {
+		return rooms.value?.filter((r) => r.id === props.roomId);
+	}
+});
 const {
 	selectedBoardId,
 	selectedColumnId,
@@ -81,9 +109,7 @@ const {
 	boards,
 	selectedColumn,
 	selectedBoard,
-	rooms,
-	// eslint-disable-next-line
-} = useCardDialogData(props.roomId);
+} = useCardDialogData();
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,

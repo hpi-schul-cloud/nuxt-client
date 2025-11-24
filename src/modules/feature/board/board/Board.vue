@@ -94,6 +94,7 @@
 					v-if="roomId"
 					v-model:is-dialog-open="moveCardOptions.isDialogOpen"
 					:room-id="roomId"
+					:has-board-manage-permission="hasManageBoardPermission"
 					:card-id="moveCardOptions.cardId"
 				/>
 				<CopyResultModal
@@ -201,6 +202,7 @@ const {
 	hasCreateColumnPermission,
 	hasCreateToolPermission,
 	hasDeletePermission,
+	hasManageBoardPermission,
 	hasEditPermission,
 	hasManageReadersCanEditPermission,
 	arePermissionsLoaded,

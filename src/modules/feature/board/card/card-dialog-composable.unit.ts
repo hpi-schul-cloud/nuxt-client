@@ -1,12 +1,5 @@
 import { useCardDialogData } from "./card-dialog-composable";
-import { Permission } from "@/serverApi/v3";
-import {
-	columnResponseFactory,
-	mockApiResponse,
-	mockedPiniaStoreTyping,
-	roomBoardGridItemFactory,
-	roomItemFactory,
-} from "@@/tests/test-utils";
+import { columnResponseFactory, mockedPiniaStoreTyping, roomBoardGridItemFactory } from "@@/tests/test-utils";
 import { useBoardApi } from "@data-board";
 import { useRoomDetailsStore, useRoomStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -22,12 +15,6 @@ describe("useCardDialogData", () => {
 	let useBoardApiMock: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let result: ReturnType<typeof useCardDialogData>;
 
-	const mockRooms = [
-		roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-		roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-		roomItemFactory.build({ permissions: [] }),
-	];
-
 	const mockBoards = [roomBoardGridItemFactory.build(), roomBoardGridItemFactory.build()];
 
 	const mockColumns = [columnResponseFactory.build({ title: "Col 1" }), columnResponseFactory.build({ title: "" })];
@@ -38,16 +25,15 @@ describe("useCardDialogData", () => {
 		vi.mocked(useBoardApi).mockReturnValue(useBoardApiMock);
 	});
 
-	const setup = (selectedRoomId?: string) => {
+	const setup = () => {
 		const roomStore = mockedPiniaStoreTyping(useRoomStore);
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 
-		roomStore.fetchRoomsPlain.mockResolvedValue(mockApiResponse({ data: { data: mockRooms } }));
 		roomDetailsStore.fetchBoardsOfRoom.mockResolvedValue({ boards: mockBoards });
 
 		const TestComponent = defineComponent({
 			setup() {
-				result = useCardDialogData(selectedRoomId);
+				result = useCardDialogData();
 				return {};
 			},
 			template: "<div></div>",
@@ -56,28 +42,6 @@ describe("useCardDialogData", () => {
 		const wrapper = mount(TestComponent);
 		return { roomStore, roomDetailsStore, wrapper };
 	};
-
-	it("should initialize and fetch rooms with edit permission only", async () => {
-		setup();
-		await flushPromises();
-
-		expect(result.rooms.value).toHaveLength(2);
-		expect(result.rooms.value?.map((r) => r.id)).toEqual(["room1", "room2"]);
-	});
-
-	it("should set selectedRoomId when initialRoomId is provided and exists", async () => {
-		setup("room1");
-		await flushPromises();
-
-		expect(result.selectedRoomId.value).toBe("room1");
-	});
-
-	it("should not set selectedRoomId when initialRoomId does not exist", async () => {
-		setup("non-existent");
-		await flushPromises();
-
-		expect(result.selectedRoomId.value).toBeUndefined();
-	});
 
 	it("should fetch boards when selectedRoomId changes", async () => {
 		const { roomDetailsStore } = setup();

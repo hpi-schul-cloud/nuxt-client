@@ -9,7 +9,7 @@
 		@cancel="onCancel"
 	>
 		<template #content>
-			<WarningAlert v-if="rooms?.length === 0" class="mb-2">
+			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
 			<InfoAlert data-testid="import-card-information">
@@ -28,7 +28,7 @@
 			<VForm id="importCardForm" data-testid="import-card-form">
 				<VSelect
 					v-model="selectedRoomId"
-					:items="rooms"
+					:items="availableRooms"
 					:disabled="isImporting"
 					item-value="id"
 					item-title="name"
@@ -66,11 +66,14 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { ShareTokenInfoResponse } from "@/serverApi/v3";
+import { Permission, ShareTokenInfoResponse } from "@/serverApi/v3";
+import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
+import { useRoomStore } from "@data-room";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
+import { sortBy } from "lodash-es";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -81,9 +84,22 @@ const { t } = useI18n();
 
 const props = defineProps<{ token: string }>();
 
+const rooms = ref<RoomItem[]>();
+
+const availableRooms = computed(() =>
+	sortBy(
+		rooms.value?.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
+		(r) => r.name
+	)
+);
+
+onBeforeMount(async () => {
+	const result = await useRoomStore().fetchRoomsPlain();
+	rooms.value = result?.data?.data;
+});
+
 const { execute, isRunning: isImporting } = useSafeAxiosTask();
-const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, rooms, columns, boards } =
-	useCardDialogData();
+const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } = useCardDialogData();
 const shareTokenInfo = ref<ShareTokenInfoResponse>();
 
 const isDialogOpen = defineModel("is-dialog-open", {
@@ -98,6 +114,7 @@ onBeforeMount(async () => {
 			name: t("components.boardCard"),
 		})
 	);
+
 	if (success) {
 		shareTokenInfo.value = result;
 	} else {
