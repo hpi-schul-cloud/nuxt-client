@@ -2,6 +2,7 @@
 	<Dialog
 		v-model:is-dialog-open="isCollaboraFileDialogOpen"
 		:message="t('components.elementTypeSelection.elements.collabora.subtitle')"
+		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-element-dialog"
 		@cancel="onCancel"
@@ -35,8 +36,8 @@
 <script setup lang="ts">
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { Dialog } from "@ui-dialog";
-import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { ref } from "vue";
+import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -52,6 +53,7 @@ type VuetifyForm = {
 
 const { isCollaboraFileDialogOpen, closeCollaboraFileDialog, collaboraFileSelectionOptions } = useAddCollaboraFile();
 const { validateOnOpeningTag } = useOpeningTagValidator();
+const { validateInvalidCharacters } = useInvalidCharactersValidator();
 
 const { t } = useI18n();
 
@@ -61,7 +63,25 @@ const selectedDocType = ref<string | null>(null);
 const fileName = ref<string>("");
 
 const docTypeRules = [isRequired(t("common.validation.required2"))];
-const fileNameRules = [(value: string) => validateOnOpeningTag(value), isRequired(t("common.validation.required2"))];
+
+const fileNameRules = [
+	(value: string) => validateOnOpeningTag(value),
+	isRequired(t("common.validation.required2")),
+	(value: string) => validateInvalidCharacters(value, ["/"]),
+];
+
+const passesAllRules = (value: string, rules: ((value: string) => true | string)[]): boolean =>
+	rules.every((rule) => rule(value) === true);
+
+const isFormValid = computed(() => {
+	if (!selectedDocType.value) {
+		return false;
+	}
+
+	const isFileNameValid = passesAllRules(fileName.value, fileNameRules);
+
+	return isFileNameValid;
+});
 
 const resetForm = () => {
 	selectedDocType.value = null;
