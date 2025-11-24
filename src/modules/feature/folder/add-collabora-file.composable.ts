@@ -1,5 +1,6 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { CollaboraFileType } from "@/types/enum/Collabora";
+import { getCollaboraAssetUrl } from "@/utils/collaboraHelper";
 import { getFileExtension } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
 import { createSharedComposable } from "@vueuse/core";
@@ -25,21 +26,8 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		folderId.value = folderIdParam;
 	};
 
-	const getAssetUrl = (collaboraFileType: CollaboraFileType): string => {
-		const base = `${window.location.origin}/collabora`;
-
-		if (collaboraFileType === CollaboraFileType.Text) {
-			return `${base}/doc.docx`;
-		}
-		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
-			return `${base}/spreadsheet.xlsx`;
-		}
-
-		return `${base}/presentation.pptx`;
-	};
-
 	const uploadCollaboraFile = async (type: CollaboraFileType, fileName: string) => {
-		const assetUrl = getAssetUrl(type);
+		const assetUrl = getCollaboraAssetUrl(type);
 		const fileExtension = getFileExtension(assetUrl);
 
 		try {
@@ -75,7 +63,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		isCollaboraFileDialogOpen,
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
-		getAssetUrl,
 		setFolderId,
 	};
 });

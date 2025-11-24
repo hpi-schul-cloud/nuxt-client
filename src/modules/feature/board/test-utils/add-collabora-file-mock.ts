@@ -22,7 +22,6 @@ export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
 	const isCollaboraFileDialogOpen = ref(false);
 	const collaboraFileSelectionOptions: Array<CollaboraFileSelectionOptions> =
 		collaboraFileSelectionOptionsFactory.createCollaboraFileSelectionOptionsList();
-	const getAssetUrl = vi.fn();
 	const setCardId = setCardIdMock ?? vi.fn();
 	const setCreateElementRequestFn = vi.fn();
 	const cardId = ref("");
@@ -33,7 +32,6 @@ export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
 		isCollaboraFileDialogOpen,
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
-		getAssetUrl,
 		setCardId,
 		setCreateElementRequestFn,
 	};
