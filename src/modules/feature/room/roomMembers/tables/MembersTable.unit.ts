@@ -40,8 +40,6 @@ vi.mock("@vueuse/integrations/useFocusTrap");
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
-vi.mock("@vueuse/integrations/useFocusTrap");
-
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
