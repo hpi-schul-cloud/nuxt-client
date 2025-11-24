@@ -41,10 +41,14 @@
 								aria-labelledby="school-radiogroup-label"
 								@update:model-value="resetRoleSelection"
 							>
-								<VRadio :value="true">
+								<VRadio :value="true" data-testid="input-invite-participants-restricted-to-creator-school">
 									<template #label> {{ t("common.labels.only") }} {{ schoolName }} </template>
 								</VRadio>
-								<VRadio :label="t('common.labels.allSchools')" :value="false" />
+								<VRadio
+									:label="t('common.labels.allSchools')"
+									:value="false"
+									data-testid="input-invite-participants-all-schools"
+								/>
 							</VRadioGroup>
 							<VDivider class="mb-6" role="presentation" />
 							<div id="valid-for-roles-label" class="mb-4">
@@ -53,6 +57,7 @@
 							<div role="group" aria-labelledby="valid-for-roles-label">
 								<VCheckbox
 									:label="t('common.labels.teacher.neutral.plural')"
+									data-testid="input-invite-participants-valid-for-teachers"
 									disabled
 									:model-value="true"
 									hide-details

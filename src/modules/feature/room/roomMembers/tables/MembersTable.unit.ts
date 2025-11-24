@@ -54,6 +54,7 @@ describe("MembersTable", () => {
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
+	let activateMock: Mock;
 
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
@@ -68,11 +69,13 @@ describe("MembersTable", () => {
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
+		activateMock = vi.fn();
 
 		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 			deactivate: deactivateMock,
+			activate: activateMock,
 		});
 
 		setupStores({
