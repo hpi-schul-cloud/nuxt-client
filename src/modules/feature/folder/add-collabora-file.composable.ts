@@ -21,18 +21,13 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		isCollaboraFileDialogOpen.value = true;
 	};
 
-	const folderId = ref("");
-	const setFolderId = (folderIdParam: string) => {
-		folderId.value = folderIdParam;
-	};
-
-	const uploadCollaboraFile = async (type: CollaboraFileType, fileName: string) => {
+	const uploadCollaboraFile = async (type: CollaboraFileType, folderId: string, fileName: string) => {
 		const assetUrl = getCollaboraAssetUrl(type);
 		const fileExtension = getFileExtension(assetUrl);
 
 		try {
 			const fullFileName = fileExtension ? `${fileName}.${fileExtension}` : fileName;
-			await uploadFromUrl(assetUrl, folderId.value, FileRecordParentType.BOARDNODES, fullFileName);
+			await uploadFromUrl(assetUrl, folderId, FileRecordParentType.BOARDNODES, fullFileName);
 		} catch {
 			// Handle error appropriately
 		} finally {
@@ -44,17 +39,20 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		{
 			id: "1",
 			label: t("components.elementTypeSelection.elements.collabora.option.text"),
-			action: async (fileName: string) => uploadCollaboraFile(CollaboraFileType.Text, fileName),
+			action: async (folderId: string, fileName: string) =>
+				uploadCollaboraFile(CollaboraFileType.Text, folderId, fileName),
 		},
 		{
 			id: "2",
 			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
-			action: async (fileName: string) => uploadCollaboraFile(CollaboraFileType.Spreadsheet, fileName),
+			action: async (folderId: string, fileName: string) =>
+				uploadCollaboraFile(CollaboraFileType.Spreadsheet, folderId, fileName),
 		},
 		{
 			id: "3",
 			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
-			action: async (fileName: string) => uploadCollaboraFile(CollaboraFileType.Presentation, fileName),
+			action: async (folderId: string, fileName: string) =>
+				uploadCollaboraFile(CollaboraFileType.Presentation, folderId, fileName),
 		},
 	];
 
@@ -63,6 +61,5 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		isCollaboraFileDialogOpen,
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
-		setFolderId,
 	};
 });

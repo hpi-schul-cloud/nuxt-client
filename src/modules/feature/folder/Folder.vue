@@ -41,7 +41,7 @@
 	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
-	<AddCollaboraFileDialog />
+	<AddCollaboraFileDialog :folder-id="folderId" />
 </template>
 
 <script setup lang="ts">
@@ -71,6 +71,11 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+const boardApi = useBoardApi();
+
+const { t } = useI18n();
+const router = useRouter();
+
 const props = defineProps({
 	folderId: {
 		type: String,
@@ -81,20 +86,6 @@ const props = defineProps({
 const emit = defineEmits<{
 	(update: "update:folder-name", pageTitle: string): void;
 }>();
-
-const enum FabEvent {
-	CREATE_DOCUMENT = "CREATE_DOCUMENT",
-	UPLOAD_FILE = "UPLOAD_FILE",
-}
-
-const folderId = toRef(props, "folderId");
-
-const boardApi = useBoardApi();
-const { openCollaboraFileDialog, setFolderId } = useAddCollaboraFile();
-setFolderId(folderId.value);
-
-const { t } = useI18n();
-const router = useRouter();
 
 const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
 	useFolderState();
@@ -108,9 +99,18 @@ const boardStore = useBoardStore();
 const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
+const { openCollaboraFileDialog } = useAddCollaboraFile();
+
+const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+
 const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
+
+const enum FabEvent {
+	CREATE_DOCUMENT = "CREATE_DOCUMENT",
+	UPLOAD_FILE = "UPLOAD_FILE",
+}
 
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;

@@ -39,6 +39,13 @@ import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+const props = defineProps({
+	folderId: {
+		type: String,
+		required: true,
+	},
+});
+
 type VuetifyForm = {
 	validate: () => Promise<{ valid: boolean }>;
 };
@@ -73,7 +80,9 @@ const onConfirm = async () => {
 	if (!valid) return;
 
 	closeCollaboraFileDialog();
-	await collaboraFileSelectionOptions.find((item) => item.id === selectedDocType.value)?.action(fileName.value);
+	await collaboraFileSelectionOptions
+		.find((item) => item.id === selectedDocType.value)
+		?.action(props.folderId, fileName.value);
 	resetForm();
 };
 </script>
