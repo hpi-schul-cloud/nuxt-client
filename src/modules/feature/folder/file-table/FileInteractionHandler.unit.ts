@@ -183,6 +183,36 @@ describe("FileInteractionHandler", () => {
 			});
 		});
 
+		describe("when collabora is not enabled", () => {
+			it("should render div instead of button", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: true },
+					{ isCollaboraEnabled: false }
+				);
+
+				const div = wrapper.find("div");
+				const button = wrapper.find("button");
+
+				expect(div.exists()).toBe(true);
+				expect(button.exists()).toBe(false);
+			});
+		});
+
+		describe("when collabora file is not editable", () => {
+			it("should render div instead of button", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: false },
+					{ isCollaboraEnabled: true }
+				);
+
+				const div = wrapper.find("div");
+				const button = wrapper.find("button");
+
+				expect(div.exists()).toBe(true);
+				expect(button.exists()).toBe(false);
+			});
+		});
+
 		describe("when preview is not possible and mimeType is not audio or video", () => {
 			it("should render div instead of button", () => {
 				const { wrapper } = setup({
