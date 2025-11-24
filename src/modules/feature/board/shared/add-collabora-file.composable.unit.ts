@@ -1,7 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { setupFileSelectMock } from "../../../util/board/test-utils/file-select-mock";
-import { CollaboraFileType, useAddCollaboraFile } from "./add-collabora-file.composable";
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { AnyContentElement, ContentElementType } from "@/types/board/ContentElement";
+import { CollaboraFileType } from "@/types/enum/Collabora";
 import { fileElementResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useCardStore } from "@data-board";
 import * as FileStorageApi from "@data-file";

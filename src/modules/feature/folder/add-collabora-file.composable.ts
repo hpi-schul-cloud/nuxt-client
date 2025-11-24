@@ -1,15 +1,10 @@
 import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { CollaboraFileType } from "@/types/enum/Collabora";
 import { getFileExtension } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-export enum CollaboraFileType {
-	Text,
-	Spreadsheet,
-	Presentation,
-}
 
 export const useAddCollaboraFile = createSharedComposable(() => {
 	const { t } = useI18n();

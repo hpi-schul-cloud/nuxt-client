@@ -2,6 +2,7 @@ import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
+import { CollaboraFileType } from "@/types/enum/Collabora";
 import { getFileExtension } from "@/utils/fileHelper";
 import { type CreateElementRequestPayload, useCardStore } from "@data-board";
 import { useFileStorageApi } from "@data-file";
@@ -9,12 +10,6 @@ import { useSharedFileSelect } from "@util-board";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-export enum CollaboraFileType {
-	Text,
-	Spreadsheet,
-	Presentation,
-}
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<AnyContentElement | undefined>;
 
