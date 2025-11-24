@@ -1964,4 +1964,5 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "Delete all {total} files?",
 	"pages.folder.delete-confirmation": "Do you really want to delete file {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "The file name already exists.",
+	"pages.folder.rename-file-dialog.validation.invalid-characters": "The file name contains invalid characters.",
 };
