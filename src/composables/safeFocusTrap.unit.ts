@@ -32,7 +32,7 @@ describe("safeFocusTrap", () => {
 		});
 	});
 
-	it("should be call immediately activate when isActiveRef is true", async () => {
+	it("should immediately call 'activate' when isActiveRef is true", async () => {
 		const isActiveRef = ref(true);
 		mobileRef.value = false;
 
