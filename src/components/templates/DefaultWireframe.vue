@@ -20,6 +20,7 @@
 					:data-testid="fabItems.dataTestId"
 					:fab-offset="fabOffset"
 					@fab:clicked="onFabClicked"
+					@on-fab-item-click="$emit('onFabItemClick', $event)"
 				>
 					{{ fabItems.title }}
 				</SpeedDialMenu>

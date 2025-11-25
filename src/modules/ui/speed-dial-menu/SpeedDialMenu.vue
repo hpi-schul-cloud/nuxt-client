@@ -19,28 +19,7 @@
 		<template v-if="isMenu">
 			<VSpeedDial v-model="isMenuOpen" activator="parent" attach=".wireframe-container" :location="menuLocation">
 				<template v-for="(action, index) in actions" :key="index">
-					<div class="d-flex justify-end align-center pr-2">
-						<VBtn
-							class="mr-2 text-on-surface"
-							:data-test-id="action.dataTestId"
-							:href="action.href"
-							:to="action.to"
-							:aria-hidden="true"
-							tabindex="-1"
-							@click="$emit('onFabItemClick', action.customEvent)"
-						>
-							{{ action.label }}
-						</VBtn>
-						<VBtn
-							color="primary"
-							:data-test-id="action.dataTestId"
-							:icon="action.icon"
-							:href="action.href"
-							:to="action.to"
-							:aria-label="action.ariaLabel"
-							@click="$emit('onFabItemClick', action.customEvent)"
-						/>
-					</div>
+					<SpeedDialMenuAction :action="action" @on-fab-item-click="$emit('onFabItemClick', $event)" />
 				</template>
 			</VSpeedDial>
 		</template>
@@ -50,6 +29,7 @@
 <script lang="ts" setup>
 import { FabAction } from "@/components/templates/default-wireframe.types";
 import { mdiClose } from "@icons/material";
+import { SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useDisplay } from "vuetify";
