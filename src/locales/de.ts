@@ -1998,4 +1998,10 @@ export default {
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "Der Dateiname existiert bereits.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "Der Dateiname enthält ungültige Zeichen.",
+	"pages.folder.add-collabora-file-dialog.title": "Dokument erstellen",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Dokumententyp",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Unbenanntes Dokument",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Tabelle)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Präsentation)",
 };

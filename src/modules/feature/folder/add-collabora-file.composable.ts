@@ -36,19 +36,19 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 	const collaboraFileSelectionOptions = [
 		{
 			id: "1",
-			label: t("components.elementTypeSelection.elements.collabora.option.text"),
+			label: t("pages.folder.add-collabora-file-dialog.option.text"),
 			action: async (folderId: string, fileName: string) =>
 				uploadCollaboraFile(CollaboraFileType.Text, folderId, fileName),
 		},
 		{
 			id: "2",
-			label: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+			label: t("pages.folder.add-collabora-file-dialog.option.spreadsheet"),
 			action: async (folderId: string, fileName: string) =>
 				uploadCollaboraFile(CollaboraFileType.Spreadsheet, folderId, fileName),
 		},
 		{
 			id: "3",
-			label: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+			label: t("pages.folder.add-collabora-file-dialog.option.presentation"),
 			action: async (folderId: string, fileName: string) =>
 				uploadCollaboraFile(CollaboraFileType.Presentation, folderId, fileName),
 		},

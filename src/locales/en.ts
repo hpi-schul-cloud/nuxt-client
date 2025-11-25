@@ -1964,4 +1964,10 @@ export default {
 	"pages.folder.delete-confirmation": "Do you really want to delete file {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "The file name already exists.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "The file name contains invalid characters.",
+	"pages.folder.add-collabora-file-dialog.title": "Create document",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Document type",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Untitled document",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Spreadsheet)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentation)",
 };

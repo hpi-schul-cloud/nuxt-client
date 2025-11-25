@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isCollaboraFileDialogOpen"
-		:message="t('components.elementTypeSelection.elements.collabora.subtitle')"
+		:message="t('pages.folder.add-collabora-file-dialog.title')"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-element-dialog"
@@ -17,7 +17,7 @@
 					item-title="label"
 					item-value="id"
 					persistent-hint
-					:label="t('components.cardElement.fileElement.collaboraFile.types')"
+					:label="t('pages.folder.add-collabora-file-dialog.doc-types')"
 					:rules="docTypeRules"
 					:menu-props="{ attach: '#officeFileForm' }"
 					data-testid="collabora-element-form-type"
@@ -26,7 +26,7 @@
 					v-model="fileName"
 					:label="t('common.labels.fileName')"
 					:rules="fileNameRules"
-					:placeholder="t('components.cardElement.fileElement.collaboraFile.untitled')"
+					:placeholder="t('pages.folder.add-collabora-file-dialog.untitled-file')"
 					data-testid="collabora-element-form-filename"
 				/>
 			</VForm>

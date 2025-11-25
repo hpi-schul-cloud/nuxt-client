@@ -1985,4 +1985,10 @@ export default {
 	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "Ім'я файлу вже існує.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "Ім'я файлу містить недопустимі символи.",
+	"pages.folder.add-collabora-file-dialog.title": "Створити документ",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Тип документа",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Без назви документ",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Документ)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Таблиця)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Презентація)",
 };
