@@ -2005,4 +2005,5 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "Дійсно видалити всі {total} файли?",
 	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "Ім'я файлу вже існує.",
+	"pages.folder.rename-file-dialog.validation.invalid-characters": "Ім'я файлу містить недопустимі символи.",
 };
