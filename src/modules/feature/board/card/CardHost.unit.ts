@@ -260,6 +260,18 @@ describe("CardHost", () => {
 			});
 		});
 
+		describe("when user clicks move button", () => {
+			it("should emit move:card event", () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+
+				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+				moveButton.vm.$emit("click");
+
+				expect(wrapper.emitted("move:card")).toHaveLength(1);
+			});
+		});
+
 		describe("when user clicks share button", () => {
 			it("should emit share:card event", () => {
 				mockedBoardPermissions.hasShareBoardPermission.value = true;

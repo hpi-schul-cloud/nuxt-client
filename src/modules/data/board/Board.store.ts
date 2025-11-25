@@ -331,7 +331,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const toColumn = board.value.columns.find((c) => c.id === payload.toColumnId);
 
 		if (fromColumn) {
-			// card was moved from this board
 			const cardIndex = fromColumn.cards.findIndex((c) => c.cardId === payload.cardId);
 			fromColumn.cards.splice(cardIndex, 1);
 		}

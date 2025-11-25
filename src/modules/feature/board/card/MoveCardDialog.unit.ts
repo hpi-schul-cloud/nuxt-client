@@ -29,8 +29,8 @@ const mockCardDialogData: ReturnType<typeof useCardDialogData> = {
 	resetBoardSelection: vi.fn(),
 	columns: ref([]),
 	boards: ref([]),
-	selectedColumn: computed(() => undefined),
-	selectedBoard: computed(() => undefined),
+	selectedColumn: computed(() => columnResponseFactory.build()),
+	selectedBoard: computed(() => roomBoardGridItemFactory.build()),
 };
 
 const mockRooms = [
@@ -82,8 +82,6 @@ describe("MoveCardDialog", () => {
 	});
 
 	it("should notify about the success of the move action.", async () => {
-		mockCardDialogData.selectedBoard = computed(() => roomBoardGridItemFactory.build());
-		mockCardDialogData.selectedColumn = computed(() => columnResponseFactory.build());
 		const { wrapper } = setup();
 
 		const dialog = wrapper.findComponent(Dialog);

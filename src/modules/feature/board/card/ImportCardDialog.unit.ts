@@ -1,4 +1,3 @@
-import { useCardDialogData } from "./card-dialog-composable";
 import ImportCardDialog from "./ImportCardDialog.vue";
 import { Permission, ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
@@ -13,31 +12,16 @@ import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { computed, nextTick, ref } from "vue";
+import { beforeEach, describe, expect, it } from "vitest";
+import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
-
-const mockCardDialogData: ReturnType<typeof useCardDialogData> = {
-	selectedBoardId: ref(),
-	selectedColumnId: ref(),
-	selectedRoomId: ref(),
-	resetBoardSelection: vi.fn(),
-	columns: ref([]),
-	boards: ref([]),
-	selectedColumn: computed(() => undefined),
-	selectedBoard: computed(() => undefined),
-};
 
 const mockRooms = [
 	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
 	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
 	roomItemFactory.build({ permissions: [] }),
 ];
-
-vi.mock("./card-dialog-composable", () => ({
-	useCardDialogData: () => mockCardDialogData,
-}));
 
 let copyModuleMock: CopyModule;
 

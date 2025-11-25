@@ -910,7 +910,7 @@ describe("BoardStore", () => {
 	});
 
 	describe("moveCardToBoardSuccess", () => {
-		it("should not move Card when board value is undefined", async () => {
+		it("should not move card when board value is undefined", async () => {
 			const { boardStore } = setup({ createBoard: false });
 
 			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B", isOwnAction: true };
@@ -950,30 +950,6 @@ describe("BoardStore", () => {
 
 			expect(firstColumn.cards.find((c) => c.cardId === cardId)).toBeUndefined();
 			expect(secondColumn.cards.find((c) => c.cardId === cardId)).toBeDefined();
-		});
-
-		it("should move a card to another column", async () => {
-			const { boardStore, firstColumn, secondColumn, cards } = setup();
-
-			const [firstCardId, secondCardId, thirdCardId] = cards.map((card) => card.cardId);
-
-			const cardPayload = {
-				cardId: secondCardId,
-				oldIndex: 1,
-				newIndex: 0,
-				fromColumnId: firstColumn.id,
-				fromColumnIndex: 0,
-				toColumnId: secondColumn.id,
-				toColumnIndex: 1,
-			};
-
-			await boardStore.moveCardSuccess({ ...cardPayload, isOwnAction: true });
-
-			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
-			const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
-
-			expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([secondCardId]);
-			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([firstCardId, thirdCardId]);
 		});
 	});
 

@@ -4,10 +4,9 @@ import { useBoardApi } from "@data-board";
 import { useRoomDetailsStore, useRoomStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { defineComponent } from "vue";
+import { defineComponent, nextTick } from "vue";
 
 vi.mock("@data-board");
 
@@ -47,10 +46,9 @@ describe("useCardDialogData", () => {
 		const { roomDetailsStore } = setup();
 
 		const { selectedRoomId, boards } = result;
-		await flushPromises();
 
 		selectedRoomId.value = "room-1";
-		await flushPromises();
+		await nextTick();
 
 		expect(roomDetailsStore.fetchBoardsOfRoom).toHaveBeenCalledWith("room-1");
 		expect(boards.value).toEqual(mockBoards);
@@ -61,10 +59,9 @@ describe("useCardDialogData", () => {
 		useBoardApiMock.fetchBoardCall.mockResolvedValue({ columns: mockColumns });
 
 		const { selectedBoardId, columns } = result;
-		await flushPromises();
 
 		selectedBoardId.value = "board-1";
-		await flushPromises();
+		await nextTick();
 
 		expect(useBoardApiMock.fetchBoardCall).toHaveBeenCalledWith("board-1");
 		expect(columns.value?.[0].title).toBe("Col 1");
