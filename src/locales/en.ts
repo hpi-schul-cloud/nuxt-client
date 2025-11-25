@@ -1579,6 +1579,7 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.learningContent.emptyState": "Currently there is no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
+	"pages.rooms.externalMembers.fab.add": "Add external person",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",

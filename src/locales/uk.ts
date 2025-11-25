@@ -1593,6 +1593,7 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.learningContent.emptyState": "Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
+	"pages.rooms.externalMembers.fab.add": "Додати зовнішню особу",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
