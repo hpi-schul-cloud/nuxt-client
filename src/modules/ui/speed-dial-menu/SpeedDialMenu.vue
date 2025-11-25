@@ -9,16 +9,17 @@
 		:location="fabLocation"
 		:icon="isCollapsed"
 		:extended="!isCollapsed"
-		:to="to"
-		:href="href"
+		:data-testid="primaryAction.dataTestId"
+		:to="primaryAction.to"
+		:href="primaryAction.href"
 		@click="onFabClick"
 	>
-		<VIcon v-if="icon">{{ isMenuOpen && isMenu ? mdiClose : icon }}</VIcon>
+		<VIcon>{{ fabIcon }}</VIcon>
 		<span v-if="!isCollapsed" class="d-block"><slot /></span>
 		<span v-else class="d-sr-only"><slot /></span>
 		<template v-if="isMenu">
 			<VSpeedDial v-model="isMenuOpen" activator="parent" attach=".wireframe-container" :location="menuLocation">
-				<template v-for="(action, index) in actions" :key="index">
+				<template v-for="(action, index) in speedDialActions" :key="index">
 					<SpeedDialMenuAction :action="action" @on-fab-item-click="$emit('onFabItemClick', $event)" />
 				</template>
 			</VSpeedDial>
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { FabAction } from "@/components/templates/default-wireframe.types";
+import { FabAction } from "./types";
 import { mdiClose } from "@icons/material";
 import { SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
@@ -36,24 +37,19 @@ import { useDisplay } from "vuetify";
 
 const props = withDefaults(
 	defineProps<{
-		icon?: string;
-		href?: string;
-		to?: string;
-		actions?: FabAction[];
+		actions: FabAction[];
 		fabOffset?: number;
 	}>(),
 	{
-		icon: "",
-		href: "",
-		to: "",
-		actions: () => [],
-		direction: "bottom",
-		orientation: "right",
 		fabOffset: 0,
 	}
 );
 
 const emit = defineEmits(["fab:clicked", "onFabItemClick"]);
+
+const primaryAction = computed(() => props.actions[0]);
+const speedDialActions = computed(() => props.actions.slice(1));
+const fabIcon = computed(() => (isMenuOpen.value && isMenu.value ? mdiClose : primaryAction.value.icon));
 
 const { mdAndDown } = useDisplay();
 const { y: scrollOffsetY } = useWindowScroll();

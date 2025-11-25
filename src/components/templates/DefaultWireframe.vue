@@ -12,18 +12,11 @@
 			</slot>
 			<div v-if="fabItems">
 				<SpeedDialMenu
-					:icon="fabItems.icon"
-					:href="fabItems.href"
-					:to="fabItems.to"
-					:actions="fabItems.actions"
-					:aria-label="fabItems.ariaLabel"
-					:data-testid="fabItems.dataTestId"
+					:actions="fabActions"
 					:fab-offset="fabOffset"
 					@fab:clicked="onFabClicked"
 					@on-fab-item-click="$emit('onFabItemClick', $event)"
-				>
-					{{ fabItems.title }}
-				</SpeedDialMenu>
+				/>
 			</div>
 			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
@@ -44,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb, FabOptions } from "./default-wireframe.types";
+import { Breadcrumb, FabAction, FabOptions } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { useCssVar, useElementSize } from "@vueuse/core";
@@ -100,6 +93,21 @@ const emit = defineEmits({
 const wireframeHeader = useTemplateRef("wireframeHeader");
 const { height } = useElementSize(wireframeHeader);
 const topbarHeightValue = useCssVar("--topbar-height");
+
+const fabActions = computed<FabAction[]>(() => {
+	const fabItems = props.fabItems;
+	return [
+		{
+			icon: fabItems?.icon,
+			label: fabItems.title,
+			ariaLabel: fabItems?.ariaLabel,
+			href: fabItems?.href,
+			to: fabItems?.to,
+			dataTestId: fabItems?.dataTestId,
+		},
+		...(fabItems?.actions ?? []),
+	];
+});
 
 const fabOffset = computed(() => {
 	const topbarHeight = topbarHeightValue.value ? parseInt(topbarHeightValue.value) : 64;
