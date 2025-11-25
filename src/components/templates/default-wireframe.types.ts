@@ -8,12 +8,10 @@ export type Breadcrumb = {
 export type FabAction = {
 	icon: string;
 	label: string;
+	ariaLabel?: string;
+	dataTestId?: string;
 	href?: string;
 	to?: string;
-	dataTestId?: string;
-	class?: string;
-	testId?: string;
-	ariaLabel?: string;
 	customEvent?: string;
 };
 
@@ -25,4 +23,9 @@ export type FabOptions = {
 	to?: string;
 	ariaLabel?: string;
 	dataTestId?: string;
+};
+
+export type Fab = {
+	actions: FabAction[];
+	variant: "single" | "speed-dial";
 };
