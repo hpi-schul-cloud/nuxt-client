@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 
 export const useRegistration = () => {
 	const i18n = useI18n();
+	const { t } = i18n;
 	const selectedLanguage = ref<LanguageType | undefined>(undefined);
 	const password = ref<string>("");
 	const isTermsOfUseAccepted = ref<boolean>(false);
@@ -49,7 +50,7 @@ export const useRegistration = () => {
 		try {
 			await new Promise((resolve, reject) => {
 				if (testError) {
-					reject("Account creation failed");
+					reject();
 				} else {
 					resolve("Account created successfully");
 				}
@@ -57,7 +58,7 @@ export const useRegistration = () => {
 			return true;
 		} catch {
 			hasCreatingAccountError.value = true;
-			throw new Error("Account creation failed");
+			throw new Error(t("pages.registrationExternalMembers.error.notCompleted"));
 		}
 	};
 

@@ -1512,6 +1512,8 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",
