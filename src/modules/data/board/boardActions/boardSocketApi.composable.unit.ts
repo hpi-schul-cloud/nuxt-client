@@ -184,6 +184,15 @@ describe("useBoardSocketApi", () => {
 			expect(mockedUseForceRenderHandler.generateRenderKey).toHaveBeenCalled();
 		});
 
+		it("should call moveCardToBoardSuccess for corresponding action", () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const { dispatch } = useBoardSocketApi();
+			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B", isOwnAction: true };
+
+			dispatch(BoardActions.moveCardToBoardSuccess(cardPayload));
+			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalledWith(cardPayload);
+		});
+
 		it("should call moveColumnSuccess for corresponding action", () => {
 			const boardStore = mockedPiniaStoreTyping(useBoardStore);
 			const { dispatch } = useBoardSocketApi();

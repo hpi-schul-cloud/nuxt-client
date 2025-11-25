@@ -17,7 +17,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
-import type { Mock } from "vitest";
+import { expect, Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 
@@ -136,9 +136,9 @@ describe("BoardStore", () => {
 			boardStore.board = board;
 		}
 
-		mockedPiniaStoreTyping(useCardStore);
+		const cardStore = mockedPiniaStoreTyping(useCardStore);
 
-		return { boardStore, board, firstColumn, secondColumn, cards };
+		return { boardStore, board, firstColumn, secondColumn, cards, cardStore };
 	};
 
 	const focusSetup = (id: string) => {
@@ -882,6 +882,74 @@ describe("BoardStore", () => {
 			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 
 			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([secondCardId, firstCardId, thirdCardId]);
+		});
+
+		it("should move a card to another column", async () => {
+			const { boardStore, firstColumn, secondColumn, cards } = setup();
+
+			const [firstCardId, secondCardId, thirdCardId] = cards.map((card) => card.cardId);
+
+			const cardPayload = {
+				cardId: secondCardId,
+				oldIndex: 1,
+				newIndex: 0,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				toColumnId: secondColumn.id,
+				toColumnIndex: 1,
+			};
+
+			await boardStore.moveCardSuccess({ ...cardPayload, isOwnAction: true });
+
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
+
+			expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([secondCardId]);
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([firstCardId, thirdCardId]);
+		});
+	});
+
+	describe("moveCardToBoardSuccess", () => {
+		it("should not move Card when board value is undefined", async () => {
+			const { boardStore } = setup({ createBoard: false });
+
+			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B", isOwnAction: true };
+			await boardStore.moveCardToBoardSuccess(cardPayload);
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should remove a card from the fromColumn if present", async () => {
+			const { boardStore, firstColumn, cards } = setup();
+
+			const cardId = cards[0].cardId;
+
+			await boardStore.moveCardToBoardSuccess({
+				cardId,
+				fromColumnId: firstColumn.id,
+				toColumnId: "newBoardId",
+				isOwnAction: false,
+			});
+
+			expect(firstColumn.cards.find((c) => c.cardId === cardId)).toBeUndefined();
+		});
+
+		it("should add a card to the target column", async () => {
+			const { boardStore, firstColumn, cards, secondColumn, cardStore } = setup();
+			const movedCard = cards[0];
+			cardStore.fetchCardRequest.mockResolvedValue();
+			cardStore.getCard.mockReturnValue(cardResponseFactory.build({ id: movedCard.cardId, height: movedCard.height }));
+
+			const cardId = cards[0].cardId;
+
+			await boardStore.moveCardToBoardSuccess({
+				cardId,
+				fromColumnId: firstColumn.id,
+				toColumnId: secondColumn.id,
+				isOwnAction: false,
+			});
+
+			expect(firstColumn.cards.find((c) => c.cardId === cardId)).toBeUndefined();
+			expect(secondColumn.cards.find((c) => c.cardId === cardId)).toBeDefined();
 		});
 
 		it("should move a card to another column", async () => {

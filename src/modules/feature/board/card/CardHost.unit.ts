@@ -175,6 +175,22 @@ describe("CardHost", () => {
 	});
 
 	describe("user permissions", () => {
+		describe("when user wants to share a card.", () => {
+			it("should show share button", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = true;
+				const { wrapper } = setup();
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toEqual(true);
+			});
+
+			it("should not show share button", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = false;
+				const { wrapper } = setup();
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toEqual(false);
+			});
+		});
+
 		describe("when user is not permitted to delete", () => {
 			it("should not show an edit button", () => {
 				mockedBoardPermissions.hasDeletePermission.value = false;
@@ -208,28 +224,6 @@ describe("CardHost", () => {
 				const { wrapper } = setup();
 				const moveButton = wrapper.findComponent(KebabMenuActionExport);
 				expect(moveButton.exists()).toEqual(false);
-			});
-		});
-
-		describe("when user is not permitted to share", () => {
-			it("should not show share button", () => {
-				mockedBoardPermissions.hasShareBoardPermission.value = false;
-				const { wrapper } = setup();
-
-				const shareButton = wrapper.findComponent(KebabMenuActionShare);
-
-				expect(shareButton.exists()).toEqual(false);
-			});
-		});
-
-		describe("when user is permitted to share", () => {
-			it("should show share button", () => {
-				mockedBoardPermissions.hasShareBoardPermission.value = true;
-				const { wrapper } = setup();
-
-				const shareButton = wrapper.findComponent(KebabMenuActionShare);
-
-				expect(shareButton.exists()).toEqual(true);
 			});
 		});
 	});

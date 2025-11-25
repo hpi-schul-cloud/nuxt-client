@@ -45,7 +45,6 @@ describe("ImportCardDialog", () => {
 	const router = createRouterMock();
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-
 		injectRouterMock(router);
 	});
 

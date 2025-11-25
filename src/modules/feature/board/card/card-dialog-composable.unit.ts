@@ -20,7 +20,7 @@ describe("useCardDialogData", () => {
 	const mockColumns = [columnResponseFactory.build({ title: "Col 1" }), columnResponseFactory.build({ title: "" })];
 
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
+		setActivePinia(createTestingPinia());
 		useBoardApiMock = createMock<ReturnType<typeof useBoardApi>>();
 		vi.mocked(useBoardApi).mockReturnValue(useBoardApiMock);
 	});

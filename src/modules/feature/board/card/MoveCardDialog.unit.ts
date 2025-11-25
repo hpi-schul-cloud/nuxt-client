@@ -10,11 +10,12 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useNotificationStore } from "@data-app";
+import { useBoardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { computed, nextTick, ref } from "vue";
@@ -44,7 +45,7 @@ vi.mock("./card-dialog-composable", () => ({
 
 describe("MoveCardDialog", () => {
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
+		setActivePinia(createTestingPinia());
 		injectRouterMock(createRouterMock());
 	});
 
@@ -84,9 +85,11 @@ describe("MoveCardDialog", () => {
 		mockCardDialogData.selectedBoard = computed(() => roomBoardGridItemFactory.build());
 		mockCardDialogData.selectedColumn = computed(() => columnResponseFactory.build());
 		const { wrapper } = setup();
+
 		const dialog = wrapper.findComponent(Dialog);
 		await dialog.vm.$emit("confirm");
-
+		await flushPromises();
+		expect(useBoardStore().moveCardToBoardRequest).toHaveBeenCalled();
 		expect(useNotificationStore().notify).toHaveBeenCalled();
 	});
 });

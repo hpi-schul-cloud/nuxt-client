@@ -69,7 +69,6 @@ export type MoveCardToBoardRequestPayload = {
 	cardId: string;
 	fromColumnId: string;
 	toColumnId: string;
-	forceNextTick?: boolean;
 };
 export type MoveCardToBoardSuccessPayload = MoveCardToBoardRequestPayload & {
 	isOwnAction: boolean;
