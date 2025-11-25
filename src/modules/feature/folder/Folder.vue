@@ -52,7 +52,6 @@ import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -67,6 +66,7 @@ import { useFolderState } from "@data-folder";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
+import { openCollabora } from "@util-collabora";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -148,24 +148,10 @@ watch(
 		if (!hasEditPermission.value) return;
 
 		if (newFile) {
-			openCollabora(newFile);
+			openCollabora(router, newFile, hasEditPermission.value);
 		}
 	}
 );
-
-const openCollabora = (newFile: FileRecordResponse) => {
-	const editorMode = "edit";
-	const url = router.resolve({
-		name: "collabora",
-		params: {
-			id: newFile.id,
-		},
-		query: {
-			editorMode,
-		},
-	}).href;
-	window.open(url, "_blank");
-};
 
 const uploadProgress = ref({
 	uploaded: 0,

@@ -1,8 +1,8 @@
 import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
 import { CollaboraFileType } from "@/types/enum/Collabora";
-import { getCollaboraAssetUrl } from "@/utils/collaboraHelper";
 import { getFileExtension } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
+import { getCollaboraAssetUrl } from "@util-collabora";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";

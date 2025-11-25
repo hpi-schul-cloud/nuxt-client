@@ -1,5 +1,5 @@
+import { getCollaboraAssetUrl } from "./helpers";
 import { CollaboraFileType } from "@/types/enum/Collabora";
-import { getCollaboraAssetUrl } from "@/utils/collaboraHelper";
 
 describe("@/utils/collaboraHelper", () => {
 	describe("getCollaboraAssetUrl", () => {
