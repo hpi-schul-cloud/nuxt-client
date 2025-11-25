@@ -121,14 +121,14 @@ const fabAction = computed(() => {
 			icon: mdiFileDocumentPlusOutline,
 			label: "Dokument erstellen",
 			ariaLabel: "Dokument erstellen",
-			dataTestId: "fab_button_create_document",
+			dataTestId: "fab-button-create-document",
 			customEvent: FabEvent.CREATE_DOCUMENT,
 		},
 		{
 			icon: mdiTrayArrowUp,
 			label: "Datei hochladen",
 			ariaLabel: "Datei hochladen",
-			dataTestId: "fab_button_upload_file",
+			dataTestId: "fab-button-upload-file",
 			customEvent: FabEvent.UPLOAD_FILE,
 		},
 	];

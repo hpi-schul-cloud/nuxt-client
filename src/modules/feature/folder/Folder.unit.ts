@@ -1,3 +1,4 @@
+import * as AddCollaboraFile from "./add-collabora-file.composable";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
@@ -5,6 +6,7 @@ import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFi
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
@@ -32,6 +34,13 @@ const useRouterMock = <Mock>useRouter;
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
+
+vi.mock("./add-collabora-file.composable");
+
+const enum FabEvent {
+	CREATE_DOCUMENT = "CREATE_DOCUMENT",
+	UPLOAD_FILE = "UPLOAD_FILE",
+}
 
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
@@ -104,6 +113,14 @@ describe("Folder.vue", () => {
 						hasEditPermission: ref(true),
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+					vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
+						openCollaboraFileDialog: vi.fn(),
+						closeCollaboraFileDialog: vi.fn(),
+						collaboraFileSelectionOptions: [],
+						isCollaboraFileDialogOpen: ref(false),
+						latestAddedCollaboraFile: ref(null),
+					});
 
 					const { wrapper } = setupWrapper();
 					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
@@ -1091,7 +1108,65 @@ describe("Folder.vue", () => {
 			});
 		});
 
-		describe("when fab button is clicked, files are selected and upload succeed", () => {
+		describe("when fab button is clicked and add collabora file is chosen", () => {
+			const setup = async () => {
+				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build();
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<ReturnType<typeof BoardApi.useSharedBoardPageInformation>>({});
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(boardState);
+
+				const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
+				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
+
+				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
+					hasEditPermission: ref(true),
+				});
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+				const mockOpenCollaboraFileDialog = vi.fn();
+				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
+					openCollaboraFileDialog: mockOpenCollaboraFileDialog,
+					closeCollaboraFileDialog: vi.fn(),
+					collaboraFileSelectionOptions: [],
+					isCollaboraFileDialogOpen: ref(false),
+					latestAddedCollaboraFile: ref(null),
+				});
+
+				const { wrapper } = setupWrapper();
+
+				return {
+					wrapper,
+					mockOpenCollaboraFileDialog,
+				};
+			};
+
+			it("should open collabora file dialog", async () => {
+				const { wrapper, mockOpenCollaboraFileDialog } = await setup();
+
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+				defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CREATE_DOCUMENT);
+
+				expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
+			});
+		});
+
+		describe("when fab button is clicked, file upload is chosen, files are selected and upload succeed", () => {
 			const setup = async () => {
 				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
 				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
@@ -1146,6 +1221,7 @@ describe("Folder.vue", () => {
 
 				const fabButton = wrapper.find("[data-testid='fab-add-files']");
 				await fabButton.trigger("click");
+				await nextTick();
 
 				const file1 = new File(["content"], "filename.txt", {
 					type: "text/plain",

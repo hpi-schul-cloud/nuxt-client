@@ -73,15 +73,9 @@ describe("AddCollaboraFileComposable", () => {
 			const { collaboraFileSelectionOptions } = setup();
 
 			expect(collaboraFileSelectionOptions).toHaveLength(3);
-			expect(collaboraFileSelectionOptions[0].label).toBe(
-				"components.elementTypeSelection.elements.collabora.option.text"
-			);
-			expect(collaboraFileSelectionOptions[1].label).toBe(
-				"components.elementTypeSelection.elements.collabora.option.spreadsheet"
-			);
-			expect(collaboraFileSelectionOptions[2].label).toBe(
-				"components.elementTypeSelection.elements.collabora.option.presentation"
-			);
+			expect(collaboraFileSelectionOptions[0].label).toBe("pages.folder.add-collabora-file-dialog.option.text");
+			expect(collaboraFileSelectionOptions[1].label).toBe("pages.folder.add-collabora-file-dialog.option.spreadsheet");
+			expect(collaboraFileSelectionOptions[2].label).toBe("pages.folder.add-collabora-file-dialog.option.presentation");
 		});
 
 		describe("action of collaboraFileSelectionOptions", () => {
