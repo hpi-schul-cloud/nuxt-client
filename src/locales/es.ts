@@ -2026,4 +2026,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "¿Borrar realmente todos los archivos {total}?",
 	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "El nombre del archivo ya existe.",
+	"pages.folder.rename-file-dialog.validation.invalid-characters":
+		"El nombre del archivo contiene caracteres no válidos.",
 };
