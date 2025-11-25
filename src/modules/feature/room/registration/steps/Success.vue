@@ -6,7 +6,7 @@
 		{{ t("pages.registrationExternalMembers.steps.success.copy") }}
 	</div>
 	<div>
-		<VBtn variant="flat" color="primary" data-testid="success-continue-button" @click="onContinue">
+		<VBtn variant="flat" color="primary" data-testid="success-continue-button" :to="LOGIN_URI">
 			{{ t("pages.registrationExternalMembers.steps.success.button") }}
 		</VBtn>
 	</div>
@@ -15,10 +15,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 const LOGIN_URI = "/";
-
-const onContinue = () => {
-	window.location.href = LOGIN_URI;
-};
 
 const { t } = useI18n();
 </script>
