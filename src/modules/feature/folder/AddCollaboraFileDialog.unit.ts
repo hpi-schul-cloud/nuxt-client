@@ -1,5 +1,6 @@
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -37,6 +38,7 @@ const collaboraFileSelectionOptionsFactory = {
 const openCollaboraFileDialog = vi.fn();
 const closeCollaboraFileDialog = vi.fn();
 const isCollaboraFileDialogOpen = ref(false);
+const latestAddedCollaboraFile = ref<FileRecordResponse | null>(null);
 const collaboraFileSelectionOptions: Array<CollaboraFileSelectionOptions> =
 	collaboraFileSelectionOptionsFactory.createCollaboraFileSelectionOptionsList();
 
@@ -45,6 +47,7 @@ const mocks = {
 	isCollaboraFileDialogOpen,
 	openCollaboraFileDialog,
 	closeCollaboraFileDialog,
+	latestAddedCollaboraFile,
 };
 
 mockedCollaboraFileSelection.mockReturnValue(mocks);

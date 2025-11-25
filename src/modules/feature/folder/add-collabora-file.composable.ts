@@ -1,4 +1,4 @@
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParentType, FileRecordResponse } from "@/fileStorageApi/v3";
 import { CollaboraFileType } from "@/types/enum/Collabora";
 import { getCollaboraAssetUrl } from "@/utils/collaboraHelper";
 import { getFileExtension } from "@/utils/fileHelper";
@@ -12,6 +12,7 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 	const { uploadFromUrl } = useFileStorageApi();
 
 	const isCollaboraFileDialogOpen = ref<boolean>(false);
+	const latestAddedCollaboraFile = ref<FileRecordResponse | null>(null);
 
 	const closeCollaboraFileDialog = () => {
 		isCollaboraFileDialogOpen.value = false;
@@ -26,7 +27,8 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		const fileExtension = getFileExtension(assetUrl);
 		const fullFileName = `${fileName}.${fileExtension}`;
 
-		await uploadFromUrl(assetUrl, folderId, FileRecordParentType.BOARDNODES, fullFileName);
+		const fileRecordResponse = await uploadFromUrl(assetUrl, folderId, FileRecordParentType.BOARDNODES, fullFileName);
+		latestAddedCollaboraFile.value = fileRecordResponse ?? null;
 
 		closeCollaboraFileDialog();
 	};
@@ -57,5 +59,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		isCollaboraFileDialogOpen,
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
+		latestAddedCollaboraFile,
 	};
 });
