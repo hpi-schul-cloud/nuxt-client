@@ -487,8 +487,7 @@ export default {
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Картку було переміщено зі стовпчика {fromColumnPosition} до стовпчика {toColumnPosition}.",
-	"components.board.screenReader.notification.cardMovedToBoard.success":
-    "Картку переміщено до розділу {toColumnId}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success": "Картку переміщено до розділу {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Стовпець було переміщено з позиції {oldPosition} в позицію {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -666,8 +665,9 @@ export default {
 	"components.molecules.import.card.hint.ctltools": "Захищені налаштування зовнішніх інструментів",
 	"components.molecules.move.card.title": "Перемістити картку",
 	"components.molecules.move.card.question": "Куди слід перемістити картку{title}?",
-	"components.molecules.move.card.message.success": `Картку успішно переміщено до дошки {link}`,
-	"components.molecules.move.card.hint.restriction": `З дозволом «Редагувати» картки можна переміщувати лише на інші дошки в межах тієї самої кімнати.`,
+	"components.molecules.move.card.message.success": "Картку успішно переміщено на дошку {link} - {column}",
+	"components.molecules.move.card.hint.restriction":
+		"З дозволом «Редагувати» картки можна переміщувати лише на інші дошки в межах тієї самої кімнати.",
 	"components.molecules.import.columnBoard.rename": "При необхідності назву дошки можна змінити: ",
 	"components.molecules.import.columnBoard.options.infoText": "Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",

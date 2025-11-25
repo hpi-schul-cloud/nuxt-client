@@ -667,8 +667,9 @@ export default {
 	"components.molecules.import.card.hint.ctltools": "Geschützte Einstellungen externer Tools",
 	"components.molecules.move.card.title": "Karte verschieben",
 	"components.molecules.move.card.question": "Wohin soll die Karte{title} verschoben werden?",
-	"components.molecules.move.card.hint.restriction": `Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.`,
-	"components.molecules.move.card.message.success": `Karte erfolgreich in den Bereich {link} - {column} verschoben`,
+	"components.molecules.move.card.hint.restriction":
+		"Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.",
+	"components.molecules.move.card.message.success": "Karte erfolgreich in den Bereich {link} - {column} verschoben",
 	"components.molecules.import.card.options.title": "Karte importieren",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",

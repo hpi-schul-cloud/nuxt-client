@@ -666,8 +666,9 @@ export default {
 	"components.molecules.import.card.hint.ctltools": "Configuraciones protegidas de herramientas externas",
 	"components.molecules.move.card.title": "Mover tarjeta",
 	"components.molecules.move.card.question": "¿A dónde se debe mover la tarjeta{title}?",
-	"components.molecules.move.card.message.success": `Tarjeta movida con éxito al tablero {link}`,
-	"components.molecules.move.card.hint.restriction": `Con el permiso «editar», las tarjetas solo pueden moverse a otras tableros dentro del mismo espacio.`,
+	"components.molecules.move.card.message.success": "Tarjeta movida con éxito al tablero {link} - {column}",
+	"components.molecules.move.card.hint.restriction":
+		"Con el permiso «editar», las tarjetas solo pueden moverse a otras tableros dentro del mismo espacio.",
 	"components.molecules.import.columnBoard.rename": "Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText": "Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",

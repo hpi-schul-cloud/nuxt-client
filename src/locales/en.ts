@@ -657,7 +657,7 @@ export default {
 	"components.molecules.move.card.title": "Move card",
 	"components.molecules.move.card.question": "Where should the card{title} be moved to?",
 	"components.molecules.move.card.hint.restriction": `With the "Edit" permission, cards can only be moved to other boards within the same room.`,
-	"components.molecules.move.card.message.success": `Card successfully moved to board {link}`,
+	"components.molecules.move.card.message.success": "Card successfully moved to the board {link} - {column}",
 	"components.molecules.import.columnBoard.rename": "If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText": "The board can be renamed below.",
 	"components.molecules.import.columnBoard.options.title": "Import board",
