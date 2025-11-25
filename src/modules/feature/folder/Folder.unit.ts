@@ -1108,7 +1108,7 @@ describe("Folder.vue", () => {
 			});
 		});
 
-		describe("when fab button is clicked and add collabora file is chosen", () => {
+		describe("when fab button is clicked", () => {
 			const setup = async () => {
 				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
 				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
@@ -1156,13 +1156,35 @@ describe("Folder.vue", () => {
 				};
 			};
 
-			it("should open collabora file dialog", async () => {
-				const { wrapper, mockOpenCollaboraFileDialog } = await setup();
+			describe("and file upload is chosen", () => {
+				it("should reset input field", async () => {
+					const { wrapper } = await setup();
 
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CREATE_DOCUMENT);
+					const file1 = new File(["content"], "filename.txt", {
+						type: "text/plain",
+					});
+					const input = wrapper.find("input[type='file']");
+					Object.defineProperty(input.element, "files", {
+						value: [file1],
+						writable: false,
+					});
 
-				expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
+					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.UPLOAD_FILE);
+
+					expect((input.element as HTMLInputElement).value).toBe("");
+				});
+			});
+
+			describe("and create document is chosen", () => {
+				it("should open collabora file dialog", async () => {
+					const { wrapper, mockOpenCollaboraFileDialog } = await setup();
+
+					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CREATE_DOCUMENT);
+
+					expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
+				});
 			});
 		});
 
