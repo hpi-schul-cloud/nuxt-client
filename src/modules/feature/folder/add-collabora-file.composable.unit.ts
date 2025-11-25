@@ -1,4 +1,5 @@
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
+import { fileRecordFactory } from "@@/tests/test-utils";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -21,6 +22,7 @@ describe("AddCollaboraFileComposable", () => {
 			closeCollaboraFileDialog,
 			collaboraFileSelectionOptions,
 			isCollaboraFileDialogOpen,
+			latestAddedCollaboraFile,
 		} = useAddCollaboraFile();
 
 		return {
@@ -28,6 +30,7 @@ describe("AddCollaboraFileComposable", () => {
 			openCollaboraFileDialog,
 			isCollaboraFileDialogOpen,
 			closeCollaboraFileDialog,
+			latestAddedCollaboraFile,
 		};
 	};
 
@@ -90,6 +93,23 @@ describe("AddCollaboraFileComposable", () => {
 				}
 
 				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
+			});
+
+			it("should set latestAddedCollaboraFile to new file record", async () => {
+				const { collaboraFileSelectionOptions, latestAddedCollaboraFile } = setup();
+				const fileRecordResponse = fileRecordFactory.build();
+				fileStorageApiMock.uploadFromUrl.mockReturnValue(fileRecordResponse);
+
+				await collaboraFileSelectionOptions[0].action("folder-id", "test-office-file");
+				expect(latestAddedCollaboraFile.value).toEqual(fileRecordResponse);
+			});
+
+			it("should set latestAddedCollaboraFile to null if uploadFromUrl fails", async () => {
+				const { collaboraFileSelectionOptions, latestAddedCollaboraFile } = setup();
+				fileStorageApiMock.uploadFromUrl.mockReturnValue();
+
+				await collaboraFileSelectionOptions[0].action("folder-id", "test-office-file");
+				expect(latestAddedCollaboraFile.value).toBeNull();
 			});
 
 			it("should finally close dialog", async () => {
