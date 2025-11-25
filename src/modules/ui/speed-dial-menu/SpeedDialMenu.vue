@@ -15,8 +15,8 @@
 		@click="onFabClick"
 	>
 		<VIcon>{{ fabIcon }}</VIcon>
-		<span v-if="!isCollapsed" class="d-block"><slot /></span>
-		<span v-else class="d-sr-only"><slot /></span>
+		<span v-if="!isCollapsed" class="d-block">{{ primaryAction.label }}</span>
+		<span v-else class="d-sr-only">{{ primaryAction.ariaLabel }}</span>
 		<template v-if="isMenu">
 			<VSpeedDial v-model="isMenuOpen" activator="parent" attach=".wireframe-container" :location="menuLocation">
 				<template v-for="(action, index) in speedDialActions" :key="index">
