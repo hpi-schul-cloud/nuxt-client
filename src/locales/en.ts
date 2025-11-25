@@ -476,9 +476,8 @@ export default {
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
 		"In column {columnPosition}, a card was moved to position {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"A card was moved to section {toColumnPosition}.",
-	"components.board.screenReader.notification.cardMovedToBoard.success":
-		"Eine Karte wurde in Abschnitt {toColumnPosition} verschoben.",
+		"A card was moved from column {fromColumnPosition} to column {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success": "A card was moved to section {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"A column was moved from position {oldPosition} to position {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -657,7 +656,7 @@ export default {
 	"components.molecules.import.card.hint.ctltools": "Protected settings of external tools",
 	"components.molecules.move.card.title": "Move card",
 	"components.molecules.move.card.question": "Where should the card{title} be moved to?",
-	"components.molecules.move.card.hint.restriction": `With the "Edit" permission, cards can only be moved to other areas within the same room.`,
+	"components.molecules.move.card.hint.restriction": `With the "Edit" permission, cards can only be moved to other boards within the same room.`,
 	"components.molecules.move.card.message.success": `Card successfully moved to board {link}`,
 	"components.molecules.import.columnBoard.rename": "If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText": "The board can be renamed below.",

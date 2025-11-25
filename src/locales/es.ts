@@ -486,7 +486,7 @@ export default {
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Se ha movido una tarjeta de la columna {fromColumnPosition} a la columna {toColumnPosition}.",
 	"components.board.screenReader.notification.cardMovedToBoard.success":
-		"Una tarjeta se movió a la sección {toColumnPosition}.",
+		"Una tarjeta fue movida a la sección {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Se ha movido una columna de la posición {oldPosition} a la posición {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -667,7 +667,7 @@ export default {
 	"components.molecules.move.card.title": "Mover tarjeta",
 	"components.molecules.move.card.question": "¿A dónde se debe mover la tarjeta{title}?",
 	"components.molecules.move.card.message.success": `Tarjeta movida con éxito al tablero {link}`,
-	"components.molecules.move.card.hint.restriction": `Con el permiso «editar», las tarjetas solo pueden moverse a otras áreas dentro del mismo espacio.`,
+	"components.molecules.move.card.hint.restriction": `Con el permiso «editar», las tarjetas solo pueden moverse a otras tableros dentro del mismo espacio.`,
 	"components.molecules.import.columnBoard.rename": "Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText": "Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
