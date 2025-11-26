@@ -128,6 +128,39 @@ describe("FileTable", () => {
 			expect(contentLastModifiedAt.exists()).toBe(true);
 		});
 
+		describe("when contentLastModifiedAt is set", () => {
+			it("should render content modified column with contentLastModifiedAt", () => {
+				const fileRecord = fileRecordFactory.build();
+				fileRecord.contentLastModifiedAt = new Date().toISOString();
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toContain(wrapper.vm.$d(new Date(fileRecord.contentLastModifiedAt)));
+			});
+		});
+
+		describe("when contentLastModifiedAt is not existing", () => {
+			it("should render content modified column with createdAt", () => {
+				const fileRecord = fileRecordFactory.build();
+				delete fileRecord.contentLastModifiedAt;
+				fileRecord.createdAt = new Date().toISOString();
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toContain(wrapper.vm.$d(new Date(fileRecord.createdAt)));
+			});
+		});
+
 		it("should render file name column", () => {
 			const fileRecord = fileRecordFactory.build();
 			const { wrapper } = setupWrapper({

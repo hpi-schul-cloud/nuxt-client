@@ -33,7 +33,7 @@
 				</template>
 				<template #[`item.contentLastModifiedAt`]="{ item }">
 					<span :data-testid="`content-modified-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
-						{{ d(item.contentLastModifiedAt) }}
+						{{ getLastModifiedDate(item) }}
 					</span>
 				</template>
 				<template #[`item.size`]="{ item }">
@@ -188,6 +188,16 @@ const fileRecordItems = computed(() =>
 		isSelectable: !isScanStatusBlocked(item.securityCheckStatus),
 	}))
 );
+
+const getLastModifiedDate = (item: FileRecord): string => {
+	if (item.contentLastModifiedAt) {
+		return d(item.contentLastModifiedAt);
+	}
+	if (item.createdAt) {
+		return d(item.createdAt);
+	}
+	return "";
+};
 
 const onDownloadFile = (selectedIds: string[]) => {
 	emit("download-file", selectedIds);
