@@ -4,12 +4,12 @@
 		:message="t('pages.folder.add-collabora-file-dialog.title')"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
-		data-testid="collabora-element-dialog"
+		data-testid="collabora-file-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<VForm id="officeFileForm" ref="form" data-testid="collabora-element-form" @submit.prevent="onConfirm">
+			<VForm id="collaboraFileForm" ref="form" data-testid="collabora-file-form" @submit.prevent="onConfirm">
 				<!-- Attach the select to the form so that we can use focusTrap in the dialog -->
 				<VSelect
 					v-model="selectedDocType"
@@ -19,15 +19,15 @@
 					persistent-hint
 					:label="t('pages.folder.add-collabora-file-dialog.doc-types')"
 					:rules="docTypeRules"
-					:menu-props="{ attach: '#officeFileForm' }"
-					data-testid="collabora-element-form-type"
+					:menu-props="{ attach: '#collaboraFileForm' }"
+					data-testid="collabora-file-type"
 				/>
 				<VTextField
 					v-model="fileName"
 					:label="t('common.labels.fileName')"
 					:rules="fileNameRules"
 					:placeholder="t('pages.folder.add-collabora-file-dialog.untitled-file')"
-					data-testid="collabora-element-form-filename"
+					data-testid="collabora-file-name"
 				/>
 			</VForm>
 		</template>
