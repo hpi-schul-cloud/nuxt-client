@@ -77,7 +77,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
 	cardId: string;
-	hasBoardManagePermission: boolean;
+	hasRelocateBoardContentPermission: boolean;
 	roomId?: string;
 }>();
 
@@ -95,7 +95,7 @@ onBeforeMount(async () => {
 });
 
 const availableRooms = computed(() => {
-	if (props.hasBoardManagePermission) {
+	if (props.hasRelocateBoardContentPermission) {
 		return sortBy(
 			rooms.value?.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
 			(r) => r.name

@@ -57,7 +57,7 @@ describe("MoveCardDialog", () => {
 			props: {
 				cardId: "card-123",
 				isDialogOpen: true,
-				hasBoardManagePermission: true,
+				hasRelocateBoardContentPermission: true,
 				...props,
 			},
 			global: {
