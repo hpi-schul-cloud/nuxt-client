@@ -1,7 +1,6 @@
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import { FileRecordResponse } from "@/fileStorageApi/v3";
-import { collaboraFileSelectionOptionsFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -11,7 +10,18 @@ import { VForm, VSelect } from "vuetify/lib/components/index";
 vi.mock("./add-collabora-file.composable");
 const mockedCollaboraFileSelection = vi.mocked(useAddCollaboraFile);
 mockedCollaboraFileSelection.mockReturnValue({
-	collaboraFileSelectionOptions: collaboraFileSelectionOptionsFactory.createCollaboraFileSelectionOptionsList(),
+	collaboraFileSelectionOptions: [
+		{
+			id: "1",
+			label: "Text Document",
+			action: vi.fn(),
+		},
+		{
+			id: "2",
+			label: "Table Document",
+			action: vi.fn(),
+		},
+	],
 	isCollaboraFileDialogOpen: ref(false),
 	openCollaboraFileDialog: vi.fn(),
 	closeCollaboraFileDialog: vi.fn(),
