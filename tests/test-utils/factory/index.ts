@@ -12,6 +12,7 @@ export * from "./cardSkeletonResponseFactory";
 export * from "./classInfoFactory";
 export * from "./classInfoResponseFactory";
 export * from "./classInfoSearchListResponseFactory";
+export * from "./collabora-file-selection-options.factory";
 export * from "./collaborativeTextEditorElementResponseFactory";
 export * from "./columnResponseFactory";
 export * from "./contextExternalToolConfigurationStatusFactory";

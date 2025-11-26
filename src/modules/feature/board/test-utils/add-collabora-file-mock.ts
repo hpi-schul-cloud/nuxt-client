@@ -1,16 +1,11 @@
 import { useAddCollaboraFile } from "../shared/add-collabora-file.composable";
-import { collaboraFileSelectionOptionsFactory } from "../test-utils/collabora-file-selection-options.factory";
+import { collaboraFileSelectionOptionsFactory } from "@@/tests/test-utils";
 import { Mock } from "vitest";
 import { ref } from "vue";
 
 interface Props {
 	openCollaboraFileDialogMock?: Mock;
 	setCardIdMock?: Mock;
-}
-interface CollaboraFileSelectionOptions {
-	id: string;
-	label: string;
-	action: (fileName: string, caption: string) => Promise<void>;
 }
 
 export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
@@ -20,8 +15,7 @@ export const setupCollaboraFileSelectionMock = (props: Props = {}) => {
 	const openCollaboraFileDialog = openCollaboraFileDialogMock ?? vi.fn();
 	const closeCollaboraFileDialog = vi.fn();
 	const isCollaboraFileDialogOpen = ref(false);
-	const collaboraFileSelectionOptions: Array<CollaboraFileSelectionOptions> =
-		collaboraFileSelectionOptionsFactory.createCollaboraFileSelectionOptionsList();
+	const collaboraFileSelectionOptions = collaboraFileSelectionOptionsFactory.createCollaboraFileSelectionOptionsList();
 	const setCardId = setCardIdMock ?? vi.fn();
 	const setCreateElementRequestFn = vi.fn();
 	const cardId = ref("");
