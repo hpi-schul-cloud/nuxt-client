@@ -1811,6 +1811,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_ROOM_COPY_ENABLED: boolean;
     /**
      * 
@@ -2946,6 +2952,37 @@ export enum CreateNewsParamsTargetModelEnum {
     Teams = 'teams'
 }
 
+/**
+ * 
+ * @export
+ * @interface CreateRegistrationBodyParams
+ */
+export interface CreateRegistrationBodyParams {
+    /**
+     * The mail adress of the new user. Will also be used as username.
+     * @type {string}
+     * @memberof CreateRegistrationBodyParams
+     */
+    email: string;
+    /**
+     * The firstname of the new user.
+     * @type {string}
+     * @memberof CreateRegistrationBodyParams
+     */
+    firstName: string;
+    /**
+     * The lastname of the new user.
+     * @type {string}
+     * @memberof CreateRegistrationBodyParams
+     */
+    lastName: string;
+    /**
+     * The id of the room the user is invited to.
+     * @type {string}
+     * @memberof CreateRegistrationBodyParams
+     */
+    roomId: string;
+}
 /**
  * 
  * @export
@@ -9266,7 +9303,7 @@ export interface SchoolPermissionsParams {
  * @enum {string}
  */
 export enum SchoolPurpose {
-    Expert = 'expert',
+    ExternalPersonSchool = 'external_person_school',
     Tombstone = 'tombstone',
     Demo = 'demo',
     Test = 'test',
