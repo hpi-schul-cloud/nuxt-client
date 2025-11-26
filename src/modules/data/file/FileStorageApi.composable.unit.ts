@@ -445,6 +445,15 @@ describe("FileStorageApi Composable", () => {
 				expect(fileRecord).toStrictEqual([fileRecordResponse]);
 			});
 
+			it("should return created file record", async () => {
+				const { parentId, parentType, imageUrl, fileRecordResponse } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				const createdFileRecord = await uploadFromUrl(imageUrl, parentId, parentType);
+
+				expect(createdFileRecord).toStrictEqual(fileRecordResponse);
+			});
+
 			describe("when file name is empty", () => {
 				it("should upload file with default filename", async () => {
 					const emptyFileName = "";
