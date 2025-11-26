@@ -6,6 +6,7 @@
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
 		:loading="isMoving"
+		data-testid="move-card-dialog"
 		@confirm="onConfirm"
 		@cancel="isDialogOpen = false"
 	>
@@ -29,6 +30,7 @@
 					:label="t('components.molecules.label.room')"
 					:placeholder="t('common.labels.room')"
 					:menu-props="{ attach: '#moveCardForm' }"
+					data-testid="move-card-select-room"
 					@update:menu="resetBoardSelection"
 				/>
 				<VSelect
@@ -39,6 +41,7 @@
 					item-value="id"
 					:placeholder="t('common.words.board')"
 					:menu-props="{ attach: '#moveCardForm' }"
+					data-testid="move-card-select-board"
 					@update:menu="selectedColumnId = undefined"
 				/>
 				<VSelect
@@ -49,6 +52,7 @@
 					item-value="id"
 					:placeholder="t('components.boardSection')"
 					:menu-props="{ attach: '#moveCardForm' }"
+					data-testid="move-card-select-column"
 				/>
 			</VForm>
 		</template>

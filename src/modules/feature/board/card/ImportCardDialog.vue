@@ -5,6 +5,7 @@
 		:message="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
+		data-testid="import-card-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>
@@ -21,7 +22,7 @@
 				</ul>
 			</InfoAlert>
 
-			<p class="text-lg mt-2">
+			<p class="text-lg mt-2" data-testid="import-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
 
@@ -35,6 +36,7 @@
 					:label="t('components.molecules.label.room')"
 					:placeholder="t('common.labels.room')"
 					:menu-props="{ attach: '#importCardForm' }"
+					data-testid="import-card-select-room"
 					@update:menu="resetBoardSelection"
 				/>
 
@@ -46,6 +48,7 @@
 					:label="t('components.molecules.label.board')"
 					:placeholder="t('common.words.board')"
 					:menu-props="{ attach: '#importCardForm' }"
+					data-testid="import-card-select-board"
 					@update:menu="selectedColumnId = undefined"
 				/>
 
@@ -57,6 +60,7 @@
 					:label="t('components.molecules.label.section')"
 					:placeholder="t('components.boardSection')"
 					:menu-props="{ attach: '#importCardForm' }"
+					data-testid="import-card-select-column"
 				/>
 			</VForm>
 		</template>
