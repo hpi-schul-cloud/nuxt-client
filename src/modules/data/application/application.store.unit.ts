@@ -102,7 +102,7 @@ describe("useApplicationStore", () => {
 				expect(useAppStore().isExternalPerson).toBe(false);
 			});
 
-			it("should correctly identify expert role", async () => {
+			it("should correctly identify external person role", async () => {
 				await setup({
 					roles: [
 						{ id: "any", name: RoleName.ExternalPerson },
