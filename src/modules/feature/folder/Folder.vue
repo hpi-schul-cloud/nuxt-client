@@ -145,8 +145,6 @@ const fabAction = computed(() => {
 watch(
 	() => latestAddedCollaboraFile.value,
 	(newFile) => {
-		if (!hasEditPermission.value) return;
-
 		if (newFile) {
 			openCollabora(router, newFile, hasEditPermission.value);
 		}
