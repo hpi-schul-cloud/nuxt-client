@@ -3,9 +3,7 @@
 		<template #header>
 			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
-
 		<RoomsWelcomeInfo class="mt-8" />
-
 		<VContainer v-if="isLoading && isEmpty" class="loader">
 			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
 		</VContainer>
@@ -15,7 +13,6 @@
 			</template>
 		</EmptyState>
 		<RoomGrid v-else :rooms />
-
 		<ImportFlow
 			:is-active="isImportMode"
 			:token="importToken"
@@ -56,12 +53,14 @@ useTitle(pageTitle);
 const fabAction = computed(() => {
 	if (!canCreateRoom.value) return;
 
-	return {
-		icon: mdiPlus,
-		title: t("pages.rooms.fab.title"),
-		to: "/rooms/new",
-		dataTestId: "fab-add-room",
-	};
+	return [
+		{
+			icon: mdiPlus,
+			label: t("pages.rooms.fab.title"),
+			to: "/rooms/new",
+			dataTestId: "fab-add-room",
+		},
+	];
 });
 
 const isImportMode = ref(false);

@@ -231,13 +231,15 @@ export default defineComponent({
 				},
 			];
 
-			const ctlToolFabItems = {
-				icon: mdiPlus,
-				title: this.$t("common.actions.add"),
-				ariaLabel: this.$t("common.actions.add"),
-				dataTestId: "add-tool-button",
-				href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
-			};
+			const ctlToolFabItems = [
+				{
+					icon: mdiPlus,
+					label: this.$t("common.actions.add"),
+					ariaLabel: this.$t("common.actions.add"),
+					dataTestId: "add-tool-button",
+					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
+				},
+			];
 
 			tabs.push({
 				name: "tools",
@@ -307,10 +309,10 @@ export default defineComponent({
 
 			const items = {
 				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
+				label: this.$t("common.actions.create"),
 				ariaLabel: this.$t("common.actions.create"),
 				dataTestId: "add-content-button",
-				actions: actions,
+				...actions,
 			};
 
 			return items;

@@ -58,7 +58,7 @@ const fabLocation = computed(() => (mdAndDown.value ? "bottom right" : "top righ
 const menuLocation = computed(() => (mdAndDown.value ? "top center" : "bottom center"));
 const fabOffset = computed(() => (props.fabOffset && !mdAndDown.value ? `${props.fabOffset - 3}px` : undefined));
 
-const isMenu = computed(() => props.actions.length > 0);
+const isMenu = computed(() => props.actions.length > 1);
 const isMenuOpen = ref(false);
 
 const isCollapsed = computed(() => isMenuOpen.value || isForceCollapseOnMobileScroll.value);

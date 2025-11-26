@@ -260,22 +260,27 @@ const fabAction = computed(() => {
 	if (!canAddRoomMembers.value) return;
 
 	if (activeTab.value === Tab.Members) {
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.add"),
-			ariaLabel: t("pages.rooms.members.add"),
-			dataTestId: "fab-add-members",
-		};
+		return [
+			{
+				icon: mdiPlus,
+				label: t("pages.rooms.members.add"),
+				ariaLabel: t("pages.rooms.members.add"),
+				dataTestId: "fab-add-members",
+			},
+		];
 	}
 
 	if (activeTab.value === Tab.Invitations) {
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.inviteMember.step.prepare.title"),
-			ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
-			dataTestId: "fab-invite-members",
-		};
+		return [
+			{
+				icon: mdiPlus,
+				label: t("pages.rooms.members.inviteMember.step.prepare.title"),
+				ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
+				dataTestId: "fab-invite-members",
+			},
+		];
 	}
+
 	return undefined;
 });
 </script>

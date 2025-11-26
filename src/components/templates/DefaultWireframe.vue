@@ -12,7 +12,7 @@
 			</slot>
 			<SpeedDialMenu
 				v-if="fabItems"
-				:actions="fabActions"
+				:actions="fabItems"
 				:fab-offset="fabOffset"
 				@fab:clicked="onFabClicked"
 				@on-fab-item-click="$emit('onFabItemClick', $event)"
@@ -36,9 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb, FabAction, FabOptions } from "./default-wireframe.types";
+import { Breadcrumb } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
 import { useCssVar, useElementSize } from "@vueuse/core";
 import { computed, PropType, useSlots, useTemplateRef } from "vue";
 import { useDisplay } from "vuetify";
@@ -59,9 +59,9 @@ const props = defineProps({
 		required: true,
 	},
 	fabItems: {
-		type: Object as PropType<FabOptions>,
+		type: Array as PropType<FabAction[]>,
 		required: false,
-		default: null,
+		default: () => [],
 	},
 	hideBorder: {
 		type: Boolean,
@@ -92,21 +92,6 @@ const emit = defineEmits({
 const wireframeHeader = useTemplateRef("wireframeHeader");
 const { height } = useElementSize(wireframeHeader);
 const topbarHeightValue = useCssVar("--topbar-height");
-
-const fabActions = computed<FabAction[]>(() => {
-	const fabItems = props.fabItems;
-	return [
-		{
-			icon: fabItems?.icon,
-			label: fabItems.title,
-			ariaLabel: fabItems?.ariaLabel,
-			href: fabItems?.href,
-			to: fabItems?.to,
-			dataTestId: fabItems?.dataTestId,
-		},
-		...(fabItems?.actions ?? []),
-	];
-});
 
 const fabOffset = computed(() => {
 	const topbarHeight = topbarHeightValue.value ? parseInt(topbarHeightValue.value) : 64;

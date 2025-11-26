@@ -24,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { FabAction, FabOptions } from "./default-wireframe.types";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Permission } from "@/serverApi/v3";
@@ -34,6 +33,7 @@ import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
+import { FabAction } from "@ui-speed-dial-menu";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -59,55 +59,60 @@ const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
 const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
 
-const fabItems: ComputedRef<FabOptions | undefined> = computed(() => {
-	if (canCreateCourse.value) {
-		const actions: FabAction[] = [
+const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
+	if (!canCreateCourse.value) return;
+
+	const actions: FabAction[] = [
+		{
+			icon: mdiSchoolOutline,
+			label: t("pages.rooms.fab.add.course"),
+			ariaLabel: t("pages.rooms.fab.add.course"),
+			dataTestId: "fab_button_add_course",
+			href: "/courses/add",
+		},
+	];
+
+	if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
+		actions.push({
+			icon: mdiSync,
+			label: t("pages.rooms.fab.add.syncedCourse"),
+			ariaLabel: t("pages.rooms.fab.add.syncedCourse"),
+			dataTestId: "fab_button_add_synced_course",
+			customEvent: RoomFabEvent.SYNCHRONIZED_COURSE,
+		});
+	}
+
+	if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
+		actions.push({
+			icon: mdiImport,
+			label: t("pages.rooms.fab.import.course"),
+			ariaLabel: t("pages.rooms.fab.import.course"),
+			dataTestId: "fab_button_import_course",
+			customEvent: RoomFabEvent.COMMON_CARTRIDGE_IMPORT,
+		});
+	}
+
+	if (actions.length <= 1) {
+		return [
 			{
-				icon: mdiSchoolOutline,
-				label: t("pages.rooms.fab.add.course"),
-				ariaLabel: t("pages.rooms.fab.add.course"),
-				dataTestId: "fab_button_add_course",
+				icon: mdiPlus,
+				label: t("common.actions.create"),
+				ariaLabel: t("pages.rooms.fab.ariaLabel"),
+				dataTestId: "add-course-button",
 				href: "/courses/add",
 			},
 		];
-
-		if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
-			actions.push({
-				icon: mdiSync,
-				label: t("pages.rooms.fab.add.syncedCourse"),
-				ariaLabel: t("pages.rooms.fab.add.syncedCourse"),
-				dataTestId: "fab_button_add_synced_course",
-				customEvent: RoomFabEvent.SYNCHRONIZED_COURSE,
-			});
-		}
-
-		if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
-			actions.push({
-				icon: mdiImport,
-				label: t("pages.rooms.fab.import.course"),
-				ariaLabel: t("pages.rooms.fab.import.course"),
-				dataTestId: "fab_button_import_course",
-				customEvent: RoomFabEvent.COMMON_CARTRIDGE_IMPORT,
-			});
-		}
-
-		const fab: FabOptions = {
-			icon: mdiPlus,
-			title: t("common.actions.create"),
-			ariaLabel: t("pages.rooms.fab.ariaLabel"),
-			dataTestId: "add-course-button",
-		};
-
-		if (actions.length <= 1) {
-			fab.href = "/courses/add";
-		} else {
-			fab.actions = actions;
-		}
-
-		return fab;
+	} else {
+		return [
+			{
+				icon: mdiPlus,
+				label: t("common.actions.create"),
+				ariaLabel: t("pages.rooms.fab.ariaLabel"),
+				dataTestId: "add-course-button",
+			},
+			...actions,
+		];
 	}
-
-	return undefined;
 });
 
 const isLoading = computed(() => courseRoomListModule.getLoading);

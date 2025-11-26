@@ -248,14 +248,17 @@ export default {
 		},
 		fabItems() {
 			if (!this.isStudent && useAppStore().userPermissions.includes(Permission.HomeworkCreate)) {
-				return {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					href: "/homework/new?returnUrl=tasks",
-					ariaLabel: this.$t("common.actions.create"),
-					testId: "addTask",
-				};
+				return [
+					{
+						icon: mdiPlus,
+						label: this.$t("common.actions.create"),
+						href: "/homework/new?returnUrl=tasks",
+						ariaLabel: this.$t("common.actions.create"),
+						dataTestId: "addTask",
+					},
+				];
 			}
+
 			return null;
 		},
 		copyResultModalItems() {
