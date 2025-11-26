@@ -161,6 +161,23 @@ describe("FileTable", () => {
 			});
 		});
 
+		describe("when contentLastModifiedAt and createdAt are not existing", () => {
+			it("should render content modified column with empty string", () => {
+				const fileRecord = fileRecordFactory.build();
+				delete fileRecord.contentLastModifiedAt;
+				delete fileRecord.createdAt;
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toBe("");
+			});
+		});
+
 		it("should render file name column", () => {
 			const fileRecord = fileRecordFactory.build();
 			const { wrapper } = setupWrapper({
