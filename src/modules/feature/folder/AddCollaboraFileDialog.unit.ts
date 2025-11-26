@@ -156,11 +156,11 @@ describe("CollaboraFileDialog", () => {
 				await nextTick();
 				expect(typeSelect.find("input").element.value).toBe(selectOption.id);
 
-				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']");
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
-				const form = wrapper.findComponent("[data-testid='collabora-element-form']");
+				const form = wrapper.findComponent("[data-testid='collabora-file-form']");
 				await form.trigger("submit");
 				await nextTick();
 				await flushPromises();
@@ -178,7 +178,7 @@ describe("CollaboraFileDialog", () => {
 				typeSelect.vm.$emit("update:modelValue", selectOption.id);
 				await nextTick();
 
-				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']");
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
@@ -192,11 +192,11 @@ describe("CollaboraFileDialog", () => {
 				const { collaboraFileSelectionOptions, wrapper } = await setup();
 				const selectOption = collaboraFileSelectionOptions[0];
 
-				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']");
 				await fileNameInput.find("input").setValue("myDocument");
 				await nextTick();
 
-				const form = wrapper.findComponent("[data-testid='collabora-element-form']");
+				const form = wrapper.findComponent("[data-testid='collabora-file-form']");
 				await form.trigger("submit");
 				await nextTick();
 				await flushPromises();
@@ -206,7 +206,7 @@ describe("CollaboraFileDialog", () => {
 			it("should have confirm button disabled", async () => {
 				const { wrapper } = await setup();
 
-				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']");
 				await fileNameInput.find("input").setValue("myDocument");
 				await nextTick();
 
@@ -226,10 +226,10 @@ describe("CollaboraFileDialog", () => {
 				await nextTick();
 				expect(typeSelect.find("input").element.value).toBe(selectOption.id);
 
-				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']").find("input");
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']").find("input");
 				expect(fileNameInput.element.value).toBe("");
 
-				const form = wrapper.findComponent("[data-testid='collabora-element-form']");
+				const form = wrapper.findComponent("[data-testid='collabora-file-form']");
 				await form.trigger("submit");
 				await nextTick();
 				await flushPromises();
@@ -260,7 +260,7 @@ describe("CollaboraFileDialog", () => {
 				typeSelect.vm.$emit("update:modelValue", selectOption.id);
 				await nextTick();
 
-				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']");
 				await fileNameInput.find("input").setValue("invalid/filename");
 				await nextTick();
 
