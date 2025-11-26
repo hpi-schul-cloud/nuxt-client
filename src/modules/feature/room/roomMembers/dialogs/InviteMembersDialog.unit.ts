@@ -1,5 +1,6 @@
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import { SchulcloudTheme } from "@/serverApi/v3/api";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -11,7 +12,7 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { beforeEach, Mock } from "vitest";
 import { nextTick } from "vue";
-import { VBtn, VCard, VCardTitle, VCheckbox, VDialog, VTextField } from "vuetify/components";
+import { VBtn, VCard, VCardTitle, VCheckbox, VDialog, VRadio, VRadioGroup, VTextField } from "vuetify/components";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -156,39 +157,224 @@ describe("InviteMembersDialog", () => {
 				expect(shareModalResult.exists()).toBe(false);
 			});
 
-			it("should have the correct checkbox labels", async () => {
+			it("should render radio buttons", async () => {
 				const { wrapper, schoolName } = await setup();
 
-				const checkboxes = wrapper.findAllComponents(VCheckbox);
-				const checkboxLabels = checkboxes.map((checkbox) => checkbox.text());
+				const radioGroup = wrapper.findComponent(VRadioGroup);
+				expect(radioGroup.exists()).toBe(true);
 
-				const expectedLabels = [
-					`pages.rooms.members.inviteMember.form.onlySchoolMembers.label ${schoolName}`,
-					"pages.rooms.members.inviteMember.form.validForStudents.label",
-					"pages.rooms.members.inviteMember.form.linkExpires.label",
-					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
-				];
+				const radioButtons = radioGroup.findAllComponents(VRadio);
+				const radioButtonLabels = radioButtons.map((radioButton) => radioButton.text());
 
-				expect(checkboxLabels).toEqual(expectedLabels);
+				const expectedLabels = [`common.labels.only ${schoolName}`, "common.labels.allSchools"];
+
+				expect(radioButtonLabels).toEqual(expectedLabels);
+				expect(radioButtons.length).toBe(2);
 			});
 
-			it("should have the correct checkbox labels when inviting external persons feature is enabled", async () => {
+			it("should reset student checkbox when radio button selection changes", async () => {
+				const { wrapper } = await setup();
+
+				const radioGroup = wrapper.getComponent(VRadioGroup);
+				const studentsCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-students");
+				await studentsCheckbox.setValue(true);
+				expect(studentsCheckbox.props("modelValue")).toBe(true);
+
+				await radioGroup.vm.$emit("update:modelValue", false);
+				await radioGroup.setValue(true);
+
+				const studentCheckboxAfterRoleSelectionChange = getCheckboxByTestid(
+					wrapper,
+					"input-invite-participants-valid-for-students"
+				);
+				expect(studentCheckboxAfterRoleSelectionChange.props("modelValue")).toBe(false);
+			});
+
+			it("should reset external person checkbox when radio button selection changes", async () => {
+				const { wrapper } = await setup();
 				createTestEnvStore({
 					FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+					SC_THEME: SchulcloudTheme.N21,
 				});
-				const { wrapper, schoolName } = await setup();
 
-				const checkboxes = wrapper.findAllComponents(VCheckbox);
-				const checkboxLabels = checkboxes.map((checkbox) => checkbox.text());
+				const radioGroup = wrapper.getComponent(VRadioGroup);
+				await radioGroup.setValue(false);
+				const externalPersonsCheckbox = getCheckboxByTestid(
+					wrapper,
+					"input-invite-participants-valid-for-external-persons"
+				);
+				await externalPersonsCheckbox.setValue(true);
+				expect(externalPersonsCheckbox.props("modelValue")).toBe(true);
 
-				const expectedLabels = [
-					`pages.rooms.members.inviteMember.form.onlySchoolMembers.label ${schoolName}`,
-					"pages.rooms.members.inviteMember.form.validForStudents.label",
-					"pages.rooms.members.inviteMember.form.validForExternalPersons.label",
-					"pages.rooms.members.inviteMember.form.linkExpires.label",
-					"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label",
-				];
-				expect(checkboxLabels).toEqual(expectedLabels);
+				await radioGroup.vm.$emit("update:modelValue", true);
+				await radioGroup.setValue(false);
+
+				const externalPersonsCheckboxAfterRoleSelectionChange = getCheckboxByTestid(
+					wrapper,
+					"input-invite-participants-valid-for-external-persons"
+				);
+				expect(externalPersonsCheckboxAfterRoleSelectionChange.props("modelValue")).toBe(false);
+			});
+
+			it("should render checked disabled teacher role checkbox", async () => {
+				const { wrapper } = await setup();
+
+				const teacherRoleCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-teachers");
+				expect(teacherRoleCheckbox.exists()).toBe(true);
+				expect(teacherRoleCheckbox.props().disabled).toBe(true);
+				expect(teacherRoleCheckbox.props("modelValue")).toBe(true);
+				expect(teacherRoleCheckbox.text()).toBe("common.labels.teacher.neutral.plural");
+			});
+
+			describe("when only own school radio button is selected", () => {
+				it("should render the valid-for-students checkbox", async () => {
+					const { wrapper } = await setup();
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(true);
+					const studentsCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-students");
+					expect(studentsCheckbox.exists()).toBe(true);
+				});
+
+				it("should not show external experts checkbox", async () => {
+					const { wrapper } = await setup();
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(true);
+					const externalExpertsCheckbox = wrapper.findComponent(
+						'[data-testid="input-invite-participants-valid-for-external-persons"]'
+					);
+					expect(externalExpertsCheckbox.exists()).toBe(false);
+				});
+
+				it("should show external experts alert when inviting external persons feature is enabled and instance is not thr", async () => {
+					const { wrapper } = await setup();
+					createTestEnvStore({
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+						SC_THEME: SchulcloudTheme.N21,
+					});
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(true);
+
+					const alert = wrapper.getComponent('[data-testid="info-alert-external-persons"]');
+					expect(alert.text()).toBe("pages.rooms.members.inviteMember.infoAlert.text.externalPersons");
+				});
+
+				it("should not show external experts alert when instance is thr and inviting external persons feature is enabled but", async () => {
+					const { wrapper } = await setup();
+					createTestEnvStore({
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+						SC_THEME: SchulcloudTheme.Thr,
+					});
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(true);
+
+					const alert = wrapper.findComponent('[data-testid="info-alert-external-persons"]');
+					expect(alert.exists()).toBe(false);
+				});
+			});
+			describe("when all schools radio button is selected", () => {
+				it("should not render valid-for-students checkbox", async () => {
+					const { wrapper } = await setup();
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(false);
+					const studentsCheckbox = wrapper.findComponent(
+						'[data-testid="input-invite-participants-valid-for-students"]'
+					);
+					expect(studentsCheckbox.exists()).toBe(false);
+				});
+
+				it("should should render external persons checkbox when inviting external persons feature is enabled and instance is not thr", async () => {
+					const { wrapper } = await setup();
+					createTestEnvStore({
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+						SC_THEME: SchulcloudTheme.N21,
+					});
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(false);
+					const externalPersonsCheckbox = getCheckboxByTestid(
+						wrapper,
+						"input-invite-participants-valid-for-external-persons"
+					);
+					expect(externalPersonsCheckbox.exists()).toBe(true);
+				});
+
+				it("should not render external persons checkbox when instance is thr and inviting external persons feature is enabled", async () => {
+					const { wrapper } = await setup();
+					createTestEnvStore({
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+						SC_THEME: SchulcloudTheme.Thr,
+					});
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(false);
+					const externalPersonsCheckbox = wrapper.findComponent(
+						'[data-testid="input-invite-participants-valid-for-external-persons"]'
+					);
+					expect(externalPersonsCheckbox.exists()).toBe(false);
+				});
+
+				it("should show students from other schools alert", async () => {
+					const { wrapper } = await setup();
+					createTestEnvStore({
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+					});
+
+					const radioGroup = wrapper.getComponent(VRadioGroup);
+					await radioGroup.setValue(false);
+
+					const alert = wrapper.getComponent('[data-testid="info-alert-students-from-other-schools"]');
+					expect(alert.text()).toBe("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools");
+				});
+			});
+
+			describe("link-expires checkbox", () => {
+				it("should render", async () => {
+					const { wrapper } = await setup();
+
+					const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
+					expect(linkExpiresCheckbox.text()).toBe("pages.rooms.members.inviteMember.form.linkExpires.label");
+				});
+				it("should enable date picker and make it required", async () => {
+					const { wrapper } = await setup();
+
+					const datePickerBefore = wrapper.getComponent(DatePicker);
+					expect(datePickerBefore.props().disabled).toBe(true);
+
+					const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
+					await linkExpiresCheckbox.setValue(true);
+
+					const datePicker = wrapper.getComponent(DatePicker);
+					expect(datePicker.props().disabled).toBe(false);
+					expect(datePicker.props().required).toBe(true);
+				});
+
+				it("should unpause focus trap and update activeUntil value when a date is selected", async () => {
+					const { wrapper } = await setup();
+
+					const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
+					await linkExpiresCheckbox.setValue(true);
+
+					const datePicker = wrapper.getComponent(DatePicker);
+					const selectedDateISO = new Date(2024, 0, 1).toISOString();
+					datePicker.vm.$emit("update:date", selectedDateISO);
+					await nextTick();
+
+					expect(unpauseMock).toHaveBeenCalled();
+					expect(datePicker.props().date).toBe(selectedDateISO);
+				});
+			});
+
+			it("should render requires confirmation checkbox checked as default", async () => {
+				const { wrapper } = await setup();
+
+				const confirmationCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-requires-confirmation");
+				expect(confirmationCheckbox.text()).toBe("pages.rooms.members.inviteMember.form.isConfirmationNeeded.label");
+				expect(confirmationCheckbox.props("modelValue")).toBe(true);
 			});
 		});
 
@@ -477,91 +663,6 @@ describe("InviteMembersDialog", () => {
 				ref: "descriptionField",
 			});
 			expect(descriptionField.text()).toContain("common.validation.tooLong");
-		});
-	});
-
-	describe("form rules", () => {
-		describe("default values of checkboxes", () => {
-			it("should have the restricted-to-creator-school and requires-confirmation checkboxes checked as default", async () => {
-				const { wrapper } = await setup();
-
-				const checkboxes = wrapper.findAllComponents(VCheckbox);
-				const checkboxStates: Record<string, boolean> = {};
-
-				checkboxes.forEach((checkbox) => {
-					checkboxStates[checkbox.attributes()["data-testid"]] = checkbox.props("modelValue") as boolean;
-				});
-
-				expect(checkboxStates).toEqual({
-					"input-invite-participants-restricted-to-creator-school": true,
-					"input-invite-participants-valid-for-students": false,
-					"input-invite-participants-link-expires": false,
-					"input-invite-participants-requires-confirmation": true,
-				});
-			});
-		});
-
-		describe("when the restricted-to-creator-school checkbox is checked", () => {
-			it("should enable the valid-for-students checkbox", async () => {
-				const { wrapper } = await setup();
-
-				const restrictedToCreatorSchoolCheckbox = getCheckboxByTestid(
-					wrapper,
-					"input-invite-participants-restricted-to-creator-school"
-				);
-				await restrictedToCreatorSchoolCheckbox.setValue(true);
-
-				const validForStudentsCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-students");
-				expect(validForStudentsCheckbox.props("disabled")).toBe(false);
-			});
-		});
-
-		describe("when the restricted-to-creator-school checkbox is unchecked", () => {
-			it("should disable and uncheck the valid-for-students checkbox", async () => {
-				const { wrapper } = await setup();
-
-				const restrictedToCreatorSchoolCheckbox = getCheckboxByTestid(
-					wrapper,
-					"input-invite-participants-restricted-to-creator-school"
-				);
-				await restrictedToCreatorSchoolCheckbox.setValue(false);
-
-				const validForStudentsCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-valid-for-students");
-
-				expect(validForStudentsCheckbox.props().disabled).toBe(true);
-				expect(validForStudentsCheckbox.props().modelValue).toBe(false);
-			});
-		});
-
-		describe("when the link-expires checkbox is checked", () => {
-			it("should enable date picker and make it required", async () => {
-				const { wrapper } = await setup();
-
-				const datePickerBefore = wrapper.getComponent(DatePicker);
-				expect(datePickerBefore.props().disabled).toBe(true);
-
-				const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
-				await linkExpiresCheckbox.setValue(true);
-
-				const datePicker = wrapper.getComponent(DatePicker);
-				expect(datePicker.props().disabled).toBe(false);
-				expect(datePicker.props().required).toBe(true);
-			});
-
-			it("should unpause focus trap and update activeUntil value when a date is selected", async () => {
-				const { wrapper } = await setup();
-
-				const linkExpiresCheckbox = getCheckboxByTestid(wrapper, "input-invite-participants-link-expires");
-				await linkExpiresCheckbox.setValue(true);
-
-				const datePicker = wrapper.getComponent(DatePicker);
-				const selectedDateISO = new Date(2024, 0, 1).toISOString();
-				datePicker.vm.$emit("update:date", selectedDateISO);
-				await nextTick();
-
-				expect(unpauseMock).toHaveBeenCalled();
-				expect(datePicker.props().date).toBe(selectedDateISO);
-			});
 		});
 	});
 });

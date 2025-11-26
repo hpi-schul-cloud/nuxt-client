@@ -19,16 +19,13 @@
 						{{ subTitle }}
 					</p>
 
-					<InfoAlert>
-						{{ t("pages.rooms.members.inviteMember.infoAlert.text") }}
-					</InfoAlert>
-
-					<VForm ref="inviteMembersForm" class="mt-5">
+					<VForm ref="inviteMembersForm" class="mt-2">
 						<VTextField
 							ref="descriptionField"
 							v-model="formData.title"
 							class="mb-8"
 							:rules="validationRules"
+							autofocus
 							:label="t('pages.rooms.members.inviteMember.form.description.label')"
 							:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
 							persistent-hint
@@ -36,35 +33,65 @@
 						/>
 
 						<div class="d-flex flex-column ga-0 checkbox-container">
-							<VCheckbox
+							<div id="school-radiogroup-label" class="d-flex mb-2">
+								{{ t("pages.rooms.members.inviteMember.form.validForSchools.label") }}
+							</div>
+							<VRadioGroup
 								v-model="formData.restrictedToCreatorSchool"
-								hide-details
-								data-testid="input-invite-participants-restricted-to-creator-school"
+								aria-labelledby="school-radiogroup-label"
+								@update:model-value="resetRoleSelection"
 							>
-								<template #label>
-									<div>
-										{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
-										<span class="d-inline-block"> {{ schoolName }} </span>
-									</div>
+								<VRadio :value="true" data-testid="input-invite-participants-restricted-to-creator-school">
+									<template #label> {{ t("common.labels.only") }} {{ schoolName }} </template>
+								</VRadio>
+								<VRadio
+									:label="t('common.labels.allSchools')"
+									:value="false"
+									data-testid="input-invite-participants-all-schools"
+								/>
+							</VRadioGroup>
+							<VDivider class="mb-6" role="presentation" />
+							<div id="valid-for-roles-label" class="mb-4">
+								{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}
+							</div>
+							<div role="group" aria-labelledby="valid-for-roles-label">
+								<VCheckbox
+									:label="t('common.labels.teacher.neutral.plural')"
+									data-testid="input-invite-participants-valid-for-teachers"
+									disabled
+									:model-value="true"
+									hide-details
+								/>
+								<template v-if="formData.restrictedToCreatorSchool">
+									<VCheckbox
+										v-model="formData.isUsableByStudents"
+										:label="t('common.labels.students.neutral')"
+										hide-details
+										data-testid="input-invite-participants-valid-for-students"
+									/>
+									<InfoAlert
+										v-if="isInviteExternalPersonsFeatureEnabled"
+										class="mt-2 mb-2"
+										data-testid="info-alert-external-persons"
+									>
+										{{ t("pages.rooms.members.inviteMember.infoAlert.text.externalPersons") }}
+									</InfoAlert>
 								</template>
-							</VCheckbox>
+								<template v-else>
+									<VCheckbox
+										v-if="isInviteExternalPersonsFeatureEnabled"
+										v-model="formData.isUsableByExternalPersons"
+										:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+										hide-details
+										data-testid="input-invite-participants-valid-for-external-persons"
+									/>
+									<InfoAlert class="mt-2 mb-2" data-testid="info-alert-students-from-other-schools">
+										{{ t("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools") }}
+									</InfoAlert>
+								</template>
+							</div>
 
-							<VCheckbox
-								v-model="formData.isUsableByStudents"
-								:disabled="!formData.restrictedToCreatorSchool"
-								:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
-								hide-details
-								data-testid="input-invite-participants-valid-for-students"
-							/>
-
-							<VCheckbox
-								v-if="isInviteExternalPersonsFeatureEnabled"
-								v-model="formData.isUsableByExternalPersons"
-								:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
-								hide-details
-								data-testid="input-invite-participants-valid-for-external-persons"
-							/>
-
+							<VDivider class="mt-4 mb-5" role="presentation" />
 							<div class="d-flex">
 								<VCheckbox
 									v-model="formData.activeUntilChecked"
@@ -75,7 +102,7 @@
 								/>
 								<DatePicker
 									ref="datePicker"
-									:aria-label="t('pages.rooms.members.tableHeader.expirationDate')"
+									aria-label="pages.rooms.members.tableHeader.expirationDate)"
 									:disabled="isDatePickerDisabled"
 									:required="!isDatePickerDisabled"
 									:min-date="new Date().toString()"
@@ -151,6 +178,7 @@
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -191,9 +219,11 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+const envConfig = useEnvConfig();
+const theme = computed(() => envConfig.value.SC_THEME);
 
 const isInviteExternalPersonsFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED
+	() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
 );
 
 const defaultFormData: RoomInvitationFormData = {
@@ -251,6 +281,12 @@ const onClose = () => {
 		formData.value = { ...defaultFormData };
 	}, 1000);
 };
+
+const resetRoleSelection = () =>
+	Object.assign(formData.value, {
+		isUsableByStudents: defaultFormData.isUsableByStudents,
+		isUsableByExternalPersons: defaultFormData.isUsableByExternalPersons,
+	});
 
 const onContinue = async () => {
 	if (invitationStep.value === InvitationStep.SHARE || inviteMembersForm.value === null) return;
@@ -331,6 +367,7 @@ const informationLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL
 .checkbox-container .v-checkbox {
 	:deep(.v-selection-control) {
 		align-items: flex-start;
+		min-height: auto;
 	}
 	:deep(.v-label) {
 		padding-bottom: 16px;
