@@ -335,4 +335,72 @@ describe("BoardColumn", () => {
 			});
 		});
 	});
+
+	describe("when editing a card", () => {
+		const setupSiblingColumns = () => {
+			const { wrapper: originalWrapper } = setup({
+				permissions: { hasCreateColumnPermission: ref(true) },
+			});
+
+			const cardHost = originalWrapper.findComponent({ name: "CardHost" });
+			const cardHostInteractionHandler = cardHost.findComponent({
+				name: "CardHostInteractionHandler",
+			});
+
+			const cardsInSiblingColumn = cardSkeletonResponseFactory.buildList(1);
+			const siblingColumn = columnResponseFactory.build({
+				cards: cardsInSiblingColumn,
+			});
+			const siblingWrapper = mount(BoardColumnVue, {
+				global: {
+					plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
+				},
+				props: {
+					column: siblingColumn,
+					index: 0,
+					columnCount: 2,
+					isListBoard: false,
+				},
+			});
+			return { originalWrapper, siblingWrapper, cardHostInteractionHandler };
+		};
+
+		it("should not show addCardButton in the same column", async () => {
+			const { originalWrapper, cardHostInteractionHandler } = setupSiblingColumns();
+
+			cardHostInteractionHandler.vm.$emit("start-edit-mode");
+			await nextTick();
+
+			const addCardButtons = originalWrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+			expect(addCardButtons).toHaveLength(0);
+		});
+
+		it("should show addCardButton in sibling column", async () => {
+			const { siblingWrapper, cardHostInteractionHandler } = setupSiblingColumns();
+
+			cardHostInteractionHandler.vm.$emit("start-edit-mode");
+			await nextTick();
+
+			const addCardButtons = siblingWrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+			expect(addCardButtons).toHaveLength(1);
+		});
+		it("should show addCardButton in same column if edit mode is stopped", async () => {
+			const { originalWrapper, cardHostInteractionHandler } = setupSiblingColumns();
+
+			cardHostInteractionHandler.vm.$emit("start-edit-mode");
+			await nextTick();
+
+			cardHostInteractionHandler.vm.$emit("stop-edit-mode");
+			await nextTick();
+
+			const addCardButtons = originalWrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+			expect(addCardButtons).toHaveLength(1);
+		});
+	});
 });
