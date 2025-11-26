@@ -13,7 +13,12 @@ import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
-import { fileRecordFactory, mockedPiniaStoreTyping, parentNodeInfoFactory } from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	fileRecordFactory,
+	mockedPiniaStoreTyping,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
@@ -87,7 +92,7 @@ describe("Folder.vue", () => {
 	describe("when user has board edit permission", () => {
 		describe("when folder contains no files", () => {
 			describe("when component is loaded", () => {
-				const setup = async () => {
+				const setup = async (boardInStoreUndefined = false, boardInStoreIsParent = true) => {
 					const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
 					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
@@ -126,6 +131,10 @@ describe("Folder.vue", () => {
 
 					const { wrapper } = setupWrapper();
 					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
+					const board = boardResponseFactory.build({
+						id: boardInStoreIsParent ? parent.id : "different-board-id",
+					});
+					useBoardStoreMock.board = boardInStoreUndefined ? undefined : board;
 
 					await nextTick();
 					await nextTick();
@@ -154,14 +163,6 @@ describe("Folder.vue", () => {
 					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalled();
 				});
 
-				it("should call fetchBoardRequest", async () => {
-					const { useBoardStoreMock, parent } = await setup();
-
-					expect(useBoardStoreMock.fetchBoardRequest).toHaveBeenCalledWith({
-						boardId: parent.id,
-					});
-				});
-
 				it("should not show the loading spinner", async () => {
 					const { wrapper } = await setup();
 
@@ -183,6 +184,31 @@ describe("Folder.vue", () => {
 					expect(includesFolderName).toBe(true);
 				});
 
+				describe("when board is not in store", () => {
+					it("should call fetchBoardRequest", async () => {
+						const { useBoardStoreMock, parent } = await setup(true);
+
+						expect(useBoardStoreMock.fetchBoardRequest).toHaveBeenCalledWith({
+							boardId: parent.id,
+						});
+					});
+				});
+				describe("when board in store is not the same as parent", () => {
+					it("should call fetchBoardRequest", async () => {
+						const { useBoardStoreMock, parent } = await setup(false, false);
+
+						expect(useBoardStoreMock.fetchBoardRequest).toHaveBeenCalledWith({
+							boardId: parent.id,
+						});
+					});
+				});
+				describe("when board in store is the same as parent", () => {
+					it("should not call fetchBoardRequest", async () => {
+						const { useBoardStoreMock } = await setup(false, true);
+
+						expect(useBoardStoreMock.fetchBoardRequest).not.toHaveBeenCalled();
+					});
+				});
 				describe("when folder is board", () => {
 					it("should call createPageInformation with the correct parentId", async () => {
 						const { boardState, parent } = await setup();

@@ -119,6 +119,12 @@ export interface FileRecordResponse {
      * @memberof FileRecordResponse
      */
     updatedAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileRecordResponse
+     */
+    contentLastModifiedAt?: string;
 }
 
 
