@@ -61,7 +61,7 @@ const props = defineProps({
 	fabItems: {
 		type: Array as PropType<FabAction[]>,
 		required: false,
-		default: () => [],
+		default: undefined,
 	},
 	hideBorder: {
 		type: Boolean,
