@@ -24,8 +24,3 @@ export type FabOptions = {
 	ariaLabel?: string;
 	dataTestId?: string;
 };
-
-export type Fab = {
-	actions: FabAction[];
-	variant: "single" | "speed-dial";
-};

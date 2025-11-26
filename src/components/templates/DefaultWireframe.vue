@@ -10,14 +10,13 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<div v-if="fabItems">
-				<SpeedDialMenu
-					:actions="fabActions"
-					:fab-offset="fabOffset"
-					@fab:clicked="onFabClicked"
-					@on-fab-item-click="$emit('onFabItemClick', $event)"
-				/>
-			</div>
+			<SpeedDialMenu
+				v-if="fabItems"
+				:actions="fabActions"
+				:fab-offset="fabOffset"
+				@fab:clicked="onFabClicked"
+				@on-fab-item-click="$emit('onFabItemClick', $event)"
+			/>
 			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<VContainer
