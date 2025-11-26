@@ -7,6 +7,7 @@ import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
@@ -21,6 +22,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
+import * as utilCollabora from "@util-collabora";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { setActivePinia } from "pinia"; // FIX_CIRCULAR_DEPENDENCY
@@ -1185,6 +1187,70 @@ describe("Folder.vue", () => {
 
 					expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
 				});
+			});
+		});
+
+		describe("when collabora file was created", () => {
+			const setup = async () => {
+				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
+				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build();
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<ReturnType<typeof BoardApi.useSharedBoardPageInformation>>({});
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(boardState);
+
+				const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
+				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
+
+				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
+					hasEditPermission: ref(true),
+				});
+				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+				const latestAddedCollaboraFile = ref<FileRecordResponse | null>(null);
+
+				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
+					openCollaboraFileDialog: vi.fn(),
+					closeCollaboraFileDialog: vi.fn(),
+					collaboraFileSelectionOptions: [],
+					isCollaboraFileDialogOpen: ref(false),
+					latestAddedCollaboraFile,
+				});
+
+				const { wrapper } = setupWrapper();
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				return {
+					wrapper,
+					latestAddedCollaboraFile,
+				};
+			};
+
+			it("should show open collabora file in new tab", async () => {
+				const { latestAddedCollaboraFile } = await setup();
+				const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+				latestAddedCollaboraFile.value = fileRecordFactory.build();
+				await nextTick();
+
+				expect(openCollaboraSpy).toHaveBeenCalled();
 			});
 		});
 
