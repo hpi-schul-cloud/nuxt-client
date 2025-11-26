@@ -40,8 +40,8 @@ const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
 vi.mock("./add-collabora-file.composable");
 
 const enum FabEvent {
-	CREATE_DOCUMENT = "CREATE_DOCUMENT",
-	UPLOAD_FILE = "UPLOAD_FILE",
+	CreateDocument = "CREATE_DOCUMENT",
+	UploadFile = "UPLOAD_FILE",
 }
 
 describe("Folder.vue", () => {
@@ -1172,7 +1172,7 @@ describe("Folder.vue", () => {
 					});
 
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.UPLOAD_FILE);
+					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.UploadFile);
 
 					expect((input.element as HTMLInputElement).value).toBe("");
 				});
@@ -1183,7 +1183,7 @@ describe("Folder.vue", () => {
 					const { wrapper, mockOpenCollaboraFileDialog } = await setup();
 
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CREATE_DOCUMENT);
+					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CreateDocument);
 
 					expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
 				});

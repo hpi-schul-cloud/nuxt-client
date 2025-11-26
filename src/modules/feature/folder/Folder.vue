@@ -109,8 +109,8 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
 
 const enum FabEvent {
-	CREATE_DOCUMENT = "CREATE_DOCUMENT",
-	UPLOAD_FILE = "UPLOAD_FILE",
+	CreateDocument = "CREATE_DOCUMENT",
+	UploadFile = "UPLOAD_FILE",
 }
 
 const fabAction = computed(() => {
@@ -122,14 +122,14 @@ const fabAction = computed(() => {
 			label: "Dokument erstellen",
 			ariaLabel: "Dokument erstellen",
 			dataTestId: "fab-button-create-document",
-			customEvent: FabEvent.CREATE_DOCUMENT,
+			customEvent: FabEvent.CreateDocument,
 		},
 		{
 			icon: mdiTrayArrowUp,
 			label: "Datei hochladen",
 			ariaLabel: "Datei hochladen",
 			dataTestId: "fab-button-upload-file",
-			customEvent: FabEvent.UPLOAD_FILE,
+			customEvent: FabEvent.UploadFile,
 		},
 	];
 
@@ -163,13 +163,13 @@ const runningUploads = ref<number>(0);
 const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
 const fabItemClickHandler = (event: string | undefined): void => {
-	if (event === FabEvent.UPLOAD_FILE) {
+	if (event === FabEvent.UploadFile) {
 		if (fileInput.value) {
 			// Reset the file input to allow re-uploading the same file
 			fileInput.value.value = "";
 			fileInput.value.click();
 		}
-	} else if (event === FabEvent.CREATE_DOCUMENT) {
+	} else if (event === FabEvent.CreateDocument) {
 		openCollaboraFileDialog();
 	}
 };
