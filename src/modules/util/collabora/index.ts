@@ -1,3 +1,3 @@
-import { getCollaboraAssetUrl, openCollabora } from "./helpers";
+import { getCollaboraAssetUrl, mapEditBoardPermissionToEditorMode, openCollabora } from "./helpers";
 
-export { getCollaboraAssetUrl, openCollabora };
+export { getCollaboraAssetUrl, mapEditBoardPermissionToEditorMode, openCollabora };
