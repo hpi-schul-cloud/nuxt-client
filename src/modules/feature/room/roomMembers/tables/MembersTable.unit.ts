@@ -41,8 +41,6 @@ vi.mock("@vueuse/integrations/useFocusTrap");
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
-vi.mock("@vueuse/integrations/useFocusTrap");
-
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
@@ -58,6 +56,7 @@ describe("MembersTable", () => {
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
+	let activateMock: Mock;
 
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
@@ -72,11 +71,13 @@ describe("MembersTable", () => {
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
+		activateMock = vi.fn();
 
 		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 			deactivate: deactivateMock,
+			activate: activateMock,
 		});
 
 		setupStores({
