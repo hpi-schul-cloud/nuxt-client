@@ -48,6 +48,7 @@ export default {
 	"common.files": "Archivos",
 	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",
+	"common.labels.allSchools": "todas las escuelas",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
 	"common.labels.changed": "Cambiado",
@@ -83,6 +84,7 @@ export default {
 	"common.labels.migrated": "Última migración el",
 	"common.labels.name": "Nombre",
 	"common.labels.notVisible": "No visible",
+	"common.labels.only": "solo",
 	"common.labels.outdated.tooltip": "Muestra cuándo la cuenta se marcó como obsoleta",
 	"common.labels.outdated": "Obsoleto desde",
 	"common.labels.partial": "parcial",
@@ -103,11 +105,13 @@ export default {
 	"common.labels.status": "Estado",
 	"common.labels.student": "Estudiante",
 	"common.labels.student.neutral": "Estudiante",
+	"common.labels.students.neutral": "Estudiantes",
 	"common.labels.students": "Estudiantes",
 	"common.labels.success": "éxito",
 	"common.labels.teacher.plural": "Profesora(e)s",
 	"common.labels.teacher": "Profesor",
 	"common.labels.teacher.neutral": "Profesor",
+	"common.labels.teacher.neutral.plural": "Profesora(e)s",
 	"common.labels.time": "Hora",
 	"common.labels.title": "Título",
 	"common.labels.unknown": "Desconocido",
@@ -1792,14 +1796,15 @@ export default {
 		"El enlace de invitación editado se muestra en el siguiente paso.",
 	"pages.rooms.members.inviteMember.step.share.title": "Compartir enlace de invitación",
 	"pages.rooms.members.inviteMember.step.edit.title": "Editar enlace de invitación",
-	"pages.rooms.members.inviteMember.infoAlert.text":
+	"pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools":
 		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un profesor supervisor de su escuela.",
+	"pages.rooms.members.inviteMember.infoAlert.text.externalPersons":
+		"Las personas externas solo pueden ser invitadas si el enlace es válido para todas las escuelas.",
 	"pages.rooms.members.inviteMember.form.description.label": "Descripción",
 	"pages.rooms.members.inviteMember.form.description.hint": "Se muestra en el resumen del enlace",
-	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
-		"Enlace sólo válido para usuarios de la siguiente escuela:",
-	"pages.rooms.members.inviteMember.form.validForStudents.label": "Enlace válido también para estudiantes",
-	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Enlace válido también para personas externas",
+	"pages.rooms.members.inviteMember.form.validForSchools.label": "Enlace válido para la(s) siguiente(s) escuela(s):",
+	"pages.rooms.members.inviteMember.form.validForRoles.label": "Enlace válido para los siguientes roles escolares:",
+	"pages.rooms.members.inviteMember.form.validForExternalPersons.label": "Personas externas (anteriormente: experto)",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
 		"La entrada a la habitación sólo es posible previa confirmación ({0})",
@@ -2014,4 +2019,6 @@ export default {
 	"pages.folder.delete-multiple-confirmation": "¿Borrar realmente todos los archivos {total}?",
 	"pages.folder.delete-confirmation": "¿Borrar realmente el archivo {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "El nombre del archivo ya existe.",
+	"pages.folder.rename-file-dialog.validation.invalid-characters":
+		"El nombre del archivo contiene caracteres no válidos.",
 };
