@@ -1618,6 +1618,9 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.members.fab.addExternalPerson": "Agregar persona externa",
 	"pages.rooms.members.fab.selectFromDirectory": "Seleccionar del directorio",
+	"pages.rooms.members.dialog.addExternalPerson.text":
+		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Agregar a la sala",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
