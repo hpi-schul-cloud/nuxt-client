@@ -1545,6 +1545,11 @@ export default {
 	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Privacy policy",
 	"pages.registrationExternalMembers.steps.welcome.tos": "Terms of use",
 	"pages.registrationExternalMembers.steps.password.heading": "Set password",
+	"pages.registrationExternalMembers.steps.success.title": "Registration successful",
+	"pages.registrationExternalMembers.steps.success.heading": "Thank you for registering with the Education Cloud!",
+	"pages.registrationExternalMembers.steps.success.copy":
+		'Welcome to the new room. In rooms, content can be created, organized and shared with different groups of people in one central place - for example with classes, colleagues, external persons or interdisciplinary teams. The menu item "Rooms" lists the rooms in which you already have membership.',
+	"pages.registrationExternalMembers.steps.success.button": "Go to login",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
