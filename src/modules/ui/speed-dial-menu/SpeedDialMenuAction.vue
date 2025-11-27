@@ -8,7 +8,7 @@
 			:to="action.to"
 			:aria-hidden="true"
 			tabindex="-1"
-			@click="$emit('onFabItemClick', action.customEvent)"
+			@click="action.clickHandler"
 		>
 			{{ action.label }}
 		</VBtn>
@@ -19,19 +19,15 @@
 			:href="action.href"
 			:to="action.to"
 			:aria-label="action.ariaLabel"
-			@click="$emit('onFabItemClick', action.customEvent)"
+			@click="action.clickHandler"
 		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { FabAction } from "@/components/templates/default-wireframe.types";
+import { FabAction } from "./types";
 
 defineProps<{
 	action: FabAction;
-}>();
-
-defineEmits<{
-	(event: "onFabItemClick", customEvent?: string): void;
 }>();
 </script>

@@ -5,5 +5,5 @@ export type FabAction = {
 	dataTestId?: string;
 	href?: string;
 	to?: string;
-	customEvent?: string;
+	clickHandler?: () => void;
 };

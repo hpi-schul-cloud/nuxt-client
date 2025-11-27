@@ -20,7 +20,7 @@
 		<template v-if="isMenu">
 			<VSpeedDial v-model="isMenuOpen" activator="parent" attach=".wireframe-container" :location="menuLocation">
 				<template v-for="(action, index) in speedDialActions" :key="index">
-					<SpeedDialMenuAction :action="action" @on-fab-item-click="$emit('onFabItemClick', $event)" />
+					<SpeedDialMenuAction :action="action" />
 				</template>
 			</VSpeedDial>
 		</template>
@@ -45,7 +45,7 @@ const props = withDefaults(
 	}
 );
 
-const emit = defineEmits(["fab:clicked", "onFabItemClick"]);
+const emit = defineEmits(["fab:clicked"]);
 
 const primaryAction = computed(() => props.actions[0]);
 const speedDialActions = computed(() => props.actions.slice(1));

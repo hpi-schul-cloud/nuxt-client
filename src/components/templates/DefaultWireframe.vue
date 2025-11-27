@@ -10,13 +10,7 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<SpeedDialMenu
-				v-if="fabItems"
-				:actions="fabItems"
-				:fab-offset="fabOffset"
-				@fab:clicked="onFabClicked"
-				@on-fab-item-click="$emit('onFabItemClick', $event)"
-			/>
+			<SpeedDialMenu v-if="fabItems" :actions="fabItems" :fab-offset="fabOffset" @fab:clicked="onFabClicked" />
 			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<VContainer
@@ -85,7 +79,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-	onFabItemClick: (event: string | undefined) => !!event,
 	"fab:clicked": () => true,
 });
 

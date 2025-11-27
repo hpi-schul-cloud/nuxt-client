@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe ref="main" max-width="short" :fab-items="fabItems" @on-fab-item-click="fabItemClickHandler">
+	<DefaultWireframe ref="main" max-width="short" :fab-items="fabItems">
 		<template #header>
 			<slot name="header" />
 		</template>
@@ -37,11 +37,6 @@ import { FabAction } from "@ui-speed-dial-menu";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-enum RoomFabEvent {
-	COMMON_CARTRIDGE_IMPORT = "import",
-	SYNCHRONIZED_COURSE = "syncedCourse",
-}
-
 const { t } = useI18n();
 
 const props = defineProps({
@@ -78,7 +73,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 			label: t("pages.rooms.fab.add.syncedCourse"),
 			ariaLabel: t("pages.rooms.fab.add.syncedCourse"),
 			dataTestId: "fab_button_add_synced_course",
-			customEvent: RoomFabEvent.SYNCHRONIZED_COURSE,
+			clickHandler: () => (isCourseSyncDialogOpen.value = true),
 		});
 	}
 
@@ -88,7 +83,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 			label: t("pages.rooms.fab.import.course"),
 			ariaLabel: t("pages.rooms.fab.import.course"),
 			dataTestId: "fab_button_import_course",
-			customEvent: RoomFabEvent.COMMON_CARTRIDGE_IMPORT,
+			clickHandler: () => commonCartridgeImportModule.setIsOpen(true),
 		});
 	}
 
@@ -118,14 +113,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 const isLoading = computed(() => courseRoomListModule.getLoading);
 
 const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken);
-
-const fabItemClickHandler = (event: string | undefined): void => {
-	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {
-		isCourseSyncDialogOpen.value = true;
-	} else if (event === RoomFabEvent.COMMON_CARTRIDGE_IMPORT) {
-		commonCartridgeImportModule.setIsOpen(true);
-	}
-};
 </script>
 
 <style lang="scss" scoped>
