@@ -134,7 +134,8 @@ const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } = useRoomAuthorization();
 
-const { isInvitationDialogOpen, invitationStep } = storeToRefs(useRoomInvitationLinkStore());
+const { isInvitationDialogOpen, invitationStep, isInviteExternalPersonsFeatureEnabled } =
+	storeToRefs(useRoomInvitationLinkStore());
 
 const isExternalPersonDialogOpen = ref(false);
 
@@ -205,8 +206,22 @@ const tabs: Array<{
 ];
 
 const onFabClick = () => {
-	invitationStep.value = InvitationStep.PREPARE;
-	isInvitationDialogOpen.value = true;
+	// if (isInviteExternalPersonsFeatureEnabled.value) {
+	// 	invitationStep.value = InvitationStep.PREPARE;
+	// 	isInvitationDialogOpen.value = true;
+	// 	return;
+	// }
+	switch (activeTab.value) {
+		case Tab.Invitations:
+			invitationStep.value = InvitationStep.PREPARE;
+			isInvitationDialogOpen.value = true;
+			break;
+		case Tab.Members:
+		default:
+			loadSchoolList();
+			isMembersDialogOpen.value = true;
+			break;
+	}
 };
 
 const handleAddMember = (event: string | undefined) => {
@@ -297,6 +312,9 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 			ariaLabel: t("pages.rooms.members.add"),
 			dataTestId: "fab-add-members",
 		};
+		if (!isInviteExternalPersonsFeatureEnabled.value) {
+			return fab;
+		}
 		const fabActions: FabAction[] = [
 			{
 				icon: mdiListBoxOutline,

@@ -9,19 +9,32 @@
 	>
 		<VCard ref="addExternalPersonContent">
 			<template #title>
-				<h2 class="mt-2">Externe Person hinzufügen</h2>
+				<h2 class="mt-2">{{ t("pages.rooms.members.fab.addExternalPerson") }}</h2>
 			</template>
 			<template #text>
 				<p>
-					Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.
+					{{ t("pages.rooms.members.dialog.addExternalPerson.text") }}
 				</p>
-				<VForm ref="inviteMembersForm" class="mt-5">
+				<VForm ref="addExternalPersonForm" class="mt-5">
 					<VTextField
 						ref="emailInput"
 						label="E-Mail-Adresse"
-						data-testid="invite-participant-description-input"
-						:rules="[isValidEmail(t('common.validation.email'))]"
+						data-testid="invite-external-person-email"
+						:error-messages="emailErrorMessage"
+						@blur="onEmailBlur"
 					/>
+					<template v-if="!isAccountFound">
+						<VTextField
+							ref="firstNameInput"
+							:label="t('common.labels.firstName')"
+							data-testid="invite-external-person-firstname"
+						/>
+						<VTextField
+							ref="lastNameInput"
+							:label="t('common.labels.lastName')"
+							data-testid="invite-external-person-lastname"
+						/>
+					</template>
 				</VForm>
 			</template>
 
@@ -40,7 +53,7 @@
 						class="ms-auto"
 						color="primary"
 						variant="flat"
-						text="Zum Raum hinzufügen"
+						:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
 						data-testid="invite-participant-save-btn"
 					/>
 				</div>
@@ -51,6 +64,7 @@
 
 <script setup lang="ts">
 import { isValidEmail } from "@util-validators";
+import { ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
@@ -66,6 +80,18 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+
+const isAccountFound = ref(true);
+
+const emailInput = useTemplateRef("emailInput");
+
+const emailErrorMessage = ref<string | undefined>(undefined);
+
+const onEmailBlur = () => {
+	const errorMessage = t("common.validation.email");
+	const valid = isValidEmail(errorMessage)(emailInput.value?.modelValue) === true;
+	emailErrorMessage.value = valid ? undefined : errorMessage;
+};
 
 const onClose = () => {
 	isOpen.value = false;
