@@ -103,16 +103,7 @@ const availableRooms = computed(() => {
 		return rooms.value?.filter((r) => r.id === props.roomId);
 	}
 });
-const {
-	selectedBoardId,
-	selectedColumnId,
-	selectedRoomId,
-	resetBoardSelection,
-	columns,
-	boards,
-	selectedColumn,
-	selectedBoard,
-} = useCardDialogData();
+const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } = useCardDialogData();
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
