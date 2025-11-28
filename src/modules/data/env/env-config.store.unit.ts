@@ -121,7 +121,7 @@ describe("useEnvStore", () => {
 				SC_THEME: SchulcloudTheme.Default,
 			});
 
-			expect(useEnvStore().instituteSupportEmail).toBe("default@xxx.de");
+			expect(useEnvStore().instituteSupportEmail).toBe("widerruf@dbildungscloud.de");
 		});
 
 		it("should return brb support email when theme is brb", async () => {
@@ -129,7 +129,7 @@ describe("useEnvStore", () => {
 				SC_THEME: SchulcloudTheme.Brb,
 			});
 
-			expect(useEnvStore().instituteSupportEmail).toBe("brb@xxx.de");
+			expect(useEnvStore().instituteSupportEmail).toBe("schul-cloud@bildungsserver.berlin-brandenburg.de");
 		});
 
 		it("should return thr support email when theme is thr", async () => {
@@ -137,7 +137,7 @@ describe("useEnvStore", () => {
 				SC_THEME: SchulcloudTheme.Thr,
 			});
 
-			expect(useEnvStore().instituteSupportEmail).toBe("thueringen@xxx.de");
+			expect(useEnvStore().instituteSupportEmail).toBe("widerruf@dbildungscloud.de");
 		});
 
 		it("should return n21 support email when theme is n21", async () => {
