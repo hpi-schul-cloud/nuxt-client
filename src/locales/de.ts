@@ -45,6 +45,7 @@ export default {
 	"common.file": "Datei",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Online Bearbeitung nicht möglich",
 	"common.files": "Dateien",
 	"common.instructions.orderBy.arrowKeys": "Die Elemente dieser Liste können per Pfeiltaste verschoben werden.",
 	"common.labels.admin": "Admin(s)",
@@ -2009,6 +2010,7 @@ export default {
 	"pages.folder.title": "Ordner",
 	"pages.folder.columns.name": "Name",
 	"pages.folder.columns.createdat": "Erstellt am",
+	"pages.folder.columns.lastModifiedAt": "Zuletzt geändert",
 	"pages.folder.columns.size": "Größe",
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
