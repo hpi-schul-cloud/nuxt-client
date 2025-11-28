@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { setupFileSelectMock } from "../../../util/board/test-utils/file-select-mock";
-import { CollaboraFileType, useAddCollaboraFile } from "./add-collabora-file.composable";
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { AnyContentElement, ContentElementType } from "@/types/board/ContentElement";
 import { fileElementResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useCardStore } from "@data-board";
@@ -45,7 +45,6 @@ describe("AddCollaboraFileComposable", () => {
 			closeCollaboraFileDialog,
 			setCardId,
 			setCreateElementRequestFn,
-			getAssetUrl,
 			collaboraFileSelectionOptions,
 			isCollaboraFileDialogOpen,
 			cardId,
@@ -69,7 +68,6 @@ describe("AddCollaboraFileComposable", () => {
 			closeCollaboraFileDialog,
 			setCardId,
 			cardId,
-			getAssetUrl,
 			cardStore,
 		};
 	};
@@ -118,17 +116,6 @@ describe("AddCollaboraFileComposable", () => {
 			setCardId("test-card-id");
 
 			expect(cardId.value).toBe("test-card-id");
-		});
-	});
-
-	describe("getAssetUrl", () => {
-		it("returns correct URL for collabora types", () => {
-			const { getAssetUrl } = setup();
-			const origin = window.location.origin;
-
-			expect(getAssetUrl(CollaboraFileType.Text)).toBe(`${origin}/collabora/doc.docx`);
-			expect(getAssetUrl(CollaboraFileType.Spreadsheet)).toBe(`${origin}/collabora/spreadsheet.xlsx`);
-			expect(getAssetUrl(CollaboraFileType.Presentation)).toBe(`${origin}/collabora/presentation.pptx`);
 		});
 	});
 
