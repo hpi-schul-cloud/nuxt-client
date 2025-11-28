@@ -1,5 +1,8 @@
 import { useBoardStore } from "./Board.store";
-import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload.types";
+import {
+	MoveCardToBoardSuccessPayload,
+	UpdateBoardLayoutRequestPayload,
+} from "./boardActions/boardActionPayload.types";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
@@ -8,7 +11,7 @@ import { useErrorHandler } from "@/components/error-handling/ErrorHandler.compos
 import { BoardLayout } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { useAppStore } from "@data-app";
@@ -910,46 +913,54 @@ describe("BoardStore", () => {
 	});
 
 	describe("moveCardToBoardSuccess", () => {
-		it("should not move card when board value is undefined", async () => {
-			const { boardStore } = setup({ createBoard: false });
+		const setupMoveCard = (createBoard = true) => {
+			const { boardStore, board, firstColumn, secondColumn, cards } = setup({ createBoard });
+			const movedCard = cards[0];
 
-			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B", isOwnAction: true };
-			await boardStore.moveCardToBoardSuccess(cardPayload);
+			const successPayload: MoveCardToBoardSuccessPayload = {
+				card: movedCard,
+				fromColumn: {
+					id: firstColumn.id,
+					title: "any",
+				},
+				toColumn: {
+					id: secondColumn.id,
+					title: "any",
+				},
+				fromBoard: {
+					id: board.id,
+					title: board.title,
+				},
+				toBoard: {
+					id: board.id,
+					title: board.title,
+				},
+				isOwnAction: true,
+			};
+			return { successPayload, movedCard, boardStore, firstColumn, secondColumn };
+		};
+
+		it("should not move card when board value is undefined", async () => {
+			const { boardStore, successPayload } = setupMoveCard(false);
+			await boardStore.moveCardToBoardSuccess(successPayload);
 			expect(boardStore.board).toBe(undefined);
 		});
 
 		it("should remove a card from the fromColumn if present", async () => {
-			const { boardStore, firstColumn, cards } = setup();
+			const { boardStore, successPayload, firstColumn, movedCard } = setupMoveCard();
+			await boardStore.moveCardToBoardSuccess(successPayload);
 
-			const cardId = cards[0].cardId;
-
-			await boardStore.moveCardToBoardSuccess({
-				cardId,
-				fromColumnId: firstColumn.id,
-				toColumnId: "newBoardId",
-				isOwnAction: false,
-			});
-
-			expect(firstColumn.cards.find((c) => c.cardId === cardId)).toBeUndefined();
+			expect(firstColumn.cards.find((c) => c.cardId === movedCard.cardId)).toBeUndefined();
 		});
 
 		it("should add a card to the target column", async () => {
-			const { boardStore, firstColumn, cards, secondColumn, cardStore } = setup();
-			const movedCard = cards[0];
-			cardStore.fetchCardRequest.mockResolvedValue();
-			cardStore.getCard.mockReturnValue(cardResponseFactory.build({ id: movedCard.cardId, height: movedCard.height }));
+			const { boardStore, firstColumn, secondColumn, successPayload, movedCard } = setupMoveCard();
+			await boardStore.moveCardToBoardSuccess(successPayload);
 
-			const cardId = cards[0].cardId;
+			expect(firstColumn.cards.find((c) => c.cardId === movedCard.cardId)).toBeUndefined();
+			expect(secondColumn.cards.find((c) => c.cardId === movedCard.cardId)).toBeDefined();
 
-			await boardStore.moveCardToBoardSuccess({
-				cardId,
-				fromColumnId: firstColumn.id,
-				toColumnId: secondColumn.id,
-				isOwnAction: false,
-			});
-
-			expect(firstColumn.cards.find((c) => c.cardId === cardId)).toBeUndefined();
-			expect(secondColumn.cards.find((c) => c.cardId === cardId)).toBeDefined();
+			expectNotification("success");
 		});
 	});
 

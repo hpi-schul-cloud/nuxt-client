@@ -34,7 +34,7 @@ import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardAct
 import { ColumnResponse } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { useAppStore } from "@data-app";
+import { useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
@@ -327,18 +327,31 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const moveCardToBoardSuccess = async (payload: MoveCardToBoardSuccessPayload) => {
 		if (!board.value) return;
-		const fromColumn = board.value.columns.find((c) => c.id === payload.fromColumnId);
-		const toColumn = board.value.columns.find((c) => c.id === payload.toColumnId);
+		const sourceColumn = board.value.columns.find((c) => c.id === payload.fromColumn.id);
+		const targetColumn = board.value.columns.find((c) => c.id === payload.toColumn.id);
 
-		if (fromColumn) {
-			const cardIndex = fromColumn.cards.findIndex((c) => c.cardId === payload.cardId);
-			fromColumn.cards.splice(cardIndex, 1);
+		if (sourceColumn) {
+			const cardIndex = sourceColumn.cards.findIndex((c) => c.cardId === payload.card.cardId);
+			sourceColumn.cards.splice(cardIndex, 1);
 		}
 
-		if (toColumn) {
-			await cardStore.fetchCardRequest({ cardIds: [payload.cardId] });
-			const card = cardStore.getCard(payload.cardId);
-			toColumn.cards.push({ cardId: payload.cardId, height: card?.height as number });
+		if (targetColumn) {
+			targetColumn.cards.push(payload.card);
+		}
+
+		if (payload.toColumn && payload.toBoard && payload.isOwnAction) {
+			useNotificationStore().notify({
+				status: "success",
+				text: "components.molecules.move.card.message.success",
+				link: {
+					to: `/boards/${payload.toBoard.id}`,
+					text: payload.toBoard.title,
+				},
+				replace: {
+					column: payload.toColumn.title,
+				},
+				duration: 10000,
+			});
 		}
 	};
 

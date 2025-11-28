@@ -64,7 +64,6 @@ import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { Permission } from "@/serverApi/v3";
 import { RoomItem } from "@/types/room/Room";
-import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
@@ -134,7 +133,7 @@ const dialogQuestion = computed(() => {
 const onConfirm = async () => {
 	const cardLocation = getCardLocation(props.cardId);
 
-	const { success } = await execute(
+	await execute(
 		async () =>
 			await moveCardToBoardRequest({
 				cardId: props.cardId,
@@ -145,20 +144,6 @@ const onConfirm = async () => {
 			type: t("components.boardColumn"),
 		})
 	);
-	if (success && selectedBoard.value && selectedColumn.value) {
-		useNotificationStore().notify({
-			status: "success",
-			text: "components.molecules.move.card.message.success",
-			link: {
-				to: `/boards/${selectedBoardId.value}`,
-				text: selectedBoard.value.title,
-			},
-			replace: {
-				column: selectedColumn.value.title,
-			},
-			duration: 10000,
-		});
-	}
 
 	isDialogOpen.value = false;
 };
