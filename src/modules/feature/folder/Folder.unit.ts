@@ -36,8 +36,7 @@ import { setActivePinia } from "pinia"; // FIX_CIRCULAR_DEPENDENCY
 import { Mock } from "vitest";
 import { ComputedRef, nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { VCard, VSkeletonLoader } from "vuetify/lib/components/index";
-import { VBtn } from "vuetify/lib/components/index";
+import { VBtn, VCard, VSkeletonLoader } from "vuetify/lib/components/index";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
