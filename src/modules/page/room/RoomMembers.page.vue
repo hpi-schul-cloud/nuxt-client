@@ -206,11 +206,6 @@ const tabs: Array<{
 ];
 
 const onFabClick = () => {
-	// if (isInviteExternalPersonsFeatureEnabled.value) {
-	// 	invitationStep.value = InvitationStep.PREPARE;
-	// 	isInvitationDialogOpen.value = true;
-	// 	return;
-	// }
 	switch (activeTab.value) {
 		case Tab.Invitations:
 			invitationStep.value = InvitationStep.PREPARE;

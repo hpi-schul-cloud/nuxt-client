@@ -20,7 +20,7 @@
 						ref="emailInput"
 						label="E-Mail-Adresse"
 						data-testid="invite-external-person-email"
-						:error-messages="emailErrorMessage"
+						:error-messages="emailValidationMessage"
 						@blur="onEmailBlur"
 					/>
 					<template v-if="!isAccountFound">
@@ -37,7 +37,6 @@
 					</template>
 				</VForm>
 			</template>
-
 			<template #actions>
 				<VSpacer />
 				<div class="mr-4 mb-3">
@@ -85,12 +84,12 @@ const isAccountFound = ref(true);
 
 const emailInput = useTemplateRef("emailInput");
 
-const emailErrorMessage = ref<string | undefined>(undefined);
+const emailValidationMessage = ref<string | undefined>(undefined);
 
 const onEmailBlur = () => {
 	const errorMessage = t("common.validation.email");
 	const valid = isValidEmail(errorMessage)(emailInput.value?.modelValue) === true;
-	emailErrorMessage.value = valid ? undefined : errorMessage;
+	emailValidationMessage.value = valid ? undefined : errorMessage;
 };
 
 const onClose = () => {
