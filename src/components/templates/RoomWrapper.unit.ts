@@ -1,5 +1,3 @@
-import { FabAction } from "./default-wireframe.types";
-import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
 import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
@@ -13,6 +11,7 @@ import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { VFab } from "vuetify/components";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -131,26 +130,26 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		describe("when course synchronization is active", () => {
-			it("should have the course sync sub menu action", () => {
+			it("should have the course sync sub menu action", async () => {
 				const wrapper = getWrapper();
 
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
 
-				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_add_synced_course")).toEqual(
-					true
-				);
+				const openSyncBtn = wrapper.findComponent("[data-test-id='fab_button_add_synced_course']");
+				expect(openSyncBtn.exists()).toBe(true);
 			});
 		});
 
 		describe("when course synchronization is active", () => {
-			it("should have the common cartridge sub menu action", () => {
+			it("should have the common cartridge sub menu action", async () => {
 				const wrapper = getWrapper();
 
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
 
-				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_import_course")).toEqual(true);
+				const openImportBtn = wrapper.findComponent("[data-test-id='fab_button_import_course']");
+				expect(openImportBtn.exists()).toBe(true);
 			});
 		});
 	});
@@ -166,22 +165,28 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the course sync fab action", () => {
-		it("should open the course sync dialog", () => {
+		it("should open the course sync dialog", async () => {
 			const wrapper = getWrapper();
 
-			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
+			const fab = wrapper.getComponent(VFab);
+			await fab.trigger("click");
+
+			const openSyncBtn = wrapper.getComponent("[data-test-id='fab_button_add_synced_course']");
+			await openSyncBtn.trigger("click");
 
 			expect((wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen).toEqual(true);
 		});
 	});
 
 	describe("when clicking on the common cartridge fab action", () => {
-		it("should open the common cartridge dialog", () => {
+		it("should open the common cartridge dialog", async () => {
 			const wrapper = getWrapper();
 
-			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-			defaultWireframe.vm.$emit("onFabItemClick", "import");
+			const fab = wrapper.getComponent(VFab);
+			await fab.trigger("click");
+
+			const openImportBtn = wrapper.getComponent("[data-test-id='fab_button_import_course']");
+			await openImportBtn.trigger("click");
 
 			expect(commonCartridgeImportModule.isOpen).toEqual(true);
 		});

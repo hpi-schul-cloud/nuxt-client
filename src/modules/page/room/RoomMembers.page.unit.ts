@@ -356,21 +356,25 @@ describe("RoomMembersPage", () => {
 			it.each([
 				{
 					activeTab: Tab.Members,
-					expectedFabItems: {
-						icon: mdiPlus,
-						title: "pages.rooms.members.add",
-						ariaLabel: "pages.rooms.members.add",
-						dataTestId: "fab-add-members",
-					},
+					expectedFabItems: [
+						{
+							icon: mdiPlus,
+							label: "pages.rooms.members.add",
+							ariaLabel: "pages.rooms.members.add",
+							dataTestId: "fab-add-members",
+						},
+					],
 				},
 				{
 					activeTab: Tab.Invitations,
-					expectedFabItems: {
-						icon: mdiPlus,
-						title: "pages.rooms.members.inviteMember.step.prepare.title",
-						ariaLabel: "pages.rooms.members.inviteMember.step.prepare.title",
-						dataTestId: "fab-invite-members",
-					},
+					expectedFabItems: [
+						{
+							icon: mdiPlus,
+							label: "pages.rooms.members.inviteMember.step.prepare.title",
+							ariaLabel: "pages.rooms.members.inviteMember.step.prepare.title",
+							dataTestId: "fab-invite-members",
+						},
+					],
 				},
 			])("should set correct fab items when active tab is $activeTab", ({ activeTab, expectedFabItems }) => {
 				roomPermissions.canAddRoomMembers = computed(() => true);
@@ -417,7 +421,7 @@ describe("RoomMembersPage", () => {
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberButton = wireframe.findComponent("[data-testid=fab-add-members]");
 			expect(addMemberButton.exists()).toBe(false);
-			expect(wireframe.props("fabItems")).toBe(null);
+			expect(wireframe.props("fabItems")).toBe(undefined);
 		});
 
 		it("should call loadSchoolList method", async () => {

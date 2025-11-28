@@ -1,7 +1,7 @@
 <template>
 	<!-- TODO - size transition not working when using extended prop -->
 	<VFab
-		app
+		:absolute="!mdAndDown"
 		color="primary"
 		size="large"
 		:transition="false"
