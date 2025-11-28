@@ -15,6 +15,7 @@ import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
 import {
 	boardResponseFactory,
+	createTestEnvStore,
 	fileRecordFactory,
 	mockedPiniaStoreTyping,
 	parentNodeInfoFactory,
@@ -27,6 +28,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import * as utilCollabora from "@util-collabora";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import dayjs from "dayjs";
@@ -35,6 +37,7 @@ import { Mock } from "vitest";
 import { ComputedRef, nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCard, VSkeletonLoader } from "vuetify/lib/components/index";
+import { VBtn } from "vuetify/lib/components/index";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -135,6 +138,9 @@ describe("Folder.vue", () => {
 						id: boardInStoreIsParent ? parent.id : "different-board-id",
 					});
 					useBoardStoreMock.board = boardInStoreUndefined ? undefined : board;
+
+					const windowOpenMock = vi.fn();
+					vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 					await nextTick();
 					await nextTick();
@@ -1137,7 +1143,7 @@ describe("Folder.vue", () => {
 		});
 
 		describe("when fab button is clicked", () => {
-			const setup = async () => {
+			const setup = async (collaboraEnabled = false) => {
 				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
 				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
@@ -1176,6 +1182,13 @@ describe("Folder.vue", () => {
 					latestAddedCollaboraFile: ref(null),
 				});
 
+				createTestEnvStore({
+					FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: collaboraEnabled,
+				});
+
+				const windowOpenMock = vi.fn();
+				vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+
 				const { wrapper } = setupWrapper();
 
 				return {
@@ -1183,6 +1196,49 @@ describe("Folder.vue", () => {
 					mockOpenCollaboraFileDialog,
 				};
 			};
+
+			it("should render fab item", async () => {
+				const { wrapper } = await setup();
+
+				const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+				expect(fabComponent.exists()).toBe(true);
+			});
+
+			describe("when collabora is not enabled", () => {
+				it("should render fab action for upload file", async () => {
+					const { wrapper } = await setup();
+
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					await fabComponent.findComponent(VBtn).trigger("click");
+
+					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+					expect(fabActions.length).toBe(1);
+
+					const uploadFileAction = fabActions[0];
+					expect(uploadFileAction.props("dataTestId")).toBe("fab-button-upload-file");
+				});
+			});
+
+			describe("when collabora is enabled", () => {
+				it("should render fab actions for upload file and collabora creating", async () => {
+					const { wrapper } = await setup(true);
+
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					await fabComponent.findComponent(VBtn).trigger("click");
+
+					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+					expect(fabActions.length).toBe(2);
+
+					const uploadFileAction = fabActions[0];
+					expect(uploadFileAction.props("dataTestId")).toBe("fab-button-upload-file");
+
+					const createDocumentAction = fabActions[1];
+					expect(createDocumentAction.props("dataTestId")).toBe("fab-button-create-document");
+				});
+			});
 
 			describe("and file upload is chosen", () => {
 				it("should reset input field", async () => {

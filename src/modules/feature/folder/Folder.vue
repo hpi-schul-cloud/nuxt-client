@@ -61,6 +61,7 @@ import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
+import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
@@ -113,25 +114,30 @@ const enum FabEvent {
 	UploadFile = "UPLOAD_FILE",
 }
 
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
+
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;
 
 	const actions = [
 		{
-			icon: mdiFileDocumentPlusOutline,
-			label: "Dokument erstellen",
-			ariaLabel: "Dokument erstellen",
-			dataTestId: "fab-button-create-document",
-			customEvent: FabEvent.CreateDocument,
-		},
-		{
 			icon: mdiTrayArrowUp,
-			label: "Datei hochladen",
-			ariaLabel: "Datei hochladen",
+			label: t("pages.folder.fab.upload-file"),
+			ariaLabel: t("pages.folder.fab.upload-file"),
 			dataTestId: "fab-button-upload-file",
 			customEvent: FabEvent.UploadFile,
 		},
 	];
+
+	if (isCollaboraEnabled.value) {
+		actions.push({
+			icon: mdiFileDocumentPlusOutline,
+			label: t("pages.folder.fab.create-document"),
+			ariaLabel: t("pages.folder.fab.create-document"),
+			dataTestId: "fab-button-create-document",
+			customEvent: FabEvent.CreateDocument,
+		});
+	}
 
 	return {
 		icon: mdiPlus,
