@@ -153,7 +153,7 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const route = useRoute();
 const boardId = route.params.id;
 
-const { isStudent, isTeacher, isExpert, userRoles } = useAppStoreRefs();
+const { isStudent, isTeacher, isExternalPerson, userRoles } = useAppStoreRefs();
 
 const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
@@ -170,7 +170,7 @@ const hasParticipationPermission = computed(() => canJoin.value || canStart.valu
 const canJoin = computed(
 	() =>
 		(isStudent.value || isTeacher.value) &&
-		(!isExpert.value || userRoles.value?.length > 1 || isWaitingRoomActive.value)
+		(!isExternalPerson.value || userRoles.value?.length > 1 || isWaitingRoomActive.value)
 );
 
 const canStart = computed(() => hasManageVideoConferencePermission.value);

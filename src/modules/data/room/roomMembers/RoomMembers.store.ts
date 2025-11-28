@@ -75,7 +75,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const schoolRoleMap: Record<string, string> = {
 		[RoleName.Teacher]: t("common.labels.teacher.neutral"),
 		[RoleName.Student]: t("common.labels.student.neutral"),
-		[RoleName.Expert]: t("common.roleName.externalPerson"),
+		[RoleName.ExternalPerson]: t("common.roleName.externalPerson"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -131,14 +131,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
 		const isAdmin = schoolRoleNames.includes(RoleName.Administrator);
 		const isTeacher = schoolRoleNames.includes(RoleName.Teacher);
-		const isExpert = schoolRoleNames.includes(RoleName.Expert);
+		const isExternalPerson = schoolRoleNames.includes(RoleName.ExternalPerson);
 
 		if (isAdmin || isTeacher) {
 			return schoolRoleMap[RoleName.Teacher];
 		}
 
-		if (isExpert) {
-			return schoolRoleMap[RoleName.Expert];
+		if (isExternalPerson) {
+			return schoolRoleMap[RoleName.ExternalPerson];
 		}
 
 		return schoolRoleMap[RoleName.Student];

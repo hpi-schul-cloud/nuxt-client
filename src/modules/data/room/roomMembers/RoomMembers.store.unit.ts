@@ -145,7 +145,7 @@ describe("useRoomMembers", () => {
 				const { roomMembersStore } = setup();
 				const membersMock = roomMemberFactory.buildList(3, {
 					roomRoleName: RoleName.Roomeditor,
-					schoolRoleNames: [RoleName.Expert],
+					schoolRoleNames: [RoleName.ExternalPerson],
 				});
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({

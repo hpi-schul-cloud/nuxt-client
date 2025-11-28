@@ -61,7 +61,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 const { hasPermission: hasAuthPermission } = useAppStore();
-const { isExpert, userRoles } = useAppStoreRefs();
+const { isExternalPerson, userRoles } = useAppStoreRefs();
 
 const videoConferenceModule: VideoConferenceModule = injectStrict(VIDEO_CONFERENCE_MODULE_KEY);
 
@@ -76,7 +76,7 @@ const isRefreshing = computed(() => videoConferenceModule.getLoading);
 const canJoinMeeting = hasAuthPermission(Permission.JoinMeeting);
 const canStart = hasAuthPermission(Permission.StartMeeting);
 const canJoin = computed(
-	() => canJoinMeeting.value && (!isExpert.value || userRoles.value.length > 1 || isWaitingRoomActive.value)
+	() => canJoinMeeting.value && (!isExternalPerson.value || userRoles.value.length > 1 || isWaitingRoomActive.value)
 );
 
 const hasPermission = computed(() => canJoin.value || canStart.value);

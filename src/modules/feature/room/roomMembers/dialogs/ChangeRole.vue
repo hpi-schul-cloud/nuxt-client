@@ -304,8 +304,10 @@ const radioOptions = computed(() => {
 		return [roomOwnerOption];
 	}
 
-	const isExpertMember = memberToChangeRole?.value.some((member) => member.schoolRoleNames.includes(RoleName.Expert));
-	if (isExpertMember) {
+	const isExternalPersonMember = memberToChangeRole?.value.some((member) =>
+		member.schoolRoleNames.includes(RoleName.ExternalPerson)
+	);
+	if (isExternalPersonMember) {
 		return baseRoles.filter((r) => r.role === RoleName.Roomviewer || r.role === RoleName.Roomeditor);
 	}
 

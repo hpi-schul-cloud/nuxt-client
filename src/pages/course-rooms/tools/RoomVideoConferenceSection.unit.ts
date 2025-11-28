@@ -20,7 +20,7 @@ describe("RoomVideoConferenceSection", () => {
 	const getWrapper = (
 		props: { roomId: string },
 		userPermissions: (Permission.JoinMeeting | Permission.StartMeeting)[],
-		isExpert: boolean,
+		isExternalPerson: boolean,
 		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
 	) => {
 		Object.defineProperty(window, "location", {
@@ -34,7 +34,7 @@ describe("RoomVideoConferenceSection", () => {
 		createTestAppStore({
 			me: {
 				permissions: userPermissions,
-				roles: isExpert ? [{ id: "expert", name: RoleName.Expert }] : [],
+				roles: isExternalPerson ? [{ id: "expert", name: RoleName.ExternalPerson }] : [],
 			},
 		});
 
