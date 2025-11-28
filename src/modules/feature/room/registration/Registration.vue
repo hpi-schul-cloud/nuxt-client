@@ -17,8 +17,18 @@
 								:selected-language="lang"
 								@update:selected-language="onUpdateSelectedLanguage"
 							/>
-							<Welcome v-else-if="step.value === RegistrationSteps.Welcome" />
-							<Password v-else-if="step.value === RegistrationSteps.PasswordSetup" v-model="password" />
+							<Welcome v-if="step.value === RegistrationSteps.Welcome" />
+							<Password
+								v-if="step.value === RegistrationSteps.PasswordSetup"
+								v-model="password"
+								:user-data="userData"
+							/>
+							<Consent
+								v-if="step.value === RegistrationSteps.DeclarationOfConsent"
+								v-model:is-terms-of-use-accepted="isTermsOfUseAccepted"
+								v-model:is-privacy-policy-accepted="isPrivacyPolicyAccepted"
+								:user-name="fullName"
+							/>
 						</VForm>
 					</VStepperWindowItem>
 				</template>
@@ -37,9 +47,7 @@
 						data-testid="registration-continue-button"
 						:disabled="stepValue === steps.length"
 						@click="onContinue"
-					>
-						{{ t("common.actions.continue") }}
-					</VBtn>
+					/>
 				</template>
 			</VStepperActions>
 		</VStepper>
@@ -47,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import Consent from "./steps/Consent.vue";
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
 import Welcome from "./steps/Welcome.vue";
@@ -62,7 +71,6 @@ enum RegistrationSteps {
 	Welcome,
 	PasswordSetup,
 	DeclarationOfConsent,
-	ConfirmationCode,
 	Registration,
 }
 
@@ -70,7 +78,18 @@ const { t } = useI18n();
 const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
 
-const { selectedLanguage, password, setSelectedLanguage, initializeLanguage } = useRegistration();
+const {
+	createAccount,
+	fetchUserData,
+	initializeLanguage,
+	isPrivacyPolicyAccepted,
+	isTermsOfUseAccepted,
+	password,
+	selectedLanguage,
+	setSelectedLanguage,
+	fullName,
+	userData,
+} = useRegistration();
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");
 
@@ -106,6 +125,11 @@ const onContinue = async () => {
 		document.getElementById(firstErrorId)?.focus();
 		return;
 	}
+
+	if (stepValue.value === RegistrationSteps.DeclarationOfConsent) {
+		await createAccount();
+	}
+
 	stepValue.value += 1;
 	await nextTick();
 
@@ -114,6 +138,7 @@ const onContinue = async () => {
 
 onMounted(() => {
 	initializeLanguage();
+	fetchUserData();
 });
 
 const steps = computed(() => [
@@ -138,14 +163,8 @@ const steps = computed(() => [
 	{
 		value: RegistrationSteps.DeclarationOfConsent,
 		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
-		heading: t("pages.registrationExternalMembers.steps.declarationOfConsent.heading"),
+		heading: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
 		id: "consent",
-	},
-	{
-		value: RegistrationSteps.ConfirmationCode,
-		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
-		heading: t("pages.registrationExternalMembers.steps.confirmationCode.heading"),
-		id: "confirmation",
 	},
 	{
 		value: RegistrationSteps.Registration,
@@ -158,5 +177,9 @@ const steps = computed(() => [
 <style scoped>
 .heading:focus {
 	outline: none;
+}
+.error-message {
+	color: #d32f2f;
+	margin-top: 1em;
 }
 </style>

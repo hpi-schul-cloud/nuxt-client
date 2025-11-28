@@ -2,11 +2,15 @@
 	<p>{{ t("pages.registrationExternalMembers.steps.password.firstParagraph", { instance }) }}</p>
 	<p>{{ t("pages.registrationExternalMembers.steps.password.secondParagraph") }}</p>
 	<div class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
-		<VTextField readonly :label="t('common.labels.firstName')" model-value="Vorname" data-testid="first-name" />
-		<VTextField readonly :label="t('common.labels.lastName')" model-value="Nachname" data-testid="last-name" />
+		<VTextField readonly :label="t('common.labels.firstName')" :model-value="userData?.name" data-testid="first-name" />
+		<VTextField
+			readonly
+			:label="t('common.labels.lastName')"
+			:model-value="userData?.surname"
+			data-testid="last-name"
+		/>
 	</div>
-	<VTextField readonly :label="t('common.labels.email')" model-value="Email" data-testid="email" />
-
+	<VTextField readonly :label="t('common.labels.email')" :model-value="userData?.email" data-testid="email" />
 	<p class="font-weight-bold mt-4">{{ t("pages.registrationExternalMembers.steps.password.setPassword") }}</p>
 	<ul id="password-instructions" class="pl-5">
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase") }}</li>
@@ -54,6 +58,16 @@ import { computed, nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VTextField } from "vuetify/components";
+
+type Props = {
+	userData: {
+		name: string;
+		surname: string;
+		email: string;
+	} | null;
+};
+
+defineProps<Props>();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
