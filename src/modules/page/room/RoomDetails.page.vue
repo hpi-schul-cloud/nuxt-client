@@ -10,6 +10,7 @@
 			<div class="d-flex align-center">
 				<h1 data-testid="room-title">{{ roomTitle }}</h1>
 				<RoomMenu
+					class="pt-1"
 					:room-name="room.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
