@@ -91,12 +91,4 @@ const customAliases: Record<string, Component> = {
 	thr: thr,
 };
 
-// const customSet: IconSet = {
-// 	component: (props: IconProps) =>
-// 		h(props.tag, [
-// 			h(customAliases[props.icon as string], {
-// 				class: "v-icon__svg",
-// 			}),
-// 		]),
-// };
 export { customAliases };

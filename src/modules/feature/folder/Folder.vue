@@ -99,12 +99,14 @@ const isRenameDialogOpen = ref(false);
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;
 
-	return {
-		icon: mdiPlus,
-		title: t("pages.folder.fab.title"),
-		ariaLabel: t("pages.folder.fab.title"),
-		dataTestId: "fab-add-files",
-	};
+	return [
+		{
+			icon: mdiPlus,
+			label: t("pages.folder.fab.title"),
+			ariaLabel: t("pages.folder.fab.title"),
+			dataTestId: "fab-add-files",
+		},
+	];
 });
 
 const uploadProgress = ref({

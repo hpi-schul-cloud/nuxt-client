@@ -1,4 +1,5 @@
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
+import { FabAction } from "./types";
 
-export { SpeedDialMenu, SpeedDialMenuAction };
+export { type FabAction, SpeedDialMenu, SpeedDialMenuAction };

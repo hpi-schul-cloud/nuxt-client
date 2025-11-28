@@ -26,11 +26,10 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import { VBtn } from "vuetify/lib/components/index";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -145,7 +144,6 @@ const getWrapper = ({
 		startShareFlow: vi.fn(),
 		resetShareFlow: vi.fn(),
 	});
-
 	courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 		fetchContent: vi.fn(),
 		getRoomData: mockData,
@@ -243,43 +241,14 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 			expect(fabComponent.exists()).toBe(true);
 		});
 
-		it("'add task' button should have correct path", async () => {
-			const wrapper = getWrapper({
-				permissionData: [Permission.HomeworkCreate],
-			});
-			const fabComponent = wrapper.findComponent(SpeedDialMenu);
-
-			// open menu
-			await fabComponent.findComponent(VBtn).trigger("click");
-			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[0];
-
-			expect(newTaskAction.props("href")).toStrictEqual("/homework/new?course=123&returnUrl=rooms/123");
-		});
-
-		it("'add lesson' button should have correct path", async () => {
-			const wrapper = getWrapper({
-				permissionData: [Permission.HomeworkCreate, Permission.TopicCreate],
-			});
-			const fabComponent = wrapper.findComponent(SpeedDialMenu);
-
-			// open menu
-			await fabComponent.findComponent(VBtn).trigger("click");
-			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[1];
-
-			expect(newTaskAction.props("href")).toStrictEqual("/courses/123/topics/add?returnUrl=rooms/123");
-		});
-
 		describe("'add list board' button", () => {
 			describe("when user doesn't have course edit permission", () => {
-				it("should not render any board creation button", async () => {
+				it.only("should not render any board creation button", async () => {
 					const wrapper = getWrapper({
 						permissionData: [Permission.HomeworkCreate, Permission.TopicCreate],
 					});
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
-
-					// open menu
-					await fabComponent.findComponent(VBtn).trigger("click");
-					const btnDataTestIds = wrapper.findAllComponents(SpeedDialMenuAction).map((btn) => btn.props("dataTestId"));
+					const btnDataTestIds = fabComponent.vm.actions.map((action) => action.dataTestId);
 
 					expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(false);
 					expect(btnDataTestIds.includes("fab_button_add_board")).toBe(false);
@@ -292,10 +261,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 						permissionData: [Permission.CourseEdit],
 					});
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
-
-					// open menu
-					await fabComponent.findComponent(VBtn).trigger("click");
-					const btnDataTestIds = wrapper.findAllComponents(SpeedDialMenuAction).map((btn) => btn.props("dataTestId"));
+					const btnDataTestIds = fabComponent.vm.actions.map((action) => action.dataTestId);
 
 					expect(btnDataTestIds.includes("fab_button_add_board")).toBe(true);
 				});

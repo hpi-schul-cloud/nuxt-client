@@ -93,12 +93,14 @@ const isOwnSchool = computed(() => room.value?.schoolId === adminSchoolId.value)
 
 const fabAction = computed(() =>
 	isOwnSchool.value
-		? {
-				icon: mdiPlus,
-				title: t("pages.rooms.members.add"),
-				ariaLabel: t("pages.rooms.members.add"),
-				dataTestId: "fab-add-members",
-			}
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.rooms.members.add"),
+					ariaLabel: t("pages.rooms.members.add"),
+					dataTestId: "fab-add-members",
+				},
+			]
 		: undefined
 );
 
