@@ -1525,9 +1525,13 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
 		"I, {userName}, declare the following:",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
-		"I agree that my personal data may be processed in accordance with the {dataProtectionLink} of the school in the {title} as well as by the learning material providers selected and bound by the school's instructions.",
+		"I agree that my personal data may be processed in accordance with the {dataProtectionLink} of the school in the {instanceTitle} as well as by the learning material providers selected and bound by the school's instructions.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
 		"The consent and thus the use is voluntary, which means that if you do not give your consent, it will not lead to disadvantages for you in class. Participation in lessons outside the {title} will be made possible by the school. You can revoke this consent at any time. A short e-mail with the declaration of revocation, stating your first and last name, class and school to the following address is sufficient: {email}. In the event of revocation, we will immediately delete the personal data stored on the basis of the consent, unless there is a legal reason for storage or you wish to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent":
+		"I agree that my personal data may be processed in accordance with the school's {dataProtectionLink} in the Schul-Cloud Brandenburg and by the selected and authorized learning material providers.",
+	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent.subtext":
+		"The consent and thus the use is voluntary and can be revoked at any time with effect for the future by e-mail to: {email}. In the event of revocation, we will immediately delete the data stored on the basis of the consent, unless there is a legal reason for retention or you want to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"I have read the {termsOfUse} of the {instanceTitle} and agree to them.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":

@@ -16,22 +16,19 @@
 			<template #label>
 				<div class="d-flex flex-column ga-1">
 					<strong>
-						<i18n-t
-							keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent"
-							scope="global"
-						>
+						<i18n-t :keypath="declarationOfConsentText" scope="global">
 							<template #dataProtectionLink>
 								<a href="/privacypolicy" target="_blank" rel="noopener">
 									{{ t("common.words.privacyPolicy") }}
 								</a>
 							</template>
+							<template #instanceTitle>
+								<span>{{ instituteTitle }}</span>
+							</template>
 						</i18n-t>
 					</strong>
 					<span class="text-medium-emphasis">
-						<i18n-t
-							keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext"
-							scope="global"
-						>
+						<i18n-t :keypath="declarationOfConsentSubtext" scope="global">
 							<template #instanceTitle>{{ instituteTitle }}</template>
 							<template #email>
 								<a :href="sanitizedSupportEmail">
@@ -73,6 +70,7 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { isRequired } from "@util-validators";
@@ -91,13 +89,30 @@ defineProps<Props>();
 
 const { t } = useI18n();
 const envConfig = useEnvConfig();
-const instanceTitle = computed(() => envConfig.value.SC_TITLE);
 const { instituteTitle, instituteSupportEmail } = storeToRefs(useEnvStore());
 const EMAIL_SUBJECT = "Bildungscloud Anfrage";
+const BRB_INSTANCE_TITLE = "Schul-Cloud Brandenburg";
+const instanceTitle = computed(() =>
+	envConfig.value.SC_THEME === SchulcloudTheme.Brb ? BRB_INSTANCE_TITLE : envConfig.value.SC_TITLE
+);
 
 const sanitizedSupportEmail = computed(() =>
 	sanitizeUrl(`mailto:${instituteSupportEmail.value}?subject=${EMAIL_SUBJECT}`)
 );
+
+const declarationOfConsentText = computed(() => {
+	if (envConfig.value.SC_THEME === SchulcloudTheme.Brb) {
+		return "pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent";
+	}
+	return "pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent";
+});
+
+const declarationOfConsentSubtext = computed(() => {
+	if (envConfig.value.SC_THEME === SchulcloudTheme.Brb) {
+		return "pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent.subtext";
+	}
+	return "pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext";
+});
 </script>
 
 <style scoped lang="scss">

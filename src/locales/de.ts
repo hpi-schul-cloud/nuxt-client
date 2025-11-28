@@ -1551,9 +1551,13 @@ export default {
 		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Ich, {userName}, erkläre Folgendes:",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
-		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der {dataProtectionLink} der Schule in der {title} sowie bei den von der Schule ausgewählten und weisungsgebundenen Lernmittelanbieter verarbeitet werden.",
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der {dataProtectionLink} der Schule in der {instanceTitle} sowie bei den von der Schule ausgewählten und weisungsgebundenen Lernmittelanbieter verarbeitet werden.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
 		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {instanceTitle}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: {email}. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren {faqLink} entnehmen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent":
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der Datenschutzerklärung in der Schul-Cloud Brandenburg sowie bei den ausgewählten und weisungsgebundenen Lernmittelanbietern verarbeitet werden.",
+	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent.subtext":
+		"Die Einwilligung und damit die Nutzung ist freiwillig und jederzeit mit Wirkung für die Zukunft widerrufbar per E-Mail an: {email}. Im Falle des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst Du auch unseren {faqLink} entnehmen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"Ich habe die {termsOfUse} der {instanceTitle} gelesen und stimme ihr zu.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":

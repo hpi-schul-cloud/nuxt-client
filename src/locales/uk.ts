@@ -1545,9 +1545,13 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
 		"Прийняття умов використання є необхідним для завершення реєстрації.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
-		"Я погоджуюсь з тим, що мої персональні дані оброблятимуться відповідно до {dataProtectionLink} школи {title}, а також із постачальниками навчальних матеріалів, обраними та проінструктованими школою.",
+		"Я погоджуюсь з тим, що мої персональні дані оброблятимуться відповідно до {dataProtectionLink} школи {instanceTitle}, а також із постачальниками навчальних матеріалів, обраними та проінструктованими школою.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
 		"Згода і, таким чином, використання є добровільними, а це означає, що якщо ви не дасте своєї згоди, це не призведе до шкоди для вас у класі. Участь в уроках поза {instanceTitle}, стане можливою завдяки школі. Відкликати цю згоду можна будь-коли. Досить короткого електронного листа із заявою про відкликання, який вказує ваше ім'я та прізвище, клас та школу на таку адресу: {email}. У разі відкликання ми негайно видалимо персональні дані, збережені на підставі згоди, якщо немає законної причини для зберігання або якщо ви не бажаєте отримати доступ до збережених даних заздалегідь. Знайти додаткову інформацію про захист даних також можна у наших {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent":
+		"Я погоджуюся з тим, що мої персональні дані можуть оброблятися відповідно до політики захисту даних у Schul-Cloud Brandenburg та обраними й уповноваженими постачальниками навчальних матеріалів",
+	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent.subtext":
+		"Згода, а отже, й використання, є добровільними та можуть бути відкликані будь-коли з чинністю на майбутнє електронною поштою на адресу: {email}. У разі відкликання ми негайно видалимо дані, що зберігаються на підставі згоди, якщо немає законної підстави для зберігання або ви не хочете отримати доступ до збережених даних заздалегідь. Ви також можете знайти додаткову інформацію про захист даних у нашому {faqLink}.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
