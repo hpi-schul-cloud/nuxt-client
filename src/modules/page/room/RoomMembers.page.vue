@@ -1,5 +1,11 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
+	<DefaultWireframe
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabItems"
+		@fab:clicked="onFabClick"
+		@on-fab-item-click="handleAddMember"
+	>
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -53,10 +59,11 @@
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
 	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
+	<AddExternalPersonDialog v-model="isExternalPersonDialogOpen" />
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { Breadcrumb, Fab, FabAction } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -68,8 +75,22 @@ import {
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { AddMembersDialog, Confirmations, Invitations, InviteMembersDialog, Members } from "@feature-room";
-import { mdiAccountMultipleOutline, mdiAccountQuestionOutline, mdiLink, mdiPlus } from "@icons/material";
+import {
+	AddExternalPersonDialog,
+	AddMembersDialog,
+	Confirmations,
+	Invitations,
+	InviteMembersDialog,
+	Members,
+} from "@feature-room";
+import {
+	mdiAccountClockOutline,
+	mdiAccountMultipleOutline,
+	mdiAccountQuestionOutline,
+	mdiLink,
+	mdiListBoxOutline,
+	mdiPlus,
+} from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
@@ -86,6 +107,11 @@ const props = defineProps({
 		default: Tab.Members,
 	},
 });
+
+enum FabEvent {
+	ADD_MEMBERS = "addMembers",
+	INVITE_MEMBERS = "inviteMembers",
+}
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -108,7 +134,10 @@ const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks } = useRoomAuthorization();
 
-const { isInvitationDialogOpen, invitationStep } = storeToRefs(useRoomInvitationLinkStore());
+const { isInvitationDialogOpen, invitationStep, isInviteExternalPersonsFeatureEnabled } =
+	storeToRefs(useRoomInvitationLinkStore());
+
+const isExternalPersonDialogOpen = ref(false);
 
 const activeTab = computed<Tab>({
 	get() {
@@ -177,18 +206,35 @@ const tabs: Array<{
 ];
 
 const onFabClick = () => {
+	// if (isInviteExternalPersonsFeatureEnabled.value) {
+	// 	invitationStep.value = InvitationStep.PREPARE;
+	// 	isInvitationDialogOpen.value = true;
+	// 	return;
+	// }
 	switch (activeTab.value) {
 		case Tab.Invitations:
 			invitationStep.value = InvitationStep.PREPARE;
 			isInvitationDialogOpen.value = true;
 			break;
-
 		case Tab.Members:
 		default:
 			loadSchoolList();
 			isMembersDialogOpen.value = true;
 			break;
 	}
+};
+
+const handleAddMember = (event: string | undefined) => {
+	if (event === FabEvent.ADD_MEMBERS) {
+		loadSchoolList();
+		isMembersDialogOpen.value = true;
+		return;
+	}
+
+	isExternalPersonDialogOpen.value = true;
+
+	const { log } = console;
+	log("event", event);
 };
 
 const { user } = useAppStoreRefs();
@@ -256,16 +302,38 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const fabAction = computed(() => {
+const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	if (!canAddRoomMembers.value) return;
 
 	if (activeTab.value === Tab.Members) {
-		return {
+		const fab: Fab = {
 			icon: mdiPlus,
 			title: t("pages.rooms.members.add"),
 			ariaLabel: t("pages.rooms.members.add"),
 			dataTestId: "fab-add-members",
 		};
+		if (!isInviteExternalPersonsFeatureEnabled.value) {
+			return fab;
+		}
+		const fabActions: FabAction[] = [
+			{
+				icon: mdiListBoxOutline,
+				label: t("pages.rooms.members.fab.selectFromDirectory"),
+				ariaLabel: t("pages.rooms.members.fab.selectFromDirectory"),
+				dataTestId: "fab-select-from-directory",
+				customEvent: FabEvent.ADD_MEMBERS,
+			},
+			{
+				icon: mdiAccountClockOutline,
+				label: t("pages.rooms.members.fab.addExternalPerson"),
+				ariaLabel: t("pages.rooms.members.fab.addExternalPerson"),
+				dataTestId: "fab-add-external-person",
+				customEvent: FabEvent.INVITE_MEMBERS,
+			},
+		];
+		fab.actions = fabActions;
+
+		return fab;
 	}
 
 	if (activeTab.value === Tab.Invitations) {

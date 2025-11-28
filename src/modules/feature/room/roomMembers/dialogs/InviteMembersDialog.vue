@@ -178,7 +178,6 @@
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -214,17 +213,12 @@ const emit = defineEmits<{
 }>();
 
 const { createLink, updateLink } = useRoomInvitationLinkStore();
-const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE } = storeToRefs(useRoomInvitationLinkStore());
+const { invitationStep, sharedUrl, editedLink, DEFAULT_EXPIRED_DATE, isInviteExternalPersonsFeatureEnabled } =
+	storeToRefs(useRoomInvitationLinkStore());
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
-const envConfig = useEnvConfig();
-const theme = computed(() => envConfig.value.SC_THEME);
-
-const isInviteExternalPersonsFeatureEnabled = computed(
-	() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
-);
 
 const defaultFormData: RoomInvitationFormData = {
 	title: "",
