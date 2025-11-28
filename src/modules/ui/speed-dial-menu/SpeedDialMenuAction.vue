@@ -1,6 +1,6 @@
 -
 <template>
-	<div class="d-flex justify-end align-center pr-2">
+	<div class="d-flex justify-end align-center pr-5">
 		<VBtn
 			class="mr-2 text-on-surface"
 			:data-test-id="action.dataTestId"

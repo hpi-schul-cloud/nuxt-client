@@ -2,7 +2,7 @@
 	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
 		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
 		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
-		<div ref="wireframeHeader" class="wireframe-header sticky">
+		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -10,7 +10,7 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<SpeedDialMenu v-if="fabItems" :actions="fabItems" :fab-offset="fabOffset" @fab:clicked="onFabClicked" />
+			<SpeedDialMenu v-if="fabItems" :actions="fabItems" @fab:clicked="onFabClicked" />
 			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<VContainer
@@ -33,8 +33,7 @@
 import { Breadcrumb } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
-import { useCssVar, useElementSize } from "@vueuse/core";
-import { computed, PropType, useSlots, useTemplateRef } from "vue";
+import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -80,15 +79,6 @@ const props = defineProps({
 
 const emit = defineEmits({
 	"fab:clicked": () => true,
-});
-
-const wireframeHeader = useTemplateRef("wireframeHeader");
-const { height } = useElementSize(wireframeHeader);
-const topbarHeightValue = useCssVar("--topbar-height");
-
-const fabOffset = computed(() => {
-	const topbarHeight = topbarHeightValue.value ? parseInt(topbarHeightValue.value) : 64;
-	return height.value + topbarHeight / 2;
 });
 
 const onFabClicked = () => {

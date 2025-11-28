@@ -2,11 +2,10 @@
 	<!-- TODO - size transition not working when using extended prop -->
 	<VFab
 		:absolute="!mdAndDown"
+		:class="{ 'large-screen-positioning': !mdAndDown, 'position-fixed medium-small-screen-positioning': mdAndDown }"
 		color="primary"
 		size="large"
 		:transition="false"
-		:style="{ top: fabOffset }"
-		:location="fabLocation"
 		:icon="isCollapsed"
 		:extended="!isCollapsed"
 		:data-testid="primaryAction.dataTestId"
@@ -35,15 +34,9 @@ import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useDisplay } from "vuetify";
 
-const props = withDefaults(
-	defineProps<{
-		actions: FabAction[];
-		fabOffset?: number;
-	}>(),
-	{
-		fabOffset: 0,
-	}
-);
+const props = defineProps<{
+	actions: FabAction[];
+}>();
 
 const emit = defineEmits(["fab:clicked"]);
 
@@ -54,9 +47,7 @@ const fabIcon = computed(() => (isMenuOpen.value && isMenu.value ? mdiClose : pr
 const { mdAndDown } = useDisplay();
 const { y: scrollOffsetY } = useWindowScroll();
 
-const fabLocation = computed(() => (mdAndDown.value ? "bottom right" : "top right"));
 const menuLocation = computed(() => (mdAndDown.value ? "top center" : "bottom center"));
-const fabOffset = computed(() => (props.fabOffset && !mdAndDown.value ? `${props.fabOffset - 3}px` : undefined));
 
 const isMenu = computed(() => props.actions.length > 1);
 const isMenuOpen = ref(false);
@@ -92,8 +83,22 @@ watchThrottled(
 </script>
 
 <style scoped lang="scss">
+.large-screen-positioning {
+	top: 22px;
+	right: 24px;
+}
+
+.medium-small-screen-positioning {
+	bottom: 32px;
+	right: 24px;
+}
+
 .size-transition {
 	transition: all 200ms ease-in-out;
 	min-width: 56px;
+}
+
+.default-width {
+	width: 100%;
 }
 </style>
