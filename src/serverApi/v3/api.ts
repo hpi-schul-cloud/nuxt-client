@@ -6520,6 +6520,43 @@ export interface MoveCardBodyParams {
 /**
  * 
  * @export
+ * @interface MoveCardResponse
+ */
+export interface MoveCardResponse {
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {CardSkeletonResponse}
+     * @memberof MoveCardResponse
+     */
+    card: CardSkeletonResponse;
+}
+/**
+ * 
+ * @export
  * @interface MoveColumnBodyParams
  */
 export interface MoveColumnBodyParams {
@@ -9965,6 +10002,25 @@ export interface ShareTokenResponse {
      * @memberof ShareTokenResponse
      */
     expiresAt?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShortNodeResponse
+ */
+export interface ShortNodeResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    title: string;
 }
 /**
  * 
@@ -14928,7 +14984,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MoveCardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerMoveCard(cardId, moveCardBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15015,7 +15071,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void> {
+        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse> {
             return localVarFp.cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15099,7 +15155,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void>;
+    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse>;
 
     /**
      * 

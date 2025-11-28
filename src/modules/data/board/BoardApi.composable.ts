@@ -232,7 +232,8 @@ export const useBoardApi = () => {
 	};
 
 	const moveCardToBoardCall = async (cardId: string, fromColumnId: string, toColumnId: string) => {
-		await cardsApi.cardControllerMoveCard(cardId, { toColumnId });
+		const response = await cardsApi.cardControllerMoveCard(cardId, { toColumnId });
+		return response.data;
 	};
 
 	const moveColumnCall = async (columnId: string, toBoardId: string, toPosition: number): Promise<void> => {
