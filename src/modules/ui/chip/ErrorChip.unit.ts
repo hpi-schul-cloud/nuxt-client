@@ -1,7 +1,7 @@
 import BaseChip from "./BaseChip.vue";
 import ErrorChip from "./ErrorChip.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiAlertCircle } from "@icons/material";
+import { mdiAlertCircleOutline } from "@icons/material";
 import { VChip } from "vuetify/components";
 
 describe("ErrorChip", () => {
@@ -61,7 +61,7 @@ describe("ErrorChip", () => {
 
 			const chip = wrapper.findComponent(BaseChip);
 
-			expect(chip.props("icon")).toBe(mdiAlertCircle);
+			expect(chip.props("icon")).toBe(mdiAlertCircleOutline);
 		});
 	});
 
