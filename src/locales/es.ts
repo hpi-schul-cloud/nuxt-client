@@ -45,6 +45,7 @@ export default {
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Edición en línea no posible",
 	"common.files": "Archivos",
 	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",
@@ -2021,6 +2022,7 @@ export default {
 	"pages.folder.title": "Carpeta",
 	"pages.folder.columns.name": "Nombre",
 	"pages.folder.columns.createdat": "Creado el",
+	"pages.folder.columns.lastModifiedAt": "Última actualización",
 	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",

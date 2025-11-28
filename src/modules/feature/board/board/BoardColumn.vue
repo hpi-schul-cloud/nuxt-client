@@ -77,7 +77,7 @@ import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardColumn } from "@/types/board/Board";
 import { useBoardPermissions, useForceRender } from "@data-board";
-import { extractDataAttribute, useDragAndDrop } from "@util-board";
+import { extractDataAttribute, useDragAndDrop, useSharedEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -106,7 +106,7 @@ const emit = defineEmits<{
 
 const boardStore = useBoardStore();
 const reactiveIndex = toRef(props, "index");
-
+const { editModeId } = useSharedEditMode();
 const { hasEditPermission, hasMovePermission, hasCreateColumnPermission } = useBoardPermissions();
 
 const columnClasses = computed(() => {
@@ -120,7 +120,14 @@ const columnClasses = computed(() => {
 });
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-const showAddButton = computed(() => hasCreateColumnPermission.value && isDragging.value === false);
+
+const isCardOfColumnInEditMode = computed(
+	() => props.column.cards.find((c) => c.cardId === editModeId.value) !== undefined
+);
+
+const showAddButton = computed(
+	() => hasCreateColumnPermission.value && isDragging.value === false && !isCardOfColumnInEditMode.value
+);
 
 const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
