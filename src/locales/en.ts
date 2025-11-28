@@ -1529,6 +1529,10 @@ export default {
 		"The consent and thus the use is voluntary, which means that if you do not give your consent, it will not lead to disadvantages for you in class. Participation in lessons outside the {title} will be made possible by the school. You can revoke this consent at any time. A short e-mail with the declaration of revocation, stating your first and last name, class and school to the following address is sufficient: {email}. In the event of revocation, we will immediately delete the personal data stored on the basis of the consent, unless there is a legal reason for storage or you wish to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"I have read the {termsOfUse} of the {instanceTitle} and agree to them.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"The declaration of consent is required to complete the registration.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"The acceptance of the terms of use is required to complete the registration.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":

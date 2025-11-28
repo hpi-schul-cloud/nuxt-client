@@ -89,10 +89,6 @@ describe("Consent.vue", () => {
 			await privacyPolicyCheckbox.setValue(false);
 			await privacyPolicyCheckbox.trigger("blur");
 
-			// expect(privacyPolicyCheckbox.text()).toContain(
-			// 	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required"
-			// );
-
 			expect(privacyPolicyCheckbox.text()).toContain("");
 		});
 	});
@@ -112,10 +108,6 @@ describe("Consent.vue", () => {
 			await termsOfUseCheckbox.setValue(true);
 			await termsOfUseCheckbox.setValue(false);
 			await termsOfUseCheckbox.trigger("blur");
-
-			// expect(termsOfUseCheckbox.text()).toContain(
-			// 	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required"
-			// );
 
 			expect(termsOfUseCheckbox.text()).toContain("");
 		});

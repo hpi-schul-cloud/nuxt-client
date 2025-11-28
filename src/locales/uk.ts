@@ -1539,6 +1539,10 @@ export default {
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Я, {userName}, заявляю наступне:",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"Я прочитав(ла) {termsOfUse} {instanceTitle} і погоджуюся з ними.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"Підтвердження згоди є необхідним для завершення реєстрації.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"Прийняття умов використання є необхідним для завершення реєстрації.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
 		"Я погоджуюсь з тим, що мої персональні дані оброблятимуться відповідно до {dataProtectionLink} школи {title}, а також із постачальниками навчальних матеріалів, обраними та проінструктованими школою.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":

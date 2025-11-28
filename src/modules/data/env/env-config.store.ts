@@ -121,9 +121,9 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const instituteSupportEmail = computed(() => {
 		const emailMap: Record<SchulcloudTheme, string> = {
 			[SchulcloudTheme.N21]: "ticketsystem@niedersachsen.support",
-			[SchulcloudTheme.Thr]: "thueringen@xxx.de",
-			[SchulcloudTheme.Brb]: "brb@xxx.de",
-			[SchulcloudTheme.Default]: "default@xxx.de",
+			[SchulcloudTheme.Thr]: "widerruf@dbildungscloud.de",
+			[SchulcloudTheme.Brb]: "widerruf@dbildungscloud.de",
+			[SchulcloudTheme.Default]: "widerruf@dbildungscloud.de",
 		};
 
 		return emailMap[env.SC_THEME];

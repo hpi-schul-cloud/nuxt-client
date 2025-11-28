@@ -1,3 +1,4 @@
+import { notifyError } from "../../application/notification-store";
 import { LanguageType } from "@/serverApi/v3";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -38,7 +39,7 @@ export const useRegistration = () => {
 		const data = await Promise.resolve({
 			name: "Max",
 			surname: "Mustermann",
-			email: "max@mustermann.com",
+			email: "max@mustermann.de",
 		});
 		userData.value = data;
 		fullName.value = `${data.name} ${data.surname}`;
@@ -52,12 +53,13 @@ export const useRegistration = () => {
 				if (testError) {
 					reject();
 				} else {
-					resolve("Account created successfully");
+					resolve(true);
 				}
 			});
 			return true;
 		} catch {
 			hasCreatingAccountError.value = true;
+			notifyError(t("pages.registrationExternalMembers.error.createAccount"), false);
 			throw new Error(t("pages.registrationExternalMembers.error.notCompleted"));
 		}
 	};

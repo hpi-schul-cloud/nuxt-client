@@ -1555,6 +1555,10 @@ export default {
 		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {instanceTitle}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: {email}. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren {faqLink} entnehmen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"Ich habe die {termsOfUse} der {instanceTitle} gelesen und stimme ihr zu.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"Die Einverständniserklärung ist notwendig, um die Registrierung abzuschließen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"Die Zustimmung zur Nutzungsordnung ist notwendig, um die Registrierung abzuschließen.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":

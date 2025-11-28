@@ -8,7 +8,11 @@
 		</template>
 	</i18n-t>
 	<div class="d-flex flex-column ga-5 checkbox-container">
-		<VCheckbox v-model="isPrivacyPolicyAccepted" :rules="validationRules" data-testid="privacy-policy-checkbox">
+		<VCheckbox
+			v-model="isPrivacyPolicyAccepted"
+			:rules="[isRequired(t('pages.registrationExternalMembers.steps.declarationOfConsent.validation.required'))]"
+			data-testid="privacy-policy-checkbox"
+		>
 			<template #label>
 				<div class="d-flex flex-column ga-1">
 					<strong>
@@ -44,7 +48,13 @@
 				</div>
 			</template>
 		</VCheckbox>
-		<VCheckbox v-model="isTermsOfUseAccepted" :rules="validationRules" data-testid="terms-of-use-checkbox">
+		<VCheckbox
+			v-model="isTermsOfUseAccepted"
+			:rules="[
+				isRequired(t('pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required')),
+			]"
+			data-testid="terms-of-use-checkbox"
+		>
 			<template #label>
 				<i18n-t
 					keypath="pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse"
@@ -88,11 +98,6 @@ const EMAIL_SUBJECT = "Bildungscloud Anfrage";
 const sanitizedSupportEmail = computed(() =>
 	sanitizeUrl(`mailto:${instituteSupportEmail.value}?subject=${EMAIL_SUBJECT}`)
 );
-
-const validationRules = [
-	// isRequired(t("pages.registrationExternalMembers.steps.declarationOfConsent.validation.required")), // Talk to UX about error message
-	isRequired(""),
-];
 </script>
 
 <style scoped lang="scss">

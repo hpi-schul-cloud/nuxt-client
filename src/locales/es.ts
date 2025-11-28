@@ -1562,6 +1562,10 @@ export default {
 		"El consentimiento y uso es, por tanto, voluntario, lo que significa que si no das tu consentimiento, no te supondrá ninguna desventaja en clase. La escuela hará posible la participación en lecciones fuera de {title}. Puedes revocar este consentimiento en cualquier momento. Será suficiente con un breve correo electrónico con la declaración de revocación, indicando tu nombre y apellido, clase y escuela a la siguiente dirección: {email}. En caso de revocación, eliminaremos inmediatamente los datos personales almacenados en virtud de tu consentimiento, a menos que exista una razón legal para el almacenamiento o desees acceder a los datos almacenados de antemano. También puedes encontrar más información sobre la protección de datos en nuestras {faqLink}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"He leído las {termsOfUse} de la {instanceTitle} y las acepto.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"La declaración de consentimiento es necesaria para completar el registro.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"La aceptación de los términos de uso es necesaria para completar el registro.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
