@@ -22,7 +22,11 @@
 		/>
 	</template>
 	<template v-else>
-		<component :is="`h${headingLevel}`" class="title" :class="scope === 'board' ? 'board-title' : 'other-title'">
+		<component
+			:is="`h${headingLevel}`"
+			class="title"
+			:class="[scope === 'board' ? 'board-title' : 'other-title', { editable: hasEditPermission }]"
+		>
 			{{ externalValue?.trim() ? externalValue : emptyValueFallback }}
 		</component>
 	</template>
@@ -44,12 +48,14 @@ type Props = {
 	isFocused?: boolean;
 	maxLength?: number | null;
 	emptyValueFallback?: string;
+	hasEditPermission?: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
 	isFocused: false,
 	maxLength: null,
 	emptyValueFallback: "",
+	hasEditPermission: false,
 });
 
 const emit = defineEmits<{
@@ -162,7 +168,6 @@ const cursorToEnd = () => {
 }
 
 .title {
-	cursor: pointer;
 	white-space: pre-wrap;
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
@@ -204,5 +209,9 @@ const cursorToEnd = () => {
 	padding: 8px 16px;
 	overflow-wrap: break-word;
 	word-break: break-word;
+}
+
+.editable {
+	cursor: pointer;
 }
 </style>
