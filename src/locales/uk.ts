@@ -46,6 +46,7 @@ export default {
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Онлайн редагування неможливе",
 	"common.instructions.orderBy.arrowKeys": "Елементи цього списку можна переміщати за допомогою клавіш зі стрілками.",
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
@@ -2000,6 +2001,7 @@ export default {
 	"pages.folder.title": "Папка",
 	"pages.folder.columns.name": "Ім'я",
 	"pages.folder.columns.createdat": "Створено на",
+	"pages.folder.columns.lastModifiedAt": "Останнє оновлення",
 	"pages.folder.columns.size": "Розмір",
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
