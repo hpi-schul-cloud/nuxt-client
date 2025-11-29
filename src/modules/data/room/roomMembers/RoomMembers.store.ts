@@ -1,4 +1,5 @@
 import { RoomMember } from "./types";
+import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
@@ -14,10 +15,9 @@ import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 	let _asAdmin = false;
 
 	const { room } = storeToRefs(useRoomDetailsStore());

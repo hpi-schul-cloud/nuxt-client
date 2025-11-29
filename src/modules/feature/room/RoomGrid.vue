@@ -7,6 +7,7 @@
 		item-key="id"
 		:options="getSortableOptions()"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
+		@start="isDragging = true"
 		@end="onDropEnd"
 	>
 		<template #item="{ element, index }">
@@ -15,6 +16,7 @@
 				:room="element"
 				:index
 				@contextmenu.prevent
+				@click.capture="onItemClick"
 				@focusin="focusedRoom = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 			/>
@@ -47,6 +49,14 @@ const { fetchRooms, moveRoom } = useRoomStore();
 const props = defineProps({
 	rooms: { type: Array<RoomItem>, required: true },
 });
+const isDragging = ref(false);
+
+// Fix for firefox
+const onItemClick = (evt: Event) => {
+	if (isDragging.value) {
+		evt.preventDefault();
+	}
+};
 
 const reorderRoom = (newIndex: number, oldIndex: number) => {
 	if (newIndex === oldIndex) return;
@@ -73,6 +83,8 @@ const reorderRoom = (newIndex: number, oldIndex: number) => {
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
+	isDragging.value = false;
+
 	if (newIndex !== undefined && oldIndex !== undefined) {
 		reorderRoom(newIndex, oldIndex);
 	}

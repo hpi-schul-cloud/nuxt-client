@@ -1,4 +1,5 @@
 import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -18,8 +19,12 @@ import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { DOMWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mock, vi } from "vitest";
 import { nextTick } from "vue";
 import { VDataTable, VIcon } from "vuetify/components";
+
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("RoomAdminMembersTable", () => {
 	beforeEach(() => {

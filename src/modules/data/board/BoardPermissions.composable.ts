@@ -30,6 +30,8 @@ const boardPermissions = (): BoardPermissionChecks => {
 
 	const hasManageBoardPermission = computed(() => checkPermission(Permission.BoardManage));
 
+	const hasRelocateBoardContentPermission = computed(() => checkPermission(Permission.BoardRelocateContent));
+
 	const hasManageReadersCanEditPermission = computed(() => checkPermission(Permission.BoardManageReadersCanEdit));
 
 	const hasManageVideoConferencePermission = computed(() => checkPermission(Permission.BoardManageVideoconference));
@@ -45,6 +47,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasEditPermission,
 		hasDeletePermission,
 		hasManageBoardPermission,
+		hasRelocateBoardContentPermission,
 		hasManageReadersCanEditPermission,
 		hasManageVideoConferencePermission,
 		hasShareBoardPermission,

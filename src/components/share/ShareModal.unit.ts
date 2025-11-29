@@ -223,6 +223,47 @@ describe("@/components/share/ShareModal", () => {
 		});
 	});
 
+	describe("when card is shared", () => {
+		const setup = () => {
+			const shareModuleMock = createModuleMocks(ShareModule, {
+				getIsShareModalOpen: true,
+				getParentType: ShareTokenBodyParamsParentTypeEnum.Card,
+				createShareUrl: vi.fn(),
+				resetShareFlow: vi.fn(),
+			});
+
+			const wrapper = mount(ShareModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					provide: {
+						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+					},
+				},
+				props: {
+					type: ShareTokenBodyParamsParentTypeEnum.Card,
+				},
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should show copyright and privacy info alert", () => {
+			const { wrapper } = setup();
+			const infoAlert = wrapper.findComponent(InfoAlert);
+
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
+		});
+
+		it("should show warning alert", () => {
+			const { wrapper } = setup();
+			const warningAlert = wrapper.findComponent(WarningAlert);
+
+			expect(warningAlert.exists()).toBe(true);
+		});
+	});
+
 	describe("when lesson is shared", () => {
 		const setup = () => {
 			const shareModuleMock = createModuleMocks(ShareModule, {

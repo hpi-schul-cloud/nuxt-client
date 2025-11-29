@@ -11,6 +11,7 @@ import {
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -32,6 +33,7 @@ export const useBoardSocketApi = () => {
 		notifyDeleteCardSuccess,
 		notifyDeleteColumnSuccess,
 		notifyMoveCardSuccess,
+		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
 		notifySetBoardAsEditableForAllUsersSuccess,
 		notifySetBoardAsNotEditableForAllUsersSuccess,
@@ -50,6 +52,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, boardStore.moveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
 			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
 			on(BoardActions.updateColumnTitleSuccess, boardStore.updateColumnTitleSuccess),
@@ -66,6 +69,7 @@ export const useBoardSocketApi = () => {
 			on(CardActions.deleteCardFailure, reloadBoard),
 			on(BoardActions.deleteColumnFailure, reloadBoard),
 			on(BoardActions.moveCardFailure, reloadBoard),
+			on(BoardActions.moveCardToBoardFailure, reloadBoard),
 			on(BoardActions.moveColumnFailure, reloadBoard),
 			on(BoardActions.updateColumnTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardTitleFailure, reloadBoard),
@@ -80,6 +84,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
 			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
 			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, notifyMoveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
 			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
 			on(BoardActions.updateBoardVisibilitySuccess, notifyUpdateBoardVisibilitySuccess),
@@ -147,6 +152,10 @@ export const useBoardSocketApi = () => {
 		}
 	};
 
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		emitOnSocket("move-card-to-board-request", payload);
+	};
+
 	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
 		const { addedIndex, removedIndex } = payload.columnMove;
 		if (addedIndex === removedIndex) return;
@@ -210,6 +219,7 @@ export const useBoardSocketApi = () => {
 		fetchBoardRequest,
 		moveCardRequest,
 		moveColumnRequest,
+		moveCardToBoardRequest,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,

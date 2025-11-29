@@ -1,6 +1,8 @@
 import { uniqueId } from "lodash-es";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { NamedValue } from "vue-i18n";
+import { RouteLocationRaw } from "vue-router";
 
 export type AlertStatus = "success" | "error" | "warning" | "info";
 
@@ -15,6 +17,11 @@ export interface AlertPayload {
 	status: AlertStatus;
 	autoClose?: boolean;
 	duration?: number;
+	link?: {
+		to: string | RouteLocationRaw;
+		text: string;
+	};
+	replace?: NamedValue;
 }
 
 export interface Alert extends AlertPayload {

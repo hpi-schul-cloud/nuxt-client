@@ -6,6 +6,7 @@
 		class="room-content-grid mt-8"
 		item-key="id"
 		:options="getSortableOptions({ disabled: !canEditRoomContent })"
+		@start="isDragging = true"
 		@end="onDropEnd"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
 	>
@@ -16,6 +17,7 @@
 				:board="element"
 				:index
 				@contextmenu.prevent
+				@click.capture="onItemClick"
 				@focusin="focusedBoard = $event.target"
 				@keydown.up.down.left.right="onArrowKeyDown($event, index)"
 			/>
@@ -51,7 +53,15 @@ const { canEditRoomContent } = useRoomAuthorization();
 
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
+const isDragging = ref(false);
 const { notifyOnScreenReader } = useAriaLiveNotifier();
+
+// Fix for firefox
+const onItemClick = (evt: Event) => {
+	if (isDragging.value) {
+		evt.preventDefault();
+	}
+};
 
 const reorderRoom = (newIndex: number, oldIndex: number) => {
 	if (newIndex === oldIndex) return;
@@ -73,6 +83,7 @@ const reorderRoom = (newIndex: number, oldIndex: number) => {
 };
 
 const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
+	isDragging.value = false;
 	if (newIndex !== undefined && oldIndex !== undefined) {
 		reorderRoom(newIndex, oldIndex);
 	}

@@ -134,7 +134,8 @@ export default class CopyModule extends VuexModule {
 		if (
 			type === ShareTokenInfoResponseParentTypeEnum.ColumnBoard ||
 			type === ShareTokenInfoResponseParentTypeEnum.Lessons ||
-			type === ShareTokenInfoResponseParentTypeEnum.Tasks
+			type === ShareTokenInfoResponseParentTypeEnum.Tasks ||
+			type === ShareTokenInfoResponseParentTypeEnum.Card
 		) {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, {

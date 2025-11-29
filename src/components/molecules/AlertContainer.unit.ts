@@ -7,6 +7,8 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
+import { I18nT } from "vue-i18n";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VAlert, VIcon } from "vuetify/lib/components/index";
 
 describe("AlertContainer", () => {
@@ -15,6 +17,7 @@ describe("AlertContainer", () => {
 	});
 
 	const getWrapper = () => {
+		injectRouterMock(createRouterMock({}));
 		const wrapper = mount(AlertContainer, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -82,5 +85,40 @@ describe("AlertContainer", () => {
 
 		const result = wrapper.find(".alert-wrapper");
 		expect(result.exists()).toBe(true);
+	});
+
+	describe("i18n-t component with links and replacements", () => {
+		it("should render i18n-t with link slot when notification contains link", async () => {
+			const { wrapper } = getWrapper();
+			useNotificationStore().notify({
+				text: "notification.with.{link}",
+				status: "info",
+				link: {
+					to: "/test-route",
+					text: "Click here",
+				},
+			});
+			await nextTick();
+
+			const i18n = wrapper.findComponent(I18nT);
+			expect(i18n.exists()).toBe(true);
+		});
+
+		it("should render i18n-t with replace slots when notification contains replacements", async () => {
+			const { wrapper } = getWrapper();
+
+			useNotificationStore().notify({
+				text: "notification.user.{userName}.{action}",
+				status: "info",
+				replace: {
+					userName: "TestUser",
+					action: "deleted",
+				},
+			});
+			await nextTick();
+
+			const i18n = wrapper.findComponent(I18nT);
+			expect(i18n.exists()).toBe(true);
+		});
 	});
 });
