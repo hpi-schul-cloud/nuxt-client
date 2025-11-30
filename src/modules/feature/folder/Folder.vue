@@ -103,7 +103,6 @@ const fabAction = computed(() => {
 		{
 			icon: mdiPlus,
 			label: t("pages.folder.fab.title"),
-			ariaLabel: t("pages.folder.fab.title"),
 			dataTestId: "fab-add-files",
 		},
 	];

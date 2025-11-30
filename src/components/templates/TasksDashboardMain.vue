@@ -251,9 +251,8 @@ export default {
 				return [
 					{
 						icon: mdiPlus,
-						label: this.$t("common.actions.create"),
+						label: this.$t("components.organisms.TasksDashboardMain.fab.createTask"),
 						href: "/homework/new?returnUrl=tasks",
-						ariaLabel: this.$t("common.actions.create"),
 						dataTestId: "addTask",
 					},
 				];

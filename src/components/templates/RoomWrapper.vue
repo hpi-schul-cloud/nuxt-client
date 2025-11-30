@@ -61,7 +61,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 		{
 			icon: mdiSchoolOutline,
 			label: t("pages.rooms.fab.add.course"),
-			ariaLabel: t("pages.rooms.fab.add.course"),
 			dataTestId: "fab_button_add_course",
 			href: "/courses/add",
 		},
@@ -71,7 +70,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 		actions.push({
 			icon: mdiSync,
 			label: t("pages.rooms.fab.add.syncedCourse"),
-			ariaLabel: t("pages.rooms.fab.add.syncedCourse"),
 			dataTestId: "fab_button_add_synced_course",
 			clickHandler: () => (isCourseSyncDialogOpen.value = true),
 		});
@@ -81,7 +79,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 		actions.push({
 			icon: mdiImport,
 			label: t("pages.rooms.fab.import.course"),
-			ariaLabel: t("pages.rooms.fab.import.course"),
 			dataTestId: "fab_button_import_course",
 			clickHandler: () => commonCartridgeImportModule.setIsOpen(true),
 		});
@@ -91,8 +88,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 		return [
 			{
 				icon: mdiPlus,
-				label: t("common.actions.create"),
-				ariaLabel: t("pages.rooms.fab.ariaLabel"),
+				label: t("pages.rooms.fab.create.course"),
 				dataTestId: "add-course-button",
 				href: "/courses/add",
 			},
@@ -101,8 +97,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 		return [
 			{
 				icon: mdiPlus,
-				label: t("common.actions.create"),
-				ariaLabel: t("pages.rooms.fab.ariaLabel"),
+				label: t("pages.rooms.fab.create.course"),
 				dataTestId: "add-course-button",
 			},
 			...actions,

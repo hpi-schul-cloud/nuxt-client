@@ -340,23 +340,20 @@ export default {
 			return [
 				{
 					icon: mdiPlus,
-					label: this.$t("common.actions.create"),
+					label: this.$t("pages.administration.teachers.fab.add"),
 					dataTestId: "fab_button_teachers_table",
-					ariaLabel: this.$t("common.actions.create"),
 				},
 				{
 					label: this.$t("pages.administration.teachers.fab.add"),
 					icon: mdiAccountPlus,
 					to: "/administration/teachers/new",
 					dataTestId: "fab_button_add_teachers",
-					ariaLabel: this.$t("pages.administration.teachers.fab.add"),
 				},
 				{
 					label: this.$t("pages.administration.teachers.fab.import"),
 					icon: mdiCloudDownload,
 					href: "/administration/teachers/import",
 					dataTestId: "fab_button_import_teachers",
-					ariaLabel: this.$t("pages.administration.teachers.fab.import"),
 				},
 			];
 		},

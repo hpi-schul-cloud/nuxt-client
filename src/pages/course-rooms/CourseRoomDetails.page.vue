@@ -271,7 +271,6 @@ export default defineComponent({
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_task",
-					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.task"),
 				});
 			}
 
@@ -281,7 +280,6 @@ export default defineComponent({
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
-					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 				});
 			}
 
@@ -290,7 +288,6 @@ export default defineComponent({
 					label: this.$t("pages.courseRoomDetails.fab.add.board"),
 					icon: mdiViewGridPlusOutline,
 					dataTestId: "fab_button_add_board",
-					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.board"),
 					clickHandler: this.fabItemClickHandler,
 				});
 			}
@@ -302,8 +299,7 @@ export default defineComponent({
 			const items = [
 				{
 					icon: mdiPlus,
-					label: this.$t("common.actions.create"),
-					ariaLabel: this.$t("common.actions.create"),
+					label: this.$t("pages.courseRoomDetails.fab.add.learnContent"),
 					dataTestId: "add-content-button",
 				},
 				...actions,

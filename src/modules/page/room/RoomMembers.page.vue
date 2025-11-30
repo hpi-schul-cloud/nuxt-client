@@ -264,7 +264,6 @@ const fabAction = computed(() => {
 			{
 				icon: mdiPlus,
 				label: t("pages.rooms.members.add"),
-				ariaLabel: t("pages.rooms.members.add"),
 				dataTestId: "fab-add-members",
 			},
 		];
@@ -275,7 +274,6 @@ const fabAction = computed(() => {
 			{
 				icon: mdiPlus,
 				label: t("pages.rooms.members.inviteMember.step.prepare.title"),
-				ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
 				dataTestId: "fab-invite-members",
 			},
 		];
