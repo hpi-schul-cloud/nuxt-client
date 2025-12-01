@@ -73,7 +73,7 @@ describe("ImportCardDialog", () => {
 		expect(wrapper.findComponent(WarningAlert).exists()).toBe(true);
 	});
 
-	it("should notify about the success of the move action.", async () => {
+	it("should notify about the success of the import action.", async () => {
 		const { wrapper } = setup();
 		await flushPromises();
 

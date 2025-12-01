@@ -111,27 +111,6 @@ describe("RoomsPage", () => {
 		});
 	});
 
-	describe("when the page is importing a card", () => {
-		const token = "6S6s-CWVVxEG";
-
-		it("should render import card dialog", () => {
-			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentTypeEnum.Card });
-			const { wrapper } = setup();
-
-			const importFLow = wrapper.findComponent(ImportCardDialog);
-
-			expect(importFLow.exists()).toBe(true);
-			expect(importFLow.props().token).toBe(token);
-		});
-
-		it("should not render import card dialog", () => {
-			router.setQuery({ import: token, type: ShareTokenBodyParamsParentTypeEnum.Room });
-			const { wrapper } = setup();
-			const importFLow = wrapper.findComponent(ImportCardDialog);
-			expect(importFLow.exists()).toBe(false);
-		});
-	});
-
 	describe("when the page is in import mode", () => {
 		const token = "6S6s-CWVVxEG";
 
@@ -144,6 +123,23 @@ describe("RoomsPage", () => {
 				wrapper,
 			};
 		};
+
+		it("should render import card dialog with card type", () => {
+			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentTypeEnum.Card });
+			const { wrapper } = setup();
+
+			const importFLow = wrapper.findComponent(ImportCardDialog);
+
+			expect(importFLow.exists()).toBe(true);
+			expect(importFLow.props().token).toBe(token);
+		});
+
+		it("should not render import card dialog with room type", () => {
+			router.setQuery({ import: token, type: ShareTokenBodyParamsParentTypeEnum.Room });
+			const { wrapper } = setup();
+			const importFLow = wrapper.findComponent(ImportCardDialog);
+			expect(importFLow.exists()).toBe(false);
+		});
 
 		it("should render import flow and be passed data", () => {
 			const { wrapper } = setupImportMode();

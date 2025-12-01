@@ -52,11 +52,11 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	};
 
 	const fetchBoardsOfRoom = async (roomId: string) => {
-		const { result } = await execute(
+		const { result, error } = await execute(
 			() => roomApi.roomControllerGetRoomBoards(roomId),
 			t("common.notifications.errors.notLoaded", { type: t("common.words.board", PLURAL_COUNT) }, PLURAL_COUNT)
 		);
-		return { boards: result?.data.data };
+		return { boards: result?.data.data, error };
 	};
 
 	const createBoard = async (roomId: string, layout: BoardLayout, title: string) => {
