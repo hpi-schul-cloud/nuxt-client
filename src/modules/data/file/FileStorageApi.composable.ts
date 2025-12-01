@@ -1,12 +1,6 @@
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
-import {
-	FileApiFactory,
-	FileApiInterface,
-	FileRecordResponse,
-	WopiApiFactory,
-	WopiApiInterface,
-} from "@/fileStorageApi/v3";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/fileStorageApi/v3";
 import {
 	EditorMode,
 	FileRecord,
@@ -80,7 +74,7 @@ export const useFileStorageApi = () => {
 		parentId: string,
 		parentType: FileRecordParent,
 		fileName?: string
-	): Promise<FileRecordResponse | void> => {
+	): Promise<FileRecord | void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
