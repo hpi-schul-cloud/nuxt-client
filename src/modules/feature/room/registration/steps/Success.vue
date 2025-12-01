@@ -1,6 +1,6 @@
 <template>
 	<div class="mb-10">
-		{{ t("pages.registrationExternalMembers.steps.success.copy") }}
+		{{ t("pages.registrationExternalMembers.steps.success.explanation") }}
 	</div>
 	<div>
 		<VBtn variant="flat" color="primary" data-testid="success-continue-button" :to="LOGIN_URI">

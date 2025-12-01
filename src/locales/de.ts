@@ -1578,7 +1578,7 @@ export default {
 	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
 	"pages.registrationExternalMembers.steps.success.title": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.success.heading": "Vielen Dank für die Registrierung in der Bildungscloud!",
-	"pages.registrationExternalMembers.steps.success.copy":
+	"pages.registrationExternalMembers.steps.success.explanation":
 		'Willkommen im neuen Raum. In Räumen können Inhalte an einem zentralen Ort erstellt, organisiert und mit unterschiedlichen Personengruppen geteilt werden - zum Beispiel mit Klassen, Kolleginnen und Kollegen, externen Personen oder interdisziplinären Teams. Im Menüpunkt „Räume" sind die Räume aufgelistet, in denen bereits eine Mitgliedschaft besteht.',
 	"pages.registrationExternalMembers.steps.success.button": "Zum Login",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
