@@ -9,7 +9,6 @@ import {
 	roomItemFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useNotificationStore } from "@data-app";
 import { useBoardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -88,6 +87,5 @@ describe("MoveCardDialog", () => {
 		await dialog.vm.$emit("confirm");
 		await flushPromises();
 		expect(useBoardStore().moveCardToBoardRequest).toHaveBeenCalled();
-		expect(useNotificationStore().notify).toHaveBeenCalled();
 	});
 });

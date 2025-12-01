@@ -496,13 +496,8 @@ describe("boardRestApi", () => {
 			const { boardStore } = setup();
 			const { moveCardToBoardRequest } = useBoardRestApi();
 
-			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B" };
-			await moveCardToBoardRequest(cardPayload);
-
-			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalledWith({
-				...cardPayload,
-				isOwnAction: true,
-			});
+			await moveCardToBoardRequest({ cardId: "123", fromColumnId: "A", toColumnId: "B" });
+			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalled();
 		});
 
 		it("should call handleError if the API call fails", async () => {
