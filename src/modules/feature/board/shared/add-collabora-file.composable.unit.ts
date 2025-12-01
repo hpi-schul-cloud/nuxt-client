@@ -167,7 +167,7 @@ describe("AddCollaboraFileComposable", () => {
 					await option.action("test-office-file", "");
 				}
 
-				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
+				expect(fileStorageApiMock.uploadCollaboraFile).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
 			});
 
 			describe("when a caption is provided", () => {
@@ -207,7 +207,7 @@ describe("AddCollaboraFileComposable", () => {
 			describe("when file upload fails", () => {
 				it("should delete the created file element", async () => {
 					const { collaboraFileSelectionOptions } = setup();
-					fileStorageApiMock.uploadFromUrl.mockRejectedValue(new Error("Upload failed"));
+					fileStorageApiMock.uploadCollaboraFile.mockRejectedValue(new Error("Upload failed"));
 
 					for (const option of collaboraFileSelectionOptions) {
 						await option.action("test-office-file", "");
