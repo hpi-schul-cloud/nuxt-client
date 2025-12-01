@@ -87,11 +87,7 @@ const setPageTitle = async () => {
 
 const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
 	try {
-		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
-			props.fileRecordId,
-			editorMode.value ?? EditorMode.VIEW,
-			userName.value
-		);
+		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(props.fileRecordId, editorMode.value, userName.value);
 
 		return collaboraUrl;
 	} catch (error) {
