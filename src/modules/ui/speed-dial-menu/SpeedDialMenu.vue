@@ -1,13 +1,17 @@
 <template>
-	<!-- TODO - size transition not working when using extended prop -->
 	<VFab
 		:absolute="!mdAndDown"
-		:class="{ 'large-screen-positioning': !mdAndDown, 'position-fixed medium-small-screen-positioning': mdAndDown }"
+		class="fab-size-transition"
+		:class="{
+			'fab-default-width': !isCollapsed,
+			'large-screen-positioning': !mdAndDown,
+			'position-fixed medium-small-screen-positioning': mdAndDown,
+		}"
+		:rounded="!isCollapsed ? 'xl' : 'circle'"
 		color="primary"
 		size="large"
 		:transition="false"
 		:icon="isCollapsed"
-		:extended="!isCollapsed"
 		:to="primaryAction.to"
 		:href="primaryAction.href"
 		:data-testid="primaryAction.dataTestId"
@@ -86,7 +90,7 @@ watchThrottled(
 );
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .large-screen-positioning {
 	top: 22px;
 	right: 24px;
@@ -97,12 +101,12 @@ watchThrottled(
 	right: 24px;
 }
 
-.size-transition {
+.fab-size-transition :deep(.v-btn) {
 	transition: all 200ms ease-in-out;
 	min-width: 56px;
 }
 
-.default-width {
+.fab-default-width :deep(.v-btn) {
 	width: 100%;
 }
 </style>
