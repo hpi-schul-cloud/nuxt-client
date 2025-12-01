@@ -3,7 +3,8 @@
 	<div class="d-flex justify-end align-center pr-5">
 		<VBtn
 			class="mr-2 text-on-surface"
-			:data-test-id="action.dataTestId"
+			elevation="4"
+			:data-testid="action.dataTestId"
 			:href="action.href"
 			:to="action.to"
 			:aria-hidden="true"
@@ -14,11 +15,12 @@
 		</VBtn>
 		<VBtn
 			color="primary"
-			:data-test-id="action.dataTestId"
+			elevation="4"
+			:data-testid="action.dataTestId"
 			:icon="action.icon"
 			:href="action.href"
 			:to="action.to"
-			:aria-label="action.ariaLabel"
+			:aria-label="action.ariaLabel ?? action.label"
 			@click="action.clickHandler"
 		/>
 	</div>

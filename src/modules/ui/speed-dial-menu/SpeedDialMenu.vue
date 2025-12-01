@@ -10,6 +10,7 @@
 		:rounded="!isCollapsed ? 'xl' : 'circle'"
 		color="primary"
 		size="large"
+		elevation="4"
 		:transition="false"
 		:icon="isCollapsed"
 		:to="primaryAction.to"
