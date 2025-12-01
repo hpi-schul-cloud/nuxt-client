@@ -74,4 +74,30 @@ describe("FileStatus", () => {
 			expect(wrapper.findComponent('[data-testid="file-status-scan-virus-detected"]').exists()).toBe(true);
 		});
 	});
+
+	describe("when collabora file size is exceeded", () => {
+		it("should show correct chip", () => {
+			const fileRecord = fileRecordFactory.build({
+				exceedsCollaboraEditableFileSize: true,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord);
+
+			expect(wrapper.findComponent('[data-testid="file-status-collabora-file-size-exceeded"]').exists()).toBe(true);
+		});
+	});
+
+	describe("when collabora file size is exceeded and virus detected", () => {
+		it("should only show virus info chip", () => {
+			const fileRecord = fileRecordFactory.build({
+				exceedsCollaboraEditableFileSize: true,
+				securityCheckStatus: FileRecordScanStatus.BLOCKED,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord);
+
+			expect(wrapper.findComponent('[data-testid="file-status-scan-virus-detected"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="file-status-collabora-file-size-exceeded"]').exists()).toBe(false);
+		});
+	});
 });

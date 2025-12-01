@@ -7,7 +7,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardPermissions, useBoardStore, useForceRender } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
+import { useDragAndDrop, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, nextTick, ref } from "vue";
 
@@ -46,6 +46,7 @@ describe("BoardColumn", () => {
 		const column = columnResponseFactory.build({
 			cards,
 		});
+		const { setEditModeId } = useSharedEditMode();
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -66,7 +67,7 @@ describe("BoardColumn", () => {
 
 		const store = mockedPiniaStoreTyping(useBoardStore);
 
-		return { wrapper, store, cards, column };
+		return { wrapper, store, cards, column, setEditModeId };
 	};
 
 	describe("when component is mounted", () => {
@@ -333,6 +334,48 @@ describe("BoardColumn", () => {
 				const emitted = wrapper.emitted("move:column-up");
 				expect(emitted).toHaveLength(1);
 			});
+		});
+	});
+
+	describe("when editing a card", () => {
+		it("should not show addCardButton in the same column", async () => {
+			const { wrapper, setEditModeId, cards } = setup();
+			const cardId = cards[0].cardId;
+			setEditModeId(cardId);
+			await nextTick();
+
+			const addCardButtons = wrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+			expect(addCardButtons).toHaveLength(0);
+		});
+
+		it("should show addCardButton in any other column", async () => {
+			const { setEditModeId: originalSetEditModeId, wrapper: originalWrapper } = setup();
+			const { cards: siblingCards } = setup();
+
+			originalSetEditModeId(siblingCards[0].cardId);
+			await nextTick();
+
+			const addCardButtons = originalWrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+			expect(addCardButtons).toHaveLength(1);
+		});
+		it("should show addCardButton in same column if edit mode is stopped", async () => {
+			const { wrapper, setEditModeId, cards } = setup();
+
+			const cardId = cards[0].cardId;
+			setEditModeId(cardId);
+			await nextTick();
+
+			setEditModeId(undefined);
+			await nextTick();
+
+			const addCardButtons = wrapper.findAllComponents({
+				name: "BoardAddCardButton",
+			});
+			expect(addCardButtons).toHaveLength(1);
 		});
 	});
 });
