@@ -1,12 +1,20 @@
 import { FileRecordItem } from "../types/filerecord-item";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
-import { fileRecordFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { useLightBox } from "@ui-light-box";
+import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { ref } from "vue";
+import { Router, useRouter } from "vue-router";
 
+vi.mock("vue-router");
 vi.mock("@ui-light-box");
+
+const useRouterMock = <Mock>useRouter;
 
 describe("FileInteractionHandler", () => {
 	const setupMocks = () => {
@@ -18,6 +26,9 @@ describe("FileInteractionHandler", () => {
 			lightBoxOptions: ref(),
 		});
 
+		const router = createMock<Router>({});
+		useRouterMock.mockReturnValue(router);
+
 		return { useLightBoxMock };
 	};
 
@@ -28,24 +39,35 @@ describe("FileInteractionHandler", () => {
 			},
 			props: {
 				fileRecordItem,
+				hasEditPermission: true,
 			},
 		});
 		return { wrapper };
 	};
 
 	describe("when file is selectable", () => {
-		const setup = (props: { previewStatus?: FilePreviewStatus; mimeType?: string }) => {
+		const setup = (
+			props: { previewStatus?: FilePreviewStatus; mimeType?: string; isCollaboraEditable?: boolean },
+			options?: { isCollaboraEnabled?: boolean }
+		) => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: props.previewStatus,
 				mimeType: props.mimeType,
+				isCollaboraEditable: props.isCollaboraEditable,
 			});
 			const fileRecordItem = {
 				...fileRecord,
 				isSelectable: true,
 			};
 
-			const { wrapper } = setupWrapper(fileRecordItem);
 			const { useLightBoxMock } = setupMocks();
+
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: options?.isCollaboraEnabled ?? false,
+			});
+
+			const { wrapper } = setupWrapper(fileRecordItem);
 
 			return { wrapper, useLightBoxMock, fileRecordItem };
 		};
@@ -135,6 +157,62 @@ describe("FileInteractionHandler", () => {
 			});
 		});
 
+		describe("when file is a collabora document", () => {
+			it("should render button", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: true },
+					{ isCollaboraEnabled: true }
+				);
+				const button = wrapper.find("button");
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should call open function", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: true },
+					{ isCollaboraEnabled: true }
+				);
+
+				const windowOpenSpy = vi.fn();
+				window.open = windowOpenSpy;
+
+				const button = wrapper.find("button");
+				button.trigger("click");
+
+				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("when collabora is not enabled", () => {
+			it("should render div instead of button", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: true },
+					{ isCollaboraEnabled: false }
+				);
+
+				const div = wrapper.find("div");
+				const button = wrapper.find("button");
+
+				expect(div.exists()).toBe(true);
+				expect(button.exists()).toBe(false);
+			});
+		});
+
+		describe("when collabora file is not editable", () => {
+			it("should render div instead of button", () => {
+				const { wrapper } = setup(
+					{ mimeType: "application/msword", isCollaboraEditable: false },
+					{ isCollaboraEnabled: true }
+				);
+
+				const div = wrapper.find("div");
+				const button = wrapper.find("button");
+
+				expect(div.exists()).toBe(true);
+				expect(button.exists()).toBe(false);
+			});
+		});
+
 		describe("when preview is not possible and mimeType is not audio or video", () => {
 			it("should render div instead of button", () => {
 				const { wrapper } = setup({
@@ -152,7 +230,7 @@ describe("FileInteractionHandler", () => {
 	});
 
 	describe("when file is not selectable", () => {
-		const setup = () => {
+		const setup = (options?: { isCollaboraEnabled?: boolean }) => {
 			const fileRecord = fileRecordFactory.build({
 				previewStatus: FilePreviewStatus.PREVIEW_POSSIBLE,
 			});
@@ -160,6 +238,12 @@ describe("FileInteractionHandler", () => {
 				...fileRecord,
 				isSelectable: false,
 			};
+
+			setupMocks();
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: options?.isCollaboraEnabled ?? false,
+			});
 
 			const { wrapper } = setupWrapper(fileRecordItem);
 
