@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import { FileRecordItem } from "../types/filerecord-item";
-import { FileRecord } from "@/types/file/File";
 import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
@@ -69,7 +68,7 @@ const handleClick = () => {
 	} else if (isVideo) {
 		openVideoInLightbox();
 	} else if (isCollabora) {
-		openCollabora(fileRecordItem, hasEditPermission);
+		openCollabora();
 	}
 };
 
@@ -117,13 +116,13 @@ const openVideoInLightbox = () => {
 	open(options);
 };
 
-const openCollabora = (fileRecord: FileRecord, hasEditPermission: boolean) => {
+const openCollabora = () => {
 	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission);
 
 	const url = router.resolve({
 		name: "collabora",
 		params: {
-			id: fileRecord.id,
+			id: fileRecordItem.id,
 		},
 		query: {
 			editorMode,
