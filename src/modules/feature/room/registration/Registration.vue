@@ -26,13 +26,18 @@
 			</VStepperWindow>
 			<VStepperActions>
 				<template #prev>
-					<VBtn v-if="stepValue > 1" data-testid="registration-back-button" @click="onBack(stepValue - 1)">
+					<VBtn
+						v-if="stepValue > 1 && stepValue < steps.length"
+						data-testid="registration-back-button"
+						@click="onBack(stepValue - 1)"
+					>
 						{{ t("common.actions.back") }}
 					</VBtn>
 				</template>
 				<template #next>
 					<VSpacer v-if="stepValue < steps.length" />
 					<VBtn
+						v-if="stepValue < steps.length"
 						variant="flat"
 						color="primary"
 						data-testid="registration-continue-button"
@@ -65,7 +70,6 @@ enum RegistrationSteps {
 	PasswordSetup,
 	DeclarationOfConsent,
 	ConfirmationCode,
-	Registration,
 	Success,
 }
 
@@ -149,12 +153,6 @@ const steps = computed(() => [
 		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
 		heading: t("pages.registrationExternalMembers.steps.confirmationCode.heading"),
 		id: "confirmation",
-	},
-	{
-		value: RegistrationSteps.Registration,
-		title: t("pages.registrationExternalMembers.steps.registration.title"),
-		heading: t("pages.registrationExternalMembers.steps.registration.heading"),
-		id: "registration",
 	},
 	{
 		value: RegistrationSteps.Success,

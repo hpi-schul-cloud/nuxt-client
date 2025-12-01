@@ -1,8 +1,5 @@
 <template>
 	<div class="mb-10">
-		<h2 class="mb-4 heading" data-testid="success-heading">
-			{{ t("pages.registrationExternalMembers.steps.success.heading") }}
-		</h2>
 		{{ t("pages.registrationExternalMembers.steps.success.copy") }}
 	</div>
 	<div>
