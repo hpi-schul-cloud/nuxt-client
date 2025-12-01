@@ -15,7 +15,6 @@ import { useBoardPermissions, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import * as utilCollabora from "@util-collabora";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -163,12 +162,11 @@ describe("FileContentElement", () => {
 					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
 
+				const collaboraPageUrl = "/collabora/" + fileRecordResponse.id + "?editorMode=edit";
 				const router = createMock<Router>();
 				const useRouterMock = <Mock>useRouter;
 				useRouterMock.mockReturnValue(router);
-
-				const windowOpenMock = vi.fn();
-				vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -216,7 +214,6 @@ describe("FileContentElement", () => {
 					menu,
 					addAlertMock,
 					fileStorageApiMock,
-					router,
 				};
 			};
 
@@ -395,33 +392,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -441,33 +446,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should not open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should not open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -487,33 +500,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should not open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should not open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -533,33 +554,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should not open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should not open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -573,12 +602,11 @@ describe("FileContentElement", () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
+					const collaboraPageUrl = "/collabora/" + "123" + "?editorMode=edit";
 					const router = createMock<Router>();
 					const useRouterMock = <Mock>useRouter;
 					useRouterMock.mockReturnValue(router);
-
-					const windowOpenMock = vi.fn();
-					vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+					router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -757,12 +785,12 @@ describe("FileContentElement", () => {
 					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
 
+				const collaboraPageUrl = "/collabora/" + fileRecordResponse.id + "?editorMode=edit";
 				const router = createMock<Router>();
 				const useRouterMock = <Mock>useRouter;
-				useRouterMock.mockReturnValue(router);
 
-				const windowOpenMock = vi.fn();
-				vi.spyOn(window, "open").mockImplementation(windowOpenMock);
+				useRouterMock.mockReturnValue(router);
+				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -809,7 +837,6 @@ describe("FileContentElement", () => {
 					element,
 					expectedFileProperties,
 					menu,
-					router,
 				};
 			};
 
@@ -974,33 +1001,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -1020,33 +1055,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should not open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should not open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/vnd.oasis.opendocument.text",
 							isCollaboraEditable: true,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -1066,33 +1109,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should not open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should not open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: true,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});
@@ -1112,33 +1163,41 @@ describe("FileContentElement", () => {
 
 				describe("when card is clicked", () => {
 					it("should not open collabora url in new tab", () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						card.trigger("click");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+						windowOpenSpy.mockRestore();
 					});
 				});
 
 				describe("when card is focused and enter is pressed", () => {
 					it("should not open collabora url in new tab", async () => {
-						const { wrapper, fileRecordResponse, router } = setup({
+						const { wrapper, fileRecordResponse } = setup({
 							isCollaboraEnabled: false,
 							mimeType: "application/pdf",
 							isCollaboraEditable: false,
 						});
+
 						const card = wrapper.findComponent(VCard);
-						const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+
+						const windowOpenMock = vi.fn();
+						const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 						await card.trigger("keydown.enter");
 
-						expect(openCollaboraSpy).not.toHaveBeenCalledWith(router, fileRecordResponse, true);
+						expect(windowOpenSpy).not.toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}`, "_blank");
+
+						windowOpenSpy.mockRestore();
 					});
 				});
 			});

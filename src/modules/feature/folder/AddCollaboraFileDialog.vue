@@ -35,13 +35,9 @@
 </template>
 <script setup lang="ts">
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
-import { FileRecordParentType } from "@/fileStorageApi/v3";
-import { CollaboraFileType } from "@/types/enum/Collabora";
 import { FileRecord } from "@/types/file/File";
-import { getFileExtension } from "@/utils/fileHelper";
-import { useFileStorageApi } from "@data-file";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { Dialog } from "@ui-dialog";
-import { getCollaboraAssetUrl } from "@util-collabora";
 import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -61,26 +57,18 @@ type VuetifyForm = {
 	validate: () => Promise<{ valid: boolean }>;
 };
 
-const { uploadFromUrl } = useFileStorageApi();
-
+const { uploadCollaboraFile } = useFileStorageApi();
 const { isCollaboraFileDialogOpen, closeCollaboraFileDialog } = useAddCollaboraFile();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { validateInvalidCharacters } = useInvalidCharactersValidator();
-
 const { t } = useI18n();
 
 const form = ref<VuetifyForm | null>(null);
-
 const selectedDocType = ref<string | null>(null);
 const fileName = ref<string>("");
 
-const uploadCollaboraFile = async (type: CollaboraFileType, folderId: string, fileName: string) => {
-	const assetUrl = getCollaboraAssetUrl(type);
-	const fileExtension = getFileExtension(assetUrl);
-	const fullFileName = `${fileName}.${fileExtension}`;
-
-	const fileRecord = await uploadFromUrl(assetUrl, folderId, FileRecordParentType.BOARDNODES, fullFileName);
-
+const uploadCollaboraFileFn = async (type: CollaboraFileType, folderId: string, fileName: string) => {
+	const fileRecord = await uploadCollaboraFile(type, folderId, fileName);
 	closeCollaboraFileDialog();
 
 	return fileRecord;
@@ -91,19 +79,19 @@ const collaboraFileSelectionOptions = [
 		id: "1",
 		label: t("pages.folder.add-collabora-file-dialog.option.text"),
 		action: async (folderId: string, fileName: string) =>
-			uploadCollaboraFile(CollaboraFileType.Text, folderId, fileName),
+			uploadCollaboraFileFn(CollaboraFileType.Text, folderId, fileName),
 	},
 	{
 		id: "2",
 		label: t("pages.folder.add-collabora-file-dialog.option.spreadsheet"),
 		action: async (folderId: string, fileName: string) =>
-			uploadCollaboraFile(CollaboraFileType.Spreadsheet, folderId, fileName),
+			uploadCollaboraFileFn(CollaboraFileType.Spreadsheet, folderId, fileName),
 	},
 	{
 		id: "3",
 		label: t("pages.folder.add-collabora-file-dialog.option.presentation"),
 		action: async (folderId: string, fileName: string) =>
-			uploadCollaboraFile(CollaboraFileType.Presentation, folderId, fileName),
+			uploadCollaboraFileFn(CollaboraFileType.Presentation, folderId, fileName),
 	},
 ];
 

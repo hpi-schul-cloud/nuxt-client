@@ -1,13 +1,9 @@
-import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
-import { CollaboraFileType } from "@/types/enum/Collabora";
-import { getFileExtension } from "@/utils/fileHelper";
 import { type CreateElementRequestPayload, useCardStore } from "@data-board";
-import { useFileStorageApi } from "@data-file";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect } from "@util-board";
-import { getCollaboraAssetUrl } from "@util-collabora";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -17,7 +13,7 @@ type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<
 export const useAddCollaboraFile = createSharedComposable(() => {
 	const { t } = useI18n();
 	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
-	const { uploadFromUrl } = useFileStorageApi();
+	const { uploadCollaboraFile } = useFileStorageApi();
 	const cardStore = useCardStore();
 
 	const cardId = ref("");
@@ -60,13 +56,9 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 			return;
 		}
 
-		const assetUrl = getCollaboraAssetUrl(type);
-		const fileExtension = getFileExtension(assetUrl);
-
 		try {
 			disableFileSelectOnMount();
-			const fullFileName = fileExtension ? `${fileName}.${fileExtension}` : fileName;
-			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fullFileName);
+			await uploadCollaboraFile(type, element.id, fileName);
 			await updateFileElementCaption(element, caption.trim());
 		} catch {
 			await cardStore.deleteElementRequest({ elementId: element.id, cardId: cardId.value });

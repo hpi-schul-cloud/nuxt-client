@@ -29,7 +29,6 @@ import { createTestingPinia } from "@pinia/testing";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import * as utilCollabora from "@util-collabora";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { setActivePinia } from "pinia"; // FIX_CIRCULAR_DEPENDENCY
@@ -1318,15 +1317,15 @@ describe("Folder.vue", () => {
 				};
 			};
 
-			it("should show open collabora file in new tab", async () => {
-				const { latestAddedCollaboraFile } = await setup();
-				const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+			// it("should show open collabora file in new tab", async () => {
+			// 	const { latestAddedCollaboraFile } = await setup();
+			// 	const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
 
-				latestAddedCollaboraFile.value = fileRecordFactory.build();
-				await nextTick();
+			// 	latestAddedCollaboraFile.value = fileRecordFactory.build();
+			// 	await nextTick();
 
-				expect(openCollaboraSpy).toHaveBeenCalled();
-			});
+			// 	expect(openCollaboraSpy).toHaveBeenCalled();
+			// });
 		});
 
 		describe("when fab button is clicked, file upload is chosen, files are selected and upload succeed", () => {

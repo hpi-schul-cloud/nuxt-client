@@ -9,18 +9,6 @@ import { VForm, VSelect } from "vuetify/lib/components/index";
 vi.mock("./add-collabora-file.composable");
 const mockedCollaboraFileSelection = vi.mocked(useAddCollaboraFile);
 mockedCollaboraFileSelection.mockReturnValue({
-	collaboraFileSelectionOptions: [
-		{
-			id: "1",
-			label: "Text Document",
-			action: vi.fn(),
-		},
-		{
-			id: "2",
-			label: "Table Document",
-			action: vi.fn(),
-		},
-	],
 	isCollaboraFileDialogOpen: ref(false),
 	openCollaboraFileDialog: vi.fn(),
 	closeCollaboraFileDialog: vi.fn(),
@@ -28,13 +16,11 @@ mockedCollaboraFileSelection.mockReturnValue({
 
 describe("CollaboraFileDialog", () => {
 	const setupMocks = () => {
-		const { closeCollaboraFileDialog, isCollaboraFileDialogOpen, collaboraFileSelectionOptions } =
-			mockedCollaboraFileSelection();
+		const { closeCollaboraFileDialog, isCollaboraFileDialogOpen } = mockedCollaboraFileSelection();
 
 		return {
 			isCollaboraFileDialogOpen,
 			closeCollaboraFileDialog,
-			collaboraFileSelectionOptions,
 		};
 	};
 
@@ -78,7 +64,7 @@ describe("CollaboraFileDialog", () => {
 			vi.clearAllMocks();
 			setupMocks();
 
-			const { isCollaboraFileDialogOpen, closeCollaboraFileDialog, collaboraFileSelectionOptions } = setupMocks();
+			const { isCollaboraFileDialogOpen, closeCollaboraFileDialog } = setupMocks();
 
 			const wrapper = mount(AddCollaboraFileDialog, {
 				global: {
@@ -94,7 +80,7 @@ describe("CollaboraFileDialog", () => {
 			isCollaboraFileDialogOpen.value = true;
 			await nextTick();
 
-			return { isCollaboraFileDialogOpen, closeCollaboraFileDialog, collaboraFileSelectionOptions, wrapper };
+			return { isCollaboraFileDialogOpen, closeCollaboraFileDialog, wrapper };
 		};
 
 		it("should make modal visible", async () => {

@@ -11,6 +11,7 @@ import {
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize } from "@/utils/fileHelper";
+import { getFileExtension } from "@/utils/fileHelper";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
@@ -24,6 +25,12 @@ export enum ErrorType {
 	FILE_TOO_BIG = "FILE_TOO_BIG",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
+}
+
+export enum CollaboraFileType {
+	Text,
+	Spreadsheet,
+	Presentation,
 }
 
 export const useFileStorageApi = () => {
@@ -67,6 +74,29 @@ export const useFileStorageApi = () => {
 			showError(error);
 			throw error;
 		}
+	};
+
+	const getCollaboraAssetUrl = (collaboraFileType: CollaboraFileType): string => {
+		const base = `${window.location.origin}/collabora`;
+
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return `${base}/doc.docx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return `${base}/spreadsheet.xlsx`;
+		}
+
+		return `${base}/presentation.pptx`;
+	};
+
+	const uploadCollaboraFile = async (type: CollaboraFileType, parentId: string, fileName: string) => {
+		const assetUrl = getCollaboraAssetUrl(type);
+		const fileExtension = getFileExtension(assetUrl);
+		const fullFileName = `${fileName}.${fileExtension}`;
+
+		const fileRecord = await uploadFromUrl(assetUrl, parentId, FileRecordParent.BOARDNODES, fullFileName);
+
+		return fileRecord;
 	};
 
 	const uploadFromUrl = async (
@@ -197,5 +227,6 @@ export const useFileStorageApi = () => {
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
+		uploadCollaboraFile,
 	};
 };
