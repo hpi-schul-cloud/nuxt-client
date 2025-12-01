@@ -1584,7 +1584,7 @@ export default {
 	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
 	"pages.registrationExternalMembers.steps.password.heading": "Establecer contraseña",
 	"pages.registrationExternalMembers.steps.success.title": "Registro exitoso",
-	"pages.registrationExternalMembers.steps.success.heading": "¡Gracias por registrarse en la Nube Educativa!",
+	"pages.registrationExternalMembers.steps.success.heading": "¡Gracias por registrarse en la {applicationName}!",
 	"pages.registrationExternalMembers.steps.success.explanation":
 		'Bienvenido a la nueva sala. En las salas, el contenido se puede crear, organizar y compartir con diferentes grupos de personas en un lugar central, por ejemplo con clases, colegas, personas externas o equipos interdisciplinarios. El elemento de menú "Salas" enumera las salas en las que ya tiene membresía.',
 	"pages.registrationExternalMembers.steps.success.button": "Ir al inicio de sesión",
