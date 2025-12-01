@@ -64,7 +64,7 @@ describe("Registration.vue", () => {
 			const { wrapper } = setup();
 
 			const stepComponents = wrapper.findAllComponents(VStepperItem);
-			expect(stepComponents.length).toBe(7);
+			expect(stepComponents.length).toBe(6);
 		});
 
 		describe("Stepper Actions", () => {
