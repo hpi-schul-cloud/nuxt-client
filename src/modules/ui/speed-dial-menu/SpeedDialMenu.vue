@@ -4,8 +4,8 @@
 		class="fab-size-transition"
 		:class="{
 			'fab-default-width': !isCollapsed,
-			'large-screen-positioning': !mdAndDown,
-			'position-fixed medium-small-screen-positioning': mdAndDown,
+			'positioning-lg': !mdAndDown,
+			'position-fixed positioning-sm-md': mdAndDown,
 		}"
 		:rounded="!isCollapsed ? 'xl' : 'circle'"
 		color="primary"
@@ -19,7 +19,7 @@
 	>
 		<VIcon>{{ fabIcon }}</VIcon>
 		<span v-if="!isCollapsed" class="d-block">{{ primaryAction.label }}</span>
-		<span v-else class="d-sr-only">{{ primaryAction.ariaLabel }}</span>
+		<span v-else class="d-sr-only">{{ primaryAction.ariaLabel ?? primaryAction.label }}</span>
 		<VSpeedDial
 			v-if="isSpeedDial"
 			v-model="isSpeedDialOpen"
@@ -91,12 +91,12 @@ watchThrottled(
 </script>
 
 <style scoped>
-.large-screen-positioning {
+.positioning-lg {
 	top: 22px;
 	right: 24px;
 }
 
-.medium-small-screen-positioning {
+.positioning-sm-md {
 	bottom: 32px;
 	right: 24px;
 }
