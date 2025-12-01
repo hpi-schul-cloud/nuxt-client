@@ -20,7 +20,6 @@ import {
 	mockedPiniaStoreTyping,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
-import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
