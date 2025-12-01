@@ -128,6 +128,7 @@ const openCollabora = () => {
 			editorMode,
 		},
 	}).href;
+
 	window.open(url, "_blank");
 };
 </script>
