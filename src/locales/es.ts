@@ -1600,8 +1600,6 @@ export default {
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
 	"pages.registrationExternalMembers.steps.welcome.heading":
 		"Al registrarse en dBildungscloud en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Política de privacidad",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
 	"pages.registrationExternalMembers.steps.password.heading": "Establecer contraseña",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",

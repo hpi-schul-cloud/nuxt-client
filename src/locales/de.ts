@@ -1593,8 +1593,6 @@ export default {
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
 	"pages.registrationExternalMembers.steps.welcome.heading":
 		"Mit der Registrierung in der dBildungscloud im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Datenschutzerklärung",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Nutzungsordnung",
 	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
