@@ -1,4 +1,5 @@
 import * as AddCollaboraFile from "./add-collabora-file.composable";
+import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
@@ -7,11 +8,10 @@ import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { FileRecordResponse } from "@/fileStorageApi/v3";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
-import { FileRecordParent } from "@/types/file/File";
+import { FileRecord, FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
 import {
 	boardResponseFactory,
@@ -20,6 +20,7 @@ import {
 	mockedPiniaStoreTyping,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
+import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
@@ -1297,13 +1298,14 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const latestAddedCollaboraFile = ref<FileRecordResponse | null>(null);
-
 				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
 					openCollaboraFileDialog: vi.fn(),
 					closeCollaboraFileDialog: vi.fn(),
 					isCollaboraFileDialogOpen: ref(false),
 				});
+
+				const windowOpenMock = vi.fn();
+				const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
 
 				const { wrapper } = setupWrapper();
 
@@ -1313,19 +1315,19 @@ describe("Folder.vue", () => {
 
 				return {
 					wrapper,
-					latestAddedCollaboraFile,
+					windowOpenSpy,
 				};
 			};
 
-			// it("should show open collabora file in new tab", async () => {
-			// 	const { latestAddedCollaboraFile } = await setup();
-			// 	const openCollaboraSpy = vi.spyOn(utilCollabora, "openCollabora");
+			it("should show open collabora file in new tab", async () => {
+				const { wrapper, windowOpenSpy } = await setup();
 
-			// 	latestAddedCollaboraFile.value = fileRecordFactory.build();
-			// 	await nextTick();
+				const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
+				const newFile: FileRecord = fileRecordFactory.build();
+				await collaboraFileDialog.vm.$emit("collabora-file-added", newFile);
 
-			// 	expect(openCollaboraSpy).toHaveBeenCalled();
-			// });
+				expect(windowOpenSpy).toHaveBeenCalled();
+			});
 		});
 
 		describe("when fab button is clicked, file upload is chosen, files are selected and upload succeed", () => {
