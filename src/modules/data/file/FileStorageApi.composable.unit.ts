@@ -841,7 +841,7 @@ describe("FileStorageApi Composable", () => {
 			};
 		};
 
-		it("calls uploadFromUrl", async () => {
+		it("returns created file record", async () => {
 			const fileName = "newFile";
 			const { uploadCollaboraFile } = setup(fileName);
 			const newFile = await uploadCollaboraFile(CollaboraFileType.Text, "parentId", fileName);
