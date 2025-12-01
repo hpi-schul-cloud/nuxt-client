@@ -1557,13 +1557,13 @@ export default {
 		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instanceTitle}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
 		"Yo, {userName}, declaro lo siguiente:",
-	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent":
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
 		"Acepto que mis datos personales se procesen de acuerdo con la {dataProtectionLink} en {instanceTitle} y en los proveedores de material de aprendizaje seleccionados e instruidos por la escuela.",
-	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext":
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
 		"El consentimiento y uso es, por tanto, voluntario, lo que significa que si no das tu consentimiento, no te supondrá ninguna desventaja en clase. La escuela hará posible la participación en lecciones fuera de {title}. Puedes revocar este consentimiento en cualquier momento. Será suficiente con un breve correo electrónico con la declaración de revocación, indicando tu nombre y apellido, clase y escuela a la siguiente dirección: {email}. En caso de revocación, eliminaremos inmediatamente los datos personales almacenados en virtud de tu consentimiento, a menos que exista una razón legal para el almacenamiento o desees acceder a los datos almacenados de antemano. También puedes encontrar más información sobre la protección de datos en nuestras {faqLink}.",
-	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent":
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
 		"Acepto que mis datos personales se procesen de acuerdo con la {dataProtectionLink} de la escuela en la Schul-Cloud Brandenburg y por los proveedores de material de aprendizaje seleccionados y autorizados.",
-	"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent.subtext":
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
 		"El consentimiento, y por lo tanto el uso, es voluntario y puede revocarse en cualquier momento con efecto futuro enviando un correo electrónico a: {email}. En caso de revocación, eliminaremos inmediatamente los datos almacenados en base al consentimiento, a menos que exista una razón legal para su conservación o que desee acceder a ellos previamente. También puede encontrar más información sobre protección de datos en nuestro {faqLink}.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
 		"He leído las {termsOfUse} de la {instanceTitle} y las acepto.",

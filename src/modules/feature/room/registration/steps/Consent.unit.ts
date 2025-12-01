@@ -64,8 +64,8 @@ describe("Consent.vue", () => {
 					theme: SchulcloudTheme.Default,
 					translationKeys: [
 						"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph",
-						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent",
-						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext",
+						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default",
+						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default",
 						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse",
 					],
 					description: "should contain all necessary translation keys",
@@ -74,8 +74,8 @@ describe("Consent.vue", () => {
 					theme: SchulcloudTheme.Brb,
 					translationKeys: [
 						"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph",
-						"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent",
-						"pages.registrationExternalMembers.steps.declarationOfConsentBRB.checkbox.consent.subtext",
+						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb",
+						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb",
 						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse",
 					],
 					description: "should contain all necessary translation keys when instance is BRB",
