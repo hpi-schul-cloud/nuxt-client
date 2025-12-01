@@ -34,7 +34,6 @@ export const useRegistration = () => {
 		i18n.locale.value = value;
 	};
 
-	// this will accept hashId parameter
 	const fetchUserData = async () => {
 		const data = await Promise.resolve({
 			name: "Max",
@@ -45,7 +44,6 @@ export const useRegistration = () => {
 		fullName.value = `${data.name} ${data.surname}`;
 	};
 
-	// Replace with actual account creation logic, e.g. API call
 	const createAccount = async () => {
 		const testError = false;
 		try {
