@@ -1,7 +1,7 @@
 import BaseChip from "./BaseChip.vue";
 import InfoChip from "./InfoChip.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiInformation } from "@icons/material";
+import { mdiInformationOutline } from "@icons/material";
 import { VChip } from "vuetify/components";
 
 describe("InfoChip", () => {
@@ -61,7 +61,7 @@ describe("InfoChip", () => {
 
 			const chip = wrapper.findComponent(BaseChip);
 
-			expect(chip.props("icon")).toBe(mdiInformation);
+			expect(chip.props("icon")).toBe(mdiInformationOutline);
 		});
 	});
 
