@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import { FabAction } from "./types";
 import { mdiClose } from "@icons/material";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
@@ -85,7 +86,7 @@ watchThrottled(
 );
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .large-screen-positioning {
 	top: 22px;
 	right: 24px;
