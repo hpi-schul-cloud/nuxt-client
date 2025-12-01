@@ -41,7 +41,7 @@
 	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
-	<AddCollaboraFileDialog :folder-id="folderId" />
+	<AddCollaboraFileDialog :folder-id="folderId" @collabora-file-added="collaboraFileAddedHandler" />
 </template>
 
 <script setup lang="ts">
@@ -101,7 +101,7 @@ const boardStore = useBoardStore();
 const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
-const { openCollaboraFileDialog, latestAddedCollaboraFile } = useAddCollaboraFile();
+const { openCollaboraFileDialog } = useAddCollaboraFile();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
@@ -148,14 +148,9 @@ const fabAction = computed(() => {
 	};
 });
 
-watch(
-	() => latestAddedCollaboraFile.value,
-	(newFile) => {
-		if (newFile) {
-			openCollabora(router, newFile, hasEditPermission.value);
-		}
-	}
-);
+const collaboraFileAddedHandler = (newFile: FileRecord) => {
+	openCollabora(router, newFile, hasEditPermission.value);
+};
 
 const uploadProgress = ref({
 	uploaded: 0,

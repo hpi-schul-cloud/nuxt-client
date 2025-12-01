@@ -126,9 +126,7 @@ describe("Folder.vue", () => {
 					vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
 						openCollaboraFileDialog: vi.fn(),
 						closeCollaboraFileDialog: vi.fn(),
-						collaboraFileSelectionOptions: [],
 						isCollaboraFileDialogOpen: ref(false),
-						latestAddedCollaboraFile: ref(null),
 					});
 
 					const { wrapper } = setupWrapper();
@@ -1176,9 +1174,7 @@ describe("Folder.vue", () => {
 				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
 					openCollaboraFileDialog: mockOpenCollaboraFileDialog,
 					closeCollaboraFileDialog: vi.fn(),
-					collaboraFileSelectionOptions: [],
 					isCollaboraFileDialogOpen: ref(false),
-					latestAddedCollaboraFile: ref(null),
 				});
 
 				createTestEnvStore({
@@ -1307,9 +1303,7 @@ describe("Folder.vue", () => {
 				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
 					openCollaboraFileDialog: vi.fn(),
 					closeCollaboraFileDialog: vi.fn(),
-					collaboraFileSelectionOptions: [],
 					isCollaboraFileDialogOpen: ref(false),
-					latestAddedCollaboraFile,
 				});
 
 				const { wrapper } = setupWrapper();
