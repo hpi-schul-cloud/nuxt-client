@@ -10,8 +10,7 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { formatFileSize } from "@/utils/fileHelper";
-import { getFileExtension } from "@/utils/fileHelper";
+import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
