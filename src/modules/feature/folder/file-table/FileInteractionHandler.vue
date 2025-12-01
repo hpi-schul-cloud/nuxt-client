@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { FileRecordItem } from "../types/filerecord-item";
-import { EditorMode, FileRecord } from "@/types/file/File";
+import { FileRecord } from "@/types/file/File";
 import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
@@ -24,6 +24,7 @@ import {
 } from "@/utils/fileHelper";
 import { useEnvConfig } from "@data-env";
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
+import { mapEditBoardPermissionToEditorMode } from "@util-board";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -117,13 +118,15 @@ const openVideoInLightbox = () => {
 };
 
 const openCollabora = (fileRecord: FileRecord, hasEditPermission: boolean) => {
+	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission);
+
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: fileRecord.id,
 		},
 		query: {
-			editorMode: hasEditPermission ? EditorMode.EDIT : EditorMode.VIEW,
+			editorMode,
 		},
 	}).href;
 	window.open(url, "_blank");

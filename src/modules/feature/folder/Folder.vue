@@ -58,7 +58,6 @@ import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULA
 import { useBoardApi } from "@/modules/data/board/BoardApi.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
-import { EditorMode } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
@@ -68,6 +67,7 @@ import { useFolderState } from "@data-folder";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
+import { mapEditBoardPermissionToEditorMode } from "@util-board";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -172,13 +172,15 @@ const fabItemClickHandler = (event: string | undefined): void => {
 };
 
 const collaboraFileAddedHandler = (newFile: FileRecord) => {
+	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
+
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: newFile.id,
 		},
 		query: {
-			editorMode: hasEditPermission ? EditorMode.EDIT : EditorMode.VIEW,
+			editorMode,
 		},
 	}).href;
 	window.open(url, "_blank");
