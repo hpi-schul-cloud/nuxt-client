@@ -217,6 +217,7 @@ const onCardInteraction = () => {
 };
 const openCollabora = () => {
 	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
+
 	const url = router.resolve({
 		name: "collabora",
 		params: {
