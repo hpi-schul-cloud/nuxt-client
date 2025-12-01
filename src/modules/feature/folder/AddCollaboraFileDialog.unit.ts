@@ -106,21 +106,27 @@ describe("CollaboraFileDialog", () => {
 			it("should call item action", async () => {
 				const { wrapper } = await setup();
 
-				const typeSelect = wrapper.findComponent(VSelect);
-				await typeSelect.setValue("1");
-				await nextTick();
-
 				const FILENAME = "myDocument";
 				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-name']");
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
+				const typeSelect = wrapper.findComponent(VSelect);
+				const typeOptions = typeSelect.props("items") as Array<{ id: string; label: string; action: () => void }>;
+				expect(typeOptions.length).toBe(3);
+
 				const form = wrapper.findComponent("[data-testid='collabora-file-form']");
-				await form.trigger("submit");
-				await nextTick();
+
+				typeOptions.forEach(async (option) => {
+					await typeSelect.setValue(option.id);
+					await nextTick();
+
+					await form.trigger("submit");
+					await nextTick();
+				});
 				await flushPromises();
 
-				expect(mockFileStorageApi.uploadCollaboraFile).toHaveBeenCalled();
+				expect(mockFileStorageApi.uploadCollaboraFile).toHaveBeenCalledTimes(typeOptions.length);
 			});
 
 			it("should have confirm button enabled", async () => {
