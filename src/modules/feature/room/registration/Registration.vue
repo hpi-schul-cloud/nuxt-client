@@ -124,11 +124,7 @@ onMounted(() => {
 	initializeLanguage();
 });
 
-const applicationName = computed(() => {
-	const scName = useEnvConfig().value.SC_TITLE;
-
-	return scName.replace("Niedersächsische", "Niedersächsischen");
-});
+const applicationName = computed(() => useEnvConfig().value.SC_TITLE.replace("Niedersächsische", "Niedersächsischen"));
 
 const steps = computed(() => [
 	{
