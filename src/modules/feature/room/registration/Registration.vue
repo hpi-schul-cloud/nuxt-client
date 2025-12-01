@@ -125,10 +125,9 @@ onMounted(() => {
 });
 
 const applicationName = computed(() => {
-	const isNbc = useEnvConfig().value.SC_THEME === "n21";
 	const scName = useEnvConfig().value.SC_TITLE;
 
-	return isNbc ? scName.replace("Niedersächsische", "Niedersächsischen") : scName;
+	return scName.replace("Niedersächsische", "Niedersächsischen");
 });
 
 const steps = computed(() => [
