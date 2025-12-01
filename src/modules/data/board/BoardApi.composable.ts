@@ -231,7 +231,7 @@ export const useBoardApi = () => {
 		});
 	};
 
-	const moveCardToBoardCall = async (cardId: string, fromColumnId: string, toColumnId: string) => {
+	const moveCardToBoardCall = async (cardId: string, toColumnId: string) => {
 		const response = await cardsApi.cardControllerMoveCard(cardId, { toColumnId });
 		return response.data;
 	};

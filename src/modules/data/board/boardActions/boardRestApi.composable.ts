@@ -149,8 +149,8 @@ export const useBoardRestApi = () => {
 
 	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
 		try {
-			const { cardId, fromColumnId, toColumnId } = payload;
-			const result = await moveCardToBoardCall(cardId, fromColumnId, toColumnId);
+			const { cardId, toColumnId } = payload;
+			const result = await moveCardToBoardCall(cardId, toColumnId);
 
 			await boardStore.moveCardToBoardSuccess({
 				...result,
