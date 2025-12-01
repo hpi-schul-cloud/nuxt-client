@@ -58,6 +58,7 @@ import Password from "./steps/Password.vue";
 import Success from "./steps/Success.vue";
 import Welcome from "./steps/Welcome.vue";
 import { LanguageType } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 import { useRegistration } from "@data-room";
 import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -123,6 +124,13 @@ onMounted(() => {
 	initializeLanguage();
 });
 
+const applicationName = computed(() => {
+	const isNbc = useEnvConfig().value.SC_THEME === "n21";
+	const scName = useEnvConfig().value.SC_TITLE;
+
+	return isNbc ? scName.replace("Niedersächsische", "Niedersächsischen") : scName;
+});
+
 const steps = computed(() => [
 	{
 		value: RegistrationSteps.LanguageSelection,
@@ -157,7 +165,7 @@ const steps = computed(() => [
 	{
 		value: RegistrationSteps.Success,
 		title: t("pages.registrationExternalMembers.steps.success.title"),
-		heading: t("pages.registrationExternalMembers.steps.success.heading"),
+		heading: t("pages.registrationExternalMembers.steps.success.heading", { applicationName: applicationName.value }),
 		id: "success",
 	},
 ]);
