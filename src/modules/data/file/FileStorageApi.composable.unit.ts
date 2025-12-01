@@ -1,4 +1,4 @@
-import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+import { CollaboraFileType, ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import * as wopiApi from "@/fileStorageApi/v3/api/wopi-api";
 import {
@@ -813,6 +813,58 @@ describe("FileStorageApi Composable", () => {
 					expect.objectContaining({ status: "error", text: "error.401" })
 				);
 			});
+		});
+	});
+
+	describe("uploadCollaboraFile", () => {
+		const setup = (fileName: string) => {
+			const parentId = ObjectIdMock();
+			const parentType = FileRecordParent.BOARDNODES;
+			const fileRecordResponse = fileRecordFactory.build({
+				parentId,
+				parentType,
+				name: fileName + ".docx",
+			});
+			const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				data: fileRecordResponse,
+			});
+
+			const fileApi = createMock<serverApi.FileApiInterface>();
+			vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+			fileApi.uploadFromUrl.mockResolvedValueOnce(response);
+
+			const { uploadCollaboraFile, uploadFromUrl } = useFileStorageApi();
+
+			return {
+				uploadCollaboraFile,
+				uploadFromUrl,
+			};
+		};
+
+		it("calls uploadFromUrl", async () => {
+			const fileName = "newFile";
+			const { uploadCollaboraFile } = setup(fileName);
+			const newFile = await uploadCollaboraFile(CollaboraFileType.Text, "parentId", fileName);
+
+			expect(newFile?.name).toBe(fileName + ".docx");
+		});
+	});
+
+	describe("getCollaboraAssetUrl", () => {
+		const setup = () => {
+			const { getCollaboraAssetUrl } = useFileStorageApi();
+			return {
+				getCollaboraAssetUrl,
+			};
+		};
+
+		it("returns correct URL for collabora types", () => {
+			const { getCollaboraAssetUrl } = setup();
+			const origin = window.location.origin;
+
+			expect(getCollaboraAssetUrl(CollaboraFileType.Text)).toBe(`${origin}/collabora/doc.docx`);
+			expect(getCollaboraAssetUrl(CollaboraFileType.Spreadsheet)).toBe(`${origin}/collabora/spreadsheet.xlsx`);
+			expect(getCollaboraAssetUrl(CollaboraFileType.Presentation)).toBe(`${origin}/collabora/presentation.pptx`);
 		});
 	});
 });

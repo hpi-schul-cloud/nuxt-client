@@ -227,5 +227,6 @@ export const useFileStorageApi = () => {
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
 		uploadCollaboraFile,
+		getCollaboraAssetUrl,
 	};
 };
