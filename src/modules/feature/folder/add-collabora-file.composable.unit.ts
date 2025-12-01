@@ -1,17 +1,4 @@
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
-import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
-import { createTestingPinia } from "@pinia/testing";
-import { setActivePinia } from "pinia";
-
-vi.mock("vue-i18n", () => ({
-	useI18n: vi.fn().mockReturnValue({
-		t: vi.fn().mockImplementation((key: string) => key),
-	}),
-}));
-
-const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
-vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 describe("AddCollaboraFileComposable", () => {
 	const setup = () => {
@@ -23,14 +10,6 @@ describe("AddCollaboraFileComposable", () => {
 			closeCollaboraFileDialog,
 		};
 	};
-
-	beforeEach(() => {
-		setActivePinia(createTestingPinia());
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
-	});
 
 	describe("openCollaboraFileDialog", () => {
 		it("should set isCollaboraFileDialogOpen to true", () => {
