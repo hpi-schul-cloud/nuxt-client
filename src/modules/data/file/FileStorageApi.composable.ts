@@ -88,12 +88,17 @@ export const useFileStorageApi = () => {
 		return `${base}/presentation.pptx`;
 	};
 
-	const uploadCollaboraFile = async (type: CollaboraFileType, parentId: string, fileName: string) => {
+	const uploadCollaboraFile = async (
+		type: CollaboraFileType,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName: string
+	) => {
 		const assetUrl = getCollaboraAssetUrl(type);
 		const fileExtension = getFileExtension(assetUrl);
 		const fullFileName = `${fileName}.${fileExtension}`;
 
-		const fileRecord = await uploadFromUrl(assetUrl, parentId, FileRecordParent.BOARDNODES, fullFileName);
+		const fileRecord = await uploadFromUrl(assetUrl, parentId, parentType, fullFileName);
 
 		return fileRecord;
 	};
@@ -227,6 +232,5 @@ export const useFileStorageApi = () => {
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
 		uploadCollaboraFile,
-		getCollaboraAssetUrl,
 	};
 };

@@ -1,6 +1,7 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
+import { FileRecordParent } from "@/types/file/File";
 import { type CreateElementRequestPayload, useCardStore } from "@data-board";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect } from "@util-board";
@@ -58,7 +59,7 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 
 		try {
 			disableFileSelectOnMount();
-			await uploadCollaboraFile(type, element.id, fileName);
+			await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
 			await updateFileElementCaption(element, caption.trim());
 		} catch {
 			await cardStore.deleteElementRequest({ elementId: element.id, cardId: cardId.value });
