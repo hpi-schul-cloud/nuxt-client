@@ -890,7 +890,7 @@ describe("FileStorageApi Composable", () => {
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
-					name: fileName + ".docx",
+					name: fileName + ".xlsx",
 				});
 				const response = createMock<AxiosResponse<FileRecord, unknown>>({
 					data: fileRecordResponse,
@@ -954,7 +954,7 @@ describe("FileStorageApi Composable", () => {
 				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
-					name: fileName + ".docx",
+					name: fileName + ".pptx",
 				});
 				const response = createMock<AxiosResponse<FileRecord, unknown>>({
 					data: fileRecordResponse,
