@@ -857,7 +857,12 @@ describe("FileStorageApi Composable", () => {
 
 			it("returns created file record", async () => {
 				const { uploadCollaboraFile, fileRecordResponse, fileName } = setup();
-				const newFile = await uploadCollaboraFile(CollaboraFileType.Text, "parentId", fileName);
+				const newFile = await uploadCollaboraFile(
+					CollaboraFileType.Text,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileName
+				);
 
 				expect(newFile).toBe(fileRecordResponse);
 			});
@@ -865,7 +870,7 @@ describe("FileStorageApi Composable", () => {
 			it("calls uploadFromUrl with correct params", async () => {
 				const { uploadCollaboraFile, fileName, fileApi, fileParams } = setup();
 
-				await uploadCollaboraFile(CollaboraFileType.Text, "parentId", fileName);
+				await uploadCollaboraFile(CollaboraFileType.Text, "parentId", FileRecordParent.BOARDNODES, fileName);
 
 				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
 					"schoolId",
@@ -916,7 +921,12 @@ describe("FileStorageApi Composable", () => {
 
 			it("returns created file record", async () => {
 				const { uploadCollaboraFile, fileRecordResponse, fileName } = setup();
-				const newFile = await uploadCollaboraFile(CollaboraFileType.Spreadsheet, "parentId", fileName);
+				const newFile = await uploadCollaboraFile(
+					CollaboraFileType.Spreadsheet,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileName
+				);
 
 				expect(newFile).toBe(fileRecordResponse);
 			});
@@ -924,7 +934,7 @@ describe("FileStorageApi Composable", () => {
 			it("calls uploadFromUrl with correct params", async () => {
 				const { uploadCollaboraFile, fileName, fileApi, fileParams } = setup();
 
-				await uploadCollaboraFile(CollaboraFileType.Spreadsheet, "parentId", fileName);
+				await uploadCollaboraFile(CollaboraFileType.Spreadsheet, "parentId", FileRecordParent.BOARDNODES, fileName);
 
 				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
 					"schoolId",
@@ -975,7 +985,12 @@ describe("FileStorageApi Composable", () => {
 
 			it("returns created file record", async () => {
 				const { uploadCollaboraFile, fileRecordResponse, fileName } = setup();
-				const newFile = await uploadCollaboraFile(CollaboraFileType.Presentation, "parentId", fileName);
+				const newFile = await uploadCollaboraFile(
+					CollaboraFileType.Presentation,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileName
+				);
 
 				expect(newFile).toBe(fileRecordResponse);
 			});
@@ -983,7 +998,7 @@ describe("FileStorageApi Composable", () => {
 			it("calls uploadFromUrl with correct params", async () => {
 				const { uploadCollaboraFile, fileName, fileApi, fileParams } = setup();
 
-				await uploadCollaboraFile(CollaboraFileType.Presentation, "parentId", fileName);
+				await uploadCollaboraFile(CollaboraFileType.Presentation, "parentId", FileRecordParent.BOARDNODES, fileName);
 
 				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
 					"schoolId",

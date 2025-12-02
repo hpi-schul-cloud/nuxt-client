@@ -35,7 +35,7 @@
 </template>
 <script setup lang="ts">
 import { useAddCollaboraFile } from "./add-collabora-file.composable";
-import { FileRecord } from "@/types/file/File";
+import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { Dialog } from "@ui-dialog";
 import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
@@ -68,7 +68,7 @@ const selectedDocType = ref<string | null>(null);
 const fileName = ref<string>("");
 
 const uploadCollaboraFileFn = async (type: CollaboraFileType, folderId: string, fileName: string) => {
-	const fileRecord = await uploadCollaboraFile(type, folderId, fileName);
+	const fileRecord = await uploadCollaboraFile(type, folderId, FileRecordParent.BOARDNODES, fileName);
 	closeCollaboraFileDialog();
 
 	return fileRecord;
