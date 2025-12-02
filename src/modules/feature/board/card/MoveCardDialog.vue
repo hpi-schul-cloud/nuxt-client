@@ -82,15 +82,9 @@ const props = defineProps<{
 
 const rooms = ref<RoomItem[]>();
 
-onBeforeMount(async () => {
-	const result = await useRoomStore().fetchRoomsPlain();
-	rooms.value = result?.data?.data;
-
-	if (props.roomId && availableRooms.value?.find((r) => r.id === props.roomId)) {
-		selectedRoomId.value = props.roomId;
-	} else {
-		selectedRoomId.value = undefined;
-	}
+const isDialogOpen = defineModel("is-dialog-open", {
+	type: Boolean,
+	default: false,
 });
 
 const availableRooms = computed(() => {
@@ -103,15 +97,21 @@ const availableRooms = computed(() => {
 		return rooms.value?.filter((r) => r.id === props.roomId);
 	}
 });
-const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } = useCardDialogData();
 
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
+onBeforeMount(async () => {
+	const result = await useRoomStore().fetchRoomsPlain();
+	rooms.value = result?.data?.data;
+
+	if (props.roomId && availableRooms.value?.find((r) => r.id === props.roomId)) {
+		selectedRoomId.value = props.roomId;
+	} else {
+		selectedRoomId.value = undefined;
+	}
 });
 
+const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } =
+	useCardDialogData(isDialogOpen);
 const { moveCardToBoardRequest, getCardLocation } = useBoardStore();
-
 const { execute, isRunning: isMoving } = useSafeAxiosTask();
 
 const dialogQuestion = computed(() => {

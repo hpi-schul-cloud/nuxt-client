@@ -6,7 +6,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { defineComponent, nextTick } from "vue";
+import { defineComponent, nextTick, ref } from "vue";
 
 vi.mock("@data-board");
 
@@ -28,11 +28,11 @@ describe("useCardDialogData", () => {
 		const roomStore = mockedPiniaStoreTyping(useRoomStore);
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 
-		roomDetailsStore.fetchBoardsOfRoom.mockResolvedValue({ boards: mockBoards });
+		roomDetailsStore.fetchBoardsOfRoom.mockResolvedValue({ boards: mockBoards, error: undefined });
 
 		const TestComponent = defineComponent({
 			setup() {
-				result = useCardDialogData();
+				result = useCardDialogData(ref(true));
 				return {};
 			},
 			template: "<div></div>",

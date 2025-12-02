@@ -2,9 +2,9 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { ColumnResponse, RoomBoardItemResponse } from "@/serverApi/v3";
 import { useBoardApi } from "@data-board";
 import { useRoomDetailsStore } from "@data-room";
-import { computed, ref, watch } from "vue";
+import { computed, Ref, ref, watchEffect } from "vue";
 
-export const useCardDialogData = () => {
+export const useCardDialogData = (isDialogOpen: Ref<boolean>) => {
 	const { t } = useI18nGlobal();
 	const selectedRoomId = ref<string>();
 	const selectedBoardId = ref<string>();
@@ -21,17 +21,19 @@ export const useCardDialogData = () => {
 		selectedBoardId.value = undefined;
 	};
 
-	watch(selectedRoomId, async (newRoomId) => {
-		if (!newRoomId) return;
-		boards.value = (await useRoomDetailsStore().fetchBoardsOfRoom(newRoomId)).boards;
+	watchEffect(async () => {
+		if (isDialogOpen.value && selectedRoomId.value) {
+			boards.value = (await useRoomDetailsStore().fetchBoardsOfRoom(selectedRoomId.value)).boards;
+		}
 	});
 
-	watch(selectedBoardId, async (newBoardId) => {
-		if (!newBoardId) return;
-		columns.value = (await useBoardApi().fetchBoardCall(newBoardId)).columns?.map((b, idx) => ({
-			...b,
-			title: b.title || `${t("components.boardColumn")} ${idx + 1}`,
-		}));
+	watchEffect(async () => {
+		if (isDialogOpen.value && selectedBoardId.value) {
+			columns.value = (await useBoardApi().fetchBoardCall(selectedBoardId.value)).columns?.map((b, idx) => ({
+				...b,
+				title: b.title || `${t("components.boardColumn")} ${idx + 1}`,
+			}));
+		}
 	});
 
 	return {

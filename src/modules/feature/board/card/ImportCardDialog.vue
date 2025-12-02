@@ -87,8 +87,12 @@ const router = useRouter();
 const { t } = useI18n();
 
 const props = defineProps<{ token: string }>();
-
 const rooms = ref<RoomItem[]>();
+
+const isDialogOpen = defineModel("is-dialog-open", {
+	type: Boolean,
+	default: false,
+});
 
 const availableRooms = computed(() =>
 	sortBy(
@@ -103,13 +107,9 @@ onBeforeMount(async () => {
 });
 
 const { execute, isRunning: isImporting } = useSafeAxiosTask();
-const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } = useCardDialogData();
+const { selectedBoardId, selectedColumnId, selectedRoomId, resetBoardSelection, columns, boards } =
+	useCardDialogData(isDialogOpen);
 const shareTokenInfo = ref<ShareTokenInfoResponse>();
-
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
-});
 
 onBeforeMount(async () => {
 	const { result, success } = await execute(
