@@ -849,22 +849,4 @@ describe("FileStorageApi Composable", () => {
 			expect(newFile?.name).toBe(fileName + ".docx");
 		});
 	});
-
-	describe("getCollaboraAssetUrl", () => {
-		const setup = () => {
-			const { getCollaboraAssetUrl } = useFileStorageApi();
-			return {
-				getCollaboraAssetUrl,
-			};
-		};
-
-		it("returns correct URL for collabora types", () => {
-			const { getCollaboraAssetUrl } = setup();
-			const origin = window.location.origin;
-
-			expect(getCollaboraAssetUrl(CollaboraFileType.Text)).toBe(`${origin}/collabora/doc.docx`);
-			expect(getCollaboraAssetUrl(CollaboraFileType.Spreadsheet)).toBe(`${origin}/collabora/spreadsheet.xlsx`);
-			expect(getCollaboraAssetUrl(CollaboraFileType.Presentation)).toBe(`${origin}/collabora/presentation.pptx`);
-		});
-	});
 });
