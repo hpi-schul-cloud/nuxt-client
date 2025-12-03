@@ -1,4 +1,3 @@
-import { setupCollaboraFileSelectionMock } from "../test-utils/add-collabora-file-mock";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
@@ -9,6 +8,7 @@ import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
+import { useAddCollaboraFile } from "@feature-collabora";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
@@ -49,6 +49,15 @@ vi.mocked(useBoardFeatures).mockImplementation(() => ({
 	isFeatureEnabled: vi.fn().mockReturnValue(true),
 }));
 
+vi.mock("@feature-composable/add-collabora-file.composable");
+const mockedAddCollaboraFile = vi.mocked(useAddCollaboraFile);
+const openCollaboraFileDialogMock = vi.fn();
+mockedAddCollaboraFile.mockReturnValue({
+	isCollaboraFileDialogOpen: ref(false),
+	openCollaboraFileDialog: openCollaboraFileDialogMock,
+	closeCollaboraFileDialog: vi.fn(),
+});
+
 describe("ElementTypeSelection Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -64,7 +73,6 @@ describe("ElementTypeSelection Composable", () => {
 				const cardId = "cardId";
 
 				setupSharedElementTypeSelectionMock();
-				setupCollaboraFileSelectionMock();
 
 				const addElementMock = vi.fn();
 				const elementType = ContentElementType.RichText;
@@ -193,8 +201,6 @@ describe("ElementTypeSelection Composable", () => {
 			const addElementMock = vi.fn();
 			const { isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
 				setupSharedElementTypeSelectionMock();
-
-			setupCollaboraFileSelectionMock();
 
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
@@ -355,12 +361,6 @@ describe("ElementTypeSelection Composable", () => {
 			const { staticElementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
-			const openCollaboraFileDialogMock = vi.fn();
-			const setCardIdMock = vi.fn();
-			const { collaboraFileSelectionOptions } = setupCollaboraFileSelectionMock({
-				setCardIdMock,
-				openCollaboraFileDialogMock,
-			});
 
 			mockedUseBoardPermissions.mockReturnValue({
 				hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
@@ -371,11 +371,8 @@ describe("ElementTypeSelection Composable", () => {
 
 			return {
 				elementTypeOptions: staticElementTypeOptions,
-				collaboraFileSelectionOptions,
 				addElementMock,
 				closeDialogMock,
-				openCollaboraFileDialogMock,
-				setCardIdMock,
 				cardId,
 			};
 		};
@@ -685,20 +682,8 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 
-			it("should set cardId", () => {
-				const { elementTypeOptions, addElementMock, cardId, setCardIdMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-
-				askType();
-
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
-				option?.action();
-
-				expect(setCardIdMock).toHaveBeenCalledTimes(1);
-			});
-
 			it("should set isCollaboraFileDialogOpen to true", () => {
-				const { elementTypeOptions, addElementMock, cardId, openCollaboraFileDialogMock } = setup();
+				const { elementTypeOptions, addElementMock, cardId } = setup();
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();

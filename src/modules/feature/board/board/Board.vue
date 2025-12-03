@@ -86,7 +86,7 @@
 				</div>
 				<ConfirmationDialog />
 				<AddElementDialog />
-				<AddCollaboraFileDialog />
+				<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 				<LightBox />
 				<CopyResultModal
 					:is-open="isCopyModalOpen"
@@ -113,7 +113,6 @@
 </template>
 
 <script setup lang="ts">
-import AddCollaboraFileDialog from "../shared/AddCollaboraFileDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
@@ -129,14 +128,18 @@ import { useLoadingState } from "@/composables/loadingState";
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
+import { BoardLayout, ContentElementType, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { FileRecordParent } from "@/types/file/File";
 import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import { CollaboraFileType } from "@data-file";
+import { useFileStorageApi } from "@data-file";
+import { AddCollaboraFileDialog } from "@feature-collabora";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -147,13 +150,23 @@ import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+const { uploadCollaboraFile } = useFileStorageApi();
+
 const props = defineProps({
 	boardId: { type: String, required: true },
 });
 
 const { t } = useI18n();
-const { editModeId } = useSharedEditMode();
+const { editModeId, setEditModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
+
+let cardId: string | undefined = undefined;
+watch(editModeId, (newVal) => {
+	if (newVal) {
+		cardId = newVal;
+	}
+});
+
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
@@ -440,6 +453,27 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 	});
 
 	isEditSettingsDialogOpen.value = false;
+};
+
+const onCreateCollaboraFile = async (payload: { type: CollaboraFileType; fileName: string }) => {
+	if (!cardId) {
+		return;
+	}
+
+	const element = await cardStore.createElementRequest({
+		type: ContentElementType.File,
+		cardId: cardId,
+	});
+	if (!element) {
+		return;
+	}
+
+	try {
+		await uploadCollaboraFile(payload.type, element.id, FileRecordParent.BOARDNODES, payload.fileName);
+		setEditModeId(cardId);
+	} catch {
+		await cardStore.deleteElementRequest({ elementId: element.id, cardId: cardId });
+	}
 };
 </script>
 

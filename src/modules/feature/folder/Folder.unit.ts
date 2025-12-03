@@ -1,5 +1,3 @@
-import * as AddCollaboraFile from "./add-collabora-file.composable";
-import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
@@ -24,6 +22,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
 import * as FolderState from "@data-folder";
+import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
@@ -43,7 +42,13 @@ const useRouterMock = <Mock>useRouter;
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
 
-vi.mock("./add-collabora-file.composable");
+vi.mock("@feature-collabora/add-collabora-file.composable");
+const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
+mockedUseAddCollaboraFile.mockReturnValue({
+	isCollaboraFileDialogOpen: ref(false),
+	openCollaboraFileDialog: vi.fn(),
+	closeCollaboraFileDialog: vi.fn(),
+});
 
 const enum FabEvent {
 	CreateDocument = "CREATE_DOCUMENT",
@@ -122,10 +127,10 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
+					mockedUseAddCollaboraFile.mockReturnValue({
+						isCollaboraFileDialogOpen: ref(false),
 						openCollaboraFileDialog: vi.fn(),
 						closeCollaboraFileDialog: vi.fn(),
-						isCollaboraFileDialogOpen: ref(false),
 					});
 
 					const { wrapper } = setupWrapper();
@@ -1170,10 +1175,10 @@ describe("Folder.vue", () => {
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
 				const mockOpenCollaboraFileDialog = vi.fn();
-				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
+				mockedUseAddCollaboraFile.mockReturnValue({
+					isCollaboraFileDialogOpen: ref(false),
 					openCollaboraFileDialog: mockOpenCollaboraFileDialog,
 					closeCollaboraFileDialog: vi.fn(),
-					isCollaboraFileDialogOpen: ref(false),
 				});
 
 				createTestEnvStore({
@@ -1256,12 +1261,12 @@ describe("Folder.vue", () => {
 
 			describe("and create document is chosen", () => {
 				it("should open collabora file dialog", async () => {
-					const { wrapper, mockOpenCollaboraFileDialog } = await setup();
+					const { wrapper } = await setup();
 
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CreateDocument);
 
-					expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
+					expect(mockedUseAddCollaboraFile).toHaveBeenCalled();
 				});
 			});
 		});
@@ -1297,7 +1302,7 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
+				mockedUseAddCollaboraFile.mockReturnValue({
 					openCollaboraFileDialog: vi.fn(),
 					closeCollaboraFileDialog: vi.fn(),
 					isCollaboraFileDialogOpen: ref(false),

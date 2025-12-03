@@ -14,8 +14,6 @@
 				<VSelect
 					v-model="selectedDocType"
 					:items="collaboraFileSelectionOptions"
-					item-title="label"
-					item-value="id"
 					persistent-hint
 					:label="t('components.cardElement.fileElement.collaboraFile.types')"
 					:rules="docTypeRules"
@@ -29,40 +27,34 @@
 					:placeholder="t('components.cardElement.fileElement.collaboraFile.untitled')"
 					data-testid="collabora-element-form-filename"
 				/>
-				<VTextarea
-					v-model="caption"
-					rows="1"
-					:rules="captionRules"
-					auto-grow
-					:label="$t('components.cardElement.fileElement.caption')"
-					data-testid="collabora-element-form-caption"
-				/>
 			</VForm>
 		</template>
 	</Dialog>
 </template>
 <script setup lang="ts">
-import { useAddCollaboraFile } from "./add-collabora-file.composable";
+import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
+import { CollaboraFileType } from "@data-file";
 import { Dialog } from "@ui-dialog";
 import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+const emit = defineEmits<{
+	(e: "create-collabora-file", payload: { type: CollaboraFileType; fileName: string }): void;
+}>();
+
 type VuetifyForm = {
 	validate: () => Promise<{ valid: boolean }>;
 };
 
-const { isCollaboraFileDialogOpen, closeCollaboraFileDialog, collaboraFileSelectionOptions } = useAddCollaboraFile();
+const { isCollaboraFileDialogOpen, closeCollaboraFileDialog } = useAddCollaboraFile();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const { validateInvalidCharacters } = useInvalidCharactersValidator();
-
 const { t } = useI18n();
 
 const form = ref<VuetifyForm | null>(null);
-
-const selectedDocType = ref<string | null>(null);
+const selectedDocType = ref<CollaboraFileType | null>(null);
 const fileName = ref<string>("");
-const caption = ref<string>("");
 
 const docTypeRules = [isRequired(t("common.validation.required2"))];
 const fileNameRules = [
@@ -70,27 +62,36 @@ const fileNameRules = [
 	isRequired(t("common.validation.required2")),
 	(value: string) => validateInvalidCharacters(value, ["/"]),
 ];
-const captionRules = [(value: string) => validateOnOpeningTag(value)];
 
 const passesAllRules = (value: string, rules: ((value: string) => true | string)[]): boolean =>
 	rules.every((rule) => rule(value) === true);
+
+const collaboraFileSelectionOptions = [
+	{
+		title: t("components.elementTypeSelection.elements.collabora.option.text"),
+		value: CollaboraFileType.Text,
+	},
+	{
+		title: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+		value: CollaboraFileType.Spreadsheet,
+	},
+	{
+		title: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+		value: CollaboraFileType.Presentation,
+	},
+];
 
 const isFormValid = computed(() => {
 	if (!selectedDocType.value) {
 		return false;
 	}
 
-	const isFileNameValid = passesAllRules(fileName.value, fileNameRules);
-	const isCaptionValid = passesAllRules(caption.value, captionRules);
-	const isFormValid = isFileNameValid && isCaptionValid;
-
-	return isFormValid;
+	return passesAllRules(fileName.value, fileNameRules);
 });
 
 const resetForm = () => {
 	selectedDocType.value = null;
 	fileName.value = "";
-	caption.value = "";
 };
 
 const onCancel = () => {
@@ -100,14 +101,13 @@ const onCancel = () => {
 
 const onConfirm = async () => {
 	if (!form?.value) return;
+	if (!selectedDocType.value) return;
 
 	const { valid } = await form.value.validate();
 	if (!valid) return;
 
+	emit("create-collabora-file", { type: selectedDocType.value, fileName: fileName.value });
 	closeCollaboraFileDialog();
-	await collaboraFileSelectionOptions
-		.find((item) => item.id === selectedDocType.value)
-		?.action(fileName.value, caption.value);
 	resetForm();
 };
 </script>
