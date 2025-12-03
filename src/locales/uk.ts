@@ -45,6 +45,7 @@ export default {
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Онлайн редагування неможливе",
 	"common.instructions.orderBy.arrowKeys": "Елементи цього списку можна переміщати за допомогою клавіш зі стрілками.",
 	"common.files": "Файли",
 	"common.labels.admin": "адміністратор(и)",
@@ -1563,6 +1564,11 @@ export default {
 	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Політика конфіденційності",
 	"pages.registrationExternalMembers.steps.welcome.tos": "Умови використання",
 	"pages.registrationExternalMembers.steps.password.heading": "Встановіть пароль",
+	"pages.registrationExternalMembers.steps.success.title": "Реєстрація успішна",
+	"pages.registrationExternalMembers.steps.success.heading": "Дякуємо за реєстрацію в {applicationName}!",
+	"pages.registrationExternalMembers.steps.success.explanation":
+		'Ласкаво просимо до нової кімнати. У кімнатах контент можна створювати, організовувати та ділитися з різними групами людей в одному центральному місці - наприклад, з класами, колегами, зовнішніми особами або міждисциплінарними командами. У пункті меню "Кімнати" перераховані кімнати, в яких ви вже маєте членство.',
+	"pages.registrationExternalMembers.steps.success.button": "Перейти до входу",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
@@ -1979,6 +1985,7 @@ export default {
 	"pages.folder.title": "Папка",
 	"pages.folder.columns.name": "Ім'я",
 	"pages.folder.columns.createdat": "Створено на",
+	"pages.folder.columns.lastModifiedAt": "Останнє оновлення",
 	"pages.folder.columns.size": "Розмір",
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
