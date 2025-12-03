@@ -10,43 +10,10 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<div v-if="fabItems" class="fab-wrapper">
-				<slot name="fab">
-					<speed-dial-menu
-						:class="{
-							'wireframe-fab-relative': lgAndUp,
-							'wireframe-fab-fixed': mdAndDown,
-						}"
-						:direction="mdAndDown ? 'top' : 'bottom'"
-						:orientation="'right'"
-						:icon="fabItems.icon"
-						:href="fabItems.href"
-						:to="fabItems.to"
-						:aria-label="fabItems.ariaLabel"
-						:data-testid="fabItems.dataTestId"
-						@fab:clicked="onFabClicked"
-					>
-						{{ fabItems.title }}
-						<template #actions>
-							<template v-for="(action, index) in fabItems.actions" :key="index">
-								<speed-dial-menu-action
-									:data-test-id="action.dataTestId"
-									:icon="action.icon"
-									:href="action.href"
-									:to="action.to"
-									:aria-label="action.ariaLabel"
-									@click="$emit('onFabItemClick', action.customEvent)"
-								>
-									{{ action.label }}
-								</speed-dial-menu-action>
-							</template>
-						</template>
-					</speed-dial-menu>
-				</slot>
-			</div>
-			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
+			<SpeedDialMenu v-if="fabItems" :actions="fabItems" @fab:clicked="onFabClicked" />
+			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
-		<v-container
+		<VContainer
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
@@ -58,14 +25,14 @@
 			}"
 		>
 			<slot />
-		</v-container>
+		</VContainer>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb, Fab } from "./default-wireframe.types";
+import { Breadcrumb } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
-import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";
 
@@ -85,9 +52,9 @@ const props = defineProps({
 		required: true,
 	},
 	fabItems: {
-		type: Object as PropType<Fab>,
+		type: Array as PropType<FabAction[]>,
 		required: false,
-		default: null,
+		default: undefined,
 	},
 	hideBorder: {
 		type: Boolean,
@@ -111,7 +78,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-	onFabItemClick: (event: string | undefined) => !!event,
 	"fab:clicked": () => true,
 });
 
@@ -124,7 +90,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
+const { smAndUp } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 </script>
@@ -189,33 +155,5 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	top: var(--topbar-height);
 	z-index: 20;
 	background-color: rgb(var(--v-theme-white));
-}
-
-.wireframe-fab-relative {
-	position: relative;
-	top: 0;
-}
-
-.wireframe-fab-fixed {
-	position: fixed;
-	bottom: 2rem;
-	right: 1rem;
-}
-
-$fab-wrapper-height: 80px;
-
-.fab-wrapper {
-	position: relative;
-	top: calc($fab-wrapper-height / 2);
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	height: $fab-wrapper-height;
-	margin-top: -#{$fab-wrapper-height};
-	pointer-events: none;
-
-	* {
-		pointer-events: auto;
-	}
 }
 </style>

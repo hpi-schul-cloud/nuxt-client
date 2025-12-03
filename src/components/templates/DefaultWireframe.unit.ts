@@ -1,6 +1,7 @@
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 
 describe("DefaultWireframe", () => {
 	const setup = (options: ComponentMountingOptions<typeof DefaultWireframe> = {}) => {
@@ -106,20 +107,25 @@ describe("DefaultWireframe", () => {
 		expect(menu.text()).toBe("a custom menu or searchbar");
 	});
 
-	it("should emit 'fab:clicked' after click the fab button", async () => {
+	it("should emit 'fab:clicked' after clicking the fab", async () => {
 		const wrapper = setup({
-			props: { maxWidth: "nativ" },
-		});
-		await wrapper.setProps({
-			fabItems: {
-				icon: "mdi-close",
-				title: "dummy title",
+			props: {
+				maxWidth: "nativ",
+				fabItems: [
+					{
+						icon: "mdi-close",
+						label: "dummy title",
+					},
+				],
 			},
 		});
 
-		const fab = wrapper.findComponent({ name: "speed-dial-menu" });
-		await fab.vm.$emit("fab:clicked");
+		const fab = wrapper.findComponent({ name: "SpeedDialMenu" });
+		fab.vm.$emit("fab:clicked");
+		await nextTick();
 
-		expect(wrapper.emitted("fab:clicked")).toHaveLength(1);
+		const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+
+		expect(defaultWireframe.emitted("fab:clicked")).toHaveLength(1);
 	});
 });
