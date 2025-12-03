@@ -1,27 +1,20 @@
-import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { FileElementContentSchema } from "@/types/board/ContentElement.schema";
-import { getFileExtension } from "@/utils/fileHelper";
+import { FileRecordParent } from "@/types/file/File";
 import { type CreateElementRequestPayload, useCardStore } from "@data-board";
-import { useFileStorageApi } from "@data-file";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedFileSelect } from "@util-board";
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-export enum CollaboraFileType {
-	Text,
-	Spreadsheet,
-	Presentation,
-}
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<AnyContentElement | undefined>;
 
 export const useAddCollaboraFile = createSharedComposable(() => {
 	const { t } = useI18n();
 	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
-	const { uploadFromUrl } = useFileStorageApi();
+	const { uploadCollaboraFile } = useFileStorageApi();
 	const cardStore = useCardStore();
 
 	const cardId = ref("");
@@ -55,19 +48,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		await cardStore.updateElementRequest({ element });
 	};
 
-	const getAssetUrl = (collaboraFileType: CollaboraFileType): string => {
-		const base = `${window.location.origin}/collabora`;
-
-		if (collaboraFileType === CollaboraFileType.Text) {
-			return `${base}/doc.docx`;
-		}
-		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
-			return `${base}/spreadsheet.xlsx`;
-		}
-
-		return `${base}/presentation.pptx`;
-	};
-
 	const createFileElementWithCollaboraFile = async (type: CollaboraFileType, fileName: string, caption: string) => {
 		const element = await createElementRequestFn.value({
 			type: ContentElementType.File,
@@ -77,13 +57,9 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 			return;
 		}
 
-		const assetUrl = getAssetUrl(type);
-		const fileExtension = getFileExtension(assetUrl);
-
 		try {
 			disableFileSelectOnMount();
-			const fullFileName = fileExtension ? `${fileName}.${fileExtension}` : fileName;
-			await uploadFromUrl(assetUrl, element.id, FileRecordParentType.BOARDNODES, fullFileName);
+			await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
 			await updateFileElementCaption(element, caption.trim());
 		} catch {
 			await cardStore.deleteElementRequest({ elementId: element.id, cardId: cardId.value });
@@ -120,7 +96,6 @@ export const useAddCollaboraFile = createSharedComposable(() => {
 		isCollaboraFileDialogOpen,
 		openCollaboraFileDialog,
 		closeCollaboraFileDialog,
-		getAssetUrl,
 		setCardId,
 		setCreateElementRequestFn,
 	};
