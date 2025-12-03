@@ -22,7 +22,7 @@ import { computed, onMounted, ref } from "vue";
 
 interface Props {
 	fileRecordId: string;
-	editorMode?: EditorMode;
+	edit?: string;
 }
 
 const props = defineProps<Props>();
@@ -34,6 +34,8 @@ const { getElementWithParentHierarchyCall } = useBoardApi();
 
 const { user, locale } = useAppStoreRefs();
 const { handleApplicationError } = useAppStore();
+
+const editorMode = computed(() => (props.edit === "true" ? EditorMode.EDIT : EditorMode.VIEW));
 
 const userName = computed(() => {
 	const firstName = user.value?.firstName;
@@ -85,11 +87,7 @@ const setPageTitle = async () => {
 
 const tryGetCollaboraUrl = async (): Promise<string | undefined> => {
 	try {
-		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(
-			props.fileRecordId,
-			props.editorMode ?? EditorMode.VIEW,
-			userName.value
-		);
+		const collaboraUrl = await getAuthorizedCollaboraDocumentUrl(props.fileRecordId, editorMode.value, userName.value);
 
 		return collaboraUrl;
 	} catch (error) {
