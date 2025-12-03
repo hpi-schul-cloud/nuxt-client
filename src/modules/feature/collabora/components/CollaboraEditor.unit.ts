@@ -75,7 +75,7 @@ describe("CollaboraEditor", () => {
 			);
 		});
 
-		it("should use EDIT mode when isEditable is true", async () => {
+		it("should use EDIT mode", async () => {
 			const { fileStorageApiMock, fileRecordId, mockedMe } = setup();
 
 			await flushPromises();
@@ -119,7 +119,7 @@ describe("CollaboraEditor", () => {
 			};
 		};
 
-		it("should use EDIT mode when isEditable is true", async () => {
+		it("should use VIEW mode", async () => {
 			const { fileStorageApiMock, fileRecordId, mockedMe } = setup();
 
 			await flushPromises();
