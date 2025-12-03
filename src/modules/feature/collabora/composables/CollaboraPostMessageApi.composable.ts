@@ -1,4 +1,8 @@
-import { appLoadingStatusValueSchema, CollaboraMessage, collaboraMessageSchema } from "./CollaboraPostMessage.schema";
+import {
+	appLoadingStatusValueSchema,
+	CollaboraMessage,
+	collaboraMessageSchema,
+} from "../schemas/CollaboraPostMessage.schema";
 import { notifyError } from "@data-app";
 import { useI18n } from "vue-i18n";
 
