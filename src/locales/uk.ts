@@ -1579,8 +1579,13 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Реєструючись у dBildungscloud на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
+		"Реєструючись у {instance} на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
 	"pages.registrationExternalMembers.steps.password.heading": "Встановіть пароль",
+	"pages.registrationExternalMembers.steps.success.title": "Реєстрація успішна",
+	"pages.registrationExternalMembers.steps.success.heading": "Дякуємо за реєстрацію в {applicationName}!",
+	"pages.registrationExternalMembers.steps.success.explanation":
+		'Ласкаво просимо до нової кімнати. У кімнатах контент можна створювати, організовувати та ділитися з різними групами людей в одному центральному місці - наприклад, з класами, колегами, зовнішніми особами або міждисциплінарними командами. У пункті меню "Кімнати" перераховані кімнати, в яких ви вже маєте членство.',
+	"pages.registrationExternalMembers.steps.success.button": "Перейти до входу",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",

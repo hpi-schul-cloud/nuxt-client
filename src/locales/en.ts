@@ -1566,8 +1566,13 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"By registering in the dBildungscloud in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
+		"By registering in the {instance} in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
 	"pages.registrationExternalMembers.steps.password.heading": "Set password",
+	"pages.registrationExternalMembers.steps.success.title": "Registration successful",
+	"pages.registrationExternalMembers.steps.success.heading": "Thank you for registering with the {applicationName}!",
+	"pages.registrationExternalMembers.steps.success.explanation":
+		'Welcome to the new room. In rooms, content can be created, organized and shared with different groups of people in one central place - for example with classes, colleagues, external persons or interdisciplinary teams. The menu item "Rooms" lists the rooms in which you already have membership.',
+	"pages.registrationExternalMembers.steps.success.button": "Go to login",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
