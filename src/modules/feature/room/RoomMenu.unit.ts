@@ -48,6 +48,7 @@ describe("@feature-room/RoomMenu", () => {
 			canListDrafts: computed(() => false),
 			canManageRoomInvitationLinks: computed(() => false),
 			canManageVideoconferences: computed(() => false),
+			canSeeMembersList: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -139,7 +140,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has view members permission", () => {
 		it("should contain room members menu item with correct membersInfoText and leave menu item", async () => {
-			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canSeeMembersList = computed(() => true);
 			roomPermissions.canAddRoomMembers = computed(() => false);
 
 			const { wrapper, menuBtn } = setup();
@@ -158,7 +159,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user has view room, edit, delete and leave permissions", () => {
 		it("should show all menu items", async () => {
-			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canSeeMembersList = computed(() => true);
 			roomPermissions.canEditRoom = computed(() => true);
 			roomPermissions.canDeleteRoom = computed(() => true);
 
@@ -265,7 +266,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user can add room members", () => {
 		it("should show the correct membersInfoText", async () => {
-			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canSeeMembersList = computed(() => true);
 			roomPermissions.canAddRoomMembers = computed(() => true);
 
 			const { wrapper, menuBtn } = setup();
@@ -280,7 +281,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when clicking on menu button", () => {
 		beforeEach(() => {
-			roomPermissions.canViewRoom = computed(() => true);
+			roomPermissions.canSeeMembersList = computed(() => true);
 			roomPermissions.canEditRoom = computed(() => true);
 			roomPermissions.canDeleteRoom = computed(() => true);
 		});
