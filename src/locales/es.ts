@@ -2028,4 +2028,12 @@ export default {
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "El nombre del archivo ya existe.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters":
 		"El nombre del archivo contiene caracteres no válidos.",
+	"pages.folder.fab.upload-file": "Subir archivo",
+	"pages.folder.fab.create-document": "Crear documento",
+	"pages.folder.add-collabora-file-dialog.title": "Crear documento",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Tipo de documento",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Documento sin título",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Texto)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
 };

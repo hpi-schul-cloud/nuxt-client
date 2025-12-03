@@ -54,7 +54,7 @@ describe("Collabora.page", () => {
 
 	const setup = () => {
 		const fileRecordId = ObjectIdMock();
-		const editorMode = EditorMode.EDIT;
+		const edit = "true";
 		const authorizedCollaboraDocumentUrlResponse = authorizedCollaboraDocumentUrlResponseFactory.build();
 
 		const { mockedMe } = createTestAppStoreWithUser("user-id");
@@ -82,14 +82,14 @@ describe("Collabora.page", () => {
 			},
 			propsData: {
 				fileRecordId,
-				editorMode,
+				edit,
 			},
 		});
 
 		return {
 			wrapper,
 			authorizedCollaboraDocumentUrlResponse,
-			editorMode,
+			edit,
 			fileStorageApiMock,
 			fileRecordId,
 			mockedMe,
@@ -97,11 +97,11 @@ describe("Collabora.page", () => {
 	};
 
 	it("should call getAuthorizedCollaboraDocumentUrl with correct parameters", () => {
-		const { fileStorageApiMock, fileRecordId, editorMode, mockedMe } = setup();
+		const { fileStorageApiMock, fileRecordId, edit, mockedMe } = setup();
 
 		expect(fileStorageApiMock.getAuthorizedCollaboraDocumentUrl).toHaveBeenCalledWith(
 			fileRecordId,
-			editorMode,
+			edit === "true" ? EditorMode.EDIT : EditorMode.VIEW,
 			`${mockedMe.user.firstName} ${mockedMe.user.lastName}`
 		);
 	});

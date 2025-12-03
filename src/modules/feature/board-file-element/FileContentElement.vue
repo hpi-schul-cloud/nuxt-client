@@ -69,7 +69,6 @@ import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { mapEditBoardPermissionToEditorMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -216,15 +215,13 @@ const onCardInteraction = () => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) openCollabora();
 };
 const openCollabora = () => {
-	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
-
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: fileRecord.value.id,
 		},
 		query: {
-			editorMode,
+			edit: hasEditPermission.value.toString(),
 		},
 	}).href;
 
