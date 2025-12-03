@@ -19,19 +19,25 @@
 							/>
 							<Welcome v-else-if="step.value === RegistrationSteps.Welcome" />
 							<Password v-else-if="step.value === RegistrationSteps.PasswordSetup" v-model="password" />
+							<Success v-else-if="step.value === RegistrationSteps.Success" />
 						</VForm>
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
 			<VStepperActions>
 				<template #prev>
-					<VBtn v-if="stepValue > 1" data-testid="registration-back-button" @click="onBack(stepValue - 1)">
+					<VBtn
+						v-if="stepValue > 1 && stepValue < steps.length"
+						data-testid="registration-back-button"
+						@click="onBack(stepValue - 1)"
+					>
 						{{ t("common.actions.back") }}
 					</VBtn>
 				</template>
 				<template #next>
 					<VSpacer v-if="stepValue < steps.length" />
 					<VBtn
+						v-if="stepValue < steps.length"
 						variant="flat"
 						color="primary"
 						data-testid="registration-continue-button"
@@ -49,8 +55,10 @@
 <script setup lang="ts">
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
+import Success from "./steps/Success.vue";
 import Welcome from "./steps/Welcome.vue";
 import { LanguageType } from "@/serverApi/v3";
+import { useEnvConfig } from "@data-env";
 import { useRegistration } from "@data-room";
 import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -63,7 +71,7 @@ enum RegistrationSteps {
 	PasswordSetup,
 	DeclarationOfConsent,
 	ConfirmationCode,
-	Registration,
+	Success,
 }
 
 const { t } = useI18n();
@@ -116,6 +124,8 @@ onMounted(() => {
 	initializeLanguage();
 });
 
+const applicationName = computed(() => useEnvConfig().value.SC_TITLE.replace("Niedersächsische", "Niedersächsischen"));
+
 const steps = computed(() => [
 	{
 		value: RegistrationSteps.LanguageSelection,
@@ -148,10 +158,10 @@ const steps = computed(() => [
 		id: "confirmation",
 	},
 	{
-		value: RegistrationSteps.Registration,
-		title: t("pages.registrationExternalMembers.steps.registration.title"),
-		heading: t("pages.registrationExternalMembers.steps.registration.heading"),
-		id: "registration",
+		value: RegistrationSteps.Success,
+		title: t("pages.registrationExternalMembers.steps.success.title"),
+		heading: t("pages.registrationExternalMembers.steps.success.heading", { applicationName: applicationName.value }),
+		id: "success",
 	},
 ]);
 </script>
