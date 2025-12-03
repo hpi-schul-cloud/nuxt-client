@@ -25,7 +25,7 @@
 		<component
 			:is="`h${headingLevel}`"
 			class="title"
-			:class="[scope === 'board' ? 'board-title' : 'other-title', { editable: hasEditPermission }]"
+			:class="[scope === 'board' ? 'board-title' : 'other-title', { 'cursor-pointer': hasEditPermission }]"
 		>
 			{{ externalValue?.trim() ? externalValue : emptyValueFallback }}
 		</component>
@@ -209,9 +209,5 @@ const cursorToEnd = () => {
 	padding: 8px 16px;
 	overflow-wrap: break-word;
 	word-break: break-word;
-}
-
-.editable {
-	cursor: pointer;
 }
 </style>
