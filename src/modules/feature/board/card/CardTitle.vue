@@ -8,6 +8,7 @@
 			scope="card"
 			:value="modelValue"
 			:is-edit-mode="isEditMode"
+			:has-edit-permission="hasEditPermission"
 			:is-focused="isFocused"
 			data-testid="card-title"
 			@update:value="onUpdateValue"
@@ -31,6 +32,10 @@ const props = defineProps({
 	},
 	isFocused: {
 		type: Boolean,
+	},
+	hasEditPermission: {
+		type: Boolean,
+		default: false,
 	},
 });
 const emit = defineEmits(["update:value", "enter"]);

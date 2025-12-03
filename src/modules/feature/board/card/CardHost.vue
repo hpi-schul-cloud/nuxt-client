@@ -16,7 +16,7 @@
 				min-height="120px"
 				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
 				:ripple="false"
-				:hover="isHovered"
+				:hover="isHovered && hasEditPermission"
 				:data-testid="cardTestId"
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
@@ -30,6 +30,7 @@
 						scope="card"
 						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
+						:has-edit-permission="hasEditPermission"
 						@update:value="onUpdateCardTitle($event, cardId)"
 						@enter="onEnter"
 					/>
