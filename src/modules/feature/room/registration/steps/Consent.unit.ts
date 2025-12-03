@@ -29,7 +29,6 @@ describe("Consent.vue", () => {
 			fullName: ref("Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
-			hasCreatingAccountError: ref(false),
 			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
 		});
 		createTestEnvStore({

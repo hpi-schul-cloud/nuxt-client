@@ -42,7 +42,6 @@ describe("Registration.vue", () => {
 			fullName: ref("Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
-			hasCreatingAccountError: ref(false),
 			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
 		});
 
@@ -50,7 +49,7 @@ describe("Registration.vue", () => {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify()],
-				stubs: { I18nT: true },
+				stubs: { I18nT: true, VMain: true },
 			},
 		});
 

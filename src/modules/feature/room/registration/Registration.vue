@@ -135,7 +135,8 @@ const onContinue = async () => {
 	}
 
 	if (stepValue.value === RegistrationSteps.DeclarationOfConsent) {
-		await createAccount();
+		const isSucceed = await createAccount();
+		if (!isSucceed) return;
 	}
 
 	stepValue.value += 1;

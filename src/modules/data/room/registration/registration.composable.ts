@@ -12,7 +12,6 @@ export const useRegistration = () => {
 	const isPrivacyPolicyAccepted = ref<boolean>(false);
 	const fullName = ref<string>("");
 	const userData = ref<{ name: string; surname: string; email: string } | null>(null);
-	const hasCreatingAccountError = ref<boolean>(false);
 
 	const initializeLanguage = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
@@ -44,7 +43,7 @@ export const useRegistration = () => {
 		fullName.value = `${data.name} ${data.surname}`;
 	};
 
-	const createAccount = async () => {
+	const createAccount = async (): Promise<boolean> => {
 		const testError = false;
 		try {
 			await new Promise((resolve, reject) => {
@@ -52,13 +51,13 @@ export const useRegistration = () => {
 					reject();
 				} else {
 					resolve(true);
+					return true;
 				}
 			});
 			return true;
 		} catch {
-			hasCreatingAccountError.value = true;
-			notifyError(t("pages.registrationExternalMembers.error.createAccount"), false);
-			throw new Error(t("pages.registrationExternalMembers.error.notCompleted"));
+			notifyError(t("pages.registrationExternalMembers.error.notCompleted"), false);
+			return false;
 		}
 	};
 
@@ -69,7 +68,6 @@ export const useRegistration = () => {
 		initializeLanguage,
 		isPrivacyPolicyAccepted,
 		isTermsOfUseAccepted,
-		hasCreatingAccountError,
 		password,
 		selectedLanguage,
 		setCookie,
