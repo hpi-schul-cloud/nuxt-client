@@ -1,7 +1,6 @@
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import { printDateFromStringUTC } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import { createTestAppStoreWithRole, fileRecordFactory } from "@@/tests/test-utils";
@@ -116,7 +115,7 @@ describe("FileTable", () => {
 			expect(wrapper.findComponent(FilePreview).exists()).toBe(true);
 		});
 
-		it("should render created at column", () => {
+		it("should render content modified column", () => {
 			const fileRecord = fileRecordFactory.build();
 			const { wrapper } = setupWrapper({
 				isLoading: false,
@@ -125,10 +124,58 @@ describe("FileTable", () => {
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
 
-			const createdAt = wrapper.find(`[data-testid='created-at-${fileRecord.name}']`);
+			const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+			expect(contentLastModifiedAt.exists()).toBe(true);
+		});
 
-			const date = printDateFromStringUTC(fileRecord.createdAt);
-			expect(createdAt.text()).toContain(date);
+		describe("when contentLastModifiedAt is set", () => {
+			it("should render content modified column with contentLastModifiedAt", () => {
+				const fileRecord = fileRecordFactory.build();
+				fileRecord.contentLastModifiedAt = new Date().toISOString();
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toContain(wrapper.vm.$d(new Date(fileRecord.contentLastModifiedAt)));
+			});
+		});
+
+		describe("when contentLastModifiedAt is not existing", () => {
+			it("should render content modified column with createdAt", () => {
+				const fileRecord = fileRecordFactory.build();
+				delete fileRecord.contentLastModifiedAt;
+				fileRecord.createdAt = new Date().toISOString();
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toContain(wrapper.vm.$d(new Date(fileRecord.createdAt)));
+			});
+		});
+
+		describe("when contentLastModifiedAt and createdAt are not existing", () => {
+			it("should render content modified column with empty string", () => {
+				const fileRecord = fileRecordFactory.build();
+				delete fileRecord.contentLastModifiedAt;
+				delete fileRecord.createdAt;
+				const { wrapper } = setupWrapper({
+					isLoading: false,
+					isEmpty: false,
+					fileRecords: [fileRecord],
+					uploadProgress: { uploaded: 1, total: 2 },
+				});
+
+				const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+				expect(contentLastModifiedAt.text()).toBe("");
+			});
 		});
 
 		it("should render file name column", () => {
@@ -194,8 +241,8 @@ describe("FileTable", () => {
 			const nameColumn = wrapper.find(`[data-testid='name-${fileRecord.name}']`);
 			expect(nameColumn.classes()).toContain("text-disabled");
 
-			const createdAtColumn = wrapper.find(`[data-testid='created-at-${fileRecord.name}']`);
-			expect(createdAtColumn.classes()).toContain("text-disabled");
+			const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+			expect(contentLastModifiedAt.classes()).toContain("text-disabled");
 
 			const sizeColumn = wrapper.find(`[data-testid='size-${fileRecord.name}']`);
 			expect(sizeColumn.classes()).toContain("text-disabled");
@@ -219,8 +266,8 @@ describe("FileTable", () => {
 			const nameColumn = wrapper.find(`[data-testid='name-${fileRecord.name}']`);
 			expect(nameColumn.classes()).not.toContain("text-disabled");
 
-			const createdAtColumn = wrapper.find(`[data-testid='created-at-${fileRecord.name}']`);
-			expect(createdAtColumn.classes()).not.toContain("text-disabled");
+			const contentLastModifiedAt = wrapper.find(`[data-testid='content-modified-at-${fileRecord.name}']`);
+			expect(contentLastModifiedAt.classes()).not.toContain("text-disabled");
 
 			const sizeColumn = wrapper.find(`[data-testid='size-${fileRecord.name}']`);
 			expect(sizeColumn.classes()).not.toContain("text-disabled");
