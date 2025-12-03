@@ -45,6 +45,7 @@ export default {
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
+	"common.file.exceedsCollaboraEditableFileSize.short": "Edición en línea no posible",
 	"common.files": "Archivos",
 	"common.instructions.orderBy.arrowKeys": "Los elementos de esta lista se pueden mover con las teclas de flecha.",
 	"common.labels.admin": "Admin(s)",
@@ -1582,6 +1583,11 @@ export default {
 	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Política de privacidad",
 	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
 	"pages.registrationExternalMembers.steps.password.heading": "Establecer contraseña",
+	"pages.registrationExternalMembers.steps.success.title": "Registro exitoso",
+	"pages.registrationExternalMembers.steps.success.heading": "¡Gracias por registrarse en la {applicationName}!",
+	"pages.registrationExternalMembers.steps.success.explanation":
+		'Bienvenido a la nueva sala. En las salas, el contenido se puede crear, organizar y compartir con diferentes grupos de personas en un lugar central, por ejemplo con clases, colegas, personas externas o equipos interdisciplinarios. El elemento de menú "Salas" enumera las salas en las que ya tiene membresía.',
+	"pages.registrationExternalMembers.steps.success.button": "Ir al inicio de sesión",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",
@@ -2009,6 +2015,7 @@ export default {
 	"pages.folder.title": "Carpeta",
 	"pages.folder.columns.name": "Nombre",
 	"pages.folder.columns.createdat": "Creado el",
+	"pages.folder.columns.lastModifiedAt": "Última actualización",
 	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
