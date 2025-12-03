@@ -1,9 +1,5 @@
 <template>
-	<VCardTitle
-		v-if="isEditMode || value !== ''"
-		class="d-block text-break-word pt-0 pb-0"
-		:class="{ 'pointer-events-none': !isEditMode }"
-	>
+	<VCardTitle v-if="isEditMode || value !== ''" class="d-block text-break-word pt-0 pb-0">
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
@@ -48,9 +44,5 @@ const onEnter = () => emit("enter");
 <style scoped>
 .text-break-word {
 	word-break: break-word;
-}
-
-.pointer-events-none {
-	pointer-events: none;
 }
 </style>
