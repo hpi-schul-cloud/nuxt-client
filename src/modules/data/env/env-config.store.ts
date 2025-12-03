@@ -118,17 +118,6 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		}
 	});
 
-	const instituteSupportEmail = computed(() => {
-		const emailMap: Record<SchulcloudTheme, string> = {
-			[SchulcloudTheme.Brb]: "schul-cloud@bildungsserver.berlin-brandenburg.de",
-			[SchulcloudTheme.N21]: "ticketsystem@niedersachsen.support",
-			[SchulcloudTheme.Thr]: "widerruf@dbildungscloud.de",
-			[SchulcloudTheme.Default]: "widerruf@dbildungscloud.de",
-		};
-
-		return emailMap[env.SC_THEME];
-	});
-
 	const loadConfiguration = async () => {
 		try {
 			const [serverConfigRes, fileConfigRes] = await Promise.all([
@@ -153,7 +142,6 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		env,
 		envFile,
 		fallBackLanguage,
-		instituteSupportEmail,
 		instituteTitle,
 	};
 });

@@ -32,7 +32,7 @@
 							<template #instanceTitle>{{ instituteTitle }}</template>
 							<template #email>
 								<a :href="sanitizedSupportEmail">
-									{{ instituteSupportEmail }}
+									{{ env.SC_CONTACT_EMAIL }}
 								</a>
 							</template>
 							<template #faqLink>
@@ -89,7 +89,7 @@ defineProps<Props>();
 
 const { t } = useI18n();
 const envConfig = useEnvConfig();
-const { instituteTitle, instituteSupportEmail } = storeToRefs(useEnvStore());
+const { instituteTitle, env } = storeToRefs(useEnvStore());
 const EMAIL_SUBJECT = "Bildungscloud Anfrage";
 const BRB_INSTANCE_TITLE = "Schul-Cloud Brandenburg";
 const instanceTitle = computed(() =>
@@ -97,7 +97,7 @@ const instanceTitle = computed(() =>
 );
 
 const sanitizedSupportEmail = computed(() =>
-	sanitizeUrl(`mailto:${instituteSupportEmail.value}?subject=${EMAIL_SUBJECT}`)
+	sanitizeUrl(`mailto:${env.value.SC_CONTACT_EMAIL}?subject=${EMAIL_SUBJECT}`)
 );
 
 const declarationOfConsentText = computed(() => {
