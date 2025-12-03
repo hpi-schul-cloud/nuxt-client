@@ -351,7 +351,7 @@ describe("CollaboraEditor", () => {
 			await flushPromises();
 
 			const iframe = wrapper.find("iframe");
-			expect(iframe.attributes("title")).toBe("pages.collabora.iframeTitle");
+			expect(iframe.attributes("title")).toBe("feature.collabora.iframeTitle");
 		});
 	});
 });

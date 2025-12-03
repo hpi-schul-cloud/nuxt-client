@@ -1906,7 +1906,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
-	"pages.collabora.iframeTitle": "Office document editor",
 	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
 	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500": "There are problems in the system. We are working on fixing the issue. Please try again later.",
@@ -1954,6 +1953,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
+	"feature.collabora.iframeTitle": "Office document editor",
 	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",

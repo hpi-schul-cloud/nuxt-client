@@ -1926,7 +1926,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
-	"pages.collabora.iframeTitle": "Редактор документів Office",
 	"pages.collabora.jsonError": "Не вдалося проаналізувати Json повідомлення Collabora.",
 	"pages.collabora.messageError": "Повідомлення Collabora недійсне.",
 	"error.500": "Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
@@ -1974,6 +1973,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
+	"feature.collabora.iframeTitle": "Редактор документів Office",
 	"pages.folder.emptyState": "Наразі тут немає файлів",
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
