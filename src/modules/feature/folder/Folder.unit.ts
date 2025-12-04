@@ -1384,7 +1384,7 @@ describe("Folder.vue", () => {
 				it("should not open new tab", async () => {
 					const { wrapper, windowOpenSpy, fileStorageApiMock } = await setup();
 
-					fileStorageApiMock.uploadCollaboraFile.mockRejectedValueOnce(new Error("Upload failed"));
+					fileStorageApiMock.uploadCollaboraFile.mockReturnValueOnce(undefined);
 
 					const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
 					await collaboraFileDialog.vm.$emit("create-collabora-file", {
