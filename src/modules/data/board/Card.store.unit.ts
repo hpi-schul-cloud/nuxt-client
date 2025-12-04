@@ -19,6 +19,7 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
 import { useNotificationStore } from "@data-app";
 import { CreateElementRequestPayload, useCardStore, useSocketConnection } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
@@ -49,6 +50,9 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
+vi.mock("@data-file");
+const mockedUseFileStorageApi = vi.mocked(useFileStorageApi);
+
 describe("CardStore", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -60,6 +64,7 @@ describe("CardStore", () => {
 	let editModeId: Ref<string | undefined>;
 	let latestEditModeId: Ref<string | undefined>;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
+	let mockedFileStorageApi: DeepMocked<ReturnType<typeof useFileStorageApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -110,6 +115,9 @@ describe("CardStore", () => {
 
 		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
+
+		mockedFileStorageApi = createMock<ReturnType<typeof useFileStorageApi>>();
+		mockedUseFileStorageApi.mockReturnValue(mockedFileStorageApi);
 
 		setEditModeId = vi.fn();
 		editModeId = ref(undefined);
