@@ -90,14 +90,13 @@ defineProps<Props>();
 const { t } = useI18n();
 const envConfig = useEnvConfig();
 const { instituteTitle, env } = storeToRefs(useEnvStore());
-const EMAIL_SUBJECT = "Bildungscloud Anfrage";
 const BRB_INSTANCE_TITLE = "Schul-Cloud Brandenburg";
 const instanceTitle = computed(() =>
 	envConfig.value.SC_THEME === SchulcloudTheme.Brb ? BRB_INSTANCE_TITLE : envConfig.value.SC_TITLE
 );
 
 const sanitizedSupportEmail = computed(() =>
-	sanitizeUrl(`mailto:${env.value.SC_CONTACT_EMAIL}?subject=${EMAIL_SUBJECT}`)
+	sanitizeUrl(`mailto:${env.value.SC_CONTACT_EMAIL}?subject=${env.value.SC_CONTACT_EMAIL_SUBJECT}`)
 );
 
 const declarationOfConsentText = computed(() => {

@@ -29,7 +29,7 @@
 								v-model:is-privacy-policy-accepted="isPrivacyPolicyAccepted"
 								:user-name="fullName"
 							/>
-							<Success v-else-if="step.value === RegistrationSteps.Success" />
+							<Success v-if="step.value === RegistrationSteps.Success" />
 						</VForm>
 					</VStepperWindowItem>
 				</template>
