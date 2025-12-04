@@ -1544,7 +1544,26 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Ich, {userName}, erkläre Folgendes:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der {dataProtectionLink} der Schule in der {instanceTitle} sowie bei den von der Schule ausgewählten und weisungsgebundenen Lernmittelanbieter verarbeitet werden.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {instanceTitle}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: {email}. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren {faqLink} entnehmen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der Datenschutzerklärung in der Schul-Cloud Brandenburg sowie bei den ausgewählten und weisungsgebundenen Lernmittelanbietern verarbeitet werden.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"Die Einwilligung und damit die Nutzung ist freiwillig und jederzeit mit Wirkung für die Zukunft widerrufbar per E-Mail an: {email}. Im Falle des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst Du auch unseren {faqLink} entnehmen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Ich habe die {termsOfUse} der {instanceTitle} gelesen und stimme ihr zu.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"Die Einverständniserklärung ist notwendig, um die Registrierung abzuschließen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"Die Zustimmung zur Nutzungsordnung ist notwendig, um die Registrierung abzuschließen.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1557,7 +1576,7 @@ export default {
 	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
 		"davon jeweils mindestens eine Zahl und ein Sonderzeichen",
 	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
-		"erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+		"erlaubte Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
 	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Das Passwort muss mindestens 8 Zeichen lang sein.",
@@ -1573,9 +1592,7 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Mit der Registrierung in der dBildungscloud im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Datenschutzerklärung",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Nutzungsordnung",
+		"Mit der Registrierung in der {instance} im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
 	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
 	"pages.registrationExternalMembers.steps.success.title": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.success.heading":

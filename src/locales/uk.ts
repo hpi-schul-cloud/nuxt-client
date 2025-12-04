@@ -1532,7 +1532,26 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Я, {userName}, заявляю наступне:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Я прочитав(ла) {termsOfUse} {instanceTitle} і погоджуюся з ними.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"Підтвердження згоди є необхідним для завершення реєстрації.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"Прийняття умов використання є необхідним для завершення реєстрації.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"Я погоджуюсь з тим, що мої персональні дані оброблятимуться відповідно до {dataProtectionLink} школи {instanceTitle}, а також із постачальниками навчальних матеріалів, обраними та проінструктованими школою.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"Згода і, таким чином, використання є добровільними, а це означає, що якщо ви не дасте своєї згоди, це не призведе до шкоди для вас у класі. Участь в уроках поза {instanceTitle}, стане можливою завдяки школі. Відкликати цю згоду можна будь-коли. Досить короткого електронного листа із заявою про відкликання, який вказує ваше ім'я та прізвище, клас та школу на таку адресу: {email}. У разі відкликання ми негайно видалимо персональні дані, збережені на підставі згоди, якщо немає законної причини для зберігання або якщо ви не бажаєте отримати доступ до збережених даних заздалегідь. Знайти додаткову інформацію про захист даних також можна у наших {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"Я погоджуюся з тим, що мої персональні дані можуть оброблятися відповідно до політики захисту даних у Schul-Cloud Brandenburg та обраними й уповноваженими постачальниками навчальних матеріалів",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"Згода, а отже, й використання, є добровільними та можуть бути відкликані будь-коли з чинністю на майбутнє електронною поштою на адресу: {email}. У разі відкликання ми негайно видалимо дані, що зберігаються на підставі згоди, якщо немає законної підстави для зберігання або ви не хочете отримати доступ до збережених даних заздалегідь. Ви також можете знайти додаткову інформацію про захист даних у нашому {faqLink}.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1560,9 +1579,7 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Реєструючись у dBildungscloud на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Політика конфіденційності",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Умови використання",
+		"Реєструючись у {instance} на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
 	"pages.registrationExternalMembers.steps.password.heading": "Встановіть пароль",
 	"pages.registrationExternalMembers.steps.success.title": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.success.heading": "Дякуємо за реєстрацію в {applicationName}!",
