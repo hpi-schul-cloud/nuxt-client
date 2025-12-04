@@ -49,10 +49,10 @@ vi.mocked(useBoardFeatures).mockImplementation(() => ({
 	isFeatureEnabled: vi.fn().mockReturnValue(true),
 }));
 
-vi.mock("@feature-composable/add-collabora-file.composable");
-const mockedAddCollaboraFile = vi.mocked(useAddCollaboraFile);
+vi.mock("@feature-collabora/composables/add-collabora-file.composable");
+const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
 const openCollaboraFileDialogMock = vi.fn();
-mockedAddCollaboraFile.mockReturnValue({
+mockedUseAddCollaboraFile.mockReturnValue({
 	isCollaboraFileDialogOpen: ref(false),
 	openCollaboraFileDialog: openCollaboraFileDialogMock,
 	closeCollaboraFileDialog: vi.fn(),
