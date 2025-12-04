@@ -244,8 +244,8 @@ describe("MembersTable", () => {
 				expectedIcon: mdiAccountOutline,
 			},
 			{
-				description: "expert icon for external experts",
-				schoolRoleNames: [RoleName.Expert],
+				description: "expert icon for external persons",
+				schoolRoleNames: [RoleName.ExternalPerson],
 				expectedIcon: mdiAccountClockOutline,
 			},
 			{

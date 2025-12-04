@@ -10,7 +10,7 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { formatFileSize } from "@/utils/fileHelper";
+import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
@@ -24,6 +24,12 @@ export enum ErrorType {
 	FILE_TOO_BIG = "FILE_TOO_BIG",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
+}
+
+export enum CollaboraFileType {
+	Text,
+	Spreadsheet,
+	Presentation,
 }
 
 export const useFileStorageApi = () => {
@@ -69,12 +75,40 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	const getCollaboraAssetUrl = (collaboraFileType: CollaboraFileType): string => {
+		const base = `${window.location.origin}/collabora`;
+
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return `${base}/doc.docx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return `${base}/spreadsheet.xlsx`;
+		}
+
+		return `${base}/presentation.pptx`;
+	};
+
+	const uploadCollaboraFile = async (
+		type: CollaboraFileType,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName: string
+	) => {
+		const assetUrl = getCollaboraAssetUrl(type);
+		const fileExtension = getFileExtension(assetUrl);
+		const fullFileName = `${fileName}.${fileExtension}`;
+
+		const fileRecord = await uploadFromUrl(assetUrl, parentId, parentType, fullFileName);
+
+		return fileRecord;
+	};
+
 	const uploadFromUrl = async (
 		imageUrl: string,
 		parentId: string,
 		parentType: FileRecordParent,
 		fileName?: string
-	): Promise<void> => {
+	): Promise<FileRecord | void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -93,6 +127,8 @@ export const useFileStorageApi = () => {
 			);
 
 			upsertFileRecords([response.data]);
+
+			return response.data;
 		} catch (error) {
 			showError(error);
 		}
@@ -195,5 +231,6 @@ export const useFileStorageApi = () => {
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
+		uploadCollaboraFile,
 	};
 };

@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { setupFileSelectMock } from "../../../util/board/test-utils/file-select-mock";
-import { CollaboraFileType, useAddCollaboraFile } from "./add-collabora-file.composable";
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { AnyContentElement, ContentElementType } from "@/types/board/ContentElement";
 import { fileElementResponseFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useCardStore } from "@data-board";
@@ -45,7 +45,6 @@ describe("AddCollaboraFileComposable", () => {
 			closeCollaboraFileDialog,
 			setCardId,
 			setCreateElementRequestFn,
-			getAssetUrl,
 			collaboraFileSelectionOptions,
 			isCollaboraFileDialogOpen,
 			cardId,
@@ -69,7 +68,6 @@ describe("AddCollaboraFileComposable", () => {
 			closeCollaboraFileDialog,
 			setCardId,
 			cardId,
-			getAssetUrl,
 			cardStore,
 		};
 	};
@@ -121,17 +119,6 @@ describe("AddCollaboraFileComposable", () => {
 		});
 	});
 
-	describe("getAssetUrl", () => {
-		it("returns correct URL for collabora types", () => {
-			const { getAssetUrl } = setup();
-			const origin = window.location.origin;
-
-			expect(getAssetUrl(CollaboraFileType.Text)).toBe(`${origin}/collabora/doc.docx`);
-			expect(getAssetUrl(CollaboraFileType.Spreadsheet)).toBe(`${origin}/collabora/spreadsheet.xlsx`);
-			expect(getAssetUrl(CollaboraFileType.Presentation)).toBe(`${origin}/collabora/presentation.pptx`);
-		});
-	});
-
 	describe("collaboraFileSelectionOptions", () => {
 		it("provides options for collabora file types", () => {
 			const { collaboraFileSelectionOptions } = setup();
@@ -180,7 +167,7 @@ describe("AddCollaboraFileComposable", () => {
 					await option.action("test-office-file", "");
 				}
 
-				expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
+				expect(fileStorageApiMock.uploadCollaboraFile).toHaveBeenCalledTimes(collaboraFileSelectionOptions.length);
 			});
 
 			describe("when a caption is provided", () => {
@@ -220,7 +207,7 @@ describe("AddCollaboraFileComposable", () => {
 			describe("when file upload fails", () => {
 				it("should delete the created file element", async () => {
 					const { collaboraFileSelectionOptions } = setup();
-					fileStorageApiMock.uploadFromUrl.mockRejectedValue(new Error("Upload failed"));
+					fileStorageApiMock.uploadCollaboraFile.mockRejectedValue(new Error("Upload failed"));
 
 					for (const option of collaboraFileSelectionOptions) {
 						await option.action("test-office-file", "");

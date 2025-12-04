@@ -63,7 +63,7 @@ describe("useApplicationStore", () => {
 		it("should return false for role checks initially", () => {
 			expect(useAppStore().isTeacher).toBe(false);
 			expect(useAppStore().isStudent).toBe(false);
-			expect(useAppStore().isExpert).toBe(false);
+			expect(useAppStore().isExternalPerson).toBe(false);
 		});
 
 		it("should return correct computed from meResponse", async () => {
@@ -91,7 +91,7 @@ describe("useApplicationStore", () => {
 
 				expect(useAppStore().isTeacher).toBe(true);
 				expect(useAppStore().isStudent).toBe(false);
-				expect(useAppStore().isExpert).toBe(false);
+				expect(useAppStore().isExternalPerson).toBe(false);
 			});
 
 			it("should correctly identify student role", async () => {
@@ -99,20 +99,20 @@ describe("useApplicationStore", () => {
 
 				expect(useAppStore().isTeacher).toBe(false);
 				expect(useAppStore().isStudent).toBe(true);
-				expect(useAppStore().isExpert).toBe(false);
+				expect(useAppStore().isExternalPerson).toBe(false);
 			});
 
-			it("should correctly identify expert role", async () => {
+			it("should correctly identify external person role", async () => {
 				await setup({
 					roles: [
-						{ id: "any", name: RoleName.Expert },
+						{ id: "any", name: RoleName.ExternalPerson },
 						{ id: "any", name: RoleName.Teacher },
 					],
 				});
 
 				expect(useAppStore().isTeacher).toBe(true);
 				expect(useAppStore().isStudent).toBe(false);
-				expect(useAppStore().isExpert).toBe(true);
+				expect(useAppStore().isExternalPerson).toBe(true);
 			});
 		});
 	});

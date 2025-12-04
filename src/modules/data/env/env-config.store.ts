@@ -31,6 +31,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 	ACCESSIBILITY_REPORT_EMAIL: "",
 	SC_CONTACT_EMAIL: "",
+	SC_CONTACT_EMAIL_SUBJECT: "",
 	FEATURE_SHOW_MIGRATION_WIZARD: false,
 	FEATURE_TLDRAW_ENABLED: false,
 	ALERT_STATUS_URL: null,
@@ -85,6 +86,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
+	FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: false,
 };
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
