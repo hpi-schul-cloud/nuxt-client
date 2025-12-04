@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
@@ -216,15 +215,13 @@ const onCardInteraction = () => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) openCollabora();
 };
 const openCollabora = () => {
-	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
-
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: fileRecord.value.id,
 		},
 		query: {
-			editorMode,
+			edit: hasEditPermission.value.toString(),
 		},
 	}).href;
 

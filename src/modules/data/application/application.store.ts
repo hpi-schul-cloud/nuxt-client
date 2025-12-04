@@ -41,7 +41,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const isTeacher = computed(() => userRoles.value.includes(RoleName.Teacher));
 	const isStudent = computed(() => userRoles.value.includes(RoleName.Student));
-	const isExpert = computed(() => userRoles.value.includes(RoleName.Expert));
+	const isExternalPerson = computed(() => userRoles.value.includes(RoleName.ExternalPerson));
 
 	// Helpers/Utils
 	const hasPermission = (permission: Permission) =>
@@ -129,7 +129,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		hasPermission,
 		isTeacher,
 		isStudent,
-		isExpert,
+		isExternalPerson,
 		school,
 		userRoles,
 		systemId,
