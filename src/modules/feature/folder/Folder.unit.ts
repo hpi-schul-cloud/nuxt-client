@@ -1379,6 +1379,22 @@ describe("Folder.vue", () => {
 
 				expect(windowOpenSpy).toHaveBeenCalled();
 			});
+
+			describe("and upload fails", () => {
+				it("should not open new tab", async () => {
+					const { wrapper, windowOpenSpy, fileStorageApiMock } = await setup();
+
+					fileStorageApiMock.uploadCollaboraFile.mockRejectedValueOnce(new Error("Upload failed"));
+
+					const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
+					await collaboraFileDialog.vm.$emit("create-collabora-file", {
+						type: CollaboraFileType.Text,
+						fileName: "myDoc",
+					});
+
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+				});
+			});
 		});
 
 		describe("when fab button is clicked, file upload is chosen, files are selected and upload succeed", () => {
