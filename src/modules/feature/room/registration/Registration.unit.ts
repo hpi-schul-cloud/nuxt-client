@@ -1,4 +1,5 @@
 import Registration from "./Registration.vue";
+import Consent from "./steps/Consent.vue";
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
 import { LanguageType } from "@/serverApi/v3";
@@ -25,20 +26,30 @@ describe("Registration.vue", () => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
 	});
-	const setup = () => {
+	const setup = (
+		options?: Partial<{
+			password: string;
+		}>
+	) => {
 		useRegistrationMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
-			password: ref(""),
+			password: ref(options?.password ?? ""),
+			isPrivacyPolicyAccepted: ref(false),
+			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
+			fullName: ref("Max Mustermann"),
+			fetchUserData: vi.fn(),
+			createAccount: vi.fn(),
+			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
 		});
 
 		const wrapper = mount(Registration, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify()],
-				stubs: { Welcome: true },
+				stubs: { I18nT: true, VMain: true },
 			},
 		});
 
@@ -60,11 +71,11 @@ describe("Registration.vue", () => {
 			expect(stepperComponent.props("modelValue")).toBe(1);
 		});
 
-		it("should have 6 steps", () => {
+		it("should have 5 steps", () => {
 			const { wrapper } = setup();
 
 			const stepComponents = wrapper.findAllComponents(VStepperItem);
-			expect(stepComponents.length).toBe(6);
+			expect(stepComponents.length).toBe(5);
 		});
 
 		describe("Stepper Actions", () => {
@@ -191,6 +202,47 @@ describe("Registration.vue", () => {
 
 				const passwordField = wrapper.get("[data-testid='password']").get("input");
 				expect(document.activeElement).toBe(passwordField.element);
+			});
+		});
+
+		describe("Consent Step", () => {
+			it("should render Consent component at consent step (4)", async () => {
+				const { wrapper } = setup();
+				const stepper = wrapper.findComponent(VStepper);
+				await stepper.setValue(4);
+
+				const consentComponent = wrapper.findComponent(Consent);
+				expect(consentComponent.exists()).toBe(true);
+			});
+
+			it("should properly pass v-model values to Consent component", async () => {
+				const { wrapper, useRegistration } = setup();
+				const stepper = wrapper.findComponent(VStepper);
+				await stepper.setValue(4);
+
+				const consentComponent = wrapper.getComponent(Consent);
+
+				expect(consentComponent.props("isPrivacyPolicyAccepted")).toBe(useRegistration.isPrivacyPolicyAccepted.value);
+				expect(consentComponent.props("isTermsOfUseAccepted")).toBe(useRegistration.isTermsOfUseAccepted.value);
+			});
+
+			it("should focus first invalid checkbox on continue button click", async () => {
+				const validPassword = "ValidPassword1!";
+				const { wrapper } = setup({ password: validPassword });
+				// we need to trigger to reach the consent step as just setValue() will not initiliaze the step forms array properly
+				const continueButton = wrapper.get("[data-testid='registration-continue-button']");
+				await continueButton.trigger("click");
+				await continueButton.trigger("click");
+				const passwordField = wrapper.get("[data-testid='confirm-password']").get("input");
+				await passwordField.setValue(validPassword);
+				await continueButton.trigger("click");
+				await flushPromises();
+
+				await continueButton.trigger("click");
+				await flushPromises();
+
+				const privacyPolicyCheckbox = wrapper.get("[data-testid='privacy-policy-checkbox']").get("input");
+				expect(document.activeElement).toBe(privacyPolicyCheckbox.element);
 			});
 		});
 	});
