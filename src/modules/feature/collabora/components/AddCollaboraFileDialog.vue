@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isCollaboraFileDialogOpen"
-		:message="t('components.elementTypeSelection.elements.collabora.subtitle')"
+		:message="t('feature.collabora.add-collabora-file-dialog.title')"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-element-dialog"
@@ -15,7 +15,7 @@
 					v-model="selectedDocType"
 					:items="collaboraFileSelectionOptions"
 					persistent-hint
-					:label="t('components.cardElement.fileElement.collaboraFile.types')"
+					:label="t('feature.collabora.add-collabora-file-dialog.doc-types')"
 					:rules="docTypeRules"
 					:menu-props="{ attach: '#officeFileForm' }"
 					data-testid="collabora-element-form-type"
@@ -24,7 +24,7 @@
 					v-model="fileName"
 					:label="t('common.labels.fileName')"
 					:rules="fileNameRules"
-					:placeholder="t('components.cardElement.fileElement.collaboraFile.untitled')"
+					:placeholder="t('feature.collabora.add-collabora-file-dialog.untitled-file')"
 					data-testid="collabora-element-form-filename"
 				/>
 			</VForm>
@@ -69,15 +69,15 @@ const passesAllRules = (value: string, rules: ((value: string) => true | string)
 
 const collaboraFileSelectionOptions = [
 	{
-		title: t("components.elementTypeSelection.elements.collabora.option.text"),
+		title: t("feature.collabora.add-collabora-file-dialog.option.text"),
 		value: CollaboraFileType.Text,
 	},
 	{
-		title: t("components.elementTypeSelection.elements.collabora.option.spreadsheet"),
+		title: t("feature.collabora.add-collabora-file-dialog.option.spreadsheet"),
 		value: CollaboraFileType.Spreadsheet,
 	},
 	{
-		title: t("components.elementTypeSelection.elements.collabora.option.presentation"),
+		title: t("feature.collabora.add-collabora-file-dialog.option.presentation"),
 		value: CollaboraFileType.Presentation,
 	},
 ];
