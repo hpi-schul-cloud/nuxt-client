@@ -23,7 +23,6 @@ import {
 } from "@/utils/fileHelper";
 import { useEnvConfig } from "@data-env";
 import { LightBoxContentType, useLightBox } from "@ui-light-box";
-import { mapEditBoardPermissionToEditorMode } from "@util-board";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -117,15 +116,13 @@ const openVideoInLightbox = () => {
 };
 
 const openCollabora = () => {
-	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission);
-
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: fileRecordItem.id,
 		},
 		query: {
-			editorMode,
+			edit: hasEditPermission.toString(),
 		},
 	}).href;
 
