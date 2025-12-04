@@ -2,7 +2,7 @@
 	<KebabMenu class="mx-2" :aria-label="t('pages.roomDetails.ariaLabels.menu')" data-testid="room-menu">
 		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
 		<KebabMenuActionRoomMembers
-			v-if="canViewRoom"
+			v-if="canSeeMembersList"
 			:members-info-text="membersInfoText"
 			@click="() => $emit('room:manage-members')"
 		/>
@@ -44,7 +44,7 @@ const { t } = useI18n();
 const isRoomCopyFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED);
 const isRoomShareFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_SHARE);
 
-const { canAddRoomMembers, canCopyRoom, canShareRoom, canEditRoom, canDeleteRoom, canViewRoom } =
+const { canAddRoomMembers, canCopyRoom, canShareRoom, canEditRoom, canDeleteRoom, canSeeMembersList } =
 	useRoomAuthorization();
 
 const membersInfoText = computed(() =>
