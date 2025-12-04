@@ -1964,7 +1964,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
-	"pages.collabora.iframeTitle": "Office-Dokument Editor",
 	"pages.collabora.jsonError": "Json der Collabora Nachricht konnte nicht geparsed werden.",
 	"pages.collabora.messageError": "Collabora Nachricht ist nicht valide.",
 	"error.500": "Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
@@ -2012,6 +2011,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
+	"feature.collabora.iframeTitle": "Office-Dokument Editor",
 	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
@@ -2030,4 +2030,12 @@ export default {
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "Der Dateiname existiert bereits.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "Der Dateiname enthält ungültige Zeichen.",
+	"pages.folder.fab.upload-file": "Datei hochladen",
+	"pages.folder.fab.create-document": "Dokument erstellen",
+	"pages.folder.add-collabora-file-dialog.title": "Dokument erstellen",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Dokumententyp",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Unbenanntes Dokument",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Tabelle)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Präsentation)",
 };

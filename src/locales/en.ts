@@ -1929,7 +1929,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
-	"pages.collabora.iframeTitle": "Office document editor",
 	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
 	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500": "There are problems in the system. We are working on fixing the issue. Please try again later.",
@@ -1977,6 +1976,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
+	"feature.collabora.iframeTitle": "Office document editor",
 	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
@@ -1995,4 +1995,12 @@ export default {
 	"pages.folder.delete-confirmation": "Do you really want to delete file {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "The file name already exists.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "The file name contains invalid characters.",
+	"pages.folder.fab.upload-file": "Upload file",
+	"pages.folder.fab.create-document": "Create document",
+	"pages.folder.add-collabora-file-dialog.title": "Create document",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Document type",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Untitled document",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Spreadsheet)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentation)",
 };
