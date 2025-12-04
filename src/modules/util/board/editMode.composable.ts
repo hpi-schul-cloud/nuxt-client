@@ -54,15 +54,20 @@ const useEditMode = (id: string, permissions: EditModePermissions = { hasEditPer
  */
 const sharedEditMode = () => {
 	const editModeId: Ref<string | undefined> = ref(undefined);
+	const latestEditModeId: Ref<string | undefined> = ref(undefined);
 
 	const setEditModeId = (id: string | undefined): void => {
 		editModeId.value = id;
+		if (id) {
+			latestEditModeId.value = id;
+		}
 	};
 
 	const isInEditMode: ComputedRef<boolean> = computed(() => editModeId.value !== undefined);
 
 	return {
 		editModeId,
+		latestEditModeId,
 		setEditModeId,
 		isInEditMode,
 	};

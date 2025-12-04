@@ -58,6 +58,7 @@ describe("CardStore", () => {
 	let mockedSharedLastCreatedElementActions: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let setEditModeId: Mock;
 	let editModeId: Ref<string | undefined>;
+	let latestEditModeId: Ref<string | undefined>;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 
 	beforeEach(() => {
@@ -112,9 +113,11 @@ describe("CardStore", () => {
 
 		setEditModeId = vi.fn();
 		editModeId = ref(undefined);
+		latestEditModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId,
+			latestEditModeId,
 			isInEditMode: computed(() => true),
 		});
 	});

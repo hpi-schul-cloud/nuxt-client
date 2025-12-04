@@ -21,7 +21,7 @@ import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
-import { nextTick, Ref, ref, watch } from "vue";
+import { nextTick, Ref, ref } from "vue";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards: Ref<Record<string, CardResponse>> = ref({});
@@ -36,15 +36,8 @@ export const useCardStore = defineStore("cardStore", () => {
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
-	const { setEditModeId, editModeId } = useSharedEditMode();
+	const { setEditModeId, editModeId, latestEditModeId } = useSharedEditMode();
 	const { uploadCollaboraFile } = useFileStorageApi();
-
-	let latestEditModeId: string | undefined = undefined;
-	watch(editModeId, (newVal) => {
-		if (newVal) {
-			latestEditModeId = newVal;
-		}
-	});
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -120,13 +113,13 @@ export const useCardStore = defineStore("cardStore", () => {
 	const createElementRequest = socketOrRest.createElementRequest;
 
 	const createFileElementWithCollabora = async (type: CollaboraFileType, fileName: string) => {
-		if (!latestEditModeId) {
+		if (!latestEditModeId.value) {
 			return;
 		}
 
 		const element = await createElementRequest({
 			type: ContentElementType.File,
-			cardId: latestEditModeId,
+			cardId: latestEditModeId.value,
 		});
 		if (!element) {
 			return;
@@ -135,7 +128,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		try {
 			await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
 		} catch {
-			await deleteElementRequest({ elementId: element.id, cardId: latestEditModeId });
+			await deleteElementRequest({ elementId: element.id, cardId: latestEditModeId.value });
 		}
 	};
 

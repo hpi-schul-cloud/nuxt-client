@@ -50,6 +50,7 @@ describe("CardHost", () => {
 	beforeEach(() => {
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
+			latestEditModeId: ref(undefined),
 			setEditModeId: vi.fn(),
 			isInEditMode: computed(() => true),
 		});

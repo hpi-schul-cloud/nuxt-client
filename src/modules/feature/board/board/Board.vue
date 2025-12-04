@@ -155,7 +155,6 @@ const props = defineProps({
 const { t } = useI18n();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
-
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
