@@ -1931,7 +1931,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
-	"pages.collabora.iframeTitle": "Редактор документів Office",
 	"pages.collabora.jsonError": "Не вдалося проаналізувати Json повідомлення Collabora.",
 	"pages.collabora.messageError": "Повідомлення Collabora недійсне.",
 	"error.500": "Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
@@ -1979,6 +1978,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
+	"feature.collabora.iframeTitle": "Редактор документів Office",
 	"pages.folder.emptyState": "Наразі тут немає файлів",
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
@@ -1997,4 +1997,12 @@ export default {
 	"pages.folder.delete-confirmation": "Дійсно видалити файл {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "Ім'я файлу вже існує.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "Ім'я файлу містить недопустимі символи.",
+	"pages.folder.fab.upload-file": "Завантажити файл",
+	"pages.folder.fab.create-document": "Створити документ",
+	"pages.folder.add-collabora-file-dialog.title": "Створити документ",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Тип документа",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Без назви документ",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Документ)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Таблиця)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Презентація)",
 };

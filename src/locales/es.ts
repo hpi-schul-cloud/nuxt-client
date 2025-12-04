@@ -1960,7 +1960,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
-	"pages.collabora.iframeTitle": "Editor de documentos de Office",
 	"pages.collabora.jsonError": "No se pudo analizar el JSON del mensaje Collabora.",
 	"pages.collabora.messageError": "El mensaje de Collabora no es válido.",
 	"error.500":
@@ -2009,6 +2008,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
 	"feature.media-shelf.layout.list": "Líneas",
 	"feature.media-shelf.layout.grid": "Red",
+	"feature.collabora.iframeTitle": "Editor de documentos de Office",
 	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",
@@ -2028,4 +2028,12 @@ export default {
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "El nombre del archivo ya existe.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters":
 		"El nombre del archivo contiene caracteres no válidos.",
+	"pages.folder.fab.upload-file": "Subir archivo",
+	"pages.folder.fab.create-document": "Crear documento",
+	"pages.folder.add-collabora-file-dialog.title": "Crear documento",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Tipo de documento",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Documento sin título",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Texto)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
 };
