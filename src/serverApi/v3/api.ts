@@ -13,13 +13,13 @@
  */
 
 
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { DUMMY_BASE_URL, assertParamExists, createRequestFunction, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, BaseAPI, RequestArgs, RequiredError } from './base';
 
 /**
  * 
@@ -139,6 +139,19 @@ export interface AccountSearchListResponse {
      * @memberof AccountSearchListResponse
      */
     limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface AddByEmailBodyParams
+ */
+export interface AddByEmailBodyParams {
+    /**
+     * The email of external persons to add to the room
+     * @type {string}
+     * @memberof AddByEmailBodyParams
+     */
+    email: string;
 }
 /**
  * 
@@ -1419,6 +1432,12 @@ export interface ConfigResponse {
     SC_CONTACT_EMAIL: string;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SC_CONTACT_EMAIL_SUBJECT: string;
+    /**
+     * 
      * @type {number}
      * @memberof ConfigResponse
      */
@@ -1807,6 +1826,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -23256,6 +23281,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerAddByEmail: async (roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerAddByEmail', 'roomId', roomId)
+            // verify required parameter 'addByEmailBodyParams' is not null or undefined
+            assertParamExists('roomControllerAddByEmail', 'addByEmailBodyParams', addByEmailBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/add-by-email`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addByEmailBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Add members to a room
          * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -23992,6 +24061,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomRoleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerAddByEmail(roomId, addByEmailBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Add members to a room
          * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -24206,6 +24287,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): AxiosPromise<RoomRoleResponse> {
+            return localVarFp.roomControllerAddByEmail(roomId, addByEmailBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Add members to a room
          * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -24401,6 +24493,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
 export interface RoomApiInterface {
     /**
      * 
+     * @summary Add external person to room or trigger registration
+     * @param {string} roomId The id of the room.
+     * @param {AddByEmailBodyParams} addByEmailBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): AxiosPromise<RoomRoleResponse>;
+
+    /**
+     * 
      * @summary Add members to a room
      * @param {string} roomId The id of the room.
      * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -24594,6 +24697,19 @@ export interface RoomApiInterface {
  * @extends {BaseAPI}
  */
 export class RoomApi extends BaseAPI implements RoomApiInterface {
+    /**
+     * 
+     * @summary Add external person to room or trigger registration
+     * @param {string} roomId The id of the room.
+     * @param {AddByEmailBodyParams} addByEmailBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerAddByEmail(roomId, addByEmailBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Add members to a room
