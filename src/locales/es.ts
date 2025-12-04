@@ -1550,7 +1550,27 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instanceTitle}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
+		"Yo, {userName}, declaro lo siguiente:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"Acepto que mis datos personales se procesen de acuerdo con la {dataProtectionLink} en {instanceTitle} y en los proveedores de material de aprendizaje seleccionados e instruidos por la escuela.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"El consentimiento y uso es, por tanto, voluntario, lo que significa que si no das tu consentimiento, no te supondrá ninguna desventaja en clase. La escuela hará posible la participación en lecciones fuera de {title}. Puedes revocar este consentimiento en cualquier momento. Será suficiente con un breve correo electrónico con la declaración de revocación, indicando tu nombre y apellido, clase y escuela a la siguiente dirección: {email}. En caso de revocación, eliminaremos inmediatamente los datos personales almacenados en virtud de tu consentimiento, a menos que exista una razón legal para el almacenamiento o desees acceder a los datos almacenados de antemano. También puedes encontrar más información sobre la protección de datos en nuestras {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"Acepto que mis datos personales se procesen de acuerdo con la {dataProtectionLink} de la escuela en la Schul-Cloud Brandenburg y por los proveedores de material de aprendizaje seleccionados y autorizados.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"El consentimiento, y por lo tanto el uso, es voluntario y puede revocarse en cualquier momento con efecto futuro enviando un correo electrónico a: {email}. En caso de revocación, eliminaremos inmediatamente los datos almacenados en base al consentimiento, a menos que exista una razón legal para su conservación o que desee acceder a ellos previamente. También puede encontrar más información sobre protección de datos en nuestro {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"He leído las {termsOfUse} de la {instanceTitle} y las acepto.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"La declaración de consentimiento es necesaria para completar el registro.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"La aceptación de los términos de uso es necesaria para completar el registro.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1579,9 +1599,7 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Al registrarse en dBildungscloud en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Política de privacidad",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
+		"Al registrarse en {instance} en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
 	"pages.registrationExternalMembers.steps.password.heading": "Establecer contraseña",
 	"pages.registrationExternalMembers.steps.success.title": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.success.heading": "¡Gracias por registrarse en la {applicationName}!",
@@ -1960,7 +1978,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
-	"pages.collabora.iframeTitle": "Editor de documentos de Office",
 	"pages.collabora.jsonError": "No se pudo analizar el JSON del mensaje Collabora.",
 	"pages.collabora.messageError": "El mensaje de Collabora no es válido.",
 	"error.500":
@@ -2009,6 +2026,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
 	"feature.media-shelf.layout.list": "Líneas",
 	"feature.media-shelf.layout.grid": "Red",
+	"feature.collabora.iframeTitle": "Editor de documentos de Office",
 	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",
