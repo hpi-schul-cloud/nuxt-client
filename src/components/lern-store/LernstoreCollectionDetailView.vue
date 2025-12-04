@@ -110,7 +110,6 @@ import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
 import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
-import contentMeta from "@/mixins/contentMeta";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { contentModule } from "@/store";
@@ -132,7 +131,7 @@ export default defineComponent({
 		UserHasRole,
 		RenderHTML,
 	},
-	mixins: [contentMeta, infiniteScrolling],
+	mixins: [infiniteScrolling],
 	props: {
 		resource: {
 			type: Object,

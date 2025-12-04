@@ -55,7 +55,6 @@
 import BaseLink from "@/components/base/BaseLink";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
-import contentMeta from "@/mixins/contentMeta";
 import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
 
@@ -65,7 +64,6 @@ export default {
 		AddContentButton,
 		UserHasRole,
 	},
-	mixins: [contentMeta],
 	props: {
 		resource: { type: Object, default: () => ({}) },
 		renderer: { type: Object, default: () => ({}) },
