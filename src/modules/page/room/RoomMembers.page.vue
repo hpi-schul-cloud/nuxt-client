@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe
-    v-if="canSeeMembersList"               
+		v-if="canSeeMembersList"
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabItems"
