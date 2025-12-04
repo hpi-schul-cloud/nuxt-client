@@ -60,8 +60,9 @@ import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
-import { CollaboraFileType, useFileStorageApi } from "@data-file";
+import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
+import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
@@ -236,7 +237,7 @@ const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
 };
 
-const onCreateCollaboraFile = async (payload: { type: CollaboraFileType; fileName: string }) => {
+const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	const newFile = await uploadCollaboraFile(
 		payload.type,
 		props.folderId,

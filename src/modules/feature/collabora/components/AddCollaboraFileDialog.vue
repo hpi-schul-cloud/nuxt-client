@@ -33,6 +33,7 @@
 </template>
 <script setup lang="ts">
 import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
+import type { CreateCollaboraFilePayload } from "../types/collabora-file";
 import { CollaboraFileType } from "@data-file";
 import { Dialog } from "@ui-dialog";
 import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
@@ -40,7 +41,7 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const emit = defineEmits<{
-	(e: "create-collabora-file", payload: { type: CollaboraFileType; fileName: string }): void;
+	(e: "create-collabora-file", payload: CreateCollaboraFilePayload): void;
 }>();
 
 type VuetifyForm = {

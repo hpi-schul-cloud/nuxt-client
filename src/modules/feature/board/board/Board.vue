@@ -136,7 +136,7 @@ import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject"
 import { useAppStore, useNotificationStore } from "@data-app";
 import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
-import { CollaboraFileType } from "@data-file";
+import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -443,7 +443,7 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 	isEditSettingsDialogOpen.value = false;
 };
 
-const onCreateCollaboraFile = async (payload: { type: CollaboraFileType; fileName: string }) => {
+const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
 };
 </script>
