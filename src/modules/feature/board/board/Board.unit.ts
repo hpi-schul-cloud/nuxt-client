@@ -36,6 +36,8 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 } from "@data-board";
+import { CollaboraFileType } from "@data-file";
+import { AddCollaboraFileDialog } from "@feature-collabora";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -1043,6 +1045,20 @@ describe("Board", () => {
 					},
 					mockRoomId
 				);
+			});
+		});
+
+		describe("@onCreateCollaboraFile", () => {
+			it("should call createFileElementWithCollabora method", async () => {
+				const { wrapper, cardStore } = setup();
+
+				const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
+				await collaboraFileDialog.vm.$emit("create-collabora-file", {
+					type: CollaboraFileType.Text,
+					fileName: "myDoc",
+				});
+
+				expect(cardStore.createFileElementWithCollabora).toHaveBeenCalled();
 			});
 		});
 	});
