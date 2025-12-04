@@ -152,7 +152,7 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	if (schoolRoleNames.includes(RoleName.Student)) {
 		return mdiAccountOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.Expert)) {
+	if (schoolRoleNames.includes(RoleName.ExternalPerson)) {
 		return mdiAccountClockOutline;
 	}
 	return undefined;
