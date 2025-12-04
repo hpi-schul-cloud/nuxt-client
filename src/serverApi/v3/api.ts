@@ -375,7 +375,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     InstanceView = 'INSTANCE_VIEW',
     InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
-    InviteExperts = 'INVITE_EXPERTS',
+    InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
     LernstoreView = 'LERNSTORE_VIEW',
@@ -7896,7 +7896,7 @@ export enum Permission {
     InstanceView = 'INSTANCE_VIEW',
     InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
-    InviteExperts = 'INVITE_EXPERTS',
+    InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
     LernstoreView = 'LERNSTORE_VIEW',
@@ -8367,7 +8367,7 @@ export enum RoleName {
     Demo = 'demo',
     DemoStudent = 'demoStudent',
     DemoTeacher = 'demoTeacher',
-    Expert = 'expert',
+    ExternalPerson = 'externalPerson',
     GuestTeacher = 'guestTeacher',
     GuestStudent = 'guestStudent',
     GuestExternalPerson = 'guestExternalPerson',
@@ -9367,7 +9367,7 @@ export interface SchoolPermissionsParams {
  * @enum {string}
  */
 export enum SchoolPurpose {
-    Expert = 'expert',
+    ExternalPersonSchool = 'external_person_school',
     Tombstone = 'tombstone',
     Demo = 'demo',
     Test = 'test',

@@ -299,10 +299,10 @@ describe("ChangeRole.vue", () => {
 			expect(radioGroup.props("modelValue")).toBe(null);
 		});
 
-		describe("when the selected user is 'RoleName.Expert'", () => {
+		describe("when the selected user is 'RoleName.ExternalPerson'", () => {
 			it("should render only Viewer and Editor radio options", () => {
 				const members = roomMemberFactory.buildList(2, {
-					schoolRoleNames: [RoleName.Expert],
+					schoolRoleNames: [RoleName.ExternalPerson],
 					roomRoleName: RoleName.Roomviewer,
 				});
 				const { wrapper } = setup({ membersForRoleChange: members });
