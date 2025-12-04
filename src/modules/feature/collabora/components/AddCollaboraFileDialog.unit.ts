@@ -2,9 +2,9 @@ import { useAddCollaboraFile } from "../composables/add-collabora-file.composabl
 import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Dialog } from "@ui-dialog";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { VForm } from "vuetify/lib/components/index";
+import { VForm, VSelect } from "vuetify/lib/components/index";
 
 vi.mock("../composables/add-collabora-file.composable");
 const mockedCollaboraFileSelection = vi.mocked(useAddCollaboraFile);
@@ -87,153 +87,124 @@ describe("CollaboraFileDialog", () => {
 			expect(dialog.props("confirmBtnDisabled")).toBe(true);
 		});
 
-		// describe("when form is valid", () => {
-		// 	it("should call item action", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
+		describe("when form is valid", () => {
+			it("should call emit event", async () => {
+				const { wrapper } = await setup();
 
-		// 		const selectOption = collaboraFileSelectionOptions[0];
-		// 		const FILENAME = "myDocument";
+				const typeSelect = wrapper.findComponent(VSelect);
+				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
+				await nextTick();
+				expect(typeSelect.find("input").element.value).toBe(selectOptions[0].value);
 
-		// 		const typeSelect = wrapper.findComponent(VSelect);
-		// 		typeSelect.vm.$emit("update:modelValue", selectOption.id);
-		// 		await nextTick();
-		// 		expect(typeSelect.find("input").element.value).toBe(selectOption.id);
+				const FILENAME = "myDocument";
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue(FILENAME);
+				await nextTick();
 
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
-		// 		await fileNameInput.find("input").setValue(FILENAME);
-		// 		await nextTick();
+				const form = wrapper.findComponent("[data-testid='collabora-element-form']");
+				await form.trigger("submit");
+				await nextTick();
+				await flushPromises();
+				expect(wrapper.emitted("create-collabora-file")).toBeTruthy();
+			});
 
-		// 		const form = wrapper.findComponent("[data-testid='collabora-element-form']");
-		// 		await form.trigger("submit");
-		// 		await nextTick();
-		// 		await flushPromises();
-		// 		expect(selectOption.action).toHaveBeenCalled();
-		// 		expect(selectOption.action).toHaveBeenCalledWith(FILENAME, "");
-		// 	});
+			it("should have confirm button enabled", async () => {
+				const { wrapper } = await setup();
 
-		// 	it("should have confirm button enabled", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
+				const typeSelect = wrapper.findComponent(VSelect);
+				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
+				await nextTick();
 
-		// 		const selectOption = collaboraFileSelectionOptions[0];
-		// 		const FILENAME = "myDocument";
+				const FILENAME = "myDocument";
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue(FILENAME);
+				await nextTick();
 
-		// 		const typeSelect = wrapper.findComponent(VSelect);
-		// 		typeSelect.vm.$emit("update:modelValue", selectOption.id);
-		// 		await nextTick();
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(false);
+			});
+		});
 
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
-		// 		await fileNameInput.find("input").setValue(FILENAME);
-		// 		await nextTick();
+		describe("when filetype is not selected", () => {
+			it("should not emit event", async () => {
+				const { wrapper } = await setup();
 
-		// 		const dialog = wrapper.findComponent(Dialog);
-		// 		expect(dialog.props("confirmBtnDisabled")).toBe(false);
-		// 	});
-		// });
+				const FILENAME = "myDocument";
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue(FILENAME);
+				await nextTick();
 
-		// describe("when filetype is not selected", () => {
-		// 	it("should not call item action", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
-		// 		const selectOption = collaboraFileSelectionOptions[0];
+				const form = wrapper.findComponent("[data-testid='collabora-element-form']");
+				await form.trigger("submit");
+				await nextTick();
+				await flushPromises();
+				expect(wrapper.emitted("create-collabora-file")).toBeFalsy();
+			});
 
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
-		// 		await fileNameInput.find("input").setValue("myDocument");
-		// 		await nextTick();
+			it("should have confirm button disabled", async () => {
+				const { wrapper } = await setup();
 
-		// 		const form = wrapper.findComponent("[data-testid='collabora-element-form']");
-		// 		await form.trigger("submit");
-		// 		await nextTick();
-		// 		await flushPromises();
-		// 		expect(selectOption.action).toHaveBeenCalledTimes(0);
-		// 	});
+				const FILENAME = "myDocument";
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue(FILENAME);
+				await nextTick();
 
-		// 	it("should have confirm button disabled", async () => {
-		// 		const { wrapper } = await setup();
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
+			});
+		});
 
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
-		// 		await fileNameInput.find("input").setValue("myDocument");
-		// 		await nextTick();
+		describe("when filename is empty", () => {
+			it("should not emit event", async () => {
+				const { wrapper } = await setup();
 
-		// 		const dialog = wrapper.findComponent(Dialog);
-		// 		expect(dialog.props("confirmBtnDisabled")).toBe(true);
-		// 	});
-		// });
+				const typeSelect = wrapper.findComponent(VSelect);
+				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
+				await nextTick();
 
-		// describe("when filename is empty", () => {
-		// 	it("should not call item action", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']").find("input");
+				expect(fileNameInput.element.value).toBe("");
 
-		// 		const selectOption = collaboraFileSelectionOptions[0];
+				const form = wrapper.findComponent("[data-testid='collabora-element-form']");
+				await form.trigger("submit");
+				await nextTick();
+				await flushPromises();
+				expect(wrapper.emitted("create-collabora-file")).toBeFalsy();
+			});
 
-		// 		const typeSelect = wrapper.findComponent(VSelect);
-		// 		typeSelect.vm.$emit("update:modelValue", selectOption.id);
-		// 		await nextTick();
-		// 		expect(typeSelect.find("input").element.value).toBe(selectOption.id);
+			it("should have confirm button disabled", async () => {
+				const { wrapper } = await setup();
 
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']").find("input");
-		// 		expect(fileNameInput.element.value).toBe("");
+				const typeSelect = wrapper.findComponent(VSelect);
+				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
+				await nextTick();
 
-		// 		const form = wrapper.findComponent("[data-testid='collabora-element-form']");
-		// 		await form.trigger("submit");
-		// 		await nextTick();
-		// 		await flushPromises();
-		// 		expect(selectOption.action).toHaveBeenCalledTimes(0);
-		// 	});
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
+			});
+		});
 
-		// 	it("should have confirm button disabled", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
+		describe("when filename contains invalid characters", () => {
+			it("should have confirm button disabled", async () => {
+				const { wrapper } = await setup();
 
-		// 		const selectOption = collaboraFileSelectionOptions[0];
+				const typeSelect = wrapper.findComponent(VSelect);
+				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
+				await nextTick();
 
-		// 		const typeSelect = wrapper.findComponent(VSelect);
-		// 		typeSelect.vm.$emit("update:modelValue", selectOption.id);
-		// 		await nextTick();
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
+				await fileNameInput.find("input").setValue("invalid/filename");
+				await nextTick();
 
-		// 		const dialog = wrapper.findComponent(Dialog);
-		// 		expect(dialog.props("confirmBtnDisabled")).toBe(true);
-		// 	});
-		// });
-
-		// describe("when filename contains invalid characters", () => {
-		// 	it("should have confirm button disabled", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
-
-		// 		const selectOption = collaboraFileSelectionOptions[0];
-
-		// 		const typeSelect = wrapper.findComponent(VSelect);
-		// 		typeSelect.vm.$emit("update:modelValue", selectOption.id);
-		// 		await nextTick();
-
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
-		// 		await fileNameInput.find("input").setValue("invalid/filename");
-		// 		await nextTick();
-
-		// 		const dialog = wrapper.findComponent(Dialog);
-		// 		expect(dialog.props("confirmBtnDisabled")).toBe(true);
-		// 	});
-		// });
-
-		// describe("when caption contains opening tag", () => {
-		// 	it("should have confirm button disabled", async () => {
-		// 		const { collaboraFileSelectionOptions, wrapper } = await setup();
-
-		// 		const selectOption = collaboraFileSelectionOptions[0];
-
-		// 		const typeSelect = wrapper.findComponent(VSelect);
-		// 		typeSelect.vm.$emit("update:modelValue", selectOption.id);
-		// 		await nextTick();
-
-		// 		const fileNameInput = wrapper.findComponent("[data-testid='collabora-element-form-filename']");
-		// 		await fileNameInput.find("input").setValue("validFilename");
-		// 		await nextTick();
-
-		// 		const captionInput = wrapper.findComponent("[data-testid='collabora-element-form-caption']");
-		// 		await captionInput.find("textarea").setValue("<script>alert('xss')</script>");
-		// 		await nextTick();
-
-		// 		const dialog = wrapper.findComponent(Dialog);
-		// 		expect(dialog.props("confirmBtnDisabled")).toBe(true);
-		// 	});
-		// });
+				const dialog = wrapper.findComponent(Dialog);
+				expect(dialog.props("confirmBtnDisabled")).toBe(true);
+			});
+		});
 
 		it("should close modal on close button click", async () => {
 			const { closeCollaboraFileDialog, wrapper } = await setup();
