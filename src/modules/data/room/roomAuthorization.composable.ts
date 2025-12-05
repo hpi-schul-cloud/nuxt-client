@@ -31,25 +31,26 @@ export const useRoomAuthorization = () => {
 	const canManageRoomInvitationLinks = computed(
 		() => userCanManageRoomInvitationLinks.value && checkRoomPermission(Permission.RoomManageInvitationlinks)
 	);
-
 	const canAddAllStudents = computed(() => canAddRoomMembers.value && canSeeAllStudents.value);
+	const canSeeMembersList = hasPermission(Permission.SchoolListRoomMembers);
 
 	return {
+		canAddAllStudents,
 		canAddRoomMembers,
 		canChangeOwner,
+		canCopyRoom,
 		canCreateRoom,
 		canDeleteRoom,
-		canCopyRoom,
-		canShareRoom,
 		canEditRoom,
 		canEditRoomContent,
 		canLeaveRoom,
-		canRemoveRoomMembers,
-		canAddAllStudents,
-		canSeeAllStudents,
-		canViewRoom,
-		canManageRoomInvitationLinks,
 		canListDrafts,
+		canManageRoomInvitationLinks,
 		canManageVideoconferences,
+		canRemoveRoomMembers,
+		canSeeAllStudents,
+		canSeeMembersList,
+		canShareRoom,
+		canViewRoom,
 	};
 };

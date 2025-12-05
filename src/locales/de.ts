@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Weiter",
 	"common.actions.copy": "Kopieren",
 	"common.actions.duplicate": "Duplizieren",
+	"common.actions.move": "Verschieben",
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
@@ -196,7 +197,7 @@ export default {
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
-	"common.words.board": "Bereich",
+	"common.words.board": "Bereich | Bereiche",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -247,6 +248,7 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
+	"common.alerts.room.not.available": "Kein Raum verfügbar. | Keine Räume verfügbar.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -493,6 +495,8 @@ export default {
 		"In Abschnitt {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Eine Karte wurde von Abschnitt {fromColumnPosition} in Abschnitt {toColumnPosition} verschoben.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Eine Karte wurde in Abschnitt {toColumnId} verschoben.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Ein Abschnitt wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -658,6 +662,20 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Folgendes wurde nicht kopiert:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.label.room": "Raum wählen",
+	"components.molecules.label.board": "Bereich wählen",
+	"components.molecules.label.section": "Abschnitt wählen",
+	"components.molecules.import.card.question": "Wohin soll die Karte{title} importiert werden?",
+	"components.molecules.import.card.hint.restriction": "Folgende Inhalte werden nicht übernommen:",
+	"components.molecules.import.card.hint.etherpad": "Inhalte aus Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Inhalte aus Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Geschützte Einstellungen externer Tools",
+	"components.molecules.move.card.title": "Karte verschieben",
+	"components.molecules.move.card.question": "Wohin soll die Karte{title} verschoben werden?",
+	"components.molecules.move.card.hint.restriction":
+		"Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.",
+	"components.molecules.move.card.message.success": "Karte erfolgreich in den Bereich {link} - {column} verschoben",
+	"components.molecules.import.card.options.title": "Karte importieren",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText": "Der Bereich kann im Folgenden umbenannt werden. ",
@@ -714,6 +732,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organisationsadministrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.card.options.infoText":
+		"Mit dem folgenden Link kann diese Karte von anderen Personen importiert werden.",
+	"components.molecules.share.card.result.linkLabel": "Link Karten-Kopie",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
@@ -1544,7 +1565,26 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Ich, {userName}, erkläre Folgendes:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der {dataProtectionLink} der Schule in der {instanceTitle} sowie bei den von der Schule ausgewählten und weisungsgebundenen Lernmittelanbieter verarbeitet werden.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"Die Einwilligung und damit die Nutzung ist freiwillig, das heißt, wenn du deine Einwilligung nicht erteilst, führt diese für dich nicht zu Nachteilen im Unterricht. Eine Teilnahme am Unterricht, außerhalb der {instanceTitle}, wird durch die Schule ermöglicht werden. Die Einwilligung kann jederzeit von dir widerrufen werden. Eine kurze E-Mail mit der Erklärung des Widerrufes, der Angabe des Vor- und Nachnamens, der Klasse und der Schule an folgende Adresse genügt: {email}. Im Fall des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten personenbezogenen Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst du auch unseren {faqLink} entnehmen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"Ich erkläre mich damit einverstanden, dass meine personenbezogenen Daten entsprechend der Datenschutzerklärung in der Schul-Cloud Brandenburg sowie bei den ausgewählten und weisungsgebundenen Lernmittelanbietern verarbeitet werden.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"Die Einwilligung und damit die Nutzung ist freiwillig und jederzeit mit Wirkung für die Zukunft widerrufbar per E-Mail an: {email}. Im Falle des Widerrufs löschen wir die auf Basis der Einwilligung gespeicherten Daten unverzüglich, es sei denn, es besteht ein gesetzlicher Grund zur Aufbewahrung oder du willst vorher noch auf die gespeicherten Daten zugreifen. Weitere Hinweise zum Datenschutz kannst Du auch unseren {faqLink} entnehmen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Ich habe die {termsOfUse} der {instanceTitle} gelesen und stimme ihr zu.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"Die Einverständniserklärung ist notwendig, um die Registrierung abzuschließen.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"Die Zustimmung zur Nutzungsordnung ist notwendig, um die Registrierung abzuschließen.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Bestätigungscode",
 	"pages.registrationExternalMembers.steps.registration.title": "Registrierung",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1557,7 +1597,7 @@ export default {
 	"pages.registrationExternalMembers.steps.password.instructions.numberAndSpecialCharacter":
 		"davon jeweils mindestens eine Zahl und ein Sonderzeichen",
 	"pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters":
-		"erlaube Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
+		"erlaubte Sonderzeichen sind: ! § $ % / ( ) = ? \\ ; : , . # + * ~ -",
 	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Das Passwort muss mindestens 8 Zeichen lang sein.",
@@ -1573,10 +1613,14 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Mit der Registrierung in der dBildungscloud im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Datenschutzerklärung",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Nutzungsordnung",
+		"Mit der Registrierung in der {instance} im nächsten Schritt werden die {dataProtection} und {tos} akzeptiert. Die {dataProtection} ist jederzeit im Footer verfügbar. Für die Nutzung gilt folgende {tos} (soweit die Schule oder Bildungseinrichtung keine eigene Nutzungsordnung erlassen hat).",
 	"pages.registrationExternalMembers.steps.password.heading": "Passwort vergeben",
+	"pages.registrationExternalMembers.steps.success.title": "Registrierung erfolgreich",
+	"pages.registrationExternalMembers.steps.success.heading":
+		"Vielen Dank für die Registrierung in der {applicationName}!",
+	"pages.registrationExternalMembers.steps.success.explanation":
+		'Willkommen im neuen Raum. In Räumen können Inhalte an einem zentralen Ort erstellt, organisiert und mit unterschiedlichen Personengruppen geteilt werden - zum Beispiel mit Klassen, Kolleginnen und Kollegen, externen Personen oder interdisziplinären Teams. Im Menüpunkt „Räume" sind die Räume aufgelistet, in denen bereits eine Mitgliedschaft besteht.',
+	"pages.registrationExternalMembers.steps.success.button": "Zum Login",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
 	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
@@ -1816,6 +1860,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",
+	"pages.rooms.invitationlinks.error.delete": "Die Einladungsliste konnte nicht gelöscht werden.",
 	"pages.rooms.title": "Räume",
 	"pages.rooms.administration.title": "Räume verwalten",
 	"pages.rooms.administration.table.header.roomName": "Raumname",
@@ -1941,7 +1986,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
-	"pages.collabora.iframeTitle": "Office-Dokument Editor",
 	"pages.collabora.jsonError": "Json der Collabora Nachricht konnte nicht geparsed werden.",
 	"pages.collabora.messageError": "Collabora Nachricht ist nicht valide.",
 	"error.500": "Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
@@ -1989,6 +2033,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
+	"feature.collabora.iframeTitle": "Office-Dokument Editor",
 	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
@@ -2007,4 +2052,12 @@ export default {
 	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "Der Dateiname existiert bereits.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "Der Dateiname enthält ungültige Zeichen.",
+	"pages.folder.fab.upload-file": "Datei hochladen",
+	"pages.folder.fab.create-document": "Dokument erstellen",
+	"pages.folder.add-collabora-file-dialog.title": "Dokument erstellen",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Dokumententyp",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Unbenanntes Dokument",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Tabelle)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Präsentation)",
 };

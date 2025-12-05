@@ -1,6 +1,7 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import { RoomItem } from "@/types/room/Room";
@@ -9,6 +10,7 @@ import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tes
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomAuthorization } from "@data-room";
+import { ImportCardDialog } from "@feature-board";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
@@ -43,6 +45,7 @@ describe("RoomsPage", () => {
 			canListDrafts: computed(() => false),
 			canManageRoomInvitationLinks: computed(() => false),
 			canManageVideoconferences: computed(() => false),
+			canSeeMembersList: computed(() => false),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
@@ -67,7 +70,7 @@ describe("RoomsPage", () => {
 					[COPY_MODULE_KEY]: copyModule,
 					[LOADING_STATE_MODULE_KEY]: loadingState,
 				},
-				stubs: { ImportFlow: true, RouterLink: true },
+				stubs: { ImportFlow: true, ImportCardDialog: true, RouterLink: true },
 			},
 		});
 
@@ -121,6 +124,23 @@ describe("RoomsPage", () => {
 				wrapper,
 			};
 		};
+
+		it("should render import card dialog with card type", () => {
+			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentTypeEnum.Card });
+			const { wrapper } = setup();
+
+			const importFLow = wrapper.findComponent(ImportCardDialog);
+
+			expect(importFLow.exists()).toBe(true);
+			expect(importFLow.props().token).toBe(token);
+		});
+
+		it("should not render import card dialog with room type", () => {
+			router.setQuery({ import: token, type: ShareTokenBodyParamsParentTypeEnum.Room });
+			const { wrapper } = setup();
+			const importFLow = wrapper.findComponent(ImportCardDialog);
+			expect(importFLow.exists()).toBe(false);
+		});
 
 		it("should render import flow and be passed data", () => {
 			const { wrapper } = setupImportMode();

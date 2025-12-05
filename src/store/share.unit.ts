@@ -63,7 +63,7 @@ describe("share module", () => {
 					await shareModule.createShareUrl(shareOptions);
 					const result = setShareUrlMock.mock.calls[0][0];
 
-					expect(result).toContain("rooms/courses-overview?import=sampleToken");
+					expect(result).toContain("rooms/courses-overview?import=sampleToken&importedType=course");
 				});
 
 				it("should return undefined on error", async () => {
