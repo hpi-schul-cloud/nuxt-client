@@ -1517,7 +1517,27 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
+		"I, {userName}, declare the following:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"I agree that my personal data may be processed in accordance with the {dataProtectionLink} of the school in the {instanceTitle} as well as by the learning material providers selected and bound by the school's instructions.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"The consent and thus the use is voluntary, which means that if you do not give your consent, it will not lead to disadvantages for you in class. Participation in lessons outside the {title} will be made possible by the school. You can revoke this consent at any time. A short e-mail with the declaration of revocation, stating your first and last name, class and school to the following address is sufficient: {email}. In the event of revocation, we will immediately delete the personal data stored on the basis of the consent, unless there is a legal reason for storage or you wish to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"I agree that my personal data may be processed in accordance with the school's {dataProtectionLink} in the Schul-Cloud Brandenburg and by the selected and authorized learning material providers.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"The consent and thus the use is voluntary and can be revoked at any time with effect for the future by e-mail to: {email}. In the event of revocation, we will immediately delete the data stored on the basis of the consent, unless there is a legal reason for retention or you want to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"I have read the {termsOfUse} of the {instanceTitle} and agree to them.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"The declaration of consent is required to complete the registration.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"The acceptance of the terms of use is required to complete the registration.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1546,9 +1566,7 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"By registering in the dBildungscloud in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Privacy policy",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Terms of use",
+		"By registering in the {instance} in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
 	"pages.registrationExternalMembers.steps.password.heading": "Set password",
 	"pages.registrationExternalMembers.steps.success.title": "Registration successful",
 	"pages.registrationExternalMembers.steps.success.heading": "Thank you for registering with the {applicationName}!",
@@ -1911,7 +1929,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
-	"pages.collabora.iframeTitle": "Office document editor",
 	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
 	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500": "There are problems in the system. We are working on fixing the issue. Please try again later.",
@@ -1959,6 +1976,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
+	"feature.collabora.iframeTitle": "Office document editor",
 	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
@@ -1977,4 +1995,12 @@ export default {
 	"pages.folder.delete-confirmation": "Do you really want to delete file {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "The file name already exists.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "The file name contains invalid characters.",
+	"pages.folder.fab.upload-file": "Upload file",
+	"pages.folder.fab.create-document": "Create document",
+	"pages.folder.add-collabora-file-dialog.title": "Create document",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Document type",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Untitled document",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Spreadsheet)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentation)",
 };

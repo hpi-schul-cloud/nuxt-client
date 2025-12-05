@@ -155,7 +155,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "collabora",
 		props: (route: RouteLocationNormalized) => ({
 			fileRecordId: route.params.id,
-			editorMode: route.query.editorMode,
+			edit: route.query.edit,
 		}),
 		meta: {
 			layout: Layouts.BORDERLESS,
