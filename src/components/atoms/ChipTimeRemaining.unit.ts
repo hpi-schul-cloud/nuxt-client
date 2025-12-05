@@ -61,10 +61,7 @@ describe("@/components/atoms/ChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.ChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t(
-				"components.atoms.ChipTimeRemaining.hintMinutes",
-				MINUTES_UNTIL_DUE
-			)}`;
+			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintMinutes", MINUTES_UNTIL_DUE)}`;
 
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
