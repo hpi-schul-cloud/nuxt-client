@@ -215,13 +215,13 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		await nextTick();
 		await nextTick();
 		expect(wrapper.findComponent('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomAvatar"
+			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomAvatar"
+			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomAvatar"
+			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="3-2"]').attributes("data-avatar-type")).toStrictEqual(
 			"vRoomGroupAvatar"
@@ -368,13 +368,13 @@ describe("@/pages/CourseRoomOverview.page", () => {
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
 
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
 
 		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomEmptyAvatar");
-		expect(wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
@@ -385,7 +385,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 
 		await wrapper.setData({ allowDragging: true });
 
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
@@ -424,8 +424,8 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		};
 		await nextTick();
 		await nextTick();
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
-		expect(wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
+		expect(wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");

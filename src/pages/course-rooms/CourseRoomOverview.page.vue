@@ -64,14 +64,14 @@
 								@dragend-group-avatar="onDragend"
 								@drop-group-avatar="addGroupElements({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomAvatar
+							<RoomAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomAvatar"
+								data-avatar-type="RoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-avatar="onDragend"
@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar.vue";
 import RoomModal from "@/components/molecules/RoomModal.vue";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
@@ -127,7 +127,7 @@ import { defineComponent, reactive } from "vue";
 export default defineComponent({
 	components: {
 		RoomWrapper,
-		vRoomAvatar,
+		RoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
@@ -298,8 +298,8 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
-				toElementName === "vRoomAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomAvatar"
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
@@ -313,7 +313,7 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
 				toElementName === "vRoomGroupAvatar"
 			) {
 				this.savePosition();
