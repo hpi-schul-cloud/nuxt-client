@@ -589,6 +589,7 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videokonferenz",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Interaktives Lernelement",
+	"components.elementTypeSelection.elements.collabora.subtitle": "Dokument erstellen",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",

@@ -585,6 +585,7 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Відеоконференція",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Інтерактивний елемент навчання",
+	"components.elementTypeSelection.elements.collabora.subtitle": "Створити документ",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",
