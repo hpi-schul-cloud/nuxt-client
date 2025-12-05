@@ -196,7 +196,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		expect(customDialog.props("isOpen")).toBe(true);
 	});
 
-	it("custom-dialog component should be visible", async () => {
+	it("CustomDialog component should be visible", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		await nextTick();
