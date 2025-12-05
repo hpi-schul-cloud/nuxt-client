@@ -39,7 +39,7 @@
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
-			v-else
+			v-else-if="!alerts.includes(FileAlert.FILE_STORAGE_ERROR)"
 			:element-id="element.id"
 			:is-edit-mode="isEditMode"
 			:is-uploading="isUploading"
@@ -51,10 +51,12 @@
 				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
+		<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 	</VCard>
 </template>
 
 <script setup lang="ts">
+import FileAlerts from "./content/alert/FileAlerts.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
@@ -143,12 +145,12 @@ const isOutlined = computed(() => {
 
 watch(element.value, async () => {
 	isLoadingFileRecord.value = true;
-	await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
+	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 	isLoadingFileRecord.value = false;
 });
 
 onMounted(async () => {
-	await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
+	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 	isLoadingFileRecord.value = false;
 });
 
@@ -169,7 +171,15 @@ const onUploadFile = async (file: File): Promise<void> => {
 };
 
 const onFetchFile = async (): Promise<void> => {
-	await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
+	await tryFetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
+};
+
+const tryFetchFiles = async (id: string, parentType: FileRecordParentType) => {
+	try {
+		return await fetchFiles(id, parentType);
+	} catch {
+		addAlert(FileAlert.FILE_STORAGE_ERROR);
+	}
 };
 
 const onUpdateAlternativeText = (value: string) => {
