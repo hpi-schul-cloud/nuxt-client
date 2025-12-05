@@ -7,6 +7,7 @@
 		data-testid="collabora-element-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
+		@click.stop
 	>
 		<template #content>
 			<VForm id="officeFileForm" ref="form" data-testid="collabora-element-form" @submit.prevent="onConfirm">

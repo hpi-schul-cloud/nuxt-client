@@ -90,7 +90,6 @@ describe("BoardStore - moveCardSuccess", () => {
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
-			latestEditModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
 

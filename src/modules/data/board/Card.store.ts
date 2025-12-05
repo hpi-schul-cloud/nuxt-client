@@ -36,7 +36,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
-	const { setEditModeId, editModeId, latestEditModeId } = useSharedEditMode();
+	const { setEditModeId, editModeId } = useSharedEditMode();
 	const { uploadCollaboraFile } = useFileStorageApi();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
@@ -113,13 +113,13 @@ export const useCardStore = defineStore("cardStore", () => {
 	const createElementRequest = socketOrRest.createElementRequest;
 
 	const createFileElementWithCollabora = async (type: CollaboraFileType, fileName: string) => {
-		if (!latestEditModeId.value) {
+		if (!editModeId.value) {
 			return;
 		}
 
 		const element = await createElementRequest({
 			type: ContentElementType.File,
-			cardId: latestEditModeId.value,
+			cardId: editModeId.value,
 		});
 		if (!element) {
 			return;
@@ -128,7 +128,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		try {
 			await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
 		} catch {
-			await deleteElementRequest({ elementId: element.id, cardId: latestEditModeId.value });
+			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
 		}
 	};
 

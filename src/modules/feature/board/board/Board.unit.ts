@@ -101,7 +101,6 @@ describe("Board", () => {
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
 			setEditModeId: vi.fn(),
-			latestEditModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
 

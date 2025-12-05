@@ -62,7 +62,6 @@ describe("CardStore", () => {
 	let mockedSharedLastCreatedElementActions: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let setEditModeId: Mock;
 	let editModeId: Ref<string | undefined>;
-	let latestEditModeId: Ref<string | undefined>;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 	let mockedFileStorageActions: DeepMocked<ReturnType<typeof useFileStorageApi>>;
 
@@ -123,11 +122,9 @@ describe("CardStore", () => {
 
 		setEditModeId = vi.fn();
 		editModeId = ref(undefined);
-		latestEditModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId,
-			latestEditModeId,
 			isInEditMode: computed(() => true),
 		});
 	});
@@ -988,7 +985,7 @@ describe("CardStore", () => {
 		it("should call createElementRequest", () => {
 			const { cardStore } = setup(false);
 
-			latestEditModeId.value = "cardId";
+			editModeId.value = "cardId";
 			cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
 
 			expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalled();
@@ -997,7 +994,7 @@ describe("CardStore", () => {
 		it("should call uploadCollaboraFile", async () => {
 			const { cardStore } = setup(false);
 
-			latestEditModeId.value = "cardId";
+			editModeId.value = "cardId";
 			mockedCardRestApiActions.createElementRequest.mockReturnValueOnce(
 				Promise.resolve({
 					id: "elementId",
