@@ -21,21 +21,19 @@
 		</template>
 
 		<template #[`item.actions`]="{ item }">
-			<div class="d-flex align-center">
-				<KebabMenu :data-testid="`kebab-menu-${item.userId}`" :aria-label="getAriaLabel(item)">
-					<KebabMenuActionConfirmRequest
-						:data-testid="`kebab-menu-confirm-${item.userId}`"
-						:aria-label="getAriaLabel(item, 'confirm')"
-						@click="onConfirm([item.userId])"
-					/>
+			<KebabMenu :data-testid="`kebab-menu-${item.userId}`" :aria-label="getAriaLabel(item)">
+				<KebabMenuActionConfirmRequest
+					:data-testid="`kebab-menu-confirm-${item.userId}`"
+					:aria-label="getAriaLabel(item, 'confirm')"
+					@click="onConfirm([item.userId])"
+				/>
 
-					<KebabMenuActionRejectRequest
-						:data-testid="`kebab-menu-reject-${item.userId}`"
-						:aria-label="getAriaLabel(item, 'reject')"
-						@click="onReject([item.userId])"
-					/>
-				</KebabMenu>
-			</div>
+				<KebabMenuActionRejectRequest
+					:data-testid="`kebab-menu-reject-${item.userId}`"
+					:aria-label="getAriaLabel(item, 'reject')"
+					@click="onReject([item.userId])"
+				/>
+			</KebabMenu>
 		</template>
 	</DataTable>
 </template>
