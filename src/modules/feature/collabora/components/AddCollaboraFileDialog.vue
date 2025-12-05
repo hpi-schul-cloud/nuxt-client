@@ -8,6 +8,7 @@
 		@cancel="onCancel"
 		@confirm="onConfirm"
 		@click.stop
+		@keydown.enter.stop
 	>
 		<template #content>
 			<VForm id="officeFileForm" ref="form" data-testid="collabora-element-form" @submit.prevent="onConfirm">
