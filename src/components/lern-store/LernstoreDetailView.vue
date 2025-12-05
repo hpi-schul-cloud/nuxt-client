@@ -140,7 +140,6 @@ import BaseLink from "@/components/base/BaseLink.vue";
 import UserHasRole from "@/components/helpers/UserHasRole.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton.vue";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
-import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags, isVideoContent } from "@/utils/helpers";
@@ -158,7 +157,6 @@ export default {
 		UserHasRole,
 		RenderHTML,
 	},
-	mixins: [contentMeta],
 	props: {
 		resource: {
 			type: Object,
