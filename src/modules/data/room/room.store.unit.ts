@@ -18,7 +18,7 @@ describe("useRoomStore", () => {
 		vi.mocked(RoomApiFactory).mockReturnValue(roomApiMock);
 	});
 
-	describe("fetchRooms", () => {
+	describe("fetchRooms & fetchRoomsPlain", () => {
 		it("should load rooms successfully", async () => {
 			const mockRooms = [
 				{ id: "1", name: "Room 1" },

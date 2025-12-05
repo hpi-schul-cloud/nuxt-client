@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Продовжити",
 	"common.actions.copy": "Копіювати",
 	"common.actions.duplicate": "Дублювати",
+	"common.actions.move": "Перемістити",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
@@ -197,7 +198,7 @@ export default {
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
-	"common.words.board": "Дошка",
+	"common.words.board": "Дошка | дошки",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -247,6 +248,7 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
+	"common.alerts.room.not.available": "Нієї кімнати недоступно. | Немає доступних кімнат.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -490,6 +492,7 @@ export default {
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Картку було переміщено зі стовпчика {fromColumnPosition} до стовпчика {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success": "Картку переміщено до розділу {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Стовпець було переміщено з позиції {oldPosition} в позицію {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -655,7 +658,21 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Наступне не було скопійовано:",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.card.options.title": "Імпортувати картку",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.label.room": "Оберіть кімнату",
+	"components.molecules.label.board": "Оберіть дошку",
+	"components.molecules.label.section": "Оберіть розділ",
+	"components.molecules.import.card.question": "Куди слід імпортувати картку{title}?",
+	"components.molecules.import.card.hint.restriction": "Наступний вміст не передається:",
+	"components.molecules.import.card.hint.etherpad": "Вміст із Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Вміст із Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Захищені налаштування зовнішніх інструментів",
+	"components.molecules.move.card.title": "Перемістити картку",
+	"components.molecules.move.card.question": "Куди слід перемістити картку{title}?",
+	"components.molecules.move.card.message.success": "Картку успішно переміщено на дошку {link} - {column}",
+	"components.molecules.move.card.hint.restriction":
+		"З дозволом «Редагувати» картки можна переміщувати лише на інші дошки в межах тієї самої кімнати.",
 	"components.molecules.import.columnBoard.rename": "При необхідності назву дошки можна змінити: ",
 	"components.molecules.import.columnBoard.options.infoText": "Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
@@ -708,6 +725,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Організаційний адміністратор",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
+	"components.molecules.share.card.options.infoText":
+		"За наступним посиланням цю картка можуть імпортувати як копію інші особи.",
+	"components.molecules.share.card.result.linkLabel": "Посилання на копію картки",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
@@ -1532,7 +1552,26 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph": "Я, {userName}, заявляю наступне:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"Я прочитав(ла) {termsOfUse} {instanceTitle} і погоджуюся з ними.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"Підтвердження згоди є необхідним для завершення реєстрації.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"Прийняття умов використання є необхідним для завершення реєстрації.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"Я погоджуюсь з тим, що мої персональні дані оброблятимуться відповідно до {dataProtectionLink} школи {instanceTitle}, а також із постачальниками навчальних матеріалів, обраними та проінструктованими школою.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"Згода і, таким чином, використання є добровільними, а це означає, що якщо ви не дасте своєї згоди, це не призведе до шкоди для вас у класі. Участь в уроках поза {instanceTitle}, стане можливою завдяки школі. Відкликати цю згоду можна будь-коли. Досить короткого електронного листа із заявою про відкликання, який вказує ваше ім'я та прізвище, клас та школу на таку адресу: {email}. У разі відкликання ми негайно видалимо персональні дані, збережені на підставі згоди, якщо немає законної причини для зберігання або якщо ви не бажаєте отримати доступ до збережених даних заздалегідь. Знайти додаткову інформацію про захист даних також можна у наших {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"Я погоджуюся з тим, що мої персональні дані можуть оброблятися відповідно до політики захисту даних у Schul-Cloud Brandenburg та обраними й уповноваженими постачальниками навчальних матеріалів",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"Згода, а отже, й використання, є добровільними та можуть бути відкликані будь-коли з чинністю на майбутнє електронною поштою на адресу: {email}. У разі відкликання ми негайно видалимо дані, що зберігаються на підставі згоди, якщо немає законної підстави для зберігання або ви не хочете отримати доступ до збережених даних заздалегідь. Ви також можете знайти додаткову інформацію про захист даних у нашому {faqLink}.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Код підтвердження",
 	"pages.registrationExternalMembers.steps.registration.title": "Реєстрація",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1560,9 +1599,7 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Реєструючись у dBildungscloud на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Політика конфіденційності",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Умови використання",
+		"Реєструючись у {instance} на наступному кроці, ви приймаєте {dataProtection} та {tos}. {dataProtection} завжди доступні у футері. Для використання діють наступні {tos} (якщо ваша школа або освітній заклад не встановили власні умови використання).",
 	"pages.registrationExternalMembers.steps.password.heading": "Встановіть пароль",
 	"pages.registrationExternalMembers.steps.success.title": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.success.heading": "Дякуємо за реєстрацію в {applicationName}!",
@@ -1807,6 +1844,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update": "Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.load": "Не вдалося завантажити список запрошень.",
+	"pages.rooms.invitationlinks.error.delete": "Не вдалося видалити список.",
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.administration.title": "Адміністрування кімнат",
 	"pages.rooms.administration.table.header.roomName": "Назва кімнати",

@@ -1,4 +1,5 @@
 import AdministrationRoomMembersPage from "./AdministrationRoomMembers.page.vue";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -14,7 +15,7 @@ import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, vi } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRoute } from "vue-router";
@@ -22,13 +23,11 @@ import { Router, useRoute } from "vue-router";
 vi.mock("vue-router");
 const useRouteMock = <Mock>useRoute;
 
-vi.mock("vue-i18n", () => ({
-	useI18n: vi.fn().mockReturnValue({
-		t: vi.fn().mockImplementation((key: string) => key),
-		n: vi.fn().mockImplementation((key: string) => key),
-	}),
-}));
-vi.mocked(useI18n());
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key, n: (key: string) => key });
+
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("AdministrationRoomMembers.page", () => {
 	const ownSchool = {
