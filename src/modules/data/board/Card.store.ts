@@ -125,9 +125,8 @@ export const useCardStore = defineStore("cardStore", () => {
 			return;
 		}
 
-		try {
-			await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
-		} catch {
+		const uploadedCollaboraFile = await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
+		if (!uploadedCollaboraFile) {
 			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
 		}
 	};
