@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Continue",
 	"common.actions.copy": "Copy",
 	"common.actions.duplicate": "Duplicate",
+	"common.actions.move": "Move",
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
@@ -189,7 +190,7 @@ export default {
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
 	"common.words.and": "and",
-	"common.words.board": "board",
+	"common.words.board": "board | boards",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",
@@ -239,6 +240,7 @@ export default {
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
 	"common.words.export": "Course export is downloading",
+	"common.alerts.room.not.available": "No room available. | No rooms available.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -480,6 +482,7 @@ export default {
 		"In column {columnPosition}, a card was moved to position {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"A card was moved from column {fromColumnPosition} to column {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success": "A card was moved to section {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"A column was moved from position {oldPosition} to position {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -646,7 +649,20 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
+	"components.molecules.label.room": "Select room",
+	"components.molecules.label.board": "Select board",
+	"components.molecules.label.section": "Select section",
+	"components.molecules.import.card.question": "Where should the card{title} be imported?",
+	"components.molecules.import.card.hint.restriction": "The following contents are not transferred:",
+	"components.molecules.import.card.hint.etherpad": "Content from Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Content from Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Protected settings of external tools",
+	"components.molecules.move.card.title": "Move card",
+	"components.molecules.move.card.question": "Where should the card{title} be moved to?",
+	"components.molecules.move.card.hint.restriction": `With the "Edit" permission, cards can only be moved to other boards within the same room.`,
+	"components.molecules.move.card.message.success": "Card successfully moved to the board {link} - {column}",
 	"components.molecules.import.columnBoard.rename": "If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText": "The board can be renamed below.",
 	"components.molecules.import.columnBoard.options.title": "Import board",
@@ -707,6 +723,9 @@ export default {
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Protected settings of external tools",
+	"components.molecules.share.card.options.infoText":
+		"With the following link, the card can be imported by other people.",
+	"components.molecules.share.card.result.linkLabel": "Link card copy",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",
@@ -1809,6 +1828,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update": "Updating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.load": "The invitation list could not be loaded.",
+	"pages.rooms.invitationlinks.error.delete": "The invitation list could not be deleted.",
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.administration.title": "Room administration",
 	"pages.rooms.administration.table.header.roomName": "Room name",
