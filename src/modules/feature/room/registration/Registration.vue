@@ -21,7 +21,9 @@
 							<Password
 								v-if="step.value === RegistrationSteps.PasswordSetup"
 								v-model="password"
-								:user-data="userData"
+								:first-name="firstName"
+								:last-name="lastName"
+								:email="email"
 							/>
 							<Consent
 								v-if="step.value === RegistrationSteps.DeclarationOfConsent"
@@ -87,7 +89,7 @@ const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
 
 const {
-	createAccount,
+	completeRegistration,
 	fetchUserData,
 	initializeLanguage,
 	isPrivacyPolicyAccepted,
@@ -95,8 +97,10 @@ const {
 	password,
 	selectedLanguage,
 	setSelectedLanguage,
+	firstName,
+	lastName,
 	fullName,
-	userData,
+	email,
 } = useRegistration();
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");
@@ -135,7 +139,7 @@ const onContinue = async () => {
 	}
 
 	if (stepValue.value === RegistrationSteps.DeclarationOfConsent) {
-		const isSucceed = await createAccount();
+		const isSucceed = await completeRegistration();
 		if (!isSucceed) return;
 	}
 
@@ -185,6 +189,7 @@ const steps = computed(() => [
 	},
 ]);
 </script>
+
 <style scoped>
 .heading:focus {
 	outline: none;

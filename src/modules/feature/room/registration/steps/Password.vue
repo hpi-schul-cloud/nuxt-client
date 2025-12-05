@@ -2,15 +2,10 @@
 	<p>{{ t("pages.registrationExternalMembers.steps.password.firstParagraph", { instance }) }}</p>
 	<p>{{ t("pages.registrationExternalMembers.steps.password.secondParagraph") }}</p>
 	<div class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
-		<VTextField readonly :label="t('common.labels.firstName')" :model-value="userData?.name" data-testid="first-name" />
-		<VTextField
-			readonly
-			:label="t('common.labels.lastName')"
-			:model-value="userData?.surname"
-			data-testid="last-name"
-		/>
+		<VTextField readonly :label="t('common.labels.firstName')" :model-value="firstName" data-testid="first-name" />
+		<VTextField readonly :label="t('common.labels.lastName')" :model-value="lastName" data-testid="last-name" />
 	</div>
-	<VTextField readonly :label="t('common.labels.email')" :model-value="userData?.email" data-testid="email" />
+	<VTextField readonly :label="t('common.labels.email')" :model-value="email" data-testid="email" />
 	<p class="font-weight-bold mt-4">{{ t("pages.registrationExternalMembers.steps.password.setPassword") }}</p>
 	<ul id="password-instructions" class="pl-5">
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.minLengthWithLowerAndUpperCase") }}</li>
@@ -60,11 +55,9 @@ import { useDisplay } from "vuetify";
 import { VTextField } from "vuetify/components";
 
 type Props = {
-	userData: {
-		name: string;
-		surname: string;
-		email: string;
-	} | null;
+	firstName: string;
+	lastName: string;
+	email: string;
 };
 
 defineProps<Props>();

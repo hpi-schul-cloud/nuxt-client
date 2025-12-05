@@ -1,17 +1,23 @@
 import { notifyError } from "../../application/notification-store";
-import { LanguageType } from "@/serverApi/v3";
-import { ref } from "vue";
+import { LanguageType, RegistrationApiFactory, RegistrationItemResponse } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useRegistration = () => {
 	const i18n = useI18n();
 	const { t } = i18n;
+	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
+
 	const selectedLanguage = ref<LanguageType | undefined>(undefined);
 	const password = ref<string>("");
 	const isTermsOfUseAccepted = ref<boolean>(false);
 	const isPrivacyPolicyAccepted = ref<boolean>(false);
-	const fullName = ref<string>("");
-	const userData = ref<{ name: string; surname: string; email: string } | null>(null);
+	const userData = ref<RegistrationItemResponse | null>(null);
+	const firstName = computed(() => userData.value?.firstName || "");
+	const lastName = computed(() => userData.value?.lastName || "");
+	const fullName = computed(() => `${firstName.value} ${lastName.value}`);
+	const email = computed(() => userData.value?.email || "");
 
 	const initializeLanguage = () => {
 		const match = document.cookie.match(/(?:^|;\s*)USER_LANG=([^;]*)/);
@@ -34,26 +40,17 @@ export const useRegistration = () => {
 	};
 
 	const fetchUserData = async () => {
-		const data = await Promise.resolve({
-			name: "Max",
-			surname: "Mustermann",
-			email: "max@mustermann.de",
-		});
-		userData.value = data;
-		fullName.value = `${data.name} ${data.surname}`;
+		const response = await registrationApi.registrationControllerGetBySecret("abc");
+		userData.value = response.data;
 	};
 
-	const createAccount = async (): Promise<boolean> => {
-		const testError = false;
+	const completeRegistration = async (): Promise<boolean> => {
 		try {
-			await new Promise((resolve, reject) => {
-				if (testError) {
-					reject();
-				} else {
-					resolve(true);
-					return true;
-				}
+			await registrationApi.registrationControllerCompleteRegistration("abc", {
+				language: selectedLanguage.value ?? LanguageType.De,
+				password: password.value,
 			});
+
 			return true;
 		} catch {
 			notifyError(t("pages.registrationExternalMembers.error.notCompleted"), false);
@@ -62,9 +59,9 @@ export const useRegistration = () => {
 	};
 
 	return {
-		createAccount,
+		completeRegistration,
 		fetchUserData,
-		fullName,
+
 		initializeLanguage,
 		isPrivacyPolicyAccepted,
 		isTermsOfUseAccepted,
@@ -72,6 +69,9 @@ export const useRegistration = () => {
 		selectedLanguage,
 		setCookie,
 		setSelectedLanguage,
-		userData,
+		firstName,
+		lastName,
+		fullName,
+		email,
 	};
 };
