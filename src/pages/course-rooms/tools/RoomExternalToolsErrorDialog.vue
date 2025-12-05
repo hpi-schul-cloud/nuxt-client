@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog
+	<CustomDialog
 		v-if="selectedItem.status"
 		:is-open="$props.isOpen"
 		:has-buttons="true"
@@ -15,10 +15,10 @@
 		<template #content>
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ExternalToolDisplayData, useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { computed, ComputedRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";

@@ -99,7 +99,7 @@
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
-		<v-custom-dialog
+		<CustomDialog
 			v-model:is-open="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
 			:size="375"
@@ -116,12 +116,12 @@
 					{{ $t("pages.administration.school.index.authSystems.confirmDeleteText") }}
 				</p>
 			</template>
-		</v-custom-dialog>
+		</CustomDialog>
 	</div>
 </template>
 
 <script>
-import vCustomDialog from "@/components/organisms/vCustomDialog";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { useAppStore } from "@data-app";
@@ -130,7 +130,7 @@ import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } 
 
 export default {
 	components: {
-		vCustomDialog,
+		CustomDialog,
 	},
 	props: {
 		systems: {

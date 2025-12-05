@@ -157,7 +157,7 @@
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
-		<v-custom-dialog
+		<CustomDialog
 			v-model:is-open="itemDelete.isOpen"
 			data-testid="delete-dialog-item"
 			:size="375"
@@ -170,13 +170,13 @@
 					{{ deleteDialogTitle(itemDelete.itemType, itemDelete.itemData.name || itemDelete.itemData.title) }}
 				</h2>
 			</template>
-		</v-custom-dialog>
+		</CustomDialog>
 	</div>
 </template>
 
 <script>
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
 	BoardElementResponseTypeEnum,
@@ -197,7 +197,7 @@ export default {
 		RoomBoardCard,
 		RoomTaskCard,
 		RoomLessonCard,
-		vCustomDialog,
+		CustomDialog,
 		draggable,
 		EmptyState,
 		ShareModal,

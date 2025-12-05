@@ -1,6 +1,6 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
 import { createTestAppStore, expectNotification, groupResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -72,7 +72,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const { wrapper } = getWrapper({ isOpen: false });
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 
@@ -101,7 +101,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			await nextTick();
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 
@@ -119,7 +119,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
 
-			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
@@ -168,7 +168,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
 
-			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
@@ -201,7 +201,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", undefined);
 			await nextTick();
 
-			const confirmationDialog = wrapper.getComponent<typeof vCustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");

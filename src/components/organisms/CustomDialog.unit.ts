@@ -1,4 +1,4 @@
-import CustomDialog from "./vCustomDialog.vue";
+import CustomDialog from "./CustomDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 
@@ -13,7 +13,7 @@ const negativeTestmockProps = {
 	hasButtons: true,
 };
 
-describe("@/components/vCustomDialog", () => {
+describe("@/components/CustomDialog", () => {
 	const mountComponent = (options: ComponentMountingOptions<typeof CustomDialog> = {}) =>
 		mount(CustomDialog, {
 			global: {

@@ -1,10 +1,5 @@
 <template>
-	<vCustomDialog
-		ref="customDialog"
-		:is-open="isOpen"
-		class="room-dialog"
-		@dialog-closed="$emit('update:isOpen', false)"
-	>
+	<CustomDialog ref="customDialog" :is-open="isOpen" class="room-dialog" @dialog-closed="$emit('update:isOpen', false)">
 		<template #title>
 			<div class="pt-2 room-title">
 				<v-text-field
@@ -32,11 +27,11 @@
 				@start-drag="$emit('drag-from-group', $event)"
 			/>
 		</template>
-	</vCustomDialog>
+	</CustomDialog>
 </template>
 <script setup lang="ts">
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";

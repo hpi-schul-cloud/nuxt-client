@@ -1,5 +1,5 @@
 import TaskItemMenu from "./TaskItemMenu.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -204,7 +204,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 			const deleteBtn = wrapper.findComponent("[data-testId=task-delete]");
 			await deleteBtn.trigger("click");
 
-			const confirmBtn = wrapper.findComponent(vCustomDialog);
+			const confirmBtn = wrapper.findComponent(CustomDialog);
 			await confirmBtn.vm.$emit("dialog-confirmed");
 
 			expect(tasksModuleMock.deleteTask).toHaveBeenCalled();

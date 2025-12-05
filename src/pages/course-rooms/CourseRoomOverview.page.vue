@@ -41,15 +41,15 @@
 						:style="{ width: dimensions.cellWidth }"
 					>
 						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
-							<vRoomEmptyAvatar
+							<RoomEmptyAvatar
 								v-if="isEmptyGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="RoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@drop-empty-avatar="setDropElement({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomGroupAvatar
+							<RoomGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-group-avatar"
@@ -57,21 +57,21 @@
 								:size="dimensions.cellWidth"
 								:device="device"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomGroupAvatar"
+								data-avatar-type="RoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-group-avatar="onDragend"
 								@drop-group-avatar="addGroupElements({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomAvatar
+							<RoomAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomAvatar"
+								data-avatar-type="RoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-avatar="onDragend"
@@ -79,11 +79,11 @@
 							/>
 						</template>
 						<template v-else>
-							<vRoomEmptyAvatar
+							<RoomEmptyAvatar
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="RoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@drop-empty-avatar="setDropElement({ x: colIndex, y: rowIndex })"
 							/>
@@ -112,10 +112,10 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
-import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar.vue";
+import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
+import RoomEmptyAvatar from "@/components/atoms/RoomEmptyAvatar.vue";
+import RoomGroupAvatar from "@/components/molecules/RoomGroupAvatar.vue";
 import RoomModal from "@/components/molecules/RoomModal.vue";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
@@ -127,9 +127,9 @@ import { defineComponent, reactive } from "vue";
 export default defineComponent({
 	components: {
 		RoomWrapper,
-		vRoomAvatar,
-		vRoomGroupAvatar,
-		vRoomEmptyAvatar,
+		RoomAvatar,
+		RoomGroupAvatar,
+		RoomEmptyAvatar,
 		RoomModal,
 		ImportFlow,
 	},
@@ -282,7 +282,7 @@ export default defineComponent({
 
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
-			if (toElementName === "vRoomEmptyAvatar") {
+			if (toElementName === "RoomEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -298,8 +298,8 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
-				toElementName === "vRoomAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomAvatar"
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
@@ -313,8 +313,8 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
-				toElementName === "vRoomGroupAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomGroupAvatar"
 			) {
 				this.savePosition();
 			}

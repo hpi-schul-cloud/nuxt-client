@@ -89,7 +89,7 @@
 			</v-btn>
 		</v-row>
 
-		<v-custom-dialog
+		<CustomDialog
 			:is-open="isWarningDialogOpen"
 			:has-buttons="true"
 			:buttons="['cancel', 'confirm']"
@@ -118,13 +118,13 @@
 					}}
 				</v-alert>
 			</template>
-		</v-custom-dialog>
+		</CustomDialog>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb } from "../templates/default-wireframe.types";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";

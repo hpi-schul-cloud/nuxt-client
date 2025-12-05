@@ -521,7 +521,7 @@ describe("ClassOverview", () => {
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 				await nextTick();
 
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				const dialog = wrapper.findComponent({ name: "CustomDialog" });
 				expect(dialog.vm.isOpen).toBe(true);
 			});
 		});
@@ -542,7 +542,7 @@ describe("ClassOverview", () => {
 
 					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+					const dialog = wrapper.findComponent({ name: "CustomDialog" });
 
 					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
 
@@ -556,7 +556,7 @@ describe("ClassOverview", () => {
 
 					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+					const dialog = wrapper.findComponent({ name: "CustomDialog" });
 
 					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
 

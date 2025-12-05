@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<VDialog v-model="dialogEdit" large max-width="900px" @click:outside="closeEdit">
-			<vImportUsersMatchSearch
+			<ImportUsersMatchSearch
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
@@ -234,7 +234,7 @@
 </template>
 
 <script>
-import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch.vue";
+import ImportUsersMatchSearch from "@/components/molecules/ImportUsersMatchSearch.vue";
 import { ImportUserResponseRoleNamesEnum, SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
@@ -251,7 +251,7 @@ import {
 
 export default {
 	components: {
-		vImportUsersMatchSearch,
+		ImportUsersMatchSearch,
 	},
 	data() {
 		return {

@@ -1,5 +1,5 @@
 <template>
-	<vCustomDialog
+	<CustomDialog
 		data-testid="end-course-sync-dialog"
 		:has-buttons="true"
 		:buttons="['cancel', 'confirm']"
@@ -23,11 +23,11 @@
 				}}
 			</p>
 		</template>
-	</vCustomDialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { notifyError, notifySuccess } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { useI18n } from "vue-i18n";

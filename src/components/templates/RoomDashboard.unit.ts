@@ -370,11 +370,11 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	describe("Deleting Items", () => {
 		const findCustomDialog = (wrapper: VueWrapper, dataTestid: string) => {
 			const dialog = wrapper
-				.findAllComponents({ name: "v-custom-dialog" })
+				.findAllComponents({ name: "CustomDialog" })
 				.find((dialog) => dialog.vm.$attrs["data-testid"] === dataTestid);
 
 			if (!dialog) {
-				throw new Error(`Cannot find VCustomDialog with data-testid="${dataTestid}"`);
+				throw new Error(`Cannot find CustomDialog with data-testid="${dataTestid}"`);
 			}
 
 			return dialog;

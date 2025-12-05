@@ -2,7 +2,7 @@
 	<section class="task-dashboard-teacher">
 		<v-window v-model="tab">
 			<v-window-item :value="tabRoutes[0]" class="padding-bottom">
-				<v-custom-double-panels
+				<DoublePanels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="t('pages.tasks.subtitleNoDue')"
@@ -30,7 +30,7 @@
 							@share-task="onShareTask"
 						/>
 					</template>
-				</v-custom-double-panels>
+				</DoublePanels>
 				<VContainer>
 					<EmptyState v-if="openTasksForTeacherIsEmpty" :title="t('pages.tasks.teacher.open.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
-import VCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
+import DoublePanels from "@/components/molecules/DoublePanels.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";

@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog
+	<CustomDialog
 		:is-open="isOpen"
 		data-testid="copy-dialog"
 		:size="480"
@@ -30,11 +30,11 @@
 				</ul>
 			</WarningAlert>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";

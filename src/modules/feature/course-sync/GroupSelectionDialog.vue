@@ -1,5 +1,5 @@
 <template>
-	<vCustomDialog
+	<CustomDialog
 		v-model:is-open="isOpen"
 		has-buttons
 		:buttons="['cancel', 'next']"
@@ -53,11 +53,11 @@
 				</span>
 			</WarningAlert>
 		</template>
-	</vCustomDialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
 import { WarningAlert } from "@ui-alert";

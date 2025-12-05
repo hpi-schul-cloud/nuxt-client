@@ -1,5 +1,5 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, provisioningOptionsDataFactory } from "@@/tests/test-utils";
@@ -296,7 +296,7 @@ describe("ProvisioningOptionsPage", () => {
 
 					await saveButton.trigger("click");
 
-					const dialog = wrapper.findComponent(VCustomDialog);
+					const dialog = wrapper.findComponent(CustomDialog);
 
 					expect(dialog.props("isOpen")).toEqual(true);
 				});
