@@ -1,13 +1,10 @@
 <template>
-	<VCardTitle
-		v-if="isEditMode || value !== ''"
-		class="d-block text-break-word pt-0 pb-0"
-		:class="{ 'pointer-events-none': !isEditMode }"
-	>
+	<VCardTitle v-if="isEditMode || value !== ''" class="d-block text-break-word pt-0 pb-0">
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:is-edit-mode="isEditMode"
+			:has-edit-permission="hasEditPermission"
 			:is-focused="isFocused"
 			data-testid="card-title"
 			@update:value="onUpdateValue"
@@ -32,6 +29,10 @@ const props = defineProps({
 	isFocused: {
 		type: Boolean,
 	},
+	hasEditPermission: {
+		type: Boolean,
+		default: false,
+	},
 });
 const emit = defineEmits(["update:value", "enter"]);
 
@@ -43,9 +44,5 @@ const onEnter = () => emit("enter");
 <style scoped>
 .text-break-word {
 	word-break: break-word;
-}
-
-.pointer-events-none {
-	pointer-events: none;
 }
 </style>

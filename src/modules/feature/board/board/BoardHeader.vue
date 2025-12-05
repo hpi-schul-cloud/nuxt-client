@@ -18,6 +18,7 @@
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
 				:max-length="100"
+				:has-edit-permission="hasEditPermission"
 				@update:value="updateBoardTitle"
 				@blur="onBoardTitleBlur"
 			/>
