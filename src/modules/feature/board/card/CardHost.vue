@@ -14,7 +14,7 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+				:elevation="isEditMode ? 6 : isHovered && hasEditPermission ? 4 : 2"
 				:ripple="false"
 				:hover="isHovered && hasEditPermission"
 				:data-testid="cardTestId"
@@ -144,6 +144,8 @@ const emit = defineEmits<{
 const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
+const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 const isHovered = useElementHover(cardHost);
 const isDetailView = ref(false);
@@ -159,8 +161,6 @@ const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${pro
 const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
