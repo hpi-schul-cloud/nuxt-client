@@ -36,6 +36,10 @@
 		<WarningAlert v-if="alerts.includes(FileAlert.SCAN_STATUS_ERROR)">
 			{{ t("common.file.scanError") }}
 		</WarningAlert>
+
+		<WarningAlert v-if="alerts.includes(FileAlert.FILE_STORAGE_ERROR)">
+			{{ t("Diese Datei ist gerade nicht verfügbar. Lade den Bereich neu.") }}
+		</WarningAlert>
 	</div>
 </template>
 
