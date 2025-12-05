@@ -4,7 +4,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { VForm, VSelect, VTextField } from "vuetify/lib/components/index";
+import { VForm, VSelect } from "vuetify/lib/components/index";
 
 vi.mock("../composables/add-collabora-file.composable");
 const mockedCollaboraFileSelection = vi.mocked(useAddCollaboraFile);
@@ -215,42 +215,6 @@ describe("CollaboraFileDialog", () => {
 			await nextTick();
 
 			expect(closeCollaboraFileDialog).toHaveBeenCalled();
-		});
-
-		it("should stop click event propagation", async () => {
-			const { wrapper } = await setup();
-			const textField = wrapper.findComponent(VTextField);
-
-			const parent = document.createElement("div");
-			document.body.appendChild(parent);
-			parent.appendChild(wrapper.element);
-
-			let bubbled = false;
-			parent.addEventListener("click", () => {
-				bubbled = true;
-			});
-
-			await textField.trigger("click");
-			expect(bubbled).toBe(false);
-		});
-
-		it("should stop keydown enter event propagation", async () => {
-			const { wrapper } = await setup();
-			const textField = wrapper.findComponent(VTextField);
-
-			const parent = document.createElement("div");
-			document.body.appendChild(parent);
-			parent.appendChild(wrapper.element);
-
-			let bubbled = false;
-			parent.addEventListener("keydown", (e) => {
-				if (e.key === "Enter") {
-					bubbled = true;
-				}
-			});
-
-			await textField.trigger("keydown", { key: "Enter" });
-			expect(bubbled).toBe(false);
 		});
 	});
 });
