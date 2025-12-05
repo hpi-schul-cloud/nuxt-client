@@ -16,6 +16,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	MIGRATION_END_GRACE_PERIOD_MS: -1,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: false,
 	DOCUMENT_BASE_DIR: "",
+	FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: false,
 	FEATURE_CONSENT_NECESSARY: false,
 	FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 	GHOST_BASE_URL: "",
@@ -85,7 +86,6 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
-	FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: false,
 };
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);

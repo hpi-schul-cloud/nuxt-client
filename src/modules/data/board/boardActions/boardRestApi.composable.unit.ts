@@ -491,6 +491,26 @@ describe("boardRestApi", () => {
 		});
 	});
 
+	describe("moveCardToBoardRequest", () => {
+		it("should call moveCardToBoardSuccess action if card was successfully moved to another board", async () => {
+			const { boardStore } = setup();
+			const { moveCardToBoardRequest } = useBoardRestApi();
+
+			await moveCardToBoardRequest({ cardId: "123", fromColumnId: "A", toColumnId: "B" });
+			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalled();
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { moveCardToBoardRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.moveCardToBoardCall.mockRejectedValue({});
+			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B" };
+			await moveCardToBoardRequest(cardPayload);
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("moveColumnRequest", () => {
 		it("should not call moveColumnSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);

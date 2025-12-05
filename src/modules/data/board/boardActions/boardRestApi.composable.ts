@@ -6,6 +6,7 @@ import {
 	DeleteColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
+	MoveCardToBoardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -30,6 +31,7 @@ export const useBoardRestApi = () => {
 		deleteColumnCall,
 		fetchBoardCall,
 		moveCardCall,
+		moveCardToBoardCall,
 		moveColumnCall,
 		updateColumnTitleCall,
 		updateBoardTitleCall,
@@ -136,6 +138,22 @@ export const useBoardRestApi = () => {
 				...payload,
 				toColumnId,
 				toColumnIndex,
+				isOwnAction: true,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
+			});
+		}
+	};
+
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		try {
+			const { cardId, toColumnId } = payload;
+			const result = await moveCardToBoardCall(cardId, toColumnId);
+
+			await boardStore.moveCardToBoardSuccess({
+				...result,
 				isOwnAction: true,
 			});
 		} catch (error) {
@@ -279,6 +297,7 @@ export const useBoardRestApi = () => {
 		deleteBoardRequest,
 		deleteColumnRequest,
 		moveCardRequest,
+		moveCardToBoardRequest,
 		moveColumnRequest,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,

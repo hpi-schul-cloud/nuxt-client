@@ -1,7 +1,7 @@
 <template>
 	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`modal-${uid}-title`">
 		<UseFocusTrap>
-			<VCard>
+			<VCard :loading>
 				<template #title>
 					<h2 :id="`modal-${uid}-title`" class="ma-0 dialog-title" data-testid="dialog-title">
 						{{ message }}
@@ -17,6 +17,7 @@
 					<div class="d-flex ga-2">
 						<VBtn
 							data-testid="dialog-cancel"
+							:disabled="areActionsDisabled"
 							:aria-label="t('common.actions.cancel')"
 							variant="text"
 							:text="t('common.actions.cancel')"
@@ -29,7 +30,7 @@
 							color="primary"
 							variant="flat"
 							:text="t(confirmBtnLangKey)"
-							:disabled="confirmBtnDisabled"
+							:disabled="confirmBtnDisabled || areActionsDisabled"
 							@click="onConfirm"
 						/>
 					</div>
@@ -48,6 +49,8 @@ import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 const props = defineProps({
 	message: { type: String, required: false, default: "" },
+	loading: { type: Boolean, default: false },
+	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, required: false, default: false },
 	confirmBtnLangKey: { type: String, required: false, default: "" },
 });
