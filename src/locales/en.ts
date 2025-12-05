@@ -1626,6 +1626,11 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.learningContent.emptyState": "Currently there is no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
+	"pages.rooms.members.fab.addExternalPerson": "Add external person",
+	"pages.rooms.members.fab.selectFromDirectory": "Select from directory",
+	"pages.rooms.members.dialog.addExternalPerson.text":
+		"Please enter the email address of the external person to be added to the room.",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Add to room",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
