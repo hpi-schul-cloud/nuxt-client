@@ -88,7 +88,7 @@
 				</div>
 				<ConfirmationDialog />
 				<AddElementDialog />
-				<AddCollaboraFileDialog />
+				<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 				<LightBox />
 				<MoveCardDialog
 					v-if="roomId"
@@ -122,7 +122,6 @@
 </template>
 
 <script setup lang="ts">
-import AddCollaboraFileDialog from "../shared/AddCollaboraFileDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
@@ -153,6 +152,8 @@ import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject"
 import { useAppStore, useNotificationStore } from "@data-app";
 import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import type { CreateCollaboraFilePayload } from "@feature-collabora";
+import { AddCollaboraFileDialog } from "@feature-collabora";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -481,6 +482,10 @@ const onSaveEditBoardSettings = async (isEditableForEveryone: boolean) => {
 	});
 
 	isEditSettingsDialogOpen.value = false;
+};
+
+const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
+	cardStore.createFileElementWithCollabora(payload.type, payload.fileName);
 };
 </script>
 

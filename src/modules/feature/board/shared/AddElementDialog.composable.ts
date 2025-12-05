@@ -1,10 +1,10 @@
-import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { notifyInfo } from "@data-app";
 import { type CreateElementRequestPayload, useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import { useAddCollaboraFile } from "@feature-collabora";
 import {
 	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
@@ -35,8 +35,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const { openCollaboraFileDialog, setCardId, setCreateElementRequestFn } = useAddCollaboraFile();
-	setCreateElementRequestFn(createElementRequestFn);
+	const { openCollaboraFileDialog } = useAddCollaboraFile();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -53,7 +52,6 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 	};
 
 	const onOfficeFileClick = async () => {
-		setCardId(cardId);
 		closeDialog();
 		openCollaboraFileDialog();
 	};
