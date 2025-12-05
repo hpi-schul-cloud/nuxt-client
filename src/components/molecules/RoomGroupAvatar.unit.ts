@@ -1,4 +1,4 @@
-import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
+import RoomGroupAvatar from "./RoomGroupAvatar.vue";
 import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -77,7 +77,7 @@ const getWrapper = (
 	} = propsData,
 	options?: object
 ) =>
-	mount(vRoomGroupAvatar, {
+	mount(RoomGroupAvatar, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -85,7 +85,7 @@ const getWrapper = (
 		...options,
 	});
 
-describe("vRoomGroupAvatar", () => {
+describe("RoomGroupAvatar", () => {
 	it("should display the title", () => {
 		const wrapper = getWrapper(propsData);
 		const labelElement = wrapper.find(".subtitle").element as HTMLElement;

@@ -1,6 +1,6 @@
 import RoomModal from "./RoomModal.vue";
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

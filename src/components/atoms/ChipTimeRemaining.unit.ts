@@ -1,10 +1,10 @@
-import VCustomChipTimeRemaining from "./VCustomChipTimeRemaining.vue";
+import ChipTimeRemaining from "./ChipTimeRemaining.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
-describe("@/components/atoms/vCustomChipTimeRemaining", () => {
+describe("@/components/atoms/ChipTimeRemaining", () => {
 	const setup = (dueDate: Date, shortenUnit = false) => {
-		const wrapper = mount(VCustomChipTimeRemaining, {
+		const wrapper = mount(ChipTimeRemaining, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -31,8 +31,8 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 			const { wrapper } = setup(dueDate);
 
 			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.VCustomChipTimeRemaining.hintHours", HOURS_UNTIL_DUE)}`;
+				"components.atoms.ChipTimeRemaining.hintDueTime"
+			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintHours", HOURS_UNTIL_DUE)}`;
 
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
@@ -41,8 +41,8 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 			const { wrapper } = setup(dueDate, true);
 
 			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")}`;
+				"components.atoms.ChipTimeRemaining.hintDueTime"
+			)}${HOURS_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintHoursShort")}`;
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
 	});
@@ -60,9 +60,9 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 			const { wrapper } = setup(dueDate);
 
 			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
+				"components.atoms.ChipTimeRemaining.hintDueTime"
 			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintMinutes",
+				"components.atoms.ChipTimeRemaining.hintMinutes",
 				MINUTES_UNTIL_DUE
 			)}`;
 
@@ -73,8 +73,8 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 			const { wrapper } = setup(dueDate, true);
 
 			const expectedResult = `${wrapper.vm.$t(
-				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.VCustomChipTimeRemaining.hintMinShort")}`;
+				"components.atoms.ChipTimeRemaining.hintDueTime"
+			)}${MINUTES_UNTIL_DUE} ${wrapper.vm.$t("components.atoms.ChipTimeRemaining.hintMinShort")}`;
 
 			expect(wrapper.element.textContent).toContain(expectedResult);
 		});
@@ -82,7 +82,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 	it("accepts valid type props", () => {
 		const validTypes = ["warning"];
-		const { validator } = VCustomChipTimeRemaining.props.type;
+		const { validator } = ChipTimeRemaining.props.type;
 
 		validTypes.forEach((type) => {
 			expect(validator(type)).toBe(true);
@@ -93,7 +93,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 	it("accepts valid dueDate props", () => {
 		const validDueDates = ["2021-06-11T14:00:00.000Z", "2021-06-07T09:30:00.000Z"];
-		const { validator } = VCustomChipTimeRemaining.props.dueDate;
+		const { validator } = ChipTimeRemaining.props.dueDate;
 
 		validDueDates.forEach((dueDate) => {
 			expect(validator(dueDate)).toBe(true);

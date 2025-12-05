@@ -224,10 +224,10 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="3-2"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomGroupAvatar"
+			"RoomGroupAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="3-3"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomEmptyAvatar"
+			"RoomEmptyAvatar"
 		);
 	});
 
@@ -373,7 +373,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
 
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomEmptyAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomEmptyAvatar");
 		expect(wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const avatarComponents = wrapper.findAll(".room-avatar");
