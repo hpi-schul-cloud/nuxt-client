@@ -7,7 +7,7 @@
 			'positioning-lg': !mdAndDown,
 			'position-fixed positioning-sm-md': mdAndDown,
 		}"
-		:rounded="!isCollapsed ? 'xl' : 'circle'"
+		:rounded="!isCollapsed ? 'pill' : 'circle'"
 		color="primary"
 		size="large"
 		elevation="4"
@@ -21,13 +21,7 @@
 		<VIcon>{{ fabIcon }}</VIcon>
 		<span v-if="!isCollapsed" class="d-block">{{ primaryAction.label }}</span>
 		<span v-else class="d-sr-only">{{ primaryAction.ariaLabel ?? primaryAction.label }}</span>
-		<VSpeedDial
-			v-if="isSpeedDial"
-			v-model="isSpeedDialOpen"
-			activator="parent"
-			attach=".wireframe-container"
-			:location="menuLocation"
-		>
+		<VSpeedDial v-if="isSpeedDial" v-model="isSpeedDialOpen" activator="parent" :location="speedDialLocation">
 			<template v-for="(action, index) in speedDialActions" :key="index">
 				<SpeedDialMenuAction :action="action" />
 			</template>
@@ -51,12 +45,11 @@ const emit = defineEmits(["fab:clicked"]);
 
 const primaryAction = computed(() => props.actions[0]);
 const speedDialActions = computed(() => props.actions.slice(1));
-const fabIcon = computed(() => (isSpeedDialOpen.value && isSpeedDial.value ? mdiClose : primaryAction.value.icon));
+const fabIcon = computed(() => (isSpeedDial.value && isSpeedDialOpen.value ? mdiClose : primaryAction.value.icon));
 
 const { mdAndDown } = useDisplay();
 
-const menuLocation = computed(() => (mdAndDown.value ? "top center" : "bottom center"));
-
+const speedDialLocation = computed(() => (mdAndDown.value ? "top center" : "bottom center"));
 const isSpeedDial = computed(() => props.actions.length > 1);
 const isSpeedDialOpen = ref(false);
 
