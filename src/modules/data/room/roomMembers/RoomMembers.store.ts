@@ -1,4 +1,4 @@
-import { RoomMember } from "./types";
+import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
@@ -9,7 +9,7 @@ import {
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
@@ -259,6 +259,20 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
+	const checkMemberByEmail = async (email: string) => {
+		try {
+			await roomApi.roomControllerAddByEmail(getRoomId(), { email });
+			await fetchMembers();
+			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+			if (responseError.code === 404) {
+				return ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND;
+			}
+			return ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL;
+		}
+	};
+
 	const leaveRoom = async () => {
 		isLoading.value = true;
 		try {
@@ -414,6 +428,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		isRoomOwner,
 		setAdminMode,
 		changeRoomOwner,
+		checkMemberByEmail,
 		confirmInvitations,
 		fetchMembers,
 		resetPotentialMembers,

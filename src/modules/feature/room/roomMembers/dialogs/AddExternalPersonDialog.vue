@@ -49,11 +49,13 @@
 					/>
 					<VBtn
 						ref="addButton"
+						:disabled="!isEmailValid"
 						class="ms-auto"
 						color="primary"
 						variant="flat"
 						:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
 						data-testid="invite-participant-save-btn"
+						@click="onAddButtonClick"
 					/>
 				</div>
 			</template>
@@ -62,34 +64,49 @@
 </template>
 
 <script setup lang="ts">
+import { ExternalMemberCheckStatus } from "@data-room";
 import { isValidEmail } from "@util-validators";
-import { ref, useTemplateRef } from "vue";
+import { ModelRef, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
 
-const isOpen = defineModel({
+const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,
 	required: true,
 });
 
+const memberStatus = defineProps<{
+	memberStatus: ExternalMemberCheckStatus | undefined;
+}>();
+
+const { log } = console;
+log("memberStatus in AddExternalPersonDialog.vue:", memberStatus);
+
 const emit = defineEmits<{
 	(e: "close"): void;
+	(e: "update:mail", email: string): void;
 }>();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
 
 const isAccountFound = ref(true);
-
+const isEmailValid = ref(false);
 const emailInput = useTemplateRef("emailInput");
-
 const emailValidationMessage = ref<string | undefined>(undefined);
 
 const onEmailBlur = () => {
 	const errorMessage = t("common.validation.email");
 	const valid = isValidEmail(errorMessage)(emailInput.value?.modelValue) === true;
 	emailValidationMessage.value = valid ? undefined : errorMessage;
+	isEmailValid.value = valid;
+
+	// Ask UX that check validation only on blur event
+};
+
+const onAddButtonClick = async () => {
+	emit("update:mail", emailInput.value?.modelValue as string);
 };
 
 const onClose = () => {
