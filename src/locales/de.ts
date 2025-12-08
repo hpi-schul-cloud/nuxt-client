@@ -187,11 +187,13 @@ export default {
 	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
+	"common.validation.email2": "Ungültiges E-Mail-Format",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
+	"common.validation.required3": "Pflichtfeld",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
@@ -1657,9 +1659,16 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
 	"pages.rooms.members.fab.addExternalPerson": "Externe Person hinzufügen",
 	"pages.rooms.members.fab.selectFromDirectory": "Aus Verzeichnis auswählen",
-	"pages.rooms.members.dialog.addExternalPerson.text":
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Externe Person hinzufügen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Externe Person einladen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Bitte Vor- und Nachnamen der schulfremden Person eingeben. Die Person erhält eine E-Mail mit einem Registrierungslink für die {applicationName}. Sobald sie einen Account erstellt hat, wird sie automatisch zum Raum hinzugefügt.",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Zum Raum hinzufügen",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
