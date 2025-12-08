@@ -1825,7 +1825,7 @@ export default {
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {roomOwner} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
-		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
+		"Diese Aktion kann nur von {memberFullName} oder der schuladministrierenden Person rückgängig gemacht werden.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",

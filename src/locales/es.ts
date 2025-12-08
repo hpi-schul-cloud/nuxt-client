@@ -1838,7 +1838,7 @@ export default {
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Si esta autorización se transfiere a {memberFullName}, {roomOwner} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
-		"Esta acción sólo puede ser deshecha por {memberFullName}.",
+		"Esta acción sólo puede ser deshecha por {memberFullName} o el administrador de la escuela.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",

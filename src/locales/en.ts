@@ -1796,7 +1796,8 @@ export default {
 		"{roomOwner} loses the “Own” permissions and receives the “Administer” permission.",
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"If this permission is transferred to {memberFullName}, {roomOwner} loses the right to delete the room.",
-	"pages.rooms.members.handOverAlert.confirm.label.subText": "This action can only be undone by {memberFullName}.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"This action can only be undone by {memberFullName} or a school administrator.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Create invitation link",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"The next step is to create a link, which can be used to enter the room.",
