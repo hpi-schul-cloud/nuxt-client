@@ -38,12 +38,12 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const defaultDates: DateSelection = {
+const defaultDates = {
 	$gte: "1900-01-01T23:00:00.000Z",
 	$lte: "2099-12-31T23:00:00.000Z",
 };
 
-const dateSelection = ref<DateSelection>({
+const dateSelection = ref<{ $gte: string; $lte: string }>({
 	$gte: new Date().toISOString(),
 	$lte: "",
 });
@@ -62,7 +62,13 @@ const onUpdateFilter = () => {
 	}
 	if (dateSelection.value.$gte === "") dateSelection.value.$gte = defaultDates.$gte;
 	if (dateSelection.value.$lte === "") dateSelection.value.$lte = defaultDates.$lte;
-	emit("update:filter", dateSelection.value);
+
+	const convertedDates = {
+		$gte: new Date(dateSelection.value.$gte),
+		$lte: new Date(dateSelection.value.$lte),
+	};
+
+	emit("update:filter", convertedDates);
 };
 
 const onClose = () => {
@@ -74,6 +80,11 @@ const onRemoveFilter = () => {
 };
 
 onMounted(() => {
-	if (props.selectedDate) dateSelection.value = props.selectedDate;
+	if (props.selectedDate) {
+		dateSelection.value = {
+			$gte: props.selectedDate.$gte instanceof Date ? props.selectedDate.$gte.toISOString() : props.selectedDate.$gte,
+			$lte: props.selectedDate.$lte instanceof Date ? props.selectedDate.$lte.toISOString() : props.selectedDate.$lte,
+		};
+	}
 });
 </script>

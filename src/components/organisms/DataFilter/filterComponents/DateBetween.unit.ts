@@ -77,6 +77,10 @@ describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 
 				actionButtonComponent.vm.$emit("update:filter");
 				expect(wrapper.emitted()).toHaveProperty("update:filter");
+
+				const emittedDates = (wrapper.emitted()["update:filter"] as Array<Array<{ $gte: Date; $lte: Date }>>)[0][0];
+				expect(emittedDates.$gte).toBeInstanceOf(Date);
+				expect(emittedDates.$lte).toBeInstanceOf(Date);
 			});
 
 			it("should emit 'remove:filter' if dateSelection value is null", () => {

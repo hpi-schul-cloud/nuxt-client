@@ -44,8 +44,8 @@ type UiState = {
 };
 
 type DateSelection = {
-	$gte: string;
-	$lte: string;
+	$gte: string | Date;
+	$lte: string | Date;
 };
 
 type UpdateFilterParamType = string[] & DateSelection;
