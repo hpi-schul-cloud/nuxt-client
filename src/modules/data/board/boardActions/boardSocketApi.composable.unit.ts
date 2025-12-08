@@ -8,7 +8,7 @@ import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { BoardLayout } from "@/serverApi/v3/api";
+import { BoardLayout, MoveCardResponse } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	boardResponseFactory,
@@ -182,6 +182,36 @@ describe("useBoardSocketApi", () => {
 
 			expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(payload);
 			expect(mockedUseForceRenderHandler.generateRenderKey).toHaveBeenCalled();
+		});
+
+		it("should call moveCardToBoardSuccess for corresponding action", () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const { dispatch } = useBoardSocketApi();
+			const cardPayload: MoveCardResponse = {
+				card: {
+					cardId: "cardId",
+					height: 100,
+				},
+				fromColumn: {
+					id: "1",
+					title: "fromColumnId",
+				},
+				toColumn: {
+					id: "2",
+					title: "toColumnId",
+				},
+				fromBoard: {
+					id: "3",
+					title: "toBoardId",
+				},
+				toBoard: {
+					id: "4",
+					title: "toBoardId",
+				},
+			};
+
+			dispatch(BoardActions.moveCardToBoardSuccess(cardPayload));
+			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalledWith(cardPayload);
 		});
 
 		it("should call moveColumnSuccess for corresponding action", () => {

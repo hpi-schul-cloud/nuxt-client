@@ -4,6 +4,7 @@ import {
 	CreateColumnSuccessPayload,
 	DeleteColumnSuccessPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardSuccessPayload,
 	MoveColumnSuccessPayload,
 	UpdateBoardLayoutSuccessPayload,
 	UpdateBoardTitleSuccessPayload,
@@ -36,6 +37,7 @@ export const SR_I18N_KEYS_MAP = {
 	CARD_MOVED_IN_SAME_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedInSameColumn.success",
 	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedToAnotherColumn.success",
 	COLUMN_MOVED_SUCCESS: "components.board.screenReader.notification.columnMoved.success",
+	COLUMN_MOVED_TO_BOARD_SUCCESS: "components.board.screenReader.notification.cardMovedToBoard.success",
 	BOARD_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.boardTitleUpdated.success",
 	BOARD_PUBLISHED_SUCCESS: "components.board.screenReader.notification.boardVisibilityUpdated.published",
 	BOARD_UNPUBLISHED_SUCCESS: "components.board.screenReader.notification.boardVisibilityUpdated.draft",
@@ -125,6 +127,16 @@ export const useBoardAriaNotification = () => {
 				})
 			);
 		}
+	};
+
+	const notifyMoveCardToBoardSuccess = (action: MoveCardToBoardSuccessPayload) => {
+		const { toColumn } = action;
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_TO_BOARD_SUCCESS, {
+				toColumnId: toColumn.title,
+			})
+		);
 	};
 
 	const notifyMoveColumnSuccess = (action: MoveColumnSuccessPayload) => {
@@ -312,6 +324,7 @@ export const useBoardAriaNotification = () => {
 		notifyDeleteColumnSuccess,
 		notifyDeleteElementSuccess,
 		notifyMoveCardSuccess,
+		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
 		notifyMoveElementSuccess,
 		notifySetBoardAsEditableForAllUsersSuccess,

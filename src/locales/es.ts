@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Continuar",
 	"common.actions.copy": "Copiar",
 	"common.actions.duplicate": "Duplicar",
+	"common.actions.move": "Mover",
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
@@ -191,7 +192,7 @@ export default {
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
-	"common.words.board": "tablero",
+	"common.words.board": "tablero | tableros",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",
@@ -241,6 +242,7 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
+	"common.alerts.room.not.available": "No hay sala disponible. | No hay salas disponibles.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -488,6 +490,8 @@ export default {
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Se ha movido una tarjeta de la columna {fromColumnPosition} a la columna {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Una tarjeta fue movida a la sección {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Se ha movido una columna de la posición {oldPosition} a la posición {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -650,7 +654,21 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "No se ha copiado lo siguiente:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.card.options.title": "Importar tarjeta",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.label.room": "Seleccionar sala",
+	"components.molecules.label.board": "Seleccionar tablero",
+	"components.molecules.label.section": "Seleccionar sección",
+	"components.molecules.import.card.question": "¿A dónde se debe importar la tarjeta{title}?",
+	"components.molecules.import.card.hint.restriction": "Los siguientes contenidos no se transfieren:",
+	"components.molecules.import.card.hint.etherpad": "Contenido de Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Contenido de Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Configuraciones protegidas de herramientas externas",
+	"components.molecules.move.card.title": "Mover tarjeta",
+	"components.molecules.move.card.question": "¿A dónde se debe mover la tarjeta{title}?",
+	"components.molecules.move.card.message.success": "Tarjeta movida con éxito al tablero {link} - {column}",
+	"components.molecules.move.card.hint.restriction":
+		"Con el permiso «editar», las tarjetas solo pueden moverse a otras tableros dentro del mismo espacio.",
 	"components.molecules.import.columnBoard.rename": "Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText": "Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
@@ -703,6 +721,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Administrador de organización",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
+	"components.molecules.share.card.options.infoText":
+		"Con el siguiente enlace, la tarjeta puede ser importada como copia por otros personas.",
+	"components.molecules.share.card.result.linkLabel": "Enlace a la copia de la tarjeta",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
@@ -1850,6 +1871,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",
+	"pages.rooms.invitationlinks.error.delete": "No se pudo eliminar la lista de invitaciones.",
 	"pages.rooms.title": "Salas",
 	"pages.rooms.administration.title": "Administración de salas",
 	"pages.rooms.administration.table.header.roomName": "Nombre de la sala",

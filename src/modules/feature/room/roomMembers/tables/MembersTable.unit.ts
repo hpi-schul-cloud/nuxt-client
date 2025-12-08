@@ -1,5 +1,6 @@
 import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -28,7 +29,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
-import { Mock } from "vitest";
+import { Mock, vi } from "vitest";
 import { computed, nextTick, Ref, ref } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/lib/components/index";
 
@@ -45,6 +46,9 @@ type RefPropertiesOnly<T> = {
 };
 
 type RoomAuthorizationRefs = RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>;
+
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
