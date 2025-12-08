@@ -2,6 +2,7 @@ import { RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
+	RegistrationApiFactory,
 	RoleName,
 	RoomApiFactory,
 	RoomMemberResponse,
@@ -9,10 +10,11 @@ import {
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
+import { HttpStatusCode } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
 
@@ -80,6 +82,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
+	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
 
 	const isRoomOwner = (userId: string) => {
 		const member = roomMembers.value.find((member) => member.userId === userId);
@@ -247,6 +250,45 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
+	const addMemberByEmail = async (
+		email: string,
+		roomId?: string
+	): Promise<"SUCCESS" | "NOT_FOUND" | "USER_NOT_VALID" | "GENERIC_ERROR"> => {
+		try {
+			const { status } = await roomApi.roomControllerAddByEmail(roomId ?? getRoomId(), { email });
+			if (status === HttpStatusCode.Ok) {
+				fetchMembers();
+				return "SUCCESS";
+			}
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+			if (responseError.code === HttpStatusCode.NotFound) {
+				return "NOT_FOUND";
+			} else if (responseError.code === HttpStatusCode.BadRequest) {
+				return "USER_NOT_VALID";
+			}
+		}
+		return "GENERIC_ERROR";
+	};
+
+	const registerExternalMember = ({
+		firstName,
+		lastName,
+		email,
+		roomId,
+	}: {
+		firstName: string;
+		lastName: string;
+		email: string;
+		roomId?: string;
+	}) =>
+		registrationApi.registrationControllerCreateOrUpdateRegistration({
+			firstName,
+			lastName,
+			email,
+			roomId: roomId ?? getRoomId(),
+		});
+
 	const removeMembers = async (userIds: string[]) => {
 		try {
 			await roomApi.roomControllerRemoveMembers(getRoomId(), {
@@ -411,6 +453,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	return {
 		addMembers,
+		addMemberByEmail,
 		isRoomOwner,
 		setAdminMode,
 		changeRoomOwner,
@@ -426,6 +469,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
+		registerExternalMember,
 		updateMembersRole,
 		baseTableHeaders,
 		confirmationList,
