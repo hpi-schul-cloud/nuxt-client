@@ -3,6 +3,7 @@ import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 
 describe("Registration.layout", () => {
 	const setup = (options?: Partial<{ windowWidth: number }>) => {
@@ -13,8 +14,8 @@ describe("Registration.layout", () => {
 		const slotContent = "<h1>Test Slot Content</h1>";
 		const wrapper = mount(RegistrationLayout, {
 			global: {
-				plugins: [createTestingVuetify()],
-				stubs: { NavigationBar: true, TheFooter: true },
+				plugins: [createTestingVuetify(), createTestingPinia()],
+				stubs: { NavigationBar: true, TheFooter: true, ApplicationError: true, AlertContainer: true, VMain: true },
 			},
 			slots: {
 				default: slotContent,
@@ -58,21 +59,21 @@ describe("Registration.layout", () => {
 	describe("main content", () => {
 		it("should render main landmark", () => {
 			const { wrapper } = setup();
-			const main = wrapper.find("main");
+			const main = wrapper.findComponent({ name: "VMain" });
 
 			expect(main.exists()).toBe(true);
 		});
 
 		it("should render slot content in main landmark", () => {
 			const { wrapper, slotContent } = setup();
-			const main = wrapper.find("main");
+			const main = wrapper.findComponent({ name: "VMain" });
 
 			expect(main.html()).toContain(slotContent);
 		});
 
 		it("should render in a smaller wrapper for extra small devices", () => {
 			const { wrapper } = setup({ windowWidth: 500 });
-			const mainWrapper = wrapper.find("main");
+			const mainWrapper = wrapper.findComponent({ name: "VMain" });
 
 			expect(mainWrapper.classes()).toContain("small-wrapper");
 			expect(mainWrapper.classes()).not.toContain("wrapper");
@@ -80,7 +81,7 @@ describe("Registration.layout", () => {
 
 		it("should render in a normal wrapper for devices larger than extra small", () => {
 			const { wrapper } = setup({ windowWidth: 1280 });
-			const mainWrapper = wrapper.find("main");
+			const mainWrapper = wrapper.findComponent({ name: "VMain" });
 
 			expect(mainWrapper.classes()).toContain("wrapper");
 			expect(mainWrapper.classes()).not.toContain("small-wrapper");

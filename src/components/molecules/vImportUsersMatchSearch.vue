@@ -372,6 +372,8 @@ const mapRoleNames = (roleNames: unknown[]) => {
 					return t("common.roleName.administrator");
 				case "expert":
 					return t("common.roleName.expert");
+				case "externalPerson":
+					return t("common.roleName.externalPerson");
 				case "superhero":
 					return t("common.roleName.superhero");
 				default:

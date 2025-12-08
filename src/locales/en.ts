@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Continue",
 	"common.actions.copy": "Copy",
 	"common.actions.duplicate": "Duplicate",
+	"common.actions.move": "Move",
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
@@ -189,7 +190,7 @@ export default {
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
 	"common.words.and": "and",
-	"common.words.board": "board",
+	"common.words.board": "board | boards",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Blue",
@@ -239,6 +240,7 @@ export default {
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
 	"common.words.export": "Course export is downloading",
+	"common.alerts.room.not.available": "No room available. | No rooms available.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -480,6 +482,7 @@ export default {
 		"In column {columnPosition}, a card was moved to position {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"A card was moved from column {fromColumnPosition} to column {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success": "A card was moved to section {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"A column was moved from position {oldPosition} to position {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -646,7 +649,20 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
+	"components.molecules.label.room": "Select room",
+	"components.molecules.label.board": "Select board",
+	"components.molecules.label.section": "Select section",
+	"components.molecules.import.card.question": "Where should the card{title} be imported?",
+	"components.molecules.import.card.hint.restriction": "The following contents are not transferred:",
+	"components.molecules.import.card.hint.etherpad": "Content from Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Content from Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Protected settings of external tools",
+	"components.molecules.move.card.title": "Move card",
+	"components.molecules.move.card.question": "Where should the card{title} be moved to?",
+	"components.molecules.move.card.hint.restriction": `With the "Edit" permission, cards can only be moved to other boards within the same room.`,
+	"components.molecules.move.card.message.success": "Card successfully moved to the board {link} - {column}",
 	"components.molecules.import.columnBoard.rename": "If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText": "The board can be renamed below.",
 	"components.molecules.import.columnBoard.options.title": "Import board",
@@ -707,6 +723,9 @@ export default {
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
 	"components.molecules.shareImport.options.ctlTools.infoText.protected": "Protected settings of external tools",
+	"components.molecules.share.card.options.infoText":
+		"With the following link, the card can be imported by other people.",
+	"components.molecules.share.card.result.linkLabel": "Link card copy",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
 	"components.molecules.shareImport.options.restrictions.infoText.personalData": "Personal data",
@@ -1519,7 +1538,27 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
+		"I, {userName}, declare the following:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"I agree that my personal data may be processed in accordance with the {dataProtectionLink} of the school in the {instanceTitle} as well as by the learning material providers selected and bound by the school's instructions.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"The consent and thus the use is voluntary, which means that if you do not give your consent, it will not lead to disadvantages for you in class. Participation in lessons outside the {title} will be made possible by the school. You can revoke this consent at any time. A short e-mail with the declaration of revocation, stating your first and last name, class and school to the following address is sufficient: {email}. In the event of revocation, we will immediately delete the personal data stored on the basis of the consent, unless there is a legal reason for storage or you wish to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"I agree that my personal data may be processed in accordance with the school's {dataProtectionLink} in the Schul-Cloud Brandenburg and by the selected and authorized learning material providers.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"The consent and thus the use is voluntary and can be revoked at any time with effect for the future by e-mail to: {email}. In the event of revocation, we will immediately delete the data stored on the basis of the consent, unless there is a legal reason for retention or you want to access the stored data beforehand. You can also find further information on data protection in our {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"I have read the {termsOfUse} of the {instanceTitle} and agree to them.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"The declaration of consent is required to complete the registration.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"The acceptance of the terms of use is required to complete the registration.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Confirmation code",
 	"pages.registrationExternalMembers.steps.registration.title": "Registration",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1548,10 +1587,13 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"By registering in the dBildungscloud in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Privacy policy",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Terms of use",
+		"By registering in the {instance} in the next step, you accept the {dataProtection} and {tos}. The {dataProtection} are always available in the footer. The following {tos} apply for use (unless your school or educational institution has issued its own terms of use).",
 	"pages.registrationExternalMembers.steps.password.heading": "Set password",
+	"pages.registrationExternalMembers.steps.success.title": "Registration successful",
+	"pages.registrationExternalMembers.steps.success.heading": "Thank you for registering with the {applicationName}!",
+	"pages.registrationExternalMembers.steps.success.explanation":
+		'Welcome to the new room. In rooms, content can be created, organized and shared with different groups of people in one central place - for example with classes, colleagues, external persons or interdisciplinary teams. The menu item "Rooms" lists the rooms in which you already have membership.',
+	"pages.registrationExternalMembers.steps.success.button": "Go to login",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
@@ -1751,7 +1793,8 @@ export default {
 		"{roomOwner} loses the “Own” permissions and receives the “Administer” permission.",
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"If this permission is transferred to {memberFullName}, {roomOwner} loses the right to delete the room.",
-	"pages.rooms.members.handOverAlert.confirm.label.subText": "This action can only be undone by {memberFullName}.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"This action can only be undone by {memberFullName} or a school administrator.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Create invitation link",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"The next step is to create a link, which can be used to enter the room.",
@@ -1788,6 +1831,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update": "Updating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.load": "The invitation list could not be loaded.",
+	"pages.rooms.invitationlinks.error.delete": "The invitation list could not be deleted.",
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.administration.title": "Room administration",
 	"pages.rooms.administration.table.header.roomName": "Room name",
@@ -1908,7 +1952,6 @@ export default {
 	"pages.videoConference.info.roomParent.notEnabledTeacher":
 		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
-	"pages.collabora.iframeTitle": "Office document editor",
 	"pages.collabora.jsonError": "Failed to parse JSON from Collabora message.",
 	"pages.collabora.messageError": "Collabora message is invalid.",
 	"error.500": "There are problems in the system. We are working on fixing the issue. Please try again later.",
@@ -1956,6 +1999,7 @@ export default {
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
+	"feature.collabora.iframeTitle": "Office document editor",
 	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
@@ -1974,4 +2018,12 @@ export default {
 	"pages.folder.delete-confirmation": "Do you really want to delete file {name}?",
 	"pages.folder.rename-file-dialog.validation.duplicate-file-name": "The file name already exists.",
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "The file name contains invalid characters.",
+	"pages.folder.fab.upload-file": "Upload file",
+	"pages.folder.fab.create-document": "Create document",
+	"pages.folder.add-collabora-file-dialog.title": "Create document",
+	"pages.folder.add-collabora-file-dialog.doc-types": "Document type",
+	"pages.folder.add-collabora-file-dialog.untitled-file": "Untitled document",
+	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Spreadsheet)",
+	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentation)",
 };

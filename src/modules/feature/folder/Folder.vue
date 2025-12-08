@@ -1,5 +1,10 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="fabClickHandler">
+	<DefaultWireframe
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabAction"
+		@on-fab-item-click="fabItemClickHandler"
+	>
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
@@ -36,9 +41,12 @@
 	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
+	<AddCollaboraFileDialog :folder-id="folderId" @collabora-file-added="collaboraFileAddedHandler" />
 </template>
 
 <script setup lang="ts">
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
+import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
@@ -53,9 +61,10 @@ import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
+import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
-import { mdiPlus } from "@icons/material";
+import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import dayjs from "dayjs";
@@ -91,21 +100,50 @@ const boardStore = useBoardStore();
 const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
+const { openCollaboraFileDialog } = useAddCollaboraFile();
+
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+
 const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
+
+const enum FabEvent {
+	CreateDocument = "CREATE_DOCUMENT",
+	UploadFile = "UPLOAD_FILE",
+}
+
+const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
 const fabAction = computed(() => {
 	if (!hasEditPermission.value) return;
 
-	return [
+	const actions = [
 		{
 			icon: mdiPlus,
 			label: t("pages.folder.fab.title"),
 			dataTestId: "fab-add-files",
 		},
+		{
+			icon: mdiTrayArrowUp,
+			label: t("pages.folder.fab.upload-file"),
+			ariaLabel: t("pages.folder.fab.upload-file"),
+			dataTestId: "fab-button-upload-file",
+			customEvent: FabEvent.UploadFile,
+		},
 	];
+
+	if (isCollaboraEnabled.value) {
+		actions.push({
+			icon: mdiFileDocumentPlusOutline,
+			label: t("pages.folder.fab.create-document"),
+			ariaLabel: t("pages.folder.fab.create-document"),
+			dataTestId: "fab-button-create-document",
+			customEvent: FabEvent.CreateDocument,
+		});
+	}
+
+	return actions;
 });
 
 const uploadProgress = ref({
@@ -119,12 +157,29 @@ const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
-const fabClickHandler = () => {
-	if (fileInput.value) {
-		// Reset the file input to allow re-uploading the same file
-		fileInput.value.value = "";
-		fileInput.value.click();
+const fabItemClickHandler = (event: string | undefined): void => {
+	if (event === FabEvent.UploadFile) {
+		if (fileInput.value) {
+			// Reset the file input to allow re-uploading the same file
+			fileInput.value.value = "";
+			fileInput.value.click();
+		}
+	} else if (event === FabEvent.CreateDocument) {
+		openCollaboraFileDialog();
 	}
+};
+
+const collaboraFileAddedHandler = (newFile: FileRecord) => {
+	const url = router.resolve({
+		name: "collabora",
+		params: {
+			id: newFile.id,
+		},
+		query: {
+			edit: hasEditPermission.value.toString(),
+		},
+	}).href;
+	window.open(url, "_blank");
 };
 
 const onDelete = async (confirmation: Promise<boolean>) => {

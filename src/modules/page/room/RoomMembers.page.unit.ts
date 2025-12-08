@@ -81,6 +81,7 @@ describe("RoomMembersPage", () => {
 
 		router = createMock<Router>({
 			currentRoute: ref({ query: { tab: "" } }),
+			replace: vi.fn(),
 		});
 		useRouterMock.mockReturnValue(router);
 
@@ -106,6 +107,7 @@ describe("RoomMembersPage", () => {
 			canManageRoomInvitationLinks: computed(() => false),
 			canListDrafts: computed(() => false),
 			canManageVideoconferences: computed(() => false),
+			canSeeMembersList: computed(() => true),
 		};
 		roomAuthorization.mockReturnValue(roomPermissions);
 
@@ -191,6 +193,25 @@ describe("RoomMembersPage", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
+	});
+
+	describe("when user has no permission to see members list", () => {
+		beforeEach(() => (roomPermissions.canSeeMembersList = computed(() => false)));
+		it("should not render content", () => {
+			const { wrapper } = setup();
+			const wireframe = wrapper.findComponent(DefaultWireframe);
+			expect(wireframe.exists()).toBe(false);
+		});
+
+		it("should not fetch members on mount", () => {
+			const { roomMembersStore } = setup();
+			expect(roomMembersStore.fetchMembers).not.toHaveBeenCalled();
+		});
+
+		it("should replace the route to /rooms", () => {
+			setup();
+			expect(router.replace).toHaveBeenCalledWith("/rooms");
+		});
 	});
 
 	it("should fetch members on mount", () => {
