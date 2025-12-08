@@ -1801,7 +1801,8 @@ export default {
 		"{roomOwner} втрачає права «Власник» і отримує права «Адміністратор».",
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Якщо цей дозвіл буде передано {memberFullName}, {roomOwner} втратить право видаляти кімнату.",
-	"pages.rooms.members.handOverAlert.confirm.label.subText": "Ця дія може бути скасована лише {memberFullName}.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"Ця дія може бути скасована лише {memberFullName} або адміністратор школи.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",

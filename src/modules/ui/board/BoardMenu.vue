@@ -7,6 +7,7 @@
 				:data-testid="dataTestid"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"
+				class="pt-1"
 				icon
 				size="36"
 				@click.stop.prevent="() => {}"
