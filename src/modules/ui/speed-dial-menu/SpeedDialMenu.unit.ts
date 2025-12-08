@@ -1,7 +1,7 @@
 import SpeedDialMenu from "./SpeedDialMenu.vue";
+import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import { FabAction } from "./types";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { logger } from "@util-logger";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/lib/components/index";
@@ -106,26 +106,12 @@ describe("SpeedDialMenu", () => {
 			expect(fab.text().length).toBe(0);
 		});
 
-		it("should render a label and icon button per action", async () => {
+		it("should render a SpeedDialMenuAction component per action", async () => {
 			const { wrapper } = setup({ actions: multipleActions });
 
 			await toggleSpeedDialMenu(wrapper);
-			const buttons = wrapper.findAllComponents(VBtn).slice(1);
-
-			const labelButtons = buttons.filter((btn, index) => index % 2 === 0);
-			const iconButtons = buttons.filter((btn, index) => index % 2 !== 0);
-			expect(labelButtons).toHaveLength(3);
-			expect(iconButtons).toHaveLength(3);
-
-			for (const btn of labelButtons) {
-				expect(btn.classes()).not.toContain("v-btn--icon");
-				expect(btn.text().length).toBeGreaterThan(0);
-			}
-
-			for (const btn of iconButtons) {
-				expect(btn.classes()).toContain("v-btn--icon");
-				expect(btn.text().length).toBe(0);
-			}
+			const actions = wrapper.findAllComponents(SpeedDialMenuAction);
+			expect(actions).toHaveLength(multipleActions.length - 1); // minus primary action
 		});
 	});
 
@@ -174,8 +160,8 @@ describe("SpeedDialMenu", () => {
 			it("should have pill shape", () => {
 				const { wrapper } = setup({ actions: singleAction });
 
-				const btn = wrapper.getComponent(VFab).getComponent(VBtn);
-				expect(btn.classes()).toContain("rounded-pill");
+				const fab = wrapper.getComponent(VFab);
+				expect(fab.props("rounded")).toBe("pill");
 			});
 
 			it("should only render an icon and label", () => {
@@ -194,9 +180,8 @@ describe("SpeedDialMenu", () => {
 				window.scrollTo({ top: 1000, behavior: "smooth" });
 				await nextTick();
 
-				const btn = wrapper.getComponent(VFab).getComponent(VBtn);
-				logger.log(btn.classes());
-				expect(btn.classes()).toContain("rounded-circle");
+				const fab = wrapper.getComponent(VFab);
+				expect(fab.props("rounded")).toBe("circle");
 			});
 
 			// TODO: sr-only is visible in dom and therefor counts as text content

@@ -6,7 +6,6 @@ import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("@pages/RoomCreate.page.vue", () => {
@@ -54,8 +53,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 			success: true,
 		});
 
-		roomFormComponent.vm.$emit("save", { room: roomParams });
-		await nextTick();
+		await roomFormComponent.vm.$emit("save", { room: roomParams });
 
 		expect(roomStore.createRoom).toHaveBeenCalledWith(roomParams);
 		expect(router.push).toHaveBeenCalledWith({
