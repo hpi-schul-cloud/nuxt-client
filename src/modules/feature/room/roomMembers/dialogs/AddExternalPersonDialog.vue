@@ -19,9 +19,9 @@
 					<VTextField
 						ref="emailInput"
 						label="E-Mail-Adresse"
+						autofocus
 						data-testid="invite-external-person-email"
-						:error-messages="emailValidationMessage"
-						@blur="onEmailBlur"
+						:rules="[isValidEmail(t('common.validation.email'))]"
 					/>
 					<template v-if="isAdditionalInfoNeeded">
 						<VTextField
@@ -64,6 +64,7 @@
 </template>
 
 <script setup lang="ts">
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { ExternalMemberCheckStatus } from "@data-room";
 import { isValidEmail } from "@util-validators";
 import { computed, ModelRef, ref, useTemplateRef } from "vue";
@@ -87,20 +88,19 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+const emailInput = useTemplateRef("emailInput");
 
 const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
-const isEmailValid = ref(false);
-const emailInput = useTemplateRef("emailInput");
-const emailValidationMessage = ref<string | undefined>(undefined);
+const isEmailValid = computed(() => {
+	const email = emailInput.value?.modelValue as string;
+	return isValidEmail(t("common.validation.email"))(email) === true;
+});
+const addExternalPersonContent = ref<VCard>();
 
-const onEmailBlur = () => {
-	const errorMessage = t("common.validation.email");
-	const valid = isValidEmail(errorMessage)(emailInput.value?.modelValue) === true;
-	emailValidationMessage.value = valid ? undefined : errorMessage;
-	isEmailValid.value = valid;
-
-	// Ask UX that check validation only on blur event
-};
+useSafeFocusTrap(isOpen, addExternalPersonContent, {
+	initialFocus: emailInput.value?.$el,
+	immediate: true,
+});
 
 const onAddButtonClick = async () => {
 	emit("update:mail", emailInput.value?.modelValue as string);

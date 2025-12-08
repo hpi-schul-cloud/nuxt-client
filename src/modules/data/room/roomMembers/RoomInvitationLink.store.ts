@@ -6,8 +6,8 @@ import {
 	UseLinkResult,
 } from "./types";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
-import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/serverApi/v3";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
