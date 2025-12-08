@@ -109,10 +109,10 @@
 	</v-custom-dialog>
 </template>
 
-<script>
+<script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { FINISHED_TASKS_MODULE_KEY, injectStrict, TASKS_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiArchiveOutline,
@@ -123,110 +123,98 @@ import {
 	mdiUndoVariant,
 } from "@icons/material";
 import { KebabMenu } from "@ui-kebab-menu";
-import { defineComponent } from "vue";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	components: { vCustomDialog, KebabMenu },
-	inject: ["tasksModule"],
-	props: {
-		taskId: {
-			type: String,
-			required: true,
-		},
-		taskIsFinished: {
-			type: Boolean,
-			required: true,
-		},
-		taskIsPublished: {
-			type: Boolean,
-		},
-		taskTitle: {
-			type: String,
-			required: false,
-			default: "",
-		},
-		courseId: {
-			type: String,
-			default: "",
-		},
-		userRole: {
-			type: String,
-			required: true,
-			validator: (role) => ["student", "teacher"].includes(role),
-		},
+const props = defineProps({
+	taskId: {
+		type: String,
+		required: true,
 	},
-	emits: ["copy-task", "share-task"],
-	data() {
-		return {
-			confirmDeleteDialogIsOpen: false,
-			mdiPencilOutline,
-			mdiUndoVariant,
-			mdiTrashCanOutline,
-			mdiContentCopy,
-			mdiShareVariantOutline,
-			mdiArchiveOutline,
-		};
+	taskIsFinished: {
+		type: Boolean,
+		required: true,
 	},
-	computed: {
-		editLink() {
-			return `/homework/${this.taskId}/edit`;
-		},
-		copyLink() {
-			return `/homework/${this.taskId}/copy?returnUrl=/tasks`;
-		},
-		isTeacher() {
-			return this.userRole === "teacher";
-		},
-		copyServiceEnabled() {
-			return useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED;
-		},
-		shareTaskEnabled() {
-			return useEnvConfig().value.FEATURE_TASK_SHARE;
-		},
-		ariaLabel() {
-			// VUE3_UPGRADE we need a proper label here. was missing before.
-			return `${this.$t("common.words.task")}`;
-		},
+	taskIsPublished: {
+		type: Boolean,
 	},
-	methods: {
-		handleFinish() {
-			if (this.taskIsFinished) {
-				finishedTasksModule.restoreTask(this.taskId);
-			} else {
-				this.tasksModule.finishTask(this.taskId);
-			}
-		},
-		handleRevertPublished() {
-			this.tasksModule.revertPublishedTask(this.taskId);
-		},
-		handleDelete() {
-			this.tasksModule.deleteTask(this.taskId);
-		},
-		onCopyTask() {
-			if (!this.copyServiceEnabled) {
-				window.location.href = this.copyLink;
-				return;
-			}
-
-			const payload = {
-				id: this.taskId,
-				courseId: this.courseId === "" ? undefined : this.courseId,
-				type: CopyParamsTypeEnum.Task,
-			};
-
-			this.$emit("copy-task", payload);
-		},
-		onShareTask() {
-			if (this.shareTaskEnabled) {
-				this.$emit("share-task", this.taskId);
-			}
-		},
+	taskTitle: {
+		type: String,
+		required: false,
+		default: "",
+	},
+	courseId: {
+		type: String,
+		default: "",
+	},
+	userRole: {
+		type: String,
+		required: true,
+		validator: (role: string) => ["student", "teacher"].includes(role),
 	},
 });
+
+const emit = defineEmits<{
+	(e: "copy-task", payload: { id: string; courseId?: string; type: CopyParamsTypeEnum }): void;
+	(e: "share-task", taskId: string): void;
+}>();
+
+const { t } = useI18n();
+const tasksModule = injectStrict(TASKS_MODULE_KEY);
+const finishedTasksModule = injectStrict(FINISHED_TASKS_MODULE_KEY);
+
+const confirmDeleteDialogIsOpen = ref(false);
+
+const editLink = computed(() => `/homework/${props.taskId}/edit`);
+const copyLink = computed(() => `/homework/${props.taskId}/copy?returnUrl=/tasks`);
+const isTeacher = computed(() => props.userRole === "teacher");
+const copyServiceEnabled = computed(() => useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED);
+const shareTaskEnabled = computed(() => useEnvConfig().value.FEATURE_TASK_SHARE);
+const ariaLabel = computed(
+	() =>
+		// VUE3_UPGRADE we need a proper label here. was missing before.
+		`${t("common.words.task")}`
+);
+
+const handleFinish = () => {
+	if (props.taskIsFinished) {
+		finishedTasksModule.restoreTask(props.taskId);
+	} else {
+		tasksModule.finishTask(props.taskId);
+	}
+};
+
+const handleRevertPublished = () => {
+	tasksModule.revertPublishedTask(props.taskId);
+};
+
+const handleDelete = () => {
+	tasksModule.deleteTask(props.taskId);
+};
+
+const onCopyTask = () => {
+	if (!copyServiceEnabled.value) {
+		window.location.href = copyLink.value;
+		return;
+	}
+
+	const payload = {
+		id: props.taskId,
+		courseId: props.courseId === "" ? undefined : props.courseId,
+		type: CopyParamsTypeEnum.Task,
+	};
+
+	emit("copy-task", payload);
+};
+
+const onShareTask = () => {
+	if (shareTaskEnabled.value) {
+		emit("share-task", props.taskId);
+	}
+};
 </script>
 
-<style lang="scss" scoped>
-// stylelint-disable sh-waqar/declaration-use-variable
+<style scoped>
 .task-action {
 	min-height: 25px !important;
 }
