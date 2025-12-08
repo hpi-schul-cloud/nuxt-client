@@ -14,7 +14,6 @@ const defaultTheme: ThemeDefinition = {
 		"on-white": "#3a424b",
 		"surface-light": "#f3f4f4",
 		"on-surface-light": "#3a424b",
-		foreground: "#3a424b",
 	},
 };
 

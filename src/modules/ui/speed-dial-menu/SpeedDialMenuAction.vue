@@ -2,7 +2,7 @@
 <template>
 	<div class="d-flex justify-end align-center pr-5">
 		<VBtn
-			class="mr-2 text-foreground"
+			class="mr-2 bg-surface"
 			elevation="4"
 			:data-testid="action.dataTestId"
 			:href="action.href"
