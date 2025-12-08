@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Продовжити",
 	"common.actions.copy": "Копіювати",
 	"common.actions.duplicate": "Дублювати",
+	"common.actions.move": "Перемістити",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
@@ -197,7 +198,7 @@ export default {
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
 	"common.words.and": "і",
-	"common.words.board": "Дошка",
+	"common.words.board": "Дошка | дошки",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
 	"common.words.color.blue": "Синій",
@@ -247,6 +248,7 @@ export default {
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
 	"common.words.export": "Завантажується експорт курсу",
+	"common.alerts.room.not.available": "Нієї кімнати недоступно. | Немає доступних кімнат.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -490,6 +492,7 @@ export default {
 		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Картку було переміщено зі стовпчика {fromColumnPosition} до стовпчика {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success": "Картку переміщено до розділу {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Стовпець було переміщено з позиції {oldPosition} в позицію {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -655,7 +658,21 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Наступне не було скопійовано:",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.card.options.title": "Імпортувати картку",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.label.room": "Оберіть кімнату",
+	"components.molecules.label.board": "Оберіть дошку",
+	"components.molecules.label.section": "Оберіть розділ",
+	"components.molecules.import.card.question": "Куди слід імпортувати картку{title}?",
+	"components.molecules.import.card.hint.restriction": "Наступний вміст не передається:",
+	"components.molecules.import.card.hint.etherpad": "Вміст із Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Вміст із Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Захищені налаштування зовнішніх інструментів",
+	"components.molecules.move.card.title": "Перемістити картку",
+	"components.molecules.move.card.question": "Куди слід перемістити картку{title}?",
+	"components.molecules.move.card.message.success": "Картку успішно переміщено на дошку {link} - {column}",
+	"components.molecules.move.card.hint.restriction":
+		"З дозволом «Редагувати» картки можна переміщувати лише на інші дошки в межах тієї самої кімнати.",
 	"components.molecules.import.columnBoard.rename": "При необхідності назву дошки можна змінити: ",
 	"components.molecules.import.columnBoard.options.infoText": "Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
@@ -708,6 +725,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Організаційний адміністратор",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
+	"components.molecules.share.card.options.infoText":
+		"За наступним посиланням цю картка можуть імпортувати як копію інші особи.",
+	"components.molecules.share.card.result.linkLabel": "Посилання на копію картки",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Посилання на копію дошки",
@@ -1786,7 +1806,8 @@ export default {
 		"{roomOwner} втрачає права «Власник» і отримує права «Адміністратор».",
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Якщо цей дозвіл буде передано {memberFullName}, {roomOwner} втратить право видаляти кімнату.",
-	"pages.rooms.members.handOverAlert.confirm.label.subText": "Ця дія може бути скасована лише {memberFullName}.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"Ця дія може бути скасована лише {memberFullName} або адміністратор школи.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Створити посилання для запрошення",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
@@ -1824,6 +1845,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update": "Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.load": "Не вдалося завантажити список запрошень.",
+	"pages.rooms.invitationlinks.error.delete": "Не вдалося видалити список.",
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.administration.title": "Адміністрування кімнат",
 	"pages.rooms.administration.table.header.roomName": "Назва кімнати",

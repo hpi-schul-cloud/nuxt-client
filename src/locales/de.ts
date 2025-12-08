@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Weiter",
 	"common.actions.copy": "Kopieren",
 	"common.actions.duplicate": "Duplizieren",
+	"common.actions.move": "Verschieben",
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
@@ -196,7 +197,7 @@ export default {
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
-	"common.words.board": "Bereich",
+	"common.words.board": "Bereich | Bereiche",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -247,6 +248,7 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
+	"common.alerts.room.not.available": "Kein Raum verfügbar. | Keine Räume verfügbar.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -493,6 +495,8 @@ export default {
 		"In Abschnitt {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Eine Karte wurde von Abschnitt {fromColumnPosition} in Abschnitt {toColumnPosition} verschoben.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Eine Karte wurde in Abschnitt {toColumnId} verschoben.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Ein Abschnitt wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -658,6 +662,20 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Folgendes wurde nicht kopiert:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.label.room": "Raum wählen",
+	"components.molecules.label.board": "Bereich wählen",
+	"components.molecules.label.section": "Abschnitt wählen",
+	"components.molecules.import.card.question": "Wohin soll die Karte{title} importiert werden?",
+	"components.molecules.import.card.hint.restriction": "Folgende Inhalte werden nicht übernommen:",
+	"components.molecules.import.card.hint.etherpad": "Inhalte aus Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Inhalte aus Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Geschützte Einstellungen externer Tools",
+	"components.molecules.move.card.title": "Karte verschieben",
+	"components.molecules.move.card.question": "Wohin soll die Karte{title} verschoben werden?",
+	"components.molecules.move.card.hint.restriction":
+		"Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.",
+	"components.molecules.move.card.message.success": "Karte erfolgreich in den Bereich {link} - {column} verschoben",
+	"components.molecules.import.card.options.title": "Karte importieren",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText": "Der Bereich kann im Folgenden umbenannt werden. ",
@@ -714,6 +732,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organisationsadministrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.card.options.infoText":
+		"Mit dem folgenden Link kann diese Karte von anderen Personen importiert werden.",
+	"components.molecules.share.card.result.linkLabel": "Link Karten-Kopie",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
@@ -1799,7 +1820,7 @@ export default {
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {roomOwner} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
-		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
+		"Diese Aktion kann nur von {memberFullName} oder der schuladministrierenden Person rückgängig gemacht werden.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
@@ -1839,6 +1860,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",
+	"pages.rooms.invitationlinks.error.delete": "Die Einladungsliste konnte nicht gelöscht werden.",
 	"pages.rooms.title": "Räume",
 	"pages.rooms.administration.title": "Räume verwalten",
 	"pages.rooms.administration.table.header.roomName": "Raumname",

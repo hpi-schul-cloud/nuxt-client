@@ -6,6 +6,9 @@ describe("BoardColumnInteractionHandler", () => {
 	const setup = (props: { isEditMode: boolean }) => {
 		document.body.setAttribute("data-app", "true");
 		const wrapper = shallowMount(BoardColumnInteractionHandler, {
+			slots: {
+				default: `<button data-testid="button">Menu representative</button>`,
+			},
 			global: {
 				plugins: [createTestingI18n()],
 			},
@@ -22,7 +25,6 @@ describe("BoardColumnInteractionHandler", () => {
 	});
 
 	describe("keyboard events", () => {
-		// TODO: add more keypress events
 		describe("when arrow keys pressed", () => {
 			it.each(["left", "right"])(
 				"should emit 'move:column-keyboard' event with '%s' key stroke when it is not in edit mode",
@@ -37,6 +39,55 @@ describe("BoardColumnInteractionHandler", () => {
 					expect(emitted[0][0].key.toLowerCase()).toStrictEqual(key);
 				}
 			);
+		});
+
+		describe("when enter key is pressed", () => {
+			describe("when being in edit mode", () => {
+				it("should end edit mode", async () => {
+					const wrapper = setup({ isEditMode: true });
+					const element = wrapper.find("[data-testid=inline-edit-interaction-handler]");
+
+					await element.trigger("keydown.enter");
+
+					const emitted = wrapper.emitted("end-edit-mode");
+					expect(emitted?.length).toBe(1);
+				});
+			});
+
+			describe("when being not in edit mode", () => {
+				it("should start edit mode", async () => {
+					const wrapper = setup({ isEditMode: false });
+					const element = wrapper.find("[data-testid=inline-edit-interaction-handler]");
+
+					await element.trigger("keydown.enter");
+
+					const emitted = wrapper.emitted("start-edit-mode");
+					expect(emitted?.length).toBe(1);
+				});
+
+				describe("when focus is on a button", () => {
+					it("should not start edit mode", async () => {
+						const wrapper = setup({ isEditMode: false });
+						const element = wrapper.find("[data-testid=button]");
+						await element.trigger("keydown.enter");
+
+						const emitted = wrapper.emitted("start-edit-mode");
+						expect(emitted).toBeUndefined();
+					});
+				});
+			});
+		});
+
+		describe("when tab key is pressed", () => {
+			it("should end edit mode", async () => {
+				const wrapper = setup({ isEditMode: true });
+				const element = wrapper.find("[data-testid=event-handle]");
+
+				await element.trigger("keydown.tab");
+
+				const emitted = wrapper.emitted("end-edit-mode");
+				expect(emitted?.length).toBe(1);
+			});
 		});
 	});
 });

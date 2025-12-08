@@ -9,6 +9,7 @@ export type BoardPermissionChecks = {
 	hasEditPermission: Ref<boolean>;
 	hasDeletePermission: Ref<boolean>;
 	hasManageBoardPermission: Ref<boolean>;
+	hasRelocateBoardContentPermission: Ref<boolean>;
 	hasManageReadersCanEditPermission: Ref<boolean>;
 	hasManageVideoConferencePermission: Ref<boolean>;
 	hasShareBoardPermission: Ref<boolean>;
@@ -25,6 +26,7 @@ export const defaultPermissions: BoardPermissionChecks = {
 	hasDeletePermission: ref(true),
 	hasEditPermission: ref(true),
 	hasManageBoardPermission: ref(false),
+	hasRelocateBoardContentPermission: ref(false),
 	hasManageReadersCanEditPermission: ref(true),
 	hasManageVideoConferencePermission: ref(true),
 	hasShareBoardPermission: ref(true),

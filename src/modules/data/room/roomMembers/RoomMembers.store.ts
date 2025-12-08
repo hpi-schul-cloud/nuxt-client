@@ -1,4 +1,5 @@
 import { RoomMember } from "./types";
+import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
 	RoleName,
@@ -14,10 +15,9 @@ import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 	let _asAdmin = false;
 
 	const { room } = storeToRefs(useRoomDetailsStore());
@@ -75,7 +75,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const schoolRoleMap: Record<string, string> = {
 		[RoleName.Teacher]: t("common.labels.teacher.neutral"),
 		[RoleName.Student]: t("common.labels.student.neutral"),
-		[RoleName.Expert]: t("common.roleName.externalPerson"),
+		[RoleName.ExternalPerson]: t("common.roleName.externalPerson"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -131,14 +131,14 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
 		const isAdmin = schoolRoleNames.includes(RoleName.Administrator);
 		const isTeacher = schoolRoleNames.includes(RoleName.Teacher);
-		const isExpert = schoolRoleNames.includes(RoleName.Expert);
+		const isExternalPerson = schoolRoleNames.includes(RoleName.ExternalPerson);
 
 		if (isAdmin || isTeacher) {
 			return schoolRoleMap[RoleName.Teacher];
 		}
 
-		if (isExpert) {
-			return schoolRoleMap[RoleName.Expert];
+		if (isExternalPerson) {
+			return schoolRoleMap[RoleName.ExternalPerson];
 		}
 
 		return schoolRoleMap[RoleName.Student];
