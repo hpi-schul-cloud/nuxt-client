@@ -144,18 +144,18 @@ export const useDataTableFilter = (userType: string) => {
 
 		if (chipItem[0] === FilterOption.CREATION_DATE)
 			return `${t("utils.adminFilter.date.created")} ${printDate(
-				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+				chipItem[1].$gte.toString()
+			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte.toString())}`;
 
 		if (chipItem[0] === FilterOption.LAST_MIGRATION_ON)
 			return `${t("utils.adminFilter.lastMigration.title")} ${printDate(
-				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+				chipItem[1].$gte.toString()
+			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte.toString())}`;
 
 		if (chipItem[0] === FilterOption.OBSOLOTE_SINCE)
 			return `${t("utils.adminFilter.outdatedSince.title")} ${printDate(
-				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+				chipItem[1].$gte.toString()
+			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte.toString())}`;
 		return [];
 	};
 
