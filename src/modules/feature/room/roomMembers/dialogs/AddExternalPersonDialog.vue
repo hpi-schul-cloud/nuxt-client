@@ -23,7 +23,7 @@
 						:error-messages="emailValidationMessage"
 						@blur="onEmailBlur"
 					/>
-					<template v-if="!isAccountFound">
+					<template v-if="isAdditionalInfoNeeded">
 						<VTextField
 							ref="firstNameInput"
 							:label="t('common.labels.firstName')"
@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { ExternalMemberCheckStatus } from "@data-room";
 import { isValidEmail } from "@util-validators";
-import { ModelRef, ref, useTemplateRef } from "vue";
+import { computed, ModelRef, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
@@ -76,12 +76,9 @@ const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	required: true,
 });
 
-const memberStatus = defineProps<{
+const props = defineProps<{
 	memberStatus: ExternalMemberCheckStatus | undefined;
 }>();
-
-const { log } = console;
-log("memberStatus in AddExternalPersonDialog.vue:", memberStatus);
 
 const emit = defineEmits<{
 	(e: "close"): void;
@@ -91,7 +88,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 
-const isAccountFound = ref(true);
+const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 const isEmailValid = ref(false);
 const emailInput = useTemplateRef("emailInput");
 const emailValidationMessage = ref<string | undefined>(undefined);

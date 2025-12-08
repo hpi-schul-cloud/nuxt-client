@@ -226,7 +226,6 @@ const onFabClick = () => {
 	}
 };
 
-const { log } = console;
 const handleAddMember = (event: string | undefined) => {
 	if (event === FabEvent.ADD_MEMBERS) {
 		loadSchoolList();
@@ -243,8 +242,6 @@ const onEmailCheck = async (email: string) => {
 		isExternalPersonDialogOpen.value = false;
 		return;
 	}
-
-	log("email check result", result);
 };
 
 const { user } = useAppStoreRefs();
