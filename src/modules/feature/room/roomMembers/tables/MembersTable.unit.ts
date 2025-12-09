@@ -1,5 +1,6 @@
 import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -15,13 +16,20 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { createMock } from "@golevelup/ts-vitest";
-import { mdiAccountOutline, mdiAccountSchoolOutline, mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import {
+	mdiAccountClockOutline,
+	mdiAccountOutline,
+	mdiAccountSchoolOutline,
+	mdiMagnify,
+	mdiMenuDown,
+	mdiMenuUp,
+} from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
-import { Mock } from "vitest";
+import { Mock, vi } from "vitest";
 import { computed, nextTick, Ref, ref } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/lib/components/index";
 
@@ -33,13 +41,14 @@ vi.mock("@vueuse/integrations/useFocusTrap");
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
-vi.mock("@vueuse/integrations/useFocusTrap");
-
 type RefPropertiesOnly<T> = {
 	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
 };
 
 type RoomAuthorizationRefs = RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>;
+
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("MembersTable", () => {
 	let askConfirmationMock: Mock;
@@ -47,6 +56,7 @@ describe("MembersTable", () => {
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
+	let activateMock: Mock;
 
 	beforeEach(() => {
 		askConfirmationMock = vi.fn();
@@ -61,11 +71,13 @@ describe("MembersTable", () => {
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
+		activateMock = vi.fn();
 
 		(useFocusTrap as Mock).mockReturnValue({
 			pause: pauseMock,
 			unpause: unpauseMock,
 			deactivate: deactivateMock,
+			activate: activateMock,
 		});
 
 		setupStores({
@@ -232,6 +244,11 @@ describe("MembersTable", () => {
 				expectedIcon: mdiAccountOutline,
 			},
 			{
+				description: "expert icon for external persons",
+				schoolRoleNames: [RoleName.ExternalPerson],
+				expectedIcon: mdiAccountClockOutline,
+			},
+			{
 				description: "teacher icon if teacher and admin roles are present",
 				schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
 				expectedIcon: mdiAccountSchoolOutline,
@@ -250,6 +267,22 @@ describe("MembersTable", () => {
 
 			const schoolRoleCell = getSchoolRoleCell(row);
 			expect(schoolRoleCell.findComponent(VIcon).props("icon")).toBe(expectedIcon);
+		});
+
+		it("should not render icon if no school role is present", () => {
+			const { wrapper } = setup({
+				members: [
+					roomMemberFactory.build({
+						schoolRoleNames: [],
+					}),
+				],
+			});
+
+			const dataTable = wrapper.getComponent(VDataTable);
+			const row = dataTable.find("tbody tr");
+
+			const schoolRoleCell = getSchoolRoleCell(row);
+			expect(schoolRoleCell.findComponent(VIcon).exists()).toBe(false);
 		});
 	});
 

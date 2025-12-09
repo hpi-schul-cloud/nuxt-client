@@ -1,6 +1,11 @@
 import {
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
 	isNonEmptyString,
 	isOfMaxLength,
+	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
 	isValidTimeFormat,
@@ -111,14 +116,87 @@ describe("util-validators", () => {
 	});
 
 	describe("isValidDateFormat", () => {
+		const isValid = isValidDateFormat(ERROR);
+
 		it("should accept valid date format", () => {
-			expect(isValidDateFormat("12.12.2023")).toBe(true);
+			expect(isValid("12.12.2023")).toBe(true);
 		});
 
 		it("should not accept invalid date format", () => {
-			expect(isValidDateFormat("31.31.2023")).toBe(false);
-			expect(isValidDateFormat("1.1.2001")).toBe(false);
-			expect(isValidDateFormat("1.101")).toBe(false);
+			expect(isValid("31.31.2023")).toBe(ERROR);
+			expect(isValid("1.1.2001")).toBe(ERROR);
+			expect(isValid("1.101")).toBe(ERROR);
+		});
+	});
+
+	describe("isOfMinLength", () => {
+		it("should not accept string of less length than parameter given", () => {
+			const minLength = 5;
+			const tooShortValue = "1234";
+			const isValid = isOfMinLength(minLength)(ERROR);
+			expect(isValid(tooShortValue)).toBe(ERROR);
+		});
+
+		it("should accept values of null or undefined", () => {
+			const minLength = 5;
+			const isValid = isOfMinLength(minLength)(ERROR);
+			expect(isValid(null)).toBe(true);
+			expect(isValid(undefined)).toBe(true);
+		});
+	});
+
+	describe("hasUppercaseLetter", () => {
+		it("should accept string with at least one uppercase letter", () => {
+			const isValid = hasUppercaseLetter(ERROR);
+			expect(isValid("Abcdef")).toBe(true);
+		});
+
+		it("should not accept string without uppercase letter", () => {
+			const isValid = hasUppercaseLetter(ERROR);
+			expect(isValid("abcdef")).toBe(ERROR);
+		});
+	});
+
+	describe("hasLowercaseLetter", () => {
+		it("should accept string with at least one lowercase letter", () => {
+			const isValid = hasLowercaseLetter(ERROR);
+			expect(isValid("Abcdef")).toBe(true);
+		});
+
+		it("should not accept string without lowercase letter", () => {
+			const isValid = hasLowercaseLetter(ERROR);
+			expect(isValid("ABCDEF")).toBe(ERROR);
+		});
+	});
+
+	describe("hasNumber", () => {
+		it("should accept string with at least one number", () => {
+			const isValid = hasNumber(ERROR);
+			expect(isValid("Abcdef1")).toBe(true);
+		});
+
+		it("should not accept string without number", () => {
+			const isValid = hasNumber(ERROR);
+			expect(isValid("ABCDEF")).toBe(ERROR);
+		});
+	});
+
+	describe("hasSpecialCharacter", () => {
+		const specialChars = "!§$%&/()=?\\;:,.#+*~-".split("");
+
+		it.each(specialChars)("should accept string with at least one special character", (specialChar) => {
+			const isValid = hasSpecialCharacter(ERROR);
+			expect(isValid(`Abcdef${specialChar}`)).toBe(true);
+		});
+
+		it("should not accept string without special character", () => {
+			const isValid = hasSpecialCharacter(ERROR);
+			expect(isValid("ABCDEF")).toBe(ERROR);
+		});
+
+		it("should not accept special characters that are not allowed", () => {
+			const isValid = hasSpecialCharacter(ERROR);
+			expect(isValid("Abcdef€")).toBe(ERROR);
 		});
 	});
 });

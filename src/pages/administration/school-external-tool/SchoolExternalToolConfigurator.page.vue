@@ -71,24 +71,21 @@ const { school } = useAppStoreRefs();
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY);
 const { t } = useI18n();
 
-const pageTitle = buildPageTitle(t("pages.tool.title"));
+const pageTitle = buildPageTitle(t("pages.tool.title"), t("pages.administration.school.index.title"));
 useTitle(pageTitle);
 
-const schoolSetting: Breadcrumb = {
-	title: t("pages.administration.school.index.title"),
-	to: "/administration/school-settings",
-};
-const breadcrumbs: Breadcrumb[] = [
+const schoolSettingPath = "/administration/school-settings";
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	{
-		title: t("pages.administration.index.title"),
-		disabled: true,
+		title: t("pages.administration.school.index.title"),
+		to: schoolSettingPath,
 	},
-	schoolSetting,
 	{
 		title: t("pages.tool.title"),
 		disabled: true,
 	},
-];
+]);
 
 const hasData: Ref<boolean> = ref(false);
 const loading: ComputedRef<boolean> = computed(() => !hasData.value || schoolExternalToolsModule.getLoading);
@@ -105,7 +102,7 @@ const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
 
 const router = useRouter();
 const onCancel = () => {
-	router.push({ path: schoolSetting.to! });
+	router.push({ path: schoolSettingPath });
 };
 
 const isDeactivated: Ref<boolean> = ref(false);
@@ -140,7 +137,7 @@ const onSave = async (
 		notifySuccess(message);
 
 		await router.push({
-			path: schoolSetting.to,
+			path: schoolSettingPath,
 			query: { openPanels: "tools" },
 		});
 	}

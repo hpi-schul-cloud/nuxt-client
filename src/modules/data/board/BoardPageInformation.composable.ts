@@ -1,76 +1,75 @@
+import { useBoardStore } from "./Board.store";
 import { useBoardApi } from "./BoardApi.composable";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { computed, ref, unref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const useBoardPageInformation = () => {
 	const { t } = useI18n();
 
 	const { getContextInfo } = useBoardApi();
+	const boardStore = useBoardStore();
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
-
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
 
-	const pageTitle = computed(() => {
-		const roomName = unref(boardContext)?.name;
-		const roomNameForPageTitle = roomName ? ", " + roomName : "";
-		const type = unref(boardContext)?.type;
+	const isCourse = computed(() => contextType.value === BoardContextType.Course);
+	const isRoom = computed(() => contextType.value === BoardContextType.Room);
 
-		if (type === BoardContextType.Course) {
-			return buildPageTitle(`${t("pages.room.boardCard.label.courseBoard")}${roomNameForPageTitle}`);
-		}
-		if (type === BoardContextType.Room) {
-			return buildPageTitle(`${t("pages.roomDetails.board.defaultName")}${roomNameForPageTitle}`);
-		}
-		return "";
+	const roomName = computed(() => {
+		const roomNameFallback = isCourse.value ? t("common.labels.course") : t("common.labels.room");
+
+		return boardContext.value?.name ?? roomNameFallback;
 	});
 
-	const breadcrumbs = computed((): Breadcrumb[] => {
-		const id = unref(boardContext)?.id;
-		const type = unref(boardContext)?.type;
-		const name = unref(boardContext)?.name;
+	const boardTitle = computed(() => {
+		let fallback = t("common.words.board");
 
-		if (!id || !type) {
-			return [];
+		if (isCourse.value) {
+			fallback = t("pages.room.boardCard.label.courseBoard");
+		} else if (isRoom.value) {
+			fallback = t("pages.roomDetails.board.defaultName");
 		}
 
-		if (type === BoardContextType.Course) {
-			return [
-				{
-					title: t("common.words.courses"),
-					to: "/rooms/courses-overview",
-					disabled: false,
-				},
-				{
-					title: name ?? t("common.labels.course"),
-					to: `/rooms/${id}`,
-					disabled: false,
-				},
-			];
-		}
-		if (type === BoardContextType.Room) {
-			return [
-				{
-					title: t("pages.rooms.title"),
-					to: "/rooms",
-					disabled: false,
-				},
-				{
-					title: name ?? t("common.labels.room"),
-					to: `/rooms/${id}`,
-					disabled: false,
-				},
-			];
-		}
-		return [];
+		return boardStore.board?.title ?? fallback;
 	});
 
-	const createPageInformation = async (id: string): Promise<void> => {
+	const pageTitle = computed(() => buildPageTitle(boardTitle.value, roomName.value));
+
+	const breadcrumbs = computed<Breadcrumb[]>(() => {
+		if (!roomId.value) return [];
+
+		const crumbs: Breadcrumb[] = [
+			{
+				title: roomName.value,
+				to: `/rooms/${roomId.value}`,
+			},
+			{
+				title: boardTitle.value,
+				disabled: true,
+			},
+		];
+
+		if (isCourse.value) {
+			crumbs.unshift({
+				title: t("common.words.courses"),
+				to: "/rooms/courses-overview",
+			});
+		} else if (isRoom.value) {
+			crumbs.unshift({
+				title: t("pages.rooms.title"),
+				to: "/rooms",
+			});
+		}
+
+		return crumbs;
+	});
+
+	const createPageInformation = async (id: string) => {
 		boardContext.value = await getContextInfo(id);
 	};
 

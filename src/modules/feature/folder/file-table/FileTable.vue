@@ -15,7 +15,7 @@
 		<div class="mt-2">
 			<DataTable :table-headers="headers" :items="fileRecordItems" :show-select="true">
 				<template #[`item.preview`]="{ item }">
-					<FileInteractionHandler :file-record-item="item">
+					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<FilePreview
 							:file-record="item"
 							:data-testid="`file-preview-${item.name}`"
@@ -24,17 +24,17 @@
 					</FileInteractionHandler>
 				</template>
 				<template #[`item.name`]="{ item }">
-					<FileInteractionHandler :file-record-item="item">
+					<FileInteractionHandler :file-record-item="item" :has-edit-permission="props.hasEditPermission">
 						<span :data-testid="`name-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
 							{{ item.name }}
 							<FileStatus :file-record="item" />
 						</span>
 					</FileInteractionHandler>
 				</template>
-				<template #[`item.createdAt`]="{ item }">
-					<span :data-testid="`created-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">{{
-						printDateFromStringUTC(item.createdAt)
-					}}</span>
+				<template #[`item.contentLastModifiedAt`]="{ item }">
+					<span :data-testid="`content-modified-at-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }">
+						{{ getLastModifiedDate(item) }}
+					</span>
 				</template>
 				<template #[`item.size`]="{ item }">
 					<span :data-testid="`size-${item.name}`" :class="{ 'text-disabled': !item.isSelectable }"
@@ -88,7 +88,6 @@
 					/>
 				</template>
 			</DataTable>
-			<FileStatusLegend />
 			<RenameFileDialog
 				v-model:is-dialog-open="isRenameDialogOpen"
 				:file-records="fileRecords"
@@ -113,12 +112,10 @@ import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FileInteractionHandler from "./FileInteractionHandler.vue";
 import FilePreview from "./FilePreview.vue";
 import FileStatus from "./FileStatus.vue";
-import FileStatusLegend from "./FileStatusLegend.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./RenameFileDialog.vue";
-import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
@@ -127,7 +124,7 @@ import { KebabMenu, KebabMenuActionRename } from "@ui-kebab-menu";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
+const { t, d } = useI18n();
 
 const props = defineProps({
 	isLoading: {
@@ -170,7 +167,7 @@ const emit = defineEmits([
 const headers = [
 	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
-	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
+	{ title: t("pages.folder.columns.lastModifiedAt"), key: "contentLastModifiedAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{
 		title: t("ui.actionMenu.actions"),
@@ -188,9 +185,19 @@ const fileRecordsToDelete = ref<FileRecord[]>([]);
 const fileRecordItems = computed(() =>
 	props.fileRecords.map((item) => ({
 		...item,
-		isSelectable: isScanStatusBlocked(item.securityCheckStatus),
+		isSelectable: !isScanStatusBlocked(item.securityCheckStatus),
 	}))
 );
+
+const getLastModifiedDate = (item: FileRecord): string => {
+	if (item.contentLastModifiedAt) {
+		return d(item.contentLastModifiedAt);
+	}
+	if (item.createdAt) {
+		return d(item.createdAt);
+	}
+	return "";
+};
 
 const onDownloadFile = (selectedIds: string[]) => {
 	emit("download-file", selectedIds);

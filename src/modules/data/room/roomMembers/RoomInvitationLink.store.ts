@@ -6,6 +6,7 @@ import {
 	UseLinkResult,
 } from "./types";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
@@ -13,10 +14,9 @@ import { useRoomDetailsStore } from "@data-room";
 import { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore", () => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 
@@ -155,16 +155,21 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	};
 
 	const invitationTableData = computed(() =>
-		roomInvitationLinks.value.map((link) => ({
-			id: link.id,
-			title: link.title,
-			isValidForStudents: link.isOnlyForTeachers ? commonTranslationsMap.NO : commonTranslationsMap.YES,
-			activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : commonTranslationsMap.NO,
-			isExpired: isExpired(link.activeUntil!),
-			status: isExpired(link.activeUntil!) ? commonTranslationsMap.EXPIRED : commonTranslationsMap.ACTIVE,
-			restrictedToCreatorSchool: link.restrictedToCreatorSchool ? commonTranslationsMap.YES : commonTranslationsMap.NO,
-			requiresConfirmation: link.requiresConfirmation ? commonTranslationsMap.YES : commonTranslationsMap.NO,
-		}))
+		roomInvitationLinks.value.map((link) => {
+			const { YES, NO, EXPIRED, ACTIVE } = commonTranslationsMap;
+
+			return {
+				id: link.id,
+				title: link.title,
+				isUsableByStudents: link.isUsableByStudents ? YES : NO,
+				isUsableByExternalPersons: link.isUsableByExternalPersons ? YES : NO,
+				activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : NO,
+				isExpired: isExpired(link.activeUntil!),
+				status: isExpired(link.activeUntil!) ? EXPIRED : ACTIVE,
+				restrictedToCreatorSchool: link.restrictedToCreatorSchool ? YES : NO,
+				requiresConfirmation: link.requiresConfirmation ? YES : NO,
+			};
+		})
 	);
 
 	const isExpired = (linkExpireDate: string) => new Date(linkExpireDate) < new Date();

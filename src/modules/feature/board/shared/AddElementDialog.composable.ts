@@ -1,9 +1,12 @@
+import { useAddCollaboraFile } from "./add-collabora-file.composable";
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { notifyInfo } from "@data-app";
 import { type CreateElementRequestPayload, useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import {
+	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -17,7 +20,7 @@ import {
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
+type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (createElementRequestFn: CreateElementRequestFn, cardId: string) => {
 	const { isFeatureEnabled } = useBoardFeatures();
@@ -31,6 +34,9 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	const { isDialogOpen, isDialogLoading, closeDialog, staticElementTypeOptions, dynamicElementTypeOptions } =
 		useSharedElementTypeSelection();
+
+	const { openCollaboraFileDialog, setCardId, setCreateElementRequestFn } = useAddCollaboraFile();
+	setCreateElementRequestFn(createElementRequestFn);
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -46,6 +52,12 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		showNotificationByElementType(elementType);
 	};
 
+	const onOfficeFileClick = async () => {
+		setCardId(cardId);
+		closeDialog();
+		openCollaboraFileDialog();
+	};
+
 	const showNotificationByElementType = (elementType: ContentElementType) => {
 		const translationKeyCollaborativeTextEditor =
 			"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
@@ -59,7 +71,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			translationKey = translationKeyDrawing;
 		}
 		if (translationKey !== "") {
-			notifyInfo(t(translationKey));
+			notifyInfo(translationKey);
 		}
 	};
 
@@ -154,6 +166,15 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				label: t("components.elementTypeSelection.elements.h5pElement.subtitle"),
 				action: () => onElementClick(ContentElementType.H5p),
 				testId: "create-element-h5p",
+			});
+		}
+
+		if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED) {
+			options.push({
+				icon: mdiFileDocumentOutline,
+				label: t("components.elementTypeSelection.elements.collabora.subtitle"),
+				action: () => onOfficeFileClick(),
+				testId: "create-element-file-with-collabora",
 			});
 		}
 

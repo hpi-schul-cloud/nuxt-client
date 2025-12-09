@@ -31,14 +31,6 @@ vi.mock("@data-room", () => ({
 const useRouteMock = <Mock>useRoute;
 const useRouterMock = <Mock>useRouter;
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 describe("RoomsOverview", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 
@@ -131,17 +123,6 @@ describe("RoomsOverview", () => {
 		it("should mount", () => {
 			const { wrapper } = setup();
 			expect(wrapper.exists()).toBe(true);
-		});
-
-		describe("breadcrumbs", () => {
-			it("should render static breadcrumbs", () => {
-				const { wrapper } = setup();
-
-				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
-
-				expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.index.title");
-				expect(breadcrumbs.at(1)?.text()).toEqual("pages.administration.rooms.index.title");
-			});
 		});
 
 		describe("onMounted", () => {

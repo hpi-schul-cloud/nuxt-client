@@ -45,9 +45,9 @@
 <script setup lang="ts">
 import { RoleName } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
-import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { RoomMember, useRoomAuthorization, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
-import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
+import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
@@ -67,6 +67,7 @@ withDefaults(defineProps<Props>(), {
 
 const { t } = useI18n();
 const { canAddRoomMembers } = useRoomAuthorization();
+const { room, fetchRoom } = useRoomDetailsStore();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
@@ -85,8 +86,14 @@ const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
 };
 
 const onDialogClose = () => {
-	membersToChangeRole.value = [];
 	isChangeRoleDialogOpen.value = false;
+
+	setTimeout(() => {
+		membersToChangeRole.value = [];
+	}, 200);
+	if (room?.id) {
+		fetchRoom(room?.id);
+	}
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
@@ -144,6 +151,9 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	}
 	if (schoolRoleNames.includes(RoleName.Student)) {
 		return mdiAccountOutline;
+	}
+	if (schoolRoleNames.includes(RoleName.ExternalPerson)) {
+		return mdiAccountClockOutline;
 	}
 	return undefined;
 };

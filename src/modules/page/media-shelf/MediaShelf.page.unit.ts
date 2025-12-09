@@ -4,7 +4,9 @@ import { mediaAvailableLineResponseFactory, mediaBoardResponseFactory } from "@@
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { ref } from "vue";
 
 vi.mock("@feature-media-shelf", async (importOriginal) => {
@@ -14,10 +16,6 @@ vi.mock("@feature-media-shelf", async (importOriginal) => {
 		useSharedMediaBoardState: vi.fn(),
 	};
 });
-
-vi.mock("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle: string | undefined) => pageTitle ?? "",
-}));
 
 describe("MediaShelfPage", () => {
 	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
@@ -37,6 +35,10 @@ describe("MediaShelfPage", () => {
 			wrapper,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	beforeEach(() => {
 		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>({

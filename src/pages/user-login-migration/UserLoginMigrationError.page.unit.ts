@@ -13,14 +13,6 @@ import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
 import { nextTick } from "vue";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 describe("UserLoginMigrationError", () => {
 	let systemsModule: Mocked<SystemsModule>;
 	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;

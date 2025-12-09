@@ -1,5 +1,4 @@
 import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
-import { useApplicationError } from "@/composables/application-error.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { RoomColor } from "@/serverApi/v3/api";
 import { RoomUpdateParams } from "@/types/room/Room";
@@ -12,22 +11,16 @@ import { createPinia, setActivePinia } from "pinia";
 vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
-vi.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = vi.mocked(useApplicationError);
-
 describe("useRoomDetailsStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let boardApiMock: DeepMocked<serverApi.BoardApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		boardApiMock = createMock<serverApi.BoardApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
-		mockedCreateApplicationErrorCalls = createMock<ReturnType<typeof useApplicationError>>();
-		mockedCreateApplicationError.mockReturnValue(mockedCreateApplicationErrorCalls);
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);

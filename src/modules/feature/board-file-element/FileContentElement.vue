@@ -1,5 +1,5 @@
 <template>
-	<v-card
+	<VCard
 		ref="fileContentElement"
 		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
@@ -20,6 +20,7 @@
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@update:name="onUpdateName"
 			@add:alert="onAddAlert"
 		>
 			<BoardMenu
@@ -50,13 +51,12 @@
 				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
-	</v-card>
+	</VCard>
 </template>
 
 <script setup lang="ts">
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { mapEditBoardPermissionToEditorMode } from "./mapper";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
@@ -69,6 +69,7 @@ import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -102,7 +103,7 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
-const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { fetchFiles, upload, getFileRecordsByParentId, rename } = useFileStorageApi();
 const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0]);
@@ -126,7 +127,7 @@ const fileProperties = computed(() => {
 		url: fileRecord.value.url,
 		previewUrl,
 		previewStatus: fileRecord.value.previewStatus,
-		isDownloadAllowed: isScanStatusBlocked(fileRecord.value.securityCheckStatus),
+		isDownloadAllowed: !isScanStatusBlocked(fileRecord.value.securityCheckStatus),
 		mimeType: fileRecord.value.mimeType,
 		element: props.element,
 		isCollaboraEditable: fileRecord.value.isCollaboraEditable,
@@ -179,6 +180,10 @@ const onUpdateCaption = (value: string) => {
 	modelValue.value.caption = value;
 };
 
+const onUpdateName = useDebounceFn((value: string) => {
+	rename(fileRecord.value.id, { fileName: value });
+}, 300);
+
 const onAddAlert = (alert: FileAlert) => {
 	addAlert(alert);
 };
@@ -210,15 +215,13 @@ const onCardInteraction = () => {
 	if (isCollaboraEnabled.value && isCollaboraEditable.value) openCollabora();
 };
 const openCollabora = () => {
-	const editorMode = mapEditBoardPermissionToEditorMode(hasEditPermission.value);
-
 	const url = router.resolve({
 		name: "collabora",
 		params: {
 			id: fileRecord.value.id,
 		},
 		query: {
-			editorMode,
+			edit: hasEditPermission.value.toString(),
 		},
 	}).href;
 

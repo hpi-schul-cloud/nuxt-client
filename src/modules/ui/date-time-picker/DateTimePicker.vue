@@ -104,8 +104,8 @@ const onError = (errorOrigin: string) => {
 	}
 };
 
-const onDateUpdate = (newDate: string) => {
-	date.value = newDate;
+const onDateUpdate = (newDate: string | null) => {
+	date.value = newDate ?? "";
 	errors.value = errors.value.filter((item) => item !== "date");
 	emitDateTime();
 };

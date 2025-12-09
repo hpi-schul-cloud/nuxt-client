@@ -4,7 +4,7 @@ import { useNotificationStore } from "@data-app";
 import { logger } from "@util-logger";
 import { useI18n } from "vue-i18n";
 
-export type ErrorType = "notCreated" | "notLoaded" | "notUpdated" | "notDeleted" | "notMoved";
+export type ErrorType = "notCreated" | "notLoaded" | "notUpdated" | "notDeleted" | "notDuplicated" | "notMoved";
 
 export type BoardObjectType = "board" | "boardColumn" | "boardRow" | "boardCard" | "boardElement";
 

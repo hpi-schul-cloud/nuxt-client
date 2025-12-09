@@ -31,6 +31,7 @@ describe("AdminTableLegend", () => {
 					$t: (key: string, placeholders: Record<string, string> = {}) =>
 						`${key}|${Object.values(placeholders || {}).join("|")}`,
 				},
+				stubs: ["base-link"],
 			},
 			props: {
 				icons,

@@ -27,9 +27,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useSchoolLicenseApi } from "@data-license";
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
 const { updateSchoolLicenses } = useSchoolLicenseApi();
 
 const isLoading = ref(false);
@@ -40,14 +38,14 @@ const updateVidisLicenses = async () => {
 	try {
 		await updateSchoolLicenses();
 
-		notifySuccess(t("components.administration.externalToolsSection.vidis.notification.success"));
+		notifySuccess("components.administration.externalToolsSection.vidis.notification.success");
 	} catch (errorResponse: unknown) {
 		const apiError = mapAxiosErrorToResponseError(errorResponse);
 
 		if (apiError.code === HttpStatusCode.RequestTimeout) {
-			notifyInfo(t("components.administration.externalToolsSection.vidis.notification.timeout"));
+			notifyInfo("components.administration.externalToolsSection.vidis.notification.timeout");
 		} else {
-			notifyError(t("common.notification.error"));
+			notifyError("common.notification.error");
 		}
 	}
 

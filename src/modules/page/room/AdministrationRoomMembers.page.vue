@@ -37,6 +37,7 @@ const route = useRoute();
 const isMembersDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
+roomMembersStore.setAdminMode(true);
 const { fetchMembers, loadSchoolList, resetStore } = roomMembersStore;
 
 const header = ref<HTMLElement | null>(null);
@@ -48,7 +49,7 @@ const headerText = computed(() =>
 	})
 );
 
-const pageTitle = computed(() => buildPageTitle(headerText.value));
+const pageTitle = computed(() => buildPageTitle(headerText.value, t("pages.rooms.administration.title")));
 useTitle(pageTitle);
 
 onMounted(async () => {

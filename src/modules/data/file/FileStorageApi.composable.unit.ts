@@ -1,4 +1,4 @@
-import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+import { CollaboraFileType, ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import * as wopiApi from "@/fileStorageApi/v3/api/wopi-api";
 import {
@@ -18,6 +18,7 @@ import {
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { fileUrlParamsFactory } from "@@/tests/test-utils/factory/fileUrlParamsFactory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { useNotificationStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
@@ -84,6 +85,116 @@ describe("FileStorageApi Composable", () => {
 				const result = await getFileRecordsByParentId(parentId);
 
 				expect(result).toEqual([]);
+			});
+		});
+	});
+
+	describe("fetchFileById", () => {
+		describe("when file api returns file record successfully", () => {
+			const setup = () => {
+				const fileRecord = fileRecordFactory.build();
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecord,
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.getFileRecord.mockResolvedValueOnce(response);
+
+				return {
+					fileRecord,
+					response,
+					fileApi,
+				};
+			};
+
+			it("should call FileApiFactory.getFileRecord", async () => {
+				const { fileApi, fileRecord } = setup();
+				const { fetchFileById } = useFileStorageApi();
+
+				await fetchFileById(fileRecord.id);
+
+				expect(fileApi.getFileRecord).toHaveBeenCalledWith(fileRecord.id);
+			});
+
+			it("should upsert filerecord", async () => {
+				const { fileRecord } = setup();
+				const { fetchFileById, getFileRecordById } = useFileStorageApi();
+
+				await fetchFileById(fileRecord.id);
+
+				const result = getFileRecordById(fileRecord.id);
+				expect(result).toStrictEqual(fileRecord);
+			});
+		});
+
+		describe("when file api returns error", () => {
+			const setup = (message?: string) => {
+				const fileRecordId = ObjectIdMock();
+
+				const { responseError, expectedPayload } = setupErrorResponse(message);
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.getFileRecord.mockRejectedValue(responseError);
+
+				return {
+					fileRecordId,
+					responseError,
+				};
+			};
+
+			it("should notify unauthorized and pass error", async () => {
+				const { fileRecordId, responseError } = setup(ErrorType.Unauthorized);
+
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.401" })
+				);
+			});
+
+			it("should notify forbidden error and pass error", async () => {
+				const { fileRecordId, responseError } = setup(ErrorType.Forbidden);
+
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({ status: "error", text: "error.403" })
+				);
+			});
+
+			it("should notify file not found error and pass error", async () => {
+				const { fileRecordId, responseError } = setup(ErrorType.FILE_NOT_FOUND);
+
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
+					})
+				);
+			});
+
+			it("should notify internal server error and pass error", async () => {
+				const { fileRecordId, responseError } = setup();
+				const { fetchFileById } = useFileStorageApi();
+
+				await expect(fetchFileById(fileRecordId)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileServiceNotAvailable",
+					})
+				);
 			});
 		});
 	});
@@ -279,8 +390,8 @@ describe("FileStorageApi Composable", () => {
 
 	describe("uploadFromUrl", () => {
 		describe("when file api uploads file successfully", () => {
-			const setup = () => {
-				const fileName = "example-picture.jpg";
+			const setup = (fileNameParam?: string) => {
+				const fileName = fileNameParam ?? "example-picture.jpg";
 				const imageUrl = `https://www.example.com/${fileName}`;
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParent.BOARDNODES;
@@ -333,6 +444,37 @@ describe("FileStorageApi Composable", () => {
 
 				const fileRecord = getFileRecordsByParentId(parentId);
 				expect(fileRecord).toStrictEqual([fileRecordResponse]);
+			});
+
+			it("should return created file record", async () => {
+				const { parentId, parentType, imageUrl, fileRecordResponse } = setup();
+				const { uploadFromUrl } = useFileStorageApi();
+
+				const createdFileRecord = await uploadFromUrl(imageUrl, parentId, parentType);
+
+				expect(createdFileRecord).toStrictEqual(fileRecordResponse);
+			});
+
+			describe("when file name is empty", () => {
+				it("should upload file with default filename", async () => {
+					const emptyFileName = "";
+					const defaultFileName = "file";
+					const { parentId, parentType, fileApi, imageUrl } = setup(emptyFileName);
+					const { uploadFromUrl } = useFileStorageApi();
+
+					await uploadFromUrl(imageUrl, parentId, parentType);
+
+					expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+						"schoolId",
+						StorageLocation.SCHOOL,
+						parentId,
+						parentType,
+						expect.objectContaining({
+							url: imageUrl,
+							fileName: defaultFileName,
+						})
+					);
+				});
 			});
 		});
 
@@ -670,6 +812,200 @@ describe("FileStorageApi Composable", () => {
 				await expect(getAuthorizedCollaboraDocumentUrl(fileRecordId, editorMode, userDisplayName)).rejects.toThrow();
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ status: "error", text: "error.401" })
+				);
+			});
+		});
+	});
+
+	describe("uploadCollaboraFile", () => {
+		describe("when uploading a collabora text file", () => {
+			const setup = () => {
+				const fileName = "newCollaboraFile";
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const fileRecordResponse = fileRecordFactory.build({
+					parentId,
+					parentType,
+					name: fileName + ".docx",
+				});
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecordResponse,
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
+
+				const { uploadCollaboraFile } = useFileStorageApi();
+
+				const fileParams = fileUrlParamsFactory.build({
+					fileName: `${fileName}.docx`,
+					headers: {
+						"User-Agent": "Embed Request User Agent",
+					},
+					url: `http://localhost:3000/collabora/doc.docx`,
+				});
+
+				return {
+					uploadCollaboraFile,
+					fileRecordResponse,
+					fileName,
+					fileApi,
+					fileParams,
+				};
+			};
+
+			it("returns created file record", async () => {
+				const { uploadCollaboraFile, fileRecordResponse, fileName } = setup();
+				const newFile = await uploadCollaboraFile(
+					CollaboraFileType.Text,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileName
+				);
+
+				expect(newFile).toBe(fileRecordResponse);
+			});
+
+			it("calls uploadFromUrl with correct params", async () => {
+				const { uploadCollaboraFile, fileName, fileApi, fileParams } = setup();
+
+				await uploadCollaboraFile(CollaboraFileType.Text, "parentId", FileRecordParent.BOARDNODES, fileName);
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileParams
+				);
+			});
+		});
+
+		describe("when uploading a collabora spreadsheet file", () => {
+			const setup = () => {
+				const fileName = "newCollaboraFile";
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const fileRecordResponse = fileRecordFactory.build({
+					parentId,
+					parentType,
+					name: fileName + ".xlsx",
+				});
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecordResponse,
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
+
+				const { uploadCollaboraFile } = useFileStorageApi();
+
+				const fileParams = fileUrlParamsFactory.build({
+					fileName: `${fileName}.xlsx`,
+					headers: {
+						"User-Agent": "Embed Request User Agent",
+					},
+					url: `http://localhost:3000/collabora/spreadsheet.xlsx`,
+				});
+
+				return {
+					uploadCollaboraFile,
+					fileRecordResponse,
+					fileName,
+					fileApi,
+					fileParams,
+				};
+			};
+
+			it("returns created file record", async () => {
+				const { uploadCollaboraFile, fileRecordResponse, fileName } = setup();
+				const newFile = await uploadCollaboraFile(
+					CollaboraFileType.Spreadsheet,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileName
+				);
+
+				expect(newFile).toBe(fileRecordResponse);
+			});
+
+			it("calls uploadFromUrl with correct params", async () => {
+				const { uploadCollaboraFile, fileName, fileApi, fileParams } = setup();
+
+				await uploadCollaboraFile(CollaboraFileType.Spreadsheet, "parentId", FileRecordParent.BOARDNODES, fileName);
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileParams
+				);
+			});
+		});
+
+		describe("when uploading a collabora presentation file", () => {
+			const setup = () => {
+				const fileName = "newCollaboraFile";
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const fileRecordResponse = fileRecordFactory.build({
+					parentId,
+					parentType,
+					name: fileName + ".pptx",
+				});
+				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+					data: fileRecordResponse,
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
+
+				const { uploadCollaboraFile } = useFileStorageApi();
+
+				const fileParams = fileUrlParamsFactory.build({
+					fileName: `${fileName}.pptx`,
+					headers: {
+						"User-Agent": "Embed Request User Agent",
+					},
+					url: `http://localhost:3000/collabora/presentation.pptx`,
+				});
+
+				return {
+					uploadCollaboraFile,
+					fileRecordResponse,
+					fileName,
+					fileApi,
+					fileParams,
+				};
+			};
+
+			it("returns created file record", async () => {
+				const { uploadCollaboraFile, fileRecordResponse, fileName } = setup();
+				const newFile = await uploadCollaboraFile(
+					CollaboraFileType.Presentation,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileName
+				);
+
+				expect(newFile).toBe(fileRecordResponse);
+			});
+
+			it("calls uploadFromUrl with correct params", async () => {
+				const { uploadCollaboraFile, fileName, fileApi, fileParams } = setup();
+
+				await uploadCollaboraFile(CollaboraFileType.Presentation, "parentId", FileRecordParent.BOARDNODES, fileName);
+
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					"parentId",
+					FileRecordParent.BOARDNODES,
+					fileParams
 				);
 			});
 		});

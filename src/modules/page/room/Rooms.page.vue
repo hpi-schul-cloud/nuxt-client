@@ -1,14 +1,25 @@
 <template>
-	<DefaultWireframe max-width="nativ" :fab-items="fabAction">
+	<DefaultWireframe max-width="full" :fab-items="fabAction" main-with-bottom-padding>
 		<template #header>
 			<h1>{{ t("pages.rooms.title") }}</h1>
 		</template>
-		<RoomsWelcomeInfo />
-		<RoomGrid :rooms="rooms" :is-loading="isLoading" :is-empty="isEmpty" />
+
+		<RoomsWelcomeInfo class="mt-8" />
+
+		<VContainer v-if="isLoading && isEmpty" class="loader">
+			<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
+		</VContainer>
+		<EmptyState v-else-if="isEmpty" :title="t('pages.rooms.emptyState')">
+			<template #media>
+				<RoomsEmptyStateSvg />
+			</template>
+		</EmptyState>
+		<RoomGrid v-else :rooms />
+		<ImportCardDialog v-if="showImportCardDialog" :is-dialog-open="showImportCardDialog" :token="importToken!" />
 		<ImportFlow
-			:is-active="isImportMode"
+			:is-active="showGenericImportDialog"
 			:token="importToken"
-			:destinations="rooms.filter((room) => !room.isLocked)"
+			:destinations="importFlowDestinations"
 			:destination-type="BoardExternalReferenceType.Room"
 			@success="onImportSuccess"
 		/>
@@ -18,13 +29,16 @@
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { useRoomAuthorization, useRoomsState } from "@data-room";
+import { useRoomAuthorization, useRoomStore } from "@data-room";
+import { ImportCardDialog } from "@feature-board";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -32,10 +46,12 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { rooms, fetchRooms, isLoading, isEmpty } = useRoomsState();
+const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
+
+const { fetchRooms } = useRoomStore();
 const { canCreateRoom } = useRoomAuthorization();
 
-const pageTitle = computed(() => buildPageTitle(`${t("pages.rooms.title")}`));
+const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const fabAction = computed(() => {
@@ -43,33 +59,40 @@ const fabAction = computed(() => {
 
 	return {
 		icon: mdiPlus,
-		title: t("common.actions.create"),
+		title: t("pages.rooms.fab.title"),
 		to: "/rooms/new",
-		ariaLabel: t("pages.rooms.fab.title"),
 		dataTestId: "fab-add-room",
 	};
 });
 
-const isImportMode = ref(false);
+const importedType = ref<string>();
 const importToken = ref<string>();
 
 watch(
 	() => route.query.import,
 	() => {
-		if (route.query.import !== undefined) {
-			isImportMode.value = true;
+		if (route.query.import) {
+			importedType.value = route.query.importedType as string;
 			importToken.value = route.query.import as string;
 		} else {
-			isImportMode.value = false;
 			importToken.value = undefined;
 		}
 	},
 	{ immediate: true }
 );
 
+const showImportCardDialog = computed(
+	() => importToken.value && importedType.value === ShareTokenBodyParamsParentTypeEnum.Card
+);
+const showGenericImportDialog = computed(
+	() => !!importToken.value && importedType.value !== ShareTokenBodyParamsParentTypeEnum.Card
+);
+
 onMounted(() => {
 	fetchRooms();
 });
+
+const importFlowDestinations = computed(() => rooms.value.filter((room) => !room.isLocked));
 
 const onImportSuccess = (newName: string, destinationId?: string) => {
 	notifySuccess(
@@ -83,7 +106,6 @@ const onImportSuccess = (newName: string, destinationId?: string) => {
 	} else {
 		router.replace({ name: "rooms" });
 		fetchRooms();
-		isImportMode.value = false;
 		importToken.value = undefined;
 	}
 };

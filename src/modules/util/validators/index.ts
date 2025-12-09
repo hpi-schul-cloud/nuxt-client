@@ -1,10 +1,33 @@
+import { containsInvalidCharacters, useInvalidCharactersValidator } from "./invalidCharactersValidator";
+import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "./openingTagValidator";
 import {
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
 	isNonEmptyString,
 	isOfMaxLength,
+	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
 	isValidTimeFormat,
 	isValidUrl,
 } from "./validators";
 
-export { isNonEmptyString, isOfMaxLength, isRequired, isValidDateFormat, isValidTimeFormat, isValidUrl };
+export {
+	containsInvalidCharacters,
+	containsOpeningTagFollowedByString,
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
+	isNonEmptyString,
+	isOfMaxLength,
+	isOfMinLength,
+	isRequired,
+	isValidDateFormat,
+	isValidTimeFormat,
+	isValidUrl,
+	useInvalidCharactersValidator,
+	useOpeningTagValidator,
+};

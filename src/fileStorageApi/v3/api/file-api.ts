@@ -443,6 +443,44 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get file record meta data by file record id.
+         * @param {string} fileRecordId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFileRecord: async (fileRecordId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'fileRecordId' is not null or undefined
+            assertParamExists('getFileRecord', 'fileRecordId', fileRecordId)
+            const localVarPath = `/file/{fileRecordId}`
+                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get stats (count and total size) of all files for a parent entityId.
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
@@ -909,6 +947,17 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get file record meta data by file record id.
+         * @param {string} fileRecordId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getFileRecord(fileRecordId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFileRecord(fileRecordId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get stats (count and total size) of all files for a parent entityId.
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
@@ -1111,6 +1160,16 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get file record meta data by file record id.
+         * @param {string} fileRecordId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFileRecord(fileRecordId: string, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.getFileRecord(fileRecordId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get stats (count and total size) of all files for a parent entityId.
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
@@ -1302,6 +1361,16 @@ export interface FileApiInterface {
      * @memberof FileApiInterface
      */
     downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object>;
+
+    /**
+     * 
+     * @summary Get file record meta data by file record id.
+     * @param {string} fileRecordId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    getFileRecord(fileRecordId: string, options?: any): AxiosPromise<FileRecordResponse>;
 
     /**
      * 
@@ -1511,6 +1580,18 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any) {
         return FileApiFp(this.configuration).downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get file record meta data by file record id.
+     * @param {string} fileRecordId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public getFileRecord(fileRecordId: string, options?: any) {
+        return FileApiFp(this.configuration).getFileRecord(fileRecordId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -1,18 +1,11 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Permission } from "@/serverApi/v3";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { NavigationGuard, NavigationGuardNext, RouteLocationNormalized } from "vue-router";
-
-const mockError = vi.fn();
-
-vi.mock("@/store", () => ({
-	applicationErrorModule: {
-		setError: () => mockError(),
-	},
-}));
 
 describe("PermissionGuard", () => {
 	const validPermissionA = "validPermissionA" as Permission;
@@ -73,7 +66,7 @@ describe("PermissionGuard", () => {
 
 			permissionGuard(to, from, next);
 
-			expect(mockError).toHaveBeenCalled();
+			expect(useAppStore().handleApplicationError).toHaveBeenCalled();
 		});
 
 		it("should create a '403' error if fallbackRoute is not provided and with one invalid permission", () => {
@@ -82,7 +75,7 @@ describe("PermissionGuard", () => {
 
 			permissionGuard(to, from, next);
 
-			expect(mockError).toHaveBeenCalled();
+			expect(useAppStore().handleApplicationError).toHaveBeenCalled();
 		});
 	});
 });

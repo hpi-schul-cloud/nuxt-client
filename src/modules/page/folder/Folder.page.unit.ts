@@ -39,7 +39,7 @@ describe("FolderPage", () => {
 
 			folderComponent.vm.$emit("update:folder-name", "Updated Folder");
 
-			expect(document.title).toBe("Updated Folder - pages.folder.title - Test Title");
+			expect(document.title).toEqual("Updated Folder");
 		});
 	});
 });

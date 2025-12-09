@@ -4,6 +4,7 @@ import {
 	CreateColumnSuccessPayload,
 	DeleteColumnSuccessPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardSuccessPayload,
 	MoveColumnSuccessPayload,
 	UpdateBoardLayoutSuccessPayload,
 	UpdateBoardTitleSuccessPayload,
@@ -16,6 +17,7 @@ import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
+	DuplicateCardSuccessPayload,
 	MoveElementSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
@@ -30,10 +32,12 @@ export const SR_I18N_KEYS_MAP = {
 	CARD_CREATED_SUCCESS: "components.board.screenReader.notification.cardCreated.success",
 	COLUMN_CREATED_SUCCESS: "components.board.screenReader.notification.columnCreated.success",
 	CARD_DELETED_SUCCESS: "components.board.screenReader.notification.cardDeleted.success",
+	CARD_DUPLICATED_SUCCESS: "components.board.screenReader.notification.cardDuplicated.success",
 	COLUMN_DELETED_SUCCESS: "components.board.screenReader.notification.columnDeleted.success",
 	CARD_MOVED_IN_SAME_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedInSameColumn.success",
 	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS: "components.board.screenReader.notification.cardMovedToAnotherColumn.success",
 	COLUMN_MOVED_SUCCESS: "components.board.screenReader.notification.columnMoved.success",
+	COLUMN_MOVED_TO_BOARD_SUCCESS: "components.board.screenReader.notification.cardMovedToBoard.success",
 	BOARD_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.boardTitleUpdated.success",
 	BOARD_PUBLISHED_SUCCESS: "components.board.screenReader.notification.boardVisibilityUpdated.published",
 	BOARD_UNPUBLISHED_SUCCESS: "components.board.screenReader.notification.boardVisibilityUpdated.draft",
@@ -90,6 +94,13 @@ export const useBoardAriaNotification = () => {
 		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS));
 	};
 
+	const notifyDuplicateCardSuccess = (action: DuplicateCardSuccessPayload) => {
+		const { isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.CARD_DUPLICATED_SUCCESS));
+	};
+
 	const notifyDeleteColumnSuccess = (action: DeleteColumnSuccessPayload) => {
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
@@ -118,12 +129,22 @@ export const useBoardAriaNotification = () => {
 		}
 	};
 
+	const notifyMoveCardToBoardSuccess = (action: MoveCardToBoardSuccessPayload) => {
+		const { toColumn } = action;
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_TO_BOARD_SUCCESS, {
+				toColumnId: toColumn.title,
+			})
+		);
+	};
+
 	const notifyMoveColumnSuccess = (action: MoveColumnSuccessPayload) => {
 		const { addedIndex, removedIndex } = action.columnMove;
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
 
-		if (addedIndex == undefined || removedIndex == undefined) return;
+		if (typeof addedIndex !== "number" || typeof removedIndex !== "number") return;
 
 		notifyOnScreenReader(
 			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS, {
@@ -226,7 +247,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		const cardId = getElementOwner(elementId);
-		if (cardId == undefined) return;
+		if (cardId === undefined) return;
 
 		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
 			columnIndex: number;
@@ -299,9 +320,11 @@ export const useBoardAriaNotification = () => {
 		notifyCreateColumnSuccess,
 		notifyCreateElementSuccess,
 		notifyDeleteCardSuccess,
+		notifyDuplicateCardSuccess,
 		notifyDeleteColumnSuccess,
 		notifyDeleteElementSuccess,
 		notifyMoveCardSuccess,
+		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
 		notifyMoveElementSuccess,
 		notifySetBoardAsEditableForAllUsersSuccess,

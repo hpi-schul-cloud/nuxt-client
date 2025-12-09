@@ -7,12 +7,6 @@ import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
 
-vi.mock("@/store", () => ({
-	applicationErrorModule: {
-		setError: vi.fn(),
-	},
-}));
-
 vi.mock("@/serverApi/v3");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
 

@@ -1,5 +1,5 @@
 import InvitationTable from "./InvitationTable.vue";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
@@ -7,6 +7,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog, useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -242,6 +243,68 @@ describe("InvitationTable", () => {
 
 				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith([roomInvitationLinks[0].id]);
 			});
+		});
+	});
+
+	describe("external persons column", () => {
+		it("renders external persons header when feature flag is enabled", async () => {
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+			});
+			const { wrapper } = setup();
+			const dataTable = wrapper.getComponent({ name: "DataTable" });
+			const headers = dataTable.props("tableHeaders").map((header: { title: string }) => header.title);
+			const fourthHeader = headers[3];
+			expect(fourthHeader).toBe("pages.rooms.members.tableHeader.validForExternalPersons");
+		});
+
+		it("does not render external persons header when feature flag is disabled", async () => {
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false,
+			});
+			const { wrapper } = setup();
+			const dataTable = wrapper.getComponent({ name: "DataTable" });
+			const headers = dataTable.props("tableHeaders").map((header: { title: string }) => header.title);
+			expect(headers).not.toContain("pages.rooms.members.tableHeader.validForExternalPersons");
+		});
+
+		it("displays correct value for external persons column", async () => {
+			setActivePinia(createTestingPinia());
+			createTestEnvStore({
+				FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false,
+			});
+			const { wrapper, roomInvitationLinkStore } = setup();
+			roomInvitationLinkStore.invitationTableData = [
+				{
+					id: "test-id",
+					title: "Test",
+					isUsableByStudents: "yes",
+					isUsableByExternalPersons: "yes",
+					activeUntil: "2099-12-31",
+					isExpired: false,
+					status: "active",
+					restrictedToCreatorSchool: "school",
+					requiresConfirmation: "no",
+				},
+				{
+					id: "test-id-2",
+					title: "Test-2",
+					isUsableByStudents: "yes",
+					isUsableByExternalPersons: "no",
+					activeUntil: "2099-12-31",
+					isExpired: false,
+					status: "active",
+					restrictedToCreatorSchool: "school",
+					requiresConfirmation: "no",
+				},
+			];
+			await nextTick();
+			const dataTable = wrapper.getComponent({ name: "DataTable" });
+			const rows = dataTable.props("items");
+			expect(rows[0].isUsableByExternalPersons).toBe("yes");
+			expect(rows[1].isUsableByExternalPersons).toBe("no");
 		});
 	});
 });

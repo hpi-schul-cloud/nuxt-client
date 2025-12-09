@@ -21,7 +21,7 @@
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
-					<CardSkeleton :height="height" />
+					<CardSkeleton :height />
 				</template>
 				<template v-if="card">
 					<CardTitle
@@ -42,6 +42,13 @@
 							:data-testid="boardMenuTestId"
 						>
 							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
+							<KebabMenuActionDuplicate
+								v-if="hasEditPermission"
+								data-testid="kebab-menu-action-duplicate-card"
+								@click="duplicateCard"
+							/>
+							<KebabMenuActionExport v-if="hasEditPermission" @click="onMoveCard(cardId)" />
+							<KebabMenuActionShare v-if="hasShareBoardPermission" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -70,6 +77,10 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
+		<VCard v-if="isDuplicating" class="mt-3">
+			<CardSkeleton :height />
+		</VCard>
+
 		<!-- Detail View -->
 		<CardHostDetailView
 			v-if="card"
@@ -98,6 +109,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -106,7 +118,14 @@ import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
 import { BoardMenuScope } from "@ui-board";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
+	KebabMenuActionEdit,
+	KebabMenuActionExport,
+	KebabMenuActionShare,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
@@ -122,7 +141,9 @@ const props = defineProps<Props>();
 const emit = defineEmits<{
 	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
+	(e: "move:card", cardId: string): void;
 	(e: "reload:board"): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const cardHost = ref(null);
@@ -144,11 +165,15 @@ const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIn
 
 const { height: cardHostHeight } = useElementSize(cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
 const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
+const onMoveCard = (cardId: string) => emit("move:card", cardId);
+const onShareCard = () => {
+	emit("share:card", props.cardId);
+};
 
 const _updateCardTitle = (newTitle: string, cardId: string) => {
 	cardStore.updateCardTitleRequest({ newTitle, cardId });
@@ -182,10 +207,10 @@ const onEndEditMode = async () => {
 const onCloseDetailView = () => (isDetailView.value = false);
 
 const onMoveContentElementDown = async ({ payload: elementId, elementIndex }: ElementMove) =>
-	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
 const onMoveContentElementUp = async ({ payload: elementId, elementIndex }: ElementMove) =>
-	cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
+	await cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
 const onMoveContentElementKeyboard = async ({ payload: elementId, elementIndex }: ElementMove, key: string) => {
 	if (!verticalCursorKeys.includes(key)) return;
@@ -210,6 +235,10 @@ const boardMenuClasses = computed(() => {
 		return "";
 	}
 	return "hidden";
+});
+
+const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
+	await cardStore.duplicateCard({ cardId: props.cardId });
 });
 
 onMounted(async () => {

@@ -1,5 +1,6 @@
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
+import FileName from "./file-name/FileName.vue";
 import FileInputs from "./FileInputs.vue";
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
@@ -32,12 +33,31 @@ describe("FileInputs", () => {
 	};
 
 	describe("when isEditMode is true", () => {
+		it("should render FileName Component", () => {
+			const { wrapper } = setup({ isEditMode: true });
+
+			const fileName = wrapper.findComponent(FileName);
+
+			expect(fileName.exists()).toBe(true);
+		});
+
 		it("should render CaptionText Component", () => {
 			const { wrapper } = setup({ isEditMode: true });
 
 			const captionText = wrapper.findComponent(CaptionText);
 
 			expect(captionText.exists()).toBe(true);
+		});
+
+		describe("when FileName emits update:name", () => {
+			it("should emit update:name", () => {
+				const { wrapper } = setup({ isEditMode: true });
+
+				const fileName = wrapper.findComponent(FileName);
+				fileName.vm.$emit("update:name", "test.jpg");
+
+				expect(wrapper.emitted("update:name")).toEqual([["test.jpg"]]);
+			});
 		});
 
 		describe("when CaptionText emits update:caption", () => {
@@ -100,6 +120,14 @@ describe("FileInputs", () => {
 	});
 
 	describe("when isEditMode is false", () => {
+		it("should not render FileName Component", () => {
+			const { wrapper } = setup({ isEditMode: false });
+
+			const fileName = wrapper.findComponent(FileName);
+
+			expect(fileName.exists()).toBe(false);
+		});
+
 		it("should not render CaptionText Component", () => {
 			const { wrapper } = setup({ isEditMode: false });
 

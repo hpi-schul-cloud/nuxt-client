@@ -1,5 +1,5 @@
 <template>
-	<Board :board-id="boardId" :breadcrumbs="breadcrumbs" />
+	<Board :board-id="boardId" />
 </template>
 
 <script setup lang="ts">
@@ -14,7 +14,7 @@ defineProps({
 	},
 });
 
-const { breadcrumbs, pageTitle } = useSharedBoardPageInformation();
+const { pageTitle } = useSharedBoardPageInformation();
 
 useTitle(pageTitle);
 </script>

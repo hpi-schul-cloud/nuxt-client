@@ -13,21 +13,27 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApiResponseError } from "@/store/types/commons";
-import { RoomCreateParams } from "@/types/room/Room";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError } from "@data-app";
-import { useRoomCreateState } from "@data-room";
+import { useRoomStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 
 const router = useRouter();
-const { createRoom, roomData } = useRoomCreateState();
+
+const roomData = ref<RoomCreateParams>({
+	name: "",
+	color: RoomColor.BlueGrey,
+	features: [],
+});
+
+const { createRoom } = useRoomStore();
 
 const pageTitle = computed(() => buildPageTitle(`${t("pages.roomCreate.title")}`));
 useTitle(pageTitle);
@@ -44,16 +50,12 @@ const breadcrumbs: Breadcrumb[] = [
 ];
 
 const onSave = async (payload: { room: RoomCreateParams }) => {
-	try {
-		const room = await createRoom(payload.room);
+	const { result: room, error } = await createRoom(payload.room);
 
-		router.push({ name: "room-details", params: { id: room.id } });
-	} catch (error: unknown) {
-		if (isInvalidRequestError(error)) {
-			notifyError(t("components.roomForm.validation.generalSaveError"));
-		} else {
-			throw createApplicationError((error as ApiResponseError).code);
-		}
+	if (error && isInvalidRequestError(error)) {
+		notifyError(t("components.roomForm.validation.generalSaveError"));
+	} else if (room) {
+		router.push({ name: "room-details", params: { id: room.data.id } });
 	}
 };
 

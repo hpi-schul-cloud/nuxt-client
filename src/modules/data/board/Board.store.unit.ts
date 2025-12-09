@@ -1,25 +1,26 @@
 import { useBoardStore } from "./Board.store";
-import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload.types";
+import {
+	MoveCardToBoardSuccessPayload,
+	UpdateBoardLayoutRequestPayload,
+} from "./boardActions/boardActionPayload.types";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
-import { applicationErrorModule } from "@/store";
-import ApplicationErrorModule from "@/store/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { useAppStore } from "@data-app";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
-import type { Mock } from "vitest";
+import { setActivePinia } from "pinia";
+import { expect, Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 
@@ -65,10 +66,7 @@ describe("BoardStore", () => {
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
-		setActivePinia(createPinia());
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
+		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
@@ -141,9 +139,9 @@ describe("BoardStore", () => {
 			boardStore.board = board;
 		}
 
-		mockedPiniaStoreTyping(useCardStore);
+		const cardStore = mockedPiniaStoreTyping(useCardStore);
 
-		return { boardStore, board, firstColumn, secondColumn, cards };
+		return { boardStore, board, firstColumn, secondColumn, cards, cardStore };
 	};
 
 	const focusSetup = (id: string) => {
@@ -420,6 +418,39 @@ describe("BoardStore", () => {
 
 					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(firstCardId);
 				});
+			});
+		});
+	});
+
+	describe("duplicateCardSuccess", () => {
+		it("should not duplicate card when a board is undefined", () => {
+			const { boardStore, cards } = setup({ createBoard: false });
+
+			boardStore.duplicateCardSuccess({
+				cardId: cards[0].cardId,
+				duplicatedCard: cardResponseFactory.build(),
+				isOwnAction: true,
+			});
+
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should duplicate a card", () => {
+			const { boardStore, cards } = setup();
+			const firstCardId = cards[0].cardId;
+
+			const duplicatedCard = cardResponseFactory.build();
+			boardStore.duplicateCardSuccess({
+				cardId: firstCardId,
+				duplicatedCard,
+				isOwnAction: true,
+			});
+
+			const secondCard = boardStore.board?.columns[0].cards[1];
+
+			expect(secondCard).toEqual({
+				cardId: duplicatedCard.id,
+				height: duplicatedCard.height,
 			});
 		});
 	});
@@ -881,6 +912,58 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("moveCardToBoardSuccess", () => {
+		const setupMoveCard = (createBoard = true) => {
+			const { boardStore, board, firstColumn, secondColumn, cards } = setup({ createBoard });
+			const movedCard = cards[0];
+
+			const successPayload: MoveCardToBoardSuccessPayload = {
+				card: movedCard,
+				fromColumn: {
+					id: firstColumn.id,
+					title: "any",
+				},
+				toColumn: {
+					id: secondColumn.id,
+					title: "any",
+				},
+				fromBoard: {
+					id: board.id,
+					title: board.title,
+				},
+				toBoard: {
+					id: board.id,
+					title: board.title,
+				},
+				isOwnAction: true,
+			};
+			return { successPayload, movedCard, boardStore, firstColumn, secondColumn };
+		};
+
+		it("should not move card when board value is undefined", async () => {
+			const { boardStore, successPayload } = setupMoveCard(false);
+			await boardStore.moveCardToBoardSuccess(successPayload);
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should remove a card from the fromColumn if present", async () => {
+			const { boardStore, successPayload, firstColumn, movedCard } = setupMoveCard();
+			await boardStore.moveCardToBoardSuccess(successPayload);
+
+			expect(firstColumn.cards.find((c) => c.cardId === movedCard.cardId)).toBeUndefined();
+		});
+
+		it("should add a card to the target column", async () => {
+			const { boardStore, firstColumn, secondColumn, successPayload, movedCard } = setupMoveCard();
+			await boardStore.moveCardToBoardSuccess(successPayload);
+
+			expect(firstColumn.cards.find((c) => c.cardId === movedCard.cardId)).toBeUndefined();
+			expect(secondColumn.cards.find((c) => c.cardId === movedCard.cardId)).toBeDefined();
+
+			expectNotification("success");
+		});
+	});
+
 	describe("fetchBoardSuccess", () => {
 		it("should fetch board", () => {
 			const { boardStore } = setup();
@@ -1230,8 +1313,7 @@ describe("BoardStore", () => {
 				});
 			});
 
-			it('should call applicationErrorModule.showError if "isOwnAction" is false', async () => {
-				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
+			it('should call handleApplicationError if "isOwnAction" is false', async () => {
 				const { boardStore } = setup({ socketFlag: true });
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 
@@ -1240,8 +1322,9 @@ describe("BoardStore", () => {
 					isOwnAction: false,
 				});
 
-				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.NotFound, "components.board.error.404")
+				expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(
+					HttpStatusCode.NotFound,
+					"components.board.error.404"
 				);
 			});
 		});

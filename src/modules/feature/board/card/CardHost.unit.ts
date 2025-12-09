@@ -1,5 +1,6 @@
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
+import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { CardResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
@@ -12,7 +13,14 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionDuplicate,
+	KebabMenuActionEdit,
+	KebabMenuActionExport,
+	KebabMenuActionShare,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode, useShareBoardLink, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
@@ -129,8 +137,6 @@ describe("CardHost", () => {
 			},
 		});
 
-		mockedPiniaStoreTyping(useCardStore);
-
 		return {
 			wrapper,
 			cardId,
@@ -169,6 +175,22 @@ describe("CardHost", () => {
 	});
 
 	describe("user permissions", () => {
+		describe("when user wants to share a card.", () => {
+			it("should show share button", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = true;
+				const { wrapper } = setup();
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toEqual(true);
+			});
+
+			it("should not show share button", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = false;
+				const { wrapper } = setup();
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				expect(shareButton.exists()).toEqual(false);
+			});
+		});
+
 		describe("when user is not permitted to delete", () => {
 			it("should not show an edit button", () => {
 				mockedBoardPermissions.hasDeletePermission.value = false;
@@ -188,16 +210,86 @@ describe("CardHost", () => {
 				expect(deleteButton.exists()).toEqual(false);
 			});
 		});
+
+		describe("when user wants to move a card.", () => {
+			it("should show move button when allowed to edit", () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+				expect(moveButton.exists()).toEqual(true);
+			});
+
+			it("should not show move button when not allowed to edit", () => {
+				mockedBoardPermissions.hasEditPermission.value = false;
+				const { wrapper } = setup();
+				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+				expect(moveButton.exists()).toEqual(false);
+			});
+		});
 	});
 
 	describe("card menus", () => {
+		describe("when users clicks duplicate menu btn", () => {
+			it("should call cardStore.duplicateCardRequest", async () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper, cardId } = setup();
+
+				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+
+				await duplicateButton.trigger("click");
+
+				expect(useCardStore().duplicateCard).toHaveBeenCalledWith({ cardId });
+			});
+
+			it("should show card skeleton while duplicating", async () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+				const cardStore = mockedPiniaStoreTyping(useCardStore);
+				cardStore.duplicateCard.mockResolvedValueOnce();
+
+				const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
+				await duplicateButton.trigger("click");
+
+				const cardSkeletons = wrapper.findAllComponents(CardSkeleton);
+				expect(cardSkeletons).toHaveLength(1);
+
+				await wrapper.vm.$nextTick();
+
+				const cardSkeletonsAfterDuplicationFinished = wrapper.findAllComponents(CardSkeleton);
+				expect(cardSkeletonsAfterDuplicationFinished).toHaveLength(0);
+			});
+		});
+
+		describe("when user clicks move button", () => {
+			it("should emit move:card event", () => {
+				mockedBoardPermissions.hasEditPermission.value = true;
+				const { wrapper } = setup();
+
+				const moveButton = wrapper.findComponent(KebabMenuActionExport);
+				moveButton.vm.$emit("click");
+
+				expect(wrapper.emitted("move:card")).toHaveLength(1);
+			});
+		});
+
+		describe("when user clicks share button", () => {
+			it("should emit share:card event", () => {
+				mockedBoardPermissions.hasShareBoardPermission.value = true;
+				const { wrapper } = setup();
+
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
+				shareButton.vm.$emit("click");
+
+				expect(wrapper.emitted("share:card")).toHaveLength(1);
+			});
+		});
+
 		describe("when users clicks share link menu", () => {
 			it("should copy a share link", async () => {
 				mockedBoardPermissions.hasDeletePermission.value = true;
 				const { wrapper, cardId } = setup();
 
 				const shareLinkButton = wrapper.findComponent(KebabMenuActionShareLink);
-
 				await shareLinkButton.trigger("click");
 
 				expect(useShareBoardLinkMock.copyShareLink).toHaveBeenCalledWith(cardId, BoardMenuScope.CARD);
@@ -210,14 +302,9 @@ describe("CardHost", () => {
 				const { wrapper } = setup();
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
-
 				await deleteButton.vm.$emit("click", true);
 
-				await wrapper.vm.$nextTick();
-				await wrapper.vm.$nextTick();
-				const emitted = wrapper.emitted()["delete:card"] ?? [];
-
-				expect(emitted).toHaveLength(1);
+				expect(wrapper.emitted("delete:card")).toHaveLength(1);
 			});
 		});
 	});

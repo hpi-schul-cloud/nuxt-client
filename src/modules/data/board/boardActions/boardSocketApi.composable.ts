@@ -11,6 +11,7 @@ import {
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -20,11 +21,9 @@ import {
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { useI18n } from "vue-i18n";
+import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -34,6 +33,7 @@ export const useBoardSocketApi = () => {
 		notifyDeleteCardSuccess,
 		notifyDeleteColumnSuccess,
 		notifyMoveCardSuccess,
+		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
 		notifySetBoardAsEditableForAllUsersSuccess,
 		notifySetBoardAsNotEditableForAllUsersSuccess,
@@ -42,16 +42,17 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
 	} = useBoardAriaNotification();
-	const { t } = useI18n();
 
 	const dispatch = (action: PermittedStoreActions<typeof BoardActions & typeof CardActions>) => {
 		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
+			on(CardActions.duplicateCardSuccess, boardStore.duplicateCardSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, boardStore.moveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
 			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
 			on(BoardActions.updateColumnTitleSuccess, boardStore.updateColumnTitleSuccess),
@@ -68,6 +69,7 @@ export const useBoardSocketApi = () => {
 			on(CardActions.deleteCardFailure, reloadBoard),
 			on(BoardActions.deleteColumnFailure, reloadBoard),
 			on(BoardActions.moveCardFailure, reloadBoard),
+			on(BoardActions.moveCardToBoardFailure, reloadBoard),
 			on(BoardActions.moveColumnFailure, reloadBoard),
 			on(BoardActions.updateColumnTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardTitleFailure, reloadBoard),
@@ -82,6 +84,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
 			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
 			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, notifyMoveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
 			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
 			on(BoardActions.updateBoardVisibilitySuccess, notifyUpdateBoardVisibilitySuccess),
@@ -149,6 +152,10 @@ export const useBoardSocketApi = () => {
 		}
 	};
 
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		emitOnSocket("move-card-to-board-request", payload);
+	};
+
 	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
 		const { addedIndex, removedIndex } = payload.columnMove;
 		if (addedIndex === removedIndex) return;
@@ -181,7 +188,7 @@ export const useBoardSocketApi = () => {
 	};
 
 	const fetchBoardFailure = () => {
-		applicationErrorModule.setError(createApplicationError(HttpStatusCode.NotFound, t("components.board.error.404")));
+		useAppStore().handleApplicationError(HttpStatusCode.NotFound, "components.board.error.404");
 	};
 
 	const reloadBoard = () => {
@@ -212,6 +219,7 @@ export const useBoardSocketApi = () => {
 		fetchBoardRequest,
 		moveCardRequest,
 		moveColumnRequest,
+		moveCardToBoardRequest,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,

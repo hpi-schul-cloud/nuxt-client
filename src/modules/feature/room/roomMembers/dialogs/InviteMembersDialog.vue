@@ -7,7 +7,7 @@
 		@keydown.esc="onClose"
 		@click:outside="onClose"
 	>
-		<v-card ref="inviteMembersContent">
+		<VCard ref="inviteMembersContent">
 			<template #title>
 				<h2 class="mt-2">
 					{{ modalTitle }}
@@ -19,85 +19,120 @@
 						{{ subTitle }}
 					</p>
 
-					<InfoAlert>
-						{{ t("pages.rooms.members.inviteMember.infoAlert.text") }}
-					</InfoAlert>
-
-					<div class="mt-5">
-						<v-text-field
+					<VForm ref="inviteMembersForm" class="mt-2">
+						<VTextField
 							ref="descriptionField"
 							v-model="formData.title"
-							class="mb-2"
+							class="mb-8"
 							:rules="validationRules"
+							autofocus
 							:label="t('pages.rooms.members.inviteMember.form.description.label')"
 							:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
 							persistent-hint
 							data-testid="invite-participant-description-input"
 						/>
 
-						<v-checkbox
-							v-model="formData.restrictedToCreatorSchool"
-							hide-details
-							data-testid="input-invite-participants-restricted-to-creator-school"
-						>
-							<template #label>
-								<div class="mt-6">
-									{{ t("pages.rooms.members.inviteMember.form.onlySchoolMembers.label") }}
-									<span class="d-inline-block">
-										{{ schoolName }}
-									</span>
-								</div>
-							</template>
-						</v-checkbox>
+						<div class="d-flex flex-column ga-0 checkbox-container">
+							<div id="school-radiogroup-label" class="d-flex mb-2">
+								{{ t("pages.rooms.members.inviteMember.form.validForSchools.label") }}
+							</div>
+							<VRadioGroup
+								v-model="formData.restrictedToCreatorSchool"
+								aria-labelledby="school-radiogroup-label"
+								@update:model-value="resetRoleSelection"
+							>
+								<VRadio :value="true" data-testid="input-invite-participants-restricted-to-creator-school">
+									<template #label> {{ t("common.labels.only") }} {{ schoolName }} </template>
+								</VRadio>
+								<VRadio
+									:label="t('common.labels.allSchools')"
+									:value="false"
+									data-testid="input-invite-participants-all-schools"
+								/>
+							</VRadioGroup>
+							<VDivider class="mb-6" role="presentation" />
+							<div id="valid-for-roles-label" class="mb-4">
+								{{ t("pages.rooms.members.inviteMember.form.validForRoles.label") }}
+							</div>
+							<div role="group" aria-labelledby="valid-for-roles-label">
+								<VCheckbox
+									:label="t('common.labels.teacher.neutral.plural')"
+									data-testid="input-invite-participants-valid-for-teachers"
+									disabled
+									:model-value="true"
+									hide-details
+								/>
+								<template v-if="formData.restrictedToCreatorSchool">
+									<VCheckbox
+										v-model="formData.isUsableByStudents"
+										:label="t('common.labels.students.neutral')"
+										hide-details
+										data-testid="input-invite-participants-valid-for-students"
+									/>
+									<InfoAlert
+										v-if="isInviteExternalPersonsFeatureEnabled"
+										class="mt-2 mb-2"
+										data-testid="info-alert-external-persons"
+									>
+										{{ t("pages.rooms.members.inviteMember.infoAlert.text.externalPersons") }}
+									</InfoAlert>
+								</template>
+								<template v-else>
+									<VCheckbox
+										v-if="isInviteExternalPersonsFeatureEnabled"
+										v-model="formData.isUsableByExternalPersons"
+										:label="t('pages.rooms.members.inviteMember.form.validForExternalPersons.label')"
+										hide-details
+										data-testid="input-invite-participants-valid-for-external-persons"
+									/>
+									<InfoAlert class="mt-2 mb-2" data-testid="info-alert-students-from-other-schools">
+										{{ t("pages.rooms.members.inviteMember.infoAlert.text.studentsFromOtherSchools") }}
+									</InfoAlert>
+								</template>
+							</div>
 
-						<v-checkbox
-							v-model="formData.isValidForStudents"
-							:disabled="!formData.restrictedToCreatorSchool"
-							:label="t('pages.rooms.members.inviteMember.form.validForStudents.label')"
-							hide-details
-							data-testid="input-invite-participants-valid-for-students"
-						/>
+							<VDivider class="mt-4 mb-5" role="presentation" />
+							<div class="d-flex">
+								<VCheckbox
+									v-model="formData.activeUntilChecked"
+									:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+									hide-details
+									class="align-self-start mr-2"
+									data-testid="input-invite-participants-link-expires"
+								/>
+								<DatePicker
+									ref="datePicker"
+									aria-label="pages.rooms.members.tableHeader.expirationDate)"
+									:disabled="isDatePickerDisabled"
+									:required="!isDatePickerDisabled"
+									:min-date="new Date().toString()"
+									:date="datePickerDate"
+									density="compact"
+									class="align-self-start"
+									data-testid="date-picker-until"
+									@click.prevent="pause"
+									@keydown.space.enter.prevent="pause"
+									@update:date="onUpdateDate"
+								/>
+							</div>
 
-						<div class="d-flex align-center justify-start my-n4 pr-0">
-							<v-checkbox
-								v-model="formData.activeUntilChecked"
-								:label="t('pages.rooms.members.inviteMember.form.linkExpires.label')"
+							<VCheckbox
+								v-model="formData.requiresConfirmation"
 								hide-details
-								class="mr-2"
-								data-testid="input-invite-participants-link-expires"
-							/>
-							<DatePicker
-								ref="datePicker"
-								v-model="formData.activeUntil"
-								:disabled="isDatePickerDisabled"
-								:required="!isDatePickerDisabled"
-								:min-date="new Date().toString()"
-								:date="datePickerDate"
-								class="mt-1"
-								data-testid="date-picker-until"
-								@click.prevent="pause"
-								@keydown.space.enter.prevent="pause"
-								@update:date="onUpdateDate"
-							/>
+								data-testid="input-invite-participants-requires-confirmation"
+							>
+								<template #label>
+									<div>
+										<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
+											<a :href="informationLink!" target="_blank" rel="noopener">
+												{{ t("pages.rooms.members.infoText.moreInformation") }}
+											</a>
+										</i18n-t>
+									</div>
+								</template>
+							</VCheckbox>
 						</div>
-
-						<v-checkbox
-							v-model="formData.requiresConfirmation"
-							hide-details
-							class="my-n6"
-							data-testid="input-invite-participants-requires-confirmation"
-						>
-							<template #label>
-								<div class="mt-6">
-									<i18n-t keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label" scope="global">
-										<a :href="informationLink!" target="_blank" rel="noopener">
-											{{ t("pages.rooms.members.infoText.moreInformation") }}
-										</a>
-									</i18n-t>
-								</div>
-							</template>
-						</v-checkbox>
-					</div>
+					</VForm>
 				</template>
 				<template v-else>
 					<ShareModalResult :share-url="sharedUrl" type="roomMemberInvitation" @copied="onCopyLink" @done="onClose" />
@@ -105,21 +140,20 @@
 			</template>
 
 			<template #actions>
-				<v-spacer />
+				<VSpacer />
 				<div v-if="invitationStep !== InvitationStep.SHARE" class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						ref="cancelButton"
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
 						data-testid="invite-participant-cancel-btn"
 						@click="onClose"
 					/>
-					<v-btn
+					<VBtn
 						ref="continueButton"
 						class="ms-auto"
 						color="primary"
 						variant="flat"
-						:disabled="isSubmitDisabled"
 						:text="t('common.actions.continue')"
 						data-testid="invite-participant-save-btn"
 						@click="onContinue"
@@ -127,7 +161,7 @@
 				</div>
 
 				<div v-else class="mr-4 mb-3">
-					<v-btn
+					<VBtn
 						ref="closeButton"
 						class="ms-auto"
 						variant="outlined"
@@ -137,14 +171,14 @@
 					/>
 				</div>
 			</template>
-		</v-card>
+		</VCard>
 	</VDialog>
 </template>
 
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { useOpeningTagValidator } from "@/utils/validation";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -156,12 +190,12 @@ import {
 } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
-import { isNonEmptyString, isOfMaxLength } from "@util-validators";
+import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { storeToRefs } from "pinia";
 import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import type { VCard } from "vuetify/components";
+import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
 
 defineProps({
 	schoolName: {
@@ -185,11 +219,18 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
+const envConfig = useEnvConfig();
+const theme = computed(() => envConfig.value.SC_THEME);
+
+const isInviteExternalPersonsFeatureEnabled = computed(
+	() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
+);
 
 const defaultFormData: RoomInvitationFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
-	isValidForStudents: false,
+	isUsableByStudents: false,
+	isUsableByExternalPersons: false,
 	activeUntilChecked: false,
 	activeUntil: undefined,
 	requiresConfirmation: true,
@@ -197,7 +238,7 @@ const defaultFormData: RoomInvitationFormData = {
 };
 
 const formData = ref({ ...defaultFormData });
-const descriptionField = useTemplateRef("descriptionField");
+const inviteMembersForm = useTemplateRef("inviteMembersForm");
 
 const validationRules = [
 	isNonEmptyString(t("common.validation.nonEmptyString")),
@@ -206,8 +247,6 @@ const validationRules = [
 ];
 
 const isDatePickerDisabled = computed(() => !formData.value.activeUntilChecked);
-
-const isSubmitDisabled = computed(() => formData.value.activeUntilChecked && !formData.value.activeUntil);
 
 const modalTitle = computed(() => {
 	const titleMap = {
@@ -229,8 +268,8 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (date: Date) => {
-	formData.value.activeUntil = date;
+const onUpdateDate = (isoDate: string | null) => {
+	formData.value.activeUntil = isoDate ?? undefined;
 	unpause();
 };
 
@@ -243,11 +282,22 @@ const onClose = () => {
 	}, 1000);
 };
 
-const onContinue = async () => {
-	if (invitationStep.value === InvitationStep.SHARE) return;
+const resetRoleSelection = () =>
+	Object.assign(formData.value, {
+		isUsableByStudents: defaultFormData.isUsableByStudents,
+		isUsableByExternalPersons: defaultFormData.isUsableByExternalPersons,
+	});
 
-	const validationResult = await descriptionField.value?.validate?.();
-	if (validationResult && validationResult.length > 0) {
+const onContinue = async () => {
+	if (invitationStep.value === InvitationStep.SHARE || inviteMembersForm.value === null) return;
+
+	const { valid, errors } = await inviteMembersForm.value.validate();
+	if (!valid && errors.length > 0) {
+		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting,
+		// so we are focusing the first invalid input to announce the error.
+		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
 		return;
 	}
 
@@ -257,7 +307,8 @@ const onContinue = async () => {
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
 				? formData.value.activeUntil.toString()
 				: DEFAULT_EXPIRED_DATE.value,
-		isOnlyForTeachers: !formData.value.isValidForStudents,
+		isUsableByStudents: formData.value.isUsableByStudents,
+		isUsableByExternalPersons: formData.value.isUsableByExternalPersons,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
@@ -289,7 +340,7 @@ watch(
 	() => formData.value.restrictedToCreatorSchool,
 	(isRestrictedToCreatorSchool: boolean) => {
 		if (isRestrictedToCreatorSchool === false) {
-			formData.value.isValidForStudents = false;
+			formData.value.isUsableByStudents = false;
 		}
 	}
 );
@@ -301,9 +352,10 @@ watch(
 			formData.value.id = newVal.id;
 			formData.value.title = newVal.title;
 			formData.value.restrictedToCreatorSchool = newVal.restrictedToCreatorSchool;
-			formData.value.isValidForStudents = !newVal.isOnlyForTeachers;
+			formData.value.isUsableByStudents = newVal.isUsableByStudents;
+			formData.value.isUsableByExternalPersons = newVal.isUsableByExternalPersons;
 			formData.value.activeUntilChecked = newVal.activeUntil !== undefined;
-			formData.value.activeUntil = newVal.activeUntil ? new Date(newVal.activeUntil) : undefined;
+			formData.value.activeUntil = newVal.activeUntil;
 			formData.value.requiresConfirmation = newVal.requiresConfirmation;
 		}
 	}
@@ -311,3 +363,16 @@ watch(
 
 const informationLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
 </script>
+<style scoped lang="scss">
+.checkbox-container .v-checkbox {
+	:deep(.v-selection-control) {
+		align-items: flex-start;
+		min-height: auto;
+	}
+	:deep(.v-label) {
+		padding-bottom: 16px;
+		margin-top: 8px;
+		align-items: flex-start;
+	}
+}
+</style>

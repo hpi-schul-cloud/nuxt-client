@@ -22,14 +22,6 @@ import { beforeEach, Mock } from "vitest";
 import { Component, nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));
@@ -78,9 +70,8 @@ describe("SchoolExternalToolConfigurator", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.index.title");
-			expect(breadcrumbs.at(1)?.text()).toEqual("pages.administration.school.index.title");
-			expect(breadcrumbs.at(2)?.text()).toEqual("pages.tool.title");
+			expect(breadcrumbs.at(0)?.text()).toEqual("pages.administration.school.index.title");
+			expect(breadcrumbs.at(1)?.text()).toEqual("pages.tool.title");
 		});
 	});
 

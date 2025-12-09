@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<default-wireframe
-			:headline="$t('pages.administration.students.index.title')"
-			:breadcrumbs="breadcrumbs"
-			max-width="full"
-			:fab-items="fab"
-		>
+		<default-wireframe :headline="$t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
 			<progress-modal
 				:active="isDeleting"
 				:percent="deletedPercent"
@@ -114,7 +109,6 @@ import ProgressModal from "@/components/molecules/ProgressModal";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
@@ -136,6 +130,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { printQrCodes } from "@util-browser";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";
 
@@ -147,7 +142,7 @@ export default {
 		ProgressModal,
 		DataFilter,
 	},
-	mixins: [print, UserHasPermission],
+	mixins: [UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
@@ -241,16 +236,6 @@ export default {
 			],
 			tableSelection: [],
 			tableSelectionType: "inclusive",
-			breadcrumbs: [
-				{
-					title: this.$t("pages.administration.index.title"),
-					disabled: true,
-				},
-				{
-					title: this.$t("pages.administration.students.index.title"),
-					disabled: true,
-				},
-			],
 			active: false,
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.students.index") &&
@@ -511,7 +496,7 @@ export default {
 					roleName: "student",
 				});
 				if (this.qrLinks.length) {
-					this.$_printQRs(this.qrLinks);
+					printQrCodes(this.qrLinks, { printPageTitleKey: "pages.administration.printQr.printPageTitle" });
 				} else {
 					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}

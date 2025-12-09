@@ -12,19 +12,19 @@
 				{{ tool.domain }}
 			</LineClamp>
 			<div class="d-flex ga-1">
-				<WarningChip v-if="isToolDeactivated" data-testId="tool-card-status-deactivated">
+				<WarningChip v-if="isToolDeactivated" data-testId="tool-card-status-deactivated" class="mr-1">
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
 
-				<WarningChip v-if="isToolNotLicensed" data-testId="tool-card-status-not-licensed">
+				<WarningChip v-if="isToolNotLicensed" data-testId="tool-card-status-not-licensed" class="mr-1">
 					{{ $t("common.medium.chip.notLicensed") }}
 				</WarningChip>
 
-				<InfoChip v-if="showAsIncompleteOperational" data-testId="tool-card-status-incompleteOperational"
-					>{{ $t("pages.rooms.tools.outdated") }}
+				<InfoChip v-if="showAsIncompleteOperational" data-testId="tool-card-status-incompleteOperational" class="mr-1">
+					{{ $t("pages.rooms.tools.outdated") }}
 				</InfoChip>
 
-				<WarningChip v-if="isToolOutdated || isToolIncomplete" data-testId="tool-card-status">
+				<WarningChip v-if="isToolOutdated || isToolIncomplete" data-testId="tool-card-status" class="mr-1">
 					{{ $t("pages.rooms.tools.outdated") }}
 				</WarningChip>
 			</div>

@@ -67,7 +67,9 @@
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
+								@share:card="onShareCard"
 								@delete:column="onDeleteColumn"
+								@move:card="onMoveCard"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
 								@move:column-down="onMoveColumnForward(index, element.id)"
 								@move:column-left="onMoveColumnBackward(index, element.id)"
@@ -86,14 +88,22 @@
 				</div>
 				<ConfirmationDialog />
 				<AddElementDialog />
+				<AddCollaboraFileDialog />
 				<LightBox />
+				<MoveCardDialog
+					v-if="roomId"
+					v-model:is-dialog-open="moveCardOptions.isDialogOpen"
+					:room-id="roomId"
+					:has-relocate-board-content-permission="hasRelocateBoardContentPermission"
+					:card-id="moveCardOptions.cardId"
+				/>
 				<CopyResultModal
 					:is-open="isCopyModalOpen"
 					:copy-result-items="copyResultModalItems"
 					:copy-result-root-item-type="copyResultRootItemType"
 					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
-				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+				<ShareModal v-if="shareModalContextType" :type="shareModalContextType" />
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
 					:current-layout="board.layout"
@@ -112,6 +122,7 @@
 </template>
 
 <script setup lang="ts">
+import AddCollaboraFileDialog from "../shared/AddCollaboraFileDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
@@ -120,22 +131,26 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import MoveCardDialog from "@/modules/feature/board/card/MoveCardDialog.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { BoardLayout, ShareTokenBodyParamsParentTypeEnum, ToolContextType } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
+import {
+	BoardExternalReferenceType,
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
-import { useNotificationStore } from "@data-app";
+import { useAppStore, useNotificationStore } from "@data-app";
 import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
@@ -144,13 +159,12 @@ import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, PropType, provide, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
-	breadcrumbs: { type: Array as PropType<Breadcrumb[]>, default: () => [] },
 });
 
 const { t } = useI18n();
@@ -159,10 +173,11 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-const { createPageInformation, contextType, roomId, resetPageInformation } = useSharedBoardPageInformation();
-const { createApplicationError } = useApplicationError();
+const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInformation } =
+	useSharedBoardPageInformation();
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
+const shareModalContextType = ref();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -187,6 +202,7 @@ const {
 	hasCreateColumnPermission,
 	hasCreateToolPermission,
 	hasDeletePermission,
+	hasRelocateBoardContentPermission,
 	hasEditPermission,
 	hasManageReadersCanEditPermission,
 	arePermissionsLoaded,
@@ -195,6 +211,10 @@ const {
 const isBoardVisible = computed(() => board.value?.isVisible);
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
+const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
+	isDialogOpen: false,
+	cardId: "",
+});
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
@@ -208,6 +228,23 @@ const onDeleteCard = async (cardId: string) => {
 	if (hasCreateCardPermission.value) {
 		cardStore.deleteCardRequest({ cardId });
 	}
+};
+
+const onMoveCard = (cardId: string) => {
+	moveCardOptions.value = {
+		isDialogOpen: true,
+		cardId,
+	};
+};
+
+const onShareCard = async (cardId: string) => {
+	shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.Card;
+
+	shareModule.startShareFlow({
+		id: cardId,
+		type: ShareTokenBodyParamsParentTypeEnum.Card,
+		destinationType: BoardExternalReferenceType.Room,
+	});
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -325,9 +362,7 @@ watch(
 
 		if (arePermissionsLoaded?.value && !canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
-			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.Forbidden, t("components.board.error.403"))
-			);
+			useAppStore().handleApplicationError(HttpStatusCode.Forbidden, "components.board.error.403");
 		}
 
 		hasReadersEditPermission.value =
@@ -346,9 +381,7 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
-const isListBoard = computed(
-	() => useEnvConfig().value.FEATURE_BOARD_LAYOUT_ENABLED && board.value?.layout === BoardLayout.List
-);
+const isListBoard = computed(() => board.value?.layout === BoardLayout.List);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
@@ -400,6 +433,8 @@ const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const onShareBoard = () => {
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
+		shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
+
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,

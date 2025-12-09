@@ -1,14 +1,27 @@
 import { uniqueId } from "lodash-es";
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { NamedValue } from "vue-i18n";
+import { RouteLocationRaw } from "vue-router";
 
 export type AlertStatus = "success" | "error" | "warning" | "info";
 
+/**
+ * text: The message to be displayed in the alert. Text or translation key allowed.
+ * status: The type of alert, which can be "success", "error", "warning", or "info".
+ * autoClose: Optional boolean indicating whether the alert should automatically close after a duration. Default is true.
+ * duration: Optional number specifying how long (in milliseconds) the alert should be displayed before auto-closing. Default is 5000ms.
+ */
 export interface AlertPayload {
 	text: string;
 	status: AlertStatus;
 	autoClose?: boolean;
 	duration?: number;
+	link?: {
+		to: string | RouteLocationRaw;
+		text: string;
+	};
+	replace?: NamedValue;
 }
 
 export interface Alert extends AlertPayload {
@@ -62,14 +75,14 @@ export const useNotificationStore = defineStore("notifyStore", () => {
 	};
 });
 
-export const notifySuccess = (text: string, autoClose = true) =>
-	useNotificationStore().notify({ text, status: "success", autoClose });
+export const notifySuccess = (textOrKey: string, autoClose = true) =>
+	useNotificationStore().notify({ text: textOrKey, status: "success", autoClose });
 
-export const notifyError = (text: string, autoClose = true) =>
-	useNotificationStore().notify({ text, status: "error", autoClose });
+export const notifyError = (textOrKey: string, autoClose = true) =>
+	useNotificationStore().notify({ text: textOrKey, status: "error", autoClose });
 
-export const notifyWarning = (text: string, autoClose = true) =>
-	useNotificationStore().notify({ text, status: "warning", autoClose });
+export const notifyWarning = (textOrKey: string, autoClose = true) =>
+	useNotificationStore().notify({ text: textOrKey, status: "warning", autoClose });
 
-export const notifyInfo = (text: string, autoClose = true) =>
-	useNotificationStore().notify({ text, status: "info", autoClose });
+export const notifyInfo = (textOrKey: string, autoClose = true) =>
+	useNotificationStore().notify({ text: textOrKey, status: "info", autoClose });

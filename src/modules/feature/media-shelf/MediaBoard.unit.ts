@@ -11,7 +11,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
@@ -278,7 +278,7 @@ describe("MediaBoard", () => {
 		it("should move the media line in the board state", async () => {
 			const { wrapper, sortableEvent, lineId } = setup();
 
-			const sortable = wrapper.findComponent(Sortable);
+			const sortable = wrapper.findComponent(Sortable) as unknown as VueWrapper<typeof Sortable>;
 
 			sortable.vm.$emit("end", sortableEvent);
 			await nextTick();

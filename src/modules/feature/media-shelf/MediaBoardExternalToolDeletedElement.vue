@@ -2,7 +2,7 @@
 	<MediaBoardElementDisplay :element="elementDisplayData" :is-unavailable="true">
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
-				<WarningChip data-testid="warning-chip-no-longer-available">
+				<WarningChip data-testid="warning-chip-no-longer-available" class="mr-1">
 					{{ $t("common.medium.chip.noLongerAvailable") }}
 				</WarningChip>
 			</div>

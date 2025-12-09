@@ -4,14 +4,22 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { axiosErrorFactory, fileFolderElementResponseFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
+import { useAppStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { AxiosPromise } from "axios";
+import { setActivePinia } from "pinia";
+import { beforeEach } from "vitest";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
 describe("useFolderState", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
 		const boardApi = createMock<serverApi.BoardElementApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
@@ -70,14 +78,15 @@ describe("useFolderState", () => {
 					vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 				};
 
-				it("should throw an error", async () => {
+				it("should create an application error", async () => {
 					const expectedError = createApplicationError(HttpStatusCode.NotFound);
 
 					setupWithError(expectedError.statusCode);
 
 					const { fetchFileFolderElement } = useFolderState();
 
-					await expect(fetchFileFolderElement("invalid-id")).rejects.toThrow(expectedError);
+					await fetchFileFolderElement("invalid-id");
+					expect(useAppStore().handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.NotFound);
 				});
 			});
 
@@ -96,11 +105,28 @@ describe("useFolderState", () => {
 						timestamps: { createdAt, lastUpdatedAt },
 					});
 				});
+
+				describe("when file folder element has an empty title", () => {
+					it("should return default title", async () => {
+						const { testId } = setup({
+							element: {
+								...fileFolderElementResponseFactory.build(),
+								content: { title: "" },
+							},
+						});
+
+						const { fetchFileFolderElement, folderName } = useFolderState();
+
+						await fetchFileFolderElement(testId);
+
+						expect(folderName.value).toEqual("pages.folder.untitled");
+					});
+				});
 			});
 
 			describe("when root parent node is a course", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "course-id",
@@ -132,13 +158,17 @@ describe("useFolderState", () => {
 							title: "Column Board",
 							to: "/boards/column-board-id",
 						},
+						{
+							disabled: true,
+							title,
+						},
 					]);
 				});
 			});
 
 			describe("when root parent node is a room", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId } = setup({
+					const { testId, title } = setup({
 						parentNodeInfos: [
 							{
 								id: "room-id",
@@ -160,6 +190,10 @@ describe("useFolderState", () => {
 						{
 							title: "Room",
 							to: "/rooms/room-id",
+						},
+						{
+							disabled: true,
+							title,
 						},
 					]);
 				});

@@ -17,7 +17,7 @@
 <script lang="ts">
 import FilePicker from "./file-picker/FilePicker.vue";
 import { ContentElementBar } from "@ui-board";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
 
 export default defineComponent({
@@ -34,6 +34,7 @@ export default defineComponent({
 		const fileWasPicked = ref(false);
 
 		const { lastCreatedElementId, resetLastCreatedElementId } = useSharedLastCreatedElement();
+		const { isFileSelectOnMountEnabled } = useSharedFileSelect();
 
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
 			if (fileWasPicked.value || props.isUploading) {
@@ -46,10 +47,11 @@ export default defineComponent({
 
 		onMounted(() => {
 			window.addEventListener("beforeunload", handleBeforeUnload);
-			if (lastCreatedElementId.value === props.elementId) {
-				isFilePickerOpen.value = true;
-				resetLastCreatedElementId();
+			if (lastCreatedElementId.value !== props.elementId) {
+				return;
 			}
+			isFilePickerOpen.value = isFileSelectOnMountEnabled.value;
+			resetLastCreatedElementId();
 		});
 
 		onBeforeUnmount(() => {

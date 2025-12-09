@@ -1,5 +1,6 @@
 import FolderTitleInput from "./FolderTitleInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/lib/components/index";
 
@@ -25,78 +26,72 @@ describe("FolderTitleInput.vue", () => {
 	};
 
 	describe("when valid title was entered", () => {
-		describe("when enter is pressed", () => {
-			it("should not show error-message", async () => {
-				const { wrapper } = setup();
+		it("should not show error-message", async () => {
+			const { wrapper } = setup();
 
-				await wrapper.findComponent(VTextField).setValue(VALID_TITLE);
-				await wrapper.find('[data-testid="folder-title-text-field-in-card"]').trigger("click");
+			await wrapper.findComponent(VTextField).setValue(VALID_TITLE);
+			await nextTick();
 
-				const alerts = wrapper.find('[role="alert"]');
+			const alerts = wrapper.find('[role="alert"]');
 
-				expect(alerts.text()).toBe("");
-			});
+			expect(alerts.text()).toBe("");
+		});
 
-			it("should emit update:title event", async () => {
-				const { wrapper } = setup();
+		it("should emit update:title event", async () => {
+			const { wrapper } = setup();
 
-				await wrapper.findComponent(VTextField).setValue(VALID_TITLE);
-				await wrapper.findComponent(VTextField).trigger("keydown.enter");
-				await nextTick();
+			await wrapper.findComponent(VTextField).setValue(VALID_TITLE);
+			await nextTick();
 
-				expect(wrapper.emitted("update:title")).toEqual([[VALID_TITLE]]);
-			});
+			expect(wrapper.emitted("update:title")).toEqual([[VALID_TITLE]]);
 		});
 	});
 
 	describe("when invalid title was entered", () => {
-		describe("when enter is pressed", () => {
-			it("should show error-message", async () => {
-				const { wrapper } = setup();
+		it("should show error-message", async () => {
+			const { wrapper } = setup();
 
-				await wrapper.findComponent(VTextField).setValue(INVALID_TITLE);
-				await wrapper.find('[data-testid="folder-title-text-field-in-card"]').trigger("click");
+			const textField = wrapper.findComponent(VTextField);
+			await textField.setValue(VALID_TITLE);
+			await textField.setValue(INVALID_TITLE);
+			await nextTick();
+			await flushPromises();
 
-				const alerts = wrapper.find('[role="alert"]');
+			const alerts = wrapper.find('[role="alert"]').text();
+			expect(alerts).toEqual("common.validation.containsOpeningTag");
+		});
 
-				expect(alerts.text()).toBe("common.validation.containsOpeningTag");
-			});
+		it("should not emit update:title event", async () => {
+			const { wrapper } = setup();
 
-			it("should not emit update:title event", async () => {
-				const { wrapper } = setup();
+			await wrapper.findComponent(VTextField).setValue(INVALID_TITLE);
+			await nextTick();
 
-				await wrapper.findComponent(VTextField).setValue(INVALID_TITLE);
-				await wrapper.findComponent(VTextField).trigger("keydown.enter");
-				await nextTick();
-
-				expect(wrapper.emitted("update:title")).toBeUndefined();
-			});
+			expect(wrapper.emitted("update:title")).toBeUndefined();
 		});
 	});
 
 	describe("when title field is empty", () => {
-		describe("when submit button is clicked", () => {
-			it("should show replace value with default message", async () => {
-				const { wrapper } = setup();
+		it("should show error-message", async () => {
+			const { wrapper } = setup();
 
-				await wrapper.find('[data-testid="folder-title-text-field-in-card"]').trigger("submit.prevent");
+			const textField = wrapper.findComponent(VTextField);
+			await textField.setValue(VALID_TITLE);
+			await textField.setValue("");
+			await nextTick();
+			await flushPromises();
 
-				const textField = wrapper
-					.findComponent('[data-testid="folder-title-text-field-in-card"]')
-					.find("input[type='text']");
+			const alerts = wrapper.find('[role="alert"]').text();
+			expect(alerts).toEqual("common.validation.required");
+		});
 
-				expect(textField.attributes("value")).toEqual("pages.folder.untitled");
-			});
+		it("should not emit update:title event", async () => {
+			const { wrapper } = setup();
 
-			it("should emit update:title event", async () => {
-				const { wrapper } = setup();
+			await wrapper.findComponent(VTextField).setValue("");
+			await nextTick();
 
-				await wrapper.findComponent(VTextField).setValue("");
-				await wrapper.find('[data-testid="save-folder-title-in-card"]').trigger("click");
-				await nextTick();
-
-				expect(wrapper.emitted("update:title")).toEqual([[""]]);
-			});
+			expect(wrapper.emitted("update:title")).toBeUndefined();
 		});
 	});
 });

@@ -19,7 +19,25 @@
 				@click:close="removeNotifier(notification.id)"
 			>
 				<div class="alert-text mr-2" data-testId="alert-text">
-					{{ notification.text }}
+					<i18n-t
+						v-if="notification.link || notification.replace"
+						:keypath="notification.text"
+						tag="span"
+						scope="global"
+					>
+						<template v-if="notification.link" #link>
+							<RouterLink data-testId="alert-link" :to="notification.link.to">
+								{{ notification.link.text }}
+							</RouterLink>
+						</template>
+						<template v-for="(value, key) in notification.replace" #[key]>
+							{{ value }}
+						</template>
+					</i18n-t>
+
+					<template v-else>
+						{{ getNotificationText(notification.text) }}
+					</template>
 				</div>
 			</v-alert>
 		</transition-group>
@@ -27,16 +45,20 @@
 </template>
 
 <script setup lang="ts">
+import { i18nKeyExists } from "@/plugins/i18n";
 import { AlertStatus, useNotificationStore } from "@data-app";
 import { mdiAlert, mdiAlertCircle, mdiCheckCircle, mdiInformation } from "@icons/material";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const { notifierItems } = storeToRefs(useNotificationStore());
 const { removeNotifier } = useNotificationStore();
 
 const { xs: isMobile } = useDisplay();
+
+const { t } = useI18n();
 
 const transition = computed(() => (isMobile.value ? "scale-transition" : "scroll-x-reverse-transition"));
 
@@ -46,6 +68,8 @@ const statusIcons: { [status in AlertStatus]: string } = {
 	error: mdiAlertCircle,
 	info: mdiInformation,
 };
+
+const getNotificationText = (text: string) => (i18nKeyExists(text) ? t(text) : text);
 </script>
 
 <style lang="scss" scoped>

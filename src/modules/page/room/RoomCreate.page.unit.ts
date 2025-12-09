@@ -1,81 +1,59 @@
-import { RoomColor, RoomCreateParams } from "@/types/room/Room";
+import { RoomColor } from "@/serverApi/v3";
+import { RoomCreateParams } from "@/types/room/Room";
+import { createTestRoomStore, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRoomCreateState } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
-import { flushPromises } from "@vue/test-utils";
-import { useRouter } from "vue-router";
-
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn().mockReturnValue({
-		push: vi.fn(),
-	}),
-}));
-
-vi.mock("@data-room/RoomCreate.state.ts", () => ({
-	useRoomCreateState: vi.fn().mockReturnValue({
-		createRoom: vi.fn().mockResolvedValue({
-			id: "123",
-			name: "test",
-			color: "blue",
-			features: [],
-		}),
-		roomData: {
-			name: "test-room-data",
-			color: "blue",
-			features: [],
-		},
-	}),
-}));
-
-vi.mock(
-	"@/utils/pageTitle",
-	() =>
-		({
-			buildPageTitle: (pageTitle) => pageTitle ?? "",
-		}) as typeof import("@/utils/pageTitle")
-);
-
-const roomParams: RoomCreateParams = {
-	name: "test",
-	color: RoomColor.Blue,
-	features: [],
-};
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("@pages/RoomCreate.page.vue", () => {
+	const router = createRouterMock();
+
 	const setup = () => {
+		injectRouterMock(router);
+
 		const wrapper = mount(RoomCreatePage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 
-		const { createRoom } = useRoomCreateState();
+		const { roomStore } = createTestRoomStore();
 		const roomFormComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
-			router: useRouter(),
-			createRoom,
+			roomStore,
 			roomFormComponent,
 		};
 	};
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();
 	});
 
-	it("should call createRoom with correct parameters on save", async () => {
-		const { createRoom, roomFormComponent } = setup();
-		roomFormComponent.vm.$emit("save", { room: roomParams });
-		await flushPromises();
-		expect(createRoom).toHaveBeenCalledWith(roomParams);
-	});
+	it("should navigate to 'room-details' with correct room id on save", async () => {
+		const { roomFormComponent, roomStore } = setup();
 
-	it("should navigate to 'room-details' with correct room id on save", () => {
-		const { roomFormComponent, router } = setup();
-		roomFormComponent.vm.$emit("save", roomParams);
+		const roomParams: RoomCreateParams = {
+			name: "test",
+			color: RoomColor.Blue,
+			features: [],
+		};
+
+		roomStore.createRoom.mockResolvedValue({
+			result: mockApiResponse({ data: roomItemFactory.build({ id: "123" }) }),
+			success: true,
+		});
+		await roomFormComponent.vm.$emit("save", { room: roomParams });
+		expect(roomStore.createRoom).toHaveBeenCalledWith(roomParams);
 		expect(router.push).toHaveBeenCalledWith({
 			name: "room-details",
 			params: { id: "123" },
@@ -83,7 +61,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 	});
 
 	it("should navigate to 'rooms' on cancel", () => {
-		const { router, roomFormComponent } = setup();
+		const { roomFormComponent } = setup();
 		roomFormComponent.vm.$emit("cancel");
 		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
 	});

@@ -10,7 +10,7 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { formatFileSize } from "@/utils/fileHelper";
+import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
@@ -26,14 +26,31 @@ export enum ErrorType {
 	Forbidden = "Forbidden",
 }
 
+export enum CollaboraFileType {
+	Text,
+	Spreadsheet,
+	Presentation,
+}
+
 export const useFileStorageApi = () => {
 	const { t } = useI18n();
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
 
-	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords } = useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, getFileRecordById } = useFileRecordsStore();
 
 	const { getStatisticByParentId, setStatisticForParent } = useParentStatisticsStore();
+
+	const fetchFileById = async (fileRecordId: string): Promise<void> => {
+		try {
+			const response = await fileApi.getFileRecord(fileRecordId);
+
+			upsertFileRecords([response.data]);
+		} catch (error) {
+			showError(error);
+			throw error;
+		}
+	};
 
 	const fetchFiles = async (parentId: string, parentType: FileRecordParent): Promise<void> => {
 		try {
@@ -58,14 +75,47 @@ export const useFileStorageApi = () => {
 		}
 	};
 
-	const uploadFromUrl = async (imageUrl: string, parentId: string, parentType: FileRecordParent): Promise<void> => {
+	const getCollaboraAssetUrl = (collaboraFileType: CollaboraFileType): string => {
+		const base = `${window.location.origin}/collabora`;
+
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return `${base}/doc.docx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return `${base}/spreadsheet.xlsx`;
+		}
+
+		return `${base}/presentation.pptx`;
+	};
+
+	const uploadCollaboraFile = async (
+		type: CollaboraFileType,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName: string
+	) => {
+		const assetUrl = getCollaboraAssetUrl(type);
+		const fileExtension = getFileExtension(assetUrl);
+		const fullFileName = `${fileName}.${fileExtension}`;
+
+		const fileRecord = await uploadFromUrl(assetUrl, parentId, parentType, fullFileName);
+
+		return fileRecord;
+	};
+
+	const uploadFromUrl = async (
+		imageUrl: string,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName?: string
+	): Promise<FileRecord | void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
-			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
+			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
 			const schoolId = useAppStore().school?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
-				fileName,
+				fileName: fileName === "" ? "file" : fileName,
 				headers: { "User-Agent": "Embed Request User Agent" },
 			};
 			const response = await fileApi.uploadFromUrl(
@@ -77,6 +127,8 @@ export const useFileStorageApi = () => {
 			);
 
 			upsertFileRecords([response.data]);
+
+			return response.data;
 		} catch (error) {
 			showError(error);
 		}
@@ -173,9 +225,12 @@ export const useFileStorageApi = () => {
 		upload,
 		uploadFromUrl,
 		getFileRecordsByParentId,
+		getFileRecordById,
 		deleteFiles,
 		getStatisticByParentId,
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
+		fetchFileById,
+		uploadCollaboraFile,
 	};
 };

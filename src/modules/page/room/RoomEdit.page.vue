@@ -17,9 +17,8 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApiResponseError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomUpdateParams } from "@/types/room/Room";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError } from "@data-app";
+import { notifyError, useAppStore } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
@@ -40,7 +39,7 @@ const { canEditRoom } = useRoomAuthorization();
 
 const roomData = ref<RoomUpdateParams>();
 
-const pageTitle = computed(() => buildPageTitle(`${t("pages.roomEdit.title")}`));
+const pageTitle = computed(() => buildPageTitle(t("pages.roomEdit.title"), roomData.value?.name));
 useTitle(pageTitle);
 
 onMounted(async () => {
@@ -76,7 +75,7 @@ const onSave = async (payload: { room: RoomUpdateParams }) => {
 		if (isInvalidRequestError(error)) {
 			notifyError(t("components.roomForm.validation.generalSaveError"));
 		} else {
-			throw createApplicationError((error as ApiResponseError).code);
+			useAppStore().handleApplicationError((error as ApiResponseError).code);
 		}
 	}
 };

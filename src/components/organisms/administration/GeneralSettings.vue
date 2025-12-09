@@ -134,9 +134,9 @@ import { schoolsModule } from "@/store";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useOpeningTagValidator } from "@util-validators";
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

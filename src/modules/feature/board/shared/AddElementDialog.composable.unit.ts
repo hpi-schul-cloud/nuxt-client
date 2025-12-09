@@ -1,3 +1,4 @@
+import { setupCollaboraFileSelectionMock } from "../test-utils/add-collabora-file-mock";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
@@ -16,6 +17,7 @@ import { ref } from "vue";
 
 vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
+vi.mock("./add-collabora-file.composable");
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
@@ -62,6 +64,7 @@ describe("ElementTypeSelection Composable", () => {
 				const cardId = "cardId";
 
 				setupSharedElementTypeSelectionMock();
+				setupCollaboraFileSelectionMock();
 
 				const addElementMock = vi.fn();
 				const elementType = ContentElementType.RichText;
@@ -191,6 +194,8 @@ describe("ElementTypeSelection Composable", () => {
 			const { isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
 				setupSharedElementTypeSelectionMock();
 
+			setupCollaboraFileSelectionMock();
+
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
@@ -200,6 +205,7 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
 				FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
+				FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true,
 			});
 
 			const { askType } = useAddElementDialog(addElementMock, "cardId");
@@ -226,7 +232,7 @@ describe("ElementTypeSelection Composable", () => {
 
 			askType();
 
-			expect(staticElementTypeOptions.value.length).toBe(9);
+			expect(staticElementTypeOptions.value.length).toBe(10);
 		});
 
 		describe("when preferred tools have finished loading", () => {
@@ -333,6 +339,7 @@ describe("ElementTypeSelection Composable", () => {
 			FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 			FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
 			FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
+			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: true,
 		};
 
 		const defaultHasManageVideoConferencePermission = false;
@@ -348,21 +355,27 @@ describe("ElementTypeSelection Composable", () => {
 			const { staticElementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
+			const openCollaboraFileDialogMock = vi.fn();
+			const setCardIdMock = vi.fn();
+			const { collaboraFileSelectionOptions } = setupCollaboraFileSelectionMock({
+				setCardIdMock,
+				openCollaboraFileDialogMock,
+			});
 
 			mockedUseBoardPermissions.mockReturnValue({
 				hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
 			} as BoardPermissionChecks);
 
 			mockedPiniaStoreTyping(useCardStore);
-
-			mockedInjectStrict.mockImplementation(() => ({
-				getEnv: mergedEnv,
-			}));
+			createTestEnvStore(mergedEnv);
 
 			return {
 				elementTypeOptions: staticElementTypeOptions,
+				collaboraFileSelectionOptions,
 				addElementMock,
 				closeDialogMock,
+				openCollaboraFileDialogMock,
+				setCardIdMock,
 				cardId,
 			};
 		};
@@ -656,6 +669,44 @@ describe("ElementTypeSelection Composable", () => {
 				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("when the collabora file element is clicked", () => {
+			it("should set isDialogOpen to false", () => {
+				const { elementTypeOptions, addElementMock, cardId, closeDialogMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
+				option?.action();
+
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
+			});
+
+			it("should set cardId", () => {
+				const { elementTypeOptions, addElementMock, cardId, setCardIdMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
+				option?.action();
+
+				expect(setCardIdMock).toHaveBeenCalledTimes(1);
+			});
+
+			it("should set isCollaboraFileDialogOpen to true", () => {
+				const { elementTypeOptions, addElementMock, cardId, openCollaboraFileDialogMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
+				option?.action();
+
+				expect(openCollaboraFileDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 	});

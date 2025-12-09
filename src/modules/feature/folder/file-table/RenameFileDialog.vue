@@ -7,14 +7,14 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<v-text-field
+			<VTextField
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
 				density="compact"
 				flat
 				:aria-label="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
-				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames]"
+				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames, rules.checkInvalidCharacters]"
 			/>
 		</template>
 	</Dialog>
@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
-import { useOpeningTagValidator } from "@/utils/validation";
 import { Dialog } from "@ui-dialog";
+import { useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -59,10 +59,16 @@ watch(
 const { t } = useI18n();
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
+const { validateInvalidCharacters } = useInvalidCharactersValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
-	validateOnOpeningTag: (value: string) => validateOnOpeningTag(value),
+	validateOnOpeningTag: (value: string) => {
+		const fileExtension = getFileExtension(name);
+		const nameWithExtension = `${value}.${fileExtension}`;
+
+		return validateOnOpeningTag(nameWithExtension);
+	},
 	checkDuplicatedNames: (value: string) => {
 		const fileExtension = getFileExtension(name);
 		const nameWithExtension = `${value}.${fileExtension}`;
@@ -72,13 +78,15 @@ const rules = reactive({
 			t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
 		);
 	},
+	checkInvalidCharacters: (value: string) => validateInvalidCharacters(value, ["/"]),
 });
 
 const isNameValid = computed(
 	() =>
 		rules.required(nameRef.value) === true &&
 		rules.validateOnOpeningTag(nameRef.value) === true &&
-		rules.checkDuplicatedNames(nameRef.value) === true
+		rules.checkDuplicatedNames(nameRef.value) === true &&
+		rules.checkInvalidCharacters(nameRef.value) === true
 );
 
 const onCancel = () => {

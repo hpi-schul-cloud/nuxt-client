@@ -9,7 +9,7 @@
 				<p>
 					{{ $t("feature-room.CopyInfoDialog.text.nextStep") }}
 				</p>
-				<InfoAlert class="mb-4">
+				<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
 					{{ $t("components.molecules.share.checkPrivacyAndCopyright") }}
 				</InfoAlert>
 				<WarningAlert>
@@ -17,16 +17,16 @@
 						{{ t("feature-room.CopyInfoDialog.text.alert.followingContent") }}
 					</p>
 					<ul class="ml-6">
-						<li>
+						<li data-testid="copy-modal-room-member-permission">
 							{{ t("feature-room.CopyInfoDialog.text.alert.membersPermissions") }}
 						</li>
-						<li>
+						<li data-testid="copy-modal-content-etherpad">
 							{{ t("feature-room.CopyInfoDialog.text.alert.Etherpad") }}
 						</li>
-						<li>
+						<li data-testid="copy-modal-content-whiteboard">
 							{{ t("feature-room.CopyInfoDialog.text.alert.whiteboard") }}
 						</li>
-						<li>
+						<li data-testid="copy-modal-protected-external-tool">
 							{{ t("feature-room.CopyInfoDialog.text.alert.protectedSettings") }}
 						</li>
 					</ul>

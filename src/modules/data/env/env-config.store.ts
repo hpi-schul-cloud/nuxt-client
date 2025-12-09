@@ -1,9 +1,8 @@
 import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
 import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, reactive } from "vue";
@@ -17,6 +16,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	MIGRATION_END_GRACE_PERIOD_MS: -1,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: false,
 	DOCUMENT_BASE_DIR: "",
+	FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: false,
 	FEATURE_CONSENT_NECESSARY: false,
 	FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 	GHOST_BASE_URL: "",
@@ -31,6 +31,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 	ACCESSIBILITY_REPORT_EMAIL: "",
 	SC_CONTACT_EMAIL: "",
+	SC_CONTACT_EMAIL_SUBJECT: "",
 	FEATURE_SHOW_MIGRATION_WIZARD: false,
 	FEATURE_TLDRAW_ENABLED: false,
 	ALERT_STATUS_URL: null,
@@ -133,7 +134,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 
 			return true;
 		} catch {
-			applicationErrorModule.setError(createApplicationError(HttpStatusCode.GatewayTimeout));
+			useAppStore().handleApplicationError(HttpStatusCode.GatewayTimeout);
 			return false;
 		}
 	};

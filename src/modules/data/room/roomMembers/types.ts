@@ -15,9 +15,10 @@ export type RoomMember = RoomMemberResponse & {
 export type RoomInvitationLink = RoomInvitationLinkResponse;
 
 export type RoomInvitationFormData = {
-	activeUntil: Date | undefined;
+	activeUntil: string | undefined;
 	activeUntilChecked: boolean;
-	isValidForStudents: boolean;
+	isUsableByStudents: boolean;
+	isUsableByExternalPersons: boolean;
 	requiresConfirmation: boolean;
 	restrictedToCreatorSchool: boolean;
 	title: string;

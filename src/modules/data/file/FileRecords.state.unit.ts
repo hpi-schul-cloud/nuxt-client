@@ -126,6 +126,65 @@ describe("FileRecords Store", () => {
 		});
 	});
 
+	describe("getFileRecordById", () => {
+		describe("when store is empty", () => {
+			it("should return undefined if no records exist", () => {
+				const store = useFileRecordsStore();
+
+				const result = store.getFileRecordById("nonexistent");
+
+				expect(result).toBeUndefined();
+			});
+		});
+
+		describe("when store has records", () => {
+			const setup = () => {
+				const store = useFileRecordsStore();
+
+				const record1 = fileRecordFactory.build();
+				const record2 = fileRecordFactory.build();
+				const record3 = fileRecordFactory.build();
+
+				return {
+					store,
+					record1,
+					record2,
+					record3,
+				};
+			};
+
+			it("should return the correct file record when it exists", () => {
+				const { store, record1, record2, record3 } = setup();
+
+				store.upsertFileRecords([record1, record2, record3]);
+
+				const result = store.getFileRecordById(record2.id);
+
+				expect(result).toEqual(expect.objectContaining(record2));
+			});
+
+			it("should return the correct file record from different parent ids", () => {
+				const { store, record1, record2, record3 } = setup();
+
+				store.upsertFileRecords([record1, record2, record3]);
+
+				const result = store.getFileRecordById(record3.id);
+
+				expect(result).toEqual(expect.objectContaining(record3));
+			});
+
+			it("should return undefined if the file record does not exist", () => {
+				const { store, record1, record2, record3 } = setup();
+
+				store.upsertFileRecords([record1, record2, record3]);
+
+				const result = store.getFileRecordById("nonexistent");
+
+				expect(result).toBeUndefined();
+			});
+		});
+	});
+
 	describe("deleteFileRecords", () => {
 		describe("when store is empty", () => {
 			it("should not throw an error when deleting from an empty store", () => {

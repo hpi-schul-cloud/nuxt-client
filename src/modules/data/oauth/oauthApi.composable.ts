@@ -13,7 +13,7 @@ export const useOAuthApi = () => {
 			const expirationDate = new Date(response.data.expiresAt);
 
 			return expirationDate;
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			// eslint-disable-next-line
 		} catch (error) {
 			return undefined;
 		}

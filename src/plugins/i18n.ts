@@ -57,4 +57,21 @@ const localCreateI18n = () => {
 	return i18n;
 };
 
-export { localCreateI18n as createI18n };
+let i18nInstance: ReturnType<typeof localCreateI18n>;
+
+const createTypedI18nInstance = () => {
+	if (!i18nInstance) {
+		i18nInstance = localCreateI18n();
+	}
+	return i18nInstance;
+};
+export { createTypedI18nInstance as createI18n };
+
+export const useI18nGlobal = () => createTypedI18nInstance()?.global;
+
+export const i18nKeyExists = (key: string) => {
+	const { locale, messages } = createTypedI18nInstance().global;
+
+	// @ts-expect-error Schema for i18n is not properly written yet. TODO: Fix schema, then remove this line.
+	return key in messages.value[locale.value];
+};

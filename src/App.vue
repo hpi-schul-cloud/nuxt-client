@@ -19,11 +19,10 @@ const route = useRoute();
 setComputedScrollbarWidthAsCssVar();
 
 const layout = computed(() => {
-	let layoutName = (route.meta.layout as string) || Layouts.LOGGED_IN;
+	const isLoggedIn = useAppStore().isLoggedIn;
+	const requestedLayout = route.meta.layout as string | undefined;
 
-	if (!useAppStore().isLoggedIn) {
-		layoutName = Layouts.LOGGED_OUT;
-	}
+	const layoutName = isLoggedIn ? requestedLayout || Layouts.LOGGED_IN : requestedLayout || Layouts.LOGGED_OUT;
 
 	if (isLayout(layoutName)) {
 		return availableLayouts[layoutName];

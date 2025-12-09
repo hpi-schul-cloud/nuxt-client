@@ -143,6 +143,19 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface AddByEmailBodyParams
+ */
+export interface AddByEmailBodyParams {
+    /**
+     * The email of external persons to add to the room
+     * @type {string}
+     * @memberof AddByEmailBodyParams
+     */
+    email: string;
+}
+/**
+ * 
+ * @export
  * @interface AddRoomMembersBodyParams
  */
 export interface AddRoomMembersBodyParams {
@@ -296,6 +309,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     BoardManage = 'BOARD_MANAGE',
+    BoardRelocateContent = 'BOARD_RELOCATE_CONTENT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -362,7 +376,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     InstanceView = 'INSTANCE_VIEW',
     InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
-    InviteExperts = 'INVITE_EXPERTS',
+    InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
     LernstoreView = 'LERNSTORE_VIEW',
@@ -425,6 +439,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     SchoolEditRoom = 'SCHOOL_EDIT_ROOM',
     SchoolDeleteRoom = 'SCHOOL_DELETE_ROOM',
     SchoolListDiscoverableTeachers = 'SCHOOL_LIST_DISCOVERABLE_TEACHERS',
+    SchoolListRoomMembers = 'SCHOOL_LIST_ROOM_MEMBERS',
     SchoolManageRoomInvitationlinks = 'SCHOOL_MANAGE_ROOM_INVITATIONLINKS',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
@@ -1418,6 +1433,12 @@ export interface ConfigResponse {
     SC_CONTACT_EMAIL: string;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SC_CONTACT_EMAIL_SUBJECT: string;
+    /**
+     * 
      * @type {number}
      * @memberof ConfigResponse
      */
@@ -1806,6 +1827,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -2949,6 +2976,37 @@ export enum CreateNewsParamsTargetModelEnum {
 /**
  * 
  * @export
+ * @interface CreateOrUpdateRegistrationBodyParams
+ */
+export interface CreateOrUpdateRegistrationBodyParams {
+    /**
+     * The mail adress of the new user. Will also be used as username.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    email: string;
+    /**
+     * The firstname of the new user.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    firstName: string;
+    /**
+     * The lastname of the new user.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    lastName: string;
+    /**
+     * The id of the room the user is invited to.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    roomId: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateRoomBodyParams
  */
 export interface CreateRoomBodyParams {
@@ -3008,11 +3066,17 @@ export interface CreateRoomInvitationLinkBodyParams {
      */
     activeUntil?: string;
     /**
-     * Indicates if the link is restricted to teachers only
+     * Indicates if the link is also usable by external persons
      * @type {boolean}
      * @memberof CreateRoomInvitationLinkBodyParams
      */
-    isOnlyForTeachers: boolean;
+    isUsableByExternalPersons: boolean;
+    /**
+     * Indicates if the link is also usable by students
+     * @type {boolean}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    isUsableByStudents: boolean;
     /**
      * Indicates if the link is restricted to the creators school
      * @type {boolean}
@@ -4858,12 +4922,6 @@ export interface LernstoreResources {
      */
     description: string;
     /**
-     * merlinReference
-     * @type {string}
-     * @memberof LernstoreResources
-     */
-    merlinReference?: string;
-    /**
      * title
      * @type {string}
      * @memberof LernstoreResources
@@ -5800,12 +5858,6 @@ export interface MaterialResponse {
      * @memberof MaterialResponse
      */
     license: Array<string>;
-    /**
-     * For material from Merlin, the Merlin reference
-     * @type {string}
-     * @memberof MaterialResponse
-     */
-    merlinReference: string;
 }
 /**
  * 
@@ -6479,11 +6531,48 @@ export interface MoveCardBodyParams {
      */
     toColumnId: string;
     /**
-     * 
+     * to bring element to a specific position, default is last position
      * @type {number}
      * @memberof MoveCardBodyParams
      */
-    toPosition: number;
+    toPosition?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MoveCardResponse
+ */
+export interface MoveCardResponse {
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {CardSkeletonResponse}
+     * @memberof MoveCardResponse
+     */
+    card: CardSkeletonResponse;
 }
 /**
  * 
@@ -6585,6 +6674,25 @@ export interface MoveElementPositionParams {
      * @memberof MoveElementPositionParams
      */
     groupIndex?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MoveItemBodyParams
+ */
+export interface MoveItemBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof MoveItemBodyParams
+     */
+    id: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveItemBodyParams
+     */
+    toPosition: number;
 }
 /**
  * 
@@ -7760,6 +7868,7 @@ export enum Permission {
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     BoardManage = 'BOARD_MANAGE',
+    BoardRelocateContent = 'BOARD_RELOCATE_CONTENT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -7826,7 +7935,7 @@ export enum Permission {
     InstanceView = 'INSTANCE_VIEW',
     InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
-    InviteExperts = 'INVITE_EXPERTS',
+    InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
     LernstoreView = 'LERNSTORE_VIEW',
@@ -7889,6 +7998,7 @@ export enum Permission {
     SchoolEditRoom = 'SCHOOL_EDIT_ROOM',
     SchoolDeleteRoom = 'SCHOOL_DELETE_ROOM',
     SchoolListDiscoverableTeachers = 'SCHOOL_LIST_DISCOVERABLE_TEACHERS',
+    SchoolListRoomMembers = 'SCHOOL_LIST_ROOM_MEMBERS',
     SchoolManageRoomInvitationlinks = 'SCHOOL_MANAGE_ROOM_INVITATIONLINKS',
     ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
     StartMeeting = 'START_MEETING',
@@ -8096,6 +8206,49 @@ export interface RedirectResponse {
 /**
  * 
  * @export
+ * @interface RegistrationItemResponse
+ */
+export interface RegistrationItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
  * @interface RemoveRoomMembersBodyParams
  */
 export interface RemoveRoomMembersBodyParams {
@@ -8253,9 +8406,10 @@ export enum RoleName {
     Demo = 'demo',
     DemoStudent = 'demoStudent',
     DemoTeacher = 'demoTeacher',
-    Expert = 'expert',
+    ExternalPerson = 'externalPerson',
     GuestTeacher = 'guestTeacher',
     GuestStudent = 'guestStudent',
+    GuestExternalPerson = 'guestExternalPerson',
     Helpdesk = 'helpdesk',
     Roomapplicant = 'roomapplicant',
     Roomviewer = 'roomviewer',
@@ -8368,6 +8522,31 @@ export enum RoomColor {
     Brown = 'brown'
 }
 
+/**
+ * 
+ * @export
+ * @interface RoomCreatedResponse
+ */
+export interface RoomCreatedResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    updatedAt: string;
+}
 /**
  * 
  * @export
@@ -8542,7 +8721,13 @@ export interface RoomInvitationLinkResponse {
      * @type {boolean}
      * @memberof RoomInvitationLinkResponse
      */
-    isOnlyForTeachers: boolean;
+    isUsableByExternalPersons: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomInvitationLinkResponse
+     */
+    isUsableByStudents: boolean;
     /**
      * 
      * @type {string}
@@ -8575,7 +8760,7 @@ export interface RoomInvitationLinkResponse {
  */
 export enum RoomInvitationLinkValidationError {
     Expired = 'EXPIRED',
-    OnlyForTeachers = 'ONLY_FOR_TEACHERS',
+    NotUsableForCurrentRole = 'NOT_USABLE_FOR_CURRENT_ROLE',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
     CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL',
     InvalidLink = 'INVALID_LINK',
@@ -8638,6 +8823,12 @@ export interface RoomItemResponse {
     updatedAt: string;
     /**
      * 
+     * @type {Array<Permission>}
+     * @memberof RoomItemResponse
+     */
+    permissions: Array<Permission>;
+    /**
+     * 
      * @type {boolean}
      * @memberof RoomItemResponse
      */
@@ -8650,29 +8841,11 @@ export interface RoomItemResponse {
  */
 export interface RoomListResponse {
     /**
-     * The items for the current page.
+     * 
      * @type {Array<RoomItemResponse>}
      * @memberof RoomListResponse
      */
     data: Array<RoomItemResponse>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof RoomListResponse
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof RoomListResponse
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof RoomListResponse
-     */
-    limit: number;
 }
 /**
  * 
@@ -9264,7 +9437,7 @@ export interface SchoolPermissionsParams {
  * @enum {string}
  */
 export enum SchoolPurpose {
-    Expert = 'expert',
+    ExternalPersonSchool = 'external_person_school',
     Tombstone = 'tombstone',
     Demo = 'demo',
     Test = 'test',
@@ -9731,7 +9904,8 @@ export enum ShareTokenBodyParamsParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9788,7 +9962,8 @@ export enum ShareTokenInfoResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9820,7 +9995,8 @@ export enum ShareTokenPayloadResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9847,6 +10023,25 @@ export interface ShareTokenResponse {
      * @memberof ShareTokenResponse
      */
     expiresAt?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShortNodeResponse
+ */
+export interface ShortNodeResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    title: string;
 }
 /**
  * 
@@ -10738,17 +10933,23 @@ export interface UpdateRoomInvitationLinkBodyParams {
      */
     activeUntil?: string;
     /**
-     * Indicates if the link is restricted to teachers only
+     * Indicates if the link is also usable by external persons
      * @type {boolean}
      * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    isOnlyForTeachers?: boolean;
+    isUsableByExternalPersons: boolean;
+    /**
+     * Indicates if the link is also usable by students
+     * @type {boolean}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    isUsableByStudents: boolean;
     /**
      * Indicates if the link is restricted to the creators school
      * @type {boolean}
      * @memberof UpdateRoomInvitationLinkBodyParams
      */
-    restrictedToCreatorSchool?: boolean;
+    restrictedToCreatorSchool: boolean;
     /**
      * Indicates if the link requires confirmation by room admins / room owners
      * @type {boolean}
@@ -14450,6 +14651,44 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
+         * @summary Copy a single card.
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerCopyCard: async (cardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cardId' is not null or undefined
+            assertParamExists('cardControllerCopyCard', 'cardId', cardId)
+            const localVarPath = `/cards/{cardId}/copy`
+                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
          * @param {CreateContentElementBodyParams} createContentElementBodyParams 
@@ -14715,13 +14954,24 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Copy a single card.
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cardControllerCopyCard(cardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCopyCard(cardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
          * @param {CreateContentElementBodyParams} createContentElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | FileFolderElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14755,7 +15005,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MoveCardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerMoveCard(cardId, moveCardBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14795,13 +15045,23 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
+         * @summary Copy a single card.
+         * @param {string} cardId The id of the card.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerCopyCard(cardId: string, options?: any): AxiosPromise<CardResponse> {
+            return localVarFp.cardControllerCopyCard(cardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new element on a card.
          * @param {string} cardId The id of the card.
          * @param {CreateContentElementBodyParams} createContentElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | FileFolderElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14832,7 +15092,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void> {
+        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse> {
             return localVarFp.cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14868,6 +15128,16 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
 export interface BoardCardApiInterface {
     /**
      * 
+     * @summary Copy a single card.
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardCardApiInterface
+     */
+    cardControllerCopyCard(cardId: string, options?: any): AxiosPromise<CardResponse>;
+
+    /**
+     * 
      * @summary Create a new element on a card.
      * @param {string} cardId The id of the card.
      * @param {CreateContentElementBodyParams} createContentElementBodyParams 
@@ -14875,7 +15145,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | FileFolderElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>;
 
     /**
      * 
@@ -14906,7 +15176,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void>;
+    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse>;
 
     /**
      * 
@@ -14939,6 +15209,18 @@ export interface BoardCardApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
+    /**
+     * 
+     * @summary Copy a single card.
+     * @param {string} cardId The id of the card.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardCardApi
+     */
+    public cardControllerCopyCard(cardId: string, options?: any) {
+        return BoardCardApiFp(this.configuration).cardControllerCopyCard(cardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new element on a card.
@@ -22791,11 +23073,342 @@ export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
 
 
 /**
+ * RegistrationApi - axios parameter creator
+ * @export
+ */
+export const RegistrationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a new registration
+         * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerCreateOrUpdateRegistration: async (createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createOrUpdateRegistrationBodyParams' is not null or undefined
+            assertParamExists('registrationControllerCreateOrUpdateRegistration', 'createOrUpdateRegistrationBodyParams', createOrUpdateRegistrationBodyParams)
+            const localVarPath = `/registrations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createOrUpdateRegistrationBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a list of registrations for specific roomId
+         * @param {string} roomId The id of the room a registration is attached to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerFindByRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('registrationControllerFindByRoom', 'roomId', roomId)
+            const localVarPath = `/registrations/by-room/{roomId}`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerGetBySecret: async (registrationSecret: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationSecret' is not null or undefined
+            assertParamExists('registrationControllerGetBySecret', 'registrationSecret', registrationSecret)
+            const localVarPath = `/registrations/by-secret/{registrationSecret}`
+                .replace(`{${"registrationSecret"}}`, encodeURIComponent(String(registrationSecret)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RegistrationApi - functional programming interface
+ * @export
+ */
+export const RegistrationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RegistrationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new registration
+         * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a list of registrations for specific roomId
+         * @param {string} roomId The id of the room a registration is attached to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerFindByRoom(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerGetBySecret(registrationSecret: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerGetBySecret(registrationSecret, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RegistrationApi - factory interface
+ * @export
+ */
+export const RegistrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RegistrationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new registration
+         * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): AxiosPromise<RegistrationItemResponse> {
+            return localVarFp.registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of registrations for specific roomId
+         * @param {string} roomId The id of the room a registration is attached to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse> {
+            return localVarFp.registrationControllerFindByRoom(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse> {
+            return localVarFp.registrationControllerGetBySecret(registrationSecret, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RegistrationApi - interface
+ * @export
+ * @interface RegistrationApi
+ */
+export interface RegistrationApiInterface {
+    /**
+     * 
+     * @summary Create a new registration
+     * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+    /**
+     * 
+     * @summary Get a list of registrations for specific roomId
+     * @param {string} roomId The id of the room a registration is attached to.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+    /**
+     * 
+     * @summary Get a registration by its secret
+     * @param {string} registrationSecret The secret of the registration.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+}
+
+/**
+ * RegistrationApi - object-oriented interface
+ * @export
+ * @class RegistrationApi
+ * @extends {BaseAPI}
+ */
+export class RegistrationApi extends BaseAPI implements RegistrationApiInterface {
+    /**
+     * 
+     * @summary Create a new registration
+     * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of registrations for specific roomId
+     * @param {string} roomId The id of the room a registration is attached to.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerFindByRoom(roomId: string, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerFindByRoom(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a registration by its secret
+     * @param {string} registrationSecret The secret of the registration.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerGetBySecret(registrationSecret: string, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerGetBySecret(registrationSecret, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * RoomApi - axios parameter creator
  * @export
  */
 export const RoomApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerAddByEmail: async (roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerAddByEmail', 'roomId', roomId)
+            // verify required parameter 'addByEmailBodyParams' is not null or undefined
+            assertParamExists('roomControllerAddByEmail', 'addByEmailBodyParams', addByEmailBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/add-by-email`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addByEmailBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Add members to a room
@@ -23122,6 +23735,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get a list of room members for admins where names are partially redacted.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetMembersRedacted: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerGetMembersRedacted', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/members-redacted`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get the boards of a room
          * @param {string} roomId The id of the room.
          * @param {*} [options] Override http request option.
@@ -23243,12 +23894,10 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get a list of rooms.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetRooms: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        roomControllerGetRooms: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/rooms`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23264,14 +23913,6 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (skip !== undefined) {
-                localVarQueryParameter['skip'] = skip;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
 
 
     
@@ -23316,6 +23957,90 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Move a single board item.
+         * @param {string} roomId The id of the room.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveBoard: async (roomId: string, moveItemBodyParams: MoveItemBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerMoveBoard', 'roomId', roomId)
+            // verify required parameter 'moveItemBodyParams' is not null or undefined
+            assertParamExists('roomControllerMoveBoard', 'moveItemBodyParams', moveItemBodyParams)
+            const localVarPath = `/rooms/{roomId}/boards`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveItemBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Move a single room item.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveRoom: async (moveItemBodyParams: MoveItemBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'moveItemBodyParams' is not null or undefined
+            assertParamExists('roomControllerMoveRoom', 'moveItemBodyParams', moveItemBodyParams)
+            const localVarPath = `/rooms`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveItemBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23422,6 +24147,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomRoleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerAddByEmail(roomId, addByEmailBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Add members to a room
          * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -23474,7 +24211,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomItemResponse>> {
+        async roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomCreatedResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerCreateRoom(createRoomBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -23509,6 +24246,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
          */
         async roomControllerGetMembers(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomMemberListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetMembers(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a list of room members for admins where names are partially redacted.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetMembersRedacted(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomMemberListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetMembersRedacted(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23548,13 +24296,11 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a list of rooms.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerGetRooms(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRooms(skip, limit, options);
+        async roomControllerGetRooms(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRooms(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23566,6 +24312,29 @@ export const RoomApiFp = function(configuration?: Configuration) {
          */
         async roomControllerLeaveRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerLeaveRoom(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Move a single board item.
+         * @param {string} roomId The id of the room.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerMoveBoard(roomId, moveItemBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Move a single room item.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerMoveRoom(moveItemBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23602,6 +24371,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
 export const RoomApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = RoomApiFp(configuration)
     return {
+        /**
+         * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): AxiosPromise<RoomRoleResponse> {
+            return localVarFp.roomControllerAddByEmail(roomId, addByEmailBodyParams, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @summary Add members to a room
@@ -23652,7 +24432,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomItemResponse> {
+        roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomCreatedResponse> {
             return localVarFp.roomControllerCreateRoom(createRoomBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -23684,6 +24464,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          */
         roomControllerGetMembers(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse> {
             return localVarFp.roomControllerGetMembers(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of room members for admins where names are partially redacted.
+         * @param {string} roomId The id of the room.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetMembersRedacted(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse> {
+            return localVarFp.roomControllerGetMembersRedacted(roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -23719,13 +24509,11 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get a list of rooms.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse> {
-            return localVarFp.roomControllerGetRooms(skip, limit, options).then((request) => request(axios, basePath));
+        roomControllerGetRooms(options?: any): AxiosPromise<RoomListResponse> {
+            return localVarFp.roomControllerGetRooms(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -23736,6 +24524,27 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          */
         roomControllerLeaveRoom(roomId: string, options?: any): AxiosPromise<string> {
             return localVarFp.roomControllerLeaveRoom(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Move a single board item.
+         * @param {string} roomId The id of the room.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomControllerMoveBoard(roomId, moveItemBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Move a single room item.
+         * @param {MoveItemBodyParams} moveItemBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.roomControllerMoveRoom(moveItemBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -23768,6 +24577,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
  * @interface RoomApi
  */
 export interface RoomApiInterface {
+    /**
+     * 
+     * @summary Add external person to room or trigger registration
+     * @param {string} roomId The id of the room.
+     * @param {AddByEmailBodyParams} addByEmailBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): AxiosPromise<RoomRoleResponse>;
+
     /**
      * 
      * @summary Add members to a room
@@ -23819,7 +24639,7 @@ export interface RoomApiInterface {
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomItemResponse>;
+    roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomCreatedResponse>;
 
     /**
      * 
@@ -23850,6 +24670,16 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerGetMembers(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse>;
+
+    /**
+     * 
+     * @summary Get a list of room members for admins where names are partially redacted.
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetMembersRedacted(roomId: string, options?: any): AxiosPromise<RoomMemberListResponse>;
 
     /**
      * 
@@ -23885,13 +24715,11 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get a list of rooms.
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse>;
+    roomControllerGetRooms(options?: any): AxiosPromise<RoomListResponse>;
 
     /**
      * 
@@ -23902,6 +24730,27 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerLeaveRoom(roomId: string, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Move a single board item.
+     * @param {string} roomId The id of the room.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Move a single room item.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -23934,6 +24783,19 @@ export interface RoomApiInterface {
  * @extends {BaseAPI}
  */
 export class RoomApi extends BaseAPI implements RoomApiInterface {
+    /**
+     * 
+     * @summary Add external person to room or trigger registration
+     * @param {string} roomId The id of the room.
+     * @param {AddByEmailBodyParams} addByEmailBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerAddByEmail(roomId, addByEmailBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Add members to a room
@@ -24035,6 +24897,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
+     * @summary Get a list of room members for admins where names are partially redacted.
+     * @param {string} roomId The id of the room.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetMembersRedacted(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetMembersRedacted(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Get the boards of a room
      * @param {string} roomId The id of the room.
      * @param {*} [options] Override http request option.
@@ -24073,14 +24947,12 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get a list of rooms.
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
      */
-    public roomControllerGetRooms(skip?: number, limit?: number, options?: any) {
-        return RoomApiFp(this.configuration).roomControllerGetRooms(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public roomControllerGetRooms(options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetRooms(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -24093,6 +24965,31 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerLeaveRoom(roomId: string, options?: any) {
         return RoomApiFp(this.configuration).roomControllerLeaveRoom(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Move a single board item.
+     * @param {string} roomId The id of the room.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerMoveBoard(roomId: string, moveItemBodyParams: MoveItemBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerMoveBoard(roomId, moveItemBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Move a single room item.
+     * @param {MoveItemBodyParams} moveItemBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerMoveRoom(moveItemBodyParams: MoveItemBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerMoveRoom(moveItemBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

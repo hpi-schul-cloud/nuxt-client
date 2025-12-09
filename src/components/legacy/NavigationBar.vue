@@ -49,18 +49,20 @@ type Props = {
 		to?: string;
 		target?: string;
 	}>;
+	hideButtons?: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
 	logoLink: "/",
 	links: () => [],
+	hideButtons: false,
 });
 
 const activeLink = ref(window.location.pathname);
 
 const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default);
 
-const hasButtons = computed(() => isDefaultTheme.value);
+const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
 
 const linksToDisplay = computed(() => (isDefaultTheme.value ? props.links : []));
 

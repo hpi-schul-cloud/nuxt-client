@@ -56,11 +56,12 @@ const { t } = useI18n();
 const contextRoute = computed(() => `/rooms/${props.contextId}`);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	const crumbs = [{ title: t("common.words.courses"), to: "/rooms/courses-overview/" }];
+	const crumbs: Breadcrumb[] = [{ title: t("common.words.courses"), to: "/rooms/courses-overview/" }];
 
 	if (courseTitle.value) {
 		crumbs.push({ title: courseTitle.value, to: contextRoute.value });
 	}
+	crumbs.push({ title: t("pages.tool.title"), disabled: true });
 
 	return crumbs;
 });

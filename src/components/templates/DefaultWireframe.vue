@@ -50,6 +50,7 @@
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
+				'main-pb-96': mainWithBottomPadding,
 				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
@@ -98,6 +99,10 @@ const props = defineProps({
 	mainWithoutPadding: {
 		type: Boolean,
 	},
+	mainWithBottomPadding: {
+		type: Boolean,
+		default: false,
+	},
 	// neded if we don't want to have full page scrolling, so it's restricted to browsers viewport height
 	isFlexContainer: {
 		type: Boolean,
@@ -128,13 +133,17 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 @use "@/styles/settings.scss" as *;
 
 .wireframe-container-flex {
-	height: calc(100vh - var(--topbar-height));
+	height: calc(100svh - var(--topbar-height));
 	display: flex;
 	flex-direction: column;
 }
 .main-content-flex {
 	flex: 1;
 	overflow-y: auto;
+}
+
+.main-pb-96 {
+	padding-bottom: 96px !important;
 }
 
 .wireframe-container h1:first-of-type {

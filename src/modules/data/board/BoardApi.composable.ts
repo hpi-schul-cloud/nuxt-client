@@ -219,11 +219,21 @@ export const useBoardApi = () => {
 		return response.data;
 	};
 
+	const duplicateCardCall = async (cardId: string) => {
+		const response = await cardsApi.cardControllerCopyCard(cardId);
+		return response.data;
+	};
+
 	const moveCardCall = async (cardId: string, toColumnId: string, toPosition: number): Promise<void> => {
 		await cardsApi.cardControllerMoveCard(cardId, {
 			toColumnId,
 			toPosition,
 		});
+	};
+
+	const moveCardToBoardCall = async (cardId: string, toColumnId: string) => {
+		const response = await cardsApi.cardControllerMoveCard(cardId, { toColumnId });
+		return response.data;
 	};
 
 	const moveColumnCall = async (columnId: string, toBoardId: string, toPosition: number): Promise<void> => {
@@ -294,6 +304,7 @@ export const useBoardApi = () => {
 		deleteCardCall,
 		deleteColumnCall,
 		moveCardCall,
+		moveCardToBoardCall,
 		moveColumnCall,
 		moveElementCall,
 		updateBoardTitleCall,
@@ -304,6 +315,7 @@ export const useBoardApi = () => {
 		updateColumnTitleCall,
 		updateElementCall,
 		createCardCall,
+		duplicateCardCall,
 		getContextInfo,
 		updateBoardLayoutCall,
 		getElementWithParentHierarchyCall,

@@ -3,8 +3,6 @@ import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
 import * as serverApi from "@/serverApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
-import { applicationErrorModule } from "@/store";
-import ApplicationErrorModule from "@/store/application-error";
 import { initializeAxios } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
@@ -12,9 +10,11 @@ import {
 	businessErrorFactory,
 	courseFactory,
 } from "@@/tests/test-utils/factory";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { useAppStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { AxiosError, AxiosInstance } from "axios";
+import { setActivePinia } from "pinia";
 
 type ReceivedRequests = [
 	{
@@ -73,9 +73,7 @@ const businessError = businessErrorFactory.build({
 
 describe("course-room module", () => {
 	beforeEach(() => {
-		setupStores({
-			applicationErrorModule: ApplicationErrorModule,
-		});
+		setActivePinia(createTestingPinia());
 		receivedRequests = [{ path: "" }, { params: {} }];
 		getRequestReturn = undefined;
 	});
@@ -719,7 +717,6 @@ describe("course-room module", () => {
 				HttpStatusCode.RequestTimeout,
 				HttpStatusCode.InternalServerError,
 			])("should create an application-error for http-error(%p)", (code) => {
-				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 
 				const errorData = axiosErrorFactory.build({
@@ -733,7 +730,7 @@ describe("course-room module", () => {
 
 				courseRoomDetailsModule.setError(errorData);
 
-				expect(setErrorSpy).toHaveBeenCalled();
+				expect(useAppStore().handleApplicationError).toHaveBeenCalled();
 			});
 		});
 

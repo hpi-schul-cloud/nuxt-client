@@ -25,7 +25,7 @@
 					bubbleScroll: true,
 					direction: 'vertical',
 					delayOnTouchOnly: true,
-					delay: 300,
+					delay: 200,
 					touchStartThreshold: 3, // needed for sensitive touch devices
 					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 					disabled: !hasMovePermission,
@@ -61,6 +61,8 @@
 						@move:card-keyboard="onMoveCardKeyboard(elementIndex, element.cardId, $event)"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
+						@share:card="emit('share:card', $event)"
+						@move:card="emit('move:card', $event)"
 					/>
 				</template>
 			</Sortable>
@@ -77,7 +79,7 @@ import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardColumn } from "@/types/board/Board";
 import { useBoardPermissions, useForceRender } from "@data-board";
-import { extractDataAttribute, useDragAndDrop } from "@util-board";
+import { extractDataAttribute, useDragAndDrop, useSharedEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -94,6 +96,7 @@ const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "create:card", columnId: string): void;
+	(e: "move:card", cardId: string): void;
 	(e: "delete:card", cardId: string): void;
 	(e: "delete:column", columnId: string): void;
 	(e: "move:column-down"): void;
@@ -102,11 +105,12 @@ const emit = defineEmits<{
 	(e: "move:column-up"): void;
 	(e: "reload:board"): void;
 	(e: "update:column-title", newTitle: string): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const boardStore = useBoardStore();
 const reactiveIndex = toRef(props, "index");
-
+const { editModeId } = useSharedEditMode();
 const { hasEditPermission, hasMovePermission, hasCreateColumnPermission } = useBoardPermissions();
 
 const columnClasses = computed(() => {
@@ -120,18 +124,25 @@ const columnClasses = computed(() => {
 });
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-const showAddButton = computed(() => hasCreateColumnPermission.value && isDragging.value === false);
+
+const isCardOfColumnInEditMode = computed(
+	() => props.column.cards.find((c) => c.cardId === editModeId.value) !== undefined
+);
+
+const showAddButton = computed(
+	() => hasCreateColumnPermission.value && isDragging.value === false && !isCardOfColumnInEditMode.value
+);
 
 const isNotFirstColumn = computed(() => props.index !== 0);
 const isNotLastColumn = computed(() => props.index !== props.columnCount - 1);
 
 const onCreateCard = () => emit("create:card", props.column.id);
 
-const onColumnDelete = (columnId: string): void => {
+const onColumnDelete = (columnId: string) => {
 	emit("delete:column", columnId);
 };
 
-const onDeleteCard = (cardId: string): void => {
+const onDeleteCard = (cardId: string) => {
 	emit("delete:card", cardId);
 };
 

@@ -14,6 +14,7 @@ import { VApp } from "vuetify/lib/components/index";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
+	useRouter: vi.fn(),
 }));
 
 const setup = () => {

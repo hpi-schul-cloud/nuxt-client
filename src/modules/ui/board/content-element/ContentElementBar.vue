@@ -113,6 +113,7 @@ const props = defineProps({
 
 .content-element-bar-texts-list-board {
 	flex: 0 0 67%;
+	min-width: 0;
 }
 
 .content-element-display-list-board {
