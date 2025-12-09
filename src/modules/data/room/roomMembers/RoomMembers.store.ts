@@ -259,7 +259,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const checkMemberByEmail = async (email: string) => {
+	const checkMemberByEmail = async (email: string): Promise<ExternalMemberCheckStatus> => {
 		try {
 			await roomApi.roomControllerAddByEmail(getRoomId(), { email });
 			await fetchMembers();
