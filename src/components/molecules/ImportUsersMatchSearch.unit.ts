@@ -1,4 +1,4 @@
-import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
+import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNamesEnum,
@@ -32,9 +32,9 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper = (props: ComponentProps<typeof vImportUsersMatchSearch>, options?: object) => {
+const getWrapper = (props: ComponentProps<typeof ImportUsersMatchSearch>, options?: object) => {
 	vi.spyOn(importUsersModule, "fetchAllUsers").mockResolvedValue();
-	return mount(vImportUsersMatchSearch, {
+	return mount(ImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -48,7 +48,7 @@ const getWrapper = (props: ComponentProps<typeof vImportUsersMatchSearch>, optio
 	});
 };
 
-describe("@/components/molecules/vImportUsersMatchSearch", () => {
+describe("@/components/molecules/ImportUsersMatchSearch", () => {
 	beforeEach(() => {
 		setupStores({ importUsersModule: ImportUsersModule });
 	});
