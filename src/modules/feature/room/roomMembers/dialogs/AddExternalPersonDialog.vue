@@ -18,6 +18,7 @@
 				<VForm ref="addExternalPersonForm" class="mt-5">
 					<VTextField
 						ref="emailInput"
+						v-model="email"
 						label="E-Mail-Adresse"
 						autofocus
 						data-testid="invite-external-person-email"
@@ -44,7 +45,7 @@
 						ref="cancelButton"
 						class="ms-auto mr-2"
 						:text="t('common.actions.cancel')"
-						data-testid="invite-participant-cancel-btn"
+						data-testid="add-external-person-cancel-btn"
 						@click="onClose"
 					/>
 					<VBtn
@@ -54,7 +55,7 @@
 						color="primary"
 						variant="flat"
 						:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
-						data-testid="invite-participant-save-btn"
+						data-testid="add-external-person-add-btn"
 						@click="onAddButtonClick"
 					/>
 				</div>
@@ -89,12 +90,10 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 const emailInput = useTemplateRef("emailInput");
+const email = ref<string>("");
 
 const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
-const isEmailValid = computed(() => {
-	const email = emailInput.value?.modelValue as string;
-	return isValidEmail(t("common.validation.email"))(email) === true;
-});
+const isEmailValid = computed(() => isValidEmail("")(email.value) === true);
 const addExternalPersonContent = ref<VCard>();
 
 useSafeFocusTrap(isOpen, addExternalPersonContent, {
@@ -103,7 +102,8 @@ useSafeFocusTrap(isOpen, addExternalPersonContent, {
 });
 
 const onAddButtonClick = async () => {
-	emit("update:mail", emailInput.value?.modelValue as string);
+	emit("update:mail", email.value);
+	isOpen.value = false;
 };
 
 const onClose = () => {
