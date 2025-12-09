@@ -1539,7 +1539,7 @@ export default {
 	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
 	"pages.content.preview_img.alt": "Vista previa de la imagen",
 	"pages.courseRoomDetails.fab.add.tool": "Agregar herramienta",
-	"pages.courseRoomDetails.fab.add.learnContent": "Agregar contenido",
+	"pages.courseRoomDetails.fab.add.learnContent": "Crear contenido",
 	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
 	"pages.courseRoomDetails.fab.add.lesson": "Nuevo tema",
 	"pages.courseRoomDetails.fab.add.task": "Nuevo tarea",

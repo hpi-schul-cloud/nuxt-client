@@ -1504,7 +1504,7 @@ export default {
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
 	"pages.courseRoomDetails.fab.add.tool": "Add tool",
-	"pages.courseRoomDetails.fab.add.learnContent": "Add learning content",
+	"pages.courseRoomDetails.fab.add.learnContent": "Create learning content",
 	"pages.courseRoomDetails.fab.add.board": "New board",
 	"pages.courseRoomDetails.fab.add.lesson": "New topic",
 	"pages.courseRoomDetails.fab.add.task": "New task",

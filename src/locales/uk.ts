@@ -1436,7 +1436,7 @@ export default {
 	"pages.administration.students.new.title": "Додати учня",
 	"pages.administration.students.table.edit.ariaLabel": "Редагувати учня",
 	"pages.courseRoomDetails.fab.add.tool": "Додати інструмент",
-	"pages.courseRoomDetails.fab.add.learnContent": "Додати навчальний контент",
+	"pages.courseRoomDetails.fab.add.learnContent": "Створюйте контент",
 	"pages.administration.teachers.fab.add": "Додати вчителя",
 	"pages.administration.teachers.fab.import": "Імпорт викладачів",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Видалити викладача",
