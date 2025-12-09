@@ -779,8 +779,7 @@ export default {
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Посилання на запрошення до кімнати",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Будь ласка, перевірте вміст на предмет авторських прав та захисту даних.",
-	"components.molecules.TaskItemMenu.confirmDelete.text": 'Ви впевнені, що хочете видалити завдання " {taskTitle} "?',
-	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",
+	"components.molecules.TaskItemMenu.ariaLabel": "Меню завдань",
 	"components.molecules.TaskItemMenu.finish": "Завершити",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Створено",
 	"components.molecules.TaskItemTeacher.graded": "Оцінено",

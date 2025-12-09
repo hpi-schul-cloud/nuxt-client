@@ -780,9 +780,7 @@ export default {
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Enlace de invitación a la sala",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Por favor, comprueba los contenidos en cuanto a derechos de autor y protección de datos.",
-	"components.molecules.TaskItemMenu.confirmDelete.text":
-		'¿Estás seguro de que deseas eliminar la tarea "{taskTitle}"?',
-	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",
+	"components.molecules.TaskItemMenu.ariaLabel": "Menú de tarea",
 	"components.molecules.TaskItemMenu.finish": "Terminar",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Creado",
 	"components.molecules.TaskItemTeacher.graded": "Calificado",
