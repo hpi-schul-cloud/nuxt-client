@@ -1532,6 +1532,7 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
 	"pages.content.preview_img.alt": "Bildvorschau",
+	"pages.courseRoomDetails.fab.add.tool": "Tool hinzufügen",
 	"pages.courseRoomDetails.fab.add.learnContent": "Lerninhalt hinzufügen",
 	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
 	"pages.courseRoomDetails.fab.add.lesson": "Neues Thema",

@@ -226,8 +226,7 @@ export default defineComponent({
 			const ctlToolFabItems = [
 				{
 					icon: mdiPlus,
-					label: this.$t("common.actions.add"),
-					ariaLabel: this.$t("common.actions.add"),
+					label: this.$t("pages.courseRoomDetails.fab.add.tool"),
 					dataTestId: "add-tool-button",
 					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				},

@@ -52,9 +52,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 			result: mockApiResponse({ data: roomItemFactory.build({ id: "123" }) }),
 			success: true,
 		});
-
 		await roomFormComponent.vm.$emit("save", { room: roomParams });
-
 		expect(roomStore.createRoom).toHaveBeenCalledWith(roomParams);
 		expect(router.push).toHaveBeenCalledWith({
 			name: "room-details",
