@@ -186,7 +186,7 @@ export default {
 	"common.tool.context.type.courses": "Kurs-Tools",
 	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
-	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
+	"common.validation.email": "Bitte eine gültige E-Mail-Adresse eingeben",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",

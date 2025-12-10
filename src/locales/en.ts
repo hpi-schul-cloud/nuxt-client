@@ -179,7 +179,7 @@ export default {
 	"common.tool.context.type.courses": "Course tools",
 	"common.tool.context.type.boardElements": "Boards",
 	"common.tool.context.type.mediaShelves": "Media shelf",
-	"common.validation.email": "Please enter a valid e-mail address",
+	"common.validation.email": "Please enter a valid email address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
 	"common.validation.regex": "The input must conform to the following rule: {comment}.",
