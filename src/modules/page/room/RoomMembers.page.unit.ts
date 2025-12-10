@@ -381,7 +381,6 @@ describe("RoomMembersPage", () => {
 						{
 							icon: mdiPlus,
 							label: "pages.rooms.members.add",
-							ariaLabel: "pages.rooms.members.add",
 							dataTestId: "fab-add-members",
 						},
 					],
@@ -392,7 +391,6 @@ describe("RoomMembersPage", () => {
 						{
 							icon: mdiPlus,
 							label: "pages.rooms.members.inviteMember.step.prepare.title",
-							ariaLabel: "pages.rooms.members.inviteMember.step.prepare.title",
 							dataTestId: "fab-invite-members",
 						},
 					],

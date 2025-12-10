@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction">
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
@@ -106,7 +106,7 @@ const isRenameDialogOpen = ref(false);
 
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
-const fabAction = computed(() => {
+const fabItems = computed(() => {
 	if (!hasEditPermission.value) return;
 
 	const actions: FabAction[] = [
@@ -118,7 +118,6 @@ const fabAction = computed(() => {
 		{
 			icon: mdiTrayArrowUp,
 			label: t("pages.folder.fab.upload-file"),
-			ariaLabel: t("pages.folder.fab.upload-file"),
 			dataTestId: "fab-button-upload-file",
 			clickHandler: uploadFile,
 		},
