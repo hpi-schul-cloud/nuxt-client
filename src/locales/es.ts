@@ -1381,7 +1381,7 @@ export default {
 	"pages.administration.students.consent.table.empty":
 		"Todos l{'@'}s usuari{'@'}s que has elegido ya han recibido su consentimiento.",
 	"pages.administration.students.consent.title": "Registrarse de forma analógica",
-	"pages.administration.students.fab.add": "Agregar estudiante",
+	"pages.administration.students.fab.add": "Crear estudiante",
 	"pages.administration.students.fab.import": "Importar estudiante",
 	"pages.administration.students.index.remove.confirm.btnText": "Eliminar estudiante",
 	"pages.administration.students.index.remove.confirm.message.all":
@@ -1450,7 +1450,7 @@ export default {
 	"pages.administration.students.new.success": "¡Estudiante creado correctamente!",
 	"pages.administration.students.new.title": "Añadir estudiante",
 	"pages.administration.students.table.edit.ariaLabel": "Editar estudiante",
-	"pages.administration.teachers.fab.add": "Agregar profesor",
+	"pages.administration.teachers.fab.add": "Crear profesor",
 	"pages.administration.teachers.fab.import": "Importar profesor",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Eliminar profesor",
 	"pages.administration.teachers.index.remove.confirm.message.all":

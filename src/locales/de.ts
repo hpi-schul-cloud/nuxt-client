@@ -1374,7 +1374,7 @@ export default {
 		"Glückwunsch, du hast die analoge Registrierung erfolgreich durchgeführt!",
 	"pages.administration.students.consent.table.empty": "Alle Schüler:innen haben bereits ihr Einverständnis gegeben.",
 	"pages.administration.students.consent.title": "Analoge Registrierung",
-	"pages.administration.students.fab.add": "Schüler:in hinzufügen",
+	"pages.administration.students.fab.add": "Schüler:in erstellen",
 	"pages.administration.students.fab.import": "Schüler:in importieren",
 	"pages.administration.students.index.remove.confirm.btnText": "Schüler:in löschen",
 	"pages.administration.students.index.remove.confirm.message.all":
@@ -1443,7 +1443,7 @@ export default {
 	"pages.administration.students.new.success": "Schüler:in erfolgreich angelegt!",
 	"pages.administration.students.new.title": "Schüler:in hinzufügen",
 	"pages.administration.students.table.edit.ariaLabel": "Schüler:in bearbeiten",
-	"pages.administration.teachers.fab.add": "Lehrkraft hinzufügen",
+	"pages.administration.teachers.fab.add": "Lehrkraft erstellen",
 	"pages.administration.teachers.fab.import": "Lehrkraft importieren",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Lehrkraft löschen",
 	"pages.administration.teachers.index.remove.confirm.message.all":
