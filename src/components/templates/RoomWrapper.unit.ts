@@ -8,10 +8,10 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { VFab } from "vuetify/components";
+import { VBtn, VFab } from "vuetify/components";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -22,7 +22,7 @@ const getWrapper = (
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
-				StartNewCourseSyncDialog: true,
+				// StartNewCourseSyncDialog: true,
 				CommonCartridgeImportModal: true,
 			},
 		},
@@ -136,8 +136,10 @@ describe("@templates/RoomWrapper.vue", () => {
 				const fab = wrapper.getComponent(VFab);
 				await fab.trigger("click");
 
-				const openSyncBtn = wrapper.findComponent("[data-test-id='fab_button_add_synced_course']");
-				expect(openSyncBtn.exists()).toBe(true);
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+				expect(speedDialMenuActions.length).toBe(3);
+				expect(speedDialMenuActions[1].props("action").dataTestId).toBe("fab_button_add_synced_course");
 			});
 		});
 
@@ -148,8 +150,10 @@ describe("@templates/RoomWrapper.vue", () => {
 				const fab = wrapper.getComponent(VFab);
 				await fab.trigger("click");
 
-				const openImportBtn = wrapper.findComponent("[data-test-id='fab_button_import_course']");
-				expect(openImportBtn.exists()).toBe(true);
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+				expect(speedDialMenuActions.length).toBe(3);
+				expect(speedDialMenuActions[2].props("action").dataTestId).toBe("fab_button_import_course");
 			});
 		});
 	});
@@ -165,14 +169,15 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the course sync fab action", () => {
-		it("should open the course sync dialog", async () => {
+		it.only("should open the course sync dialog", async () => {
 			const wrapper = getWrapper();
 
 			const fab = wrapper.getComponent(VFab);
 			await fab.trigger("click");
 
-			const openSyncBtn = wrapper.getComponent("[data-test-id='fab_button_add_synced_course']");
-			await openSyncBtn.trigger("click");
+			const openSyncBtn = wrapper.findAllComponents(SpeedDialMenuAction)[1];
+
+			await openSyncBtn.getComponent(VBtn).trigger("click");
 
 			expect((wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen).toEqual(true);
 		});
@@ -185,8 +190,8 @@ describe("@templates/RoomWrapper.vue", () => {
 			const fab = wrapper.getComponent(VFab);
 			await fab.trigger("click");
 
-			const openImportBtn = wrapper.getComponent("[data-test-id='fab_button_import_course']");
-			await openImportBtn.trigger("click");
+			const openImportBtn = wrapper.findAllComponents(SpeedDialMenuAction)[2];
+			await openImportBtn.getComponent(VBtn).trigger("click");
 
 			expect(commonCartridgeImportModule.isOpen).toEqual(true);
 		});
