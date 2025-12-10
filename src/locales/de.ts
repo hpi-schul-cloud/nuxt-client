@@ -1667,6 +1667,12 @@ export default {
 		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Bitte Vor- und Nachnamen der schulfremden Person eingeben. Die Person erhält eine E-Mail mit einem Registrierungslink für die {applicationName}. Sobald sie einen Account erstellt hat, wird sie automatisch zum Raum hinzugefügt.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-Mail-Adresse",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Bitte eine gültige E-Mail-Adresse eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Vorname",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Bitte einen Vornamen eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Nachname",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Bitte einen Nachnamen eingeben",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Zum Raum hinzufügen",
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",

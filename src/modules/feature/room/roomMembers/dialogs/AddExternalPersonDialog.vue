@@ -18,7 +18,7 @@
 				</h2>
 			</template>
 			<template #text>
-				<InfoAlert v-if="step === 'details'" class="mb-2">{{
+				<InfoAlert v-if="step === 'details'" class="mb-4">{{
 					t("pages.rooms.members.dialog.addExternalPerson.steps.details.alert", { applicationName })
 				}}</InfoAlert>
 				<p v-if="step === 'email'">
@@ -31,26 +31,28 @@
 					<VTextField
 						ref="emailInput"
 						v-model="email"
-						:label="t('common.labels.email')"
+						class="mb-4"
+						:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
 						data-testid="invite-external-person-email"
 						:readonly="step === 'details'"
-						:rules="[isValidEmail(t('common.validation.email'))]"
+						:rules="[isValidEmail(t('pages.rooms.members.dialog.addExternalPerson.label.email.error'))]"
 					/>
 					<template v-if="step === 'details'">
 						<VTextField
 							ref="firstNameInput"
 							v-model="firstName"
-							:label="t('common.labels.firstName')"
+							class="mb-4"
+							:label="t('pages.rooms.members.dialog.addExternalPerson.label.firstName')"
 							data-testid="invite-external-person-firstname"
-							:rules="[isNonEmptyString(t('common.validation.required3'))]"
+							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error	'))]"
 							@keydown.enter.prevent="() => lastNameInput?.focus()"
 						/>
 						<VTextField
 							ref="lastNameInput"
 							v-model="lastName"
-							:label="t('common.labels.lastName')"
+							:label="t('pages.rooms.members.dialog.addExternalPerson.label.lastName')"
 							data-testid="invite-external-person-lastname"
-							:rules="[isNonEmptyString(t('common.validation.required3'))]"
+							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.lastName.error'))]"
 							@keydown.enter.prevent="onConfirmDetails"
 						/>
 					</template>
