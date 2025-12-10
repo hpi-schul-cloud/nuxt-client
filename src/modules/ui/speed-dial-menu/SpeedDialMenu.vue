@@ -15,12 +15,12 @@
 		:icon="isCollapsed"
 		:to="primaryAction.to"
 		:href="primaryAction.href"
+		:aria-label="isCollapsed ? (primaryAction.ariaLabel ?? primaryAction.label) : undefined"
 		:data-testid="primaryAction.dataTestId"
 		@click="onFabClick"
 	>
 		<VIcon>{{ fabIcon }}</VIcon>
-		<span v-if="!isCollapsed" class="d-block">{{ primaryAction.label }}</span>
-		<span v-else class="d-sr-only">{{ primaryAction.ariaLabel ?? primaryAction.label }}</span>
+		<span v-if="!isCollapsed" id="fab-label" class="d-block">{{ primaryAction.label }}</span>
 		<VSpeedDial v-if="isSpeedDial" v-model="isSpeedDialOpen" activator="parent" :location="speedDialLocation">
 			<template v-for="(action, index) in speedDialActions" :key="index">
 				<SpeedDialMenuAction :action="action" />

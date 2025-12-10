@@ -6,7 +6,7 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/lib/components/index";
 
-describe("SpeedDialMenu", () => {
+describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 	window.scrollTo = vi.fn();
 
 	const setup = ({ actions }: { actions: FabAction[] }) => {
@@ -91,12 +91,10 @@ describe("SpeedDialMenu", () => {
 			await toggleSpeedDialMenu(wrapper);
 			const buttons = wrapper.findAllComponents(VBtn);
 
-			// 1 primary action button + 6 speed dial action buttons
 			expect(buttons).toHaveLength(7);
 		});
 
-		// TODO: sr-only is visible in dom and therefor counts as text content
-		it.skip("should render close btn while open", async () => {
+		it("should render close btn while open", async () => {
 			const { wrapper } = setup({ actions: multipleActions });
 
 			await toggleSpeedDialMenu(wrapper);
@@ -177,14 +175,15 @@ describe("SpeedDialMenu", () => {
 			// TODO: figure out how to trigger/mock scroll behavior
 			it.skip("should have circular shape", async () => {
 				const { wrapper } = setup({ actions: singleAction });
-				window.scrollTo({ top: 1000, behavior: "smooth" });
+				// window.scrollTo({ top: 1000, behavior: "smooth" });
+				// window.dispatchEvent(new CustomEvent("scroll", { detail: 2000 }));
 				await nextTick();
 
 				const fab = wrapper.getComponent(VFab);
 				expect(fab.props("rounded")).toBe("circle");
 			});
 
-			// TODO: sr-only is visible in dom and therefor counts as text content
+			// TODO: figure out how to trigger/mock scroll behavior
 			it.skip("should only render an icon", () => {
 				const { wrapper } = setup({ actions: singleAction });
 
