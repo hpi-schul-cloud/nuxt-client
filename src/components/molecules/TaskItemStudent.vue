@@ -33,7 +33,7 @@
 				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">
 					{{ dueDateLabel }}
 				</div>
-				<v-custom-chip-time-remaining
+				<ChipTimeRemaining
 					v-if="taskState === 'warning'"
 					class="ml-2 ml-sm-0 float-sm-right"
 					:type="taskState"
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
+import ChipTimeRemaining from "@/components/atoms/ChipTimeRemaining.vue";
 import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
 import {
 	fromNowToFuture,
@@ -62,7 +62,10 @@ import { vOnClickOutside } from "@vueuse/components";
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
-	components: { VCustomChipTimeRemaining, TaskItemMenu },
+	components: {
+		ChipTimeRemaining,
+		TaskItemMenu,
+	},
 	directives: {
 		outsideClick: vOnClickOutside,
 	},

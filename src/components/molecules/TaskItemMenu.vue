@@ -85,7 +85,7 @@
 			</v-list-item-title>
 		</v-list-item>
 	</KebabMenu>
-	<v-custom-dialog
+	<CustomDialog
 		v-model:is-open="confirmDeleteDialogIsOpen"
 		:size="375"
 		has-buttons
@@ -106,11 +106,11 @@
 				}}
 			</p>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script>
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { useEnvConfig } from "@data-env";
@@ -126,7 +126,7 @@ import { KebabMenu } from "@ui-kebab-menu";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	components: { vCustomDialog, KebabMenu },
+	components: { CustomDialog, KebabMenu },
 	inject: ["tasksModule"],
 	props: {
 		taskId: {
