@@ -1,4 +1,4 @@
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import MigrationWizard from "@/pages/administration/Migration.page.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
@@ -595,7 +595,7 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent<typeof VCustomDialog>({
+				const dialog = wrapper.findComponent<typeof CustomDialog>({
 					ref: "clearAutoMatchesDialog",
 				});
 
@@ -614,7 +614,7 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent<typeof VCustomDialog>({
+				const dialog = wrapper.findComponent<typeof CustomDialog>({
 					ref: "clearAutoMatchesDialog",
 				});
 

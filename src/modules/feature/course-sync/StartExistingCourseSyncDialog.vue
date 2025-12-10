@@ -5,7 +5,7 @@
 		@confirm="onConfirmGroupSelection"
 		@cancel="closeDialog"
 	/>
-	<vCustomDialog
+	<CustomDialog
 		ref="start-existing-course-sync-dialog"
 		:is-open="isOpen && step === 1"
 		has-buttons
@@ -38,12 +38,12 @@
 				}}
 			</p>
 		</template>
-	</vCustomDialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";

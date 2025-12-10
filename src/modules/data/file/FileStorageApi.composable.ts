@@ -27,9 +27,9 @@ export enum ErrorType {
 }
 
 export enum CollaboraFileType {
-	Text,
-	Spreadsheet,
-	Presentation,
+	Text = "TEXT",
+	Spreadsheet = "SPREADSHEET",
+	Presentation = "PRESENTATION",
 }
 
 export const useFileStorageApi = () => {

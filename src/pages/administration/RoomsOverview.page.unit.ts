@@ -512,7 +512,7 @@ describe("RoomsOverview", () => {
 				await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 				await nextTick();
 
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				const dialog = wrapper.findComponent({ name: "CustomDialog" });
 				expect(dialog.vm.isOpen).toBe(true);
 			});
 		});
@@ -616,7 +616,7 @@ describe("RoomsOverview", () => {
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+					const dialog = wrapper.findComponent({ name: "CustomDialog" });
 
 					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
 
@@ -630,7 +630,7 @@ describe("RoomsOverview", () => {
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+					const dialog = wrapper.findComponent({ name: "CustomDialog" });
 
 					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
 

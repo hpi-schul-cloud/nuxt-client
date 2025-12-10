@@ -19,6 +19,7 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
 import { useNotificationStore } from "@data-app";
 import { CreateElementRequestPayload, useCardStore, useSocketConnection } from "@data-board";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
@@ -49,6 +50,9 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
+vi.mock("@data-file");
+const mockedFileStorageApi = vi.mocked(useFileStorageApi);
+
 describe("CardStore", () => {
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -59,6 +63,7 @@ describe("CardStore", () => {
 	let setEditModeId: Mock;
 	let editModeId: Ref<string | undefined>;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
+	let mockedFileStorageActions: DeepMocked<ReturnType<typeof useFileStorageApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -109,6 +114,11 @@ describe("CardStore", () => {
 
 		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
+
+		mockedFileStorageActions = createMock<ReturnType<typeof useFileStorageApi>>({
+			uploadCollaboraFile: vi.fn(),
+		});
+		mockedFileStorageApi.mockReturnValue(mockedFileStorageActions);
 
 		setEditModeId = vi.fn();
 		editModeId = ref(undefined);
@@ -967,6 +977,88 @@ describe("CardStore", () => {
 				cardStore.disconnectSocketRequest();
 
 				expect(mockedCardRestApiActions.disconnectSocketRequest).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("createFileElementWithCollabora", () => {
+		const setupCreateFileElementWithCollabora = (editMode = false, createElementFails = false, uploadFails = false) => {
+			const { cardStore } = setup(false);
+
+			editModeId.value = editMode ? "cardId" : undefined;
+
+			const createElementRequestReturnValue = createElementFails
+				? Promise.resolve(undefined)
+				: Promise.resolve({
+						id: "elementId",
+						type: ContentElementType.File,
+						content: {},
+					});
+			mockedCardRestApiActions.createElementRequest.mockReturnValue(createElementRequestReturnValue);
+
+			const uploadCollaboraFileReturnValue = uploadFails
+				? Promise.resolve(undefined)
+				: Promise.resolve({ id: "fileId" });
+			mockedFileStorageActions.uploadCollaboraFile.mockReturnValue(uploadCollaboraFileReturnValue);
+
+			return {
+				cardStore,
+			};
+		};
+
+		describe("when a card is in edit mode", () => {
+			it("should call createElementRequest", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedCardRestApiActions.createElementRequest).toHaveBeenCalled();
+			});
+
+			it("should call uploadCollaboraFile", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedFileStorageActions.uploadCollaboraFile).toHaveBeenCalled();
+			});
+
+			describe("when element creation fails", () => {
+				it("should not call uploadCollaboraFile", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedFileStorageActions.uploadCollaboraFile).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when uploading collabora file fails", () => {
+				it("should delete created element", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, false, true);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedCardRestApiActions.deleteElementRequest).toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when no card is in edit mode", () => {
+			it("should not call createElementRequest", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(false, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedCardRestApiActions.createElementRequest).not.toHaveBeenCalled();
+			});
+
+			it("should not call uploadCollaboraFile", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(false, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedFileStorageActions.uploadCollaboraFile).not.toHaveBeenCalled();
 			});
 		});
 	});
