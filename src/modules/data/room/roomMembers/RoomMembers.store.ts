@@ -259,7 +259,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const checkMemberByEmail = async (email: string): Promise<ExternalMemberCheckStatus> => {
+	const addMemberByEmail = async (email: string): Promise<ExternalMemberCheckStatus | void> => {
 		try {
 			await roomApi.roomControllerAddByEmail(getRoomId(), { email });
 			await fetchMembers();
@@ -269,7 +269,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			if (responseError.code === 404) {
 				return ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND;
 			}
-			return ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL;
+			if (responseError.code === 400) {
+				return ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL;
+			}
+			return;
 		}
 	};
 
@@ -424,11 +427,11 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	]);
 
 	return {
+		addMemberByEmail,
 		addMembers,
 		isRoomOwner,
 		setAdminMode,
 		changeRoomOwner,
-		checkMemberByEmail,
 		confirmInvitations,
 		fetchMembers,
 		resetPotentialMembers,

@@ -237,8 +237,8 @@ const handleAddMember = (event: string | undefined) => {
 };
 
 const onEmailCheck = async (email: string) => {
-	const result = await roomMembersStore.checkMemberByEmail(email);
-	if (result === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
+	const addMemberStatus = await roomMembersStore.addMemberByEmail(email);
+	if (addMemberStatus === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		isExternalPersonDialogOpen.value = false;
 		return;
 	}
