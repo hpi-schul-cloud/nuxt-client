@@ -21,8 +21,8 @@
 						:label="t('common.labels.email')"
 						autofocus
 						data-testid="invite-external-person-email"
-						:error-messages="emailValidationMessage"
-						@blur="onEmailBlur"
+						:rules="[isValidEmail(t('common.validation.email'))]"
+						validate-on="submit"
 					/>
 					<template v-if="isAdditionalInfoNeeded">
 						<VTextField
@@ -90,21 +90,20 @@ const { t } = useI18n();
 const { xs } = useDisplay();
 const emailInput = useTemplateRef("emailInput");
 const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
-const isEmailValid = ref(false);
 const addExternalPersonContent = ref<VCard>();
 const emailValidationMessage = ref<string | undefined>(undefined);
+const addExternalPersonForm = useTemplateRef("addExternalPersonForm");
 
 useSafeFocusTrap(isOpen, addExternalPersonContent);
 
-const onEmailBlur = () => {
-	const errorMessage = t("common.validation.email");
-	const valid = isValidEmail(errorMessage)(emailInput.value?.modelValue) === true;
-	emailValidationMessage.value = valid ? undefined : errorMessage;
-	isEmailValid.value = valid;
-};
-
 const onAddButtonClick = async () => {
-	if (!isEmailValid.value) return;
+	if (addExternalPersonForm.value === null) return;
+	const { valid, errors } = await addExternalPersonForm.value.validate();
+	if (!valid && errors.length > 0) {
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
+		return;
+	}
 	emit("update:mail", emailInput.value?.modelValue);
 	onClose();
 };
