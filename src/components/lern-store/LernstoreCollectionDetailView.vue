@@ -238,7 +238,7 @@ export default defineComponent({
 			this.bottom = this.isBottomReached();
 		},
 		isBottomReached() {
-			const { scrollY } = window;
+			const { scrollY } = globalThis;
 			const visibleHeight = document.documentElement.clientHeight;
 			const pageHeight = document.documentElement.scrollHeight;
 			const bottomOfPage = Math.ceil(visibleHeight + scrollY) >= pageHeight;
