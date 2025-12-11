@@ -5,7 +5,6 @@ import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFi
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
@@ -45,11 +44,6 @@ const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
 
 vi.mock("@feature-collabora/composables/add-collabora-file.composable");
 const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
-
-const enum FabEvent {
-	CreateDocument = "CREATE_DOCUMENT",
-	UploadFile = "UPLOAD_FILE",
-}
 
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
@@ -1247,11 +1241,10 @@ describe("Folder.vue", () => {
 					await fabComponent.findComponent(VBtn).trigger("click");
 
 					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
-
 					expect(fabActions.length).toBe(1);
 
-					const uploadFileAction = fabActions[0];
-					expect(uploadFileAction.props("dataTestId")).toBe("fab-button-upload-file");
+					const uploadFileAction = fabActions[0].getComponent(VBtn);
+					expect(uploadFileAction.attributes("data-testid")).toBe("fab-button-upload-file");
 				});
 			});
 
@@ -1266,11 +1259,11 @@ describe("Folder.vue", () => {
 
 					expect(fabActions.length).toBe(2);
 
-					const uploadFileAction = fabActions[0];
-					expect(uploadFileAction.props("dataTestId")).toBe("fab-button-upload-file");
+					const uploadFileAction = fabActions[0].getComponent(VBtn);
+					expect(uploadFileAction.attributes("data-testid")).toBe("fab-button-upload-file");
 
-					const createDocumentAction = fabActions[1];
-					expect(createDocumentAction.props("dataTestId")).toBe("fab-button-create-document");
+					const createDocumentAction = fabActions[1].getComponent(VBtn);
+					expect(createDocumentAction.attributes("data-testid")).toBe("fab-button-create-document");
 				});
 			});
 
@@ -1287,8 +1280,12 @@ describe("Folder.vue", () => {
 						writable: false,
 					});
 
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.UploadFile);
+					const fabComponent = wrapper.getComponent(SpeedDialMenu);
+					await fabComponent.getComponent(VBtn).trigger("click");
+					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+					const uploadFileAction = fabActions[0].getComponent(VBtn);
+					await uploadFileAction.trigger("click");
 
 					expect((input.element as HTMLInputElement).value).toBe("");
 				});
@@ -1296,10 +1293,14 @@ describe("Folder.vue", () => {
 
 			describe("and create document is chosen", () => {
 				it("should open collabora file dialog", async () => {
-					const { wrapper, mockedOpenCollaboraFileDialog } = await setup();
+					const { wrapper, mockedOpenCollaboraFileDialog } = await setup(true);
 
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					await defaultWireframe.vm.$emit("onFabItemClick", FabEvent.CreateDocument);
+					const fabComponent = wrapper.getComponent(SpeedDialMenu);
+					await fabComponent.getComponent(VBtn).trigger("click");
+					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+					const createDocumentAction = fabActions[1].getComponent(VBtn);
+					await createDocumentAction.trigger("click");
 
 					expect(mockedOpenCollaboraFileDialog).toHaveBeenCalled();
 				});

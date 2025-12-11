@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb, Fab } from "@/components/templates/default-wireframe.types";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
@@ -55,6 +55,7 @@ import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
+import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref, toRef } from "vue";
@@ -103,13 +104,15 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const fabAction = computed<Fab | undefined>(() =>
+const fabAction = computed<FabAction[] | undefined>(() =>
 	canEditRoomContent.value
-		? {
-				icon: mdiPlus,
-				title: t("pages.roomDetails.fab.add.board"),
-				dataTestId: "add-content-button",
-			}
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.roomDetails.fab.add.board"),
+					dataTestId: "add-content-button",
+				},
+			]
 		: undefined
 );
 

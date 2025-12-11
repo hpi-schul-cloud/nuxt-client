@@ -1,13 +1,6 @@
 <template>
 	<CourseRoomLockedPage v-if="isLocked" :title="roomData.title" />
-	<DefaultWireframe
-		v-else
-		ref="main"
-		:fab-items="getCurrentFabItems"
-		:breadcrumbs="breadcrumbs"
-		max-width="short"
-		@on-fab-item-click="fabItemClickHandler"
-	>
+	<DefaultWireframe v-else ref="main" :fab-items="getCurrentFabItems" :breadcrumbs="breadcrumbs" max-width="short">
 		<template #header>
 			<div class="d-flex mt-3">
 				<h1 class="pb-2 ma-0 course-title" :class="{ 'pr-5': roomData.isArchived }" data-testid="courses-course-title">
@@ -100,7 +93,6 @@ import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
-	BoardLayout,
 	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	Permission,
@@ -229,13 +221,14 @@ export default defineComponent({
 				},
 			];
 
-			const ctlToolFabItems = {
-				icon: mdiPlus,
-				title: this.$t("common.actions.add"),
-				ariaLabel: this.$t("common.actions.add"),
-				dataTestId: "add-tool-button",
-				href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
-			};
+			const ctlToolFabItems = [
+				{
+					icon: mdiPlus,
+					label: this.$t("pages.courseRoomDetails.fab.add.tool"),
+					dataTestId: "add-tool-button",
+					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
+				},
+			];
 
 			tabs.push({
 				name: "tools",
@@ -275,7 +268,6 @@ export default defineComponent({
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_task",
-					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.task"),
 				});
 			}
 
@@ -285,7 +277,6 @@ export default defineComponent({
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
-					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 				});
 			}
 
@@ -293,9 +284,8 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.board"),
 					icon: mdiViewGridPlusOutline,
-					customEvent: "board-type-dialog-open",
 					dataTestId: "fab_button_add_board",
-					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.board"),
+					clickHandler: this.fabItemClickHandler,
 				});
 			}
 
@@ -303,13 +293,14 @@ export default defineComponent({
 				return null;
 			}
 
-			const items = {
-				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
-				ariaLabel: this.$t("common.actions.create"),
-				dataTestId: "add-content-button",
-				actions: actions,
-			};
+			const items = [
+				{
+					icon: mdiPlus,
+					label: this.$t("pages.courseRoomDetails.fab.add.learnContent"),
+					dataTestId: "add-content-button",
+				},
+				...actions,
+			];
 
 			return items;
 		},
@@ -447,14 +438,8 @@ export default defineComponent({
 		onLayoutSelected(layout) {
 			this.onCreateBoard(this.roomData.roomId, layout);
 		},
-		fabItemClickHandler(event) {
-			if (event === "board-create") {
-				this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
-			}
-
-			if (event === "board-type-dialog-open") {
-				this.boardLayoutDialogIsOpen = true;
-			}
+		fabItemClickHandler() {
+			this.boardLayoutDialogIsOpen = true;
 		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
