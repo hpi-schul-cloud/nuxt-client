@@ -3,7 +3,6 @@ import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import { FabAction } from "./types";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount, VueWrapper } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/lib/components/index";
 
 describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
@@ -168,28 +167,6 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 				const fab = wrapper.getComponent(VFab);
 				expect(fab.findComponent(VIcon).exists()).toBe(true);
 				expect(fab.text()).toStrictEqual("Add Item");
-			});
-		});
-
-		describe("when collapsed", () => {
-			// TODO: figure out how to trigger/mock scroll behavior
-			it.skip("should have circular shape", async () => {
-				const { wrapper } = setup({ actions: singleAction });
-				// window.scrollTo({ top: 1000, behavior: "smooth" });
-				// window.dispatchEvent(new CustomEvent("scroll", { detail: 2000 }));
-				await nextTick();
-
-				const fab = wrapper.getComponent(VFab);
-				expect(fab.props("rounded")).toBe("circle");
-			});
-
-			// TODO: figure out how to trigger/mock scroll behavior
-			it.skip("should only render an icon", () => {
-				const { wrapper } = setup({ actions: singleAction });
-
-				const fab = wrapper.getComponent(VFab);
-				expect(fab.findComponent(VIcon).exists()).toBe(true);
-				expect(fab.text().length).toBe(0);
 			});
 		});
 	});
