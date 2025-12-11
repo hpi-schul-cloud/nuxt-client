@@ -36,12 +36,10 @@
 	/>
 	<input ref="fileInput" type="file" multiple hidden data-testid="input-folder-fileupload" aria-hidden="true" />
 	<LightBox />
-	<AddCollaboraFileDialog :folder-id="folderId" @collabora-file-added="collaboraFileAddedHandler" />
+	<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 </template>
 
 <script setup lang="ts">
-import { useAddCollaboraFile } from "./add-collabora-file.composable";
-import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
@@ -59,6 +57,8 @@ import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board"
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
+import type { CreateCollaboraFilePayload } from "@feature-collabora";
+import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -89,7 +89,7 @@ const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPa
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles, rename } = useFileStorageApi();
+const { fetchFiles, upload, uploadCollaboraFile, getFileRecordsByParentId, deleteFiles, rename } = useFileStorageApi();
 
 const boardStore = useBoardStore();
 
@@ -152,19 +152,6 @@ const uploadFile = () => {
 		fileInput.value.value = "";
 		fileInput.value.click();
 	}
-};
-
-const collaboraFileAddedHandler = (newFile: FileRecord) => {
-	const url = router.resolve({
-		name: "collabora",
-		params: {
-			id: newFile.id,
-		},
-		query: {
-			edit: hasEditPermission.value.toString(),
-		},
-	}).href;
-	window.open(url, "_blank");
 };
 
 const onDelete = async (confirmation: Promise<boolean>) => {
@@ -232,6 +219,27 @@ const onRename = async (newName: string) => {
 
 const onRenameCancel = () => {
 	isRenameDialogOpen.value = false;
+};
+
+const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
+	const newFile = await uploadCollaboraFile(
+		payload.type,
+		props.folderId,
+		FileRecordParent.BOARDNODES,
+		payload.fileName
+	);
+	if (!newFile) return;
+
+	const url = router.resolve({
+		name: "collabora",
+		params: {
+			id: newFile.id,
+		},
+		query: {
+			edit: hasEditPermission.value.toString(),
+		},
+	}).href;
+	window.open(url, "_blank");
 };
 
 const resetUploadProgress = () => {

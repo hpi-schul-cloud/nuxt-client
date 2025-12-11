@@ -1,6 +1,6 @@
 import RoomModal from "./RoomModal.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -47,15 +47,15 @@ describe("RoomModal", () => {
 			it("it should be rendered", () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
+				const dialog = wrapper.findComponent(CustomDialog);
 
 				expect(dialog.exists()).toBe(true);
 			});
 
-			it("it should pass isOpen to vCustomDialog", () => {
+			it("it should pass isOpen to CustomDialog", () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
+				const dialog = wrapper.findComponent(CustomDialog);
 				expect(dialog.props("isOpen")).toBeFalsy();
 			});
 		});
@@ -70,10 +70,10 @@ describe("RoomModal", () => {
 				return { wrapper };
 			};
 
-			it("should pass isOpen to vCustomDialog", async () => {
+			it("should pass isOpen to CustomDialog", async () => {
 				const { wrapper } = await setup();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
+				const dialog = wrapper.findComponent(CustomDialog);
 				expect(dialog.props("isOpen")).toBeTruthy();
 			});
 		});
@@ -303,11 +303,11 @@ describe("RoomModal", () => {
 		});
 	});
 
-	describe("when vCustomDialog emits dialog-closed", () => {
+	describe("when CustomDialog emits dialog-closed", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			dialog.vm.$emit("dialog-closed");
 
 			return { wrapper };

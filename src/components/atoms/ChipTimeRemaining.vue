@@ -41,15 +41,15 @@ const hintDueDate = (dueDate: string, shorten = false) => {
 		const diffMins = fromNowToFuture(dueDate, "minutes");
 
 		const label = shorten
-			? t("components.atoms.VCustomChipTimeRemaining.hintMinShort")
-			: t("components.atoms.VCustomChipTimeRemaining.hintMinutes", diffMins);
+			? t("components.atoms.ChipTimeRemaining.hintMinShort")
+			: t("components.atoms.ChipTimeRemaining.hintMinutes", diffMins);
 
-		return `${t("components.atoms.VCustomChipTimeRemaining.hintDueTime")}${diffMins} ${label}`;
+		return `${t("components.atoms.ChipTimeRemaining.hintDueTime")}${diffMins} ${label}`;
 	} else {
 		const label = shorten
-			? t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")
-			: t("components.atoms.VCustomChipTimeRemaining.hintHours", diffHrs);
-		return `${t("components.atoms.VCustomChipTimeRemaining.hintDueTime")}${diffHrs} ${label}`;
+			? t("components.atoms.ChipTimeRemaining.hintHoursShort")
+			: t("components.atoms.ChipTimeRemaining.hintHours", diffHrs);
+		return `${t("components.atoms.ChipTimeRemaining.hintDueTime")}${diffHrs} ${label}`;
 	}
 };
 </script>

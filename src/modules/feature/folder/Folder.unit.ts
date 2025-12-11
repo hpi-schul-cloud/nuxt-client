@@ -1,5 +1,3 @@
-import * as AddCollaboraFile from "./add-collabora-file.composable";
-import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import DeleteFileDialog from "./file-table/DeleteFileDialog.vue";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
 import KebabMenuActionDeleteFiles from "./file-table/KebabMenuActionDeleteFiles.vue";
@@ -10,7 +8,7 @@ import FolderMenu from "./FolderMenu.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
-import { FileRecord, FileRecordParent } from "@/types/file/File";
+import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
 import {
 	boardResponseFactory,
@@ -22,7 +20,9 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
+import { CollaboraFileType } from "@data-file";
 import * as FolderState from "@data-folder";
+import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
@@ -42,7 +42,8 @@ const useRouterMock = <Mock>useRouter;
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
 
-vi.mock("./add-collabora-file.composable");
+vi.mock("@feature-collabora/composables/add-collabora-file.composable");
+const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
 
 describe("Folder.vue", () => {
 	enableAutoUnmount(afterEach);
@@ -116,11 +117,8 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
-						openCollaboraFileDialog: vi.fn(),
-						closeCollaboraFileDialog: vi.fn(),
-						isCollaboraFileDialogOpen: ref(false),
-					});
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
 					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
@@ -246,6 +244,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					setupWrapper();
 
 					await nextTick();
@@ -299,6 +300,9 @@ describe("Folder.vue", () => {
 						hasEditPermission: ref(true),
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
 
@@ -365,6 +369,9 @@ describe("Folder.vue", () => {
 						hasEditPermission: ref(true),
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
 
@@ -438,6 +445,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
@@ -500,6 +510,9 @@ describe("Folder.vue", () => {
 						hasEditPermission: ref(true),
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
 
@@ -564,6 +577,9 @@ describe("Folder.vue", () => {
 						hasEditPermission: ref(true),
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
 
@@ -652,6 +668,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper, router } = setupWrapper();
 
 					const kebabMenu = wrapper.find("[data-testid='folder-menu']");
@@ -726,6 +745,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper } = setupWrapper();
 
 					await flushPromises();
@@ -790,6 +812,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper } = setupWrapper();
 
 					await flushPromises();
@@ -851,6 +876,9 @@ describe("Folder.vue", () => {
 					hasEditPermission: ref(true),
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
 
@@ -923,6 +951,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper } = setupWrapper();
 
 					await flushPromises();
@@ -990,6 +1021,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper } = setupWrapper();
 
 					await flushPromises();
@@ -1053,6 +1087,9 @@ describe("Folder.vue", () => {
 					hasEditPermission: ref(true),
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
 
@@ -1119,6 +1156,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 				const { wrapper } = setupWrapper();
 
 				return { wrapper };
@@ -1163,11 +1203,11 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const mockOpenCollaboraFileDialog = vi.fn();
-				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
-					openCollaboraFileDialog: mockOpenCollaboraFileDialog,
-					closeCollaboraFileDialog: vi.fn(),
+				const mockedOpenCollaboraFileDialog = vi.fn();
+				mockedUseAddCollaboraFile.mockReturnValue({
 					isCollaboraFileDialogOpen: ref(false),
+					openCollaboraFileDialog: mockedOpenCollaboraFileDialog,
+					closeCollaboraFileDialog: vi.fn(),
 				});
 
 				createTestEnvStore({
@@ -1181,7 +1221,7 @@ describe("Folder.vue", () => {
 
 				return {
 					wrapper,
-					mockOpenCollaboraFileDialog,
+					mockedOpenCollaboraFileDialog,
 				};
 			};
 
@@ -1253,7 +1293,7 @@ describe("Folder.vue", () => {
 
 			describe("and create document is chosen", () => {
 				it("should open collabora file dialog", async () => {
-					const { wrapper, mockOpenCollaboraFileDialog } = await setup(true);
+					const { wrapper, mockedOpenCollaboraFileDialog } = await setup(true);
 
 					const fabComponent = wrapper.getComponent(SpeedDialMenu);
 					await fabComponent.getComponent(VBtn).trigger("click");
@@ -1262,12 +1302,12 @@ describe("Folder.vue", () => {
 					const createDocumentAction = fabActions[1].getComponent(VBtn);
 					await createDocumentAction.trigger("click");
 
-					expect(mockOpenCollaboraFileDialog).toHaveBeenCalled();
+					expect(mockedOpenCollaboraFileDialog).toHaveBeenCalled();
 				});
 			});
 		});
 
-		describe("when collabora file was created", () => {
+		describe("when collabora file should be created", () => {
 			const setup = async () => {
 				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
 				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
@@ -1298,11 +1338,8 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				vi.spyOn(AddCollaboraFile, "useAddCollaboraFile").mockReturnValue({
-					openCollaboraFileDialog: vi.fn(),
-					closeCollaboraFileDialog: vi.fn(),
-					isCollaboraFileDialogOpen: ref(false),
-				});
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const windowOpenMock = vi.fn();
 				const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(windowOpenMock);
@@ -1316,17 +1353,48 @@ describe("Folder.vue", () => {
 				return {
 					wrapper,
 					windowOpenSpy,
+					fileStorageApiMock,
 				};
 			};
+
+			it("should upload collabora file", async () => {
+				const { wrapper, fileStorageApiMock } = await setup();
+
+				const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
+				await collaboraFileDialog.vm.$emit("create-collabora-file", {
+					type: CollaboraFileType.Text,
+					fileName: "myDoc",
+				});
+
+				expect(fileStorageApiMock.uploadCollaboraFile).toHaveBeenCalled();
+			});
 
 			it("should show open collabora file in new tab", async () => {
 				const { wrapper, windowOpenSpy } = await setup();
 
 				const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
-				const newFile: FileRecord = fileRecordFactory.build();
-				await collaboraFileDialog.vm.$emit("collabora-file-added", newFile);
+				await collaboraFileDialog.vm.$emit("create-collabora-file", {
+					type: CollaboraFileType.Text,
+					fileName: "myDoc",
+				});
 
 				expect(windowOpenSpy).toHaveBeenCalled();
+			});
+
+			describe("and upload fails", () => {
+				it("should not open new tab", async () => {
+					const { wrapper, windowOpenSpy, fileStorageApiMock } = await setup();
+
+					fileStorageApiMock.uploadCollaboraFile.mockReturnValueOnce(undefined);
+
+					const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
+					await collaboraFileDialog.vm.$emit("create-collabora-file", {
+						type: CollaboraFileType.Text,
+						fileName: "myDoc",
+					});
+
+					expect(windowOpenSpy).not.toHaveBeenCalled();
+				});
 			});
 		});
 
@@ -1376,6 +1444,9 @@ describe("Folder.vue", () => {
 					hasEditPermission: ref(true),
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper, parentId } = setupWrapper();
 
@@ -1507,6 +1578,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 				const { wrapper, parentId } = setupWrapper();
 
 				await nextTick();
@@ -1606,6 +1680,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 				const { wrapper } = setupWrapper();
 
 				await flushPromises();
@@ -1663,6 +1740,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 				const { wrapper } = setupWrapper();
 
 				await flushPromises();
@@ -1710,8 +1790,8 @@ describe("Folder.vue", () => {
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
-				const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
-				mockedUseBoardApi.mockReturnValue(boardApiMock);
+				const boardState = createMock<ReturnType<typeof BoardApi.useSharedBoardPageInformation>>({});
+				vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(boardState);
 
 				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -1720,6 +1800,9 @@ describe("Folder.vue", () => {
 				const fileRecord2 = fileRecordFactory.build();
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
+				const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				mockedUseBoardApi.mockReturnValue(boardApiMock);
+
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
@@ -1727,6 +1810,9 @@ describe("Folder.vue", () => {
 					hasEditPermission: ref(false),
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
 
@@ -1796,6 +1882,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
+
 					const { wrapper } = setupWrapper();
 
 					await flushPromises();
@@ -1858,6 +1947,9 @@ describe("Folder.vue", () => {
 						hasEditPermission: ref(false),
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 					mockedUseBoardApi.mockReturnValue(boardApiMock);

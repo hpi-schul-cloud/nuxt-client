@@ -57,14 +57,14 @@
 			data-testid="room-content"
 			@copy-board-element="onCopyBoardElement"
 		/>
-		<share-modal type="courses" />
-		<copy-result-modal
+		<ShareModal type="courses" />
+		<CopyResultModal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-		<common-cartridge-export-modal />
+		<CommonCartridgeExportModal />
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
@@ -86,8 +86,7 @@
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RoomDashboard from "@/components/templates/RoomDashboard.vue";
@@ -137,13 +136,12 @@ export default defineComponent({
 	components: {
 		StartExistingCourseSyncDialog,
 		EndCourseSyncDialog,
-		vCustomDialog,
 		DefaultWireframe,
 		RoomDashboard,
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
-		commonCartridgeExportModal,
+		CommonCartridgeExportModal,
 		SelectBoardLayoutDialog,
 		CourseRoomLockedPage,
 	},

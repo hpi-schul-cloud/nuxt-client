@@ -8180,6 +8180,37 @@ export interface PublicSystemResponse {
 /**
  * 
  * @export
+ * @interface RangeDate
+ */
+export interface RangeDate {
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $gt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $gte?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $lt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $lte?: string;
+}
+/**
+ * 
+ * @export
  * @interface ReadersCanEditBodyParams
  */
 export interface ReadersCanEditBodyParams {
@@ -12273,15 +12304,15 @@ export const AdminStudentsApiAxiosParamCreator = function (configuration?: Confi
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiStudentsControllerSearchStudents: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        adminApiStudentsControllerSearchStudents: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/admin/students`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12388,15 +12419,15 @@ export const AdminStudentsApiFp = function(configuration?: Configuration) {
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+        async adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12430,15 +12461,15 @@ export const AdminStudentsApiFactory = function (configuration?: Configuration, 
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+        adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
             return localVarFp.adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(axios, basePath));
         },
     };
@@ -12470,16 +12501,16 @@ export interface AdminStudentsApiInterface {
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminStudentsApiInterface
      */
-    adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+    adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
 
 }
 
@@ -12512,16 +12543,16 @@ export class AdminStudentsApi extends BaseAPI implements AdminStudentsApiInterfa
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminStudentsApi
      */
-    public adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any) {
+    public adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any) {
         return AdminStudentsApiFp(this.configuration).adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -12581,15 +12612,15 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/admin/teachers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12696,15 +12727,15 @@ export const AdminTeachersApiFp = function(configuration?: Configuration) {
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12738,15 +12769,15 @@ export const AdminTeachersApiFactory = function (configuration?: Configuration, 
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
             return localVarFp.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(axios, basePath));
         },
     };
@@ -12778,16 +12809,16 @@ export interface AdminTeachersApiInterface {
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminTeachersApiInterface
      */
-    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
 
 }
 
@@ -12820,16 +12851,16 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminTeachersApi
      */
-    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any) {
+    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any) {
         return AdminTeachersApiFp(this.configuration).adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
     }
 }
