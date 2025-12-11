@@ -67,12 +67,12 @@
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { ExternalMemberCheckStatus } from "@data-room";
 import { isValidEmail } from "@util-validators";
-import { computed, ModelRef, ref, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VSpacer, VTextField } from "vuetify/components";
 
-const isOpen: ModelRef<boolean> = defineModel("isOpen", {
+const isOpen = defineModel({
 	type: Boolean,
 	required: true,
 });
@@ -94,10 +94,7 @@ const isEmailValid = ref(false);
 const addExternalPersonContent = ref<VCard>();
 const emailValidationMessage = ref<string | undefined>(undefined);
 
-useSafeFocusTrap(isOpen, addExternalPersonContent, {
-	initialFocus: emailInput.value?.$el,
-	immediate: true,
-});
+useSafeFocusTrap(isOpen, addExternalPersonContent);
 
 const onEmailBlur = () => {
 	const errorMessage = t("common.validation.email");

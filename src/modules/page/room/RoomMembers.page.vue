@@ -61,9 +61,9 @@
 	<ConfirmationDialog />
 	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
 	<AddExternalPersonDialog
-		v-model:is-open="isExternalPersonDialogOpen"
+		v-model="isExternalPersonDialogOpen"
 		:member-status="externalMemberStatus"
-		@update:mail="onEmailCheck"
+		@update:mail="onAddMemberByEmail"
 	/>
 </template>
 
@@ -116,7 +116,7 @@ const props = defineProps({
 
 enum FabEvent {
 	ADD_MEMBERS = "addMembers",
-	INVITE_MEMBERS = "inviteMembers",
+	INVITE_MEMBERS = "addExternalPerson",
 }
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -236,7 +236,7 @@ const handleAddMember = (event: string | undefined) => {
 	isExternalPersonDialogOpen.value = true;
 };
 
-const onEmailCheck = async (email: string) => {
+const onAddMemberByEmail = async (email: string) => {
 	const addMemberStatus = await roomMembersStore.addMemberByEmail(email);
 	if (addMemberStatus === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		isExternalPersonDialogOpen.value = false;
