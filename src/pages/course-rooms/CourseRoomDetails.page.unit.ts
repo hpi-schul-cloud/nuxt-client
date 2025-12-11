@@ -495,9 +495,9 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 		it("should open modal for sharing action", () => {
 			const wrapper = getWrapper();
 			const modalView = wrapper.findComponent({
-				name: "share-modal",
+				name: "ShareModal",
 			});
-			const shareDialog = modalView.findComponent({ name: "v-custom-dialog" });
+			const shareDialog = modalView.findComponent({ name: "CustomDialog" });
 
 			expect(shareDialog.props("isOpen")).toBe(true);
 		});

@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog
+	<CustomDialog
 		ref="dialog"
 		:is-open="isOpen"
 		:size="480"
@@ -39,11 +39,11 @@
 				/>
 			</div>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { ImportDestinationItem } from "@/store/types/rooms";
 import { mdiInformation } from "@icons/material";

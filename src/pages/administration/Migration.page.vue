@@ -66,7 +66,7 @@
 					</VStepperItem>
 				</VStepperHeader>
 
-				<VCustomDialog
+				<CustomDialog
 					ref="cancelMigrationDialog"
 					v-model:is-open="isCancelDialogOpen"
 					has-buttons
@@ -80,9 +80,9 @@
 					<template #content>
 						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Description") }}
 					</template>
-				</VCustomDialog>
+				</CustomDialog>
 
-				<VCustomDialog
+				<CustomDialog
 					ref="clearAutoMatchesDialog"
 					v-model:is-open="isClearAutoMatchesDialogOpen"
 					has-buttons
@@ -106,7 +106,7 @@
 							>
 						</p>
 					</template>
-				</VCustomDialog>
+				</CustomDialog>
 			</VStepper>
 		</template>
 
@@ -433,7 +433,7 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/organisms/administration/ImportUsers.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";

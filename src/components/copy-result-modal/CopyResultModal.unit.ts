@@ -1,5 +1,5 @@
 import CopyResultModal from "./CopyResultModal.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -72,7 +72,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be closed by default", () => {
 			const wrapper = createWrapper();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const title = dialog.findComponent('[data-testid="dialog-title"');
 
 			expect(dialog.vm.isOpen).toBe(false);
@@ -82,7 +82,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be open when is-open property is true", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const title = dialog.findComponent('[data-testid="dialog-title"');
 
 			expect(dialog.vm.isOpen).toBe(true);
@@ -94,7 +94,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should show partial-title when copy was partially successful", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const headline = dialog.findComponent('[data-testid="dialog-title"]').text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
@@ -105,7 +105,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should forward the dialog-closed event of the wrapped dialog", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			dialog.vm.$emit("dialog-closed");
 
 			expect(wrapper.emitted("copy-dialog-closed")).toHaveLength(1);
@@ -122,7 +122,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).toContain("components.molecules.copyResult.courseFiles.info");
@@ -152,7 +152,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(CustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
 					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
@@ -182,7 +182,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(CustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
 					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
@@ -218,7 +218,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).toContain("components.molecules.copyResult.membersAndPermissions");
@@ -244,7 +244,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
@@ -270,7 +270,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
@@ -296,7 +296,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
@@ -322,7 +322,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");

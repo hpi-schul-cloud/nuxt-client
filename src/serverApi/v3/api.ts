@@ -309,6 +309,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     BoardManage = 'BOARD_MANAGE',
+    BoardRelocateContent = 'BOARD_RELOCATE_CONTENT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -6530,11 +6531,48 @@ export interface MoveCardBodyParams {
      */
     toColumnId: string;
     /**
-     * 
+     * to bring element to a specific position, default is last position
      * @type {number}
      * @memberof MoveCardBodyParams
      */
-    toPosition: number;
+    toPosition?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MoveCardResponse
+ */
+export interface MoveCardResponse {
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {CardSkeletonResponse}
+     * @memberof MoveCardResponse
+     */
+    card: CardSkeletonResponse;
 }
 /**
  * 
@@ -7830,6 +7868,7 @@ export enum Permission {
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     BoardManage = 'BOARD_MANAGE',
+    BoardRelocateContent = 'BOARD_RELOCATE_CONTENT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -8486,6 +8525,31 @@ export enum RoomColor {
 /**
  * 
  * @export
+ * @interface RoomCreatedResponse
+ */
+export interface RoomCreatedResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    updatedAt: string;
+}
+/**
+ * 
+ * @export
  * @interface RoomDetailsResponse
  */
 export interface RoomDetailsResponse {
@@ -8757,6 +8821,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof RoomItemResponse
+     */
+    permissions: Array<Permission>;
     /**
      * 
      * @type {boolean}
@@ -9834,7 +9904,8 @@ export enum ShareTokenBodyParamsParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9891,7 +9962,8 @@ export enum ShareTokenInfoResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9923,7 +9995,8 @@ export enum ShareTokenPayloadResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9950,6 +10023,25 @@ export interface ShareTokenResponse {
      * @memberof ShareTokenResponse
      */
     expiresAt?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShortNodeResponse
+ */
+export interface ShortNodeResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    title: string;
 }
 /**
  * 
@@ -14913,7 +15005,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MoveCardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerMoveCard(cardId, moveCardBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15000,7 +15092,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void> {
+        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse> {
             return localVarFp.cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15084,7 +15176,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void>;
+    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse>;
 
     /**
      * 
@@ -24119,7 +24211,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomItemResponse>> {
+        async roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomCreatedResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerCreateRoom(createRoomBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -24340,7 +24432,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomItemResponse> {
+        roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomCreatedResponse> {
             return localVarFp.roomControllerCreateRoom(createRoomBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -24547,7 +24639,7 @@ export interface RoomApiInterface {
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomItemResponse>;
+    roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomCreatedResponse>;
 
     /**
      * 

@@ -120,7 +120,7 @@
 					{{ t("components.administration.schoolYearChangeSection.step.three.button") }}
 				</VBtn>
 			</div>
-			<VCustomDialog
+			<CustomDialog
 				v-model:is-open="isStartDialogOpen"
 				has-buttons
 				:buttons="['cancel', 'confirm']"
@@ -133,8 +133,8 @@
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.start.content") }}
 				</template>
-			</VCustomDialog>
-			<VCustomDialog
+			</CustomDialog>
+			<CustomDialog
 				v-model:is-open="isFinishDialogOpen"
 				has-buttons
 				:buttons="['cancel', 'confirm']"
@@ -147,13 +147,13 @@
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.finish.content") }}
 				</template>
-			</VCustomDialog>
+			</CustomDialog>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";

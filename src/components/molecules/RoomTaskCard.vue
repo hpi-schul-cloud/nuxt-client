@@ -57,7 +57,7 @@
 					</v-icon>
 					{{ chip.name }}
 				</v-chip>
-				<v-custom-chip-time-remaining
+				<ChipTimeRemaining
 					v-if="roles.Student === userRole && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.dueDate"
@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining.vue";
+import ChipTimeRemaining from "@/components/atoms/ChipTimeRemaining.vue";
 import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";

@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Weiter",
 	"common.actions.copy": "Kopieren",
 	"common.actions.duplicate": "Duplizieren",
+	"common.actions.move": "Verschieben",
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
@@ -196,7 +197,7 @@ export default {
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
 	"common.words.and": "und",
-	"common.words.board": "Bereich",
+	"common.words.board": "Bereich | Bereiche",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
 	"common.words.color.blue": "Blau",
@@ -247,6 +248,7 @@ export default {
 	"common.words.topic": "Thema",
 	"common.words.topics": "Themen",
 	"common.words.yes": "Ja",
+	"common.alerts.room.not.available": "Kein Raum verfügbar. | Keine Räume verfügbar.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -414,11 +416,11 @@ export default {
 	"components.administration.schoolYearChangeSection.dialog.finish.title": "Transferphase wirklich beenden?",
 	"components.administration.schoolYearChangeSection.dialog.finish.content":
 		"Die Synchronisierung der LDAP-Daten wird gestartet. Nutzerdaten und Klassen werden aktualisiert. Das neue Schuljahr wird automatisch gesetzt.",
-	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
-	"components.atoms.VCustomChipTimeRemaining.hintHours": "Stunde | Stunden",
-	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
-	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
-	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "Minute | Minuten",
+	"components.atoms.ChipTimeRemaining.hintDueTime": "in ",
+	"components.atoms.ChipTimeRemaining.hintHours": "Stunde | Stunden",
+	"components.atoms.ChipTimeRemaining.hintHoursShort": "h",
+	"components.atoms.ChipTimeRemaining.hintMinShort": "min",
+	"components.atoms.ChipTimeRemaining.hintMinutes": "Minute | Minuten",
 	"components.audioPlayer.pause": "Anhalten",
 	"components.audioPlayer.play": "Abspielen",
 	"components.audioPlayer.slider": "Audio Schieberegler für Fortschritt",
@@ -493,6 +495,8 @@ export default {
 		"In Abschnitt {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Eine Karte wurde von Abschnitt {fromColumnPosition} in Abschnitt {toColumnPosition} verschoben.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Eine Karte wurde in Abschnitt {toColumnId} verschoben.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Ein Abschnitt wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -539,8 +543,6 @@ export default {
 	"components.cardElement.fileElement.emptyAlt": "Hier ist ein Bild mit folgendem Namen",
 	"components.cardElement.fileElement.pdfAlt": "Vorschaubild für ",
 	"components.cardElement.fileElement.collaboraFile": "Dokument",
-	"components.cardElement.fileElement.collaboraFile.types": "Dokumententyp",
-	"components.cardElement.fileElement.collaboraFile.untitled": "Unbenanntes Dokument",
 	"components.cardElement.fileElement.previewError": "Laden der Vorschau fehlgeschlagen.",
 	"components.cardElement.fileElement.reloadStatus": "Status aktualisieren",
 	"components.cardElement.fileElement.videoFormatError":
@@ -592,9 +594,6 @@ export default {
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videokonferenz",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Interaktives Lernelement",
 	"components.elementTypeSelection.elements.collabora.subtitle": "Dokument erstellen",
-	"components.elementTypeSelection.elements.collabora.option.text": ".docx (Text)",
-	"components.elementTypeSelection.elements.collabora.option.spreadsheet": ".xlsx (Tabelle)",
-	"components.elementTypeSelection.elements.collabora.option.presentation": ".pptx (Präsentation)",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",
@@ -658,6 +657,20 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "Folgendes wurde nicht kopiert:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.label.room": "Raum wählen",
+	"components.molecules.label.board": "Bereich wählen",
+	"components.molecules.label.section": "Abschnitt wählen",
+	"components.molecules.import.card.question": "Wohin soll die Karte{title} importiert werden?",
+	"components.molecules.import.card.hint.restriction": "Folgende Inhalte werden nicht übernommen:",
+	"components.molecules.import.card.hint.etherpad": "Inhalte aus Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Inhalte aus Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Geschützte Einstellungen externer Tools",
+	"components.molecules.move.card.title": "Karte verschieben",
+	"components.molecules.move.card.question": "Wohin soll die Karte{title} verschoben werden?",
+	"components.molecules.move.card.hint.restriction":
+		"Mit der Berechtigung „Bearbeiten“ können Karten nur innerhalb des selben Raumes in andere Bereiche verschoben werden.",
+	"components.molecules.move.card.message.success": "Karte erfolgreich in den Bereich {link} - {column} verschoben",
+	"components.molecules.import.card.options.title": "Karte importieren",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.rename": "Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText": "Der Bereich kann im Folgenden umbenannt werden. ",
@@ -714,6 +727,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Organisationsadministrator",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.card.options.infoText":
+		"Mit dem folgenden Link kann diese Karte von anderen Personen importiert werden.",
+	"components.molecules.share.card.result.linkLabel": "Link Karten-Kopie",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Link Bereich-Kopie",
@@ -1799,7 +1815,7 @@ export default {
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {roomOwner} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
-		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
+		"Diese Aktion kann nur von {memberFullName} oder der schuladministrierenden Person rückgängig gemacht werden.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Einladungslink erstellen",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
@@ -1839,6 +1855,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",
+	"pages.rooms.invitationlinks.error.delete": "Die Einladungsliste konnte nicht gelöscht werden.",
 	"pages.rooms.title": "Räume",
 	"pages.rooms.administration.title": "Räume verwalten",
 	"pages.rooms.administration.table.header.roomName": "Raumname",
@@ -2012,6 +2029,12 @@ export default {
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
 	"feature.collabora.iframeTitle": "Office-Dokument Editor",
+	"feature.collabora.add-collabora-file-dialog.title": "Dokument erstellen",
+	"feature.collabora.add-collabora-file-dialog.doc-types": "Dokumententyp",
+	"feature.collabora.add-collabora-file-dialog.untitled-file": "Unbenanntes Dokument",
+	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Text)",
+	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Tabelle)",
+	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Präsentation)",
 	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien",
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
@@ -2032,10 +2055,4 @@ export default {
 	"pages.folder.rename-file-dialog.validation.invalid-characters": "Der Dateiname enthält ungültige Zeichen.",
 	"pages.folder.fab.upload-file": "Datei hochladen",
 	"pages.folder.fab.create-document": "Dokument erstellen",
-	"pages.folder.add-collabora-file-dialog.title": "Dokument erstellen",
-	"pages.folder.add-collabora-file-dialog.doc-types": "Dokumententyp",
-	"pages.folder.add-collabora-file-dialog.untitled-file": "Unbenanntes Dokument",
-	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Text)",
-	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Tabelle)",
-	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Präsentation)",
 };
