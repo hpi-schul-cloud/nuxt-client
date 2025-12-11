@@ -91,7 +91,6 @@ const { xs } = useDisplay();
 const emailInput = useTemplateRef("emailInput");
 const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 const addExternalPersonContent = ref<VCard>();
-const emailValidationMessage = ref<string | undefined>(undefined);
 const addExternalPersonForm = useTemplateRef("addExternalPersonForm");
 
 useSafeFocusTrap(isOpen, addExternalPersonContent);
@@ -111,6 +110,5 @@ const onAddButtonClick = async () => {
 const onClose = () => {
 	isOpen.value = false;
 	emit("close");
-	emailValidationMessage.value = undefined;
 };
 </script>
