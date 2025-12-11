@@ -15,8 +15,10 @@ import {
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { FileRecordParent } from "@/types/file/File";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
@@ -35,6 +37,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
+	const { uploadCollaboraFile } = useFileStorageApi();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -108,6 +111,25 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const createElementRequest = socketOrRest.createElementRequest;
+
+	const createFileElementWithCollabora = async (type: CollaboraFileType, fileName: string) => {
+		if (!editModeId.value) {
+			return;
+		}
+
+		const element = await createElementRequest({
+			type: ContentElementType.File,
+			cardId: editModeId.value,
+		});
+		if (!element) {
+			return;
+		}
+
+		const uploadedCollaboraFile = await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
+		if (!uploadedCollaboraFile) {
+			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
+		}
+	};
 
 	const createPreferredElement = (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
 		restApi.createPreferredElement(payload, tool);
@@ -265,5 +287,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		preferredTools,
 		isPreferredToolsLoading,
 		disconnectSocketRequest,
+		createFileElementWithCollabora,
 	};
 });
