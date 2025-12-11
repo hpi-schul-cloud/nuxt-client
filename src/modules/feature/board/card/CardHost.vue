@@ -14,7 +14,7 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered && hasEditPermission ? 4 : 2"
+				:elevation="cardElevation"
 				:ripple="false"
 				:hover="isHovered && hasEditPermission"
 				:data-testid="cardTestId"
@@ -161,6 +161,7 @@ const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${pro
 const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
+const cardElevation = computed(() => (isEditMode.value ? 6 : isHovered.value && hasEditPermission.value ? 4 : 2));
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
