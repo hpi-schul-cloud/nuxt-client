@@ -145,7 +145,6 @@ export default defineComponent({
 			mdiChevronLeft,
 			mdiPound,
 			bottom: false,
-			scrollY: 0,
 		};
 	},
 	computed: {
@@ -237,7 +236,6 @@ export default defineComponent({
 	methods: {
 		scrollEventHandler() {
 			this.bottom = this.isBottomReached();
-			this.scrollY = window.scrollY;
 		},
 		isBottomReached() {
 			const { scrollY } = window;
