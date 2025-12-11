@@ -29,9 +29,11 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		try {
 			roomVariant.value = RoomVariant.ROOM;
 			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
+			console.log("Fetched room details:", room.value);
 			if (config.loadBoards) {
 				roomBoards.value = (await roomApi.roomControllerGetRoomBoards(id)).data.data;
 			}
+			lockedRoomName.value = undefined;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
