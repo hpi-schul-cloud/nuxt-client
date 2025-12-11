@@ -167,7 +167,15 @@ const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${pro
 const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
-const cardElevation = computed(() => (isEditMode.value ? 6 : isHovered.value && hasEditPermission.value ? 4 : 2));
+const cardElevation = computed(() => {
+	if (isEditMode.value) {
+		return 6;
+	}
+	if (isHovered.value && hasEditPermission.value) {
+		return 4;
+	}
+	return 2;
+});
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
