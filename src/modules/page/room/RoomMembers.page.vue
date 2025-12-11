@@ -240,7 +240,6 @@ const onAddMemberByEmail = async (email: string) => {
 	const addMemberStatus = await roomMembersStore.addMemberByEmail(email);
 	if (addMemberStatus === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		isExternalPersonDialogOpen.value = false;
-		return;
 	}
 };
 
