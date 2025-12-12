@@ -76,11 +76,12 @@ export default class VideoConferenceModule extends VuexModule {
 		try {
 			const response: AxiosResponse<VideoConferenceInfoResponse> =
 				await this.videoConferenceApi.videoConferenceControllerInfo(params.scope, params.scopeId);
-
+			console.log("response.data", response.data);
 			const mapped: VideoConferenceInfo = {
 				state: videoConferenceStateMapping[response.data.state] ?? VideoConferenceState.UNKNOWN,
 				options: response.data.options,
 			};
+			console.log("mapped", mapped);
 
 			this.setVideoConferenceInfo(mapped);
 		} catch (error: unknown) {
