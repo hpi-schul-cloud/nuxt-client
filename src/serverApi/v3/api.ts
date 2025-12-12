@@ -1339,6 +1339,25 @@ export interface ColumnResponse {
 /**
  * 
  * @export
+ * @interface CompleteRegistrationBodyParams
+ */
+export interface CompleteRegistrationBodyParams {
+    /**
+     * The prefered language of the new user.
+     * @type {LanguageType}
+     * @memberof CompleteRegistrationBodyParams
+     */
+    language: LanguageType;
+    /**
+     * 
+     * @type {string}
+     * @memberof CompleteRegistrationBodyParams
+     */
+    password: string;
+}
+/**
+ * 
+ * @export
  * @interface ComponentEtherpadPropsImpl
  */
 export interface ComponentEtherpadPropsImpl {
@@ -23111,6 +23130,46 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
+         * @summary Complete a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerCompleteRegistration: async (registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationSecret' is not null or undefined
+            assertParamExists('registrationControllerCompleteRegistration', 'registrationSecret', registrationSecret)
+            // verify required parameter 'completeRegistrationBodyParams' is not null or undefined
+            assertParamExists('registrationControllerCompleteRegistration', 'completeRegistrationBodyParams', completeRegistrationBodyParams)
+            const localVarPath = `/registrations/by-secret/{registrationSecret}/complete`
+                .replace(`{${"registrationSecret"}}`, encodeURIComponent(String(registrationSecret)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(completeRegistrationBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new registration
          * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
          * @param {*} [options] Override http request option.
@@ -23233,6 +23292,18 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Complete a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCompleteRegistration(registrationSecret, completeRegistrationBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new registration
          * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
          * @param {*} [options] Override http request option.
@@ -23276,6 +23347,17 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
+         * @summary Complete a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.registrationControllerCompleteRegistration(registrationSecret, completeRegistrationBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new registration
          * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
          * @param {*} [options] Override http request option.
@@ -23315,6 +23397,17 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
 export interface RegistrationApiInterface {
     /**
      * 
+     * @summary Complete a registration by its secret
+     * @param {string} registrationSecret The secret of the registration.
+     * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Create a new registration
      * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
      * @param {*} [options] Override http request option.
@@ -23352,6 +23445,19 @@ export interface RegistrationApiInterface {
  * @extends {BaseAPI}
  */
 export class RegistrationApi extends BaseAPI implements RegistrationApiInterface {
+    /**
+     * 
+     * @summary Complete a registration by its secret
+     * @param {string} registrationSecret The secret of the registration.
+     * @param {CompleteRegistrationBodyParams} completeRegistrationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerCompleteRegistration(registrationSecret: string, completeRegistrationBodyParams: CompleteRegistrationBodyParams, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerCompleteRegistration(registrationSecret, completeRegistrationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new registration
