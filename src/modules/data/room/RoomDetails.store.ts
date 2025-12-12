@@ -19,7 +19,6 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const room = ref<RoomDetails>();
 	const roomVariant = ref<RoomVariant>();
 	const roomBoards = ref<RoomBoardItem[]>([]);
-	const lockedRoomName = ref<string | undefined>();
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -32,14 +31,13 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 			if (config.loadBoards) {
 				roomBoards.value = (await roomApi.roomControllerGetRoomBoards(id)).data.data;
 			}
-			lockedRoomName.value = undefined;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
 			if (responseError.code === 404) {
 				roomVariant.value = RoomVariant.COURSE_ROOM;
 			} else if (responseError.code === 403 && responseError.type === "LOCKED_ROOM") {
-				lockedRoomName.value = responseError.message;
+				return { isLocked: true, lockedRoomName: responseError.message };
 			} else {
 				throw createApplicationError(responseError.code);
 			}
@@ -49,7 +47,10 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	};
 
 	const fetchRoomAndBoards = async (id: string) => {
-		await fetchRoom(id, { loadBoards: true });
+		const result = await fetchRoom(id, { loadBoards: true });
+		if (result?.isLocked) {
+			return { isLocked: true, lockedRoomName: result.lockedRoomName };
+		}
 	};
 
 	const fetchBoardsOfRoom = async (roomId: string) => {
@@ -107,6 +108,5 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		roomVariant,
 		roomBoards,
 		updateRoom,
-		lockedRoomName,
 	};
 });
