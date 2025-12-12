@@ -1,30 +1,34 @@
 import RoomMembersPage from "./RoomMembers.page.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
+import { ConfigResponse, RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
-import { mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
+	ExternalMemberCheckStatus,
 	InvitationStep,
 	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { AddMembersDialog, Confirmations, Invitations, Members } from "@feature-room";
+import { AddExternalPersonDialog, AddMembersDialog, Confirmations, Invitations, Members } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { flushPromises } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
@@ -122,14 +126,21 @@ describe("RoomMembersPage", () => {
 		});
 	});
 
-	const setup = (options?: { createRoom?: boolean; activeTab?: Tab; isLoading?: boolean }) => {
-		const { createRoom, activeTab, isLoading } = {
+	const setup = (options?: {
+		createRoom?: boolean;
+		activeTab?: Tab;
+		isLoading?: boolean;
+		envConfig?: Partial<ConfigResponse>;
+	}) => {
+		const { createRoom, activeTab, isLoading, envConfig } = {
 			createRoom: true,
 			activeTab: Tab.Members,
 			isLoading: false,
-
 			...options,
 		};
+
+		setActivePinia(createTestingPinia());
+		createTestEnvStore(envConfig);
 
 		const room = createRoom ? roomFactory.build() : undefined;
 
@@ -471,6 +482,67 @@ describe("RoomMembersPage", () => {
 
 			expect(addMemberDialogAfterClick.vm.modelValue).toBe(true);
 		});
+
+		describe("when FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED is true", () => {
+			describe("SpeedDialMenu", () => {
+				it("should have speed dial menu actions", async () => {
+					roomPermissions.canAddRoomMembers = computed(() => true);
+					const { wrapper } = setup({
+						activeTab: Tab.Members,
+						envConfig: {
+							FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+						},
+					});
+
+					const wireframe = wrapper.findComponent(DefaultWireframe);
+					const addMemberButton = wireframe.getComponent("[data-testid=fab-add-members]").getComponent(VBtn);
+					await addMemberButton.trigger("click");
+
+					const fabActions = wrapper.findAllComponents(SpeedDialMenuAction);
+					expect(fabActions.length).toBe(2);
+				});
+			});
+
+			it("should open add members dialog when clicking on add-member action", async () => {
+				roomPermissions.canAddRoomMembers = computed(() => true);
+				const { wrapper } = setup({
+					activeTab: Tab.Members,
+					envConfig: {
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+					},
+				});
+
+				const addMemberDialogBefore = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
+				expect(addMemberDialogBefore.vm.modelValue).toBe(false);
+
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				wireframe.vm.$emit("onFabItemClick", "addMembers");
+				await nextTick();
+
+				const addMemberDialog = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
+				expect(addMemberDialog.vm.modelValue).toBe(true);
+			});
+
+			it("should open AddExternalPerson dialog when clicking on invite-members action", async () => {
+				roomPermissions.canAddRoomMembers = computed(() => true);
+				const { wrapper } = setup({
+					activeTab: Tab.Members,
+					envConfig: {
+						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
+					},
+				});
+
+				const addExternalMemberDialogBefore = wrapper.findComponent(AddExternalPersonDialog);
+				expect(addExternalMemberDialogBefore.vm.modelValue).toBe(false);
+
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				wireframe.vm.$emit("onFabItemClick", "addExternalPerson");
+				await nextTick();
+
+				const addExternalMemberDialog = wrapper.findComponent(AddExternalPersonDialog);
+				expect(addExternalMemberDialog.vm.modelValue).toBe(true);
+			});
+		});
 	});
 
 	describe("invite members fab", () => {
@@ -539,6 +611,38 @@ describe("RoomMembersPage", () => {
 			await dialog.vm.$emit("close");
 
 			expect(dialog.props("modelValue")).toBe(false);
+		});
+	});
+
+	describe("add members by email", () => {
+		it("should call addMembersByEmail when @update:mail is emitted", async () => {
+			roomPermissions.canAddRoomMembers = computed(() => true);
+			const { wrapper, roomMembersStore } = setup();
+
+			const dialog = wrapper.getComponent(AddExternalPersonDialog);
+
+			const email = "test@example.com";
+			dialog.vm.$emit("update:mail", email);
+			await nextTick();
+
+			expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith(email);
+		});
+		describe("when response is ACCOUNT_FOUND_AND_ADDED", () => {
+			it("should close the dialog", async () => {
+				roomPermissions.canAddRoomMembers = computed(() => true);
+				const { wrapper, roomMembersStore } = setup();
+
+				roomMembersStore.addMemberByEmail.mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED);
+
+				const dialog = wrapper.getComponent(AddExternalPersonDialog);
+				await dialog.setValue(true);
+
+				const email = "test@example.com";
+				dialog.vm.$emit("update:mail", email);
+				await flushPromises();
+
+				expect(dialog.props("modelValue")).toBe(false);
+			});
 		});
 	});
 

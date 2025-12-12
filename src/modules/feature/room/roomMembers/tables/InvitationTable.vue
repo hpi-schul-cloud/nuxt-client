@@ -55,7 +55,6 @@
 
 <script setup lang="ts">
 import { isNotNullish } from "@/utils/typeScript";
-import { useEnvConfig } from "@data-env";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { mdiShareVariantOutline } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -68,14 +67,9 @@ import {
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
-import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
-const isInviteExternalPersonsFeatureEnabled = computed(
-	() => useEnvConfig().value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED
-);
 
 defineProps({
 	headerBottom: {
@@ -97,6 +91,7 @@ const {
 	roomInvitationLinks,
 	sharedUrl,
 	selectedIds,
+	isInviteExternalPersonsFeatureEnabled,
 } = storeToRefs(roomInvitationLinkStore);
 const { askConfirmation } = useConfirmationDialog();
 

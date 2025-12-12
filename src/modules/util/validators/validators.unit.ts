@@ -8,6 +8,7 @@ import {
 	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
+	isValidEmail,
 	isValidTimeFormat,
 	isValidUrl,
 } from "@util-validators";
@@ -197,6 +198,20 @@ describe("util-validators", () => {
 		it("should not accept special characters that are not allowed", () => {
 			const isValid = hasSpecialCharacter(ERROR);
 			expect(isValid("Abcdef€")).toBe(ERROR);
+		});
+	});
+
+	describe("isValidEmail", () => {
+		const isValid = isValidEmail(ERROR);
+
+		it("should accept valid email address", () => {
+			expect(isValid("test@example.com")).toBe(true);
+		});
+
+		it("should not accept invalid email address", () => {
+			expect(isValid("test@.com")).toBe(ERROR);
+			expect(isValid("testexample.com")).toBe(ERROR);
+			expect(isValid("test@exam_ple.com")).toBe(ERROR);
 		});
 	});
 });
