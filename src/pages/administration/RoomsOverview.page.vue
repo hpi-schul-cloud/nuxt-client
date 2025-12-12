@@ -130,7 +130,7 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<v-custom-dialog
+		<CustomDialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
 			data-testid="delete-dialog"
@@ -153,7 +153,7 @@
 					}}
 				</p>
 			</template>
-		</v-custom-dialog>
+		</CustomDialog>
 		<StartExistingCourseSyncDialog
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";

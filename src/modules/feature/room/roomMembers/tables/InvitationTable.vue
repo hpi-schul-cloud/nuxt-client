@@ -13,7 +13,7 @@
 		</template>
 
 		<template #[`item.actions`]="{ item }">
-			<div class="d-flex align-center">
+			<div class="d-flex justify-end">
 				<VBtn
 					ref="shareButton"
 					variant="text"
