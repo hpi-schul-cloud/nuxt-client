@@ -89,7 +89,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const { xs } = useDisplay();
-const emailInput = useTemplateRef("emailInput");
 const email = ref("");
 const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 const addExternalPersonContent = ref<VCard>();
@@ -105,12 +104,9 @@ const onAddButtonClick = async () => {
 		document.getElementById(firstErrorId)?.focus();
 		return;
 	}
-	const { log } = console;
-	// const email = emailInput.value?.modelValue;
-	log("in dialog emailInput value:", emailInput.value?.modelValue);
-	log("element value:", emailInput.value);
 	emit("update:mail", email.value);
 	onClose();
+	email.value = "";
 };
 
 const onClose = () => {
