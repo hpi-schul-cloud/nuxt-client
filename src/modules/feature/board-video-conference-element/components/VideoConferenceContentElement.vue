@@ -169,8 +169,8 @@ const hasParticipationPermission = computed(() => canJoin.value || canStart.valu
 
 const canJoin = computed(
 	() =>
-		(isStudent.value || isTeacher.value) &&
-		(!isExternalPerson.value || userRoles.value?.length > 1 || isWaitingRoomActive.value)
+		(isStudent.value || isTeacher.value || isExternalPerson.value) &&
+		(userRoles.value?.length > 1 || isWaitingRoomActive.value)
 );
 
 const canStart = computed(() => hasManageVideoConferencePermission.value);
