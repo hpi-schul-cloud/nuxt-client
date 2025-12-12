@@ -18,6 +18,7 @@
 				<VForm ref="addExternalPersonForm" class="mt-5">
 					<VTextField
 						ref="emailInput"
+						v-model="email"
 						:label="t('common.labels.email')"
 						autofocus
 						data-testid="invite-external-person-email"
@@ -89,6 +90,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 const emailInput = useTemplateRef("emailInput");
+const email = ref("");
 const isAdditionalInfoNeeded = computed(() => props?.memberStatus === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 const addExternalPersonContent = ref<VCard>();
 const addExternalPersonForm = useTemplateRef("addExternalPersonForm");
@@ -104,10 +106,10 @@ const onAddButtonClick = async () => {
 		return;
 	}
 	const { log } = console;
-	const email = emailInput.value?.modelValue;
+	// const email = emailInput.value?.modelValue;
 	log("in dialog emailInput value:", emailInput.value?.modelValue);
 	log("element value:", emailInput.value);
-	emit("update:mail", email);
+	emit("update:mail", email.value);
 	onClose();
 };
 
