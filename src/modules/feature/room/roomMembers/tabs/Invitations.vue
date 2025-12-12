@@ -7,8 +7,8 @@
 	</div>
 </template>
 <script setup lang="ts">
+import InvitationTable from "../tables/InvitationTable.vue";
 import { useRoomInvitationLinkStore } from "@data-room";
-import { InvitationTable } from "@feature-room";
 import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 

@@ -1,3 +1,4 @@
+import { useRoomDetailsStore } from "../RoomDetails.store";
 import {
 	CreateRoomInvitationLinkDto,
 	InvitationStep,
@@ -10,7 +11,6 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
-import { useRoomDetailsStore } from "@data-room";
 import { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
