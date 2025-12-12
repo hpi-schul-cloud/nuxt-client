@@ -169,8 +169,6 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 					["firstName", "asc"],
 					["address.city", "asc"],
 				],
-				"update:sort-by": [["firstName"], ["firstName"], ["firstName"], ["address.city"]],
-				"update:sort-order": [["asc"], ["desc"], ["asc"], ["asc"]],
 			});
 		});
 	});

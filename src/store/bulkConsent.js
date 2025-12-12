@@ -1,6 +1,40 @@
-import generatePassword from "@/mixins/generatePassword";
 import { inputDateFormat } from "@/plugins/datetime";
 import { $axios } from "@/utils/api";
+
+const words = [
+	"auto",
+	"baum",
+	"bein",
+	"blumen",
+	"flocke",
+	"frosch",
+	"halsband",
+	"hand",
+	"haus",
+	"herr",
+	"horn",
+	"kind",
+	"kleid",
+	"kobra",
+	"komet",
+	"konzert",
+	"kopf",
+	"kugel",
+	"puppe",
+	"rauch",
+	"raupe",
+	"regenbogen",
+	"schuh",
+	"seele",
+	"spatz",
+	"taktisch",
+	"traum",
+	"trommel",
+	"wolke",
+];
+
+const generatePassword = () =>
+	words[Math.floor(Math.random() * words.length)] + Math.floor(Math.random() * 9998 + 1).toString();
 
 export const actions = {
 	/**

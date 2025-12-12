@@ -17,8 +17,8 @@
 						<component
 							:is="componentHeaderRow"
 							v-model:current-page-selection-state="currentPageSelectionState"
-							v-model:sort-by="$_controllableDataSortBy"
-							v-model:sort-order="$_controllableDataSortOrder"
+							v-model:sort-by="SortBy"
+							v-model:sort-order="SortOrder"
 							:all-rows-selectable="rowsSelectable"
 							:columns="columns"
 							data-testid="table-data-head"
@@ -69,7 +69,6 @@ import RowSelectionBar from "./RowSelectionBar.vue";
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
 import Pagination from "@/components/organisms/Pagination.vue";
-import controllableData from "@/mixins/controllableData";
 import { getValueByPath } from "@/utils/helpers";
 
 export default {
@@ -77,7 +76,6 @@ export default {
 		Pagination,
 		RowSelectionBar,
 	},
-	mixins: [controllableData(["sortBy", "sortOrder", "selectionType"])],
 	props: {
 		/**
 		 * Defines the visible columns
@@ -207,6 +205,9 @@ export default {
 			editFilterActive: false,
 			tableData: this.data,
 			selectionKeys: {},
+			SortBy: this.sortBy,
+			SortOrder: this.sortOrder,
+			SelectionType: this.selectionType,
 		};
 	},
 	computed: {
@@ -223,13 +224,13 @@ export default {
 		numberOfSelectedItems() {
 			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
-			return this.$_controllableDataSelectionType === "inclusive" ? selections.length : this.total - selections.length;
+			return this.SelectionType === "inclusive" ? selections.length : this.total - selections.length;
 		},
 		allRowsOfAllPagesSelected: {
 			get() {
 				// TODO think about moving selections outside this method
 				const selections = Object.keys(this.selectionKeys);
-				return this.$_controllableDataSelectionType === "exclusive" && selections.length === 0;
+				return this.SelectionType === "exclusive" && selections.length === 0;
 			},
 			set(state) {
 				if (state) {
@@ -244,17 +245,13 @@ export default {
 				const isInSelection = (row) => this.selectionKeys[getValueByPath(row, this.trackBy)];
 
 				const allSelected =
-					this.$_controllableDataSelectionType === "inclusive"
-						? Boolean(this.data.every(isInSelection))
-						: !this.data.some(isInSelection);
+					this.SelectionType === "inclusive" ? Boolean(this.data.every(isInSelection)) : !this.data.some(isInSelection);
 				if (allSelected) {
 					return "all";
 				}
 
 				const someSelected =
-					this.$_controllableDataSelectionType === "inclusive"
-						? Boolean(this.data.some(isInSelection))
-						: !this.data.every(isInSelection);
+					this.SelectionType === "inclusive" ? Boolean(this.data.some(isInSelection)) : !this.data.every(isInSelection);
 				if (someSelected) {
 					return "some";
 				}
@@ -296,7 +293,7 @@ export default {
 				 * Inclusive means all items in the passed array are selected.
 				 * Exclusive means all items not in the passed array are selected.
 				 */
-				this.$emit("update:selection", Object.keys(to), this.$_controllableDataSelectionType);
+				this.$emit("update:selection", Object.keys(to), this.SelectionType);
 				/**
 				 * helper event for the selectedRowIds .sync modifier
 				 */
@@ -324,19 +321,28 @@ export default {
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			}
 		},
+		sortBy(to) {
+			this.SortBy = to;
+		},
+		sortOrder(to) {
+			this.SortOrder = to;
+		},
+		selectionType(to) {
+			this.SelectionType = to;
+		},
 	},
 	methods: {
 		getValueByPath,
 		selectAllRowsOfAllPages() {
 			this.selectionKeys = {};
-			this.$_controllableDataSelectionType = "exclusive";
+			this.SelectionType = "exclusive";
 		},
 		unselectAllRowsOfAllPages() {
 			this.selectionKeys = {};
-			this.$_controllableDataSelectionType = "inclusive";
+			this.SelectionType = "inclusive";
 		},
 		setRowSelection(row, state) {
-			const newState = this.$_controllableDataSelectionType === "inclusive" ? state : !state;
+			const newState = this.SelectionType === "inclusive" ? state : !state;
 
 			if (newState) {
 				this.selectionKeys = {
@@ -349,16 +355,14 @@ export default {
 		},
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);
-			return Boolean(
-				this.$_controllableDataSelectionType === "inclusive" ? this.selectionKeys[rowId] : !this.selectionKeys[rowId]
-			);
+			return Boolean(this.SelectionType === "inclusive" ? this.selectionKeys[rowId] : !this.selectionKeys[rowId]);
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.$emit("update:sort", sortBy, sortOrder);
 		},
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
-			action.action(selections, this.$_controllableDataSelectionType);
+			action.action(selections, this.SelectionType);
 			this.unselectAllRowsOfAllPages();
 		},
 	},
