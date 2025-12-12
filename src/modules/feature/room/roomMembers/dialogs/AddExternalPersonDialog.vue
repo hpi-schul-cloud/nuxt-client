@@ -103,7 +103,11 @@ const onAddButtonClick = async () => {
 		document.getElementById(firstErrorId)?.focus();
 		return;
 	}
-	emit("update:mail", emailInput.value?.modelValue);
+	const { log } = console;
+	const email = emailInput.value?.modelValue;
+	log("in dialog emailInput value:", emailInput.value?.modelValue);
+	log("element value:", emailInput.value);
+	emit("update:mail", email);
 	onClose();
 };
 
