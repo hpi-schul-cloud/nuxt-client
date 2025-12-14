@@ -239,7 +239,7 @@ describe("AuthSystems", () => {
 			await deleteBtn.trigger("click");
 
 			const customDialog = wrapper.findAllComponents({
-				name: "v-custom-dialog",
+				name: "CustomDialog",
 			});
 
 			expect(customDialog).toHaveLength(1);
@@ -258,7 +258,7 @@ describe("AuthSystems", () => {
 			const deleteBtn = wrapper.findComponent(searchStrings.deleteSystemButton);
 			await deleteBtn.trigger("click");
 
-			const customDialog = wrapper.findComponent({ name: "v-custom-dialog" });
+			const customDialog = wrapper.findComponent({ name: "CustomDialog" });
 
 			customDialog.vm.$emit("dialog-confirmed", 123);
 			expect(deleteSpy).toHaveBeenCalled();
@@ -271,7 +271,7 @@ describe("AuthSystems", () => {
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
 			await deleteBtn.trigger("click");
-			const customDialog = wrapper.findComponent({ name: "v-custom-dialog" });
+			const customDialog = wrapper.findComponent({ name: "CustomDialog" });
 
 			customDialog.vm.$emit("dialog-confirmed");
 			expect(removeSystem).toHaveBeenCalled();

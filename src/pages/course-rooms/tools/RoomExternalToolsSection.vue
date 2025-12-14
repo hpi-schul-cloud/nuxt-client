@@ -21,7 +21,7 @@
 			@closed="onCloseErrorDialog"
 		/>
 
-		<v-custom-dialog
+		<CustomDialog
 			:is-open="isDeleteDialogOpen"
 			:has-buttons="true"
 			confirm-btn-title-key="common.actions.remove"
@@ -45,12 +45,12 @@
 					}}
 				</p>
 			</template>
-		</v-custom-dialog>
+		</CustomDialog>
 	</div>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import { Permission, ToolContextType } from "@/serverApi/v3";
