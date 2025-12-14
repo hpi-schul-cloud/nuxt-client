@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isDialogOpen"
-		:message="t('ui.rename.dialog.title', { entity: entityName })"
+		:title="t('ui.rename.dialog.title', { entity: entityName })"
 		:confirm-btn-disabled="!isNameValid"
 		@cancel="onCancel"
 		@confirm="onConfirm"

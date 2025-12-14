@@ -2,7 +2,7 @@
 	<Dialog
 		v-model:is-dialog-open="isDialogOpen"
 		:loading="isImporting"
-		:message="t('components.molecules.import.card.options.title')"
+		:title="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
 		data-testid="import-card-dialog"

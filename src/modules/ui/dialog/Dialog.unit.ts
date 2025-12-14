@@ -8,14 +8,14 @@ describe("Dialog", () => {
 
 	describe("when the dialog isDialogOpen is true", () => {
 		const setup = () => {
-			const message = "message to the user";
+			const title = "title of dialog";
 			const slotContent = "<div>content</div>";
 			const confirmBtnLangKey = "language.key";
 
 			const wrapper = mount(Dialog, {
 				props: {
 					isDialogOpen: true,
-					message,
+					title,
 					confirmBtnLangKey,
 				},
 				slots: {
@@ -27,14 +27,14 @@ describe("Dialog", () => {
 					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
-			return { wrapper, slotContent, message, confirmBtnLangKey };
+			return { wrapper, slotContent, title, confirmBtnLangKey };
 		};
 
-		it("should render message", () => {
-			const { wrapper, message } = setup();
+		it("should render title", () => {
+			const { wrapper, title } = setup();
 			const card = wrapper.findComponent(VDialog).findComponent(VCard);
 
-			expect(card.text()).toContain(message);
+			expect(card.text()).toContain(title);
 		});
 
 		it("should render slot content", () => {
@@ -86,6 +86,7 @@ describe("Dialog", () => {
 			const wrapper = mount(Dialog, {
 				props: {
 					isDialogOpen: false,
+					title: "title of dialog",
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
@@ -109,6 +110,7 @@ describe("Dialog", () => {
 			const wrapper = mount(Dialog, {
 				props: {
 					isDialogOpen: true,
+					title: "title of dialog",
 					confirmBtnLangKey,
 				},
 				global: {
@@ -133,6 +135,7 @@ describe("Dialog", () => {
 		const setup = () => {
 			const wrapper = mount(Dialog, {
 				props: {
+					title: "title of dialog",
 					isDialogOpen: true,
 				},
 				global: {

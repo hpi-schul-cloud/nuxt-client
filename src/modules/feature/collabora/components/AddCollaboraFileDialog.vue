@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model:is-dialog-open="isCollaboraFileDialogOpen"
-		:message="t('feature.collabora.add-collabora-file-dialog.title')"
+		:title="t('feature.collabora.add-collabora-file-dialog.title')"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-file-dialog"
