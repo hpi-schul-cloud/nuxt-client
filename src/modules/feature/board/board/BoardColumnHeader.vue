@@ -15,6 +15,7 @@
 						:data-testid="`column-title-${index}`"
 						scope="column"
 						:is-edit-mode="isEditMode"
+						:has-edit-permission="hasEditPermission"
 						class="w-100"
 						:is-focused="isFocusedById"
 						@update:value="onUpdateTitle"
