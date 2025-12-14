@@ -169,7 +169,7 @@ describe("@templates/RoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the course sync fab action", () => {
-		it.only("should open the course sync dialog", async () => {
+		it("should open the course sync dialog", async () => {
 			const wrapper = getWrapper();
 
 			const fab = wrapper.getComponent(VFab);

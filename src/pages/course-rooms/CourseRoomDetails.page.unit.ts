@@ -1,7 +1,6 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	BoardElementResponseTypeEnum as BoardTypes,
 	CopyApiResponseStatusEnum,
@@ -29,7 +28,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { VBtn } from "vuetify/components";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -243,7 +242,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 		describe("'add list board' button", () => {
 			describe("when user doesn't have course edit permission", () => {
-				it.only("should not render any board creation button", async () => {
+				it("should not render any board creation button", async () => {
 					const wrapper = getWrapper({
 						permissionData: [Permission.HomeworkCreate, Permission.TopicCreate],
 					});
@@ -274,9 +273,11 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					const layoutDialog = wrapper.findComponent("[data-testid=board-layout-dialog]");
 					expect(layoutDialog.exists()).toBe(false);
 
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
-					await nextTick();
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					await fabComponent.getComponent(VBtn).trigger("click");
+
+					const addBoardButton = wrapper.findComponent("[data-testid=fab_button_add_board]");
+					await addBoardButton.getComponent(VBtn).trigger("click");
 
 					const openLayoutDialog = wrapper.findComponent("[data-testid=board-layout-dialog]");
 					expect(openLayoutDialog.exists()).toBe(true);
