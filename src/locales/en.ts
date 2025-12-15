@@ -1936,7 +1936,7 @@ export default {
 	"pages.userMigration.title": "Relocation of the login system",
 	"pages.videoConference.action.refresh": "Update status",
 	"pages.videoConference.info.noPermission":
-		"The video conference hasn't started yet or you don't have permission to join it.",
+		"Participation in the video conference is not possible because the waiting room has not been activated.",
 	"pages.videoConference.info.notStarted": "The video conference hasn't started yet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"The element is no longer available. Please contact the teacher.",

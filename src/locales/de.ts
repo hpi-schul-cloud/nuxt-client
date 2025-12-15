@@ -1972,7 +1972,7 @@ export default {
 	"pages.userMigration.title": "Umzug des Anmeldesystems",
 	"pages.videoConference.action.refresh": "Status aktualisieren",
 	"pages.videoConference.info.noPermission":
-		"Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen.",
+		"Die Teilnahme an der Videokonferenz ist nicht möglich, da der Warteraum nicht aktiviert wurde.",
 	"pages.videoConference.info.notStarted": "Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",

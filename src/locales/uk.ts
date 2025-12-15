@@ -1956,7 +1956,7 @@ export default {
 	"pages.userMigration.title": "Переміщення системи входу",
 	"pages.videoConference.action.refresh": "оновити статус",
 	"pages.videoConference.info.noPermission":
-		"Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
+		"Участь у відеоконференції неможлива, оскільки кімната очікування не була активована.",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Елемент більше не доступний. Будь ласка, зверніться до викладача.",

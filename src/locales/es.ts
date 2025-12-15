@@ -1986,7 +1986,8 @@ export default {
 	"pages.userMigration.success.title": "Migración exitosa de su sistema de registro",
 	"pages.userMigration.title": "Reubicación del sistema de inicio de sesión",
 	"pages.videoConference.action.refresh": "Estado de actualización",
-	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
+	"pages.videoConference.info.noPermission":
+		"No es posible participar en la videoconferencia porque la sala de espera no se ha activado.",
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
