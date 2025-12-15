@@ -1,10 +1,13 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="element-type-selection" :width="dialogWidth">
-		<VCard :loading="isDialogLoading">
-			<VCardTitle class="text-h2 text-break px-6 pt-4">
-				{{ t("components.elementTypeSelection.dialog.title") }}
-			</VCardTitle>
-			<VCardText class="d-flex flex-row flex-wrap align-center">
+	<Dialog
+		v-model="isDialogOpen"
+		:title="t('components.elementTypeSelection.dialog.title')"
+		:loading="isDialogLoading"
+		data-testid="element-type-selection"
+		:width="dialogWidth"
+	>
+		<template #content>
+			<div class="d-flex flex-row flex-wrap align-center">
 				<ExtendedIconBtn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
@@ -13,18 +16,20 @@
 					:label="item.label"
 					@click.stop="item.action"
 				/>
-			</VCardText>
-			<VCardActions class="mb-2 px-6">
-				<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
-					{{ t("common.actions.cancel") }}
-				</VBtn>
-			</VCardActions>
-		</VCard>
-	</VDialog>
+			</div>
+		</template>
+		<template #actions>
+			<VSpacer />
+			<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
+				{{ t("common.actions.cancel") }}
+			</VBtn>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { Dialog } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -39,14 +44,3 @@ const dialogWidth: ComputedRef<number> = computed(() => {
 	return totalOptions >= 3 ? 426 : 320;
 });
 </script>
-
-<style scoped>
-.subtitle {
-	overflow-wrap: break-word;
-	white-space: normal;
-}
-
-.button-max-width {
-	max-width: 100px;
-}
-</style>
