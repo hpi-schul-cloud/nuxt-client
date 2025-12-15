@@ -1,6 +1,6 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
+		v-model="isDialogOpen"
 		:title="t('pages.folder.ariaLabels.menu.action.edit')"
 		:confirm-btn-disabled="!isNameValid"
 		@cancel="onCancel"

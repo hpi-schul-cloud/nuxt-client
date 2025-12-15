@@ -1,6 +1,6 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
+		v-model="isDialogOpen"
 		:title="deleteMessage"
 		@confirm="() => emit('confirm')"
 		@cancel="() => emit('cancel')"

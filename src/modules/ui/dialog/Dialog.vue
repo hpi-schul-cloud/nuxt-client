@@ -1,6 +1,6 @@
 <template>
 	<!-- TODO: identifier prop to add to data-testids? -->
-	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`dialog-${uid}-title`">
+	<VDialog v-model="isOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`dialog-${uid}-title`">
 		<UseFocusTrap>
 			<VCard :loading>
 				<template #title>
@@ -58,12 +58,12 @@ const props = defineProps({
 	confirmBtnLangKey: { type: String, required: false, default: "" },
 });
 
-const isDialogOpen = defineModel("is-dialog-open", {
+const emit = defineEmits(["cancel", "confirm"]);
+
+const isOpen = defineModel({
 	type: Boolean,
 	default: false,
 });
-
-const emit = defineEmits(["cancel", "confirm"]);
 
 const { t } = useI18n();
 const { uid } = useUid();

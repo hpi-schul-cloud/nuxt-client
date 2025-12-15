@@ -1,6 +1,6 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
+		v-model="isDialogOpen"
 		:loading="isImporting"
 		:title="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
