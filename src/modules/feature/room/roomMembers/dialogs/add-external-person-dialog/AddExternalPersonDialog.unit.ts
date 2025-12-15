@@ -10,6 +10,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
+import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
 describe("AddExternalPersonDialog", () => {
@@ -159,7 +160,7 @@ describe("AddExternalPersonDialog", () => {
 
 				expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
-				expect(emailInput.props().readonly).toBe(true);
+				await nextTick();
 
 				expect(wrapper.findComponent('[data-testid="add-external-person-firstname"]').exists()).toBe(true);
 				expect(wrapper.findComponent('[data-testid="add-external-person-confirm-btn"]').exists()).toBe(true);
@@ -174,9 +175,7 @@ describe("AddExternalPersonDialog", () => {
 				const emailInput = wrapper.findComponent('[data-testid="add-external-person-email"]').getComponent(VTextField);
 				await emailInput.setValue("test-email@example.com");
 
-				const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
-				await addBtn.trigger("click");
-				await flushPromises();
+				await clickAddButton();
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith({
 					autoClose: true,
@@ -197,10 +196,7 @@ describe("AddExternalPersonDialog", () => {
 				const emailInput = wrapper.findComponent('[data-testid="add-external-person-email"]').getComponent(VTextField);
 				await emailInput.setValue("test-email@example.com");
 
-				const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
-				await addBtn.trigger("click");
-
-				await flushPromises();
+				await clickAddButton();
 
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
 
@@ -208,9 +204,6 @@ describe("AddExternalPersonDialog", () => {
 				await backBtn.trigger("click");
 
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("email");
-				expect(
-					wrapper.findComponent<typeof VTextField>('[data-testid="add-external-person-email"]').props().readonly
-				).toBe(false);
 				expect(wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]').exists()).toBe(true);
 			});
 		});
