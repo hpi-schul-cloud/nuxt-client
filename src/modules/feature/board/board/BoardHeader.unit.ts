@@ -5,11 +5,7 @@ import { BoardExternalReferenceType, ConfigResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import {
-  useBoardFocusHandler,
-  useBoardPermissions,
-  useCourseBoardEditMode,
-} from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionChangeLayout,
