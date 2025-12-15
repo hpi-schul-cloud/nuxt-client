@@ -1673,9 +1673,10 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Por favor, introduzca un nombre",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Apellido",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Por favor, introduzca un apellido",
-	"pages.rooms.members.dialog.addExternalPerson.text":
-		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Agregar a la sala",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Enviar invitación",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"No se ha podido enviar la invitación. Por favor, inténtelo de nuevo más tarde",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",

@@ -1651,9 +1651,10 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Будь ласка, введіть ім'я",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Прізвище",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Будь ласка, введіть прізвище",
-	"pages.rooms.members.dialog.addExternalPerson.text":
-		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Додати до кімнати",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Надіслати запрошення",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"Не вдалося надіслати запрошення. Будь ласка, спробуйте пізніше",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",

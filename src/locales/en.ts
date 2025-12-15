@@ -1637,15 +1637,10 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Please enter a first name",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Last name",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Please enter a last name",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Add to room",
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Send invitation",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"The invitation could not be sent. Please try again later",
-	"pages.rooms.members.dialog.addExternalPerson.text":
-		"With the following link, the person can be invited to register in {applicationName}.",
-	"pages.rooms.members.dialog.addExternalPerson.text.success": "The invitation was successfully sent to {email}.",
-	"pages.rooms.members.dialog.addExternalPerson.text.error":
-		"An error occurred while sending the invitation. Please try again later.",
-	"pages.rooms.members.dialog.addExternalPerson.button.close": "Close",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
