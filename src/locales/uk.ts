@@ -1637,6 +1637,11 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.learningContent.emptyState": "Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
+	"pages.rooms.members.fab.addExternalPerson": "Додати зовнішню особу",
+	"pages.rooms.members.fab.selectFromDirectory": "Вибрати з каталогу",
+	"pages.rooms.members.dialog.addExternalPerson.text":
+		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Додати до кімнати",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
