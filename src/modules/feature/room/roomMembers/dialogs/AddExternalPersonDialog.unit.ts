@@ -102,7 +102,7 @@ describe("AddExternalPersonDialog", () => {
 
 			expect(emailInput.vm.errorMessages?.length || 0).toBeGreaterThan(0);
 		});
-		it("should continue to the details step when a valid email address was entered and the backend returned ACCOUNT_FOUND_AND_ADDED", async () => {
+		it("should close the dialog when a valid email address was entered and the backend returned ACCOUNT_FOUND_AND_ADDED", async () => {
 			const { wrapper, roomMembersStore } = setup();
 
 			roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED);
@@ -143,7 +143,7 @@ describe("AddExternalPersonDialog", () => {
 			expect(wrapper.findComponent('[data-testid="add-external-person-confirm-btn"]').exists()).toBe(true);
 			expect(wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]').exists()).toBe(false);
 		});
-		it("should show an error step when a valid email address was entered and the backend returned ACCOUNT_IS_NOT_EXTERNAL", async () => {
+		it("should continue to the error step when a valid email address was entered and the backend returned ACCOUNT_IS_NOT_EXTERNAL", async () => {
 			const { wrapper, roomMembersStore } = setup();
 
 			roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL);
@@ -237,6 +237,14 @@ describe("AddExternalPersonDialog", () => {
 				.getComponent(VTextField);
 
 			expect(firstNameInput.vm.errorMessages?.length || 0).toBeGreaterThan(0);
+			expect(lastNameInput.vm.errorMessages?.length || 0).toBeGreaterThan(0);
+
+			firstNameInput.setValue("John");
+			confirmBtn.trigger("click");
+
+			await flushPromises();
+
+			expect(firstNameInput.vm.errorMessages?.length || 0).toBe(0);
 			expect(lastNameInput.vm.errorMessages?.length || 0).toBeGreaterThan(0);
 		});
 
