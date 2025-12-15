@@ -1669,6 +1669,8 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Bitte einen Nachnamen eingeben",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Zum Raum hinzufügen",
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"Die Einladung konnte leider nicht versendet werden. Bitte später erneut versuchen",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",

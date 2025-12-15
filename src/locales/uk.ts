@@ -1637,6 +1637,20 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
 	"pages.rooms.members.fab.addExternalPerson": "Додати зовнішню особу",
 	"pages.rooms.members.fab.selectFromDirectory": "Вибрати з каталогу",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Додати зовнішню особу",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
+		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Запросити зовнішню особу",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"Обліковий запис із цією електронною адресою не знайдено. Особу можна запросити зареєструватися в {applicationName}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Будь ласка, введіть ім'я та прізвище зовнішньої особи. Особа отримає електронний лист із посиланням на реєстрацію в {applicationName}. Щойно вона створить обліковий запис, її буде автоматично додано до кімнати.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "Електронна адреса",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Будь ласка, введіть дійсну електронну адресу",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Ім'я",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Будь ласка, введіть ім'я",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Прізвище",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Будь ласка, введіть прізвище",
 	"pages.rooms.members.dialog.addExternalPerson.text":
 		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Додати до кімнати",
