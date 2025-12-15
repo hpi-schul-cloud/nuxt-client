@@ -26,9 +26,9 @@
 						:label="t('pages.common.tools.configureVideoconferenceDialog.text.waitingRoom')"
 						:hide-details="true"
 					/>
-					<VAlert v-if="!localOptions.moderatorMustApproveJoinRequests" type="info">{{
+					<InfoAlert v-if="!localOptions.moderatorMustApproveJoinRequests">{{
 						t("pages.common.tools.configureVideoconferenceDialog.info.waitingRoom")
-					}}</VAlert>
+					}}</InfoAlert>
 					<VCheckbox
 						v-model="localOptions.everybodyJoinsAsModerator"
 						data-testid="everybody-joins-as-moderator"
@@ -58,6 +58,7 @@
 
 <script setup lang="ts">
 import { VideoConferenceOptions } from "@/store/types/video-conference";
+import { InfoAlert } from "@ui-alert";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { computed, ComputedRef, ModelRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";
