@@ -36,6 +36,8 @@
 						data-testid="invite-external-person-email"
 						:readonly="step === 'details'"
 						:rules="[isValidEmail(t('pages.rooms.members.dialog.addExternalPerson.label.email.error'))]"
+						validate-on="submit"
+						@keydown.prevent.enter="onSubmit"
 					/>
 					<template v-if="step === 'details'">
 						<VTextField
@@ -44,8 +46,9 @@
 							class="mb-4"
 							:label="t('pages.rooms.members.dialog.addExternalPerson.label.firstName')"
 							data-testid="invite-external-person-firstname"
-							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error	'))]"
-							@keydown.enter.prevent="() => lastNameInput?.focus()"
+							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error'))]"
+							validate-on="submit"
+							@keydown.prevent.enter="onSubmit"
 						/>
 						<VTextField
 							ref="lastNameInput"
@@ -53,7 +56,8 @@
 							:label="t('pages.rooms.members.dialog.addExternalPerson.label.lastName')"
 							data-testid="invite-external-person-lastname"
 							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.lastName.error'))]"
-							@keydown.enter.prevent="onConfirmDetails"
+							validate-on="submit"
+							@keydown.prevent.enter="onSubmit"
 						/>
 					</template>
 				</VForm>
@@ -115,9 +119,11 @@
 </template>
 
 <script setup lang="ts">
+import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useRoomMembersStore } from "@data-room";
+import { ExternalMemberCheckStatus } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { isNonEmptyString, isValidEmail } from "@util-validators";
 import { computed, ref, watch } from "vue";
@@ -140,6 +146,8 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 
+const addExternalPersonContent = ref<VCard>();
+
 const step = ref<"email" | "details" | "error">("email");
 
 const addExternalPersonForm = ref<VForm>();
@@ -160,25 +168,30 @@ const formValid = computed(
 			lastNameInput.value?.isValid)
 );
 
-watch(isOpen, (newVal) => {
-	if (newVal === true) {
+useSafeFocusTrap(isOpen, addExternalPersonContent);
+
+watch(step, (newVal) => {
+	if (newVal === "details") {
 		setTimeout(() => {
-			emailInput.value?.focus();
+			if (!firstNameInput.value?.isValid) {
+				firstNameInput.value?.focus();
+				return;
+			} else if (!lastNameInput.value?.isValid) {
+				lastNameInput.value?.focus();
+				return;
+			}
 		}, 0);
 	}
 });
 
-watch(step, (newStep) => {
-	setTimeout(() => {
-		if (newStep === "email") {
-			emailInput.value?.focus();
-		} else if (newStep === "details") {
-			firstNameInput.value?.focus();
-		}
-	}, 0);
-});
-
-const onSubmit = () => {
+const onSubmit = async () => {
+	if (!addExternalPersonForm.value) return;
+	const { valid, errors } = await addExternalPersonForm.value.validate();
+	if (!valid && errors.length > 0) {
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
+		return;
+	}
 	if (step.value === "email") {
 		onConfirmEmail();
 	} else if (step.value === "details") {
@@ -189,20 +202,12 @@ const onSubmit = () => {
 };
 
 const onConfirmEmail = async () => {
-	emailInput.value?.validate();
-
-	if (!emailInput.value?.isValid) {
-		emailInput.value?.focus();
-
-		return;
-	}
-
 	const status = await roomMembersStore.addMemberByEmail(email.value);
-	if (status === "SUCCESS") {
+	if (status === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		onClose();
-	} else if (status === "NOT_FOUND") {
+	} else if (status === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND) {
 		step.value = "details";
-	} else if (status === "USER_NOT_VALID") {
+	} else if (status === ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL) {
 		step.value = "error";
 	} else {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
@@ -210,16 +215,6 @@ const onConfirmEmail = async () => {
 };
 
 const onConfirmDetails = async () => {
-	addExternalPersonForm.value?.validate();
-	if (!formValid.value) {
-		if (firstNameInput.value?.isValid === false) {
-			firstNameInput.value.focus();
-		} else if (lastNameInput.value?.isValid === false) {
-			lastNameInput.value.focus();
-		}
-		return;
-	}
-
 	try {
 		await roomMembersStore.registerExternalMember({
 			email: email.value,

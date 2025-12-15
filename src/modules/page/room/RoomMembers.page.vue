@@ -111,7 +111,7 @@ const props = defineProps({
 
 enum FabEvent {
 	ADD_MEMBERS = "addMembers",
-	INVITE_MEMBERS = "inviteMembers",
+	INVITE_MEMBERS = "addExternalPerson",
 }
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -228,9 +228,6 @@ const handleAddMember = (event: string | undefined) => {
 	}
 
 	isExternalPersonDialogOpen.value = true;
-
-	const { log } = console;
-	log("event", event);
 };
 
 const { user } = useAppStoreRefs();

@@ -1,4 +1,4 @@
-import { RoomMember } from "./types";
+import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
@@ -14,7 +14,6 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
-import { HttpStatusCode } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
 
@@ -250,27 +249,6 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const addMemberByEmail = async (
-		email: string,
-		roomId?: string
-	): Promise<"SUCCESS" | "NOT_FOUND" | "USER_NOT_VALID" | "GENERIC_ERROR"> => {
-		try {
-			const { status } = await roomApi.roomControllerAddByEmail(roomId ?? getRoomId(), { email });
-			if (status === HttpStatusCode.Ok) {
-				fetchMembers();
-				return "SUCCESS";
-			}
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-			if (responseError.code === HttpStatusCode.NotFound) {
-				return "NOT_FOUND";
-			} else if (responseError.code === HttpStatusCode.BadRequest) {
-				return "USER_NOT_VALID";
-			}
-		}
-		return "GENERIC_ERROR";
-	};
-
 	const registerExternalMember = ({
 		firstName,
 		lastName,
@@ -298,6 +276,24 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			selectedIds.value = [];
 		} catch {
 			notifyError(t("pages.rooms.members.error.remove"));
+		}
+	};
+
+	const addMemberByEmail = async (email: string): Promise<ExternalMemberCheckStatus | void> => {
+		try {
+			const roomId = getRoomId();
+			await roomApi.roomControllerAddByEmail(roomId, { email });
+			await fetchMembers();
+			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+			if (responseError.code === 404) {
+				return ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND;
+			}
+			if (responseError.code === 400) {
+				return ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL;
+			}
+			return;
 		}
 	};
 

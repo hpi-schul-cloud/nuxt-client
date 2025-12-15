@@ -3,8 +3,10 @@ import * as serverApi from "@/serverApi/v3/api";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName, SchoolUserListResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
 import {
+	axiosErrorFactory,
 	createTestAppStore,
 	expectNotification,
 	mockApiResponse,
@@ -16,7 +18,7 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { ExternalMemberCheckStatus, RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
@@ -1011,6 +1013,46 @@ describe("useRoomMembers", () => {
 			expect(roomMembersStore.roomMembersWithoutApplicants).toEqual(roomMembersWithoutApplicants);
 			expect(roomMembersStore.roomMembersWithoutApplicants.length).toEqual(2);
 			expect(roomMembersStore.roomMembers.length).toEqual(5);
+		});
+	});
+
+	describe("checkMemberByEmail", () => {
+		beforeEach(() => {
+			roomApiMock.roomControllerAddByEmail.mockReset();
+		});
+		const email = "test@example.com";
+		it("should call the API to check member by email", async () => {
+			const { roomMembersStore, roomDetailsStore } = setup();
+
+			roomMembersStore.addMemberByEmail(email);
+
+			expect(roomApiMock.roomControllerAddByEmail).toHaveBeenCalledWith(roomDetailsStore.room!.id, { email });
+		});
+
+		describe("when the API call returns 400 error", () => {
+			it("should return ACCOUNT_IS_NOT_EXTERNAL", async () => {
+				roomApiMock.roomControllerAddByEmail.mockRejectedValueOnce(
+					axiosErrorFactory.withStatusCode(HttpStatusCode.BadRequest).build()
+				);
+
+				const { roomMembersStore } = setup();
+				const result = await roomMembersStore.addMemberByEmail(email);
+
+				expect(result).toStrictEqual(ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL);
+			});
+		});
+
+		describe("when the API call returns 404 error", () => {
+			it("should return ACCOUNT_NOT_FOUND", async () => {
+				roomApiMock.roomControllerAddByEmail.mockRejectedValueOnce(
+					axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build()
+				);
+
+				const { roomMembersStore } = setup();
+				const result = await roomMembersStore.addMemberByEmail(email);
+
+				expect(result).toStrictEqual(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
+			});
 		});
 	});
 });
