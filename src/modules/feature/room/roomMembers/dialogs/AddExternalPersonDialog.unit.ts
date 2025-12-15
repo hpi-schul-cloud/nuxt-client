@@ -4,17 +4,16 @@ import SchoolsModule from "@/store/schools";
 import { schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { ExternalMemberCheckStatus } from "@data-room";
+import { ExternalMemberCheckStatus, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
-vi.mock("@vueuse/integrations/useFocusTrap");
-
 describe("AddExternalPersonDialog", () => {
+	vi.mock("@vueuse/integrations/useFocusTrap");
 	let wrapper: VueWrapper<InstanceType<typeof AddExternalPersonDialog>>;
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
@@ -39,29 +38,25 @@ describe("AddExternalPersonDialog", () => {
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});
 
-	const setup = (options?: { memberStatus: ExternalMemberCheckStatus; modelValue: boolean }) => {
+	const setup = (options?: { modelValue?: boolean }) => {
+		const pinia = createTestingPinia({
+			stubActions: false,
+		});
+
+		const roomMembersStore = useRoomMembersStore();
+		roomMembersStore.registerExternalMember = vi.fn();
+
 		wrapper = mount(AddExternalPersonDialog, {
 			props: {
 				modelValue: options?.modelValue ?? true,
 			},
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomMembersStore: {
-								addMemberByEmail: vi.fn(),
-								registerExternalMember: vi.fn(),
-							},
-						},
-					}),
-				],
+				plugins: [createTestingVuetify(), createTestingI18n(), pinia],
 			},
 		});
 
-		return { wrapper };
+		return { wrapper, roomMembersStore };
 	};
 
 	afterEach(() => {
@@ -91,23 +86,9 @@ describe("AddExternalPersonDialog", () => {
 
 			expect(emitted).toHaveProperty("close");
 		});
+	});
 
-		it("should try to add member when add button is clicked with valid email", async () => {
-			const { wrapper } = setup();
-
-			const emailInput = wrapper.findComponent('[data-testid="add-external-person-email"]').getComponent(VTextField);
-			emailInput.setValue("test-test@example.com");
-			await nextTick();
-
-			const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
-			await addBtn.trigger("click");
-
-			// The component should call the store method, but since no store is mocked properly,
-			// we just verify the component doesn't crash and the button exists
-			expect(addBtn.exists()).toBe(true);
-			expect(emailInput.vm.modelValue).toBe("test-test@example.com");
-		});
-
+	describe("email step", () => {
 		it("should handle invalid email validation", async () => {
 			const { wrapper } = setup();
 
@@ -118,8 +99,47 @@ describe("AddExternalPersonDialog", () => {
 			const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
 			await addBtn.trigger("click");
 
-			// Check that the email input shows validation errors
 			expect(emailInput.vm.errorMessages?.length || 0).toBeGreaterThan(0);
+		});
+		it("should continue to the details step when a valid email address was entered and the backend returned ACCOUNT_FOUND_AND_ADDED", async () => {
+			const { wrapper, roomMembersStore } = setup();
+
+			roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED);
+			const email = "test@example.com";
+			const emailInput = wrapper.findComponent('[data-testid="add-external-person-email"]').getComponent(VTextField);
+			await emailInput.setValue(email);
+
+			const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
+			await addBtn.trigger("click");
+
+			await nextTick();
+
+			expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith(email);
+			expect(wrapper.emitted()).toHaveProperty("close");
+		});
+		it("should continue to the details step when a valid email address was entered and the backend returned ACCOUNT_NOT_FOUND", async () => {
+			const { wrapper, roomMembersStore } = setup();
+
+			roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
+
+			const emailInput = wrapper.findComponent('[data-testid="add-external-person-email"]').getComponent(VTextField);
+			await emailInput.setValue("test-email@example.com");
+
+			const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
+			await addBtn.trigger("click");
+
+			await flushPromises();
+
+			expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
+
+			expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
+
+			const emailInputAfter = wrapper.findComponent<typeof VTextField>('[data-testid="add-external-person-email"]');
+			expect(emailInputAfter.props().readonly).toBe(true);
+
+			expect(wrapper.findComponent('[data-testid="add-external-person-firstname"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="add-external-person-confirm-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]').exists()).toBe(false);
 		});
 	});
 });
