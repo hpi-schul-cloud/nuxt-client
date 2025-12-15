@@ -4,7 +4,6 @@
 		:title="t('components.elementTypeSelection.dialog.title')"
 		:loading="isDialogLoading"
 		data-testid="element-type-selection"
-		:width="dialogWidth"
 	>
 		<template #content>
 			<div class="d-flex flex-row flex-wrap align-center">
@@ -31,16 +30,9 @@
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { Dialog } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { isDialogOpen, isDialogLoading, closeDialog, elementTypeOptions } = useSharedElementTypeSelection();
 
 const { t } = useI18n();
-
-const dialogWidth: ComputedRef<number> = computed(() => {
-	const totalOptions = elementTypeOptions.value.length;
-
-	return totalOptions >= 3 ? 426 : 320;
-});
 </script>
