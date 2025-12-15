@@ -27,12 +27,7 @@
 				<p v-if="step === 'details'">
 					{{ t("pages.rooms.members.dialog.addExternalPerson.steps.details.text", { applicationName }) }}
 				</p>
-				<VForm
-					ref="addExternalPersonForm"
-					class="mt-5"
-					data-testid="add-external-person-form"
-					@submit.prevent="onSubmit"
-				>
+				<VForm ref="addExternalPersonForm" class="mt-5" data-testid="add-external-person-form">
 					<VTextField
 						ref="emailInput"
 						v-model="email"
@@ -42,7 +37,7 @@
 						:readonly="step === 'details'"
 						:rules="[isValidEmail(t('pages.rooms.members.dialog.addExternalPerson.label.email.error'))]"
 						validate-on="submit"
-						@keydown.prevent.enter="onSubmit"
+						@keydown.enter.prevent="onConfirmEmail()"
 					/>
 					<template v-if="step === 'details'">
 						<VTextField
@@ -52,8 +47,7 @@
 							:label="t('pages.rooms.members.dialog.addExternalPerson.label.firstName')"
 							data-testid="add-external-person-firstname"
 							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error'))]"
-							validate-on="submit"
-							@keydown.prevent.enter="onSubmit"
+							@keydown.enter.prevent="onConfirmDetails()"
 						/>
 						<VTextField
 							ref="lastNameInput"
@@ -61,8 +55,7 @@
 							:label="t('pages.rooms.members.dialog.addExternalPerson.label.lastName')"
 							data-testid="add-external-person-lastname"
 							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.lastName.error'))]"
-							validate-on="submit"
-							@keydown.prevent.enter="onSubmit"
+							@keydown.enter.prevent="onConfirmDetails()"
 						/>
 					</template>
 				</VForm>
@@ -85,8 +78,7 @@
 							variant="flat"
 							:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
 							data-testid="add-external-person-add-email-btn"
-							type="submit"
-							@click="onSubmit"
+							@click="onConfirmEmail"
 						/>
 					</template>
 					<template v-if="step === 'details'">
@@ -95,7 +87,7 @@
 							class="ms-auto mr-2"
 							:text="t('common.actions.back')"
 							data-testid="add-external-person-back-btn"
-							@click="onBackToEmail"
+							@click="clearForm"
 						/>
 						<VBtn
 							ref="confirmButton"
@@ -104,8 +96,7 @@
 							variant="flat"
 							:text="t('pages.rooms.members.dialog.addExternalPerson.button.invite')"
 							data-testid="add-external-person-confirm-btn"
-							type="submit"
-							@click="onSubmit"
+							@click="onConfirmDetails"
 						/>
 					</template>
 					<template v-if="step === 'error'">
@@ -131,7 +122,7 @@ import { useEnvConfig } from "@data-env";
 import { ExternalMemberCheckStatus, useRoomMembersStore } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { isNonEmptyString, isValidEmail } from "@util-validators";
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VForm, VSpacer, VTextField } from "vuetify/components";
@@ -157,25 +148,12 @@ const step = ref<"email" | "details" | "error">("email");
 
 const addExternalPersonForm = ref<VForm>();
 const firstNameInput = useTemplateRef("firstNameInput");
-const lastNameInput = useTemplateRef("lastNameInput");
 
 const email = ref<string>("");
 const firstName = ref<string>("");
 const lastName = ref<string>("");
 
 useSafeFocusTrap(isOpen, addExternalPersonContent);
-
-watch(step, (newVal) => {
-	if (newVal === "details") {
-		setTimeout(() => {
-			if (!firstNameInput.value?.isValid) {
-				firstNameInput.value?.focus();
-			} else if (!lastNameInput.value?.isValid) {
-				lastNameInput.value?.focus();
-			}
-		}, 0);
-	}
-});
 
 const checkForErrorsAndFocus = async () => {
 	if (!addExternalPersonForm.value) return;
@@ -188,26 +166,18 @@ const checkForErrorsAndFocus = async () => {
 	return false;
 };
 
-const onSubmit = async () => {
+const onConfirmEmail = async () => {
 	if (await checkForErrorsAndFocus()) {
 		return;
 	}
 
-	if (step.value === "email") {
-		onConfirmEmail();
-	} else if (step.value === "details") {
-		onConfirmDetails();
-	} else {
-		onClose();
-	}
-};
-
-const onConfirmEmail = async () => {
 	const status = await roomMembersStore.addMemberByEmail(email.value);
 	if (status === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		onClose();
 	} else if (status === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND) {
 		step.value = "details";
+		await nextTick();
+		firstNameInput.value?.focus();
 	} else if (status === ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL) {
 		step.value = "error";
 	} else {
@@ -216,6 +186,10 @@ const onConfirmEmail = async () => {
 };
 
 const onConfirmDetails = async () => {
+	if (await checkForErrorsAndFocus()) {
+		return;
+	}
+
 	try {
 		await roomMembersStore.registerExternalMember({
 			email: email.value,
@@ -232,10 +206,6 @@ const onConfirmDetails = async () => {
 const clearForm = () => {
 	[email, firstName, lastName].forEach((field) => (field.value = ""));
 	step.value = "email";
-};
-
-const onBackToEmail = () => {
-	clearForm();
 };
 
 const onClose = () => {
