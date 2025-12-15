@@ -10,6 +10,7 @@ import {
 	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
+	isValidEmail,
 	isValidTimeFormat,
 	isValidUrl,
 } from "./validators";
@@ -26,6 +27,7 @@ export {
 	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
+	isValidEmail,
 	isValidTimeFormat,
 	isValidUrl,
 	useInvalidCharactersValidator,
