@@ -68,10 +68,6 @@ const props = defineProps({
 
 const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);
 
-const onFetchFile = () => {
-	emit("fetch:file");
-};
-
 const onUpdateCaption = (value: string) => {
 	emit("update:caption", value);
 };
