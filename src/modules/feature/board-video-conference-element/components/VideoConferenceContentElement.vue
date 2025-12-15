@@ -140,7 +140,7 @@ const preFetchedUrl = ref<string | undefined>(undefined);
 if (isVideoConferenceEnabled.value) {
 	onMounted(async () => {
 		await fetchVideoConferenceInfo();
-		if (isRunning.value) {
+		if (isRunning.value && (canStart.value || canJoin.value)) {
 			preFetchedUrl.value = await joinVideoConference();
 		}
 	});
