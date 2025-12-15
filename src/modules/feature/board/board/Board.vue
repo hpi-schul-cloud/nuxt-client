@@ -86,7 +86,6 @@
 						/>
 					</div>
 				</div>
-				<ConfirmationDialog />
 				<AddElementDialog />
 				<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 				<LightBox />
@@ -154,7 +153,6 @@ import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPa
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";

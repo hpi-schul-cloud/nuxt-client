@@ -20,6 +20,15 @@
 		<template v-else>
 			<RoomAdminTable :show-select="false" :header-bottom="headerBottom" @manage-room-members="manageRoom" />
 		</template>
+		<template #confirmation-dialog>
+			<ConfirmationDialog>
+				<template #alert>
+					<WarningAlert data-testid="warning-alert">
+						{{ t("pages.rooms.administration.table.delete.infoMessage") }}
+					</WarningAlert>
+				</template>
+			</ConfirmationDialog>
+		</template>
 	</DefaultWireframe>
 </template>
 
@@ -29,6 +38,8 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { useAdministrationRoomStore } from "@data-room";
 import { RoomAdminTable } from "@feature-room";
+import { WarningAlert } from "@ui-alert";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";

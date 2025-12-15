@@ -46,7 +46,6 @@
 				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
-		<ConfirmationDialog />
 	</VForm>
 </template>
 
@@ -54,7 +53,7 @@
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { RoomFeatures } from "@/serverApi/v3";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";

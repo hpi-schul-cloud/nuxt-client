@@ -60,11 +60,15 @@
 			<slot />
 		</v-container>
 	</div>
+	<slot name="confirmation-dialog">
+		<ConfirmationDialog />
+	</slot>
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb, Fab } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";

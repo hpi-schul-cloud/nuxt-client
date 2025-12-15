@@ -50,7 +50,6 @@
 		:is-admin-mode="true"
 		@close="onDialogClose"
 	/>
-	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -59,7 +58,7 @@ import { schoolsModule } from "@/store/store-accessor";
 import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
