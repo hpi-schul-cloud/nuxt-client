@@ -128,8 +128,7 @@
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useRoomMembersStore } from "@data-room";
-import { ExternalMemberCheckStatus } from "@data-room";
+import { ExternalMemberCheckStatus, useRoomMembersStore } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { isNonEmptyString, isValidEmail } from "@util-validators";
 import { computed, ref, useTemplateRef, watch } from "vue";
@@ -171,10 +170,8 @@ watch(step, (newVal) => {
 		setTimeout(() => {
 			if (!firstNameInput.value?.isValid) {
 				firstNameInput.value?.focus();
-				return;
 			} else if (!lastNameInput.value?.isValid) {
 				lastNameInput.value?.focus();
-				return;
 			}
 		}, 0);
 	}
