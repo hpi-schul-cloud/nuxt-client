@@ -72,7 +72,7 @@
 				data-testid="form-dialog"
 				@close="closeDialog"
 			/>
-			<v-custom-dialog
+			<CustomDialog
 				v-model:is-open="isDeleteTermsDialogOpen"
 				:size="430"
 				has-buttons
@@ -93,14 +93,14 @@
 						</div>
 					</v-alert>
 				</template>
-			</v-custom-dialog>
+			</CustomDialog>
 		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "@/components/organisms/administration/SchoolTermsFormDialog.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { ConsentVersion } from "@/store/types/consent-version";
