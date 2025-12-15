@@ -153,7 +153,7 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const route = useRoute();
 const boardId = route.params.id;
 
-const { isStudent, isTeacher, isExternalPerson, userRoles } = useAppStoreRefs();
+const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
 const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
