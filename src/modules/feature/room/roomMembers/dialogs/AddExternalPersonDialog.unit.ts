@@ -113,6 +113,7 @@ describe("AddExternalPersonDialog", () => {
 			const addBtn = wrapper.findComponent('[data-testid="add-external-person-add-email-btn"]');
 			await addBtn.trigger("click");
 
+			await flushPromises();
 			await nextTick();
 
 			expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith(email);

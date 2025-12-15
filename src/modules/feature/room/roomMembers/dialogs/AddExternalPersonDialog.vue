@@ -29,7 +29,6 @@
 				</p>
 				<VForm
 					ref="addExternalPersonForm"
-					v-model="formValid"
 					class="mt-5"
 					data-testid="add-external-person-form"
 					@submit.prevent="onSubmit"
@@ -133,7 +132,7 @@ import { useRoomMembersStore } from "@data-room";
 import { ExternalMemberCheckStatus } from "@data-room";
 import { InfoAlert } from "@ui-alert";
 import { isNonEmptyString, isValidEmail } from "@util-validators";
-import { computed, ref, watch } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VForm, VSpacer, VTextField } from "vuetify/components";
@@ -158,22 +157,12 @@ const addExternalPersonContent = ref<VCard>();
 const step = ref<"email" | "details" | "error">("email");
 
 const addExternalPersonForm = ref<VForm>();
-const emailInput = ref<VTextField>();
-const firstNameInput = ref<VTextField>();
-const lastNameInput = ref<VTextField>();
+const firstNameInput = useTemplateRef("firstNameInput");
+const lastNameInput = useTemplateRef("lastNameInput");
 
 const email = ref<string>("");
 const firstName = ref<string>("");
 const lastName = ref<string>("");
-
-const formValid = computed(
-	() =>
-		(step.value === "email" && emailInput.value?.isValid) ||
-		(step.value === "details" &&
-			emailInput.value?.isValid &&
-			firstNameInput.value?.isValid &&
-			lastNameInput.value?.isValid)
-);
 
 useSafeFocusTrap(isOpen, addExternalPersonContent);
 
@@ -191,14 +180,22 @@ watch(step, (newVal) => {
 	}
 });
 
-const onSubmit = async () => {
+const checkForErrorsAndFocus = async () => {
 	if (!addExternalPersonForm.value) return;
 	const { valid, errors } = await addExternalPersonForm.value.validate();
 	if (!valid && errors.length > 0) {
 		const firstErrorId = errors[0].id as string;
 		document.getElementById(firstErrorId)?.focus();
+		return true;
+	}
+	return false;
+};
+
+const onSubmit = async () => {
+	if (await checkForErrorsAndFocus()) {
 		return;
 	}
+
 	if (step.value === "email") {
 		onConfirmEmail();
 	} else if (step.value === "details") {
