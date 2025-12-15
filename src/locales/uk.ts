@@ -1450,6 +1450,8 @@ export default {
 	"pages.administration.teachers.new.success": "Викладача успішно створено!",
 	"pages.administration.teachers.new.title": "Додати викладача",
 	"pages.administration.teachers.table.edit.ariaLabel": "Редагування вчителя",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Зовнішні особи можуть брати участь у відеоконференції лише в тому випадку, якщо активовано функцію «Кімната очікування».",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Створити відеоконференцію",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission": "Права модерації для всіх учасників",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Вимкнути звук учасникам при вході",

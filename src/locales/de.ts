@@ -1460,6 +1460,8 @@ export default {
 	"pages.administration.teachers.new.success": "Lehrkraft erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Externe Personen können nur dann an der Videokonferenz teilnehmen, wenn die Funktion Warteraum aktiviert wurde.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Videokonferenz erstellen",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderationsrechte für alle Teilnehmenden",

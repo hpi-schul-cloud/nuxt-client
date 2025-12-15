@@ -1467,6 +1467,8 @@ export default {
 	"pages.administration.teachers.new.success": "¡Profesor creado correctamente!",
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Las personas externas solo pueden participar en la videoconferencia si se ha activado la función Sala de espera.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Crear videoconferencia",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Derechos de moderación para todos los participantes",

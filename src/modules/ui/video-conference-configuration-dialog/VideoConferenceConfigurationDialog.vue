@@ -26,6 +26,9 @@
 						:label="t('pages.common.tools.configureVideoconferenceDialog.text.waitingRoom')"
 						:hide-details="true"
 					/>
+					<VAlert v-if="!localOptions.moderatorMustApproveJoinRequests" type="info">{{
+						t("pages.common.tools.configureVideoconferenceDialog.info.waitingRoom")
+					}}</VAlert>
 					<VCheckbox
 						v-model="localOptions.everybodyJoinsAsModerator"
 						data-testid="everybody-joins-as-moderator"

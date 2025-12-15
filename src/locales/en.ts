@@ -1435,6 +1435,8 @@ export default {
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
 	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"External persons can only participate in the video conference if the waiting room function has been activated.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Create video conference",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderation rights for all participants",
