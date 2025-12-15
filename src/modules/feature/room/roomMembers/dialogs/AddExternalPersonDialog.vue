@@ -173,7 +173,7 @@ const onConfirmEmail = async () => {
 
 	const status = await roomMembersStore.addMemberByEmail(email.value);
 	if (status === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
-		onClose();
+		closeDialog();
 	} else if (status === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND) {
 		step.value = "details";
 		await nextTick();
@@ -191,7 +191,7 @@ const onConfirmDetails = async () => {
 	}
 
 	try {
-		await roomMembersStore.registerExternalMember({
+		await roomMembersStore.startRegistrationProcess({
 			email: email.value,
 			firstName: firstName.value,
 			lastName: lastName.value,
@@ -199,16 +199,18 @@ const onConfirmDetails = async () => {
 	} catch {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	} finally {
-		onClose();
+		closeDialog();
 	}
 };
+
+const onClose = () => closeDialog();
 
 const clearForm = () => {
 	[email, firstName, lastName].forEach((field) => (field.value = ""));
 	step.value = "email";
 };
 
-const onClose = () => {
+const closeDialog = () => {
 	isOpen.value = false;
 	emit("close");
 };

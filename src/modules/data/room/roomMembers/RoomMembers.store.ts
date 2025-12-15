@@ -249,7 +249,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
-	const registerExternalMember = ({
+	const startRegistrationProcess = ({
 		firstName,
 		lastName,
 		email,
@@ -465,7 +465,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
-		registerExternalMember,
+		startRegistrationProcess,
 		updateMembersRole,
 		baseTableHeaders,
 		confirmationList,
