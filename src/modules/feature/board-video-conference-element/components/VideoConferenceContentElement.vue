@@ -168,9 +168,7 @@ const isErrorDialogOpen = computed(() => !!error.value);
 const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
 
 const canJoin = computed(
-	() =>
-		(isStudent.value || isTeacher.value || isExternalPerson.value) &&
-		(userRoles.value?.length > 1 || isWaitingRoomActive.value)
+	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
 );
 
 const canStart = computed(() => hasManageVideoConferencePermission.value);
