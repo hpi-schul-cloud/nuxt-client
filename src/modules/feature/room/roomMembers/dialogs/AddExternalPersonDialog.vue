@@ -27,13 +27,19 @@
 				<p v-if="step === 'details'">
 					{{ t("pages.rooms.members.dialog.addExternalPerson.steps.details.text", { applicationName }) }}
 				</p>
-				<VForm ref="addExternalPersonForm" v-model="formValid" class="mt-5" @submit.prevent="onSubmit">
+				<VForm
+					ref="addExternalPersonForm"
+					v-model="formValid"
+					class="mt-5"
+					data-testid="add-external-person-form"
+					@submit.prevent="onSubmit"
+				>
 					<VTextField
 						ref="emailInput"
 						v-model="email"
 						class="mb-4"
 						:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
-						data-testid="invite-external-person-email"
+						data-testid="add-external-person-email"
 						:readonly="step === 'details'"
 						:rules="[isValidEmail(t('pages.rooms.members.dialog.addExternalPerson.label.email.error'))]"
 						validate-on="submit"
@@ -45,7 +51,7 @@
 							v-model="firstName"
 							class="mb-4"
 							:label="t('pages.rooms.members.dialog.addExternalPerson.label.firstName')"
-							data-testid="invite-external-person-firstname"
+							data-testid="add-external-person-firstname"
 							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error'))]"
 							validate-on="submit"
 							@keydown.prevent.enter="onSubmit"
@@ -54,7 +60,7 @@
 							ref="lastNameInput"
 							v-model="lastName"
 							:label="t('pages.rooms.members.dialog.addExternalPerson.label.lastName')"
-							data-testid="invite-external-person-lastname"
+							data-testid="add-external-person-lastname"
 							:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.lastName.error'))]"
 							validate-on="submit"
 							@keydown.prevent.enter="onSubmit"
@@ -70,7 +76,7 @@
 							ref="cancelButton"
 							class="ms-auto mr-2"
 							:text="t('common.actions.cancel')"
-							data-testid="invite-participant-cancel-btn"
+							data-testid="add-external-person-cancel-btn"
 							@click="onClose"
 						/>
 						<VBtn
@@ -79,8 +85,9 @@
 							color="primary"
 							variant="flat"
 							:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
-							data-testid="invite-participant-add-email-btn"
-							@click="onConfirmEmail"
+							data-testid="add-external-person-add-email-btn"
+							type="submit"
+							@click="onSubmit"
 						/>
 					</template>
 					<template v-if="step === 'details'">
@@ -88,7 +95,7 @@
 							ref="backButton"
 							class="ms-auto mr-2"
 							:text="t('common.actions.back')"
-							data-testid="invite-participant-back-btn"
+							data-testid="add-external-person-back-btn"
 							@click="onBackToEmail"
 						/>
 						<VBtn
@@ -97,9 +104,9 @@
 							color="primary"
 							variant="flat"
 							:text="t('pages.rooms.members.dialog.addExternalPerson.button.invite')"
-							data-testid="invite-participant-confirm-btn"
+							data-testid="add-external-person-confirm-btn"
 							type="submit"
-							@click="onConfirmDetails"
+							@click="onSubmit"
 						/>
 					</template>
 					<template v-if="step === 'error'">
@@ -108,7 +115,7 @@
 							color="secondary"
 							class="ms-auto mr-2"
 							:text="t('common.labels.close')"
-							data-testid="invite-participant-close-btn"
+							data-testid="add-external-person-close-btn"
 							@click="onClose"
 						/>
 					</template>
