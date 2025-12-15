@@ -34,12 +34,10 @@
 
 <script setup lang="ts">
 import InnerContent from "./InnerContent.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import { DrawingElementResponse } from "@/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";

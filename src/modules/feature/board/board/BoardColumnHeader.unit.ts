@@ -2,7 +2,7 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
 import {
 	KebabMenuActionDelete,
@@ -12,7 +12,6 @@ import {
 	KebabMenuActionMoveUp,
 	KebabMenuActionRename,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { flatten } from "lodash";
 import { computed, nextTick, ref } from "vue";
@@ -23,7 +22,7 @@ const mockedUserPermissions = vi.mocked(useBoardPermissions);
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-vi.mock("@util-board/editMode.composable");
+vi.mock("@data-board/edit-mode.composable");
 const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
 describe("BoardColumnHeader", () => {

@@ -44,12 +44,8 @@
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
+import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,

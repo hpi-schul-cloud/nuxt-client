@@ -5,7 +5,11 @@ import { BoardExternalReferenceType, ConfigResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import {
+  useBoardFocusHandler,
+  useBoardPermissions,
+  useCourseBoardEditMode,
+} from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionChangeLayout,
@@ -16,7 +20,6 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
@@ -27,7 +30,7 @@ const mockedUserPermissions = vi.mocked(useBoardPermissions);
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-vi.mock("@util-board/editMode.composable");
+vi.mock("@data-board/edit-mode.composable");
 const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
 describe("BoardHeader", () => {
