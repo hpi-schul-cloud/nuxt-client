@@ -12,7 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomLockedPage from "./RoomLocked.page.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
