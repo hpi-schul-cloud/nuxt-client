@@ -11,7 +11,7 @@
 		<StepEmail v-if="step === 'email'" @update:email="onUpdateEmail" @close="onClose" />
 		<StepDetails
 			v-else-if="step === 'details'"
-			:application-name="applicationName"
+			:application-names="applicationNames"
 			:email="email"
 			@update:details="onUpdateDetails"
 			@close="onClose"
@@ -55,7 +55,13 @@ import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VForm, VSpacer } from "vuetify/components";
 
 const roomMembersStore = useRoomMembersStore();
-const applicationName = computed(() => useEnvConfig().value.SC_TITLE.replace("Niedersächsische", "Niedersächsischen"));
+const applicationNames = computed(() => {
+	const name = useEnvConfig().value.SC_TITLE || "dBildungsCloud";
+	return {
+		text: name.replace("Niedersächsische", "Niedersächsischen"),
+		alert: name,
+	};
+});
 
 const isOpen = defineModel({
 	type: Boolean,

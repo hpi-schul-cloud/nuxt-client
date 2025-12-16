@@ -7,10 +7,16 @@
 		</template>
 		<template #text>
 			<InfoAlert class="mb-4">{{
-				t("pages.rooms.members.dialog.addExternalPerson.steps.details.alert", { applicationName })
+				t("pages.rooms.members.dialog.addExternalPerson.steps.details.alert", {
+					applicationName: applicationNames.alert,
+				})
 			}}</InfoAlert>
 			<p>
-				{{ t("pages.rooms.members.dialog.addExternalPerson.steps.details.text", { applicationName }) }}
+				{{
+					t("pages.rooms.members.dialog.addExternalPerson.steps.details.text", {
+						applicationName: applicationNames.text,
+					})
+				}}
 			</p>
 			<VForm ref="detailsForm" class="mt-5" data-testid="add-external-person-detail-form">
 				<VTextField
@@ -72,7 +78,10 @@ import { onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
-	applicationName: string;
+	applicationNames: {
+		text: string;
+		alert: string;
+	};
 	email: string;
 }>();
 

@@ -8,7 +8,10 @@ describe("StepDetails", () => {
 
 	const defaultProps = {
 		email: "test@example.com",
-		applicationName: "dBildungsCloud",
+		applicationNames: {
+			text: "dBildungsCloud Text",
+			alert: "dBildungsCloud Alert",
+		},
 	};
 
 	const setup = (props = {}) => {
