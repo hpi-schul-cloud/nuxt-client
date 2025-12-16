@@ -147,7 +147,7 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<v-custom-dialog
+		<CustomDialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
 			data-testid="delete-dialog"
@@ -171,7 +171,7 @@
 					}}
 				</p>
 			</template>
-		</v-custom-dialog>
+		</CustomDialog>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
@@ -213,7 +213,7 @@
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
 import GroupModule from "@/store/group";

@@ -14,6 +14,7 @@ import {
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
+import { flatten } from "lodash";
 import { computed, nextTick, ref } from "vue";
 
 vi.mock("@data-board/BoardPermissions.composable");
@@ -79,14 +80,28 @@ describe("BoardColumnHeader", () => {
 	});
 
 	describe("when the title updated", () => {
-		it("should emit 'update:title'", () => {
+		it("should not emit 'update:title' immediatly", async () => {
 			const wrapper = setup();
 
+			const newTitle = "New column title";
 			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-			titleInput.vm.$emit("update:value");
+			titleInput.vm.$emit("update:value", newTitle);
 
-			const emitted = wrapper.emitted();
-			expect(emitted["update:title"]).toBeDefined();
+			const emittedUpdateTitle = wrapper.emitted("update:title");
+			expect(emittedUpdateTitle).toBeUndefined();
+		});
+
+		it("should emit 'update:title' after debounce time", async () => {
+			vi.useFakeTimers();
+			const wrapper = setup();
+
+			const newTitle = "New column title";
+			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+			titleInput.vm.$emit("update:value", newTitle);
+			await vi.advanceTimersByTimeAsync(3000);
+
+			const emittedUpdateTitle = wrapper.emitted("update:title");
+			expect(flatten(emittedUpdateTitle)).toStrictEqual([newTitle]);
 		});
 	});
 

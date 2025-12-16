@@ -7,7 +7,7 @@
 			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
-			@keydown.enter.prevent="onStartEditMode"
+			@keydown.enter.prevent="onToggleEditMode"
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
@@ -18,13 +18,16 @@
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
 				:max-length="100"
+				:has-edit-permission="hasEditPermission"
 				@update:value="updateBoardTitle"
 				@blur="onBoardTitleBlur"
 			/>
 			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 		</InlineEditInteractionHandler>
 		<div class="d-flex mt-4">
-			<BoardDraftChip v-if="isDraft" />
+			<VChip v-if="isDraft" class="align-self-center cursor-default" data-testid="board-draft-chip">
+				{{ t("common.words.draft") }}
+			</VChip>
 			<BoardEditableChip v-if="isEditableChipVisible" />
 			<BoardMenu v-if="hasManageBoardPermission" :scope="BoardMenuScope.BOARD" data-testid="board-menu-btn">
 				<KebabMenuActionRename @click="onStartEditMode" />
@@ -44,7 +47,6 @@
 import { BoardExternalReferenceType } from "../../../../serverApi/v3";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
-import BoardDraftChip from "./BoardDraftChip.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
@@ -117,6 +119,14 @@ const onStartEditMode = () => {
 const onEndEditMode = () => {
 	if (!hasEditPermission.value) return;
 	stopEditMode();
+};
+
+const onToggleEditMode = () => {
+	if (isEditMode.value) {
+		onEndEditMode();
+	} else {
+		onStartEditMode();
+	}
 };
 
 const onCopyBoard = () => {
@@ -195,10 +205,6 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @use "@/styles/settings.scss" as *;
-
-.v-chip {
-	cursor: default;
-}
 
 .input-width-calc-span {
 	position: absolute;

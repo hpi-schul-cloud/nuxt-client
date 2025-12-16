@@ -14,9 +14,9 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+				:elevation="cardElevation"
 				:ripple="false"
-				:hover="isHovered"
+				:hover="isHovered && hasEditPermission"
 				:data-testid="cardTestId"
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
@@ -30,6 +30,7 @@
 						scope="card"
 						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
+						:has-edit-permission="hasEditPermission"
 						@update:value="onUpdateCardTitle($event, cardId)"
 						@enter="onEnter"
 					/>
@@ -47,6 +48,8 @@
 								data-testid="kebab-menu-action-duplicate-card"
 								@click="duplicateCard"
 							/>
+							<KebabMenuActionExport v-if="hasEditPermission" @click="onMoveCard(cardId)" />
+							<KebabMenuActionShare v-if="hasShareBoardPermission" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
@@ -120,6 +123,8 @@ import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
+	KebabMenuActionExport,
+	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
@@ -137,12 +142,16 @@ const props = defineProps<Props>();
 const emit = defineEmits<{
 	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
+	(e: "move:card", cardId: string): void;
 	(e: "reload:board"): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
 const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
+const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
 
 const isHovered = useElementHover(cardHost);
 const isDetailView = ref(false);
@@ -158,12 +167,23 @@ const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${pro
 const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const cardElevation = computed(() => {
+	if (isEditMode.value) {
+		return 6;
+	}
+	if (isHovered.value && hasEditPermission.value) {
+		return 4;
+	}
+	return 2;
+});
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
 const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
+const onMoveCard = (cardId: string) => emit("move:card", cardId);
+const onShareCard = () => {
+	emit("share:card", props.cardId);
+};
 
 const _updateCardTitle = (newTitle: string, cardId: string) => {
 	cardStore.updateCardTitleRequest({ newTitle, cardId });

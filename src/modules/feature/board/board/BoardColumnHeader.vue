@@ -10,11 +10,12 @@
 					@move:column-keyboard="onMoveColumnKeyboard"
 				>
 					<BoardAnyTitleInput
-						:value="title"
+						:value="updatedTitle"
 						:empty-value-fallback="t('components.board.column.defaultTitle')"
 						:data-testid="`column-title-${index}`"
 						scope="column"
 						:is-edit-mode="isEditMode"
+						:has-edit-permission="hasEditPermission"
 						class="w-100"
 						:is-focused="isFocusedById"
 						@update:value="onUpdateTitle"
@@ -58,7 +59,8 @@ import {
 	KebabMenuActionMoveUp,
 	KebabMenuActionRename,
 } from "@ui-kebab-menu";
-import { ref, toRef } from "vue";
+import { watchDebounced } from "@vueuse/core";
+import { ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -81,6 +83,9 @@ const emit = defineEmits([
 const { t } = useI18n();
 
 const columnId = toRef(props, "columnId");
+const columnTitle = toRef(props, "title");
+const updatedTitle = ref(columnTitle.value);
+const lastEmittedTitle = ref(columnTitle.value);
 const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(columnId.value);
 
@@ -94,6 +99,7 @@ const onStartEditMode = () => {
 
 const onEndEditMode = () => {
 	if (!hasEditPermission.value) return;
+	emitTitleUpdate();
 	stopEditMode();
 };
 
@@ -130,5 +136,18 @@ const onMoveColumnRight = () => emitIfNotListBoard("move:column-right");
 const onMoveColumnDown = () => emit("move:column-down");
 const onMoveColumnUp = () => emit("move:column-up");
 
-const onUpdateTitle = (newTitle: string) => emit("update:title", newTitle);
+const onUpdateTitle = (newTitle: string) => (updatedTitle.value = newTitle);
+
+const emitTitleUpdate = () => {
+	if (lastEmittedTitle.value !== updatedTitle.value) {
+		emit("update:title", updatedTitle.value);
+		lastEmittedTitle.value = updatedTitle.value;
+	}
+};
+
+watchDebounced(updatedTitle, emitTitleUpdate, { debounce: 500, maxWait: 2000 });
+watch(columnTitle, (newVal) => {
+	updatedTitle.value = newVal;
+	lastEmittedTitle.value = newVal;
+});
 </script>

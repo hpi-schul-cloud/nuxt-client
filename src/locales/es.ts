@@ -7,6 +7,7 @@ export default {
 	"common.actions.continue": "Continuar",
 	"common.actions.copy": "Copiar",
 	"common.actions.duplicate": "Duplicar",
+	"common.actions.move": "Mover",
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
@@ -191,7 +192,7 @@ export default {
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
 	"common.words.and": "y",
-	"common.words.board": "tablero",
+	"common.words.board": "tablero | tableros",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
 	"common.words.color.blue": "Azul",
@@ -241,6 +242,7 @@ export default {
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
 	"common.words.export": "La exportación del curso se está descargando",
+	"common.alerts.room.not.available": "No hay sala disponible. | No hay salas disponibles.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -412,11 +414,11 @@ export default {
 		"¿Realmente final de la fase de transferencia?",
 	"components.administration.schoolYearChangeSection.dialog.finish.content":
 		"Se inicia la sincronización de los datos LDAP. Se actualizan los datos y clases de los usuarios. El nuevo año escolar se establece automáticamente.",
-	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
-	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
-	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",
-	"components.atoms.VCustomChipTimeRemaining.hintMinShort": "min",
-	"components.atoms.VCustomChipTimeRemaining.hintMinutes": "minuto | minutos",
+	"components.atoms.ChipTimeRemaining.hintDueTime": "en ",
+	"components.atoms.ChipTimeRemaining.hintHours": "hora | horas",
+	"components.atoms.ChipTimeRemaining.hintHoursShort": "h",
+	"components.atoms.ChipTimeRemaining.hintMinShort": "min",
+	"components.atoms.ChipTimeRemaining.hintMinutes": "minuto | minutos",
 	"components.audioPlayer.pause": "Pausa",
 	"components.audioPlayer.play": "Reproducir",
 	"components.audioPlayer.slider": "Control deslizante",
@@ -488,6 +490,8 @@ export default {
 		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
 		"Se ha movido una tarjeta de la columna {fromColumnPosition} a la columna {toColumnPosition}.",
+	"components.board.screenReader.notification.cardMovedToBoard.success":
+		"Una tarjeta fue movida a la sección {toColumnId}.",
 	"components.board.screenReader.notification.columnMoved.success":
 		"Se ha movido una columna de la posición {oldPosition} a la posición {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
@@ -534,8 +538,6 @@ export default {
 	"components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
 	"components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
 	"components.cardElement.fileElement.collaboraFile": "Archivo",
-	"components.cardElement.fileElement.collaboraFile.types": "Tipo de documento",
-	"components.cardElement.fileElement.collaboraFile.untitled": "Documento sin título",
 	"components.cardElement.fileElement.previewError": "No se ha podido cargar la vista previa.",
 	"components.cardElement.fileElement.reloadStatus": "Estado de actualización",
 	"components.cardElement.fileElement.videoFormatError":
@@ -588,9 +590,6 @@ export default {
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle": "Videoconferencia",
 	"components.elementTypeSelection.elements.h5pElement.subtitle": "Elemento de aprendizaje interactivo",
 	"components.elementTypeSelection.elements.collabora.subtitle": "Crear documento",
-	"components.elementTypeSelection.elements.collabora.option.text": ".docx (Texto)",
-	"components.elementTypeSelection.elements.collabora.option.spreadsheet": ".xlsx (Hoja de cálculo)",
-	"components.elementTypeSelection.elements.collabora.option.presentation": ".pptx (Presentación)",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",
@@ -655,7 +654,21 @@ export default {
 	"components.molecules.copyResult.followingNotCopied": "No se ha copiado lo siguiente:",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.card.options.title": "Importar tarjeta",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.label.room": "Seleccionar sala",
+	"components.molecules.label.board": "Seleccionar tablero",
+	"components.molecules.label.section": "Seleccionar sección",
+	"components.molecules.import.card.question": "¿A dónde se debe importar la tarjeta{title}?",
+	"components.molecules.import.card.hint.restriction": "Los siguientes contenidos no se transfieren:",
+	"components.molecules.import.card.hint.etherpad": "Contenido de Etherpads",
+	"components.molecules.import.card.hint.whiteboard": "Contenido de Whiteboards",
+	"components.molecules.import.card.hint.ctltools": "Configuraciones protegidas de herramientas externas",
+	"components.molecules.move.card.title": "Mover tarjeta",
+	"components.molecules.move.card.question": "¿A dónde se debe mover la tarjeta{title}?",
+	"components.molecules.move.card.message.success": "Tarjeta movida con éxito al tablero {link} - {column}",
+	"components.molecules.move.card.hint.restriction":
+		"Con el permiso «editar», las tarjetas solo pueden moverse a otras tableros dentro del mismo espacio.",
 	"components.molecules.import.columnBoard.rename": "Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText": "Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
@@ -708,6 +721,9 @@ export default {
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin": "Administrador de organización",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager": "Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
+	"components.molecules.share.card.options.infoText":
+		"Con el siguiente enlace, la tarjeta puede ser importada como copia por otros personas.",
+	"components.molecules.share.card.result.linkLabel": "Enlace a la copia de la tarjeta",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.columnBoard.result.linkLabel": "Enlace a la copia del tablón",
@@ -1550,7 +1566,27 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.registrationExternalMembers.error.notCompleted":
+		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
+		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instanceTitle}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.secondParagraph":
+		"Yo, {userName}, declaro lo siguiente:",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default":
+		"Acepto que mis datos personales se procesen de acuerdo con la {dataProtectionLink} en {instanceTitle} y en los proveedores de material de aprendizaje seleccionados e instruidos por la escuela.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.default":
+		"El consentimiento y uso es, por tanto, voluntario, lo que significa que si no das tu consentimiento, no te supondrá ninguna desventaja en clase. La escuela hará posible la participación en lecciones fuera de {title}. Puedes revocar este consentimiento en cualquier momento. Será suficiente con un breve correo electrónico con la declaración de revocación, indicando tu nombre y apellido, clase y escuela a la siguiente dirección: {email}. En caso de revocación, eliminaremos inmediatamente los datos personales almacenados en virtud de tu consentimiento, a menos que exista una razón legal para el almacenamiento o desees acceder a los datos almacenados de antemano. También puedes encontrar más información sobre la protección de datos en nuestras {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb":
+		"Acepto que mis datos personales se procesen de acuerdo con la {dataProtectionLink} de la escuela en la Schul-Cloud Brandenburg y por los proveedores de material de aprendizaje seleccionados y autorizados.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.subtext.brb":
+		"El consentimiento, y por lo tanto el uso, es voluntario y puede revocarse en cualquier momento con efecto futuro enviando un correo electrónico a: {email}. En caso de revocación, eliminaremos inmediatamente los datos almacenados en base al consentimiento, a menos que exista una razón legal para su conservación o que desee acceder a ellos previamente. También puede encontrar más información sobre protección de datos en nuestro {faqLink}.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.termsOfUse":
+		"He leído las {termsOfUse} de la {instanceTitle} y las acepto.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.validation.required":
+		"La declaración de consentimiento es necesaria para completar el registro.",
+	"pages.registrationExternalMembers.steps.declarationOfConsent.termOfUse.validation.required":
+		"La aceptación de los términos de uso es necesaria para completar el registro.",
 	"pages.registrationExternalMembers.steps.confirmationCode.title": "Código de confirmación",
 	"pages.registrationExternalMembers.steps.registration.title": "Registro",
 	"pages.registrationExternalMembers.steps.password.firstParagraph":
@@ -1579,9 +1615,7 @@ export default {
 	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
 	"pages.registrationExternalMembers.steps.welcome.heading":
-		"Al registrarse en dBildungscloud en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
-	"pages.registrationExternalMembers.steps.welcome.dataProtection": "Política de privacidad",
-	"pages.registrationExternalMembers.steps.welcome.tos": "Condiciones de uso",
+		"Al registrarse en {instance} en el siguiente paso, acepta la {dataProtection} y los {tos}. La {dataProtection} está siempre disponible en el pie de página. Para el uso, se aplican los siguientes {tos} (a menos que su escuela o institución educativa haya establecido sus propias condiciones de uso).",
 	"pages.registrationExternalMembers.steps.password.heading": "Establecer contraseña",
 	"pages.registrationExternalMembers.steps.success.title": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.success.heading": "¡Gracias por registrarse en la {applicationName}!",
@@ -1794,7 +1828,7 @@ export default {
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Si esta autorización se transfiere a {memberFullName}, {roomOwner} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
-		"Esta acción sólo puede ser deshecha por {memberFullName}.",
+		"Esta acción sólo puede ser deshecha por {memberFullName} o el administrador de la escuela.",
 	"pages.rooms.members.inviteMember.step.prepare.title": "Crear enlace de invitación",
 	"pages.rooms.members.inviteMember.firstStep.subTitle":
 		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
@@ -1837,6 +1871,7 @@ export default {
 	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",
+	"pages.rooms.invitationlinks.error.delete": "No se pudo eliminar la lista de invitaciones.",
 	"pages.rooms.title": "Salas",
 	"pages.rooms.administration.title": "Administración de salas",
 	"pages.rooms.administration.table.header.roomName": "Nombre de la sala",
@@ -2009,6 +2044,12 @@ export default {
 	"feature.media-shelf.layout.list": "Líneas",
 	"feature.media-shelf.layout.grid": "Red",
 	"feature.collabora.iframeTitle": "Editor de documentos de Office",
+	"feature.collabora.add-collabora-file-dialog.title": "Crear documento",
+	"feature.collabora.add-collabora-file-dialog.doc-types": "Tipo de documento",
+	"feature.collabora.add-collabora-file-dialog.untitled-file": "Documento sin título",
+	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Texto)",
+	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
+	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
 	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",
@@ -2030,10 +2071,4 @@ export default {
 		"El nombre del archivo contiene caracteres no válidos.",
 	"pages.folder.fab.upload-file": "Subir archivo",
 	"pages.folder.fab.create-document": "Crear documento",
-	"pages.folder.add-collabora-file-dialog.title": "Crear documento",
-	"pages.folder.add-collabora-file-dialog.doc-types": "Tipo de documento",
-	"pages.folder.add-collabora-file-dialog.untitled-file": "Documento sin título",
-	"pages.folder.add-collabora-file-dialog.option.text": ".docx (Texto)",
-	"pages.folder.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
-	"pages.folder.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
 };

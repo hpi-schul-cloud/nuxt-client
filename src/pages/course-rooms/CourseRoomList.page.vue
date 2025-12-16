@@ -38,7 +38,7 @@
 							md="3"
 							sm="3"
 						>
-							<vRoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
+							<RoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
 						</v-col>
 					</v-row>
 				</v-container>
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
@@ -59,7 +59,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		RoomWrapper,
-		vRoomAvatar,
+		RoomAvatar,
 	},
 	data() {
 		return {

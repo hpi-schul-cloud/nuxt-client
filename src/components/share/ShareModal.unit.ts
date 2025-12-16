@@ -1,5 +1,5 @@
 import ShareModal from "./ShareModal.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
@@ -66,7 +66,7 @@ describe("@/components/share/ShareModal", () => {
 
 		it("should call 'createShareUrl' store method when next button clicked", () => {
 			const { wrapper } = setup();
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 
 			dialog.vm.$emit("next");
 
@@ -75,7 +75,7 @@ describe("@/components/share/ShareModal", () => {
 
 		it("should call 'resetShareFlow' store method when dialog closed", () => {
 			const { wrapper } = setup();
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 
 			dialog.vm.$emit("dialog-closed");
 
@@ -130,7 +130,7 @@ describe("@/components/share/ShareModal", () => {
 			it("should have the correct title", () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
+				const dialog = wrapper.findComponent(CustomDialog);
 				const cardText = dialog.findComponent({ name: "v-card-text" });
 
 				const infotext = cardText.find(`[data-testid="share-modal-external-tools-info"]`);
@@ -200,6 +200,47 @@ describe("@/components/share/ShareModal", () => {
 				},
 				props: {
 					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+				},
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should show copyright and privacy info alert", () => {
+			const { wrapper } = setup();
+			const infoAlert = wrapper.findComponent(InfoAlert);
+
+			expect(infoAlert.text()).toBe("components.molecules.share.checkPrivacyAndCopyright");
+		});
+
+		it("should show warning alert", () => {
+			const { wrapper } = setup();
+			const warningAlert = wrapper.findComponent(WarningAlert);
+
+			expect(warningAlert.exists()).toBe(true);
+		});
+	});
+
+	describe("when card is shared", () => {
+		const setup = () => {
+			const shareModuleMock = createModuleMocks(ShareModule, {
+				getIsShareModalOpen: true,
+				getParentType: ShareTokenBodyParamsParentTypeEnum.Card,
+				createShareUrl: vi.fn(),
+				resetShareFlow: vi.fn(),
+			});
+
+			const wrapper = mount(ShareModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					provide: {
+						[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+					},
+				},
+				props: {
+					type: ShareTokenBodyParamsParentTypeEnum.Card,
 				},
 			});
 

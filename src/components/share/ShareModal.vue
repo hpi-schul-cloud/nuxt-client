@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog
+	<CustomDialog
 		:is-open="isOpen"
 		data-testid="share-dialog"
 		:size="480"
@@ -74,11 +74,11 @@
 				</div>
 			</v-fade-transition>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
@@ -151,12 +151,17 @@ const showAlertInfo = computed(
 		props.type === ShareTokenBodyParamsParentTypeEnum.Courses ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
 		props.type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.Room
+		props.type === ShareTokenBodyParamsParentTypeEnum.Room ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Card
 );
 
 const showCourseInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Courses);
 
-const showBoardInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard);
+const showBoardInfo = computed(
+	() =>
+		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
+		props.type === ShareTokenBodyParamsParentTypeEnum.Card
+);
 
 const showLessonInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Lessons);
 

@@ -1,9 +1,11 @@
+import MoveCardDialog from "../card/MoveCardDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
 import {
+	BoardExternalReferenceType,
 	BoardLayout,
 	ConfigResponse,
 	CopyApiResponse,
@@ -36,6 +38,8 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 } from "@data-board";
+import { CollaboraFileType } from "@data-file";
+import { AddCollaboraFileDialog } from "@feature-collabora";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -449,11 +453,17 @@ describe("Board", () => {
 		});
 	});
 
-	describe("CopyResultModal", () => {
+	describe("Dialogs", () => {
 		it("should have a result modal component", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
+		});
+
+		it("should have a move dialog component", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
 	});
 
@@ -1004,6 +1014,21 @@ describe("Board", () => {
 			});
 		});
 
+		describe("@share:card", () => {
+			it("should start the card share flow", async () => {
+				const { wrapper, shareModule } = setup();
+
+				const boardColumn = wrapper.findComponent(BoardColumn);
+				await boardColumn.vm.$emit("share:card", "card-id");
+
+				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					id: "card-id",
+					type: ShareTokenBodyParamsParentTypeEnum.Card,
+					destinationType: BoardExternalReferenceType.Room,
+				});
+			});
+		});
+
 		describe("when the 'delete' menu button is clicked", () => {
 			let openDeleteBoardDialogMock: Mock;
 			beforeEach(() => {
@@ -1042,6 +1067,20 @@ describe("Board", () => {
 					},
 					mockRoomId
 				);
+			});
+		});
+
+		describe("@onCreateCollaboraFile", () => {
+			it("should call createFileElementWithCollabora method", async () => {
+				const { wrapper, cardStore } = setup();
+
+				const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
+				await collaboraFileDialog.vm.$emit("create-collabora-file", {
+					type: CollaboraFileType.Text,
+					fileName: "myDoc",
+				});
+
+				expect(cardStore.createFileElementWithCollabora).toHaveBeenCalled();
 			});
 		});
 	});

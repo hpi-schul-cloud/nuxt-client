@@ -1,3 +1,4 @@
+import { useI18nGlobal } from "@/plugins/i18n";
 import * as serverApi from "@/serverApi/v3/api";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName, SchoolUserListResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
@@ -21,12 +22,11 @@ import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock, MockInstance } from "vitest";
+import { Mock, MockInstance, vi } from "vitest";
 import { nextTick } from "vue";
-import { useI18n } from "vue-i18n";
 
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
@@ -145,7 +145,7 @@ describe("useRoomMembers", () => {
 				const { roomMembersStore } = setup();
 				const membersMock = roomMemberFactory.buildList(3, {
 					roomRoleName: RoleName.Roomeditor,
-					schoolRoleNames: [RoleName.Expert],
+					schoolRoleNames: [RoleName.ExternalPerson],
 				});
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({

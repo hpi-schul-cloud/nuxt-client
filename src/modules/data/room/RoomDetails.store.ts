@@ -1,3 +1,5 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@/serverApi/v3";
 import { RoomBoardItem, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -11,6 +13,8 @@ export enum RoomVariant {
 }
 
 export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
+	const { t } = useI18nGlobal();
+	const PLURAL_COUNT = 2;
 	const isLoading = ref(true);
 	const room = ref<RoomDetails>();
 	const roomVariant = ref<RoomVariant>();
@@ -19,6 +23,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+	const { execute } = useSafeAxiosTask();
 
 	const fetchRoom = async (id: string, config = { loadBoards: false }) => {
 		try {
@@ -44,6 +49,14 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 
 	const fetchRoomAndBoards = async (id: string) => {
 		await fetchRoom(id, { loadBoards: true });
+	};
+
+	const fetchBoardsOfRoom = async (roomId: string) => {
+		const { result, error } = await execute(
+			() => roomApi.roomControllerGetRoomBoards(roomId),
+			t("common.notifications.errors.notLoaded", { type: t("common.words.board", PLURAL_COUNT) }, PLURAL_COUNT)
+		);
+		return { boards: result?.data.data, error };
 	};
 
 	const createBoard = async (roomId: string, layout: BoardLayout, title: string) => {
@@ -83,6 +96,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 
 	return {
 		fetchRoomAndBoards,
+		fetchBoardsOfRoom,
 		fetchRoom,
 		createBoard,
 		moveBoard,

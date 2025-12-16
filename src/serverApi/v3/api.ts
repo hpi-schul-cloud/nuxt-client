@@ -143,6 +143,19 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface AddByEmailBodyParams
+ */
+export interface AddByEmailBodyParams {
+    /**
+     * The email of external persons to add to the room
+     * @type {string}
+     * @memberof AddByEmailBodyParams
+     */
+    email: string;
+}
+/**
+ * 
+ * @export
  * @interface AddRoomMembersBodyParams
  */
 export interface AddRoomMembersBodyParams {
@@ -296,6 +309,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     BoardManage = 'BOARD_MANAGE',
+    BoardRelocateContent = 'BOARD_RELOCATE_CONTENT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -362,7 +376,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     InstanceView = 'INSTANCE_VIEW',
     InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
-    InviteExperts = 'INVITE_EXPERTS',
+    InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
     LernstoreView = 'LERNSTORE_VIEW',
@@ -1419,6 +1433,12 @@ export interface ConfigResponse {
     SC_CONTACT_EMAIL: string;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SC_CONTACT_EMAIL_SUBJECT: string;
+    /**
+     * 
      * @type {number}
      * @memberof ConfigResponse
      */
@@ -1807,6 +1827,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -2947,6 +2973,37 @@ export enum CreateNewsParamsTargetModelEnum {
     Teams = 'teams'
 }
 
+/**
+ * 
+ * @export
+ * @interface CreateOrUpdateRegistrationBodyParams
+ */
+export interface CreateOrUpdateRegistrationBodyParams {
+    /**
+     * The mail adress of the new user. Will also be used as username.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    email: string;
+    /**
+     * The firstname of the new user.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    firstName: string;
+    /**
+     * The lastname of the new user.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    lastName: string;
+    /**
+     * The id of the room the user is invited to.
+     * @type {string}
+     * @memberof CreateOrUpdateRegistrationBodyParams
+     */
+    roomId: string;
+}
 /**
  * 
  * @export
@@ -6474,11 +6531,48 @@ export interface MoveCardBodyParams {
      */
     toColumnId: string;
     /**
-     * 
+     * to bring element to a specific position, default is last position
      * @type {number}
      * @memberof MoveCardBodyParams
      */
-    toPosition: number;
+    toPosition?: number;
+}
+/**
+ * 
+ * @export
+ * @interface MoveCardResponse
+ */
+export interface MoveCardResponse {
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toBoard: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    fromColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {ShortNodeResponse}
+     * @memberof MoveCardResponse
+     */
+    toColumn: ShortNodeResponse;
+    /**
+     * 
+     * @type {CardSkeletonResponse}
+     * @memberof MoveCardResponse
+     */
+    card: CardSkeletonResponse;
 }
 /**
  * 
@@ -7774,6 +7868,7 @@ export enum Permission {
     BoardManageVideoconference = 'BOARD_MANAGE_VIDEOCONFERENCE',
     BoardManageReadersCanEdit = 'BOARD_MANAGE_READERS_CAN_EDIT',
     BoardManage = 'BOARD_MANAGE',
+    BoardRelocateContent = 'BOARD_RELOCATE_CONTENT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -7840,7 +7935,7 @@ export enum Permission {
     InstanceView = 'INSTANCE_VIEW',
     InstanceEdit = 'INSTANCE_EDIT',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
-    InviteExperts = 'INVITE_EXPERTS',
+    InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
     LernstoreView = 'LERNSTORE_VIEW',
@@ -8085,6 +8180,37 @@ export interface PublicSystemResponse {
 /**
  * 
  * @export
+ * @interface RangeDate
+ */
+export interface RangeDate {
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $gt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $gte?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $lt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RangeDate
+     */
+    $lte?: string;
+}
+/**
+ * 
+ * @export
  * @interface ReadersCanEditBodyParams
  */
 export interface ReadersCanEditBodyParams {
@@ -8107,6 +8233,49 @@ export interface RedirectResponse {
      * @memberof RedirectResponse
      */
     redirect_to: string;
+}
+/**
+ * 
+ * @export
+ * @interface RegistrationItemResponse
+ */
+export interface RegistrationItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    updatedAt: string;
 }
 /**
  * 
@@ -8268,7 +8437,7 @@ export enum RoleName {
     Demo = 'demo',
     DemoStudent = 'demoStudent',
     DemoTeacher = 'demoTeacher',
-    Expert = 'expert',
+    ExternalPerson = 'externalPerson',
     GuestTeacher = 'guestTeacher',
     GuestStudent = 'guestStudent',
     GuestExternalPerson = 'guestExternalPerson',
@@ -8384,6 +8553,31 @@ export enum RoomColor {
     Brown = 'brown'
 }
 
+/**
+ * 
+ * @export
+ * @interface RoomCreatedResponse
+ */
+export interface RoomCreatedResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomCreatedResponse
+     */
+    updatedAt: string;
+}
 /**
  * 
  * @export
@@ -8658,6 +8852,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof RoomItemResponse
+     */
+    permissions: Array<Permission>;
     /**
      * 
      * @type {boolean}
@@ -9268,7 +9468,7 @@ export interface SchoolPermissionsParams {
  * @enum {string}
  */
 export enum SchoolPurpose {
-    Expert = 'expert',
+    ExternalPersonSchool = 'external_person_school',
     Tombstone = 'tombstone',
     Demo = 'demo',
     Test = 'test',
@@ -9735,7 +9935,8 @@ export enum ShareTokenBodyParamsParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9792,7 +9993,8 @@ export enum ShareTokenInfoResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9824,7 +10026,8 @@ export enum ShareTokenPayloadResponseParentTypeEnum {
     Tasks = 'tasks',
     Lessons = 'lessons',
     ColumnBoard = 'columnBoard',
-    Room = 'room'
+    Room = 'room',
+    Card = 'card'
 }
 
 /**
@@ -9851,6 +10054,25 @@ export interface ShareTokenResponse {
      * @memberof ShareTokenResponse
      */
     expiresAt?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ShortNodeResponse
+ */
+export interface ShortNodeResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ShortNodeResponse
+     */
+    title: string;
 }
 /**
  * 
@@ -12082,15 +12304,15 @@ export const AdminStudentsApiAxiosParamCreator = function (configuration?: Confi
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiStudentsControllerSearchStudents: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        adminApiStudentsControllerSearchStudents: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/admin/students`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12197,15 +12419,15 @@ export const AdminStudentsApiFp = function(configuration?: Configuration) {
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+        async adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12239,15 +12461,15 @@ export const AdminStudentsApiFactory = function (configuration?: Configuration, 
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+        adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
             return localVarFp.adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(axios, basePath));
         },
     };
@@ -12279,16 +12501,16 @@ export interface AdminStudentsApiInterface {
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminStudentsApiInterface
      */
-    adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+    adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
 
 }
 
@@ -12321,16 +12543,16 @@ export class AdminStudentsApi extends BaseAPI implements AdminStudentsApiInterfa
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminStudentsApi
      */
-    public adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any) {
+    public adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any) {
         return AdminStudentsApiFp(this.configuration).adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -12390,15 +12612,15 @@ export const AdminTeachersApiAxiosParamCreator = function (configuration?: Confi
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/users/admin/teachers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -12505,15 +12727,15 @@ export const AdminTeachersApiFp = function(configuration?: Configuration) {
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12547,15 +12769,15 @@ export const AdminTeachersApiFactory = function (configuration?: Configuration, 
          * @param {object} [$sort] Sort parameter.
          * @param {object} [consentStatus] 
          * @param {Array<string>} [classes] 
-         * @param {object} [createdAt] 
-         * @param {object} [lastLoginSystemChange] 
-         * @param {object} [outdatedSince] 
+         * @param {RangeDate} [createdAt] 
+         * @param {RangeDate} [lastLoginSystemChange] 
+         * @param {RangeDate} [outdatedSince] 
          * @param {string} [searchQuery] 
          * @param {Array<string>} [users] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
             return localVarFp.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(axios, basePath));
         },
     };
@@ -12587,16 +12809,16 @@ export interface AdminTeachersApiInterface {
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminTeachersApiInterface
      */
-    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
 
 }
 
@@ -12629,16 +12851,16 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
      * @param {object} [$sort] Sort parameter.
      * @param {object} [consentStatus] 
      * @param {Array<string>} [classes] 
-     * @param {object} [createdAt] 
-     * @param {object} [lastLoginSystemChange] 
-     * @param {object} [outdatedSince] 
+     * @param {RangeDate} [createdAt] 
+     * @param {RangeDate} [lastLoginSystemChange] 
+     * @param {RangeDate} [outdatedSince] 
      * @param {string} [searchQuery] 
      * @param {Array<string>} [users] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AdminTeachersApi
      */
-    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: object, lastLoginSystemChange?: object, outdatedSince?: object, searchQuery?: string, users?: Array<string>, options?: any) {
+    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, $sort?: object, consentStatus?: object, classes?: Array<string>, createdAt?: RangeDate, lastLoginSystemChange?: RangeDate, outdatedSince?: RangeDate, searchQuery?: string, users?: Array<string>, options?: any) {
         return AdminTeachersApiFp(this.configuration).adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, $sort, consentStatus, classes, createdAt, lastLoginSystemChange, outdatedSince, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
     }
 }
@@ -14814,7 +15036,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MoveCardResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerMoveCard(cardId, moveCardBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14901,7 +15123,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void> {
+        cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse> {
             return localVarFp.cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14985,7 +15207,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<void>;
+    cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse>;
 
     /**
      * 
@@ -22882,11 +23104,342 @@ export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
 
 
 /**
+ * RegistrationApi - axios parameter creator
+ * @export
+ */
+export const RegistrationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a new registration
+         * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerCreateOrUpdateRegistration: async (createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createOrUpdateRegistrationBodyParams' is not null or undefined
+            assertParamExists('registrationControllerCreateOrUpdateRegistration', 'createOrUpdateRegistrationBodyParams', createOrUpdateRegistrationBodyParams)
+            const localVarPath = `/registrations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createOrUpdateRegistrationBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a list of registrations for specific roomId
+         * @param {string} roomId The id of the room a registration is attached to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerFindByRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('registrationControllerFindByRoom', 'roomId', roomId)
+            const localVarPath = `/registrations/by-room/{roomId}`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerGetBySecret: async (registrationSecret: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationSecret' is not null or undefined
+            assertParamExists('registrationControllerGetBySecret', 'registrationSecret', registrationSecret)
+            const localVarPath = `/registrations/by-secret/{registrationSecret}`
+                .replace(`{${"registrationSecret"}}`, encodeURIComponent(String(registrationSecret)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RegistrationApi - functional programming interface
+ * @export
+ */
+export const RegistrationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RegistrationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new registration
+         * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a list of registrations for specific roomId
+         * @param {string} roomId The id of the room a registration is attached to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerFindByRoom(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerGetBySecret(registrationSecret: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerGetBySecret(registrationSecret, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RegistrationApi - factory interface
+ * @export
+ */
+export const RegistrationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RegistrationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new registration
+         * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): AxiosPromise<RegistrationItemResponse> {
+            return localVarFp.registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of registrations for specific roomId
+         * @param {string} roomId The id of the room a registration is attached to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse> {
+            return localVarFp.registrationControllerFindByRoom(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a registration by its secret
+         * @param {string} registrationSecret The secret of the registration.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse> {
+            return localVarFp.registrationControllerGetBySecret(registrationSecret, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RegistrationApi - interface
+ * @export
+ * @interface RegistrationApi
+ */
+export interface RegistrationApiInterface {
+    /**
+     * 
+     * @summary Create a new registration
+     * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+    /**
+     * 
+     * @summary Get a list of registrations for specific roomId
+     * @param {string} roomId The id of the room a registration is attached to.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+    /**
+     * 
+     * @summary Get a registration by its secret
+     * @param {string} registrationSecret The secret of the registration.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+}
+
+/**
+ * RegistrationApi - object-oriented interface
+ * @export
+ * @class RegistrationApi
+ * @extends {BaseAPI}
+ */
+export class RegistrationApi extends BaseAPI implements RegistrationApiInterface {
+    /**
+     * 
+     * @summary Create a new registration
+     * @param {CreateOrUpdateRegistrationBodyParams} createOrUpdateRegistrationBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams: CreateOrUpdateRegistrationBodyParams, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerCreateOrUpdateRegistration(createOrUpdateRegistrationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of registrations for specific roomId
+     * @param {string} roomId The id of the room a registration is attached to.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerFindByRoom(roomId: string, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerFindByRoom(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a registration by its secret
+     * @param {string} registrationSecret The secret of the registration.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerGetBySecret(registrationSecret: string, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerGetBySecret(registrationSecret, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * RoomApi - axios parameter creator
  * @export
  */
 export const RoomApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerAddByEmail: async (roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerAddByEmail', 'roomId', roomId)
+            // verify required parameter 'addByEmailBodyParams' is not null or undefined
+            assertParamExists('roomControllerAddByEmail', 'addByEmailBodyParams', addByEmailBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/add-by-email`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(addByEmailBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Add members to a room
@@ -23625,6 +24178,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomRoleResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerAddByEmail(roomId, addByEmailBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Add members to a room
          * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -23677,7 +24242,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomItemResponse>> {
+        async roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomCreatedResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerCreateRoom(createRoomBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -23839,6 +24404,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @summary Add external person to room or trigger registration
+         * @param {string} roomId The id of the room.
+         * @param {AddByEmailBodyParams} addByEmailBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): AxiosPromise<RoomRoleResponse> {
+            return localVarFp.roomControllerAddByEmail(roomId, addByEmailBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Add members to a room
          * @param {string} roomId The id of the room.
          * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -23887,7 +24463,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomItemResponse> {
+        roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomCreatedResponse> {
             return localVarFp.roomControllerCreateRoom(createRoomBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -24034,6 +24610,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
 export interface RoomApiInterface {
     /**
      * 
+     * @summary Add external person to room or trigger registration
+     * @param {string} roomId The id of the room.
+     * @param {AddByEmailBodyParams} addByEmailBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any): AxiosPromise<RoomRoleResponse>;
+
+    /**
+     * 
      * @summary Add members to a room
      * @param {string} roomId The id of the room.
      * @param {AddRoomMembersBodyParams} addRoomMembersBodyParams 
@@ -24083,7 +24670,7 @@ export interface RoomApiInterface {
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomItemResponse>;
+    roomControllerCreateRoom(createRoomBodyParams: CreateRoomBodyParams, options?: any): AxiosPromise<RoomCreatedResponse>;
 
     /**
      * 
@@ -24227,6 +24814,19 @@ export interface RoomApiInterface {
  * @extends {BaseAPI}
  */
 export class RoomApi extends BaseAPI implements RoomApiInterface {
+    /**
+     * 
+     * @summary Add external person to room or trigger registration
+     * @param {string} roomId The id of the room.
+     * @param {AddByEmailBodyParams} addByEmailBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerAddByEmail(roomId: string, addByEmailBodyParams: AddByEmailBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerAddByEmail(roomId, addByEmailBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Add members to a room
