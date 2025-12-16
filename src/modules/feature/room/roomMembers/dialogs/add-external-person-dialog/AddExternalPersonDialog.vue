@@ -58,8 +58,8 @@ const roomMembersStore = useRoomMembersStore();
 const applicationNames = computed(() => {
 	const name = useEnvConfig().value.SC_TITLE || "dBildungsCloud";
 	return {
-		text: name.replace("Niedersächsische", "Niedersächsischen"),
-		alert: name,
+		alert: name.replace("Niedersächsische", "Niedersächsischen"),
+		text: name,
 	};
 });
 
