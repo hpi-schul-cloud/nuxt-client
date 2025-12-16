@@ -14,9 +14,9 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+				:elevation="cardElevation"
 				:ripple="false"
-				:hover="isHovered"
+				:hover="isHovered && hasEditPermission"
 				:data-testid="cardTestId"
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
@@ -30,6 +30,7 @@
 						scope="card"
 						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
+						:has-edit-permission="hasEditPermission"
 						@update:value="onUpdateCardTitle($event, cardId)"
 						@enter="onEnter"
 					/>
@@ -110,14 +111,10 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
-import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
+import { useBoardFocusHandler, useBoardPermissions, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
@@ -149,6 +146,8 @@ const emit = defineEmits<{
 const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
+const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
 
 const isHovered = useElementHover(cardHost);
 const isDetailView = ref(false);
@@ -164,8 +163,15 @@ const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${pro
 const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
+const cardElevation = computed(() => {
+	if (isEditMode.value) {
+		return 6;
+	}
+	if (isHovered.value && hasEditPermission.value) {
+		return 4;
+	}
+	return 2;
+});
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 

@@ -1,18 +1,11 @@
 import { ToolParameterType } from "../tool-parameter.enum";
-import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";
 import {
-	ContextExternalToolConfigurationStatusResponse,
-	CustomParameterEntryParam,
-	CustomParameterEntryResponse,
 	CustomParameterLocationParams,
 	CustomParameterScopeTypeParams,
 	CustomParameterTypeParams,
-	LaunchRequestMethod,
 } from "@/serverApi/v3";
-import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
-import { ContextExternalToolConfigurationStatus } from "@data-external-tool";
 
 export const ToolParamLocationMapping: Record<CustomParameterLocationParams, ToolParameterLocation> = {
 	[CustomParameterLocationParams.Path]: ToolParameterLocation.PATH,
@@ -39,43 +32,3 @@ export const ToolParamScopeMapping: Record<CustomParameterScopeTypeParams, ToolP
 	[CustomParameterScopeTypeParams.Global]: ToolParameterScope.Global,
 	[CustomParameterScopeTypeParams.School]: ToolParameterScope.School,
 };
-
-export const ToolLaunchRequestMethodMapping: Record<LaunchRequestMethod, ToolLaunchRequestMethodEnum> = {
-	[LaunchRequestMethod.Get]: ToolLaunchRequestMethodEnum.Get,
-	[LaunchRequestMethod.Post]: ToolLaunchRequestMethodEnum.Post,
-};
-
-export class CommonToolMapper {
-	static mapToCustomParameterEntryParam(parameter: ToolParameterEntry): CustomParameterEntryParam {
-		const mapped: CustomParameterEntryParam = {
-			name: parameter.name,
-			value: parameter.value,
-		};
-
-		return mapped;
-	}
-
-	static mapToToolParameterEntry(response: CustomParameterEntryResponse): ToolParameterEntry {
-		const mapped: ToolParameterEntry = {
-			name: response.name,
-			value: response.value,
-		};
-
-		return mapped;
-	}
-
-	static mapContextExternalToolConfigurationStatus(
-		status: ContextExternalToolConfigurationStatusResponse
-	): ContextExternalToolConfigurationStatus {
-		const mapped: ContextExternalToolConfigurationStatus = {
-			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
-			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
-			isIncompleteOnScopeContext: status.isIncompleteOnScopeContext,
-			isIncompleteOperationalOnScopeContext: status.isIncompleteOperationalOnScopeContext,
-			isDeactivated: status.isDeactivated,
-			isNotLicensed: status.isNotLicensed,
-		};
-
-		return mapped;
-	}
-}

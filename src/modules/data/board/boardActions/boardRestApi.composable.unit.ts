@@ -15,10 +15,9 @@ import {
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useAppStore } from "@data-app";
-import { useBoardStore, useSocketConnection } from "@data-board";
+import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
@@ -30,7 +29,7 @@ const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 vi.mock("../BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-vi.mock("@util-board/editMode.composable");
+vi.mock("@data-board/edit-mode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../socket/socket");

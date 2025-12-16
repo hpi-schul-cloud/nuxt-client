@@ -16,4 +16,4 @@ export type {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./roomMembers/types";
-export { InvitationStep, RoomInvitationLinkValidationError } from "./roomMembers/types";
+export { ExternalMemberCheckStatus, InvitationStep, RoomInvitationLinkValidationError } from "./roomMembers/types";
