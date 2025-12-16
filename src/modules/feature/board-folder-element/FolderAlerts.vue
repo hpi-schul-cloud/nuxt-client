@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<WarningAlert v-if="alerts.includes(FolderAlert.FILE_STORAGE_ERROR)">
-			{{ t("Infos zum Dateiordner sind gerade nicht verfügbar. Lade den Bereich neu.") }}
+			{{ t("components.cardElement.folderElement.storage.error") }}
 		</WarningAlert>
 	</div>
 </template>
