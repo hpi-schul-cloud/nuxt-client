@@ -1,3 +1,4 @@
+import FileAlerts from "./content/alert/FileAlerts.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import FileContentElement from "./FileContentElement.vue";
@@ -15,7 +16,7 @@ import { useBoardPermissions, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { shallowMount } from "@vue/test-utils";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
@@ -39,9 +40,10 @@ describe("FileContentElement", () => {
 		const menu = "slot-menu";
 
 		const addAlertMock = vi.fn();
+		const mockedAlerts: FileAlert[] = [];
 		vi.mocked(useFileAlerts).mockReturnValue({
 			addAlert: addAlertMock,
-			alerts: computed(() => []),
+			alerts: computed(() => mockedAlerts),
 		});
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
@@ -58,11 +60,62 @@ describe("FileContentElement", () => {
 			},
 		});
 
-		return { wrapper, menu, addAlertMock };
+		return { wrapper, menu, addAlertMock, mockedAlerts };
 	};
 
 	afterEach(() => {
 		vi.resetAllMocks();
+	});
+
+	describe("when file fetching fails", () => {
+		const setup = () => {
+			const element = fileElementResponseFactory.build();
+
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+			fileStorageApiMock.fetchFiles.mockRejectedValueOnce(new Error());
+
+			const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+			const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
+				hasEditPermission: ref(true),
+			});
+			useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+
+			const useContentElementStateMock = vi.mocked(useContentElementState);
+			const fileContentElement = fileElementResponseFactory.build();
+			useContentElementStateMock.mockReturnValueOnce({
+				modelValue: ref(fileContentElement),
+				computedElement: computed(() => fileContentElement),
+			});
+
+			const { wrapper, addAlertMock } = getWrapper({
+				element,
+				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			});
+
+			return {
+				wrapper,
+				fileStorageApiMock,
+				addAlertMock,
+			};
+		};
+		it("should not render FileUpload", async () => {
+			const { fileStorageApiMock, wrapper } = setup();
+			await flushPromises();
+
+			expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(1);
+			expect(wrapper.findComponent(FileUpload).exists()).toBe(false);
+		});
+
+		it("should add alert", async () => {
+			const { addAlertMock } = setup();
+			await flushPromises();
+
+			expect(addAlertMock).toHaveBeenCalledTimes(1);
+		});
 	});
 
 	describe("when component is in view mode", () => {
@@ -1200,6 +1253,64 @@ describe("FileContentElement", () => {
 						windowOpenSpy.mockRestore();
 					});
 				});
+			});
+		});
+	});
+
+	describe("file alerts", () => {
+		const setup = () => {
+			const element = fileElementResponseFactory.build();
+
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+
+			const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
+			const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
+				hasEditPermission: ref(true),
+			});
+			useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+
+			const useContentElementStateMock = vi.mocked(useContentElementState);
+			const fileContentElement = fileElementResponseFactory.build();
+			useContentElementStateMock.mockReturnValueOnce({
+				modelValue: ref(fileContentElement),
+				computedElement: computed(() => fileContentElement),
+			});
+
+			const { wrapper, mockedAlerts } = getWrapper({
+				element,
+				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			});
+
+			return {
+				wrapper,
+				mockedAlerts,
+				fileStorageApiMock,
+			};
+		};
+
+		it("should pass alerts to FileAlert", () => {
+			const { wrapper, mockedAlerts } = setup();
+
+			const fileAlert = wrapper.findComponent(FileAlerts);
+
+			expect(fileAlert.props()).toEqual({
+				alerts: mockedAlerts,
+			});
+		});
+
+		describe("when file alerts emits on-status-reload", () => {
+			it("should fetch file", async () => {
+				const { wrapper, fileStorageApiMock } = setup();
+
+				const fileAlert = wrapper.findComponent(FileAlerts);
+
+				await fileAlert.vm.$emit("on-status-reload");
+
+				expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(2);
 			});
 		});
 	});
