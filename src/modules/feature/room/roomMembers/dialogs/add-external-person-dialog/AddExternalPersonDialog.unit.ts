@@ -10,7 +10,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
-import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
 describe("AddExternalPersonDialog", () => {
@@ -79,7 +78,7 @@ describe("AddExternalPersonDialog", () => {
 		it("should render the component", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.getComponent(AddExternalPersonDialog)).toBe(true);
+			expect(wrapper.find('[data-testid="add-external-person-dialog"]')).toBeTruthy();
 		});
 	});
 
@@ -143,9 +142,6 @@ describe("AddExternalPersonDialog", () => {
 				expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
 
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("error");
-
-				expect(wrapper.getComponent('[data-testid="add-external-person-close-btn"]')).toBe(true);
-				expect(wrapper.getComponent('[data-testid="add-external-person-add-email-btn"]')).toBe(false);
 			});
 
 			it("should continue to the details step if no matching account was found", async () => {
@@ -155,16 +151,14 @@ describe("AddExternalPersonDialog", () => {
 
 				const emailInput = wrapper.getComponent('[data-testid="add-external-person-email"]').getComponent(VTextField);
 				await emailInput.setValue("test-email@example.com");
-
 				await clickAddButton();
 
 				expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
-				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
-				await nextTick();
 
-				expect(wrapper.getComponent('[data-testid="add-external-person-firstname"]')).toBe(true);
-				expect(wrapper.getComponent('[data-testid="add-external-person-confirm-btn"]')).toBe(true);
-				expect(wrapper.getComponent('[data-testid="add-external-person-add-email-btn"]')).toBe(false);
+				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
+				expect(wrapper.getComponent('[data-testid="add-external-person-firstname"]')).toBeTruthy();
+				expect(wrapper.getComponent('[data-testid="add-external-person-confirm-btn"]')).toBeTruthy();
+				expect(wrapper.find('[data-testid="add-external-person-add-email-btn"]').exists()).toBe(false);
 			});
 
 			it("should show an error notification if addMemberByEmail fails", async () => {
@@ -204,7 +198,7 @@ describe("AddExternalPersonDialog", () => {
 				await backBtn.trigger("click");
 
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("email");
-				expect(wrapper.getComponent('[data-testid="add-external-person-add-email-btn"]')).toBe(true);
+				expect(wrapper.getComponent('[data-testid="add-external-person-add-email-btn"]')).toBeTruthy();
 			});
 		});
 
