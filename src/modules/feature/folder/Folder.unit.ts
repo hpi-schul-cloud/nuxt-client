@@ -6,8 +6,6 @@ import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
@@ -19,6 +17,7 @@ import {
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useBoardStore } from "@data-board";
 import * as BoardApi from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { CollaboraFileType } from "@data-file";
@@ -31,7 +30,7 @@ import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import dayjs from "dayjs";
-import { setActivePinia } from "pinia"; // FIX_CIRCULAR_DEPENDENCY
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { ComputedRef, nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";

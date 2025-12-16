@@ -18,10 +18,8 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import { mdiCogOutline } from "@icons/material";
-import { BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { useI18n } from "vue-i18n";
 

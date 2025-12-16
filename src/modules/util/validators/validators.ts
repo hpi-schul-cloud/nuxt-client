@@ -140,3 +140,14 @@ export const hasSpecialCharacter: FormValidatorFn<string> = (errMsg) => (value) 
 	}
 	return true;
 };
+
+/** * Checks if given value is a valid email address
+ */
+export const isValidEmail: FormValidatorFn<string> = (errMsg) => (value) => {
+	const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+	if (!emailRegex.test(value)) {
+		return errMsg;
+	}
+	return true;
+};

@@ -55,8 +55,8 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 				],
 				stubs: {
 					CourseRoomDetailsPage: true,
-					"RoomLocked.page": true,
-					"RoomDetails.page": true,
+					RoomLockedPage: true,
+					RoomDetailsPage: true,
 				},
 			},
 			router,
@@ -102,7 +102,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 						lockedRoomName: "Locked Room",
 					});
 
-					expect(wrapper.html()).toBe('<room-locked.page-stub title="Locked Room"></room-locked.page-stub>');
+					expect(wrapper.html()).toBe('<room-locked-page-stub title="Locked Room"></room-locked-page-stub>');
 				});
 			});
 
@@ -113,7 +113,7 @@ describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 						roomVariant: RoomVariant.ROOM,
 					});
 
-					expect(wrapper.html()).toBe('<room-details.page-stub room="[object Object]"></room-details.page-stub>');
+					expect(wrapper.html()).toBe('<room-details-page-stub room="[object Object]"></room-details-page-stub>');
 				});
 			});
 		});
