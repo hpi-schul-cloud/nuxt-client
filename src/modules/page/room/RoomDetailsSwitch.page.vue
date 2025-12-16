@@ -12,9 +12,10 @@
 </template>
 
 <script setup lang="ts">
+import RoomDetailsPage from "./RoomDetails.page.vue";
+import RoomLockedPage from "./RoomLocked.page.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { RoomDetailsPage, RoomLockedPage } from "@page-room";
 import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";

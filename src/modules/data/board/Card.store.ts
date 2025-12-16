@@ -14,12 +14,13 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useSharedEditMode } from "./edit-mode.composable";
 import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { FileRecordParent } from "@/types/file/File";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
