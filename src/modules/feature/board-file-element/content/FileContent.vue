@@ -63,7 +63,6 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
-	alerts: { type: Array as PropType<FileAlert[]>, required: true },
 });
 
 const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);

@@ -15,7 +15,6 @@
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
 			:file-properties="fileProperties"
-			:alerts="alerts"
 			:is-edit-mode="isEditMode"
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
@@ -176,7 +175,7 @@ const onFetchFile = async (): Promise<void> => {
 
 const tryFetchFiles = async (id: string, parentType: FileRecordParentType) => {
 	try {
-		return await fetchFiles(id, parentType);
+		await fetchFiles(id, parentType);
 	} catch {
 		addAlert(FileAlert.FILE_STORAGE_ERROR);
 	}
