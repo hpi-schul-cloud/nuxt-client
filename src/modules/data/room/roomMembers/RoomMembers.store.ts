@@ -1,3 +1,4 @@
+import { useRoomDetailsStore } from "../RoomDetails.store";
 import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
@@ -12,7 +13,6 @@ import {
 import { schoolsModule } from "@/store";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
-import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";

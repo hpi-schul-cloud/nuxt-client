@@ -1,3 +1,4 @@
+import { useRoomDetailsStore } from "../RoomDetails.store";
 import {
 	CreateRoomInvitationLinkDto,
 	InvitationStep,
@@ -11,7 +12,6 @@ import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useRoomDetailsStore } from "@data-room";
 import { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";

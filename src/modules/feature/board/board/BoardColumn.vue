@@ -75,11 +75,9 @@
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardColumn } from "@/types/board/Board";
-import { useBoardPermissions, useForceRender } from "@data-board";
-import { extractDataAttribute, useDragAndDrop, useSharedEditMode } from "@util-board";
+import { useBoardPermissions, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
+import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
