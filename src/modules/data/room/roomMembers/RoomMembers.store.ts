@@ -1,5 +1,5 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
-import { RoomMember } from "./types";
+import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
@@ -10,7 +10,7 @@ import {
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
@@ -259,6 +259,24 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
+	const addMemberByEmail = async (email: string): Promise<ExternalMemberCheckStatus | void> => {
+		try {
+			const roomId = getRoomId();
+			await roomApi.roomControllerAddByEmail(roomId, { email });
+			await fetchMembers();
+			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+			if (responseError.code === 404) {
+				return ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND;
+			}
+			if (responseError.code === 400) {
+				return ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL;
+			}
+			return;
+		}
+	};
+
 	const leaveRoom = async () => {
 		isLoading.value = true;
 		try {
@@ -410,6 +428,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	]);
 
 	return {
+		addMemberByEmail,
 		addMembers,
 		isRoomOwner,
 		setAdminMode,

@@ -8,9 +8,10 @@ import {
 } from "./types";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
+import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
@@ -32,6 +33,12 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
+
+	const envConfig = useEnvConfig();
+	const theme = computed(() => envConfig.value.SC_THEME);
+	const isInviteExternalPersonsFeatureEnabled = computed(
+		() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
+	);
 
 	const fetchLinks = async () => {
 		const isRoomDetailsStoreLoaded = room.value !== undefined;
@@ -184,6 +191,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 		editedLink,
 		invitationStep,
 		isInvitationDialogOpen,
+		isInviteExternalPersonsFeatureEnabled,
 		isLoading,
 		invitationTableData,
 		roomInvitationLinks,
