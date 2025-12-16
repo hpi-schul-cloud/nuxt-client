@@ -1,19 +1,6 @@
-import { ToolLaunchRequest } from "../tool-launch-request";
 import { ToolParameter } from "../tool-parameter";
-import {
-	CommonToolMapper,
-	ToolLaunchRequestMethodMapping,
-	ToolParamLocationMapping,
-	ToolParamScopeMapping,
-	ToolParamTypeMapping,
-} from "./common-tool.mapper";
-import {
-	CustomParameterResponse,
-	ToolLaunchRequestResponse,
-	ToolReferenceListResponse,
-	ToolReferenceResponse,
-} from "@/serverApi/v3";
-import { ExternalToolDisplayData } from "@data-external-tool";
+import { ToolParamLocationMapping, ToolParamScopeMapping, ToolParamTypeMapping } from "./common-tool.mapper";
+import { CustomParameterResponse } from "@/serverApi/v3";
 
 export class ExternalToolMapper {
 	static mapToToolParameter(response: CustomParameterResponse): ToolParameter {
@@ -29,43 +16,6 @@ export class ExternalToolMapper {
 			isProtected: response.isProtected,
 			regex: response.regex,
 			regexComment: response.regexComment,
-		};
-
-		return mapped;
-	}
-
-	static mapToExternalToolDisplayDataList(response: ToolReferenceListResponse): ExternalToolDisplayData[] {
-		const mapped: ExternalToolDisplayData[] = response.data.map(
-			(tool): ExternalToolDisplayData => ExternalToolMapper.mapToExternalToolDisplayData(tool)
-		);
-
-		return mapped;
-	}
-
-	static mapToExternalToolDisplayData(response: ToolReferenceResponse): ExternalToolDisplayData {
-		const mapped: ExternalToolDisplayData = {
-			contextExternalToolId: response.contextToolId,
-			name: response.displayName,
-			domain: response.domain,
-			description: response.description,
-			status: CommonToolMapper.mapContextExternalToolConfigurationStatus(response.status),
-			logoUrl: response.logoUrl,
-			thumbnailUrl: response.thumbnailUrl,
-			openInNewTab: response.openInNewTab,
-			isLtiDeepLinkingTool: response.isLtiDeepLinkingTool,
-			ltiDeepLink: response.ltiDeepLink,
-		};
-
-		return mapped;
-	}
-
-	static mapToToolLaunchRequest(response: ToolLaunchRequestResponse): ToolLaunchRequest {
-		const mapped: ToolLaunchRequest = {
-			method: ToolLaunchRequestMethodMapping[response.method],
-			url: response.url,
-			payload: response.payload,
-			openNewTab: response.openNewTab,
-			launchType: response.launchType,
 		};
 
 		return mapped;

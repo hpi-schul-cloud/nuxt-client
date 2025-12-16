@@ -28,14 +28,9 @@ export const useContextExternalToolApi = () => {
 	const createContextExternalToolCall = async (
 		contextExternalTool: ContextExternalToolSave
 	): Promise<ContextExternalTool> => {
-		const contextExternalToolPostParams: ContextExternalToolPostParams =
-			ContextExternalToolMapper.mapToContextExternalToolPostParams(contextExternalTool);
+		const response = await toolApi.toolContextControllerCreateContextExternalTool(contextExternalTool);
 
-		const response: AxiosResponse<ContextExternalToolResponse> =
-			await toolApi.toolContextControllerCreateContextExternalTool(contextExternalToolPostParams);
-
-		const mapped: ContextExternalTool = ContextExternalToolMapper.mapToContextExternalTool(response.data);
-
+		const mapped = ContextExternalToolMapper.mapToContextExternalTool(response.data);
 		return mapped;
 	};
 

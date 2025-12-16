@@ -1,4 +1,4 @@
-import { useBoardPermissions } from "@data-board";
+import { useBoardPermissions } from "./BoardPermissions.composable";
 import { createSharedComposable } from "@vueuse/core";
 import { computed, ComputedRef, Ref, ref } from "vue";
 

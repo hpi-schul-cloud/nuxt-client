@@ -8,7 +8,13 @@ import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useCardStore,
+	useCourseBoardEditMode,
+	useSharedEditMode,
+} from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
@@ -21,7 +27,7 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
-import { useCourseBoardEditMode, useShareBoardLink, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { useShareBoardLink, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
 
@@ -29,12 +35,14 @@ vi.mock("vue-router");
 
 vi.mock("@util-board");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
-const mockedEditMode = vi.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 const mockedUseShareBoardLink = vi.mocked(useShareBoardLink);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
+
+vi.mock("@data-board/edit-mode.composable");
+const mockedEditMode = vi.mocked(useCourseBoardEditMode);
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("@data-board/BoardPermissions.composable");
 const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);

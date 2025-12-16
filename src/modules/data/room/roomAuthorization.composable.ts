@@ -1,6 +1,6 @@
+import { useRoomDetailsStore } from "./RoomDetails.store";
 import { Permission } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
-import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 

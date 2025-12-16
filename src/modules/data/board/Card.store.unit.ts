@@ -18,11 +18,11 @@ import {
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
 import { useNotificationStore } from "@data-app";
-import { CreateElementRequestPayload, useCardStore, useSocketConnection } from "@data-board";
+import { CreateElementRequestPayload, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
@@ -38,8 +38,10 @@ vi.mock("./cardActions/cardRestApi.composable");
 const mockedUseCardRestApi = vi.mocked(useCardRestApi);
 
 vi.mock("@util-board");
-const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+
+vi.mock("@data-board/edit-mode.composable");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);

@@ -49,15 +49,6 @@ vi.mocked(useBoardFeatures).mockImplementation(() => ({
 	isFeatureEnabled: vi.fn().mockReturnValue(true),
 }));
 
-vi.mock("@feature-collabora/composables/add-collabora-file.composable");
-const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
-const openCollaboraFileDialogMock = vi.fn();
-mockedUseAddCollaboraFile.mockReturnValue({
-	isCollaboraFileDialogOpen: ref(false),
-	openCollaboraFileDialog: openCollaboraFileDialogMock,
-	closeCollaboraFileDialog: vi.fn(),
-});
-
 describe("ElementTypeSelection Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -691,7 +682,7 @@ describe("ElementTypeSelection Composable", () => {
 				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file-with-collabora");
 				option?.action();
 
-				expect(openCollaboraFileDialogMock).toHaveBeenCalledTimes(1);
+				expect(useAddCollaboraFile().isCollaboraFileDialogOpen.value).toBe(true);
 			});
 		});
 	});

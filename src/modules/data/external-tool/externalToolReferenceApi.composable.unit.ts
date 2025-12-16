@@ -44,8 +44,7 @@ describe("externalToolReferenceApi.composable", () => {
 		it("should return an display data", async () => {
 			const { displayData } = setup();
 
-			const result: ExternalToolDisplayData =
-				await useExternalToolReferenceApi().fetchDisplayDataCall("contextExternalToolId");
+			const result = await useExternalToolReferenceApi().fetchDisplayDataCall("contextExternalToolId");
 
 			expect(result).toEqual<ExternalToolDisplayData>({
 				contextExternalToolId: displayData.contextToolId,

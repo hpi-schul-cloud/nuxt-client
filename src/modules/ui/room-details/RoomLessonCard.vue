@@ -69,6 +69,7 @@
 </template>
 
 <script setup lang="ts">
+import RoomDotMenu from "./RoomDotMenu.vue";
 import { LessonData } from "./types";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { RoomData } from "@/store/types/room";
@@ -80,7 +81,6 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
-import { RoomDotMenu } from "@ui-room-details";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
