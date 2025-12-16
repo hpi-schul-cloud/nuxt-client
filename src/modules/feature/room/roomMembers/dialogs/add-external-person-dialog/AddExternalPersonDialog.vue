@@ -93,10 +93,6 @@ const checkForErrorsAndFocus = async () => {
 };
 
 const onUpdateEmail = async (newEmail: string) => {
-	if (await checkForErrorsAndFocus()) {
-		return;
-	}
-
 	email.value = newEmail;
 
 	const status = await roomMembersStore.addMemberByEmail(newEmail);

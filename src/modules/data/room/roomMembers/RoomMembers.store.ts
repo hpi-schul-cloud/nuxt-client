@@ -3,6 +3,7 @@ import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
+	CreateOrUpdateRegistrationBodyParams,
 	RegistrationApiFactory,
 	RoleName,
 	RoomApiFactory,
@@ -254,12 +255,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		lastName,
 		email,
 		roomId,
-	}: {
-		firstName: string;
-		lastName: string;
-		email: string;
-		roomId?: string;
-	}) =>
+	}: Omit<CreateOrUpdateRegistrationBodyParams, "roomId"> & { roomId?: string }) =>
 		registrationApi.registrationControllerCreateOrUpdateRegistration({
 			firstName,
 			lastName,
