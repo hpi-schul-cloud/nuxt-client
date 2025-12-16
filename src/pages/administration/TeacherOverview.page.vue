@@ -100,7 +100,6 @@ import ProgressModal from "@/components/molecules/ProgressModal";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -132,7 +131,6 @@ export default {
 		ProgressModal,
 		DataFilter,
 	},
-	mixins: [UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
@@ -285,12 +283,15 @@ export default {
 		showConsent() {
 			return useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
+		userPermissions() {
+			return useAppStore().userPermissions;
+		},
 		filteredActions() {
 			let editedActions = this.tableActions;
 
 			// filter actions by permissions
 			editedActions = this.tableActions.filter((action) =>
-				action.permission ? this.$_userHasPermission(action.permission) : true
+				action.permission ? this.userHasPermission(action.permission) : true
 			);
 
 			// filters out the QR bulk action is user is not an admin
@@ -333,7 +334,7 @@ export default {
 			return editedColumns;
 		},
 		fab() {
-			if (this.schoolIsExternallyManaged || !this.$_userHasPermission(Permission.TeacherCreate)) {
+			if (this.schoolIsExternallyManaged || !this.userHasPermission(Permission.TeacherCreate)) {
 				return null;
 			}
 
@@ -384,6 +385,14 @@ export default {
 		document.title = buildPageTitle(this.$t("pages.administration.teachers.index.title"));
 	},
 	methods: {
+		userHasPermission(permission) {
+			if (!permission) {
+				throw new Error("parameter permission is missing");
+			}
+			return typeof permission === "string"
+				? !permission || this.userPermissions.includes(permission)
+				: !permission() || permission(this.userPermissions);
+		},
 		find() {
 			const query = {
 				$limit: this.limit,
