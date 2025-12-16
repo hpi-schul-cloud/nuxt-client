@@ -2,6 +2,7 @@ import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useSharedEditMode } from "../edit-mode.composable";
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
@@ -36,7 +37,6 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 

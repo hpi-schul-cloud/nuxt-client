@@ -24,9 +24,7 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useMediaBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { useBoardFocusHandler } from "@data-board";
+import { useBoardFocusHandler, useMediaBoardEditMode } from "@data-board";
 import { BoardAnyTitleInput, BoardColumnInteractionHandler } from "@feature-board";
 import { ref, toRef } from "vue";
 

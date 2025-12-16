@@ -76,8 +76,6 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useMediaBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	BoardLayout,
 	ContentElementType,
@@ -87,6 +85,7 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { useMediaBoardEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
