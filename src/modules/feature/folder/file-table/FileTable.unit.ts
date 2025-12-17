@@ -34,6 +34,7 @@ describe("FileTable", () => {
 			props: {
 				isLoading: props.isLoading,
 				isEmpty: props.isEmpty,
+				fileFetchingError: false,
 				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,

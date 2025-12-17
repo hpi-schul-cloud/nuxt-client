@@ -21,6 +21,7 @@
 		<FileTable
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
+			:file-fetching-error="fileFetchingError"
 			:has-edit-permission="hasEditPermission"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
@@ -150,6 +151,7 @@ const uploadProgress = ref({
 const areUploadStatsVisible = ref(false);
 const isLoading = ref(true);
 const isEmpty = computed(() => uploadedFileRecords.value.length === 0);
+const fileFetchingError = ref<boolean>(false);
 const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
@@ -287,7 +289,7 @@ onMounted(async () => {
 	try {
 		await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	} catch {
-		// Ignore errors fetching files
+		fileFetchingError.value = true;
 	}
 	if (!boardStore.board || boardStore.board.id !== parent.value.id) {
 		await boardStore.fetchBoardRequest({ boardId: parent.value.id });
