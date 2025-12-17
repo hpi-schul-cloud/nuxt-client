@@ -26,7 +26,7 @@
 					:label="t('pages.common.tools.configureVideoconferenceDialog.text.waitingRoom')"
 					:hide-details="true"
 				/>
-				<InfoAlert v-if="!localOptions.moderatorMustApproveJoinRequests" class="mx-2 mt-n2">{{
+				<InfoAlert v-if="showInfoAlert" class="mx-2 mt-n2">{{
 					t("pages.common.tools.configureVideoconferenceDialog.info.waitingRoom")
 				}}</InfoAlert>
 				<VCheckbox
@@ -58,6 +58,7 @@
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { VideoConferenceOptions } from "@/store/types/video-conference";
+import { BoardContextType } from "@/types/board/BoardContext";
 import { InfoAlert } from "@ui-alert";
 import { computed, ComputedRef, ModelRef, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -67,6 +68,11 @@ const props = defineProps({
 	options: {
 		type: Object as PropType<VideoConferenceOptions>,
 		required: true,
+	},
+	boardParentType: {
+		type: String as PropType<BoardContextType | undefined>,
+		required: false,
+		default: undefined,
 	},
 });
 
@@ -83,4 +89,15 @@ const { t } = useI18n();
 defineEmits(["close", "start-video-conference"]);
 
 const localOptions: ComputedRef<VideoConferenceOptions> = computed(() => props.options);
+
+const showInfoAlert = computed(() => {
+	if (props.boardParentType === BoardContextType.Course) {
+		// courses can never have external participants - so the info alert is not needed
+		return false;
+	}
+
+	const isWaitingRoomOptionDisabled = localOptions.value.moderatorMustApproveJoinRequests === false;
+
+	return isWaitingRoomOptionDisabled;
+});
 </script>

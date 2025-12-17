@@ -70,6 +70,7 @@
 			</VCard>
 		</VDialog>
 		<VideoConferenceConfigurationDialog
+			:board-parent-type="boardParentType"
 			:is-open="isConfigurationDialogOpen"
 			:options="videoConferenceInfo.options"
 			@close="onCloseConfigurationDialog"
