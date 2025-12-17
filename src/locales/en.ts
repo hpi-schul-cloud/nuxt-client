@@ -1435,6 +1435,8 @@ export default {
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
 	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"External persons can only participate in the video conference if the waiting room function has been activated.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Create video conference",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderation rights for all participants",
@@ -1941,7 +1943,7 @@ export default {
 	"pages.userMigration.title": "Relocation of the login system",
 	"pages.videoConference.action.refresh": "Update status",
 	"pages.videoConference.info.noPermission":
-		"The video conference hasn't started yet or you don't have permission to join it.",
+		"Participation in the video conference is not possible because the waiting room has not been activated.",
 	"pages.videoConference.info.notStarted": "The video conference hasn't started yet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"The element is no longer available. Please contact the teacher.",
