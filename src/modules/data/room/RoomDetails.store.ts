@@ -46,12 +46,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		}
 	};
 
-	const fetchRoomAndBoards = async (id: string) => {
-		const result = await fetchRoom(id, { loadBoards: true });
-		if (result?.isLocked) {
-			return { isLocked: true, lockedRoomName: result.lockedRoomName };
-		}
-	};
+	const fetchRoomAndBoards = async (id: string) => await fetchRoom(id, { loadBoards: true });
 
 	const fetchBoardsOfRoom = async (roomId: string) => {
 		const { result, error } = await execute(

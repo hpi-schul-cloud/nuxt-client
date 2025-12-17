@@ -37,8 +37,11 @@ watch(
 	async (newRoomId) => {
 		isLoading.value = true;
 		const result = await fetchRoomAndBoards(newRoomId as string);
-		isLocked.value = !!result?.isLocked;
-		lockedRoomName.value = result?.lockedRoomName || "";
+		if (result?.isLocked) {
+			isLocked.value = result.isLocked;
+			lockedRoomName.value = result.lockedRoomName;
+		}
+
 		isLoading.value = false;
 	},
 	{ immediate: true }
