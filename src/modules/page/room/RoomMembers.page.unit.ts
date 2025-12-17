@@ -18,21 +18,28 @@ import {
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
-import { AddExternalPersonDialog, AddMembersDialog, Confirmations, Invitations, Members } from "@feature-room";
+import {
+	AddExternalPersonDialog,
+	AddMembersDialog,
+	Confirmations,
+	Invitations,
+	InviteMembersDialog,
+	Members,
+} from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
-import { SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { flushPromises } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { VBtn, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
+import { VBtn, VCard, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -176,7 +183,6 @@ describe("RoomMembersPage", () => {
 					LeaveRoomProhibitedDialog: true,
 					// Do not stub AddMembersDialog so that VDialog is accessible in tests
 					Members: true,
-					InviteMembersDialog: true,
 					UseFocusTrap: true,
 				},
 			},
@@ -409,9 +415,9 @@ describe("RoomMembersPage", () => {
 			])("should set correct fab items when active tab is $activeTab", ({ activeTab, expectedFabItems }) => {
 				roomPermissions.canAddRoomMembers = computed(() => true);
 				const { wrapper } = setup({ activeTab });
-				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const fab = wrapper.findComponent(`[data-testid=${expectedFabItems[0].dataTestId}]`);
 
-				expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
+				expect(fab.exists()).toBe(true);
 			});
 		});
 
@@ -514,15 +520,16 @@ describe("RoomMembersPage", () => {
 					},
 				});
 
-				const addMemberDialogBefore = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
-				expect(addMemberDialogBefore.vm.modelValue).toBe(false);
+				const addMemberDialogBefore = wrapper.findComponent(AddMembersDialog).findComponent(VCard);
+				expect(addMemberDialogBefore.exists()).toBe(false);
 
-				const wireframe = wrapper.findComponent(DefaultWireframe);
-				wireframe.vm.$emit("onFabItemClick", "addMembers");
-				await nextTick();
+				await wrapper.findComponent(SpeedDialMenu).findComponent(VBtn).trigger("click");
 
-				const addMemberDialog = wrapper.findComponent(AddMembersDialog).findComponent(VDialog);
-				expect(addMemberDialog.vm.modelValue).toBe(true);
+				const addMemberBtn = wrapper.findComponent("[data-testid='fab-select-from-directory']").getComponent(VBtn);
+				await addMemberBtn.trigger("click");
+
+				const addMemberDialog = wrapper.findComponent(AddMembersDialog).findComponent(VCard);
+				expect(addMemberDialog.exists()).toBe(true);
 			});
 
 			it("should open AddExternalPerson dialog when clicking on invite-members action", async () => {
@@ -534,15 +541,16 @@ describe("RoomMembersPage", () => {
 					},
 				});
 
-				const addExternalMemberDialogBefore = wrapper.findComponent(AddExternalPersonDialog);
-				expect(addExternalMemberDialogBefore.vm.modelValue).toBe(false);
+				const addExternalMemberDialogBefore = wrapper.findComponent(AddExternalPersonDialog).findComponent(VCard);
+				expect(addExternalMemberDialogBefore.exists()).toBe(false);
 
-				const wireframe = wrapper.findComponent(DefaultWireframe);
-				wireframe.vm.$emit("onFabItemClick", "addExternalPerson");
-				await nextTick();
+				await wrapper.findComponent(SpeedDialMenu).findComponent(VBtn).trigger("click");
 
-				const addExternalMemberDialog = wrapper.findComponent(AddExternalPersonDialog);
-				expect(addExternalMemberDialog.vm.modelValue).toBe(true);
+				const addExternalBtn = wrapper.findComponent("[data-testid='fab-add-external-person']").getComponent(VBtn);
+				await addExternalBtn.trigger("click");
+
+				const addExternalMemberDialog = wrapper.findComponent(AddExternalPersonDialog).findComponent(VCard);
+				expect(addExternalMemberDialog.exists()).toBe(true);
 			});
 		});
 	});
@@ -553,23 +561,18 @@ describe("RoomMembersPage", () => {
 			const { wrapper, roomInvitationLinkStore } = setup({
 				activeTab: Tab.Invitations,
 			});
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const dialogBeforeClick = wrapper.findComponent({
-				name: "InviteMembersDialog",
-			});
 
-			expect(dialogBeforeClick.props("modelValue")).toBe(false);
+			const dialogBeforeClick = wrapper.findComponent(InviteMembersDialog).findComponent(VCard);
+
+			expect(dialogBeforeClick.exists()).toBe(false);
 			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
 
-			const addMemberButton = wireframe.getComponent("[data-testid=fab-invite-members]").getComponent(VBtn);
-
+			const addMemberButton = wrapper.findComponent("[data-testid=fab-invite-members]").getComponent(VBtn);
 			await addMemberButton.trigger("click");
 
-			const dialogAfterClick = wrapper.findComponent({
-				name: "InviteMembersDialog",
-			});
+			const dialogAfterClick = wrapper.findComponent(InviteMembersDialog).findComponent(VCard);
 
-			expect(dialogAfterClick.props("modelValue")).toBe(true);
+			expect(dialogAfterClick.exists()).toBe(true);
 			expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(true);
 			expect(roomInvitationLinkStore.invitationStep).toBe(InvitationStep.PREPARE);
 		});

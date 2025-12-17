@@ -347,6 +347,7 @@ const fabItems = computed<FabAction[] | undefined>(() => {
 				icon: mdiPlus,
 				label: t("pages.rooms.members.inviteMember.step.prepare.title"),
 				dataTestId: "fab-invite-members",
+				clickHandler: onFabClick,
 			},
 		];
 	}
