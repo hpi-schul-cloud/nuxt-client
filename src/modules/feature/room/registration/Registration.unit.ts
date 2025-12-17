@@ -6,10 +6,13 @@ import { LanguageType } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRegistration } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
 import { VStepper, VStepperItem } from "vuetify/components";
 
 vi.mock("vue-i18n", () => ({
@@ -17,6 +20,10 @@ vi.mock("vue-i18n", () => ({
 		t: vi.fn().mockImplementation((key) => key),
 	}),
 }));
+
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-room/registration/registration.composable");
 const useRegistrationMock = vi.mocked(useRegistration);
@@ -29,6 +36,7 @@ describe("Registration.vue", () => {
 	const setup = (
 		options?: Partial<{
 			password: string;
+			queryParams?: string;
 		}>
 	) => {
 		useRegistrationMock.mockReturnValue({
@@ -44,6 +52,14 @@ describe("Registration.vue", () => {
 			createAccount: vi.fn(),
 			registrationSecret: ref<string>(""),
 			userData: ref({ firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" }),
+		});
+
+		const router = createMock<Router>({});
+		useRouterMock.mockReturnValue(router);
+		useRouteMock.mockReturnValue({
+			query: {
+				"registration-secret": options?.queryParams ?? "secret-value",
+			},
 		});
 
 		const wrapper = mount(Registration, {
