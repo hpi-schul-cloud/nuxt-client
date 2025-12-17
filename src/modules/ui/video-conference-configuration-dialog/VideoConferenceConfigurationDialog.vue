@@ -7,8 +7,8 @@
 		@click:outside="$emit('close')"
 	>
 		<VCard ref="dialog-content" :ripple="false">
-			<VCardTitle class="mx-4 pb-0">
-				<h2 class="mt-3" data-testid="video-conference-config-dialog-title">
+			<VCardTitle class="mx-3 pb-0">
+				<h2 class="mt-4" data-testid="video-conference-config-dialog-title">
 					{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
 				</h2>
 			</VCardTitle>
