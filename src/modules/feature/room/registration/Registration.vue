@@ -67,10 +67,12 @@ import Password from "./steps/Password.vue";
 import Success from "./steps/Success.vue";
 import Welcome from "./steps/Welcome.vue";
 import { LanguageType } from "@/serverApi/v3";
+import { isNotNullish } from "@/utils/typeScript";
 import { useEnvConfig } from "@data-env";
 import { useRegistration } from "@data-room";
 import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { VForm } from "vuetify/components";
 
@@ -85,6 +87,9 @@ enum RegistrationSteps {
 const { t } = useI18n();
 const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
+const router = useRouter();
+const route = useRoute();
+const queryParamName = "registration-secret";
 
 const {
 	createAccount,
@@ -93,11 +98,13 @@ const {
 	isPrivacyPolicyAccepted,
 	isTermsOfUseAccepted,
 	password,
+	registrationSecret,
 	selectedLanguage,
 	setSelectedLanguage,
 	fullName,
 	userData,
 } = useRegistration();
+
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");
 
@@ -146,6 +153,13 @@ const onContinue = async () => {
 };
 
 onMounted(() => {
+	const queryValue = route.query[queryParamName] as string | undefined;
+	if (!isNotNullish(queryValue) || queryValue.trim() === "") {
+		router.replace("/");
+		return;
+	}
+	registrationSecret.value = queryValue;
+
 	initializeLanguage();
 	fetchUserData();
 });

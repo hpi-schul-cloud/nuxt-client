@@ -42,7 +42,8 @@ describe("Registration.vue", () => {
 			fullName: ref("Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
-			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
+			registrationSecret: ref<string>(""),
+			userData: ref({ firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" }),
 		});
 
 		const wrapper = mount(Registration, {
