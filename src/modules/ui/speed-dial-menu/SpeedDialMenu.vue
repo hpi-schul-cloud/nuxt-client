@@ -1,7 +1,7 @@
 <template>
 	<VFab
 		:absolute="!mdAndDown"
-		class="fab-size-transition"
+		class="fab-size-transition z-index-100"
 		:class="{
 			'fab-default-width': !isCollapsed,
 			'positioning-lg': !mdAndDown,
@@ -100,5 +100,9 @@ watchThrottled(
 
 .fab-default-width :deep(.v-btn) {
 	width: 100%;
+}
+
+.z-index-100 {
+	z-index: 100;
 }
 </style>

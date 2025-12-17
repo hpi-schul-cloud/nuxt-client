@@ -2,7 +2,7 @@
 <template>
 	<div class="d-flex justify-end align-center pr-5">
 		<VBtn
-			class="mr-2 bg-surface"
+			class="mr-2 bg-surface z-index-100"
 			elevation="4"
 			:data-testid="action.dataTestId"
 			:href="action.href"
@@ -15,6 +15,7 @@
 		</VBtn>
 		<VBtn
 			color="primary"
+			class="z-index-100"
 			elevation="4"
 			:data-testid="action.dataTestId"
 			:icon="action.icon"
@@ -33,3 +34,9 @@ defineProps<{
 	action: FabAction;
 }>();
 </script>
+
+<style scoped>
+.z-index-100 {
+	z-index: 100;
+}
+</style>
