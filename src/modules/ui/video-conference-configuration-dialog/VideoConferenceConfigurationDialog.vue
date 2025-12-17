@@ -7,13 +7,13 @@
 		@click:outside="$emit('close')"
 	>
 		<VCard ref="dialog-content" :ripple="false">
-			<template #title>
-				<h2 class="my-2" data-testid="video-conference-config-dialog-title">
+			<VCardTitle class="mx-4 pb-0">
+				<h2 class="mt-3" data-testid="video-conference-config-dialog-title">
 					{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
 				</h2>
-			</template>
+			</VCardTitle>
 
-			<template #text>
+			<VCardText class="pt-0">
 				<VCheckbox
 					v-model="localOptions.everyAttendeeJoinsMuted"
 					data-testid="every-attendee-joins-muted"
@@ -35,26 +35,22 @@
 					:label="t('pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission')"
 					:hide-details="true"
 				/>
-			</template>
+			</VCardText>
 
-			<template #actions>
-				<VSpacer />
-				<VSpacer />
-				<div class="mr-4 mb-3">
-					<VBtn data-testid="dialog-cancel" variant="text" @click="$emit('close')">
-						{{ t("common.actions.cancel") }}
-					</VBtn>
-					<VBtn
-						data-testid="dialog-create"
-						class="px-6"
-						color="primary"
-						variant="flat"
-						@click="$emit('start-video-conference')"
-					>
-						{{ t("common.actions.create") }}
-					</VBtn>
-				</div>
-			</template>
+			<VCardActions class="mr-4 mb-3">
+				<VBtn data-testid="dialog-cancel" variant="text" @click="$emit('close')">
+					{{ t("common.actions.cancel") }}
+				</VBtn>
+				<VBtn
+					data-testid="dialog-create"
+					class="px-6"
+					color="primary"
+					variant="flat"
+					@click="$emit('start-video-conference')"
+				>
+					{{ t("common.actions.create") }}
+				</VBtn>
+			</VCardActions>
 		</VCard>
 	</VDialog>
 </template>
