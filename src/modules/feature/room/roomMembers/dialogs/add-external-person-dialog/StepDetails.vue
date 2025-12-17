@@ -33,7 +33,10 @@
 					class="mb-4"
 					:label="t('pages.rooms.members.dialog.addExternalPerson.label.firstName')"
 					data-testid="add-external-person-firstname"
-					:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error'))]"
+					:rules="[
+						isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.firstName.error')),
+						hasNoOpeningTagFollowedByString(t('common.validation.containsOpeningTag').replace(/\.$/, '')),
+					]"
 					@keydown.enter.prevent="onConfirmDetails"
 				/>
 				<VTextField
@@ -41,7 +44,10 @@
 					v-model="lastName"
 					:label="t('pages.rooms.members.dialog.addExternalPerson.label.lastName')"
 					data-testid="add-external-person-lastname"
-					:rules="[isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.lastName.error'))]"
+					:rules="[
+						isNonEmptyString(t('pages.rooms.members.dialog.addExternalPerson.label.lastName.error')),
+						hasNoOpeningTagFollowedByString(t('common.validation.containsOpeningTag').replace(/\.$/, '')),
+					]"
 					@keydown.enter.prevent="onConfirmDetails"
 				/>
 			</VForm>
@@ -73,7 +79,7 @@
 <script setup lang="ts">
 import { getFirstInvalidElement } from "./utils/form";
 import { InfoAlert } from "@ui-alert";
-import { isNonEmptyString } from "@util-validators";
+import { hasNoOpeningTagFollowedByString, isNonEmptyString } from "@util-validators";
 import { onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 

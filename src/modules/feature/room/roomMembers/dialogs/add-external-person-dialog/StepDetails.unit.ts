@@ -87,44 +87,70 @@ describe("StepDetails", () => {
 	});
 
 	describe("form validation", () => {
-		describe("when first name is empty", () => {
-			it("should show validation error for first name", async () => {
-				const { firstNameInput, lastNameInput, clickConfirmButton } = setup();
+		describe("when first name is empty", async () => {
+			const { wrapper, firstNameInput, lastNameInput, clickConfirmButton } = setup();
 
-				await lastNameInput.setValue("Doe");
-				await clickConfirmButton();
+			await lastNameInput.setValue("Doe");
+			await clickConfirmButton();
+			const emitted = wrapper.emitted();
 
+			it("should show validation error for first name", () => {
 				expect(firstNameInput.text()).toContain("pages.rooms.members.dialog.addExternalPerson.label.firstName.error");
 			});
 
-			it("should not emit update:details event", async () => {
-				const { wrapper, lastNameInput, clickConfirmButton } = setup();
-
-				await lastNameInput.setValue("Doe");
-				await clickConfirmButton();
-				const emitted = wrapper.emitted();
-
+			it("should not emit update:details event", () => {
 				expect(emitted).not.toHaveProperty("update:details");
 			});
 		});
 
-		describe("when last name is empty", () => {
-			it("should show validation error for last name", async () => {
-				const { firstNameInput, lastNameInput, clickConfirmButton } = setup();
+		describe("when first name contains html", async () => {
+			const { firstNameInput, lastNameInput, clickConfirmButton } = setup();
 
-				await firstNameInput.setValue("John");
-				await clickConfirmButton();
+			await firstNameInput.setValue("John<script>alert('xss')</script>");
+			await lastNameInput.setValue("Doe");
+			await clickConfirmButton();
+			const emitted = wrapper.emitted();
 
-				expect(lastNameInput.text()).toContain("pages.rooms.members.dialog.addExternalPerson.label.lastName.error");
+			it("should show validation error for first name", () => {
+				expect(firstNameInput.vm.errorMessages).toHaveLength(1);
+				expect(firstNameInput.vm.errorMessages?.[0]).toContain("common.validation.containsOpeningTag");
 			});
 
 			it("should not emit update:details event", async () => {
-				const { wrapper, firstNameInput, clickConfirmButton } = setup();
+				expect(emitted).not.toHaveProperty("update:details");
+			});
+		});
 
-				await firstNameInput.setValue("John");
-				await clickConfirmButton();
-				const emitted = wrapper.emitted();
+		describe("when last name is empty", async () => {
+			const { firstNameInput, lastNameInput, clickConfirmButton } = setup();
 
+			await firstNameInput.setValue("John");
+			await clickConfirmButton();
+			const emitted = wrapper.emitted();
+
+			it("should show validation error for last name", () => {
+				expect(lastNameInput.text()).toContain("pages.rooms.members.dialog.addExternalPerson.label.lastName.error");
+			});
+
+			it("should not emit update:details event", () => {
+				expect(emitted).not.toHaveProperty("update:details");
+			});
+		});
+
+		describe("when last name contains html", async () => {
+			const { firstNameInput, lastNameInput, clickConfirmButton } = setup();
+
+			await firstNameInput.setValue("John");
+			await lastNameInput.setValue("Doe<script>alert('xss')</script>");
+			await clickConfirmButton();
+			const emitted = wrapper.emitted();
+
+			it("should show validation error for last name", () => {
+				expect(lastNameInput.vm.errorMessages).toHaveLength(1);
+				expect(lastNameInput.vm.errorMessages?.[0]).toContain("common.validation.containsOpeningTag");
+			});
+
+			it("should not emit update:details event", async () => {
 				expect(emitted).not.toHaveProperty("update:details");
 			});
 		});
@@ -145,6 +171,29 @@ describe("StepDetails", () => {
 				await clickConfirmButton();
 				const emitted = wrapper.emitted();
 
+				expect(emitted).not.toHaveProperty("update:details");
+			});
+		});
+
+		describe("when both names contains html", async () => {
+			const { firstNameInput, lastNameInput, clickConfirmButton } = setup();
+
+			await firstNameInput.setValue("John<script>alert('xss')</script>");
+			await lastNameInput.setValue("Doe<script>alert('xss')</script>");
+			await clickConfirmButton();
+			const emitted = wrapper.emitted();
+
+			it("should show validation error for first name", () => {
+				expect(firstNameInput.vm.errorMessages).toHaveLength(1);
+				expect(firstNameInput.vm.errorMessages?.[0]).toContain("common.validation.containsOpeningTag");
+			});
+
+			it("should show validation error for last name", () => {
+				expect(lastNameInput.vm.errorMessages).toHaveLength(1);
+				expect(lastNameInput.vm.errorMessages?.[0]).toContain("common.validation.containsOpeningTag");
+			});
+
+			it("should not emit update:details event", async () => {
 				expect(emitted).not.toHaveProperty("update:details");
 			});
 		});
