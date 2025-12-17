@@ -4,7 +4,6 @@ import { BusinessError } from "./types/commons";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
-	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	ToolApiFactory,
 	ToolApiInterface,
@@ -42,7 +41,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		return this.schoolExternalTools;
 	}
 
-	get getSchoolExternalToolConfigurationTemplates(): SchoolExternalToolConfigurationTemplate[] {
+	get getSchoolExternalToolConfigurationTemplates() {
 		return this.schoolExternalToolConfigurationTemplates;
 	}
 
@@ -106,10 +105,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		try {
 			const resp = await this.toolApi.toolSchoolControllerGetSchoolExternalTools(schoolId);
 
-			const schoolExternalTools: SchoolExternalTool[] =
-				SchoolExternalToolMapper.mapSchoolExternalToolSearchListResponse(resp.data);
-
-			this.setSchoolExternalTools(schoolExternalTools);
+			this.setSchoolExternalTools(resp.data.data);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
@@ -124,7 +120,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 	}
 
 	@Action
-	async loadSchoolExternalTool(schoolExternalToolId: string): Promise<SchoolExternalTool | undefined> {
+	async loadSchoolExternalTool(schoolExternalToolId: string) {
 		this.setLoading(true);
 		this.resetBusinessError();
 
@@ -132,11 +128,9 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			const response: AxiosResponse<SchoolExternalToolResponse> =
 				await this.toolApi.toolSchoolControllerGetSchoolExternalTool(schoolExternalToolId);
 
-			const mapped: SchoolExternalTool = SchoolExternalToolMapper.mapToSchoolExternalTool(response.data);
-
 			this.setLoading(false);
 
-			return mapped;
+			return response.data;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
@@ -180,8 +174,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			const availableTools: AxiosResponse<SchoolExternalToolConfigurationTemplateListResponse> =
 				await this.toolApi.toolConfigurationControllerGetAvailableToolsForSchool(schoolId);
 
-			const mapped: SchoolExternalToolConfigurationTemplate[] =
-				SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplateList(availableTools.data);
+			const mapped = SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplateList(availableTools.data);
 
 			this.setSchoolExternalToolConfigurationTemplates(mapped);
 		} catch (error: unknown) {
@@ -206,8 +199,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			const configTemplate: AxiosResponse<SchoolExternalToolConfigurationTemplateResponse> =
 				await this.toolApi.toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId);
 
-			const mapped: SchoolExternalToolConfigurationTemplate =
-				SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplate(configTemplate.data);
+			const mapped = SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplate(configTemplate.data);
 
 			this.setSchoolExternalToolConfigurationTemplates([mapped]);
 		} catch (error: unknown) {
@@ -229,10 +221,7 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		this.resetBusinessError();
 
 		try {
-			const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-				SchoolExternalToolMapper.mapToSchoolExternalToolPostParams(schoolExternalTool);
-
-			await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(schoolExternalToolPostParams);
+			await this.toolApi.toolSchoolControllerCreateSchoolExternalTool(schoolExternalTool);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
@@ -255,12 +244,9 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		this.resetBusinessError();
 
 		try {
-			const schoolExternalToolPostParams: SchoolExternalToolPostParams =
-				SchoolExternalToolMapper.mapToSchoolExternalToolPostParams(params.schoolExternalTool);
-
 			await this.toolApi.toolSchoolControllerUpdateSchoolExternalTool(
 				params.schoolExternalToolId,
-				schoolExternalToolPostParams
+				params.schoolExternalTool
 			);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);

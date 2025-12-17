@@ -179,7 +179,7 @@ export default {
 	"common.tool.context.type.courses": "Course tools",
 	"common.tool.context.type.boardElements": "Boards",
 	"common.tool.context.type.mediaShelves": "Media shelf",
-	"common.validation.email": "Please enter a valid e-mail address",
+	"common.validation.email": "Please enter a valid email address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
 	"common.validation.regex": "The input must conform to the following rule: {comment}.",
@@ -1436,6 +1436,8 @@ export default {
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
 	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"External persons can only participate in the video conference if the waiting room function has been activated.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Create video conference",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderation rights for all participants",
@@ -1624,6 +1626,11 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.learningContent.emptyState": "Currently there is no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
+	"pages.rooms.members.fab.addExternalPerson": "Add external person",
+	"pages.rooms.members.fab.selectFromDirectory": "Select from directory",
+	"pages.rooms.members.dialog.addExternalPerson.text":
+		"Please enter the email address of the external person to be added to the room.",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Add to room",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.create.course": "Create course",
 	"pages.rooms.fab.add.course": "New course",
@@ -1939,7 +1946,7 @@ export default {
 	"pages.userMigration.title": "Relocation of the login system",
 	"pages.videoConference.action.refresh": "Update status",
 	"pages.videoConference.info.noPermission":
-		"The video conference hasn't started yet or you don't have permission to join it.",
+		"Participation in the video conference is not possible because the waiting room has not been activated.",
 	"pages.videoConference.info.notStarted": "The video conference hasn't started yet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"The element is no longer available. Please contact the teacher.",

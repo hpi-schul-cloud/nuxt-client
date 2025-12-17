@@ -70,6 +70,7 @@
 			</VCard>
 		</VDialog>
 		<VideoConferenceConfigurationDialog
+			:board-parent-type="boardParentType"
 			:is-open="isConfigurationDialogOpen"
 			:options="videoConferenceInfo.options"
 			@close="onCloseConfigurationDialog"
@@ -82,8 +83,6 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@/serverApi/v3";
 import { useAppStoreRefs } from "@data-app";
 import {
@@ -93,7 +92,7 @@ import {
 	useContentElementState,
 	useSharedBoardPageInformation,
 } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, onMounted, PropType, ref, toRef } from "vue";
@@ -140,7 +139,7 @@ const preFetchedUrl = ref<string | undefined>(undefined);
 if (isVideoConferenceEnabled.value) {
 	onMounted(async () => {
 		await fetchVideoConferenceInfo();
-		if (isRunning.value) {
+		if (isRunning.value && (canStart.value || canJoin.value)) {
 			preFetchedUrl.value = await joinVideoConference();
 		}
 	});
@@ -153,7 +152,7 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const route = useRoute();
 const boardId = route.params.id;
 
-const { isStudent, isTeacher, isExternalPerson, userRoles } = useAppStoreRefs();
+const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
 const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
@@ -168,9 +167,7 @@ const isErrorDialogOpen = computed(() => !!error.value);
 const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
 
 const canJoin = computed(
-	() =>
-		(isStudent.value || isTeacher.value) &&
-		(!isExternalPerson.value || userRoles.value?.length > 1 || isWaitingRoomActive.value)
+	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
 );
 
 const canStart = computed(() => hasManageVideoConferencePermission.value);

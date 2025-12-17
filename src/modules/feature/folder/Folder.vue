@@ -45,15 +45,11 @@ import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardApi } from "@/modules/data/board/BoardApi.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useBoardPermissions, useSharedBoardPageInformation } from "@data-board";
+import { useBoardApi, useBoardPermissions, useBoardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";

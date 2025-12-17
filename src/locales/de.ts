@@ -186,7 +186,7 @@ export default {
 	"common.tool.context.type.courses": "Kurs-Tools",
 	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
-	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
+	"common.validation.email": "Bitte eine gültige E-Mail-Adresse eingeben",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",
@@ -1461,6 +1461,8 @@ export default {
 	"pages.administration.teachers.new.success": "Lehrkraft erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Externe Personen können nur dann an der Videokonferenz teilnehmen, wenn die Funktion Warteraum aktiviert wurde.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Videokonferenz erstellen",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderationsrechte für alle Teilnehmenden",
@@ -1653,6 +1655,11 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.learningContent.emptyState": "Aktuell gibt es keine Lerninhalte in diesem Kurs",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
+	"pages.rooms.members.fab.addExternalPerson": "Externe Person hinzufügen",
+	"pages.rooms.members.fab.selectFromDirectory": "Aus Verzeichnis auswählen",
+	"pages.rooms.members.dialog.addExternalPerson.text":
+		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Zum Raum hinzufügen",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.create.course": "Kurs erstellen",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
@@ -1975,7 +1982,7 @@ export default {
 	"pages.userMigration.title": "Umzug des Anmeldesystems",
 	"pages.videoConference.action.refresh": "Status aktualisieren",
 	"pages.videoConference.info.noPermission":
-		"Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen.",
+		"Die Teilnahme an der Videokonferenz ist nicht möglich, da der Warteraum nicht aktiviert wurde.",
 	"pages.videoConference.info.notStarted": "Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",

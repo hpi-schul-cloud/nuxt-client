@@ -5,12 +5,10 @@ import {
 	ContextExternalToolPostParams,
 	ContextExternalToolResponse,
 	ContextExternalToolResponseContextTypeEnum,
-	CustomParameterEntryParam,
 	ToolContextType,
 } from "@/serverApi/v3";
 import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
 import { ExternalToolMapper } from "@/store/external-tool/mapper";
-import { CommonToolMapper } from "@/store/external-tool/mapper/common-tool.mapper";
 
 export const ToolContextMapping: Record<ContextExternalToolResponseContextTypeEnum, ToolContextType> = {
 	[ContextExternalToolResponseContextTypeEnum.Course]: ToolContextType.Course,
@@ -52,9 +50,7 @@ export class ContextExternalToolMapper {
 			contextType: contextExternalTool.contextType,
 			schoolToolId: contextExternalTool.schoolToolId,
 			displayName: contextExternalTool.displayName,
-			parameters: contextExternalTool.parameters.map(
-				(parameter): CustomParameterEntryParam => CommonToolMapper.mapToCustomParameterEntryParam(parameter)
-			),
+			parameters: contextExternalTool.parameters,
 		};
 
 		return mapped;

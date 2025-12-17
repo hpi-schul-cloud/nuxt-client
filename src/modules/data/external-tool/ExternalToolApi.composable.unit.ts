@@ -49,7 +49,7 @@ describe("ExternalToolApi.composable", () => {
 		it("should return launch request data", async () => {
 			const { launchRequest } = setup();
 
-			const result: ToolLaunchRequest = await useExternalToolApi().fetchContextLaunchDataCall("contextExternalToolId");
+			const result = await useExternalToolApi().fetchContextLaunchDataCall("contextExternalToolId");
 
 			expect(result).toEqual<ToolLaunchRequest>({
 				url: launchRequest.url,
@@ -94,10 +94,7 @@ describe("ExternalToolApi.composable", () => {
 		it("should return launch request data", async () => {
 			const { launchRequest, bodyParams } = setup();
 
-			const result: ToolLaunchRequest = await useExternalToolApi().fetchSchoolLaunchDataCall(
-				"contextExternalToolId",
-				bodyParams
-			);
+			const result = await useExternalToolApi().fetchSchoolLaunchDataCall("contextExternalToolId", bodyParams);
 
 			expect(result).toEqual<ToolLaunchRequest>({
 				url: launchRequest.url,
