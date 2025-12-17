@@ -1,11 +1,5 @@
 <template>
-	<DefaultWireframe
-		v-if="canSeeMembersList"
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabItems"
-		@on-fab-item-click="handleAddMember"
-	>
+	<DefaultWireframe v-if="canSeeMembersList" max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -333,14 +327,12 @@ const fabItems = computed<FabAction[] | undefined>(() => {
 			{
 				icon: mdiListBoxOutline,
 				label: t("pages.rooms.members.fab.selectFromDirectory"),
-				ariaLabel: t("pages.rooms.members.fab.selectFromDirectory"),
 				dataTestId: "fab-select-from-directory",
 				clickHandler: () => handleAddMember(FabEvent.ADD_MEMBERS),
 			},
 			{
 				icon: mdiAccountClockOutline,
 				label: t("pages.rooms.members.fab.addExternalPerson"),
-				ariaLabel: t("pages.rooms.members.fab.addExternalPerson"),
 				dataTestId: "fab-add-external-person",
 				clickHandler: () => handleAddMember(FabEvent.INVITE_MEMBERS),
 			}

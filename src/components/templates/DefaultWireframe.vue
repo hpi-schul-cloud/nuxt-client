@@ -10,7 +10,7 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<SpeedDialMenu v-if="fabItems" :actions="fabItems" @fab:clicked="onFabClicked" />
+			<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
 			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<VContainer
@@ -76,14 +76,6 @@ const props = defineProps({
 		default: false,
 	},
 });
-
-const emit = defineEmits({
-	"fab:clicked": () => true,
-});
-
-const onFabClicked = () => {
-	emit("fab:clicked");
-};
 
 defineOptions({
 	inheritAttrs: false,

@@ -41,8 +41,6 @@ const props = defineProps<{
 	actions: FabAction[];
 }>();
 
-const emit = defineEmits(["fab:clicked"]);
-
 const primaryAction = computed(() => props.actions[0]);
 const speedDialActions = computed(() => props.actions.slice(1));
 const fabIcon = computed(() => (isSpeedDial.value && isSpeedDialOpen.value ? mdiClose : primaryAction.value.icon));
@@ -61,7 +59,7 @@ const onFabClick = () => {
 	if (isSpeedDial.value) {
 		isSpeedDialOpen.value = !isSpeedDialOpen.value;
 	} else {
-		emit("fab:clicked");
+		if (primaryAction.value.clickHandler) primaryAction.value.clickHandler();
 	}
 };
 

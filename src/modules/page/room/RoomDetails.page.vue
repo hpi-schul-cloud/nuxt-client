@@ -1,11 +1,5 @@
 <template>
-	<DefaultWireframe
-		max-width="full"
-		main-with-bottom-padding
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabAction"
-		@fab:clicked="boardLayoutDialogIsOpen = true"
-	>
+	<DefaultWireframe max-width="full" main-with-bottom-padding :breadcrumbs="breadcrumbs" :fab-items="fabAction">
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="room-title">{{ roomTitle }}</h1>
@@ -111,6 +105,9 @@ const fabAction = computed<FabAction[] | undefined>(() =>
 					icon: mdiPlus,
 					label: t("pages.roomDetails.fab.add.board"),
 					dataTestId: "add-content-button",
+					clickHandler: () => {
+						boardLayoutDialogIsOpen.value = true;
+					},
 				},
 			]
 		: undefined

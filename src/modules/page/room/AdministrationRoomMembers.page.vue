@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction">
 		<template #header>
 			<div ref="header" class="d-flex align-items-center">
 				<h1 data-testid="admin-room-detail-title">
@@ -98,6 +98,7 @@ const fabAction = computed(() =>
 					icon: mdiPlus,
 					label: t("pages.rooms.members.add"),
 					dataTestId: "fab-add-members",
+					clickHandler: onFabClick,
 				},
 			]
 		: undefined
