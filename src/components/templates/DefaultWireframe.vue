@@ -14,7 +14,7 @@
 			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<VContainer
-			:fluid="maxWidth !== 'nativ'"
+			:fluid="maxWidth !== 'native'"
 			class="main-content"
 			:class="{
 				'main-pb-96': mainWithBottomPadding,
@@ -48,7 +48,7 @@ const props = defineProps({
 		default: null,
 	},
 	maxWidth: {
-		type: String as PropType<"full" | "short" | "nativ">,
+		type: String as PropType<"full" | "short" | "native">,
 		required: true,
 	},
 	fabItems: {

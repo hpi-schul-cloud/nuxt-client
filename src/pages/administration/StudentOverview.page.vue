@@ -363,7 +363,7 @@ export default {
 			return instanceBasedIcons;
 		},
 		fab() {
-			if (this.schoolIsExternallyManaged || !this.$_userHasPermission(Permission.StudentCreate)) {
+			if (this.schoolIsExternallyManaged || !this.userHasPermission(Permission.StudentCreate)) {
 				return;
 			}
 
