@@ -1,5 +1,10 @@
 import { useRegistration } from "./registration.composable";
 import { LanguageType } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3/api";
+import { useNotificationStore } from "@data-app";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { ref } from "vue";
 
 vi.mock("vue-i18n", () => ({
@@ -10,6 +15,16 @@ vi.mock("vue-i18n", () => ({
 }));
 
 describe("useRegistration", () => {
+	let registrationApi: DeepMocked<serverApi.RegistrationApiInterface>;
+	beforeEach(() => {
+		registrationApi = createMock<serverApi.RegistrationApiInterface>();
+		vi.spyOn(serverApi, "RegistrationApiFactory").mockReturnValue(registrationApi);
+		setActivePinia(createTestingPinia());
+	});
+	afterEach(() => {
+		vi.clearAllMocks();
+	});
+
 	const setup = () => {
 		const { selectedLanguage, setCookie, setSelectedLanguage, initializeLanguage } = useRegistration();
 		return { selectedLanguage, setCookie, setSelectedLanguage, initializeLanguage };
@@ -64,5 +79,71 @@ describe("useRegistration", () => {
 
 		setSelectedLanguage(LanguageType.Es);
 		expect(selectedLanguage.value).toBe(LanguageType.Es);
+	});
+
+	describe("fetchUserData", () => {
+		it("should fetch and set user data correctly", async () => {
+			const { fetchUserData, userData, registrationSecret } = useRegistration();
+			registrationSecret.value = "test-secret";
+			registrationApi.registrationControllerGetBySecret.mockResolvedValueOnce({
+				data: { firstName: "Max", lastName: "Mustermann", email: "sample-mail@de.de" },
+			});
+
+			await fetchUserData();
+
+			expect(userData.value).toEqual({
+				firstName: "Max",
+				lastName: "Mustermann",
+				email: "sample-mail@de.de",
+			});
+		});
+
+		it("should handle errors when fetching user data fails", async () => {
+			const { fetchUserData, registrationSecret } = useRegistration();
+			registrationSecret.value = "test-secret";
+			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(new Error("API Error"));
+
+			await fetchUserData();
+
+			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith("test-secret");
+			expect(useNotificationStore().notify).toHaveBeenCalledWith({
+				text: "pages.registrationExternalMembers.error.notFetchedUserData",
+				status: "error",
+				autoClose: false,
+			});
+		});
+	});
+
+	describe("createAccount", () => {
+		it("should create account successfully", async () => {
+			const { createAccount, registrationSecret, password } = useRegistration();
+			registrationSecret.value = "test-secret";
+			password.value = "securePassword123";
+			registrationApi.registrationControllerCompleteRegistration.mockResolvedValueOnce({});
+
+			const result = await createAccount();
+
+			expect(result).toBe(true);
+			expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith("test-secret", {
+				language: undefined,
+				password: "securePassword123",
+			});
+		});
+
+		it("should handle errors when account creation fails", async () => {
+			const { createAccount, registrationSecret, password } = useRegistration();
+			registrationSecret.value = "test-secret";
+			password.value = "securePassword123";
+			registrationApi.registrationControllerCompleteRegistration.mockRejectedValueOnce(new Error("API Error"));
+
+			const result = await createAccount();
+
+			expect(result).toBe(false);
+			expect(useNotificationStore().notify).toHaveBeenCalledWith({
+				text: "pages.registrationExternalMembers.error.notCompleted",
+				status: "error",
+				autoClose: false,
+			});
+		});
 	});
 });
