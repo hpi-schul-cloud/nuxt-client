@@ -110,8 +110,6 @@ import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
 import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
-import contentMeta from "@/mixins/contentMeta";
-import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { contentModule } from "@/store";
 import { getAuthor, getDescription, getMetadataAttribute, getProvider, getTags } from "@/utils/helpers";
@@ -132,7 +130,6 @@ export default defineComponent({
 		UserHasRole,
 		RenderHTML,
 	},
-	mixins: [contentMeta, infiniteScrolling],
 	props: {
 		resource: {
 			type: Object,
@@ -147,6 +144,7 @@ export default defineComponent({
 			mdiCalendar,
 			mdiChevronLeft,
 			mdiPound,
+			bottom: false,
 		};
 	},
 	computed: {
@@ -218,6 +216,13 @@ export default defineComponent({
 			return this.loading;
 		},
 	},
+	created() {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+		window.addEventListener("scroll", this.scrollEventHandler);
+	},
+	beforeUnmount() {
+		window.removeEventListener("scroll", this.scrollEventHandler);
+	},
 	mounted() {
 		this.searchElements();
 		this.activateTransition = true;
@@ -229,6 +234,16 @@ export default defineComponent({
 		document.title = buildPageTitle(pageTitle);
 	},
 	methods: {
+		scrollEventHandler() {
+			this.bottom = this.isBottomReached();
+		},
+		isBottomReached() {
+			const { scrollY } = globalThis;
+			const visibleHeight = document.documentElement.clientHeight;
+			const pageHeight = document.documentElement.scrollHeight;
+			const bottomOfPage = Math.ceil(visibleHeight + scrollY) >= pageHeight;
+			return bottomOfPage || pageHeight < visibleHeight;
+		},
 		async searchElements() {
 			try {
 				// Clears the previous collection elements before rendering the new ones
