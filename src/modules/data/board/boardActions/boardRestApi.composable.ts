@@ -1,5 +1,6 @@
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
+import { useSharedEditMode } from "../edit-mode.composable";
 import {
 	CreateCardRequestPayload,
 	DeleteBoardRequestPayload,
@@ -19,7 +20,6 @@ import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-
 import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
-import { useSharedEditMode } from "@util-board";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();

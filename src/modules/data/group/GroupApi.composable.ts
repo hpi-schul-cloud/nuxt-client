@@ -1,8 +1,8 @@
 import { GroupMapper } from "./GroupMapper";
 import { GroupListFilter, PaginationOptions } from "./types";
+import { Group } from "./types/group";
 import { GroupApiFactory, GroupListResponse, GroupResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { Group } from "@data-group";
 import { AxiosResponse } from "axios";
 
 export const useGroupApi = () => {

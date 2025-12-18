@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
+import KebabMenuList from "./KebabMenuList.vue";
 import { mdiDotsVertical } from "@icons/material";
-import { KebabMenuList } from "@ui-kebab-menu";
 import type { Slot, VNode } from "vue";
 import { Comment, Fragment } from "vue";
 

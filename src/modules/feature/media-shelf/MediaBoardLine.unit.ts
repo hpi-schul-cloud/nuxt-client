@@ -11,8 +11,9 @@ import {
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useMediaBoardEditMode } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
-import { useDragAndDrop, useMediaBoardEditMode } from "@util-board";
+import { useDragAndDrop } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

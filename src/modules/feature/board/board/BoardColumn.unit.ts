@@ -4,10 +4,10 @@ import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils"
 import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardPermissions, useBoardStore, useForceRender } from "@data-board";
+import { useBoardPermissions, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useDragAndDrop, useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, nextTick, ref } from "vue";
 

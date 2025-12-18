@@ -49,14 +49,10 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { upperCaseFirstChar } from "@/utils/textFormatting";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
-import { BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionChangeLayout,
 	KebabMenuActionDelete,

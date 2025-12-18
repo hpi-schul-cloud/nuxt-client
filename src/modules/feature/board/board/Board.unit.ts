@@ -36,19 +36,16 @@ import {
 	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
+	useCourseBoardEditMode,
 	useSharedBoardPageInformation,
+	useSharedEditMode,
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
 import { AddCollaboraFileDialog } from "@feature-collabora";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
-import {
-	extractDataAttribute,
-	useCourseBoardEditMode,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
+import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -61,7 +58,7 @@ const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 vi.mock("@util-board/extractDataAttribute.util");
 const mockExtractDataAttribute = vi.mocked(extractDataAttribute);
 
-vi.mock("@util-board/editMode.composable");
+vi.mock("@data-board/edit-mode.composable");
 const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 

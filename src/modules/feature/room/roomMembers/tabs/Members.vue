@@ -13,9 +13,9 @@
 </template>
 
 <script setup lang="ts">
+import MembersTable from "../tables/MembersTable.vue";
 import { useEnvConfig } from "@data-env";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
-import { MembersTable } from "@feature-room";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

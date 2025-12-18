@@ -111,14 +111,10 @@ import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
-import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
-import { BoardMenuScope } from "@ui-board";
+import { useBoardFocusHandler, useBoardPermissions, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
