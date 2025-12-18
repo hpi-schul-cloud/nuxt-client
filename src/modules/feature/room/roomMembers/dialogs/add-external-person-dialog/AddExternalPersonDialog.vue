@@ -135,7 +135,6 @@ const resetForm = () => {
 
 const closeDialog = () => {
 	isOpen.value = false;
-	resetForm();
 	emit("close");
 };
 </script>
