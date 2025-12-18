@@ -90,6 +90,7 @@ describe("StepDetails", () => {
 
 	describe("reactivity", () => {
 		const { wrapper, firstNameInput, lastNameInput } = setup();
+
 		describe("when firstName value changes", () => {
 			it("should emit 'update:firstName' event with new firstName value", async () => {
 				await firstNameInput.setValue("John");

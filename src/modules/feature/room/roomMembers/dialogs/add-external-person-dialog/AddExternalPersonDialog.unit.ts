@@ -93,8 +93,8 @@ describe("AddExternalPersonDialog", () => {
 			const { wrapper } = setup();
 
 			await clickButton("cancel");
-
 			const emitted = wrapper.emitted();
+
 			expect(emitted).toHaveProperty("close");
 		});
 	});
@@ -177,7 +177,6 @@ describe("AddExternalPersonDialog", () => {
 					await clickButton("add-email");
 
 					expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
-
 					expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
 					expect(wrapper.getComponent('[data-testid="add-external-person-firstname"]')).toBeTruthy();
 					expect(wrapper.getComponent('[data-testid="add-external-person-confirm-btn"]')).toBeTruthy();
