@@ -1,6 +1,7 @@
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { RoleName } from "@/serverApi/v3";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import { createTestAppStoreWithRole, fileRecordFactory } from "@@/tests/test-utils";
@@ -21,6 +22,7 @@ describe("FileTable", () => {
 	const setupWrapper = (props: {
 		isLoading: boolean;
 		isEmpty: boolean;
+		fileStorageError: boolean;
 		fileRecords: FileRecord[];
 		uploadProgress: {
 			uploaded: number;
@@ -34,7 +36,7 @@ describe("FileTable", () => {
 			props: {
 				isLoading: props.isLoading,
 				isEmpty: props.isEmpty,
-				fileFetchingError: false,
+				fileStorageError: props.fileStorageError,
 				isStudent: false,
 				fileRecords: props.fileRecords,
 				uploadProgress: props.uploadProgress,
@@ -50,6 +52,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: true,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
@@ -65,6 +68,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: true,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
@@ -80,6 +84,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
@@ -90,11 +95,28 @@ describe("FileTable", () => {
 		});
 	});
 
+	describe("when file storage has an error", () => {
+		it("should show error state", () => {
+			const { wrapper } = setupWrapper({
+				isLoading: false,
+				isEmpty: false,
+				fileStorageError: true,
+				fileRecords: [],
+				uploadProgress: { uploaded: 0, total: 0 },
+			});
+
+			expect(wrapper.findComponent(VSkeletonLoader).exists()).toBe(false);
+			expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
+			expect(wrapper.findComponent(BrokenPencilSvg).exists()).toBe(true);
+		});
+	});
+
 	describe("when isLoading is false and isEmpty is false and uploadProgress.total > 0", () => {
 		it("should show data table", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -109,6 +131,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -121,6 +144,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -136,6 +160,7 @@ describe("FileTable", () => {
 				const { wrapper } = setupWrapper({
 					isLoading: false,
 					isEmpty: false,
+					fileStorageError: false,
 					fileRecords: [fileRecord],
 					uploadProgress: { uploaded: 1, total: 2 },
 				});
@@ -153,6 +178,7 @@ describe("FileTable", () => {
 				const { wrapper } = setupWrapper({
 					isLoading: false,
 					isEmpty: false,
+					fileStorageError: false,
 					fileRecords: [fileRecord],
 					uploadProgress: { uploaded: 1, total: 2 },
 				});
@@ -170,6 +196,7 @@ describe("FileTable", () => {
 				const { wrapper } = setupWrapper({
 					isLoading: false,
 					isEmpty: false,
+					fileStorageError: false,
 					fileRecords: [fileRecord],
 					uploadProgress: { uploaded: 1, total: 2 },
 				});
@@ -184,6 +211,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -197,6 +225,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -212,6 +241,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 1, total: 2 },
 			});
@@ -229,6 +259,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
@@ -254,6 +285,7 @@ describe("FileTable", () => {
 			const { wrapper } = setupWrapper({
 				isLoading: false,
 				isEmpty: false,
+				fileStorageError: false,
 				fileRecords: [fileRecord],
 				uploadProgress: { uploaded: 0, total: 0 },
 			});
