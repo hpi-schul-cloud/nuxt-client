@@ -1,7 +1,7 @@
 import { notifyError } from "../../application/notification-store";
 import { LanguageType, RegistrationApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useRegistration = () => {
@@ -11,10 +11,10 @@ export const useRegistration = () => {
 	const password = ref<string>("");
 	const isTermsOfUseAccepted = ref<boolean>(false);
 	const isPrivacyPolicyAccepted = ref<boolean>(false);
-	const fullName = ref<string>("");
 	const userData = ref<{ firstName: string; lastName: string; email: string } | null>(null);
 	const registrationSecret = ref<string>("");
 	const hasApiErrorOccurred = ref<boolean>(false);
+	const fullName = computed(() => (userData.value ? `${userData.value.firstName} ${userData.value.lastName}` : ""));
 
 	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
 
@@ -44,7 +44,6 @@ export const useRegistration = () => {
 				await registrationApi.registrationControllerGetBySecret(registrationSecret.value)
 			).data;
 			userData.value = { firstName, lastName, email };
-			fullName.value = `${firstName} ${lastName}`;
 		} catch {
 			hasApiErrorOccurred.value = true;
 			notifyError(t("pages.registrationExternalMembers.error.notFetchedUserData"), false);

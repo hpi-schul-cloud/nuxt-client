@@ -6,7 +6,7 @@ import { useRegistration } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { VCheckbox } from "vuetify/components";
 
 vi.mock("@data-room/registration/registration.composable");
@@ -27,7 +27,7 @@ describe("Consent.vue", () => {
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
-			fullName: ref("Max Mustermann"),
+			fullName: computed(() => "Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
 			registrationSecret: ref<string>(""),

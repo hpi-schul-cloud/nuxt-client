@@ -11,7 +11,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { nextTick, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VStepper, VStepperItem } from "vuetify/components";
 
@@ -49,11 +49,11 @@ describe("Registration.vue", () => {
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
-			fullName: ref("Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
 			registrationSecret: ref<string>(""),
 			userData: ref({ firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" }),
+			fullName: computed(() => "Max Mustermann"),
 		});
 
 		const router = createMock<Router>({});
