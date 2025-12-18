@@ -99,7 +99,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		instance.on("connect_error", errorHandler);
 		instance.on("connect", async function () {
 			if (retryCount > 0) {
-				reportBoardError("connect after retry", "Connection restored after retry");
+				reportBoardError("connect_after_retry", "Connection restored after retry");
 				retryCount = 0;
 			}
 		});
