@@ -70,6 +70,7 @@
 			</VCard>
 		</VDialog>
 		<VideoConferenceConfigurationDialog
+			:board-parent-type="boardParentType"
 			:is-open="isConfigurationDialogOpen"
 			:options="videoConferenceInfo.options"
 			@close="onCloseConfigurationDialog"
@@ -138,7 +139,7 @@ const preFetchedUrl = ref<string | undefined>(undefined);
 if (isVideoConferenceEnabled.value) {
 	onMounted(async () => {
 		await fetchVideoConferenceInfo();
-		if (isRunning.value) {
+		if (isRunning.value && (canStart.value || canJoin.value)) {
 			preFetchedUrl.value = await joinVideoConference();
 		}
 	});
@@ -151,7 +152,7 @@ const { modelValue, computedElement } = useContentElementState(props, {
 const route = useRoute();
 const boardId = route.params.id;
 
-const { isStudent, isTeacher, isExternalPerson, userRoles } = useAppStoreRefs();
+const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
 const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
@@ -166,9 +167,7 @@ const isErrorDialogOpen = computed(() => !!error.value);
 const hasParticipationPermission = computed(() => canJoin.value || canStart.value);
 
 const canJoin = computed(
-	() =>
-		(isStudent.value || isTeacher.value) &&
-		(!isExternalPerson.value || userRoles.value?.length > 1 || isWaitingRoomActive.value)
+	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
 );
 
 const canStart = computed(() => hasManageVideoConferencePermission.value);

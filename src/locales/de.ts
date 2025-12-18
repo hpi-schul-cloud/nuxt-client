@@ -1463,6 +1463,8 @@ export default {
 	"pages.administration.teachers.new.success": "Lehrkraft erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Externe Personen können nur dann an der Videokonferenz teilnehmen, wenn die Funktion Warteraum aktiviert wurde.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Videokonferenz erstellen",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderationsrechte für alle Teilnehmenden",
@@ -1655,9 +1657,24 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
 	"pages.rooms.members.fab.addExternalPerson": "Externe Person hinzufügen",
 	"pages.rooms.members.fab.selectFromDirectory": "Aus Verzeichnis auswählen",
-	"pages.rooms.members.dialog.addExternalPerson.text":
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Externe Person hinzufügen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Externe Person einladen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Bitte Vor- und Nachnamen der schulfremden Person eingeben. Die Person erhält eine E-Mail mit einem Registrierungslink für die {applicationName}. Sobald sie einen Account erstellt hat, wird sie automatisch zum Raum hinzugefügt.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-Mail-Adresse",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Bitte eine gültige E-Mail-Adresse eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Vorname",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Bitte einen Vornamen eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Nachname",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Bitte einen Nachnamen eingeben",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Zum Raum hinzufügen",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"Die Einladung konnte leider nicht versendet werden. Bitte später erneut versuchen",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
@@ -1980,7 +1997,7 @@ export default {
 	"pages.userMigration.title": "Umzug des Anmeldesystems",
 	"pages.videoConference.action.refresh": "Status aktualisieren",
 	"pages.videoConference.info.noPermission":
-		"Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen.",
+		"Die Teilnahme an der Videokonferenz ist nicht möglich, da der Warteraum nicht aktiviert wurde.",
 	"pages.videoConference.info.notStarted": "Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",

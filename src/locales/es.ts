@@ -1470,6 +1470,8 @@ export default {
 	"pages.administration.teachers.new.success": "¡Profesor creado correctamente!",
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Las personas externas solo pueden participar en la videoconferencia si se ha activado la función Sala de espera.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Crear videoconferencia",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Derechos de moderación para todos los participantes",
@@ -1661,9 +1663,25 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.members.fab.addExternalPerson": "Agregar persona externa",
 	"pages.rooms.members.fab.selectFromDirectory": "Seleccionar del directorio",
-	"pages.rooms.members.dialog.addExternalPerson.text":
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Añadir persona externa",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invitar a persona externa",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"No se ha encontrado ninguna cuenta con esta dirección de correo electrónico. Se puede invitar a la persona a registrarse en {applicationName}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Por favor, introduzca el nombre y apellido de la persona externa. La persona recibirá un correo electrónico con un enlace de registro para {applicationName}. En cuanto haya creado una cuenta, se añadirá automáticamente a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "Dirección de correo electrónico",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error":
+		"Por favor, introduzca una dirección de correo electrónico válida",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Nombre",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Por favor, introduzca un nombre",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Apellido",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Por favor, introduzca un apellido",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Agregar a la sala",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Enviar invitación",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"No se ha podido enviar la invitación. Por favor, inténtelo de nuevo más tarde",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
@@ -1994,7 +2012,8 @@ export default {
 	"pages.userMigration.success.title": "Migración exitosa de su sistema de registro",
 	"pages.userMigration.title": "Reubicación del sistema de inicio de sesión",
 	"pages.videoConference.action.refresh": "Estado de actualización",
-	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
+	"pages.videoConference.info.noPermission":
+		"No es posible participar en la videoconferencia porque la sala de espera no se ha activado.",
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",

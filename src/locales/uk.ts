@@ -1453,6 +1453,8 @@ export default {
 	"pages.administration.teachers.new.success": "Викладача успішно створено!",
 	"pages.administration.teachers.new.title": "Додати викладача",
 	"pages.administration.teachers.table.edit.ariaLabel": "Редагування вчителя",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Зовнішні особи можуть брати участь у відеоконференції лише в тому випадку, якщо активовано функцію «Кімната очікування».",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Створити відеоконференцію",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission": "Права модерації для всіх учасників",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Вимкнути звук учасникам при вході",
@@ -1640,9 +1642,24 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
 	"pages.rooms.members.fab.addExternalPerson": "Додати зовнішню особу",
 	"pages.rooms.members.fab.selectFromDirectory": "Вибрати з каталогу",
-	"pages.rooms.members.dialog.addExternalPerson.text":
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Додати зовнішню особу",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Запросити зовнішню особу",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"Обліковий запис із цією електронною адресою не знайдено. Особу можна запросити зареєструватися в {applicationName}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Будь ласка, введіть ім'я та прізвище зовнішньої особи. Особа отримає електронний лист із посиланням на реєстрацію в {applicationName}. Щойно вона створить обліковий запис, її буде автоматично додано до кімнати.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "Електронна адреса",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Будь ласка, введіть дійсну електронну адресу",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Ім'я",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Будь ласка, введіть ім'я",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Прізвище",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Будь ласка, введіть прізвище",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Додати до кімнати",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Надіслати запрошення",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"Не вдалося надіслати запрошення. Будь ласка, спробуйте пізніше",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
@@ -1964,7 +1981,7 @@ export default {
 	"pages.userMigration.title": "Переміщення системи входу",
 	"pages.videoConference.action.refresh": "оновити статус",
 	"pages.videoConference.info.noPermission":
-		"Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
+		"Участь у відеоконференції неможлива, оскільки кімната очікування не була активована.",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Елемент більше не доступний. Будь ласка, зверніться до викладача.",

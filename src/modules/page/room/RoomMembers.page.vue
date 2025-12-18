@@ -60,11 +60,7 @@
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
 	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
-	<AddExternalPersonDialog
-		v-model="isExternalPersonDialogOpen"
-		:member-status="externalMemberStatus"
-		@update:mail="onAddMemberByEmail"
-	/>
+	<AddExternalPersonDialog v-model="isExternalPersonDialogOpen" />
 </template>
 
 <script setup lang="ts">
@@ -74,7 +70,6 @@ import { Tab } from "@/types/room/RoomMembers";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import {
-	ExternalMemberCheckStatus,
 	InvitationStep,
 	useRoomAuthorization,
 	useRoomDetailsStore,
@@ -144,7 +139,6 @@ const { isInvitationDialogOpen, invitationStep, isInviteExternalPersonsFeatureEn
 	storeToRefs(useRoomInvitationLinkStore());
 
 const isExternalPersonDialogOpen = ref(false);
-const externalMemberStatus = ref<ExternalMemberCheckStatus | undefined>(undefined);
 
 const activeTab = computed<Tab>({
 	get() {
@@ -234,13 +228,6 @@ const handleAddMember = (event: string | undefined) => {
 	}
 
 	isExternalPersonDialogOpen.value = true;
-};
-
-const onAddMemberByEmail = async (email: string) => {
-	const addMemberStatus = await roomMembersStore.addMemberByEmail(email);
-	if (addMemberStatus === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
-		isExternalPersonDialogOpen.value = false;
-	}
 };
 
 const { user } = useAppStoreRefs();
