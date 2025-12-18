@@ -1,5 +1,11 @@
 <template>
-	<VToolbar flat :height="appBarHeight" :class="!props.sidebarExpanded && isFixed ? 'toolbar--fixed' : ''">
+	<VToolbar
+		:height="appBarHeight"
+		class="top-bar"
+		:class="{
+			'hide-top-bar': !sidebarExpanded && isScrollingDown,
+		}"
+	>
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -44,12 +50,6 @@
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
 	</VToolbar>
-	<div
-		v-if="!props.sidebarExpanded && isFixed"
-		aria-hidden="true"
-		class="toolbar-placeholder"
-		:style="{ height: appBarHeight + 'px' }"
-	/>
 </template>
 
 <script setup lang="ts">
@@ -61,42 +61,18 @@ import UserMenu from "./UserMenu.vue";
 import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { useAppStoreRefs } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useWindowScroll } from "@vueuse/core";
+import { computed, onMounted, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 
-const SCROLL_THRESHOLD = 100;
-const SCROLL_DISTANCE = 10;
-const isFixed = ref(false);
-let lastScrollY = window.scrollY;
+const { y } = useWindowScroll();
+const isScrollingDown = ref(false);
 
-const handleScroll = () => {
-	if (props.sidebarExpanded) {
-		isFixed.value = false;
-		lastScrollY = window.scrollY;
-		return;
-	}
-	const currentScrollY = window.scrollY;
-	const scrollDistance = Math.abs(currentScrollY - lastScrollY);
-
-	if (currentScrollY <= 0) {
-		isFixed.value = false;
-	} else if (currentScrollY < lastScrollY && currentScrollY > SCROLL_THRESHOLD && scrollDistance > SCROLL_DISTANCE) {
-		isFixed.value = true;
-	} else if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD && scrollDistance > SCROLL_DISTANCE) {
-		isFixed.value = false;
-	}
-	lastScrollY = currentScrollY;
-};
-
-onMounted(() => {
-	window.addEventListener("scroll", handleScroll);
+watch(y, (newVal, oldVal) => {
+	isScrollingDown.value = newVal > oldVal;
 });
 
-onUnmounted(() => {
-	window.removeEventListener("scroll", handleScroll);
-});
-
-const props = defineProps({
+defineProps({
 	sidebarExpanded: {
 		type: Boolean,
 		required: true,
@@ -107,11 +83,7 @@ defineEmits(["sidebar-toggled"]);
 
 const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 
-const { lgAndUp, mdAndUp } = useDisplay();
-
-const isDesktop = computed(() => lgAndUp.value);
-
-const isTabletOrBigger = computed(() => mdAndUp.value);
+const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
 
 onMounted(() => {
 	(async () => {
@@ -131,20 +103,27 @@ const statusAlertColor = computed(() => {
 
 const { user, school, userRoles: roleNames } = useAppStoreRefs();
 
-const hasLogo = computed(() => !!school.value?.logo?.url);
+const hasLogo = computed(() => school.value?.logo?.url !== undefined);
 
 const appBarHeight = computed(() => {
 	const height = window.getComputedStyle(document.documentElement).getPropertyValue("--topbar-height");
-	const heightWithoutUnit = parseInt(height);
-
-	return heightWithoutUnit;
+	return parseInt(height);
 });
 </script>
 
 <style scoped>
-.toolbar-placeholder {
-	width: 100%;
+.top-bar {
+	position: sticky;
+	background-color: #fff !important;
+	top: 0;
+	z-index: 100;
+	transition: top 0.2s ease-in-out;
 }
+
+.hide-top-bar {
+	top: calc(-1 * var(--topbar-height));
+}
+
 .school-name {
 	max-width: 280px;
 	text-overflow: ellipsis;
@@ -155,19 +134,5 @@ const appBarHeight = computed(() => {
 .school-logo {
 	max-height: 40px;
 	max-width: 160px;
-}
-
-.v-toolbar {
-	background-color: #fff !important;
-}
-
-.toolbar--fixed {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 1000;
-	opacity: 1;
-	border-bottom: 1px solid rgba(128, 128, 128, 0.25);
 }
 </style>
