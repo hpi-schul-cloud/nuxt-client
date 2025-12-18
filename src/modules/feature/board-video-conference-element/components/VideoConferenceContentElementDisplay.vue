@@ -27,11 +27,7 @@
 				<slot />
 			</template>
 			<template #statusInfo>
-				<div
-					v-if="isRunning && hasParticipationPermission"
-					class="pulsating-dot my-auto"
-					data-testid="vc-pulsating-dot"
-				/>
+				<div v-if="isRunning" class="pulsating-dot my-auto" data-testid="vc-pulsating-dot" />
 			</template>
 		</ContentElementBar>
 	</div>
