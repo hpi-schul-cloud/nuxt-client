@@ -107,10 +107,9 @@ describe("useRoomDetailsStore", () => {
 					message: "Locker Room",
 				});
 
-				await store.fetchRoomAndBoards("room-id");
+				const result = await store.fetchRoomAndBoards("room-id");
 
-				expect(store.lockedRoomName).toBe("Locker Room");
-				expect(store.isLoading).toBe(false);
+				expect(result?.isLocked).toBe(true);
 			});
 		});
 
