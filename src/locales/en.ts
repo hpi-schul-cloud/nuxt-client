@@ -1625,9 +1625,24 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.members.fab.addExternalPerson": "Add external person",
 	"pages.rooms.members.fab.selectFromDirectory": "Select from directory",
-	"pages.rooms.members.dialog.addExternalPerson.text":
-		"Please enter the email address of the external person to be added to the room.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Add external person",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
+		"Please enter the e-mail address of the external person to be added to the room.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invite external person",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"No account was found with this e-mail address. The person can be invited to register in {applicationName}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Please enter the first and last name of the external person. The person will receive an e-mail with a registration link for {applicationName}. As soon as they have created an account, they will automatically be added to the room.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-mail address",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Please enter a valid e-mail address",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "First name",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Please enter a first name",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Last name",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Please enter a last name",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Add to room",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Send invitation",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"The invitation could not be sent. Please try again later",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
@@ -1898,7 +1913,7 @@ export default {
 	"pages.tool.context.title": "Adding External Tools",
 	"pages.tool.deactivate.label": "Deactivate tool at school",
 	"pages.tool.description.firstParagraph":
-		"The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.",
+		"The course-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available inside the course.",
 	"pages.tool.description.secondParagraph": "Deleting a configuration removes the tool from the course.",
 	"pages.tool.description.moreInformation": "More information can be found in our {0}.",
 	"pages.tool.description.moreInformation.link": "Help section on external tools",

@@ -1,5 +1,11 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="dialog" :max-width="480" :aria-labelledby="`modal-${uid}-title`">
+	<VDialog
+		v-model="isDialogOpen"
+		data-testid="dialog"
+		:max-width="480"
+		:aria-labelledby="`modal-${uid}-title`"
+		@after-leave="onAfterLeave"
+	>
 		<UseFocusTrap>
 			<VCard :loading>
 				<template #title>
@@ -60,7 +66,7 @@ const isDialogOpen = defineModel("is-dialog-open", {
 	default: false,
 });
 
-const emit = defineEmits(["cancel", "confirm"]);
+const emit = defineEmits(["cancel", "confirm", "after-leave"]);
 
 const { t } = useI18n();
 
@@ -75,6 +81,9 @@ const onCancel = () => {
 };
 const onConfirm = () => {
 	emit("confirm");
+};
+const onAfterLeave = () => {
+	emit("after-leave");
 };
 </script>
 
