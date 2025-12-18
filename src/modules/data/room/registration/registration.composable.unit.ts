@@ -115,10 +115,11 @@ describe("useRegistration", () => {
 	});
 
 	describe("createAccount", () => {
+		const pass = "something-123";
 		it("should create account successfully", async () => {
 			const { createAccount, registrationSecret, password } = useRegistration();
 			registrationSecret.value = "test-secret";
-			password.value = "securePassword123";
+			password.value = pass;
 			registrationApi.registrationControllerCompleteRegistration.mockResolvedValueOnce({});
 
 			const result = await createAccount();
@@ -126,14 +127,14 @@ describe("useRegistration", () => {
 			expect(result).toBe(true);
 			expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith("test-secret", {
 				language: undefined,
-				password: "securePassword123",
+				password: pass,
 			});
 		});
 
 		it("should handle errors when account creation fails", async () => {
 			const { createAccount, registrationSecret, password } = useRegistration();
 			registrationSecret.value = "test-secret";
-			password.value = "securePassword123";
+			password.value = pass;
 			registrationApi.registrationControllerCompleteRegistration.mockRejectedValueOnce(new Error("API Error"));
 
 			const result = await createAccount();
