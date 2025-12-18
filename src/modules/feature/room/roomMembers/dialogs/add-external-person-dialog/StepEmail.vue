@@ -52,14 +52,14 @@ import { isValidEmail } from "@util-validators";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const emailForm = ref();
-const email = ref<string>("");
+const email = defineModel("email", { type: String, required: true });
 
 const emit = defineEmits<{
 	(e: "close"): void;
-	(e: "update:email", email: string): void;
+	(e: "submit:email", email: string): void;
 }>();
 
+const emailForm = ref();
 const emailInput = ref<HTMLElement>();
 
 onMounted(() => {
@@ -77,7 +77,7 @@ const onConfirmEmail = async () => {
 		return;
 	}
 
-	emit("update:email", email.value);
+	emit("submit:email", email.value);
 };
 
 const onCancel = () => {

@@ -21,7 +21,7 @@
 			<VForm ref="detailsForm" class="mt-5" data-testid="add-external-person-detail-form">
 				<VTextField
 					ref="emailInput"
-					v-model="emailModel"
+					v-model="email"
 					class="mb-4"
 					:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
 					data-testid="add-external-person-email"
@@ -80,20 +80,24 @@
 import { getFirstInvalidElement } from "./utils/form";
 import { InfoAlert } from "@ui-alert";
 import { hasNoOpeningTagFollowedByString, isNonEmptyString } from "@util-validators";
-import { onMounted, ref, toRef } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const props = defineProps<{
+defineProps<{
 	applicationNames: {
 		text: string;
 		alert: string;
 	};
-	email: string;
 }>();
+
+const email = defineModel("email", { type: String, required: true });
+const firstName = defineModel("firstName", { type: String, required: true });
+const lastName = defineModel("lastName", { type: String, required: true });
 
 const emit = defineEmits<{
 	(e: "back"): void;
 	(e: "update:details", firstName: string, lastName: string): void;
+	(e: "submit:invitation"): void;
 }>();
 
 const firstNameInput = ref<HTMLElement>();
@@ -107,9 +111,6 @@ onMounted(() => {
 const { t } = useI18n();
 
 const detailsForm = ref();
-const firstName = ref<string>("");
-const lastName = ref<string>("");
-const emailModel = toRef(props, "email");
 
 const onConfirmDetails = async () => {
 	const errorElement = await getFirstInvalidElement(detailsForm);
@@ -118,9 +119,11 @@ const onConfirmDetails = async () => {
 		return;
 	}
 	emit("update:details", firstName.value, lastName.value);
+	emit("submit:invitation");
 };
 
 const onBack = () => {
+	emit("update:details", firstName.value, lastName.value);
 	emit("back");
 };
 </script>

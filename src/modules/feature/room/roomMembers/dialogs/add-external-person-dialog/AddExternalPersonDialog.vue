@@ -8,12 +8,15 @@
 		@click:outside="onClose"
 		@after-leave="resetForm"
 	>
-		<StepEmail v-if="step === 'email'" @update:email="onUpdateEmail" @close="onClose" />
+		<StepEmail v-if="step === 'email'" :email="email" @submit:email="onSubmitEmail" @close="onClose" />
 		<StepDetails
 			v-else-if="step === 'details'"
 			:application-names="applicationNames"
 			:email="email"
+			:first-name="firstName"
+			:last-name="lastName"
 			@update:details="onUpdateDetails"
+			@submit:invitation="onSubmitInvitation"
 			@close="onClose"
 			@back="onBack"
 		/>
@@ -52,7 +55,7 @@ import { ExternalMemberCheckStatus, useRoomMembersStore } from "@data-room";
 import { computed, nextTick, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { VBtn, type VCard, VForm, VSpacer } from "vuetify/components";
+import { VBtn, type VCard, VSpacer } from "vuetify/components";
 
 const roomMembersStore = useRoomMembersStore();
 const applicationNames = computed(() => {
@@ -79,29 +82,20 @@ const addExternalPersonContent = ref<VCard>();
 
 const step = ref<"email" | "details" | "error">("email");
 
-const addExternalPersonForm = ref<VForm>();
-
 const email = ref<string>("");
 const firstName = ref<string>("");
 const lastName = ref<string>("");
 
 useSafeFocusTrap(isOpen, addExternalPersonContent);
 
-const checkForErrorsAndFocus = async () => {
-	if (!addExternalPersonForm.value) return;
-	const { valid, errors } = await addExternalPersonForm.value.validate();
-	if (!valid && errors.length > 0) {
-		const firstErrorId = errors[0].id as string;
-		document.getElementById(firstErrorId)?.focus();
-		return true;
-	}
-	return false;
+const onUpdateDetails = (newFirstName: string, newLastName: string) => {
+	firstName.value = newFirstName;
+	lastName.value = newLastName;
 };
 
-const onUpdateEmail = async (newEmail: string) => {
+const onSubmitEmail = async (newEmail: string) => {
 	email.value = newEmail;
-
-	const status = await roomMembersStore.addMemberByEmail(newEmail);
+	const status = await roomMembersStore.addMemberByEmail(email.value);
 	if (status === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		closeDialog();
 	} else if (status === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND) {
@@ -114,11 +108,7 @@ const onUpdateEmail = async (newEmail: string) => {
 	}
 };
 
-const onConfirmDetails = async () => {
-	if (await checkForErrorsAndFocus()) {
-		return;
-	}
-
+const onSubmitInvitation = async () => {
 	try {
 		await roomMembersStore.startRegistrationProcess({
 			email: email.value,
@@ -134,14 +124,8 @@ const onConfirmDetails = async () => {
 
 const onClose = () => closeDialog();
 
-const onUpdateDetails = (newFirstName: string, newLastName: string) => {
-	firstName.value = newFirstName;
-	lastName.value = newLastName;
-	onConfirmDetails();
-};
-
 const onBack = () => {
-	resetForm();
+	step.value = "email";
 };
 
 const resetForm = () => {
@@ -151,6 +135,7 @@ const resetForm = () => {
 
 const closeDialog = () => {
 	isOpen.value = false;
+	resetForm();
 	emit("close");
 };
 </script>
