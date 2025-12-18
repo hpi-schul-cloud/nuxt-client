@@ -253,12 +253,12 @@ export default {
 						icon: mdiPlus,
 						label: this.$t("components.organisms.TasksDashboardMain.fab.createTask"),
 						href: "/homework/new?returnUrl=tasks",
-						dataTestId: "addTask",
+						dataTestId: "add-task",
 					},
 				];
 			}
 
-			return null;
+			return undefined;
 		},
 		copyResultModalItems() {
 			return this.copyModule.getCopyResultFailedItems;

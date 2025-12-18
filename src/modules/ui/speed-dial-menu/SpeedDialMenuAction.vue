@@ -17,7 +17,7 @@
 			color="primary"
 			class="z-index-100"
 			elevation="4"
-			:data-testid="action.dataTestId"
+			:data-testid="`${action.dataTestId}-icon-btn`"
 			:icon="action.icon"
 			:href="action.href"
 			:to="action.to"
