@@ -439,34 +439,42 @@ describe("socket.ts", () => {
 					const mockError = getSessionIdUnknownError();
 					await eventCallbacks.connect_error(mockError);
 
-					expect(logger.error).toHaveBeenCalledWith("Failed to report error", expect.any(Error));
+					expect(logger.error).toHaveBeenCalledWith(
+						"Failed to report error - will retry in 5 seconds",
+						expect.any(Error)
+					);
 				});
 			});
 		});
 
 		describe("when error is general connection error", () => {
-			it("should increment retry count", async () => {
-				const { eventCallbacks } = await setup();
+			describe("when less than three connection attempts have failed", () => {
+				it("should not report the error (usual hiccups on websocket connection)", async () => {
+					const { eventCallbacks } = await setup();
 
-				const mockError = { type: "test_error", message: "Test error message" };
-				eventCallbacks.connect_error(mockError);
-				eventCallbacks.connect_error(mockError);
-				eventCallbacks.connect_error(mockError);
-				eventCallbacks.connect_error(mockError);
-				eventCallbacks.connect_error(mockError);
-				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
-					expect.objectContaining({
-						retryCount: 4,
-					})
-				);
-				// for (let i = 0; i <= 5; i++) {
-				// 	eventCallbacks.connect_error(mockError);
-				// 	expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
-				// 		expect.objectContaining({
-				// 			retryCount: i,
-				// 		})
-				// 	);
-				// }
+					const mockError = { type: "test_error", message: "Test error message" };
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+
+					expect(boardErrorReportApi.boardErrorReportControllerReportError).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when three connection attempts have failed", () => {
+				it("should report the error with the right retryCount", async () => {
+					const { eventCallbacks } = await setup();
+
+					const mockError = { type: "test_error", message: "Test error message" };
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+
+					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
+						expect.objectContaining({
+							retryCount: 2,
+						})
+					);
+				});
 			});
 
 			describe("when url does not contain board id", () => {
