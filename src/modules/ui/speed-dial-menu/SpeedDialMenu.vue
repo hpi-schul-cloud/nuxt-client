@@ -1,6 +1,5 @@
 <template>
 	<VFab
-		id="fab"
 		:absolute="!mdAndDown"
 		class="fab-size-transition z-index-100"
 		:class="{
