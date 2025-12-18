@@ -1,6 +1,5 @@
 import { notifyError } from "../../application/notification-store";
-import { LanguageType } from "@/serverApi/v3";
-import { RegistrationApiFactory } from "@/serverApi/v3";
+import { LanguageType, RegistrationApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
