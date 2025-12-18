@@ -42,6 +42,7 @@ describe("Registration.vue", () => {
 		useRegistrationMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(options?.password ?? ""),
+			hasApiErrorOccurred: ref(false),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),

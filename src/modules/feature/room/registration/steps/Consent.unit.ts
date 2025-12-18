@@ -21,6 +21,7 @@ describe("Consent.vue", () => {
 		useRegistrationMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(""),
+			hasApiErrorOccurred: ref(false),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),

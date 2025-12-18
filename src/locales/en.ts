@@ -1533,7 +1533,7 @@ export default {
 	"pages.news.title": "News",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Registration could not be completed. Please try again later.",
-	"pages.registrationExternalMembers.error.notFetchedUserData": "User data could not be fetched.",
+	"pages.registrationExternalMembers.error.notFetchedUserData": "Registration data could not be fetched.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",

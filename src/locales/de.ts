@@ -1562,7 +1562,7 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
-	"pages.registrationExternalMembers.error.notFetchedUserData": "Benutzerdaten konnten nicht abgerufen werden.",
+	"pages.registrationExternalMembers.error.notFetchedUserData": "Registrierungsdaten konnten nicht abgerufen werden.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",

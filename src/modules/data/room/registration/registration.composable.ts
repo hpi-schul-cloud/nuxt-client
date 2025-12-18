@@ -15,6 +15,7 @@ export const useRegistration = () => {
 	const fullName = ref<string>("");
 	const userData = ref<{ firstName: string; lastName: string; email: string } | null>(null);
 	const registrationSecret = ref<string>("");
+	const hasApiErrorOccurred = ref<boolean>(false);
 
 	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
 
@@ -46,6 +47,7 @@ export const useRegistration = () => {
 			userData.value = { firstName, lastName, email };
 			fullName.value = `${firstName} ${lastName}`;
 		} catch {
+			hasApiErrorOccurred.value = true;
 			notifyError(t("pages.registrationExternalMembers.error.notFetchedUserData"), false);
 		}
 	};
@@ -67,6 +69,7 @@ export const useRegistration = () => {
 		createAccount,
 		fetchUserData,
 		fullName,
+		hasApiErrorOccurred,
 		initializeLanguage,
 		isPrivacyPolicyAccepted,
 		isTermsOfUseAccepted,

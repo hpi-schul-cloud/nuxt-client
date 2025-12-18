@@ -1549,7 +1549,7 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
-	"pages.registrationExternalMembers.error.notFetchedUserData": "Не вдалося отримати дані користувача.",
+	"pages.registrationExternalMembers.error.notFetchedUserData": "Не вдалося отримати реєстраційні дані.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",

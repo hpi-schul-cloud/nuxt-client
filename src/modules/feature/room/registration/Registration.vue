@@ -51,7 +51,7 @@
 						variant="flat"
 						color="primary"
 						data-testid="registration-continue-button"
-						:disabled="stepValue === steps.length"
+						:disabled="stepValue === steps.length || hasApiErrorOccurred"
 						@click="onContinue"
 					/>
 				</template>
@@ -95,6 +95,7 @@ const {
 	createAccount,
 	fetchUserData,
 	initializeLanguage,
+	hasApiErrorOccurred,
 	isPrivacyPolicyAccepted,
 	isTermsOfUseAccepted,
 	password,
