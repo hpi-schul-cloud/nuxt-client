@@ -4,9 +4,11 @@
 			<VSkeletonLoader ref="skeleton-loader" type="table-thead, table-tbody" class="mt-6" />
 		</VContainer>
 	</template>
-	<template v-else-if="fileFetchingError">
+	<template v-else-if="fileStorageError">
 		<EmptyState :title="t('components.board.notifications.errors.fileServiceNotAvailable')">
-			<template #media> <BrokenPencilSvg /> </template>
+			<template #media>
+				<BrokenPencilSvg />
+			</template>
 		</EmptyState>
 	</template>
 	<template v-else-if="isEmpty && !areUploadStatsVisible">
@@ -141,7 +143,7 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
-	fileFetchingError: {
+	fileStorageError: {
 		type: Boolean,
 		required: true,
 	},

@@ -5,6 +5,7 @@ import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFi
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
+import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
@@ -850,7 +851,7 @@ describe("Folder.vue", () => {
 		});
 
 		describe("when folder contains files", () => {
-			const setup = async () => {
+			const setup = async (fileStorageFails = false) => {
 				const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
 				vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
@@ -872,7 +873,13 @@ describe("Folder.vue", () => {
 
 				const fileRecord1 = fileRecordFactory.build();
 				const fileRecord2 = fileRecordFactory.build({ isUploading: true });
-				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
+
+				if (fileStorageFails) {
+					fileStorageApiMock.fetchFiles.mockRejectedValueOnce(new Error("File fetch failed"));
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+				} else {
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
+				}
 
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
@@ -1058,6 +1065,16 @@ describe("Folder.vue", () => {
 					const { fileStorageApiMock, fileRecord1 } = await setup();
 
 					expect(fileStorageApiMock.deleteFiles).toHaveBeenCalledWith([fileRecord1]);
+				});
+			});
+
+			describe("when file fetching fails", () => {
+				it("should show error state", async () => {
+					const { wrapper, fileStorageApiMock } = await setup(true);
+
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalled();
+					const errorState = wrapper.findComponent(BrokenPencilSvg);
+					expect(errorState.exists()).toBe(true);
 				});
 			});
 		});
