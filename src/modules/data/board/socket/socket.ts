@@ -114,8 +114,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			return;
 		}
 
-		if (retryCount % 5 === 4) {
-			// report every 5th try to establish the connection to the server
+		if (retryCount >= 2) {
+			// report only after 2 retries = 3 connect attempts (=> "regular" initial hiccups don't need reporting)
 			reportBoardError("connect_error", errorData?.message ?? error.message);
 			notifyError(t("error.4500"));
 		}
