@@ -99,7 +99,8 @@ describe("useRegistration", () => {
 		});
 
 		it("should handle errors when fetching user data fails", async () => {
-			const { fetchUserData, registrationSecret } = useRegistration();
+			const { fetchUserData, registrationSecret, hasApiErrorOccurred } = useRegistration();
+			expect(hasApiErrorOccurred.value).toBe(false);
 			registrationSecret.value = "test-secret";
 			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(new Error("API Error"));
 
@@ -111,6 +112,7 @@ describe("useRegistration", () => {
 				status: "error",
 				autoClose: false,
 			});
+			expect(hasApiErrorOccurred.value).toBe(true);
 		});
 	});
 

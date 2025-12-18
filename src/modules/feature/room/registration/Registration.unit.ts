@@ -37,12 +37,13 @@ describe("Registration.vue", () => {
 		options?: Partial<{
 			password: string;
 			queryParams?: string;
+			hasApiErrorOccurred?: boolean;
 		}>
 	) => {
 		useRegistrationMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(options?.password ?? ""),
-			hasApiErrorOccurred: ref(false),
+			hasApiErrorOccurred: ref(options?.hasApiErrorOccurred ?? false),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),
@@ -174,6 +175,17 @@ describe("Registration.vue", () => {
 
 					const welcomeStepHeading = wrapper.get("#step-heading-welcome");
 					expect(document.activeElement).toEqual(welcomeStepHeading.element);
+				});
+
+				it("should be disabled if API error has occurred", async () => {
+					const { wrapper } = setup({ hasApiErrorOccurred: true });
+					const stepper = wrapper.findComponent(VStepper);
+					const continueButton = wrapper
+						.find("[data-testid='registration-continue-button']")
+						.getComponent({ name: "VBtn" });
+
+					expect(stepper.props("modelValue")).toBe(1);
+					expect(continueButton.props("disabled")).toStrictEqual(true);
 				});
 			});
 		});
