@@ -533,7 +533,7 @@ describe("socket.ts", () => {
 
 				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
 					expect.objectContaining({
-						type: "connect after retry",
+						type: "connect_after_retry",
 						retryCount: 2,
 					})
 				);
