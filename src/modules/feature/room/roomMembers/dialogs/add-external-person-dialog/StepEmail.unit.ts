@@ -9,6 +9,7 @@ describe("StepEmail", () => {
 	const setup = () => {
 		wrapper = mount(StepEmail, {
 			attachTo: document.body,
+			props: { email: "" },
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -55,6 +56,20 @@ describe("StepEmail", () => {
 		});
 	});
 
+	describe("reactivity", () => {
+		describe("when email value changes", () => {
+			it("should emit 'update:email' event with new email value", async () => {
+				const { wrapper, emailInput } = setup();
+
+				await emailInput.setValue("test@example.com");
+				const emitted = wrapper.emitted();
+
+				expect(emitted).toHaveProperty("update:email");
+				expect(emitted["update:email"]).toEqual([["test@example.com"]]);
+			});
+		});
+	});
+
 	describe("email validation", () => {
 		describe("when email is invalid", () => {
 			it("should show validation error for invalid email", async () => {
@@ -73,7 +88,7 @@ describe("StepEmail", () => {
 				await clickAddButton();
 				const emitted = wrapper.emitted();
 
-				expect(emitted).not.toHaveProperty("update:email");
+				expect(emitted).not.toHaveProperty("submit:email");
 			});
 		});
 
@@ -91,7 +106,7 @@ describe("StepEmail", () => {
 
 	describe("form submission", () => {
 		describe("when email is valid", () => {
-			it("should emit 'update:email' event with valid email when add button is clicked", async () => {
+			it("should emit 'submit:email' event with valid email when add button is clicked", async () => {
 				const { wrapper, emailInput, clickAddButton } = setup();
 
 				await emailInput.setValue("test@example.com");
@@ -99,21 +114,21 @@ describe("StepEmail", () => {
 				const emitted = wrapper.emitted();
 
 				expect(emitted).toHaveProperty("update:email");
-				expect(emitted["update:email"]).toEqual([["test@example.com"]]);
+				expect(emitted["submit:email"]).toEqual([["test@example.com"]]);
 			});
 
-			it("should emit 'update:email' event with valid email when form is submitted", async () => {
+			it("should emit 'submit:email' event with valid email when form is submitted", async () => {
 				const { wrapper, emailInput, clickAddButton } = setup();
 
 				await emailInput.setValue("test@example.com");
 				await clickAddButton();
 				const emitted = wrapper.emitted();
 
-				expect(emitted).toHaveProperty("update:email");
-				expect(emitted["update:email"]).toEqual([["test@example.com"]]);
+				expect(emitted).toHaveProperty("submit:email");
+				expect(emitted["submit:email"]).toEqual([["test@example.com"]]);
 			});
 
-			it("should emit 'update:email' event when enter key is pressed in email input", async () => {
+			it("should emit 'submit:email' event when enter key is pressed in email input", async () => {
 				const { wrapper, emailInput } = setup();
 
 				await emailInput.setValue("test@example.com");
@@ -121,8 +136,8 @@ describe("StepEmail", () => {
 				await flushPromises();
 				const emitted = wrapper.emitted();
 
-				expect(emitted).toHaveProperty("update:email");
-				expect(emitted["update:email"]).toEqual([["test@example.com"]]);
+				expect(emitted).toHaveProperty("submit:email");
+				expect(emitted["submit:email"]).toEqual([["test@example.com"]]);
 			});
 		});
 	});

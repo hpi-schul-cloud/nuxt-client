@@ -7,11 +7,13 @@ describe("StepDetails", () => {
 	let wrapper: VueWrapper<InstanceType<typeof StepDetails>>;
 
 	const defaultProps = {
-		email: "test@example.com",
 		applicationNames: {
 			text: "dBildungsCloud Text",
 			alert: "dBildungsCloud Alert",
 		},
+		email: "test@example.com",
+		firstName: "",
+		lastName: "",
 	};
 
 	const setup = (props = {}) => {
@@ -83,6 +85,30 @@ describe("StepDetails", () => {
 			const { emailInput } = setup();
 
 			expect(emailInput.vm.modelValue).toBe("test@example.com");
+		});
+	});
+
+	describe("reactivity", () => {
+		const { wrapper, firstNameInput, lastNameInput } = setup();
+		describe("when firstName value changes", () => {
+			it("should emit 'update:firstName' event with new firstName value", async () => {
+				await firstNameInput.setValue("John");
+
+				const emitted = wrapper.emitted();
+
+				expect(emitted).toHaveProperty("update:firstName");
+				expect(emitted["update:firstName"]).toEqual([["John"]]);
+			});
+		});
+		describe("when lastName value changes", () => {
+			it("should emit 'update:lastName' event with new lastName value", async () => {
+				await lastNameInput.setValue("Doe");
+
+				const emitted = wrapper.emitted();
+
+				expect(emitted).toHaveProperty("update:lastName");
+				expect(emitted["update:lastName"]).toEqual([["Doe"]]);
+			});
 		});
 	});
 
@@ -201,7 +227,7 @@ describe("StepDetails", () => {
 
 	describe("form submission", () => {
 		describe("when both names are valid", () => {
-			it("should emit 'update:details' event with correct data when confirm button is clicked", async () => {
+			it("should emit 'update:details' and 'submit:invitation' events with correct data when confirm button is clicked", async () => {
 				const { wrapper, firstNameInput, lastNameInput, clickConfirmButton } = setup();
 
 				await firstNameInput.setValue("John");
@@ -211,6 +237,7 @@ describe("StepDetails", () => {
 
 				expect(emitted).toHaveProperty("update:details");
 				expect(emitted["update:details"]).toEqual([["John", "Doe"]]);
+				expect(emitted).toHaveProperty("submit:invitation");
 			});
 
 			it("should emit 'update:details' event when enter key is pressed in first name field", async () => {

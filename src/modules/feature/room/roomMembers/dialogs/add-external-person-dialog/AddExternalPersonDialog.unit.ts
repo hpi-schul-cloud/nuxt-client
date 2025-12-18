@@ -189,7 +189,7 @@ describe("AddExternalPersonDialog", () => {
 
 	describe("details step", () => {
 		describe("when back button is clicked", () => {
-			it("should go back to email step", async () => {
+			it("should go back to email step maintaining email input value", async () => {
 				const { wrapper, roomMembersStore } = setup();
 
 				roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
@@ -203,6 +203,9 @@ describe("AddExternalPersonDialog", () => {
 
 				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("email");
 				expect(wrapper.getComponent('[data-testid="add-external-person-add-email-btn"]')).toBeTruthy();
+				expect(
+					wrapper.getComponent('[data-testid="add-external-person-email"]').getComponent(VTextField).vm.modelValue
+				).toBe("test-email@example.com");
 			});
 		});
 
