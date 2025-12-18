@@ -134,7 +134,11 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		};
 
 		boardErrorReportApi.boardErrorReportControllerReportError(dataWithBoardId).catch((err) => {
-			logger.error("Failed to report error", err);
+			logger.error("Failed to report error - will retry in 5 seconds", err);
+			setTimeout(() => {
+				// try again in 5 seconds
+				reportBoardError(type, message);
+			}, 5000);
 		});
 	};
 
