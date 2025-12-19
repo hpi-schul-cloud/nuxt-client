@@ -17,10 +17,10 @@ let instance: Socket | null = null;
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 let retryCount = 0;
 
-export const resetSocketStateForTesting = () => {
+export const resetSocketStateForTesting = (initialRetryCount = 0) => {
 	instance = null;
 	dispatchHandlers.length = 0;
-	retryCount = 0;
+	retryCount = initialRetryCount;
 };
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
@@ -36,7 +36,6 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 				path: "/board-collaboration",
 				withCredentials: true,
-				reconnectionAttempts: 20,
 				closeOnBeforeunload: true,
 			});
 
@@ -46,18 +45,12 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 			instance.on("connect", async function () {
 				logger.log("connected");
-				if (retryCount > 0) {
-					reportBoardError("connect after retry", "Connection restored after retry");
-					retryCount = 0;
-				}
-
 				if (isInitialConnection) return;
 				if (timeoutFn.isPending?.value) {
 					timeoutFn.stop();
 					return;
 				}
 				notifySuccess(t("common.notification.connection.restored"));
-
 				if (!(boardStore.board && cardStore.cards)) return;
 				await boardStore.reloadBoard();
 				await cardStore.fetchCardRequest({
@@ -74,20 +67,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 				}, 1000);
 			});
 
-			instance.on("connect_error", (error: Error & { data?: unknown }) => {
-				const errorData = error.data as { code?: number; message?: string; status?: number } | undefined;
-				if (errorData?.message === "Session ID unknown") {
-					reportBoardError("session_id_unknown", "Session ID unknown - automatically reset connection.");
-					disconnectSocket();
-				} else if (retryCount > 20) {
-					reportBoardError("connect_error", "Max reconnection attempts reached");
-					notifyError(t("error.4500"));
-					retryCount = 0;
-				} else {
-					reportBoardError("connect_error", errorData?.message ?? error.message);
-					retryCount++;
-				}
-			});
+			addErrorHandling(instance);
 		}
 		if (!instance.connected) {
 			instance.connect();
@@ -115,6 +95,33 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		if (timeoutFn?.isPending.value) timeoutFn.stop();
 	};
 
+	const addErrorHandling = (instance: Socket) => {
+		instance.on("connect_error", errorHandler);
+		instance.on("connect", async function () {
+			if (retryCount > 0) {
+				reportBoardError("connect_after_retry", "Connection restored after retry");
+				retryCount = 0;
+			}
+		});
+	};
+
+	const errorHandler = (error: Error & { data?: unknown }) => {
+		const errorData = error.data as { code?: number; message?: string; status?: number } | undefined;
+		if (errorData?.message === "Session ID unknown") {
+			reportBoardError("session_id_unknown", "Session ID unknown - automatically reset connection.");
+			// disconnect the socket - it will reconnect automatically on next emit
+			disconnectSocket();
+			return;
+		}
+
+		if (retryCount >= 2) {
+			// report only after 2 retries = 3 connect attempts (=> "regular" initial hiccups don't need reporting)
+			reportBoardError("connect_error", errorData?.message ?? error.message);
+			notifyError(t("error.4500"));
+		}
+		retryCount++;
+	};
+
 	const reportBoardError = (type: string, message: string) => {
 		const url = window.location.href;
 		const boardId = url.match(/boards\/([0-9a-fA-F]{24})/)?.[1] ?? "unknown";
@@ -127,7 +134,11 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		};
 
 		boardErrorReportApi.boardErrorReportControllerReportError(dataWithBoardId).catch((err) => {
-			logger.error("Failed to report error", err);
+			logger.error("Failed to report error - will retry in 5 seconds", err);
+			setTimeout(() => {
+				// try again in 5 seconds
+				reportBoardError(type, message);
+			}, 5000);
 		});
 	};
 

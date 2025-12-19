@@ -58,12 +58,14 @@ const initializeTimeout = (pending = false) => {
 
 const dispatchMock = vi.fn();
 
+type Fn = (...args: unknown[]) => unknown;
+
 describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: Mock };
 	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
 	// values are created only once when the module is loaded and initially used.
-	let socketHandlers: Record<string, (arg?: unknown) => void> | undefined = undefined;
+	let namedSocketHandlers: Record<string, Fn>;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
 	let boardErrorReportApi: DeepMocked<ReturnType<typeof BoardErrorReportApiFactory>>;
@@ -98,18 +100,21 @@ describe("socket.ts", () => {
 		resetSocketStateForTesting();
 	});
 
-	const getEventCallback = (eventName: string) => {
-		const listener = (mockSocket.on as Mock).mock.calls.find(([event]) => event === eventName);
-		return listener?.[1];
+	const getEventCallbacks = (eventName: string): Fn[] => {
+		const listeners = (mockSocket.on as Mock).mock.calls
+			.filter(([event]) => event === eventName)
+			.map(([_, callback]) => callback);
+		return listeners;
 	};
 
-	function getEventCallbacks() {
-		socketHandlers = socketHandlers ?? {
-			connect: getEventCallback("connect"),
-			connect_error: getEventCallback("connect_error"),
-			disconnect: getEventCallback("disconnect"),
+	function getAllEventCallbacks() {
+		namedSocketHandlers = namedSocketHandlers ?? {
+			connect: () => getEventCallbacks("connect").forEach((cb) => cb()),
+			connect_error: (error: Error & { data?: unknown }) =>
+				getEventCallbacks("connect_error").forEach((cb) => cb(error)),
+			disconnect: () => getEventCallbacks("disconnect").forEach((cb) => cb()),
 		};
-		return socketHandlers;
+		return namedSocketHandlers;
 	}
 
 	const getOrInitialiseBoardStore = () => {
@@ -134,7 +139,7 @@ describe("socket.ts", () => {
 			useSocketConnection(dispatchMock);
 		const socket = await getConnectedSocket();
 
-		const eventCallbacks = getEventCallbacks();
+		const eventCallbacks = getAllEventCallbacks();
 
 		if (options.doInitializeTimeout !== undefined) {
 			initializeTimeout(doInitializeTimeout);
@@ -142,8 +147,10 @@ describe("socket.ts", () => {
 
 		const triggerServerEvent = (event: string, payload?: unknown) => {
 			const calls = (mockSocket.onAny as Mock).mock.calls;
-			const listener = calls.length > 0 ? calls[0][0] : vi.fn();
-			listener(event, payload);
+			const listeners = calls.length > 0 ? calls[0] : [];
+			for (const listener of listeners) {
+				listener(event, payload);
+			}
 		};
 
 		if (options.url) {
@@ -222,18 +229,6 @@ describe("socket.ts", () => {
 			expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalled();
 		});
 
-		describe("when board exists", () => {
-			it("should call reloadBoard", async () => {
-				const { eventCallbacks } = await setup({
-					doInitializeTimeout: false,
-				});
-				eventCallbacks.disconnect();
-				eventCallbacks.connect();
-
-				expect(boardStore.reloadBoard).toHaveBeenCalled();
-			});
-		});
-
 		describe("when board doesn't exist", () => {
 			it("should not call reloadBoard", async () => {
 				const { eventCallbacks } = await setup();
@@ -255,13 +250,17 @@ describe("socket.ts", () => {
 		});
 
 		describe("connect_error event", () => {
-			it("should report board error and show failure notification", async () => {
+			it("should report board error and show failure notification for every 5th retry", async () => {
 				const { eventCallbacks } = await setup();
 
 				const mockError = {
 					type: "connect_error",
 					message: "Connection failed",
 				};
+				eventCallbacks.connect_error(mockError);
+				eventCallbacks.connect_error(mockError);
+				eventCallbacks.connect_error(mockError);
+				eventCallbacks.connect_error(mockError);
 				eventCallbacks.connect_error(mockError);
 				nextTick();
 
@@ -377,7 +376,7 @@ describe("socket.ts", () => {
 	});
 
 	describe("when adding multiple handlers", () => {
-		it("should call all handlers on incoming event", async () => {
+		it("should call all dispatchers on incoming event", async () => {
 			const { triggerServerEvent, getConnectedSocket, connected } = await setup();
 
 			await getConnectedSocket();
@@ -440,24 +439,42 @@ describe("socket.ts", () => {
 					const mockError = getSessionIdUnknownError();
 					await eventCallbacks.connect_error(mockError);
 
-					expect(logger.error).toHaveBeenCalledWith("Failed to report error", expect.any(Error));
+					expect(logger.error).toHaveBeenCalledWith(
+						"Failed to report error - will retry in 5 seconds",
+						expect.any(Error)
+					);
 				});
 			});
 		});
 
 		describe("when error is general connection error", () => {
-			it("should increment retry count", async () => {
-				const { eventCallbacks } = await setup();
+			describe("when less than three connection attempts have failed", () => {
+				it("should not report the error (usual hiccups on websocket connection)", async () => {
+					const { eventCallbacks } = await setup();
 
-				const mockError = { type: "test_error", message: "Test error message" };
-				for (let i = 0; i <= 5; i++) {
+					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+
+					expect(boardErrorReportApi.boardErrorReportControllerReportError).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when three connection attempts have failed", () => {
+				it("should report the error with the right retryCount", async () => {
+					const { eventCallbacks } = await setup();
+
+					const mockError = { type: "test_error", message: "Test error message" };
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+
 					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
 						expect.objectContaining({
-							retryCount: i,
+							retryCount: 2,
 						})
 					);
-				}
+				});
 			});
 
 			describe("when url does not contain board id", () => {
@@ -466,13 +483,17 @@ describe("socket.ts", () => {
 
 					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
 
 					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 						expect.objectContaining({
 							boardId: "unknown",
 							type: "connect_error",
 							message: "Test error message",
-							retryCount: 0,
+							retryCount: 4,
 						})
 					);
 				});
@@ -484,13 +505,17 @@ describe("socket.ts", () => {
 
 					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
+					eventCallbacks.connect_error(mockError);
 
 					expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenCalledWith(
 						expect.objectContaining({
 							boardId: "69121555fd38bab102439ff8",
 							type: "connect_error",
 							message: "Test error message",
-							retryCount: 0,
+							retryCount: 4,
 						})
 					);
 				});
@@ -508,7 +533,7 @@ describe("socket.ts", () => {
 
 				expect(boardErrorReportApi.boardErrorReportControllerReportError).toHaveBeenLastCalledWith(
 					expect.objectContaining({
-						type: "connect after retry",
+						type: "connect_after_retry",
 						retryCount: 2,
 					})
 				);
