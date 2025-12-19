@@ -82,6 +82,10 @@ watchThrottled(
 </script>
 
 <style scoped>
+.v-fab {
+	pointer-events: auto;
+}
+
 .positioning-lg {
 	position: absolute;
 	bottom: -22px;
