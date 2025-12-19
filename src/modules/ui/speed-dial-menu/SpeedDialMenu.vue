@@ -3,7 +3,6 @@
 		class="fab-size-transition z-index-100"
 		:class="{
 			'fab-default-width': !isCollapsed,
-			'positioning-lg': !mdAndDown,
 			'position-fixed positioning-sm-md': mdAndDown,
 		}"
 		:rounded="!isCollapsed ? 'pill' : 'circle'"
@@ -84,12 +83,6 @@ watchThrottled(
 <style scoped>
 .v-fab {
 	pointer-events: auto;
-}
-
-.positioning-lg {
-	position: absolute;
-	bottom: -22px;
-	right: 24px;
 }
 
 .positioning-sm-md {
