@@ -103,7 +103,7 @@ describe("socket.ts", () => {
 	const getEventCallbacks = (eventName: string): Fn[] => {
 		const listeners = (mockSocket.on as Mock).mock.calls
 			.filter(([event]) => event === eventName)
-			.map(([_, callback]) => callback);
+			.map(([, callback]) => callback);
 		return listeners;
 	};
 
