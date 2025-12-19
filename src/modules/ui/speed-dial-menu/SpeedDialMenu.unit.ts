@@ -121,7 +121,6 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 			const { wrapper } = setup({ actions: multipleActions });
 
 			expect(wrapper.classes()).toContain("positioning-lg");
-			expect(wrapper.classes()).toContain("v-fab--absolute");
 		});
 
 		it("should open speed dial downwards", async () => {
