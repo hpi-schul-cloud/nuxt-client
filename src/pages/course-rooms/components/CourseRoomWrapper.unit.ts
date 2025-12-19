@@ -1,6 +1,6 @@
-import { FabAction } from "./default-wireframe.types";
-import DefaultWireframe from "./DefaultWireframe.vue";
-import RoomWrapper from "./RoomWrapper.vue";
+import CourseRoomWrapper from "./CourseRoomWrapper.vue";
+import { FabAction } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
@@ -15,11 +15,11 @@ import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
 const getWrapper = (
-	options: ComponentMountingOptions<typeof RoomWrapper> = {
+	options: ComponentMountingOptions<typeof CourseRoomWrapper> = {
 		props: { hasRooms: true },
 	}
 ) =>
-	mount(RoomWrapper, {
+	mount(CourseRoomWrapper, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
@@ -69,7 +69,7 @@ const mockData: CourseMetadataResponse[] = [
 	},
 ];
 
-describe("@templates/RoomWrapper.vue", () => {
+describe("@templates/CourseRoomWrapper.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({
@@ -172,7 +172,7 @@ describe("@templates/RoomWrapper.vue", () => {
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
 
-			expect((wrapper.vm as unknown as typeof RoomWrapper).isCourseSyncDialogOpen).toEqual(true);
+			expect((wrapper.vm as unknown as typeof CourseRoomWrapper).isCourseSyncDialogOpen).toEqual(true);
 		});
 	});
 

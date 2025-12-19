@@ -1,5 +1,5 @@
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import TasksList from "@/components/organisms/TasksList.vue";
+import TasksList from "./TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
@@ -20,7 +20,7 @@ const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } = mock
 
 const tabRoutes = ["current", "drafts", "finished"];
 
-describe("@/components/templates/TasksDashboardTeacher", () => {
+describe("TasksDashboardTeacher", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;

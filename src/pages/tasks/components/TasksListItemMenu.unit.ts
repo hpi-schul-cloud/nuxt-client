@@ -1,4 +1,4 @@
-import TaskItemMenu from "./TaskItemMenu.vue";
+import TasksListItemMenu from "./TasksListItemMenu.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -14,7 +14,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { VBtn } from "vuetify/lib/components/index";
+import { VBtn } from "vuetify/components";
 
 const { tasksTeacher } = mocks;
 
@@ -32,7 +32,7 @@ const getWrapper = (
 	},
 	options = {}
 ) =>
-	mount(TaskItemMenu, {
+	mount(TasksListItemMenu, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -45,7 +45,7 @@ const getWrapper = (
 		...options,
 	});
 
-describe("@/components/molecules/TaskItemMenu", () => {
+describe("TasksListItemMenu", () => {
 	const defineWindowWidth = (width: number) => {
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
@@ -71,7 +71,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 	describe("props", () => {
 		it("should accept valid userRole prop", () => {
-			const { validator } = TaskItemMenu.props.userRole;
+			const { validator } = TasksListItemMenu.props.userRole;
 			const validRoles = ["student", "teacher"];
 
 			validRoles.forEach((task) => {
@@ -80,7 +80,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 		});
 
 		it("should reject invalid userRole prop", () => {
-			const { validator } = TaskItemMenu.props.userRole;
+			const { validator } = TasksListItemMenu.props.userRole;
 			const invalidRoles = ["admin", "tomato"];
 
 			invalidRoles.forEach((task) => {

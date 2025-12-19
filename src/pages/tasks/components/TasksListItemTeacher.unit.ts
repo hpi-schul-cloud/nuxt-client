@@ -1,5 +1,5 @@
-import TaskItemMenu from "./TaskItemMenu.vue";
-import TaskItemTeacher from "./TaskItemTeacher.vue";
+import TasksListItemMenu from "./TasksListItemMenu.vue";
+import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY } from "@/utils/inject";
@@ -11,7 +11,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
-import { VBtn, VListItem } from "vuetify/lib/components/index";
+import { VBtn, VListItem } from "vuetify/components";
 
 const { tasksTeacher, drafts, plannedTask, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
 
@@ -23,7 +23,7 @@ const mockRouter = {
 };
 
 const getWrapper = (props: { task: object }) =>
-	mount(TaskItemTeacher, {
+	mount(TasksListItemTeacher, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -37,7 +37,7 @@ const getWrapper = (props: { task: object }) =>
 		},
 	});
 
-describe("@/components/molecules/TaskItemTeacher", () => {
+describe("TasksListItemTeacher", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 	});
@@ -59,7 +59,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	it("accepts valid task props", () => {
-		const { validator } = TaskItemTeacher.props.task;
+		const { validator } = TasksListItemTeacher.props.task;
 		const validTasks = tasksTeacher;
 
 		validTasks.forEach((task) => {
@@ -92,7 +92,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			type: CopyParamsTypeEnum.Task,
 		};
 
-		const oneTaskItemMenu = wrapper.findComponent(TaskItemMenu);
+		const oneTaskItemMenu = wrapper.findComponent(TasksListItemMenu);
 		oneTaskItemMenu.vm.$emit("copy-task", payload);
 
 		expect(wrapper.emitted()["copy-task"]?.[0]).toStrictEqual(expect.arrayContaining([payload]));

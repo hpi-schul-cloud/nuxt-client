@@ -1,9 +1,9 @@
-import DoublePanels from "./DoublePanels.vue";
+import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VExpansionPanels } from "vuetify/lib/components/index";
+import { VExpansionPanels } from "vuetify/components";
 
-describe("@/components/molecules/DoublePanels", () => {
+describe("TasksDashBoardPanels", () => {
 	const propsData = {
 		panelOneCount: 1,
 		panelTwoCount: 13,
@@ -57,7 +57,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	const slot2 = "<div class='slot2' />";
 
 	it("Should render its slots", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -72,7 +72,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Accepts valid panel count props", () => {
-		const { validator } = DoublePanels.props.panelOneCount;
+		const { validator } = TasksDashBoardPanels.props.panelOneCount;
 		const validCount = 1234;
 		const invalidCounts = [-1, undefined, {}];
 
@@ -84,7 +84,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Accepts valid status props", () => {
-		const { validator } = DoublePanels.props.status;
+		const { validator } = TasksDashBoardPanels.props.status;
 		const validStati = [null, "completed", "pending", "error"];
 		const invalidStatus = "Invalid status";
 		expect(validator(invalidStatus)).toBe(false);
@@ -94,7 +94,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Accepts valid expanded props", () => {
-		const { validator } = DoublePanels.props.expandedDefault;
+		const { validator } = TasksDashBoardPanels.props.expandedDefault;
 		const validProp1 = 0;
 		const validProp2 = 1;
 		const invalidPropValues = [-1, undefined, {}, 2];
@@ -108,7 +108,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Should render skeleton loader when the status is pending", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -119,7 +119,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Should render only panel 1 disabled, if panel 2 has data", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -133,7 +133,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Should render only panel 2 disabled, if panel 1 has data", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -147,7 +147,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Should open panel 2, if panel 1 disabled", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -162,7 +162,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Should open panel 1, if panel 2 disabled", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -177,7 +177,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Shouldn't render headers, if it's empty", () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -188,7 +188,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("Should trigger toggle on panel header click", async () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
@@ -202,7 +202,7 @@ describe("@/components/molecules/DoublePanels", () => {
 	});
 
 	it("'toggle()' should collapse expanded panel and expand the collapsed one", async () => {
-		const wrapper = mount(DoublePanels, {
+		const wrapper = mount(TasksDashBoardPanels, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},

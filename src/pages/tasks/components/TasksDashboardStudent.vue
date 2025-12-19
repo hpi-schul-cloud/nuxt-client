@@ -2,7 +2,7 @@
 	<section class="task-dashboard-student">
 		<v-window v-model="tab">
 			<v-window-item :value="tabRoutes[0]">
-				<DoublePanels
+				<TasksDashBoardPanels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleNoDue')"
@@ -18,7 +18,7 @@
 						<tasks-list :tasks="withDueDateTasks" :title="$t('pages.tasks.subtitleOpen')" user-role="student" />
 						<tasks-list :tasks="overdueTasks" :title="$t('pages.tasks.student.subtitleOverDue')" user-role="student" />
 					</template>
-				</DoublePanels>
+				</TasksDashBoardPanels>
 				<VContainer>
 					<EmptyState v-if="openTasksForStudentIsEmpty" :title="$t('pages.tasks.student.open.emptyState.title')">
 						<template #media>
@@ -28,7 +28,7 @@
 				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[1]">
-				<DoublePanels
+				<TasksDashBoardPanels
 					:panel-one-count="gradedTasks.length"
 					:panel-two-count="submittedTasks.length"
 					:panel-one-title="$t('pages.tasks.subtitleGraded')"
@@ -43,7 +43,7 @@
 					<template #panelTwo>
 						<tasks-list :tasks="submittedTasks" user-role="student" />
 					</template>
-				</DoublePanels>
+				</TasksDashBoardPanels>
 				<VContainer>
 					<EmptyState
 						v-if="completedTasksForStudentIsEmpty"
@@ -70,14 +70,14 @@
 </template>
 
 <script>
-import DoublePanels from "@/components/molecules/DoublePanels.vue";
-import TasksList from "@/components/organisms/TasksList";
+import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
+import TasksList from "./TasksList.vue";
 import { EmptyState, TasksEmptyStateSvg } from "@ui-empty-state";
 
 export default {
 	components: {
 		TasksList,
-		DoublePanels,
+		TasksDashBoardPanels,
 		EmptyState,
 		TasksEmptyStateSvg,
 	},

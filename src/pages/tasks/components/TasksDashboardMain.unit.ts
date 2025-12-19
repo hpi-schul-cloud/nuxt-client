@@ -17,7 +17,7 @@ import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
-import { VAutocomplete } from "vuetify/lib/components/index";
+import { VAutocomplete } from "vuetify/components";
 
 const $route = {
 	query: {
@@ -45,7 +45,7 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	hasTasks: false,
 };
 
-describe("@/components/templates/TasksDashboardMain", () => {
+describe("TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;

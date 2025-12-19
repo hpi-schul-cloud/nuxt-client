@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import { Fab, FabAction } from "./default-wireframe.types";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
+import { Fab, FabAction } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
@@ -125,7 +125,7 @@ const fabItemClickHandler = (event: string | undefined): void => {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 :deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;

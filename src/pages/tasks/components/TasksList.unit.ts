@@ -1,5 +1,5 @@
-import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
+import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import { RoleName } from "@/serverApi/v3";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -15,7 +15,7 @@ import { beforeAll } from "vitest";
 
 const { tasks } = mocks;
 
-describe("@/components/organisms/TasksList", () => {
+describe("TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
@@ -238,7 +238,7 @@ describe("@/components/organisms/TasksList", () => {
 			type: CopyParamsTypeEnum.Task,
 		};
 
-		const oneTaskItemTeacher = wrapper.findComponent(TaskItemTeacher);
+		const oneTaskItemTeacher = wrapper.findComponent(TasksListItemTeacher);
 		oneTaskItemTeacher.vm.$emit("copy-task", payload);
 
 		expect(wrapper.emitted()["copy-task"]?.[0]).toEqual(expect.arrayContaining([payload]));

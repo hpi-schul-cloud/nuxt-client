@@ -50,13 +50,13 @@
 </template>
 
 <script>
+import TasksListItemMenu from "./TasksListItemMenu.vue";
 import ChipTimeRemaining from "@/components/atoms/ChipTimeRemaining.vue";
-import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
 import {
 	fromNowToFuture,
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
-} from "@/plugins/datetime";
+} from "@/plugins/datetime.js";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
@@ -64,7 +64,7 @@ const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 export default {
 	components: {
 		ChipTimeRemaining,
-		TaskItemMenu,
+		TaskItemMenu: TasksListItemMenu,
 	},
 	directives: {
 		outsideClick: vOnClickOutside,

@@ -37,7 +37,7 @@
 							@delete-board="openItemDeleteDialog(item.content, item.type)"
 							@share-board="getSharedBoard(item.content.columnBoardId)"
 						/>
-						<RoomTaskCard
+						<CourseRoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
 							:task-card-index="index"
@@ -112,7 +112,7 @@
 						})
 					"
 				/>
-				<RoomTaskCard
+				<CourseRoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
 					:task-card-index="index"
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
+import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
@@ -195,7 +195,7 @@ import draggable from "vuedraggable";
 export default {
 	components: {
 		RoomBoardCard,
-		RoomTaskCard,
+		CourseRoomTaskCard,
 		RoomLessonCard,
 		CustomDialog,
 		draggable,

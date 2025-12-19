@@ -1,5 +1,5 @@
-import TasksList from "@/components/organisms/TasksList.vue";
-import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
+import TasksDashboardStudent from "./TasksDashboardStudent.vue";
+import TasksList from "./TasksList.vue";
 import FinishedTasksModule from "@/store/finished-tasks";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
@@ -11,7 +11,7 @@ import { shallowMount } from "@vue/test-utils";
 
 const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
-describe("@/components/templates/TasksDashboardStudent", () => {
+describe("TasksDashboardStudent", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 

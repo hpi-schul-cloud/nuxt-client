@@ -1,4 +1,4 @@
-import TaskItemStudent from "./TaskItemStudent.vue";
+import TasksListItemStudent from "./TasksListItemStudent.vue";
 import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
@@ -22,8 +22,8 @@ const mockRouter = {
 	push: vi.fn(),
 };
 
-const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) =>
-	mount(TaskItemStudent, {
+const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
+	mount(TasksListItemStudent, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -37,7 +37,7 @@ const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) =>
 		},
 	});
 
-describe("@/components/molecules/TaskItemStudent", () => {
+describe("TasksListItemStudent", () => {
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
@@ -138,7 +138,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	});
 
 	it("accepts valid task props", () => {
-		const { validator } = TaskItemStudent.props.task;
+		const { validator } = TasksListItemStudent.props.task;
 		const validTasks = tasks;
 
 		validTasks.forEach((task) => {

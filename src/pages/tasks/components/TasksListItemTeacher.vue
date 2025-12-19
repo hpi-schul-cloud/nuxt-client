@@ -89,7 +89,7 @@
 				class="context-menu-min-width"
 				data-testid="three-dot-task-option-menu"
 			>
-				<task-item-menu
+				<TasksListItemMenu
 					:task-id="task.id"
 					:task-is-finished="task.status.isFinished"
 					:task-is-published="!task.status.isDraft && !task.status.isFinished"
@@ -105,15 +105,15 @@
 </template>
 
 <script>
-import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
-import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime";
+import TasksListItemMenu from "./TasksListItemMenu.vue";
+import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime.js";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
 const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { TaskItemMenu },
+	components: { TasksListItemMenu },
 	directives: {
 		outsideClick: vOnClickOutside,
 	},

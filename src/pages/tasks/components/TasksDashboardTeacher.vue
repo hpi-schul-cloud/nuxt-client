@@ -2,7 +2,7 @@
 	<section class="task-dashboard-teacher">
 		<v-window v-model="tab">
 			<v-window-item :value="tabRoutes[0]" class="padding-bottom">
-				<DoublePanels
+				<TasksDashBoardPanels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
 					:panel-one-title="t('pages.tasks.subtitleNoDue')"
@@ -30,7 +30,7 @@
 							@share-task="onShareTask"
 						/>
 					</template>
-				</DoublePanels>
+				</TasksDashBoardPanels>
 				<VContainer>
 					<EmptyState v-if="openTasksForTeacherIsEmpty" :title="t('pages.tasks.teacher.open.emptyState.title')">
 						<template #media> <TasksEmptyStateSvg /></template>
@@ -66,11 +66,11 @@
 </template>
 
 <script setup lang="ts">
-import { useCopy } from "../../composables/copy";
-import { useLoadingState } from "../../composables/loadingState";
-import DoublePanels from "@/components/molecules/DoublePanels.vue";
-import TasksList from "@/components/organisms/TasksList.vue";
+import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
+import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { CopyParams } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";

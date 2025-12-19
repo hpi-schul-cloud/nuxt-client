@@ -77,12 +77,12 @@
 </template>
 
 <script>
-import TasksDashboardStudent from "./TasksDashboardStudent";
-import TasksDashboardTeacher from "./TasksDashboardTeacher";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import TasksDashboardStudent from "./TasksDashboardStudent.vue";
+import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { Permission, RoleName } from "@/serverApi/v3/index.ts";
+import { COPY_MODULE_KEY } from "@/utils/inject/index.ts";
 import { useAppStore } from "@data-app";
 import {
 	mdiArchiveOutline,
@@ -312,7 +312,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 .substitute-filter-placeholder {
 	min-height: 78px;
