@@ -90,13 +90,13 @@
 </template>
 
 <script>
+import CourseRoomDashboard from "./components/CourseRoomDashboard.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
@@ -145,7 +145,7 @@ export default defineComponent({
 		StartExistingCourseSyncDialog,
 		EndCourseSyncDialog,
 		DefaultWireframe,
-		RoomDashboard,
+		CourseRoomDashboard,
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
@@ -224,7 +224,7 @@ export default defineComponent({
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
 					dataTestId: "learnContent-tab",
-					component: RoomDashboard,
+					component: CourseRoomDashboard,
 					fabItems: this.learnContentFabItems,
 				},
 			];

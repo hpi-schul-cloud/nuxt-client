@@ -1,4 +1,4 @@
-import RoomDashboard from "./RoomDashboard.vue";
+import CourseRoomDashboard from "./CourseRoomDashboard.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -18,7 +18,7 @@ import { beforeEach, Mock } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
-import { VCard } from "vuetify/lib/components/index";
+import { VCard } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -118,11 +118,11 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 	getIsShareModalOpen: false,
 });
 
-const getWrapper = (props: ComponentProps<typeof RoomDashboard>, options?: object) => {
+const getWrapper = (props: ComponentProps<typeof CourseRoomDashboard>, options?: object) => {
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
 
-	const wrapper = mount(RoomDashboard, {
+	const wrapper = mount(CourseRoomDashboard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -136,7 +136,7 @@ const getWrapper = (props: ComponentProps<typeof RoomDashboard>, options?: objec
 	return wrapper;
 };
 
-describe("@/components/templates/RoomDashboard.vue", () => {
+describe("@/components/templates/CourseRoomDashboard.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
