@@ -4,6 +4,13 @@
 			<VSkeletonLoader ref="skeleton-loader" type="table-thead, table-tbody" class="mt-6" />
 		</VContainer>
 	</template>
+	<template v-else-if="fileStorageError">
+		<EmptyState :title="t('components.board.notifications.errors.fileServiceNotAvailable')">
+			<template #media>
+				<BrokenPencilSvg />
+			</template>
+		</EmptyState>
+	</template>
 	<template v-else-if="isEmpty && !areUploadStatsVisible">
 		<EmptyState :title="t('pages.folder.emptyState')">
 			<template #media>
@@ -116,6 +123,7 @@ import FileUploadProgress from "./FileUploadProgress.vue";
 import KebabMenuActionDeleteFiles from "./KebabMenuActionDeleteFiles.vue";
 import KebabMenuActionDownloadFiles from "./KebabMenuActionDownloadFiles.vue";
 import RenameFileDialog from "./RenameFileDialog.vue";
+import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { FileRecord } from "@/types/file/File";
 import { formatFileSize, getFileExtension, isScanStatusBlocked } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
@@ -132,6 +140,10 @@ const props = defineProps({
 		required: true,
 	},
 	isEmpty: {
+		type: Boolean,
+		required: true,
+	},
+	fileStorageError: {
 		type: Boolean,
 		required: true,
 	},

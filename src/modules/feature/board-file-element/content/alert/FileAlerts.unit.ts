@@ -113,4 +113,13 @@ describe("FileAlerts", () => {
 			expect(infoAlert.text()).toBe("components.cardElement.fileElement.videoFormatError");
 		});
 	});
+
+	describe("when alerts contains FileAlert.FILE_STORAGE_ERROR", () => {
+		it("should render FileAlert.FILE_STORAGE_ERROR", () => {
+			const { wrapper } = setup([FileAlert.FILE_STORAGE_ERROR]);
+
+			const warningAlert = wrapper.findComponent(WarningAlert);
+			expect(warningAlert.text()).toContain("common.file.storage.error");
+		});
+	});
 });
