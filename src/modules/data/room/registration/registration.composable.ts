@@ -53,7 +53,7 @@ export const useRegistration = () => {
 	const createAccount = async (): Promise<boolean> => {
 		try {
 			await registrationApi.registrationControllerCompleteRegistration(registrationSecret.value, {
-				language: selectedLanguage.value!,
+				language: selectedLanguage.value || LanguageType.De,
 				password: password.value,
 			});
 			return true;

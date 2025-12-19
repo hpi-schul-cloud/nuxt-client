@@ -128,7 +128,7 @@ describe("useRegistration", () => {
 
 			expect(result).toBe(true);
 			expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith("test-secret", {
-				language: undefined,
+				language: LanguageType.De,
 				password: pass,
 			});
 		});
