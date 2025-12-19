@@ -1,6 +1,5 @@
 <template>
 	<VFab
-		:absolute="!mdAndDown"
 		class="fab-size-transition z-index-100"
 		:class="{
 			'fab-default-width': !isCollapsed,
@@ -84,7 +83,8 @@ watchThrottled(
 
 <style scoped>
 .positioning-lg {
-	top: 22px;
+	position: absolute;
+	bottom: -22px;
 	right: 24px;
 }
 

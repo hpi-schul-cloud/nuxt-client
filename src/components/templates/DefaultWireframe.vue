@@ -95,6 +95,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	display: flex;
 	flex-direction: column;
 }
+
 .main-content-flex {
 	flex: 1;
 	overflow-y: auto;
@@ -109,6 +110,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 }
 
 .wireframe-header {
+	position: relative;
 	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
