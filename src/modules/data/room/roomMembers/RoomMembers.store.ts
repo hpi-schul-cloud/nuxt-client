@@ -3,6 +3,8 @@ import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
+	CreateOrUpdateRegistrationBodyParams,
+	RegistrationApiFactory,
 	RoleName,
 	RoomApiFactory,
 	RoomMemberResponse,
@@ -80,6 +82,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
+	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
 
 	const isRoomOwner = (userId: string) => {
 		const member = roomMembers.value.find((member) => member.userId === userId);
@@ -246,6 +249,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			notifyError(t("pages.rooms.members.error.add"));
 		}
 	};
+
+	const startRegistrationProcess = ({
+		firstName,
+		lastName,
+		email,
+		roomId,
+	}: Omit<CreateOrUpdateRegistrationBodyParams, "roomId"> & { roomId?: string }) =>
+		registrationApi.registrationControllerCreateOrUpdateRegistration({
+			firstName,
+			lastName,
+			email,
+			roomId: roomId ?? getRoomId(),
+		});
 
 	const removeMembers = async (userIds: string[]) => {
 		try {
@@ -428,8 +444,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	]);
 
 	return {
-		addMemberByEmail,
 		addMembers,
+		addMemberByEmail,
 		isRoomOwner,
 		setAdminMode,
 		changeRoomOwner,
@@ -445,6 +461,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
+		startRegistrationProcess,
 		updateMembersRole,
 		baseTableHeaders,
 		confirmationList,
