@@ -216,5 +216,26 @@ describe("CollaboraFileDialog", () => {
 
 			expect(closeCollaboraFileDialog).toHaveBeenCalled();
 		});
+
+		describe("when modal has finished transition out", () => {
+			it("should reset the form", async () => {
+				const { wrapper } = await setup();
+
+				const typeSelect = wrapper.findComponent(VSelect);
+				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
+				await nextTick();
+
+				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-form-filename']");
+				await fileNameInput.find("input").setValue("filename");
+				await nextTick();
+
+				const dialog = wrapper.findComponent(Dialog);
+				await dialog.vm.$emit("after-leave");
+
+				expect(fileNameInput.find("input").element.value).toBe("");
+				expect(typeSelect.find("input").element.value).toBe("");
+			});
+		});
 	});
 });

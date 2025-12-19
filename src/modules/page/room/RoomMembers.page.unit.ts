@@ -11,7 +11,6 @@ import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/room
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
-	ExternalMemberCheckStatus,
 	InvitationStep,
 	useRoomAuthorization,
 	useRoomDetailsStore,
@@ -33,7 +32,6 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { flushPromises } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -616,38 +614,6 @@ describe("RoomMembersPage", () => {
 			await dialog.vm.$emit("close");
 
 			expect(dialog.props("modelValue")).toBe(false);
-		});
-	});
-
-	describe("add members by email", () => {
-		it("should call addMembersByEmail when @update:mail is emitted", async () => {
-			roomPermissions.canAddRoomMembers = computed(() => true);
-			const { wrapper, roomMembersStore } = setup();
-
-			const dialog = wrapper.getComponent(AddExternalPersonDialog);
-
-			const email = "test@example.com";
-			dialog.vm.$emit("update:mail", email);
-			await nextTick();
-
-			expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith(email);
-		});
-		describe("when response is ACCOUNT_FOUND_AND_ADDED", () => {
-			it("should close the dialog", async () => {
-				roomPermissions.canAddRoomMembers = computed(() => true);
-				const { wrapper, roomMembersStore } = setup();
-
-				roomMembersStore.addMemberByEmail.mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED);
-
-				const dialog = wrapper.getComponent(AddExternalPersonDialog);
-				await dialog.setValue(true);
-
-				const email = "test@example.com";
-				dialog.vm.$emit("update:mail", email);
-				await flushPromises();
-
-				expect(dialog.props("modelValue")).toBe(false);
-			});
 		});
 	});
 

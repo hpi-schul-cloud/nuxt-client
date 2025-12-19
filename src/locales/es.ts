@@ -1663,9 +1663,25 @@ export default {
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.members.fab.addExternalPerson": "Agregar persona externa",
 	"pages.rooms.members.fab.selectFromDirectory": "Seleccionar del directorio",
-	"pages.rooms.members.dialog.addExternalPerson.text":
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Añadir persona externa",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invitar a persona externa",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"No se ha encontrado ninguna cuenta con esta dirección de correo electrónico. Se puede invitar a la persona a registrarse en {applicationName}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Por favor, introduzca el nombre y apellido de la persona externa. La persona recibirá un correo electrónico con un enlace de registro para {applicationName}. En cuanto haya creado una cuenta, se añadirá automáticamente a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "Dirección de correo electrónico",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error":
+		"Por favor, introduzca una dirección de correo electrónico válida",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Nombre",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Por favor, introduzca un nombre",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Apellido",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Por favor, introduzca un apellido",
 	"pages.rooms.members.dialog.addExternalPerson.button.add": "Agregar a la sala",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Enviar invitación",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"No se ha podido enviar la invitación. Por favor, inténtelo de nuevo más tarde",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.create.course": "Crear curso",
 	"pages.rooms.fab.add.course": "Nuevo curso",

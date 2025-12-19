@@ -1,5 +1,11 @@
 <template>
-	<VAppBar flat :height="appBarHeight">
+	<VToolbar
+		:height="appBarHeight"
+		class="top-bar"
+		:class="{
+			'hide-top-bar': !sidebarExpanded && isScrollingDown,
+		}"
+	>
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -43,7 +49,7 @@
 			data-testid="school-logo"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
-	</VAppBar>
+	</VToolbar>
 </template>
 
 <script setup lang="ts">
@@ -55,8 +61,16 @@ import UserMenu from "./UserMenu.vue";
 import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { useAppStoreRefs } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
-import { computed, onMounted } from "vue";
+import { useWindowScroll } from "@vueuse/core";
+import { computed, onMounted, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
+
+const { y } = useWindowScroll();
+const isScrollingDown = ref(false);
+
+watch(y, (newVal, oldVal) => {
+	isScrollingDown.value = newVal > oldVal;
+});
 
 defineProps({
 	sidebarExpanded: {
@@ -69,11 +83,7 @@ defineEmits(["sidebar-toggled"]);
 
 const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 
-const { lgAndUp, mdAndUp } = useDisplay();
-
-const isDesktop = computed(() => lgAndUp.value);
-
-const isTabletOrBigger = computed(() => mdAndUp.value);
+const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
 
 onMounted(() => {
 	(async () => {
@@ -93,17 +103,27 @@ const statusAlertColor = computed(() => {
 
 const { user, school, userRoles: roleNames } = useAppStoreRefs();
 
-const hasLogo = computed(() => !!school.value?.logo?.url);
+const hasLogo = computed(() => school.value?.logo?.url !== undefined);
 
 const appBarHeight = computed(() => {
 	const height = window.getComputedStyle(document.documentElement).getPropertyValue("--topbar-height");
-	const heightWithoutUnit = parseInt(height);
-
-	return heightWithoutUnit;
+	return parseInt(height);
 });
 </script>
 
 <style scoped>
+.top-bar {
+	position: sticky;
+	background-color: #fff !important;
+	top: 0;
+	z-index: 1000;
+	transition: top 0.2s ease-in-out;
+}
+
+.hide-top-bar {
+	top: calc(-1 * var(--topbar-height));
+}
+
 .school-name {
 	max-width: 280px;
 	text-overflow: ellipsis;

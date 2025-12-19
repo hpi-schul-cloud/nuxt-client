@@ -5,7 +5,7 @@ import RoomContentGrid from "./RoomContentGrid.vue";
 import RoomCopyFlow from "./RoomCopyFlow.vue";
 import RoomForm from "./RoomForm.vue";
 import RoomGrid from "./RoomGrid.vue";
-import AddExternalPersonDialog from "./roomMembers/dialogs/AddExternalPersonDialog.vue";
+import AddExternalPersonDialog from "./roomMembers/dialogs/add-external-person-dialog/AddExternalPersonDialog.vue";
 import AddMembersDialog from "./roomMembers/dialogs/AddMembersDialog.vue";
 import ChangeRole from "./roomMembers/dialogs/ChangeRole.vue";
 import InviteMembersDialog from "./roomMembers/dialogs/InviteMembersDialog.vue";

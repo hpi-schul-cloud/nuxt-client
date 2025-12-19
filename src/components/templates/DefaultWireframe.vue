@@ -2,7 +2,7 @@
 	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
 		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
 		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
-		<div class="wireframe-header sticky">
+		<div class="wireframe-header">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -11,7 +11,7 @@
 				</h1>
 			</slot>
 			<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
-			<VDivider v-if="showDivider" class="mx-n6" role="presentation" />
+			<VDivider v-if="showDivider" role="presentation" />
 		</div>
 		<VContainer
 			:fluid="maxWidth !== 'native'"
@@ -112,6 +112,8 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
+	background-color: rgb(var(--v-theme-white));
+	z-index: 20;
 }
 
 :deep(.v-application__wrap) {
@@ -132,20 +134,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	margin: 0;
 }
 
-.v-divider {
-	z-index: -1;
-	margin-right: -1.5rem;
-	margin-left: -1.5rem;
-}
-
 .breadcrumbs-placeholder {
 	height: 22px;
-}
-
-.sticky {
-	position: sticky;
-	top: var(--topbar-height);
-	z-index: 20;
-	background-color: rgb(var(--v-theme-white));
 }
 </style>
