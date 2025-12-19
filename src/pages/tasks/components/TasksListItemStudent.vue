@@ -43,7 +43,7 @@
 		</div>
 		<template #append>
 			<div :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<task-item-menu :task-id="task.id" :task-is-finished="task.status.isFinished" user-role="student" />
+				<TasksListItemMenu :task-id="task.id" :task-is-finished="task.status.isFinished" user-role="student" />
 			</div>
 		</template>
 	</v-list-item>
@@ -51,12 +51,12 @@
 
 <script>
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import ChipTimeRemaining from "@/components/atoms/ChipTimeRemaining.vue";
 import {
 	fromNowToFuture,
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime.js";
+import { ChipTimeRemaining } from "@ui-chip";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
@@ -64,7 +64,7 @@ const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 export default {
 	components: {
 		ChipTimeRemaining,
-		TaskItemMenu: TasksListItemMenu,
+		TasksListItemMenu,
 	},
 	directives: {
 		outsideClick: vOnClickOutside,

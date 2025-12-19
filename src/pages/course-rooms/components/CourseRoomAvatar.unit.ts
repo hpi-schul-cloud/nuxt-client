@@ -1,9 +1,9 @@
-import RoomAvatar from "./RoomAvatar.vue";
+import CourseRoomAvatar from "./CourseRoomAvatar.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
-import { VBadge } from "vuetify/lib/components/index";
+import { VBadge } from "vuetify/components";
 
 const mockData = {
 	id: "456",
@@ -24,7 +24,7 @@ vi.mock("vue-router");
 
 describe("RoomAvatar", () => {
 	const setup = (optionalProps: object = {}) => {
-		const wrapper = mount(RoomAvatar, {
+		const wrapper = mount(CourseRoomAvatar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -172,7 +172,7 @@ describe("RoomAvatar", () => {
 			await avatarComponent.trigger("dragstart");
 			const startDragEvent = wrapper.emitted("startDrag");
 
-			expect((wrapper.vm as unknown as typeof RoomAvatar).isDragging).toBe(true);
+			expect((wrapper.vm as unknown as typeof CourseRoomAvatar).isDragging).toBe(true);
 			expect(startDragEvent).toHaveLength(1);
 			expect(startDragEvent && startDragEvent[0][0]).toStrictEqual(mockData);
 		});
@@ -202,7 +202,7 @@ describe("RoomAvatar", () => {
 
 			await avatarComponent.trigger("dragenter");
 
-			expect((wrapper.vm as unknown as typeof RoomAvatar).isDragging).toBe(false);
+			expect((wrapper.vm as unknown as typeof CourseRoomAvatar).isDragging).toBe(false);
 		});
 
 		it("should emit 'dragend' event when draging ended", async () => {
@@ -211,7 +211,7 @@ describe("RoomAvatar", () => {
 
 			await avatarComponent.trigger("dragend");
 
-			expect((wrapper.vm as unknown as typeof RoomAvatar).isDragging).toBe(false);
+			expect((wrapper.vm as unknown as typeof CourseRoomAvatar).isDragging).toBe(false);
 			expect(wrapper.emitted()).toHaveProperty("dragend");
 		});
 	});

@@ -1,12 +1,12 @@
+import ErrorContent from "./ErrorContent.vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
-import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
-describe("@/components/error-handling/ErrorContent.vue", () => {
+describe("ErrorContent.vue", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 	});

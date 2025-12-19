@@ -112,12 +112,12 @@
 </template>
 
 <script>
+import CourseRoomAvatar from "./components/CourseRoomAvatar.vue";
+import CourseRoomGroupAvatar from "./components/CourseRoomGroupAvatar.vue";
+import CourseRoomModal from "./components/CourseRoomModal.vue";
 import CourseRoomWrapper from "./components/CourseRoomWrapper.vue";
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
-import RoomEmptyAvatar from "@/components/atoms/RoomEmptyAvatar.vue";
-import RoomGroupAvatar from "@/components/molecules/RoomGroupAvatar.vue";
-import RoomModal from "@/components/molecules/RoomModal.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
+import CourseRoomEmptyAvatar from "@/pages/course-rooms/components/CourseRoomEmptyAvatar.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
@@ -127,10 +127,10 @@ import { defineComponent, reactive } from "vue";
 export default defineComponent({
 	components: {
 		CourseRoomWrapper,
-		RoomAvatar,
-		RoomGroupAvatar,
-		RoomEmptyAvatar,
-		RoomModal,
+		RoomAvatar: CourseRoomAvatar,
+		RoomGroupAvatar: CourseRoomGroupAvatar,
+		RoomEmptyAvatar: CourseRoomEmptyAvatar,
+		RoomModal: CourseRoomModal,
 		ImportFlow,
 	},
 	layout: "defaultVuetify",

@@ -50,9 +50,9 @@
 </template>
 
 <script setup lang="ts">
+import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
-import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import { Permission, ToolContextType } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";

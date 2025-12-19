@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationError from "@/components/molecules/ApplicationError.vue";
+import AlertContainer from "./components/AlertContainer.vue";
+import ApplicationError from "./components/ApplicationError.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { Sidebar, Topbar } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";

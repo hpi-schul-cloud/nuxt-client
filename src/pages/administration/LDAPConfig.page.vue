@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
+import InfoMessage from "./components/InfoMessage.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
 import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";

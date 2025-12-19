@@ -82,7 +82,6 @@
 </template>
 
 <script setup lang="ts">
-import ChipTimeRemaining from "@/components/atoms/ChipTimeRemaining.vue";
 import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
@@ -95,6 +94,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@icons/material";
+import { ChipTimeRemaining } from "@ui-chip";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

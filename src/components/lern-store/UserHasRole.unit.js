@@ -1,4 +1,4 @@
-import UserHasRole from "./UserHasRole";
+import UserHasRole from "./UserHasRole.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

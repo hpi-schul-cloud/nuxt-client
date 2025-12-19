@@ -1,6 +1,6 @@
-import RoomModal from "./RoomModal.vue";
+import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
+import CourseRoomModal from "./CourseRoomModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -12,7 +12,7 @@ describe("RoomModal", () => {
 		const { isOpen } = props;
 		setupStores({ courseRoomListModule: CourseRoomListModule });
 
-		const wrapper = mount(RoomModal, {
+		const wrapper = mount(CourseRoomModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			props: {
 				isOpen,
@@ -89,21 +89,21 @@ describe("RoomModal", () => {
 			it("should pass 'draggable' prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
 				expect(iterator.props("canDraggable")).toBe(true);
 			});
 
 			it("should pass itemsize prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
 				expect(iterator.props("itemSize")).toBe("5em");
 			});
 
 			it("should pass groupElements prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
 				expect(iterator.props("avatars")).toEqual([]);
 			});
 		});
@@ -266,7 +266,7 @@ describe("RoomModal", () => {
 		describe("when room-avatar-iterator emits 'startDrag'", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
 				const roomItem = {
 					id: "dummy id",
 					title: "dummy title",

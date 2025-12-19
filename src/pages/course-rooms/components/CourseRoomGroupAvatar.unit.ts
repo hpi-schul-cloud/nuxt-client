@@ -1,9 +1,9 @@
-import RoomGroupAvatar from "./RoomGroupAvatar.vue";
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import CourseRoomAvatar from "./CourseRoomAvatar.vue";
+import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
+import CourseRoomGroupAvatar from "./CourseRoomGroupAvatar.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VBadge, VCard } from "vuetify/lib/components/index";
+import { VBadge, VCard } from "vuetify/components";
 
 vi.mock("vue-router");
 
@@ -77,7 +77,7 @@ const getWrapper = (
 	} = propsData,
 	options?: object
 ) =>
-	mount(RoomGroupAvatar, {
+	mount(CourseRoomGroupAvatar, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -116,7 +116,7 @@ describe("RoomGroupAvatar", () => {
 
 	it("should display the correct size and group-avatar property", () => {
 		const wrapper = getWrapper(propsData);
-		const iterator = wrapper.findComponent(RoomAvatarIterator);
+		const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
 
 		expect(iterator).toBeTruthy();
 		expect(iterator.props("itemSize")).toStrictEqual("0.8em");
@@ -126,7 +126,7 @@ describe("RoomGroupAvatar", () => {
 
 	it("should have correct amount of items", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAllComponents(RoomAvatar);
+		const avatarComponents = wrapper.findAllComponents(CourseRoomAvatar);
 
 		expect(avatarComponents).toBeTruthy();
 		expect(avatarComponents).toHaveLength(3);
@@ -134,7 +134,7 @@ describe("RoomGroupAvatar", () => {
 
 	it("should contain the correct item", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAllComponents(RoomAvatar);
+		const avatarComponents = wrapper.findAllComponents(CourseRoomAvatar);
 
 		expect(avatarComponents[0].props("item").id).toStrictEqual("5");
 	});
@@ -170,7 +170,7 @@ describe("RoomGroupAvatar", () => {
 			maxItems: 4,
 			draggable: true,
 		});
-		const avatarComponent = wrapper.findComponent(RoomAvatar);
+		const avatarComponent = wrapper.findComponent(CourseRoomAvatar);
 
 		avatarComponent.trigger("dragstart");
 		await Promise.resolve();
@@ -187,7 +187,7 @@ describe("RoomGroupAvatar", () => {
 			maxItems: 4,
 			draggable: false,
 		});
-		const avatarComponent = wrapper.findComponent(RoomAvatar);
+		const avatarComponent = wrapper.findComponent(CourseRoomAvatar);
 
 		avatarComponent.trigger("dragstart");
 		await Promise.resolve();

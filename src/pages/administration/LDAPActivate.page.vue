@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
+import InfoMessage from "./components/InfoMessage.vue";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";

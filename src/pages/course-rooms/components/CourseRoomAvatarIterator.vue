@@ -9,7 +9,7 @@
 						class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
 						:cols="colCount"
 					>
-						<RoomAvatar
+						<CourseRoomAvatar
 							:draggable="canDraggable"
 							class="room-avatar"
 							:item="item.raw"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
+import CourseRoomAvatar from "./CourseRoomAvatar.vue";
 
 type ItemType = {
 	id: string;

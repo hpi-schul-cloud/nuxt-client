@@ -1,4 +1,4 @@
-import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
+import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import { Permission, RoleName } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,

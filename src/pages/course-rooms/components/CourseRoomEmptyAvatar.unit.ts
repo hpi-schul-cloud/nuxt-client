@@ -1,11 +1,11 @@
-import RoomEmptyAvatar from "./RoomEmptyAvatar.vue";
+import CourseRoomEmptyAvatar from "./CourseRoomEmptyAvatar.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 describe("RoomEmptyAvatar", () => {
 	const setup = () => {
-		const wrapper = mount(RoomEmptyAvatar, {
+		const wrapper = mount(CourseRoomEmptyAvatar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

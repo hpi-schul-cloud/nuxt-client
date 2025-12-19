@@ -241,7 +241,7 @@
 <script>
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
+import BackendDataTable from "@/pages/administration/components/BackendDataTable.vue";
 import StepProgress from "@/components/organisms/StepProgress";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";

@@ -2,7 +2,7 @@ import InfoMessage from "./InfoMessage.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
-describe("@/components/atoms/InfoMessage", () => {
+describe("InfoMessage", () => {
 	const expectedMessage = "This is some useful information";
 	const setup = (type?: "bc-info" | "bc-success" | "bc-warning" | "bc-error") => {
 		const wrapper = mount(InfoMessage, {

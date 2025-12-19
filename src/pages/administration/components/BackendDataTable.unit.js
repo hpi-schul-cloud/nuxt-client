@@ -1,5 +1,5 @@
-import BackendDataTable from "./BackendDataTable";
-import { tableColumns, tableData } from "./DataTable.data-factory.js";
+import BackendDataTable from "./BackendDataTable.vue";
+import users from "./testUserData.js";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -10,6 +10,37 @@ import {
 	mdiMenuDownOutline,
 	mdiMenuUpOutline,
 } from "@icons/material";
+
+const tableData = (n) => users.slice(0, n);
+
+const tableColumns = [
+	{
+		field: "firstName",
+		label: "Vorname",
+		sortable: true,
+	},
+	{
+		field: "lastName",
+		label: "Nachname",
+	},
+	{
+		field: "address.city",
+		label: "Stadt",
+		sortable: true,
+	},
+	{
+		field: "age",
+		label: "Alter",
+	},
+	{
+		field: "birthday",
+		label: "Geburtstag",
+	},
+	{
+		field: "agreed",
+		label: "Zustimmung",
+	},
+];
 
 const defaultData = tableData(5);
 
@@ -38,7 +69,9 @@ function getWrapper(props, options) {
 const getTableRowsContent = async (wrapper) =>
 	wrapper.findAll("tbody tr").map((rowWrapper) => rowWrapper.findAll("td").map((cell) => cell.text()));
 
-describe("@/components/organisms/DataTable/BackendDataTable", () => {
+export { tableColumns, tableData };
+
+describe("BackendDataTable", () => {
 	beforeEach(() => {
 		vi.spyOn(window, "scrollTo").mockImplementation();
 	});

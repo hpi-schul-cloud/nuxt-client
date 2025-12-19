@@ -16,7 +16,7 @@
 			</div>
 		</template>
 		<template #content>
-			<room-avatar-iterator
+			<course-room-avatar-iterator
 				class="iterator"
 				:avatars="groupData.groupElements"
 				:item-size="itemSize"
@@ -30,8 +30,8 @@
 	</CustomDialog>
 </template>
 <script setup lang="ts">
+import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import { courseRoomListModule } from "@/store";
 import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";

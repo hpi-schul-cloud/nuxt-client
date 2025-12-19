@@ -10,7 +10,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import ErrorContent from "@/components/error-handling/ErrorContent.vue";
+import ErrorContent from "./ErrorContent.vue";
 import { useAppStoreRefs } from "@data-app";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

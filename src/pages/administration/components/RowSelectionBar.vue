@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ContextMenu from "@/components/molecules/ContextMenu.vue";
+import ContextMenu from "./ContextMenu.vue";
 import { mdiClose } from "@icons/material";
 
 export default {
@@ -96,7 +96,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 .row-selection-info {
 	display: flex;

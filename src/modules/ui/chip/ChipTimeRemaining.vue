@@ -1,14 +1,8 @@
 <template>
-	<v-chip
-		v-if="type === 'warning'"
-		color="orange-lighten-3"
-		size="small"
-		variant="flat"
-		data-test-id="dueDateHintLabel"
-	>
+	<VChip v-if="type === 'warning'" color="orange-lighten-3" size="small" variant="flat" data-test-id="dueDateHintLabel">
 		<v-icon start size="small"> {{ mdiTimerSandComplete }} </v-icon>
 		{{ hintDueDate(dueDate, shortenUnit) }}
-	</v-chip>
+	</VChip>
 </template>
 
 <script setup lang="ts">

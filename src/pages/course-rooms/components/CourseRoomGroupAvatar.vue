@@ -53,12 +53,12 @@
 </template>
 
 <script>
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import { mdiLock } from "@icons/material";
 
 export default {
 	components: {
-		RoomAvatarIterator,
+		RoomAvatarIterator: CourseRoomAvatarIterator,
 	},
 	props: {
 		data: {
@@ -128,8 +128,8 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
-@use "@/utils/multiline-ellipsis.scss" as *;
+@use "@/styles/settings" as *;
+@use "@/utils/multiline-ellipsis" as *;
 
 .subtitle {
 	margin-right: -20px;

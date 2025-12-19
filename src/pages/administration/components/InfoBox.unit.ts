@@ -5,7 +5,7 @@ import { VNode } from "vue";
 
 type MountingSlots = Record<string, string | (() => VNode[])>;
 
-describe("@/components/molecules/InfoBox", () => {
+describe("InfoBox", () => {
 	describe("when active is true", () => {
 		const setup = (slots: MountingSlots) => {
 			const wrapper = mount(InfoBox, {

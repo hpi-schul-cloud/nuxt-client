@@ -9,7 +9,7 @@ import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { I18nT } from "vue-i18n";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VAlert, VIcon } from "vuetify/lib/components/index";
+import { VAlert, VIcon } from "vuetify/components";
 
 describe("AlertContainer", () => {
 	beforeEach(() => {

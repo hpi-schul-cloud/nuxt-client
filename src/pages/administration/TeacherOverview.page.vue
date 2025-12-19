@@ -95,11 +95,11 @@
 	</div>
 </template>
 <script>
-import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+import AdminTableLegend from "./components/AdminTableLegend.vue";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import BackendDataTable from "@/pages/administration/components/BackendDataTable.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";

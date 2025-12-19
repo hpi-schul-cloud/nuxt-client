@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
+import InfoMessage from "./components/InfoMessage.vue";
 import FormCreateUser from "@/components/organisms/FormCreateUser";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoleName } from "@/serverApi/v3";

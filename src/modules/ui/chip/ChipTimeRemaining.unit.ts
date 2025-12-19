@@ -2,7 +2,7 @@ import ChipTimeRemaining from "./ChipTimeRemaining.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
-describe("@/components/atoms/ChipTimeRemaining", () => {
+describe("ChipTimeRemaining", () => {
 	const setup = (dueDate: Date, shortenUnit = false) => {
 		const wrapper = mount(ChipTimeRemaining, {
 			global: {

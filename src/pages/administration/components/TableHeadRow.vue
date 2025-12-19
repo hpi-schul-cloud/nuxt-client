@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import InfoBox from "@/components/molecules/InfoBox";
+import InfoBox from "./InfoBox.vue";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert, mdiInformation, mdiMenuDownOutline, mdiMenuSwapOutline, mdiMenuUpOutline } from "@icons/material";
 
@@ -270,7 +270,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 .table__row {
 	font-weight: bold;

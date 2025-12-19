@@ -12,7 +12,7 @@
 			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-notfound"
 		/>
-		<img v-else :alt="errorText" src="@/assets/img/pc_repair.png" class="repair-image" data-testid="img-generic" />
+		<img v-else :alt="errorText" src="../../assets/img/pc_repair.png" class="repair-image" data-testid="img-generic" />
 		<h1 class="text-h2 px-4" data-testid="err-text">
 			{{ errorText }}
 		</h1>
@@ -52,7 +52,7 @@ const isNotFoundError = computed(() => props.statusCode === HttpStatusCode.NotFo
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 .repair-image {
 	width: 75%;

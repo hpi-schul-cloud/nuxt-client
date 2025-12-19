@@ -177,7 +177,7 @@ const getWrapper = ({
 				[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 			},
 			stubs: {
-				RoomDashboard: true,
+				CourseRoomDashboard: true,
 				RoomExternalToolsOverview: true,
 				EndCourseSyncDialog: true,
 				StartExistingCourseSyncDialog: true,
@@ -187,7 +187,7 @@ const getWrapper = ({
 	});
 };
 
-describe("@/pages/CourseRoomDetails.page.vue", () => {
+describe("CourseRoomDetails.page.vue", () => {
 	beforeEach(() => {
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			getIsOpen: false,

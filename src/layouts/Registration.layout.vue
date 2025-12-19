@@ -14,11 +14,11 @@
 </template>
 
 <script setup lang="ts">
+import AlertContainer from "./components/AlertContainer.vue";
+import ApplicationError from "./components/ApplicationError.vue";
 import Logo from "@/assets/img/logo/logo-image-mono.svg";
 import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
 

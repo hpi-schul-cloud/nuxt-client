@@ -48,8 +48,8 @@
 </template>
 
 <script lang="ts">
+import CourseRoomAvatar from "./components/CourseRoomAvatar.vue";
 import CourseRoomWrapper from "./components/CourseRoomWrapper.vue";
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -59,7 +59,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		CourseRoomWrapper,
-		RoomAvatar,
+		RoomAvatar: CourseRoomAvatar,
 	},
 	data() {
 		return {
