@@ -11,8 +11,8 @@
 				</h1>
 			</slot>
 			<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
-			<VDivider v-if="showDivider" role="presentation" />
 		</div>
+		<VDivider v-if="showDivider" role="presentation" />
 		<VContainer
 			:fluid="maxWidth !== 'native'"
 			class="main-content"
