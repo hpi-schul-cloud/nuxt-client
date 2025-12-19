@@ -1,7 +1,7 @@
 <template>
 	<VFab
 		:absolute="!mdAndDown"
-		class="fab-size-transition z-index-100 pointer-events-none"
+		class="fab-size-transition z-index-100"
 		:class="{
 			'fab-default-width': !isCollapsed,
 			'positioning-lg': !mdAndDown,
@@ -104,9 +104,5 @@ watchThrottled(
 
 .z-index-100 {
 	z-index: 100;
-}
-
-.pointer-events-none {
-	pointer-events: none;
 }
 </style>
