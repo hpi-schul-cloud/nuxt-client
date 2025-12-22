@@ -788,6 +788,7 @@ export default {
 	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.molecules.export.options.info.point3": "Las carpetas de archivos no se exportan con la versión CC_1.1",
 	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -1748,6 +1749,7 @@ export default {
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
 	"pages.room.modal.course.export.options.columnBoards": "Tableros",
 	"pages.room.modal.course.export.version1.1": "Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
+	"pages.room.modal.course.export.version1.1.hint": "Las carpetas no se pueden exportar en esta versión.",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	"pages.roomCreate.title": "Crear sala",
 	"pages.roomEdit.title": "Editar sala",

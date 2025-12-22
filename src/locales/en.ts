@@ -772,6 +772,7 @@ export default {
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
+	"components.molecules.export.options.info.point3": "File folders are not exported with version CC_1.1",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -1711,6 +1712,7 @@ export default {
 	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
 	"pages.room.modal.course.export.options.columnBoards": "Boards",
 	"pages.room.modal.course.export.version1.1": "Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
+	"pages.room.modal.course.export.version1.1.hint": "Folders can not be exported in this version!",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	"pages.roomCreate.title": "Create room",
 	"pages.roomEdit.title": "Edit room",

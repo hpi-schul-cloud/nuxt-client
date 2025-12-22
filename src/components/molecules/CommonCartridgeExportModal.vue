@@ -15,6 +15,14 @@
 			</template>
 			<template #text>
 				<div v-if="step === 0 && isExportModalOpen">
+					<div class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5">
+						<div class="mx-2">
+							<v-icon color="info">{{ mdiInformation }}</v-icon>
+						</div>
+						<p>
+							{{ $t(`components.molecules.export.options.info.point3`) }}
+						</p>
+					</div>
 					<div class="">
 						<v-radio-group v-model="radios">
 							<v-radio id="1.1.0" :label="$t('pages.room.modal.course.export.version1.1')" value="1.1.0" />
@@ -32,6 +40,11 @@
 							<br />
 							&middot;
 							{{ $t(`components.molecules.export.options.info.point2`) }}
+							<br />
+							&middot;
+							<div v-if="radios.valueOf.name == '1.1.0'">
+								{{ $t(`components.molecules.export.options.info.point3`) }}
+							</div>
 						</p>
 					</div>
 					<v-container class="pt-0">
