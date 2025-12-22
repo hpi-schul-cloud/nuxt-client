@@ -42,7 +42,7 @@
 							{{ $t(`components.molecules.export.options.info.point2`) }}
 							<br />
 							&middot;
-							<div v-if="radios.valueOf.name == '1.1.0'">
+							<div v-if="radios == '1.1.0'">
 								{{ $t(`components.molecules.export.options.info.point3`) }}
 							</div>
 						</p>
