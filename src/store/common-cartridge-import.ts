@@ -1,5 +1,7 @@
 import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
+import { FileApiFactory, FileApiInterface, FileRecordParentType, StorageLocation } from "@/fileStorageApi/v3";
 import { $axios } from "@/utils/api";
+import { useAppStoreRefs } from "@data-app";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
@@ -28,6 +30,10 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
 	}
 
+	public get fileStorageApi(): FileApiInterface {
+		return FileApiFactory(undefined, "/v3", $axios);
+	}
+
 	@Mutation
 	public setFile(file: File | undefined): void {
 		this._file = file;
@@ -45,13 +51,29 @@ export default class CommonCartridgeImportModule extends VuexModule {
 
 	@Action
 	async importCommonCartridgeFile(file: File | undefined): Promise<void> {
-		if (!file) {
+		const { user, school } = useAppStoreRefs();
+		const schoolId = school.value?.id;
+		const currentUserId = user.value?.id;
+
+		if (!file || !currentUserId || !schoolId) {
 			this.setIsSuccess(false);
 			return;
 		}
 
 		try {
-			await this.commonCartridgeApi.commonCartridgeControllerImportCourse(file);
+			const uploadResult = await this.fileStorageApi.upload(
+				schoolId,
+				StorageLocation.SCHOOL,
+				currentUserId,
+				FileRecordParentType.USERS,
+				file
+			);
+
+			const fileRecords = uploadResult.data;
+
+			// TODO use the fileRecords to start the import and remove this console.log statement.
+			// eslint-disable-next-line no-console
+			console.log(fileRecords);
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
