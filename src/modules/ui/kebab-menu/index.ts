@@ -4,6 +4,7 @@ import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
 import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 import KebabMenuActionDeleteMemberInvitation from "./KebabMenuActionDeleteMemberInvitation.vue";
+import KebabMenuActionDownload from "./KebabMenuActionDownload.vue";
 import KebabMenuActionDuplicate from "./KebabMenuActionDuplicate.vue";
 import KebabMenuActionEdit from "./KebabMenuActionEdit.vue";
 import KebabMenuActionExport from "./KebabMenuActionExport.vue";
@@ -23,27 +24,28 @@ import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
 import KebabMenuList from "./KebabMenuList.vue";
 
 export {
-	KebabMenu,
-	KebabMenuAction,
-	KebabMenuActionChangeLayout,
-	KebabMenuActionChangePermission,
-	KebabMenuActionDelete,
-	KebabMenuActionDeleteMemberInvitation,
-	KebabMenuActionDuplicate,
-	KebabMenuActionEdit,
-	KebabMenuActionExport,
-	KebabMenuActionLeaveRoom,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveLeft,
-	KebabMenuActionMoveRight,
-	KebabMenuActionMoveUp,
-	KebabMenuActionPublish,
-	KebabMenuActionRemoveMember,
-	KebabMenuActionRename,
-	KebabMenuActionRevert,
-	KebabMenuActionRoomCopy,
-	KebabMenuActionRoomMembers,
-	KebabMenuActionShare,
-	KebabMenuActionShareLink,
-	KebabMenuList,
+  KebabMenu,
+  KebabMenuAction,
+  KebabMenuActionChangeLayout,
+  KebabMenuActionChangePermission,
+  KebabMenuActionDelete,
+  KebabMenuActionDeleteMemberInvitation,
+  KebabMenuActionDownload,
+  KebabMenuActionDuplicate,
+  KebabMenuActionEdit,
+  KebabMenuActionExport,
+  KebabMenuActionLeaveRoom,
+  KebabMenuActionMoveDown,
+  KebabMenuActionMoveLeft,
+  KebabMenuActionMoveRight,
+  KebabMenuActionMoveUp,
+  KebabMenuActionPublish,
+  KebabMenuActionRemoveMember,
+  KebabMenuActionRename,
+  KebabMenuActionRevert,
+  KebabMenuActionRoomCopy,
+  KebabMenuActionRoomMembers,
+  KebabMenuActionShare,
+  KebabMenuActionShareLink,
+  KebabMenuList,
 };
