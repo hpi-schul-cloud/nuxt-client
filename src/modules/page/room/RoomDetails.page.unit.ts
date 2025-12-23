@@ -21,7 +21,7 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { VBreadcrumbsItem } from "vuetify/components";
+import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
 vi.mock("vue-router", () => ({
 	useRouter: vi.fn().mockReturnValue({
@@ -267,8 +267,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const openDialog = async (wrapper: VueWrapper) => {
-			const wireframe = wrapper.getComponent(DefaultWireframe);
-			await wireframe.vm.$emit("fab:clicked");
+			const fab = wrapper.getComponent(VFab).getComponent(VBtn);
+			await fab.trigger("click");
 		};
 
 		it("should render fab button when user has edit permissions", () => {
@@ -284,10 +284,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			const { wrapper } = setup();
 			await openDialog(wrapper);
 
-			const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
-
-			expect(dialog.isVisible()).toBe(true);
-			expect(dialog.props("modelValue")).toBe(true);
+			const dialog = wrapper.findComponent(SelectBoardLayoutDialog).findComponent(VCard);
+			expect(dialog.exists()).toBe(true);
 		});
 
 		describe("and user selects a multi-column layout", () => {

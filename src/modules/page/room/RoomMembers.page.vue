@@ -1,12 +1,5 @@
 <template>
-	<DefaultWireframe
-		v-if="canSeeMembersList"
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabItems"
-		@fab:clicked="onFabClick"
-		@on-fab-item-click="handleAddMember"
-	>
+	<DefaultWireframe v-if="canSeeMembersList" max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -64,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb, Fab, FabAction } from "@/components/templates/default-wireframe.types";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -95,6 +88,7 @@ import {
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { FabAction } from "@ui-speed-dial-menu";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { type Component, computed, ComputedRef, onMounted, onUnmounted, PropType, ref, watchEffect } from "vue";
@@ -299,48 +293,52 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const fabItems: ComputedRef<Fab | undefined> = computed(() => {
+const fabItems = computed<FabAction[] | undefined>(() => {
 	if (!canAddRoomMembers.value) return;
 
 	if (activeTab.value === Tab.Members) {
-		const fab: Fab = {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.add"),
-			ariaLabel: t("pages.rooms.members.add"),
-			dataTestId: "fab-add-members",
-		};
+		const actions: FabAction[] = [
+			{
+				icon: mdiPlus,
+				label: t("pages.rooms.members.add"),
+				dataTestId: "fab-add-members",
+				clickHandler: onFabClick,
+			},
+		];
+
 		if (!isInviteExternalPersonsFeatureEnabled.value) {
-			return fab;
+			return actions;
 		}
-		const fabActions: FabAction[] = [
+
+		actions.push(
 			{
 				icon: mdiListBoxOutline,
 				label: t("pages.rooms.members.fab.selectFromDirectory"),
-				ariaLabel: t("pages.rooms.members.fab.selectFromDirectory"),
 				dataTestId: "fab-select-from-directory",
-				customEvent: FabEvent.ADD_MEMBERS,
+				clickHandler: () => handleAddMember(FabEvent.ADD_MEMBERS),
 			},
 			{
 				icon: mdiAccountClockOutline,
 				label: t("pages.rooms.members.fab.addExternalPerson"),
-				ariaLabel: t("pages.rooms.members.fab.addExternalPerson"),
 				dataTestId: "fab-add-external-person",
-				customEvent: FabEvent.INVITE_MEMBERS,
-			},
-		];
-		fab.actions = fabActions;
+				clickHandler: () => handleAddMember(FabEvent.INVITE_MEMBERS),
+			}
+		);
 
-		return fab;
+		return actions;
 	}
 
 	if (activeTab.value === Tab.Invitations) {
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.inviteMember.step.prepare.title"),
-			ariaLabel: t("pages.rooms.members.inviteMember.step.prepare.title"),
-			dataTestId: "fab-invite-members",
-		};
+		return [
+			{
+				icon: mdiPlus,
+				label: t("pages.rooms.members.inviteMember.step.prepare.title"),
+				dataTestId: "fab-invite-members",
+				clickHandler: onFabClick,
+			},
+		];
 	}
+
 	return undefined;
 });
 </script>
