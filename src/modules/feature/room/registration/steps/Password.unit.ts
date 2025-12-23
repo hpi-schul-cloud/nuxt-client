@@ -26,7 +26,7 @@ describe("Password.vue", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			propsData: {
-				userData: { name: "Max", surname: "Mustermann", email: "max@mustermann.com" },
+				userData: { firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" },
 			},
 		});
 		return { wrapper };
