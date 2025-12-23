@@ -5,45 +5,34 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecordParent } from "@/types/file/File";
 import { formatFileSize } from "@/utils/fileHelper";
-import { useFileStorageApi } from "@data-file";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 interface FileStatisticProps {
-	elementId: string;
+	fileStatistics?: {
+		fileCount: number;
+		totalSizeInBytes: number;
+	};
 }
 
 const props = defineProps<FileStatisticProps>();
 
-const { tryGetParentStatisticFromApi, getStatisticByParentId } = useFileStorageApi();
-
-const fileStatistics = computed(() => {
-	const statistics = getStatisticByParentId(props.elementId);
-
-	return statistics;
-});
-
 const { t } = useI18n();
 
 const humanReadableFileSize = computed(() => {
-	const localizedString = formatFileSize(fileStatistics.value?.totalSizeInBytes || 0);
+	const localizedString = formatFileSize(props.fileStatistics?.totalSizeInBytes || 0);
 
 	return localizedString;
 });
 
 const fileTranslation = computed(() => {
-	const isSingleFile = fileStatistics.value?.fileCount === 1;
+	const isSingleFile = props.fileStatistics?.fileCount === 1;
 
 	if (isSingleFile) {
 		return t("common.file");
 	} else {
 		return t("common.files");
 	}
-});
-
-onMounted(async () => {
-	await tryGetParentStatisticFromApi(props.elementId, FileRecordParent.BOARDNODES);
 });
 </script>
