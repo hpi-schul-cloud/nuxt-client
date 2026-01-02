@@ -25,7 +25,7 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
+import { useBoardStore, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import {
 	ContextExternalToolConfigurationTemplate,
 	ContextExternalToolSave,
@@ -33,7 +33,6 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -52,7 +51,7 @@ const mockedUseContextExternalToolApi = vi.mocked(useContextExternalToolApi);
 vi.mock("../CardRequestPool.composable");
 const mockedSharedCardRequestPool = vi.mocked(useSharedCardRequestPool);
 
-vi.mock("@util-board/editMode.composable");
+vi.mock("@data-board/edit-mode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../socket/socket");

@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe :headline="headline" max-width="nativ">
+	<default-wireframe :headline="headline" max-width="native">
 		<v-alert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
 				{{ $t(error.translationKey) }}

@@ -4,6 +4,7 @@
 		:data-testid="attrs['data-testid'] ?? 'dialog'"
 		:max-width="480"
 		:aria-labelledby="`dialog-${uid}-title`"
+		@after-leave="onAfterLeave"
 	>
 		<UseFocusTrap>
 			<VCard :loading>
@@ -61,7 +62,7 @@ const props = defineProps({
 	confirmBtnLangKey: { type: String, required: false, default: undefined },
 });
 
-const emit = defineEmits(["cancel", "confirm"]);
+const emit = defineEmits(["cancel", "confirm", "after-leave"]);
 
 const isOpen = defineModel({
 	type: Boolean,
@@ -82,6 +83,10 @@ const onCancel = () => {
 
 const onConfirm = () => {
 	emit("confirm");
+};
+
+const onAfterLeave = () => {
+	emit("after-leave");
 };
 </script>
 

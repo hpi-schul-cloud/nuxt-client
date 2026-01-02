@@ -1,5 +1,9 @@
 import { containsInvalidCharacters, useInvalidCharactersValidator } from "./invalidCharactersValidator";
-import { containsOpeningTagFollowedByString, useOpeningTagValidator } from "./openingTagValidator";
+import {
+	containsOpeningTagFollowedByString,
+	hasNoOpeningTagFollowedByString,
+	useOpeningTagValidator,
+} from "./openingTagValidator";
 import {
 	hasLowercaseLetter,
 	hasNumber,
@@ -10,6 +14,7 @@ import {
 	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
+	isValidEmail,
 	isValidTimeFormat,
 	isValidUrl,
 } from "./validators";
@@ -18,6 +23,7 @@ export {
 	containsInvalidCharacters,
 	containsOpeningTagFollowedByString,
 	hasLowercaseLetter,
+	hasNoOpeningTagFollowedByString,
 	hasNumber,
 	hasSpecialCharacter,
 	hasUppercaseLetter,
@@ -26,6 +32,7 @@ export {
 	isOfMinLength,
 	isRequired,
 	isValidDateFormat,
+	isValidEmail,
 	isValidTimeFormat,
 	isValidUrl,
 	useInvalidCharactersValidator,

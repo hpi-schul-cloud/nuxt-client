@@ -109,12 +109,11 @@ import ProgressModal from "@/components/molecules/ProgressModal";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
@@ -142,7 +141,6 @@ export default {
 		ProgressModal,
 		DataFilter,
 	},
-	mixins: [UserHasPermission],
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
@@ -303,7 +301,7 @@ export default {
 
 			// filter actions by permissions
 			editedActions = this.tableActions.filter((action) =>
-				action.permission ? this.$_userHasPermission(action.permission) : true
+				action.permission ? this.userHasPermission(action.permission) : true
 			);
 
 			// filter the delete action if school is external
@@ -365,32 +363,29 @@ export default {
 			return instanceBasedIcons;
 		},
 		fab() {
-			if (this.schoolIsExternallyManaged || !this.$_userHasPermission(Permission.StudentCreate)) {
-				return null;
+			if (this.schoolIsExternallyManaged || !this.userHasPermission(Permission.StudentCreate)) {
+				return;
 			}
 
-			return {
-				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
-				dataTestId: "fab_button_students_table",
-				ariaLabel: this.$t("common.actions.create"),
-				actions: [
-					{
-						label: this.$t("pages.administration.students.fab.add"),
-						icon: mdiAccountPlus,
-						to: "/administration/students/new",
-						dataTestId: "fab_button_add_students",
-						ariaLabel: this.$t("pages.administration.students.fab.add"),
-					},
-					{
-						label: this.$t("pages.administration.students.fab.import"),
-						icon: mdiCloudDownload,
-						href: "/administration/students/import",
-						dataTestId: "fab_button_import_students",
-						ariaLabel: this.$t("pages.administration.students.fab.import"),
-					},
-				],
-			};
+			return [
+				{
+					icon: mdiPlus,
+					label: this.$t("pages.administration.students.fab.add"),
+					dataTestId: "fab_button_students_table",
+				},
+				{
+					label: this.$t("pages.administration.students.fab.add"),
+					icon: mdiAccountPlus,
+					to: "/administration/students/new",
+					dataTestId: "fab_button_add_students",
+				},
+				{
+					label: this.$t("pages.administration.students.fab.import"),
+					icon: mdiCloudDownload,
+					href: "/administration/students/import",
+					dataTestId: "fab_button_import_students",
+				},
+			];
 		},
 	},
 	watch: {
@@ -428,6 +423,14 @@ export default {
 			this.$store.dispatch("users/findStudents", {
 				query,
 			});
+		},
+		userHasPermission(permission) {
+			if (!permission) {
+				throw new Error("parameter permission is missing");
+			}
+			return typeof permission === "string"
+				? !permission || useAppStore().userPermissions.includes(permission)
+				: !permission() || permission(useAppStore().userPermissions);
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
@@ -496,7 +499,9 @@ export default {
 					roleName: "student",
 				});
 				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks, { printPageTitleKey: "pages.administration.printQr.printPageTitle" });
+					printQrCodes(this.qrLinks, {
+						printPageTitleKey: "pages.administration.printQr.printPageTitle",
+					});
 				} else {
 					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}

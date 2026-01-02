@@ -79,6 +79,17 @@ describe("Dialog", () => {
 				expect(wrapper.emitted("confirm")).toBeTruthy();
 			});
 		});
+
+		describe("when the dialog has finished transition out", () => {
+			it("should emit after-leave", async () => {
+				const { wrapper } = setup();
+
+				const dialog = wrapper.findComponent(VDialog);
+				await dialog.vm.$emit("after-leave");
+
+				expect(wrapper.emitted("after-leave")).toBeTruthy();
+			});
+		});
 	});
 
 	describe("when the dialog isDialogOpen is false", () => {

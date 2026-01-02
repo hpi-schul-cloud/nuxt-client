@@ -121,6 +121,7 @@
 </template>
 
 <script setup lang="ts">
+import MoveCardDialog from "../card/MoveCardDialog.vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import EditSettingsDialog from "../shared/EditSettingsDialog.vue";
@@ -132,12 +133,6 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useBoardStore } from "@/modules/data/board/Board.store"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import MoveCardDialog from "@/modules/feature/board/card/MoveCardDialog.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -149,7 +144,14 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { useAppStore, useNotificationStore } from "@data-app";
-import { useBoardInactivity, useBoardPermissions, useCardStore, useSharedBoardPageInformation } from "@data-board";
+import {
+	useBoardInactivity,
+	useBoardPermissions,
+	useBoardStore,
+	useCardStore,
+	useSharedBoardPageInformation,
+	useSharedEditMode,
+} from "@data-board";
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";

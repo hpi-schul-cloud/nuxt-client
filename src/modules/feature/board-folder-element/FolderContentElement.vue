@@ -51,12 +51,10 @@
 <script setup lang="ts">
 import FileStatistic from "./FileStatistic.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
-import { BoardMenuScope, ContentElementBar } from "@ui-board";
+import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";

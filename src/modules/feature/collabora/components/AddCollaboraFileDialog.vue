@@ -7,6 +7,7 @@
 		data-testid="collabora-file-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
+		@after-leave="resetForm"
 		@click.stop
 		@keydown.enter.stop
 	>
@@ -98,7 +99,6 @@ const resetForm = () => {
 };
 
 const onCancel = () => {
-	resetForm();
 	closeCollaboraFileDialog();
 };
 
@@ -111,6 +111,5 @@ const onConfirm = async () => {
 
 	emit("create-collabora-file", { type: selectedDocType.value, fileName: fileName.value });
 	closeCollaboraFileDialog();
-	resetForm();
 };
 </script>

@@ -87,12 +87,10 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const hasData: Ref<boolean> = ref(false);
-const loading: ComputedRef<boolean> = computed(() => !hasData.value || schoolExternalToolsModule.getLoading);
+const hasData = ref(false);
+const loading = computed(() => !hasData.value || schoolExternalToolsModule.getLoading);
 
-const configurationTemplates: ComputedRef<SchoolExternalToolConfigurationTemplate[]> = computed(
-	() => schoolExternalToolsModule.getSchoolExternalToolConfigurationTemplates
-);
+const configurationTemplates = computed(() => schoolExternalToolsModule.getSchoolExternalToolConfigurationTemplates);
 
 const configuration: Ref<SchoolExternalTool | undefined> = ref();
 
@@ -113,7 +111,7 @@ const onSave = async (
 ) => {
 	if (school.value) {
 		const schoolExternalTool: SchoolExternalToolSave = SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
-			template,
+			template.externalToolId,
 			configuredParameterValues,
 			school.value.id,
 			isDeactivated.value

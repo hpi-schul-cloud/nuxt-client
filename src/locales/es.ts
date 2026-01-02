@@ -855,6 +855,7 @@ export default {
 	"components.organisms.Pagination.recordsPerPage": "Entradas por página",
 	"components.organisms.Pagination.showTotalRecords": "Mostrar todas las {total} entradas",
 	"components.organisms.TasksDashboardMain.filter.substitute": "Tareas de las Susstiticiones",
+	"components.organisms.TasksDashboardMain.fab.createTask": "Crear tarea",
 	"components.organisms.TasksDashboardMain.tab.completed": "Completado",
 	"components.organisms.TasksDashboardMain.tab.current": "Actual",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
@@ -1373,7 +1374,7 @@ export default {
 	"pages.administration.students.consent.table.empty":
 		"Todos l{'@'}s usuari{'@'}s que has elegido ya han recibido su consentimiento.",
 	"pages.administration.students.consent.title": "Registrarse de forma analógica",
-	"pages.administration.students.fab.add": "Nuevo estudiante",
+	"pages.administration.students.fab.add": "Crear estudiante",
 	"pages.administration.students.fab.import": "Importar estudiante",
 	"pages.administration.students.index.remove.confirm.btnText": "Eliminar estudiante",
 	"pages.administration.students.index.remove.confirm.message.all":
@@ -1442,7 +1443,7 @@ export default {
 	"pages.administration.students.new.success": "¡Estudiante creado correctamente!",
 	"pages.administration.students.new.title": "Añadir estudiante",
 	"pages.administration.students.table.edit.ariaLabel": "Editar estudiante",
-	"pages.administration.teachers.fab.add": "Nuevo profesor",
+	"pages.administration.teachers.fab.add": "Crear profesor",
 	"pages.administration.teachers.fab.import": "Importar profesor",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Eliminar profesor",
 	"pages.administration.teachers.index.remove.confirm.message.all":
@@ -1465,6 +1466,8 @@ export default {
 	"pages.administration.teachers.new.success": "¡Profesor creado correctamente!",
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Las personas externas solo pueden participar en la videoconferencia si se ha activado la función Sala de espera.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Crear videoconferencia",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Derechos de moderación para todos los participantes",
@@ -1530,6 +1533,8 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Elige un curso / asignatura",
 	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
 	"pages.content.preview_img.alt": "Vista previa de la imagen",
+	"pages.courseRoomDetails.fab.add.tool": "Agregar herramienta",
+	"pages.courseRoomDetails.fab.add.learnContent": "Crear contenido",
 	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
 	"pages.courseRoomDetails.fab.add.lesson": "Nuevo tema",
 	"pages.courseRoomDetails.fab.add.task": "Nuevo tarea",
@@ -1654,10 +1659,31 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.learningContent.emptyState": "Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
+	"pages.rooms.members.fab.addExternalPerson": "Agregar persona externa",
+	"pages.rooms.members.fab.selectFromDirectory": "Seleccionar del directorio",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Añadir persona externa",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
+		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invitar a persona externa",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"No se ha encontrado ninguna cuenta con esta dirección de correo electrónico. Se puede invitar a la persona a registrarse en {applicationName}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Por favor, introduzca el nombre y apellido de la persona externa. La persona recibirá un correo electrónico con un enlace de registro para {applicationName}. En cuanto haya creado una cuenta, se añadirá automáticamente a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "Dirección de correo electrónico",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error":
+		"Por favor, introduzca una dirección de correo electrónico válida",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Nombre",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Por favor, introduzca un nombre",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Apellido",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Por favor, introduzca un apellido",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Agregar a la sala",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Enviar invitación",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"No se ha podido enviar la invitación. Por favor, inténtelo de nuevo más tarde",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
+	"pages.rooms.fab.create.course": "Crear curso",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
-	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.fab.import.course": "Importar curso",
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.headerSection.archived": "Archivo",
@@ -1727,7 +1753,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Menú de la sala",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
-	"pages.roomDetails.fab.add.board": "Añadir tablero",
+	"pages.roomDetails.fab.add.board": "Crear tablero",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.roomDetails.emptyState": "Actualmente no hay contenidos de aprendizaje en esta sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas",
@@ -1984,7 +2010,8 @@ export default {
 	"pages.userMigration.success.title": "Migración exitosa de su sistema de registro",
 	"pages.userMigration.title": "Reubicación del sistema de inicio de sesión",
 	"pages.videoConference.action.refresh": "Estado de actualización",
-	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
+	"pages.videoConference.info.noPermission":
+		"No es posible participar en la videoconferencia porque la sala de espera no se ha activado.",
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",

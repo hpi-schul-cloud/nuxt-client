@@ -1,7 +1,10 @@
-import { RoomMember } from "./types";
+import { useRoomDetailsStore } from "../RoomDetails.store";
+import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
 import {
 	ChangeRoomRoleBodyParamsRoleNameEnum,
+	CreateOrUpdateRegistrationBodyParams,
+	RegistrationApiFactory,
 	RoleName,
 	RoomApiFactory,
 	RoomMemberResponse,
@@ -9,9 +12,8 @@ import {
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
-import { useRoomDetailsStore } from "@data-room";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
@@ -80,6 +82,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
+	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
 
 	const isRoomOwner = (userId: string) => {
 		const member = roomMembers.value.find((member) => member.userId === userId);
@@ -247,6 +250,19 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		}
 	};
 
+	const startRegistrationProcess = ({
+		firstName,
+		lastName,
+		email,
+		roomId,
+	}: Omit<CreateOrUpdateRegistrationBodyParams, "roomId"> & { roomId?: string }) =>
+		registrationApi.registrationControllerCreateOrUpdateRegistration({
+			firstName,
+			lastName,
+			email,
+			roomId: roomId ?? getRoomId(),
+		});
+
 	const removeMembers = async (userIds: string[]) => {
 		try {
 			await roomApi.roomControllerRemoveMembers(getRoomId(), {
@@ -256,6 +272,24 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 			selectedIds.value = [];
 		} catch {
 			notifyError(t("pages.rooms.members.error.remove"));
+		}
+	};
+
+	const addMemberByEmail = async (email: string): Promise<ExternalMemberCheckStatus | void> => {
+		try {
+			const roomId = getRoomId();
+			await roomApi.roomControllerAddByEmail(roomId, { email });
+			await fetchMembers();
+			return ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED;
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+			if (responseError.code === 404) {
+				return ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND;
+			}
+			if (responseError.code === 400) {
+				return ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL;
+			}
+			return;
 		}
 	};
 
@@ -411,6 +445,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	return {
 		addMembers,
+		addMemberByEmail,
 		isRoomOwner,
 		setAdminMode,
 		changeRoomOwner,
@@ -426,6 +461,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		leaveRoom,
 		rejectInvitations,
 		removeMembers,
+		startRegistrationProcess,
 		updateMembersRole,
 		baseTableHeaders,
 		confirmationList,

@@ -186,7 +186,7 @@ export default {
 	"common.tool.context.type.courses": "Kurs-Tools",
 	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
-	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
+	"common.validation.email": "Bitte eine gültige E-Mail-Adresse eingeben",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",
@@ -853,6 +853,7 @@ export default {
 	"components.organisms.Pagination.recordsPerPage": "Einträge pro Seite",
 	"components.organisms.Pagination.showTotalRecords": "Zeige alle {total} Einträge",
 	"components.organisms.TasksDashboardMain.filter.substitute": "Aufgaben aus Vertretungen",
+	"components.organisms.TasksDashboardMain.fab.createTask": "Aufgabe erstellen",
 	"components.organisms.TasksDashboardMain.tab.completed": "Erledigt",
 	"components.organisms.TasksDashboardMain.tab.current": "Aktuell",
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
@@ -1366,7 +1367,7 @@ export default {
 		"Glückwunsch, du hast die analoge Registrierung erfolgreich durchgeführt!",
 	"pages.administration.students.consent.table.empty": "Alle Schüler:innen haben bereits ihr Einverständnis gegeben.",
 	"pages.administration.students.consent.title": "Analoge Registrierung",
-	"pages.administration.students.fab.add": "Neue/r Schüler:in",
+	"pages.administration.students.fab.add": "Schüler:in erstellen",
 	"pages.administration.students.fab.import": "Schüler:in importieren",
 	"pages.administration.students.index.remove.confirm.btnText": "Schüler:in löschen",
 	"pages.administration.students.index.remove.confirm.message.all":
@@ -1435,7 +1436,7 @@ export default {
 	"pages.administration.students.new.success": "Schüler:in erfolgreich angelegt!",
 	"pages.administration.students.new.title": "Schüler:in hinzufügen",
 	"pages.administration.students.table.edit.ariaLabel": "Schüler:in bearbeiten",
-	"pages.administration.teachers.fab.add": "Neue Lehrkraft",
+	"pages.administration.teachers.fab.add": "Lehrkraft erstellen",
 	"pages.administration.teachers.fab.import": "Lehrkraft importieren",
 	"pages.administration.teachers.index.remove.confirm.btnText": "Lehrkraft löschen",
 	"pages.administration.teachers.index.remove.confirm.message.all":
@@ -1458,6 +1459,8 @@ export default {
 	"pages.administration.teachers.new.success": "Lehrkraft erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
+	"pages.common.tools.configureVideoconferenceDialog.info.waitingRoom":
+		"Externe Personen können nur dann an der Videokonferenz teilnehmen, wenn die Funktion Warteraum aktiviert wurde.",
 	"pages.common.tools.configureVideoconferenceDialog.title": "Videokonferenz erstellen",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Moderationsrechte für alle Teilnehmenden",
@@ -1524,6 +1527,8 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
 	"pages.content.preview_img.alt": "Bildvorschau",
+	"pages.courseRoomDetails.fab.add.tool": "Tool hinzufügen",
+	"pages.courseRoomDetails.fab.add.learnContent": "Lerninhalt erstellen",
 	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
 	"pages.courseRoomDetails.fab.add.lesson": "Neues Thema",
 	"pages.courseRoomDetails.fab.add.task": "Neue Aufgabe",
@@ -1648,10 +1653,30 @@ export default {
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.learningContent.emptyState": "Aktuell gibt es keine Lerninhalte in diesem Kurs",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
+	"pages.rooms.members.fab.addExternalPerson": "Externe Person hinzufügen",
+	"pages.rooms.members.fab.selectFromDirectory": "Aus Verzeichnis auswählen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Externe Person hinzufügen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
+		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Externe Person einladen",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
+		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
+		"Bitte Vor- und Nachnamen der schulfremden Person eingeben. Die Person erhält eine E-Mail mit einem Registrierungslink für die {applicationName}. Sobald sie einen Account erstellt hat, wird sie automatisch zum Raum hinzugefügt.",
+	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-Mail-Adresse",
+	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Bitte eine gültige E-Mail-Adresse eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Vorname",
+	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Bitte einen Vornamen eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Nachname",
+	"pages.rooms.members.dialog.addExternalPerson.label.lastName.error": "Bitte einen Nachnamen eingeben",
+	"pages.rooms.members.dialog.addExternalPerson.button.add": "Zum Raum hinzufügen",
+	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
+	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
+		"Die Einladung konnte leider nicht versendet werden. Bitte später erneut versuchen",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
+	"pages.rooms.fab.create.course": "Kurs erstellen",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
-	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.headerSection.archived": "Archiv",
@@ -1970,7 +1995,7 @@ export default {
 	"pages.userMigration.title": "Umzug des Anmeldesystems",
 	"pages.videoConference.action.refresh": "Status aktualisieren",
 	"pages.videoConference.info.noPermission":
-		"Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen.",
+		"Die Teilnahme an der Videokonferenz ist nicht möglich, da der Warteraum nicht aktiviert wurde.",
 	"pages.videoConference.info.notStarted": "Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",
