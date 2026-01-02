@@ -10,44 +10,11 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<div v-if="fabItems" class="fab-wrapper">
-				<slot name="fab">
-					<speed-dial-menu
-						:class="{
-							'wireframe-fab-relative': lgAndUp,
-							'wireframe-fab-fixed': mdAndDown,
-						}"
-						:direction="mdAndDown ? 'top' : 'bottom'"
-						:orientation="'right'"
-						:icon="fabItems.icon"
-						:href="fabItems.href"
-						:to="fabItems.to"
-						:aria-label="fabItems.ariaLabel"
-						:data-testid="fabItems.dataTestId"
-						@fab:clicked="onFabClicked"
-					>
-						{{ fabItems.title }}
-						<template #actions>
-							<template v-for="(action, index) in fabItems.actions" :key="index">
-								<speed-dial-menu-action
-									:data-test-id="action.dataTestId"
-									:icon="action.icon"
-									:href="action.href"
-									:to="action.to"
-									:aria-label="action.ariaLabel"
-									@click="$emit('onFabItemClick', action.customEvent)"
-								>
-									{{ action.label }}
-								</speed-dial-menu-action>
-							</template>
-						</template>
-					</speed-dial-menu>
-				</slot>
-			</div>
+			<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
 		</div>
-		<v-divider v-if="showDivider" role="presentation" />
-		<v-container
-			:fluid="maxWidth !== 'nativ'"
+		<VDivider v-if="showDivider" role="presentation" />
+		<VContainer
+			:fluid="maxWidth !== 'native'"
 			class="main-content"
 			:class="{
 				'main-pb-96': mainWithBottomPadding,
@@ -58,14 +25,14 @@
 			}"
 		>
 			<slot />
-		</v-container>
+		</VContainer>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb, Fab } from "./default-wireframe.types";
+import { Breadcrumb } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
-import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";
 
@@ -81,13 +48,13 @@ const props = defineProps({
 		default: null,
 	},
 	maxWidth: {
-		type: String as PropType<"full" | "short" | "nativ">,
+		type: String as PropType<"full" | "short" | "native">,
 		required: true,
 	},
 	fabItems: {
-		type: Object as PropType<Fab>,
+		type: Array as PropType<FabAction[]>,
 		required: false,
-		default: null,
+		default: undefined,
 	},
 	hideBorder: {
 		type: Boolean,
@@ -110,21 +77,12 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits({
-	onFabItemClick: (event: string | undefined) => !!event,
-	"fab:clicked": () => true,
-});
-
-const onFabClicked = () => {
-	emit("fab:clicked");
-};
-
 defineOptions({
 	inheritAttrs: false,
 });
 const slots = useSlots();
 
-const { mdAndDown, smAndUp, lgAndUp } = useDisplay();
+const { smAndUp } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 </script>
@@ -137,6 +95,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 	display: flex;
 	flex-direction: column;
 }
+
 .main-content-flex {
 	flex: 1;
 	overflow-y: auto;
@@ -151,6 +110,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 }
 
 .wireframe-header {
+	position: relative;
 	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
@@ -178,41 +138,5 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .breadcrumbs-placeholder {
 	height: 22px;
-}
-
-.sticky {
-	position: sticky;
-	top: var(--topbar-height);
-	z-index: 20;
-	background-color: rgb(var(--v-theme-white));
-}
-
-.wireframe-fab-relative {
-	position: relative;
-	top: 0;
-}
-
-.wireframe-fab-fixed {
-	position: fixed;
-	bottom: 2rem;
-	right: 1rem;
-}
-
-$fab-wrapper-height: 80px;
-
-.fab-wrapper {
-	position: relative;
-	top: calc($fab-wrapper-height / 2);
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-	height: $fab-wrapper-height;
-	margin-top: -#{$fab-wrapper-height};
-	pointer-events: none;
-	z-index: 100;
-
-	* {
-		pointer-events: auto;
-	}
 }
 </style>
