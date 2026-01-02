@@ -6,10 +6,13 @@ import { LanguageType } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRegistration } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick, ref } from "vue";
+import { Mock } from "vitest";
+import { computed, nextTick, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
 import { VStepper, VStepperItem } from "vuetify/components";
 
 vi.mock("vue-i18n", () => ({
@@ -17,6 +20,10 @@ vi.mock("vue-i18n", () => ({
 		t: vi.fn().mockImplementation((key) => key),
 	}),
 }));
+
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-room/registration/registration.composable");
 const useRegistrationMock = vi.mocked(useRegistration);
@@ -29,20 +36,32 @@ describe("Registration.vue", () => {
 	const setup = (
 		options?: Partial<{
 			password: string;
+			queryParams?: string;
+			hasApiErrorOccurred?: boolean;
 		}>
 	) => {
 		useRegistrationMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(options?.password ?? ""),
+			hasApiErrorOccurred: ref(options?.hasApiErrorOccurred ?? false),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
-			fullName: ref("Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
-			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
+			registrationSecret: ref<string>(""),
+			userData: ref({ firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" }),
+			fullName: computed(() => "Max Mustermann"),
+		});
+
+		const router = createMock<Router>({});
+		useRouterMock.mockReturnValue(router);
+		useRouteMock.mockReturnValue({
+			query: {
+				"registration-secret": options?.queryParams ?? "secret-value",
+			},
 		});
 
 		const wrapper = mount(Registration, {
@@ -156,6 +175,17 @@ describe("Registration.vue", () => {
 
 					const welcomeStepHeading = wrapper.get("#step-heading-welcome");
 					expect(document.activeElement).toEqual(welcomeStepHeading.element);
+				});
+
+				it("should be disabled if API error has occurred", async () => {
+					const { wrapper } = setup({ hasApiErrorOccurred: true });
+					const stepper = wrapper.findComponent(VStepper);
+					const continueButton = wrapper
+						.find("[data-testid='registration-continue-button']")
+						.getComponent({ name: "VBtn" });
+
+					expect(stepper.props("modelValue")).toBe(1);
+					expect(continueButton.props("disabled")).toStrictEqual(true);
 				});
 			});
 		});
