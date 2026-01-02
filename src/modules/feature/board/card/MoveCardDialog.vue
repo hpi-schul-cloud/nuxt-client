@@ -1,8 +1,8 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
+		v-model="isDialogOpen"
 		:are-actions-disabled="isMoving"
-		:message="t('components.molecules.move.card.title')"
+		:title="t('components.molecules.move.card.title')"
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
 		:loading="isMoving"

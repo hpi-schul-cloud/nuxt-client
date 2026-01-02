@@ -1,59 +1,60 @@
 @forward "vuetify/settings" with (
-	$body-font-family: var(--font-primary),
-	$heading-font-family: var(--font-accent),
-	$line-height-root: var(--line-height-md),
-	$typography: (
-		"h1": (
-			"size": var(--heading-1),
-			"line-height": 40px,
-			"letter-spacing": 0px,
-		),
-		"h2": (
-			"size": var(--heading-2),
-			"line-height": 33px,
-			"letter-spacing": 0px,
-		),
-		"h3": (
-			"size": var(--heading-3),
-			"line-height": 31px,
-			"letter-spacing": 0px,
-		),
-		"h4": (
-			"size": var(--heading-4),
-			"weight": 700,
-			"line-height": 30px,
-			"letter-spacing": 0px,
-		),
-		"h5": (
-			"size": var(--heading-5),
-			"weight": 700,
-			"line-height": 30px,
-			"letter-spacing": 0px,
-		),
-		"h6": (
-			"size": var(--heading-6),
-			"weight": 700,
-			"line-height": 30px,
-			"letter-spacing": 0px,
-		),
-	),
+  $body-font-family: var(--font-primary),
+  $heading-font-family: var(--font-accent),
+  $line-height-root: var(--line-height-md),
+  $typography: (
+    "h1": (
+      "size": var(--heading-1),
+      "line-height": 40px,
+      "letter-spacing": 0px,
+    ),
+    "h2": (
+      "size": var(--heading-2),
+      "line-height": 33px,
+      "letter-spacing": 0px,
+    ),
+    "h3": (
+      "size": var(--heading-3),
+      "line-height": 31px,
+      "letter-spacing": 0px,
+    ),
+    "h4": (
+      "size": var(--heading-4),
+      "weight": 700,
+      "line-height": 30px,
+      "letter-spacing": 0px,
+    ),
+    "h5": (
+      "size": var(--heading-5),
+      "weight": 700,
+      "line-height": 30px,
+      "letter-spacing": 0px,
+    ),
+    "h6": (
+      "size": var(--heading-6),
+      "weight": 700,
+      "line-height": 30px,
+      "letter-spacing": 0px,
+    ),
+  ),
 
-	// v-btn
-	$button-font-size: 1rem,
-	$button-text-transform: none,
-	$button-font-weight: 700,
-	$button-text-letter-spacing: 0.044em,
+  // v-btn
+  $button-font-size: 1rem,
+  $button-text-transform: none,
+  $button-font-weight: 700,
+  $button-text-letter-spacing: 0.044em,
 
-	// card
-	$card-text-letter-spacing: normal,
-	$card-subtitle-opacity: 1,
+  // card
+  $card-text-font-size: 1rem,
+  $card-text-letter-spacing: normal,
+  $card-subtitle-opacity: 1,
 
-	// list
-	$list-item-icon-margin-start: 8px,
+  // list
+  $list-item-icon-margin-start: 8px,
 
-	// breadcrumbs
-	$breadcrumbs-item-padding: 0px,
+  // breadcrumbs
+  $breadcrumbs-item-padding: 0px,
 
-	// v-label
-	$label-opacity: var(--v-high-emphasis-opacity)
+  // v-label
+  $label-opacity: var(--v-high-emphasis-opacity)
 );
