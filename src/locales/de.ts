@@ -77,6 +77,7 @@ export default {
 	"common.labels.firstName": "Vorname",
 	"common.labels.fullName": "Vorname & Nachname",
 	"common.labels.greeting": "Hallo, {name}",
+	"common.labels.invitedDate": "Eingeladen am",
 	"common.labels.language": "Sprache",
 	"common.labels.lastName.new": "Neuer Nachname",
 	"common.labels.lastName": "Nachname",
@@ -1877,6 +1878,13 @@ export default {
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel": "Mitgliedsanfrage für {fullName} ablehnen",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel": "Einladungslink „{linkTitle}“ teilen",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel": "Aktionsmenü für Einladungslink „{linkTitle}“",
+	"pages.rooms.members.registrations.remove.confirmation":
+		"Einladung für {invitedEmail} wirklich aus dem Raum entfernen?",
+	"pages.rooms.members.registrations.multipleRemove.confirmation":
+		"Ausgewählte Einladungen wirklich aus dem Raum entfernen?",
+	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Aktionsmenü für {registrationEmail}",
+	"pages.rooms.members.registrations.remove.ariaLabel": "Einladung für {registrationEmail} aus Raum entfernen",
+	"pages.rooms.members.registrations.resend.ariaLabel": "Einladung für {registrationEmail} erneut versenden",
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",

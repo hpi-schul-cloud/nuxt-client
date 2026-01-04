@@ -77,6 +77,7 @@ export default {
 	"common.labels.firstName": "Nombre",
 	"common.labels.fullName": "Nombre y apellidos",
 	"common.labels.greeting": "Hola, {name}",
+	"common.labels.invitedDate": "Invitado el",
 	"common.labels.language": "Idioma",
 	"common.labels.lastName.new": "Nuevo apellido",
 	"common.labels.lastName": "Apellidos",
@@ -1894,6 +1895,13 @@ export default {
 		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Menú de acción para el enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.registrations.remove.confirmation":
+		"¿Eliminar realmente la invitación para {invitedEmail} de la sala?",
+	"pages.rooms.members.registrations.multipleRemove.confirmation":
+		"¿Eliminar realmente las invitaciones seleccionadas de la sala?",
+	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Menú de acciones para {registrationEmail}",
+	"pages.rooms.members.registrations.remove.ariaLabel": "Eliminar invitación para {registrationEmail} de la sala",
+	"pages.rooms.members.registrations.resend.ariaLabel": "Reenviar invitación para {registrationEmail}",
 	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",
