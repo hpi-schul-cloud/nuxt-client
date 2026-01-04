@@ -495,6 +495,50 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
 /**
  * 
  * @export
+ * @interface AuthorizationManyReferencesBodyParams
+ */
+export interface AuthorizationManyReferencesBodyParams {
+    /**
+     * List of references to authorize against.
+     * @type {Array<AuthorizationBodyParams>}
+     * @memberof AuthorizationManyReferencesBodyParams
+     */
+    references: Array<AuthorizationBodyParams>;
+}
+/**
+ * 
+ * @export
+ * @interface AuthorizedByReferenceResponse
+ */
+export interface AuthorizedByReferenceResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthorizedByReferenceResponse
+     */
+    userId: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof AuthorizedByReferenceResponse
+     */
+    isAuthorized: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthorizedByReferenceResponse
+     */
+    referenceType: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AuthorizedByReferenceResponse
+     */
+    referenceId: string;
+}
+/**
+ * 
+ * @export
  * @interface AuthorizedResponse
  */
 export interface AuthorizedResponse {
@@ -13773,6 +13817,46 @@ export const AuthorizationApiAxiosParamCreator = function (configuration?: Confi
         },
         /**
          * 
+         * @summary Checks if user is authorized to perform the given operation.
+         * @param {AuthorizationManyReferencesBodyParams} authorizationManyReferencesBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorizationReferenceControllerAuthorizeByReferences: async (authorizationManyReferencesBodyParams: AuthorizationManyReferencesBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'authorizationManyReferencesBodyParams' is not null or undefined
+            assertParamExists('authorizationReferenceControllerAuthorizeByReferences', 'authorizationManyReferencesBodyParams', authorizationManyReferencesBodyParams)
+            const localVarPath = `/authorization/by-references`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(authorizationManyReferencesBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {CreateAccessTokenParams} createAccessTokenParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13870,6 +13954,17 @@ export const AuthorizationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Checks if user is authorized to perform the given operation.
+         * @param {AuthorizationManyReferencesBodyParams} authorizationManyReferencesBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams: AuthorizationManyReferencesBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<AuthorizedByReferenceResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @param {CreateAccessTokenParams} createAccessTokenParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13911,6 +14006,16 @@ export const AuthorizationApiFactory = function (configuration?: Configuration, 
         },
         /**
          * 
+         * @summary Checks if user is authorized to perform the given operation.
+         * @param {AuthorizationManyReferencesBodyParams} authorizationManyReferencesBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams: AuthorizationManyReferencesBodyParams, options?: any): AxiosPromise<Array<AuthorizedByReferenceResponse>> {
+            return localVarFp.authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {CreateAccessTokenParams} createAccessTokenParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13946,6 +14051,16 @@ export interface AuthorizationApiInterface {
      * @memberof AuthorizationApiInterface
      */
     authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any): AxiosPromise<AuthorizedResponse>;
+
+    /**
+     * 
+     * @summary Checks if user is authorized to perform the given operation.
+     * @param {AuthorizationManyReferencesBodyParams} authorizationManyReferencesBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApiInterface
+     */
+    authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams: AuthorizationManyReferencesBodyParams, options?: any): AxiosPromise<Array<AuthorizedByReferenceResponse>>;
 
     /**
      * 
@@ -13985,6 +14100,18 @@ export class AuthorizationApi extends BaseAPI implements AuthorizationApiInterfa
      */
     public authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams: AuthorizationBodyParams, options?: any) {
         return AuthorizationApiFp(this.configuration).authorizationReferenceControllerAuthorizeByReference(authorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Checks if user is authorized to perform the given operation.
+     * @param {AuthorizationManyReferencesBodyParams} authorizationManyReferencesBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthorizationApi
+     */
+    public authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams: AuthorizationManyReferencesBodyParams, options?: any) {
+        return AuthorizationApiFp(this.configuration).authorizationReferenceControllerAuthorizeByReferences(authorizationManyReferencesBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23773,6 +23900,48 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Resend registration mail for a specific registration and roomId
+         * @param {string} registrationId The id of the registration the room is attached to.
+         * @param {string} roomId The id of a room that the registration is associated with.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerResendRegistrationMail: async (registrationId: string, roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationId' is not null or undefined
+            assertParamExists('registrationControllerResendRegistrationMail', 'registrationId', registrationId)
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('registrationControllerResendRegistrationMail', 'roomId', roomId)
+            const localVarPath = `/registrations/{registrationId}/resend-mail/{roomId}`
+                .replace(`{${"registrationId"}}`, encodeURIComponent(String(registrationId)))
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -23840,6 +24009,18 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerGetBySecret(registrationSecret, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Resend registration mail for a specific registration and roomId
+         * @param {string} registrationId The id of the registration the room is attached to.
+         * @param {string} roomId The id of a room that the registration is associated with.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async registrationControllerResendRegistrationMail(registrationId: string, roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerResendRegistrationMail(registrationId, roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -23902,6 +24083,17 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
         registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse> {
             return localVarFp.registrationControllerGetBySecret(registrationSecret, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Resend registration mail for a specific registration and roomId
+         * @param {string} registrationId The id of the registration the room is attached to.
+         * @param {string} roomId The id of a room that the registration is associated with.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registrationControllerResendRegistrationMail(registrationId: string, roomId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.registrationControllerResendRegistrationMail(registrationId, roomId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -23962,6 +24154,17 @@ export interface RegistrationApiInterface {
      * @memberof RegistrationApiInterface
      */
     registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+
+    /**
+     * 
+     * @summary Resend registration mail for a specific registration and roomId
+     * @param {string} registrationId The id of the registration the room is attached to.
+     * @param {string} roomId The id of a room that the registration is associated with.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApiInterface
+     */
+    registrationControllerResendRegistrationMail(registrationId: string, roomId: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -24032,6 +24235,19 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      */
     public registrationControllerGetBySecret(registrationSecret: string, options?: any) {
         return RegistrationApiFp(this.configuration).registrationControllerGetBySecret(registrationSecret, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Resend registration mail for a specific registration and roomId
+     * @param {string} registrationId The id of the registration the room is attached to.
+     * @param {string} roomId The id of a room that the registration is associated with.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RegistrationApi
+     */
+    public registrationControllerResendRegistrationMail(registrationId: string, roomId: string, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerResendRegistrationMail(registrationId, roomId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
