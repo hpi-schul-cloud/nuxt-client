@@ -15,15 +15,15 @@
 			</span>
 		</template>
 		<template #[`action-menu-items`]>
-			<!-- <KebabMenuActionResendInvitation @click="onResendInvitation(selectedIds)" /> -->
+			<KebabMenuActionResendInvitation @click="onResendInvitation(selectedIds)" />
 			<KebabMenuActionRemoveInvitation @click="onRemoveInvitation(selectedIds)" />
 		</template>
 		<template #[`item.actions`]="{ item, index }">
 			<KebabMenu :data-testid="`kebab-menu-${index}`" :aria-label="getAriaLabel(item)">
-				<!-- <KebabMenuActionResendInvitation
+				<KebabMenuActionResendInvitation
 					:aria-label="getAriaLabel(item, 'resend')"
 					@click="onResendInvitation([item.id])"
-				/> -->
+				/>
 				<KebabMenuActionRemoveInvitation
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveInvitation([item.id])"
@@ -38,7 +38,7 @@
 import { type Registration, useRegistrationStore } from "@data-room";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
-import { KebabMenu, KebabMenuActionRemoveInvitation } from "@ui-kebab-menu";
+import { KebabMenu, KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -48,7 +48,7 @@ const registrationStore = useRegistrationStore();
 
 const { roomRegistrations, selectedIds } = storeToRefs(registrationStore);
 
-const { removeInvitations } = registrationStore;
+const { removeInvitations, resendInvitations } = registrationStore;
 const { askConfirmation } = useConfirmationDialog();
 
 const registrationTableData = computed(() => roomRegistrations.value as unknown as Record<string, unknown>[]);
@@ -56,6 +56,10 @@ const registrationTableData = computed(() => roomRegistrations.value as unknown 
 const onRemoveInvitation = async (registrationIds: string[]) => {
 	const shouldRemove = await confirmRemoval(registrationIds);
 	if (shouldRemove) await removeInvitations(registrationIds);
+};
+
+const onResendInvitation = async (registrationIds: string[]) => {
+	await resendInvitations(registrationIds);
 };
 
 const confirmRemoval = async (invitationIds: string[]) => {

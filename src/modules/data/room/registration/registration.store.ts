@@ -104,8 +104,42 @@ export const useRegistrationStore = defineStore("registration", () => {
 			);
 			selectedIds.value = [];
 		} catch {
-			notifyError(t("pages.roomMembers.error.notRemovedInvitations"), false);
+			notifyError(t("pages.registrationExternalMembers.error.notRemovedInvitations"), false);
 		}
+	};
+
+	const resendInvitations = async (invitationIds: string[]): Promise<void> => {
+		try {
+			if (!roomId.value) return;
+
+			const allowedIds = invitationIds.filter((id) => canResendRegistration(id));
+			if (allowedIds.length === 0) {
+				notifyError(t("pages.registrationExternalMembers.info.tooManyResendRequests"), false);
+				return;
+			}
+
+			const Promises = invitationIds.map((id) =>
+				registrationApi.registrationControllerResendRegistrationMail(id, roomId.value!)
+			);
+			await Promise.all(Promises);
+			await fetchRegistrationsForCurrentRoom();
+		} catch {
+			notifyError(t("pages.registrationExternalMembers.error.notResentInvitations"), false);
+		}
+	};
+
+	const canResendRegistration = (registrationId: string): boolean => {
+		const registration = getRegistrationById(registrationId);
+		if (!registration) return false;
+
+		if (!registration.resentAt) return true;
+
+		const lastResend = new Date(registration.resentAt).getTime();
+		const now = Date.now();
+		const TWO_MINUTES_MS = 2 * 60 * 1000;
+
+		const twoMinutesHavePassed = now - lastResend >= TWO_MINUTES_MS;
+		return twoMinutesHavePassed;
 	};
 
 	const resetStore = () => {
@@ -128,6 +162,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 		fetchUserData,
 		completeRegistration,
 		removeInvitations,
+		resendInvitations,
 		getRegistrationById,
 		getEmailOfRegistration,
 	};

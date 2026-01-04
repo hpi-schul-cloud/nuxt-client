@@ -1578,7 +1578,7 @@ export default {
 	"pages.registrationExternalMembers.error.notResentInvitations":
 		"Die Einladungen konnten leider nicht erneut gesendet werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.info.tooManyResendRequests":
-		"Die Einladungen konnten leider nicht erneut gesendet werden. Bitte später erneut versuchen.",
+		"Es wurde soeben eine E-Mail versendet. Nach zwei Minuten kann die E-Mail erneut versendet werden.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",
