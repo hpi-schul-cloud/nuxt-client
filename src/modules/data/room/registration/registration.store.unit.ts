@@ -228,6 +228,64 @@ describe("registration.store", () => {
 		});
 	});
 
+	describe("resendInvitations", () => {
+		it("resends invitations on success", async () => {
+			const registrations = createRegistrations(2);
+			const { registrationStore, roomDetailsStore } = setup({ roomRegistrations: registrations });
+
+			registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+			registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+
+			await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
+
+			expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
+				registrations[0].id,
+				roomDetailsStore.room?.id
+			);
+			expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
+				registrations[1].id,
+				roomDetailsStore.room?.id
+			);
+		});
+
+		it("fetches updated registrations after resending", async () => {
+			const registrations = createRegistrations(1);
+			const { registrationStore, roomDetailsStore } = setup({ roomRegistrations: registrations });
+
+			registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+
+			await registrationStore.resendInvitations([registrations[0].id]);
+
+			expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+		});
+
+		it("does not resend invitations when resentAt is within 2 minutes and notifies as info", async () => {
+			const now = new Date();
+			const oneMinuteAgo = new Date(now.getTime() - 1 * 60 * 1000).toISOString();
+
+			const registrations = registrationFactory.buildList(1, {
+				resentAt: oneMinuteAgo,
+			});
+			const { registrationStore } = setup({ roomRegistrations: registrations });
+
+			await registrationStore.resendInvitations([registrations[0].id]);
+
+			expect(registrationApi.registrationControllerResendRegistrationMail).not.toHaveBeenCalled();
+			expectNotification("info");
+		});
+
+		it("notifies on error", async () => {
+			const registrations = createRegistrations(1);
+			const { registrationStore } = setup({ roomRegistrations: registrations });
+
+			registrationApi.registrationControllerResendRegistrationMail.mockRejectedValueOnce(new Error("Error"));
+
+			await registrationStore.resendInvitations([registrations[0].id]);
+
+			expectNotification("error");
+		});
+	});
+
 	describe("resetStore", () => {
 		it("reset the store", async () => {
 			const registrations = createRegistrations();

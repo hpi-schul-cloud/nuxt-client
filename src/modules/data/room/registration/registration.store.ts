@@ -7,7 +7,7 @@ import {
 	RegistrationListResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { notifyError } from "@data-app";
+import { notifyError, notifyInfo } from "@data-app";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -114,7 +114,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 
 			const allowedIds = invitationIds.filter((id) => canResendRegistration(id));
 			if (allowedIds.length === 0) {
-				notifyError(t("pages.registrationExternalMembers.info.tooManyResendRequests"), false);
+				notifyInfo(t("pages.registrationExternalMembers.info.tooManyResendRequests"), false);
 				return;
 			}
 
