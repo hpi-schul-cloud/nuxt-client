@@ -8475,6 +8475,12 @@ export interface RegistrationItemResponse {
      * @memberof RegistrationItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RegistrationItemResponse
+     */
+    resentAt?: string;
 }
 /**
  * 
