@@ -4735,6 +4735,142 @@ export interface H5pElementResponse {
 /**
  * 
  * @export
+ * @interface HelpdeskProblemCreateParams
+ */
+export interface HelpdeskProblemCreateParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    supportType: HelpdeskProblemCreateParamsSupportTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    subject: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    replyEmail: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    problemArea: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    device?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    consent?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskProblemCreateParams
+     */
+    problemDescription: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum HelpdeskProblemCreateParamsSupportTypeEnum {
+    Problem = 'problem',
+    Wish = 'wish'
+}
+
+/**
+ * 
+ * @export
+ * @interface HelpdeskWishCreateParams
+ */
+export interface HelpdeskWishCreateParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    supportType: HelpdeskWishCreateParamsSupportTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    subject: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    replyEmail: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof HelpdeskWishCreateParams
+     */
+    problemArea: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    device?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof HelpdeskWishCreateParams
+     */
+    consent?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    role: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    desire: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    benefit: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HelpdeskWishCreateParams
+     */
+    acceptanceCriteria?: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum HelpdeskWishCreateParamsSupportTypeEnum {
+    Problem = 'problem',
+    Wish = 'wish'
+}
+
+/**
+ * 
+ * @export
  * @interface ImportUserListResponse
  */
 export interface ImportUserListResponse {
@@ -8299,6 +8435,19 @@ export interface RegistrationItemResponse {
 /**
  * 
  * @export
+ * @interface RegistrationListResponse
+ */
+export interface RegistrationListResponse {
+    /**
+     * 
+     * @type {Array<RegistrationItemResponse>}
+     * @memberof RegistrationListResponse
+     */
+    data: Array<RegistrationItemResponse>;
+}
+/**
+ * 
+ * @export
  * @interface RemoveRoomMembersBodyParams
  */
 export interface RemoveRoomMembersBodyParams {
@@ -9069,6 +9218,61 @@ export interface RoomStatsListResponse {
      * @memberof RoomStatsListResponse
      */
     limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface RuntimeConfigListItemResponse
+ */
+export interface RuntimeConfigListItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RuntimeConfigListItemResponse
+     */
+    key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RuntimeConfigListItemResponse
+     */
+    type: RuntimeConfigListItemResponseTypeEnum;
+    /**
+     * guaranteed to be of the type defined in \"type\" property
+     * @type {object}
+     * @memberof RuntimeConfigListItemResponse
+     */
+    value: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof RuntimeConfigListItemResponse
+     */
+    description?: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum RuntimeConfigListItemResponseTypeEnum {
+    String = 'string',
+    Number = 'number',
+    Boolean = 'boolean'
+}
+
+/**
+ * 
+ * @export
+ * @interface RuntimeConfigListResponse
+ */
+export interface RuntimeConfigListResponse {
+    /**
+     * 
+     * @type {Array<RuntimeConfigListItemResponse>}
+     * @memberof RuntimeConfigListResponse
+     */
+    data: Array<RuntimeConfigListItemResponse>;
 }
 /**
  * 
@@ -11006,6 +11210,19 @@ export interface UpdateRoomInvitationLinkBodyParams {
      * @memberof UpdateRoomInvitationLinkBodyParams
      */
     requiresConfirmation: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateRuntimeConfigValueBodyParams
+ */
+export interface UpdateRuntimeConfigValueBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateRuntimeConfigValueBodyParams
+     */
+    value: string;
 }
 /**
  * 
@@ -19030,6 +19247,240 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
 
 
 /**
+ * HelpdeskApi - axios parameter creator
+ * @export
+ */
+export const HelpdeskApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a new helpdesk problem
+         * @param {string} userAgent 
+         * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        helpdeskControllerCreateProblem: async (userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userAgent' is not null or undefined
+            assertParamExists('helpdeskControllerCreateProblem', 'userAgent', userAgent)
+            // verify required parameter 'helpdeskProblemCreateParams' is not null or undefined
+            assertParamExists('helpdeskControllerCreateProblem', 'helpdeskProblemCreateParams', helpdeskProblemCreateParams)
+            const localVarPath = `/helpdesk/problem`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (userAgent !== undefined && userAgent !== null) {
+                localVarHeaderParameter['user-agent'] = String(userAgent);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(helpdeskProblemCreateParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create a new helpdesk wish
+         * @param {string} userAgent 
+         * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        helpdeskControllerCreateWish: async (userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userAgent' is not null or undefined
+            assertParamExists('helpdeskControllerCreateWish', 'userAgent', userAgent)
+            // verify required parameter 'helpdeskWishCreateParams' is not null or undefined
+            assertParamExists('helpdeskControllerCreateWish', 'helpdeskWishCreateParams', helpdeskWishCreateParams)
+            const localVarPath = `/helpdesk/wish`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (userAgent !== undefined && userAgent !== null) {
+                localVarHeaderParameter['user-agent'] = String(userAgent);
+            }
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(helpdeskWishCreateParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HelpdeskApi - functional programming interface
+ * @export
+ */
+export const HelpdeskApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HelpdeskApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new helpdesk problem
+         * @param {string} userAgent 
+         * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.helpdeskControllerCreateProblem(userAgent, helpdeskProblemCreateParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Create a new helpdesk wish
+         * @param {string} userAgent 
+         * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.helpdeskControllerCreateWish(userAgent, helpdeskWishCreateParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * HelpdeskApi - factory interface
+ * @export
+ */
+export const HelpdeskApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HelpdeskApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new helpdesk problem
+         * @param {string} userAgent 
+         * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any): AxiosPromise<void> {
+            return localVarFp.helpdeskControllerCreateProblem(userAgent, helpdeskProblemCreateParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create a new helpdesk wish
+         * @param {string} userAgent 
+         * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any): AxiosPromise<void> {
+            return localVarFp.helpdeskControllerCreateWish(userAgent, helpdeskWishCreateParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HelpdeskApi - interface
+ * @export
+ * @interface HelpdeskApi
+ */
+export interface HelpdeskApiInterface {
+    /**
+     * 
+     * @summary Create a new helpdesk problem
+     * @param {string} userAgent 
+     * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HelpdeskApiInterface
+     */
+    helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Create a new helpdesk wish
+     * @param {string} userAgent 
+     * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HelpdeskApiInterface
+     */
+    helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * HelpdeskApi - object-oriented interface
+ * @export
+ * @class HelpdeskApi
+ * @extends {BaseAPI}
+ */
+export class HelpdeskApi extends BaseAPI implements HelpdeskApiInterface {
+    /**
+     * 
+     * @summary Create a new helpdesk problem
+     * @param {string} userAgent 
+     * @param {HelpdeskProblemCreateParams} helpdeskProblemCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HelpdeskApi
+     */
+    public helpdeskControllerCreateProblem(userAgent: string, helpdeskProblemCreateParams: HelpdeskProblemCreateParams, options?: any) {
+        return HelpdeskApiFp(this.configuration).helpdeskControllerCreateProblem(userAgent, helpdeskProblemCreateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a new helpdesk wish
+     * @param {string} userAgent 
+     * @param {HelpdeskWishCreateParams} helpdeskWishCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HelpdeskApi
+     */
+    public helpdeskControllerCreateWish(userAgent: string, helpdeskWishCreateParams: HelpdeskWishCreateParams, options?: any) {
+        return HelpdeskApiFp(this.configuration).helpdeskControllerCreateWish(userAgent, helpdeskWishCreateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * LessonApi - axios parameter creator
  * @export
  */
@@ -23374,7 +23825,7 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
+        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerFindByRoom(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -23438,7 +23889,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse> {
+        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationListResponse> {
             return localVarFp.registrationControllerFindByRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -23500,7 +23951,7 @@ export interface RegistrationApiInterface {
      * @throws {RequiredError}
      * @memberof RegistrationApiInterface
      */
-    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse>;
+    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationListResponse>;
 
     /**
      * 
@@ -25627,6 +26078,206 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
      */
     public roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any) {
         return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * RuntimeConfigApi - axios parameter creator
+ * @export
+ */
+export const RuntimeConfigApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        runtimeConfigControllerGetRuntimeConfig: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/runtime-config`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} key The key of the runtime config value.
+         * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        runtimeConfigControllerUpdateRuntimeConfigValue: async (key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'key' is not null or undefined
+            assertParamExists('runtimeConfigControllerUpdateRuntimeConfigValue', 'key', key)
+            // verify required parameter 'updateRuntimeConfigValueBodyParams' is not null or undefined
+            assertParamExists('runtimeConfigControllerUpdateRuntimeConfigValue', 'updateRuntimeConfigValueBodyParams', updateRuntimeConfigValueBodyParams)
+            const localVarPath = `/runtime-config/{key}`
+                .replace(`{${"key"}}`, encodeURIComponent(String(key)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateRuntimeConfigValueBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RuntimeConfigApi - functional programming interface
+ * @export
+ */
+export const RuntimeConfigApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RuntimeConfigApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async runtimeConfigControllerGetRuntimeConfig(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RuntimeConfigListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.runtimeConfigControllerGetRuntimeConfig(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} key The key of the runtime config value.
+         * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.runtimeConfigControllerUpdateRuntimeConfigValue(key, updateRuntimeConfigValueBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RuntimeConfigApi - factory interface
+ * @export
+ */
+export const RuntimeConfigApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RuntimeConfigApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        runtimeConfigControllerGetRuntimeConfig(options?: any): AxiosPromise<RuntimeConfigListResponse> {
+            return localVarFp.runtimeConfigControllerGetRuntimeConfig(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} key The key of the runtime config value.
+         * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.runtimeConfigControllerUpdateRuntimeConfigValue(key, updateRuntimeConfigValueBodyParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RuntimeConfigApi - interface
+ * @export
+ * @interface RuntimeConfigApi
+ */
+export interface RuntimeConfigApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RuntimeConfigApiInterface
+     */
+    runtimeConfigControllerGetRuntimeConfig(options?: any): AxiosPromise<RuntimeConfigListResponse>;
+
+    /**
+     * 
+     * @param {string} key The key of the runtime config value.
+     * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RuntimeConfigApiInterface
+     */
+    runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * RuntimeConfigApi - object-oriented interface
+ * @export
+ * @class RuntimeConfigApi
+ * @extends {BaseAPI}
+ */
+export class RuntimeConfigApi extends BaseAPI implements RuntimeConfigApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RuntimeConfigApi
+     */
+    public runtimeConfigControllerGetRuntimeConfig(options?: any) {
+        return RuntimeConfigApiFp(this.configuration).runtimeConfigControllerGetRuntimeConfig(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} key The key of the runtime config value.
+     * @param {UpdateRuntimeConfigValueBodyParams} updateRuntimeConfigValueBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RuntimeConfigApi
+     */
+    public runtimeConfigControllerUpdateRuntimeConfigValue(key: string, updateRuntimeConfigValueBodyParams: UpdateRuntimeConfigValueBodyParams, options?: any) {
+        return RuntimeConfigApiFp(this.configuration).runtimeConfigControllerUpdateRuntimeConfigValue(key, updateRuntimeConfigValueBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
