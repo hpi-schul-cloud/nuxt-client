@@ -1,0 +1,134 @@
+import { useRoomDetailsStore } from "../RoomDetails.store";
+import { useI18nGlobal } from "@/plugins/i18n";
+import {
+	LanguageType,
+	RegistrationApiFactory,
+	RegistrationItemResponse,
+	RegistrationListResponse,
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { notifyError } from "@data-app";
+import { defineStore, storeToRefs } from "pinia";
+import { computed, ref } from "vue";
+
+export type RegistrationList = RegistrationListResponse["data"];
+export type Registration = RegistrationItemResponse;
+
+export const useRegistrationStore = defineStore("registration", () => {
+	const { t } = useI18nGlobal();
+
+	const { room } = storeToRefs(useRoomDetailsStore());
+	const roomId = computed(() => room.value?.id);
+
+	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
+
+	const roomRegistrations = ref<RegistrationList>([]);
+	const registrationSecret = ref<string>("");
+	const userData = ref<{
+		firstName: string;
+		lastName: string;
+		email: string;
+	} | null>(null);
+	const hasApiErrorOccurred = ref<boolean>(false);
+
+	const isLoading = ref<boolean>(false);
+	const selectedIds = ref<string[]>([]);
+
+	const fetchRegistrationsForCurrentRoom = async () => {
+		if (!roomId.value) return;
+
+		isLoading.value = true;
+		try {
+			const { data } = await registrationApi.registrationControllerFindByRoom(roomId.value);
+
+			roomRegistrations.value = data.data ?? [];
+		} catch {
+			notifyError(t("pages.registrationExternalMembers.error.notFetchedRegistrations"), false);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
+	const fetchUserData = async () => {
+		isLoading.value = true;
+		try {
+			const { firstName, lastName, email } = (
+				await registrationApi.registrationControllerGetBySecret(registrationSecret.value)
+			).data;
+
+			userData.value = { firstName, lastName, email };
+		} catch {
+			hasApiErrorOccurred.value = true;
+			notifyError(t("pages.registrationExternalMembers.error.notFetchedUserData"), false);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
+	const getRegistrationById = (registrationId: string) =>
+		roomRegistrations.value.find((registration) => registration.id === registrationId);
+
+	const getEmailOfRegistration = (registrationId = "") => {
+		const registration = getRegistrationById(registrationId);
+		if (!registration) {
+			return "";
+		}
+		return registration.email;
+	};
+
+	const completeRegistration = async (language: LanguageType, password: string): Promise<boolean> => {
+		isLoading.value = true;
+		try {
+			await registrationApi.registrationControllerCompleteRegistration(registrationSecret.value, {
+				language,
+				password,
+			});
+			return true;
+		} catch {
+			notifyError(t("pages.registrationExternalMembers.error.notCompleted"), false);
+			return false;
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
+	const removeInvitations = async (invitationIds: string[]): Promise<void> => {
+		try {
+			if (!roomId.value) return;
+			const Promises = invitationIds.map((id) =>
+				registrationApi.registrationControllerCancelRegistration(id, roomId.value!)
+			);
+			await Promise.all(Promises);
+			roomRegistrations.value = roomRegistrations.value.filter(
+				(registration) => !invitationIds.includes(registration.id)
+			);
+			selectedIds.value = [];
+		} catch {
+			notifyError(t("pages.roomMembers.error.notRemovedInvitations"), false);
+		}
+	};
+
+	const resetStore = () => {
+		isLoading.value = false;
+		registrationSecret.value = "";
+		userData.value = null;
+		roomRegistrations.value = [];
+		selectedIds.value = [];
+	};
+
+	return {
+		hasApiErrorOccurred,
+		isLoading,
+		registrationSecret,
+		userData,
+		roomRegistrations,
+		selectedIds,
+		resetStore,
+		fetchRegistrationsForCurrentRoom,
+		fetchUserData,
+		completeRegistration,
+		removeInvitations,
+		getRegistrationById,
+		getEmailOfRegistration,
+	};
+});

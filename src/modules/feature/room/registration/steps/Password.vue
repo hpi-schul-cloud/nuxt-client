@@ -2,11 +2,16 @@
 	<p>{{ t("pages.registrationExternalMembers.steps.password.firstParagraph", { instance }) }}</p>
 	<p>{{ t("pages.registrationExternalMembers.steps.password.secondParagraph") }}</p>
 	<div class="d-flex" :class="{ 'flex-column': xs, 'ga-6': !xs }">
-		<VTextField readonly :label="t('common.labels.firstName')" :model-value="userData?.name" data-testid="first-name" />
+		<VTextField
+			readonly
+			:label="t('common.labels.firstName')"
+			:model-value="userData?.firstName"
+			data-testid="first-name"
+		/>
 		<VTextField
 			readonly
 			:label="t('common.labels.lastName')"
-			:model-value="userData?.surname"
+			:model-value="userData?.lastName"
 			data-testid="last-name"
 		/>
 	</div>
@@ -61,8 +66,8 @@ import { VTextField } from "vuetify/components";
 
 type Props = {
 	userData: {
-		name: string;
-		surname: string;
+		firstName: string;
+		lastName: string;
 		email: string;
 	} | null;
 };
