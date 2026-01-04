@@ -22,6 +22,7 @@ export default {
 	"common.actions.leave": "Verlassen",
 	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
+	"common.actions.resend": "Erneut versenden",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
@@ -1568,6 +1569,16 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+		"Die Registrierungen konnten leider nicht geladen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.notFetchedUserData":
+		"Die Nutzerdaten konnten leider nicht geladen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.notRemovedInvitations":
+		"Die Einladungen konnten leider nicht entfernt werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.notResentInvitations":
+		"Die Einladungen konnten leider nicht erneut gesendet werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.info.tooManyResendRequests":
+		"Die Einladungen konnten leider nicht erneut gesendet werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",

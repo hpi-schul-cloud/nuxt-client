@@ -23,6 +23,7 @@ export default {
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
+	"common.actions.resend": "Reenviar",
 	"common.actions.save": "Guardar",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
@@ -1574,6 +1575,16 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+		"Lamentablemente, no se han podido cargar los registros. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.notFetchedUserData":
+		"Lamentablemente, no se han podido cargar los datos de usuario. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.notRemovedInvitations":
+		"Lamentablemente, no se han podido eliminar las invitaciones. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.notResentInvitations":
+		"Lamentablemente, no se han podido reenviar las invitaciones. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.info.tooManyResendRequests":
+		"Se acaba de enviar un correo electrónico. Pasados dos minutos, se puede volver a enviar el correo electrónico.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instanceTitle}.",

@@ -23,6 +23,7 @@ export default {
 	"common.actions.leave": "Leave",
 	"common.actions.remove": "Remove",
 	"common.actions.rename": "Rename",
+	"common.actions.resend": "Resend",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
@@ -1539,6 +1540,16 @@ export default {
 	"pages.news.title": "News",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Registration could not be completed. Please try again later.",
+	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+		"Unfortunately, the registrations could not be loaded. Please try again later.",
+	"pages.registrationExternalMembers.error.notFetchedUserData":
+		"Unfortunately, the user data could not be loaded. Please try again later.",
+	"pages.registrationExternalMembers.error.notRemovedInvitations":
+		"Unfortunately, the invitations could not be removed. Please try again later.",
+	"pages.registrationExternalMembers.error.notResentInvitations":
+		"Unfortunately, the invitations could not be resent. Please try again later.",
+	"pages.registrationExternalMembers.info.tooManyResendRequests":
+		"An email has just been sent. After two minutes, the email can be sent again.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",

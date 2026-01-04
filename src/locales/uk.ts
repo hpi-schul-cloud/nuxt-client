@@ -23,6 +23,7 @@ export default {
 	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",
+	"common.actions.resend": "Надіслати знову",
 	"common.actions.save": "Зберегти",
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
@@ -1555,6 +1556,16 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+		"На жаль, реєстрацію не вдалося завантажити. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.notFetchedUserData":
+		"На жаль, дані користувача не вдалося завантажити. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.notRemovedInvitations":
+		"На жаль, запрошення не вдалося видалити. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.notResentInvitations":
+		"На жаль, запрошення не вдалося надіслати повторно. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.info.tooManyResendRequests":
+		"Щойно було надіслано електронний лист. Через дві хвилини електронний лист можна надіслати знову.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",
