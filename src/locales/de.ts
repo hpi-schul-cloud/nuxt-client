@@ -1740,7 +1740,6 @@ export default {
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
 	"pages.room.modal.course.export.options.columnBoards": "Bereiche",
 	"pages.room.modal.course.export.version1.1": "Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
-	"pages.room.modal.course.export.version1.1.hint": "Ordner können in dieser Version nicht exportiert werden!",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	"pages.roomCreate.title": "Raum erstellen",
 	"pages.roomEdit.title": "Raum bearbeiten",

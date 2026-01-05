@@ -1726,7 +1726,6 @@ export default {
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
 	"pages.room.modal.course.export.options.columnBoards": "Дошки",
 	"pages.room.modal.course.export.version1.1": "Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
-	"pages.room.modal.course.export.version1.1.hint": "У цій версії папки не можна експортувати.",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	"pages.roomCreate.title": "Створити кімнату",
 	"pages.roomEdit.title": "Кімната редагування",
