@@ -101,8 +101,9 @@ const {
 	setSelectedLanguage,
 	fullName,
 } = useRegistrationStepper();
-const { completeRegistration, fetchUserData, hasApiErrorOccurred, userData } = useRegistrationStore();
-const { registrationSecret } = storeToRefs(useRegistrationStore());
+const registrationStore = useRegistrationStore();
+const { hasApiErrorOccurred, registrationSecret, userData } = storeToRefs(registrationStore);
+const { completeRegistration, fetchUserData } = registrationStore;
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");
 
