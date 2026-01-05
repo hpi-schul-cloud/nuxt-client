@@ -1,6 +1,8 @@
 import { useRegistration } from "./registration.composable";
 import { LanguageType } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { axiosErrorFactory } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -98,17 +100,36 @@ describe("useRegistration", () => {
 			});
 		});
 
-		it("should handle errors when fetching user data fails", async () => {
+		it("should handle '404' errors when fetching user data fails", async () => {
 			const { fetchUserData, registrationSecret, hasApiErrorOccurred } = useRegistration();
 			expect(hasApiErrorOccurred.value).toBe(false);
 			registrationSecret.value = "test-secret";
-			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(new Error("API Error"));
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
+			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
 
 			await fetchUserData();
 
 			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith("test-secret");
 			expect(useNotificationStore().notify).toHaveBeenCalledWith({
-				text: "pages.registrationExternalMembers.error.notFetchedUserData",
+				text: "pages.registrationExternalMembers.error.404",
+				status: "error",
+				autoClose: false,
+			});
+			expect(hasApiErrorOccurred.value).toBe(true);
+		});
+
+		it("should handle other errors when fetching user data fails", async () => {
+			const { fetchUserData, registrationSecret, hasApiErrorOccurred } = useRegistration();
+			expect(hasApiErrorOccurred.value).toBe(false);
+			registrationSecret.value = "test-secret";
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.InternalServerError).build();
+			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
+
+			await fetchUserData();
+
+			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith("test-secret");
+			expect(useNotificationStore().notify).toHaveBeenCalledWith({
+				text: "pages.registrationExternalMembers.error",
 				status: "error",
 				autoClose: false,
 			});
