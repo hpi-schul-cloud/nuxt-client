@@ -42,6 +42,7 @@ export default {
 	"common.file.scanWontCheck.short": "Preview not possible",
 	"common.file.scanError.short": "Preview not possible",
 	"common.file.virusDetected.short": "Virus suspected",
+	"common.file.storage.error": "This file is currently not available. Please reload the board.",
 	"common.file": "file",
 	"common.file.exceedsCollaboraEditableFileSize": "Documents larger than {sizeInMb} cannot be edited online.",
 	"common.file.exceedsCollaboraEditableFileSize.short": "Online editing not possible",
@@ -536,6 +537,8 @@ export default {
 	"components.cardElement.fileElement.openOfficeDocument": "Open office document",
 	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
+	"components.cardElement.folderElement.storage.error":
+		"Information about the file folder is currently not available. Please reload the board.",
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.notification.visibleAndEditable":

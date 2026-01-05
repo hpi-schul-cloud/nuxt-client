@@ -43,6 +43,7 @@ export default {
 	"common.file.scanWontCheck.short": "Vorschau nicht möglich",
 	"common.file.scanError.short": "Vorschau nicht möglich",
 	"common.file.virusDetected.short": "Virenverdacht",
+	"common.file.storage.error": "Diese Datei ist gerade nicht verfügbar. Lade den Bereich neu.",
 	"common.file": "Datei",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Dokumente größer als {sizeInMb} können online nicht bearbeitet werden.",
@@ -551,6 +552,8 @@ export default {
 	"components.cardElement.fileElement.openOfficeDocument": "Office Dokument öffnen",
 	"components.cardElement.folderElement": "Dateiordner",
 	"components.cardElement.folderElement.untitled": "Unbenannter Ordner",
+	"components.cardElement.folderElement.storage.error":
+		"Infos zum Dateiordner sind gerade nicht verfügbar. Lade den Bereich neu.",
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.notification.visibleAndEditable":

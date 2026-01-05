@@ -43,6 +43,7 @@ export default {
 	"common.file.scanWontCheck.short": "Vista previa no posible",
 	"common.file.scanError.short": "Vista previa no posible",
 	"common.file.virusDetected.short": "Virus sospechado",
+	"common.file.storage.error": "Este archivo no está disponible actualmente. Por favor, recargue el tablero.",
 	"common.file": "Archivo",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Los documentos que superen los {sizeInMb} no se pueden editar en línea.",
@@ -546,6 +547,8 @@ export default {
 	"components.cardElement.fileElement.openOfficeDocument": "Abrir documento Office",
 	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
+	"components.cardElement.folderElement.storage.error":
+		"La información sobre la carpeta de archivos no está disponible actualmente. Por favor, recargue el tablero.",
 	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.notification.visibleAndEditable":
