@@ -15,7 +15,7 @@
 		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
 
 		<div
-			class="wireframe-menu-container d-flex"
+			class="wireframe-menu-container d-flex align-center"
 			:class="{
 				'positioning-sm-to-md': mdAndDown,
 			}"
@@ -160,7 +160,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 .wireframe-menu-container {
 	position: sticky;
 	min-height: 56px;
-	margin-top: -23px;
+	margin-top: -30px;
 	z-index: 2000;
 	top: calc(var(--topbar-height) + 16px);
 
