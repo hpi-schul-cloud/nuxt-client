@@ -214,7 +214,7 @@ describe("MemberInvitationsTable", () => {
 
 			expect(askConfirmationMock).toHaveBeenCalledWith({
 				message: "pages.rooms.members.registrations.remove.confirmation",
-				confirmActionLangKey: "common.actions.remove",
+				confirmActionLangKey: "common.actions.delete",
 			});
 		});
 
