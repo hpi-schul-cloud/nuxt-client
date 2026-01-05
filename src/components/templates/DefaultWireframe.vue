@@ -2,7 +2,7 @@
 	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
 		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
 		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
-		<div ref="header" class="wireframe-header">
+		<div class="wireframe-header">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -45,7 +45,7 @@
 import { Breadcrumb } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
-import { computed, onMounted, PropType, ref, useSlots } from "vue";
+import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -97,20 +97,6 @@ const slots = useSlots();
 const { smAndUp, mdAndDown } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
-
-const header = ref();
-const headerHeight = ref(0);
-
-onMounted(() => {
-	// Need to detect header height to position speed dial properly.
-	// Relative in header does not work smoothly with sticky VSpeedDial positioning.
-	const updateHeight = () => {
-		headerHeight.value = header.value?.offsetHeight;
-	};
-	updateHeight();
-	const observer = new ResizeObserver(updateHeight);
-	observer.observe(header.value);
-});
 </script>
 
 <style lang="scss" scoped>
