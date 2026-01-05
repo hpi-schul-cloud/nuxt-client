@@ -1,6 +1,7 @@
 import { notifyError } from "../../application/notification-store";
 import { LanguageType, RegistrationApiFactory } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -44,9 +45,14 @@ export const useRegistration = () => {
 				await registrationApi.registrationControllerGetBySecret(registrationSecret.value)
 			).data;
 			userData.value = { firstName, lastName, email };
-		} catch {
+		} catch (error: unknown) {
+			const { code } = mapAxiosErrorToResponseError(error);
 			hasApiErrorOccurred.value = true;
-			notifyError(t("pages.registrationExternalMembers.error.notFetchedUserData"), false);
+			if (code === HttpStatusCode.NotFound) {
+				notifyError(t("pages.registrationExternalMembers.error.404"), false);
+				return;
+			}
+			notifyError(t("pages.registrationExternalMembers.error"), false);
 		}
 	};
 
