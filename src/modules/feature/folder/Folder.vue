@@ -1,10 +1,5 @@
 <template>
-	<DefaultWireframe
-		max-width="full"
-		:breadcrumbs="breadcrumbs"
-		:fab-items="fabAction"
-		@on-fab-item-click="fabItemClickHandler"
-	>
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
 		<template #header>
 			<div class="d-flex align-center">
 				<h1 data-testid="folder-title">
@@ -64,6 +59,7 @@ import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora"
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
+import { FabAction } from "@ui-speed-dial-menu";
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -105,23 +101,22 @@ const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 const fileInput = ref<HTMLInputElement | null>(null);
 const isRenameDialogOpen = ref(false);
 
-const enum FabEvent {
-	CreateDocument = "CREATE_DOCUMENT",
-	UploadFile = "UPLOAD_FILE",
-}
-
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
-const fabAction = computed(() => {
+const fabItems = computed(() => {
 	if (!hasEditPermission.value) return;
 
-	const actions = [
+	const actions: FabAction[] = [
+		{
+			icon: mdiPlus,
+			label: t("pages.folder.fab.title"),
+			dataTestId: "fab-add-files",
+		},
 		{
 			icon: mdiTrayArrowUp,
 			label: t("pages.folder.fab.upload-file"),
-			ariaLabel: t("pages.folder.fab.upload-file"),
 			dataTestId: "fab-button-upload-file",
-			customEvent: FabEvent.UploadFile,
+			clickHandler: uploadFile,
 		},
 	];
 
@@ -129,19 +124,12 @@ const fabAction = computed(() => {
 		actions.push({
 			icon: mdiFileDocumentPlusOutline,
 			label: t("pages.folder.fab.create-document"),
-			ariaLabel: t("pages.folder.fab.create-document"),
 			dataTestId: "fab-button-create-document",
-			customEvent: FabEvent.CreateDocument,
+			clickHandler: openCollaboraFileDialog,
 		});
 	}
 
-	return {
-		icon: mdiPlus,
-		title: t("pages.folder.fab.title"),
-		ariaLabel: t("pages.folder.fab.title"),
-		dataTestId: "fab-add-files",
-		actions: actions,
-	};
+	return actions;
 });
 
 const uploadProgress = ref({
@@ -156,15 +144,11 @@ const runningUploads = ref<number>(0);
 
 const uploadedFileRecords = computed(() => fileRecords.value.filter((fileRecord) => !fileRecord.isUploading));
 
-const fabItemClickHandler = (event: string | undefined): void => {
-	if (event === FabEvent.UploadFile) {
-		if (fileInput.value) {
-			// Reset the file input to allow re-uploading the same file
-			fileInput.value.value = "";
-			fileInput.value.click();
-		}
-	} else if (event === FabEvent.CreateDocument) {
-		openCollaboraFileDialog();
+const uploadFile = () => {
+	if (fileInput.value) {
+		// Reset the file input to allow re-uploading the same file
+		fileInput.value.value = "";
+		fileInput.value.click();
 	}
 };
 
