@@ -1,6 +1,10 @@
 <template>
-	<KebabMenuAction :icon="mdiTrayArrowDown" data-testid="kebab-menu-action-download" :disabled="disabled"
-		@click="onClick">
+	<KebabMenuAction
+		:icon="mdiTrayArrowDown"
+		data-testid="kebab-menu-action-download"
+		:disabled="disabled"
+		@click="onClick"
+	>
 		{{ t("common.actions.download") }}
 	</KebabMenuAction>
 </template>
@@ -12,7 +16,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 interface KebabMenuActionDownloadFilesProps {
-	selectedIds: string[];
+	selectedIds?: string[];
 	disabled?: boolean;
 }
 

@@ -1,36 +1,67 @@
 <template>
-	<v-card ref="folderContentElement" class="mb-4" data-testid="board-folder-element" elevation="0" variant="outlined"
-		:ripple="false" :tabindex="isEditMode ? 0 : undefined"
-		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle" @keydown.up.down="onKeydownArrow"
-		@keydown.stop>
-		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline" tabindex="0" role="button"
-			class="content-element-bar" :aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
-			@click="onTitleClick" @keydown.enter="onTitleClick">
+	<v-card
+		ref="folderContentElement"
+		class="mb-4"
+		data-testid="board-folder-element"
+		elevation="0"
+		variant="outlined"
+		:ripple="false"
+		:tabindex="isEditMode ? 0 : undefined"
+		:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
+	>
+		<ContentElementBar
+			:has-grey-background="true"
+			:icon="mdiFolderOpenOutline"
+			tabindex="0"
+			role="button"
+			class="content-element-bar"
+			:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+			@click="onTitleClick"
+			@keydown.enter="onTitleClick"
+		>
 			<template #title>
 				{{ elementTitle }}
 			</template>
 			<template v-if="isEditMode" #menu>
-				<BoardMenu :scope="BoardMenuScope.FOLDER_ELEMENT" has-background
-					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`">
+				<BoardMenu
+					:scope="BoardMenuScope.FOLDER_ELEMENT"
+					has-background
+					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				>
 					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 					<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-					<KebabMenuActionDownload :disabled="!isDownloadAllowed"
-						scope-language-key="components.cardElement.folderElement" @click="onDownload" />
-					<KebabMenuActionDelete scope-language-key="components.cardElement.folderElement"
-						@click="onDelete" />
+					<KebabMenuActionDownload
+						:disabled="!isDownloadAllowed"
+						scope-language-key="components.cardElement.folderElement"
+						@click="onDownload"
+					/>
+					<KebabMenuActionDelete scope-language-key="components.cardElement.folderElement" @click="onDelete" />
 				</BoardMenu>
 			</template>
 		</ContentElementBar>
 		<v-card-text v-if="isEditMode">
-			<FolderTitleInput :data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
-				:title="element.content.title" @update:title="onUpdateTitle" />
+			<FolderTitleInput
+				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
+				:title="element.content.title"
+				@update:title="onUpdateTitle"
+			/>
 		</v-card-text>
 		<v-card-actions class="py-2 px-4">
 			<FileStatistic :element-id="element.id" :file-statistics="fileStatistics" />
 			<v-spacer />
-			<v-btn :aria-label="$t('components.board.action.download')" :disabled="!isDownloadAllowed"
-				data-testid="board-file-element-edit-menu-download" class="float-right download-button" icon
-				size="small" variant="text" @click="onDownload" @keydown.enter="onDownload">
+			<v-btn
+				:aria-label="$t('components.board.action.download')"
+				:disabled="!isDownloadAllowed"
+				data-testid="board-file-element-edit-menu-download"
+				class="float-right download-button"
+				icon
+				size="small"
+				variant="text"
+				@click="onDownload"
+				@keydown.enter="onDownload"
+			>
 				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 			</v-btn>
 		</v-card-actions>
@@ -84,7 +115,8 @@ const { modelValue } = useContentElementState(props, { autoSaveDebounce: 100 });
 
 const elementTitle = computed(() => element.value.content.title || t("components.cardElement.folderElement.untitled"));
 
-const { tryGetParentStatisticFromApi, getStatisticByParentId, getFileRecordsByParentId, fetchFiles } = useFileStorageApi();
+const { tryGetParentStatisticFromApi, getStatisticByParentId, getFileRecordsByParentId, fetchFiles } =
+	useFileStorageApi();
 
 const fileStatistics = computed(() => {
 	const statistics = getStatisticByParentId(props.element.id);
