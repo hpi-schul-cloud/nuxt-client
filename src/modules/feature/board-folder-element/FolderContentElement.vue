@@ -32,11 +32,6 @@
 				>
 					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 					<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-					<KebabMenuActionDownload
-						:disabled="!isDownloadAllowed"
-						scope-language-key="components.cardElement.folderElement"
-						@click="onDownload"
-					/>
 					<KebabMenuActionDelete scope-language-key="components.cardElement.folderElement" @click="onDelete" />
 				</BoardMenu>
 			</template>
@@ -54,7 +49,7 @@
 			<v-btn
 				:aria-label="$t('components.board.action.download')"
 				:disabled="!isDownloadAllowed"
-				data-testid="board-file-element-edit-menu-download"
+				data-testid="board-folder-element-edit-menu-download"
 				class="float-right download-button"
 				icon
 				size="small"
@@ -69,6 +64,8 @@
 </template>
 
 <script setup lang="ts">
+import FileStatistic from "./FileStatistic.vue";
+import FolderTitleInput from "./FolderTitleInput.vue";
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import { downloadFilesAsArchive } from "@/utils/fileHelper";
@@ -76,17 +73,10 @@ import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { mdiFolderOpenOutline, mdiTrayArrowDown } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionDownload,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import FileStatistic from "./FileStatistic.vue";
-import FolderTitleInput from "./FolderTitleInput.vue";
 
 interface FolderContentElementProps {
 	element: FileFolderElement;
