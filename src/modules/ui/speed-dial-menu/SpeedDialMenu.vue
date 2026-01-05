@@ -3,7 +3,6 @@
 		class="fab-size-transition"
 		:class="{
 			'fab-max-height': isCollapsed,
-			'positioning-sm-to-md': mdAndDown,
 		}"
 		:rounded="!isCollapsed ? 'pill' : 'circle'"
 		color="primary"
@@ -83,13 +82,6 @@ watchThrottled(
 </script>
 
 <style scoped>
-.positioning-sm-to-md {
-	position: fixed;
-	top: unset;
-	right: 24px;
-	bottom: 32px;
-}
-
 .fab-size-transition :deep(.v-btn) {
 	transition: all 200ms ease-in-out;
 }

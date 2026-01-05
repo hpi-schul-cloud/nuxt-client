@@ -14,7 +14,12 @@
 
 		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
 
-		<div class="wireframe-menu-container d-flex">
+		<div
+			class="wireframe-menu-container d-flex"
+			:class="{
+				'positioning-sm-to-md': mdAndDown,
+			}"
+		>
 			<div class="ml-auto mr-6">
 				<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
 			</div>
@@ -89,7 +94,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const { smAndUp } = useDisplay();
+const { smAndUp, mdAndDown } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 
@@ -172,5 +177,12 @@ onMounted(() => {
 	margin-top: -23px;
 	z-index: 2000;
 	top: calc(var(--topbar-height) + 16px);
+
+	&.positioning-sm-to-md {
+		position: fixed;
+		top: unset;
+		right: 0;
+		bottom: 24px;
+	}
 }
 </style>

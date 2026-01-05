@@ -98,7 +98,7 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 			const fab = wrapper.findComponent(VFab);
 
 			expect(fab.findComponent(VIcon).exists()).toBe(true);
-			expect(fab.text().length).toBe(0);
+			expect(fab.find("#fab-label").exists()).toBe(false);
 		});
 
 		it("should render a SpeedDialMenuAction component per action", async () => {
