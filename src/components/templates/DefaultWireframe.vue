@@ -15,7 +15,7 @@
 		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
 
 		<div class="wireframe-menu-container d-flex">
-			<div class="mr-6">
+			<div class="ml-auto mr-6">
 				<SpeedDialMenu v-if="fabItems" class="speed-menu" :header-height="headerHeight" :actions="fabItems" />
 			</div>
 		</div>
@@ -161,10 +161,6 @@ onMounted(() => {
 	height: 22px;
 }
 
-.fab-container {
-	min-height: 56px;
-}
-
 .wireframe-divider {
 	position: sticky;
 	top: var(--topbar-height);
@@ -172,8 +168,9 @@ onMounted(() => {
 
 .wireframe-menu-container {
 	position: sticky;
+	min-height: 56px;
 	margin-top: -23px;
 	z-index: 2000;
-	top: calc(var(--topbar-height) + 16px);
+	top: var(--topbar-height);
 }
 </style>
