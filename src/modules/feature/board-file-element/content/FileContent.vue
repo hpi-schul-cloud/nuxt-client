@@ -39,7 +39,6 @@
 				@update:name="onUpdateName"
 			/>
 			<ContentElementFooter :file-properties="fileProperties" />
-			<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 		</div>
 	</div>
 </template>
@@ -49,7 +48,6 @@ import FileDisplay from "../content/display/FileDisplay.vue";
 import { FileProperties } from "../shared/types/file-properties";
 import { FileAlert } from "../shared/types/FileAlert.enum";
 import FileInputs from "././inputs/FileInputs.vue";
-import FileAlerts from "./alert/FileAlerts.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import { isAudioMimeType, isPdfMimeType, isVideoMimeType } from "@/utils/fileHelper";
@@ -65,14 +63,9 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
-	alerts: { type: Array as PropType<FileAlert[]>, required: true },
 });
 
 const emit = defineEmits(["fetch:file", "update:alternativeText", "update:caption", "update:name", "add:alert"]);
-
-const onFetchFile = () => {
-	emit("fetch:file");
-};
 
 const onUpdateCaption = (value: string) => {
 	emit("update:caption", value);

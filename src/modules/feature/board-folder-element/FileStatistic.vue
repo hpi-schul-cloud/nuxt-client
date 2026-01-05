@@ -2,9 +2,13 @@
 	<span v-if="fileStatistics" class="text-caption" data-testid="file-statistic">
 		{{ `${fileStatistics?.fileCount} ${fileTranslation} ⋅ ${humanReadableFileSize}` }}
 	</span>
+	<FolderAlerts v-else :alerts="alerts" />
 </template>
 
 <script setup lang="ts">
+import { FolderAlert } from "./FolderAlert.enum";
+import FolderAlerts from "./FolderAlerts.vue";
+import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { FileRecordParent } from "@/types/file/File";
 import { formatFileSize } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
@@ -18,6 +22,7 @@ interface FileStatisticProps {
 const props = defineProps<FileStatisticProps>();
 
 const { tryGetParentStatisticFromApi, getStatisticByParentId } = useFileStorageApi();
+const { alerts, addAlert } = useFolderAlerts();
 
 const fileStatistics = computed(() => {
 	const statistics = getStatisticByParentId(props.elementId);
@@ -44,6 +49,10 @@ const fileTranslation = computed(() => {
 });
 
 onMounted(async () => {
-	await tryGetParentStatisticFromApi(props.elementId, FileRecordParent.BOARDNODES);
+	try {
+		await tryGetParentStatisticFromApi(props.elementId, FileRecordParent.BOARDNODES);
+	} catch {
+		addAlert(FolderAlert.FILE_STORAGE_ERROR);
+	}
 });
 </script>
