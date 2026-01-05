@@ -70,7 +70,7 @@ const confirmRemoval = async (invitationIds: string[]) => {
 	}
 	const shouldRemove = await askConfirmation({
 		message,
-		confirmActionLangKey: "common.actions.remove",
+		confirmActionLangKey: "common.actions.delete",
 	});
 	return shouldRemove;
 };

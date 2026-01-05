@@ -11,6 +11,6 @@ describe("KebabMenuActionResendInvitation", () => {
 		});
 
 		expect(wrapper.exists()).toBe(true);
-		expect(wrapper.text()).toBe("common.actions.resend");
+		expect(wrapper.text()).toBe("pages.rooms.members.registrations.actionMenu.resend");
 	});
 });

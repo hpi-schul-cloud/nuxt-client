@@ -23,7 +23,6 @@ export default {
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
-	"common.actions.resend": "Reenviar",
 	"common.actions.save": "Guardar",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
@@ -1913,6 +1912,8 @@ export default {
 	"pages.rooms.members.registrations.multipleRemove.confirmation":
 		"¿Eliminar realmente las invitaciones seleccionadas de la sala?",
 	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Menú de acciones para {registrationEmail}",
+	"pages.rooms.members.registrations.actionMenu.remove": "Eliminar invitación",
+	"pages.rooms.members.registrations.actionMenu.resend": "Reenviar invitación",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Eliminar invitación para {registrationEmail} de la sala",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Reenviar invitación para {registrationEmail}",
 	"pages.rooms.members.registrations.resend.success.single": "Se ha vuelto a enviar la invitación.",

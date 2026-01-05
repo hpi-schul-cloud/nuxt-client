@@ -1,6 +1,6 @@
 <template>
 	<KebabMenuAction :icon="mdiPencilOutline" data-testid="kebab-menu-action-resend-invitation">
-		{{ t("common.actions.resend") }}
+		{{ t("pages.rooms.members.registrations.actionMenu.resend") }}
 	</KebabMenuAction>
 </template>
 

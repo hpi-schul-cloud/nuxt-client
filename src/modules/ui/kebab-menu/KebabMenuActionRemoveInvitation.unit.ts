@@ -11,6 +11,6 @@ describe("KebabMenuActionRemoveInvitation", () => {
 		});
 
 		expect(wrapper.exists()).toBe(true);
-		expect(wrapper.text()).toBe("common.actions.remove");
+		expect(wrapper.text()).toBe("pages.rooms.members.registrations.actionMenu.remove");
 	});
 });
