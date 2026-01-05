@@ -1786,6 +1786,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
+	"pages.rooms.members.title.roomMembers": "Raum-Mitglieder",
+	"pages.rooms.members.title.invitations": "Versendete Einladungen",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -1896,6 +1898,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Aktionsmenü für {registrationEmail}",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Einladung für {registrationEmail} aus Raum entfernen",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Einladung für {registrationEmail} erneut versenden",
+	"pages.rooms.members.registrations.resend.success.single": "Einladung wurde erneut versendet.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Einladungen wurden erneut versendet.",
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",

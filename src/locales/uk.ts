@@ -1772,6 +1772,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасників",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} меню",
+	"pages.rooms.members.title.roomMembers": "Члени приміщення",
+	"pages.rooms.members.title.invitations": "Надіслані запрошення",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
@@ -1879,6 +1881,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Меню дій для {registrationEmail}",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Видалити запрошення для {registrationEmail} з кімнати",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Надіслати запрошення для {registrationEmail} ще раз",
+	"pages.rooms.members.registrations.resend.success.single": "Запрошення було надіслано повторно.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Запрошення були надіслані повторно.",
 	"pages.rooms.invitationlinks.error.create": "Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update": "Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.load": "Не вдалося завантажити список запрошень.",

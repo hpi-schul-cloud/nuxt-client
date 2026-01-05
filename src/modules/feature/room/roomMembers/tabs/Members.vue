@@ -8,10 +8,16 @@
 	</div>
 
 	<div class="mb-12">
+		<h2 class="mb-0">
+			{{ t("pages.rooms.members.title.roomMembers") }}
+		</h2>
 		<MembersTable v-if="!isLoadingMembers" :header-bottom="headerBottom" />
 	</div>
 
 	<div>
+		<h2 class="mb-0">
+			{{ t("pages.rooms.members.title.invitations") }}
+		</h2>
 		<MemberInvitationsTable v-if="!isLoadingInvitations && canManageRoomInvitationLinks" />
 	</div>
 </template>

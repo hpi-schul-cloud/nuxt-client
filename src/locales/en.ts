@@ -1758,6 +1758,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Members",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menu",
+	"pages.rooms.members.title.roomMembers": "Room Members",
+	"pages.rooms.members.title.invitations": "Invitations sent",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
@@ -1863,6 +1865,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Action menu for invitation {registrationEmail}",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Remove invitation for {registrationEmail} from room",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Resend invitation for {registrationEmail}",
+	"pages.rooms.members.registrations.resend.success.single": "Invitation has been sent again.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Invitations have been sent out again.",
 	"pages.rooms.invitationlinks.error.create": "Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update": "Updating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.load": "The invitation list could not be loaded.",

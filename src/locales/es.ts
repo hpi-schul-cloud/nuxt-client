@@ -1795,6 +1795,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Miembros",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menú",
+	"pages.rooms.members.title.roomMembers": "Miembros de la sala",
+	"pages.rooms.members.title.invitations": "Invitaciones enviadas",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
@@ -1913,6 +1915,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Menú de acciones para {registrationEmail}",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Eliminar invitación para {registrationEmail} de la sala",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Reenviar invitación para {registrationEmail}",
+	"pages.rooms.members.registrations.resend.success.single": "Se ha vuelto a enviar la invitación.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Se han vuelto a enviar las invitaciones.",
 	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",
