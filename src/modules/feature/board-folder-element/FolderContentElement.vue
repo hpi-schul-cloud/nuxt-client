@@ -43,7 +43,7 @@
 				@update:title="onUpdateTitle"
 			/>
 		</v-card-text>
-		<v-card-actions class="py-2 px-4">
+		<v-card-actions v-if="alerts.length === 0" class="py-2 px-4">
 			<FileStatistic :element-id="element.id" :file-statistics="fileStatistics" />
 			<v-spacer />
 			<v-btn
@@ -60,12 +60,16 @@
 				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 			</v-btn>
 		</v-card-actions>
+		<FolderAlerts v-else :alerts="alerts" />
 	</v-card>
 </template>
 
 <script setup lang="ts">
 import FileStatistic from "./FileStatistic.vue";
+import { FolderAlert } from "./FolderAlert.enum";
+import FolderAlerts from "./FolderAlerts.vue";
 import FolderTitleInput from "./FolderTitleInput.vue";
+import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import { downloadFilesAsArchive } from "@/utils/fileHelper";
@@ -108,6 +112,8 @@ const elementTitle = computed(() => element.value.content.title || t("components
 const { tryGetParentStatisticFromApi, getStatisticByParentId, getFileRecordsByParentId, fetchFiles } =
 	useFileStorageApi();
 
+const { alerts, addAlert } = useFolderAlerts();
+
 const fileStatistics = computed(() => {
 	const statistics = getStatisticByParentId(props.element.id);
 
@@ -115,7 +121,11 @@ const fileStatistics = computed(() => {
 });
 
 onMounted(async () => {
-	await tryGetParentStatisticFromApi(props.element.id, FileRecordParent.BOARDNODES);
+	try {
+		await tryGetParentStatisticFromApi(props.element.id, FileRecordParent.BOARDNODES);
+	} catch {
+		addAlert(FolderAlert.FILE_STORAGE_ERROR);
+	}
 });
 
 const onUpdateTitle = (value: string) => {
