@@ -6,8 +6,6 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/components";
 
 describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
-	window.scrollTo = vi.fn();
-
 	const setup = ({ actions }: { actions: FabAction[] }) => {
 		const wrapper = mount(SpeedDialMenu, {
 			attachTo: document.body,
@@ -117,12 +115,6 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 			defineWindowWidth(1300);
 		});
 
-		it("should be positioned absolutely at the top right", () => {
-			const { wrapper } = setup({ actions: multipleActions });
-
-			expect(wrapper.classes()).toContain("positioning-lg");
-		});
-
 		it("should open speed dial downwards", async () => {
 			const { wrapper } = setup({ actions: multipleActions });
 			await toggleSpeedDialMenu(wrapper);
@@ -135,13 +127,6 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 	describe("on small to medium screens", () => {
 		beforeEach(() => {
 			defineWindowWidth(800);
-		});
-
-		it("should be positioned absolutely at the top right", () => {
-			const { wrapper } = setup({ actions: multipleActions });
-
-			expect(wrapper.classes()).toContain("positioning-sm-md");
-			expect(wrapper.classes()).toContain("position-fixed");
 		});
 
 		it("should open speed dial downwards", async () => {

@@ -2,7 +2,7 @@
 	<div class="wireframe-container" :class="{ 'wireframe-container-flex': isFlexContainer }">
 		<div id="notify-screen-reader-polite" aria-live="polite" class="d-sr-only" />
 		<div id="notify-screen-reader-assertive" aria-live="assertive" class="d-sr-only" />
-		<div class="wireframe-header">
+		<div ref="header" class="wireframe-header">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else :class="{ 'breadcrumbs-placeholder': smAndUp }" />
 			<slot name="header">
@@ -10,9 +10,16 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
 		</div>
-		<VDivider v-if="showDivider" role="presentation" />
+
+		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
+
+		<div class="wireframe-menu-container d-flex">
+			<div class="mr-6">
+				<SpeedDialMenu v-if="fabItems" class="speed-menu" :header-height="headerHeight" :actions="fabItems" />
+			</div>
+		</div>
+
 		<VContainer
 			:fluid="maxWidth !== 'native'"
 			class="main-content"
@@ -33,7 +40,7 @@
 import { Breadcrumb } from "./default-wireframe.types";
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
-import { computed, PropType, useSlots } from "vue";
+import { computed, onMounted, PropType, ref, useSlots } from "vue";
 import { useDisplay } from "vuetify";
 
 const props = defineProps({
@@ -70,7 +77,7 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
-	// neded if we don't want to have full page scrolling, so it's restricted to browsers viewport height
+	// needed if we don't want to have full page scrolling, so it's restricted to browsers viewport height
 	isFlexContainer: {
 		type: Boolean,
 		default: false,
@@ -85,6 +92,20 @@ const slots = useSlots();
 const { smAndUp } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
+
+const header = ref();
+const headerHeight = ref(0);
+
+onMounted(() => {
+	// Need to detect header height to position speed dial properly.
+	// Relative in header does not work smoothly with sticky VSpeedDial positioning.
+	const updateHeight = () => {
+		headerHeight.value = header.value?.offsetHeight;
+	};
+	updateHeight();
+	const observer = new ResizeObserver(updateHeight);
+	observer.observe(header.value);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -138,5 +159,21 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .breadcrumbs-placeholder {
 	height: 22px;
+}
+
+.fab-container {
+	min-height: 56px;
+}
+
+.wireframe-divider {
+	position: sticky;
+	top: var(--topbar-height);
+}
+
+.wireframe-menu-container {
+	position: sticky;
+	margin-top: -23px;
+	z-index: 2000;
+	top: calc(var(--topbar-height) + 16px);
 }
 </style>

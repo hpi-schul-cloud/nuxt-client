@@ -1,15 +1,15 @@
 <template>
 	<VFab
-		class="fab-size-transition z-index-100"
+		class="speed-dial-menu fab-size-transition"
 		:class="{
-			'fab-default-width': !isCollapsed,
-			'positioning-lg': !mdAndDown,
-			'position-fixed positioning-sm-md': mdAndDown,
+			'fab-max-height': isCollapsed,
+			'positioning-sm-md': mdAndDown,
 		}"
 		:rounded="!isCollapsed ? 'pill' : 'circle'"
 		color="primary"
 		size="large"
 		elevation="4"
+		position="sticky"
 		:transition="false"
 		:icon="isCollapsed"
 		:to="primaryAction.to"
@@ -38,6 +38,7 @@ import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	actions: FabAction[];
+	headerHeight?: number;
 }>();
 
 const primaryAction = computed(() => props.actions[0]);
@@ -67,13 +68,9 @@ watchThrottled(
 	(newVal, oldVal) => {
 		if (!mdAndDown.value) {
 			forceCollapseOnMobileScroll.value = false;
-			return;
-		}
-		if (oldVal > 0 && oldVal > newVal) {
+		} else if (oldVal > 0 && oldVal > newVal) {
 			forceCollapseOnMobileScroll.value = false;
-			return;
-		}
-		if (newVal > 100) {
+		} else if (newVal > 100) {
 			forceCollapseOnMobileScroll.value = true;
 		}
 	},
@@ -82,31 +79,24 @@ watchThrottled(
 </script>
 
 <style scoped>
-.v-fab {
-	pointer-events: auto;
-}
-
-.positioning-lg {
-	position: absolute;
-	bottom: -22px;
+.speed-dial-menu {
+	position: sticky;
+	top: v-bind("headerHeight + 'px'");
 	right: 24px;
+	pointer-events: auto;
+	z-index: 100;
 }
 
 .positioning-sm-md {
+	top: unset;
 	bottom: 32px;
-	right: 24px;
 }
 
 .fab-size-transition :deep(.v-btn) {
 	transition: all 200ms ease-in-out;
-	min-width: 56px;
 }
 
-.fab-default-width :deep(.v-btn) {
-	width: 100%;
-}
-
-.z-index-100 {
-	z-index: 100;
+.fab-max-height {
+	max-height: 45px;
 }
 </style>
