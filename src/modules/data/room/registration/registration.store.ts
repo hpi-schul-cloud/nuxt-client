@@ -7,7 +7,7 @@ import {
 	RegistrationListResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { notifyError, notifyInfo } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -123,6 +123,11 @@ export const useRegistrationStore = defineStore("registration", () => {
 			);
 			await Promise.all(Promises);
 			await fetchRegistrationsForCurrentRoom();
+			if (allowedIds.length > 1) {
+				notifySuccess(t("pages.rooms.members.registrations.resend.success.multiple"));
+			} else {
+				notifySuccess(t("pages.rooms.members.registrations.resend.success.single"));
+			}
 		} catch {
 			notifyError(t("pages.registrationExternalMembers.error.notResentInvitations"), false);
 		}
