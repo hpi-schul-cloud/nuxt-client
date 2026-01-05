@@ -16,7 +16,7 @@
 
 		<div class="wireframe-menu-container d-flex">
 			<div class="ml-auto mr-6">
-				<SpeedDialMenu v-if="fabItems" class="speed-menu" :header-height="headerHeight" :actions="fabItems" />
+				<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
 			</div>
 		</div>
 
@@ -171,6 +171,6 @@ onMounted(() => {
 	min-height: 56px;
 	margin-top: -23px;
 	z-index: 2000;
-	top: var(--topbar-height);
+	top: calc(var(--topbar-height) + 16px);
 }
 </style>

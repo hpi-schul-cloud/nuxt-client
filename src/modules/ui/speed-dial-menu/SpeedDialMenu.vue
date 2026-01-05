@@ -1,15 +1,14 @@
 <template>
 	<VFab
-		class="speed-dial-menu fab-size-transition"
+		class="fab-size-transition"
 		:class="{
 			'fab-max-height': isCollapsed,
-			'positioning-sm-md': mdAndDown,
+			'positioning-sm-to-md': mdAndDown,
 		}"
 		:rounded="!isCollapsed ? 'pill' : 'circle'"
 		color="primary"
 		size="large"
 		elevation="4"
-		position="sticky"
 		:transition="false"
 		:icon="isCollapsed"
 		:to="primaryAction.to"
@@ -20,7 +19,13 @@
 	>
 		<VIcon>{{ fabIcon }}</VIcon>
 		<span v-if="!isCollapsed" id="fab-label" class="d-block">{{ primaryAction.label }}</span>
-		<VSpeedDial v-if="isSpeedDial" v-model="isSpeedDialOpen" activator="parent" :location="speedDialLocation">
+		<VSpeedDial
+			v-if="isSpeedDial"
+			v-model="isSpeedDialOpen"
+			:attach="true"
+			activator="parent"
+			:location="speedDialLocation"
+		>
 			<template v-for="(action, index) in speedDialActions" :key="index">
 				<SpeedDialMenuAction :action="action" />
 			</template>
@@ -38,7 +43,6 @@ import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	actions: FabAction[];
-	headerHeight?: number;
 }>();
 
 const primaryAction = computed(() => props.actions[0]);
@@ -79,16 +83,10 @@ watchThrottled(
 </script>
 
 <style scoped>
-.speed-dial-menu {
-	position: sticky;
-	top: v-bind("headerHeight + 'px'");
-	right: 24px;
-	pointer-events: auto;
-	z-index: 100;
-}
-
-.positioning-sm-md {
+.positioning-sm-to-md {
+	position: fixed;
 	top: unset;
+	right: 24px;
 	bottom: 32px;
 }
 
