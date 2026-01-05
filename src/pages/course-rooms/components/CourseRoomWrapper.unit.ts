@@ -1,6 +1,4 @@
 import CourseRoomWrapper from "./CourseRoomWrapper.vue";
-import { FabAction } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
@@ -10,9 +8,10 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { VBtn, VFab } from "vuetify/components";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof CourseRoomWrapper> = {
@@ -23,7 +22,7 @@ const getWrapper = (
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
-				StartNewCourseSyncDialog: true,
+				// StartNewCourseSyncDialog: true,
 				CommonCartridgeImportModal: true,
 			},
 		},
@@ -131,26 +130,30 @@ describe("@templates/CourseRoomWrapper.vue", () => {
 		});
 
 		describe("when course synchronization is active", () => {
-			it("should have the course sync sub menu action", () => {
+			it("should have the course sync sub menu action", async () => {
 				const wrapper = getWrapper();
 
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
 
-				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_add_synced_course")).toEqual(
-					true
-				);
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+				expect(speedDialMenuActions.length).toBe(3);
+				expect(speedDialMenuActions[1].props("action").dataTestId).toBe("fab_button_add_synced_course");
 			});
 		});
 
 		describe("when course synchronization is active", () => {
-			it("should have the common cartridge sub menu action", () => {
+			it("should have the common cartridge sub menu action", async () => {
 				const wrapper = getWrapper();
 
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				const fabActions: FabAction[] | undefined = defaultWireframe.props().fabItems?.actions;
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
 
-				expect(fabActions?.some((action: FabAction) => action.dataTestId === "fab_button_import_course")).toEqual(true);
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+				expect(speedDialMenuActions.length).toBe(3);
+				expect(speedDialMenuActions[2].props("action").dataTestId).toBe("fab_button_import_course");
 			});
 		});
 	});
@@ -166,22 +169,29 @@ describe("@templates/CourseRoomWrapper.vue", () => {
 	});
 
 	describe("when clicking on the course sync fab action", () => {
-		it("should open the course sync dialog", () => {
+		it("should open the course sync dialog", async () => {
 			const wrapper = getWrapper();
 
-			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
+			const fab = wrapper.getComponent(VFab);
+			await fab.trigger("click");
+
+			const openSyncBtn = wrapper.findAllComponents(SpeedDialMenuAction)[1];
+
+			await openSyncBtn.getComponent(VBtn).trigger("click");
 
 			expect((wrapper.vm as unknown as typeof CourseRoomWrapper).isCourseSyncDialogOpen).toEqual(true);
 		});
 	});
 
 	describe("when clicking on the common cartridge fab action", () => {
-		it("should open the common cartridge dialog", () => {
+		it("should open the common cartridge dialog", async () => {
 			const wrapper = getWrapper();
 
-			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-			defaultWireframe.vm.$emit("onFabItemClick", "import");
+			const fab = wrapper.getComponent(VFab);
+			await fab.trigger("click");
+
+			const openImportBtn = wrapper.findAllComponents(SpeedDialMenuAction)[2];
+			await openImportBtn.getComponent(VBtn).trigger("click");
 
 			expect(commonCartridgeImportModule.isOpen).toEqual(true);
 		});

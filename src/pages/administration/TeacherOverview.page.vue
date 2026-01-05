@@ -335,31 +335,28 @@ export default {
 		},
 		fab() {
 			if (this.schoolIsExternallyManaged || !this.userHasPermission(Permission.TeacherCreate)) {
-				return null;
+				return;
 			}
 
-			return {
-				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
-				dataTestId: "fab_button_teachers_table",
-				ariaLabel: this.$t("common.actions.create"),
-				actions: [
-					{
-						label: this.$t("pages.administration.teachers.fab.add"),
-						icon: mdiAccountPlus,
-						to: "/administration/teachers/new",
-						dataTestId: "fab_button_add_teachers",
-						ariaLabel: this.$t("pages.administration.teachers.fab.add"),
-					},
-					{
-						label: this.$t("pages.administration.teachers.fab.import"),
-						icon: mdiCloudDownload,
-						href: "/administration/teachers/import",
-						dataTestId: "fab_button_import_teachers",
-						ariaLabel: this.$t("pages.administration.teachers.fab.import"),
-					},
-				],
-			};
+			return [
+				{
+					icon: mdiPlus,
+					label: this.$t("pages.administration.teachers.fab.add"),
+					dataTestId: "fab_button_teachers_table",
+				},
+				{
+					label: this.$t("pages.administration.teachers.fab.add"),
+					icon: mdiAccountPlus,
+					to: "/administration/teachers/new",
+					dataTestId: "fab_button_add_teachers",
+				},
+				{
+					label: this.$t("pages.administration.teachers.fab.import"),
+					icon: mdiCloudDownload,
+					href: "/administration/teachers/import",
+					dataTestId: "fab_button_import_teachers",
+				},
+			];
 		},
 	},
 	watch: {

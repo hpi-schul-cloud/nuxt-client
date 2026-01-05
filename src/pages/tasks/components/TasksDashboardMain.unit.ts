@@ -206,13 +206,13 @@ describe("TasksDashboardMain", () => {
 		});
 
 		it("should render add task button", () => {
-			const fabComponent = wrapper.find(".fab-wrapper");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toEqual(true);
 		});
 
 		it("'add task' button should have correct path", () => {
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
-			expect(fabComponent.props("href")).toStrictEqual("/homework/new?returnUrl=tasks");
+			expect(fabComponent.vm.actions[0].href).toStrictEqual("/homework/new?returnUrl=tasks");
 		});
 
 		it("should open tab from store state", () => {

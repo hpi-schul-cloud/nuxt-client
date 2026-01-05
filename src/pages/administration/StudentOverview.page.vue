@@ -364,31 +364,28 @@ export default {
 		},
 		fab() {
 			if (this.schoolIsExternallyManaged || !this.userHasPermission(Permission.StudentCreate)) {
-				return null;
+				return;
 			}
 
-			return {
-				icon: mdiPlus,
-				title: this.$t("common.actions.create"),
-				dataTestId: "fab_button_students_table",
-				ariaLabel: this.$t("common.actions.create"),
-				actions: [
-					{
-						label: this.$t("pages.administration.students.fab.add"),
-						icon: mdiAccountPlus,
-						to: "/administration/students/new",
-						dataTestId: "fab_button_add_students",
-						ariaLabel: this.$t("pages.administration.students.fab.add"),
-					},
-					{
-						label: this.$t("pages.administration.students.fab.import"),
-						icon: mdiCloudDownload,
-						href: "/administration/students/import",
-						dataTestId: "fab_button_import_students",
-						ariaLabel: this.$t("pages.administration.students.fab.import"),
-					},
-				],
-			};
+			return [
+				{
+					icon: mdiPlus,
+					label: this.$t("pages.administration.students.fab.add"),
+					dataTestId: "fab_button_students_table",
+				},
+				{
+					label: this.$t("pages.administration.students.fab.add"),
+					icon: mdiAccountPlus,
+					to: "/administration/students/new",
+					dataTestId: "fab_button_add_students",
+				},
+				{
+					label: this.$t("pages.administration.students.fab.import"),
+					icon: mdiCloudDownload,
+					href: "/administration/students/import",
+					dataTestId: "fab_button_import_students",
+				},
+			];
 		},
 	},
 	watch: {
