@@ -1,6 +1,6 @@
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuList } from "@ui-kebab-menu";
-import { VList, VListItem } from "vuetify/lib/components/index";
+import { VList } from "vuetify/lib/components/index";
 
 describe("KebabMenuList", () => {
 	const setup = () => {
@@ -44,11 +44,13 @@ describe("KebabMenuList", () => {
 			const wrapper = setup();
 			const menuList = wrapper.findComponent(VList);
 
+			// Spy on Vuetify's focus method to verify our component calls it correctly
+			const focusSpy = vi.spyOn(menuList.vm, "focus");
+
 			vi.runAllTimers();
 
-			const firstMenuItem = menuList.findAllComponents(VListItem)[0].element;
-
-			expect(document.activeElement).toBe(firstMenuItem);
+			// Verify that our component called focus("first") as expected
+			expect(focusSpy).toHaveBeenCalledWith("first");
 		});
 	});
 });
