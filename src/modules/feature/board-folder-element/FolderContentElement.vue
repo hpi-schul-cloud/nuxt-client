@@ -78,6 +78,7 @@ import { useFileStorageApi } from "@data-file";
 import { mdiFolderOpenOutline, mdiTrayArrowDown } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -155,7 +156,11 @@ const onDownload = async () => {
 	await fetchFiles(element.value.id, FileRecordParent.BOARDNODES);
 	const fileRecords = getFileRecordsByParentId(element.value.id);
 	const fileRecordIds = fileRecords.map((fr) => fr.id);
-	downloadFilesAsArchive({ fileRecordIds, archiveName: elementTitle.value });
+
+	const now = dayjs().format("YYYYMMDD");
+	const archiveName = `${now}_${elementTitle.value}`;
+
+	downloadFilesAsArchive({ fileRecordIds, archiveName });
 };
 
 const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) > 0);
