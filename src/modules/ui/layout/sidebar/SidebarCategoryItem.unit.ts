@@ -39,14 +39,21 @@ describe("@ui-layout/SidebarCategoryItem", () => {
 	mockedUseSidebarSelection.mockReturnValue({ isActive: ref(false) });
 
 	const setup = (sidebarItem: SidebarGroupItem) => {
-		const wrapper = mount(SidebarCategoryItem, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+		const wrapper = mount(
+			{
+				components: { SidebarCategoryItem },
+				template: `<VList><SidebarCategoryItem :item="item" /></VList>`,
+				props: ["item"],
 			},
-			props: {
-				item: sidebarItem,
-			},
-		});
+			{
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					item: sidebarItem,
+				},
+			}
+		);
 
 		return {
 			wrapper,
