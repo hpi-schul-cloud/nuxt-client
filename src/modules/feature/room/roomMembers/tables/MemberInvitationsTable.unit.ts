@@ -1,3 +1,4 @@
+import { KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "../menus";
 import MemberInvitationsTable from "./MemberInvitationsTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { createTestAppStoreWithUser, mockedPiniaStoreTyping, registrationFactory } from "@@/tests/test-utils";
@@ -7,7 +8,6 @@ import { type Registration, useRegistrationStore } from "@data-room";
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import { KebabMenuActionRemoveInvitation } from "@ui-kebab-menu";
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
 import { Mock, vi } from "vitest";
@@ -234,6 +234,30 @@ describe("MemberInvitationsTable", () => {
 			await triggerInvitationRemoval(wrapper, 0);
 
 			expect(registrationStore.removeInvitations).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("resend invitation action", () => {
+		const triggerInvitationResend = async (wrapper: VueWrapper, index: number) => {
+			const dataTable = wrapper.getComponent(VDataTable);
+			const menuBtn = dataTable.findComponent(`[data-testid="kebab-menu-${index}"]`);
+
+			await menuBtn.trigger("click");
+			await nextTick();
+
+			const resendBtn = wrapper.findComponent(KebabMenuActionResendInvitation);
+
+			await resendBtn.trigger("click");
+		};
+
+		describe("when resend button is clicked", () => {
+			it("should call resendInvitations", async () => {
+				const { wrapper, registrationStore, registrationItems } = setup();
+
+				await triggerInvitationResend(wrapper, 0);
+
+				expect(registrationStore.resendInvitations).toHaveBeenCalledWith([registrationItems[0].id]);
+			});
 		});
 	});
 
