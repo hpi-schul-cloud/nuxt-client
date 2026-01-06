@@ -44,6 +44,8 @@ describe("KebabMenuList", () => {
 			const wrapper = setup();
 			const menuList = wrapper.findComponent(VList);
 
+			// Note: We can't check document.activeElement here anymore because Vuetify's internal focus()
+			// function changed and we don't want to mock vuetify internals
 			const focusSpy = vi.spyOn(menuList.vm, "focus");
 
 			vi.runAllTimers();
