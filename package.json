@@ -50,7 +50,7 @@
 		"vue-i18n": "^11.1.12",
 		"vue-router": "^4.6.3",
 		"vuedraggable": "^4.1.0",
-		"vuetify": "^3.9.3",
+		"vuetify": "^3.11.6",
 		"vuex": "^4.1.0",
 		"zod": "^4.1.12"
 	},
@@ -79,7 +79,7 @@
 		"fishery": "^2.3.1",
 		"globals": "^15.9.0",
 		"http-proxy-middleware": "^3.0.5",
-		"jsdom": "^26.1.0",
+		"jsdom": "^27.4.0",
 		"npm-run-all2": "^7.0.2",
 		"prettier": "^3.6.2",
 		"resize-observer-polyfill": "^1.5.1",

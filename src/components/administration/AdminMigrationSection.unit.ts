@@ -1010,7 +1010,7 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const migrationWizardButton = wrapper.find('[data-testid="migration-wizard-button]');
+					const migrationWizardButton = wrapper.find('[data-testid="migration-wizard-button"]');
 					expect(migrationWizardButton.exists()).toBeFalsy();
 				});
 			});
