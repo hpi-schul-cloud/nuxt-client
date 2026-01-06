@@ -44,12 +44,10 @@ describe("KebabMenuList", () => {
 			const wrapper = setup();
 			const menuList = wrapper.findComponent(VList);
 
-			// Spy on Vuetify's focus method to verify our component calls it correctly
 			const focusSpy = vi.spyOn(menuList.vm, "focus");
 
 			vi.runAllTimers();
 
-			// Verify that our component called focus("first") as expected
 			expect(focusSpy).toHaveBeenCalledWith("first");
 		});
 	});
