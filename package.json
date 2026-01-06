@@ -91,7 +91,7 @@
 		"vite-plugin-vue-devtools": "^8.0.3",
 		"vite-plugin-vuetify": "^2.1.2",
 		"vite-tsconfig-paths": "^5.1.4",
-		"vitest": "^3.2.4",
+		"vitest": "^4.0.16",
 		"vue-router-mock": "^2.0.0",
 		"vue-tsc": "^3.1.2",
 		"vuex-module-decorators": "^1.2.0"
