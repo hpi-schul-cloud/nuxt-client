@@ -1540,15 +1540,17 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
-	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
 		"Unfortunately, the registrations could not be loaded. Please try again later.",
-	"pages.registrationExternalMembers.error.notFetchedUserData":
+	"pages.registrationExternalMembers.error.failedFetchUserData":
 		"Unfortunately, the user data could not be loaded. Please try again later.",
-	"pages.registrationExternalMembers.error.notRemovedInvitations":
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"Unfortunately, the user data could not be loaded. Please contact the school.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
 		"Unfortunately, the invitations could not be removed. Please try again later.",
-	"pages.registrationExternalMembers.error.notResentInvitations":
+	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"Unfortunately, the invitations could not be resent. Please try again later.",
 	"pages.registrationExternalMembers.info.tooManyResendRequests":
 		"An email has just been sent. After two minutes, the email can be sent again.",

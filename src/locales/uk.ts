@@ -1556,15 +1556,17 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
-	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
 		"На жаль, реєстрацію не вдалося завантажити. Спробуйте пізніше.",
-	"pages.registrationExternalMembers.error.notFetchedUserData":
+	"pages.registrationExternalMembers.error.failedFetchUserData":
 		"На жаль, дані користувача не вдалося завантажити. Спробуйте пізніше.",
-	"pages.registrationExternalMembers.error.notRemovedInvitations":
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"На жаль, дані користувача не вдалося завантажити. Зверніться до школи.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
 		"На жаль, запрошення не вдалося видалити. Спробуйте пізніше.",
-	"pages.registrationExternalMembers.error.notResentInvitations":
+	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"На жаль, запрошення не вдалося надіслати повторно. Спробуйте пізніше.",
 	"pages.registrationExternalMembers.info.tooManyResendRequests":
 		"Щойно було надіслано електронний лист. Через дві хвилини електронний лист можна надіслати знову.",

@@ -1575,15 +1575,17 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
-	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
 		"Lamentablemente, no se han podido cargar los registros. Inténtalo de nuevo más tarde.",
-	"pages.registrationExternalMembers.error.notFetchedUserData":
+	"pages.registrationExternalMembers.error.failedFetchUserData":
 		"Lamentablemente, no se han podido cargar los datos de usuario. Inténtalo de nuevo más tarde.",
-	"pages.registrationExternalMembers.error.notRemovedInvitations":
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"Lamentablemente, no se han podido cargar los datos de usuario. Por favor, póngase en contacto con la escuela.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
 		"Lamentablemente, no se han podido eliminar las invitaciones. Inténtalo de nuevo más tarde.",
-	"pages.registrationExternalMembers.error.notResentInvitations":
+	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"Lamentablemente, no se han podido reenviar las invitaciones. Inténtalo de nuevo más tarde.",
 	"pages.registrationExternalMembers.info.tooManyResendRequests":
 		"Se acaba de enviar un correo electrónico. Pasados dos minutos, se puede volver a enviar el correo electrónico.",

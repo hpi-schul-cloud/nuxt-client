@@ -1569,15 +1569,17 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
-	"pages.registrationExternalMembers.error.notFetchedRegistrations":
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
 		"Die Registrierungen konnten leider nicht geladen werden. Bitte später erneut versuchen.",
-	"pages.registrationExternalMembers.error.notFetchedUserData":
+	"pages.registrationExternalMembers.error.failedFetchUserData":
 		"Die Nutzerdaten konnten leider nicht geladen werden. Bitte später erneut versuchen.",
-	"pages.registrationExternalMembers.error.notRemovedInvitations":
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"Die Nutzerdaten konnten leider nicht geladen werden. Bitte die Schule kontaktieren.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
 		"Die Einladungen konnten leider nicht entfernt werden. Bitte später erneut versuchen.",
-	"pages.registrationExternalMembers.error.notResentInvitations":
+	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"Die Einladungen konnten leider nicht erneut gesendet werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.info.tooManyResendRequests":
 		"Es wurde soeben eine E-Mail versendet. Nach zwei Minuten kann die E-Mail erneut versendet werden.",
