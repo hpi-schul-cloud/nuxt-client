@@ -49,7 +49,7 @@
 			<v-btn
 				:aria-label="$t('components.board.action.download')"
 				:disabled="!isDownloadAllowed"
-				data-testid="board-folder-element-edit-menu-download"
+				data-testid="board-folder-element-download-button"
 				class="float-right download-button"
 				icon
 				size="small"
