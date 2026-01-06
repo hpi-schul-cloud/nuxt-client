@@ -6,7 +6,8 @@ import {
 	RegistrationItemResponse,
 	RegistrationListResponse,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -43,7 +44,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 
 			roomRegistrations.value = data.data ?? [];
 		} catch {
-			notifyError(t("pages.registrationExternalMembers.error.notFetchedRegistrations"), false);
+			notifyError(t("pages.registrationExternalMembers.error.failedFetchRegistrations"), false);
 		} finally {
 			isLoading.value = false;
 		}
@@ -57,9 +58,14 @@ export const useRegistrationStore = defineStore("registration", () => {
 			).data;
 
 			userData.value = { firstName, lastName, email };
-		} catch {
+		} catch (error: unknown) {
+			const { code } = mapAxiosErrorToResponseError(error);
 			hasApiErrorOccurred.value = true;
-			notifyError(t("pages.registrationExternalMembers.error.notFetchedUserData"), false);
+			if (code === HttpStatusCode.NotFound) {
+				notifyError(t("pages.registrationExternalMembers.error.failedFetchUserData.404"), false);
+				return;
+			}
+			notifyError(t("pages.registrationExternalMembers.error.failedFetchUserData"), false);
 		} finally {
 			isLoading.value = false;
 		}
@@ -85,7 +91,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 			});
 			return true;
 		} catch {
-			notifyError(t("pages.registrationExternalMembers.error.notCompleted"), false);
+			notifyError(t("pages.registrationExternalMembers.error.failedCompleteRegistration"), false);
 			return false;
 		} finally {
 			isLoading.value = false;
@@ -104,7 +110,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 			);
 			selectedIds.value = [];
 		} catch {
-			notifyError(t("pages.registrationExternalMembers.error.notRemovedInvitations"), false);
+			notifyError(t("pages.registrationExternalMembers.error.failedRemoveInvitations"), false);
 		}
 	};
 
@@ -129,7 +135,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 				notifySuccess(t("pages.rooms.members.registrations.resend.success.single"));
 			}
 		} catch {
-			notifyError(t("pages.registrationExternalMembers.error.notResentInvitations"), false);
+			notifyError(t("pages.registrationExternalMembers.error.failedResendInvitations"), false);
 		}
 	};
 

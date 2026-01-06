@@ -2,7 +2,14 @@ import { useRoomDetailsStore } from "../RoomDetails.store";
 import { type RegistrationList, useRegistrationStore } from "./registration.store";
 import { useI18nGlobal } from "@/plugins/i18n";
 import * as serverApi from "@/serverApi/v3/api";
-import { expectNotification, mockedPiniaStoreTyping, registrationFactory, roomFactory } from "@@/tests/test-utils";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import {
+	axiosErrorFactory,
+	expectNotification,
+	mockedPiniaStoreTyping,
+	registrationFactory,
+	roomFactory,
+} from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -87,12 +94,28 @@ describe("registration.store", () => {
 			expect(registrationStore.userData).toEqual(mockedRegistrationData);
 		});
 
-		it("shows error notification on failure and sets hasApiErrorOccurred", async () => {
+		it("shows error notification on 404 failure and sets hasApiErrorOccurred", async () => {
 			const mockedSecret = "secret-123";
 			const { registrationStore } = setup({ registrationSecret: mockedSecret });
 			expect(registrationStore.hasApiErrorOccurred).toBe(false);
 
-			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(new Error("API Error"));
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
+			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
+
+			await registrationStore.fetchUserData();
+
+			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
+			expectNotification("error");
+			expect(registrationStore.hasApiErrorOccurred).toBe(true);
+		});
+
+		it("shows error notification on other failure and sets hasApiErrorOccurred", async () => {
+			const mockedSecret = "secret-123";
+			const { registrationStore } = setup({ registrationSecret: mockedSecret });
+			expect(registrationStore.hasApiErrorOccurred).toBe(false);
+
+			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.InternalServerError).build();
+			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
 
 			await registrationStore.fetchUserData();
 
