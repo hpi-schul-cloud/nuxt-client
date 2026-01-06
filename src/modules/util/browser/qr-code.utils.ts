@@ -106,3 +106,7 @@ export const printQrCodes = (
 		logger.warn("Could not open print window for QR codes.");
 	}
 };
+
+// TODO: REMOVE THIS IS JUST A TEST FOR SONARCLOUD
+export const isValidQrContent = (content: string) =>
+	logger.warn("isValidQrContent is not implemented yet. Sonarcloud pls be fine.");

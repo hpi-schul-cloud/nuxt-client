@@ -60,6 +60,5 @@ describe("printQrCodes", () => {
 
 		expect(() => printQrCodes([{ qrContent: "https://example.com" }])).not.toThrow();
 		expect(warnSpy).toHaveBeenCalledWith("Could not open print window for QR codes.");
-		//TODO: TEST IF SONARCLOUD IS STILL WORKING
 	});
 });
