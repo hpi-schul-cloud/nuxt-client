@@ -1,24 +1,26 @@
 import { printQrCodes } from "./qr-code.utils";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("printQrCodes", () => {
-	const mockWindow = createMock<Window>({
-		document: {
-			documentElement: { innerHTML: "" },
-			body: { appendChild: vi.fn() },
-			createElement: vi.fn(() => ({
-				appendChild: vi.fn(),
-			})),
-		},
-		print: vi.fn(),
-		close: vi.fn(),
-	});
+	let mockWindow: Window;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		mockWindow = createMock<Window>({
+			document: {
+				documentElement: { innerHTML: "" },
+				body: { appendChild: vi.fn() },
+				createElement: vi.fn(() => ({
+					appendChild: vi.fn(),
+				})),
+			},
+			print: vi.fn(),
+			close: vi.fn(),
+		});
 		vi.spyOn(window, "open").mockReturnValue(mockWindow);
 	});
 
@@ -52,8 +54,11 @@ describe("printQrCodes", () => {
 	});
 
 	it("should not throw when window.open fails", () => {
+		const warnSpy = vi.spyOn(logger, "warn").mockImplementation(vi.fn());
+
 		vi.spyOn(window, "open").mockReturnValue(null);
 
 		expect(() => printQrCodes([{ qrContent: "https://example.com" }])).not.toThrow();
+		expect(warnSpy).toHaveBeenCalledWith("Could not open print window for QR codes.");
 	});
 });
