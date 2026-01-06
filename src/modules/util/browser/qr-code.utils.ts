@@ -77,7 +77,6 @@ export const printQrCodes = (
 `;
 		const qrCodeList = document.createElement("ul");
 		qrCodeList.classList.add("qrcode-list");
-		printWindow.document.body.appendChild(qrCodeList);
 
 		qrCodeItems.forEach(({ qrContent, title }) => {
 			const qrCodeListItem = document.createElement("li");
