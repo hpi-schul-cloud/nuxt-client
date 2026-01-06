@@ -81,14 +81,14 @@ describe("MemberInvitationsTable", () => {
 		createTestingPinia({
 			initialState: {
 				registrationStore: {
-					roomRegistrations: registrations,
+					registrations,
 				},
 			},
 		});
 		createTestAppStoreWithUser();
 
 		const registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
-		registrationStore.roomRegistrations = registrations;
+		registrationStore.registrations = registrations;
 
 		const wrapper = mount(MemberInvitationsTable, {
 			attachTo: document.body,
@@ -97,7 +97,7 @@ describe("MemberInvitationsTable", () => {
 			},
 		});
 
-		const registrationItems = registrationStore.roomRegistrations;
+		const registrationItems = registrationStore.registrations;
 
 		return {
 			wrapper,

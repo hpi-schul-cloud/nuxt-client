@@ -21,11 +21,6 @@ vi.mock("@/plugins/i18n");
 describe("registration.store", () => {
 	let registrationApi: DeepMocked<serverApi.RegistrationApiInterface>;
 
-	const createRegistrations = (count = 2): RegistrationList => {
-		const registrations = registrationFactory.buildList(count);
-		return registrations;
-	};
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		registrationApi = createMock<serverApi.RegistrationApiInterface>();
@@ -36,7 +31,7 @@ describe("registration.store", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: { registrationSecret?: string; roomRegistrations?: RegistrationList }) => {
+	const setup = (options?: { registrationSecret?: string; registrations?: RegistrationList }) => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		roomDetailsStore.room = roomFactory.build();
 
@@ -46,282 +41,322 @@ describe("registration.store", () => {
 			registrationStore.registrationSecret = options.registrationSecret;
 		}
 
-		if (options?.roomRegistrations) {
-			registrationStore.roomRegistrations = options.roomRegistrations;
+		if (options?.registrations) {
+			registrationStore.registrations = options.registrations;
 		}
 
 		return { registrationStore, roomDetailsStore };
 	};
 
 	describe("fetchRegistrationsForCurrentRoom", () => {
-		it("stores registrations for current room on success", async () => {
-			const registration = createRegistrations(1)[0];
-			const { registrationStore, roomDetailsStore } = setup({ roomRegistrations: [registration] });
+		describe("when successful", () => {
+			it("should store registrations for current room", async () => {
+				const registration = registrationFactory.buildList(1)[0];
+				const { registrationStore, roomDetailsStore } = setup({ registrations: [registration] });
 
-			registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce([registration]);
+				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce([registration]);
 
-			await registrationStore.fetchRegistrationsForCurrentRoom();
+				await registrationStore.fetchRegistrationsForCurrentRoom();
 
-			expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
-			expect(registrationStore.roomRegistrations).toEqual([registration]);
+				expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+				expect(registrationStore.registrations).toEqual([registration]);
+			});
 		});
 
-		it("notifies on error", async () => {
-			const { registrationStore, roomDetailsStore } = setup();
+		describe("when error happens", () => {
+			it("should notify", async () => {
+				const { registrationStore, roomDetailsStore } = setup();
 
-			registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(new Error("Error"));
 
-			await registrationStore.fetchRegistrationsForCurrentRoom();
+				await registrationStore.fetchRegistrationsForCurrentRoom();
 
-			expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
-			expectNotification("error");
+				expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+				expectNotification("error");
+			});
 		});
 	});
 
 	describe("fetchUserData", () => {
-		it("stores user data on success", async () => {
-			const mockedSecret = "secret-123";
-			const { registrationStore } = setup({ registrationSecret: mockedSecret });
+		describe("when successful", () => {
+			it("stores user data", async () => {
+				const mockedSecret = "secret-123";
+				const { registrationStore } = setup({ registrationSecret: mockedSecret });
 
-			const mockedRegistrationData = { firstName: "Max", lastName: "Mustermann", email: "sample-mail@de.de" };
-			registrationApi.registrationControllerGetBySecret.mockResolvedValueOnce({
-				data: mockedRegistrationData,
+				const mockedRegistrationData = { firstName: "Max", lastName: "Mustermann", email: "sample-mail@de.de" };
+				registrationApi.registrationControllerGetBySecret.mockResolvedValueOnce({
+					data: mockedRegistrationData,
+				});
+
+				await registrationStore.fetchUserData();
+
+				expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
+				expect(registrationStore.userData).toEqual(mockedRegistrationData);
 			});
-
-			await registrationStore.fetchUserData();
-
-			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
-			expect(registrationStore.userData).toEqual(mockedRegistrationData);
 		});
 
-		it("shows error notification on 404 failure and sets hasApiErrorOccurred", async () => {
-			const mockedSecret = "secret-123";
-			const { registrationStore } = setup({ registrationSecret: mockedSecret });
-			expect(registrationStore.hasApiErrorOccurred).toBe(false);
+		describe("when 404 error happens", () => {
+			it("shows error notification and sets hasApiErrorOccurred", async () => {
+				const mockedSecret = "secret-123";
+				const { registrationStore } = setup({ registrationSecret: mockedSecret });
+				expect(registrationStore.hasApiErrorOccurred).toBe(false);
 
-			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
-			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
+				const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.NotFound).build();
+				registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
 
-			await registrationStore.fetchUserData();
+				await registrationStore.fetchUserData();
 
-			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
-			expectNotification("error");
-			expect(registrationStore.hasApiErrorOccurred).toBe(true);
+				expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
+				expectNotification("error");
+				expect(registrationStore.hasApiErrorOccurred).toBe(true);
+			});
 		});
 
-		it("shows error notification on other failure and sets hasApiErrorOccurred", async () => {
-			const mockedSecret = "secret-123";
-			const { registrationStore } = setup({ registrationSecret: mockedSecret });
-			expect(registrationStore.hasApiErrorOccurred).toBe(false);
+		describe("when other error happens", () => {
+			it("shows error notification and sets hasApiErrorOccurred", async () => {
+				const mockedSecret = "secret-123";
+				const { registrationStore } = setup({ registrationSecret: mockedSecret });
+				expect(registrationStore.hasApiErrorOccurred).toBe(false);
 
-			const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.InternalServerError).build();
-			registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
+				const axiosError = axiosErrorFactory.withStatusCode(HttpStatusCode.InternalServerError).build();
+				registrationApi.registrationControllerGetBySecret.mockRejectedValueOnce(axiosError);
 
-			await registrationStore.fetchUserData();
+				await registrationStore.fetchUserData();
 
-			expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
-			expectNotification("error");
-			expect(registrationStore.hasApiErrorOccurred).toBe(true);
+				expect(registrationApi.registrationControllerGetBySecret).toHaveBeenCalledWith(mockedSecret);
+				expectNotification("error");
+				expect(registrationStore.hasApiErrorOccurred).toBe(true);
+			});
 		});
 	});
 
 	describe("completeRegistration", () => {
-		it("returns true on success", async () => {
-			const mockedSecret = "secret-123";
-			const { registrationStore } = setup({ registrationSecret: mockedSecret });
+		describe("when successful", () => {
+			it("returns true", async () => {
+				const mockedSecret = "secret-123";
+				const { registrationStore } = setup({ registrationSecret: mockedSecret });
 
-			registrationApi.registrationControllerCompleteRegistration.mockResolvedValueOnce({});
+				registrationApi.registrationControllerCompleteRegistration.mockResolvedValueOnce({});
 
-			const result = await registrationStore.completeRegistration(serverApi.LanguageType.En, "SuperSecret123");
+				const result = await registrationStore.completeRegistration(serverApi.LanguageType.En, "SuperSecret123");
 
-			expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith(mockedSecret, {
-				language: serverApi.LanguageType.En,
-				password: "SuperSecret123",
+				expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith(mockedSecret, {
+					language: serverApi.LanguageType.En,
+					password: "SuperSecret123",
+				});
+				expect(result).toBe(true);
 			});
-			expect(result).toBe(true);
 		});
 
-		it("returns false and notifies on error", async () => {
-			const { registrationStore } = setup({ registrationSecret: "secret-123" });
+		describe("when error happens", () => {
+			it("returns false and notifies", async () => {
+				const { registrationStore } = setup({ registrationSecret: "secret-123" });
 
-			registrationApi.registrationControllerCompleteRegistration.mockRejectedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerCompleteRegistration.mockRejectedValueOnce(new Error("Error"));
 
-			const result = await registrationStore.completeRegistration(serverApi.LanguageType.De, "badpassword");
-			expect(result).toBe(false);
-			expectNotification("error");
+				const result = await registrationStore.completeRegistration(serverApi.LanguageType.De, "badpassword");
+				expect(result).toBe(false);
+				expectNotification("error");
+			});
 		});
 	});
 
 	describe("removeInvitations", () => {
-		it("removes invitation on success", async () => {
-			const registration = createRegistrations(1)[0];
-			const { registrationStore, roomDetailsStore } = setup({ roomRegistrations: [registration] });
+		describe("when successful", () => {
+			it("removes invitation", async () => {
+				const registration = registrationFactory.buildList(1)[0];
+				const { registrationStore, roomDetailsStore } = setup({ registrations: [registration] });
 
-			registrationApi.registrationControllerCancelRegistration.mockResolvedValueOnce({});
+				registrationApi.registrationControllerCancelRegistration.mockResolvedValueOnce({});
 
-			await registrationStore.removeInvitations([registration.id]);
+				await registrationStore.removeInvitations([registration.id]);
 
-			expect(registrationApi.registrationControllerCancelRegistration).toHaveBeenCalledWith(
-				registration.id,
-				roomDetailsStore.room?.id
-			);
-			expect(registrationStore.roomRegistrations).not.toContainEqual(registration);
+				expect(registrationApi.registrationControllerCancelRegistration).toHaveBeenCalledWith(
+					registration.id,
+					roomDetailsStore.room?.id
+				);
+				expect(registrationStore.registrations).not.toContainEqual(registration);
+			});
 		});
 
-		it("does not remove invitation and notifies on error", async () => {
-			const { registrationStore } = setup();
+		describe("when error happens", () => {
+			it("does not remove invitation and notifies", async () => {
+				const { registrationStore } = setup();
 
-			registrationApi.registrationControllerCancelRegistration.mockRejectedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerCancelRegistration.mockRejectedValueOnce(new Error("Error"));
 
-			await registrationStore.removeInvitations(["random-registration-id"]);
-			expectNotification("error");
+				await registrationStore.removeInvitations(["random-registration-id"]);
+				expectNotification("error");
+			});
 		});
 	});
 
 	describe("getRegistrationById", () => {
-		it("should return registration when id exists", () => {
-			const registrations = createRegistrations();
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+		describe("when id exists", () => {
+			it("should return registration", () => {
+				const registrations = registrationFactory.buildList(2);
+				const { registrationStore } = setup({ registrations });
 
-			const result = registrationStore.getRegistrationById(registrations[0].id);
+				const result = registrationStore.getRegistrationById(registrations[0].id);
 
-			expect(result).toEqual(registrations[0]);
+				expect(result).toEqual(registrations[0]);
+			});
 		});
 
-		it("should return undefined when id does not exist", () => {
-			const registrations = createRegistrations(1);
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+		describe("when id does not exist", () => {
+			it("should return undefined", () => {
+				const registrations = registrationFactory.buildList(1);
+				const { registrationStore } = setup({ registrations });
 
-			const result = registrationStore.getRegistrationById("999");
+				const result = registrationStore.getRegistrationById("999");
 
-			expect(result).toBeUndefined();
+				expect(result).toBeUndefined();
+			});
 		});
 
-		it("should return undefined when roomRegistrations is empty", () => {
-			const { registrationStore } = setup({ roomRegistrations: [] });
+		describe("when registrations is empty", () => {
+			it("should return undefined", () => {
+				const { registrationStore } = setup({ registrations: [] });
 
-			const result = registrationStore.getRegistrationById("1");
+				const result = registrationStore.getRegistrationById("1");
 
-			expect(result).toBeUndefined();
+				expect(result).toBeUndefined();
+			});
 		});
 	});
 
 	describe("getEmailOfRegistration", () => {
-		it("should return email when registration exists", () => {
-			const registrations = createRegistrations();
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+		describe("when registration exists", () => {
+			it("should return email", () => {
+				const registrations = registrationFactory.buildList(2);
+				const { registrationStore } = setup({ registrations });
 
-			const result = registrationStore.getEmailOfRegistration(registrations[0].id);
+				const result = registrationStore.getEmailOfRegistration(registrations[0].id);
 
-			expect(result).toBe(registrations[0].email);
+				expect(result).toBe(registrations[0].email);
+			});
 		});
 
-		it("should return empty string when registration does not exist", () => {
-			const registrations = createRegistrations(1);
-			const { registrationStore } = setup({ roomRegistrations: registrations });
-			const result = registrationStore.getEmailOfRegistration("999");
+		describe("when registration does not exist", () => {
+			it("should return empty string", () => {
+				const registrations = registrationFactory.buildList(1);
+				const { registrationStore } = setup({ registrations });
+				const result = registrationStore.getEmailOfRegistration("999");
 
-			expect(result).toBe("");
+				expect(result).toBe("");
+			});
 		});
 
-		it("should return empty string when registrationId is empty string", () => {
-			const registrations = createRegistrations(1);
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+		describe("when registrationId is empty string", () => {
+			it("should return empty string", () => {
+				const registrations = registrationFactory.buildList(1);
+				const { registrationStore } = setup({ registrations });
 
-			const result = registrationStore.getEmailOfRegistration("");
+				const result = registrationStore.getEmailOfRegistration("");
 
-			expect(result).toBe("");
+				expect(result).toBe("");
+			});
 		});
 
-		it("should return empty string when roomRegistrations is empty", () => {
-			const { registrationStore } = setup({ roomRegistrations: [] });
+		describe("when registrations is empty", () => {
+			it("should return empty string", () => {
+				const { registrationStore } = setup({ registrations: [] });
 
-			const result = registrationStore.getEmailOfRegistration("1");
+				const result = registrationStore.getEmailOfRegistration("1");
 
-			expect(result).toBe("");
+				expect(result).toBe("");
+			});
 		});
 
-		it("should return empty string when registration exists but has no email", () => {
-			const registrations = [{ id: "1", email: "", firstName: "John", lastName: "Doe" }] as RegistrationList;
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+		describe("when registration exists but has no email", () => {
+			it("should return empty string", () => {
+				const registrations = [{ id: "1", email: "", firstName: "John", lastName: "Doe" }] as RegistrationList;
+				const { registrationStore } = setup({ registrations });
 
-			const result = registrationStore.getEmailOfRegistration("1");
+				const result = registrationStore.getEmailOfRegistration("1");
 
-			expect(result).toBe("");
+				expect(result).toBe("");
+			});
 		});
 	});
 
 	describe("resendInvitations", () => {
-		it("resends invitations on success", async () => {
-			const registrations = createRegistrations(2);
-			const { registrationStore, roomDetailsStore } = setup({ roomRegistrations: registrations });
+		describe("when successful", () => {
+			it("resends invitations", async () => {
+				const registrations = registrationFactory.buildList(2);
+				const { registrationStore, roomDetailsStore } = setup({ registrations });
 
-			registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
-			registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+				registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+				registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
 
-			await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
+				await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
 
-			expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
-				registrations[0].id,
-				roomDetailsStore.room?.id
-			);
-			expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
-				registrations[1].id,
-				roomDetailsStore.room?.id
-			);
-		});
-
-		it("fetches updated registrations after resending", async () => {
-			const registrations = createRegistrations(1);
-			const { registrationStore, roomDetailsStore } = setup({ roomRegistrations: registrations });
-
-			registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
-
-			await registrationStore.resendInvitations([registrations[0].id]);
-
-			expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
-		});
-
-		it("does not resend invitations when resentAt is within 2 minutes and notifies as info", async () => {
-			const now = new Date();
-			const oneMinuteAgo = new Date(now.getTime() - 1 * 60 * 1000).toISOString();
-
-			const registrations = registrationFactory.buildList(1, {
-				resentAt: oneMinuteAgo,
+				expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
+					registrations[0].id,
+					roomDetailsStore.room?.id
+				);
+				expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
+					registrations[1].id,
+					roomDetailsStore.room?.id
+				);
 			});
-			const { registrationStore } = setup({ roomRegistrations: registrations });
 
-			await registrationStore.resendInvitations([registrations[0].id]);
+			it("fetches updated registrations after resending", async () => {
+				const registrations = registrationFactory.buildList(1);
+				const { registrationStore, roomDetailsStore } = setup({ registrations });
 
-			expect(registrationApi.registrationControllerResendRegistrationMail).not.toHaveBeenCalled();
-			expectNotification("info");
+				registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+
+				await registrationStore.resendInvitations([registrations[0].id]);
+
+				expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+			});
 		});
 
-		it("notifies on error", async () => {
-			const registrations = createRegistrations(1);
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+		describe("when resentAt is within 2 minutes", () => {
+			it("does not resend invitations and notifies as info", async () => {
+				const now = new Date();
+				const oneMinuteAgo = new Date(now.getTime() - 1 * 60 * 1000).toISOString();
 
-			registrationApi.registrationControllerResendRegistrationMail.mockRejectedValueOnce(new Error("Error"));
+				const registrations = registrationFactory.buildList(1, {
+					resentAt: oneMinuteAgo,
+				});
+				const { registrationStore } = setup({ registrations });
 
-			await registrationStore.resendInvitations([registrations[0].id]);
+				await registrationStore.resendInvitations([registrations[0].id]);
 
-			expectNotification("error");
+				expect(registrationApi.registrationControllerResendRegistrationMail).not.toHaveBeenCalled();
+				expectNotification("info");
+			});
+		});
+
+		describe("when error happens", () => {
+			it("notifies", async () => {
+				const registrations = registrationFactory.buildList(1);
+				const { registrationStore } = setup({ registrations });
+
+				registrationApi.registrationControllerResendRegistrationMail.mockRejectedValueOnce(new Error("Error"));
+
+				await registrationStore.resendInvitations([registrations[0].id]);
+
+				expectNotification("error");
+			});
 		});
 	});
 
 	describe("resetStore", () => {
 		it("reset the store", async () => {
-			const registrations = createRegistrations();
-			const { registrationStore } = setup({ roomRegistrations: registrations });
+			const registrations = registrationFactory.buildList(2);
+			const { registrationStore } = setup({ registrations });
 
-			registrationStore.roomRegistrations = registrations;
-			expect(registrationStore.roomRegistrations).toHaveLength(registrations.length);
+			registrationStore.registrations = registrations;
+			expect(registrationStore.registrations).toHaveLength(registrations.length);
 
 			registrationStore.resetStore();
 			expect(registrationStore.isLoading).toBe(false);
 			expect(registrationStore.registrationSecret).toStrictEqual("");
 			expect(registrationStore.userData).toBe(null);
-			expect(registrationStore.roomRegistrations).toHaveLength(0);
+			expect(registrationStore.registrations).toHaveLength(0);
 			expect(registrationStore.selectedIds).toHaveLength(0);
 		});
 	});

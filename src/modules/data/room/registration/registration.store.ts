@@ -23,7 +23,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 
 	const registrationApi = RegistrationApiFactory(undefined, "/v3", $axios);
 
-	const roomRegistrations = ref<RegistrationList>([]);
+	const registrations = ref<RegistrationList>([]);
 	const registrationSecret = ref<string>("");
 	const userData = ref<{
 		firstName: string;
@@ -42,7 +42,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 		try {
 			const { data } = await registrationApi.registrationControllerFindByRoom(roomId.value);
 
-			roomRegistrations.value = data.data ?? [];
+			registrations.value = data.data ?? [];
 		} catch {
 			notifyError(t("pages.registrationExternalMembers.error.failedFetchRegistrations"), false);
 		} finally {
@@ -72,7 +72,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 	};
 
 	const getRegistrationById = (registrationId: string) =>
-		roomRegistrations.value.find((registration) => registration.id === registrationId);
+		registrations.value.find((registration) => registration.id === registrationId);
 
 	const getEmailOfRegistration = (registrationId = "") => {
 		const registration = getRegistrationById(registrationId);
@@ -105,9 +105,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 				registrationApi.registrationControllerCancelRegistration(id, roomId.value!)
 			);
 			await Promise.all(Promises);
-			roomRegistrations.value = roomRegistrations.value.filter(
-				(registration) => !invitationIds.includes(registration.id)
-			);
+			registrations.value = registrations.value.filter((registration) => !invitationIds.includes(registration.id));
 			selectedIds.value = [];
 		} catch {
 			notifyError(t("pages.registrationExternalMembers.error.failedRemoveInvitations"), false);
@@ -157,7 +155,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 		isLoading.value = false;
 		registrationSecret.value = "";
 		userData.value = null;
-		roomRegistrations.value = [];
+		registrations.value = [];
 		selectedIds.value = [];
 	};
 
@@ -166,7 +164,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 		isLoading,
 		registrationSecret,
 		userData,
-		roomRegistrations,
+		registrations,
 		selectedIds,
 		resetStore,
 		fetchRegistrationsForCurrentRoom,

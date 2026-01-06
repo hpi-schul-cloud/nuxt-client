@@ -46,12 +46,12 @@ import { useI18n } from "vue-i18n";
 const { t, locale } = useI18n();
 const registrationStore = useRegistrationStore();
 
-const { roomRegistrations, selectedIds } = storeToRefs(registrationStore);
+const { registrations, selectedIds } = storeToRefs(registrationStore);
 
 const { removeInvitations, resendInvitations } = registrationStore;
 const { askConfirmation } = useConfirmationDialog();
 
-const registrationTableData = computed(() => roomRegistrations.value as unknown as Record<string, unknown>[]);
+const registrationTableData = computed(() => registrations.value as unknown as Record<string, unknown>[]);
 
 const onRemoveInvitation = async (registrationIds: string[]) => {
 	const shouldRemove = await confirmRemoval(registrationIds);
