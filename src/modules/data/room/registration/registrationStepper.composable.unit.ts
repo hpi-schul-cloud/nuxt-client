@@ -55,27 +55,30 @@ describe("useRegistrationStepper", () => {
 		expect(selectedLanguage.value).toBe(LanguageType.En);
 	});
 
-	it("should set USER_LANG cookie when setSelectedLanguage is called", () => {
-		const { setSelectedLanguage } = setup();
+	describe("when setSelectedLanguage is called", () => {
+		it("should set USER_LANG cookie", () => {
+			const { setSelectedLanguage } = setup();
 
-		const expires = new Date();
-		expires.setFullYear(expires.getFullYear() + 1);
+			const expires = new Date();
+			const oneDay = 24 * 60 * 60 * 1000;
+			expires.setTime(expires.getTime() + oneDay);
 
-		setSelectedLanguage(LanguageType.De);
+			setSelectedLanguage(LanguageType.De);
 
-		expect(document.cookie).toBe(
-			`USER_LANG=${LanguageType.De}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`
-		);
-	});
+			expect(document.cookie).toBe(
+				`USER_LANG=${LanguageType.De}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`
+			);
+		});
 
-	it("should update selectedLanguage when setSelectedLanguage is called", () => {
-		const { selectedLanguage, setSelectedLanguage } = setup();
+		it("should update selectedLanguage", () => {
+			const { selectedLanguage, setSelectedLanguage } = setup();
 
-		expect(selectedLanguage.value).toBeUndefined();
+			expect(selectedLanguage.value).toBeUndefined();
 
-		setSelectedLanguage(LanguageType.Es);
+			setSelectedLanguage(LanguageType.Es);
 
-		expect(selectedLanguage.value).toBe(LanguageType.Es);
+			expect(selectedLanguage.value).toBe(LanguageType.Es);
+		});
 	});
 
 	it("should compute fullName from store userData", async () => {

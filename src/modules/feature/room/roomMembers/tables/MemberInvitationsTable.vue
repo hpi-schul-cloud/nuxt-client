@@ -35,10 +35,11 @@
 </template>
 
 <script setup lang="ts">
+import { KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "../menus";
 import { type Registration, useRegistrationStore } from "@data-room";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
-import { KebabMenu, KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "@ui-kebab-menu";
+import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -79,19 +80,16 @@ const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
 };
 
-// formatter to avoid recreating it on each re-render
-const dateFormatter = computed(() => new Intl.DateTimeFormat(locale.value));
-
-const formatDate = (isoDate: string) => dateFormatter.value.format(new Date(isoDate));
+const formatDate = (isoDate: string) => Intl.DateTimeFormat(locale.value).format(new Date(isoDate));
 
 const getAriaLabel = (registration: Registration, actionFor: "remove" | "resend" | "" = "") => {
 	const registrationEmail = registration.email;
-	const mapActionToConst = {
+	const mapActionToLanguageKey = {
 		remove: "pages.rooms.members.registrations.remove.ariaLabel",
 		resend: "pages.rooms.members.registrations.resend.ariaLabel",
 		"": "pages.rooms.members.registrations.actionMenu.ariaLabel",
 	};
-	const languageKey = mapActionToConst[actionFor];
+	const languageKey = mapActionToLanguageKey[actionFor];
 	return t(languageKey, { registrationEmail });
 };
 

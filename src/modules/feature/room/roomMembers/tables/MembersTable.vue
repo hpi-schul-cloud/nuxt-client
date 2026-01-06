@@ -126,12 +126,12 @@ const onUpdateSelectedIds = (ids: string[]) => {
 
 const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "" = "") => {
 	const memberFullName = member.fullName;
-	const mapActionToConst = {
+	const mapActionToLanguageKey = {
 		remove: "pages.rooms.members.remove.ariaLabel",
 		changeRole: "pages.rooms.members.changePermission.ariaLabel",
 		"": "pages.rooms.members.actionMenu.ariaLabel",
 	};
-	const languageKey = mapActionToConst[actionFor];
+	const languageKey = mapActionToLanguageKey[actionFor];
 	return t(languageKey, { memberFullName });
 };
 

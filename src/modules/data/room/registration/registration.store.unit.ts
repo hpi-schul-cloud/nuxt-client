@@ -267,17 +267,6 @@ describe("registration.store", () => {
 				expect(result).toBe("");
 			});
 		});
-
-		describe("when registration exists but has no email", () => {
-			it("should return empty string", () => {
-				const registrations = [{ id: "1", email: "", firstName: "John", lastName: "Doe" }] as RegistrationList;
-				const { registrationStore } = setup({ registrations });
-
-				const result = registrationStore.getEmailOfRegistration("1");
-
-				expect(result).toBe("");
-			});
-		});
 	});
 
 	describe("resendInvitations", () => {

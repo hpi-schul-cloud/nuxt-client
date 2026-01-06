@@ -25,7 +25,8 @@ export const useRegistrationStepper = () => {
 
 	const setCookie = (lang: LanguageType) => {
 		const expires = new Date();
-		expires.setFullYear(expires.getFullYear() + 1);
+		const oneDay = 24 * 60 * 60 * 1000;
+		expires.setTime(expires.getTime() + oneDay);
 		document.cookie = `USER_LANG=${lang}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`;
 	};
 

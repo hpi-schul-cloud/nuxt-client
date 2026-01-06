@@ -1568,7 +1568,7 @@ export default {
 		"На жаль, запрошення не вдалося видалити. Спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"На жаль, запрошення не вдалося надіслати повторно. Спробуйте пізніше.",
-	"pages.registrationExternalMembers.info.tooManyResendRequests":
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
 		"Щойно було надіслано електронний лист. Через дві хвилини електронний лист можна надіслати знову.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":

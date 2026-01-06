@@ -1587,7 +1587,7 @@ export default {
 		"Lamentablemente, no se han podido eliminar las invitaciones. Inténtalo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"Lamentablemente, no se han podido reenviar las invitaciones. Inténtalo de nuevo más tarde.",
-	"pages.registrationExternalMembers.info.tooManyResendRequests":
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
 		"Se acaba de enviar un correo electrónico. Pasados dos minutos, se puede volver a enviar el correo electrónico.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":

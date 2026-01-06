@@ -1552,7 +1552,7 @@ export default {
 		"Unfortunately, the invitations could not be removed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedResendInvitations":
 		"Unfortunately, the invitations could not be resent. Please try again later.",
-	"pages.registrationExternalMembers.info.tooManyResendRequests":
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
 		"An email has just been sent. After two minutes, the email can be sent again.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
