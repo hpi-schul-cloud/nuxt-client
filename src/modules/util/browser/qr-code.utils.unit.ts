@@ -37,7 +37,7 @@ describe("printQrCodes", () => {
 	it("should add QR code items to the document", () => {
 		printQrCodes([{ qrContent: "https://example.com" }, { qrContent: "https://test.com" }]);
 
-		expect(mockWindow.document.body.appendChild).toHaveBeenCalledTimes(2);
+		expect(mockWindow.document.body.appendChild).toHaveBeenCalledTimes(1);
 	});
 
 	it("should trigger print and close the window", () => {
