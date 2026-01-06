@@ -89,7 +89,7 @@ const getAriaLabel = (registration: Registration, actionFor: "remove" | "resend"
 	const mapActionToConst = {
 		remove: "pages.rooms.members.registrations.remove.ariaLabel",
 		resend: "pages.rooms.members.registrations.resend.ariaLabel",
-		"": "pages.rooms.members.actionMenu.ariaLabel",
+		"": "pages.rooms.members.registrations.actionMenu.ariaLabel",
 	};
 	const languageKey = mapActionToConst[actionFor];
 	return t(languageKey, { registrationEmail });
