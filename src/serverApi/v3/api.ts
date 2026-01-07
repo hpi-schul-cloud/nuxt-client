@@ -23981,7 +23981,7 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCancelRegistrations(roomId, cancelRegistrationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -24060,7 +24060,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): AxiosPromise<void> {
+        registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse> {
             return localVarFp.registrationControllerCancelRegistrations(roomId, cancelRegistrationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -24133,7 +24133,7 @@ export interface RegistrationApiInterface {
      * @throws {RequiredError}
      * @memberof RegistrationApiInterface
      */
-    registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): AxiosPromise<void>;
+    registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse>;
 
     /**
      * 

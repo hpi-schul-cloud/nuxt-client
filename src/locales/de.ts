@@ -1903,6 +1903,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.remove": "Einladung löschen",
 	"pages.rooms.members.registrations.actionMenu.resend": "Einladung erneut versenden",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Einladung für {registrationEmail} aus Raum löschen",
+	"pages.rooms.members.registrations.remove.success.single": "Einladung wurde erfolgreich gelöscht.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Einladungen wurden erfolgreich gelöscht.",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Einladung für {registrationEmail} erneut versenden",
 	"pages.rooms.members.registrations.resend.success.single": "Einladung wurde erneut versendet.",
 	"pages.rooms.members.registrations.resend.success.multiple": "Einladungen wurden erneut versendet.",

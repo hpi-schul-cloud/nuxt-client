@@ -1886,6 +1886,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.remove": "Видалити запрошення",
 	"pages.rooms.members.registrations.actionMenu.resend": "Надіслати запрошення ще раз",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Видалити запрошення для {registrationEmail} з кімнати",
+	"pages.rooms.members.registrations.remove.success.single": "Запрошення було успішно видалено.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Запрошення були успішно видалені.",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Надіслати запрошення для {registrationEmail} ще раз",
 	"pages.rooms.members.registrations.resend.success.single": "Запрошення було надіслано повторно.",
 	"pages.rooms.members.registrations.resend.success.multiple": "Запрошення були надіслані повторно.",

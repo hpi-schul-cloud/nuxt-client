@@ -101,9 +101,15 @@ export const useRegistrationStore = defineStore("registration", () => {
 	const removeInvitations = async (invitationIds: string[]): Promise<void> => {
 		try {
 			if (!roomId.value) return;
+
 			await registrationApi.registrationControllerCancelRegistrations(roomId.value, { registrationIds: invitationIds });
-			registrations.value = registrations.value.filter((registration) => !invitationIds.includes(registration.id));
+			await fetchRegistrationsForCurrentRoom();
 			selectedIds.value = [];
+			if (invitationIds.length > 1) {
+				notifySuccess(t("pages.rooms.members.registrations.remove.success.multiple"));
+			} else {
+				notifySuccess(t("pages.rooms.members.registrations.remove.success.single"));
+			}
 		} catch {
 			notifyError(t("pages.registrationExternalMembers.error.failedRemoveInvitations"), false);
 		}
@@ -124,6 +130,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 			);
 			await Promise.all(Promises);
 			await fetchRegistrationsForCurrentRoom();
+			selectedIds.value = [];
 			if (allowedIds.length > 1) {
 				notifySuccess(t("pages.rooms.members.registrations.resend.success.multiple"));
 			} else {

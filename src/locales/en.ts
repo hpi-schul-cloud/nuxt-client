@@ -1870,6 +1870,8 @@ export default {
 	"pages.rooms.members.registrations.actionMenu.remove": "Delete invitation",
 	"pages.rooms.members.registrations.actionMenu.resend": "Resend invitation",
 	"pages.rooms.members.registrations.remove.ariaLabel": "Delete invitation for {registrationEmail} from room",
+	"pages.rooms.members.registrations.remove.success.single": "Invitation has been successfully deleted.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Invitations have been successfully deleted.",
 	"pages.rooms.members.registrations.resend.ariaLabel": "Resend invitation for {registrationEmail}",
 	"pages.rooms.members.registrations.resend.success.single": "Invitation has been sent again.",
 	"pages.rooms.members.registrations.resend.success.multiple": "Invitations have been sent out again.",
