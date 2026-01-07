@@ -42,7 +42,7 @@ const isListItem = (target: HTMLElement | SVGElement): boolean => {
 	return target.className?.includes("v-list-item");
 };
 
-const isAllowedTarget = (event: MouseEvent): boolean => {
+const isAllowedTarget = (event: Event): boolean => {
 	const target = event.target as HTMLElement | SVGElement;
 	if (!(target instanceof HTMLElement) && !(target instanceof SVGElement)) return true;
 
@@ -51,7 +51,7 @@ const isAllowedTarget = (event: MouseEvent): boolean => {
 	return target && disallowedConditions.every((fn) => !fn(target));
 };
 
-const onClickOutside = (event: MouseEvent) => {
+const onClickOutside = (event: Event) => {
 	if (props.isEditMode && isAllowedTarget(event)) {
 		emit("end-edit-mode");
 	}
