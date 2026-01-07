@@ -2,7 +2,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { ref } from "vue";
 
 interface Props {
-	askConfirmationMock?: ReturnType<typeof vi.fn>;
+	askConfirmationMock?: ReturnType<typeof useConfirmationDialog>["askConfirmation"];
 }
 
 export default function setupConfirmationComposableMock(props: Props = {}) {
