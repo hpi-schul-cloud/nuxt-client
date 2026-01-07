@@ -1,16 +1,16 @@
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import { FabAction } from "./types";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/components";
 
-describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
+describe("SpeedDialMenu", () => {
 	const setup = ({ actions }: { actions: FabAction[] }) => {
 		const wrapper = mount(SpeedDialMenu, {
 			attachTo: document.body,
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				actions,
