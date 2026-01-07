@@ -2,8 +2,8 @@ import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { useInlineEditInteractionHandler } from "@util-board";
-import { createSharedComposable, MaybeRefOrGetter, useEventListener, useFocus, useFocusWithin } from "@vueuse/core";
-import { computed, nextTick, onMounted, onUnmounted, Ref, ref } from "vue";
+import { createSharedComposable, useEventListener, useFocus, useFocusWithin } from "@vueuse/core";
+import { computed, MaybeRefOrGetter, nextTick, onMounted, onUnmounted, Ref, ref } from "vue";
 
 declare type FocusableId = BoardColumn["id"] | BoardCard["id"] | AnyContentElement["id"];
 

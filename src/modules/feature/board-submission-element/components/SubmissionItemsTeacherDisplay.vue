@@ -78,8 +78,7 @@
 <script lang="ts">
 import { Status, TeacherSubmission } from "../types/submission";
 import { mdiCheck, mdiClose, mdiMinus } from "@icons/material";
-import { MaybeRef } from "@vueuse/core";
-import { computed, defineComponent, PropType, Ref, ref, toRef, unref, watch } from "vue";
+import { computed, defineComponent, MaybeRef, PropType, Ref, ref, toRef, unref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { DataTableHeader } from "vuetify";
 import { VExpansionPanelTitle } from "vuetify/components";
