@@ -29,11 +29,17 @@
 				@keypress.enter="onClick"
 				@dragenter.prevent.stop="dragEnter"
 			>
-				<v-avatar :aria-label="avatarAriaLabel" :size="size" data-testid="course-icon" :show-badge="showBadge">
+				<VAvatar
+					:aria-label="avatarAriaLabel"
+					:size="size"
+					data-testid="course-icon"
+					:show-badge="showBadge"
+					color="transparent"
+				>
 					<span :class="avatarTextClass" data-testid="course-short-title">
 						{{ item.shortTitle }}
 					</span>
-				</v-avatar>
+				</VAvatar>
 			</VBtn>
 		</v-badge>
 		<div v-if="!condenseLayout" aria-hidden="true" :class="titleClasses" data-testid="course-title">
