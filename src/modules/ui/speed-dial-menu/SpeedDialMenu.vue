@@ -7,7 +7,7 @@
 					'fab-max-height': isCollapsed,
 				}"
 				v-bind="activatorProps"
-				:rounded="!isCollapsed ? 'pill' : 'circle'"
+				:rounded="isCollapsed ? 'circle' : 'pill'"
 				color="primary"
 				size="large"
 				elevation="4"
@@ -15,7 +15,7 @@
 				:icon="isCollapsed"
 				:to="primaryAction.to"
 				:href="primaryAction.href"
-				:aria-label="isCollapsed ? (primaryAction.ariaLabel ?? primaryAction.label) : undefined"
+				:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
 				:data-testid="primaryAction.dataTestId"
 				@click="onFabClick"
 			>
@@ -36,12 +36,16 @@ import { FabAction } from "./types";
 import { mdiClose } from "@icons/material";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	actions: FabAction[];
 }>();
 
+const { t } = useI18n();
+
+const closeAriaText = t("common.labels.close");
 const primaryAction = computed(() => props.actions[0]);
 const speedDialActions = computed(() => props.actions.slice(1));
 const fabIcon = computed(() => (isSpeedDial.value && isSpeedDialOpen.value ? mdiClose : primaryAction.value.icon));
