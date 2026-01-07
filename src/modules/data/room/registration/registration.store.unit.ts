@@ -167,13 +167,13 @@ describe("registration.store", () => {
 				const registration = registrationFactory.buildList(1)[0];
 				const { registrationStore, roomDetailsStore } = setup({ registrations: [registration] });
 
-				registrationApi.registrationControllerCancelRegistration.mockResolvedValueOnce({});
+				registrationApi.registrationControllerCancelRegistrations.mockResolvedValueOnce({});
 
 				await registrationStore.removeInvitations([registration.id]);
 
-				expect(registrationApi.registrationControllerCancelRegistration).toHaveBeenCalledWith(
-					registration.id,
-					roomDetailsStore.room?.id
+				expect(registrationApi.registrationControllerCancelRegistrations).toHaveBeenCalledWith(
+					roomDetailsStore.room?.id,
+					{ registrationIds: [registration.id] }
 				);
 				expect(registrationStore.registrations).not.toContainEqual(registration);
 			});
@@ -183,7 +183,7 @@ describe("registration.store", () => {
 			it("does not remove invitation and notifies", async () => {
 				const { registrationStore } = setup();
 
-				registrationApi.registrationControllerCancelRegistration.mockRejectedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerCancelRegistrations.mockRejectedValueOnce(new Error("Error"));
 
 				await registrationStore.removeInvitations(["random-registration-id"]);
 				expectNotification("error");

@@ -101,10 +101,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 	const removeInvitations = async (invitationIds: string[]): Promise<void> => {
 		try {
 			if (!roomId.value) return;
-			const Promises = invitationIds.map((id) =>
-				registrationApi.registrationControllerCancelRegistration(id, roomId.value!)
-			);
-			await Promise.all(Promises);
+			await registrationApi.registrationControllerCancelRegistrations(roomId.value, { registrationIds: invitationIds });
 			registrations.value = registrations.value.filter((registration) => !invitationIds.includes(registration.id));
 			selectedIds.value = [];
 		} catch {

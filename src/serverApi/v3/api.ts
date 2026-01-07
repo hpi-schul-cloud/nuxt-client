@@ -1023,6 +1023,19 @@ export interface BusinessError {
 /**
  * 
  * @export
+ * @interface CancelRegistrationBodyParams
+ */
+export interface CancelRegistrationBodyParams {
+    /**
+     * The registration ids the room is attached to
+     * @type {Array<string>}
+     * @memberof CancelRegistrationBodyParams
+     */
+    registrationIds: Array<string>;
+}
+/**
+ * 
+ * @export
  * @interface CardListResponse
  */
 export interface CardListResponse {
@@ -23714,19 +23727,18 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
-         * @summary Cancel a registration for a specific roomId
-         * @param {string} registrationId The id of the registration the room is attached to.
+         * @summary Cancel registrations for a specific roomId
          * @param {string} roomId The id of a room that should get detached from the registration.
+         * @param {CancelRegistrationBodyParams} cancelRegistrationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistration: async (registrationId: string, roomId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'registrationId' is not null or undefined
-            assertParamExists('registrationControllerCancelRegistration', 'registrationId', registrationId)
+        registrationControllerCancelRegistrations: async (roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('registrationControllerCancelRegistration', 'roomId', roomId)
-            const localVarPath = `/registrations/{registrationId}/cancel/{roomId}`
-                .replace(`{${"registrationId"}}`, encodeURIComponent(String(registrationId)))
+            assertParamExists('registrationControllerCancelRegistrations', 'roomId', roomId)
+            // verify required parameter 'cancelRegistrationBodyParams' is not null or undefined
+            assertParamExists('registrationControllerCancelRegistrations', 'cancelRegistrationBodyParams', cancelRegistrationBodyParams)
+            const localVarPath = `/registrations/cancel/{roomId}`
                 .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23745,9 +23757,12 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cancelRegistrationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23960,14 +23975,14 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Cancel a registration for a specific roomId
-         * @param {string} registrationId The id of the registration the room is attached to.
+         * @summary Cancel registrations for a specific roomId
          * @param {string} roomId The id of a room that should get detached from the registration.
+         * @param {CancelRegistrationBodyParams} cancelRegistrationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCancelRegistration(registrationId, roomId, options);
+        async registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCancelRegistrations(roomId, cancelRegistrationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -24039,14 +24054,14 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
-         * @summary Cancel a registration for a specific roomId
-         * @param {string} registrationId The id of the registration the room is attached to.
+         * @summary Cancel registrations for a specific roomId
          * @param {string} roomId The id of a room that should get detached from the registration.
+         * @param {CancelRegistrationBodyParams} cancelRegistrationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.registrationControllerCancelRegistration(registrationId, roomId, options).then((request) => request(axios, basePath));
+        registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.registrationControllerCancelRegistrations(roomId, cancelRegistrationBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24111,14 +24126,14 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
 export interface RegistrationApiInterface {
     /**
      * 
-     * @summary Cancel a registration for a specific roomId
-     * @param {string} registrationId The id of the registration the room is attached to.
+     * @summary Cancel registrations for a specific roomId
      * @param {string} roomId The id of a room that should get detached from the registration.
+     * @param {CancelRegistrationBodyParams} cancelRegistrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistrationApiInterface
      */
-    registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any): AxiosPromise<void>;
+    registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -24183,15 +24198,15 @@ export interface RegistrationApiInterface {
 export class RegistrationApi extends BaseAPI implements RegistrationApiInterface {
     /**
      * 
-     * @summary Cancel a registration for a specific roomId
-     * @param {string} registrationId The id of the registration the room is attached to.
+     * @summary Cancel registrations for a specific roomId
      * @param {string} roomId The id of a room that should get detached from the registration.
+     * @param {CancelRegistrationBodyParams} cancelRegistrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistrationApi
      */
-    public registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any) {
-        return RegistrationApiFp(this.configuration).registrationControllerCancelRegistration(registrationId, roomId, options).then((request) => request(this.axios, this.basePath));
+    public registrationControllerCancelRegistrations(roomId: string, cancelRegistrationBodyParams: CancelRegistrationBodyParams, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerCancelRegistrations(roomId, cancelRegistrationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
