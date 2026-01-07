@@ -15,13 +15,14 @@
 		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
 
 		<div
+			v-if="fabItems"
 			class="wireframe-menu-container d-flex align-center"
 			:class="{
 				'positioning-sm-to-md': mdAndDown,
 			}"
 		>
 			<div class="ml-auto mr-6">
-				<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
+				<SpeedDialMenu :actions="fabItems" />
 			</div>
 		</div>
 

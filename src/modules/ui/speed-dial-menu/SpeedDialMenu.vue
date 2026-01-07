@@ -1,35 +1,33 @@
 <template>
-	<VFab
-		class="fab-size-transition"
-		:class="{
-			'fab-max-height': isCollapsed,
-		}"
-		:rounded="!isCollapsed ? 'pill' : 'circle'"
-		color="primary"
-		size="large"
-		elevation="4"
-		:transition="false"
-		:icon="isCollapsed"
-		:to="primaryAction.to"
-		:href="primaryAction.href"
-		:aria-label="isCollapsed ? (primaryAction.ariaLabel ?? primaryAction.label) : undefined"
-		:data-testid="primaryAction.dataTestId"
-		@click="onFabClick"
-	>
-		<VIcon>{{ fabIcon }}</VIcon>
-		<span v-if="!isCollapsed" id="fab-label" class="d-block">{{ primaryAction.label }}</span>
-		<VSpeedDial
-			v-if="isSpeedDial"
-			v-model="isSpeedDialOpen"
-			:attach="true"
-			activator="parent"
-			:location="speedDialLocation"
-		>
-			<template v-for="(action, index) in speedDialActions" :key="index">
-				<SpeedDialMenuAction :action="action" />
-			</template>
-		</VSpeedDial>
-	</VFab>
+	<VSpeedDial v-model="isSpeedDialOpen" :attach="true" :location="speedDialLocation">
+		<template #activator="{ props: activatorProps }">
+			<VFab
+				class="fab-size-transition"
+				:class="{
+					'fab-max-height': isCollapsed,
+				}"
+				v-bind="activatorProps"
+				:rounded="!isCollapsed ? 'pill' : 'circle'"
+				color="primary"
+				size="large"
+				elevation="4"
+				:transition="false"
+				:icon="isCollapsed"
+				:to="primaryAction.to"
+				:href="primaryAction.href"
+				:aria-label="isCollapsed ? (primaryAction.ariaLabel ?? primaryAction.label) : undefined"
+				:data-testid="primaryAction.dataTestId"
+				@click="onFabClick"
+			>
+				<VIcon>{{ fabIcon }}</VIcon>
+				<span v-if="!isCollapsed" id="fab-label" class="d-block">{{ primaryAction.label }}</span>
+			</VFab>
+		</template>
+
+		<template v-for="action in speedDialActions" :key="action.label">
+			<SpeedDialMenuAction :action="action" />
+		</template>
+	</VSpeedDial>
 </template>
 
 <script lang="ts" setup>
@@ -59,11 +57,7 @@ const forceCollapseOnMobileScroll = ref(false);
 const isCollapsed = computed(() => isSpeedDialOpen.value || forceCollapseOnMobileScroll.value);
 
 const onFabClick = () => {
-	if (isSpeedDial.value) {
-		isSpeedDialOpen.value = !isSpeedDialOpen.value;
-	} else {
-		if (primaryAction.value.clickHandler) primaryAction.value.clickHandler();
-	}
+	if (primaryAction.value.clickHandler) primaryAction.value.clickHandler();
 };
 
 watchThrottled(
