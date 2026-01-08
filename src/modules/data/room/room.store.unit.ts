@@ -5,6 +5,7 @@ import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tes
 import { useNotificationStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -16,6 +17,8 @@ describe("useRoomStore", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		vi.mocked(RoomApiFactory).mockReturnValue(roomApiMock);
+
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
 	describe("fetchRooms & fetchRoomsPlain", () => {

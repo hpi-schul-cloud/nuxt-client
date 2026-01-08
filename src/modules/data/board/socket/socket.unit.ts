@@ -93,6 +93,7 @@ describe("socket.ts", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		mockSocket.connected = true;
+		vi.spyOn(logger, "log").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
@@ -423,6 +424,7 @@ describe("socket.ts", () => {
 
 			describe("when reporting the board error fails", () => {
 				it("should not throw error", async () => {
+					vi.spyOn(logger, "error").mockImplementation(vi.fn());
 					const { eventCallbacks } = await setup();
 					boardErrorReportApi.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
 
