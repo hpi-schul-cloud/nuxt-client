@@ -160,13 +160,17 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .wireframe-menu-container {
 	position: sticky;
+	pointer-events: none;
 	min-height: 56px;
 	margin-top: -30px;
+	margin-bottom: -30px;
 	z-index: 2000;
 	top: calc(var(--topbar-height) + 16px);
 
 	&.positioning-sm-to-md {
 		position: fixed;
+		margin-top: unset;
+		margin-bottom: unset;
 		top: unset;
 		right: 0;
 		bottom: 24px;

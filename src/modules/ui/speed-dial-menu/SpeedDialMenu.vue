@@ -3,9 +3,6 @@
 		<template #activator="{ props: activatorProps }">
 			<VFab
 				class="fab-size-transition"
-				:class="{
-					'fab-max-height': isCollapsed,
-				}"
 				v-bind="activatorProps"
 				:rounded="isCollapsed ? 'circle' : 'pill'"
 				color="primary"
@@ -15,12 +12,16 @@
 				:icon="isCollapsed"
 				:to="primaryAction.to"
 				:href="primaryAction.href"
-				:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
 				:data-testid="primaryAction.dataTestId"
 				@click="onFabClick"
 			>
 				<VIcon>{{ fabIcon }}</VIcon>
-				<span v-if="!isCollapsed" id="fab-label" class="d-block">{{ primaryAction.label }}</span>
+				<span
+					id="fab-label"
+					:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
+					class="d-block"
+					>{{ !isCollapsed ? primaryAction.label : "" }}</span
+				>
 			</VFab>
 		</template>
 
@@ -82,9 +83,5 @@ watchThrottled(
 <style scoped>
 .fab-size-transition :deep(.v-btn) {
 	transition: all 200ms ease-in-out;
-}
-
-.fab-max-height {
-	max-height: 45px;
 }
 </style>
