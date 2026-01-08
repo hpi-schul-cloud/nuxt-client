@@ -15,9 +15,9 @@
 			</template>
 			<template #text>
 				<div v-if="step === 0 && isExportModalOpen">
-					<div class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5">
+					<div class="d-flex flex-row pa-2 mb-4 rounded orange bg-orange-lighten-5">
 						<div class="mx-2">
-							<v-icon color="info">{{ mdiInformation }}</v-icon>
+							<v-icon color="warning">{{ mdiAlert }}</v-icon>
 						</div>
 						<p>
 							{{ $t(`components.molecules.export.options.info.point3`) }}
@@ -41,9 +41,15 @@
 							&middot;
 							{{ $t(`components.molecules.export.options.info.point2`) }}
 							<br />
-							<span v-if="radios && radios == '1.1.0'">
+						</p>
+					</div>
+					<div v-if="radios && radios == '1.1.0'" class="d-flex flex-row pa-2 mb-4 rounded orange bg-orange-lighten-5">
+						<div class="mx-2">
+							<v-icon color="warning">{{ mdiAlert }}</v-icon>
+						</div>
+						<p>
+							<span>
 								<div data-testid="export-info-point3">
-									&middot;
 									{{ $t(`components.molecules.export.options.info.point3`) }}
 								</div>
 							</span>
@@ -157,7 +163,7 @@ import {
 } from "@/types/course-room/CourseRoom";
 import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
-import { mdiInformation } from "@icons/material";
+import { mdiAlert, mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
