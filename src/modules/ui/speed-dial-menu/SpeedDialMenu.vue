@@ -1,32 +1,33 @@
 <template>
-	<VFab
-		class="fab-size-transition"
-		:rounded="isCollapsed ? 'circle' : 'pill'"
-		color="primary"
-		size="large"
-		elevation="4"
-		:transition="false"
-		:icon="isCollapsed"
-		:to="primaryAction.to"
-		:href="primaryAction.href"
-		:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
-		:data-testid="primaryAction.dataTestId"
-		@click="onFabClick"
-	>
-		<VIcon>{{ fabIcon }}</VIcon>
-		<span v-if="!isCollapsed" id="fab-label">{{ primaryAction.label }}</span>
-		<VSpeedDial
-			v-if="isSpeedDial"
-			v-model="isSpeedDialOpen"
-			:attach="true"
-			activator="parent"
-			:location="speedDialLocation"
-		>
-			<template v-for="(action, index) in speedDialActions" :key="index">
-				<SpeedDialMenuAction :action="action" />
-			</template>
-		</VSpeedDial>
-	</VFab>
+	<VSpeedDial v-model="isSpeedDialOpen" :attach="true" :location="speedDialLocation" transition="fade-transition">
+		<template #activator="{ props: activatorProps }">
+			<VFab
+				class="fab-size-transition"
+				v-bind="activatorProps"
+				:rounded="isCollapsed ? 'circle' : 'pill'"
+				color="primary"
+				size="large"
+				elevation="4"
+				:icon="isCollapsed"
+				:to="primaryAction.to"
+				:href="primaryAction.href"
+				:data-testid="primaryAction.dataTestId"
+				@click="onFabClick"
+			>
+				<VIcon>{{ fabIcon }}</VIcon>
+				<span
+					id="fab-label"
+					:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
+					class="d-block"
+					>{{ !isCollapsed ? primaryAction.label : "" }}</span
+				>
+			</VFab>
+		</template>
+
+		<template v-for="action in speedDialActions" :key="action.label">
+			<SpeedDialMenuAction :action="action" />
+		</template>
+	</VSpeedDial>
 </template>
 
 <script lang="ts" setup>
