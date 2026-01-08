@@ -44,6 +44,8 @@ import teacher from "./teacher.vue";
 import thr from "./thr.vue";
 import { Component } from "vue";
 
+// TODO: Remove custom icons and use only standardized icons from the design system
+
 const customAliases: Record<string, Component> = {
 	brb: brb,
 	class: classIcon,
