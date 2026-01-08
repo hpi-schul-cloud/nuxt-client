@@ -8,6 +8,7 @@
 				color="primary"
 				size="large"
 				elevation="4"
+				:transition="false"
 				:icon="isCollapsed"
 				:to="primaryAction.to"
 				:href="primaryAction.href"
@@ -19,8 +20,9 @@
 					id="fab-label"
 					:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
 					class="d-block"
-					>{{ !isCollapsed ? primaryAction.label : "" }}</span
 				>
+					{{ !isCollapsed ? primaryAction.label : "" }}
+				</span>
 			</VFab>
 		</template>
 
