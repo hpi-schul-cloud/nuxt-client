@@ -653,7 +653,6 @@ describe("FileContentElement", () => {
 			describe("when upload is successful", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
-					document.body.setAttribute("data-app", "true");
 
 					const collaboraPageUrl = "/collabora/" + "123" + "?editorMode=edit";
 					const router = createMock<Router>();
@@ -760,7 +759,6 @@ describe("FileContentElement", () => {
 			describe("when upload returns error", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
-					document.body.setAttribute("data-app", "true");
 
 					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -828,8 +826,6 @@ describe("FileContentElement", () => {
 				isCollaboraEditable?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
-				document.body.setAttribute("data-app", "true");
-
 				const fileRecordResponse = fileRecordFactory.build({
 					securityCheckStatus: props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
