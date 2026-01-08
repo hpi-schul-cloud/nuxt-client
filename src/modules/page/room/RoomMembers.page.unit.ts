@@ -32,7 +32,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
