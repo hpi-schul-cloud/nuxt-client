@@ -1,7 +1,7 @@
 import EditSettingsDialog from "./EditSettingsDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { WarningAlert } from "@ui-alert";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
 import { VCard, VDialog, VRadioGroup } from "vuetify/components";
 

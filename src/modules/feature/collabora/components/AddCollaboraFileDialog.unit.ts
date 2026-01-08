@@ -95,7 +95,7 @@ describe("CollaboraFileDialog", () => {
 				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
-				expect(typeSelect.find("input").element.value).toBe(selectOptions[0].value);
+				expect(typeSelect.find("input").element.value).toBe(selectOptions[0].title);
 
 				const FILENAME = "myDocument";
 				const fileNameInput = wrapper.findComponent("[data-testid='collabora-file-form-filename']");

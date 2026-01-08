@@ -43,6 +43,7 @@ export default {
 	"common.file.scanWontCheck.short": "Попередній перегляд неможливий",
 	"common.file.scanError.short": "Попередній перегляд неможливий",
 	"common.file.virusDetected.short": "Підозра на вірус",
+	"common.file.storage.error": "Цей файл наразі недоступний. Будь ласка, перезавантажте дошку.",
 	"common.file": "Файл",
 	"common.file.exceedsCollaboraEditableFileSize":
 		"Документи розміром більше {sizeInMb} не можуть бути оброблені онлайн.",
@@ -544,6 +545,8 @@ export default {
 	"components.cardElement.fileElement.openOfficeDocument": "Документ у форматі Open Office",
 	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
+	"components.cardElement.folderElement.storage.error":
+		"Підключення до файлового сховища не вдалося. Будь ласка, спробуйте ще раз пізніше.",
 	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.notification.visibleAndEditable":
