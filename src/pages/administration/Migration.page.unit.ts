@@ -48,8 +48,6 @@ type MigrationPageWrapperType = Partial<{
 const getWrapper = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
 ): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
-	document.body.setAttribute("data-app", "true");
-
 	useRouterMock.mockReturnValue(router);
 
 	return mount(MigrationWizard, {

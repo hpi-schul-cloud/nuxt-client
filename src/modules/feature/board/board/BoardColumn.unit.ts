@@ -47,7 +47,6 @@ describe("BoardColumn", () => {
 			cards,
 		});
 		const { setEditModeId } = useSharedEditMode();
-		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
