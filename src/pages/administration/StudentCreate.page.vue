@@ -31,8 +31,8 @@
 </template>
 
 <script>
+import FormCreateUser from "./components/FormCreateUser.vue";
 import InfoMessage from "./components/InfoMessage.vue";
-import FormCreateUser from "@/components/organisms/FormCreateUser";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";

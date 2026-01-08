@@ -105,10 +105,10 @@
 
 <script>
 import AdminTableLegend from "./components/AdminTableLegend.vue";
-import ProgressModal from "@/components/molecules/ProgressModal";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
+import BackendDataTable from "./components/BackendDataTable.vue";
+import ProgressModal from "./components/ProgressModal.vue";
+import DataFilter from "./data-filter/DataFilter.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/pages/administration/components/BackendDataTable.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";

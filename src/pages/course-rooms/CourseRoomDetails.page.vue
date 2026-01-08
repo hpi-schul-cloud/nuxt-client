@@ -83,11 +83,11 @@
 </template>
 
 <script>
+import CourseCommonCartridgeExportModal from "./components/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "./components/CourseRoomDashboard.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useCopy } from "@/composables/copy";
@@ -141,7 +141,7 @@ export default defineComponent({
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
-		CommonCartridgeExportModal,
+		CommonCartridgeExportModal: CourseCommonCartridgeExportModal,
 		SelectBoardLayoutDialog,
 		CourseRoomLockedPage,
 	},

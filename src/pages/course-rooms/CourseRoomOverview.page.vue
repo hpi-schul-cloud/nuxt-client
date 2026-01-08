@@ -113,11 +113,11 @@
 
 <script>
 import CourseRoomAvatar from "./components/CourseRoomAvatar.vue";
+import CourseRoomEmptyAvatar from "./components/CourseRoomEmptyAvatar.vue";
 import CourseRoomGroupAvatar from "./components/CourseRoomGroupAvatar.vue";
 import CourseRoomModal from "./components/CourseRoomModal.vue";
 import CourseRoomWrapper from "./components/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import CourseRoomEmptyAvatar from "@/pages/course-rooms/components/CourseRoomEmptyAvatar.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";

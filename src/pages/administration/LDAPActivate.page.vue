@@ -141,7 +141,7 @@
 				</modal-body-info>
 			</template>
 			<template #footer>
-				<modal-footer-confirm
+				<ModalFooterConfirm
 					backgroundcolor="rgba(var(--v-theme-success))"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"

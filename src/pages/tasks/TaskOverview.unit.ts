@@ -1,5 +1,5 @@
+import TasksDashboardMain from "./components/TasksDashboardMain.vue";
 import TaskOverview from "./TaskOverview.page.vue";
-import TasksDashboardMain from "@/pages/tasks/components/TasksDashboardMain.vue";
 import { RoleName } from "@/serverApi/v3";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";

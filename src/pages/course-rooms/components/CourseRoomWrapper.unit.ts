@@ -23,7 +23,7 @@ const getWrapper = (
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: {
 				// StartNewCourseSyncDialog: true,
-				CommonCartridgeImportModal: true,
+				CourseCommonCartridgeImportModal: true,
 			},
 		},
 		...options,

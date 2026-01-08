@@ -43,7 +43,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings",
-		component: () => import("@/pages/administration/SchoolSettings.page.vue"),
+		component: () => import("@/pages/administration/school-settings/SchoolSettings.page.vue"),
 		name: "administration-school-settings",
 		beforeEnter: createPermissionGuard([Permission.SchoolEdit]),
 	},
@@ -65,7 +65,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings/provisioning-options",
-		component: () => import("@/components/administration/ProvisioningOptionsPage.vue"),
+		component: () => import("@/pages/administration/ProvisioningOptionsPage.vue"),
 		name: "provivisioning-options-page",
 		beforeEnter: createPermissionGuard([Permission.SchoolSystemView, Permission.SchoolSystemEdit]),
 		props: (to: RouteLocationNormalized) => ({

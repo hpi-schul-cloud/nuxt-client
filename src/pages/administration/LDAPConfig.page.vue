@@ -74,10 +74,10 @@
 
 <script>
 import InfoMessage from "./components/InfoMessage.vue";
-import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
-import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
-import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
-import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
+import ClassesSection from "./ldap/LdapClassesSection.vue";
+import ConnectionSection from "./ldap/LdapConnectionSection.vue";
+import RolesSection from "./ldap/LdapRolesSection.vue";
+import UsersSection from "./ldap/LdapUsersSection.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";

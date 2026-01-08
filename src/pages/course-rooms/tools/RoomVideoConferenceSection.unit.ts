@@ -1,5 +1,5 @@
+import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
 import { Permission, RoleName, VideoConferenceScope } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { VideoConferenceState } from "@/store/types/video-conference";
@@ -12,7 +12,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import { VDialog } from "vuetify/lib/components/index";
+import { VDialog } from "vuetify/components";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";

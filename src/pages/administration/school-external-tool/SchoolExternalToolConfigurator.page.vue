@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
@@ -18,7 +18,7 @@
 			</p>
 		</div>
 		<v-spacer class="mt-10" />
-		<external-tool-configurator
+		<ExternalToolConfigurator
 			:templates="configurationTemplates"
 			:configuration="configuration"
 			:error="apiError"
@@ -40,8 +40,8 @@
 					data-testId="configuration-deactivate-checkbox"
 				/>
 			</template>
-		</external-tool-configurator>
-	</default-wireframe>
+		</ExternalToolConfigurator>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">

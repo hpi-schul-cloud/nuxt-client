@@ -19,12 +19,12 @@
 			<slot name="page-content" />
 		</template>
 		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
-		<CommonCartridgeImportModal :max-width="480" class="upload-modal" />
+		<CourseCommonCartridgeImportModal :max-width="480" class="upload-modal" />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
+import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";

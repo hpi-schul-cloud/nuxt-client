@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
+import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@/serverApi/v3";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";

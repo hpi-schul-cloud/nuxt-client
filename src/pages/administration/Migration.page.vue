@@ -432,7 +432,7 @@
 	</DefaultWireframe>
 </template>
 <script setup lang="ts">
-import ImportUsers from "@/components/organisms/administration/ImportUsers.vue";
+import ImportUsers from "./components/ImportUsers.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
