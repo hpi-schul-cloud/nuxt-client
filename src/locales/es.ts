@@ -1028,7 +1028,7 @@ export default {
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
-	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" borrar?',
+	"pages.administration.courses.deleteDialog.content": '¿Realmente desea eliminar el curso "{itemName}"?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.courses.withoutTeacher": "Mostrar sólo los cursos sin profesor",

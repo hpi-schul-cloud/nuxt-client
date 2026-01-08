@@ -1024,7 +1024,7 @@ export default {
 	"pages.administration.classes.manage": "Керувати класом",
 	"pages.administration.classes.header.sync": "Синхронізовано з",
 	"pages.administration.courses.delete": "Видалити курс",
-	"pages.administration.courses.deleteDialog.content": 'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
+	"pages.administration.courses.deleteDialog.content": 'Ви справді хочете видалити курс "{itemName}"?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.courses.withoutTeacher": "Відображати тільки курси без викладача",

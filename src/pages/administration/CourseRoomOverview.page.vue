@@ -130,30 +130,6 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<CustomDialog
-			:is-open="isDeleteDialogOpen"
-			max-width="360"
-			data-testid="delete-dialog"
-			has-buttons
-			:buttons="['cancel', 'confirm']"
-			@dialog-closed="onCancelCourseDeletion"
-			@dialog-confirmed="onConfirmCourseDeletion"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ t("pages.administration.courses.delete") }}
-				</h2>
-			</template>
-			<template #content>
-				<p>
-					{{
-						t("pages.administration.courses.deleteDialog.content", {
-							itemName: selectedItemName,
-						})
-					}}
-				</p>
-			</template>
-		</CustomDialog>
 		<StartExistingCourseSyncDialog
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
@@ -162,7 +138,6 @@
 			data-testid="start-sync-dialog"
 			@success="onConfirmSynchronizeCourse"
 		/>
-
 		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			:course-name="selectedItem?.name"
@@ -170,7 +145,6 @@
 			:course-id="selectedItem?.id"
 			@success="loadCourseList"
 		/>
-
 		<v-btn
 			class="my-5 button-start"
 			color="primary"
@@ -180,7 +154,6 @@
 		>
 			{{ t("pages.administration.courses.index.add") }}
 		</v-btn>
-
 		<p class="text-muted">
 			{{
 				t("pages.administration.common.hint", {
@@ -192,7 +165,6 @@
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -202,9 +174,11 @@ import { useEnvConfig, useEnvStore } from "@data-env";
 import { useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { mdiAlert, mdiCheck, mdiPencilOutline, mdiSync, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { logger } from "@util-logger";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
+import { computed, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import type { DataTableHeader } from "vuetify";
@@ -228,6 +202,7 @@ const router = useRouter();
 
 const { t } = useI18n();
 useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
+const { askConfirmation } = useConfirmationDialog();
 
 const {
 	fetchCourses,
@@ -261,7 +236,7 @@ const footerProps = {
 	itemsPerPageOptions: [5, 10, 25, 50, 100],
 };
 
-const courseStatus: ComputedRef<CourseStatus> = computed(() => {
+const courseStatus = computed(() => {
 	switch (props.tab) {
 		case "current":
 			return CourseStatus.Current;
@@ -275,22 +250,15 @@ const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 const hasPermission = useAppStore().hasPermission(Permission.CourseAdministration);
 
 const showRoomAction = (item: CourseInfoDataResponse) => hasPermission.value && item.id;
-
 const showSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && !item.syncedGroup;
-
 const showEndSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && item.syncedGroup;
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
+const isStartSyncDialogOpen = ref(false);
+const isCourseSyncDialogOpen = ref(false);
+const isEndSyncDialogOpen = ref(false);
+const selectedItem = ref<CourseInfoDataResponse | undefined>();
 
-const isStartSyncDialogOpen: Ref<boolean> = ref(false);
-
-const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
-
-const isEndSyncDialogOpen: Ref<boolean> = ref(false);
-
-const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
-
-const selectedItemName: ComputedRef<string> = computed(() => selectedItem.value?.name || "???");
+const selectedItemName = computed(() => selectedItem.value?.name || "???");
 
 const joinNamesList = (names: string[]) => {
 	if (names.length === 0) return;
@@ -308,14 +276,23 @@ const onClickEndSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 	isEndSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedCourse: CourseInfoDataResponse) => {
+const onClickDeleteIcon = async (selectedCourse: CourseInfoDataResponse) => {
 	selectedItem.value = selectedCourse;
-	isDeleteDialogOpen.value = true;
-};
 
-const onCancelCourseDeletion = () => {
-	selectedItem.value = undefined;
-	isDeleteDialogOpen.value = false;
+	const shouldDelete = await askConfirmation({
+		message: t("pages.administration.courses.deleteDialog.content", {
+			itemName: selectedItemName.value,
+		}),
+		confirmActionLangKey: "common.actions.delete",
+	});
+	logger.log("shouldDelete", shouldDelete);
+
+	if (shouldDelete) {
+		await deleteCourseAndReload();
+	} else {
+		logger.log("cancel");
+		selectedItem.value = undefined;
+	}
 };
 
 const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
@@ -364,7 +341,7 @@ const onConfirmSynchronizeCourse = async () => {
 	await loadCourseList();
 };
 
-const onConfirmCourseDeletion = async () => {
+const deleteCourseAndReload = async () => {
 	if (selectedItem.value) {
 		await deleteCourse(selectedItem.value.id);
 	}
