@@ -1,5 +1,12 @@
 <template>
-	<Dialog v-model="isDialogOpen" :title :confirm-btn-lang-key data-testid="confirmation-dialog">
+	<Dialog
+		v-model="isDialogOpen"
+		:title
+		:confirm-btn-lang-key
+		data-testid="confirmation-dialog"
+		@confirm="confirm"
+		@cancel="cancel"
+	>
 		<template #content>
 			<div v-if="$slots.alert" class="alert-text">
 				<slot name="alert" />
@@ -13,7 +20,7 @@ import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import { Dialog } from "@ui-dialog";
 import { computed } from "vue";
 
-const { dialogOptions, isDialogOpen } = useInternalConfirmationDialog();
+const { confirm, cancel, dialogOptions, isDialogOpen } = useInternalConfirmationDialog();
 
 const title = computed(() => (dialogOptions.value ? dialogOptions.value.message : ""));
 
