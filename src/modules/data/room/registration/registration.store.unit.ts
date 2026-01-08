@@ -12,6 +12,7 @@ import {
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { AxiosPromise } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
@@ -275,18 +276,13 @@ describe("registration.store", () => {
 				const registrations = registrationFactory.buildList(2);
 				const { registrationStore, roomDetailsStore } = setup({ registrations });
 
-				registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
-				registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce({});
 
 				await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
 
-				expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
-					registrations[0].id,
-					roomDetailsStore.room?.id
-				);
-				expect(registrationApi.registrationControllerResendRegistrationMail).toHaveBeenCalledWith(
-					registrations[1].id,
-					roomDetailsStore.room?.id
+				expect(registrationApi.registrationControllerResendRegistrationMails).toHaveBeenCalledWith(
+					roomDetailsStore.room?.id,
+					{ registrationIds: [registrations[0].id, registrations[1].id] }
 				);
 			});
 
@@ -294,28 +290,27 @@ describe("registration.store", () => {
 				const registrations = registrationFactory.buildList(1);
 				const { registrationStore, roomDetailsStore } = setup({ registrations });
 
-				registrationApi.registrationControllerResendRegistrationMail.mockResolvedValueOnce({});
+				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce({
+					data: { data: registrations },
+				} as unknown as AxiosPromise<serverApi.RegistrationListResponse>);
+				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(registrations);
 
 				await registrationStore.resendInvitations([registrations[0].id]);
 
 				expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
 			});
-		});
 
-		describe("when resentAt is within 2 minutes", () => {
-			it("does not resend invitations and notifies as info", async () => {
-				const now = new Date();
-				const oneMinuteAgo = new Date(now.getTime() - 1 * 60 * 1000).toISOString();
-
-				const registrations = registrationFactory.buildList(1, {
-					resentAt: oneMinuteAgo,
-				});
+			it("notifies about success", async () => {
+				const registrations = registrationFactory.buildList(2);
 				const { registrationStore } = setup({ registrations });
 
-				await registrationStore.resendInvitations([registrations[0].id]);
+				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce({
+					data: { data: registrations },
+				} as unknown as AxiosPromise<serverApi.RegistrationListResponse>);
 
-				expect(registrationApi.registrationControllerResendRegistrationMail).not.toHaveBeenCalled();
-				expectNotification("info");
+				await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
+
+				expectNotification("success");
 			});
 		});
 
@@ -324,7 +319,7 @@ describe("registration.store", () => {
 				const registrations = registrationFactory.buildList(1);
 				const { registrationStore } = setup({ registrations });
 
-				registrationApi.registrationControllerResendRegistrationMail.mockRejectedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerResendRegistrationMails.mockRejectedValueOnce(new Error("Error"));
 
 				await registrationStore.resendInvitations([registrations[0].id]);
 

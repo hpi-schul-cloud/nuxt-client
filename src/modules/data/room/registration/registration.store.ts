@@ -119,19 +119,17 @@ export const useRegistrationStore = defineStore("registration", () => {
 		try {
 			if (!roomId.value) return;
 
-			const allowedIds = invitationIds.filter((id) => canResendRegistration(id));
-			if (allowedIds.length === 0) {
-				notifyInfo(t("pages.registrationExternalMembers.info.tooManyResendRequests"), false);
+			const resentInvitations = await registrationApi.registrationControllerResendRegistrationMails(roomId.value, {
+				registrationIds: invitationIds,
+			});
+			const resentIds = resentInvitations.data.data.map((invitation) => invitation.id);
+			if (resentIds.length === 0) {
+				notifyInfo(t("pages.registrationExternalMembers.info.invitationRecentlySent"), false);
 				return;
 			}
-
-			const Promises = invitationIds.map((id) =>
-				registrationApi.registrationControllerResendRegistrationMail(id, roomId.value!)
-			);
-			await Promise.all(Promises);
 			await fetchRegistrationsForCurrentRoom();
 			selectedIds.value = [];
-			if (allowedIds.length > 1) {
+			if (resentIds.length > 1) {
 				notifySuccess(t("pages.rooms.members.registrations.resend.success.multiple"));
 			} else {
 				notifySuccess(t("pages.rooms.members.registrations.resend.success.single"));
@@ -139,20 +137,6 @@ export const useRegistrationStore = defineStore("registration", () => {
 		} catch {
 			notifyError(t("pages.registrationExternalMembers.error.failedResendInvitations"), false);
 		}
-	};
-
-	const canResendRegistration = (registrationId: string): boolean => {
-		const registration = getRegistrationById(registrationId);
-		if (!registration) return false;
-
-		if (!registration.resentAt) return true;
-
-		const lastResend = new Date(registration.resentAt).getTime();
-		const now = Date.now();
-		const TWO_MINUTES_MS = 2 * 60 * 1000;
-
-		const twoMinutesHavePassed = now - lastResend >= TWO_MINUTES_MS;
-		return twoMinutesHavePassed;
 	};
 
 	const resetStore = () => {
