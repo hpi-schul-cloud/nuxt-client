@@ -18,6 +18,7 @@ describe("@feature-room/RoomGrid", () => {
 		const wrapper = mount(RoomGrid, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { RoomGridItem: true },
 			},
 			props: { rooms },
 		});
