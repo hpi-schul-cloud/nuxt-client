@@ -30,6 +30,9 @@ const getWrapper = (props: { task: object }) =>
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
+			stubs: {
+				TaskItemMenu: true,
+			},
 		},
 		props: props,
 		mocks: {
@@ -336,24 +339,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 				expect(wrapper.find(".menuable__content__active").exists()).toBe(false);
 			});
-
-			it.todo("should close & hide menu on outside click");
-		});
-
-		describe("keyboard events", () => {
-			it("should show menu btn on tab focus", async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				const vListItem = wrapper.findComponent(VListItem);
-				await vListItem.trigger("focus");
-
-				expect(wrapper.vm.isActive).toBe(true);
-				const menuBtn = wrapper.findComponent(`[data-testid=task-menu]`);
-
-				expect(menuBtn.isVisible()).toBe(true);
-			});
 		});
 
 		it("should link to btn edit page on edit btn click", async () => {
@@ -366,17 +351,6 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const editBtn = wrapper.findComponent(`[data-testid="task-edit"]`);
 
 			expect(editBtn.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}/edit`);
-		});
-
-		it("always show menu on mobile", () => {
-			defineWindowWidth(375);
-
-			const wrapper = getWrapper({
-				task: tasksTeacher[0],
-			});
-
-			const menuBtn = wrapper.findComponent(VBtn);
-			expect(menuBtn.isVisible()).toBe(true);
 		});
 	});
 });

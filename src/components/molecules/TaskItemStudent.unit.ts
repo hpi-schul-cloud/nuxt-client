@@ -30,6 +30,9 @@ const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) =>
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
+			stubs: {
+				TaskItemMenu: true,
+			},
 		},
 		props,
 		mocks: {
