@@ -1013,7 +1013,6 @@ export default {
 	"pages.administration.classes.createSuccessor": "Перенести клас на наступний навчальний рік",
 	"pages.administration.classes.delete": "Видалити клас",
 	"pages.administration.classes.deleteDialog.content": 'Ви впевнені, що хочете видалити клас "{itemName}"?',
-	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
 	"pages.administration.common.hint":
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",

@@ -175,7 +175,6 @@ import { useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { mdiAlert, mdiCheck, mdiPencilOutline, mdiSync, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import { logger } from "@util-logger";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, PropType, ref } from "vue";
@@ -285,12 +284,10 @@ const onClickDeleteIcon = async (selectedCourse: CourseInfoDataResponse) => {
 		}),
 		confirmActionLangKey: "common.actions.delete",
 	});
-	logger.log("shouldDelete", shouldDelete);
 
 	if (shouldDelete) {
 		await deleteCourseAndReload();
 	} else {
-		logger.log("cancel");
 		selectedItem.value = undefined;
 	}
 };

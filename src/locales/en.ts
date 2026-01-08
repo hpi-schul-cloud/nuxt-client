@@ -997,7 +997,6 @@ export default {
 	"pages.administration.classes.createSuccessor": "Move class to the next school year",
 	"pages.administration.classes.delete": "Delete class",
 	"pages.administration.classes.deleteDialog.content": 'Are you sure you want to delete class "{itemName}"?',
-	"pages.administration.classes.deleteDialog.title": "Delete class?",
 	"pages.administration.classes.edit": "Edit class",
 	"pages.administration.common.hint":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
