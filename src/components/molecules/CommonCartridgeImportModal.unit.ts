@@ -21,8 +21,6 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 	});
 
 	const setupWrapper = (getters: Partial<CommonCartridgeImportModule>) => {
-		document.body.setAttribute("data-app", "true");
-
 		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
 			getAllElements: [],
 		});

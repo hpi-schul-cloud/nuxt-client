@@ -37,8 +37,6 @@ describe("ContentElementList", () => {
 		});
 
 		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
-			document.body.setAttribute("data-app", "true");
-
 			const wrapper = shallowMount(ContentElementList, {
 				global: {
 					plugins: [createTestingI18n(), createTestingVuetify()],
@@ -148,8 +146,6 @@ describe("ContentElementList", () => {
 		});
 
 		const setup = (props: { elements: AnyContentElement[]; isEditMode: boolean; isDetailView: boolean }) => {
-			document.body.setAttribute("data-app", "true");
-
 			const wrapper = shallowMount(ContentElementList, {
 				global: {
 					plugins: [createTestingI18n(), createTestingVuetify()],

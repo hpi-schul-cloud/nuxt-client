@@ -8,8 +8,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("ContentElementFooter", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const propsData = {
 			fileProperties: {
 				name: "file-record #1.txt",
