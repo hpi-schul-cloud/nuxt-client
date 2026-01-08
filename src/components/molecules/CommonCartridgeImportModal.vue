@@ -104,8 +104,7 @@ async function onConfirm(): Promise<void> {
 	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
 
 	if (commonCartridgeImportModule.isSuccess) {
-		const title = courseRoomListModule.getAllElements[0]?.title;
-		notifySuccess(i18n.t("pages.rooms.ccImportCourse.success", { name: title }));
+		notifySuccess(i18n.t("pages.rooms.ccImportCourse.success"));
 	} else {
 		notifyError(i18n.t("pages.rooms.ccImportCourse.error"));
 	}
