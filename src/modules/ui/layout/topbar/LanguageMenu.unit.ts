@@ -17,12 +17,18 @@ describe("@ui-layout/LanguageMenu", () => {
 	});
 
 	const setup = (attrs = {}) => {
-		const wrapper = mount(LanguageMenu, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+		const wrapper = mount(
+			{
+				template: `<VList><LanguageMenu/></VList>`,
+				components: { LanguageMenu },
 			},
-			...attrs,
-		});
+			{
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				...attrs,
+			}
+		);
 
 		return { wrapper };
 	};
@@ -37,7 +43,6 @@ describe("@ui-layout/LanguageMenu", () => {
 	describe("with available languages", () => {
 		it("should render the selected language item", () => {
 			const { wrapper } = setup();
-
 			expect(wrapper.find("[data-testid=selected-language-de]").exists()).toBe(true);
 		});
 
