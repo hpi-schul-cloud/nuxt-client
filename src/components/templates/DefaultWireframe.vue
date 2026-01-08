@@ -155,6 +155,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .wireframe-divider {
 	position: sticky;
+	z-index: 100;
 	top: var(--topbar-height);
 }
 
