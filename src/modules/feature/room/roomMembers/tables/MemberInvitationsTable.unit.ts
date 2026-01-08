@@ -9,7 +9,7 @@ import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
 import { nextTick, ref } from "vue";
 import { VDataTable, VTextField } from "vuetify/lib/components/index";
@@ -17,7 +17,9 @@ import { VDataTable, VTextField } from "vuetify/lib/components/index";
 vi.mock("@ui-confirmation-dialog");
 const mockedUseConfirmationDialog = vi.mocked(useConfirmationDialog);
 
-vi.mock("@vueuse/integrations/useFocusTrap");
+vi.mock("@vueuse/integrations/useFocusTrap", () => ({
+	useFocusTrap: vi.fn(),
+}));
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
