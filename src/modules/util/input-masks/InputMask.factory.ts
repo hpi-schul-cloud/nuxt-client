@@ -1,5 +1,5 @@
 import type { MaskInputOptions } from "maska";
-import { vMaska } from "maska";
+import { vMaska } from "maska/vue";
 import { FunctionDirective } from "vue";
 
 /**
@@ -14,7 +14,7 @@ import { FunctionDirective } from "vue";
  */
 export const createInputMask = (options: MaskInputOptions) => {
 	const bindMaska: FunctionDirective<HTMLElement> = (el, binding, vNode, oldVnode) => {
-		const newBinding = { ...binding, arg: options as string };
+		const newBinding = { ...binding, value: options };
 		(vMaska as FunctionDirective<HTMLElement>)(el, newBinding, vNode, oldVnode);
 	};
 

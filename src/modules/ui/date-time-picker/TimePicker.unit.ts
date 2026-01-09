@@ -1,6 +1,7 @@
 import TimePicker from "./TimePicker.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { VTextField } from "vuetify/components";
 
 describe("TimePicker", () => {
 	const mountComponent = (options: ComponentMountingOptions<typeof TimePicker> = {}) =>
@@ -24,6 +25,18 @@ describe("TimePicker", () => {
 			props: { time: "12:30" },
 		});
 		expect(wrapper.findComponent(TimePicker).exists()).toBe(true);
+	});
+
+	it("should format raw numeric input into HH:MM pattern", async () => {
+		const wrapper = mountComponent({
+			props: { time: "" },
+		});
+		const textField = wrapper.findComponent(VTextField);
+		const input = textField.find("input");
+
+		await input.setValue("1230");
+
+		expect(input.element.value).toBe("12:30");
 	});
 
 	describe("when picking a time through typing", () => {
