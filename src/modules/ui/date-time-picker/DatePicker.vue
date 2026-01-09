@@ -22,7 +22,7 @@
 		:close-on-content-click="false"
 		:activator="`#${datePickerId}`"
 	>
-		<UseFocusTrap>
+		<UseFocusTrap :options="{ immediate: true }">
 			<VDatePicker
 				v-model="dateObject"
 				:aria-expanded="showDatePicker"
