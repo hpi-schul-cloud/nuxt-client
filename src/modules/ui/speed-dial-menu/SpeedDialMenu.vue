@@ -16,11 +16,7 @@
 				@click="onFabClick"
 			>
 				<VIcon :icon="fabIcon" />
-				<span
-					id="fab-label"
-					:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"
-					class="d-block"
-				>
+				<span id="fab-label" :aria-label="activatorAriaText" class="d-block">
 					{{ !isCollapsed ? primaryAction.label : "" }}
 				</span>
 			</VFab>
@@ -48,6 +44,9 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const closeAriaText = t("common.labels.close");
+const activatorAriaText = computed(() =>
+	isCollapsed.value ? closeAriaText : (primaryAction.value.ariaLabel ?? primaryAction.value.label)
+);
 const primaryAction = computed(() => props.actions[0]);
 const speedDialActions = computed(() => props.actions.slice(1));
 const fabIcon = computed(() => (isSpeedDial.value && isSpeedDialOpen.value ? mdiClose : primaryAction.value.icon));

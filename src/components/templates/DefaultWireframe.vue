@@ -11,9 +11,7 @@
 				</h1>
 			</slot>
 		</div>
-
 		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
-
 		<div
 			v-if="fabItems"
 			class="wireframe-menu-container d-flex align-center"
