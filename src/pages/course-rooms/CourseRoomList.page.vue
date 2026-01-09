@@ -38,7 +38,7 @@
 							md="3"
 							sm="3"
 						>
-							<RoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
+							<CourseRoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
 						</v-col>
 					</v-row>
 				</v-container>
@@ -59,7 +59,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		CourseRoomWrapper,
-		RoomAvatar: CourseRoomAvatar,
+		CourseRoomAvatar,
 	},
 	data() {
 		return {

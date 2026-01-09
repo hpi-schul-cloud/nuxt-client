@@ -1,6 +1,6 @@
 import BorderlessLayout from "./Borderless.layout.vue";
 import AlertContainer from "./components/AlertContainer.vue";
-import ApplicationError from "@/layouts/components/ApplicationError.vue";
+import ApplicationError from "./components/ApplicationError.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";

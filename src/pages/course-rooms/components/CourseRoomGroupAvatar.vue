@@ -34,7 +34,7 @@
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="$emit('clicked', data.id)"
 			>
-				<room-avatar-iterator
+				<CourseRoomAvatarIterator
 					ref="avatar-iterator"
 					:avatars="data.groupElements"
 					condense-layout
@@ -58,7 +58,7 @@ import { mdiLock } from "@icons/material";
 
 export default {
 	components: {
-		RoomAvatarIterator: CourseRoomAvatarIterator,
+		CourseRoomAvatarIterator,
 	},
 	props: {
 		data: {

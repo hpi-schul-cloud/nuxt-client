@@ -68,7 +68,7 @@ const mockData: CourseMetadataResponse[] = [
 	},
 ];
 
-describe("@templates/CourseRoomWrapper.vue", () => {
+describe("CourseRoomWrapper.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({

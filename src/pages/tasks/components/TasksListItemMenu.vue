@@ -111,8 +111,8 @@
 
 <script>
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy.ts";
-import { finishedTasksModule } from "@/store/index.ts";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiArchiveOutline,

@@ -89,7 +89,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<admin-migration-section />
+						<SchoolAdminMigrationSection />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -159,7 +159,7 @@ export default defineComponent({
 		DefaultWireframe,
 		ExternalToolsSection,
 		SchoolYearChangeSection,
-		AdminMigrationSection: SchoolAdminMigrationSection,
+		SchoolAdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicy,
 		SchoolTermsOfUse,

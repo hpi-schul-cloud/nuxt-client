@@ -98,7 +98,7 @@
 		/>
 	</div>
 
-	<migration-warning-card
+	<SchoolMigrationWarningCard
 		v-if="isStartWarningVisible"
 		value="start"
 		data-testid="migration-start-warning-card"
@@ -106,7 +106,7 @@
 		@set="onStartMigration()"
 	/>
 
-	<migration-warning-card
+	<SchoolMigrationWarningCard
 		v-if="isEndWarningVisible"
 		value="end"
 		data-testid="migration-end-warning-card"
@@ -197,7 +197,7 @@ import { useI18n } from "vue-i18n";
 export default defineComponent({
 	name: "SchoolAdminMigrationSection",
 	components: {
-		MigrationWarningCard: SchoolMigrationWarningCard,
+		SchoolMigrationWarningCard,
 		InfoAlert,
 	},
 	setup() {
@@ -275,7 +275,7 @@ export default defineComponent({
 			return false;
 		});
 
-		const latestMigration: ComputedRef<string> = computed(() => {
+		const latestMigration = computed(() => {
 			if (isGracePeriodExpired.value) {
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
 			} else {

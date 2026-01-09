@@ -64,7 +64,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-		<CommonCartridgeExportModal />
+		<CourseCommonCartridgeExportModal />
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
@@ -141,7 +141,7 @@ export default defineComponent({
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
-		CommonCartridgeExportModal: CourseCommonCartridgeExportModal,
+		CourseCommonCartridgeExportModal,
 		SelectBoardLayoutDialog,
 		CourseRoomLockedPage,
 	},

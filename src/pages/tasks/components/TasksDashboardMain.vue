@@ -81,8 +81,8 @@ import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { Permission, RoleName } from "@/serverApi/v3/index.ts";
-import { COPY_MODULE_KEY } from "@/utils/inject/index.ts";
+import { Permission, RoleName } from "@/serverApi/v3";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { useAppStore } from "@data-app";
 import {
 	mdiArchiveOutline,
