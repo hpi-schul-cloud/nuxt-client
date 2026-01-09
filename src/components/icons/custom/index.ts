@@ -1,9 +1,5 @@
-import brb from "./brb.vue";
 import classIcon from "./class.vue";
-import dBildungscloud from "./dBildungscloud.vue";
 import filePdfOutline from "./file-pdf-outline.vue";
-import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
-import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
 import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
 import folderOpenUserOutline from "./folder_open_user_outline.vue";
 import gridOutline from "./grid-outline.vue";
@@ -47,12 +43,8 @@ import { Component } from "vue";
 // TODO: Remove custom icons and use only standardized icons from the design system
 
 const customAliases: Record<string, Component> = {
-	brb: brb,
 	class: classIcon,
-	dBildungscloud: dBildungscloud,
 	file_pdf_outline: filePdfOutline,
-	folder_open_courses_outline: folderOpenCoursesOutline,
-	folder_open_shared_outline: folderOpenSharedOutline,
 	folder_open_teams_outline: folderOpenTeamsOutline,
 	folder_open_user_outline: folderOpenUserOutline,
 	gridOutline: gridOutline,
