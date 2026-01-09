@@ -15,7 +15,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { VAlert, VRadio, VRadioGroup } from "vuetify/lib/components/index";

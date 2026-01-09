@@ -2,6 +2,7 @@ import { useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-axios-error";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -10,6 +11,7 @@ describe("useSafeTask", () => {
 
 	beforeEach(() => {
 		task = useSafeTask();
+		vi.spyOn(logger, "error").mockImplementation(vi.fn());
 	});
 
 	describe("Pattern 1: Async function with internal await", () => {

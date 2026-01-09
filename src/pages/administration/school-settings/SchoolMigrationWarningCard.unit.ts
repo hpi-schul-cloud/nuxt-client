@@ -9,15 +9,14 @@ describe("MigrationWarningCard", () => {
 	});
 
 	const setup = (value = "start") => {
-		document.body.setAttribute("data-app", "true");
 		const wrapper = mount(SchoolMigrationWarningCard, {
-			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
-			},
-			propsData: {
-				value,
-			},
-		});
+      global: {
+        plugins: [createTestingI18n(), createTestingVuetify()],
+      },
+      propsData: {
+        value,
+      },
+    });
 
 		return { wrapper };
 	};

@@ -30,8 +30,6 @@ describe("SchoolAdminMigrationSection", () => {
 		userLoginMigrationGetters: Partial<UserLoginMigrationModule> = {},
 		envConfig?: Partial<ConfigResponse>
 	) => {
-		document.body.setAttribute("data-app", "true");
-
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getUserLoginMigration: {
 				sourceSystemId: "sourceSystemId",

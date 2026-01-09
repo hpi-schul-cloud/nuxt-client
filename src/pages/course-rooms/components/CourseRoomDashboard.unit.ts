@@ -143,8 +143,6 @@ describe("@/components/templates/CourseRoomDashboard.vue", () => {
 			FEATURE_LESSON_SHARE: true,
 			FEATURE_TASK_SHARE: true,
 		});
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			courseRoomDetailsModule: CourseRoomDetailsModule,
 			copyModule: CopyModule,

@@ -1,8 +1,9 @@
 import { createInputMask } from "./InputMask.factory";
-import { MaskInputOptions, vMaska } from "maska";
+import type { MaskInputOptions } from "maska";
+import { vMaska } from "maska/vue";
 import { DirectiveBinding, FunctionDirective, VNode } from "vue";
 
-vi.mock("maska");
+vi.mock("maska/vue");
 
 const maskaDirectiveMock = {
 	element: {} as unknown as HTMLElement,
@@ -41,6 +42,6 @@ describe("InputMask.factory", () => {
 			maskaDirectiveMock.vnode,
 			maskaDirectiveMock.oldVnode
 		);
-		expect(mockedMaska).toHaveBeenCalledWith({}, { arg: options }, {}, {});
+		expect(mockedMaska).toHaveBeenCalledWith({}, { value: options }, {}, {});
 	});
 });

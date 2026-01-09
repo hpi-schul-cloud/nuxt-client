@@ -26,8 +26,6 @@ describe("CollaboraFileDialog", () => {
 
 	describe("when isCollaboraFileDialogOpen is false", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			setupMocks();
 
 			const wrapper = mount(AddCollaboraFileDialog, {
@@ -55,8 +53,6 @@ describe("CollaboraFileDialog", () => {
 
 	describe("when isCollaboraFileDialogOpen is changed from false to true", () => {
 		const setup = async () => {
-			document.body.setAttribute("data-app", "true");
-
 			const { isCollaboraFileDialogOpen, closeCollaboraFileDialog } = setupMocks();
 
 			const wrapper = mount(AddCollaboraFileDialog, {

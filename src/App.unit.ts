@@ -62,6 +62,7 @@ describe("App.vue", () => {
 		});
 
 		const wrapper = mount(App, {
+			shallow: true,
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -72,6 +73,9 @@ describe("App.vue", () => {
 						name: SchulcloudTheme.Default,
 					},
 					loadingStateModule: loadingStateModuleMock,
+				},
+				stubs: {
+					RouterView: true,
 				},
 			},
 		});
