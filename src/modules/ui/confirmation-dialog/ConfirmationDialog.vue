@@ -8,9 +8,7 @@
 		@cancel="cancel"
 	>
 		<template #content>
-			<div v-if="$slots.alert" class="alert-text">
-				<slot name="alert" />
-			</div>
+			<slot />
 		</template>
 	</Dialog>
 </template>
