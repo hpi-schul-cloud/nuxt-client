@@ -28,7 +28,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
 import { computed, nextTick, Ref, ref } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/lib/components/index";

@@ -1576,6 +1576,10 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.404":
+		"No se han podido recuperar los datos de registro. Ponte en contacto con la escuela.",
+	"pages.registrationExternalMembers.error":
+		"No se han podido recuperar los datos de registro. Inténtalo de nuevo más tarde.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instanceTitle}.",
