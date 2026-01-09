@@ -15,7 +15,7 @@
 				:data-testid="primaryAction.dataTestId"
 				@click="onFabClick"
 			>
-				<VIcon>{{ fabIcon }}</VIcon>
+				<VIcon :icon="fabIcon" />
 				<span
 					id="fab-label"
 					:aria-label="isCollapsed ? closeAriaText : (primaryAction.ariaLabel ?? primaryAction.label)"

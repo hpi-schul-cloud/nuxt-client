@@ -91,14 +91,14 @@ describe("SpeedDialMenu", () => {
 			expect(buttons).toHaveLength(7);
 		});
 
-		it("should render close btn while open", async () => {
+		it("should render empty text while open", async () => {
 			const { wrapper } = setup({ actions: multipleActions });
 
 			await toggleSpeedDialMenu(wrapper);
 			const fab = wrapper.findComponent(VFab);
 
 			expect(fab.findComponent(VIcon).exists()).toBe(true);
-			expect(fab.find("#fab-label").exists()).toBe(false);
+			expect(fab.find("#fab-label").text()).toBe("");
 		});
 
 		it("should render a SpeedDialMenuAction component per action", async () => {
