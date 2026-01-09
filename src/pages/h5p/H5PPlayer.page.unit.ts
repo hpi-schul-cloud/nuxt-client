@@ -22,7 +22,7 @@ describe("H5PPlayerPage", () => {
 
 	const getWrapper = (
 		props: ComponentProps<typeof H5pPlayerPage> = {
-			parentType: H5PContentParentType.LESSONS,
+			parentType: H5PContentParentType.BOARD_ELEMENT,
 			contentId: "contentId",
 		}
 	) => {
