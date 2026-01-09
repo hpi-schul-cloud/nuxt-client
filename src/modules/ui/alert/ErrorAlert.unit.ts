@@ -5,8 +5,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("ErrorAlert", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const slot = "TestSlot";
 		const wrapper = shallowMount(ErrorAlert, {
 			slots: {

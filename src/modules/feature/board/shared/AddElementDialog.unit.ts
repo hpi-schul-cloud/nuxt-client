@@ -26,8 +26,6 @@ describe("ElementTypeSelection", () => {
 
 	describe("when isDialogOpen is false", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			setupMocks();
 
 			const wrapper = mount(AddElementDialog, {
@@ -50,8 +48,6 @@ describe("ElementTypeSelection", () => {
 
 	describe("when isDialogOpen is changed from false to true", () => {
 		const setup = async () => {
-			document.body.setAttribute("data-app", "true");
-
 			const { isDialogOpen, staticElementTypeOptions, closeDialog } = setupMocks();
 
 			const wrapper = mount(AddElementDialog, {
@@ -100,8 +96,6 @@ describe("ElementTypeSelection", () => {
 
 	describe("when the dynamic options had changed while the dialog is opened", () => {
 		const setup = async () => {
-			document.body.setAttribute("data-app", "true");
-
 			const { isDialogOpen, dynamicElementTypeOptions } = setupMocks();
 
 			type AddElementDialogWrapper<T> = VueWrapper<ComponentPublicInstance & T>;
