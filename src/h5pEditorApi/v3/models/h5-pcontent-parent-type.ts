@@ -20,7 +20,6 @@
  * @enum {string}
  */
 export enum H5PContentParentType {
-    LESSONS = 'lessons',
     BOARD_ELEMENT = 'board-element'
 }
 

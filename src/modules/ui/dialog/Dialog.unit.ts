@@ -51,7 +51,7 @@ describe("Dialog", () => {
 
 				await dialog.vm.$emit("update:modelValue", false);
 
-				expect(wrapper.emitted("update:is-dialog-open")).toBeTruthy();
+				expect(wrapper.emitted("update:is-dialog-open")).toHaveLength(1);
 				expect(wrapper.emitted("update:is-dialog-open")?.[0]).toEqual([false]);
 			});
 		});
@@ -64,7 +64,7 @@ describe("Dialog", () => {
 
 				await cancelButton.trigger("click");
 
-				expect(wrapper.emitted("cancel")).toBeTruthy();
+				expect(wrapper.emitted("cancel")).toHaveLength(1);
 			});
 		});
 
@@ -76,18 +76,17 @@ describe("Dialog", () => {
 
 				await confirmButton.trigger("click");
 
-				expect(wrapper.emitted("confirm")).toBeTruthy();
+				expect(wrapper.emitted("confirm")).toHaveLength(1);
 			});
 		});
 
 		describe("when the dialog has finished transition out", () => {
-			it("should emit after-leave", async () => {
+			it("should emit after-leave", () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(VDialog);
-				await dialog.vm.$emit("after-leave");
+				wrapper.vm.$emit("after-leave");
 
-				expect(wrapper.emitted("after-leave")).toBeTruthy();
+				expect(wrapper.emitted("after-leave")).toHaveLength(1);
 			});
 		});
 	});
