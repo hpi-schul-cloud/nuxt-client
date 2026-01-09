@@ -1,7 +1,7 @@
 <template>
 	<VDialog
 		v-model="isOpen"
-		:data-testid="attrs['data-testid'] ?? 'dialog'"
+		:data-testid="attrs['data-testid'] ?? identifier"
 		:max-width="480"
 		:aria-labelledby="`dialog-${uid}-title`"
 		@after-leave="onAfterLeave"
@@ -9,7 +9,7 @@
 		<UseFocusTrap>
 			<VCard :loading>
 				<template #title>
-					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${identifier}-dialog-title`">
+					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${identifier}-title`">
 						{{ title }}
 					</h2>
 				</template>
@@ -23,14 +23,14 @@
 						<VSpacer />
 						<div class="d-flex ga-2">
 							<VBtn
-								:data-testid="`${identifier}-dialog-cancel`"
+								:data-testid="`${identifier}-cancel`"
 								:disabled="areActionsDisabled"
 								variant="text"
 								:text="t('common.actions.cancel')"
 								@click="onCancel"
 							/>
 							<VBtn
-								:data-testid="`${identifier}-dialog-confirm`"
+								:data-testid="`${identifier}-confirm`"
 								class="px-6"
 								color="primary"
 								variant="flat"
@@ -54,7 +54,7 @@ import { useI18n } from "vue-i18n";
 import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 const props = defineProps({
-	identifier: { type: String, required: false, default: undefined },
+	identifier: { type: String, required: false, default: "dialog" },
 	title: { type: String, required: true },
 	loading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },

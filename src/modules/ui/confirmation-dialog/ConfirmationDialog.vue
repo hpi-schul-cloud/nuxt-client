@@ -3,7 +3,7 @@
 		v-model="isDialogOpen"
 		:title
 		:confirm-btn-lang-key
-		data-testid="confirmation-dialog"
+		identifier="confirmation-dialog"
 		@confirm="confirm"
 		@cancel="cancel"
 	>

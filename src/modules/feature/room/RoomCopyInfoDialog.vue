@@ -3,8 +3,7 @@
 		v-model="isOpen"
 		:title="t('feature-room.CopyInfoDialog.title')"
 		:confirm-btn-lang-key="'common.actions.duplicate'"
-		identifier="copy-info"
-		data-testid="copy-info-dialog"
+		identifier="copy-info-dialog"
 		@cancel="emit('copy:cancel')"
 		@confirm="emit('copy:confirm')"
 	>

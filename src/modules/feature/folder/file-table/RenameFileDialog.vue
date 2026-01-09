@@ -3,6 +3,7 @@
 		v-model="isDialogOpen"
 		:title="t('ui.rename.dialog.title', { entity: entityName })"
 		:confirm-btn-disabled="!isNameValid"
+		identifier="rename-file-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 	>

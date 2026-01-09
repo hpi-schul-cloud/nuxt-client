@@ -6,7 +6,7 @@
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
 		:loading="isMoving"
-		data-testid="move-card-dialog"
+		identifier="move-card-dialog"
 		@confirm="onConfirm"
 		@cancel="isDialogOpen = false"
 	>
@@ -14,11 +14,9 @@
 			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
-
 			<p class="text-lg mt-2" data-testid="move-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
-
 			<VForm id="moveCardForm" data-testid="move-card-form">
 				<VSelect
 					v-model="selectedRoomId"
