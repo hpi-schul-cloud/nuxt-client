@@ -1,36 +1,38 @@
 <template>
-	<DataTable
-		:items="registrationTableData"
-		:table-headers="tableHeaders"
-		:show-select="true"
-		:external-selected-ids="selectedIds"
-		data-testid="participant-invitations-table"
-		select-item-key="id"
-		aria-label-name-key="email"
-		@update:selected-ids="onUpdateSelectedIds"
-	>
-		<template #[`item.updatedAt`]="{ item }">
-			<span class="text-no-wrap">
-				{{ formatDate(item.updatedAt) }}
-			</span>
-		</template>
-		<template #[`action-menu-items`]>
-			<KebabMenuActionResendInvitation @click="onResendInvitation(selectedIds)" />
-			<KebabMenuActionRemoveInvitation @click="onRemoveInvitation(selectedIds)" />
-		</template>
-		<template #[`item.actions`]="{ item, index }">
-			<KebabMenu :data-testid="`kebab-menu-${index}`" :aria-label="getAriaLabel(item)">
-				<KebabMenuActionResendInvitation
-					:aria-label="getAriaLabel(item, 'resend')"
-					@click="onResendInvitation([item.id])"
-				/>
-				<KebabMenuActionRemoveInvitation
-					:aria-label="getAriaLabel(item, 'remove')"
-					@click="onRemoveInvitation([item.id])"
-				/>
-			</KebabMenu>
-		</template>
-	</DataTable>
+	<div class="member-invitations-table">
+		<DataTable
+			:items="registrationTableData"
+			:table-headers="tableHeaders"
+			:show-select="true"
+			:external-selected-ids="selectedIds"
+			data-testid="participant-invitations-table"
+			select-item-key="id"
+			aria-label-name-key="email"
+			@update:selected-ids="onUpdateSelectedIds"
+		>
+			<template #[`item.updatedAt`]="{ item }">
+				<span class="text-no-wrap">
+					{{ formatDate(item.updatedAt) }}
+				</span>
+			</template>
+			<template #[`action-menu-items`]>
+				<KebabMenuActionResendInvitation @click="onResendInvitation(selectedIds)" />
+				<KebabMenuActionRemoveInvitation @click="onRemoveInvitation(selectedIds)" />
+			</template>
+			<template #[`item.actions`]="{ item, index }">
+				<KebabMenu :data-testid="`kebab-menu-${index}`" :aria-label="getAriaLabel(item)">
+					<KebabMenuActionResendInvitation
+						:aria-label="getAriaLabel(item, 'resend')"
+						@click="onResendInvitation([item.id])"
+					/>
+					<KebabMenuActionRemoveInvitation
+						:aria-label="getAriaLabel(item, 'remove')"
+						@click="onRemoveInvitation([item.id])"
+					/>
+				</KebabMenu>
+			</template>
+		</DataTable>
+	</div>
 	<ConfirmationDialog />
 </template>
 
@@ -113,6 +115,15 @@ const tableHeaders = computed(() => [
 	{
 		title: t("pages.rooms.members.tableHeader.actions"),
 		key: "actions",
+		sortable: false,
+		width: 50,
+		align: "center",
 	},
 ]);
 </script>
+
+<style lang="scss" scoped>
+.member-invitations-table :deep(.table-title-header.pt-7) {
+	padding-top: 8px !important;
+}
+</style>
