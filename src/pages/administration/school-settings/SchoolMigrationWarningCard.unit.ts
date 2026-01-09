@@ -10,13 +10,13 @@ describe("MigrationWarningCard", () => {
 
 	const setup = (value = "start") => {
 		const wrapper = mount(SchoolMigrationWarningCard, {
-      global: {
-        plugins: [createTestingI18n(), createTestingVuetify()],
-      },
-      propsData: {
-        value,
-      },
-    });
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			propsData: {
+				value,
+			},
+		});
 
 		return { wrapper };
 	};
