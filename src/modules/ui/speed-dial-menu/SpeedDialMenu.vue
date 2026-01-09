@@ -62,7 +62,7 @@ const forceCollapseOnMobileScroll = ref(false);
 const isCollapsed = computed(() => isSpeedDialOpen.value || forceCollapseOnMobileScroll.value);
 
 const onFabClick = () => {
-	if (primaryAction.value.clickHandler) primaryAction.value.clickHandler();
+	if (primaryAction.value.clickHandler && !isSpeedDial.value) primaryAction.value.clickHandler();
 };
 
 watchThrottled(
