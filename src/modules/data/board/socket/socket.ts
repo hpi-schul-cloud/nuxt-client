@@ -21,6 +21,7 @@ export const resetSocketStateForTesting = (initialRetryCount = 0) => {
 	instance = null;
 	dispatchHandlers.length = 0;
 	retryCount = initialRetryCount;
+	isInitialConnection = true;
 };
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {

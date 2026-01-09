@@ -4,7 +4,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("BoardColumnInteractionHandler", () => {
 	const setup = (props: { isEditMode: boolean }) => {
-		document.body.setAttribute("data-app", "true");
 		const wrapper = shallowMount(BoardColumnInteractionHandler, {
 			slots: {
 				default: `<button data-testid="button">Menu representative</button>`,

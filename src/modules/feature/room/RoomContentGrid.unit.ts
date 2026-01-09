@@ -20,6 +20,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		const wrapper = mount(RoomContentGrid, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { RoomContentGridItem: true },
 			},
 			props: {
 				roomId: "test-room",

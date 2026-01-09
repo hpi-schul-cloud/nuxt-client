@@ -6,7 +6,7 @@ import { useRegistration } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { VCheckbox } from "vuetify/components";
 
 vi.mock("@data-room/registration/registration.composable");
@@ -21,15 +21,17 @@ describe("Consent.vue", () => {
 		useRegistrationMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(""),
+			hasApiErrorOccurred: ref(false),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
-			fullName: ref("Max Mustermann"),
+			fullName: computed(() => "Max Mustermann"),
 			fetchUserData: vi.fn(),
 			createAccount: vi.fn(),
-			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
+			registrationSecret: ref<string>(""),
+			userData: ref({ firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" }),
 		});
 		createTestEnvStore({
 			SC_THEME: theme ?? SchulcloudTheme.Default,
