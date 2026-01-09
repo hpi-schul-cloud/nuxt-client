@@ -1,17 +1,5 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		data-testid="copy-dialog"
-		:size="480"
-		has-buttons
-		:buttons="['close']"
-		@dialog-closed="onDialogClosed"
-	>
-		<template #title>
-			<h2 class="mt-2 wordbreak-normal">
-				{{ $t("components.molecules.copyResult.title.partial") }}
-			</h2>
-		</template>
+	<Dialog :model-value="isOpen" :title="$t('components.molecules.copyResult.title.partial')" data-testid="copy-dialog">
 		<template #content>
 			<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
 				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
@@ -30,14 +18,23 @@
 				</ul>
 			</WarningAlert>
 		</template>
-	</CustomDialog>
+		<template #actions>
+			<VSpacer />
+			<VBtn
+				data-testid="copy-dialog-close-btn"
+				variant="outlined"
+				:text="t('common.labels.close')"
+				@click="emit('copy-dialog-closed')"
+			/>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
+import { Dialog } from "@ui-dialog";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -72,10 +69,6 @@ const hasElementOfType = (items: CopyResultItem[], types: CopyApiResponseTypeEnu
 		found = item.elements.find((e) => types.includes(e.type)) !== undefined;
 	});
 	return found;
-};
-
-const onDialogClosed = () => {
-	emit("copy-dialog-closed");
 };
 
 const items = computed(() => props.copyResultItems);
@@ -138,13 +131,3 @@ const hasExternalToolElement = computed(() =>
 	hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalToolElement)
 );
 </script>
-
-<style scoped lang="scss">
-.wordbreak-normal {
-	word-break: normal;
-}
-
-.aligned-with-icon {
-	padding-top: 4px;
-}
-</style>
