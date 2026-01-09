@@ -111,6 +111,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 				notifySuccess(t("pages.rooms.members.registrations.remove.success.single"));
 			}
 		} catch {
+			await fetchRegistrationsForCurrentRoom();
 			notifyError(t("pages.registrationExternalMembers.error.failedRemoveInvitations"), false);
 		}
 	};

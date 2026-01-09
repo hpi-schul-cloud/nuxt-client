@@ -189,6 +189,16 @@ describe("registration.store", () => {
 				await registrationStore.removeInvitations(["random-registration-id"]);
 				expectNotification("error");
 			});
+
+			it("fetches current registrations anew after error", async () => {
+				const { registrationStore, roomDetailsStore } = setup();
+
+				registrationApi.registrationControllerCancelRegistrations.mockRejectedValueOnce(new Error("Error"));
+
+				await registrationStore.removeInvitations(["random-registration-id"]);
+
+				expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+			});
 		});
 	});
 
