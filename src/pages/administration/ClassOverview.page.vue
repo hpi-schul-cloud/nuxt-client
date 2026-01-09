@@ -280,8 +280,6 @@ const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.typ
 
 const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Group;
 
-const isDeleteDialogOpen = ref(false);
-
 const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
