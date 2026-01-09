@@ -8,7 +8,7 @@
 	>
 		<UseFocusTrap>
 			<VCard :loading>
-				<template #title>
+				<template v-if="title" #title>
 					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${identifier}-title`">
 						{{ title }}
 					</h2>
@@ -55,7 +55,7 @@ import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 const props = defineProps({
 	identifier: { type: String, required: false, default: "dialog" },
-	title: { type: String, required: true },
+	title: { type: String, default: undefined },
 	loading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, required: false, default: false },
