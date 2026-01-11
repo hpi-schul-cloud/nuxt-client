@@ -14,11 +14,11 @@
 		<MembersTable v-if="!isLoadingMembers" :header-bottom="headerBottom" />
 	</div>
 
-	<div>
+	<div v-if="!isLoadingInvitations && canManageRoomInvitationLinks">
 		<h2 class="mb-0">
 			{{ t("pages.rooms.members.title.invitations") }}
 		</h2>
-		<MemberInvitationsTable v-if="!isLoadingInvitations && canManageRoomInvitationLinks" />
+		<MemberInvitationsTable />
 	</div>
 </template>
 

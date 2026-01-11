@@ -270,7 +270,11 @@ onMounted(async () => {
 		router.replace("/rooms");
 		return;
 	}
-	await Promise.all([fetchMembers(), fetchRegistrationsForCurrentRoom()]);
+	const promises = [fetchMembers()];
+	if (canManageRoomInvitationLinks.value) {
+		promises.push(fetchRegistrationsForCurrentRoom());
+	}
+	await Promise.all(promises);
 });
 
 onUnmounted(() => {
