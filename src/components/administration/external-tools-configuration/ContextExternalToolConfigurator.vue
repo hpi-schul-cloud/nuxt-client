@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import { ToolParameterEntry } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";

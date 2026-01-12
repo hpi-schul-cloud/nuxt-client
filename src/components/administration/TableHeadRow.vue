@@ -270,7 +270,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings" as *;
+@use "settings" as *;
 
 .table__row {
 	font-weight: bold;

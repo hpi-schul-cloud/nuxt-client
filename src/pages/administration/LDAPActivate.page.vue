@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import InfoMessage from "./components/InfoMessage.vue";
+import InfoMessage from "../../components/administration/InfoMessage.vue";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import { SchulcloudTheme } from "@/serverApi/v3";

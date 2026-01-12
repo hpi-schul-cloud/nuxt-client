@@ -96,7 +96,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings" as *;
+@use "settings" as *;
 
 .row-selection-info {
 	display: flex;

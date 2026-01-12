@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getValueByPath } from "@/utils/helpers";
+import { getValueByPath } from "@/utils/helpers.js";
 
 export default {
 	props: {
@@ -86,7 +86,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings" as *;
+@use "settings" as *;
 
 .table__row {
 	border-top: 1px solid rgba(var(--v-theme-white));

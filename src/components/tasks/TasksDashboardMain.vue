@@ -314,7 +314,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings" as *;
+@use "settings" as *;
 
 .substitute-filter-placeholder {
 	min-height: 78px;

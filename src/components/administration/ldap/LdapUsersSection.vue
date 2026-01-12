@@ -115,7 +115,7 @@ import {
 	mdiCardAccountDetailsOutline,
 	mdiEmailOutline,
 	mdiFileTreeOutline,
-} from "@icons/material/index.ts";
+} from "@icons/material";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { defineComponent } from "vue";

@@ -45,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
+import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
+import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
 import { SchoolExternalTool, SchoolExternalToolSave, ToolParameterEntry } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import SchoolExternalToolsModule from "@/store/school-external-tools";

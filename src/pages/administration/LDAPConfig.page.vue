@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import InfoMessage from "./components/InfoMessage.vue";
+import InfoMessage from "../../components/administration/InfoMessage.vue";
 import ClassesSection from "@/components/administration/ldap/LdapClassesSection.vue";
 import ConnectionSection from "@/components/administration/ldap/LdapConnectionSection.vue";
 import RolesSection from "@/components/administration/ldap/LdapRolesSection.vue";

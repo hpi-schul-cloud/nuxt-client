@@ -54,7 +54,7 @@
 
 <script>
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
-import { mdiLock } from "@icons/material/index.ts";
+import { mdiLock } from "@icons/material";
 
 export default {
 	components: {

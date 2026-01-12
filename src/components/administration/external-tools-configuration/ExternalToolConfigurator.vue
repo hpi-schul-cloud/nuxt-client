@@ -79,7 +79,7 @@
 <script setup lang="ts" generic="T extends ExternalToolConfigurationTemplate">
 import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
+import ExternalToolConfigSettings from "@/components/administration/external-tools-configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { SchoolExternalTool, ToolParameter, ToolParameterEntry } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
