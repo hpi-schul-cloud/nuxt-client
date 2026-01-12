@@ -48,8 +48,8 @@
 </template>
 
 <script lang="ts">
-import CourseRoomAvatar from "./components/CourseRoomAvatar.vue";
-import CourseRoomWrapper from "./components/CourseRoomWrapper.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";

@@ -1,5 +1,5 @@
-import CourseRoomModal from "./components/CourseRoomModal.vue";
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import { courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";

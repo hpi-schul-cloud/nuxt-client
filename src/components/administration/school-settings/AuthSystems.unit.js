@@ -1,7 +1,7 @@
 import AuthSystems from "./AuthSystems.vue";
-import { Permission } from "@/serverApi/v3";
-import { schoolsModule } from "@/store";
-import SchoolsModule from "@/store/schools";
+import { Permission } from "@/serverApi/v3/index.ts";
+import { schoolsModule } from "@/store/index.ts";
+import SchoolsModule from "@/store/schools.ts";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";

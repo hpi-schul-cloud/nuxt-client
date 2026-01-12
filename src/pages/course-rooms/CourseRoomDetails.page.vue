@@ -83,10 +83,10 @@
 </template>
 
 <script>
-import CourseCommonCartridgeExportModal from "./components/CourseCommonCartridgeExportModal.vue";
-import CourseRoomDashboard from "./components/CourseRoomDashboard.vue";
+import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
+import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";

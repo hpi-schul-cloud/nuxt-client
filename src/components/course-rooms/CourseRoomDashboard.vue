@@ -183,10 +183,10 @@ import {
 	BoardLayout,
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
-import { courseRoomDetailsModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
+} from "@/serverApi/v3/index.ts";
+import { courseRoomDetailsModule } from "@/store/index.ts";
+import { CopyParamsTypeEnum } from "@/store/copy.ts";
+import { SHARE_MODULE_KEY } from "@/utils/inject/index.ts";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";

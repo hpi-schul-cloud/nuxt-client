@@ -112,11 +112,11 @@
 </template>
 
 <script>
-import CourseRoomAvatar from "./components/CourseRoomAvatar.vue";
-import CourseRoomEmptyAvatar from "./components/CourseRoomEmptyAvatar.vue";
-import CourseRoomGroupAvatar from "./components/CourseRoomGroupAvatar.vue";
-import CourseRoomModal from "./components/CourseRoomModal.vue";
-import CourseRoomWrapper from "./components/CourseRoomWrapper.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvatar.vue";
+import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";

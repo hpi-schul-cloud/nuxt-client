@@ -16,7 +16,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { createAxiosError } from "@util-axios-error";
+import { createAxiosError } from "@util-error-handling";
 import { AxiosInstance, AxiosPromise } from "axios";
 import { setActivePinia } from "pinia";
 

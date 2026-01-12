@@ -122,11 +122,11 @@
 
 <script>
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { Permission } from "@/serverApi/v3";
-import { schoolsModule } from "@/store";
+import { Permission } from "@/serverApi/v3/index.ts";
+import { schoolsModule } from "@/store/index.ts";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
+import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material/index.ts";
 
 export default {
 	components: {

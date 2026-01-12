@@ -16,10 +16,10 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
+import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();

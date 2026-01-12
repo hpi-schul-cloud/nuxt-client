@@ -108,14 +108,14 @@
 </template>
 
 <script>
-import { ldapPathRegexValidator } from "@/utils/ldapConstants";
+import { ldapPathRegexValidator } from "@/utils/ldapConstants.js";
 import {
 	mdiAccountBoxOutline,
 	mdiAccountCircleOutline,
 	mdiCardAccountDetailsOutline,
 	mdiEmailOutline,
 	mdiFileTreeOutline,
-} from "@icons/material";
+} from "@icons/material/index.ts";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { defineComponent } from "vue";

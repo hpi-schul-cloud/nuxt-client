@@ -73,8 +73,8 @@
 </template>
 
 <script>
-import { ldapPathRegexValidator } from "@/utils/ldapConstants";
-import { mdiAccountGroupOutline, mdiCheck, mdiFileTreeOutline } from "@icons/material";
+import { ldapPathRegexValidator } from "@/utils/ldapConstants.js";
+import { mdiAccountGroupOutline, mdiCheck, mdiFileTreeOutline } from "@icons/material/index.ts";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { defineComponent } from "vue";

@@ -3,12 +3,12 @@ import { useBoardRestApi } from "../boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "../boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { useCardSocketApi } from "../cardActions/cardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { computed, ref } from "vue";
@@ -26,7 +26,7 @@ const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 vi.mock("@data-board");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@data-board/socket/socket");

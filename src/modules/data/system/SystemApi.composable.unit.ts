@@ -1,11 +1,11 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { PublicSystemResponse, SystemsApiInterface } from "@/serverApi/v3/api";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { useErrorHandler } from "@util-error-handling";
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 
 describe("SystemApi.composable", () => {
 	let systemApi: DeepMocked<SystemsApiInterface>;

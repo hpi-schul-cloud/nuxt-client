@@ -76,9 +76,9 @@
 </template>
 
 <script>
-import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "@/utils/ldapConstants";
+import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "@/utils/ldapConstants.js";
 import { useEnvConfig } from "@data-env";
-import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline, mdiLockOutline } from "@icons/material";
+import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline, mdiLockOutline } from "@icons/material/index.ts";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { defineComponent } from "vue";
