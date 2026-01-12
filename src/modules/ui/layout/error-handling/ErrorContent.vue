@@ -52,7 +52,7 @@ const isNotFoundError = computed(() => props.statusCode === HttpStatusCode.NotFo
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "settings" as *;
+@use "@/styles/settings.scss" as *;
 
 .repair-image {
 	width: 75%;

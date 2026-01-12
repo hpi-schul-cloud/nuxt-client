@@ -1,9 +1,9 @@
 import ErrorPage from "./Error.page.vue";
-import ErrorContent from "@/modules/ui/layout/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { ErrorContent } from "@ui-layout";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";

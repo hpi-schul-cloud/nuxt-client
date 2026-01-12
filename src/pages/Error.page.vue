@@ -8,9 +8,9 @@
 </template>
 <script lang="ts" setup>
 import { useStorage } from "@/composables/locale-storage.composable";
-import ErrorContent from "@/modules/ui/layout/error-handling/ErrorContent.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { ErrorContent } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
