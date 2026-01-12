@@ -78,11 +78,11 @@ import ClassesSection from "./ldap/LdapClassesSection.vue";
 import ConnectionSection from "./ldap/LdapConnectionSection.vue";
 import RolesSection from "./ldap/LdapRolesSection.vue";
 import UsersSection from "./ldap/LdapUsersSection.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
+import { DefaultWireframe } from "@ui-layout";
 import { mapGetters } from "vuex";
 
 export default {

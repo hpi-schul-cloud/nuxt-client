@@ -1,4 +1,4 @@
-import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import DefaultWireframe from "./DefaultWireframe.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 

@@ -3,7 +3,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
-describe("@/components/atoms/Breadcrumbs", () => {
+describe("Breadcrumbs", () => {
 	const setup = (breadcrumbs?: Array<{ title: string; to: string }>) => {
 		const wrapper = mount(Breadcrumbs, {
 			global: {

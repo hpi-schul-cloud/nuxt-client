@@ -108,7 +108,6 @@ import AdminTableLegend from "./components/AdminTableLegend.vue";
 import BackendDataTable from "./components/BackendDataTable.vue";
 import ProgressModal from "./components/ProgressModal.vue";
 import DataFilter from "./data-filter/DataFilter.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -129,6 +128,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";

@@ -243,13 +243,13 @@ import BackendDataTable from "./components/BackendDataTable.vue";
 import StepProgress from "./components/StepProgress.vue";
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 
 export default {
 	components: {

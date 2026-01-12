@@ -30,8 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "./default-wireframe.types";
-import { Breadcrumbs } from "@ui-breadcrumbs";
+import Breadcrumbs from "./Breadcrumbs.vue";
+import { Breadcrumb } from "./types";
 import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";
@@ -88,7 +88,7 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 </script>
 
 <style lang="scss" scoped>
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 .wireframe-container-flex {
 	height: calc(100svh - var(--topbar-height));

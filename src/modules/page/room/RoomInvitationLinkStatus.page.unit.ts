@@ -1,10 +1,10 @@
 import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomInvitationLinkValidationError, UseLinkResult, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
+import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";

@@ -33,11 +33,11 @@
 <script>
 import FormCreateUser from "./components/FormCreateUser.vue";
 import InfoMessage from "./components/InfoMessage.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
+import { DefaultWireframe } from "@ui-layout";
 import { mapGetters } from "vuex";
 
 export default {

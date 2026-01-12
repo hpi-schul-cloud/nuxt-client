@@ -1,4 +1,3 @@
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardElementApiFactory } from "@/serverApi/v3";
 import {
 	AnyContentElement,
@@ -11,6 +10,7 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
+import { Breadcrumb } from "@ui-layout";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

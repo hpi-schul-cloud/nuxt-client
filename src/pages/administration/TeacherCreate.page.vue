@@ -23,10 +23,10 @@
 <script>
 import FormCreateUser from "./components/FormCreateUser.vue";
 import InfoMessage from "./components/InfoMessage.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
+import { DefaultWireframe } from "@ui-layout";
 
 export default {
 	components: {
