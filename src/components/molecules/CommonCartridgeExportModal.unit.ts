@@ -6,9 +6,10 @@ import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { nextTick } from "vue";
 import { VDialog } from "vuetify/lib/components/index";
 
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
@@ -188,6 +189,43 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			await allColumnBoards.trigger("click");
 
 			expect(allColumnBoards.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
+		});
+	});
+	describe("info point3 visibility for version 1.1.0", () => {
+		it("should display components.molecules.export.options.info.point3 when radios is 1.1.0", async () => {
+			const wrapper = setup();
+
+			await nextTick();
+			await flushPromises();
+
+			const emit = wrapper.emitted();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			expect(nextBtn.exists()).toBe(true);
+			await nextBtn.trigger("click");
+
+			const html = wrapper.html();
+
+			const infoPoint3 = wrapper.findComponent('[data-testid="export-info-point3"]');
+			expect(infoPoint3.exists()).toBe(true);
+		});
+		it("should not display components.molecules.export.options.info.point3 when radios is 1.3.0", async () => {
+			const wrapper = setup();
+			await nextTick();
+			await flushPromises();
+
+			const radios = wrapper.findAll('[data-testid="version-radio-group"] input');
+			expect(radios.length).toBeGreaterThan(0);
+			for (const input of radios) {
+				if (input.attributes("value") === "1.3.0") {
+					await input.setValue();
+				}
+			}
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			expect(nextBtn.exists()).toBe(true);
+			await nextBtn.trigger("click");
+
+			const infoPoint3 = wrapper.findComponent('[data-testid="export-info-point3"]');
+			expect(infoPoint3.exists()).toBe(false);
 		});
 	});
 });
