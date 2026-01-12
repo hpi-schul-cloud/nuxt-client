@@ -1714,7 +1714,6 @@ export default {
 	"pages.rooms.tools.deactivatedDialog.title": "Інструмент “{toolName}“ вимкнено",
 	"pages.rooms.tools.notLicensedDialog.title": "Інструмент “{toolName}“ Не уповноважений",
 	"pages.rooms.tools.deleteDialog.content": "Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
-	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
 	"pages.rooms.tools.emptyState": "Наразі в цьому курсі немає інструментів",
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",

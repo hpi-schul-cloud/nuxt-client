@@ -107,7 +107,7 @@ const menuItems = [
 	{
 		icon: mdiTrashCanOutline,
 		action: handleDelete,
-		name: t("common.actions.remove"),
+		name: t("common.actions.delete"),
 		dataTestId: "tool-delete",
 	},
 ];
