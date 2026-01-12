@@ -1,25 +1,27 @@
 <template>
-	<CustomDialog
+	<Dialog
 		v-if="selectedItem.status"
-		:is-open="$props.isOpen"
+		:model-value="isOpen"
+		:title="t(getTitle, { toolName: selectedItem.name })"
 		:has-buttons="true"
 		:buttons="['close']"
-		data-testId="error-dialog"
-		@dialog-closed="onCloseCustomDialog"
+		identifier="error-dialog"
 	>
-		<template #title>
-			<h2 class="my-2">
-				{{ t(getTitle, { toolName: selectedItem.name }) }}
-			</h2>
-		</template>
 		<template #content>
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
-	</CustomDialog>
+		<template #actions>
+			<VSpacer />
+			<VBtn data-testid="error-dialog-close-btn" variant="outlined" @click="onClose">
+				{{ t("common.labels.close") }}
+			</VBtn>
+		</template>
+	</Dialog>
 </template>
+
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ExternalToolDisplayData, useContextExternalToolConfigurationStatus } from "@data-external-tool";
+import { Dialog } from "@ui-dialog";
 import { computed, ComputedRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -43,7 +45,7 @@ const { determineDeactivatedTranslationKey, determineToolStatusTranslationKey, d
 
 const { t } = useI18n();
 
-const onCloseCustomDialog = () => {
+const onClose = () => {
 	emit("closed");
 };
 

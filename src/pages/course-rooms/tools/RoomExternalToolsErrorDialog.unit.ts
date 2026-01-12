@@ -8,8 +8,10 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { VCard, VCardText } from "vuetify/components";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (props: { selectedItem: ExternalToolDisplayData; isOpen?: boolean }) => {
@@ -55,7 +57,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const title = wrapper.getComponent(VCard).find('[data-testid="error-dialog-title"]');
 
 				expect(title.text()).toEqual("pages.rooms.tools.outdatedDialog.title");
 			});
@@ -63,7 +65,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.outdatedOnSchool.teacher");
 			});
@@ -87,7 +89,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const title = wrapper.getComponent(VCard).find('[data-testid="error-dialog-title"]');
 
 				expect(title.text()).toEqual("pages.rooms.tools.incompleteDialog.title");
 			});
@@ -95,7 +97,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.outdated.teacher");
 			});
@@ -119,7 +121,8 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const title = wrapper.getComponent(VCard).find('[data-testid="error-dialog-title"]');
+				logger.log(wrapper.getComponent(VCard).html());
 
 				expect(title.text()).toEqual("error.generic");
 			});
@@ -127,7 +130,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.outdated.teacher");
 			});
@@ -151,7 +154,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const title = wrapper.getComponent(VCard).find('[data-testid="error-dialog-title"]');
 
 				expect(title.text()).toEqual("pages.rooms.tools.deactivatedDialog.title");
 			});
@@ -159,7 +162,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.deactivated.teacher");
 			});
@@ -183,7 +186,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+				const title = wrapper.getComponent(VCard).find('[data-testid="error-dialog-title"]');
 
 				expect(title.text()).toEqual("pages.rooms.tools.notLicensedDialog.title");
 			});
@@ -191,7 +194,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.notLicensed.teacher");
 			});
