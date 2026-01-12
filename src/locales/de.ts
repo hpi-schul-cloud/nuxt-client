@@ -1571,6 +1571,10 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.registrationExternalMembers.error.notCompleted":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.404":
+		"Die Registrierungsdaten konnten nicht abgerufen werden. Bitte die Schule kontaktieren.",
+	"pages.registrationExternalMembers.error":
+		"Die Registrierungsdaten konnten nicht abgerufen werden. Bitte später noch einmal versuchen.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",

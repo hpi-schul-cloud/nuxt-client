@@ -117,7 +117,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -244,7 +246,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					setupWrapper();
@@ -301,7 +305,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -370,7 +376,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
@@ -445,7 +453,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
@@ -511,7 +521,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
@@ -578,7 +590,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
@@ -668,7 +682,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper, router } = setupWrapper();
@@ -745,7 +761,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -812,7 +830,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -883,7 +903,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
@@ -957,7 +979,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -1027,7 +1051,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -1104,7 +1130,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
@@ -1172,7 +1200,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
@@ -1354,7 +1384,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const windowOpenMock = vi.fn();
@@ -1461,7 +1493,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper, parentId } = setupWrapper();
@@ -1594,7 +1628,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper, parentId } = setupWrapper();
@@ -1696,7 +1732,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
@@ -1756,7 +1794,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
@@ -1827,7 +1867,9 @@ describe("Folder.vue", () => {
 				});
 				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					isCollaboraFileDialogOpen: ref(false),
+				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
@@ -1898,7 +1940,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -1964,7 +2008,9 @@ describe("Folder.vue", () => {
 					});
 					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>();
+					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+						isCollaboraFileDialogOpen: ref(false),
+					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();

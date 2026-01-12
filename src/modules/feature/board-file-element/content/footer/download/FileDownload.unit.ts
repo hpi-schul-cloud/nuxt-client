@@ -156,8 +156,6 @@ describe("FileDownload", () => {
 
 	describe("when download is not allowed", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			const props = {
 				fileName: "file-record #1.txt",
 				url: "1/file-record #1.txt",

@@ -13,8 +13,6 @@ describe("ExternalToolElementMenu", () => {
 		rowIndex: number;
 		elementIndex: number;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(ExternalToolElementMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
