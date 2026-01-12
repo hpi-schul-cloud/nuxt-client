@@ -148,7 +148,7 @@
 			</template>
 		</v-data-table-server>
 		<end-course-sync-dialog
-			v-model:is-open="isEndSyncDialogOpen"
+			v-model="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
 			:course-name="selectedItemForSync.courseName"
 			:group-name="selectedItemForSync.groupName"

@@ -782,7 +782,7 @@ describe("ClassOverview", () => {
 			await wrapper.find('[data-testid="class-table-end-course-sync-btn"]').trigger("click");
 
 			const dialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
-			expect(dialog.vm.isOpen).toBe(true);
+			expect(dialog.props().modelValue).toBe(true);
 		});
 	});
 

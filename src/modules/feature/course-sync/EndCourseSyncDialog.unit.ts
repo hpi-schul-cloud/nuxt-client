@@ -18,7 +18,7 @@ describe("EndCourseSyncDialog", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				isOpen: true,
+				modelValue: true,
 				courseName: "testCourseName",
 				groupName: "testGroupName",
 				courseId: "courseId",
@@ -48,8 +48,8 @@ describe("EndCourseSyncDialog", () => {
 			const cancelBtn = wrapper.findComponent("[data-testid=dialog-cancel]");
 			await cancelBtn.trigger("click");
 
-			expect(wrapper.vm.isOpen).toEqual(false);
-			expect(wrapper.emitted("update:isOpen")).toBeDefined();
+			expect(wrapper.props().modelValue).toEqual(false);
+			expect(wrapper.emitted("update:modelValue")).toBeDefined();
 		});
 	});
 
@@ -60,8 +60,8 @@ describe("EndCourseSyncDialog", () => {
 			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
 
-			expect(wrapper.vm.isOpen).toEqual(false);
-			expect(wrapper.emitted("update:isOpen")).toBeDefined();
+			expect(wrapper.props().modelValue).toEqual(false);
+			expect(wrapper.emitted("update:modelValue")).toBeDefined();
 		});
 
 		it("should call the api", async () => {

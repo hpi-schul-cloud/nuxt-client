@@ -513,7 +513,7 @@ describe("RoomsOverview", () => {
 				await nextTick();
 
 				const dialog = wrapper.findComponent({ name: "Dialog" });
-				expect(dialog.vm.isOpen).toBe(true);
+				expect(dialog.props().modelValue).toBe(true);
 			});
 		});
 

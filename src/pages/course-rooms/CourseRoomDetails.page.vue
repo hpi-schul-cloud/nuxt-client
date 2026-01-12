@@ -66,7 +66,7 @@
 		/>
 		<CommonCartridgeExportModal />
 		<end-course-sync-dialog
-			v-model:is-open="isEndSyncDialogOpen"
+			v-model="isEndSyncDialogOpen"
 			group-name=""
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"

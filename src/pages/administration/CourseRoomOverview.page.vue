@@ -139,7 +139,7 @@
 			@success="onConfirmSynchronizeCourse"
 		/>
 		<EndCourseSyncDialog
-			v-model:is-open="isEndSyncDialogOpen"
+			v-model="isEndSyncDialogOpen"
 			:course-name="selectedItem?.name"
 			:group-name="selectedItem?.syncedGroup"
 			:course-id="selectedItem?.id"
