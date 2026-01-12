@@ -17,9 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import AlertContainer from "./components/AlertContainer.vue";
-import ApplicationError from "./components/ApplicationError.vue";
 import { AutoLogoutWarning } from "@feature-auto-logout";
+import { AlertContainer, ApplicationError } from "@ui-layout";
 import { Sidebar, Topbar } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";

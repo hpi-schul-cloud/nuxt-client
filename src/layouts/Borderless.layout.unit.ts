@@ -1,9 +1,8 @@
 import BorderlessLayout from "./Borderless.layout.vue";
-import AlertContainer from "./components/AlertContainer.vue";
-import ApplicationError from "./components/ApplicationError.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
+import { AlertContainer, ApplicationError } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { shallowMount } from "@vue/test-utils";
 import { KeepAlive } from "vue";

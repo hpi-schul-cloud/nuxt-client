@@ -8,7 +8,7 @@
 </template>
 <script lang="ts" setup>
 import { useStorage } from "@/composables/locale-storage.composable";
-import ErrorContent from "@/layouts/components/ErrorContent.vue";
+import ErrorContent from "@/modules/ui/layout/error-handling/ErrorContent.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useTitle } from "@vueuse/core";

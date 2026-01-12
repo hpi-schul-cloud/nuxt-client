@@ -1,5 +1,5 @@
 import ErrorPage from "./Error.page.vue";
-import ErrorContent from "@/layouts/components/ErrorContent.vue";
+import ErrorContent from "@/modules/ui/layout/error-handling/ErrorContent.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
