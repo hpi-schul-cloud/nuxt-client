@@ -19,6 +19,7 @@ describe("@feature-room/RoomContentGridItem", () => {
 		const wrapper = mount(RoomContentGridItem, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { RouterLink: true },
 			},
 			props,
 		});

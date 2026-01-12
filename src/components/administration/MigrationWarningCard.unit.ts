@@ -9,7 +9,6 @@ describe("MigrationWarningCard", () => {
 	});
 
 	const setup = (value = "start") => {
-		document.body.setAttribute("data-app", "true");
 		const wrapper = mount(MigrationWarningCard, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],

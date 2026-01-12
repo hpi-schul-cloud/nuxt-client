@@ -61,13 +61,13 @@ describe("elementFocus.composable", () => {
 			const querySelectorSpy = vi.spyOn(document, "querySelector");
 			querySelectorSpy.mockReturnValue(null);
 
-			const loggerErrorSpy = vi.spyOn(logger, "error");
+			const loggerErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
 			const { focusNodeFromHash } = useElementFocus();
 			const promise = focusNodeFromHash();
 			vi.advanceTimersByTime(20000);
 			await promise;
-			expect(loggerErrorSpy).toHaveBeenCalled();
+			expect(loggerErrorSpy).toHaveBeenCalledWith("Element not found after multiple attempts.");
 		});
 	});
 });

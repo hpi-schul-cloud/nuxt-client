@@ -78,6 +78,7 @@ export default {
 	"common.labels.firstName": "Vorname",
 	"common.labels.fullName": "Vorname & Nachname",
 	"common.labels.greeting": "Hallo, {name}",
+	"common.labels.invitedDate": "Eingeladen am",
 	"common.labels.language": "Sprache",
 	"common.labels.lastName.new": "Neuer Nachname",
 	"common.labels.lastName": "Nachname",
@@ -1568,8 +1569,20 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
+		"Die Registrierungen konnten leider nicht geladen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.failedFetchUserData":
+		"Die Nutzerdaten konnten leider nicht geladen werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"Die Nutzerdaten konnten leider nicht geladen werden. Bitte die Schule kontaktieren.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
+		"Die Einladungen konnten leider nicht entfernt werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.error.failedResendInvitations":
+		"Die Einladungen konnten leider nicht erneut gesendet werden. Bitte später erneut versuchen.",
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
+		"Es wurde soeben eine E-Mail versendet. Nach zwei Minuten kann die E-Mail erneut versendet werden.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Einwilligungserklärung",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Bitte die folgenden Einwilligungserklärung bestätigen, damit die {instanceTitle} genutzt werden kann.",
@@ -1777,6 +1790,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText}-Menü",
+	"pages.rooms.members.title.roomMembers": "Raum-Mitglieder",
+	"pages.rooms.members.title.invitations": "Versendete Einladungen",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -1880,6 +1895,19 @@ export default {
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel": "Mitgliedsanfrage für {fullName} ablehnen",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel": "Einladungslink „{linkTitle}“ teilen",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel": "Aktionsmenü für Einladungslink „{linkTitle}“",
+	"pages.rooms.members.registrations.remove.confirmation":
+		"Einladung für {invitedEmail} wirklich aus dem Raum löschen?",
+	"pages.rooms.members.registrations.multipleRemove.confirmation":
+		"Ausgewählte Einladungen wirklich aus dem Raum löschen?",
+	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Aktionsmenü für {registrationEmail}",
+	"pages.rooms.members.registrations.actionMenu.remove": "Einladung löschen",
+	"pages.rooms.members.registrations.actionMenu.resend": "Einladung erneut versenden",
+	"pages.rooms.members.registrations.remove.ariaLabel": "Einladung für {registrationEmail} aus Raum löschen",
+	"pages.rooms.members.registrations.remove.success.single": "Einladung wurde erfolgreich gelöscht.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Einladungen wurden erfolgreich gelöscht.",
+	"pages.rooms.members.registrations.resend.ariaLabel": "Einladung für {registrationEmail} erneut versenden",
+	"pages.rooms.members.registrations.resend.success.single": "Einladung wurde erneut versendet.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Einladungen wurden erneut versendet.",
 	"pages.rooms.invitationlinks.error.create": "Das Erstellen des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.update": "Das Aktualisieren des Einladungslinks ist fehlgeschlagen.",
 	"pages.rooms.invitationlinks.error.load": "Die Einladungsliste konnte nicht geladen werden.",

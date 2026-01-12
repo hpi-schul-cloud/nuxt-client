@@ -9,7 +9,6 @@ const componentProps = {
 
 describe("CardTitle", () => {
 	const setup = (options: { isEditMode: boolean }) => {
-		document.body.setAttribute("data-app", "true");
 		const wrapper = shallowMount(CardTitle, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

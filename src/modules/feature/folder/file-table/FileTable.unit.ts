@@ -13,6 +13,8 @@ import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { VSkeletonLoader } from "vuetify/lib/components/index";
 
+vi.mock("vue-router");
+
 describe("FileTable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
