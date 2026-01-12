@@ -1,3 +1,4 @@
+import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -141,6 +142,46 @@ describe("Members", () => {
 			const membersTable = wrapper.findComponent(MembersTable);
 
 			expect(membersTable.exists()).toBe(false);
+		});
+	});
+
+	describe("pending invitations table", () => {
+		describe("when feature flag is disabled", () => {
+			it("should not render pending invitations table", () => {
+				createTestEnvStore({ FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false });
+				const { wrapper } = setup({
+					roomAuthorization: { canManageRoomInvitationLinks: false },
+				});
+
+				const invitationsTable = wrapper.findComponent(MemberInvitationsTable);
+				expect(invitationsTable.exists()).toBe(false);
+			});
+		});
+
+		describe("when feature flag is enabled", () => {
+			describe("when user has permission to manage room invitation links", () => {
+				it("should render pending invitations table", () => {
+					createTestEnvStore({ FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true });
+					const { wrapper } = setup({
+						roomAuthorization: { canManageRoomInvitationLinks: true },
+					});
+
+					const invitationsTable = wrapper.findComponent(MemberInvitationsTable);
+					expect(invitationsTable.exists()).toBe(true);
+				});
+			});
+
+			describe("when user has no permission to manage room invitation links", () => {
+				it("should not render pending invitations table", () => {
+					createTestEnvStore({ FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true });
+					const { wrapper } = setup({
+						roomAuthorization: { canManageRoomInvitationLinks: false },
+					});
+
+					const invitationsTable = wrapper.findComponent(MemberInvitationsTable);
+					expect(invitationsTable.exists()).toBe(false);
+				});
+			});
 		});
 	});
 });
