@@ -1728,9 +1728,10 @@ export default {
 	"pages.rooms.ccImportCourse.title": "Importar curso",
 	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
-	"pages.rooms.ccImportCourse.loading": "Importación en curso...",
-	"pages.rooms.ccImportCourse.success": "El curso {name} se ha importado correctamente.",
-	"pages.rooms.ccImportCourse.error": "Se ha producido un error al importar el curso.",
+	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
+	"pages.rooms.ccImportCourse.success":
+		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
+	"pages.rooms.ccImportCourse.error": "Se produjo un error al cargar el archivo del curso.",
 	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",

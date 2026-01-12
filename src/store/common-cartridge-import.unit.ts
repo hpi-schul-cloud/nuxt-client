@@ -136,6 +136,8 @@ describe("CommonCartridgeImportModule", () => {
 					FileRecordParentType.USERS,
 					file
 				);
+				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).toHaveBeenCalledTimes(1);
+
 				expect(sut.isSuccess).toBe(true);
 			});
 

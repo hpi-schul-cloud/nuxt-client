@@ -71,9 +71,11 @@ export default class CommonCartridgeImportModule extends VuexModule {
 
 			const fileRecords = uploadResult.data;
 
-			// TODO use the fileRecords to start the import and remove this console.log statement.
-			// eslint-disable-next-line no-console
-			console.log(fileRecords);
+			this.commonCartridgeApi.commonCartridgeControllerImportCourse({
+				fileRecordId: fileRecords.id,
+				fileName: fileRecords.name,
+				fileUrl: fileRecords.url,
+			});
 			this.setIsSuccess(true);
 		} catch {
 			this.setIsSuccess(false);
