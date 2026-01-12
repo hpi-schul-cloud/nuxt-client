@@ -59,7 +59,7 @@ const props = defineProps({
 	loading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, required: false, default: false },
-	confirmBtnLangKey: { type: String, required: false, default: undefined },
+	confirmBtnLangKey: { type: String, required: false, default: "common.actions.confirm" },
 });
 
 const emit = defineEmits(["cancel", "confirm", "after-leave"]);
