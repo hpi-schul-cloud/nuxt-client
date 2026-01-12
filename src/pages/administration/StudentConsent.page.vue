@@ -239,9 +239,9 @@
 </template>
 
 <script>
-import BackendDataTable from "../../components/administration/BackendDataTable.vue";
-import StepProgress from "../../components/administration/StepProgress.vue";
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
+import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import StepProgress from "@/components/administration/StepProgress.vue";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";

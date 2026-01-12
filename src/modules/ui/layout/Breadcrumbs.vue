@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
+import { Breadcrumb } from "./types";
 import { mdiChevronRight } from "@icons/material";
-import { Breadcrumb } from "@/modules/ui/layout/index";
 import { useDisplay } from "vuetify";
 
 defineProps<{

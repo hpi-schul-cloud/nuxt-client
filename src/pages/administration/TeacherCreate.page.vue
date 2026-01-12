@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import FormCreateUser from "../../components/administration/FormCreateUser.vue";
-import InfoMessage from "../../components/administration/InfoMessage.vue";
+import FormCreateUser from "@/components/administration/FormCreateUser.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
