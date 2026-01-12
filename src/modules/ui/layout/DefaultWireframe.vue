@@ -10,9 +10,20 @@
 					{{ headline }}
 				</h1>
 			</slot>
-			<SpeedDialMenu v-if="fabItems" :actions="fabItems" />
 		</div>
-		<VDivider v-if="showDivider" role="presentation" />
+		<VDivider v-if="showDivider" class="wireframe-divider" role="presentation" />
+		<div
+			v-if="fabItems"
+			class="wireframe-menu-container d-flex align-center"
+			:class="{
+				'positioning-sm-to-md': mdAndDown,
+			}"
+		>
+			<div class="ml-auto mr-6">
+				<SpeedDialMenu :actions="fabItems" />
+			</div>
+		</div>
+
 		<VContainer
 			:fluid="maxWidth !== 'native'"
 			class="main-content"
@@ -70,7 +81,7 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
-	// neded if we don't want to have full page scrolling, so it's restricted to browsers viewport height
+	// needed if we don't want to have full page scrolling, so it's restricted to browsers viewport height
 	isFlexContainer: {
 		type: Boolean,
 		default: false,
@@ -82,7 +93,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const { smAndUp } = useDisplay();
+const { smAndUp, mdAndDown } = useDisplay();
 
 const showDivider = computed(() => !props.hideBorder && !!(props.headline || slots.header));
 </script>
@@ -138,5 +149,30 @@ const showDivider = computed(() => !props.hideBorder && !!(props.headline || slo
 
 .breadcrumbs-placeholder {
 	height: 22px;
+}
+
+.wireframe-divider {
+	position: sticky;
+	z-index: 100;
+	top: var(--topbar-height);
+}
+
+.wireframe-menu-container {
+	position: sticky;
+	pointer-events: none;
+	min-height: 56px;
+	margin-top: -30px;
+	margin-bottom: -30px;
+	z-index: 2000;
+	top: calc(var(--topbar-height) + 16px);
+
+	&.positioning-sm-to-md {
+		position: fixed;
+		margin-top: unset;
+		margin-bottom: unset;
+		top: unset;
+		right: 0;
+		bottom: 24px;
+	}
 }
 </style>
