@@ -1,19 +1,5 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		data-testid="share-dialog"
-		:size="480"
-		has-buttons
-		:buttons="isOpen ? actionButtons : []"
-		@dialog-closed="onCloseDialog"
-		@next="onNext()"
-	>
-		<template #title>
-			<h2 class="mt-2 text-break">
-				{{ modalTitle }}
-			</h2>
-		</template>
-
+	<Dialog :model-value="isOpen" :title="modalTitle" identifier="share-dialog">
 		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
@@ -74,11 +60,27 @@
 				</div>
 			</v-fade-transition>
 		</template>
-	</CustomDialog>
+		<template #actions>
+			<template v-if="step === 'firstStep'">
+				<VSpacer />
+				<VBtn data-testid="share-dialog-cancel" variant="text" @click="onCloseDialog">
+					{{ t("common.actions.cancel") }}
+				</VBtn>
+				<VBtn data-testid="share-dialog-next" class="px-6" color="primary" variant="flat" @click="onNext">
+					{{ t("common.actions.continue") }}
+				</VBtn>
+			</template>
+			<template v-else>
+				<VSpacer />
+				<VBtn data-testid="share-dialog-close" variant="outlined" @click="onCloseDialog">
+					{{ t("common.labels.close") }}
+				</VBtn>
+			</template>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
@@ -86,6 +88,7 @@ import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { InfoAlert, WarningAlert } from "@ui-alert";
+import { Dialog } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
