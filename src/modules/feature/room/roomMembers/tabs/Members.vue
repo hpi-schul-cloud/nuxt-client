@@ -8,14 +8,25 @@
 	</div>
 
 	<div class="mb-12">
-		<MembersTable v-if="!isLoading" :header-bottom="headerBottom" />
+		<h2 class="mb-0">
+			{{ t("pages.rooms.members.title.roomMembers") }}
+		</h2>
+		<MembersTable v-if="!isLoadingMembers" :header-bottom="headerBottom" />
+	</div>
+
+	<div v-if="!isLoadingInvitations && canManageRoomInvitationLinks">
+		<h2 class="mb-0">
+			{{ t("pages.rooms.members.title.invitations") }}
+		</h2>
+		<MemberInvitationsTable />
 	</div>
 </template>
 
 <script setup lang="ts">
+import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
 import MembersTable from "../tables/MembersTable.vue";
 import { useEnvConfig } from "@data-env";
-import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { useRegistrationStore, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -30,8 +41,10 @@ defineProps({
 const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
-const { isLoading } = storeToRefs(roomMembersStore);
-const { canAddRoomMembers } = useRoomAuthorization();
+const registrationStore = useRegistrationStore();
+const { isLoading: isLoadingMembers } = storeToRefs(roomMembersStore);
+const { isLoading: isLoadingInvitations } = storeToRefs(registrationStore);
+const { canAddRoomMembers, canManageRoomInvitationLinks } = useRoomAuthorization();
 
 const linkAriaLabel = computed(
 	() => `${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`

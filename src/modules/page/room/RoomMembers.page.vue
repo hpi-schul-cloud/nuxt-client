@@ -64,6 +64,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import {
 	InvitationStep,
+	useRegistrationStore,
 	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
@@ -121,8 +122,10 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
+const registrationStore = useRegistrationStore();
 roomMembersStore.setAdminMode(false);
-const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore;
+const { fetchMembers, loadSchoolList, leaveRoom, resetStore: resetRoomMembersStore } = roomMembersStore;
+const { fetchRegistrationsForCurrentRoom, resetStore: resetRegistrationStore } = registrationStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -267,11 +270,16 @@ onMounted(async () => {
 		router.replace("/rooms");
 		return;
 	}
-	await fetchMembers();
+	const promises = [fetchMembers()];
+	if (canManageRoomInvitationLinks.value) {
+		promises.push(fetchRegistrationsForCurrentRoom());
+	}
+	await Promise.all(promises);
 });
 
 onUnmounted(() => {
-	resetStore();
+	resetRoomMembersStore();
+	resetRegistrationStore();
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {

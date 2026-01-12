@@ -51,12 +51,13 @@ import StepEmail from "./StepEmail.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { ExternalMemberCheckStatus, useRoomMembersStore } from "@data-room";
+import { ExternalMemberCheckStatus, useRegistrationStore, useRoomMembersStore } from "@data-room";
 import { computed, nextTick, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { VBtn, type VCard, VSpacer } from "vuetify/components";
 
+const registrationStore = useRegistrationStore();
 const roomMembersStore = useRoomMembersStore();
 const applicationNames = computed(() => {
 	const name = useEnvConfig().value.SC_TITLE || "dBildungsCloud";
@@ -119,6 +120,7 @@ const onSubmitInvitation = async () => {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	} finally {
 		closeDialog();
+		await registrationStore.fetchRegistrationsForCurrentRoom();
 	}
 };
 
