@@ -45,6 +45,7 @@ export * from "./mediaSchoolLicenseResponseFactory";
 export * from "./parentNodeInfoFactory";
 export * from "./parentStatisticFactory";
 export * from "./provisioningOptionsDataFactory";
+export * from "./registrationFactory";
 export * from "./richTextElementContentFactory";
 export * from "./richTextElementResponseFactory";
 export * from "./room";

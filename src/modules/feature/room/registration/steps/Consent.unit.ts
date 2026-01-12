@@ -1,38 +1,43 @@
 import Consent from "./Consent.vue";
 import { LanguageType, SchulcloudTheme } from "@/serverApi/v3";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRegistration } from "@data-room";
+import { useRegistrationStepper, useRegistrationStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { VCheckbox } from "vuetify/components";
 
-vi.mock("@data-room/registration/registration.composable");
-const useRegistrationMock = vi.mocked(useRegistration);
+vi.mock("@data-room/registration/registrationStepper.composable");
+const useRegistrationStepperMock = vi.mocked(useRegistrationStepper);
+
+let registrationStore: ReturnType<typeof useRegistrationStore>;
 
 describe("Consent.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
 	});
 
 	const setup = (theme?: SchulcloudTheme) => {
-		useRegistrationMock.mockReturnValue({
+		useRegistrationStepperMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(""),
-			hasApiErrorOccurred: ref(false),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
 			fullName: computed(() => "Max Mustermann"),
-			fetchUserData: vi.fn(),
-			createAccount: vi.fn(),
-			registrationSecret: ref<string>(""),
-			userData: ref({ firstName: "Max", lastName: "Mustermann", email: "max@mustermann.com" }),
 		});
+		registrationStore.isLoading = false;
+		registrationStore.registrationSecret = "";
+		registrationStore.userData = {
+			firstName: "Max",
+			lastName: "Mustermann",
+			email: "",
+		};
 		createTestEnvStore({
 			SC_THEME: theme ?? SchulcloudTheme.Default,
 		});
