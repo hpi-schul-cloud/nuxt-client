@@ -1,22 +1,13 @@
 <template>
-	<CustomDialog
-		ref="dialog"
-		:is-open="isOpen"
-		:size="480"
-		has-buttons
-		:buttons="['cancel', 'confirm']"
-		confirm-btn-title-key="common.actions.import"
-		data-testid="import-modal"
+	<Dialog
+		:model-value="isOpen"
+		:title="t(`components.molecules.import.${parentType}.options.title`)"
+		confirm-btn-lang-key="common.actions.import"
+		identifier="import-modal"
 		:confirm-btn-disabled="!isTitleValid"
-		@dialog-confirmed="onConfirm"
-		@dialog-canceled="onCancel"
+		@confirm="onConfirm"
+		@cancel="onCancel"
 	>
-		<template #title>
-			<h2 class="mt-2">
-				{{ t(`components.molecules.import.${parentType}.options.title`) }}
-			</h2>
-		</template>
-
 		<template #content>
 			<div>
 				<div v-if="showAlertInfo" class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
@@ -66,12 +57,12 @@
 				/>
 			</div>
 		</template>
-	</CustomDialog>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { mdiInformation } from "@icons/material";
+import { Dialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
