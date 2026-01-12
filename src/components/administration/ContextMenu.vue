@@ -206,7 +206,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "settings" as *;
+@use "@/styles/settings" as *;
 
 .context-menu {
 	--transition-duration: 0.15s;

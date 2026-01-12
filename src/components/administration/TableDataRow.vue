@@ -86,7 +86,7 @@ export default {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "settings" as *;
+@use "@/styles/settings" as *;
 
 .table__row {
 	border-top: 1px solid rgba(var(--v-theme-white));

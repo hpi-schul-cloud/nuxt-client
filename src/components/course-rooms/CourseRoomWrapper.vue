@@ -112,7 +112,7 @@ const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.h
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "settings" as *;
+@use "@/styles/settings" as *;
 
 :deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;

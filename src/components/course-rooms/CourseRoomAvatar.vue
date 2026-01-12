@@ -198,7 +198,7 @@ const dropAvatar = () => {
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "settings" as *;
+@use "@/styles/settings" as *;
 @use "@/utils/multiline-ellipsis" as *;
 
 .v-avatar {
