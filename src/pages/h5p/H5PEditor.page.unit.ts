@@ -31,7 +31,7 @@ describe("H5PEditorPage", () => {
 
 	const getWrapper = (
 		props: ComponentProps<typeof H5pEditorPage> = {
-			parentType: H5PContentParentType.LESSONS,
+			parentType: H5PContentParentType.BOARD_ELEMENT,
 			parentId: "parentId",
 			contentId: undefined,
 		}
@@ -60,17 +60,6 @@ describe("H5PEditorPage", () => {
 	};
 
 	describe("Setup", () => {
-		describe("when the parent type is lessons", () => {
-			it("should have no hooks", async () => {
-				const { wrapper } = getWrapper({
-					parentType: H5PContentParentType.LESSONS,
-					parentId: "parentId",
-				});
-
-				expect((wrapper.vm as unknown as typeof H5pEditorPage).hooks).toBeUndefined();
-			});
-		});
-
 		describe("when the parent type is board-element", () => {
 			describe("when onCreate hook succeeds", () => {
 				it("should have board hooks", async () => {

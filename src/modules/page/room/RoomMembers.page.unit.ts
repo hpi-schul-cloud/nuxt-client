@@ -12,6 +12,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	InvitationStep,
+	useRegistrationStore,
 	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
@@ -32,7 +33,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
@@ -193,9 +194,11 @@ describe("RoomMembersPage", () => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(useRoomInvitationLinkStore);
+		const registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
 
 		return {
 			wrapper,
+			registrationStore,
 			roomDetailsStore,
 			roomMembersStore,
 			roomInvitationLinkStore,
@@ -238,6 +241,20 @@ describe("RoomMembersPage", () => {
 		const { roomDetailsStore } = setup({ createRoom: false });
 
 		expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith(routeRoomId);
+	});
+
+	describe("when user has permission to manage room invitation links", () => {
+		beforeEach(() => (roomPermissions.canManageRoomInvitationLinks = computed(() => true)));
+
+		it("should fetch registrations on mount", () => {
+			const { registrationStore } = setup();
+			expect(registrationStore.fetchRegistrationsForCurrentRoom).toHaveBeenCalled();
+		});
+	});
+
+	it("should not fetch registrations on mount on default", () => {
+		const { registrationStore } = setup();
+		expect(registrationStore.fetchRegistrationsForCurrentRoom).not.toHaveBeenCalled();
 	});
 
 	describe("page title", () => {

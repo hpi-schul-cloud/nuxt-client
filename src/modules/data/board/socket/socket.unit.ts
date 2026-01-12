@@ -93,6 +93,7 @@ describe("socket.ts", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		mockSocket.connected = true;
+		vi.spyOn(logger, "log").mockImplementation(vi.fn());
 	});
 
 	afterEach(() => {
@@ -123,7 +124,7 @@ describe("socket.ts", () => {
 		return { boardStore, cardStore };
 	};
 
-	const setup = async (
+	const setup = (
 		options: {
 			doInitializeTimeout?: boolean;
 			url?: string;
@@ -137,7 +138,7 @@ describe("socket.ts", () => {
 
 		const { emitOnSocket, emitWithAck, disconnectSocket, getConnectedSocket, connected } =
 			useSocketConnection(dispatchMock);
-		const socket = await getConnectedSocket();
+		const socket = getConnectedSocket();
 
 		const eventCallbacks = getAllEventCallbacks();
 
@@ -172,8 +173,8 @@ describe("socket.ts", () => {
 	};
 
 	describe("connect event", () => {
-		it("should showSuccess when socket is connected", () => async () => {
-			const { eventCallbacks } = await setup();
+		it("should showSuccess when socket is connected", () => {
+			const { eventCallbacks } = setup();
 			eventCallbacks.disconnect();
 			eventCallbacks.connect();
 
@@ -181,8 +182,8 @@ describe("socket.ts", () => {
 		});
 
 		describe("when the client connects for the first time", () => {
-			it("should not show 'connection restored' notification", async () => {
-				const { eventCallbacks } = await setup();
+			it("should not show 'connection restored' notification", () => {
+				const { eventCallbacks } = setup();
 				eventCallbacks.connect();
 
 				expect(useNotificationStore().notify).not.toHaveBeenCalled();
@@ -192,8 +193,8 @@ describe("socket.ts", () => {
 		});
 
 		describe("when the client reconnects", () => {
-			it("should show 'connection restored' notification", async () => {
-				const { eventCallbacks } = await setup();
+			it("should show 'connection restored' notification", () => {
+				const { eventCallbacks } = setup();
 
 				eventCallbacks.disconnect();
 				eventCallbacks.connect();
@@ -202,8 +203,8 @@ describe("socket.ts", () => {
 			});
 		});
 
-		it("should not show connection restored notification and call 'timeout.stop'", async () => {
-			const { eventCallbacks } = await setup({
+		it("should not show connection restored notification and call 'timeout.stop'", () => {
+			const { eventCallbacks } = setup({
 				doInitializeTimeout: true,
 			});
 
@@ -216,9 +217,9 @@ describe("socket.ts", () => {
 			});
 		});
 
-		it("should report successful connection restoration after retry", async () => {
+		it("should report successful connection restoration after retry", () => {
 			boardErrorReportApi.boardErrorReportControllerReportError.mockResolvedValue(mockApiResponse({ data: {} }));
-			const { eventCallbacks } = await setup({
+			const { eventCallbacks } = setup({
 				doInitializeTimeout: true,
 			});
 
@@ -230,8 +231,8 @@ describe("socket.ts", () => {
 		});
 
 		describe("when board doesn't exist", () => {
-			it("should not call reloadBoard", async () => {
-				const { eventCallbacks } = await setup();
+			it("should not call reloadBoard", () => {
+				const { eventCallbacks } = setup();
 
 				getOrInitialiseBoardStore().boardStore.board = undefined;
 				eventCallbacks.disconnect();
@@ -243,15 +244,15 @@ describe("socket.ts", () => {
 	});
 
 	describe("disconnect event", () => {
-		it("should showFailure when socket is disconnected", async () => {
-			const { eventCallbacks } = await setup();
+		it("should showFailure when socket is disconnected", () => {
+			const { eventCallbacks } = setup();
 			eventCallbacks.disconnect();
 			expectNotification("error");
 		});
 
 		describe("connect_error event", () => {
-			it("should report board error and show failure notification for every 5th retry", async () => {
-				const { eventCallbacks } = await setup();
+			it("should report board error and show failure notification for every 5th retry", () => {
+				const { eventCallbacks } = setup();
 
 				const mockError = {
 					type: "connect_error",
@@ -269,8 +270,8 @@ describe("socket.ts", () => {
 				);
 			});
 
-			it("should show error after 20 retries", async () => {
-				const { eventCallbacks } = await setup();
+			it("should show error after 20 retries", () => {
+				const { eventCallbacks } = setup();
 
 				const mockError = {
 					type: "connect_error",
@@ -285,25 +286,25 @@ describe("socket.ts", () => {
 		});
 
 		describe("emitOnSocket", () => {
-			it("should call emit", async () => {
-				const { emitOnSocket } = await setup();
+			it("should call emit", () => {
+				const { emitOnSocket } = setup();
 
 				emitOnSocket("deleteCard", {});
 				expect(mockSocket.emit).toHaveBeenCalledWith("deleteCard", {});
 			});
 
-			it("should not call connect if connected already", async () => {
+			it("should not call connect if connected already", () => {
 				mockSocket.connected = true;
-				const { emitOnSocket } = await setup();
+				const { emitOnSocket } = setup();
 
 				emitOnSocket("deleteCard", {});
 
 				expect(mockSocket.connect).not.toHaveBeenCalled();
 			});
 
-			it("should call connect if not connected yet", async () => {
+			it("should call connect if not connected yet", () => {
 				mockSocket.connected = false;
-				const { emitOnSocket } = await setup();
+				const { emitOnSocket } = setup();
 
 				emitOnSocket("deleteCard", {});
 
@@ -312,8 +313,8 @@ describe("socket.ts", () => {
 		});
 
 		describe("emitWithAck", () => {
-			it("should call emitWithAck", async () => {
-				const { emitWithAck } = await setup();
+			it("should call emitWithAck", () => {
+				const { emitWithAck } = setup();
 
 				emitWithAck("deleteCard", {});
 
@@ -321,18 +322,18 @@ describe("socket.ts", () => {
 				expect(timeoutResponseMock.emitWithAck).toHaveBeenCalledWith("deleteCard", {});
 			});
 
-			it("should not call connect if connected already", async () => {
+			it("should not call connect if connected already", () => {
 				mockSocket.connected = true;
-				const { emitWithAck } = await setup();
+				const { emitWithAck } = setup();
 
 				emitWithAck("deleteCard", {});
 
 				expect(mockSocket.connect).not.toHaveBeenCalled();
 			});
 
-			it("should call connect if not connected yet", async () => {
+			it("should call connect if not connected yet", () => {
 				mockSocket.connected = false;
-				const { emitWithAck } = await setup();
+				const { emitWithAck } = setup();
 
 				emitWithAck("deleteCard", {});
 
@@ -341,17 +342,17 @@ describe("socket.ts", () => {
 		});
 
 		describe("disconnectSocket", () => {
-			it("should do nothing if socket is not connected", async () => {
+			it("should do nothing if socket is not connected", () => {
 				mockSocket.connected = false;
-				const { disconnectSocket } = await setup({ doInitializeTimeout: true });
+				const { disconnectSocket } = setup({ doInitializeTimeout: true });
 
 				disconnectSocket();
 
 				expect(mockSocket.disconnect).not.toHaveBeenCalled();
 			});
 
-			it("should call disconnect", async () => {
-				const { eventCallbacks, disconnectSocket } = await setup({
+			it("should call disconnect", () => {
+				const { eventCallbacks, disconnectSocket } = setup({
 					doInitializeTimeout: true,
 				});
 
@@ -361,8 +362,8 @@ describe("socket.ts", () => {
 				expect(mockSocket.disconnect).toHaveBeenCalled();
 			});
 
-			it("should call stop if timeout is pending", async () => {
-				const { eventCallbacks, disconnectSocket } = await setup({
+			it("should call stop if timeout is pending", () => {
+				const { eventCallbacks, disconnectSocket } = setup({
 					doInitializeTimeout: true,
 				});
 
@@ -377,7 +378,7 @@ describe("socket.ts", () => {
 
 	describe("when adding multiple handlers", () => {
 		it("should call all dispatchers on incoming event", async () => {
-			const { triggerServerEvent, getConnectedSocket, connected } = await setup();
+			const { triggerServerEvent, getConnectedSocket, connected } = setup();
 
 			await getConnectedSocket();
 			const anotherDispatchMock = vi.fn();
@@ -406,7 +407,7 @@ describe("socket.ts", () => {
 			});
 
 			it("should notify error, report board error and disconnect socket", async () => {
-				const { eventCallbacks, socket, getConnectedSocket } = await setup();
+				const { eventCallbacks, socket, getConnectedSocket } = setup();
 
 				await getConnectedSocket();
 				const mockError = getSessionIdUnknownError();
@@ -422,8 +423,9 @@ describe("socket.ts", () => {
 			});
 
 			describe("when reporting the board error fails", () => {
-				it("should not throw error", async () => {
-					const { eventCallbacks } = await setup();
+				it("should not throw error", () => {
+					vi.spyOn(logger, "error").mockImplementation(vi.fn());
+					const { eventCallbacks } = setup();
 					boardErrorReportApi.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
 
 					const mockError = getSessionIdUnknownError();
@@ -431,7 +433,7 @@ describe("socket.ts", () => {
 				});
 
 				it("should call logger.error", async () => {
-					const { eventCallbacks } = await setup();
+					const { eventCallbacks } = setup();
 
 					logger.error = vi.fn();
 					boardErrorReportApi.boardErrorReportControllerReportError.mockRejectedValueOnce(new Error("Network error"));
@@ -449,8 +451,8 @@ describe("socket.ts", () => {
 
 		describe("when error is general connection error", () => {
 			describe("when less than three connection attempts have failed", () => {
-				it("should not report the error (usual hiccups on websocket connection)", async () => {
-					const { eventCallbacks } = await setup();
+				it("should not report the error (usual hiccups on websocket connection)", () => {
+					const { eventCallbacks } = setup();
 
 					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
@@ -461,8 +463,8 @@ describe("socket.ts", () => {
 			});
 
 			describe("when three connection attempts have failed", () => {
-				it("should report the error with the right retryCount", async () => {
-					const { eventCallbacks } = await setup();
+				it("should report the error with the right retryCount", () => {
+					const { eventCallbacks } = setup();
 
 					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
@@ -478,8 +480,8 @@ describe("socket.ts", () => {
 			});
 
 			describe("when url does not contain board id", () => {
-				it("should report board error with correct parameters and boardId:unknown", async () => {
-					const { eventCallbacks } = await setup({ url: "http://test.com/boards/noid" });
+				it("should report board error with correct parameters and boardId:unknown", () => {
+					const { eventCallbacks } = setup({ url: "http://test.com/boards/noid" });
 
 					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
@@ -500,8 +502,8 @@ describe("socket.ts", () => {
 			});
 
 			describe("when url contains board id", () => {
-				it("should report board error with correct parameters and extracted boardId", async () => {
-					const { eventCallbacks } = await setup({ url: "http://localhost:4000/boards/69121555fd38bab102439ff8" });
+				it("should report board error with correct parameters and extracted boardId", () => {
+					const { eventCallbacks } = setup({ url: "http://localhost:4000/boards/69121555fd38bab102439ff8" });
 
 					const mockError = { type: "test_error", message: "Test error message" };
 					eventCallbacks.connect_error(mockError);
@@ -523,8 +525,8 @@ describe("socket.ts", () => {
 		});
 
 		describe("when connection is re-established", () => {
-			it("should reset retry count", async () => {
-				const { eventCallbacks } = await setup();
+			it("should reset retry count", () => {
+				const { eventCallbacks } = setup();
 
 				const mockError = { type: "test_error", message: "Test error message" };
 				eventCallbacks.connect_error(mockError);

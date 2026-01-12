@@ -5,6 +5,7 @@ import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tes
 import { useNotificationStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -35,6 +36,7 @@ describe("useRoomStore", () => {
 		});
 
 		it("should show error notification when fetch fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
 			roomApiMock.roomControllerGetRooms.mockRejectedValue(new Error("Network error"));
 
 			await useRoomStore().fetchRooms();
@@ -54,6 +56,7 @@ describe("useRoomStore", () => {
 		});
 
 		it("should show error notification when create fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
 			roomApiMock.roomControllerCreateRoom.mockRejectedValue(new Error("Create failed"));
 			await useRoomStore().createRoom(createParams);
 			expectNotification("error");
@@ -68,6 +71,7 @@ describe("useRoomStore", () => {
 		});
 
 		it("should show error notification when delete fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
 			roomApiMock.roomControllerDeleteRoom.mockRejectedValue(new Error("Delete failed"));
 			await useRoomStore().deleteRoom("room-123");
 			expectNotification("error");
@@ -82,6 +86,7 @@ describe("useRoomStore", () => {
 		});
 
 		it("should show error notification when leave fails", async () => {
+			vi.spyOn(logger, "error").mockImplementation(vi.fn());
 			roomApiMock.roomControllerLeaveRoom.mockRejectedValue(new Error("Leave failed"));
 			await useRoomStore().leaveRoom("room-123");
 			expectNotification("error");

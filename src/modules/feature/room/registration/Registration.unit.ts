@@ -3,35 +3,52 @@ import Consent from "./steps/Consent.vue";
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
 import { LanguageType } from "@/serverApi/v3";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRegistration } from "@data-room";
+import { useRegistrationStepper, useRegistrationStore } from "@data-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick, ref } from "vue";
+import { Mock } from "vitest";
+import { computed, nextTick, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
 import { VStepper, VStepperItem } from "vuetify/components";
 
-vi.mock("vue-i18n", () => ({
-	useI18n: () => ({
-		t: vi.fn().mockImplementation((key) => key),
-	}),
-}));
+vi.mock("vue-i18n", async () => {
+	const actual = await vi.importActual<typeof import("vue-i18n")>("vue-i18n");
 
-vi.mock("@data-room/registration/registration.composable");
-const useRegistrationMock = vi.mocked(useRegistration);
+	return {
+		...actual,
+		useI18n: () => ({
+			t: vi.fn().mockImplementation((key) => key),
+		}),
+	};
+});
+
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
+const useRouteMock = <Mock>useRoute;
+
+vi.mock("@data-room/registration/registrationStepper.composable");
+const useRegistrationStepperMock = vi.mocked(useRegistrationStepper);
+
+let registrationStore: ReturnType<typeof useRegistrationStore>;
 
 describe("Registration.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
+		registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
 	});
 	const setup = (
 		options?: Partial<{
 			password: string;
+			queryParams?: string;
+			hasApiErrorOccurred?: boolean;
 		}>
 	) => {
-		useRegistrationMock.mockReturnValue({
+		useRegistrationStepperMock.mockReturnValue({
 			selectedLanguage: ref(LanguageType.De),
 			password: ref(options?.password ?? ""),
 			isPrivacyPolicyAccepted: ref(false),
@@ -39,10 +56,23 @@ describe("Registration.vue", () => {
 			setCookie: vi.fn(),
 			setSelectedLanguage: vi.fn(),
 			initializeLanguage: vi.fn(),
-			fullName: ref("Max Mustermann"),
-			fetchUserData: vi.fn(),
-			createAccount: vi.fn(),
-			userData: ref({ name: "Max", surname: "Mustermann", email: "max@mustermann.com" }),
+			fullName: computed(() => "Max Mustermann"),
+		});
+		registrationStore.isLoading = false;
+		registrationStore.registrationSecret = options?.queryParams ?? "secret-value";
+		registrationStore.userData = {
+			firstName: "Max",
+			lastName: "Mustermann",
+			email: "",
+		};
+		registrationStore.hasApiErrorOccurred = options?.hasApiErrorOccurred ?? false;
+
+		const router = createMock<Router>({});
+		useRouterMock.mockReturnValue(router);
+		useRouteMock.mockReturnValue({
+			query: {
+				"registration-secret": options?.queryParams ?? "secret-value",
+			},
 		});
 
 		const wrapper = mount(Registration, {
@@ -53,14 +83,14 @@ describe("Registration.vue", () => {
 			},
 		});
 
-		return { wrapper, useRegistration: useRegistrationMock() };
+		return { wrapper, useRegistrationStepper: useRegistrationStepperMock() };
 	};
 
 	it("should be rendered", () => {
-		const { wrapper, useRegistration } = setup();
+		const { wrapper, useRegistrationStepper } = setup();
 		expect(wrapper).toBeDefined();
-		expect(useRegistration.initializeLanguage).toHaveBeenCalled();
-		expect(useRegistration.selectedLanguage.value).toStrictEqual(LanguageType.De);
+		expect(useRegistrationStepper.initializeLanguage).toHaveBeenCalled();
+		expect(useRegistrationStepper.selectedLanguage.value).toStrictEqual(LanguageType.De);
 	});
 
 	describe("Stepper Component", () => {
@@ -157,23 +187,34 @@ describe("Registration.vue", () => {
 					const welcomeStepHeading = wrapper.get("#step-heading-welcome");
 					expect(document.activeElement).toEqual(welcomeStepHeading.element);
 				});
+
+				it("should be disabled if API error has occurred", async () => {
+					const { wrapper } = setup({ hasApiErrorOccurred: true });
+					const stepper = wrapper.findComponent(VStepper);
+					const continueButton = wrapper
+						.find("[data-testid='registration-continue-button']")
+						.getComponent({ name: "VBtn" });
+
+					expect(stepper.props("modelValue")).toBe(1);
+					expect(continueButton.props("disabled")).toStrictEqual(true);
+				});
 			});
 		});
 
 		describe("Language Selection Component", () => {
 			it("should call setSelectedLanguage when language is updated", async () => {
-				const { wrapper, useRegistration } = setup();
+				const { wrapper, useRegistrationStepper } = setup();
 				const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
 
 				languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.En);
 				await nextTick();
 
-				expect(useRegistration.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.En);
+				expect(useRegistrationStepper.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.En);
 			});
 
 			it("should have default language as German even if the selectedLanguage's value is undefined", () => {
-				const { wrapper, useRegistration } = setup();
-				useRegistration.selectedLanguage.value = undefined;
+				const { wrapper, useRegistrationStepper } = setup();
+				useRegistrationStepper.selectedLanguage.value = undefined;
 				const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
 
 				expect(languageSelectionComponent.props("selectedLanguage")).toBe(LanguageType.De);
@@ -216,14 +257,16 @@ describe("Registration.vue", () => {
 			});
 
 			it("should properly pass v-model values to Consent component", async () => {
-				const { wrapper, useRegistration } = setup();
+				const { wrapper, useRegistrationStepper } = setup();
 				const stepper = wrapper.findComponent(VStepper);
 				await stepper.setValue(4);
 
 				const consentComponent = wrapper.getComponent(Consent);
 
-				expect(consentComponent.props("isPrivacyPolicyAccepted")).toBe(useRegistration.isPrivacyPolicyAccepted.value);
-				expect(consentComponent.props("isTermsOfUseAccepted")).toBe(useRegistration.isTermsOfUseAccepted.value);
+				expect(consentComponent.props("isPrivacyPolicyAccepted")).toBe(
+					useRegistrationStepper.isPrivacyPolicyAccepted.value
+				);
+				expect(consentComponent.props("isTermsOfUseAccepted")).toBe(useRegistrationStepper.isTermsOfUseAccepted.value);
 			});
 
 			it("should focus first invalid checkbox on continue button click", async () => {

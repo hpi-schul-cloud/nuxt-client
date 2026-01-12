@@ -4,8 +4,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("BoardSectionCreationHeader", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(BoardSectionCreationHeader, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

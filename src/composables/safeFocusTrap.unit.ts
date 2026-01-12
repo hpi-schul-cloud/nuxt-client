@@ -1,6 +1,6 @@
 import { useSafeFocusTrap } from "./safeFocusTrap";
 import { flushPromises } from "@vue/test-utils";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock } from "vitest";
 import { nextTick, Ref, ref } from "vue";
 import { useDisplay } from "vuetify";
