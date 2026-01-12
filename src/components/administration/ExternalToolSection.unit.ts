@@ -29,7 +29,7 @@ import { setActivePinia } from "pinia";
 import { expect, Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { VCardText } from "vuetify/lib/components/index";
+import { VCardText } from "vuetify/components";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);

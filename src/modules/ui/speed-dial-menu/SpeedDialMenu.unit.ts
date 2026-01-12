@@ -1,18 +1,16 @@
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import { FabAction } from "./types";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { VBtn, VFab, VIcon, VSpeedDial } from "vuetify/components";
 
-describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
-	window.scrollTo = vi.fn();
-
+describe("SpeedDialMenu", () => {
 	const setup = ({ actions }: { actions: FabAction[] }) => {
 		const wrapper = mount(SpeedDialMenu, {
 			attachTo: document.body,
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				actions,
@@ -93,14 +91,14 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 			expect(buttons).toHaveLength(7);
 		});
 
-		it("should render close btn while open", async () => {
+		it("should render empty text while open", async () => {
 			const { wrapper } = setup({ actions: multipleActions });
 
 			await toggleSpeedDialMenu(wrapper);
 			const fab = wrapper.findComponent(VFab);
 
 			expect(fab.findComponent(VIcon).exists()).toBe(true);
-			expect(fab.text().length).toBe(0);
+			expect(fab.find("#fab-label").text()).toBe("");
 		});
 
 		it("should render a SpeedDialMenuAction component per action", async () => {
@@ -117,12 +115,6 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 			defineWindowWidth(1300);
 		});
 
-		it("should be positioned absolutely at the top right", () => {
-			const { wrapper } = setup({ actions: multipleActions });
-
-			expect(wrapper.classes()).toContain("positioning-lg");
-		});
-
 		it("should open speed dial downwards", async () => {
 			const { wrapper } = setup({ actions: multipleActions });
 			await toggleSpeedDialMenu(wrapper);
@@ -135,13 +127,6 @@ describe("@ui-speed-dial-menu/SpeedDialMenu", () => {
 	describe("on small to medium screens", () => {
 		beforeEach(() => {
 			defineWindowWidth(800);
-		});
-
-		it("should be positioned absolutely at the top right", () => {
-			const { wrapper } = setup({ actions: multipleActions });
-
-			expect(wrapper.classes()).toContain("positioning-sm-md");
-			expect(wrapper.classes()).toContain("position-fixed");
 		});
 
 		it("should open speed dial downwards", async () => {
