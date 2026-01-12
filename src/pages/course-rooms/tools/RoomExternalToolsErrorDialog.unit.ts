@@ -8,7 +8,6 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
-import { logger } from "@util-logger";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VCard, VCardText } from "vuetify/components";
@@ -122,7 +121,6 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const { wrapper } = setup();
 
 				const title = wrapper.getComponent(VCard).find('[data-testid="error-dialog-title"]');
-				logger.log(wrapper.getComponent(VCard).html());
 
 				expect(title.text()).toEqual("error.generic");
 			});
