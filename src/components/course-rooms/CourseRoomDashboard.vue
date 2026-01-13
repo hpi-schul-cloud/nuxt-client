@@ -185,7 +185,7 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy.ts";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";

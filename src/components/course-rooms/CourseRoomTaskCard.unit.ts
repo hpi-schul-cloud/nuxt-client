@@ -217,7 +217,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/components/molecules/CourseRoomTaskCard", () => {
+describe("CourseRoomTaskCard", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();

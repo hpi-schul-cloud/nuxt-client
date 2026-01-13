@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { ldapPathRegexValidator } from "@/utils/ldapConstants.js";
+import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import {
 	mdiAccountOffOutline,
 	mdiAccountOutline,

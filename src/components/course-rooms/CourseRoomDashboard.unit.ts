@@ -136,7 +136,7 @@ const getWrapper = (props: ComponentProps<typeof CourseRoomDashboard>, options?:
 	return wrapper;
 };
 
-describe("@/components/templates/CourseRoomDashboard.vue", () => {
+describe("CourseRoomDashboard.vue", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({

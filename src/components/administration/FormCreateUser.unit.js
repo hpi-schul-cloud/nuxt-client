@@ -19,7 +19,7 @@ const getMockActionsErrorCreate = () => ({
 	find: vi.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
-describe("@/components/organisms/FormCreateUser", () => {
+describe("FormCreateUser", () => {
 	const setup = (actions = getMockActions(), options = {}) => {
 		const wrapper = mount(FormCreateUser, {
 			global: {

@@ -69,7 +69,7 @@ import Pagination from "./Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 import TableDataRow from "./TableDataRow.vue";
 import TableHeadRow from "./TableHeadRow.vue";
-import { getValueByPath } from "@/utils/helpers.js";
+import { getValueByPath } from "@/utils/helpers";
 
 export default {
 	components: {

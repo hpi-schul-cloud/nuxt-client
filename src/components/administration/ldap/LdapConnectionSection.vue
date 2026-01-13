@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "@/utils/ldapConstants.js";
+import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "@/utils/ldapConstants";
 import { useEnvConfig } from "@data-env";
 import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline, mdiLockOutline } from "@icons/material";
 import useVuelidate from "@vuelidate/core";

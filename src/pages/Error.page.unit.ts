@@ -59,7 +59,7 @@ describe("@pages/Error.page.vue", () => {
 			},
 		});
 	};
-	describe("@/components/error-handling/ErrorPage.vue", () => {
+	describe("ErrorPage.vue", () => {
 		it("should assign 'window.location' when back button is clicked", async () => {
 			const wrapper = mountComponent();
 			const btnElement = wrapper.findComponent({ ref: "btn-back" });

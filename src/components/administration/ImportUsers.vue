@@ -237,7 +237,7 @@
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
 import { ImportUserResponseRoleNamesEnum, SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
-import { MatchedBy } from "@/store/import-users.ts";
+import { MatchedBy } from "@/store/import-users";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
