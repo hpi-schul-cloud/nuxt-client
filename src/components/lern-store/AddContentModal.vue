@@ -54,7 +54,7 @@
 
 <script>
 import BaseModal from "../base/BaseModal.vue";
-import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalFooter from "@/components/legacy/ModalFooter.vue";
 import { contentModule } from "@/store";
 import { mapGetters } from "vuex";
 

@@ -30,7 +30,7 @@ const getShallowWrapper = (props: { menuItems: MenuItem[] }, options?: object) =
 		...options,
 	});
 
-describe("@/components/molecules/RoomDotMenu", () => {
+describe("RoomDotMenu", () => {
 	it("should render with correct props", () => {
 		const wrapper = getWrapper(testProps);
 

@@ -1,11 +1,5 @@
 <template>
-	<VToolbar
-		:height="appBarHeight"
-		class="top-bar"
-		:class="{
-			'hide-top-bar': !sidebarExpanded && isScrollingDown,
-		}"
-	>
+	<VToolbar :height="appBarHeight" class="top-bar">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -118,10 +112,6 @@ const appBarHeight = computed(() => {
 	top: 0;
 	z-index: 1000;
 	transition: top 0.2s ease-in-out;
-}
-
-.hide-top-bar {
-	top: calc(-1 * var(--topbar-height));
 }
 
 .school-name {

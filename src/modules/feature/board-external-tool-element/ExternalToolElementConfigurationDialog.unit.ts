@@ -1,5 +1,5 @@
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
-import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
+import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

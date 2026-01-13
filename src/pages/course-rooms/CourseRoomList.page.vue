@@ -1,5 +1,5 @@
 <template>
-	<room-wrapper :has-rooms="hasRooms">
+	<CourseRoomWrapper :has-rooms="hasRooms">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.all") }}
@@ -38,18 +38,18 @@
 							md="3"
 							sm="3"
 						>
-							<RoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
+							<CourseRoomAvatar :ref="`${room.id}-avatar`" class="room-avatar" :item="room" size="5em" />
 						</v-col>
 					</v-row>
 				</v-container>
 			</v-row>
 		</template>
-	</room-wrapper>
+	</CourseRoomWrapper>
 </template>
 
 <script lang="ts">
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -58,8 +58,8 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: {
-		RoomWrapper,
-		RoomAvatar,
+		CourseRoomWrapper,
+		CourseRoomAvatar,
 	},
 	data() {
 		return {

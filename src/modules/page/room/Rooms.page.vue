@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
@@ -35,6 +34,7 @@ import { ImportCardDialog } from "@feature-board";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";

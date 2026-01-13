@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
@@ -18,7 +18,7 @@
 			</p>
 		</div>
 		<v-spacer class="mt-10" />
-		<external-tool-configurator
+		<ExternalToolConfigurator
 			:templates="configurationTemplates"
 			:configuration="configuration"
 			:error="apiError"
@@ -40,15 +40,13 @@
 					data-testId="configuration-deactivate-checkbox"
 				/>
 			</template>
-		</external-tool-configurator>
-	</default-wireframe>
+		</ExternalToolConfigurator>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
+import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
 import { SchoolExternalTool, SchoolExternalToolSave, ToolParameterEntry } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -57,6 +55,7 @@ import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStoreRefs } from "@data-app";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";

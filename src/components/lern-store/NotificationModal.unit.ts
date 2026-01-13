@@ -1,4 +1,4 @@
-import ModalBodyInfo from "../molecules/ModalBodyInfo.vue";
+import ModalBodyInfo from "../legacy/ModalBodyInfo.vue";
 import NotificationModal from "./NotificationModal.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
