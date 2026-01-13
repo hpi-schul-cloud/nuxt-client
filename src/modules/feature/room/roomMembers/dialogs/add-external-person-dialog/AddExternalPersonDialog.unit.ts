@@ -212,7 +212,7 @@ describe("AddExternalPersonDialog", () => {
 		});
 
 		describe("when details are valid", () => {
-			it("should call startRegistrationProcess with correct data, close dialog and refetch registrations", async () => {
+			it("should call startRegistrationProcess with correct data, close dialog, show success notification and refetch registrations", async () => {
 				const { wrapper, roomMembersStore, registrationStore } = setup();
 
 				roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
@@ -233,6 +233,11 @@ describe("AddExternalPersonDialog", () => {
 					lastName,
 				});
 				expect(wrapper.emitted()).toHaveProperty("close");
+				expect(useNotificationStore().notify).toHaveBeenCalledWith({
+					autoClose: true,
+					status: "success",
+					text: "TODO: add success message",
+				});
 				expect(registrationStore.fetchRegistrationsForCurrentRoom).toHaveBeenCalled();
 			});
 

@@ -49,7 +49,7 @@
 import StepDetails from "./StepDetails.vue";
 import StepEmail from "./StepEmail.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { notifyError } from "@data-app";
+import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { ExternalMemberCheckStatus, useRegistrationStore, useRoomMembersStore } from "@data-room";
 import { computed, nextTick, ref } from "vue";
@@ -120,6 +120,7 @@ const onSubmitInvitation = async () => {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	} finally {
 		closeDialog();
+		notifySuccess("TODO: add success message");
 		await registrationStore.fetchRegistrationsForCurrentRoom();
 	}
 };
