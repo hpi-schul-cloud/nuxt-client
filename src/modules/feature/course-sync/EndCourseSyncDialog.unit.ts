@@ -48,8 +48,9 @@ describe("EndCourseSyncDialog", () => {
 			const cancelBtn = wrapper.findComponent("[data-testid=dialog-cancel]");
 			await cancelBtn.trigger("click");
 
-			expect(wrapper.props().modelValue).toEqual(false);
 			expect(wrapper.emitted("update:modelValue")).toBeDefined();
+			const updateEvents = wrapper.emitted("update:modelValue");
+			expect(updateEvents && updateEvents[0][0]).toEqual(false);
 		});
 	});
 
@@ -60,8 +61,9 @@ describe("EndCourseSyncDialog", () => {
 			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
 
-			expect(wrapper.props().modelValue).toEqual(false);
 			expect(wrapper.emitted("update:modelValue")).toBeDefined();
+			const updateEvents = wrapper.emitted("update:modelValue");
+			expect(updateEvents && updateEvents[0][0]).toEqual(false);
 		});
 
 		it("should call the api", async () => {

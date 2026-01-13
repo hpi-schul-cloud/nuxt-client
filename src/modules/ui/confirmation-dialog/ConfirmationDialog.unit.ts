@@ -58,7 +58,10 @@ describe("ConfirmationDialog", () => {
 		it("should render dialog title", async () => {
 			const { wrapper, message } = setup();
 
-			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find(".dialog-title");
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find("[data-testid=confirmation-dialog-title]");
 
 			expect(dialogTitle.text()).toContain(message);
 		});
@@ -66,9 +69,12 @@ describe("ConfirmationDialog", () => {
 		it("should render empty dialog title if no message is provided", async () => {
 			const { wrapper } = setup({ message: undefined });
 
-			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find(".dialog-title");
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find("[data-testid=confirmation-dialog-title]");
 
-			expect(dialogTitle.text()).toBe("");
+			expect(dialogTitle.exists()).toBe(false);
 		});
 	});
 
