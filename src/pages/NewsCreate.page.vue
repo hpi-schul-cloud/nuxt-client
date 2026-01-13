@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { newsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { FormNews } from "@feature-news-form";
+import { DefaultWireframe } from "@ui-layout";
 
 export default {
 	components: {

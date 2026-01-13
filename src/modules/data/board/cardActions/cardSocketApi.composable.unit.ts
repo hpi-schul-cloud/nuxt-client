@@ -14,7 +14,6 @@ import {
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, ContentElementType } from "@/serverApi/v3";
 import { cardResponseFactory, mockedPiniaStoreTyping, richTextElementContentFactory } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
@@ -22,6 +21,7 @@ import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
@@ -34,7 +34,7 @@ vi.mock("vue-i18n");
 vi.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@util-board/LastCreatedElement.composable");

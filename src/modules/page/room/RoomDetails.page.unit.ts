@@ -1,4 +1,3 @@
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import * as serverApi from "@/serverApi/v3/api";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
@@ -15,6 +14,7 @@ import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
+import { DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

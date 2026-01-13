@@ -1,9 +1,9 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardApi } from "./BoardApi.composable";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { Breadcrumb } from "@ui-layout";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

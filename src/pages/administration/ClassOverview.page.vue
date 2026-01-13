@@ -214,7 +214,6 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
@@ -228,6 +227,7 @@ import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import { mdiAccountGroupOutline, mdiArrowUp, mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";

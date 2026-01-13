@@ -10,14 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApiResponseError } from "@/store/types/commons";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { RoomForm } from "@feature-room";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

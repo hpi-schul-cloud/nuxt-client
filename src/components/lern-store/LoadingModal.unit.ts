@@ -1,5 +1,5 @@
 import LoadingModal from "./LoadingModal.vue";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
+import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index";

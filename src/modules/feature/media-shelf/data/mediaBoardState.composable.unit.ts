@@ -1,6 +1,5 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
-import { ApiErrorHandler, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, MediaBoardColors } from "@/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
@@ -9,9 +8,10 @@ import {
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { ApiErrorHandler, useErrorHandler } from "@util-error-handling";
 
 vi.mock("./mediaBoardApi.composable");
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 
 vi.mock(
 	"@/utils/create-shared-composable",

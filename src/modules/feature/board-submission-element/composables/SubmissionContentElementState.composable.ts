@@ -1,7 +1,7 @@
 import { StudentSubmission, TeacherSubmission } from "../types/submission";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { SubmissionsResponse } from "@/serverApi/v3";
+import { useErrorHandler } from "@util-error-handling";
 import { computed, onMounted, Ref, ref, watch } from "vue";
 
 export const useSubmissionContentElementState = (id: string, modelValue: Ref<{ dueDate?: string }>) => {

@@ -26,12 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { News, PatchNewsPayload } from "@/store/types/news";
 import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { AlertStatus, useNotificationStore } from "@data-app";
 import { FormNews } from "@feature-news-form";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";

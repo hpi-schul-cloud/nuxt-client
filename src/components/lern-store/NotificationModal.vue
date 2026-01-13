@@ -18,8 +18,8 @@
 
 <script>
 import BaseModal from "../base/BaseModal.vue";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
-import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm.vue";
+import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
+import ModalFooterConfirm from "@/components/legacy/ModalFooterConfirm.vue";
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
 export default {
 	name: "NotificationModal",

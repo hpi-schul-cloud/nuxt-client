@@ -1,14 +1,13 @@
 import BorderlessLayout from "./Borderless.layout.vue";
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import ApplicationError from "@/components/molecules/ApplicationError.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { AutoLogoutWarning } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
+import { AlertContainer, ApplicationError } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { shallowMount } from "@vue/test-utils";
 import { KeepAlive } from "vue";
 import { RouterView } from "vue-router";
-import { VMain } from "vuetify/lib/components/index";
+import { VMain } from "vuetify/components";
 
 describe("BorderlessLayout", () => {
 	const getWrapper = () => {
