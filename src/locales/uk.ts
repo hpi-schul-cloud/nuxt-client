@@ -1556,6 +1556,7 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

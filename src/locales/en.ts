@@ -1540,6 +1540,7 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

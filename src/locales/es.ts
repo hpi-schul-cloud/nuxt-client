@@ -1575,6 +1575,7 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

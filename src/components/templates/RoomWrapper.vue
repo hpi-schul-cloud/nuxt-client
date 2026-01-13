@@ -1,6 +1,7 @@
 <template>
 	<DefaultWireframe ref="main" max-width="short" :fab-items="fabItems">
 		<template #header>
+			<LernStoreInfoBanner />
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
@@ -24,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import LernStoreInfoBanner from "@/components/lern-store/LernStoreInfoBanner.vue";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Permission } from "@/serverApi/v3";
