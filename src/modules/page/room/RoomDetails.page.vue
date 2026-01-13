@@ -34,8 +34,6 @@
 
 <script setup lang="ts">
 import ShareModal from "@/components/share/ShareModal.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
@@ -47,6 +45,7 @@ import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";

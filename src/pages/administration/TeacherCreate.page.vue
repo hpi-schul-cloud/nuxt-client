@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
-import FormCreateUser from "@/components/organisms/FormCreateUser";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import FormCreateUser from "@/components/administration/FormCreateUser.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
+import { DefaultWireframe } from "@ui-layout";
 
 export default {
 	components: {

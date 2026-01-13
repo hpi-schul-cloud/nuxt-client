@@ -52,8 +52,8 @@
 </template>
 
 <script>
+import UserHasRole from "./UserHasRole.vue";
 import BaseLink from "@/components/base/BaseLink";
-import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";

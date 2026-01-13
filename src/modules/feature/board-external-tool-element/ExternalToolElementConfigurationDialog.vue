@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
+import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import { notifySuccess } from "@data-app";

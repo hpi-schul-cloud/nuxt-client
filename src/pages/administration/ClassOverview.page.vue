@@ -188,7 +188,6 @@
 </template>
 
 <script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
@@ -203,6 +202,7 @@ import { EndCourseSyncDialog } from "@feature-course-sync";
 import { mdiAccountGroupOutline, mdiArrowUp, mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";

@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { useAdministrationRoomStore } from "@data-room";
@@ -39,6 +38,7 @@ import { RoomAdminTable } from "@feature-room";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
+import { DefaultWireframe } from "@ui-layout";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";

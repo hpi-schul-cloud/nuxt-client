@@ -1,9 +1,7 @@
 <template>
-	<div>
-		<WarningAlert v-if="alerts.includes(FolderAlert.FILE_STORAGE_ERROR)">
-			{{ t("components.cardElement.folderElement.storage.error") }}
-		</WarningAlert>
-	</div>
+	<WarningAlert v-if="alerts.includes(FolderAlert.FILE_STORAGE_ERROR)">
+		{{ t("components.cardElement.folderElement.storage.error") }}
+	</WarningAlert>
 </template>
 
 <script setup lang="ts">

@@ -1,43 +1,45 @@
 <template>
-	<DataTable
-		:items="tableData"
-		:table-headers="tableHeader"
-		:show-select="canAddRoomMembers"
-		:external-selected-ids="selectedIds"
-		:header-bottom="headerBottom"
-		data-testid="participants-table"
-		select-item-key="userId"
-		aria-label-name-key="fullName"
-		@update:selected-ids="onUpdateSelectedIds"
-	>
-		<template #[`action-menu-items`]>
-			<KebabMenuActionChangePermission v-if="canAddRoomMembers" @click="onChangePermission(selectedIds)" />
-			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
-		</template>
-		<template #[`item.displaySchoolRole`]="{ item }">
-			<span class="text-no-wrap">
-				<VIcon v-if="getSchoolRoleIcon(item.schoolRoleNames)" :icon="getSchoolRoleIcon(item.schoolRoleNames)" />
-				{{ item.displaySchoolRole }}
-			</span>
-		</template>
-		<template v-if="canAddRoomMembers" #[`item.actions`]="{ item, index }">
-			<KebabMenu
-				v-if="isNeitherRoomOwnerNorCurrentUser(item.userId)"
-				:data-testid="`kebab-menu-${index}`"
-				:aria-label="getAriaLabel(item)"
-			>
-				<KebabMenuActionChangePermission
-					:aria-label="getAriaLabel(item, 'changeRole')"
-					@click="onChangePermission([item.userId])"
-				/>
-				<KebabMenuActionRemoveMember
-					v-if="!isRoomOwner(item.userId)"
-					:aria-label="getAriaLabel(item, 'remove')"
-					@click="onRemoveMembers([item.userId])"
-				/>
-			</KebabMenu>
-		</template>
-	</DataTable>
+	<div class="members-table">
+		<DataTable
+			:items="tableData"
+			:table-headers="tableHeader"
+			:show-select="canAddRoomMembers"
+			:external-selected-ids="selectedIds"
+			:header-bottom="headerBottom"
+			data-testid="participants-table"
+			select-item-key="userId"
+			aria-label-name-key="fullName"
+			@update:selected-ids="onUpdateSelectedIds"
+		>
+			<template #[`action-menu-items`]>
+				<KebabMenuActionChangePermission v-if="canAddRoomMembers" @click="onChangePermission(selectedIds)" />
+				<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
+			</template>
+			<template #[`item.displaySchoolRole`]="{ item }">
+				<span class="text-no-wrap">
+					<VIcon v-if="getSchoolRoleIcon(item.schoolRoleNames)" :icon="getSchoolRoleIcon(item.schoolRoleNames)" />
+					{{ item.displaySchoolRole }}
+				</span>
+			</template>
+			<template v-if="canAddRoomMembers" #[`item.actions`]="{ item, index }">
+				<KebabMenu
+					v-if="isNeitherRoomOwnerNorCurrentUser(item.userId)"
+					:data-testid="`kebab-menu-${index}`"
+					:aria-label="getAriaLabel(item)"
+				>
+					<KebabMenuActionChangePermission
+						:aria-label="getAriaLabel(item, 'changeRole')"
+						@click="onChangePermission([item.userId])"
+					/>
+					<KebabMenuActionRemoveMember
+						v-if="!isRoomOwner(item.userId)"
+						:aria-label="getAriaLabel(item, 'remove')"
+						@click="onRemoveMembers([item.userId])"
+					/>
+				</KebabMenu>
+			</template>
+		</DataTable>
+	</div>
 	<ChangeRole v-model="isChangeRoleDialogOpen" :members="membersToChangeRole" @close="onDialogClose" />
 </template>
 
@@ -125,12 +127,12 @@ const onUpdateSelectedIds = (ids: string[]) => {
 
 const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "" = "") => {
 	const memberFullName = member.fullName;
-	const mapActionToConst = {
+	const mapActionToLanguageKey = {
 		remove: "pages.rooms.members.remove.ariaLabel",
 		changeRole: "pages.rooms.members.changePermission.ariaLabel",
 		"": "pages.rooms.members.actionMenu.ariaLabel",
 	};
-	const languageKey = mapActionToConst[actionFor];
+	const languageKey = mapActionToLanguageKey[actionFor];
 	return t(languageKey, { memberFullName });
 };
 
@@ -141,6 +143,7 @@ const tableHeader = computed(() => [
 		key: "actions",
 		sortable: false,
 		width: 50,
+		align: "center",
 	},
 ]);
 
@@ -157,3 +160,9 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	return undefined;
 };
 </script>
+
+<style lang="scss" scoped>
+.members-table :deep(.table-title-header.pt-7) {
+	padding-top: 8px !important;
+}
+</style>

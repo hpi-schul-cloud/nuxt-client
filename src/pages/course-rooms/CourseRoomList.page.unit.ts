@@ -69,7 +69,7 @@ const mockData: CourseMetadataResponse[] = [
 	},
 ];
 
-describe("@/pages/CourseRoomListPage", () => {
+describe("CourseRoomListPage", () => {
 	const setup = () => {
 		const wrapper = getWrapper();
 

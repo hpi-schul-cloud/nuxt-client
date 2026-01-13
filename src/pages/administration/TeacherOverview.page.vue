@@ -95,11 +95,10 @@
 	</div>
 </template>
 <script>
-import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-import ProgressModal from "@/components/molecules/ProgressModal";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
+import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
+import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -119,6 +118,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";
@@ -457,7 +457,9 @@ export default {
 					roleName: "teacher",
 				});
 				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks, { printPageTitleKey: "pages.administration.printQr.printPageTitle" });
+					printQrCodes(this.qrLinks, {
+						printPageTitleKey: "pages.administration.printQr.printPageTitle",
+					});
 				} else {
 					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 				}

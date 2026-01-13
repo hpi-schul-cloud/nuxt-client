@@ -76,6 +76,7 @@ export default {
 	"common.labels.firstName": "First Name",
 	"common.labels.fullName": "Name & Last Name",
 	"common.labels.greeting": "Hello, {name}",
+	"common.labels.invitedDate": "Invited on",
 	"common.labels.language": "Language",
 	"common.labels.lastName.new": "New last name",
 	"common.labels.lastName": "Last Name",
@@ -1537,10 +1538,20 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
-	"pages.registrationExternalMembers.error.404": "Registration data could not be fetched. Please contact the school.",
-	"pages.registrationExternalMembers.error": "Registration data could not be fetched. Please try again later.",
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
+		"Unfortunately, the registrations could not be loaded. Please try again later.",
+	"pages.registrationExternalMembers.error.failedFetchUserData":
+		"Unfortunately, the user data could not be loaded. Please try again later.",
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"Unfortunately, the user data could not be loaded. Please contact the school.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
+		"Unfortunately, the invitations could not be removed. Please try again later.",
+	"pages.registrationExternalMembers.error.failedResendInvitations":
+		"Unfortunately, the invitations could not be resent. Please try again later.",
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
+		"An email has just been sent. After two minutes, the email can be sent again.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaration of consent",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Please confirm the following declaration of consent so that the {instanceTitle} can be used.",
@@ -1748,6 +1759,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Members",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menu",
+	"pages.rooms.members.title.roomMembers": "Room Members",
+	"pages.rooms.members.title.invitations": "Invitations sent",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
@@ -1848,6 +1861,17 @@ export default {
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel": "Reject the membership request for {fullName}",
 	"pages.rooms.members.invitationTable.shareButton.ariaLabel": "Share invitation link “{linkTitle}”",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel": "Action menu for invitation link “{linkTitle}”",
+	"pages.rooms.members.registrations.remove.confirmation": "Delete invitation for {invitedEmail} from the room?",
+	"pages.rooms.members.registrations.multipleRemove.confirmation": "Delete selected invitations from the room?",
+	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Action menu for invitation {registrationEmail}",
+	"pages.rooms.members.registrations.actionMenu.remove": "Delete invitation",
+	"pages.rooms.members.registrations.actionMenu.resend": "Resend invitation",
+	"pages.rooms.members.registrations.remove.ariaLabel": "Delete invitation for {registrationEmail} from room",
+	"pages.rooms.members.registrations.remove.success.single": "Invitation has been successfully deleted.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Invitations have been successfully deleted.",
+	"pages.rooms.members.registrations.resend.ariaLabel": "Resend invitation for {registrationEmail}",
+	"pages.rooms.members.registrations.resend.success.single": "Invitation has been sent again.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Invitations have been sent out again.",
 	"pages.rooms.invitationlinks.error.create": "Creating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.update": "Updating the invitation link has failed.",
 	"pages.rooms.invitationlinks.error.load": "The invitation list could not be loaded.",

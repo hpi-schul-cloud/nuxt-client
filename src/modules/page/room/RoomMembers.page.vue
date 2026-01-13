@@ -53,13 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import {
 	InvitationStep,
+	useRegistrationStore,
 	useRoomAuthorization,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
@@ -83,6 +82,7 @@ import {
 } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useElementBounding, useTitle } from "@vueuse/core";
@@ -117,8 +117,10 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
+const registrationStore = useRegistrationStore();
 roomMembersStore.setAdminMode(false);
-const { fetchMembers, loadSchoolList, leaveRoom, resetStore } = roomMembersStore;
+const { fetchMembers, loadSchoolList, leaveRoom, resetStore: resetRoomMembersStore } = roomMembersStore;
+const { fetchRegistrationsForCurrentRoom, resetStore: resetRegistrationStore } = registrationStore;
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -263,11 +265,16 @@ onMounted(async () => {
 		router.replace("/rooms");
 		return;
 	}
-	await fetchMembers();
+	const promises = [fetchMembers()];
+	if (canManageRoomInvitationLinks.value) {
+		promises.push(fetchRegistrationsForCurrentRoom());
+	}
+	await Promise.all(promises);
 });
 
 onUnmounted(() => {
-	resetStore();
+	resetRoomMembersStore();
+	resetRegistrationStore();
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {

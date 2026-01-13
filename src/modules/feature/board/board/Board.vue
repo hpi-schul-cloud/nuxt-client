@@ -130,7 +130,6 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
@@ -155,6 +154,7 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
+import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";

@@ -1,15 +1,24 @@
+import FileStatistic from "./FileStatistic.vue";
+import { FolderAlert } from "./FolderAlert.enum";
 import FolderContentElement from "./FolderContentElement.vue";
+import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
+import { parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
+import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { flushPromises, mount } from "@vue/test-utils";
 import { Mock } from "vitest";
+import { computed } from "vue";
 import { Router, useRouter } from "vue-router";
+import { VAlert } from "vuetify/components";
+
+vi.mock("./useFolderAlerts.composable");
 
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
@@ -40,8 +49,28 @@ describe("FolderContentElement", () => {
 		isNotFirstElement?: boolean;
 		isNotLastElement?: boolean;
 		element?: FileFolderElement;
+		alerts?: FolderAlert[];
+		fileStatistics?: ReturnType<typeof parentStatisticFactory.build>;
 	}) => {
 		useRouterMock.mockReturnValueOnce(router);
+		const statistic =
+			options.fileStatistics ||
+			parentStatisticFactory.build({
+				fileCount: 3,
+				totalSizeInBytes: 3000000,
+			});
+		const getStatisticByParentId = vi.fn(() => statistic);
+		const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
+		const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
+			getStatisticByParentId,
+			tryGetParentStatisticFromApi,
+		});
+		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
+
+		vi.mocked(useFolderAlerts).mockReturnValue({
+			addAlert: vi.fn(),
+			alerts: computed(() => options.alerts || []),
+		});
 
 		const wrapper = mount(FolderContentElement, {
 			global: {
@@ -232,6 +261,82 @@ describe("FolderContentElement", () => {
 			await linkElement.trigger(`keydown.${key}`);
 
 			expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+		});
+	});
+
+	describe("when file statistics are available", () => {
+		it("should show file statistics", async () => {
+			const { wrapper } = setupWrapper({
+				isEditMode: true,
+			});
+
+			const fileStatistic = wrapper.findComponent(FileStatistic);
+			expect(fileStatistic.exists()).toBe(true);
+		});
+
+		it("should fetch file statistics from API", async () => {
+			setupWrapper({
+				isEditMode: true,
+			});
+
+			await flushPromises();
+
+			const fileStorageApi = FileStorageApi.useFileStorageApi();
+			expect(fileStorageApi.tryGetParentStatisticFromApi).toHaveBeenCalledWith("123", "boardnodes");
+		});
+	});
+
+	describe("download button", () => {
+		const downloadButtonTestId = '[data-testid="board-folder-element-download-button"]';
+		describe("when file folder is not empty", () => {
+			it("should show download button in edit mode", () => {
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+				});
+
+				const downloadButton = wrapper.findComponent(downloadButtonTestId);
+
+				expect(downloadButton.exists()).toBe(true);
+			});
+			it("should show download button in view mode", () => {
+				const { wrapper } = setupWrapper({
+					isEditMode: false,
+				});
+
+				const downloadButton = wrapper.findComponent(downloadButtonTestId);
+
+				expect(downloadButton.exists()).toBe(true);
+			});
+		});
+
+		describe("when file folder is empty", () => {
+			it("should show download button as disabled", () => {
+				const fileStatistics = parentStatisticFactory.build({
+					fileCount: 0,
+					totalSizeInBytes: 0,
+				});
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+					fileStatistics,
+				});
+
+				const downloadButton = wrapper.findComponent(downloadButtonTestId);
+
+				expect(downloadButton.attributes("disabled")).toBeDefined();
+			});
+		});
+	});
+
+	describe("when file statistics are not available", () => {
+		it("should show an alert", async () => {
+			const { wrapper } = setupWrapper({
+				isEditMode: true,
+				alerts: [FolderAlert.FILE_STORAGE_ERROR],
+			});
+
+			const alert = wrapper.findComponent(VAlert);
+			expect(alert.exists()).toBe(true);
+			expect(alert.text()).toContain("components.cardElement.folderElement.storage.error");
 		});
 	});
 });

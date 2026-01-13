@@ -10,7 +10,7 @@ import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index";
+import { VApp } from "vuetify/components";
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),

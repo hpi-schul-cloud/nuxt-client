@@ -1,31 +1,31 @@
 <template>
-	<VFab
-		class="fab-size-transition z-index-100"
-		:class="{
-			'fab-default-width': !isCollapsed,
-			'positioning-lg': !mdAndDown,
-			'position-fixed positioning-sm-md': mdAndDown,
-		}"
-		:rounded="!isCollapsed ? 'pill' : 'circle'"
-		color="primary"
-		size="large"
-		elevation="4"
-		:transition="false"
-		:icon="isCollapsed"
-		:to="primaryAction.to"
-		:href="primaryAction.href"
-		:aria-label="isCollapsed ? (primaryAction.ariaLabel ?? primaryAction.label) : undefined"
-		:data-testid="primaryAction.dataTestId"
-		@click="onFabClick"
-	>
-		<VIcon>{{ fabIcon }}</VIcon>
-		<span v-if="!isCollapsed" id="fab-label" class="d-block">{{ primaryAction.label }}</span>
-		<VSpeedDial v-if="isSpeedDial" v-model="isSpeedDialOpen" activator="parent" :location="speedDialLocation">
-			<template v-for="(action, index) in speedDialActions" :key="index">
-				<SpeedDialMenuAction :action="action" />
-			</template>
-		</VSpeedDial>
-	</VFab>
+	<VSpeedDial v-model="isSpeedDialOpen" :attach="true" :location="speedDialLocation" transition="fade-transition">
+		<template #activator="{ props: activatorProps }">
+			<VFab
+				class="fab-size-transition"
+				v-bind="activatorProps"
+				:rounded="isCollapsed ? 'circle' : 'pill'"
+				color="primary"
+				size="large"
+				elevation="4"
+				:transition="false"
+				:icon="isCollapsed"
+				:to="primaryAction.to"
+				:href="primaryAction.href"
+				:data-testid="primaryAction.dataTestId"
+				@click="onFabClick"
+			>
+				<VIcon :icon="fabIcon" />
+				<span id="fab-label" :aria-label="activatorAriaText" class="d-block">
+					{{ !isCollapsed ? primaryAction.label : "" }}
+				</span>
+			</VFab>
+		</template>
+
+		<template v-for="action in speedDialActions" :key="action.label">
+			<SpeedDialMenuAction :action="action" />
+		</template>
+	</VSpeedDial>
 </template>
 
 <script lang="ts" setup>
@@ -34,12 +34,19 @@ import { FabAction } from "./types";
 import { mdiClose } from "@icons/material";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const props = defineProps<{
 	actions: FabAction[];
 }>();
 
+const { t } = useI18n();
+
+const closeAriaText = t("common.labels.close");
+const activatorAriaText = computed(() =>
+	isCollapsed.value ? closeAriaText : (primaryAction.value.ariaLabel ?? primaryAction.value.label)
+);
 const primaryAction = computed(() => props.actions[0]);
 const speedDialActions = computed(() => props.actions.slice(1));
 const fabIcon = computed(() => (isSpeedDial.value && isSpeedDialOpen.value ? mdiClose : primaryAction.value.icon));
@@ -55,11 +62,7 @@ const forceCollapseOnMobileScroll = ref(false);
 const isCollapsed = computed(() => isSpeedDialOpen.value || forceCollapseOnMobileScroll.value);
 
 const onFabClick = () => {
-	if (isSpeedDial.value) {
-		isSpeedDialOpen.value = !isSpeedDialOpen.value;
-	} else {
-		if (primaryAction.value.clickHandler) primaryAction.value.clickHandler();
-	}
+	if (primaryAction.value.clickHandler && !isSpeedDial.value) primaryAction.value.clickHandler();
 };
 
 watchThrottled(
@@ -67,13 +70,9 @@ watchThrottled(
 	(newVal, oldVal) => {
 		if (!mdAndDown.value) {
 			forceCollapseOnMobileScroll.value = false;
-			return;
-		}
-		if (oldVal > 0 && oldVal > newVal) {
+		} else if (oldVal > 0 && oldVal > newVal) {
 			forceCollapseOnMobileScroll.value = false;
-			return;
-		}
-		if (newVal > 100) {
+		} else if (newVal > 100) {
 			forceCollapseOnMobileScroll.value = true;
 		}
 	},
@@ -82,31 +81,7 @@ watchThrottled(
 </script>
 
 <style scoped>
-.v-fab {
-	pointer-events: auto;
-}
-
-.positioning-lg {
-	position: absolute;
-	bottom: -22px;
-	right: 24px;
-}
-
-.positioning-sm-md {
-	bottom: 32px;
-	right: 24px;
-}
-
 .fab-size-transition :deep(.v-btn) {
 	transition: all 200ms ease-in-out;
-	min-width: 56px;
-}
-
-.fab-default-width :deep(.v-btn) {
-	width: 100%;
-}
-
-.z-index-100 {
-	z-index: 100;
 }
 </style>

@@ -64,7 +64,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-		<CommonCartridgeExportModal />
+		<CourseCommonCartridgeExportModal />
 		<end-course-sync-dialog
 			v-model="isEndSyncDialogOpen"
 			group-name=""
@@ -84,12 +84,11 @@
 
 <script>
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
+import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
+import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
+import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
@@ -126,6 +125,7 @@ import {
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
@@ -137,11 +137,11 @@ export default defineComponent({
 		StartExistingCourseSyncDialog,
 		EndCourseSyncDialog,
 		DefaultWireframe,
-		RoomDashboard,
+		CourseRoomDashboard,
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
-		CommonCartridgeExportModal,
+		CourseCommonCartridgeExportModal,
 		SelectBoardLayoutDialog,
 		CourseRoomLockedPage,
 	},
@@ -216,7 +216,7 @@ export default defineComponent({
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
 					dataTestId: "learnContent-tab",
-					component: RoomDashboard,
+					component: CourseRoomDashboard,
 					fabItems: this.learnContentFabItems,
 				},
 			];

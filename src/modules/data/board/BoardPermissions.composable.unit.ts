@@ -1,12 +1,12 @@
 import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, Permission, RoleName } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { boardResponseFactory, createTestAppStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -32,7 +32,7 @@ vi.mock("vue-i18n", () => ({
 
 vi.mocked(useI18n());
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 describe("BoardPermissions.composable", () => {

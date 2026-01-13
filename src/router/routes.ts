@@ -65,7 +65,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings/provisioning-options",
-		component: () => import("@/components/administration/ProvisioningOptionsPage.vue"),
+		component: () => import("@/pages/administration/ProvisioningOptionsPage.vue"),
 		name: "provivisioning-options-page",
 		beforeEnter: createPermissionGuard([Permission.SchoolSystemView, Permission.SchoolSystemEdit]),
 		props: (to: RouteLocationNormalized) => ({

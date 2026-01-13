@@ -240,16 +240,16 @@
 
 <script>
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import StepProgress from "@/components/organisms/StepProgress";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import StepProgress from "@/components/administration/StepProgress.vue";
+import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 
 export default {
 	components: {
