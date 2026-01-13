@@ -25,8 +25,8 @@
 					</div>
 					<div data-testid="version-radio-group">
 						<v-radio-group v-model="radios">
-							<v-radio id="1.1.0" :label="$t('pages.room.modal.course.export.version1.1')" value="1.1.0" />
-							<v-radio id="1.3.0" :label="$t('pages.room.modal.course.export.version1.3')" value="1.3.0" />
+							<v-radio data-testid="version-110-radio-button" id="1.1.0" :label="$t('pages.room.modal.course.export.version1.1')" value="1.1.0" />
+							<v-radio data-testid="version-130-radio-button" id="1.3.0" :label="$t('pages.room.modal.course.export.version1.3')" value="1.3.0" />
 						</v-radio-group>
 					</div>
 				</div>
