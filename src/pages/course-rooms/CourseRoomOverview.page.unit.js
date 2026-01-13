@@ -1,5 +1,5 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
-import RoomModal from "@/components/molecules/RoomModal";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import { courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";
@@ -124,7 +124,7 @@ const getWrapper = () => {
 	});
 };
 
-describe("@/pages/CourseRoomOverview.page", () => {
+describe("CourseRoomOverview.page", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore();
@@ -192,7 +192,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent(CourseRoomModal);
 		expect(customDialog.props("isOpen")).toBe(true);
 	});
 
@@ -203,7 +203,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		await nextTick();
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent(CourseRoomModal);
 		await nextTick();
 		const input = customDialog.findComponent({ name: "v-text-field" });
 		expect(customDialog.props("isOpen")).toBe(true);
@@ -356,7 +356,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			},
 		});
 
-		const roomModal = wrapper.findComponent(RoomModal);
+		const roomModal = wrapper.findComponent(CourseRoomModal);
 		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[0]);
 
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-1"]');

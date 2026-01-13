@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import Impressum from "@/components/templates/impressum.vue";
+import Impressum from "@/components/legacy/Impressum.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { defineComponent } from "vue";

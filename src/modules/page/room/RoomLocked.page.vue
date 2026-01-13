@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import PermissionErrorSvg from "../../../assets/img/PermissionErrorSvg.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { DefaultWireframe } from "@ui-layout";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 

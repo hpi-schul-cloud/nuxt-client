@@ -19,10 +19,9 @@
 
 <script setup lang="ts">
 import CrossedHandsSvg from "@/assets/img/CrossedHandsSvg.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomInvitationLinkValidationError, useRoomInvitationLinkStore } from "@data-room";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
