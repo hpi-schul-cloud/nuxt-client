@@ -1,6 +1,5 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
@@ -15,6 +14,7 @@ import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
+import { DefaultWireframe } from "@ui-layout";
 import { setActivePinia } from "pinia";
 import { computed } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";

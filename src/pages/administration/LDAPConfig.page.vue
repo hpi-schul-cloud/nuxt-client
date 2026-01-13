@@ -73,16 +73,16 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
-import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
-import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection.vue";
-import RolesSection from "@/components/organisms/Ldap/LdapRolesSection.vue";
-import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
+import ClassesSection from "@/components/administration/ldap/LdapClassesSection.vue";
+import ConnectionSection from "@/components/administration/ldap/LdapConnectionSection.vue";
+import RolesSection from "@/components/administration/ldap/LdapRolesSection.vue";
+import UsersSection from "@/components/administration/ldap/LdapUsersSection.vue";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
+import { DefaultWireframe } from "@ui-layout";
 import { mapGetters } from "vuex";
 
 export default {

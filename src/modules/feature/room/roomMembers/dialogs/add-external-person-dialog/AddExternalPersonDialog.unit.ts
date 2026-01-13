@@ -5,7 +5,7 @@ import { schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useNotificationStore } from "@data-app";
-import { ExternalMemberCheckStatus, useRoomMembersStore } from "@data-room";
+import { ExternalMemberCheckStatus, useRegistrationStore, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -46,6 +46,9 @@ describe("AddExternalPersonDialog", () => {
 		const roomMembersStore = useRoomMembersStore();
 		roomMembersStore.startRegistrationProcess = vi.fn();
 
+		const registrationStore = useRegistrationStore();
+		registrationStore.fetchRegistrationsForCurrentRoom = vi.fn();
+
 		wrapper = mount(AddExternalPersonDialog, {
 			props: {
 				modelValue: options?.modelValue ?? true,
@@ -56,7 +59,7 @@ describe("AddExternalPersonDialog", () => {
 			},
 		});
 
-		return { wrapper, roomMembersStore };
+		return { wrapper, roomMembersStore, registrationStore };
 	};
 
 	afterEach(() => {
@@ -209,8 +212,8 @@ describe("AddExternalPersonDialog", () => {
 		});
 
 		describe("when details are valid", () => {
-			it("should call startRegistrationProcess with correct data and close dialog", async () => {
-				const { wrapper, roomMembersStore } = setup();
+			it("should call startRegistrationProcess with correct data, close dialog and refetch registrations", async () => {
+				const { wrapper, roomMembersStore, registrationStore } = setup();
 
 				roomMembersStore.addMemberByEmail = vi.fn().mockResolvedValue(ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND);
 
@@ -230,6 +233,7 @@ describe("AddExternalPersonDialog", () => {
 					lastName,
 				});
 				expect(wrapper.emitted()).toHaveProperty("close");
+				expect(registrationStore.fetchRegistrationsForCurrentRoom).toHaveBeenCalled();
 			});
 
 			it("should show an error notification and close dialog if registerExternalMember fails", async () => {

@@ -1,5 +1,5 @@
 <template>
-	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
@@ -92,7 +92,7 @@
 				</div>
 			</div>
 		</template>
-	</room-wrapper>
+	</CourseRoomWrapper>
 	<room-modal
 		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
@@ -112,12 +112,12 @@
 </template>
 
 <script>
-import RoomAvatar from "@/components/atoms/RoomAvatar.vue";
-import RoomEmptyAvatar from "@/components/atoms/RoomEmptyAvatar.vue";
-import RoomGroupAvatar from "@/components/molecules/RoomGroupAvatar.vue";
-import RoomModal from "@/components/molecules/RoomModal.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvatar.vue";
+import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
@@ -126,11 +126,11 @@ import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	components: {
-		RoomWrapper,
-		RoomAvatar,
-		RoomGroupAvatar,
-		RoomEmptyAvatar,
-		RoomModal,
+		CourseRoomWrapper,
+		RoomAvatar: CourseRoomAvatar,
+		RoomGroupAvatar: CourseRoomGroupAvatar,
+		RoomEmptyAvatar: CourseRoomEmptyAvatar,
+		RoomModal: CourseRoomModal,
 		ImportFlow,
 	},
 	layout: "defaultVuetify",

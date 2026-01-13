@@ -141,7 +141,7 @@
 				</modal-body-info>
 			</template>
 			<template #footer>
-				<modal-footer-confirm
+				<ModalFooterConfirm
 					backgroundcolor="rgba(var(--v-theme-success))"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"
@@ -153,10 +153,9 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
+import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
+import ModalFooterConfirm from "@/components/legacy/ModalFooterConfirm.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { unchangedPassword } from "@/utils/ldapConstants";
@@ -169,6 +168,7 @@ import {
 	mdiChevronLeft,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {

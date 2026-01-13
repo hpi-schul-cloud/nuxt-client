@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth.vue";
+import InfoModalFullWidth from "@/components/legacy/InfoModalFullWidth.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
 import { logger } from "@util-logger";

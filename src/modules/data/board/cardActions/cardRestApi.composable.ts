@@ -15,12 +15,6 @@ import {
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
 import {
-	ApiErrorHandlerFactory,
-	BoardObjectType,
-	ErrorType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
-import {
 	ContentElementType,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
@@ -37,6 +31,7 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
+import { ApiErrorHandlerFactory, BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 

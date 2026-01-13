@@ -78,6 +78,7 @@ export default {
 	"common.labels.firstName": "Ім'я",
 	"common.labels.fullName": "Ім'я та Прізвище",
 	"common.labels.greeting": "Вітаємо, {name}",
+	"common.labels.invitedDate": "Запрошено на",
 	"common.labels.language": "Мова",
 	"common.labels.lastName.new": "Нове прізвище",
 	"common.labels.lastName": "Прізвище",
@@ -1556,10 +1557,20 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
-	"pages.registrationExternalMembers.error.404": "Не вдалося отримати дані реєстрації. Зверніться до школи.",
-	"pages.registrationExternalMembers.error": "Не вдалося отримати дані реєстрації. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
+		"На жаль, реєстрацію не вдалося завантажити. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.failedFetchUserData":
+		"На жаль, дані користувача не вдалося завантажити. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"На жаль, дані користувача не вдалося завантажити. Зверніться до школи.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
+		"На жаль, запрошення не вдалося видалити. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.error.failedResendInvitations":
+		"На жаль, запрошення не вдалося надіслати повторно. Спробуйте пізніше.",
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
+		"Щойно було надіслано електронний лист. Через дві хвилини електронний лист можна надіслати знову.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Декларація про згоду",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Будь ласка, підтвердьте наведену нижче заяву про згоду, щоб можна було користуватися {instanceTitle}.",
@@ -1766,6 +1777,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасників",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} меню",
+	"pages.rooms.members.title.roomMembers": "Члени приміщення",
+	"pages.rooms.members.title.invitations": "Надіслані запрошення",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
@@ -1868,6 +1881,17 @@ export default {
 	"pages.rooms.members.confirmationTable.actionMenu.confirm.ariaLabel": "Підтвердити запит на членство для {fullName}",
 	"pages.rooms.members.confirmationTable.actionMenu.reject.ariaLabel": "Відхилити запит на членство для {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel": "Меню дій для посилання-запрошення „{linkTitle}“",
+	"pages.rooms.members.registrations.remove.confirmation": "Видалити запрошення для {invitedEmail} з кімнати?",
+	"pages.rooms.members.registrations.multipleRemove.confirmation": "Вибрані запрошення дійсно видалити з кімнати?",
+	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Меню дій для {registrationEmail}",
+	"pages.rooms.members.registrations.actionMenu.remove": "Видалити запрошення",
+	"pages.rooms.members.registrations.actionMenu.resend": "Надіслати запрошення ще раз",
+	"pages.rooms.members.registrations.remove.ariaLabel": "Видалити запрошення для {registrationEmail} з кімнати",
+	"pages.rooms.members.registrations.remove.success.single": "Запрошення було успішно видалено.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Запрошення були успішно видалені.",
+	"pages.rooms.members.registrations.resend.ariaLabel": "Надіслати запрошення для {registrationEmail} ще раз",
+	"pages.rooms.members.registrations.resend.success.single": "Запрошення було надіслано повторно.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Запрошення були надіслані повторно.",
 	"pages.rooms.invitationlinks.error.create": "Не вдалося створити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.update": "Не вдалося оновити посилання на запрошення.",
 	"pages.rooms.invitationlinks.error.load": "Не вдалося завантажити список запрошень.",

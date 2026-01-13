@@ -1,4 +1,4 @@
-import UserLoginMigrationConsent from "@/pages/user-login-migration/UserLoginMigrationConsent.page.vue";
+import UserLoginMigrationConsent from "./UserLoginMigrationConsent.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { UserLoginMigration } from "@/store/user-login-migration";

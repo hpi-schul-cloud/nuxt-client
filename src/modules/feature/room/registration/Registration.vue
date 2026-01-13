@@ -69,7 +69,8 @@ import Welcome from "./steps/Welcome.vue";
 import { LanguageType } from "@/serverApi/v3";
 import { isNotNullish } from "@/utils/typeScript";
 import { useEnvConfig } from "@data-env";
-import { useRegistration } from "@data-room";
+import { useRegistrationStepper, useRegistrationStore } from "@data-room";
+import { storeToRefs } from "pinia";
 import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -92,20 +93,17 @@ const route = useRoute();
 const queryParamName = "registration-secret";
 
 const {
-	createAccount,
-	fetchUserData,
 	initializeLanguage,
-	hasApiErrorOccurred,
 	isPrivacyPolicyAccepted,
 	isTermsOfUseAccepted,
 	password,
-	registrationSecret,
 	selectedLanguage,
 	setSelectedLanguage,
 	fullName,
-	userData,
-} = useRegistration();
-
+} = useRegistrationStepper();
+const registrationStore = useRegistrationStore();
+const { hasApiErrorOccurred, registrationSecret, userData } = storeToRefs(registrationStore);
+const { completeRegistration, fetchUserData } = registrationStore;
 const lang = computed(() => selectedLanguage.value || LanguageType.De);
 const stepForms = useTemplateRef("stepForms");
 
@@ -143,7 +141,7 @@ const onContinue = async () => {
 	}
 
 	if (stepValue.value === RegistrationSteps.DeclarationOfConsent) {
-		const isSucceed = await createAccount();
+		const isSucceed = await completeRegistration(lang.value, password.value);
 		if (!isSucceed) return;
 	}
 

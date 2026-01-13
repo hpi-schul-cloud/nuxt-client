@@ -78,6 +78,7 @@ export default {
 	"common.labels.firstName": "Nombre",
 	"common.labels.fullName": "Nombre y apellidos",
 	"common.labels.greeting": "Hola, {name}",
+	"common.labels.invitedDate": "Invitado el",
 	"common.labels.language": "Idioma",
 	"common.labels.lastName.new": "Nuevo apellido",
 	"common.labels.lastName": "Apellidos",
@@ -1575,12 +1576,20 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
-	"pages.registrationExternalMembers.error.notCompleted":
+	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
-	"pages.registrationExternalMembers.error.404":
-		"No se han podido recuperar los datos de registro. Ponte en contacto con la escuela.",
-	"pages.registrationExternalMembers.error":
-		"No se han podido recuperar los datos de registro. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.failedFetchRegistrations":
+		"Lamentablemente, no se han podido cargar los registros. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.failedFetchUserData":
+		"Lamentablemente, no se han podido cargar los datos de usuario. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.failedFetchUserData.404":
+		"Lamentablemente, no se han podido cargar los datos de usuario. Por favor, póngase en contacto con la escuela.",
+	"pages.registrationExternalMembers.error.failedRemoveInvitations":
+		"Lamentablemente, no se han podido eliminar las invitaciones. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.error.failedResendInvitations":
+		"Lamentablemente, no se han podido reenviar las invitaciones. Inténtalo de nuevo más tarde.",
+	"pages.registrationExternalMembers.info.invitationRecentlySent":
+		"Se acaba de enviar un correo electrónico. Pasados dos minutos, se puede volver a enviar el correo electrónico.",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.title": "Declaración de consentimiento",
 	"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph":
 		"Por favor, confirma la siguiente declaración de consentimiento para que se pueda utilizar la {instanceTitle}.",
@@ -1791,6 +1800,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Miembros",
 	"pages.rooms.members.menu.ariaLabel": "{membersInfoText} menú",
+	"pages.rooms.members.title.roomMembers": "Miembros de la sala",
+	"pages.rooms.members.title.invitations": "Invitaciones enviadas",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
@@ -1902,6 +1913,19 @@ export default {
 		"Rechazar la solicitud de membresía de {fullName}",
 	"pages.rooms.members.invitationTable.actionMenu.ariaLabel":
 		"Menú de acción para el enlace de invitación „{linkTitle}“",
+	"pages.rooms.members.registrations.remove.confirmation":
+		"¿Eliminar realmente la invitación para {invitedEmail} de la sala?",
+	"pages.rooms.members.registrations.multipleRemove.confirmation":
+		"¿Eliminar realmente las invitaciones seleccionadas de la sala?",
+	"pages.rooms.members.registrations.actionMenu.ariaLabel": "Menú de acciones para {registrationEmail}",
+	"pages.rooms.members.registrations.actionMenu.remove": "Eliminar invitación",
+	"pages.rooms.members.registrations.actionMenu.resend": "Reenviar invitación",
+	"pages.rooms.members.registrations.remove.ariaLabel": "Eliminar invitación para {registrationEmail} de la sala",
+	"pages.rooms.members.registrations.remove.success.single": "La invitación se ha eliminado correctamente.",
+	"pages.rooms.members.registrations.remove.success.multiple": "Las invitaciones se han eliminado correctamente.",
+	"pages.rooms.members.registrations.resend.ariaLabel": "Reenviar invitación para {registrationEmail}",
+	"pages.rooms.members.registrations.resend.success.single": "Se ha vuelto a enviar la invitación.",
+	"pages.rooms.members.registrations.resend.success.multiple": "Se han vuelto a enviar las invitaciones.",
 	"pages.rooms.invitationlinks.error.create": "No se ha podido crear el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.update": "Se ha producido un error al actualizar el enlace de invitación.",
 	"pages.rooms.invitationlinks.error.load": "No se pudo cargar la lista de invitados.",

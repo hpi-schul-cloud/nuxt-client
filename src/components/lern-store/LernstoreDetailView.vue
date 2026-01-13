@@ -136,8 +136,8 @@
 </template>
 
 <script>
+import UserHasRole from "./UserHasRole.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
-import UserHasRole from "@/components/helpers/UserHasRole.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton.vue";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
 import { printDateFromTimestamp } from "@/plugins/datetime";
