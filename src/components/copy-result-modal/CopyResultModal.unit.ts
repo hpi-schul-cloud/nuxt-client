@@ -92,7 +92,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
 			const dialog = wrapper.findComponent(VDialog).findComponent(VCard);
-			const headline = dialog.find('[data-testid="dialog-title"]').text();
+			const headline = dialog.find('[data-testid="copy-dialog-title"]').text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
 		});

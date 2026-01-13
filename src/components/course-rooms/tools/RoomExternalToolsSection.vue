@@ -111,9 +111,3 @@ const showErrorDialog = (displayData: ExternalToolDisplayData | undefined) => {
 	isErrorDialogOpen.value = true;
 };
 </script>
-
-<style lang="scss" scoped>
-.text-break-word {
-	word-break: break-word;
-}
-</style>

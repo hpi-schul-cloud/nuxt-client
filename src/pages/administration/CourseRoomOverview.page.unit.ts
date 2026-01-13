@@ -587,7 +587,7 @@ describe("RoomsOverview", () => {
 					name: "EndCourseSyncDialog",
 				});
 
-				expect(dialog.vm.isOpen).toBe(true);
+				expect(dialog.props().modelValue).toBe(true);
 			});
 		});
 
