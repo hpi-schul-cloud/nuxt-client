@@ -1682,6 +1682,8 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Añadir persona externa",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"La invitación por correo electrónico no es posible. Por favor, compruebe los requisitos necesarios.",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invitar a persona externa",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"No se ha encontrado ninguna cuenta con esta dirección de correo electrónico. Se puede invitar a la persona a registrarse en {applicationName}.",
