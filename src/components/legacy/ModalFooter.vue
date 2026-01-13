@@ -13,7 +13,7 @@
 
 <style lang="scss" scoped>
 @use "sass:map";
-@use "@/styles/settings.scss" as *;
+@use "@/styles/settings" as *;
 
 .footer-container {
 	position: relative;

@@ -1,7 +1,7 @@
 import ModalBodyInfo from "./ModalBodyInfo.vue";
 import { shallowMount } from "@vue/test-utils";
 
-describe("@/components/molecules/ModalBodyInfo", () => {
+describe("ModalBodyInfo", () => {
 	it("renders icon", () => {
 		const slotContent = "hallo";
 		const { element } = shallowMount(ModalBodyInfo, {

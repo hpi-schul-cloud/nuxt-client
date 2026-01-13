@@ -154,8 +154,8 @@
 
 <script>
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
+import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
+import ModalFooterConfirm from "@/components/legacy/ModalFooterConfirm.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { unchangedPassword } from "@/utils/ldapConstants";
