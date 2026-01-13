@@ -19,7 +19,7 @@
 						<div class="mx-2">
 							<v-icon color="warning">{{ mdiAlert }}</v-icon>
 						</div>
-						<p>
+						<p data-testid="fixed-export-options-warning-info-point3">
 							{{ $t(`components.molecules.export.options.info.point3`) }}
 						</p>
 					</div>
@@ -49,7 +49,7 @@
 						</div>
 						<p>
 							<span>
-								<div data-testid="export-info-point3">
+								<div data-testid="export-options-info-point3">
 									{{ $t(`components.molecules.export.options.info.point3`) }}
 								</div>
 							</span>
