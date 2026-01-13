@@ -15,11 +15,11 @@
 			</template>
 			<template #text>
 				<div v-if="step === 0 && isExportModalOpen">
-					<div class="d-flex flex-row pa-2 mb-4 rounded orange bg-orange-lighten-5">
+					<div class="d-flex flex-row pa-2 mb-4 rounded orange bg-orange-lighten-5" data-testid="fixed-export-options-warning-info-point3">
 						<div class="mx-2">
 							<v-icon color="warning">{{ mdiAlert }}</v-icon>
 						</div>
-						<p data-testid="fixed-export-options-warning-info-point3">
+						<p>
 							{{ $t(`components.molecules.export.options.info.point3`) }}
 						</p>
 					</div>
