@@ -1,7 +1,7 @@
 import { useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
-import { createAxiosError } from "@util-axios-error";
+import { createAxiosError } from "@util-error-handling";
 import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";

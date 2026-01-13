@@ -40,9 +40,8 @@
 
 <script lang="ts">
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { GroupMapper, GroupUser, useGroupState } from "@data-group";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { DataTableHeader } from "vuetify";

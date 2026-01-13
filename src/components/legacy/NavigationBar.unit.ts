@@ -6,7 +6,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 
-describe("@/components/legacy/NavigationBar", () => {
+describe("NavigationBar", () => {
 	const navbarLinks = [
 		{
 			title: "global.topbar.loggedOut.actions.blog",
