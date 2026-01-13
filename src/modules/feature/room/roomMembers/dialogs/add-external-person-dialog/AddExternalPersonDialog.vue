@@ -120,7 +120,7 @@ const onSubmitInvitation = async () => {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	} finally {
 		closeDialog();
-		notifySuccess("TODO: add success message");
+		notifySuccess(t("pages.rooms.members.dialog.addExternalPerson.success.addingMember", { email: email.value }));
 		await registrationStore.fetchRegistrationsForCurrentRoom();
 	}
 };

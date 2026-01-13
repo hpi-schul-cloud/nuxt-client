@@ -236,7 +236,7 @@ describe("AddExternalPersonDialog", () => {
 				expect(useNotificationStore().notify).toHaveBeenCalledWith({
 					autoClose: true,
 					status: "success",
-					text: "TODO: add success message",
+					text: "pages.rooms.members.dialog.addExternalPerson.success.addingMember",
 				});
 				expect(registrationStore.fetchRegistrationsForCurrentRoom).toHaveBeenCalled();
 			});
