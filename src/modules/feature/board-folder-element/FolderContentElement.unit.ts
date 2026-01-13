@@ -4,6 +4,7 @@ import FolderContentElement from "./FolderContentElement.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
+import { downloadFilesAsArchive } from "@/utils/fileHelper";
 import { parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
@@ -13,12 +14,17 @@ import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { flushPromises, mount } from "@vue/test-utils";
+import dayjs from "dayjs";
 import { Mock } from "vitest";
 import { computed } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VAlert } from "vuetify/components";
 
 vi.mock("./useFolderAlerts.composable");
+
+vi.mock("@data-file", () => ({
+	useFileStorageApi: vi.fn(),
+}));
 
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
@@ -29,6 +35,21 @@ vi.mock("@data-board", () => ({
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
+
+vi.mock("@/utils/fileHelper");
+
+vi.mock("dayjs", () => {
+	const mockDayjs = vi.fn(() => ({
+		format: vi.fn().mockReturnValue("20260113"),
+	}));
+
+	//@ts-expect-error Add the extend method that dayjs plugins use
+	mockDayjs.extend = vi.fn();
+
+	return {
+		default: mockDayjs,
+	};
+});
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
@@ -337,6 +358,115 @@ describe("FolderContentElement", () => {
 			const alert = wrapper.findComponent(VAlert);
 			expect(alert.exists()).toBe(true);
 			expect(alert.text()).toContain("components.cardElement.folderElement.storage.error");
+		});
+	});
+
+	describe("onDownload function", () => {
+		const downloadButtonTestId = '[data-testid="board-folder-element-download-button"]';
+
+		const setupDownloadTest = (
+			options: {
+				fileRecords?: Array<{ id: string; name: string }>;
+				fetchFilesError?: Error;
+				element?: FileFolderElement;
+			} = {}
+		) => {
+			const mockFileRecords = options.fileRecords || [
+				{ id: "file-1", name: "file1.txt" },
+				{ id: "file-2", name: "file2.pdf" },
+			];
+
+			const getFileRecordsByParentIdSpy = vi.fn(() => mockFileRecords);
+
+			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+
+			fileStorageApiMock.getFileRecordsByParentId.mockImplementation(getFileRecordsByParentIdSpy);
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
+
+			const downloadFilesAsArchiveSpy = vi.mocked(downloadFilesAsArchive).mockReturnValueOnce();
+
+			// Ensure alerts are empty so the download button is rendered
+			vi.mocked(useFolderAlerts).mockReturnValue({
+				addAlert: vi.fn(),
+				alerts: computed(() => []), // Empty alerts array
+			});
+
+			const { wrapper } = setupWrapper({ element: options.element });
+
+			return {
+				wrapper,
+				fileStorageApiMock,
+				downloadFilesAsArchiveSpy,
+				mockFileRecords,
+			};
+		};
+
+		beforeEach(() => {
+			vi.clearAllMocks();
+			// Reset the dayjs mock for each test
+			vi.mocked(dayjs).mockReturnValue({
+				format: vi.fn().mockReturnValue("20260113"),
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			} as any);
+		});
+
+		describe("when download button is clicked", () => {
+			it("should fetch files with correct parameters", async () => {
+				const { wrapper } = setupDownloadTest();
+				await wrapper.vm.$nextTick();
+				await flushPromises();
+
+				const downloadButton = wrapper.find(downloadButtonTestId);
+				expect(downloadButton.exists()).toBe(true);
+
+				// Get the current FileStorageApi instance to check the spy calls
+				const fileStorageApi = FileStorageApi.useFileStorageApi();
+
+				// Try to directly invoke the onDownload function
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const vm = wrapper.vm as any;
+				if (vm.onDownload) {
+					await vm.onDownload();
+					await flushPromises();
+				} else {
+					// Fallback to clicking the button
+					await downloadButton.trigger("click");
+					await flushPromises();
+				}
+
+				expect(fileStorageApi.fetchFiles).toHaveBeenCalledWith(mockElement.id, "boardnodes");
+			});
+
+			it("should get file records by parent ID", async () => {
+				const { wrapper } = setupDownloadTest();
+				await flushPromises();
+
+				const downloadButton = wrapper.find(downloadButtonTestId);
+				const fileStorageApi = FileStorageApi.useFileStorageApi();
+
+				await downloadButton.trigger("click");
+				await flushPromises();
+
+				expect(fileStorageApi.getFileRecordsByParentId).toHaveBeenCalledWith(mockElement.id);
+			});
+
+			it("should use current date format YYYYMMDD", async () => {
+				const mockDateFormat = vi.fn().mockReturnValue("20231225");
+				// @ts-expect-error test case
+				vi.mocked(dayjs).mockReturnValue({
+					format: mockDateFormat,
+				});
+
+				const { wrapper, downloadFilesAsArchiveSpy } = setupDownloadTest();
+				await flushPromises();
+
+				const downloadButton = wrapper.find(downloadButtonTestId);
+				await downloadButton.trigger("click");
+				await flushPromises();
+
+				expect(mockDateFormat).toHaveBeenCalledWith("YYYYMMDD");
+				expect(downloadFilesAsArchiveSpy).toHaveBeenCalled();
+			});
 		});
 	});
 });
