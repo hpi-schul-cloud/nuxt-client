@@ -43,7 +43,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings",
-		component: () => import("@/components/administration/school-settings/SchoolSettings.page.vue"),
+		component: () => import("@/pages/administration/SchoolSettings.page.vue"),
 		name: "administration-school-settings",
 		beforeEnter: createPermissionGuard([Permission.SchoolEdit]),
 	},

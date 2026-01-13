@@ -133,13 +133,13 @@
 </template>
 
 <script lang="ts">
-import AuthSystems from "./AuthSystems.vue";
-import ExternalToolsSection from "./ExternalToolSection.vue";
-import GeneralSettings from "./GeneralSettings.vue";
-import SchoolAdminMigrationSection from "./SchoolAdminMigrationSection.vue";
-import SchoolPolicy from "./SchoolPolicy.vue";
-import SchoolTermsOfUse from "./SchoolTerms.vue";
-import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
+import AuthSystems from "@/components/administration/school-settings/AuthSystems.vue";
+import ExternalToolsSection from "@/components/administration/school-settings/ExternalToolSection.vue";
+import GeneralSettings from "@/components/administration/school-settings/GeneralSettings.vue";
+import SchoolAdminMigrationSection from "@/components/administration/school-settings/SchoolAdminMigrationSection.vue";
+import SchoolPolicy from "@/components/administration/school-settings/SchoolPolicy.vue";
+import SchoolTermsOfUse from "@/components/administration/school-settings/SchoolTerms.vue";
+import SchoolYearChangeSection from "@/components/administration/school-settings/SchoolYearChangeSection.vue";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
