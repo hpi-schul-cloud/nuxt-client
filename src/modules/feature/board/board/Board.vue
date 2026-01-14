@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-if="board">
+		<template v-if="boardStore.isLoading === false && board">
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
@@ -26,7 +26,7 @@
 						@edit:settings="onEditBoardSettings"
 					/>
 				</template>
-				<div :class="boardClasses" :style="boardStyle">
+				<div id="main" :class="boardClasses" :style="boardStyle">
 					<Sortable
 						:list="board.columns"
 						item-key="id"
@@ -118,6 +118,20 @@
 				/>
 			</DefaultWireframe>
 		</template>
+
+		<VDialog v-model="showLoadingDialog" class="w-33" :persistent="true">
+			<VCard class="pa-4">
+				<VCard-text class="text-center">
+					<div v-if="boardStore.isConnected === false && board" class="text-center" data-testid="dialog-text">
+						{{ t("error.ws.connectionLost") }}
+					</div>
+					<VProgressCircular color="primary" indeterminate :size="36" class="my-4" />
+					<div>
+						<VBtn @click="onBackToOverview">{{ t("pages.content.index.backToOverview") }}</VBtn>
+					</div>
+				</VCard-text>
+			</VCard>
+		</VDialog>
 	</div>
 </template>
 
@@ -160,6 +174,7 @@ import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
+import { useTimeout } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
@@ -218,6 +233,8 @@ const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
 	isDialogOpen: false,
 	cardId: "",
 });
+
+const started500msAgo = useTimeout(500);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
@@ -392,6 +409,16 @@ const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems)
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
+const showLoadingDialog = computed(() => {
+	if (started500msAgo.value === true && boardStore.isConnected === false) {
+		return true;
+	}
+	if (started500msAgo.value === true && boardStore.isLoading) {
+		return true;
+	}
+	return false;
+});
+
 const boardClasses = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "board"];
 	if (isListBoard.value) {
@@ -425,6 +452,10 @@ const onCopyResultModalClosed = () => {
 };
 
 const router = useRouter();
+
+const onBackToOverview = () => {
+	router.push({ path: "/dashboard" });
+};
 
 const onCopyBoard = async () => {
 	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });

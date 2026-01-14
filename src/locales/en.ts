@@ -2005,6 +2005,7 @@ export default {
 	"error.4500":
 		"Connection error: The real-time session could not be established. Please check the connection or reload the page.",
 	"error.4401": "Unfortunately, you do not have permission to view this content.",
+	"error.ws.connectionLost": "The connection has been interrupted. Trying to re-establish it...",
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",

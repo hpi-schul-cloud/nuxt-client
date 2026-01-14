@@ -708,6 +708,30 @@ export interface BoardErrorReportBodyParams {
      * @memberof BoardErrorReportBodyParams
      */
     retryCount: number;
+    /**
+     * List of logged steps
+     * @type {Array<string>}
+     * @memberof BoardErrorReportBodyParams
+     */
+    logSteps: Array<string>;
+    /**
+     * Operating System of the user
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    os: string;
+    /**
+     * Browser of the user
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    browser: string;
+    /**
+     * Device type of the user
+     * @type {string}
+     * @memberof BoardErrorReportBodyParams
+     */
+    deviceType: string;
 }
 /**
  * 
@@ -8436,19 +8460,6 @@ export interface RedirectResponse {
 /**
  * 
  * @export
- * @interface RegistrationBodyParams
- */
-export interface RegistrationBodyParams {
-    /**
-     * The registration ids the room is attached to
-     * @type {Array<string>}
-     * @memberof RegistrationBodyParams
-     */
-    registrationIds: Array<string>;
-}
-/**
- * 
- * @export
  * @interface RegistrationItemResponse
  */
 export interface RegistrationItemResponse {
@@ -8488,19 +8499,6 @@ export interface RegistrationItemResponse {
      * @memberof RegistrationItemResponse
      */
     updatedAt: string;
-}
-/**
- * 
- * @export
- * @interface RegistrationListResponse
- */
-export interface RegistrationListResponse {
-    /**
-     * 
-     * @type {Array<RegistrationItemResponse>}
-     * @memberof RegistrationListResponse
-     */
-    data: Array<RegistrationItemResponse>;
 }
 /**
  * 
@@ -23721,18 +23719,19 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
-         * @summary Cancel registrations for a specific roomId
+         * @summary Cancel a registration for a specific roomId
+         * @param {string} registrationId The id of the registration the room is attached to.
          * @param {string} roomId The id of a room that should get detached from the registration.
-         * @param {RegistrationBodyParams} registrationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistrations: async (roomId: string, registrationBodyParams: RegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
+        registrationControllerCancelRegistration: async (registrationId: string, roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationId' is not null or undefined
+            assertParamExists('registrationControllerCancelRegistration', 'registrationId', registrationId)
             // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('registrationControllerCancelRegistrations', 'roomId', roomId)
-            // verify required parameter 'registrationBodyParams' is not null or undefined
-            assertParamExists('registrationControllerCancelRegistrations', 'registrationBodyParams', registrationBodyParams)
-            const localVarPath = `/registrations/cancel/{roomId}`
+            assertParamExists('registrationControllerCancelRegistration', 'roomId', roomId)
+            const localVarPath = `/registrations/{registrationId}/cancel/{roomId}`
+                .replace(`{${"registrationId"}}`, encodeURIComponent(String(registrationId)))
                 .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -23751,12 +23750,9 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(registrationBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -23915,50 +23911,6 @@ export const RegistrationApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @summary Resend registration mail for specific registrations and roomId
-         * @param {string} roomId The id of a room that the registration is associated with.
-         * @param {RegistrationBodyParams} registrationBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        registrationControllerResendRegistrationMails: async (roomId: string, registrationBodyParams: RegistrationBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('registrationControllerResendRegistrationMails', 'roomId', roomId)
-            // verify required parameter 'registrationBodyParams' is not null or undefined
-            assertParamExists('registrationControllerResendRegistrationMails', 'registrationBodyParams', registrationBodyParams)
-            const localVarPath = `/registrations/resend-mail/{roomId}`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(registrationBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -23971,14 +23923,14 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Cancel registrations for a specific roomId
+         * @summary Cancel a registration for a specific roomId
+         * @param {string} registrationId The id of the registration the room is attached to.
          * @param {string} roomId The id of a room that should get detached from the registration.
-         * @param {RegistrationBodyParams} registrationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCancelRegistrations(roomId, registrationBodyParams, options);
+        async registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerCancelRegistration(registrationId, roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -24011,7 +23963,7 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
+        async registrationControllerFindByRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationItemResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerFindByRoom(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -24026,18 +23978,6 @@ export const RegistrationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerGetBySecret(registrationSecret, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
-        /**
-         * 
-         * @summary Resend registration mail for specific registrations and roomId
-         * @param {string} roomId The id of a room that the registration is associated with.
-         * @param {RegistrationBodyParams} registrationBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RegistrationListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.registrationControllerResendRegistrationMails(roomId, registrationBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
     }
 };
 
@@ -24050,14 +23990,14 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
-         * @summary Cancel registrations for a specific roomId
+         * @summary Cancel a registration for a specific roomId
+         * @param {string} registrationId The id of the registration the room is attached to.
          * @param {string} roomId The id of a room that should get detached from the registration.
-         * @param {RegistrationBodyParams} registrationBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse> {
-            return localVarFp.registrationControllerCancelRegistrations(roomId, registrationBodyParams, options).then((request) => request(axios, basePath));
+        registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.registrationControllerCancelRegistration(registrationId, roomId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24087,7 +24027,7 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationListResponse> {
+        registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse> {
             return localVarFp.registrationControllerFindByRoom(roomId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -24100,17 +24040,6 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
         registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse> {
             return localVarFp.registrationControllerGetBySecret(registrationSecret, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @summary Resend registration mail for specific registrations and roomId
-         * @param {string} roomId The id of a room that the registration is associated with.
-         * @param {RegistrationBodyParams} registrationBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse> {
-            return localVarFp.registrationControllerResendRegistrationMails(roomId, registrationBodyParams, options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -24122,14 +24051,14 @@ export const RegistrationApiFactory = function (configuration?: Configuration, b
 export interface RegistrationApiInterface {
     /**
      * 
-     * @summary Cancel registrations for a specific roomId
+     * @summary Cancel a registration for a specific roomId
+     * @param {string} registrationId The id of the registration the room is attached to.
      * @param {string} roomId The id of a room that should get detached from the registration.
-     * @param {RegistrationBodyParams} registrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistrationApiInterface
      */
-    registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse>;
+    registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -24160,7 +24089,7 @@ export interface RegistrationApiInterface {
      * @throws {RequiredError}
      * @memberof RegistrationApiInterface
      */
-    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationListResponse>;
+    registrationControllerFindByRoom(roomId: string, options?: any): AxiosPromise<RegistrationItemResponse>;
 
     /**
      * 
@@ -24171,17 +24100,6 @@ export interface RegistrationApiInterface {
      * @memberof RegistrationApiInterface
      */
     registrationControllerGetBySecret(registrationSecret: string, options?: any): AxiosPromise<RegistrationItemResponse>;
-
-    /**
-     * 
-     * @summary Resend registration mail for specific registrations and roomId
-     * @param {string} roomId The id of a room that the registration is associated with.
-     * @param {RegistrationBodyParams} registrationBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RegistrationApiInterface
-     */
-    registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any): AxiosPromise<RegistrationListResponse>;
 
 }
 
@@ -24194,15 +24112,15 @@ export interface RegistrationApiInterface {
 export class RegistrationApi extends BaseAPI implements RegistrationApiInterface {
     /**
      * 
-     * @summary Cancel registrations for a specific roomId
+     * @summary Cancel a registration for a specific roomId
+     * @param {string} registrationId The id of the registration the room is attached to.
      * @param {string} roomId The id of a room that should get detached from the registration.
-     * @param {RegistrationBodyParams} registrationBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RegistrationApi
      */
-    public registrationControllerCancelRegistrations(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any) {
-        return RegistrationApiFp(this.configuration).registrationControllerCancelRegistrations(roomId, registrationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public registrationControllerCancelRegistration(registrationId: string, roomId: string, options?: any) {
+        return RegistrationApiFp(this.configuration).registrationControllerCancelRegistration(registrationId, roomId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -24252,19 +24170,6 @@ export class RegistrationApi extends BaseAPI implements RegistrationApiInterface
      */
     public registrationControllerGetBySecret(registrationSecret: string, options?: any) {
         return RegistrationApiFp(this.configuration).registrationControllerGetBySecret(registrationSecret, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Resend registration mail for specific registrations and roomId
-     * @param {string} roomId The id of a room that the registration is associated with.
-     * @param {RegistrationBodyParams} registrationBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RegistrationApi
-     */
-    public registrationControllerResendRegistrationMails(roomId: string, registrationBodyParams: RegistrationBodyParams, options?: any) {
-        return RegistrationApiFp(this.configuration).registrationControllerResendRegistrationMails(roomId, registrationBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
