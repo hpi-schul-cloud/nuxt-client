@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe ref="main" max-width="full">
 		<template #header>
-			<h1 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
+			<h1 aria-level="1" class="mt-0 me-auto" data-testid="fwu-title">
 				{{ t("pages.fwu-media.title") }}
 			</h1>
 		</template>
@@ -9,6 +9,7 @@
 		<template #default>
 			<VTextField
 				v-model="searchQuery"
+				data-testid="fwu-search"
 				class="mt-4 mb-8"
 				variant="filled"
 				:label="t('common.labels.search')"
@@ -17,7 +18,7 @@
 				hide-details
 			/>
 
-			<TransitionGroup name="fwu-grid" tag="div" class="results-grid">
+			<TransitionGroup name="fwu-grid" tag="div" class="fwu-grid-container">
 				<VCard
 					v-for="item in filteredFwuList"
 					:key="item.id"
@@ -38,12 +39,16 @@
 </template>
 
 <script setup lang="ts">
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { FwuApiFactory } from "@/generated/fwu-api/v3";
+import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiMagnify } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { refDebounced, useTitle, useUrlSearchParams } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+
 const { t } = useI18n();
 
 useTitle(buildPageTitle(t("pages.fwu-media.title")));
@@ -127,6 +132,14 @@ const fwuList = ref<IFwuList[]>([
 	},
 ]);
 
+const fwuApi = FwuApiFactory(undefined, "/v3", $axios);
+
+const { execute, isRunning } = useSafeAxiosTask();
+onMounted(async () => {
+	const { result } = await execute(() => fwuApi.fwuLearningContentsControllerGetList());
+	console.log(result);
+});
+
 const filteredFwuList = computed(() => {
 	if (!debouncedSearch.value || debouncedSearch.value.trim() === "") {
 		return fwuList.value;
@@ -139,7 +152,7 @@ const filteredFwuList = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.results-grid {
+.fwu-grid-container {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 	gap: 1.5rem;
