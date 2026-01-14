@@ -33,7 +33,7 @@
 import StepDetails from "./StepDetails.vue";
 import StepEmail from "./StepEmail.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { notifyError } from "@data-app";
+import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
 	ExternalMemberCheckStatus,
@@ -109,6 +109,7 @@ const onSubmitInvitation = async () => {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	} finally {
 		closeDialog();
+		notifySuccess(t("pages.rooms.members.dialog.addExternalPerson.success.addingMember", { email: email.value }));
 		await registrationStore.fetchRegistrationsForCurrentRoom();
 	}
 };

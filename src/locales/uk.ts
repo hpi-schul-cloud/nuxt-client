@@ -1679,6 +1679,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Надіслати запрошення",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"Не вдалося надіслати запрошення. Будь ласка, спробуйте пізніше",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Запрошення надіслано на {email}",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.create.course": "Створити курс",
 	"pages.rooms.fab.add.course": "Новий курс",
