@@ -65,34 +65,22 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
-
-				<CustomDialog
-					ref="cancelMigrationDialog"
-					v-model:is-open="isCancelDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
+				<Dialog
+					:model-value="isCancelDialogOpen"
+					:title="t('components.administration.adminMigrationSection.migrationWizardCancelDialog.Title')"
 					data-testid="cancel-migration-dialog"
-					@dialog-confirmed="confirmCancelMigration()"
+					@confirm="confirmCancelMigration()"
 				>
-					<template #title>
-						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Title") }}
-					</template>
 					<template #content>
 						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Description") }}
 					</template>
-				</CustomDialog>
-
-				<CustomDialog
-					ref="clearAutoMatchesDialog"
-					v-model:is-open="isClearAutoMatchesDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
+				</Dialog>
+				<Dialog
+					:model-value="isClearAutoMatchesDialogOpen"
+					:title="t('components.administration.adminMigrationSection.clearAutoMatchesDialog.title')"
 					data-testid="clear-auto-matches-dialog"
-					@dialog-confirmed="clearAllAutoMatches()"
+					@confirm="clearAllAutoMatches()"
 				>
-					<template #title>
-						{{ t("components.administration.adminMigrationSection.clearAutoMatchesDialog.title") }}
-					</template>
 					<template #content>
 						<p>
 							{{
@@ -106,7 +94,7 @@
 							>
 						</p>
 					</template>
-				</CustomDialog>
+				</Dialog>
 			</VStepper>
 		</template>
 
@@ -433,7 +421,6 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
@@ -441,6 +428,7 @@ import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { mdiClose } from "@icons/material";
+import { Dialog } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from "vue";
