@@ -3,8 +3,8 @@
 		:model-value="isOpen"
 		:title="t(`components.molecules.import.${parentType}.options.title`)"
 		confirm-btn-lang-key="common.actions.import"
-		identifier="import-modal"
 		:confirm-btn-disabled="!isTitleValid"
+		identifier="import-modal"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>

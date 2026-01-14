@@ -3,8 +3,6 @@
 		v-if="selectedItem.status"
 		:model-value="isOpen"
 		:title="t(getTitle, { toolName: selectedItem.name })"
-		:has-buttons="true"
-		:buttons="['close']"
 		identifier="error-dialog"
 	>
 		<template #content>

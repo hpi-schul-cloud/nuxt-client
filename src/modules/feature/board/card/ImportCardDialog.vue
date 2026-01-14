@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model="isDialogOpen"
-		:loading="isImporting"
+		:is-loading="isImporting"
 		:title="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"

@@ -2,7 +2,7 @@
 	<Dialog
 		v-model="isDialogOpen"
 		:title="t('components.elementTypeSelection.dialog.title')"
-		:loading="isDialogLoading"
+		:is-loading="isDialogLoading"
 		data-testid="element-type-selection"
 	>
 		<template #content>

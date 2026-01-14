@@ -5,7 +5,7 @@
 		:title="t('components.molecules.move.card.title')"
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
-		:loading="isMoving"
+		:is-loading="isMoving"
 		identifier="move-card-dialog"
 		@confirm="onConfirm"
 		@cancel="isDialogOpen = false"
