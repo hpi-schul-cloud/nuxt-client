@@ -22,13 +22,13 @@
 				<VCard
 					v-for="item in filteredFwuList"
 					:key="item.id"
-					:href="item.targetUrl"
+					:href="item.target_url"
 					target="_blank"
 					rel="noopener noreferrer"
 					hover
 					class="fwu-card"
 				>
-					<VImg :src="item.thumbnail" height="200" cover />
+					<VImg :src="item.thumbnail_url" height="200" cover />
 					<VCardTitle class="fwu-card-title text-wrap">
 						{{ item.title }}
 					</VCardTitle>
@@ -69,75 +69,14 @@ interface IFwuList {
 	targetUrl: string;
 }
 
-const fwuList = ref<IFwuList[]>([
-	{
-		id: "1",
-		title: "Vue.js Dokumentation",
-		thumbnail: "https://picsum.photos/seed/vue/400/300",
-		targetUrl: "https://vuejs.org",
-	},
-	{
-		id: "2",
-		title: "Vuetify Component Framework",
-		thumbnail: "https://picsum.photos/seed/vuetify/400/300",
-		targetUrl: "https://vuetifyjs.com",
-	},
-	{
-		id: "3",
-		title: "VueUse Collection",
-		thumbnail: "https://picsum.photos/seed/vueuse/400/300",
-		targetUrl: "https://vueuse.org",
-	},
-	{
-		id: "4",
-		title: "Pinia State Management",
-		thumbnail: "https://picsum.photos/seed/pinia/400/300",
-		targetUrl: "https://pinia.vuejs.org",
-	},
-	{
-		id: "5",
-		title: "Vue Router Navigation",
-		thumbnail: "https://picsum.photos/seed/router/400/300",
-		targetUrl: "https://router.vuejs.org",
-	},
-	{
-		id: "6",
-		title: "Nuxt Framework",
-		thumbnail: "https://picsum.photos/seed/nuxt/400/300",
-		targetUrl: "https://nuxt.com",
-	},
-	{
-		id: "7",
-		title: "Vite Build Tool",
-		thumbnail: "https://picsum.photos/seed/vite/400/300",
-		targetUrl: "https://vitejs.dev",
-	},
-	{
-		id: "8",
-		title: "TypeScript Dokumentation",
-		thumbnail: "https://picsum.photos/seed/typescript/400/300",
-		targetUrl: "https://www.typescriptlang.org",
-	},
-	{
-		id: "9",
-		title: "Material Design Icons",
-		thumbnail: "https://picsum.photos/seed/mdi/400/300",
-		targetUrl: "https://pictogrammers.com/library/mdi/",
-	},
-	{
-		id: "10",
-		title: "JavaScript MDN Web Docs",
-		thumbnail: "https://picsum.photos/seed/mdn/400/300",
-		targetUrl: "https://developer.mozilla.org",
-	},
-]);
+const fwuList = ref<IFwuList[]>([]);
 
 const fwuApi = FwuApiFactory(undefined, "/v3", $axios);
 
 const { execute, isRunning } = useSafeAxiosTask();
 onMounted(async () => {
 	const { result } = await execute(() => fwuApi.fwuLearningContentsControllerGetList());
-	console.log(result);
+	fwuList.value = result?.data;
 });
 
 const filteredFwuList = computed(() => {
