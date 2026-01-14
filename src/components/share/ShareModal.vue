@@ -62,7 +62,6 @@
 		</template>
 		<template #actions>
 			<template v-if="step === 'firstStep'">
-				<VSpacer />
 				<VBtn data-testid="share-dialog-cancel" variant="text" @click="onCloseDialog">
 					{{ t("common.actions.cancel") }}
 				</VBtn>
@@ -71,7 +70,6 @@
 				</VBtn>
 			</template>
 			<template v-else>
-				<VSpacer />
 				<VBtn data-testid="share-dialog-close" variant="outlined" @click="onCloseDialog">
 					{{ t("common.labels.close") }}
 				</VBtn>

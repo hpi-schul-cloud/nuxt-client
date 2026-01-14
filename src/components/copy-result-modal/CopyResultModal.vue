@@ -19,7 +19,6 @@
 			</WarningAlert>
 		</template>
 		<template #actions>
-			<VSpacer />
 			<VBtn
 				data-testid="copy-dialog-close-btn"
 				variant="outlined"

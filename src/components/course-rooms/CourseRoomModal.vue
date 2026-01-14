@@ -26,7 +26,6 @@
 			/>
 		</template>
 		<template #actions>
-			<VSpacer />
 			<VBtn
 				data-testid="room-modal-close-btn"
 				variant="outlined"

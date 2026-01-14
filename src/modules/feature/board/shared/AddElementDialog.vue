@@ -18,7 +18,6 @@
 			</div>
 		</template>
 		<template #actions>
-			<VSpacer />
 			<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
 				{{ t("common.actions.cancel") }}
 			</VBtn>

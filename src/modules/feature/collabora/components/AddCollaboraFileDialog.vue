@@ -34,6 +34,7 @@
 		</template>
 	</Dialog>
 </template>
+
 <script setup lang="ts">
 import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
 import type { CreateCollaboraFilePayload } from "../types/collabora-file";

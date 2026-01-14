@@ -19,9 +19,9 @@
 					</div>
 				</template>
 				<template #actions>
-					<slot name="actions">
-						<VSpacer />
-						<div class="d-flex ga-2">
+					<VSpacer />
+					<div class="d-flex ga-2">
+						<slot name="actions">
 							<VBtn
 								:data-testid="`${identifier}-cancel`"
 								:disabled="areActionsDisabled"
@@ -38,8 +38,8 @@
 								:disabled="confirmBtnDisabled || areActionsDisabled"
 								@click="onConfirm"
 							/>
-						</div>
-					</slot>
+						</slot>
+					</div>
 				</template>
 			</VCard>
 		</UseFocusTrap>
@@ -54,12 +54,12 @@ import { useI18n } from "vue-i18n";
 import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 const props = defineProps({
-	identifier: { type: String, required: false, default: "dialog" },
+	identifier: { type: String, default: "dialog" },
 	title: { type: String, default: undefined },
 	loading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },
-	confirmBtnDisabled: { type: Boolean, required: false, default: false },
-	confirmBtnLangKey: { type: String, required: false, default: "common.actions.confirm" },
+	confirmBtnDisabled: { type: Boolean, default: false },
+	confirmBtnLangKey: { type: String, default: "common.actions.confirm" },
 });
 
 const emit = defineEmits(["cancel", "confirm", "after-leave"]);

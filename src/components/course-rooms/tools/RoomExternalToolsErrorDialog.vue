@@ -11,7 +11,6 @@
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
 		<template #actions>
-			<VSpacer />
 			<VBtn data-testid="error-dialog-close-btn" variant="outlined" @click="onClose">
 				{{ t("common.labels.close") }}
 			</VBtn>
