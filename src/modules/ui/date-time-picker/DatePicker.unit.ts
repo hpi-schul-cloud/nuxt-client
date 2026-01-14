@@ -39,6 +39,15 @@ describe("DatePicker", () => {
 		expect(textField.exists()).toBe(true);
 	});
 
+	it("should format raw numeric input into DD.MM.YYYY pattern", async () => {
+		const { textField } = setup();
+		const input = textField.find("input");
+
+		await input.setValue("01012026");
+
+		expect(input.element.value).toBe("01.01.2026");
+	});
+
 	describe("keyboard navigation", () => {
 		it("should open date picker menu on space key", async () => {
 			const { wrapper, textField } = setup();

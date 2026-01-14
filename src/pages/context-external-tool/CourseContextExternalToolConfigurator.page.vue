@@ -29,13 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";

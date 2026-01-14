@@ -2,7 +2,6 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { UpdateCardHeightRequestPayload, UpdateCardTitleRequestPayload } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
@@ -33,13 +32,14 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { useErrorHandler } from "@util-error-handling";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("../BoardApi.composable");

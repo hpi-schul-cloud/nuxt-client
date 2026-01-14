@@ -16,14 +16,13 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";

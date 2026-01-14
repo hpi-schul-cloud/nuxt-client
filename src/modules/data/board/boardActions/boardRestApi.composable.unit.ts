@@ -1,6 +1,5 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -18,12 +17,13 @@ import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("../BoardApi.composable");

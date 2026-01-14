@@ -27,13 +27,13 @@
 
 <script setup lang="ts">
 import RoomContentGridItem from "./RoomContentGridItem.vue";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
 import { notifyError } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { getGridContainerColumnsCount } from "@util-browser";
+import { useErrorHandler } from "@util-error-handling";
 import { getSortableOptions } from "@util-sorting";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

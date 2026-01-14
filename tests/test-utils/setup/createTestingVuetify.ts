@@ -1,10 +1,10 @@
+import { customAliases } from "@/components/icons/custom";
+import * as materialAliases from "@/components/icons/material";
+import ResizeObserver from "resize-observer-polyfill";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/lib/components/index";
 import * as directives from "vuetify/lib/directives/index";
-import * as materialAliases from "@/components/icons/material";
 import { aliases, mdi } from "vuetify/lib/iconsets/mdi-svg";
-import { customAliases } from "@/components/icons/custom";
-import ResizeObserver from "resize-observer-polyfill";
 
 export const createTestingVuetify = (options = {}) => {
 	const vuetify = createVuetify({

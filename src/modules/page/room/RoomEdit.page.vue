@@ -12,8 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ApiResponseError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomUpdateParams } from "@/types/room/Room";
@@ -21,6 +19,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, useAppStore } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, ref } from "vue";

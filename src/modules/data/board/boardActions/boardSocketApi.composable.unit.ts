@@ -7,7 +7,6 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout, MoveCardResponse } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
@@ -21,6 +20,7 @@ import { useBoardStore, useForceRender, useSocketConnection } from "@data-board"
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
@@ -37,7 +37,7 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("vue-router");
