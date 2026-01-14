@@ -39,7 +39,11 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
-	<ConfirmationDialog />
+	<ConfirmationDialog>
+		<WarningAlert data-testid="warning-alert">
+			{{ t("pages.rooms.administration.table.delete.infoMessage") }}
+		</WarningAlert>
+	</ConfirmationDialog>
 </template>
 
 <script setup lang="ts">
