@@ -22,7 +22,7 @@
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon>$class</v-icon>
+					<v-icon :icon="mdiAccountEye" />
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -163,6 +163,7 @@ import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import {
+	mdiAccountEye,
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,
 	mdiChevronLeft,
@@ -194,6 +195,7 @@ export default {
 			mdiCheckCircle,
 			mdiChevronLeft,
 			mdiShieldAccountVariantOutline,
+			mdiAccountEye,
 		};
 	},
 	computed: {

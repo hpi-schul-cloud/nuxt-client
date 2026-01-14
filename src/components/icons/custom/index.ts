@@ -1,4 +1,3 @@
-import classIcon from "./class.vue";
 import filePdfOutline from "./file-pdf-outline.vue";
 import h5pOutline from "./h5p-outline.vue";
 import icCollection from "./ic_collection.vue";
@@ -21,7 +20,6 @@ import { Component } from "vue";
 // TODO: Remove custom icons and use only standardized icons from the design system
 
 const customAliases: Record<string, Component> = {
-	class: classIcon,
 	file_pdf_outline: filePdfOutline,
 	h5pOutline: h5pOutline,
 	ic_collection: icCollection,
