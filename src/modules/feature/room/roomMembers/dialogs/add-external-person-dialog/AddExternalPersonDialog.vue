@@ -8,7 +8,13 @@
 		@click:outside="onClose"
 		@after-leave="resetForm"
 	>
-		<StepEmail v-if="step === 'email'" :email="email" @submit:email="onSubmitEmail" @close="onClose" />
+		<StepEmail
+			v-if="step === 'email' || step === 'error'"
+			:email="email"
+			:has-error="step === 'error'"
+			@submit:email="onSubmitEmail"
+			@close="onClose"
+		/>
 		<StepDetails
 			v-else-if="step === 'details'"
 			:application-names="applicationNames"
@@ -20,28 +26,6 @@
 			@close="onClose"
 			@back="onBack"
 		/>
-		<VCard v-else-if="step === 'error'">
-			<template #title>
-				<h2 class="mt-2">
-					{{ t("pages.rooms.members.dialog.addExternalPerson.steps.details.heading") }}
-				</h2>
-			</template>
-			<template #text />
-			<template #actions>
-				<VSpacer />
-				<div class="mr-4 mb-3">
-					<VBtn
-						ref="closeButton"
-						color="secondary"
-						class="ms-auto mr-2"
-						:text="t('common.labels.close')"
-						data-testid="add-external-person-close-btn"
-						@click="onClose()"
-					/>
-				</div>
-			</template>
-		</VCard>
-		<div v-else>fdfdfd</div>
 	</VDialog>
 </template>
 
@@ -55,7 +39,7 @@ import { ExternalMemberCheckStatus, useRegistrationStore, useRoomMembersStore } 
 import { computed, nextTick, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { VBtn, type VCard, VSpacer } from "vuetify/components";
+import { type VCard } from "vuetify/components";
 
 const registrationStore = useRegistrationStore();
 const roomMembersStore = useRoomMembersStore();

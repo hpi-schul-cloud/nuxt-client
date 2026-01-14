@@ -14,6 +14,7 @@
 					ref="emailInput"
 					v-model="email"
 					class="mb-4"
+					:readonly="hasError"
 					:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
 					data-testid="add-external-person-email"
 					:rules="[isValidEmail(t('pages.rooms.members.dialog.addExternalPerson.label.email.error'))]"
@@ -21,26 +22,41 @@
 					@keydown.enter.prevent="onConfirmEmail()"
 				/>
 			</VForm>
+			<ErrorAlert v-if="hasError" class="error-message">
+				<span>{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal") }}</span>
+			</ErrorAlert>
 		</template>
 		<template #actions>
 			<VSpacer />
 			<div class="mr-4 mb-3">
-				<VBtn
-					ref="cancelButton"
-					class="ms-auto mr-2"
-					:text="t('common.actions.cancel')"
-					data-testid="add-external-person-cancel-btn"
-					@click="onCancel"
-				/>
-				<VBtn
-					ref="addButton"
-					class="ms-auto"
-					color="primary"
-					variant="flat"
-					:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
-					data-testid="add-external-person-add-email-btn"
-					@click="onConfirmEmail"
-				/>
+				<template v-if="!hasError">
+					<VBtn
+						ref="cancelButton"
+						class="ms-auto mr-2"
+						:text="t('common.actions.cancel')"
+						data-testid="add-external-person-cancel-btn"
+						@click="onCancel"
+					/>
+					<VBtn
+						ref="addButton"
+						class="ms-auto"
+						color="primary"
+						variant="flat"
+						:text="t('pages.rooms.members.dialog.addExternalPerson.button.add')"
+						data-testid="add-external-person-add-email-btn"
+						@click="onConfirmEmail"
+					/>
+				</template>
+				<template v-else>
+					<VBtn
+						ref="closeButton"
+						class="ms-auto"
+						variant="outlined"
+						:text="t('common.labels.close')"
+						data-testid="add-external-person-close-btn"
+						@click="onCancel"
+					/>
+				</template>
 			</div>
 		</template>
 	</VCard>
@@ -48,11 +64,20 @@
 
 <script setup lang="ts">
 import { getFirstInvalidElement } from "./utils/form";
+import { ErrorAlert } from "@ui-alert";
 import { isValidEmail } from "@util-validators";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+type Props = {
+	hasError?: boolean;
+};
+
 const email = defineModel("email", { type: String, required: true });
+
+withDefaults(defineProps<Props>(), {
+	hasError: false,
+});
 
 const emit = defineEmits<{
 	(e: "close"): void;
