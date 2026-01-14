@@ -90,8 +90,6 @@ import { Dialog } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-type VDialogButtonActions = "back" | "edit" | "cancel" | "confirm" | "close" | "next";
-
 const props = defineProps({
 	type: {
 		type: String as PropType<ShareTokenBodyParamsParentTypeEnum>,
@@ -110,24 +108,19 @@ type ShareModalStep = "firstStep" | "secondStep";
 
 const step = computed<ShareModalStep>(() => (shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"));
 
-const modalOptions: Record<ShareModalStep, { title: string; actionButtons: VDialogButtonActions[] }> = {
-	firstStep: {
-		title: t("components.molecules.share.options.title"),
-		actionButtons: ["cancel", "next"],
-	},
-	secondStep: {
-		title: t("components.molecules.share.result.title"),
-		actionButtons: ["close"],
-	},
-};
-
 const shareUrl = computed(() => shareModule.getShareUrl ?? "");
-
-const actionButtons = computed(() => modalOptions[step.value].actionButtons ?? []);
 
 const shareOptions = ref<ShareOptions>();
 
-const modalTitle = computed(() => modalOptions[step.value].title ?? "");
+const modalTitle = computed(() => {
+	if (step.value === "firstStep") {
+		return t("components.molecules.share.options.title");
+	}
+	if (step.value === "secondStep") {
+		return t("components.molecules.share.result.title");
+	}
+	return undefined;
+});
 
 const onShareOptionsChange = (newValue: ShareOptions) => {
 	shareOptions.value = newValue;
