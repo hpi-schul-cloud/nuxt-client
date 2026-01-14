@@ -41,6 +41,7 @@
 		</DataTable>
 	</div>
 	<ChangeRole v-model="isChangeRoleDialogOpen" :members="membersToChangeRole" @close="onDialogClose" />
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -49,7 +50,7 @@ import { RoleName } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { RoomMember, useRoomAuthorization, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";

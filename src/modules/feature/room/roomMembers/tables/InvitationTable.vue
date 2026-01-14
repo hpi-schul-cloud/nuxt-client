@@ -51,13 +51,14 @@
 			</div>
 		</template>
 	</DataTable>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import { isNotNullish } from "@/utils/typeScript";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { mdiShareVariantOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import {
 	KebabMenu,

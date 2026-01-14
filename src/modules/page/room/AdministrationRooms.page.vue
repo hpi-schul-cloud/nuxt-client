@@ -20,13 +20,11 @@
 		<template v-else>
 			<RoomAdminTable :show-select="false" :header-bottom="headerBottom" @manage-room-members="manageRoom" />
 		</template>
-		<template #confirmation-dialog>
-			<ConfirmationDialog>
-				<WarningAlert data-testid="warning-alert">
-					{{ t("pages.rooms.administration.table.delete.infoMessage") }}
-				</WarningAlert>
-			</ConfirmationDialog>
-		</template>
+		<ConfirmationDialog>
+			<WarningAlert data-testid="warning-alert">
+				{{ t("pages.rooms.administration.table.delete.infoMessage") }}
+			</WarningAlert>
+		</ConfirmationDialog>
 	</DefaultWireframe>
 </template>
 

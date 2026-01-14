@@ -23,7 +23,6 @@
 				<SpeedDialMenu :actions="fabItems" />
 			</div>
 		</div>
-
 		<VContainer
 			:fluid="maxWidth !== 'native'"
 			class="main-content"
@@ -38,15 +37,11 @@
 			<slot />
 		</VContainer>
 	</div>
-	<slot name="confirmation-dialog">
-		<ConfirmationDialog />
-	</slot>
 </template>
 
 <script setup lang="ts">
 import Breadcrumbs from "./Breadcrumbs.vue";
 import { Breadcrumb } from "./types";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { type FabAction, SpeedDialMenu } from "@ui-speed-dial-menu";
 import { computed, PropType, useSlots } from "vue";
 import { useDisplay } from "vuetify";

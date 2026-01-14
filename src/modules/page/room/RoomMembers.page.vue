@@ -50,6 +50,7 @@
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
 	<AddExternalPersonDialog v-model="isExternalPersonDialogOpen" />
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -80,7 +81,7 @@ import {
 	mdiListBoxOutline,
 	mdiPlus,
 } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";

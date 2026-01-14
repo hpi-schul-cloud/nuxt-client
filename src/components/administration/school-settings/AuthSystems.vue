@@ -99,6 +99,7 @@
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
+		<ConfirmationDialog />
 	</div>
 </template>
 

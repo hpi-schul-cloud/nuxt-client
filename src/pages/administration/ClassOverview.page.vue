@@ -184,6 +184,7 @@
 				})
 			}}
 		</p>
+		<ConfirmationDialog />
 	</default-wireframe>
 </template>
 
@@ -201,7 +202,7 @@ import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import { mdiAccountGroupOutline, mdiArrowUp, mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";

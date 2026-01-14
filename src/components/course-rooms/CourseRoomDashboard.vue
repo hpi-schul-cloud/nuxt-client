@@ -157,6 +157,7 @@
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
+		<ConfirmationDialog />
 	</div>
 </template>
 
@@ -173,7 +174,7 @@ import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import { defineComponent } from "vue";
@@ -188,6 +189,7 @@ export default defineComponent({
 		EmptyState,
 		ShareModal,
 		LearningContentEmptyStateSvg,
+		ConfirmationDialog,
 	},
 	inject: {
 		shareModule: { from: SHARE_MODULE_KEY },

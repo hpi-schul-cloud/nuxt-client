@@ -39,13 +39,14 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import { RoomStatsItemResponse } from "@/serverApi/v3";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuAction, KebabMenuActionRoomMembers } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";

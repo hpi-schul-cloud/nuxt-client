@@ -18,6 +18,7 @@
 		:is-open="isErrorDialogOpen"
 		@closed="onCloseErrorDialog"
 	/>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -26,7 +27,7 @@ import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import { Permission, ToolContextType } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
