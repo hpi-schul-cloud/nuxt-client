@@ -164,10 +164,10 @@ export default defineComponent({
 			}
 			return `/administration/ldap/config?id=${system.id}`;
 		},
-		openConfirmDeleteDialog(systemId) {
+		async openConfirmDeleteDialog(systemId) {
 			this.systemId = systemId;
 
-			const shouldDelete = this.askConfirmation({
+			const shouldDelete = await this.askConfirmation({
 				message: this.$t("pages.administration.school.index.authSystems.confirmDeleteText"),
 				confirmActionLangKey: "common.actions.delete",
 			});
