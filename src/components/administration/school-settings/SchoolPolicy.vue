@@ -53,11 +53,7 @@
 							:aria-label="$t('pages.administration.school.index.schoolPolicy.edit')"
 						/>
 					</v-list-item-action>
-					<v-list-item-action
-						v-if="privacyPolicy"
-						data-testid="delete-button"
-						@click.stop="isDeletePolicyDialogOpen = true"
-					>
+					<v-list-item-action v-if="privacyPolicy" data-testid="delete-button" @click.stop="onDelete">
 						<v-btn
 							:icon="mdiTrashCanOutline"
 							variant="text"
@@ -72,35 +68,19 @@
 				data-testid="form-dialog"
 				@close="closeDialog"
 			/>
-			<CustomDialog
-				v-model:is-open="isDeletePolicyDialogOpen"
-				:size="430"
-				has-buttons
-				confirm-btn-title-key="common.actions.delete"
-				:confirm-btn-icon="mdiTrashCanOutline"
-				data-testid="delete-dialog"
-				@dialog-confirmed="deleteFile"
-			>
-				<template #title>
-					<h3 class="text-h2 mt-0">
-						{{ $t("pages.administration.school.index.schoolPolicy.delete.title") }}
-					</h3>
-				</template>
-				<template #content>
-					<v-alert type="info" class="mb-0">
-						<div class="alert-text">
-							{{ $t("pages.administration.school.index.schoolPolicy.delete.text") }}
-						</div>
-					</v-alert>
-				</template>
-			</CustomDialog>
+			<ConfirmationDialog>
+				<InfoAlert type="info" class="mb-0">
+					<div class="alert-text">
+						{{ $t("pages.administration.school.index.schoolPolicy.delete.text") }}
+					</div>
+				</InfoAlert>
+			</ConfirmationDialog>
 		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { ConsentVersion } from "@/store/types/consent-version";
@@ -109,6 +89,8 @@ import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
 import { mdiAlertCircle, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, ComputedRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -116,9 +98,9 @@ const { t } = useI18n();
 const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const isSchoolPolicyFormDialogOpen: Ref<boolean> = ref(false);
-const isDeletePolicyDialogOpen: Ref<boolean> = ref(false);
 
 const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+
 watch(
 	school,
 	async (newValue) => {
@@ -137,6 +119,18 @@ const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 const downloadPolicy = () => {
 	if (privacyPolicy.value) {
 		downloadFile(privacyPolicy.value.consentData.data, t("pages.administration.school.index.schoolPolicy.fileName"));
+	}
+};
+
+const { askConfirmation } = useConfirmationDialog();
+const onDelete = async () => {
+	const shouldDelete = await askConfirmation({
+		message: t("pages.administration.school.index.schoolPolicy.delete.title"),
+		confirmActionLangKey: "common.actions.delete",
+	});
+
+	if (shouldDelete) {
+		await deleteFile();
 	}
 };
 

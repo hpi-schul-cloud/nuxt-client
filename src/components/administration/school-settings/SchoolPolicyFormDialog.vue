@@ -9,11 +9,11 @@
 	>
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
+				<WarningAlert type="warning" class="mb-10" :icon="mdiAlert">
 					<div class="alert-text">
 						{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
 					</div>
-				</v-alert>
+				</WarningAlert>
 				<v-file-input
 					ref="input-file"
 					v-model="file"
@@ -49,6 +49,7 @@ import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { mdiAlert } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
