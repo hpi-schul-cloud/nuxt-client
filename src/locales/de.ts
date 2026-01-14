@@ -1216,7 +1216,6 @@ export default {
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Sind Sie sich sicher, dass Sie folgendes Authentifizierungs-System löschen wollen?",
 	"pages.administration.school.index.authSystems.delete": "{system} löschen",
-	"pages.administration.school.index.authSystems.deleteAuthSystem": "Authentifizierung löschen",
 	"pages.administration.school.index.authSystems.edit": "{system} bearbeiten",
 	"pages.administration.school.index.authSystems.loginLinkLabel": "Login-Link deiner Schule",
 	"pages.administration.school.index.authSystems.title": "Authentifizierung",

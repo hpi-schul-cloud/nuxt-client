@@ -1213,7 +1213,6 @@ export default {
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Ви дійсно хочете видалити наступну систему автентифікації?",
 	"pages.administration.school.index.authSystems.delete": "Видалити {system}",
-	"pages.administration.school.index.authSystems.deleteAuthSystem": "Видалити автентифікацію",
 	"pages.administration.school.index.authSystems.edit": "Редагувати {system}",
 	"pages.administration.school.index.authSystems.loginLinkLabel": "Посилання для входу до вашої школи",
 	"pages.administration.school.index.authSystems.title": "Аутентифікація",

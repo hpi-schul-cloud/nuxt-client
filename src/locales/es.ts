@@ -1219,7 +1219,6 @@ export default {
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"¿Estás seguro de que deseas eliminar la siguiente sistema de autenticación?",
 	"pages.administration.school.index.authSystems.delete": "Eliminar {system}",
-	"pages.administration.school.index.authSystems.deleteAuthSystem": "Eliminar sistema LDAP",
 	"pages.administration.school.index.authSystems.edit": "Editar {system}",
 	"pages.administration.school.index.authSystems.loginLinkLabel": "Enlace de acceso a la escuela",
 	"pages.administration.school.index.authSystems.title": "Autenticación",

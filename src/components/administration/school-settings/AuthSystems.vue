@@ -99,51 +99,33 @@
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
-		<CustomDialog
-			v-model:is-open="confirmDeleteDialog.isOpen"
-			class="custom-dialog"
-			:size="375"
-			has-buttons
-			@dialog-confirmed="removeSystem(confirmDeleteDialog.systemId)"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ $t("pages.administration.school.index.authSystems.deleteAuthSystem") }}
-				</h2>
-			</template>
-			<template #content>
-				<p class="text-md mt-2">
-					{{ $t("pages.administration.school.index.authSystems.confirmDeleteText") }}
-				</p>
-			</template>
-		</CustomDialog>
 	</div>
 </template>
 
 <script>
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { defineComponent } from "vue";
 
-export default {
-	components: {
-		CustomDialog,
-	},
+export default defineComponent({
 	props: {
 		systems: {
 			type: Array,
 			required: true,
 		},
 	},
+	setup() {
+		const { askConfirmation } = useConfirmationDialog();
+
+		return { askConfirmation };
+	},
 	data() {
 		return {
-			confirmDeleteDialog: {
-				isOpen: false,
-				systemId: undefined,
-			},
+			systemId: undefined,
 			iconMdiPencilOutline: mdiPencilOutline,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiContentCopy: mdiContentCopy,
@@ -183,10 +165,16 @@ export default {
 			return `/administration/ldap/config?id=${system.id}`;
 		},
 		openConfirmDeleteDialog(systemId) {
-			this.confirmDeleteDialog = {
-				isOpen: true,
-				systemId,
-			};
+			this.systemId = systemId;
+
+			const shouldDelete = this.askConfirmation({
+				message: this.$t("pages.administration.school.index.authSystems.confirmDeleteText"),
+				confirmActionLangKey: "common.actions.delete",
+			});
+
+			if (shouldDelete) {
+				this.removeSystem(systemId);
+			}
 		},
 		isLoginSystem(system) {
 			return system.oauthConfig || system.ldapConfig;
@@ -225,7 +213,7 @@ export default {
 			this.copiedElement = "";
 		},
 	},
-};
+});
 </script>
 
 <style scoped lang="scss">
