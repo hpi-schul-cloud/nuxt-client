@@ -23,7 +23,14 @@
 				/>
 			</VForm>
 			<ErrorAlert v-if="hasError" class="error-message">
-				<span>{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal") }}</span>
+				<i18n-t keypath="pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal" scope="global">
+					<template #link>
+						<a :href="requirementsLink!" target="_blank" rel="noopener" :ariaLabel="linkAriaLabel">
+							{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements") }}
+						</a>
+					</template>
+				</i18n-t>
+				<!-- <span>{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal") }}</span> -->
 			</ErrorAlert>
 		</template>
 		<template #actions>
@@ -64,9 +71,10 @@
 
 <script setup lang="ts">
 import { getFirstInvalidElement } from "./utils/form";
+import { useEnvConfig } from "@data-env";
 import { ErrorAlert } from "@ui-alert";
 import { isValidEmail } from "@util-validators";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -108,4 +116,10 @@ const onConfirmEmail = async () => {
 const onCancel = () => {
 	emit("close");
 };
+const linkAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements")}, ${t("common.ariaLabel.newTab")}`
+);
+
+const requirementsLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
 </script>

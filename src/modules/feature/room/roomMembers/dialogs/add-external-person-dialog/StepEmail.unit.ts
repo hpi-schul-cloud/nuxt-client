@@ -1,5 +1,6 @@
 import StepEmail from "./StepEmail.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { ErrorAlert } from "@ui-alert";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { VTextField } from "vuetify/components";
@@ -12,7 +13,7 @@ describe("StepEmail", () => {
 			attachTo: document.body,
 			props: { email: "", hasError: false },
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 			},
 		});
 
@@ -178,11 +179,22 @@ describe("StepEmail", () => {
 		});
 	});
 
-	describe("cancel functionality", () => {
+	describe("cancel/close functionality", () => {
 		it("should emit 'close' event when cancel button is clicked", async () => {
 			const { wrapper, clickCancelButton } = setup();
 
 			await clickCancelButton();
+			const emitted = wrapper.emitted();
+
+			expect(emitted).toHaveProperty("close");
+		});
+
+		it("should emit 'close' event when close button is clicked", async () => {
+			const { wrapper } = setup();
+			await wrapper.setProps({ hasError: true });
+
+			const closeButton = wrapper.getComponent('[data-testid="add-external-person-close-btn"]');
+			await closeButton.trigger("click");
 			const emitted = wrapper.emitted();
 
 			expect(emitted).toHaveProperty("close");

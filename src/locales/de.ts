@@ -1677,7 +1677,8 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
-		"Einladung per E-Mail nicht möglich. Bitte nötige Voraussetzungen prüfen.",
+		"Einladung per E-Mail nicht möglich. Bitte nötige {link} prüfen.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": " Voraussetzungen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Externe Person einladen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
