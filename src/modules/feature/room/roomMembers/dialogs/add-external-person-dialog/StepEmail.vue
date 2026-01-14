@@ -25,7 +25,7 @@
 			<ErrorAlert v-if="hasError" class="error-message">
 				<i18n-t keypath="pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal" scope="global">
 					<template #link>
-						<a :href="requirementsLink!" target="_blank" rel="noopener" :ariaLabel="linkAriaLabel">
+						<a :href="requirementsLink!" class="link" target="_blank" rel="noopener" :ariaLabel="linkAriaLabel">
 							{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements") }}
 						</a>
 					</template>
@@ -122,3 +122,9 @@ const linkAriaLabel = computed(
 
 const requirementsLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
 </script>
+
+<style scoped lang="scss">
+.link {
+	color: rgba(var(--v-theme-on-surface));
+}
+</style>
