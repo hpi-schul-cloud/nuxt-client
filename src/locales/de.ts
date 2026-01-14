@@ -1691,6 +1691,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"Die Einladung konnte leider nicht versendet werden. Bitte später erneut versuchen",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Einladung an {email} versendet",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.create.course": "Kurs erstellen",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
