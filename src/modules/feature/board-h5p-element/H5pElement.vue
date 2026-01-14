@@ -163,8 +163,15 @@ const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
 	const contentId: string | null = h5pElement.content.contentId;
 	if (contentId) {
 		const title = await getContentTitle(contentId);
-		contentTitle.value = title ?? t("components.cardElement.h5pElement");
+		const decodedTitle = title ? decodeHtmlEntities(title) : t("components.cardElement.h5pElement");
+		contentTitle.value = decodedTitle;
 	}
+};
+
+const decodeHtmlEntities = (text: string): string => {
+	const textarea = document.createElement("textarea");
+	textarea.innerHTML = text;
+	return textarea.value;
 };
 
 onMounted(async () => {
