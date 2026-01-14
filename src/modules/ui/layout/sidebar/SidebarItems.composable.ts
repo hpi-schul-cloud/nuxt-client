@@ -105,6 +105,12 @@ export const useSidebarItems = () => {
 			testId: "sidebar-learningstore",
 		},
 		{
+			title: "fwu-media.title",
+			to: "/fwu-media",
+			icon: mdiBookshelf,
+			testId: "sidebar-fwu-media",
+		},
+		{
 			title: "feature.media-shelf.title",
 			to: "/media-shelf",
 			icon: mdiBookshelf,

@@ -2094,6 +2094,7 @@ export default {
 	"utils.adminFilter.placeholder.complete.name": "Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
+	"fwu-media.title": "FWU Medien",
 	"feature.media-shelf.title": "Estante multimedia",
 	"feature.media-shelf.emptyState": "Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",

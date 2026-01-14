@@ -2059,6 +2059,7 @@ export default {
 	"utils.adminFilter.placeholder.complete.name": "Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"fwu-media.title": "FWU Medien",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState": "Наразі немає медіафайлів, доступних для використання",
 	"feature.media-shelf.createLine": "Додайте лінію",
