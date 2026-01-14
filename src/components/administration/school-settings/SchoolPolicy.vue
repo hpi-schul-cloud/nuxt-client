@@ -63,10 +63,8 @@
 				@close="closeDialog"
 			/>
 			<ConfirmationDialog>
-				<InfoAlert class="mb-0">
-					<div class="alert-text">
-						{{ $t("pages.administration.school.index.schoolPolicy.delete.text") }}
-					</div>
+				<InfoAlert>
+					{{ $t("pages.administration.school.index.schoolPolicy.delete.text") }}
 				</InfoAlert>
 			</ConfirmationDialog>
 		</template>
@@ -139,12 +137,7 @@ const closeDialog = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
+<style scoped>
 .item-no-action {
 	&:hover {
 		cursor: default;

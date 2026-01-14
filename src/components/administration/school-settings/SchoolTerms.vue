@@ -47,11 +47,7 @@
 							:aria-label="t('pages.administration.school.index.termsOfUse.edit')"
 						/>
 					</v-list-item-action>
-					<v-list-item-action
-						v-if="termsOfUse"
-						data-testid="delete-button"
-						@click.stop="isDeleteTermsDialogOpen = true"
-					>
+					<v-list-item-action v-if="termsOfUse" data-testid="delete-button" @click.stop="onDelete">
 						<v-btn
 							:icon="mdiTrashCanOutline"
 							variant="text"
@@ -66,35 +62,17 @@
 				data-testid="form-dialog"
 				@close="closeDialog"
 			/>
-			<CustomDialog
-				v-model:is-open="isDeleteTermsDialogOpen"
-				:size="430"
-				has-buttons
-				confirm-btn-title-key="common.actions.delete"
-				:confirm-btn-icon="mdiTrashCanOutline"
-				data-testid="delete-dialog"
-				@dialog-confirmed="deleteFile"
-			>
-				<template #title>
-					<h3 class="text-h2 mt-0">
-						{{ t("pages.administration.school.index.termsOfUse.delete.title") }}
-					</h3>
-				</template>
-				<template #content>
-					<v-alert type="info" class="mb-0">
-						<div class="alert-text">
-							{{ t("pages.administration.school.index.termsOfUse.delete.text") }}
-						</div>
-					</v-alert>
-				</template>
-			</CustomDialog>
+			<ConfirmationDialog>
+				<InfoAlert>
+					{{ t("pages.administration.school.index.termsOfUse.delete.text") }}
+				</InfoAlert>
+			</ConfirmationDialog>
 		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { ConsentVersion } from "@/store/types/consent-version";
@@ -103,17 +81,17 @@ import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
 import { mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
-import { ErrorAlert } from "@ui-alert";
-import { computed, ComputedRef, Ref, ref, watch } from "vue";
+import { ErrorAlert, InfoAlert } from "@ui-alert";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
-const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
+const isSchoolTermsFormDialogOpen = ref(false);
 
-const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+const school = computed<School>(() => schoolsModule.getSchool);
 watch(
 	school,
 	async (newValue) => {
@@ -124,14 +102,26 @@ watch(
 
 const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
 
-const termsOfUse: ComputedRef<ConsentVersion | null> = computed(() => termsOfUseModule.getTermsOfUse);
-const status: ComputedRef<string> = computed(() => termsOfUseModule.getStatus);
+const termsOfUse = computed<ConsentVersion | null>(() => termsOfUseModule.getTermsOfUse);
+const status = computed<string>(() => termsOfUseModule.getStatus);
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 
 const downloadTerms = () => {
 	if (termsOfUse.value) {
 		downloadFile(termsOfUse.value.consentData.data, t("pages.administration.school.index.termsOfUse.fileName"));
+	}
+};
+
+const { askConfirmation } = useConfirmationDialog();
+const onDelete = async () => {
+	const shouldDelete = await askConfirmation({
+		message: t("pages.administration.school.index.termsOfUse.delete.title"),
+		confirmActionLangKey: "common.actions.delete",
+	});
+
+	if (shouldDelete) {
+		await deleteFile();
 	}
 };
 
@@ -145,12 +135,7 @@ const closeDialog = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
+<style scoped>
 .item-no-action {
 	&:hover {
 		cursor: default;
