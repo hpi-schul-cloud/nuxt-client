@@ -12,7 +12,7 @@
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon>$teacher</v-icon>
+					<v-icon :icon="mdiHumanMaleBoard" />
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
@@ -167,6 +167,7 @@ import {
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,
 	mdiChevronLeft,
+	mdiHumanMaleBoard,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
@@ -196,6 +197,7 @@ export default {
 			mdiChevronLeft,
 			mdiShieldAccountVariantOutline,
 			mdiAccountEye,
+			mdiHumanMaleBoard,
 		};
 	},
 	computed: {

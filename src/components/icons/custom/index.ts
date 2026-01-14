@@ -13,7 +13,6 @@ import taskMissed from "./task-missed.vue";
 import taskMissedFilled from "./task-missed-filled.vue";
 import taskOpenFilled from "./task-open-filled.vue";
 import tasks from "./tasks.vue";
-import teacher from "./teacher.vue";
 import { Component } from "vue";
 
 // TODO: Remove custom icons and use only standardized icons from the design system
@@ -34,7 +33,6 @@ const customAliases: Record<string, Component> = {
 	taskMissed: taskMissed,
 	taskOpenFilled: taskOpenFilled,
 	tasks: tasks,
-	teacher: teacher,
 };
 
 export { customAliases };
