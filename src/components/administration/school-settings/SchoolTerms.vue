@@ -1,17 +1,11 @@
 <template>
 	<div>
-		<v-alert
+		<ErrorAlert
 			v-if="status === 'error'"
-			type="error"
 			class="mb-6"
 			data-testid="error-alert"
 			:text="t('pages.administration.school.index.termsOfUse.error')"
-			:icon="mdiAlertCircle"
-		>
-			<div class="alert-text">
-				{{ t("pages.administration.school.index.termsOfUse.error") }}
-			</div>
-		</v-alert>
+		/>
 		<template v-else>
 			<v-progress-linear v-if="status === 'pending'" indeterminate class="mb-6" data-testid="progress-bar" />
 			<v-list-item
@@ -108,7 +102,8 @@ import { School } from "@/store/types/schools";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
-import { mdiAlertCircle, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
 import { computed, ComputedRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

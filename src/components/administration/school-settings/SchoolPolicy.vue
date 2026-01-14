@@ -1,17 +1,11 @@
 <template>
 	<div>
-		<v-alert
+		<ErrorAlert
 			v-if="status === 'error'"
-			type="error"
 			class="mb-6"
 			data-testid="error-alert"
-			:icon="mdiAlertCircle"
 			:text="$t('pages.administration.school.index.schoolPolicy.error')"
-		>
-			<div class="alert-text">
-				{{ $t("pages.administration.school.index.schoolPolicy.error") }}
-			</div>
-		</v-alert>
+		/>
 		<template v-else>
 			<v-progress-linear v-if="status === 'pending'" indeterminate class="mb-6" data-testid="progress-bar" />
 			<v-list-item
@@ -69,7 +63,7 @@
 				@close="closeDialog"
 			/>
 			<ConfirmationDialog>
-				<InfoAlert type="info" class="mb-0">
+				<InfoAlert class="mb-0">
 					<div class="alert-text">
 						{{ $t("pages.administration.school.index.schoolPolicy.delete.text") }}
 					</div>
@@ -88,8 +82,8 @@ import { School } from "@/store/types/schools";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
-import { mdiAlertCircle, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
-import { InfoAlert } from "@ui-alert";
+import { mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, ComputedRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
