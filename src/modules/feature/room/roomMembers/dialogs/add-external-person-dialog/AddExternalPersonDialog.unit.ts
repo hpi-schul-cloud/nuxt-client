@@ -5,7 +5,12 @@ import { schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useNotificationStore } from "@data-app";
-import { ExternalMemberCheckStatus, useRegistrationStore, useRoomMembersStore } from "@data-room";
+import {
+	ExternalMemberCheckStatus,
+	ExternalMembersInvitationSteps,
+	useRegistrationStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -165,7 +170,9 @@ describe("AddExternalPersonDialog", () => {
 						await clickButton("add-email");
 
 						expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
-						expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("error");
+						expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe(
+							ExternalMembersInvitationSteps.Error
+						);
 					});
 				});
 			});
@@ -180,7 +187,9 @@ describe("AddExternalPersonDialog", () => {
 					await clickButton("add-email");
 
 					expect(roomMembersStore.addMemberByEmail).toHaveBeenCalledWith("test-email@example.com");
-					expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
+					expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe(
+						ExternalMembersInvitationSteps.Details
+					);
 					expect(wrapper.getComponent('[data-testid="add-external-person-firstname"]')).toBeTruthy();
 					expect(wrapper.getComponent('[data-testid="add-external-person-confirm-btn"]')).toBeTruthy();
 					expect(wrapper.find('[data-testid="add-external-person-add-email-btn"]').exists()).toBe(false);
@@ -199,11 +208,15 @@ describe("AddExternalPersonDialog", () => {
 				await getTextfield("email").setValue("test-email@example.com");
 				await clickButton("add-email");
 
-				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("details");
+				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe(
+					ExternalMembersInvitationSteps.Details
+				);
 
 				await clickButton("back");
 
-				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe("email");
+				expect((wrapper.vm as unknown as VueWrapper & { step: string }).step).toBe(
+					ExternalMembersInvitationSteps.Email
+				);
 				expect(wrapper.getComponent('[data-testid="add-external-person-add-email-btn"]')).toBeTruthy();
 				expect(
 					wrapper.getComponent('[data-testid="add-external-person-email"]').getComponent(VTextField).vm.modelValue

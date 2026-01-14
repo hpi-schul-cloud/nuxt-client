@@ -9,14 +9,14 @@
 		@after-leave="resetForm"
 	>
 		<StepEmail
-			v-if="step === 'email' || step === 'error'"
+			v-if="step === ExternalMembersInvitationSteps.Email || step === ExternalMembersInvitationSteps.Error"
 			:email="email"
-			:has-error="step === 'error'"
+			:has-error="step === ExternalMembersInvitationSteps.Error"
 			@submit:email="onSubmitEmail"
 			@close="onClose"
 		/>
 		<StepDetails
-			v-else-if="step === 'details'"
+			v-else-if="step === ExternalMembersInvitationSteps.Details"
 			:application-names="applicationNames"
 			:email="email"
 			:first-name="firstName"
@@ -35,7 +35,12 @@ import StepEmail from "./StepEmail.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { ExternalMemberCheckStatus, useRegistrationStore, useRoomMembersStore } from "@data-room";
+import {
+	ExternalMemberCheckStatus,
+	ExternalMembersInvitationSteps,
+	useRegistrationStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { computed, nextTick, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -65,7 +70,7 @@ const { xs } = useDisplay();
 
 const addExternalPersonContent = ref<VCard>();
 
-const step = ref<"email" | "details" | "error">("email");
+const step = ref<ExternalMembersInvitationSteps>(ExternalMembersInvitationSteps.Email);
 
 const email = ref<string>("");
 const firstName = ref<string>("");
@@ -84,10 +89,10 @@ const onSubmitEmail = async (newEmail: string) => {
 	if (status === ExternalMemberCheckStatus.ACCOUNT_FOUND_AND_ADDED) {
 		closeDialog();
 	} else if (status === ExternalMemberCheckStatus.ACCOUNT_NOT_FOUND) {
-		step.value = "details";
+		step.value = ExternalMembersInvitationSteps.Details;
 		await nextTick();
 	} else if (status === ExternalMemberCheckStatus.ACCOUNT_IS_NOT_EXTERNAL) {
-		step.value = "error";
+		step.value = ExternalMembersInvitationSteps.Error;
 	} else {
 		notifyError(t("pages.rooms.members.dialog.addExternalPerson.errors.addingMember"));
 	}
@@ -111,12 +116,12 @@ const onSubmitInvitation = async () => {
 const onClose = () => closeDialog();
 
 const onBack = () => {
-	step.value = "email";
+	step.value = ExternalMembersInvitationSteps.Email;
 };
 
 const resetForm = () => {
 	[email, firstName, lastName].forEach((field) => (field.value = ""));
-	step.value = "email";
+	step.value = ExternalMembersInvitationSteps.Email;
 };
 
 const closeDialog = () => {
