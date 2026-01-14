@@ -1663,7 +1663,7 @@ export default {
 		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
 		"Запрошення електронною поштою неможливе. Будь ласка, перевірте необхідні {link}.",
-	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": " вимоги",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "вимоги",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Запросити зовнішню особу",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"Обліковий запис із цією електронною адресою не знайдено. Особу можна запросити зареєструватися в {applicationName}.",

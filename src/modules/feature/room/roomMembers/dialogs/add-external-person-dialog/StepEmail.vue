@@ -30,7 +30,6 @@
 						</a>
 					</template>
 				</i18n-t>
-				<!-- <span>{{ t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal") }}</span> -->
 			</ErrorAlert>
 		</template>
 		<template #actions>
