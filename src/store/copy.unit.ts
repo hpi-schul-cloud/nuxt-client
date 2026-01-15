@@ -474,67 +474,6 @@ describe("copy module", () => {
 				copyModule.setCopyResultFailedItems(payload);
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
-
-			// TODO - Why is this being skipped? Test should be fixed or deleted
-			it.skip("should set the state and change the statusses 'success'", () => {
-				const payload = {
-					payload: {
-						title: "test course",
-						type: CopyApiResponseTypeEnum.Course,
-						status: CopyApiResponseStatusEnum.Partial,
-						id: "12345",
-						elements: [
-							{
-								type: CopyApiResponseTypeEnum.Metadata,
-								status: CopyApiResponseStatusEnum.Success,
-							},
-							{
-								type: CopyApiResponseTypeEnum.Board,
-								status: CopyApiResponseStatusEnum.Partial,
-								id: "345",
-								elements: [
-									{
-										title: "Task 1",
-										type: CopyApiResponseTypeEnum.Task,
-										destinationCourseId: "aCourseId",
-										status: CopyApiResponseStatusEnum.Partial,
-										id: "567",
-										elements: [
-											{
-												type: CopyApiResponseTypeEnum.Metadata,
-												status: CopyApiResponseStatusEnum.Success,
-											},
-											{
-												type: CopyApiResponseTypeEnum.SubmissionGroup,
-												status: CopyApiResponseStatusEnum.NotDoing,
-											},
-										],
-									},
-								],
-							},
-						],
-					},
-				};
-				const expectedData = [
-					{
-						title: "test course",
-						type: CopyApiResponseTypeEnum.Course,
-						elementId: "12345",
-						elements: [],
-						url: "/courses/12345/edit",
-					},
-					{
-						elementId: "567",
-						elements: [],
-						title: "Task 1",
-						type: CopyApiResponseTypeEnum.Task,
-						url: "/homework/567/edit?returnUrl=rooms/aCourseId",
-					},
-				];
-				const copyModule = new CopyModule({});
-				copyModule.setCopyResultFailedItems(payload);
-				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
-			});
 		});
 	});
 
