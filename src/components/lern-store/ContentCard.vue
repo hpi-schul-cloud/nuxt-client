@@ -28,7 +28,7 @@
 							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon class="custom-icon content__text-icon" icon="$ic_collection" />
+								<v-icon class="custom-icon content__text-icon" :icon="mdiLayers" />
 							</div>
 						</div>
 					</div>
@@ -57,6 +57,7 @@ import BaseLink from "@/components/base/BaseLink";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
+import { mdiLayers } from "@icons/material";
 
 export default {
 	components: {
@@ -75,6 +76,7 @@ export default {
 		return {
 			isChecked: false,
 			copyModalActive: false,
+			mdiLayers,
 		};
 	},
 	computed: {

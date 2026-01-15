@@ -1,5 +1,4 @@
 import h5pOutline from "./h5p-outline.vue";
-import icCollection from "./ic_collection.vue";
 import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
@@ -19,7 +18,6 @@ import { Component } from "vue";
 
 const customAliases: Record<string, Component> = {
 	h5pOutline: h5pOutline,
-	ic_collection: icCollection,
 	langIconDe: langIconDe,
 	langIconEn: langIconEn,
 	langIconEs: langIconEs,
