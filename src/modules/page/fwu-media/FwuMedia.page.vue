@@ -33,7 +33,7 @@
 						class="fwu-card"
 					>
 						<VImg :src="item.thumbnail_url" height="200" cover />
-						<VCardTitle class="fwu-card-title text-wrap">
+						<VCardTitle class="font-weight-bold text-body-1 text-wrap">
 							{{ item.title }}
 						</VCardTitle>
 					</VCard>
