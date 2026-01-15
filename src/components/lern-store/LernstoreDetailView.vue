@@ -113,6 +113,9 @@
 						</template>
 					</div>
 					<div v-show="collectionLink !== ''" class="meta-container">
+						<div class="meta-icon">
+							<v-icon class="custom-icon meta-icon">$ic_collection</v-icon>
+						</div>
 						<base-link design="none" type="button" class="meta-text link" :to="collectionLink">
 							<span>{{ $t("pages.content.card.collection") }}</span>
 						</base-link>
