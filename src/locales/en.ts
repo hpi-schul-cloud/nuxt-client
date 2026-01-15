@@ -1540,7 +1540,13 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
+	"pages.lernstore.info.banner.title": "Learning Store contents reorganized",
+	"pages.lernstore.info.banner.helpLinkText": "help page",
+	"pages.lernstore.info.banner.item.0":
+		"All Learning Store contents are now available in the Media Library and can be integrated as a tool in courses and areas.",
+	"pages.lernstore.info.banner.item.1": "Learning Store contents already embedded in topics remain available.",
+	"pages.lernstore.info.banner.item.2":
+		"The Learning Store page will be discontinued in week 9 (24.02.2026) – further information on our {helpLink}.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

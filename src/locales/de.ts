@@ -1570,6 +1570,12 @@ export default {
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
 	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
+	"pages.lernstore.info.banner.helpLinkText": "Hilfeseite",
+	"pages.lernstore.info.banner.item.0":
+		"Alle Lern-Store-Inhalte stehen ab sofort im Medienregal zur Verfügung und können als Tool in Kursen sowie in Bereichen eingebunden werden.",
+	"pages.lernstore.info.banner.item.1": "Bereits in Themen eingebundene Lern-Store-Inhalte sind weiterhin verfügbar.",
+	"pages.lernstore.info.banner.item.2":
+		"Die Seite Lern-Store wird in KW 9 (24.02.2026) abgeschaltet – weitere Infos auf unserer {helpLink}.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

@@ -1575,7 +1575,14 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
-	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
+	"pages.lernstore.info.banner.title": "Contenidos de la Tienda de Aprendizaje reorganizados",
+	"pages.lernstore.info.banner.helpLinkText": "página de ayuda",
+	"pages.lernstore.info.banner.item.0":
+		"Todos los contenidos de la Tienda de Aprendizaje ya están disponibles en el Estante de Medios y pueden integrarse como herramienta en cursos y áreas.",
+	"pages.lernstore.info.banner.item.1":
+		"Los contenidos de la Tienda de Aprendizaje ya incorporados en temas siguen disponibles.",
+	"pages.lernstore.info.banner.item.2":
+		"La página de la Tienda de Aprendizaje se desactivará en la semana 9 (24.02.2026) – más información en nuestra {helpLink}.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

@@ -1556,7 +1556,13 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
-	"pages.lernstore.info.banner.title": "Lern-Store-Inhalte neu organisiert",
+	"pages.lernstore.info.banner.title": "Вміст Магазину навчання реорганізовано",
+	"pages.lernstore.info.banner.helpLinkText": "сторінка допомоги",
+	"pages.lernstore.info.banner.item.0":
+		"Весь вміст Магазину навчання тепер доступний у Медіатеці та може бути інтегрований як інструмент у курси та розділи.",
+	"pages.lernstore.info.banner.item.1": "Вміст Магазину навчання, вже інтегрований у теми, залишається доступним.",
+	"pages.lernstore.info.banner.item.2":
+		"Сторінку Магазину навчання буде вимкнено у тижні 9 (24.02.2026) – додаткова інформація на нашій {helpLink}.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
