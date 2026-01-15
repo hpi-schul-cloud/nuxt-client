@@ -790,7 +790,7 @@ export default {
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2": "Подання, призначені до завдання.",
-	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з версією CC_1.1",
+	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
 	"components.organisms.ContentCard.report.body": "Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":

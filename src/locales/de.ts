@@ -710,7 +710,8 @@ export default {
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
-	"components.molecules.export.options.info.point3": "Dateiordner werden mit Version CC_1.1 nicht exportiert",
+	"components.molecules.export.options.info.point3":
+		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",

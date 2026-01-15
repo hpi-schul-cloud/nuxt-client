@@ -776,7 +776,7 @@ export default {
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
-	"components.molecules.export.options.info.point3": "File folders are not exported with version CC_1.1",
+	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
