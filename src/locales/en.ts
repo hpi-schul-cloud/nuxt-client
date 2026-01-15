@@ -1663,6 +1663,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Send invitation",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"The invitation could not be sent. Please try again later",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Invitation sent to {email}",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.create.course": "Create course",
 	"pages.rooms.fab.add.course": "New course",
