@@ -16,7 +16,7 @@
 				<template #text>
 					<slot name="content" />
 				</template>
-				<template #actions>
+				<template v-if="!noActions" #actions>
 					<VSpacer />
 					<div class="d-flex ga-2">
 						<slot name="actions">
@@ -58,6 +58,7 @@ defineProps({
 	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, default: false },
 	confirmBtnLangKey: { type: String, default: "common.actions.confirm" },
+	noActions: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["cancel", "confirm", "after-leave"]);
