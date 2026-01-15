@@ -28,7 +28,6 @@
 							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon class="custom-icon content__text-icon" icon="$ic_collection" />
 							</div>
 						</div>
 					</div>
