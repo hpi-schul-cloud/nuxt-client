@@ -17,11 +17,17 @@ import { Component } from "vue";
 // TODO: Remove custom icons and use only standardized icons from the design system
 
 const customAliases: Record<string, Component> = {
+	// icon h5p-outline is not replacable by mdi or material design icons
+	// because it is a custom icon for the H5P file type
+	// which is not available in any icon library
 	h5pOutline: h5pOutline,
+	// language icons are not replacable by mdi or material design icons
 	langIconDe: langIconDe,
 	langIconEn: langIconEn,
 	langIconEs: langIconEs,
 	langIconUk: langIconUk,
+	// icon lernstore_outline is replacable by mdiLibraryBooksOutline from mdi
+	// but it has to be replaced in schulcloud-client, too much work - lernstore will be removed soon
 	lernstore_outline: lernstoreOutline,
 	shelfOutline: shelfOutline,
 	taskDoneFilled: taskDoneFilled,
