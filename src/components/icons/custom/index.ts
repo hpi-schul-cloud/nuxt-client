@@ -3,7 +3,6 @@ import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
-import lernstoreOutline from "./lernstore_outline.vue";
 import shelfOutline from "./shelf-outline.vue";
 import taskDone from "./task-done.vue";
 import taskDoneFilled from "./task-done-filled.vue";
@@ -22,7 +21,6 @@ const customAliases: Record<string, Component> = {
 	langIconEn: langIconEn,
 	langIconEs: langIconEs,
 	langIconUk: langIconUk,
-	lernstore_outline: lernstoreOutline,
 	shelfOutline: shelfOutline,
 	taskDoneFilled: taskDoneFilled,
 	taskDone: taskDone,
