@@ -2109,6 +2109,7 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
 	"pages.fwu-media.title": "FWU Medios",
+	"pages.fwu-media.items": "FWU Medios",
 	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",

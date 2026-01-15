@@ -2074,6 +2074,7 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Таблиця)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Презентація)",
 	"pages.fwu-media.title": "FWU Медіа",
+	"pages.fwu-media.items": "FWU Медіа",
 	"pages.folder.emptyState": "Наразі тут немає файлів",
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
