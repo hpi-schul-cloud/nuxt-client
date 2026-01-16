@@ -29,9 +29,13 @@ const customAliases: Record<string, Component> = {
 	lernstore_outline: lernstoreOutline,
 	// icon shelf-outline is not replacable by mdi or material design icons
 	shelfOutline: shelfOutline,
+	// task draft icon is not replacable by mdi or material design icons
 	taskDraft: taskDraft,
+	// task missed filled icon is not replacable by mdi or material design icons
 	taskMissedFilled: taskMissedFilled,
+	// task missed icon is not replacable by mdi or material design icons
 	taskMissed: taskMissed,
+	// task open filled icon is not replacable by mdi or material design icons
 	taskOpenFilled: taskOpenFilled,
 	tasks: tasks,
 };
