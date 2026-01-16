@@ -604,7 +604,7 @@ describe("Folder.vue", () => {
 					await renameButton.trigger("click");
 
 					const renameDialog = wrapper.findComponent(VCard);
-					const confirmButton = renameDialog.find("[data-testid='dialog-confirm']");
+					const confirmButton = renameDialog.find("[data-testid='rename-folder-dialog-confirm']");
 					await confirmButton.trigger("click");
 
 					return {
@@ -628,7 +628,7 @@ describe("Folder.vue", () => {
 					const { wrapper } = await setup();
 
 					const renameDialog = wrapper.findComponent(VCard);
-					const cancelButton = renameDialog.find("[data-testid='dialog-cancel']");
+					const cancelButton = renameDialog.find("[data-testid='rename-folder-dialog-cancel']");
 
 					expect(cancelButton.isVisible()).toBe(false);
 				});
@@ -696,7 +696,7 @@ describe("Folder.vue", () => {
 					await renameButton.trigger("click");
 
 					const renameDialog = wrapper.findComponent(VCard);
-					const cancelButton = renameDialog.find("[data-testid='dialog-cancel']");
+					const cancelButton = renameDialog.find("[data-testid='rename-folder-dialog-cancel']");
 					await cancelButton.trigger("click");
 
 					return {
@@ -720,7 +720,7 @@ describe("Folder.vue", () => {
 					const { wrapper } = await setup();
 
 					const renameDialog = wrapper.findComponent(VCard);
-					const cancelButton = renameDialog.find("[data-testid='dialog-cancel']");
+					const cancelButton = renameDialog.find("[data-testid='rename-folder-dialog-cancel']");
 
 					expect(cancelButton.isVisible()).toBe(false);
 				});

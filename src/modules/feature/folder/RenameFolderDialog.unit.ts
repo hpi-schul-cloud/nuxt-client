@@ -41,25 +41,13 @@ describe("RenameFolderDialog", () => {
 			expect(input.attributes("value")).toBe(name);
 		});
 
-		describe("when Dialog emits update:is-dialog-open", () => {
-			it("should emit update:is-dialog-open", async () => {
-				const { wrapper } = setup();
-				const dialog = wrapper.findComponent(Dialog);
-
-				await dialog.vm.$emit("update:is-dialog-open", false);
-
-				expect(wrapper.emitted("update:is-dialog-open")).toBeTruthy();
-				expect(wrapper.emitted("update:is-dialog-open")?.[0]).toEqual([false]);
-			});
-		});
-
 		describe("when Dialog emits cancel", () => {
 			it("should emit cancel", async () => {
 				const { wrapper } = setup();
 				const dialog = wrapper.findComponent(Dialog);
 				dialog.vm.$emit("cancel");
 
-				expect(wrapper.emitted("cancel")).toBeTruthy();
+				expect(wrapper.emitted("cancel")).toHaveLength(1);
 			});
 		});
 
@@ -74,7 +62,6 @@ describe("RenameFolderDialog", () => {
 
 				dialog.vm.$emit("confirm");
 
-				expect(wrapper.emitted("confirm")).toBeTruthy();
 				expect(wrapper.emitted("confirm")?.[0]).toEqual(["new name"]);
 			});
 		});

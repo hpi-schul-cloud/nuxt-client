@@ -1,9 +1,10 @@
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Dialog } from "@ui-dialog";
 import { VueWrapper } from "@vue/test-utils";
 import { Mock } from "vitest";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { VCard, VDialog } from "vuetify/lib/components/index";
 
 vi.mock("./Confirmation.composable");
@@ -57,7 +58,10 @@ describe("ConfirmationDialog", () => {
 		it("should render dialog title", async () => {
 			const { wrapper, message } = setup();
 
-			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find(".dialog-title");
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find("[data-testid=confirmation-dialog-title]");
 
 			expect(dialogTitle.text()).toContain(message);
 		});
@@ -65,9 +69,12 @@ describe("ConfirmationDialog", () => {
 		it("should render empty dialog title if no message is provided", async () => {
 			const { wrapper } = setup({ message: undefined });
 
-			const dialogTitle = wrapper.findComponent(VDialog).findComponent(VCard).find(".dialog-title");
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find("[data-testid=confirmation-dialog-title]");
 
-			expect(dialogTitle.text()).toBe("");
+			expect(dialogTitle.exists()).toBe(false);
 		});
 	});
 
@@ -75,76 +82,20 @@ describe("ConfirmationDialog", () => {
 		it("should call 'confirm' if 'confirm' button clicked", async () => {
 			const { wrapper } = setup();
 
-			const confirmButton = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent("[data-testid='dialog-confirm']");
+			const dialog = wrapper.findComponent(Dialog);
+			dialog.vm.$emit("confirm");
+			await nextTick();
 
-			await confirmButton.trigger("click");
 			expect(confirmMock).toHaveBeenCalled();
 		});
 
 		it("should call 'cancel' if 'cancel' button clicked", async () => {
 			const { wrapper } = setup();
 
-			const cancelButton = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent("[data-testid='dialog-cancel']");
+			const dialog = wrapper.findComponent(Dialog);
+			dialog.vm.$emit("cancel");
+			await nextTick();
 
-			await cancelButton.trigger("click");
-			expect(cancelMock).toHaveBeenCalled();
-		});
-	});
-
-	describe("confirm button", () => {
-		it("should call 'confirm' if button is clicked", async () => {
-			const { wrapper } = setup();
-
-			const confirmButton = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent("[data-testid='dialog-confirm']");
-
-			await confirmButton.trigger("click");
-			expect(confirmMock).toHaveBeenCalled();
-		});
-
-		it("should have correct text when own language key is provided", async () => {
-			const { wrapper, confirmActionLangKey } = setup({
-				confirmActionLangKey: "providedLanguageKey",
-			});
-
-			const confirmButton = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent("[data-testid='dialog-confirm']");
-
-			expect(confirmButton.text()).toContain(confirmActionLangKey);
-		});
-
-		it("should have default text when no language key is provided", async () => {
-			const { wrapper } = setup({ confirmActionLangKey: undefined });
-
-			const confirmButton = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent("[data-testid='dialog-confirm']");
-
-			expect(confirmButton.text()).toContain("common.actions.confirm");
-		});
-	});
-
-	describe("cancel button", () => {
-		it("should call 'cancel' if dialog is cancelled", async () => {
-			const { wrapper } = setup();
-
-			const cancelButton = wrapper
-				.findComponent(VDialog)
-				.findComponent(VCard)
-				.findComponent("[data-testid='dialog-cancel']");
-
-			await cancelButton.trigger("click");
 			expect(cancelMock).toHaveBeenCalled();
 		});
 	});

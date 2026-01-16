@@ -1,5 +1,4 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, provisioningOptionsDataFactory } from "@@/tests/test-utils";
@@ -7,6 +6,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisioning-options";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mock } from "vitest";
@@ -296,9 +296,9 @@ describe("ProvisioningOptionsPage", () => {
 
 					await saveButton.trigger("click");
 
-					const dialog = wrapper.findComponent(CustomDialog);
+					const dialog = wrapper.findComponent(Dialog);
 
-					expect(dialog.props("isOpen")).toEqual(true);
+					expect(dialog.props("modelValue")).toEqual(true);
 				});
 			});
 

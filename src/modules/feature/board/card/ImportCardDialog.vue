@@ -1,11 +1,11 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
-		:loading="isImporting"
-		:message="t('components.molecules.import.card.options.title')"
+		v-model="isDialogOpen"
+		:is-loading="isImporting"
+		:title="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
-		data-testid="import-card-dialog"
+		identifier="import-card-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>
@@ -21,11 +21,9 @@
 					<li>{{ t("components.molecules.import.card.hint.ctltools") }}</li>
 				</ul>
 			</InfoAlert>
-
 			<p class="text-lg mt-2" data-testid="import-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
-
 			<VForm id="importCardForm" data-testid="import-card-form">
 				<VSelect
 					v-model="selectedRoomId"
@@ -39,7 +37,6 @@
 					data-testid="import-card-select-room"
 					@update:menu="resetBoardSelection"
 				/>
-
 				<VSelect
 					v-model="selectedBoardId"
 					:disabled="!selectedRoomId || isImporting"
@@ -51,7 +48,6 @@
 					data-testid="import-card-select-board"
 					@update:menu="selectedColumnId = undefined"
 				/>
-
 				<VSelect
 					v-model="selectedColumnId"
 					:disabled="!selectedBoardId || isImporting"

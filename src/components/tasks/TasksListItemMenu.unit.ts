@@ -1,49 +1,21 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, LOADING_STATE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { VBtn } from "vuetify/components";
-
-const { tasksTeacher } = mocks;
-
-let tasksModuleMock: TasksModule;
-let copyModuleMock: CopyModule;
-let loadingStateModuleMock: LoadingStateModule;
-
-const getWrapper = (
-	props: {
-		taskId: string;
-		taskIsFinished: boolean;
-		taskIsPublished: boolean;
-		userRole: string;
-		courseId?: string;
-	},
-	options = {}
-) =>
-	mount(TasksListItemMenu, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				tasksModule: tasksModuleMock,
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				loadingStateModule: loadingStateModuleMock,
-			},
-		},
-		props,
-		...options,
-	});
+import { nextTick } from "vue";
+import { VBtn } from "vuetify/lib/components/index";
 
 describe("TasksListItemMenu", () => {
 	const defineWindowWidth = (width: number) => {
@@ -54,6 +26,36 @@ describe("TasksListItemMenu", () => {
 		});
 		window.dispatchEvent(new Event("resize"));
 	};
+
+	const { tasksTeacher } = mocks;
+
+	let tasksModuleMock: TasksModule;
+	let copyModuleMock: CopyModule;
+	let loadingStateModuleMock: LoadingStateModule;
+
+	const getWrapper = (
+		props: {
+			taskId: string;
+			taskIsFinished: boolean;
+			taskIsPublished: boolean;
+			userRole: string;
+			courseId?: string;
+		},
+		options = {}
+	) =>
+		mount(TasksListItemMenu, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[TASKS_MODULE_KEY.valueOf()]: tasksModuleMock,
+					[FINISHED_TASKS_MODULE_KEY.valueOf()]: finishedTasksModule,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
+				},
+			},
+			props,
+			...options,
+		});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -86,44 +88,6 @@ describe("TasksListItemMenu", () => {
 			invalidRoles.forEach((task) => {
 				expect(validator(task)).toBe(false);
 			});
-		});
-	});
-
-	describe("computed properties", () => {
-		it("should compute correct edit link", () => {
-			const task = tasksTeacher[0];
-			const wrapper = getWrapper({
-				taskId: task.id,
-				taskIsFinished: task.status.isFinished,
-				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
-				userRole: "teacher",
-			});
-
-			expect(wrapper.vm.editLink).toStrictEqual(`/homework/${task.id}/edit`);
-		});
-
-		it("should compute correct copy link", () => {
-			const task = tasksTeacher[0];
-			const wrapper = getWrapper({
-				taskId: task.id,
-				taskIsFinished: task.status.isFinished,
-				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
-				userRole: "teacher",
-			});
-
-			expect(wrapper.vm.copyLink).toStrictEqual(`/homework/${task.id}/copy?returnUrl=/tasks`);
-		});
-
-		it("should set isTeacher correctly", () => {
-			const task = tasksTeacher[0];
-			const wrapper = getWrapper({
-				taskId: task.id,
-				taskIsFinished: task.status.isFinished,
-				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
-				userRole: "teacher",
-			});
-
-			expect(wrapper.vm.isTeacher).toBe(true);
 		});
 	});
 
@@ -201,11 +165,9 @@ describe("TasksListItemMenu", () => {
 			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
 
-			const deleteBtn = wrapper.findComponent("[data-testId=task-delete]");
-			await deleteBtn.trigger("click");
-
-			const confirmBtn = wrapper.findComponent(CustomDialog);
-			await confirmBtn.vm.$emit("dialog-confirmed");
+			const deleteAction = wrapper.getComponent(KebabMenuActionDelete);
+			deleteAction.vm.$emit("click", true);
+			await nextTick();
 
 			expect(tasksModuleMock.deleteTask).toHaveBeenCalled();
 		});

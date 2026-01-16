@@ -1,10 +1,10 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isCollaboraFileDialogOpen"
-		:message="t('feature.collabora.add-collabora-file-dialog.title')"
+		v-model="isCollaboraFileDialogOpen"
+		:title="t('feature.collabora.add-collabora-file-dialog.title')"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
-		data-testid="collabora-file-dialog"
+		identifier="collabora-file-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 		@after-leave="resetForm"
@@ -34,6 +34,7 @@
 		</template>
 	</Dialog>
 </template>
+
 <script setup lang="ts">
 import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
 import type { CreateCollaboraFilePayload } from "../types/collabora-file";

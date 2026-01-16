@@ -440,22 +440,6 @@ describe("teachers/index", () => {
 		expect(usersActionsStubs.findTeachers).toHaveBeenCalled();
 	});
 
-	// currently disabled, will be reactivated when the new components are in use
-	it.skip("should table filter options call uiState after passing props", () => {
-		const { wrapper, uiStateMutationsStubs } = setup();
-
-		vi.runAllTimers();
-
-		const filterComponent = wrapper.findComponent(`[data-testid="data_filter"]`);
-		expect(filterComponent.exists()).toBe(true);
-
-		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
-
-		vi.runAllTimers();
-
-		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
-	});
-
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		createTestEnvStore({ ...envs, ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
 		const { wrapper } = setup();

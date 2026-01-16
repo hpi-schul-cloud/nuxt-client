@@ -25,11 +25,11 @@
 			</template>
 		</EmptyState>
 		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
-		<ConfirmationDialog />
 		<SelectBoardLayoutDialog v-if="canEditRoomContent" v-model="boardLayoutDialogIsOpen" @select="onCreateBoard" />
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.Room" />
+		<ConfirmationDialog />
 	</DefaultWireframe>
 </template>
 

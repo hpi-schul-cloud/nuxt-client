@@ -1,5 +1,4 @@
 import MigrationWizard from "./Migration.page.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
@@ -10,6 +9,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { Dialog } from "@ui-dialog";
 import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -383,23 +383,6 @@ describe("User Migration / Index", () => {
 				expect(wrapper.vm.isCancelDialogOpen).toBe(true);
 			});
 
-			it("should change isCancelDialogOpen on isOpen", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("update:isOpen", false);
-				await nextTick();
-
-				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
-			});
-
 			it("should call stores on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
@@ -416,15 +399,15 @@ describe("User Migration / Index", () => {
 				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(await Promise.resolve());
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
+				const dialogs = wrapper.findAllComponents(Dialog);
+				expect(dialogs[0].exists()).toBe(true);
+				expect(dialogs[0].props().title).toBe(
+					"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+				);
 
-				dialog.vm.$emit("dialog-confirmed");
-
+				dialogs[0].vm.$emit("confirm");
 				await nextTick();
 
 				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
@@ -448,11 +431,13 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
+				const dialogs = wrapper.findAllComponents(Dialog);
+				expect(dialogs[0].exists()).toBe(true);
+				expect(dialogs[0].props().title).toBe(
+					"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+				);
 
-				dialog.vm.$emit("dialog-confirmed");
+				dialogs[0].vm.$emit("confirm");
 				await nextTick();
 
 				expect(router.push).toHaveBeenCalledWith({
@@ -561,13 +546,18 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "clearAutoMatchesDialog",
-				});
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const clearDialog = dialogs[1];
+				expect(clearDialog.exists()).toBe(true);
+				expect(clearDialog.props().title).toBe(
+					"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+				);
+
+				clearDialog.vm.$emit("confirm");
 
 				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(true);
-				expect(dialog.exists()).toBe(true);
-				expect(dialog.vm.isOpen).toBeTruthy();
+				expect(clearDialog.exists()).toBe(true);
+				expect(clearDialog.props().modelValue).toBe(true);
 			});
 
 			it("should display the correct dialog content and text", async () => {
@@ -593,16 +583,15 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent<typeof CustomDialog>({
-					ref: "clearAutoMatchesDialog",
-				});
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const clearDialog = dialogs[1];
+				expect(clearDialog.exists()).toBe(true);
 
-				dialog.vm.cancelDialog?.();
+				clearDialog.vm.$emit("cancel");
 				await nextTick();
 
 				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(false);
-				expect(dialog.exists()).toBe(true);
-				expect(dialog.vm.isOpen).toBeFalsy();
+				expect(clearDialog.props().modelValue).toBe(false);
 			});
 
 			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
@@ -612,16 +601,16 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent<typeof CustomDialog>({
-					ref: "clearAutoMatchesDialog",
-				});
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const clearDialog = dialogs[1];
+				expect(clearDialog.exists()).toBe(true);
 
-				dialog.vm.confirmDialog?.();
+				clearDialog.vm.$emit("confirm");
 				await nextTick();
 
 				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
 				expect(importUsersStub.methods.reloadData).toHaveBeenCalled();
-				expect(dialog.vm.isOpen).toBeFalsy();
+				expect(clearDialog.props().modelValue).toBe(false);
 			});
 		});
 	});

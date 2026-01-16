@@ -55,9 +55,9 @@ describe("RenameFileDialog", () => {
 				const { wrapper } = setup();
 				const dialog = wrapper.findComponent(Dialog);
 
-				await dialog.vm.$emit("update:is-dialog-open", false);
+				await dialog.vm.$emit("update:modelValue", false);
 
-				expect(wrapper.emitted("update:is-dialog-open")).toBeTruthy();
+				expect(wrapper.emitted("update:is-dialog-open")).toHaveLength(1);
 				expect(wrapper.emitted("update:is-dialog-open")?.[0]).toEqual([false]);
 			});
 		});
@@ -68,7 +68,7 @@ describe("RenameFileDialog", () => {
 				const dialog = wrapper.findComponent(Dialog);
 				dialog.vm.$emit("cancel");
 
-				expect(wrapper.emitted("cancel")).toBeTruthy();
+				expect(wrapper.emitted("cancel")).toHaveLength(1);
 			});
 		});
 
@@ -83,7 +83,7 @@ describe("RenameFileDialog", () => {
 
 				dialog.vm.$emit("confirm");
 
-				expect(wrapper.emitted("confirm")).toBeTruthy();
+				expect(wrapper.emitted("confirm")).toHaveLength(1);
 				expect(wrapper.emitted("confirm")?.[0]).toEqual(["new name"]);
 			});
 		});

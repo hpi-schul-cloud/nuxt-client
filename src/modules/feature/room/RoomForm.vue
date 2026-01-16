@@ -46,8 +46,8 @@
 				{{ t("common.actions.save") }}
 			</VBtn>
 		</div>
-		<ConfirmationDialog />
 	</VForm>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">

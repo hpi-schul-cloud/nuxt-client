@@ -54,25 +54,20 @@
 			:template="selectedTemplate"
 			data-testid="configuration-field"
 		/>
-		<v-spacer class="mt-10" />
-		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle" data-testId="tool-error-alert">
+		<ErrorAlert v-if="error && error.message" class="mt-10" data-testId="tool-error-alert">
 			{{ $t(getBusinessErrorTranslationKey(error)!) }}
-		</v-alert>
-		<v-row class="justify-end mt-10">
-			<v-btn class="mr-2" variant="outlined" data-testId="cancel-button" @click="onCancel">
-				{{ $t("common.actions.cancel") }}
-			</v-btn>
-			<v-btn
-				class="mr-2"
-				color="primary"
-				variant="flat"
-				:disabled="!parametersValid"
-				data-testId="save-button"
-				@click="onSave"
-			>
-				{{ isInEditMode ? $t("common.actions.update") : $t("common.actions.add") }}
-			</v-btn>
-		</v-row>
+		</ErrorAlert>
+		<div class="d-flex mt-10">
+			<VSpacer />
+			<div class="d-flex ga-2 mr-2">
+				<v-btn variant="outlined" data-testId="cancel-button" @click="onCancel">
+					{{ $t("common.actions.cancel") }}
+				</v-btn>
+				<v-btn color="primary" variant="flat" :disabled="!parametersValid" data-testId="save-button" @click="onSave">
+					{{ isInEditMode ? $t("common.actions.update") : $t("common.actions.add") }}
+				</v-btn>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -85,7 +80,8 @@ import { SchoolExternalTool, ToolParameter, ToolParameterEntry } from "@/store/e
 import { BusinessError } from "@/store/types/commons";
 import { notifyError } from "@data-app";
 import { ContextExternalTool, ExternalToolConfigurationTemplate } from "@data-external-tool";
-import { mdiAlertCircle, mdiContentPaste } from "@icons/material";
+import { mdiContentPaste } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
 import { computed, ComputedRef, nextTick, Ref, ref, toRef, useSlots, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

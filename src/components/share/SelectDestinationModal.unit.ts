@@ -43,11 +43,10 @@ describe("@components/share/SelectDestinationModal", () => {
 		await select.setValue(course);
 
 		const dialog = wrapper.findComponent({
-			ref: "dialog",
+			name: "Dialog",
 		});
 
-		const nextButton = dialog.findComponent('[data-testid="dialog-next"]');
-		await nextButton.trigger("click");
+		await dialog.vm.$emit("confirm");
 
 		const emitted = wrapper.emitted("next");
 
@@ -60,10 +59,10 @@ describe("@components/share/SelectDestinationModal", () => {
 		const { wrapper } = setup();
 
 		const dialog = wrapper.findComponent({
-			ref: "dialog",
+			name: "Dialog",
 		});
 
-		await dialog.vm.$emit("next");
+		await dialog.vm.$emit("confirm");
 
 		expect(wrapper.emitted("next")).toBeUndefined();
 	});
@@ -72,10 +71,10 @@ describe("@components/share/SelectDestinationModal", () => {
 		const { wrapper } = setup();
 
 		const dialog = wrapper.findComponent({
-			ref: "dialog",
+			name: "Dialog",
 		});
 
-		await dialog.vm.$emit("dialog-canceled");
+		await dialog.vm.$emit("cancel");
 		expect(wrapper.emitted("cancel")).toHaveLength(1);
 	});
 });

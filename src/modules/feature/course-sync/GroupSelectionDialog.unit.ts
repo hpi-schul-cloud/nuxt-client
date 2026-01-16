@@ -70,7 +70,7 @@ describe("GroupSelectionDialog", () => {
 		it("should disable the continue button", () => {
 			const { wrapper } = getWrapper();
 
-			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
+			const nextBtn = wrapper.findComponent("[data-testid=group-selection-dialog-confirm]");
 
 			expect(nextBtn.attributes("disabled")).toBeDefined();
 		});
@@ -124,7 +124,7 @@ describe("GroupSelectionDialog", () => {
 			const autocomplete = wrapper.findComponent(VAutocomplete);
 			await autocomplete.setValue(group);
 
-			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
+			const nextBtn = wrapper.findComponent("[data-testid=group-selection-dialog-confirm]");
 			await nextBtn.trigger("click");
 
 			expect(wrapper.emitted("confirm")).toEqual([[group]]);
@@ -132,14 +132,12 @@ describe("GroupSelectionDialog", () => {
 	});
 
 	describe("when clicking the cancel button", () => {
-		it("should close the dialog", async () => {
+		it("should emit the cancel event", async () => {
 			const { wrapper } = getWrapper();
 
-			const cancelBtn = wrapper.findComponent("[data-testid=dialog-cancel]");
+			const cancelBtn = wrapper.findComponent("[data-testid=group-selection-dialog-cancel]");
 			await cancelBtn.trigger("click");
 
-			expect(wrapper.vm.isOpen).toEqual(false);
-			expect(wrapper.emitted("update:isOpen")).toBeDefined();
 			expect(wrapper.emitted("cancel")).toEqual([[]]);
 		});
 	});
@@ -172,7 +170,7 @@ describe("GroupSelectionDialog", () => {
 		it("should disable the continue button", async () => {
 			const { wrapper } = await setup();
 
-			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
+			const nextBtn = wrapper.findComponent("[data-testid=group-selection-dialog-confirm]");
 
 			expect(nextBtn.attributes("disabled")).toBeDefined();
 		});

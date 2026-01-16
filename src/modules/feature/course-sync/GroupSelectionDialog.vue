@@ -1,18 +1,13 @@
 <template>
-	<CustomDialog
-		v-model:is-open="isOpen"
-		has-buttons
-		:buttons="['cancel', 'next']"
-		:next-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"
-		@next="onConfirm"
-		@dialog-canceled="$emit('cancel')"
+	<Dialog
+		:model-value="isOpen"
+		:title="$t('feature-course-sync.GroupSelectionDialog.title')"
+		:confirm-btn-lang-key="'common.actions.continue'"
+		:confirm-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"
+		identifier="group-selection-dialog"
+		@confirm="onConfirm"
+		@cancel="$emit('cancel')"
 	>
-		<template #title>
-			<div class="text-h2 my-2 text-break">
-				{{ $t("feature-course-sync.GroupSelectionDialog.title") }}
-			</div>
-		</template>
-
 		<template #content>
 			<p class="text-md mt-2" data-testid="group-dialog-info-text">
 				{{ description }}
@@ -53,14 +48,14 @@
 				</span>
 			</WarningAlert>
 		</template>
-	</CustomDialog>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
 import { WarningAlert } from "@ui-alert";
+import { Dialog } from "@ui-dialog";
 import { useDebounceFn } from "@vueuse/core";
 import { ModelRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

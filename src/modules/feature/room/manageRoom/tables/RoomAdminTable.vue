@@ -40,11 +40,9 @@
 		</template>
 	</DataTable>
 	<ConfirmationDialog>
-		<template #alert>
-			<WarningAlert data-testid="warning-alert">
-				{{ t("pages.rooms.administration.table.delete.infoMessage") }}
-			</WarningAlert>
-		</template>
+		<WarningAlert data-testid="warning-alert">
+			{{ t("pages.rooms.administration.table.delete.infoMessage") }}
+		</WarningAlert>
 	</ConfirmationDialog>
 </template>
 

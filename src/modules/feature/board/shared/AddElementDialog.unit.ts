@@ -31,6 +31,8 @@ describe("ElementTypeSelection", () => {
 			const wrapper = mount(AddElementDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -51,6 +53,8 @@ describe("ElementTypeSelection", () => {
 			const wrapper = mount(AddElementDialog, {
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -101,6 +105,8 @@ describe("ElementTypeSelection", () => {
 				},
 				global: {
 					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -121,17 +127,6 @@ describe("ElementTypeSelection", () => {
 			const option = wrapper.findComponent<typeof ExtendedIconBtn>(`[data-testid="${element.testId}"]`);
 
 			expect(option.isVisible()).toBe(true);
-		});
-
-		it("should adjust the width of the dialog", async () => {
-			const { wrapper, dynamicElementTypeOptions } = await setup();
-
-			const element = elementTypeSelectionOptionsFactory.create();
-			dynamicElementTypeOptions.value = [element];
-
-			await flushPromises();
-
-			expect(wrapper.vm.dialogWidth).toBe(426);
 		});
 	});
 });

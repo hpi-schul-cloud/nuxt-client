@@ -33,17 +33,9 @@ describe("TheFooter.vue", () => {
 		return { wrapper, theme };
 	};
 
-	it.skip("Link to accessibility statement is set correctly", () => {
-		// accessibility statement is now part of the theme-specific TheFooter.vue implementation
-	});
-
 	it("Env-Variable sets the status page link correctly", () => {
 		const { wrapper } = setup();
 		expect(wrapper.html()).toContain(dummyUrl);
-	});
-
-	it.skip("Env-Variable sets the report accessibility email correctly", () => {
-		// accessibility statement is now part of the theme-specific TheFooter.vue implementation
 	});
 
 	it("check that all links are rendered in the footer", () => {

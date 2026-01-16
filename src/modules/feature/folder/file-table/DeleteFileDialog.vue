@@ -1,7 +1,8 @@
 <template>
 	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
-		:message="deleteMessage"
+		v-model="isDialogOpen"
+		:title="deleteMessage"
+		identifier="delete-file-dialog"
 		@confirm="() => emit('confirm')"
 		@cancel="() => emit('cancel')"
 	/>

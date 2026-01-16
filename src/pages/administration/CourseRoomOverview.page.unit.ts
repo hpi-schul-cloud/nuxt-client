@@ -1,4 +1,4 @@
-import RoomsOverview from "./RoomsOverview.page.vue";
+import RoomsOverview from "./CourseRoomOverview.page.vue";
 import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
@@ -512,8 +512,8 @@ describe("RoomsOverview", () => {
 				await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 				await nextTick();
 
-				const dialog = wrapper.findComponent({ name: "CustomDialog" });
-				expect(dialog.vm.isOpen).toBe(true);
+				const dialog = wrapper.findComponent({ name: "Dialog" });
+				expect(dialog.props().modelValue).toBe(true);
 			});
 		});
 
@@ -587,7 +587,7 @@ describe("RoomsOverview", () => {
 					name: "EndCourseSyncDialog",
 				});
 
-				expect(dialog.vm.isOpen).toBe(true);
+				expect(dialog.props().modelValue).toBe(true);
 			});
 		});
 
@@ -616,9 +616,10 @@ describe("RoomsOverview", () => {
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
+					const dialog = wrapper.findComponent({ name: "Dialog" });
 
-					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
+					dialog.vm.$emit("cancel");
+					await nextTick();
 
 					expect(useCourseListMock.deleteCourse).not.toHaveBeenCalled();
 				});
@@ -630,9 +631,10 @@ describe("RoomsOverview", () => {
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
+					const dialog = wrapper.findComponent({ name: "Dialog" });
 
-					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
+					dialog.vm.$emit("confirm");
+					await nextTick();
 
 					expect(useCourseListMock.deleteCourse).toHaveBeenCalled();
 				});

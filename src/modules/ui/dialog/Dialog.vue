@@ -1,44 +1,42 @@
 <template>
 	<VDialog
-		v-model="isDialogOpen"
-		data-testid="dialog"
+		v-model="isOpen"
+		:data-testid="attrs['data-testid'] ?? identifier"
 		:max-width="480"
-		:aria-labelledby="`modal-${uid}-title`"
-		@after-leave="onAfterLeave"
+		:aria-labelledby="`dialog-${uid}-title`"
+		@after-leave="() => emit('after-leave')"
 	>
 		<UseFocusTrap>
-			<VCard :loading>
-				<template #title>
-					<h2 :id="`modal-${uid}-title`" class="ma-0 dialog-title" data-testid="dialog-title">
-						{{ message }}
+			<VCard :loading="isLoading">
+				<template v-if="title" #title>
+					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${identifier}-title`">
+						{{ title }}
 					</h2>
 				</template>
 				<template #text>
-					<div :id="`modal-${uid}-body`">
-						<slot name="content" />
-					</div>
+					<slot name="content" />
 				</template>
-				<template #actions>
+				<template v-if="!noActions" #actions>
 					<VSpacer />
 					<div class="d-flex ga-2">
-						<VBtn
-							data-testid="dialog-cancel"
-							:disabled="areActionsDisabled"
-							:aria-label="t('common.actions.cancel')"
-							variant="text"
-							:text="t('common.actions.cancel')"
-							@click="onCancel"
-						/>
-						<VBtn
-							data-testid="dialog-confirm"
-							:aria-label="t('common.actions.confirm')"
-							class="px-6"
-							color="primary"
-							variant="flat"
-							:text="t(confirmBtnLangKey)"
-							:disabled="confirmBtnDisabled || areActionsDisabled"
-							@click="onConfirm"
-						/>
+						<slot name="actions">
+							<VBtn
+								:data-testid="`${identifier}-cancel`"
+								:disabled="areActionsDisabled"
+								variant="text"
+								:text="t('common.actions.cancel')"
+								@click="() => emit('cancel')"
+							/>
+							<VBtn
+								:data-testid="`${identifier}-confirm`"
+								class="px-6"
+								color="primary"
+								variant="flat"
+								:text="t(confirmBtnLangKey)"
+								:disabled="confirmBtnDisabled || areActionsDisabled"
+								@click="() => emit('confirm')"
+							/>
+						</slot>
 					</div>
 				</template>
 			</VCard>
@@ -49,42 +47,30 @@
 <script setup lang="ts">
 import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
-import { computed } from "vue";
+import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
-const props = defineProps({
-	message: { type: String, required: false, default: "" },
-	loading: { type: Boolean, default: false },
+defineProps({
+	identifier: { type: String, default: "dialog" },
+	title: { type: String, default: undefined },
+	isLoading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },
-	confirmBtnDisabled: { type: Boolean, required: false, default: false },
-	confirmBtnLangKey: { type: String, required: false, default: "" },
-});
-
-const isDialogOpen = defineModel("is-dialog-open", {
-	type: Boolean,
-	default: false,
+	confirmBtnDisabled: { type: Boolean, default: false },
+	confirmBtnLangKey: { type: String, default: "common.actions.confirm" },
+	noActions: { type: Boolean, default: false },
 });
 
 const emit = defineEmits(["cancel", "confirm", "after-leave"]);
 
+const isOpen = defineModel({
+	type: Boolean,
+	default: false,
+});
+
 const { t } = useI18n();
-
 const { uid } = useUid();
-
-const confirmBtnLangKey = computed(() =>
-	props.confirmBtnLangKey ? props.confirmBtnLangKey : "common.actions.confirm"
-);
-
-const onCancel = () => {
-	emit("cancel");
-};
-const onConfirm = () => {
-	emit("confirm");
-};
-const onAfterLeave = () => {
-	emit("after-leave");
-};
+const attrs = useAttrs();
 </script>
 
 <style scoped>
@@ -92,16 +78,17 @@ const onAfterLeave = () => {
 	white-space: normal;
 	hyphens: none;
 	word-break: break-word;
-	line-height: var(--line-height-lg);
 }
+
 .v-card :deep(.v-card-item) {
-	padding: 1.25rem 1.5rem;
+	padding: 16px 24px;
 }
+
 .v-card :deep(.v-card-text) {
-	padding: 0 1.5rem;
-	margin-bottom: 1rem;
+	padding: 16px 24px 24px 24px;
 }
+
 .v-card :deep(.v-card-actions) {
-	padding: 0 1.5rem 1.5rem;
+	padding: 8px 24px 24px 24px;
 }
 </style>

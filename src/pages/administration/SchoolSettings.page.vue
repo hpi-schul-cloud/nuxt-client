@@ -57,7 +57,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-terms-of-use />
+						<school-terms />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -138,7 +138,7 @@ import ExternalToolsSection from "@/components/administration/school-settings/Ex
 import GeneralSettings from "@/components/administration/school-settings/GeneralSettings.vue";
 import SchoolAdminMigrationSection from "@/components/administration/school-settings/SchoolAdminMigrationSection.vue";
 import SchoolPolicy from "@/components/administration/school-settings/SchoolPolicy.vue";
-import SchoolTermsOfUse from "@/components/administration/school-settings/SchoolTerms.vue";
+import SchoolTerms from "@/components/administration/school-settings/SchoolTerms.vue";
 import SchoolYearChangeSection from "@/components/administration/school-settings/SchoolYearChangeSection.vue";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
@@ -162,7 +162,7 @@ export default defineComponent({
 		SchoolAdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicy,
-		SchoolTermsOfUse,
+		SchoolTerms,
 		AuthSystems,
 	},
 	setup() {
