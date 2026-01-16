@@ -273,6 +273,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "media-shelf",
 	},
 	{
+		path: `/fwu-media`,
+		component: async () => (await import("@page-fwu-media")).FwuMedia,
+		name: "fwu-media",
+		meta: {
+			isPublic: true,
+		},
+	},
+	{
 		path: "/migration/success",
 		component: () => import("@/pages/user-login-migration/UserLoginMigrationSuccess.page.vue"),
 		name: "user-login-migration-success",

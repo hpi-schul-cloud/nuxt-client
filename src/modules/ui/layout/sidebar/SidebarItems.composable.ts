@@ -15,6 +15,7 @@ import {
 	mdiNewspaperVariantOutline,
 	mdiPuzzleOutline,
 	mdiSchoolOutline,
+	mdiTune,
 	mdiViewGridOutline,
 } from "@icons/material";
 import { computed, ComputedRef } from "vue";
@@ -103,6 +104,12 @@ export const useSidebarItems = () => {
 			icon: "$lernstore_outline",
 			permissions: [Permission.LernstoreView],
 			testId: "sidebar-learningstore",
+		},
+		{
+			title: "pages.fwu-media.title",
+			to: "/fwu-media",
+			icon: mdiTune,
+			testId: "sidebar-fwu-media",
 		},
 		{
 			title: "feature.media-shelf.title",

@@ -2058,6 +2058,8 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Text)",
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Spreadsheet)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Presentation)",
+	"pages.fwu-media.title": "FWU Media",
+	"pages.fwu-media.items": "FWU Media",
 	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
