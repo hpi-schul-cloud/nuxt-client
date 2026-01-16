@@ -45,7 +45,7 @@
 			@update:model-value="$emit('update:modelValue', { ...modelValue, nameAttribute: $event })"
 		>
 			<template #icon>
-				<v-icon>$class</v-icon>
+				<v-icon :icon="mdiAccountEye" />
 			</template>
 		</base-input>
 		<base-input
@@ -74,7 +74,7 @@
 
 <script>
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
-import { mdiAccountGroupOutline, mdiCheck, mdiFileTreeOutline } from "@icons/material";
+import { mdiAccountEye, mdiAccountGroupOutline, mdiCheck, mdiFileTreeOutline } from "@icons/material";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { defineComponent } from "vue";
@@ -109,6 +109,7 @@ export default defineComponent({
 			mdiAccountGroupOutline,
 			mdiCheck,
 			mdiFileTreeOutline,
+			mdiAccountEye,
 		};
 	},
 	computed: {
