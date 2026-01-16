@@ -4,7 +4,10 @@
 			<v-icon> {{ mdiChevronLeft }}</v-icon>
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
+
 		<div class="content" :class="{ inline: isInline }">
+			<LernStoreInfoBanner class="mt-6" />
+
 			<div>
 				<div class="search">
 					<div class="search__input-container">
@@ -76,6 +79,7 @@ import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFo
 import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
 import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
+import LernStoreInfoBanner from "@/components/lern-store/LernStoreInfoBanner.vue";
 import themeConfig from "@/theme.config";
 import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
