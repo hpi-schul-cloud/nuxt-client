@@ -89,6 +89,7 @@ import { RenderHTML } from "@feature-render-html";
 import {
 	mdiContentCopy,
 	mdiPencilOutline,
+	mdiPlaylistCheck,
 	mdiShareVariantOutline,
 	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
@@ -156,7 +157,7 @@ const isPlanned = computed(() => {
 	const delay = 5 * 1000;
 	return scheduledDate && new Date(scheduledDate).getTime() - delay > new Date().getTime();
 });
-const titleIcon = computed(() => "$tasks");
+const titleIcon = computed(() => mdiPlaylistCheck);
 const cardActions = computed(() => {
 	const roleBasedActions: Record<string, Array<{ action: () => void; name: string; testid: string }>> = {
 		[Roles.Teacher]: [],

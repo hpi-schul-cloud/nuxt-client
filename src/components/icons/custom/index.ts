@@ -9,7 +9,6 @@ import taskDraft from "./task-draft.vue";
 import taskMissed from "./task-missed.vue";
 import taskMissedFilled from "./task-missed-filled.vue";
 import taskOpenFilled from "./task-open-filled.vue";
-import tasks from "./tasks.vue";
 import { Component } from "vue";
 
 // TODO: Remove custom icons and use only standardized icons from the design system
@@ -37,7 +36,6 @@ const customAliases: Record<string, Component> = {
 	taskMissed: taskMissed,
 	// task open filled icon is not replacable by mdi or material design icons
 	taskOpenFilled: taskOpenFilled,
-	tasks: tasks,
 };
 
 export { customAliases };
