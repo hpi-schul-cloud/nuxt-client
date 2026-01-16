@@ -12,7 +12,7 @@
 				size="36"
 				@click.stop.prevent="() => {}"
 				@dblclick.stop.prevent="() => {}"
-				@keydown.enter.stop
+				@keydown.enter.space.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
