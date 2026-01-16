@@ -29,6 +29,7 @@ const customAliases: Record<string, Component> = {
 	// icon lernstore_outline is replacable by mdiLibraryBooksOutline from mdi
 	// but it has to be replaced in schulcloud-client, too much work - lernstore will be removed soon
 	lernstore_outline: lernstoreOutline,
+	// icon shelf-outline is not replacable by mdi or material design icons
 	shelfOutline: shelfOutline,
 	taskDoneFilled: taskDoneFilled,
 	taskDone: taskDone,
