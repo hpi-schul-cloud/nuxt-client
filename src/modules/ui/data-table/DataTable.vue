@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
+		class="d-flex justify-space-between align-center ga-3 mb-2 pb-2 table-title-header sticky"
 		:class="{
 			'flex-column mt-4': isExtraSmallDisplay,
 			'pt-7': smAndUp,
@@ -17,15 +17,12 @@
 			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
 
-		<v-spacer v-else />
-
 		<slot name="left-of-search" />
-		<v-text-field
+		<VTextField
 			v-model="search"
 			density="compact"
 			flat
 			hide-details
-			max-width="400px"
 			mobile-breakpoint="sm"
 			single-line
 			variant="solo-filled"
@@ -37,9 +34,9 @@
 		/>
 	</div>
 
-	<v-divider role="presentation" />
+	<VDivider role="presentation" />
 
-	<v-data-table
+	<VDataTable
 		v-model:search="search"
 		v-model="selectedIds"
 		:data-testid="dataTestid"
@@ -88,7 +85,7 @@
 		<template v-for="slot in Object.keys($slots)" #[slot]="scope">
 			<slot :name="slot" v-bind="scope" />
 		</template>
-	</v-data-table>
+	</VDataTable>
 </template>
 
 <script setup lang="ts">
