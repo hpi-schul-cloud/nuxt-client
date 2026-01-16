@@ -69,6 +69,7 @@
 					:model-value="isCancelDialogOpen"
 					:title="t('components.administration.adminMigrationSection.migrationWizardCancelDialog.Title')"
 					data-testid="cancel-migration-dialog"
+					@cancel="isCancelDialogOpen = false"
 					@confirm="confirmCancelMigration()"
 				>
 					<template #content>
@@ -79,6 +80,7 @@
 					:model-value="isClearAutoMatchesDialogOpen"
 					:title="t('components.administration.adminMigrationSection.clearAutoMatchesDialog.title')"
 					data-testid="clear-auto-matches-dialog"
+					@cancel="isClearAutoMatchesDialogOpen = false"
 					@confirm="clearAllAutoMatches()"
 				>
 					<template #content>
@@ -431,7 +433,7 @@ import { mdiClose } from "@icons/material";
 import { Dialog } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, onUnmounted, Ref, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -441,23 +443,23 @@ const router = useRouter();
 
 const theme = injectStrict(THEME_KEY);
 
-const migrationStep: Ref<number> = ref(1);
+const migrationStep = ref(1);
 
-const isMigrationConfirm: Ref<boolean> = ref(false);
+const isMigrationConfirm = ref(false);
 
-const errorTimeout: Ref<number> = ref(7500);
+const errorTimeout = ref(7500);
 
-const isLoading: Ref<boolean> = ref(false);
+const isLoading = ref(false);
 
-const matchByPreferredName: Ref<boolean> = ref(false);
+const matchByPreferredName = ref(false);
 
-const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
+const checkTotal = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-const isCancelDialogOpen: Ref<boolean> = ref(false);
+const isCancelDialogOpen = ref(false);
 
-const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
+const isClearAutoMatchesDialogOpen = ref(false);
 
-const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
+const importUsersRef = ref<InstanceType<typeof ImportUsers> | null>(null);
 
 const isMigrationNotStarted = computed(() => school.value.inUserMigration === undefined);
 
@@ -471,7 +473,7 @@ const isMaintenanceFinished = computed(() => !school.value.inMaintenance);
 
 const school = computed(() => schoolsModule.getSchool);
 
-const businessError: ComputedRef<BusinessError | null> = computed(() => importUsersModule.getBusinessError);
+const businessError = computed<BusinessError | null>(() => importUsersModule.getBusinessError);
 
 const totalMatched = computed(() => importUsersModule.getTotalMatched);
 
@@ -663,6 +665,7 @@ const clearAllAutoMatches = async () => {
 
 	importUsersRef.value?.reloadData();
 
+	isClearAutoMatchesDialogOpen.value = false;
 	isLoading.value = false;
 };
 
