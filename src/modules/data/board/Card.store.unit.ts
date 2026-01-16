@@ -1018,6 +1018,14 @@ describe("CardStore", () => {
 		};
 
 		describe("when a card is in edit mode", () => {
+			it("should disable file picker", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedUseSharedFileSelectActions.disableFileSelectOnMount).toHaveBeenCalled();
+			});
+
 			it("should call createElementRequest", () => {
 				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
 
@@ -1034,7 +1042,23 @@ describe("CardStore", () => {
 				expect(mockedFileStorageActions.uploadCollaboraFile).toHaveBeenCalled();
 			});
 
+			it("should reset file picker", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedUseSharedFileSelectActions.resetFileSelectOnMountEnabled).toHaveBeenCalled();
+			});
+
 			describe("when element creation fails", () => {
+				it("should reset file picker", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedUseSharedFileSelectActions.resetFileSelectOnMountEnabled).toHaveBeenCalled();
+				});
+
 				it("should not call uploadCollaboraFile", async () => {
 					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
 
