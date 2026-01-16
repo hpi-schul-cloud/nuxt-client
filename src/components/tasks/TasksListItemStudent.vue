@@ -56,6 +56,7 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime.js";
+import { mdiCheckCircle } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
 import { vOnClickOutside } from "@vueuse/components";
 
@@ -115,7 +116,7 @@ export default {
 				warning: "$taskOpenFilled",
 				overdue: "$taskMissed",
 				submitted: "$taskDone",
-				graded: "$taskDoneFilled",
+				graded: mdiCheckCircle,
 				gradedOverdue: "$taskMissedFilled",
 				open: "$taskOpenFilled",
 			};
