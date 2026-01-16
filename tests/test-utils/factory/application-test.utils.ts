@@ -61,3 +61,7 @@ export const createTestAppStoreWithRole = (roleName: RoleName, pinia?: Pinia) =>
 export const expectNotification = (status: AlertStatus) => {
 	expect(useNotificationStore().notify).toHaveBeenCalledWith(expect.objectContaining({ status }));
 };
+
+export const expectNoNotification = () => {
+	expect(useNotificationStore().notify).not.toHaveBeenCalled();
+};
