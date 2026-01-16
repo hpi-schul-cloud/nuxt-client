@@ -109,10 +109,7 @@ export default {
 		vertical-align: middle;
 
 		.text-content {
-			max-width: 200px;
 			padding: 8px;
-			overflow: hidden;
-			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
 
