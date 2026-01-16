@@ -5,7 +5,6 @@ import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import shelfOutline from "./shelf-outline.vue";
-import taskDone from "./task-done.vue";
 import taskDraft from "./task-draft.vue";
 import taskMissed from "./task-missed.vue";
 import taskMissedFilled from "./task-missed-filled.vue";
@@ -30,7 +29,6 @@ const customAliases: Record<string, Component> = {
 	lernstore_outline: lernstoreOutline,
 	// icon shelf-outline is not replacable by mdi or material design icons
 	shelfOutline: shelfOutline,
-	taskDone: taskDone,
 	taskDraft: taskDraft,
 	taskMissedFilled: taskMissedFilled,
 	taskMissed: taskMissed,
