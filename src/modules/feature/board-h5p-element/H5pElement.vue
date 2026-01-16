@@ -51,6 +51,7 @@ import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
 import { injectStrict } from "@/utils/inject";
+import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
 import { ContentElementBar } from "@ui-board";
@@ -166,12 +167,6 @@ const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
 		const decodedTitle = title ? decodeHtmlEntities(title) : t("components.cardElement.h5pElement");
 		contentTitle.value = decodedTitle;
 	}
-};
-
-const decodeHtmlEntities = (text: string): string => {
-	const textarea = document.createElement("textarea");
-	textarea.innerHTML = text;
-	return textarea.value;
 };
 
 onMounted(async () => {
