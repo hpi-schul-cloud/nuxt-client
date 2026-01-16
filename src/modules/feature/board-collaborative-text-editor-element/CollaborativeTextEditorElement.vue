@@ -5,8 +5,6 @@
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
 		:ripple="false"
-		tabindex="0"
-		role="button"
 		:aria-label="ariaLabel"
 		@keydown.up.down="onKeydownArrow"
 		@click="redirectToEditorUrl"
