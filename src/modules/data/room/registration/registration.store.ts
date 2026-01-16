@@ -9,6 +9,7 @@ import {
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 
@@ -37,6 +38,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 
 	const fetchRegistrationsForCurrentRoom = async () => {
 		if (!roomId.value) return;
+		if (useEnvConfig().value.FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED === false) return;
 
 		isLoading.value = true;
 		try {

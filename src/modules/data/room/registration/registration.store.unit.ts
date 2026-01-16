@@ -5,6 +5,8 @@ import * as serverApi from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	axiosErrorFactory,
+	createTestEnvStore,
+	expectNoNotification,
 	expectNotification,
 	mockedPiniaStoreTyping,
 	registrationFactory,
@@ -32,11 +34,20 @@ describe("registration.store", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: { registrationSecret?: string; registrations?: RegistrationList }) => {
+	const setup = (options?: {
+		registrationSecret?: string;
+		registrations?: RegistrationList;
+		envConfig?: Record<string, unknown>;
+	}) => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		roomDetailsStore.room = roomFactory.build();
 
 		const registrationStore = mockedPiniaStoreTyping(useRegistrationStore);
+
+		createTestEnvStore({
+			FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: true,
+			...options?.envConfig,
+		});
 
 		if (options?.registrationSecret !== undefined) {
 			registrationStore.registrationSecret = options.registrationSecret;
@@ -74,6 +85,20 @@ describe("registration.store", () => {
 
 				expect(registrationApi.registrationControllerFindByRoom).toHaveBeenCalledWith(roomDetailsStore.room?.id);
 				expectNotification("error");
+			});
+		});
+
+		describe("when feature flag is disabled", () => {
+			it("should not call API", async () => {
+				const { registrationStore } = setup({
+					envConfig: { FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: false },
+				});
+				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(new Error("Error"));
+
+				await registrationStore.fetchRegistrationsForCurrentRoom();
+
+				expect(registrationApi.registrationControllerFindByRoom).not.toHaveBeenCalled();
+				expectNoNotification();
 			});
 		});
 	});
