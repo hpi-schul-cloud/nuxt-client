@@ -3,6 +3,7 @@ import InnerContent from "./InnerContent.vue";
 import { DrawingElementResponse } from "@/serverApi/v3";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
@@ -13,7 +14,6 @@ vi.mock("@data-board", () => ({
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
 	useDeleteConfirmationDialog: vi.fn(),
 }));
-vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
 
@@ -34,6 +34,9 @@ describe("DrawingContentElement", () => {
 			propsData: props,
 		});
 
+		const windowMock = createMock<Window>();
+		vi.spyOn(globalThis, "open").mockImplementation(() => windowMock);
+
 		return { wrapper };
 	};
 
@@ -53,7 +56,7 @@ describe("DrawingContentElement", () => {
 			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
 		});
 
-		it("should have the correct href and target attribute", () => {
+		it("should open element in new tab when clicked", async () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
@@ -66,8 +69,37 @@ describe("DrawingContentElement", () => {
 				ref: "drawingElement",
 			});
 
-			expect(elementCard.attributes("href")).toBe(`/tldraw?parentId=${DRAWING_ELEMENT.id}`);
-			expect(elementCard.attributes("target")).toBe("_blank");
+			await elementCard.trigger("click");
+
+			expect(window.open).toHaveBeenCalledTimes(1);
+			expect(window.open).toHaveBeenCalledWith(
+				`/tldraw?parentId=${DRAWING_ELEMENT.id}`,
+				"_blank",
+				"noopener,noreferrer"
+			);
+		});
+
+		it.each(["enter", "space"])("should open element in new tab when %s is pressed", async (key) => {
+			const { wrapper } = setup({
+				element: DRAWING_ELEMENT,
+				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			});
+
+			const elementCard = wrapper.findComponent({
+				ref: "drawingElement",
+			});
+
+			await elementCard.trigger(`keydown.${key}`);
+
+			expect(window.open).toHaveBeenCalledTimes(1);
+			expect(window.open).toHaveBeenCalledWith(
+				`/tldraw?parentId=${DRAWING_ELEMENT.id}`,
+				"_blank",
+				"noopener,noreferrer"
+			);
 		});
 
 		it("should have the correct aria-label", () => {

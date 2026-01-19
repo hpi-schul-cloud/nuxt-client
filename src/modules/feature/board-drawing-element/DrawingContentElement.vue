@@ -5,9 +5,9 @@
 		data-testid="drawing-element"
 		variant="outlined"
 		:ripple="false"
-		:href="sanitizedUrl"
-		target="_blank"
 		:aria-label="ariaLabel"
+		@click="redirectToSanitizedUrl"
+		@keydown.enter.space="redirectToSanitizedUrl"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
@@ -61,6 +61,10 @@ const drawingElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 
 const sanitizedUrl = computed(() => sanitizeUrl(`/tldraw?parentId=${element.value.id}`));
+
+const redirectToSanitizedUrl = () => {
+	window.open(sanitizedUrl.value, "_blank", "noopener,noreferrer");
+};
 
 useBoardFocusHandler(element.value.id, drawingElement);
 
