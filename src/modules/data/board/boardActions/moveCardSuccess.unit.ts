@@ -7,7 +7,7 @@ import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
@@ -22,6 +22,7 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
 vi.mock("@data-board");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
@@ -54,6 +55,7 @@ describe("BoardStore - moveCardSuccess", () => {
 	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedBoardRestApiActions: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedCardSocketApiActions: DeepMocked<ReturnType<typeof useCardSocketApi>>;
+	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
 	let setEditModeId: Mock;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 	let router: DeepMocked<Router>;
@@ -99,6 +101,13 @@ describe("BoardStore - moveCardSuccess", () => {
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: vi.fn(),
 		});
+
+		mockedUseSharedFileSelectActions = createMock<ReturnType<typeof useSharedFileSelect>>({
+			isFileSelectOnMountEnabled: ref(true),
+			resetFileSelectOnMountEnabled: vi.fn(),
+			disableFileSelectOnMount: vi.fn(),
+		});
+		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
 
 		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
