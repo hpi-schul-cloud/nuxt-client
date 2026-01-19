@@ -1580,13 +1580,13 @@ export default {
 	"pages.lernstore.info.banner.title": "En el futuro, los medios estarán disponibles a través del estante de medios",
 	"pages.lernstore.info.banner.helpLinkText": "páginas de ayuda",
 	"pages.lernstore.info.banner.item.0.brb":
-		"A partir de ahora, las mediatecas del Lernstore (Mundo, Wir lernen online y FWU-Medien) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
+		"A partir de ahora, las mediatecas del Lern-Store (Mundo, Wir lernen online y FWU-Medios) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
 	"pages.lernstore.info.banner.item.0.n21":
-		"A partir de ahora, las mediatecas del Lernstore (Mundo y Wir lernen online) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
+		"A partir de ahora, las mediatecas del Lern-Store (Mundo y Wir lernen online) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
 	"pages.lernstore.info.banner.item.0.thr":
-		"A partir de ahora, las mediatecas del Lernstore (Mundo, Wir lernen online y Mediothek/Pixiothek) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
+		"A partir de ahora, las mediatecas del Lern-Store (Mundo, Wir lernen online y Mediothek/Pixiothek) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
 	"pages.lernstore.info.banner.item.1":
-		"Por lo tanto, el Lernstore se desconectará en la semana 10 (04.03.2026). Los contenidos del Lernstore ya integrados en los temas seguirán estando disponibles.",
+		"Por lo tanto, el Lern-Store se desconectará en la semana 10 (04.03.2026). Los contenidos del Lern-Store ya integrados en los temas seguirán estando disponibles.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

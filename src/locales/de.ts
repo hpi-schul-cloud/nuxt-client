@@ -1574,13 +1574,13 @@ export default {
 	"pages.lernstore.info.banner.title": "Die Medien sind künftig über das Medienregal erreichbar",
 	"pages.lernstore.info.banner.helpLinkText": "Hilfeseiten",
 	"pages.lernstore.info.banner.item.0.brb":
-		"Ab sofort sind die Mediatheken aus dem Lernstore (Mundo, Wir lernen online und FWU-Medien) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
+		"Ab sofort sind die Mediatheken aus dem Lern-store (Mundo, Wir lernen online und FWU-Medien) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
 	"pages.lernstore.info.banner.item.0.n21":
-		"Ab sofort sind die Mediatheken aus dem Lernstore (Mundo und Wir lernen online) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
+		"Ab sofort sind die Mediatheken aus dem Lern-store (Mundo und Wir lernen online) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
 	"pages.lernstore.info.banner.item.0.thr":
-		"Ab sofort sind die Mediatheken aus dem Lernstore (Mundo, Wir lernen online und Mediothek/Pixiothek) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
+		"Ab sofort sind die Mediatheken aus dem Lern-store (Mundo, Wir lernen online und Mediothek/Pixiothek) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
 	"pages.lernstore.info.banner.item.1":
-		"Der Lernstore wird daher in KW 10 (04.03.2026) abgeschaltet. In den Themen bereits eingebundene Lernstore-Inhalte sind weiterhin verfügbar.",
+		"Der Lern-store wird daher in KW 10 (04.03.2026) abgeschaltet. In den Themen bereits eingebundene Lernstore-Inhalte sind weiterhin verfügbar.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
