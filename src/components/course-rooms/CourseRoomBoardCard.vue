@@ -24,7 +24,7 @@
 					</span>
 				</div>
 				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
-					<RoomDotMenu
+					<CourseRoomDotMenu
 						:menu-items="actionsMenuItems"
 						:data-testid="`board-card-menu-${boardCardIndex}`"
 						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import RoomDotMenu from "./CourseRoomDotMenu.vue";
+import CourseRoomDotMenu from "./CourseRoomDotMenu.vue";
 import { BoardLayout, ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import {

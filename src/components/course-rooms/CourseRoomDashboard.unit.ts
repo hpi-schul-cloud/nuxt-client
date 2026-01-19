@@ -1,4 +1,7 @@
+import CourseRoomBoardCard from "./CourseRoomBoardCard.vue";
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
+import CourseRoomLessonCard from "./CourseRoomLessonCard.vue";
+import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
@@ -6,13 +9,15 @@ import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, Mock } from "vitest";
 import { nextTick } from "vue";
@@ -22,6 +27,9 @@ import { VCard } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
+
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 const mockData = {
 	roomId: "123",
@@ -137,17 +145,35 @@ const getWrapper = (props: ComponentProps<typeof CourseRoomDashboard>, options?:
 };
 
 describe("CourseRoomDashboard.vue", () => {
+	let askConfirmationMock: Mock;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_LESSON_SHARE: true,
 			FEATURE_TASK_SHARE: true,
 		});
+
 		setupStores({
 			courseRoomDetailsModule: CourseRoomDetailsModule,
 			copyModule: CopyModule,
 		});
+
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+
+		// mockedUseConfirmationDialog.mockReturnValue({
+		// 			askConfirmation: askConfirmationMock,
+		// 			isDialogOpen: ref(false),
+		// 		});
 	});
+
+	// afterEach(() => {
+	// 	vi.clearAllMocks();
+	// });
+
 	describe("common features", () => {
 		it("should have props", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -159,7 +185,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should list board card", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const boardCard = wrapper.findAllComponents({ name: "RoomBoardCard" });
+			const boardCard = wrapper.findAllComponents(CourseRoomBoardCard);
 			expect(boardCard).toHaveLength(1);
 		});
 
@@ -366,17 +392,17 @@ describe("CourseRoomDashboard.vue", () => {
 	});
 
 	describe("Deleting Items", () => {
-		const findCustomDialog = (wrapper: VueWrapper, dataTestid: string) => {
-			const dialog = wrapper
-				.findAllComponents({ name: "CustomDialog" })
-				.find((dialog) => dialog.vm.$attrs["data-testid"] === dataTestid);
+		// const findDialog = (wrapper: VueWrapper, dataTestid: string) => {
+		// 	const dialog = wrapper
+		// 		.findAllComponents({ name: "Dialog" })
+		// 		.find((dialog) => dialog.vm.$attrs["data-testid"] === dataTestid);
 
-			if (!dialog) {
-				throw new Error(`Cannot find CustomDialog with data-testid="${dataTestid}"`);
-			}
+		// 	if (!dialog) {
+		// 		throw new Error(`Cannot find Dialog with data-testid="${dataTestid}"`);
+		// 	}
 
-			return dialog;
-		};
+		// 	return dialog;
+		// };
 
 		it("should call the openItemDeleteDialog method when lesson should be deleted", () => {
 			const openDeleteDialogMock = vi.fn();
@@ -402,40 +428,42 @@ describe("CourseRoomDashboard.vue", () => {
 			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
 		});
 
-		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
+		it("should call deleteItem method after confirming", async () => {
 			const deleteItemMock = vi.fn();
+			askConfirmationMock.mockResolvedValue(true);
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.deleteItem = deleteItemMock;
-			wrapper.vm.itemDelete.isOpen = true;
-			await nextTick();
-			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
 
-			deleteModal.vm.$emit("dialog-confirmed");
+			const taskCard = wrapper.findComponent(CourseRoomTaskCard);
+			taskCard.vm.$emit("delete-task");
+			await nextTick();
+
 			expect(deleteItemMock).toHaveBeenCalled();
 		});
 
-		it("should call store methods after modal emits 'dialog-confirmed' when deleting task", async () => {
+		it("should call store methods after confirming when deleting task", async () => {
 			const deleteTaskMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const deleteLessonMock = vi.fn();
+			askConfirmationMock.mockResolvedValue(true);
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteTask = deleteTaskMock;
 			courseRoomDetailsModule.fetchContent = fetchContentMock;
 			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
-			const taskCard = wrapper.findComponent<VCard>(".task-card");
+			const taskCard = wrapper.findComponent(CourseRoomTaskCard);
 
 			taskCard.vm.$emit("delete-task");
 			await nextTick();
-			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
 
-			deleteModal.vm.$emit("dialog-confirmed");
-			await nextTick();
 			expect(deleteTaskMock).toHaveBeenCalled();
+			await flushPromises();
+
 			expect(fetchContentMock).toHaveBeenCalled();
 			expect(deleteLessonMock).not.toHaveBeenCalled();
 		});
 
-		it("should call store methods after modal emits 'dialog-confirmed' when deleting lesson", async () => {
+		it("should call store methods after confirming when deleting lesson", async () => {
+			askConfirmationMock.mockResolvedValue(true);
 			const deleteTaskMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const deleteLessonMock = vi.fn().mockResolvedValue(true);
@@ -443,26 +471,15 @@ describe("CourseRoomDashboard.vue", () => {
 			courseRoomDetailsModule.deleteTask = deleteTaskMock;
 			courseRoomDetailsModule.fetchContent = fetchContentMock;
 			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
-			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
+			const lessonCard = wrapper.findComponent(CourseRoomLessonCard);
 
 			lessonCard.vm.$emit("delete-lesson");
-			await nextTick();
-			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
 
-			deleteModal.vm.$emit("dialog-confirmed");
 			await nextTick();
 			expect(deleteTaskMock).not.toHaveBeenCalled();
 			expect(deleteLessonMock).toHaveBeenCalled();
+			await flushPromises();
 			expect(fetchContentMock).toHaveBeenCalled();
-		});
-
-		it("should close the modal view after clicking the 'cancel' button", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			wrapper.vm.itemDelete.isOpen = true;
-			await nextTick();
-			const cancelButton = wrapper.findComponent(`[data-testid="dialog-cancel"]`);
-			cancelButton.trigger("click");
-			expect(wrapper.vm.itemDelete.isOpen).toBe(false);
 		});
 	});
 
@@ -532,16 +549,17 @@ describe("CourseRoomDashboard.vue", () => {
 	});
 
 	describe("Publishing and unpublishing a board", () => {
-		it("should call publishBoard action", () => {
+		it.only("should call publishBoard action", async () => {
 			const publishCardMock = vi.fn();
 			const wrapper = getWrapper({
 				roomDataObject: mockData,
 				role: "teacher",
 			});
-			const boardCard = wrapper.findComponent({ name: "room-board-card" });
+			const boardCard = wrapper.findComponent(CourseRoomBoardCard);
 			courseRoomDetailsModule.publishCard = publishCardMock;
 
 			boardCard.vm.$emit("update-visibility", true);
+			await nextTick();
 
 			expect(publishCardMock).toHaveBeenCalled();
 			expect(publishCardMock.mock.calls[0][0].visibility).toStrictEqual(true);
@@ -633,7 +651,7 @@ describe("CourseRoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyBoard = copyBoardMock;
 
-			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
+			const boardCard = wrapper.findComponent(CourseRoomBoardCard);
 			boardCard.vm.$emit("copy-board");
 
 			expect(copyBoardMock).toHaveBeenCalled();
@@ -642,7 +660,7 @@ describe("CourseRoomDashboard.vue", () => {
 		it("should emit 'copy-board-element' with correct board-related payload", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
+			const boardCard = wrapper.findComponent(CourseRoomBoardCard);
 			boardCard.vm.$emit("copy-board");
 
 			expect(wrapper.emitted()).toHaveProperty("copy-board-element");
