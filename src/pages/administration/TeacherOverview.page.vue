@@ -439,7 +439,6 @@ export default {
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
-				// TODO wrong use of store (not so bad)
 				await this.$store.dispatch("users/sendRegistrationLink", {
 					userIds: rowIds,
 					selectionType,

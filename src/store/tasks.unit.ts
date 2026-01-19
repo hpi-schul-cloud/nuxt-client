@@ -163,10 +163,7 @@ describe("task store", () => {
 				}));
 		});
 
-		// TODO - implement when we figured out how to correctly mock stores
 		describe("finishTask", () => {
-			it.todo("should call finish task api and refetch all tasks");
-
 			it("should handle an error", () =>
 				new Promise<void>((done) => {
 					const task = taskFactory.build();
