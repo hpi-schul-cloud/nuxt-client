@@ -1,5 +1,4 @@
-import RoomLessonCard from "./RoomLessonCard.vue";
-import { LessonData } from "./types";
+import RoomLessonCard from "./CourseRoomLessonCard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

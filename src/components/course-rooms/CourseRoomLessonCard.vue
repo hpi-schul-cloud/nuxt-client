@@ -69,8 +69,8 @@
 </template>
 
 <script setup lang="ts">
+import { LessonData } from "../../modules/ui/room-details/types";
 import RoomDotMenu from "./RoomDotMenu.vue";
-import { LessonData } from "./types";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { RoomData } from "@/store/types/room";
 import { useEnvConfig } from "@data-env";

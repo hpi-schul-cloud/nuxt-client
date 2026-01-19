@@ -63,7 +63,7 @@
 							@copy-task="copyTask(item.content.id)"
 							@share-task="getSharedTask(item.content.id)"
 						/>
-						<RoomLessonCard
+						<CourseRoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
 							:lesson-card-index="index"
@@ -130,7 +130,7 @@
 					@finish-task="finishTask(item.content.id)"
 					@restore-task="restoreTask(item.content.id)"
 				/>
-				<RoomLessonCard
+				<CourseRoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
 					:lesson-card-index="index"
@@ -162,6 +162,7 @@
 </template>
 
 <script>
+import CourseRoomLessonCard from "./CourseRoomLessonCard.vue";
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
@@ -176,7 +177,7 @@ import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
-import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
+import { RoomBoardCard } from "@ui-room-details";
 import { defineComponent } from "vue";
 import draggable from "vuedraggable";
 
@@ -184,7 +185,7 @@ export default defineComponent({
 	components: {
 		RoomBoardCard,
 		CourseRoomTaskCard,
-		RoomLessonCard,
+		CourseRoomLessonCard,
 		draggable,
 		EmptyState,
 		ShareModal,
@@ -317,6 +318,7 @@ export default defineComponent({
 		openItemDeleteDialog(itemContent, itemType) {
 			this.itemDelete.itemData = itemContent;
 			this.itemDelete.itemType = itemType;
+
 			this.askConfirmation({
 				message: this.deleteDialogTitle(itemType, itemContent.name || itemContent.title),
 				confirmActionLangKey: "common.actions.delete",
