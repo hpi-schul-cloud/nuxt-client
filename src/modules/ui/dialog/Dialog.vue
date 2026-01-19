@@ -25,7 +25,7 @@
 								:disabled="areActionsDisabled"
 								variant="text"
 								:text="t('common.actions.cancel')"
-								@click="() => emit('cancel')"
+								@click="onCancel"
 							/>
 							<VBtn
 								:data-testid="`${identifier}-confirm`"
@@ -34,7 +34,7 @@
 								variant="flat"
 								:text="t(confirmBtnLangKey)"
 								:disabled="confirmBtnDisabled || areActionsDisabled"
-								@click="() => emit('confirm')"
+								@click="onConfirm"
 							/>
 						</slot>
 					</div>
@@ -71,6 +71,16 @@ const isOpen = defineModel({
 const { t } = useI18n();
 const { uid } = useUid();
 const attrs = useAttrs();
+
+const onCancel = () => {
+	isOpen.value = false;
+	emit("cancel");
+};
+
+const onConfirm = () => {
+	isOpen.value = false;
+	emit("confirm");
+};
 </script>
 
 <style scoped>
