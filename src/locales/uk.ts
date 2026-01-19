@@ -790,6 +790,7 @@ export default {
 	"components.molecules.export.options.info": "Наступний вміст не експортується:",
 	"components.molecules.export.options.info.point1": "Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2": "Подання, призначені до завдання.",
+	"components.molecules.export.options.info.point3": "Папки файлів не експортуються з Common Cartridge версією 1.1",
 	"components.organisms.ContentCard.report.body": "Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -1661,6 +1662,9 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Додати зовнішню особу",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Будь ласка, введіть електронну адресу зовнішньої особи, яку потрібно додати до кімнати.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"Запрошення електронною поштою неможливе. Будь ласка, перевірте необхідні {link}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "вимоги",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Запросити зовнішню особу",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"Обліковий запис із цією електронною адресою не знайдено. Особу можна запросити зареєструватися в {applicationName}.",
@@ -1676,6 +1680,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Надіслати запрошення",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"Не вдалося надіслати запрошення. Будь ласка, спробуйте пізніше",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Запрошення надіслано на {email}",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.create.course": "Створити курс",
 	"pages.rooms.fab.add.course": "Новий курс",

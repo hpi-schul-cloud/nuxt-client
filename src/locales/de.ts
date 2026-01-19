@@ -710,6 +710,8 @@ export default {
 	"components.molecules.export.options.info": "Folgende Inhalte werden nicht exportiert:",
 	"components.molecules.export.options.info.point1": "Hochgeladene Dateien innerhalb des Kurses.",
 	"components.molecules.export.options.info.point2": "Abgaben, die einer Aufgabe zugeordnet sind.",
+	"components.molecules.export.options.info.point3":
+		"Dateiordner werden mit Common Cartridge Version 1.1 nicht exportiert",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
@@ -1676,6 +1678,9 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Externe Person hinzufügen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Bitte die E-Mail-Adresse der schulfremden bzw. Externen Person angeben, die zum Raum hinzugefügt werden soll.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"Einladung per E-Mail nicht möglich. Bitte nötige {link} prüfen.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "Voraussetzungen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Externe Person einladen",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"Es wurde kein Account mit dieser E-Mail-Adresse gefunden. Die Person kann eingeladen werden, sich in der {applicationName} zu registrieren.",
@@ -1691,6 +1696,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Einladung absenden",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"Die Einladung konnte leider nicht versendet werden. Bitte später erneut versuchen",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Einladung an {email} versendet",
 	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.create.course": "Kurs erstellen",
 	"pages.rooms.fab.add.course": "Neuer Kurs",

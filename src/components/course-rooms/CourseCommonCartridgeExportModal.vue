@@ -15,10 +15,31 @@
 			</template>
 			<template #text>
 				<div v-if="step === 0 && isExportModalOpen">
-					<div class="">
+					<div
+						data-testid="fixed-export-options-warning-info-point3"
+						class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5"
+					>
+						<div class="mx-2">
+							<v-icon color="info">{{ mdiInformation }}</v-icon>
+						</div>
+						<p>
+							{{ $t(`components.molecules.export.options.info.point3`) }}
+						</p>
+					</div>
+					<div data-testid="version-radio-group">
 						<v-radio-group v-model="radios">
-							<v-radio id="1.1.0" :label="$t('pages.room.modal.course.export.version1.1')" value="1.1.0" />
-							<v-radio id="1.3.0" :label="$t('pages.room.modal.course.export.version1.3')" value="1.3.0" />
+							<v-radio
+								id="1.1.0"
+								data-testid="version-110-radio-button"
+								:label="$t('pages.room.modal.course.export.version1.1')"
+								value="1.1.0"
+							/>
+							<v-radio
+								id="1.3.0"
+								data-testid="version-130-radio-button"
+								:label="$t('pages.room.modal.course.export.version1.3')"
+								value="1.3.0"
+							/>
 						</v-radio-group>
 					</div>
 				</div>
@@ -32,6 +53,12 @@
 							<br />
 							&middot;
 							{{ $t(`components.molecules.export.options.info.point2`) }}
+							<span v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point3">
+								<br />
+								&middot;
+								{{ $t(`components.molecules.export.options.info.point3`) }}
+							</span>
+							<br />
 						</p>
 					</div>
 					<v-container class="pt-0">
