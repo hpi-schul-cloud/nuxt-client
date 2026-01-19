@@ -6,9 +6,8 @@
 		</v-btn>
 
 		<div class="content" :class="{ inline: isInline }">
-			<LernStoreInfoBanner class="mt-6" />
-
 			<div>
+				<LernStoreInfoBanner class="mt-6" />
 				<div class="search">
 					<div class="search__input-container">
 						<v-text-field
