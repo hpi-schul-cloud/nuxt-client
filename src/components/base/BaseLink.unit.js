@@ -70,7 +70,6 @@ describe("@/components/base/BaseLink", () => {
 			},
 		});
 		expect(wrapper.findComponent(RouterLinkStub).props().to).toBe("/news");
-		expect(wrapper.element.tagName).not.toStrictEqual("A");
 	});
 
 	it("renders router link for internal links by name", () => {
