@@ -1,5 +1,5 @@
-import RoomDotMenu from "./RoomDotMenu.vue";
-import { MenuItem } from "./types";
+import RoomDotMenu from "./CourseRoomDotMenu.vue";
+import { MenuItem } from "@/types/course-room/CourseRoom";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount, shallowMount } from "@vue/test-utils";
 import { VBtn, VIcon, VListItem, VMenu } from "vuetify/lib/components/index";

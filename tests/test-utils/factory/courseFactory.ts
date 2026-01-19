@@ -1,4 +1,4 @@
-import { Course } from "@/store/types/room";
+import { Course } from "@/types/course-room/CourseRoom";
 import { Factory } from "fishery";
 
 export const courseFactory = Factory.define<Course>(({ sequence }) => ({

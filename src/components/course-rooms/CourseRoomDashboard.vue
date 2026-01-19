@@ -16,7 +16,7 @@
 			>
 				<template #item="{ element: item, index }">
 					<div>
-						<RoomBoardCard
+						<CourseRoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
 							:board-card-index="index"
@@ -93,7 +93,7 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
-				<RoomBoardCard
+				<CourseRoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
 					:board-card-index="index"
@@ -162,6 +162,7 @@
 </template>
 
 <script>
+import CourseRoomBoardCard from "./CourseRoomBoardCard.vue";
 import CourseRoomLessonCard from "./CourseRoomLessonCard.vue";
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
@@ -177,13 +178,12 @@ import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
-import { RoomBoardCard } from "@ui-room-details";
 import { defineComponent } from "vue";
 import draggable from "vuedraggable";
 
 export default defineComponent({
 	components: {
-		RoomBoardCard,
+		CourseRoomBoardCard,
 		CourseRoomTaskCard,
 		CourseRoomLessonCard,
 		draggable,

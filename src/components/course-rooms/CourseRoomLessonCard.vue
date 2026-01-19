@@ -21,7 +21,7 @@
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
-					<RoomDotMenu
+					<CourseRoomDotMenu
 						v-if="userRole === Roles.Teacher"
 						:menu-items="moreActionsMenuItems"
 						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
@@ -69,10 +69,8 @@
 </template>
 
 <script setup lang="ts">
-import { LessonData } from "../../modules/ui/room-details/types";
-import RoomDotMenu from "./RoomDotMenu.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { RoomData } from "@/store/types/room";
+import { LessonData, RoomData } from "@/types/course-room/CourseRoom";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,

@@ -1,3 +1,4 @@
+import CourseRoomDotMenu from "../CourseRoomDotMenu.vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
@@ -9,7 +10,6 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { RoomDotMenu } from "@ui-room-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
@@ -550,7 +550,7 @@ describe("RoomExternalToolCard", () => {
 		it("should display the item menu", () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.findComponent(RoomDotMenu);
+			const itemMenu = wrapper.findComponent(CourseRoomDotMenu);
 
 			expect(itemMenu.isVisible()).toEqual(true);
 		});
@@ -558,7 +558,7 @@ describe("RoomExternalToolCard", () => {
 		it("should display the edit menu item", async () => {
 			const { wrapper } = setup();
 
-			const menuButton = wrapper.findComponent(RoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
+			const menuButton = wrapper.findComponent(CourseRoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
 			await menuButton.trigger("click");
 
 			const toolEditMenuItem = wrapper.findComponent('[data-testid="tool-edit"]');
@@ -569,7 +569,7 @@ describe("RoomExternalToolCard", () => {
 		it("should display the delete menu item", async () => {
 			const { wrapper } = setup();
 
-			const menuButton = wrapper.findComponent(RoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
+			const menuButton = wrapper.findComponent(CourseRoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
 
 			await menuButton.trigger("click");
 
@@ -582,7 +582,7 @@ describe("RoomExternalToolCard", () => {
 			it("should emit the edit event", async () => {
 				const { wrapper, tool } = setup();
 
-				const menuButton = wrapper.findComponent(RoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
+				const menuButton = wrapper.findComponent(CourseRoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
 				await menuButton.trigger("click");
 
 				const toolDeleteMenuItem = wrapper.findComponent('[data-testId="tool-edit"]');
@@ -597,7 +597,7 @@ describe("RoomExternalToolCard", () => {
 			it("should emit the delete event", async () => {
 				const { wrapper, tool } = setup();
 
-				const menuButton = wrapper.findComponent(RoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
+				const menuButton = wrapper.findComponent(CourseRoomDotMenu).get('[data-testid="room-tool-three-dot-button"]');
 				await menuButton.trigger("click");
 
 				const toolDeleteMenuItem = wrapper.findComponent('[data-testId="tool-delete"]');

@@ -1,6 +1,6 @@
 import RoomLessonCard from "./CourseRoomLessonCard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { LessonData } from "@/store/types/room";
+import { LessonData } from "@/types/course-room/CourseRoom";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";

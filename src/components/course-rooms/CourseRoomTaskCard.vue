@@ -22,7 +22,7 @@
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
-					<room-dot-menu
+					<CourseRoomDotMenu
 						:menu-items="moreActionsMenuItems[userRole]"
 						:data-testid="`task-card-menu-${taskCardIndex}`"
 						:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
@@ -82,6 +82,7 @@
 </template>
 
 <script setup lang="ts">
+import CourseRoomDotMenu from "./CourseRoomDotMenu.vue";
 import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
@@ -95,7 +96,6 @@ import {
 	mdiUndoVariant,
 } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
-import { RoomDotMenu } from "@ui-room-details";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

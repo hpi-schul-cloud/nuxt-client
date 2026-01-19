@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import RoomDotMenu from "./RoomDotMenu.vue";
+import RoomDotMenu from "./CourseRoomDotMenu.vue";
 import { BoardLayout, ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import {

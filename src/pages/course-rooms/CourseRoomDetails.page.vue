@@ -13,7 +13,7 @@
 					{{ $t("pages.courseRooms.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
-					<room-dot-menu
+					<CourseRoomDotMenu
 						:menu-items="headlineMenuItems"
 						data-testid="room-menu"
 						:aria-label="$t('pages.courseRooms.headerSection.menu.ariaLabel')"
@@ -87,6 +87,7 @@ import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import CourseCommonCartridgeExportModal from "@/components/course-rooms/CourseCommonCartridgeExportModal.vue";
 import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.vue";
+import CourseRoomDotMenu from "@/components/course-rooms/CourseRoomDotMenu.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
@@ -126,7 +127,7 @@ import {
 	mdiViewListOutline,
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
-import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
@@ -138,7 +139,7 @@ export default defineComponent({
 		EndCourseSyncDialog,
 		DefaultWireframe,
 		CourseRoomDashboard,
-		RoomDotMenu,
+		CourseRoomDotMenu,
 		CopyResultModal,
 		ShareModal,
 		CourseCommonCartridgeExportModal,

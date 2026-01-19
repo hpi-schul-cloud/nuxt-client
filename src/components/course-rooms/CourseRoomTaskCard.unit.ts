@@ -1,6 +1,6 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { Task } from "@/store/types/room";
+import { Task } from "@/types/course-room/CourseRoom";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
