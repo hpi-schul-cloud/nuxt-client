@@ -1543,7 +1543,7 @@ export default {
 	"pages.lernstore.info.banner.title": "In the future, the media will be accessible via the media shelf",
 	"pages.lernstore.info.banner.helpLinkText": "help pages",
 	"pages.lernstore.info.banner.item.0.brb":
-		"From now on, the media libraries from Lernstore (Mundo and Wir lernen online and FWU-Medien) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+		"From now on, the media libraries from Lernstore (Mundo, Wir lernen online and FWU-Medien) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
 	"pages.lernstore.info.banner.item.0.n21":
 		"From now on, the media libraries from Lernstore (Mundo and Wir lernen online) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
 	"pages.lernstore.info.banner.item.0.thr":
