@@ -1,9 +1,8 @@
 <template>
-	<v-card
+	<VCard
 		ref="folderContentElement"
 		class="mb-4"
 		data-testid="board-folder-element"
-		elevation="0"
 		variant="outlined"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
@@ -11,18 +10,15 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<ContentElementBar
-			:has-grey-background="true"
-			:icon="mdiFolderOpenOutline"
-			tabindex="0"
-			role="button"
-			class="content-element-bar"
-			:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
-			@click="onTitleClick"
-			@keydown.enter="onTitleClick"
-		>
+		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline" @click="onTitleClick">
 			<template #title>
-				{{ elementTitle }}
+				<button
+					class="folder-title"
+					:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
+					@keydown.enter.space.stop="onTitleClick"
+				>
+					{{ elementTitle }}
+				</button>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -36,32 +32,30 @@
 				</BoardMenu>
 			</template>
 		</ContentElementBar>
-		<v-card-text v-if="isEditMode">
+		<VCardText v-if="isEditMode">
 			<FolderTitleInput
 				:data-testid="`folder-title-input-${columnIndex}-${rowIndex}-${elementIndex}`"
 				:title="element.content.title"
 				@update:title="onUpdateTitle"
 			/>
-		</v-card-text>
-		<v-card-actions v-if="alerts.length === 0" class="py-2 px-4">
+		</VCardText>
+		<VCardActions v-if="alerts.length === 0" class="py-2 pl-4">
 			<FileStatistic :element-id="element.id" :file-statistics="fileStatistics" />
 			<v-spacer />
-			<v-btn
-				:aria-label="$t('components.board.action.download')"
+			<VBtn
+				:aria-label="t('components.board.action.download')"
 				:disabled="!isDownloadAllowed"
 				data-testid="board-folder-element-download-button"
 				class="float-right download-button"
-				icon
+				:icon="mdiTrayArrowDown"
 				size="small"
 				variant="text"
 				@click="onDownload"
 				@keydown.enter="onDownload"
-			>
-				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
-			</v-btn>
-		</v-card-actions>
+			/>
+		</VCardActions>
 		<FolderAlerts v-else :alerts="alerts" />
-	</v-card>
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -173,12 +167,17 @@ const onTitleClick = () => {
 };
 </script>
 
-<style scoped>
-.content-element-bar:focus {
-	outline-offset: -10px;
-}
-
+<style scoped lang="scss">
 .download-button {
-	margin-right: -6px;
+	padding-right: 10px;
+}
+.folder-title {
+	&:hover {
+		text-decoration: underline;
+	}
+	&:focus {
+		outline: 2px solid -webkit-focus-ring-color;
+		outline-offset: -1px;
+	}
 }
 </style>
