@@ -1556,13 +1556,16 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
-	"pages.lernstore.info.banner.title": "Вміст Магазину навчання реорганізовано",
-	"pages.lernstore.info.banner.helpLinkText": "сторінка допомоги",
-	"pages.lernstore.info.banner.item.0":
-		"Весь вміст Магазину навчання тепер доступний у Медіатеці та може бути інтегрований як інструмент у курси та розділи.",
-	"pages.lernstore.info.banner.item.1": "Вміст Магазину навчання, вже інтегрований у теми, залишається доступним.",
-	"pages.lernstore.info.banner.item.2":
-		"Сторінку Магазину навчання буде вимкнено у тижні 9 (24.02.2026) – додаткова інформація на нашій {helpLink}.",
+	"pages.lernstore.info.banner.title": "У майбутньому медіа будуть доступні через медіаполицю",
+	"pages.lernstore.info.banner.helpLinkText": "cторінки допомоги",
+	"pages.lernstore.info.banner.item.0.brb":
+		"З цього моменту медіатеки з Lernstore (Mundo і Wir lernen online та FWU-Medien) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.n21":
+		"З цього моменту медіатеки з Lernstore (Mundo і Wir lernen online) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.thr":
+		"З цього моменту медіатеки з Lernstore (Mundo, Wir lernen online та Mediothek/Pixiothek) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
+	"pages.lernstore.info.banner.item.1":
+		"Тому Lernstore буде вимкнено в 10-му тижні (04.03.2026). Вміст Lernstore, вже інтегрований у теми, залишиться доступним.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

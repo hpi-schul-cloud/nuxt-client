@@ -1540,13 +1540,16 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.lernstore.info.banner.title": "Learning Store contents reorganized",
-	"pages.lernstore.info.banner.helpLinkText": "help page",
-	"pages.lernstore.info.banner.item.0":
-		"All Learning Store contents are now available in the Media Library and can be integrated as a tool in courses and areas.",
-	"pages.lernstore.info.banner.item.1": "Learning Store contents already embedded in topics remain available.",
-	"pages.lernstore.info.banner.item.2":
-		"The Learning Store page will be discontinued in week 9 (24.02.2026) – further information on our {helpLink}.",
+	"pages.lernstore.info.banner.title": "In the future, the media will be accessible via the media shelf",
+	"pages.lernstore.info.banner.helpLinkText": "help pages",
+	"pages.lernstore.info.banner.item.0.brb":
+		"From now on, the media libraries from Lernstore (Mundo and Wir lernen online and FWU-Medien) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.n21":
+		"From now on, the media libraries from Lernstore (Mundo and Wir lernen online) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.thr":
+		"From now on, the media libraries from Lernstore (Mundo, Wir lernen online and Mediothek/Pixiothek) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+	"pages.lernstore.info.banner.item.1":
+		"The Lernstore will therefore be shut down in week 10 (03/04/2026). Lernstore content already integrated into topics will remain available.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
