@@ -7,6 +7,12 @@ export type Lesson = {
 	hidden: boolean;
 };
 
+export type LessonData = Lesson & {
+	numberOfDraftTasks: number;
+	numberOfPlannedTasks: number;
+	numberOfPublishedTasks: number;
+};
+
 export type Task = {
 	id: string;
 	name: string;
