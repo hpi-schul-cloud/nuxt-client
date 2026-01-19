@@ -25,7 +25,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<general-settings class="mt-4" />
+						<GeneralSettings class="mt-4" />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -41,7 +41,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-policy />
+						<SchoolPolicy />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -57,7 +57,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-terms />
+						<SchoolTerms />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -73,7 +73,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-year-change-section />
+						<SchoolYearChangeSection />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -108,7 +108,7 @@
 						<template v-if="isLoading">
 							<v-skeleton-loader type="table-thead, table-row, table-row" data-testid="systems-panel-skeleton" />
 						</template>
-						<auth-systems v-else :systems="systems" />
+						<AuthSystems v-else :systems="systems" />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 

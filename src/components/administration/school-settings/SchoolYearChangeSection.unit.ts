@@ -4,11 +4,12 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useSharedSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick, ref } from "vue";
-import { VBtn, VCheckbox } from "vuetify/components";
+import { VBtn, VCard, VCheckbox } from "vuetify/components";
 
 vi.mock("@data-school");
 
@@ -69,17 +70,17 @@ describe("SchoolYearChangeSection", () => {
 				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
-				expect(transferStartButton.isVisible()).toBeTruthy();
-				expect(transferStartButton.props().disabled).toBeTruthy();
+				expect(transferStartButton.isVisible()).toBe(true);
+				expect(transferStartButton.props().disabled).toBe(true);
 
-				expect(transferStartedButton.exists()).toBeFalsy();
+				expect(transferStartedButton.exists()).toBe(false);
 
-				expect(ldapButton.props().disabled).toBeTruthy();
+				expect(ldapButton.props().disabled).toBe(true);
 
-				expect(checkBox.props().disabled).toBeTruthy();
+				expect(checkBox.props().disabled).toBe(true);
 				expect(checkBox.props().modelValue).toBe(false);
 
-				expect(transferFinishButton.props().disabled).toBeTruthy();
+				expect(transferFinishButton.props().disabled).toBe(true);
 			});
 		});
 
@@ -105,17 +106,17 @@ describe("SchoolYearChangeSection", () => {
 				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
-				expect(transferStartButton.isVisible()).toBeTruthy();
-				expect(transferStartButton.props().disabled).toBeFalsy();
+				expect(transferStartButton.isVisible()).toBe(true);
+				expect(transferStartButton.props().disabled).toBe(false);
 
-				expect(transferStartedButton.exists()).toBeFalsy();
+				expect(transferStartedButton.exists()).toBe(false);
 
-				expect(ldapButton.props().disabled).toBeTruthy();
+				expect(ldapButton.props().disabled).toBe(true);
 
-				expect(checkBox.props().disabled).toBeTruthy();
+				expect(checkBox.props().disabled).toBe(true);
 				expect(checkBox.props().modelValue).toBe(false);
 
-				expect(transferFinishButton.props().disabled).toBeTruthy();
+				expect(transferFinishButton.props().disabled).toBe(true);
 			});
 		});
 	});
@@ -137,16 +138,13 @@ describe("SchoolYearChangeSection", () => {
 			it("should open dialog", async () => {
 				const { wrapper } = setup();
 
-				const button = wrapper.find('[data-testid="start-transfer-button"]');
+				const button = wrapper.findComponent('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
-
-				expect(title.isVisible()).toBeTruthy();
-				expect(cancelBtn.isVisible()).toBeTruthy();
-				expect(confirmBtn.isVisible()).toBeTruthy();
+				const dialogs = wrapper.findAllComponents(Dialog);
+				expect(dialogs[0].exists()).toBe(true);
+				expect(dialogs[0].props().modelValue).toBe(true);
+				expect(dialogs[0].props().title).toBe("components.administration.schoolYearChangeSection.dialog.start.title");
 			});
 		});
 	});
@@ -186,17 +184,19 @@ describe("SchoolYearChangeSection", () => {
 				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).not.toHaveBeenCalled();
 			});
 
-			it("should not show the dialog", async () => {
+			it("should close dialog", async () => {
 				const { wrapper } = setup();
 
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const startTransferDialog = dialogs[0];
+
+				const cancelBtn = startTransferDialog.findComponent('[data-testid="dialog-cancel"]');
 				await cancelBtn.trigger("click");
 
-				expect(title.isVisible()).toBeFalsy();
+				expect(startTransferDialog.props().modelValue).toBe(false);
 			});
 
 			it("should show the start transfer button", () => {
@@ -204,22 +204,24 @@ describe("SchoolYearChangeSection", () => {
 
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 
-				expect(button.isVisible()).toBeTruthy();
+				expect(button.isVisible()).toBe(true);
 			});
 		});
 
 		describe("when confirm button is clicked", () => {
-			it("should not show the dialog", async () => {
+			it("should close dialog", async () => {
 				const { wrapper } = setup();
 
 				const button = wrapper.find('[data-testid="start-transfer-button"]');
 				await button.trigger("click");
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const startTransferDialog = dialogs[0];
+
+				const confirmBtn = startTransferDialog.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				expect(title.isVisible()).toBeFalsy();
+				expect(startTransferDialog.props().modelValue).toBe(false);
 			});
 
 			it("should call setMaintenance", async () => {
@@ -245,8 +247,8 @@ describe("SchoolYearChangeSection", () => {
 
 				const ldapButton = wrapper.findComponent<typeof VBtn>('[data-testid="ldap-data-button"]');
 
-				expect(ldapButton.isVisible()).toBeTruthy();
-				expect(ldapButton.props().disabled).toBeFalsy();
+				expect(ldapButton.isVisible()).toBe(true);
+				expect(ldapButton.props().disabled).toBe(false);
 			});
 
 			it("should show the transfer started button", async () => {
@@ -260,8 +262,8 @@ describe("SchoolYearChangeSection", () => {
 
 				const transferStartedButton = wrapper.findComponent<typeof VBtn>('[data-testid="started-transfer-button"]');
 
-				expect(transferStartedButton.isVisible()).toBeTruthy();
-				expect(transferStartedButton.props().disabled).toBeTruthy();
+				expect(transferStartedButton.isVisible()).toBe(true);
+				expect(transferStartedButton.props().disabled).toBe(true);
 			});
 		});
 	});
@@ -302,8 +304,8 @@ describe("SchoolYearChangeSection", () => {
 
 				const checkBox = wrapper.findComponent<typeof VCheckbox>('[data-testid="checkbox-update-data"]');
 
-				expect(checkBox.isVisible()).toBeTruthy();
-				expect(checkBox.props().disabled).toBeFalsy();
+				expect(checkBox.isVisible()).toBe(true);
+				expect(checkBox.props().disabled).toBe(false);
 				expect(checkBox.props().modelValue).toBe(false);
 			});
 		});
@@ -339,7 +341,7 @@ describe("SchoolYearChangeSection", () => {
 				checkBox.vm.$emit("update:modelValue", true);
 				await nextTick();
 
-				expect(ldapButton.props().disabled).toBeTruthy();
+				expect(ldapButton.props().disabled).toBe(true);
 			});
 
 			it("should enable transfer finish button", async () => {
@@ -351,7 +353,7 @@ describe("SchoolYearChangeSection", () => {
 
 				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
-				expect(transferFinishButton.props().disabled).toBeFalsy();
+				expect(transferFinishButton.props().disabled).toBe(false);
 			});
 		});
 
@@ -388,7 +390,7 @@ describe("SchoolYearChangeSection", () => {
 				checkBox.vm.$emit("update:modelValue", false);
 				await nextTick();
 
-				expect(ldapButton.props().disabled).toBeFalsy();
+				expect(ldapButton.props().disabled).toBe(false);
 			});
 
 			it("should disable transfer finish button", async () => {
@@ -400,7 +402,7 @@ describe("SchoolYearChangeSection", () => {
 
 				const transferFinishButton = wrapper.findComponent<typeof VBtn>('[data-testid="finish-transfer-button"]');
 
-				expect(transferFinishButton.props().disabled).toBeTruthy();
+				expect(transferFinishButton.props().disabled).toBe(true);
 			});
 		});
 	});
@@ -438,13 +440,17 @@ describe("SchoolYearChangeSection", () => {
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
+				const dialogs = wrapper.findAllComponents(Dialog);
+				expect(dialogs[1].props().title).toBe("components.administration.schoolYearChangeSection.dialog.finish.title");
+				const finishTransferDialog = dialogs[1].findComponent(VCard);
 
-				expect(title.isVisible()).toBeTruthy();
-				expect(cancelBtn.isVisible()).toBeTruthy();
-				expect(confirmBtn.isVisible()).toBeTruthy();
+				const title = finishTransferDialog.find('[data-testid="dialog-title"]');
+				const cancelBtn = finishTransferDialog.findComponent('[data-testid="dialog-cancel"]');
+				const confirmBtn = finishTransferDialog.findComponent('[data-testid="dialog-confirm"]');
+
+				expect(title.exists()).toBe(true);
+				expect(cancelBtn.exists()).toBe(true);
+				expect(confirmBtn.exists()).toBe(true);
 			});
 		});
 	});
@@ -494,17 +500,19 @@ describe("SchoolYearChangeSection", () => {
 				expect(useSharedSchoolYearChangeApiMock.setMaintenanceMode).not.toHaveBeenCalled();
 			});
 
-			it("should not show the dialog", async () => {
+			it("should close dialog", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel"]');
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const finishTransferDialog = dialogs[1];
+
+				const cancelBtn = finishTransferDialog.findComponent('[data-testid="dialog-cancel"]');
 				await cancelBtn.trigger("click");
 
-				expect(title.isVisible()).toBeFalsy();
+				expect(finishTransferDialog.props().modelValue).toBe(false);
 			});
 
 			it("should show the finish transfer button", async () => {
@@ -512,22 +520,24 @@ describe("SchoolYearChangeSection", () => {
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 
-				expect(button.isVisible()).toBeTruthy();
+				expect(button.isVisible()).toBe(true);
 			});
 		});
 
 		describe("when confirm button is clicked", () => {
-			it("should not show the dialog", async () => {
+			it("should close dialog", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.find('[data-testid="finish-transfer-button"]');
 				await button.trigger("click");
 
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
+				const dialogs = wrapper.findAllComponents(Dialog);
+				const finishTransferDialog = dialogs[1];
+
+				const confirmBtn = finishTransferDialog.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				expect(title.isVisible()).toBeFalsy();
+				expect(finishTransferDialog.props().modelValue).toBe(false);
 			});
 
 			it("should call setMaintenance", async () => {
@@ -558,17 +568,17 @@ describe("SchoolYearChangeSection", () => {
 				const confirmBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 				await confirmBtn.trigger("click");
 
-				expect(transferStartButton.exists()).toBeFalsy();
+				expect(transferStartButton.exists()).toBe(false);
 
-				expect(transferStartedButton.isVisible()).toBeTruthy();
-				expect(transferStartedButton.props().disabled).toBeTruthy();
+				expect(transferStartedButton.isVisible()).toBe(true);
+				expect(transferStartedButton.props().disabled).toBe(true);
 
-				expect(ldapButton.props().disabled).toBeTruthy();
+				expect(ldapButton.props().disabled).toBe(true);
 
-				expect(checkBox.props().disabled).toBeTruthy();
+				expect(checkBox.props().disabled).toBe(true);
 				expect(checkBox.props().modelValue).toBe(true);
 
-				expect(transferFinishButton.props().disabled).toBeTruthy();
+				expect(transferFinishButton.props().disabled).toBe(true);
 			});
 		});
 	});

@@ -121,7 +121,7 @@
 				</VBtn>
 			</div>
 			<Dialog
-				:model-value="isStartDialogOpen"
+				v-model="isStartDialogOpen"
 				:title="t('components.administration.schoolYearChangeSection.dialog.start.title')"
 				data-testid="cancel-school-year-change-dialog"
 				@confirm="confirmSchoolYearChange"
@@ -131,14 +131,11 @@
 				</template>
 			</Dialog>
 			<Dialog
-				:model-value="isFinishDialogOpen"
+				v-model="isFinishDialogOpen"
 				:title="t('components.administration.schoolYearChangeSection.dialog.finish.title')"
 				data-testid="finish-school-year-change-dialog"
 				@confirm="finishTransfer"
 			>
-				<template #title>
-					{{ t("components.administration.schoolYearChangeSection.dialog.finish.title") }}
-				</template>
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.finish.content") }}
 				</template>
@@ -154,7 +151,7 @@ import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
@@ -169,7 +166,7 @@ const { t } = useI18n();
 
 const isLoading = ref(false);
 
-const schoolYearMode: ComputedRef<string> = computed(() => {
+const schoolYearMode = computed<string>(() => {
 	const currentTime = new Date();
 
 	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE.valueOf();
@@ -204,7 +201,7 @@ const finishTransfer = async () => {
 	}
 };
 
-const isStartDialogOpen: Ref<boolean> = ref(false);
+const isStartDialogOpen = ref(false);
 
 const startTransfer = () => {
 	isStartDialogOpen.value = true;
