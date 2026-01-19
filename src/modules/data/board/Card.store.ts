@@ -20,7 +20,7 @@ import { FileRecordParent } from "@/types/file/File";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -30,6 +30,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
 
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
+	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
@@ -118,11 +119,13 @@ export const useCardStore = defineStore("cardStore", () => {
 			return;
 		}
 
+		disableFileSelectOnMount();
 		const element = await createElementRequest({
 			type: ContentElementType.File,
 			cardId: editModeId.value,
 		});
 		if (!element) {
+			resetFileSelectOnMountEnabled();
 			return;
 		}
 
@@ -130,6 +133,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (!uploadedCollaboraFile) {
 			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
 		}
+		resetFileSelectOnMountEnabled();
 	};
 
 	const createPreferredElement = (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
