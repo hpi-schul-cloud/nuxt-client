@@ -26,9 +26,9 @@
 							<div class="content__img-background-gradient" />
 
 							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
-							<div v-show="isCollection()" class="card-tag">
+							<div class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon class="custom-icon content__text-icon" :icon="mdiFileMultipleOutline" />
+								<v-icon :icon="mdiFileMultipleOutline" />
 							</div>
 						</div>
 					</div>

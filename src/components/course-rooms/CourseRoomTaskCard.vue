@@ -18,7 +18,7 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" :data-testid="`task-card-title-${taskCardIndex}`">
-					<v-icon size="14" class="fill" :icon="titleIcon" />
+					<v-icon size="14" class="fill" :icon="mdiPlaylistCheck" />
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -157,7 +157,7 @@ const isPlanned = computed(() => {
 	const delay = 5 * 1000;
 	return scheduledDate && new Date(scheduledDate).getTime() - delay > new Date().getTime();
 });
-const titleIcon = computed(() => mdiPlaylistCheck);
+
 const cardActions = computed(() => {
 	const roleBasedActions: Record<string, Array<{ action: () => void; name: string; testid: string }>> = {
 		[Roles.Teacher]: [],
