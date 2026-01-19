@@ -4,14 +4,11 @@
 		ref="elementCard"
 		class="mb-4"
 		data-testid="board-hp5-element"
-		elevation="0"
 		variant="outlined"
 		:ripple="false"
-		tabindex="0"
-		role="button"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
-		@keyup.enter="onClickElement"
+		@keyup.enter.space="onClickElement"
 		@click="onClickElement"
 	>
 		<ContentElementBar :has-grey-background="true" icon="$h5pOutline" :has-row-style="isSmallOrLargerListBoard">
