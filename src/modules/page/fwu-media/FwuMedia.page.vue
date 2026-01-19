@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe ref="main" max-width="full">
+	<DefaultWireframe ref="main" :breadcrumbs max-width="full">
 		<template #header>
 			<h1 aria-level="1" class="mt-0 me-auto" data-testid="fwu-title">
 				{{ t("pages.fwu-media.title") }}
@@ -7,7 +7,7 @@
 		</template>
 
 		<template #default>
-			<div v-if="debouncedIsRunning" class="d-flex mt-10 justify-center align-center">
+			<div v-if="debouncedIsLoading" class="d-flex mt-10 justify-center align-center">
 				<VProgressCircular indeterminate size="115" />
 			</div>
 			<template v-else>
@@ -49,16 +49,30 @@ import { FwuApiFactory } from "@/generated/fwu-api/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiMagnify } from "@icons/material";
-import { DefaultWireframe } from "@ui-layout";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { refDebounced, useTitle, useUrlSearchParams } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { execute, isRunning } = useSafeAxiosTask();
+const { execute, status } = useSafeAxiosTask();
+
+const isLoadingFwuContent = computed(() => status.value === "" || status.value === "pending");
 const { t } = useI18n();
 const PLURAL_COUNT = 2;
 
-useTitle(buildPageTitle(t("pages.fwu-media.title")));
+const pageTitle = buildPageTitle(t("pages.fwu-media.title"));
+useTitle(pageTitle);
+
+const breadcrumbs = computed<Breadcrumb[]>(() => [
+	{
+		title: t("feature.media-shelf.title"),
+		to: "/media-shelf",
+	},
+	{
+		title: pageTitle,
+		disabled: true,
+	},
+]);
 
 const params = useUrlSearchParams("history");
 const searchQuery = computed({
@@ -68,7 +82,7 @@ const searchQuery = computed({
 	},
 });
 const debouncedSearch = refDebounced(searchQuery, 300);
-const debouncedIsRunning = refDebounced(isRunning, 200);
+const debouncedIsLoading = refDebounced(isLoadingFwuContent, 200);
 
 interface IFwuList {
 	id: string;

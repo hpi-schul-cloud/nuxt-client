@@ -3,6 +3,7 @@ import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Permission, ToolContextType } from "@/serverApi/v3";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	isEnum,
 	isMongoId,
@@ -11,6 +12,8 @@ import {
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validation";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
@@ -273,11 +276,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "media-shelf",
 	},
 	{
-		path: `/fwu-media`,
+		path: `/media-shelf/fwu-media`,
 		component: async () => (await import("@page-fwu-media")).FwuMedia,
 		name: "fwu-media",
-		meta: {
-			isPublic: true,
+		beforeEnter(to, from, next) {
+			if (useEnvConfig().value.FEATURE_FWU_CONTENT_ENABLED) {
+				return next();
+			}
+			useAppStore().handleApplicationError(HttpStatusCode.Unauthorized);
 		},
 	},
 	{
