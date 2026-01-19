@@ -8,8 +8,6 @@
 		:variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		:href="sanitizedUrl"
-		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onClick"
@@ -159,6 +157,8 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
+	} else {
+		window.open(sanitizedUrl.value, "_blank", "noopener,noreferrer");
 	}
 };
 </script>
