@@ -1580,7 +1580,7 @@ export default {
 	"pages.lernstore.info.banner.item.0.thr":
 		"Ab sofort sind die Mediatheken aus dem Lern-Store (Mundo, Wir lernen online und Mediothek/Pixiothek) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
 	"pages.lernstore.info.banner.item.1":
-		"Der Lern-Store wird daher in KW 10 (04.03.2026) abgeschaltet. In den Themen bereits eingebundene Lern-store-Inhalte sind weiterhin verfügbar.",
+		"Der Lern-Store wird daher in KW 10 (04.03.2026) abgeschaltet. In den Themen bereits eingebundene Lern-Store-Inhalte sind weiterhin verfügbar.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
