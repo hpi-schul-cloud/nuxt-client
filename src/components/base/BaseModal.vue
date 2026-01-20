@@ -1,5 +1,5 @@
 <template>
-	<v-dialog
+	<VDialog
 		v-model="isDialogOpen"
 		:persistent="backgroundClickDisabled"
 		:aria-labelledby="`modal-${uid}-title`"
@@ -26,7 +26,7 @@
 				</slot>
 			</slot>
 		</v-card>
-	</v-dialog>
+	</VDialog>
 </template>
 
 <script setup lang="ts">

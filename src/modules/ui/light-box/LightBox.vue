@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="isLightBoxOpen" fullscreen data-testid="light-box">
+	<VDialog v-model="isLightBoxOpen" fullscreen data-testid="light-box">
 		<v-toolbar>
 			<v-btn :aria-label="t('common.labels.close')" :icon="mdiClose" data-testid="light-box-close-btn" @click="close" />
 
@@ -48,7 +48,7 @@
 				</ErrorAlert>
 			</v-col>
 		</v-row>
-	</v-dialog>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
