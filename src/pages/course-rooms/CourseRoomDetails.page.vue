@@ -109,6 +109,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { SelectBoardLayoutDialog } from "@feature-board";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
@@ -127,7 +128,6 @@ import {
 	mdiViewListOutline,
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";

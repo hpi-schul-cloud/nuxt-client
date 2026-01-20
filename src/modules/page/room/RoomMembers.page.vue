@@ -73,6 +73,7 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
+import { LeaveRoomProhibitedDialog } from "@feature-room";
 import {
 	mdiAccountClockOutline,
 	mdiAccountMultipleOutline,
@@ -84,7 +85,6 @@ import {
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
-import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";

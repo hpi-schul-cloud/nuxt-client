@@ -1,7 +1,7 @@
+import { LeaveRoomProhibitedDialog } from "./LeaveRoomProhibitedDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { VueWrapper } from "@vue/test-utils";
 import { VCard, VDialog } from "vuetify/lib/components/index";
 
