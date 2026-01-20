@@ -50,6 +50,7 @@ import {
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime.js";
 import { TaskResponse } from "@/serverApi/v3";
+import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
@@ -104,8 +105,8 @@ const taskIcon = computed(() => {
 	const stateIcons = {
 		warning: "$taskOpenFilled",
 		overdue: "$taskMissed",
-		submitted: "$taskDone",
-		graded: "$taskDoneFilled",
+		submitted: mdiCheckCircleOutline,
+		graded: mdiCheckCircleOutline,
 		gradedOverdue: "$taskMissedFilled",
 		open: "$taskOpenFilled",
 	};

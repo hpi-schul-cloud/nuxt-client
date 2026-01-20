@@ -18,7 +18,7 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" :data-testid="`task-card-title-${taskCardIndex}`">
-					<v-icon size="14" class="fill" :icon="titleIcon" />
+					<v-icon size="14" class="fill" :icon="mdiFormatListChecks" />
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -52,7 +52,7 @@
 					size="small"
 					:data-testid="[chip.testid]"
 				>
-					<v-icon v-if="chip.icon" start size="small" class="fill" color="rgba(0, 0, 0, 0.87)">
+					<v-icon v-if="chip.icon" size="small" class="mr-1" color="rgba(0, 0, 0, 0.87)">
 						{{ chip.icon }}
 					</v-icon>
 					{{ chip.name }}
@@ -88,7 +88,9 @@ import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
+	mdiCheckCircleOutline,
 	mdiContentCopy,
+	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiShareVariantOutline,
 	mdiTextBoxCheckOutline,
@@ -156,7 +158,7 @@ const isPlanned = computed(() => {
 	const delay = 5 * 1000;
 	return scheduledDate && new Date(scheduledDate).getTime() - delay > new Date().getTime();
 });
-const titleIcon = computed(() => "$tasks");
+
 const cardActions = computed(() => {
 	const roleBasedActions: Record<string, Array<{ action: () => void; name: string; testid: string }>> = {
 		[Roles.Teacher]: [],
@@ -223,7 +225,7 @@ const chipItems = computed(() => {
 	if (props.userRole === Roles.Student) {
 		if (isSubmittedNotGraded.value) {
 			roleBasedChips[Roles.Student].push({
-				icon: "$taskDone",
+				icon: mdiCheckCircleOutline,
 				name: t(`pages.room.taskCard.student.label.submitted`),
 				class: "submitted",
 				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
@@ -232,7 +234,7 @@ const chipItems = computed(() => {
 
 		if (isGraded.value) {
 			roleBasedChips[Roles.Student].push({
-				icon: "$taskDone",
+				icon: mdiCheckCircleOutline,
 				name: t(`pages.room.taskCard.student.label.submitted`),
 				class: "submitted",
 				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
