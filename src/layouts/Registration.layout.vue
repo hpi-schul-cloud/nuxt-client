@@ -1,8 +1,8 @@
 <template>
 	<VToolbar color="white" density="compact" elevation="2">
-		<VContainer :class="{ 'center-xs-logo': isExtraSmallDevice }" class="top-container pa-0">
+		<VContainer class="top-container pa-0">
 			<a href="/">
-				<img :src="logo" class="logo" alt="Schulcloud Logo" :class="{ 'center-xs-img': isExtraSmallDevice }" />
+				<img :src="logo" class="logo" alt="Schulcloud Logo" :class="{ 'centered-img': isSmallDevice }" />
 			</a>
 		</VContainer>
 	</VToolbar>
@@ -10,7 +10,7 @@
 		<ApplicationError>
 			<AlertContainer />
 		</ApplicationError>
-		<VContainer :class="['main-container', { 'main-container-xs': isExtraSmallDevice }]">
+		<VContainer :class="['main-container', { 'main-container-sm': isSmallDevice }]">
 			<slot />
 		</VContainer>
 	</VMain>
@@ -24,21 +24,18 @@ import { AlertContainer, ApplicationError } from "@ui-layout";
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
 
-const { xs } = useDisplay();
-const isExtraSmallDevice = computed(() => xs.value);
+const { smAndDown } = useDisplay();
+const isSmallDevice = computed(() => smAndDown.value);
 </script>
 
 <style lang="scss" scoped>
 .main-container {
 	width: 70vw;
 }
-.main-container-xs {
+.main-container-sm {
 	width: 100%;
 }
-.center-xs-logo {
-	justify-content: center !important;
-}
-.center-xs-img {
+.centered-img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

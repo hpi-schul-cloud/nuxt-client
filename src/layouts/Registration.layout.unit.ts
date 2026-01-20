@@ -1,13 +1,16 @@
 import RegistrationLayout from "./Registration.layout.vue";
 import Logo from "@/assets/img/logo/logo-image-mono.svg";
-import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { nextTick } from "vue";
+import { VContainer, VMain, VToolbar } from "vuetify/components";
 
 describe("Registration.layout", () => {
 	const setup = (options?: Partial<{ windowWidth: number }>) => {
 		Object.defineProperty(globalThis, "innerWidth", {
+			writable: true,
+			configurable: true,
 			value: options?.windowWidth ?? 1280,
 		});
 
@@ -32,27 +35,12 @@ describe("Registration.layout", () => {
 	});
 
 	describe("topbar", () => {
-		it("should render navigation bar with logo", () => {
+		it("should render logo", () => {
 			const { wrapper } = setup();
-			const navigationBar = wrapper.findComponent(NavigationBar);
+			const topbar = wrapper.findComponent(VToolbar);
 
-			expect(navigationBar.exists()).toBe(true);
-			expect(navigationBar.props("img")).toBe(Logo);
-		});
-
-		it("should not render buttons in NavigationBar", () => {
-			const { wrapper } = setup();
-			const navigationBar = wrapper.findComponent(NavigationBar);
-
-			expect(navigationBar.props().hideButtons).toBe(true);
-		});
-
-		it("renders inside a header landmark", () => {
-			const { wrapper } = setup();
-			const header = wrapper.find('[data-testid="registration-layout-top-bar"]');
-			const navigationBar = header.findComponent(NavigationBar);
-
-			expect(navigationBar.exists()).toBe(true);
+			expect(topbar.exists()).toBe(true);
+			expect(topbar.html()).toContain(Logo);
 		});
 	});
 
@@ -71,20 +59,22 @@ describe("Registration.layout", () => {
 			expect(main.html()).toContain(slotContent);
 		});
 
-		it("should render in a smaller wrapper for extra small devices", () => {
-			const { wrapper } = setup({ windowWidth: 500 });
-			const mainWrapper = wrapper.findComponent({ name: "VMain" });
+		it("should render in a smaller wrapper for small devices", async () => {
+			const { wrapper } = setup({ windowWidth: 300 });
+			await nextTick();
+			const mainWrapper = wrapper.findComponent(VMain).findComponent(VContainer);
 
-			expect(mainWrapper.classes()).toContain("small-wrapper");
-			expect(mainWrapper.classes()).not.toContain("wrapper");
+			const classes = mainWrapper.classes();
+
+			expect(classes).toContain("main-container-small");
 		});
 
-		it("should render in a normal wrapper for devices larger than extra small", () => {
+		it("should render in a normal wrapper for larger devices ", () => {
 			const { wrapper } = setup({ windowWidth: 1280 });
-			const mainWrapper = wrapper.findComponent({ name: "VMain" });
+			const mainWrapper = wrapper.findComponent(VMain).findComponent(VContainer);
 
-			expect(mainWrapper.classes()).toContain("wrapper");
-			expect(mainWrapper.classes()).not.toContain("small-wrapper");
+			expect(mainWrapper.classes()).toContain("main-container");
+			expect(mainWrapper.classes()).not.toContain("main-container-small");
 		});
 	});
 
