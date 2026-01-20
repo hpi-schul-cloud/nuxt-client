@@ -16,6 +16,17 @@ describe("TasksListItemStudent", () => {
 		push: vi.fn(),
 	};
 
+	const defineWindowWidth = (width: number) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
+		window.dispatchEvent(new Event("resize"));
+	};
+
+	defineWindowWidth(1264);
+
 	const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
 		mount(TasksListItemStudent, {
 			global: {
@@ -127,14 +138,14 @@ describe("TasksListItemStudent", () => {
 	});
 
 	it("computed DueDateLabel() method should be able to render a shortened date", () => {
+		defineWindowWidth(500);
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
-
-		wrapper.vm.$vuetify.display.xs = true;
 
 		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
-		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);
+		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
+		expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
 	});
 
 	it("should display topic", () => {
