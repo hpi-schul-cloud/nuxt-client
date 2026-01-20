@@ -19,12 +19,7 @@
 			</WarningAlert>
 		</template>
 		<template #actions>
-			<VBtn
-				data-testid="copy-dialog-close-btn"
-				variant="outlined"
-				:text="t('common.labels.close')"
-				@click="emit('copy-dialog-closed')"
-			/>
+			<DialogBtnClose @click="emit('copy-dialog-closed')" />
 		</template>
 	</Dialog>
 </template>
@@ -33,7 +28,7 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
