@@ -163,16 +163,7 @@ describe("CourseRoomDashboard.vue", () => {
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
-
-		// mockedUseConfirmationDialog.mockReturnValue({
-		// 			askConfirmation: askConfirmationMock,
-		// 			isDialogOpen: ref(false),
-		// 		});
 	});
-
-	// afterEach(() => {
-	// 	vi.clearAllMocks();
-	// });
 
 	describe("common features", () => {
 		it("should have props", () => {

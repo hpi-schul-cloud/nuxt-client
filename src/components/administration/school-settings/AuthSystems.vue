@@ -109,10 +109,13 @@ import { schoolsModule } from "@/store";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+	components: {
+		ConfirmationDialog,
+	},
 	props: {
 		systems: {
 			type: Array,
