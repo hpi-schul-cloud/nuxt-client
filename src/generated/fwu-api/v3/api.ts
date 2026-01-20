@@ -21,6 +21,93 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
+/**
+ * 
+ * @export
+ * @interface ApiValidationError
+ */
+export interface ApiValidationError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof ApiValidationError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof ApiValidationError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof ApiValidationError
+     */
+    details?: object;
+}
+/**
+ * 
+ * @export
+ * @interface FwuItemResponse
+ */
+export interface FwuItemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FwuItemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FwuItemResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FwuItemResponse
+     */
+    targetUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FwuItemResponse
+     */
+    thumbnailUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FwuItemResponse
+     */
+    description?: string;
+}
+/**
+ * 
+ * @export
+ * @interface FwuListResponse
+ */
+export interface FwuListResponse {
+    /**
+     * 
+     * @type {Array<FwuItemResponse>}
+     * @memberof FwuListResponse
+     */
+    data: Array<FwuItemResponse>;
+}
 
 /**
  * FwuApi - axios parameter creator
@@ -30,6 +117,7 @@ export const FwuApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          * 
+         * @summary Streamable download of a content file.
          * @param {string} fwuLearningContent 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -67,6 +155,7 @@ export const FwuApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
+         * @summary Get a list of content items.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -110,20 +199,22 @@ export const FwuApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Streamable download of a content file.
          * @param {string} fwuLearningContent 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async fwuLearningContentsControllerGet(fwuLearningContent: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async fwuLearningContentsControllerGet(fwuLearningContent: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.fwuLearningContentsControllerGet(fwuLearningContent, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
+         * @summary Get a list of content items.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async fwuLearningContentsControllerGetList(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<object>>> {
+        async fwuLearningContentsControllerGetList(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FwuListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.fwuLearningContentsControllerGetList(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -139,19 +230,21 @@ export const FwuApiFactory = function (configuration?: Configuration, basePath?:
     return {
         /**
          * 
+         * @summary Streamable download of a content file.
          * @param {string} fwuLearningContent 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fwuLearningContentsControllerGet(fwuLearningContent: string, options?: any): AxiosPromise<void> {
+        fwuLearningContentsControllerGet(fwuLearningContent: string, options?: any): AxiosPromise<any> {
             return localVarFp.fwuLearningContentsControllerGet(fwuLearningContent, options).then((request) => request(axios, basePath));
         },
         /**
          * 
+         * @summary Get a list of content items.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fwuLearningContentsControllerGetList(options?: any): AxiosPromise<Array<object>> {
+        fwuLearningContentsControllerGetList(options?: any): AxiosPromise<FwuListResponse> {
             return localVarFp.fwuLearningContentsControllerGetList(options).then((request) => request(axios, basePath));
         },
     };
@@ -165,20 +258,22 @@ export const FwuApiFactory = function (configuration?: Configuration, basePath?:
 export interface FwuApiInterface {
     /**
      * 
+     * @summary Streamable download of a content file.
      * @param {string} fwuLearningContent 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FwuApiInterface
      */
-    fwuLearningContentsControllerGet(fwuLearningContent: string, options?: any): AxiosPromise<void>;
+    fwuLearningContentsControllerGet(fwuLearningContent: string, options?: any): AxiosPromise<any>;
 
     /**
      * 
+     * @summary Get a list of content items.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FwuApiInterface
      */
-    fwuLearningContentsControllerGetList(options?: any): AxiosPromise<Array<object>>;
+    fwuLearningContentsControllerGetList(options?: any): AxiosPromise<FwuListResponse>;
 
 }
 
@@ -191,6 +286,7 @@ export interface FwuApiInterface {
 export class FwuApi extends BaseAPI implements FwuApiInterface {
     /**
      * 
+     * @summary Streamable download of a content file.
      * @param {string} fwuLearningContent 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -202,6 +298,7 @@ export class FwuApi extends BaseAPI implements FwuApiInterface {
 
     /**
      * 
+     * @summary Get a list of content items.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FwuApi

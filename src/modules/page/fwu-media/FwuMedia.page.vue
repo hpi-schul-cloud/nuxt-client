@@ -25,13 +25,13 @@
 					<VCard
 						v-for="item in filteredFwuList"
 						:key="item.id"
-						:href="item.target_url"
+						:href="item.targetUrl"
 						target="_blank"
 						rel="noopener noreferrer"
 						hover
 						class="fwu-card"
 					>
-						<VImg :src="item.thumbnail_url" height="200" cover />
+						<VImg :src="item.thumbnailUrl" height="200" cover />
 						<VCardTitle class="font-weight-bold text-body-1 text-wrap">
 							{{ item.title }}
 						</VCardTitle>
@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { FwuApiFactory } from "@/generated/fwu-api/v3";
+import { FwuApiFactory, FwuItemResponse } from "@/generated/fwu-api/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiMagnify } from "@icons/material";
@@ -53,7 +53,7 @@ import { refDebounced, useTitle, useUrlSearchParams } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const fwuList = ref<IFwuList[]>([]);
+const fwuList = ref<FwuItemResponse[]>([]);
 const fwuApi = FwuApiFactory(undefined, "/v3", $axios);
 const { execute, status } = useSafeAxiosTask();
 
@@ -85,13 +85,6 @@ const searchQuery = computed({
 const debouncedSearch = refDebounced(searchQuery, 300);
 const debouncedIsLoading = refDebounced(isLoadingFwuContent, 200);
 
-interface IFwuList {
-	id: string;
-	title: string;
-	thumbnail_url: string;
-	target_url: string;
-}
-
 onMounted(async () => {
 	const { result } = await execute(
 		() => fwuApi.fwuLearningContentsControllerGetList(),
@@ -103,7 +96,7 @@ onMounted(async () => {
 			PLURAL_COUNT
 		)
 	);
-	fwuList.value = (result?.data ?? []) as IFwuList[];
+	fwuList.value = result?.data?.data ?? [];
 });
 
 const filteredFwuList = computed(() => {
