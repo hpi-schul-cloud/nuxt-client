@@ -29669,6 +29669,43 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerAddAndActivateToolForAllSchools: async (contextExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextExternalToolId' is not null or undefined
+            assertParamExists('toolConfigurationControllerAddAndActivateToolForAllSchools', 'contextExternalToolId', contextExternalToolId)
+            const localVarPath = `/tools/add-and-activate-for-all-schools/{contextExternalToolId}`
+                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Lists all available tools that can be added for a given context
          * @param {any} contextType 
          * @param {string} contextId 
@@ -30928,6 +30965,16 @@ export const ToolApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Lists all available tools that can be added for a given context
          * @param {any} contextType 
          * @param {string} contextId 
@@ -31290,6 +31337,15 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Lists all available tools that can be added for a given context
          * @param {any} contextType 
          * @param {string} contextId 
@@ -31620,6 +31676,15 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
 export interface ToolApiInterface {
     /**
      * 
+     * @param {string} contextExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Lists all available tools that can be added for a given context
      * @param {any} contextType 
      * @param {string} contextId 
@@ -31948,6 +32013,17 @@ export interface ToolApiInterface {
  * @extends {BaseAPI}
  */
 export class ToolApi extends BaseAPI implements ToolApiInterface {
+    /**
+     * 
+     * @param {string} contextExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerAddAndActivateToolForAllSchools(contextExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Lists all available tools that can be added for a given context
