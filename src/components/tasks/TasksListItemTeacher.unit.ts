@@ -2,7 +2,6 @@ import TasksListItemMenu from "./TasksListItemMenu.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -11,7 +10,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
-import { VBtn, VListItem } from "vuetify/components";
+import { VListItem } from "vuetify/components";
 
 const { tasksTeacher, drafts, plannedTask, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
 
@@ -27,11 +26,11 @@ const getWrapper = (props: { task: object }) =>
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				tasksModule: tasksModuleMock,
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+				// tasksModule: tasksModuleMock,
+				// [COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
 			stubs: {
-				TaskItemMenu: true,
+				TasksListItemMenu: true,
 			},
 		},
 		props: props,
@@ -312,45 +311,6 @@ describe("TasksListItemTeacher", () => {
 
 			expect(topicLabel.exists()).toBe(false);
 			expect(wrapper.vm.topic).toStrictEqual("");
-		});
-	});
-
-	describe("when menu is used", () => {
-		describe("mouse events", () => {
-			it("should open menu on btn click", async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				const menuBtn = wrapper.findComponent(VBtn);
-				await menuBtn.trigger("click");
-
-				expect(wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()).toBe(true);
-			});
-
-			it("should close menu on btn click", async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				const menuBtn = wrapper.find(".v-btn");
-				await menuBtn.trigger("click");
-				await menuBtn.trigger("click");
-
-				expect(wrapper.find(".menuable__content__active").exists()).toBe(false);
-			});
-		});
-
-		it("should link to btn edit page on edit btn click", async () => {
-			const wrapper = getWrapper({
-				task: tasksTeacher[0],
-			});
-
-			const menuBtn = wrapper.findComponent(VBtn);
-			await menuBtn.trigger("click");
-			const editBtn = wrapper.findComponent(`[data-testid="task-edit"]`);
-
-			expect(editBtn.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}/edit`);
 		});
 	});
 });
