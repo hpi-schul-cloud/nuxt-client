@@ -6,19 +6,25 @@ import { ConsentVersion } from "@/store/types/consent-version";
 import { downloadFile } from "@/utils/fileHelper";
 import { PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mocked } from "vitest";
+import type { Mock, Mocked } from "vitest";
 
 vi.mock("@/utils/fileHelper");
+
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 describe("SchoolPolicy", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
+	let askConfirmationMock: Mock;
 
 	const mockPolicy: ConsentVersion = {
 		_id: "123",
@@ -74,6 +80,13 @@ describe("SchoolPolicy", () => {
 
 		return wrapper;
 	};
+
+	beforeEach(() => {
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+	});
 
 	describe("when school is set", () => {
 		it("should call fetch privacy policy", () => {
@@ -159,13 +172,13 @@ describe("SchoolPolicy", () => {
 	});
 
 	describe("when user clicks delete button", () => {
-		it("should change isDeletePolicyDialogOpen to true", () => {
+		it("should call deletePrivacyPolicy", async () => {
+			askConfirmationMock.mockResolvedValueOnce(true);
 			const wrapper = setup();
-			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
 
-			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(false);
-			wrapper.find('[data-testid="delete-button"]').trigger("click");
-			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(true);
+			await wrapper.find('[data-testid="delete-button"]').trigger("click");
+
+			expect(privacyPolicyModule.deletePrivacyPolicy).toHaveBeenCalled();
 		});
 	});
 

@@ -6,19 +6,25 @@ import { ConsentVersion } from "@/store/types/consent-version";
 import { downloadFile } from "@/utils/fileHelper";
 import { SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mocked } from "vitest";
+import type { Mock, Mocked } from "vitest";
 
 vi.mock("@/utils/fileHelper");
+
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 describe("SchoolTerms", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let termsOfUseModule: Mocked<TermsOfUseModule>;
+	let askConfirmationMock: Mock;
 
 	const mockTerms: ConsentVersion = {
 		_id: "123",
@@ -74,6 +80,13 @@ describe("SchoolTerms", () => {
 
 		return wrapper;
 	};
+
+	beforeEach(() => {
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+	});
 
 	describe("when school is set", () => {
 		it("should call fetch terms of use", () => {
@@ -157,13 +170,12 @@ describe("SchoolTerms", () => {
 	});
 
 	describe("when user clicks delete button", () => {
-		it("should change isDeleteTermsDialogOpen to true", async () => {
+		it("should call deleteTermsOfUse", async () => {
+			askConfirmationMock.mockResolvedValueOnce(true);
 			const wrapper = setup();
-			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
 
-			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(false);
 			await wrapper.findComponent('[data-testid="delete-button"]').trigger("click");
-			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(true);
+			expect(termsOfUseModule.deleteTermsOfUse).toHaveBeenCalledTimes(1);
 		});
 	});
 
