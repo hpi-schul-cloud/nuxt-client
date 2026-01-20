@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe ref="main" :breadcrumbs max-width="full">
 		<template #header>
-			<h1 aria-level="1" class="mt-0 me-auto" data-testid="fwu-title">
+			<h1 aria-level="1" class="my-4" data-testid="fwu-title">
 				{{ t("pages.fwu-media.title") }}
 			</h1>
 		</template>
@@ -19,7 +19,6 @@
 					:label="t('common.labels.search')"
 					:prepend-inner-icon="mdiMagnify"
 					clearable
-					hide-details
 				/>
 
 				<TransitionGroup name="fwu-grid" tag="div" class="fwu-grid-container">
@@ -54,6 +53,8 @@ import { refDebounced, useTitle, useUrlSearchParams } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+const fwuList = ref<IFwuList[]>([]);
+const fwuApi = FwuApiFactory(undefined, "/v3", $axios);
 const { execute, status } = useSafeAxiosTask();
 
 const isLoadingFwuContent = computed(() => status.value === "" || status.value === "pending");
@@ -87,12 +88,9 @@ const debouncedIsLoading = refDebounced(isLoadingFwuContent, 200);
 interface IFwuList {
 	id: string;
 	title: string;
-	thumbnail_url: string; // (url || bytes)
+	thumbnail_url: string;
 	target_url: string;
 }
-
-const fwuList = ref<IFwuList[]>([]);
-const fwuApi = FwuApiFactory(undefined, "/v3", $axios);
 
 onMounted(async () => {
 	const { result } = await execute(

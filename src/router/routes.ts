@@ -2,7 +2,7 @@ import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { Permission, SchulcloudTheme, ToolContextType } from "@/serverApi/v3";
+import { Permission, ToolContextType } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	isEnum,
@@ -280,11 +280,10 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: async () => (await import("@page-fwu-media")).FwuMedia,
 		name: "fwu-media",
 		beforeEnter(to, from, next) {
-			// FWU media is only available for BRB
-			if (useEnvConfig().value.SC_THEME === SchulcloudTheme.Brb) {
+			if (useEnvConfig().value.FEATURE_FWU_CONTENT_ENABLED) {
 				return next();
 			}
-			useAppStore().handleApplicationError(HttpStatusCode.Unauthorized);
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
 		},
 	},
 	{

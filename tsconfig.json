@@ -1,26 +1,26 @@
 {
-	"compilerOptions": {
-		"isolatedModules": true,
-		"target": "esnext",
-		"module": "esnext",
-		"strict": true,
-		"jsx": "preserve",
-		"importHelpers": true,
-		"moduleResolution": "bundler",
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"allowJs": true,
-		"checkJs": false,
-		"forceConsistentCasingInFileNames": true,
-		"useDefineForClassFields": true,
-		"sourceMap": true,
-		"experimentalDecorators": true,
-		"baseUrl": ".",
-		"types": ["node", "vitest/globals"],
-		"typeRoots": ["./node_modules/@types", "./types", "./node_modules"],
-		"paths": {
-      "@data-app": ["src/modules/data/application"],
+  "compilerOptions": {
+    "isolatedModules": true,
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "types": ["node", "vitest/globals"],
+    "typeRoots": ["./node_modules/@types", "./types", "./node_modules"],
+    "paths": {
+	  "@data-app": ["src/modules/data/application"],
       "@data-board": ["src/modules/data/board"],
       "@data-external-tool": ["src/modules/data/external-tool"],
       "@data-group": ["src/modules/data/group"],
@@ -113,16 +113,16 @@
       "@/*": ["src/*"],
       "@@/*": ["*"]
     },
-		"lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-		"outDir": "dist"
-	},
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.tsx",
-		"src/**/*.vue",
-		"tests/**/*.ts",
-		"tests/**/*.tsx",
-		"types/**/*.d.ts"
-	],
-	"exclude": ["node_modules", "dist", "./src/components/base/components.js"]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "outDir": "dist"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "types/**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", "./src/components/base/components.js"]
 }
