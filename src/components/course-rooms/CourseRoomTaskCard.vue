@@ -18,7 +18,7 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" :data-testid="`task-card-title-${taskCardIndex}`">
-					<v-icon size="14" class="fill" :icon="mdiPlaylistCheck" />
+					<v-icon size="14" class="fill" :icon="mdiFormatListChecks" />
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -89,8 +89,8 @@ import { RenderHTML } from "@feature-render-html";
 import {
 	mdiCheckCircleOutline,
 	mdiContentCopy,
+	mdiFormatListChecks,
 	mdiPencilOutline,
-	mdiPlaylistCheck,
 	mdiShareVariantOutline,
 	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
