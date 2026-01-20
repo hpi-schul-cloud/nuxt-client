@@ -66,7 +66,7 @@ describe("Registration.layout", () => {
 
 			const classes = mainWrapper.classes();
 
-			expect(classes).toContain("main-container-small");
+			expect(classes).toContain("main-container-sm");
 		});
 
 		it("should render in a normal wrapper for larger devices ", () => {
@@ -74,7 +74,7 @@ describe("Registration.layout", () => {
 			const mainWrapper = wrapper.findComponent(VMain).findComponent(VContainer);
 
 			expect(mainWrapper.classes()).toContain("main-container");
-			expect(mainWrapper.classes()).not.toContain("main-container-small");
+			expect(mainWrapper.classes()).not.toContain("main-container-sm");
 		});
 	});
 
