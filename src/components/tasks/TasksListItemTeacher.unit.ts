@@ -1,8 +1,6 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
-import TasksModule from "@/store/tasks";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
@@ -14,9 +12,6 @@ import { VListItem } from "vuetify/components";
 
 const { tasksTeacher, drafts, plannedTask, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
 
-let tasksModuleMock: TasksModule;
-let copyModuleMock: CopyModule;
-
 const mockRouter = {
 	push: vi.fn(),
 };
@@ -25,10 +20,6 @@ const getWrapper = (props: { task: object }) =>
 	mount(TasksListItemTeacher, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				// tasksModule: tasksModuleMock,
-				// [COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-			},
 			stubs: {
 				TasksListItemMenu: true,
 			},
@@ -54,11 +45,6 @@ describe("TasksListItemTeacher", () => {
 	};
 
 	defineWindowWidth(1264);
-
-	beforeEach(() => {
-		tasksModuleMock = createModuleMocks(TasksModule);
-		copyModuleMock = createModuleMocks(CopyModule);
-	});
 
 	it("accepts valid task props", () => {
 		const { validator } = TasksListItemTeacher.props.task;
