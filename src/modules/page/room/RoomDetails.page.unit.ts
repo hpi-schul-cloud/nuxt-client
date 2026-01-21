@@ -9,13 +9,13 @@ import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/facto
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomAuthorization, useRoomDetailsStore } from "@data-room";
-import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { SelectBoardLayoutDialog } from "@feature-board";
+import { LeaveRoomProhibitedDialog, RoomContentGrid, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
-import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";

@@ -41,10 +41,10 @@ import {
 	useSharedEditMode,
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
+import { SelectBoardLayoutDialog } from "@feature-board";
 import { AddCollaboraFileDialog } from "@feature-collabora";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

@@ -1,4 +1,4 @@
-import { LeaveRoomProhibitedDialog } from "./LeaveRoomProhibitedDialog.vue";
+import LeaveRoomProhibitedDialog from "./LeaveRoomProhibitedDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
