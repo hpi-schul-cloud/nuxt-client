@@ -1,6 +1,6 @@
 <template>
 	<VBtn
-		:data-testid="`${identifier}-cancel`"
+		:data-testid="testId"
 		:disabled="disabled"
 		variant="text"
 		:text="t('common.actions.cancel')"
@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps({
@@ -21,4 +22,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+
+const attrs = useAttrs();
+const testId = attrs["data-testid"] ?? "dialog-cancel";
 </script>

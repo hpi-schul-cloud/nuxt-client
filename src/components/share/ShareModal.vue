@@ -62,12 +62,8 @@
 		</template>
 		<template #actions>
 			<template v-if="step === 'firstStep'">
-				<VBtn data-testid="share-dialog-cancel" variant="text" @click="onCloseDialog">
-					{{ t("common.actions.cancel") }}
-				</VBtn>
-				<VBtn data-testid="share-dialog-next" class="px-6" color="primary" variant="flat" @click="onNext">
-					{{ t("common.actions.continue") }}
-				</VBtn>
+				<DialogBtnCancel data-testid="share-dialog-cancel" @click="onCloseDialog" />
+				<DialogBtnConfirm data-testid="share-dialog-next" text-lang-key="common.actions.continue" @click="onNext" />
 			</template>
 			<template v-else>
 				<DialogBtnClose data-testid="share-dialog-close" @click="onCloseDialog" />
@@ -84,7 +80,7 @@ import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog, DialogBtnClose } from "@ui-dialog";
+import { Dialog, DialogBtnCancel, DialogBtnClose, DialogBtnConfirm } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

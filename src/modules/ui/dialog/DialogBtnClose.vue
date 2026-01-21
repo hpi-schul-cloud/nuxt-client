@@ -8,7 +8,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const attrs = useAttrs();
-const testId = attrs["data-testid"] ?? "dialog-btn-close";
+const testId = attrs["data-testid"] ?? "dialog-close";
 
 const emit = defineEmits<{
 	(e: "click"): void;

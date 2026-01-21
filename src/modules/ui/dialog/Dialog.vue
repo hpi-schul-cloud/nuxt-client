@@ -23,7 +23,7 @@
 							<DialogBtnCancel :identifier="identifier" :disabled="areActionsDisabled" @click="onCancel" />
 							<DialogBtnConfirm
 								:identifier="identifier"
-								:text="t(confirmBtnLangKey)"
+								:text-lang-key="confirmBtnLangKey"
 								:disabled="areActionsDisabled || confirmBtnDisabled"
 								@click="onConfirm"
 							/>

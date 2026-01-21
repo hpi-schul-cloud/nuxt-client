@@ -6,7 +6,7 @@
 		data-testid="element-type-selection"
 	>
 		<template #content>
-			<div class="d-flex flex-row flex-wrap align-center">
+			<div class="d-flex flex-row flex-wrap align-center justify-space-between">
 				<ExtendedIconBtn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
