@@ -20,20 +20,11 @@
 					<VSpacer />
 					<div class="d-flex ga-2">
 						<slot name="actions">
-							<VBtn
-								:data-testid="`${identifier}-cancel`"
-								:disabled="areActionsDisabled"
-								variant="text"
-								:text="t('common.actions.cancel')"
-								@click="onCancel"
-							/>
-							<VBtn
-								:data-testid="`${identifier}-confirm`"
-								class="px-6"
-								color="primary"
-								variant="flat"
+							<DialogBtnCancel :identifier="identifier" :disabled="areActionsDisabled" @click="onCancel" />
+							<DialogBtnConfirm
+								:identifier="identifier"
 								:text="t(confirmBtnLangKey)"
-								:disabled="confirmBtnDisabled || areActionsDisabled"
+								:disabled="areActionsDisabled || confirmBtnDisabled"
 								@click="onConfirm"
 							/>
 						</slot>
@@ -45,11 +36,13 @@
 </template>
 
 <script setup lang="ts">
+import DialogBtnCancel from "./DialogBtnCancel.vue";
+import DialogBtnConfirm from "./DialogBtnConfirm.vue";
 import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
-import { VBtn, VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
+import { VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 defineProps({
 	identifier: { type: String, default: "dialog" },

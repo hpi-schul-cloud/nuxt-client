@@ -18,7 +18,7 @@
 				@click="downloadTerms"
 			>
 				<template #prepend>
-					<v-icon>$file_pdf_outline</v-icon>
+					<v-icon :icon="mdiFilePdfBox" />
 				</template>
 				<v-list-item-title class="text-body-1 mb-2">
 					{{ t("pages.administration.school.index.termsOfUse.fileName") }}
@@ -80,7 +80,7 @@ import { School } from "@/store/types/schools";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
-import { mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, ref, watch } from "vue";

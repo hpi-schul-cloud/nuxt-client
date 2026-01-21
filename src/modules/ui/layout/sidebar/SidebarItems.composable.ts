@@ -12,6 +12,7 @@ import {
 	mdiFolderOpenOutline,
 	mdiFormatListChecks,
 	mdiHelpCircleOutline,
+	mdiLibraryOutline,
 	mdiNewspaperVariantOutline,
 	mdiPuzzleOutline,
 	mdiSchoolOutline,
@@ -100,7 +101,7 @@ export const useSidebarItems = () => {
 		{
 			title: "common.words.lernstore",
 			to: "/content",
-			icon: "$lernstore_outline",
+			icon: mdiLibraryOutline,
 			permissions: [Permission.LernstoreView],
 			testId: "sidebar-learningstore",
 		},
