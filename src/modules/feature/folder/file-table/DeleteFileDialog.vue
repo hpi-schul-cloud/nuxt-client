@@ -2,7 +2,7 @@
 	<Dialog
 		v-model="isDialogOpen"
 		:title="deleteMessage"
-		identifier="delete-file-dialog"
+		data-testid="delete-file-dialog"
 		@confirm="() => emit('confirm')"
 		@cancel="() => emit('cancel')"
 	/>

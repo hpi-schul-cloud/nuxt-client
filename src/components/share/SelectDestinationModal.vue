@@ -2,7 +2,7 @@
 	<Dialog
 		:model-value="isOpen"
 		:title="t(`components.molecules.import.${parentType}.options.title`)"
-		identifier="select-destination-modal"
+		data-testid="select-destination-modal"
 		:confirm-btn-lang-key="t('common.actions.continue')"
 		@confirm="onNext"
 		@cancel="onCancel"

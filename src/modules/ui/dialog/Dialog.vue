@@ -1,7 +1,7 @@
 <template>
 	<VDialog
 		v-model="isOpen"
-		:data-testid="attrs['data-testid'] ?? identifier"
+		:data-testid="testId"
 		:max-width="480"
 		:aria-labelledby="`dialog-${uid}-title`"
 		@after-leave="() => emit('after-leave')"
@@ -9,7 +9,7 @@
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
 				<template v-if="title" #title>
-					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${identifier}-title`">
+					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
 						{{ title }}
 					</h2>
 				</template>
@@ -20,9 +20,9 @@
 					<VSpacer />
 					<div class="d-flex ga-2">
 						<slot name="actions">
-							<DialogBtnCancel :identifier="identifier" :disabled="areActionsDisabled" @click="onCancel" />
+							<DialogBtnCancel :data-testid="`${testId}-cancel`" :disabled="areActionsDisabled" @click="onCancel" />
 							<DialogBtnConfirm
-								:identifier="identifier"
+								:data-testid="`${testId}-confirm`"
 								:text-lang-key="confirmBtnLangKey"
 								:disabled="areActionsDisabled || confirmBtnDisabled"
 								@click="onConfirm"
@@ -41,11 +41,9 @@ import DialogBtnConfirm from "./DialogBtnConfirm.vue";
 import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { useAttrs } from "vue";
-import { useI18n } from "vue-i18n";
 import { VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
 
 defineProps({
-	identifier: { type: String, default: "dialog" },
 	title: { type: String, default: undefined },
 	isLoading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },
@@ -61,9 +59,10 @@ const isOpen = defineModel({
 	default: false,
 });
 
-const { t } = useI18n();
 const { uid } = useUid();
 const attrs = useAttrs();
+
+const testId = attrs["data-testid"] ?? "dialog";
 
 const onCancel = () => {
 	isOpen.value = false;

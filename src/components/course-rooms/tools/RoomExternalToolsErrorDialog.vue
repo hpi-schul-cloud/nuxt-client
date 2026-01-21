@@ -3,7 +3,7 @@
 		v-if="selectedItem.status"
 		:model-value="isOpen"
 		:title="t(getTitle, { toolName: selectedItem.name })"
-		identifier="error-dialog"
+		data-testid="error-dialog"
 	>
 		<template #content>
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>

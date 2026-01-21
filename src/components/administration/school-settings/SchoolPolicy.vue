@@ -56,7 +56,7 @@
 					</v-list-item-action>
 				</template>
 			</v-list-item>
-			<school-policy-form-dialog
+			<SchoolPolicyFormDialog
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolPolicyFormDialogOpen"
 				data-testid="form-dialog"

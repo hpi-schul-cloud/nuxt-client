@@ -5,7 +5,7 @@
 		:title="t('components.molecules.import.card.options.title')"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
-		identifier="import-card-dialog"
+		data-testid="import-card-dialog"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>

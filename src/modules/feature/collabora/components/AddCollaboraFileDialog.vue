@@ -4,7 +4,7 @@
 		:title="t('feature.collabora.add-collabora-file-dialog.title')"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
-		identifier="collabora-file-dialog"
+		data-testid="collabora-file-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 		@after-leave="resetForm"

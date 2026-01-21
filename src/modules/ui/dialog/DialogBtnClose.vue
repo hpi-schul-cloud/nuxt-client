@@ -5,12 +5,13 @@
 <script setup lang="ts">
 import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
-const { t } = useI18n();
-
-const attrs = useAttrs();
-const testId = attrs["data-testid"] ?? "dialog-close";
 
 const emit = defineEmits<{
 	(e: "click"): void;
 }>();
+
+const { t } = useI18n();
+
+const attrs = useAttrs();
+const testId = attrs["data-testid"] ?? "dialog-close";
 </script>

@@ -4,7 +4,7 @@
 		:title="t(`components.molecules.import.${parentType}.options.title`)"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!isTitleValid"
-		identifier="import-modal"
+		data-testid="import-modal"
 		@confirm="onConfirm"
 		@cancel="onCancel"
 	>

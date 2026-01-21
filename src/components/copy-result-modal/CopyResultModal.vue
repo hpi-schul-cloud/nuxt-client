@@ -1,5 +1,5 @@
 <template>
-	<Dialog :model-value="isOpen" :title="$t('components.molecules.copyResult.title.partial')" identifier="copy-dialog">
+	<Dialog :model-value="isOpen" :title="$t('components.molecules.copyResult.title.partial')" data-testid="copy-dialog">
 		<template #content>
 			<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
 				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}

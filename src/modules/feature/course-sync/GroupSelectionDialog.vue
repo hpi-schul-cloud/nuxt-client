@@ -4,7 +4,7 @@
 		:title="$t('feature-course-sync.GroupSelectionDialog.title')"
 		:confirm-btn-lang-key="'common.actions.continue'"
 		:confirm-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"
-		identifier="group-selection-dialog"
+		data-testid="group-selection-dialog"
 		@confirm="onConfirm"
 		@cancel="$emit('cancel')"
 	>

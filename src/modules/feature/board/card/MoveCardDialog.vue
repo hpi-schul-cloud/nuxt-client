@@ -6,7 +6,7 @@
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
 		:is-loading="isMoving"
-		identifier="move-card-dialog"
+		data-testid="move-card-dialog"
 		@confirm="onConfirm"
 		@cancel="isDialogOpen = false"
 	>

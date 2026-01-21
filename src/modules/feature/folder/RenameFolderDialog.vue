@@ -3,7 +3,7 @@
 		v-model="isDialogOpen"
 		:title="t('pages.folder.ariaLabels.menu.action.edit')"
 		:confirm-btn-disabled="!isNameValid"
-		identifier="rename-folder-dialog"
+		data-testid="rename-folder-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 	>

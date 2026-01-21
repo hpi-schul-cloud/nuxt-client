@@ -1,5 +1,5 @@
 <template>
-	<Dialog :model-value="isOpen" :title="modalTitle" identifier="share-dialog">
+	<Dialog :model-value="isOpen" :title="modalTitle" data-testid="share-dialog">
 		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
