@@ -5,7 +5,9 @@
 		class="mb-4"
 		data-testid="board-hp5-element"
 		variant="outlined"
+		:aria-label="ariaLabel"
 		:ripple="false"
+		:role="isEditMode ? undefined : 'button'"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@keyup.enter.space="onClickElement"
@@ -18,6 +20,7 @@
 					:src="H5PImage"
 					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
 					:cover="isSmallOrLargerListBoard"
+					alt=""
 				/>
 			</template>
 			<template #title>
@@ -165,6 +168,13 @@ const fetchAndSetContentTitle = async (h5pElement: H5pElementResponse) => {
 		contentTitle.value = decodedTitle;
 	}
 };
+
+const ariaLabel = computed(() => {
+	const title = hasLinkedContent.value
+		? `${t("components.cardElement.h5pElement")} ${contentTitle.value}`
+		: t("components.cardElement.h5pElement.create");
+	return `${title}, ${t("common.ariaLabel.newTab")}`;
+});
 
 onMounted(async () => {
 	await fetchAndSetContentTitle(element.value);
