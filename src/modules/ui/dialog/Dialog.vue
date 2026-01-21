@@ -8,15 +8,17 @@
 	>
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
-				<template v-if="title" #title>
-					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
-						{{ title }}
-					</h2>
-				</template>
-				<template #text>
+				<VCardItem class="py-4 px-6">
+					<VCardTitle v-if="title">
+						<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
+							{{ title }}
+						</h2>
+					</VCardTitle>
+				</VCardItem>
+				<VCardText class="pa-6 pt-4">
 					<slot name="content" />
-				</template>
-				<template v-if="!noActions" #actions>
+				</VCardText>
+				<VCardActions v-if="!noActions" class="pa-6 pt-2">
 					<VSpacer />
 					<div class="d-flex ga-2">
 						<slot name="actions">
@@ -29,7 +31,7 @@
 							/>
 						</slot>
 					</div>
-				</template>
+				</VCardActions>
 			</VCard>
 		</UseFocusTrap>
 	</VDialog>
@@ -80,17 +82,5 @@ const onConfirm = () => {
 	white-space: normal;
 	hyphens: none;
 	word-break: break-word;
-}
-
-.v-card :deep(.v-card-item) {
-	padding: 16px 24px;
-}
-
-.v-card :deep(.v-card-text) {
-	padding: 16px 24px 24px 24px;
-}
-
-.v-card :deep(.v-card-actions) {
-	padding: 8px 24px 24px 24px;
 }
 </style>
