@@ -1,7 +1,6 @@
 import { inputDateFormat } from "@/plugins/datetime";
 import { $axios } from "@/utils/api";
-import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 
 const words = [
 	"auto",
@@ -57,19 +56,12 @@ export interface Student {
 	};
 }
 
-export interface BulkConsentState {
-	selectedStudents: string[];
-	registeredStudents: string[];
-	selectedStudentsData: Student[];
-	registerError: Record<string, unknown>;
-}
-
-export const useBulkConsentStore = defineStore("bulkConsent", () => {
-	// State
+export const useBulkConsent = () => {
+	// State as refs
 	const selectedStudents = ref<string[]>([]);
 	const registeredStudents = ref<string[]>([]);
 	const selectedStudentsData = ref<Student[]>([]);
-	const registerError = reactive<Record<string, unknown>>({});
+	const registerError = ref<Record<string, unknown>>({});
 
 	// Actions
 	const register = async (payload: Student[] | Student) => {
@@ -92,12 +84,12 @@ export const useBulkConsentStore = defineStore("bulkConsent", () => {
 			}
 
 			if (errors.length > 0) {
-				Object.assign(registerError, { promiseErrors: errors });
+				registerError.value = { promiseErrors: errors };
 			}
 
 			registeredStudents.value = registered;
 		} else {
-			Object.assign(registerError, { mapError: true });
+			registerError.value = { mapError: true };
 		}
 	};
 
@@ -148,15 +140,19 @@ export const useBulkConsentStore = defineStore("bulkConsent", () => {
 	};
 
 	const setRegisterError = (payload: Record<string, unknown>) => {
-		Object.assign(registerError, payload);
+		registerError.value = { ...payload };
 	};
 
-	// Getters
-	const getSelectedStudentsData = () => selectedStudentsData.value;
-	const getSelectedStudents = () => selectedStudents.value;
+	// Reset function to clear all state
+	const reset = () => {
+		selectedStudents.value = [];
+		registeredStudents.value = [];
+		selectedStudentsData.value = [];
+		registerError.value = {};
+	};
 
 	return {
-		// State
+		// State (reactive refs)
 		selectedStudents,
 		registeredStudents,
 		selectedStudentsData,
@@ -169,8 +165,6 @@ export const useBulkConsentStore = defineStore("bulkConsent", () => {
 		setSelectedStudents,
 		setRegisteredStudents,
 		setRegisterError,
-		// Getters
-		getSelectedStudentsData,
-		getSelectedStudents,
+		reset,
 	};
-});
+};

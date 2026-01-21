@@ -243,15 +243,14 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
+import { useBulkConsent } from "@/composables/bulkConsent.composable";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
-import { useBulkConsentStore } from "@/stores/bulkConsent.store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
-import { mapStores } from "pinia";
 
 export default {
 	components: {
@@ -259,6 +258,12 @@ export default {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
+	},
+	setup() {
+		const bulkConsent = useBulkConsent();
+		return {
+			bulkConsent,
+		};
 	},
 	data() {
 		return {
@@ -336,7 +341,6 @@ export default {
 		};
 	},
 	computed: {
-		...mapStores(useBulkConsentStore),
 		breadcrumbs() {
 			return [
 				{
@@ -388,9 +392,9 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 			};
-			await this.bulkConsentStore.findConsentUsers(query);
+			await this.bulkConsent.findConsentUsers(query);
 
-			this.tableData = this.bulkConsentStore.selectedStudentsData;
+			this.tableData = this.bulkConsent.selectedStudentsData;
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
@@ -398,10 +402,10 @@ export default {
 			this.find();
 		},
 		inputDate(student) {
-			this.bulkConsentStore.updateStudent(student);
+			this.bulkConsent.updateStudent(student);
 		},
 		inputPass(student) {
-			this.bulkConsentStore.updateStudent(student);
+			this.bulkConsent.updateStudent(student);
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -443,7 +447,7 @@ export default {
 					}),
 					this
 				);
-				this.bulkConsentStore.register(users);
+				this.bulkConsent.register(users);
 
 				notifySuccess(this.$t("pages.administration.students.consent.steps.register.success"));
 				this.next();
@@ -484,7 +488,7 @@ export default {
 			});
 		},
 		cancel() {
-			this.bulkConsentStore.setSelectedStudents({
+			this.bulkConsent.setSelectedStudents({
 				students: [],
 			});
 			this.$router.push({
