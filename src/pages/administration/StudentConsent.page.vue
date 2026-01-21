@@ -245,11 +245,13 @@ import StepProgress from "@/components/administration/StepProgress.vue";
 import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
+import { useBulkConsentStore } from "@/stores/bulkConsent.store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
+import { mapStores } from "pinia";
 
 export default {
 	components: {
@@ -334,6 +336,7 @@ export default {
 		};
 	},
 	computed: {
+		...mapStores(useBulkConsentStore),
 		breadcrumbs() {
 			return [
 				{
@@ -385,9 +388,9 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 			};
-			await this.$store.dispatch("bulkConsent/findConsentUsers", query);
+			await this.bulkConsentStore.findConsentUsers(query);
 
-			this.tableData = this.$store.getters["bulkConsent/getSelectedStudentsData"];
+			this.tableData = this.bulkConsentStore.selectedStudentsData;
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
@@ -395,10 +398,10 @@ export default {
 			this.find();
 		},
 		inputDate(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
+			this.bulkConsentStore.updateStudent(student);
 		},
 		inputPass(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
+			this.bulkConsentStore.updateStudent(student);
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -440,7 +443,7 @@ export default {
 					}),
 					this
 				);
-				this.$store.dispatch("bulkConsent/register", users);
+				this.bulkConsentStore.register(users);
 
 				notifySuccess(this.$t("pages.administration.students.consent.steps.register.success"));
 				this.next();
@@ -481,7 +484,7 @@ export default {
 			});
 		},
 		cancel() {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
+			this.bulkConsentStore.setSelectedStudents({
 				students: [],
 			});
 			this.$router.push({

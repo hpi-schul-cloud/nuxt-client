@@ -53,27 +53,6 @@ const specificFilesMock = {
 const createMockStore = () => {
 	const storeOptions = {
 		modules: {
-			bulkConsent: {
-				namespaced: true,
-				actions: {
-					register: vi.fn(),
-					updateStudent: vi.fn(),
-					setStudents: vi.fn(),
-					findConsentUsers: vi.fn(),
-				},
-				getters: {
-					getSelectedStudentsData: () => mockData,
-					getSelectedStudents: () => ["60c220e2d03a60006502f272", "60c220f4d03a60006502f500"],
-				},
-
-				mutations: {
-					setSelectedStudents: vi.fn(),
-					setRegisteredStudents: vi.fn(),
-					setStudentsData: vi.fn(),
-					updateStudentData: vi.fn(),
-					setRegisterError: vi.fn(),
-				},
-			},
 			filePaths: {
 				namespaced: true,
 				getters: {
@@ -84,13 +63,23 @@ const createMockStore = () => {
 	};
 
 	const mockStore = createStore(storeOptions);
-	const bulkConsentActionsStubs = storeOptions.modules.bulkConsent.actions;
 
-	return { mockStore, bulkConsentActionsStubs };
+	return { mockStore };
 };
 
 const setup = () => {
-	const { mockStore, bulkConsentActionsStubs } = createMockStore();
+	const { mockStore } = createMockStore();
+
+	// Mock Pinia store
+	const mockBulkConsentStore = {
+		selectedStudentsData: mockData,
+		selectedStudents: ["60c220e2d03a60006502f272", "60c220f4d03a60006502f500"],
+		findConsentUsers: vi.fn(),
+		updateStudent: vi.fn(),
+		register: vi.fn(),
+		setSelectedStudents: vi.fn(),
+	};
+
 	const wrapper = mount(ConsentPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -104,8 +93,11 @@ const setup = () => {
 				"base-modal": BaseModal,
 			},
 		},
+		computed: {
+			bulkConsentStore: () => mockBulkConsentStore,
+		},
 	});
-	return { wrapper, bulkConsentActionsStubs };
+	return { wrapper, mockBulkConsentStore };
 };
 
 describe("students/consent", () => {
@@ -122,9 +114,9 @@ describe("students/consent", () => {
 	});
 
 	it("should dispatch the users findConsentUsers action on load", () => {
-		const { bulkConsentActionsStubs } = setup();
+		const { mockBulkConsentStore } = setup();
 
-		expect(bulkConsentActionsStubs.findConsentUsers).toHaveBeenCalled();
+		expect(mockBulkConsentStore.findConsentUsers).toHaveBeenCalled();
 	});
 
 	it("should display StepProgress component", () => {
@@ -154,7 +146,7 @@ describe("students/consent", () => {
 	});
 
 	it("should call inputPass method when password input element's value change", async () => {
-		const { wrapper, bulkConsentActionsStubs } = setup();
+		const { wrapper, mockBulkConsentStore } = setup();
 
 		await nextTick();
 		await nextTick();
@@ -163,11 +155,11 @@ describe("students/consent", () => {
 		await input.trigger("change");
 
 		expect(input.exists()).toBe(true);
-		expect(bulkConsentActionsStubs.updateStudent).toHaveBeenCalled();
+		expect(mockBulkConsentStore.updateStudent).toHaveBeenCalled();
 	});
 
 	it("should call inputDate method when birthday input element's value change", async () => {
-		const { wrapper, bulkConsentActionsStubs } = setup();
+		const { wrapper, mockBulkConsentStore } = setup();
 
 		await nextTick();
 		await nextTick();
@@ -176,7 +168,7 @@ describe("students/consent", () => {
 		await input.trigger("change");
 
 		expect(input.exists()).toBe(true);
-		expect(bulkConsentActionsStubs.updateStudent).toHaveBeenCalled();
+		expect(mockBulkConsentStore.updateStudent).toHaveBeenCalled();
 	});
 
 	it("should appear the validation error if birthdayWarning is set to true", async () => {

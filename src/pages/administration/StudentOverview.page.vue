@@ -111,6 +111,7 @@ import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
+import { useBulkConsentStore } from "@/stores/bulkConsent.store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -130,6 +131,7 @@ import {
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
+import { mapStores } from "pinia";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";
 
@@ -245,6 +247,7 @@ export default {
 		};
 	},
 	computed: {
+		...mapStores(useBulkConsentStore),
 		...mapGetters("users", {
 			students: "getList",
 			pagination: "getPagination",
@@ -467,7 +470,7 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
+			this.bulkConsentStore.setSelectedStudents({
 				students: this.tableSelection,
 				selectionType: selectionType,
 			});
