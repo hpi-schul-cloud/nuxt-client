@@ -9,16 +9,14 @@
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
 		<template #actions>
-			<VBtn data-testid="error-dialog-close-btn" variant="outlined" @click="onClose">
-				{{ t("common.labels.close") }}
-			</VBtn>
+			<DialogBtnClose data-testid="error-dialog-close-btn" @click="onClose" />
 		</template>
 	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { ExternalToolDisplayData, useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { Dialog } from "@ui-dialog";
+import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { computed, ComputedRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 

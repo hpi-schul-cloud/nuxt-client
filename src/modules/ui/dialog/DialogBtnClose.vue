@@ -1,19 +1,14 @@
 <template>
-	<VBtn
-		:data-testid="`${identifier}-close`"
-		variant="outlined"
-		:text="t('common.labels.close')"
-		@click="emit('click')"
-	/>
+	<VBtn :data-testid="testId" variant="outlined" :text="t('common.labels.close')" @click="emit('click')" />
 </template>
 
 <script setup lang="ts">
+import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
-defineProps({
-	identifier: { type: String, default: "dialog" },
-});
+const attrs = useAttrs();
+const testId = attrs["data-testid"] ?? "dialog-btn-close";
 
 const emit = defineEmits<{
 	(e: "click"): void;

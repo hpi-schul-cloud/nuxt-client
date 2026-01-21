@@ -70,9 +70,7 @@
 				</VBtn>
 			</template>
 			<template v-else>
-				<VBtn data-testid="share-dialog-close" variant="outlined" @click="onCloseDialog">
-					{{ t("common.labels.close") }}
-				</VBtn>
+				<DialogBtnClose data-testid="share-dialog-close" @click="onCloseDialog" />
 			</template>
 		</template>
 	</Dialog>
@@ -86,7 +84,7 @@ import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

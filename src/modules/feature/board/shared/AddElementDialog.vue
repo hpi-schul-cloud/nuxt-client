@@ -18,16 +18,14 @@
 			</div>
 		</template>
 		<template #actions>
-			<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
-				{{ t("common.actions.cancel") }}
-			</VBtn>
+			<DialogBtnClose data-testid="dialog-close" variant="outlined" @click.stop="closeDialog" />
 		</template>
 	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { Dialog } from "@ui-dialog";
+import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { useI18n } from "vue-i18n";
 

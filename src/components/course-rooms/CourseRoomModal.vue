@@ -26,12 +26,7 @@
 			/>
 		</template>
 		<template #actions>
-			<VBtn
-				data-testid="room-modal-close-btn"
-				variant="outlined"
-				:text="$t('common.labels.close')"
-				@click="emit('update:isOpen', false)"
-			/>
+			<DialogBtnClose data-testid="room-modal-close-btn" @click="emit('update:isOpen', false)" />
 		</template>
 	</Dialog>
 </template>
@@ -39,7 +34,7 @@
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import { courseRoomListModule } from "@/store";
-import { Dialog } from "@ui-dialog";
+import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";
 

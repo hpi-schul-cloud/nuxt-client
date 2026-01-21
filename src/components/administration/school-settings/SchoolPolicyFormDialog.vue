@@ -10,9 +10,7 @@
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
 				<WarningAlert type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="alert-text">
-						{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
-					</div>
+					{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
 				</WarningAlert>
 				<v-file-input
 					ref="input-file"
@@ -119,12 +117,7 @@ const submit = async () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
+<style scoped>
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;
