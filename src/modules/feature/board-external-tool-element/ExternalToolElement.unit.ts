@@ -964,6 +964,40 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
+	describe("role attribute", () => {
+		const setup = (isEditMode: boolean) => {
+			const { wrapper } = getWrapper({
+				element: externalToolElementResponseFactory.build({
+					content: { contextExternalToolId: null },
+				}),
+				isEditMode,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should have role link in view mode", () => {
+			const { wrapper } = setup(false);
+
+			const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+			expect(element.attributes("role")).toEqual("link");
+		});
+
+		it("should not have role link in edit mode", () => {
+			// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+			// because of nested interactive elements
+			const { wrapper } = setup(true);
+
+			const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+			expect(element.attributes("role")).not.toEqual("link");
+			expect(element.attributes("role")).toBeUndefined();
+		});
+	});
+
 	describe("Aria label", () => {
 		describe("when no tool is selected", () => {
 			const setup = () => {

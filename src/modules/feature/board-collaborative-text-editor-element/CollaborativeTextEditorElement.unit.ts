@@ -109,6 +109,16 @@ describe("CollaborativeTextEditorElement", () => {
 			expect(boardMenu.exists()).toBe(false);
 		});
 
+		it("should have role link", () => {
+			const { wrapper } = setup({
+				isEditMode: false,
+			});
+
+			const elementCard = wrapper.findComponent(VCard);
+
+			expect(elementCard.attributes("role")).toEqual("link");
+		});
+
 		it("should have the correct aria-label", () => {
 			const { wrapper } = setup({
 				isEditMode: false,
@@ -228,6 +238,19 @@ describe("CollaborativeTextEditorElement", () => {
 	});
 
 	describe("when component is in edit-mode", () => {
+		it("should not have role link", () => {
+			// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+			// because of nested interactive elements
+			const { wrapper } = setup({
+				isEditMode: true,
+			});
+
+			const elementCard = wrapper.findComponent(VCard);
+
+			expect(elementCard.attributes("role")).not.toEqual("link");
+			expect(elementCard.attributes("role")).toBeUndefined();
+		});
+
 		describe("when element is focused", () => {
 			it.each(["up", "down"])("should emit 'move-keyboard:edit' when arrow key %s is pressed", async (key) => {
 				const { wrapper } = setup({
