@@ -158,7 +158,7 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
-	} else if (props.isEditMode) {
+	} else if (props.isEditMode && !isCreating.value) {
 		window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 	}
 };
