@@ -12,13 +12,13 @@
 	>
 		<ContentElementBar :has-grey-background="true" :icon="mdiFolderOpenOutline" @click="onTitleClick">
 			<template #title>
-				<button
+				<RouterLink
 					class="folder-title"
 					:aria-label="t('components.cardElement.folderElement') + ' ' + elementTitle"
-					@keydown.enter.space.stop="onTitleClick"
+					:to="folderRoute"
 				>
 					{{ elementTitle }}
-				</button>
+				</RouterLink>
 			</template>
 			<template v-if="isEditMode" #menu>
 				<BoardMenu
@@ -75,7 +75,7 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import dayjs from "dayjs";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 interface FolderContentElementProps {
 	element: FileFolderElement;
@@ -160,24 +160,16 @@ const onDownload = async () => {
 const isDownloadAllowed = computed(() => (fileStatistics.value?.fileCount ?? 0) > 0);
 
 const router = useRouter();
-const onTitleClick = () => {
-	const folderRoute = `/folder/${element.value.id}`;
-
-	router.push(folderRoute);
-};
+const folderRoute = computed(() => `/folder/${element.value.id}`);
+const onTitleClick = () => router.push(folderRoute.value);
 </script>
 
 <style scoped lang="scss">
 .download-button {
 	padding-right: 10px;
 }
-.folder-title {
-	&:hover {
-		text-decoration: underline;
-	}
-	&:focus {
-		outline: 2px solid -webkit-focus-ring-color;
-		outline-offset: -1px;
-	}
+.folder-title:focus {
+	outline: 2px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
 }
 </style>
