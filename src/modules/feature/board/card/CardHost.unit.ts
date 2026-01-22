@@ -27,7 +27,7 @@ import {
 	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
-import { useShareBoardLink, useSharedLastCreatedElement } from "@util-board";
+import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
 
@@ -36,6 +36,7 @@ vi.mock("vue-router");
 vi.mock("@util-board");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 const mockedUseShareBoardLink = vi.mocked(useShareBoardLink);
+const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -56,6 +57,7 @@ describe("CardHost", () => {
 	let mockedBoardPermissions: BoardPermissionChecks;
 	let mockedSharedLastCreatedElementCalls: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
+	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
 
 	beforeEach(() => {
 		mockedUseSharedEditMode.mockReturnValue({
@@ -100,6 +102,13 @@ describe("CardHost", () => {
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
 		mockedSharedLastCreatedElementCalls = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
 		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementCalls);
+
+		mockedUseSharedFileSelectActions = createMock<ReturnType<typeof useSharedFileSelect>>({
+			isFileSelectOnMountEnabled: ref(true),
+			resetFileSelectOnMountEnabled: vi.fn(),
+			disableFileSelectOnMount: vi.fn(),
+		});
+		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
 	});
 
 	afterEach(() => {
