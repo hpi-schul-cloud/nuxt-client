@@ -2,12 +2,13 @@
 	<v-card
 		ref="linkContentElement"
 		class="mb-4"
-		:target="target"
 		data-testid="board-link-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: target, rel: 'noopener noreferrer' }"
+		@keydown.enter.space="onClick"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onClick"
@@ -157,8 +158,8 @@ const { focusNodeFromHash } = useElementFocus();
 const onClick = () => {
 	if (sanitizedUrl.value === window.location.href) {
 		focusNodeFromHash();
-	} else {
-		window.open(sanitizedUrl.value, "_blank", "noopener,noreferrer");
+	} else if (props.isEditMode) {
+		window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 	}
 };
 </script>
