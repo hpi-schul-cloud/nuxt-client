@@ -6,7 +6,7 @@
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		variant="outlined"
 		:ripple="false"
-		:role="isEditMode ? undefined : 'button'"
+		:role="isEditMode ? undefined : 'link'"
 		:loading="isLoading"
 		:aria-label="ariaLabel"
 		@keyup.enter="onClickElement"

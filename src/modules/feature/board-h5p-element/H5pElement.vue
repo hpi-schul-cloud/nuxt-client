@@ -7,7 +7,7 @@
 		variant="outlined"
 		:aria-label="ariaLabel"
 		:ripple="false"
-		:role="isEditMode ? undefined : 'button'"
+		:role="isEditMode ? undefined : 'link'"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@keyup.enter.space="onClickElement"

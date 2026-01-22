@@ -6,7 +6,7 @@
 		variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		:role="isEditMode ? undefined : 'button'"
+		:role="isEditMode ? undefined : 'link'"
 		@keydown.up.down="onKeydownArrow"
 		@click="redirectToEditorUrl"
 		@keydown.enter.space="redirectToEditorUrl"
