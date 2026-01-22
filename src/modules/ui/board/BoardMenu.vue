@@ -12,6 +12,7 @@
 				size="36"
 				@click.stop.prevent="() => {}"
 				@dblclick.stop.prevent="() => {}"
+				@keyup.enter.space.stop
 				@keydown.enter.space.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
