@@ -15,6 +15,17 @@
 					"withInterfaces": true
 				}
 			},
+			"fwu-api": {
+				"generatorName": "typescript-axios",
+				"inputSpec": "http://localhost:4446/api/v3/docs-json/",
+				"output": "./src/generated/fwu-api/v3",
+				"skipValidateSpec": true,
+				"enablePostProcessFile": true,
+				"additionalProperties": {
+					"supportsES6": true,
+					"withInterfaces": true
+				}
+			},
 			"common-cartridge-api": {
 				"generatorName": "typescript-axios",
 				"inputSpec": "http://localhost:3350/api/v3/docs-json/",
