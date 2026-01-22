@@ -15,7 +15,7 @@
 				@update:model-value="updateMediaBoardLayout"
 			>
 				<VBtn
-					icon="$shelfOutline"
+					icon="$gridRowOutline"
 					size="x-small"
 					width="48px"
 					:value="BoardLayout.List"
