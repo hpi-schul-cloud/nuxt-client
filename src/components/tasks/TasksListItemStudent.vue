@@ -56,6 +56,7 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime.js";
+import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
 import { vOnClickOutside } from "@vueuse/components";
 
@@ -114,8 +115,8 @@ export default {
 			const stateIcons = {
 				warning: "$taskOpenFilled",
 				overdue: "$taskMissed",
-				submitted: "$taskDone",
-				graded: "$taskDoneFilled",
+				submitted: mdiCheckCircleOutline,
+				graded: mdiCheckCircleOutline,
 				gradedOverdue: "$taskMissedFilled",
 				open: "$taskOpenFilled",
 			};

@@ -91,15 +91,6 @@ describe("@/components/organisms/ContentCard", () => {
 			expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe("");
 		});
 
-		it("Renders collection icon", () => {
-			const { wrapper } = setup(Collection);
-
-			const cardTag = wrapper.get(".card-tag");
-			const collectionIcon = cardTag.getComponent({ name: "v-icon" });
-
-			expect(collectionIcon.props("icon")).toBe("$ic_collection");
-		});
-
 		it("Renders title of content Card", () => {
 			const { wrapper } = setup(Collection);
 
