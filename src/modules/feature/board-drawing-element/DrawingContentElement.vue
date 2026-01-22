@@ -6,7 +6,8 @@
 		variant="outlined"
 		:ripple="false"
 		:aria-label="ariaLabel"
-		@click="redirectToSanitizedUrl"
+		v-bind="isEditMode ? {} : { href: sanitizedUrl, target: '_blank', rel: 'noopener noreferrer' }"
+		v-on="isEditMode ? { click: redirectToSanitizedUrl } : {}"
 		@keydown.enter.space="redirectToSanitizedUrl"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
@@ -63,7 +64,7 @@ const element = toRef(props, "element");
 const sanitizedUrl = computed(() => sanitizeUrl(`/tldraw?parentId=${element.value.id}`));
 
 const redirectToSanitizedUrl = () => {
-	window.open(sanitizedUrl.value, "_blank", "noopener,noreferrer");
+	window.open(sanitizedUrl.value, "_blank", "noopener noreferrer");
 };
 
 useBoardFocusHandler(element.value.id, drawingElement);
