@@ -31,7 +31,7 @@
 						hover
 						class="fwu-card"
 					>
-						<VImg :src="item.thumbnailUrl" height="200" cover />
+						<VImg :src="item.thumbnailUrl" :alt="item.title" height="200" cover />
 						<VCardTitle class="font-weight-bold text-body-1 text-wrap">
 							{{ item.title }}
 						</VCardTitle>

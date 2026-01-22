@@ -87,7 +87,7 @@ export interface FwuItemResponse {
      * @type {string}
      * @memberof FwuItemResponse
      */
-    thumbnailUrl: string;
+    thumbnailUrl?: string;
     /**
      * 
      * @type {string}
