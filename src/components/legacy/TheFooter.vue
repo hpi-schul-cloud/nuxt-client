@@ -10,7 +10,6 @@
 				:to="link.to"
 				:target="link.target"
 			>
-				<!-- :rel="link.rel" -->
 				{{ link.text }}
 			</VBtn>
 		</template>
