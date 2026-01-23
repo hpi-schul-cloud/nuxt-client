@@ -1,12 +1,13 @@
-import { createProxyMiddleware } from "http-proxy-middleware";
 import {
 	isCommonCartridge,
 	isFileStorage,
+	isFWUEndpoint,
 	isH5pEditor,
 	isH5pStaticFiles,
 	isServer,
 } from "../../src/router/server-route.mjs";
 import { isVueClient } from "../../src/router/vue-client-route.mjs";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const createLegacyClientProxy = () => {
 	const legacyClientProxy = createProxyMiddleware({
@@ -48,6 +49,14 @@ const createH5pEditorProxy = () => {
 	return h5pEditorProxy;
 };
 
+const createFwuEditorProxy = () => {
+	const fwuEditorProxy = createProxyMiddleware({
+		target: "http://localhost:4446",
+		changeOrigin: true,
+	});
+	return fwuEditorProxy;
+};
+
 const createH5pStaticFilesProxy = () => {
 	const h5pStaticFilesProxy = createProxyMiddleware({
 		target: "http://localhost:8080",
@@ -71,6 +80,7 @@ const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
 	const vueClientProxy = createVueClientProxy();
 	const fileStorageProxy = createFileStorageProxy();
 	const h5pEditorProxy = createH5pEditorProxy();
+	const fwuEditorProxy = createFwuEditorProxy();
 	const h5pStaticFilesProxy = createH5pStaticFilesProxy();
 	const commonCartridgeProxy = createCommonCartridgeProxy();
 
@@ -87,6 +97,8 @@ const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
 			h5pStaticFilesProxy(req, res, next);
 		} else if (isH5pEditor(path)) {
 			h5pEditorProxy(req, res, next);
+		} else if (isFWUEndpoint(path)) {
+			fwuEditorProxy(req, res, next);
 		} else if (isCommonCartridge(path)) {
 			commonCartridgeProxy(req, res, next);
 		} else if (isServer(path)) {
