@@ -1,5 +1,5 @@
 <template>
-	<Dialog :model-value="isOpen">
+	<Dialog :model-value="isOpen" title="">
 		<template #content>
 			<div class="pt-2 room-title">
 				<v-text-field

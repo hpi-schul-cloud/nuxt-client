@@ -1,11 +1,11 @@
 <template>
 	<Dialog
 		:model-value="isOpen"
-		:title="t(`components.molecules.import.${parentType}.options.title`)"
+		:title="`components.molecules.import.${parentType}.options.title`"
+		confirm-btn-lang-key="common.actions.continue"
 		data-testid="select-destination-modal"
-		:confirm-btn-lang-key="t('common.actions.continue')"
 		@confirm="onNext"
-		@cancel="onCancel"
+		@cancel="emit('cancel')"
 	>
 		<template #content>
 			<div>
@@ -17,7 +17,7 @@
 						{{ infoText }}
 					</div>
 				</div>
-				<v-select
+				<VSelect
 					v-model="selectedReference"
 					return-object
 					item-value="id"
@@ -95,5 +95,4 @@ const onNext = () => {
 		emit("next", id);
 	}
 };
-const onCancel = () => emit("cancel");
 </script>

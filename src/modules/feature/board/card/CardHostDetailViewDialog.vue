@@ -1,60 +1,57 @@
 <template>
-	<div>
-		<VDialog
-			:model-value="isOpen"
-			:fullscreen="isFullscreen"
-			:scrim="isFullscreen"
-			:width="700"
-			scrollable
-			transition="dialog-bottom-transition"
-			@keydown.escape="onDialogClose"
-		>
-			<v-card>
-				<div class="toolbar-fixed-offset">
-					<v-toolbar class="toolbar-position" color="white">
-						<v-btn icon @click="onDialogClose">
-							<v-icon>{{ mdiClose }}</v-icon>
-						</v-btn>
-						<v-spacer />
-						<v-btn class="mr-4" @click="onToggleFullscreen"> toggle fullscreen (debug) </v-btn>
-						<v-btn class="mr-4" @click="onToggleEdit">
-							{{
-								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
-							}}
-						</v-btn>
+	<!--	Currently not in use. Kept to have a reference implementation of a full screen view of a card. -->
+	<VDialog
+		:model-value="isOpen"
+		:fullscreen="isFullscreen"
+		:scrim="isFullscreen"
+		:width="700"
+		scrollable
+		transition="dialog-bottom-transition"
+		@keydown.escape="onDialogClose"
+	>
+		<v-card>
+			<div class="toolbar-fixed-offset">
+				<v-toolbar class="toolbar-position" color="white">
+					<v-btn icon @click="onDialogClose">
+						<v-icon>{{ mdiClose }}</v-icon>
+					</v-btn>
+					<v-spacer />
+					<v-btn class="mr-4" @click="onToggleFullscreen"> toggle fullscreen (debug) </v-btn>
+					<v-btn class="mr-4" @click="onToggleEdit">
+						{{ isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit") }}
+					</v-btn>
 
-						<v-btn color="primary" @click="onDeleteCard">
-							{{ $t("components.boardCard") }} {{ $t("common.actions.delete") }}
-						</v-btn>
-					</v-toolbar>
+					<v-btn color="primary" @click="onDeleteCard">
+						{{ $t("components.boardCard") }} {{ $t("common.actions.delete") }}
+					</v-btn>
+				</v-toolbar>
+			</div>
+			<v-card-text>
+				<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
+					<CardTitle
+						:is-edit-mode="isEditMode"
+						:value="card.title"
+						scope="card"
+						:is-focused="true"
+						@update:value="onUpdateCardTitle"
+						@enter="onEnterTitle"
+					/>
+					<ContentElementList
+						:elements="card.elements"
+						:is-edit-mode="isEditMode"
+						:is-detail-view="true"
+						:row-index="rowIndex"
+						:column-index="columnIndex"
+						@delete:element="onDeleteElement"
+						@move-down:element="onMoveElementDown"
+						@move-up:element="onMoveElementUp"
+						@move-keyboard:element="onMoveElementKeyboard"
+					/>
+					<CardAddElementMenu @add-element="onAddElement" />
 				</div>
-				<v-card-text>
-					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
-						<CardTitle
-							:is-edit-mode="isEditMode"
-							:value="card.title"
-							scope="card"
-							:is-focused="true"
-							@update:value="onUpdateCardTitle"
-							@enter="onEnterTitle"
-						/>
-						<ContentElementList
-							:elements="card.elements"
-							:is-edit-mode="isEditMode"
-							:is-detail-view="true"
-							:row-index="rowIndex"
-							:column-index="columnIndex"
-							@delete:element="onDeleteElement"
-							@move-down:element="onMoveElementDown"
-							@move-up:element="onMoveElementUp"
-							@move-keyboard:element="onMoveElementKeyboard"
-						/>
-						<CardAddElementMenu @add-element="onAddElement" />
-					</div>
-				</v-card-text>
-			</v-card>
-		</VDialog>
-	</div>
+			</v-card-text>
+		</v-card>
+	</VDialog>
 </template>
 
 <script lang="ts">

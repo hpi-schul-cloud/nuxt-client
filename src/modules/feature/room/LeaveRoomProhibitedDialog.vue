@@ -1,43 +1,23 @@
 <template>
-	<VDialog v-model="isOpen" :width="xs ? 'auto' : 480" data-testid="dialog-leave-room-owner" max-width="480">
-		<UseFocusTrap>
-			<VCard>
-				<template #title>
-					<h2 class="mt-2" data-testid="dialog-title">
-						{{ t("pages.rooms.leaveRoom.menu") }}
-					</h2>
-				</template>
-				<template #text>
-					<WarningAlert class="warning-text">
-						{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
-					</WarningAlert>
-				</template>
-				<template #actions>
-					<VSpacer />
-					<div class="mr-4 mb-3">
-						<VBtn
-							data-testid="dialog-close"
-							class="px-6"
-							variant="outlined"
-							:text="t('common.labels.close')"
-							@click="$emit('update:modelValue', false)"
-						/>
-					</div>
-				</template>
-			</VCard>
-		</UseFocusTrap>
-	</VDialog>
+	<Dialog v-model="isOpen" data-testid="dialog-leave-room-owner" title="pages.rooms.leaveRoom.menu">
+		<template #content>
+			<WarningAlert class="warning-text">
+				{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
+			</WarningAlert>
+		</template>
+		<template #actions>
+			<DialogBtnClose @click="$emit('update:modelValue', false)" />
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { WarningAlert } from "@ui-alert";
-import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
 
 defineEmits(["update:modelValue"]);
 
-const { xs } = useDisplay();
 const { t } = useI18n();
 
 const isOpen = defineModel({

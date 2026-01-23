@@ -106,14 +106,11 @@ const shareUrl = computed(() => shareModule.getShareUrl ?? "");
 
 const shareOptions = ref<ShareOptions>();
 
-const modalTitle = computed(() => {
+const modalTitle = computed((): string => {
 	if (step.value === "firstStep") {
 		return t("components.molecules.share.options.title");
 	}
-	if (step.value === "secondStep") {
-		return t("components.molecules.share.result.title");
-	}
-	return undefined;
+	return t("components.molecules.share.result.title");
 });
 
 const onShareOptionsChange = (newValue: ShareOptions) => {

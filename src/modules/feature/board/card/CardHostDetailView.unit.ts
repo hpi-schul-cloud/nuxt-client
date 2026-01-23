@@ -1,4 +1,4 @@
-import CardHostDetailView from "./CardHostDetailView.vue";
+import CardHostDetailViewDialog from "./CardHostDetailViewDialog.vue";
 import { CardResponse } from "@/serverApi/v3";
 import { defaultPermissions } from "@/types/board/Permissions";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
@@ -14,11 +14,11 @@ const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 vi.mock("@data-board/BoardPermissions.composable");
 const boardPermissions = vi.mocked(useBoardPermissions);
 
-describe("CardHostDetailView", () => {
-	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {
+describe("CardHostDetailViewDialog", () => {
+	const setup = (props: ComponentProps<typeof CardHostDetailViewDialog>) => {
 		boardPermissions.mockReturnValue(defaultPermissions);
 
-		const wrapper = shallowMount(CardHostDetailView, {
+		const wrapper = shallowMount(CardHostDetailViewDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -38,7 +38,7 @@ describe("CardHostDetailView", () => {
 				columnIndex: 0,
 				rowIndex: 1,
 			});
-			expect(wrapper.findComponent(CardHostDetailView).exists()).toBe(true);
+			expect(wrapper.findComponent(CardHostDetailViewDialog).exists()).toBe(true);
 		});
 	});
 });

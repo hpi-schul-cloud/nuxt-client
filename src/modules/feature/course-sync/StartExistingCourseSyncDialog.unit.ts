@@ -72,7 +72,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			const { wrapper } = getWrapper({ isOpen: false });
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof Dialog>({
+			const confirmationDialog = wrapper.findComponent({
 				ref: "start-existing-course-sync-dialog",
 			});
 

@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		v-model="isDialogOpen"
-		:title="t('components.elementTypeSelection.dialog.title')"
+		title="components.elementTypeSelection.dialog.title"
 		:is-loading="isDialogLoading"
 		data-testid="element-type-selection"
 	>
@@ -18,7 +18,7 @@
 			</div>
 		</template>
 		<template #actions>
-			<DialogBtnClose data-testid="dialog-close" variant="outlined" @click.stop="closeDialog" />
+			<DialogBtnClose @click.stop="closeDialog" />
 		</template>
 	</Dialog>
 </template>
@@ -27,9 +27,6 @@
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { Dialog, DialogBtnClose } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { useI18n } from "vue-i18n";
 
 const { isDialogOpen, isDialogLoading, closeDialog, elementTypeOptions } = useSharedElementTypeSelection();
-
-const { t } = useI18n();
 </script>

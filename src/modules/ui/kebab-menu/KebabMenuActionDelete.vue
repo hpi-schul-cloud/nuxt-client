@@ -16,14 +16,10 @@ import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 
-type Props = {
+const props = defineProps<{
 	name?: string | undefined;
 	scopeLanguageKey: keyof MessageSchema;
-};
-
-const props = withDefaults(defineProps<Props>(), {
-	name: undefined,
-});
+}>();
 const emit = defineEmits(["click"]);
 
 const attrs = useAttrs();

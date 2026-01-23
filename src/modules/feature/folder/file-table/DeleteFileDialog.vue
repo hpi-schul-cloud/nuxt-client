@@ -3,8 +3,8 @@
 		v-model="isDialogOpen"
 		:title="deleteMessage"
 		data-testid="delete-file-dialog"
-		@confirm="() => emit('confirm')"
-		@cancel="() => emit('cancel')"
+		@confirm="emit('confirm')"
+		@cancel="emit('cancel')"
 	/>
 </template>
 

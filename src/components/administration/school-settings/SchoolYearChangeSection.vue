@@ -166,7 +166,7 @@ const { t } = useI18n();
 
 const isLoading = ref(false);
 
-const schoolYearMode = computed<string>(() => {
+const schoolYearMode = computed(() => {
 	const currentTime = new Date();
 
 	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE.valueOf();

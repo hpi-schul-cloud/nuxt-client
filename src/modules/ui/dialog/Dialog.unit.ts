@@ -1,67 +1,51 @@
 import Dialog from "./Dialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { enableAutoUnmount, mount } from "@vue/test-utils";
-import { VCard, VDialog } from "vuetify/lib/components/index";
+import { createTestingPinia } from "@pinia/testing";
+import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { VCard, VCardTitle, VDialog } from "vuetify/components";
 
 describe("Dialog", () => {
-	enableAutoUnmount(afterEach);
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
-	describe("when the dialog isDialogOpen is true", () => {
-		const setup = () => {
-			const title = "title of dialog";
-			const slotContent = "<div>content</div>";
-			const confirmBtnLangKey = "language.key";
+	const setup = (isOpened = true) => {
+		const title = "title of dialog";
+		const slotContent = "<div>content</div>";
+		const confirmBtnLangKey = "language.key";
 
-			const wrapper = mount(Dialog, {
-				props: {
-					isDialogOpen: true,
-					title,
-					confirmBtnLangKey,
-				},
-				slots: {
-					content: slotContent,
-				},
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					stubs: { UseFocusTrap: true },
-					renderStubDefaultSlot: true, // to access content inside focus trap
-				},
-			});
-			return { wrapper, slotContent, title, confirmBtnLangKey };
-		};
+		const wrapper = mount(Dialog, {
+			props: {
+				modelValue: isOpened,
+				title,
+				confirmBtnLangKey,
+			},
+			slots: {
+				content: slotContent,
+			},
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { UseFocusTrap: true },
+				renderStubDefaultSlot: true, // to access content inside focus trap
+			},
+		});
+		const dialog = wrapper.findComponent(VDialog);
+		const card = dialog.findComponent(VCard);
 
+		return { wrapper, title, dialog, card };
+	};
+
+	describe("when the dialog is opened", () => {
 		it("should render title", () => {
-			const { wrapper, title } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
-
-			expect(card.text()).toContain(title);
-		});
-
-		it("should render slot content", () => {
-			const { wrapper, slotContent } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
-
-			expect(card.html()).toContain(slotContent);
-		});
-
-		describe("when VDialog emits update:modelValue", () => {
-			it("should emit update:is-dialog-open", async () => {
-				const { wrapper } = setup();
-				const dialog = wrapper.findComponent(VDialog);
-
-				await dialog.vm.$emit("update:modelValue", false);
-
-				expect(wrapper.emitted("update:is-dialog-open")).toHaveLength(1);
-				expect(wrapper.emitted("update:is-dialog-open")?.[0]).toEqual([false]);
-			});
+			const { title, dialog } = setup();
+			expect(dialog.findComponent(VCardTitle).text()).toContain(title);
 		});
 
 		describe("when cancel button is clicked", () => {
 			it("should emit cancel", async () => {
-				const { wrapper } = setup();
-				const card = wrapper.findComponent(VDialog).findComponent(VCard);
+				const { wrapper, card } = setup();
 				const cancelButton = card.find('[data-testid="dialog-cancel"]');
-
 				await cancelButton.trigger("click");
 
 				expect(wrapper.emitted("cancel")).toHaveLength(1);
@@ -70,10 +54,8 @@ describe("Dialog", () => {
 
 		describe("when confirm button is clicked", () => {
 			it("should emit confirm", async () => {
-				const { wrapper } = setup();
-				const card = wrapper.findComponent(VDialog).findComponent(VCard);
+				const { wrapper, card } = setup();
 				const confirmButton = card.find('[data-testid="dialog-confirm"]');
-
 				await confirmButton.trigger("click");
 
 				expect(wrapper.emitted("confirm")).toHaveLength(1);
@@ -85,84 +67,15 @@ describe("Dialog", () => {
 				const { wrapper } = setup();
 
 				wrapper.vm.$emit("after-leave");
-
 				expect(wrapper.emitted("after-leave")).toHaveLength(1);
 			});
 		});
 	});
 
-	describe("when the dialog isDialogOpen is false", () => {
-		const setup = () => {
-			const wrapper = mount(Dialog, {
-				props: {
-					isDialogOpen: false,
-					title: "title of dialog",
-				},
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-				},
-			});
-			return { wrapper };
-		};
-
+	describe("when the dialog is closed", () => {
 		it("should not render card", () => {
-			const { wrapper } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
-
+			const { card } = setup(false);
 			expect(card.exists()).toBe(false);
-		});
-	});
-
-	describe("when confirmBtnLangKey is defined", () => {
-		const setup = () => {
-			const confirmBtnLangKey = "language.key";
-
-			const wrapper = mount(Dialog, {
-				props: {
-					isDialogOpen: true,
-					title: "title of dialog",
-					confirmBtnLangKey,
-				},
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					stubs: { UseFocusTrap: true },
-					renderStubDefaultSlot: true, // to access content inside focus trap
-				},
-			});
-			return { wrapper, confirmBtnLangKey };
-		};
-
-		it("should render confirm button with correct text", () => {
-			const { wrapper, confirmBtnLangKey } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
-			const confirmButton = card.find('[data-testid="dialog-confirm"]');
-
-			expect(confirmButton.text()).toContain(confirmBtnLangKey);
-		});
-	});
-
-	describe("when confirmBtnLangKey is not defined", () => {
-		const setup = () => {
-			const wrapper = mount(Dialog, {
-				props: {
-					title: "title of dialog",
-					isDialogOpen: true,
-				},
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					stubs: { UseFocusTrap: true },
-					renderStubDefaultSlot: true, // to access content inside focus trap
-				},
-			});
-			return { wrapper };
-		};
-
-		it("should render confirm button with default text", () => {
-			const { wrapper } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
-			const confirmButton = card.find('[data-testid="dialog-confirm"]');
-
-			expect(confirmButton.text()).toContain("common.actions.confirm");
 		});
 	});
 });

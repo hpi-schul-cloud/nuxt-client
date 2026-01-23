@@ -2,7 +2,7 @@
 	<Dialog
 		v-model="isDialogOpen"
 		:title
-		:confirm-btn-lang-key
+		:confirm-btn-lang-key="dialogOptions?.confirmActionLangKey"
 		data-testid="confirmation-dialog"
 		@confirm="confirm"
 		@cancel="cancel"
@@ -20,7 +20,5 @@ import { computed } from "vue";
 
 const { confirm, cancel, dialogOptions, isDialogOpen } = useInternalConfirmationDialog();
 
-const title = computed(() => (dialogOptions.value ? dialogOptions.value.message : undefined));
-
-const confirmBtnLangKey = computed(() => dialogOptions.value?.confirmActionLangKey ?? "common.actions.confirm");
+const title = computed(() => (dialogOptions.value ? dialogOptions.value.message : ""));
 </script>

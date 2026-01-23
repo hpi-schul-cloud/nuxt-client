@@ -83,7 +83,7 @@
 		</VCard>
 
 		<!-- Detail View -->
-		<CardHostDetailView
+		<CardHostDetailViewDialog
 			v-if="card"
 			:card="card"
 			:is-open="isDetailView"
@@ -105,7 +105,7 @@
 <script setup lang="ts">
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostDetailView from "./CardHostDetailView.vue";
+import CardHostDetailViewDialog from "./CardHostDetailViewDialog.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";

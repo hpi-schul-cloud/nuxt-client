@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		:model-value="isOpen"
-		:title="t('common.words.termsOfUse')"
+		title="common.words.termsOfUse"
 		confirm-btn-lang-key="pages.administration.school.index.termsOfUse.replace"
 		:confirm-btn-disabled="!isFormValid"
 		@cancel="onCancel"
@@ -42,14 +42,13 @@
 <script setup lang="ts">
 import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
-import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { mdiAlert } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { Dialog } from "@ui-dialog";
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps<{
@@ -64,12 +63,12 @@ const { t } = useI18n();
 const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-const termsForm: Ref<File[]> = ref([]);
-const isFormValid: Ref<boolean> = ref(false);
-const isFormTouched: Ref<boolean> = ref(false);
-const file: Ref<File | null> = ref(null);
+const termsForm = ref<File[]>([]);
+const isFormValid = ref(false);
+const isFormTouched = ref(false);
+const file = ref<File | null>(null);
 
-const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+const school = computed(() => schoolsModule.getSchool);
 
 const maxFileUploadSizeInKb = 4194304;
 const rules = {
@@ -111,7 +110,7 @@ const onConfirm = async () => {
 		emit("close");
 		await termsOfUseModule.createTermsOfUse(newConsentVersion);
 
-		notifySuccess(t("pages.administration.school.index.termsOfUse.success"));
+		notifySuccess("pages.administration.school.index.termsOfUse.success");
 		resetForm();
 	}
 };

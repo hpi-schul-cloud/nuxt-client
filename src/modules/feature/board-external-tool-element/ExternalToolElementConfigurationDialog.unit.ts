@@ -9,6 +9,7 @@ import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
+import { VCardTitle } from "vuetify/components";
 
 vi.mock("@util-board");
 
@@ -64,7 +65,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			const { wrapper } = setup();
 
 			const dialog = wrapper.findComponent(Dialog);
-			const title = dialog.findComponent({ name: "VCardTitle" });
+			const title = dialog.findComponent(VCardTitle);
 
 			expect(title.text()).toEqual("feature-board-external-tool-element.dialog.title");
 		});

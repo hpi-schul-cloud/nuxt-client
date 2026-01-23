@@ -1,8 +1,8 @@
 <template>
 	<Dialog
 		:model-value="isOpen"
-		:title="$t('feature-course-sync.GroupSelectionDialog.title')"
-		:confirm-btn-lang-key="'common.actions.continue'"
+		title="feature-course-sync.GroupSelectionDialog.title"
+		confirm-btn-lang-key="common.actions.continue"
 		:confirm-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"
 		data-testid="group-selection-dialog"
 		@confirm="onConfirm"

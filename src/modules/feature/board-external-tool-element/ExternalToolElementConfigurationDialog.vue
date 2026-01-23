@@ -1,10 +1,5 @@
 <template>
-	<Dialog
-		:model-value="isOpen"
-		:title="t('feature-board-external-tool-element.dialog.title')"
-		no-actions
-		@cancel="onCancel"
-	>
+	<Dialog :model-value="isOpen" title="feature-board-external-tool-element.dialog.title" no-actions>
 		<template #content>
 			<ContextExternalToolConfigurator
 				ref="contextExternalToolConfigurator"

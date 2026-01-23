@@ -4,14 +4,14 @@
 		:data-testid="testId"
 		:max-width="480"
 		:aria-labelledby="`dialog-${uid}-title`"
-		@after-leave="() => emit('after-leave')"
+		@after-leave="emit('after-leave')"
 	>
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
 				<VCardItem class="py-4 px-6">
-					<VCardTitle v-if="title">
+					<VCardTitle v-if="titleString">
 						<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
-							{{ title }}
+							{{ titleString }}
 						</h2>
 					</VCardTitle>
 				</VCardItem>
@@ -40,13 +40,15 @@
 <script setup lang="ts">
 import DialogBtnCancel from "./DialogBtnCancel.vue";
 import DialogBtnConfirm from "./DialogBtnConfirm.vue";
+import { i18nKeyExists } from "@/plugins/i18n";
 import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
-import { useAttrs } from "vue";
-import { VCard, VDialog, VSpacer } from "vuetify/lib/components/index";
+import { computed, useAttrs } from "vue";
+import { useI18n } from "vue-i18n";
+import { VCard, VDialog, VSpacer } from "vuetify/components";
 
-defineProps({
-	title: { type: String, default: undefined },
+const props = defineProps({
+	title: { type: String, required: true }, // Allowing text or i18n key
 	isLoading: { type: Boolean, default: false },
 	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, default: false },
@@ -54,6 +56,7 @@ defineProps({
 	noActions: { type: Boolean, default: false },
 });
 
+const { t } = useI18n();
 const emit = defineEmits(["cancel", "confirm", "after-leave"]);
 
 const isOpen = defineModel({
@@ -65,6 +68,7 @@ const { uid } = useUid();
 const attrs = useAttrs();
 
 const testId = attrs["data-testid"] ?? "dialog";
+const titleString = computed(() => (i18nKeyExists(props.title) ? t(props.title) : props.title));
 
 const onCancel = () => {
 	isOpen.value = false;

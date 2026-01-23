@@ -107,17 +107,11 @@ const prepareRemovalMessage = (linkIds: string[]) =>
 				invitation: invitationTableData.value.find((link) => link.id === linkIds[0])?.title,
 			});
 
-const confirmDeletion = async (linkIds: string[]) => {
+const onDeleteLinks = async (linkIds: string[]) => {
 	const shouldDelete = await askConfirmation({
 		message: prepareRemovalMessage(linkIds),
 		confirmActionLangKey: "common.actions.delete",
 	});
-
-	return shouldDelete;
-};
-
-const onDeleteLinks = async (linkIds: string[]) => {
-	const shouldDelete = await confirmDeletion(linkIds);
 	if (shouldDelete) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
 	}

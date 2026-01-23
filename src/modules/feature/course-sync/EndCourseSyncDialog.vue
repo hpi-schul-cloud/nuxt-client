@@ -2,7 +2,7 @@
 	<Dialog
 		v-model="isOpen"
 		data-testid="end-course-sync-dialog"
-		:title="$t('feature-course-sync.EndCourseSyncDialog.title')"
+		title="feature-course-sync.EndCourseSyncDialog.title"
 		:confirm-btn-disabled="!courseId"
 		@confirm="onConfirm"
 		@cancel="closeDialog"

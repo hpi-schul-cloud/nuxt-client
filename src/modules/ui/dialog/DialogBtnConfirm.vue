@@ -5,8 +5,8 @@
 		color="primary"
 		variant="flat"
 		:text="t(textLangKey)"
-		:disabled="disabled"
-		@click="() => emit('click')"
+		:disabled
+		@click="emit('click')"
 	/>
 </template>
 
@@ -15,7 +15,6 @@ import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps({
-	identifier: { type: String, default: "dialog" },
 	textLangKey: { type: String, default: "common.actions.confirm" },
 	disabled: { type: Boolean, default: false },
 });
