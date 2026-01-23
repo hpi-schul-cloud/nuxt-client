@@ -47,6 +47,7 @@ const vueRoutes = [
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
 	`^/media-shelf/?$`,
+	`^/media-shelf/fwu-media/?$`,
 	`^/news/new/?$`,
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
