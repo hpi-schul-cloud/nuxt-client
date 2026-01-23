@@ -2,7 +2,7 @@
 	<VMenu location="bottom end" min-width="250">
 		<template #activator="{ props: menuProps }">
 			<VBtn
-				v-bind="menuProps"
+				v-bind="{ ...menuProps, ...safariAriaOwnsWorkaround }"
 				:variant="variant"
 				:data-testid="dataTestid"
 				:ripple="false"
@@ -32,6 +32,7 @@ import { BoardMenuScope } from "./board-menu-scope";
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -74,6 +75,12 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 };
 
 const boardMenuAriaLabel = computed(() => ariaLabelForScope[props.scope]);
+
+// Workound for Vuetify Safari aria-owns issue which was introduced in Vuetify 3.10.8
+// See:https://github.com/vuetifyjs/vuetify/issues/22540
+// Please remove once Vuetify fixed this issue.
+const isSafari =
+	/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) && !/Firefox/.test(navigator.userAgent);
 </script>
 
 <style scoped>
