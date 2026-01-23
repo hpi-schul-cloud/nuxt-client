@@ -75,12 +75,6 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 };
 
 const boardMenuAriaLabel = computed(() => ariaLabelForScope[props.scope]);
-
-// Workound for Vuetify Safari aria-owns issue which was introduced in Vuetify 3.10.8
-// See:https://github.com/vuetifyjs/vuetify/issues/22540
-// Please remove once Vuetify fixed this issue.
-const isSafari =
-	/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent) && !/Firefox/.test(navigator.userAgent);
 </script>
 
 <style scoped>
