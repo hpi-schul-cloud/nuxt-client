@@ -14,7 +14,7 @@
 		<MembersTable v-if="!isLoadingMembers" :header-bottom="headerBottom" />
 	</div>
 
-	<div v-if="!isLoadingInvitations && canManageRoomInvitationLinks">
+	<div v-if="!isLoadingInvitations && canManageRoomInvitationLinks && isInviteExternalPersonsFeatureEnabled">
 		<h2 class="mb-0">
 			{{ t("pages.rooms.members.title.invitations") }}
 		</h2>
@@ -26,7 +26,12 @@
 import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
 import MembersTable from "../tables/MembersTable.vue";
 import { useEnvConfig } from "@data-env";
-import { useRegistrationStore, useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import {
+	useRegistrationStore,
+	useRoomAuthorization,
+	useRoomInvitationLinkStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -41,6 +46,7 @@ defineProps({
 const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
+const { isInviteExternalPersonsFeatureEnabled } = storeToRefs(useRoomInvitationLinkStore());
 const registrationStore = useRegistrationStore();
 const { isLoading: isLoadingMembers } = storeToRefs(roomMembersStore);
 const { isLoading: isLoadingInvitations } = storeToRefs(registrationStore);

@@ -792,6 +792,8 @@ export default {
 	"components.molecules.export.options.info": "El siguiente contenido no se exporta:",
 	"components.molecules.export.options.info.point1": "Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2": "Envíos asignados a una tarea.",
+	"components.molecules.export.options.info.point3":
+		"Las carpetas de archivos no se exportan con la Common Cartridge versión 1.1",
 	"components.organisms.ContentCard.report.body": "Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -1682,6 +1684,9 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Añadir persona externa",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Por favor, introduzca la dirección de correo electrónico de la persona externa que desea añadir a la sala.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"La invitación por correo electrónico no es posible. Por favor, compruebe los {link} necesarios.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "requisitos",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invitar a persona externa",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"No se ha encontrado ninguna cuenta con esta dirección de correo electrónico. Se puede invitar a la persona a registrarse en {applicationName}.",
@@ -1698,6 +1703,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Enviar invitación",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"No se ha podido enviar la invitación. Por favor, inténtelo de nuevo más tarde",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Invitación enviada a {email}",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.create.course": "Crear curso",
 	"pages.rooms.fab.add.course": "Nuevo curso",
@@ -2109,6 +2115,8 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Texto)",
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Hoja de cálculo)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Presentación)",
+	"pages.fwu-media.title": "FWU Medios",
+	"pages.fwu-media.items": "FWU Medios",
 	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",

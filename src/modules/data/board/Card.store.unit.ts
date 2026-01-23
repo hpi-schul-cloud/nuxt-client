@@ -2,7 +2,6 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import {
@@ -22,7 +21,8 @@ import { CreateElementRequestPayload, useCardStore, useSharedEditMode, useSocket
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { cloneDeep } from "lodash-es";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
@@ -39,11 +39,12 @@ const mockedUseCardRestApi = vi.mocked(useCardRestApi);
 
 vi.mock("@util-board");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
 vi.mock("@data-board/edit-mode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@data-board/socket/socket");
@@ -62,6 +63,7 @@ describe("CardStore", () => {
 	let mockedCardSocketApiActions: DeepMocked<ReturnType<typeof useCardSocketApi>>;
 	let mockedCardRestApiActions: DeepMocked<ReturnType<typeof useCardRestApi>>;
 	let mockedSharedLastCreatedElementActions: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
+	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
 	let setEditModeId: Mock;
 	let editModeId: Ref<string | undefined>;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
@@ -113,6 +115,13 @@ describe("CardStore", () => {
 
 		mockedSharedLastCreatedElementActions = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
 		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementActions);
+
+		mockedUseSharedFileSelectActions = createMock<ReturnType<typeof useSharedFileSelect>>({
+			isFileSelectOnMountEnabled: ref(true),
+			resetFileSelectOnMountEnabled: vi.fn(),
+			disableFileSelectOnMount: vi.fn(),
+		});
+		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
 
 		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
@@ -1009,6 +1018,14 @@ describe("CardStore", () => {
 		};
 
 		describe("when a card is in edit mode", () => {
+			it("should disable file picker", () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedUseSharedFileSelectActions.disableFileSelectOnMount).toHaveBeenCalled();
+			});
+
 			it("should call createElementRequest", () => {
 				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
 
@@ -1025,7 +1042,23 @@ describe("CardStore", () => {
 				expect(mockedFileStorageActions.uploadCollaboraFile).toHaveBeenCalled();
 			});
 
+			it("should reset file picker", async () => {
+				const { cardStore } = setupCreateFileElementWithCollabora(true, false, false);
+
+				await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+				expect(mockedUseSharedFileSelectActions.resetFileSelectOnMountEnabled).toHaveBeenCalled();
+			});
+
 			describe("when element creation fails", () => {
+				it("should reset file picker", async () => {
+					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
+
+					await cardStore.createFileElementWithCollabora(CollaboraFileType.Text, "fileName.docx");
+
+					expect(mockedUseSharedFileSelectActions.resetFileSelectOnMountEnabled).toHaveBeenCalled();
+				});
+
 				it("should not call uploadCollaboraFile", async () => {
 					const { cardStore } = setupCreateFileElementWithCollabora(true, true, false);
 

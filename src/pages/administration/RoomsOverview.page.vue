@@ -193,7 +193,6 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -202,6 +201,7 @@ import { useEnvConfig, useEnvStore } from "@data-env";
 import { useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { mdiAlert, mdiCheck, mdiPencilOutline, mdiSync, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";

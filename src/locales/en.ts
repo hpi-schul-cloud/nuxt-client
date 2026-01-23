@@ -776,6 +776,7 @@ export default {
 	"components.molecules.export.options.info": "The following content is not exported:",
 	"components.molecules.export.options.info.point1": "Uploaded files within the course.",
 	"components.molecules.export.options.info.point2": "Submissions assigned to a task.",
+	"components.molecules.export.options.info.point3": "File folders are not exported with Common Cartridge Version 1.1",
 	"components.organisms.ContentCard.report.body": "Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email": "inhalte{'@'}hpi-schul-cloud.de",
 	"components.organisms.ContentCard.report.subject":
@@ -1647,6 +1648,9 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.heading": "Add external person",
 	"pages.rooms.members.dialog.addExternalPerson.steps.email.text":
 		"Please enter the e-mail address of the external person to be added to the room.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal":
+		"Invitation by e-mail is not possible. Please check the necessary {link}.",
+	"pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements": "requirements",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.heading": "Invite external person",
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.alert":
 		"No account was found with this e-mail address. The person can be invited to register in {applicationName}.",
@@ -1662,6 +1666,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.button.invite": "Send invitation",
 	"pages.rooms.members.dialog.addExternalPerson.errors.addingMember":
 		"The invitation could not be sent. Please try again later",
+	"pages.rooms.members.dialog.addExternalPerson.success.addingMember": "Invitation sent to {email}",
 	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.create.course": "Create course",
 	"pages.rooms.fab.add.course": "New course",
@@ -2054,6 +2059,8 @@ export default {
 	"feature.collabora.add-collabora-file-dialog.option.text": ".docx (Text)",
 	"feature.collabora.add-collabora-file-dialog.option.spreadsheet": ".xlsx (Spreadsheet)",
 	"feature.collabora.add-collabora-file-dialog.option.presentation": ".pptx (Presentation)",
+	"pages.fwu-media.title": "FWU Media",
+	"pages.fwu-media.items": "FWU Media",
 	"pages.folder.emptyState": "There are currently no files here",
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",

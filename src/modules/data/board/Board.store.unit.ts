@@ -7,7 +7,6 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
@@ -18,7 +17,8 @@ import { useAppStore } from "@data-app";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { expect, Mock } from "vitest";
 import { computed, ref } from "vue";
@@ -32,11 +32,12 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
 vi.mock("@data-board/edit-mode.composable");
 const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@data-board/socket/socket");
@@ -62,6 +63,7 @@ describe("BoardStore", () => {
 	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedBoardRestApiActions: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedCardSocketApiActions: DeepMocked<ReturnType<typeof useCardSocketApi>>;
+	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
 	let setEditModeId: Mock;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 	let router: DeepMocked<Router>;
@@ -107,6 +109,13 @@ describe("BoardStore", () => {
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: vi.fn(),
 		});
+
+		mockedUseSharedFileSelectActions = createMock<ReturnType<typeof useSharedFileSelect>>({
+			isFileSelectOnMountEnabled: ref(true),
+			resetFileSelectOnMountEnabled: vi.fn(),
+			disableFileSelectOnMount: vi.fn(),
+		});
+		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
 
 		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);

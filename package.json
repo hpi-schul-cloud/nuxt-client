@@ -16,6 +16,7 @@
 		"lint": "npx eslint src/**/*.{ts,js,vue}",
 		"lint:fix": "npx eslint src/**/*.{ts,js,vue} --fix",
 		"generate-client:server": "openapi-generator-cli generate -c ./openapitools.json --generator-key server-api",
+		"generate-client:fwu": "openapi-generator-cli generate -c ./openapitools.json --generator-key fwu-api",
 		"generate-client:filestorage": "openapi-generator-cli generate -c ./openapitools.json --generator-key file-storage-api",
 		"generate-client:h5p-editor": "openapi-generator-cli generate -c ./openapitools.json --generator-key h5p-editor-api",
 		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
@@ -81,7 +82,7 @@
 		"http-proxy-middleware": "^3.0.5",
 		"jsdom": "^27.4.0",
 		"npm-run-all2": "^7.0.2",
-		"prettier": "^3.6.2",
+		"prettier": "^3.7.4",
 		"resize-observer-polyfill": "^1.5.1",
 		"sass-embedded": "^1.93.2",
 		"typescript": "^5.9.3",

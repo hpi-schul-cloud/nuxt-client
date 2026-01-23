@@ -6,7 +6,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
 
-describe("@/components/legacy/TheFooter.vue", () => {
+describe("TheFooter.vue", () => {
 	const dummyUrl = "dummy-url.org";
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());

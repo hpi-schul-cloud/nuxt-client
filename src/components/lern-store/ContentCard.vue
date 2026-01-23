@@ -26,9 +26,9 @@
 							<div class="content__img-background-gradient" />
 
 							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
-							<div v-show="isCollection()" class="card-tag">
+							<div class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon class="custom-icon content__text-icon" icon="$ic_collection" />
+								<v-icon :icon="mdiFileMultipleOutline" />
 							</div>
 						</div>
 					</div>
@@ -52,11 +52,12 @@
 </template>
 
 <script>
+import UserHasRole from "./UserHasRole.vue";
 import BaseLink from "@/components/base/BaseLink";
-import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
+import { mdiFileMultipleOutline } from "@icons/material";
 
 export default {
 	components: {
@@ -75,6 +76,7 @@ export default {
 		return {
 			isChecked: false,
 			copyModalActive: false,
+			mdiFileMultipleOutline,
 		};
 	},
 	computed: {

@@ -3,6 +3,7 @@ import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Permission, ToolContextType } from "@/serverApi/v3";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	isEnum,
 	isMongoId,
@@ -11,6 +12,8 @@ import {
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validation";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
@@ -65,7 +68,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/school-settings/provisioning-options",
-		component: () => import("@/components/administration/ProvisioningOptionsPage.vue"),
+		component: () => import("@/pages/administration/ProvisioningOptionsPage.vue"),
 		name: "provivisioning-options-page",
 		beforeEnter: createPermissionGuard([Permission.SchoolSystemView, Permission.SchoolSystemEdit]),
 		props: (to: RouteLocationNormalized) => ({
@@ -271,6 +274,17 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/media-shelf`,
 		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
 		name: "media-shelf",
+	},
+	{
+		path: `/media-shelf/fwu-media`,
+		component: async () => (await import("@page-fwu-media")).FwuMedia,
+		name: "fwu-media",
+		beforeEnter(to, from, next) {
+			if (useEnvConfig().value.FEATURE_FWU_CONTENT_ENABLED) {
+				return next();
+			}
+			useAppStore().handleApplicationError(HttpStatusCode.NotFound);
+		},
 	},
 	{
 		path: "/migration/success",

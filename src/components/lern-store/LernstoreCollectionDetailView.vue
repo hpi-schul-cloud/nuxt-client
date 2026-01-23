@@ -106,7 +106,7 @@
 
 <script>
 import BaseLink from "../base/BaseLink";
-import UserHasRole from "@/components/helpers/UserHasRole";
+import UserHasRole from "./UserHasRole.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
 import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";

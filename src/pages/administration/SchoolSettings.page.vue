@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe :headline="headline" max-width="native">
+	<DefaultWireframe :headline="headline" max-width="native">
 		<v-alert v-if="error" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
 				{{ $t(error.translationKey) }}
@@ -89,7 +89,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<admin-migration-section />
+						<SchoolAdminMigrationSection />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -129,24 +129,24 @@
 				</v-expansion-panel>
 			</v-expansion-panels>
 		</div>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script lang="ts">
-import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
-import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
-import SchoolYearChangeSection from "@/components/administration/SchoolYearChangeSection.vue";
-import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
-import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
-import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
-import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import AuthSystems from "@/components/administration/school-settings/AuthSystems.vue";
+import ExternalToolsSection from "@/components/administration/school-settings/ExternalToolSection.vue";
+import GeneralSettings from "@/components/administration/school-settings/GeneralSettings.vue";
+import SchoolAdminMigrationSection from "@/components/administration/school-settings/SchoolAdminMigrationSection.vue";
+import SchoolPolicy from "@/components/administration/school-settings/SchoolPolicy.vue";
+import SchoolTermsOfUse from "@/components/administration/school-settings/SchoolTerms.vue";
+import SchoolYearChangeSection from "@/components/administration/school-settings/SchoolYearChangeSection.vue";
 import { School } from "@/store/types/schools";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { useSharedSchoolYearChange } from "@data-school";
 import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, defineComponent, onMounted, Ref, ref, watch } from "vue";
@@ -159,7 +159,7 @@ export default defineComponent({
 		DefaultWireframe,
 		ExternalToolsSection,
 		SchoolYearChangeSection,
-		AdminMigrationSection,
+		SchoolAdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicy,
 		SchoolTermsOfUse,

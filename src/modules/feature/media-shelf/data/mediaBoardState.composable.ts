@@ -1,6 +1,5 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { ElementCreate, ElementMove, LineMove } from "./types";
-import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	BoardLayout,
 	DeletedElementResponse,
@@ -11,6 +10,7 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
+import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { Ref, ref } from "vue";
 
 const useMediaBoardState = () => {

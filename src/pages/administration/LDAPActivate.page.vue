@@ -12,7 +12,7 @@
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon>$teacher</v-icon>
+					<v-icon :icon="mdiHumanMaleBoard" />
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
@@ -22,7 +22,7 @@
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon>$class</v-icon>
+					<v-icon :icon="mdiAccountEye" />
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ $t("common.labels.classes") }}</span>
 				</div>
@@ -141,7 +141,7 @@
 				</modal-body-info>
 			</template>
 			<template #footer>
-				<modal-footer-confirm
+				<ModalFooterConfirm
 					backgroundcolor="rgba(var(--v-theme-success))"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"
@@ -153,10 +153,9 @@
 </template>
 
 <script>
-import InfoMessage from "@/components/atoms/InfoMessage";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
+import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
+import ModalFooterConfirm from "@/components/legacy/ModalFooterConfirm.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { unchangedPassword } from "@/utils/ldapConstants";
@@ -164,11 +163,14 @@ import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import {
+	mdiAccountEye,
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,
 	mdiChevronLeft,
+	mdiHumanMaleBoard,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
 import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {
@@ -194,6 +196,8 @@ export default {
 			mdiCheckCircle,
 			mdiChevronLeft,
 			mdiShieldAccountVariantOutline,
+			mdiAccountEye,
+			mdiHumanMaleBoard,
 		};
 	},
 	computed: {

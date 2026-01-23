@@ -33,3 +33,10 @@ export type SidebarGroupItem = {
 } & SidebarItemBaseData;
 
 export type SidebarItems = (SidebarSingleItem | SidebarGroupItem)[];
+
+export type Breadcrumb = {
+	title: string;
+	href?: string;
+	to?: string;
+	disabled?: boolean;
+};
