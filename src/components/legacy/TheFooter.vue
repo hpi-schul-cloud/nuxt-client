@@ -1,30 +1,29 @@
 <template>
-	<VContainer justify="center" md="auto" class="d-flex justify-center align-center flex-wrap">
-		<template v-for="(link, index) in links" :key="link.text">
-			<span v-if="index !== 0" class="ma-1"> - </span>
-			<VBtn
-				variant="plain"
-				class="footer-link pa-0 mx-1"
-				color="primary"
-				:href="link.href"
-				:to="link.to"
-				:target="link.target"
-			>
-				{{ link.text }}
-			</VBtn>
-		</template>
-	</VContainer>
+	<VFooter class="d-flex align-center justify-center flex-wrap mb-3 footer">
+		<VBtn
+			v-for="(link, index) in links"
+			:key="index"
+			class="footer-btn"
+			color="primary"
+			variant="plain"
+			:href="link.href"
+			:to="link.to"
+			:text="link.text"
+			:target="link.target"
+		/>
+	</VFooter>
 </template>
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { VFooter } from "vuetify/components";
 
 const { t } = useI18n();
 
 const links = computed(() => {
-	const baseLinks = [
+	const baseLinks: Array<{ text: string; to?: string; href?: string; target?: string }> = [
 		{
 			to: "/imprint",
 			text: t("components.legacy.footer.imprint"),
@@ -45,14 +44,24 @@ const links = computed(() => {
 		},
 	];
 
-	if (useEnvConfig().value.ALERT_STATUS_URL) {
-		baseLinks.push({
-			href: useEnvConfig().value.ALERT_STATUS_URL as string,
-			text: t("components.legacy.footer.status"),
-			target: "_blank",
-		});
-	}
-
-	return baseLinks;
+	return useEnvConfig().value.ALERT_STATUS_URL
+		? [
+				...baseLinks,
+				{
+					href: useEnvConfig().value.ALERT_STATUS_URL as string,
+					text: t("components.legacy.footer.status"),
+					target: "_blank",
+				},
+			]
+		: baseLinks;
 });
 </script>
+
+<style lang="scss" scoped>
+.footer {
+	max-height: var(--footer-height);
+}
+.footer-btn {
+	opacity: 1;
+}
+</style>
