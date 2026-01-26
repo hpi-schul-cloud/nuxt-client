@@ -6,8 +6,8 @@
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
 		</div>
-		<TheFooter />
 	</div>
+	<TheFooter />
 </template>
 
 <script setup lang="ts">

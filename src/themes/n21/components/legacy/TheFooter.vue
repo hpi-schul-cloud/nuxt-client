@@ -1,32 +1,29 @@
 <template>
-	<footer class="footer">
-		<div class="top-line">
-			<span class="current-year">© {{ currentYear }} {{ theme.name }}</span>
-		</div>
-
-		<div>
-			<template v-for="(link, index) in links" :key="link.text">
-				<span v-if="index !== 0" :key="index" aria-hidden="true"> - </span>
-				<base-link class="footer-link" v-bind="link">{{ link.text }}</base-link>
-			</template>
-		</div>
-	</footer>
+	<VFooter class="d-flex align-center justify-center flex-wrap mb-3 footer">
+		<VBtn
+			v-for="(link, index) in links"
+			:key="index"
+			class="footer-btn text-lg"
+			color="primary"
+			variant="plain"
+			:href="link.href"
+			:to="link.to"
+			:text="link.text"
+			:target="link.target"
+		/>
+	</VFooter>
 </template>
 
 <script setup lang="ts">
 import { filePathsModule } from "@/store";
-import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const theme = injectStrict(THEME_KEY);
-
-const currentYear = computed(() => new Date().getFullYear());
 
 const links = computed(() => {
-	const linksArr = [
+	const baseLinks: Array<{ text: string; to?: string; href?: string; target?: string }> = [
 		{
 			to: "/imprint",
 			text: t("components.legacy.footer.imprint"),
@@ -35,13 +32,11 @@ const links = computed(() => {
 			href: "/termsofuse",
 			text: t("components.legacy.footer.terms"),
 			target: "_blank",
-			rel: "noopener",
 		},
 		{
 			href: "/privacypolicy",
 			text: t("components.legacy.footer.privacy_policy"),
 			target: "_blank",
-			rel: "noopener",
 		},
 		{
 			href: "mailto:" + useEnvConfig().value.SC_CONTACT_EMAIL + "?subject=Niedersächsische%20Bildungscloud%20Anfrage",
@@ -49,15 +44,14 @@ const links = computed(() => {
 		},
 	];
 	if (useEnvConfig().value.ALERT_STATUS_URL) {
-		linksArr.push({
+		baseLinks.push({
 			href: useEnvConfig().value.ALERT_STATUS_URL as string,
 			text: t("components.legacy.footer.status"),
 			target: "_blank",
-			rel: "noopener",
 		});
 	}
 	if (useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL) {
-		linksArr.push({
+		baseLinks.push({
 			href:
 				"mailto:" +
 				useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL +
@@ -65,50 +59,23 @@ const links = computed(() => {
 				t("components.legacy.footer.accessibility.report"),
 			text: t("components.legacy.footer.accessibility.report"),
 			target: "_blank",
-			rel: "noopener",
 		});
 	}
-	linksArr.push({
+	baseLinks.push({
 		href: filePathsModule.getSpecificFiles.accessibilityStatement.toString(),
 		text: t("components.legacy.footer.accessibility.statement"),
 		target: "_blank",
-		rel: "noopener",
 	});
-	return linksArr;
+	return baseLinks;
 });
 </script>
 
 <style lang="scss" scoped>
-.current-year {
-	margin-bottom: 8px;
-	font-size: var(--text-lg);
-}
-
 .footer {
-	width: 100%;
-	padding: 0 16px;
-	margin: 24px 0 16px;
-	text-align: center;
+	max-height: var(--footer-height);
 }
-
-.top-line {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.footer-link {
-	color: rgba(var(--v-theme-primary));
-	border: none;
-
-	&:focus,
-	&:hover {
-		color: rgba(var(--v-theme-primary-darken-1));
-		text-decoration: underline;
-	}
-
-	&:visited {
-		color: rgba(var(--v-theme-primary));
-	}
+.footer-btn {
+	opacity: 1;
+	font-weight: normal;
 }
 </style>
