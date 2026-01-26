@@ -1,6 +1,7 @@
 <template>
 	<DefaultWireframe ref="main" max-width="short" :fab-items="fabItems">
 		<template #header>
+			<LernStoreInfoBanner />
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
@@ -25,6 +26,7 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
+import LernStoreInfoBanner from "@/components/lern-store/LernStoreInfoBanner.vue";
 import { Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import { useAppStore } from "@data-app";
