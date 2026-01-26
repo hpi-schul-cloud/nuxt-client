@@ -1541,6 +1541,16 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.lernstore.info.banner.title": "In the future, the media will be accessible via the media shelf",
+	"pages.lernstore.info.banner.helpLinkText": "help pages",
+	"pages.lernstore.info.banner.item.0.brb":
+		"From now on, the media libraries from learning store (Mundo, Wir lernen online and FWU-Media) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.n21":
+		"From now on, the media libraries from learning store (Mundo and Wir lernen online) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.thr":
+		"From now on, the media libraries from learning store (Mundo, Wir lernen online and Mediothek/Pixiothek) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
+	"pages.lernstore.info.banner.item.1":
+		"The learning store will therefore be shut down in week 10 (03/04/2026). Learning store content already integrated into topics will remain available.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
