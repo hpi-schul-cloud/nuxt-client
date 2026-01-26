@@ -2,7 +2,7 @@
 	<VMenu location="bottom end" min-width="250">
 		<template #activator="{ props: menuProps }">
 			<VBtn
-				v-bind="menuProps"
+				v-bind="{ ...menuProps, ...safariAriaOwnsWorkaround }"
 				:variant="variant"
 				:data-testid="dataTestid"
 				:ripple="false"
@@ -33,6 +33,7 @@ import { BoardMenuScope } from "./board-menu-scope";
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
