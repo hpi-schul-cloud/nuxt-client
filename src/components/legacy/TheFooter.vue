@@ -3,7 +3,7 @@
 		<VBtn
 			v-for="(link, index) in links"
 			:key="index"
-			class="footer-btn"
+			class="footer-btn text-lg"
 			color="primary"
 			variant="plain"
 			:href="link.href"
@@ -63,5 +63,6 @@ const links = computed(() => {
 }
 .footer-btn {
 	opacity: 1;
+	font-weight: normal;
 }
 </style>
