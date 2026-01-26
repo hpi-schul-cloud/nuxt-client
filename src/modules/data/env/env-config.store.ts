@@ -27,6 +27,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	SC_TITLE: "",
 	TRAINING_URL: "https://lernen.dbildungscloud.de",
 	FEATURE_SHOW_OUTDATED_USERS: false,
+	FEATURE_FWU_CONTENT_ENABLED: false,
 	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 	FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 	ACCESSIBILITY_REPORT_EMAIL: "",

@@ -24,7 +24,7 @@
 				@click="downloadPolicy"
 			>
 				<template #prepend>
-					<v-icon>$file_pdf_outline</v-icon>
+					<v-icon :icon="mdiFilePdfBox" />
 				</template>
 				<v-list-item-title class="text-body-1 mb-2">
 					{{ $t("pages.administration.school.index.schoolPolicy.fileName") }}
@@ -108,7 +108,7 @@ import { School } from "@/store/types/schools";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
-import { mdiAlertCircle, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
+import { mdiAlertCircle, mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { computed, ComputedRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
