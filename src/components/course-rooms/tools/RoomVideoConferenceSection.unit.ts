@@ -482,7 +482,7 @@ describe("RoomVideoConferenceSection", () => {
 
 				const configurationDialog = wrapper.findComponent(VideoConferenceConfigurationDialog);
 
-				expect(configurationDialog.props("isOpen")).toBe(true);
+				expect(configurationDialog.props("modelValue")).toBe(true);
 			});
 		});
 	});

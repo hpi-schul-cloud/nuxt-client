@@ -1,6 +1,6 @@
 <template>
 	<VBtn
-		:data-testid="testId"
+		data-testid="dialog-confirm"
 		class="px-6"
 		color="primary"
 		variant="flat"
@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineProps({
@@ -24,7 +23,4 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-
-const attrs = useAttrs();
-const testId = attrs["data-testid"] ?? "dialog-confirm";
 </script>

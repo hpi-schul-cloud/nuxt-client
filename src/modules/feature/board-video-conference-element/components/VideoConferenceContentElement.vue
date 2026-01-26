@@ -46,34 +46,18 @@
 				<KebabMenuActionDelete scope-language-key="components.cardElement.videoConferenceElement" @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
-		<VDialog
-			ref="errorDialog"
-			v-model="isErrorDialogOpen"
-			:max-width="480"
+		<Dialog
+			:model-value="isErrorDialogOpen"
+			no-confirm
+			title="error.generic"
+			cancel-btn-lang-key="common.labels.close"
 			data-testid="error-dialog"
-			@click:outside="resetError"
-			@keydown.esc="resetError"
-		>
-			<VCard :ripple="false">
-				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="my-2 text-break-word">
-						{{ t("error.generic") }}
-					</h2>
-				</VCardTitle>
-				<VCardActions class="action-buttons px-6">
-					<div class="button-section button-right">
-						<VBtn data-testid="dialog-close" variant="outlined" @click="resetError">
-							{{ t("common.labels.close") }}
-						</VBtn>
-					</div>
-				</VCardActions>
-			</VCard>
-		</VDialog>
+			@cancel="resetError"
+		/>
 		<VideoConferenceConfigurationDialog
+			v-model="isConfigurationDialogOpen"
 			:board-parent-type="boardParentType"
-			:is-open="isConfigurationDialogOpen"
 			:options="videoConferenceInfo.options"
-			@close="onCloseConfigurationDialog"
 			@start-video-conference="onStartVideoConference"
 		/>
 	</VCard>
@@ -93,6 +77,7 @@ import {
 	useSharedBoardPageInformation,
 } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { Dialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, onMounted, PropType, ref, toRef } from "vue";
@@ -185,7 +170,6 @@ const onContentClick = async () => {
 	await fetchVideoConferenceInfo();
 };
 
-const onCloseConfigurationDialog = () => (isConfigurationDialogOpen.value = false);
 const onCreateTitle = (title: string) => (modelValue.value.title = title);
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (!isCreating.value && props.isEditMode) {

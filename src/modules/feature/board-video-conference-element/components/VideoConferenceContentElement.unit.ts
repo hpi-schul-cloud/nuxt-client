@@ -12,6 +12,7 @@ import { VideoConferenceContentElement } from "@feature-board-video-conference-e
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu } from "@ui-board";
+import { Dialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
@@ -660,10 +661,7 @@ describe("VideoConferenceContentElement", () => {
 				useVideoConferenceMock.error.value = new Error("error");
 				await flushPromises();
 
-				const dialog = wrapper.findComponent({
-					ref: "errorDialog",
-				});
-
+				const dialog = wrapper.findComponent(Dialog);
 				expect(dialog.props("modelValue")).toBe(true);
 			});
 		});
@@ -678,9 +676,7 @@ describe("VideoConferenceContentElement", () => {
 				const videoConferenceElement = wrapper.findComponent('[data-testid="video-conference-element"]');
 				await videoConferenceElement.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "errorDialog",
-				});
+				const dialog = wrapper.findComponent(Dialog);
 
 				expect(dialog.props("modelValue")).toBe(false);
 			});

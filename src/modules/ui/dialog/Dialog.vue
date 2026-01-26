@@ -2,9 +2,11 @@
 	<VDialog
 		v-model="isOpen"
 		:data-testid="testId"
-		:max-width="480"
+		:max-width="maxWidth"
 		:aria-labelledby="`dialog-${uid}-title`"
 		@after-leave="emit('after-leave')"
+		@click:outside="emit('cancel')"
+		@keydown.esc="emit('cancel')"
 	>
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
@@ -15,22 +17,25 @@
 						</h2>
 					</VCardTitle>
 				</VCardItem>
-				<VCardText class="pa-6 pt-4">
+				<VCardText v-if="$slots.content" class="pa-6 pt-4">
 					<slot name="content" />
 				</VCardText>
-				<VCardActions v-if="!noActions" class="pa-6 pt-2">
-					<VSpacer />
-					<div class="d-flex ga-2">
-						<slot name="actions">
-							<DialogBtnCancel :data-testid="`${testId}-cancel`" :disabled="areActionsDisabled" @click="onCancel" />
-							<DialogBtnConfirm
-								:data-testid="`${testId}-confirm`"
-								:text-lang-key="confirmBtnLangKey"
-								:disabled="areActionsDisabled || confirmBtnDisabled"
-								@click="onConfirm"
-							/>
-						</slot>
-					</div>
+				<VCardActions v-if="!noActions" class="pa-6 pt-2 ga-2 justify-end">
+					<slot name="actions">
+						<DialogBtnCancel
+							:text-lang-key="cancelBtnLangKey"
+							:data-testid="`${testId}-cancel`"
+							:disabled="areActionsDisabled"
+							@click="onCancel"
+						/>
+						<DialogBtnConfirm
+							v-if="!noConfirm"
+							:data-testid="`${testId}-confirm`"
+							:text-lang-key="confirmBtnLangKey"
+							:disabled="areActionsDisabled || confirmBtnDisabled"
+							@click="onConfirm"
+						/>
+					</slot>
 				</VCardActions>
 			</VCard>
 		</UseFocusTrap>
@@ -45,15 +50,18 @@ import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { computed, useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
-import { VCard, VDialog, VSpacer } from "vuetify/components";
+import { VCard, VDialog } from "vuetify/components";
 
 const props = defineProps({
 	title: { type: String, required: true }, // Allowing text or i18n key
 	isLoading: { type: Boolean, default: false },
+	maxWidth: { type: [Number, String], default: 480 },
 	areActionsDisabled: { type: Boolean, default: false },
 	confirmBtnDisabled: { type: Boolean, default: false },
 	confirmBtnLangKey: { type: String, default: "common.actions.confirm" },
+	cancelBtnLangKey: { type: String, default: "common.actions.cancel" },
 	noActions: { type: Boolean, default: false },
+	noConfirm: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();

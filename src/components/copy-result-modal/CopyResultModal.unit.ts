@@ -7,7 +7,7 @@ import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { VCard, VDialog } from "vuetify/components";
+import { VCard } from "vuetify/components";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -73,7 +73,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be closed by default", () => {
 			const wrapper = createWrapper();
 
-			const dialog = wrapper.findComponent(VDialog).findComponent(VCard);
+			const dialog = wrapper.findComponent(Dialog).findComponent(VCard);
 
 			expect(dialog.exists()).toBe(false);
 		});
@@ -81,7 +81,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be open when is-open property is true", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(VDialog).findComponent(VCard);
+			const dialog = wrapper.findComponent(Dialog).findComponent(VCard);
 
 			expect(dialog.exists()).toBe(true);
 		});
@@ -91,7 +91,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should show partial-title when copy was partially successful", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(VDialog).findComponent(VCard);
+			const dialog = wrapper.findComponent(Dialog).findComponent(VCard);
 			const headline = dialog.find('[data-testid="copy-dialog-title"]').text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
@@ -102,10 +102,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should forward the dialog-closed event of the wrapped dialog", async () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(VDialog).findComponent(VCard);
-			const closeBtn = dialog.findComponent('[data-testid="copy-dialog-close-btn"]');
-			await closeBtn.trigger("click");
-
+			const dialog = wrapper.findComponent(Dialog);
+			dialog.vm.$emit("cancel");
 			expect(wrapper.emitted("copy-dialog-closed")).toHaveLength(1);
 		});
 	});

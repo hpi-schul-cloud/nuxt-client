@@ -1,5 +1,12 @@
 <template>
-	<Dialog :model-value="isOpen" :title="$t('components.molecules.copyResult.title.partial')" data-testid="copy-dialog">
+	<Dialog
+		:model-value="isOpen"
+		title="components.molecules.copyResult.title.partial"
+		cancel-btn-lang-key="common.labels.close"
+		data-testid="copy-dialog"
+		no-confirm
+		@cancel="emit('copy-dialog-closed')"
+	>
 		<template #content>
 			<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
 				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
@@ -18,9 +25,6 @@
 				</ul>
 			</WarningAlert>
 		</template>
-		<template #actions>
-			<DialogBtnClose @click="emit('copy-dialog-closed')" />
-		</template>
 	</Dialog>
 </template>
 
@@ -28,7 +32,7 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog, DialogBtnClose } from "@ui-dialog";
+import { Dialog } from "@ui-dialog";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -40,17 +44,18 @@ type CopyResultItem = {
 	}>;
 };
 
-type Props = {
-	isOpen?: boolean;
-	copyResultItems?: Array<CopyResultItem>;
-	copyResultRootItemType?: string;
-};
-
-const props = withDefaults(defineProps<Props>(), {
-	isOpen: false,
-	copyResultItems: () => [] as CopyResultItem[],
-	copyResultRootItemType: "",
-});
+const props = withDefaults(
+	defineProps<{
+		isOpen?: boolean;
+		copyResultItems?: Array<CopyResultItem>;
+		copyResultRootItemType?: string;
+	}>(),
+	{
+		isOpen: false,
+		copyResultItems: () => [] as CopyResultItem[],
+		copyResultRootItemType: "",
+	}
+);
 
 const emit = defineEmits<{
 	(e: "copy-dialog-closed"): void;
