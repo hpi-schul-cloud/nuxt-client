@@ -30,13 +30,11 @@ let tooltipWidth = "320px";
 const tooltipText = ref<string>("");
 
 const checkOverflow = () => {
-	if (!textElement.value) {
-		return;
+	if (textElement.value) {
+		tooltipText.value = textElement.value.textContent;
+		isOverflowingLongText.value = textElement.value.offsetWidth < textElement.value.scrollWidth;
+		tooltipWidth = `${textElement.value.offsetWidth * 0.8}px`;
 	}
-
-	tooltipText.value = textElement.value.textContent;
-	isOverflowingLongText.value = textElement.value.offsetWidth < textElement.value.scrollWidth;
-	tooltipWidth = `${textElement.value.offsetWidth * 0.8}px`;
 };
 
 const mutationObserver = useMutationObserver(textElement, checkOverflow, {
