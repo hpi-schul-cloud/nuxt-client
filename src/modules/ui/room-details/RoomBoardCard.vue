@@ -15,9 +15,9 @@
 		@keydown.down.prevent="onMoveCardDown"
 		@keydown.up.prevent="onMoveCardUp"
 	>
-		<VCardText class="pb-1">
+		<VCardText>
 			<div class="top-row-container mb-0">
-				<div class="d-flex align-center mb-3 tagline">
+				<div class="d-flex align-center tagline">
 					<VIcon size="14" class="mr-1" :icon="titleIcon" />
 					<span class="title-board-card" :data-testid="`board-card-title-${boardCardIndex}`">
 						{{ cardTitle }}

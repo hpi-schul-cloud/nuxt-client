@@ -38,34 +38,34 @@
 				tabindex="0"
 				:html="task.description"
 			/>
-		</v-card-text>
-		<v-card-text
-			v-if="!isPlanned && !isDraft && !isFinished"
-			class="ma-0 pb-0 pt-0 submitted-section"
-			:data-testid="`task-card-info-${taskCardIndex}`"
-		>
-			<div class="chip-items-group">
-				<v-chip
-					v-for="(chip, index) in chipItems[userRole]"
-					:key="index"
-					:class="[chip.class]"
-					size="small"
-					:data-testid="[chip.testid]"
-				>
-					<v-icon v-if="chip.icon" size="small" class="mr-1" color="rgba(0, 0, 0, 0.87)">
-						{{ chip.icon }}
-					</v-icon>
-					{{ chip.name }}
-				</v-chip>
-				<ChipTimeRemaining
-					v-if="roles.Student === userRole && isCloseToDueDate && !isSubmitted"
-					type="warning"
-					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.display.xs"
-				/>
+			<div
+				v-if="!isPlanned && !isDraft && !isFinished"
+				class="ma-0 submitted-section"
+				:data-testid="`task-card-info-${taskCardIndex}`"
+			>
+				<div class="chip-items-group">
+					<v-chip
+						v-for="(chip, index) in chipItems[userRole]"
+						:key="index"
+						:class="[chip.class]"
+						size="small"
+						:data-testid="[chip.testid]"
+					>
+						<v-icon v-if="chip.icon" size="small" class="mr-1" color="rgba(0, 0, 0, 0.87)">
+							{{ chip.icon }}
+						</v-icon>
+						{{ chip.name }}
+					</v-chip>
+					<ChipTimeRemaining
+						v-if="roles.Student === userRole && isCloseToDueDate && !isSubmitted"
+						type="warning"
+						:due-date="task.dueDate"
+						:shorten-unit="$vuetify.display.xs"
+					/>
+				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
+		<v-card-actions class="pt-1" data-testid="content-card-task-actions">
 			<v-btn
 				v-for="(action, index) in cardActions[userRole]"
 				:key="index"

@@ -15,7 +15,7 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
+		<v-card-text data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
 				<div class="title-section">
 					{{ $t("common.words.topic") }}
@@ -38,13 +38,9 @@
 			>
 				{{ lesson.name }}
 			</div>
-		</v-card-text>
-		<v-card-text v-if="showChip" class="ma-0 pb-0 pt-0 submitted-section" data-testid="content-card-lesson-info">
-			<div class="chip-items-group">
-				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0">
-					<div class="chip-value">
-						{{ taskChipValue }}
-					</div>
+			<div v-if="showChip" class="ma-0 pb-0 pt-0 submitted-section" data-testid="content-card-lesson-info">
+				<div class="chip-items-group">
+					<v-chip size="small" :text="taskChipValue" />
 				</div>
 			</div>
 		</v-card-text>
