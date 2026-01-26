@@ -37,11 +37,8 @@ const checkOverflow = () => {
 	}
 };
 
-const mutationObserver = useMutationObserver(textElement, checkOverflow, {
-	attributes: true,
-	childList: true,
-	subtree: true,
-});
+const mutationObserverConfig = { attributes: false, childList: true, subtree: true };
+const mutationObserver = useMutationObserver(textElement, checkOverflow, mutationObserverConfig);
 
 onMounted(() => {
 	checkOverflow();
