@@ -2,7 +2,7 @@
 	<VMenu :width="isExternalLogoutAllowed ? 'auto' : '215'">
 		<template #activator="{ props: menuProps }">
 			<VBtn
-				v-bind="menuProps"
+				v-bind="{ ...menuProps, ...safariAriaOwnsWorkaround }"
 				v-bind.attr="$attrs"
 				icon
 				data-testid="user-menu-btn"
@@ -42,6 +42,7 @@ import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import { computed, onMounted, PropType, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
