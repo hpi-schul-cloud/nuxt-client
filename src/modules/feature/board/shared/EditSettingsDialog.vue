@@ -1,96 +1,57 @@
 <template>
-	<VDialog
+	<Dialog
 		v-model="isOpen"
-		:width="xs ? 'auto' : 480"
 		data-testid="dialog-edit-settings"
-		max-width="480"
-		@keydown.esc="onClose"
-		@click:outside="onClose"
+		title="components.board.menu.editing.settings.title"
+		:cancel-btn-lang-key="isDraftMode ? 'common.labels.close' : 'common.actions.cancel'"
+		confirm-btn-lang-key="common.actions.save"
+		:no-confirm="isDraftMode"
+		@cancel="onClose"
+		@confirm="onSave"
 	>
-		<VCard ref="editSettings">
-			<template #title>
-				<h2 class="mt-2 dialog-title">
-					{{ modalTitle }}
-				</h2>
+		<template #content>
+			<WarningAlert v-if="isDraftMode">
+				{{ t("components.board.dialog.readerCanEdit.alert.text") }}
+			</WarningAlert>
+			<template v-else>
+				<p data-testid="edit-settings-subtitle">
+					{{ t("components.board.dialog.readerCanEdit.subtitle") }}
+				</p>
+				<VRadioGroup v-model="selectedOption" hide-details class="mt-6">
+					<VRadio
+						v-for="(option, index) in radioOptions"
+						:key="index"
+						:value="option.value"
+						class="align-start mb-2"
+						:data-testid="option.dataTestid"
+					>
+						<template #label>
+							<div class="inline-flex flex-column mt-2">
+								<i18n-t :keypath="option.labelHeader" scope="global">
+									<b>{{ t(option.labelInlineFormattedText) }}</b>
+								</i18n-t>
+								<div class="radio-label">
+									{{ t(option.labelDescription) }}
+								</div>
+							</div>
+						</template>
+					</VRadio>
+				</VRadioGroup>
 			</template>
-			<template #text>
-				<WarningAlert v-if="isDraftMode">
-					<span class="alert-text">
-						<p>
-							{{ t("components.board.dialog.readerCanEdit.alert.text") }}
-						</p>
-					</span>
-				</WarningAlert>
-				<template v-else>
-					<div data-testid="edit-settings-subtitle">
-						{{ t("components.board.dialog.readerCanEdit.subtitle") }}
-					</div>
-					<div>
-						<VRadioGroup v-model="selectedOption" hide-details class="mt-6">
-							<VRadio
-								v-for="(option, index) in radioOptions"
-								:key="index"
-								:value="option.value"
-								class="align-start mb-2"
-								:data-testid="option.dataTestid"
-							>
-								<template #label>
-									<div class="inline-flex flex-column mt-2">
-										<i18n-t :keypath="option.labelHeader" scope="global">
-											<b>{{ t(option.labelInlineFormattedText) }}</b>
-										</i18n-t>
-										<div>
-											<span class="radio-label">
-												{{ t(option.labelDescription) }}
-											</span>
-										</div>
-									</div>
-								</template>
-							</VRadio>
-						</VRadioGroup>
-					</div>
-				</template>
-			</template>
-			<template #actions>
-				<div class="mr-4 mb-3">
-					<VBtn
-						ref="cancelButton"
-						class="ms-auto mr-2"
-						:text="isDraftMode ? t('common.labels.close') : t('common.actions.cancel')"
-						:variant="isDraftMode ? 'outlined' : 'flat'"
-						data-testid="edit-settings-cancel-btn"
-						@click="onClose"
-					/>
-					<VBtn
-						v-if="!isDraftMode"
-						ref="saveButton"
-						class="ms-auto"
-						color="primary"
-						variant="flat"
-						:text="t('common.actions.save')"
-						data-testid="edit-settings-save-btn"
-						@click="onSave"
-					/>
-				</div>
-			</template>
-		</VCard>
-	</VDialog>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
 import { WarningAlert } from "@ui-alert";
-import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { Dialog } from "@ui-dialog";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
-import type { VCard } from "vuetify/components";
 
-type Props = {
+const props = defineProps<{
 	isDraftMode: boolean;
 	isEditableSelected: boolean;
-};
-
-const props = defineProps<Props>();
+}>();
 
 const isOpen = defineModel({
 	type: Boolean,
@@ -103,12 +64,9 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs } = useDisplay();
 
 type EditOption = "notEditable" | "editable";
 const selectedOption = ref<EditOption>("notEditable");
-
-const modalTitle = computed(() => t("components.board.menu.editing.settings.title"));
 
 const radioOptions = computed(() => [
 	{
@@ -139,20 +97,6 @@ const onSave = () => {
 
 	emit("close");
 };
-
-const editSettings = ref<VCard>();
-const { deactivate } = useFocusTrap(editSettings, {
-	immediate: true,
-});
-
-watch(
-	() => isOpen.value,
-	(isOpen: boolean) => {
-		if (!isOpen) {
-			deactivate();
-		}
-	}
-);
 
 watch(
 	() => props.isEditableSelected,
