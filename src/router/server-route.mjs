@@ -1,40 +1,25 @@
-const isServer = (path) => {
-	return (
-		path.startsWith("/api/v") &&
-		!isFileStorage(path) &&
-		!isCommonCartridge(path)
-	);
-};
+const isServer = (path) => path.startsWith("/api/v") && !isFileStorage(path) && !isCommonCartridge(path);
 
-const isFileStorage = (path) => {
-	return path.startsWith("/api/v3/file") || path.startsWith("/api/v3/wopi");
-};
+const isFileStorage = (path) => path.startsWith("/api/v3/file") || path.startsWith("/api/v3/wopi");
 
 /**
  * @param {string} path
  */
-const isH5pEditor = (path) => {
-	return path.startsWith("/api/v3/h5p-editor");
-};
+const isH5pEditor = (path) => path.startsWith("/api/v3/h5p-editor");
 
 /**
  * @param {string} path
  */
-const isH5pStaticFiles = (path) => {
-	return path.startsWith("/api/v3/h5p-editor/h5pstatics");
-};
+const isFWUEndpoint = (path) => path.startsWith("/api/v3/fwu");
 
 /**
  * @param {string} path
  */
-const isCommonCartridge = (path) => {
-	return path.startsWith("/api/v3/common-cartridge");
-};
+const isH5pStaticFiles = (path) => path.startsWith("/api/v3/h5p-editor/h5pstatics");
 
-export {
-	isServer,
-	isFileStorage,
-	isH5pEditor,
-	isH5pStaticFiles,
-	isCommonCartridge,
-};
+/**
+ * @param {string} path
+ */
+const isCommonCartridge = (path) => path.startsWith("/api/v3/common-cartridge");
+
+export { isCommonCartridge, isFileStorage, isFWUEndpoint, isH5pEditor, isH5pStaticFiles, isServer };

@@ -63,7 +63,7 @@
 			@update:model-value="$emit('update:modelValue', { ...modelValue, teacher: $event })"
 		>
 			<template #icon>
-				<v-icon>$teacher</v-icon>
+				<v-icon :icon="mdiHumanMaleBoard" />
 			</template>
 		</base-input>
 		<base-input
@@ -103,6 +103,7 @@ import {
 	mdiAccountOffOutline,
 	mdiAccountOutline,
 	mdiAccountSchoolOutline,
+	mdiHumanMaleBoard,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
 import useVuelidate from "@vuelidate/core";
@@ -133,6 +134,7 @@ export default defineComponent({
 			mdiAccountOutline,
 			mdiAccountSchoolOutline,
 			mdiShieldAccountVariantOutline,
+			mdiHumanMaleBoard,
 			memberValidationMessages: [{ key: "required", message: this.$t("common.validation.required") }],
 			rolesValidationMessages: [
 				{

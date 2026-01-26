@@ -477,7 +477,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     TopicEdit = 'TOPIC_EDIT',
     TopicView = 'TOPIC_VIEW',
     UploadFiles = 'UPLOAD_FILES',
-    UseLibreoffice = 'USE_LIBREOFFICE',
     UseRocketchat = 'USE_ROCKETCHAT',
     UsergroupCreate = 'USERGROUP_CREATE',
     UsergroupEdit = 'USERGROUP_EDIT',
@@ -1590,6 +1589,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_LERNSTORE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_FWU_CONTENT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -8235,7 +8240,6 @@ export enum Permission {
     TopicEdit = 'TOPIC_EDIT',
     TopicView = 'TOPIC_VIEW',
     UploadFiles = 'UPLOAD_FILES',
-    UseLibreoffice = 'USE_LIBREOFFICE',
     UseRocketchat = 'USE_ROCKETCHAT',
     UsergroupCreate = 'USERGROUP_CREATE',
     UsergroupEdit = 'USERGROUP_EDIT',
