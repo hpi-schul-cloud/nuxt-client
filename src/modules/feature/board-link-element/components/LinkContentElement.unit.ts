@@ -191,6 +191,52 @@ describe("LinkContentElement", () => {
 			});
 
 			describe("when element is in edit mode", () => {
+				it("should not have href and target attributes", () => {
+					// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+					// because of nested interactive elements
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setupWrapper({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+					expect(linkElement.attributes("href")).toBeUndefined();
+					expect(linkElement.attributes("target")).toBeUndefined();
+				});
+
+				it("should open element in new tab when clicked", async () => {
+					const windowMock = createMock<Window>();
+					vi.spyOn(globalThis, "open").mockImplementation(() => windowMock);
+
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setupWrapper({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+
+					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+					await linkElement.trigger("click");
+
+					expect(window.open).toHaveBeenCalledTimes(1);
+					expect(window.open).toHaveBeenCalledWith(`${linkElementContent.url}`, "_blank", "noopener noreferrer");
+				});
+
+				it.each(["enter", "space"])("should open element in new tab when %s is pressed", async (key) => {
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setupWrapper({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+
+					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+					await linkElement.trigger(`keydown.${key}`);
+
+					expect(window.open).toHaveBeenCalledTimes(1);
+					expect(window.open).toHaveBeenCalledWith(`${linkElementContent.url}`, "_blank", "noopener noreferrer");
+				});
+
 				it.each(["up", "down"])("should 'emit move-keyboard:edit' when arrow key %s is pressed", async (key) => {
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
@@ -207,6 +253,18 @@ describe("LinkContentElement", () => {
 			});
 
 			describe("when element is in view mode", () => {
+				it("should have href and target attributes", () => {
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setupWrapper({
+						content: linkElementContent,
+						isEditMode: false,
+					});
+					const linkElement = wrapper.findComponent('[data-testid="board-link-element"]');
+
+					expect(linkElement.attributes("href")).toBe(linkElementContent.url);
+					expect(linkElement.attributes("target")).toBe("_blank");
+				});
+
 				it.each(["up", "down"])(
 					"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
 					async (key) => {

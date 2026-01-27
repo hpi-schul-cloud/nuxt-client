@@ -1,43 +1,29 @@
 <template>
-	<!-- HINT for Devs – dBildungscloud (default theme) footer is the only one with he link 'Security'; the other instances are not using this link.  -->
-	<footer class="footer">
-		<div>
-			<template v-for="(link, index) in links" :key="link.text">
-				<span v-if="index !== 0"> - </span>
-				<base-link class="footer-link" v-bind="link">
-					{{ link.text }}
-				</base-link>
-			</template>
-		</div>
-		<p class="bottom-line">
-			<span>©{{ currentYear }} {{ theme.name }}</span>
-			| Made with
-			<span class="heart">❤</span> in Potsdam |
-			{{ $t("components.legacy.footer.powered_by") }}
-			<a href="https://lokalise.com" target="_blank">
-				<img
-					class="poweredby-logo"
-					src="@/assets/img/lokalise_logo.svg"
-					:alt="$t('components.legacy.footer.lokalise_logo_alt')"
-				/>
-			</a>
-		</p>
-	</footer>
+	<VFooter class="d-flex align-center justify-center flex-wrap mb-3 footer">
+		<VBtn
+			v-for="(link, index) in links"
+			:key="index"
+			class="footer-btn text-lg"
+			color="primary"
+			variant="plain"
+			:href="link.href"
+			:to="link.to"
+			:text="link.text"
+			:target="link.target"
+		/>
+	</VFooter>
 </template>
 
 <script setup lang="ts">
-import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { VFooter } from "vuetify/components";
 
 const { t } = useI18n();
-const theme = injectStrict(THEME_KEY);
-
-const currentYear = new Date().getFullYear();
 
 const links = computed(() => {
-	const baseLinks = [
+	const baseLinks: Array<{ text: string; to?: string; href?: string; target?: string }> = [
 		{
 			to: "/imprint",
 			text: t("components.legacy.footer.imprint"),
@@ -46,74 +32,37 @@ const links = computed(() => {
 			href: "/termsofuse",
 			text: t("components.legacy.footer.terms"),
 			target: "_blank",
-			rel: "noopener",
 		},
 		{
 			to: "/privacypolicy",
 			text: t("components.legacy.footer.privacy_policy"),
 			target: "_blank",
-			rel: "noopener",
 		},
 		{
 			href: "mailto:support@dbildungscloud.de?subject=dBildungscloud%20Anfrage",
 			text: t("components.legacy.footer.contact"),
 		},
-		{
-			href: "https://github.com/hpi-schul-cloud",
-			text: t("components.legacy.footer.github"),
-		},
 	];
 
-	if (useEnvConfig().value.ALERT_STATUS_URL) {
-		baseLinks.push({
-			href: useEnvConfig().value.ALERT_STATUS_URL as string,
-			text: t("components.legacy.footer.status"),
-			target: "_blank",
-			rel: "noopener",
-		});
-	}
-	baseLinks.push({
-		to: "/security",
-		text: t("components.legacy.footer.security"),
-	});
-
-	return baseLinks;
+	return useEnvConfig().value.ALERT_STATUS_URL
+		? [
+				...baseLinks,
+				{
+					href: useEnvConfig().value.ALERT_STATUS_URL as string,
+					text: t("components.legacy.footer.status"),
+					target: "_blank",
+				},
+			]
+		: baseLinks;
 });
 </script>
 
 <style lang="scss" scoped>
 .footer {
-	width: 100%;
-	padding: 0 16px;
-	margin: 24px 0 16px;
-	text-align: center;
+	max-height: var(--footer-height);
 }
-
-.bottom-line {
-	margin-top: 8px;
-
-	.heart {
-		color: rgba(var(--v-theme-primary));
-	}
-
-	.poweredby-logo {
-		height: 1em;
-		vertical-align: middle;
-	}
-}
-
-.footer-link {
-	color: rgba(var(--v-theme-primary));
-	border: none;
-
-	&:focus,
-	&:hover {
-		color: rgba(var(--v-theme-primary-darken-1));
-		text-decoration: underline;
-	}
-
-	&:visited {
-		color: rgba(var(--v-theme-primary));
-	}
+.footer-btn {
+	opacity: 1;
+	font-weight: normal;
 }
 </style>
