@@ -120,7 +120,7 @@ const linkAriaLabel = computed(
 		`${t("pages.rooms.members.dialog.addExternalPerson.steps.email.error.userNotExternal.requirements")}, ${t("common.ariaLabel.newTab")}`
 );
 
-const requirementsLink = computed(() => useEnvConfig().value.ROOM_MEMBER_INFO_URL);
+const requirementsLink = computed(() => useEnvConfig().value.ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL);
 </script>
 
 <style scoped lang="scss">

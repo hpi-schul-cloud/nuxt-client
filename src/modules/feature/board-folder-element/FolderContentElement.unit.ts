@@ -12,10 +12,10 @@ import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { flushPromises, mount } from "@vue/test-utils";
+import { flushPromises } from "@vue/test-utils";
 import { Mock } from "vitest";
 import { computed } from "vue";
-import { Router, useRouter } from "vue-router";
+import { Router, RouterLink, useRouter } from "vue-router";
 import { VAlert } from "vuetify/components";
 
 vi.mock("./useFolderAlerts.composable");
@@ -27,7 +27,16 @@ vi.mock("@data-board", () => ({
 	})),
 }));
 
-vi.mock("vue-router");
+vi.mock("vue-router", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-router")>();
+	return {
+		...actual,
+		useRoute: vi.fn(),
+		useRouter: vi.fn(() => ({
+			push: vi.fn(),
+		})),
+	};
+});
 const useRouterMock = <Mock>useRouter;
 
 describe("FolderContentElement", () => {
@@ -42,7 +51,6 @@ describe("FolderContentElement", () => {
 			lastUpdatedAt: "2024-01-01T00:00:00Z",
 		},
 	};
-	const router = createMock<Router>();
 
 	const setupWrapper = (options: {
 		isEditMode?: boolean;
@@ -52,7 +60,8 @@ describe("FolderContentElement", () => {
 		alerts?: FolderAlert[];
 		fileStatistics?: ReturnType<typeof parentStatisticFactory.build>;
 	}) => {
-		useRouterMock.mockReturnValueOnce(router);
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 		const statistic =
 			options.fileStatistics ||
 			parentStatisticFactory.build({
@@ -77,6 +86,7 @@ describe("FolderContentElement", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					FileStatistic: true,
+					RouterLink: true,
 				},
 			},
 			props: {
@@ -149,6 +159,16 @@ describe("FolderContentElement", () => {
 			expect(menu.exists()).toBe(false);
 		});
 
+		it("should render folder element title link with correct props", async () => {
+			const { wrapper, mockElement } = setupWrapper({
+				isEditMode: false,
+			});
+
+			const link = wrapper.getComponent(RouterLink);
+			expect(link.props("to")).toBe(`/folder/${mockElement.id}`);
+			expect(link.attributes("aria-label")).toBe(`components.cardElement.folderElement ${mockElement.content.title}`);
+		});
+
 		it.each(["up", "down"])(
 			"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
 			async (key) => {
@@ -156,9 +176,9 @@ describe("FolderContentElement", () => {
 					isEditMode: false,
 				});
 
-				const folderElemet = wrapper.findComponent('[data-testid="board-folder-element"]');
+				const folderElement = wrapper.findComponent('[data-testid="board-folder-element"]');
 
-				await folderElemet.trigger(`keydown.${key}`);
+				await folderElement.trigger(`keydown.${key}`);
 
 				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
 			}
@@ -166,25 +186,12 @@ describe("FolderContentElement", () => {
 
 		describe("when contentelementbar is clicked", () => {
 			it("should push folder route to router", async () => {
-				const { wrapper, mockElement } = setupWrapper({
+				const { wrapper, mockElement, router } = setupWrapper({
 					isEditMode: false,
 				});
 
 				const contentElementBar = wrapper.findComponent(ContentElementBar);
 				await contentElementBar.trigger("click");
-
-				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
-			});
-		});
-
-		describe("when folder element title is focused and enter is pressed", () => {
-			it("should push folder route to router", async () => {
-				const { wrapper, mockElement } = setupWrapper({
-					isEditMode: false,
-				});
-
-				const folderElement = wrapper.findComponent(ContentElementBar);
-				await folderElement.trigger("keydown.enter");
 
 				expect(router.push).toHaveBeenCalledWith(`/folder/${mockElement.id}`);
 			});

@@ -1961,6 +1961,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     ROOM_MEMBER_INFO_URL: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: string | null;
 }
 /**
  * 

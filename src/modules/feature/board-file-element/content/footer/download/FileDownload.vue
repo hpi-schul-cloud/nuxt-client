@@ -30,8 +30,8 @@ const onDownload = async (event: Event) => {
 };
 </script>
 
-<style type="text/scss">
+<style scoped lang="scss">
 .download-button {
-	margin-right: -6px;
+	padding-right: 10px;
 }
 </style>
