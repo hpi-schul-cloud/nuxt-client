@@ -9,7 +9,7 @@ import { useNotificationStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SCDialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -77,7 +77,7 @@ describe("ImportCardDialog", () => {
 		const { wrapper } = setup();
 		await flushPromises();
 
-		const dialog = wrapper.findComponent(Dialog);
+		const dialog = wrapper.findComponent(SCDialog);
 		await dialog.vm.$emit("confirm");
 		await flushPromises();
 		expect(useNotificationStore().notify).toHaveBeenCalled();

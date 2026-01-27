@@ -1,15 +1,16 @@
 <template>
-	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
-		:message="deleteMessage"
-		@confirm="() => emit('confirm')"
-		@cancel="() => emit('cancel')"
+	<SCDialog
+		v-model="isDialogOpen"
+		:title="deleteMessage"
+		data-testid="delete-file-dialog"
+		@confirm="emit('confirm')"
+		@cancel="emit('cancel')"
 	/>
 </template>
 
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
-import { Dialog } from "@ui-dialog";
+import { SCDialog } from "@ui-dialog";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 

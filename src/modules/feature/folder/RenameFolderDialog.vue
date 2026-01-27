@@ -1,13 +1,14 @@
 <template>
-	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
-		:message="t('pages.folder.ariaLabels.menu.action.edit')"
+	<SCDialog
+		v-model="isDialogOpen"
+		title="pages.folder.ariaLabels.menu.action.edit"
 		:confirm-btn-disabled="!isNameValid"
-		@cancel="onCancel"
+		data-testid="rename-folder-dialog"
 		@confirm="onConfirm"
+		@cancel="onCancel"
 	>
 		<template #content>
-			<v-text-field
+			<VTextField
 				v-model="nameRef"
 				data-testid="rename-dialog-input"
 				density="compact"
@@ -17,11 +18,11 @@
 				:rules="[rules.validateOnOpeningTag]"
 			/>
 		</template>
-	</Dialog>
+	</SCDialog>
 </template>
 
 <script setup lang="ts">
-import { Dialog } from "@ui-dialog";
+import { SCDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
