@@ -3,7 +3,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { VueWrapper } from "@vue/test-utils";
-import { VCard, VDialog } from "vuetify/lib/components/index";
+import { VCard, VDialog } from "vuetify/components";
 
 describe("ConfirmationDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;

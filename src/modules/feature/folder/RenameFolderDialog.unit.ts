@@ -1,10 +1,16 @@
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
-import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
+import { setActivePinia } from "pinia";
+import { VCard, VTextField } from "vuetify/components";
 
 describe("RenameFolderDialog", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("when the dialog isDialogOpen is true", () => {
 		const setup = () => {
 			const name = "name of item";
@@ -56,7 +62,7 @@ describe("RenameFolderDialog", () => {
 				const { wrapper } = setup();
 				const dialog = wrapper.findComponent(Dialog);
 
-				const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
+				const input = dialog.findComponent(VCard).find("input[type='text']");
 				await input.setValue("new name");
 				await input.trigger("input");
 
@@ -85,7 +91,7 @@ describe("RenameFolderDialog", () => {
 
 		it("should not render card", () => {
 			const { wrapper } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
+			const card = wrapper.findComponent(Dialog).findComponent(VCard);
 
 			expect(card.exists()).toBe(false);
 		});

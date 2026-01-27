@@ -1,10 +1,16 @@
 import RenameFileDialog from "./RenameFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
-import { VCard, VDialog, VTextField } from "vuetify/lib/components/index";
+import { setActivePinia } from "pinia";
+import { VCard, VTextField } from "vuetify/components";
 
 describe("RenameFileDialog", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("when the dialog isDialogOpen is true", () => {
 		const setup = () => {
 			const entityName = "entity name";
@@ -28,8 +34,6 @@ describe("RenameFileDialog", () => {
 							},
 						}),
 					],
-					stubs: { UseFocusTrap: true },
-					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 			return { wrapper, entityName, name };
@@ -37,7 +41,7 @@ describe("RenameFileDialog", () => {
 
 		it("should render entity name with name", () => {
 			const { wrapper, entityName } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
+			const card = wrapper.findComponent(Dialog).findComponent(VCard);
 
 			expect(card.text()).toContain(entityName);
 		});
@@ -45,7 +49,7 @@ describe("RenameFileDialog", () => {
 		it("should render input with name", () => {
 			const { wrapper, name } = setup();
 
-			const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
+			const input = wrapper.findComponent(Dialog).findComponent(VCard).find("input[type='text']");
 			expect(input.exists()).toBe(true);
 			expect(input.attributes("value")).toBe(name);
 		});
@@ -77,7 +81,7 @@ describe("RenameFileDialog", () => {
 				const { wrapper } = setup();
 				const dialog = wrapper.findComponent(Dialog);
 
-				const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
+				const input = wrapper.findComponent(Dialog).findComponent(VCard).find("input[type='text']");
 				await input.setValue("new name");
 				await input.trigger("input");
 
@@ -92,7 +96,7 @@ describe("RenameFileDialog", () => {
 			it("should still show the latest valid name", async () => {
 				const { name, wrapper } = setup();
 
-				const input = wrapper.findComponent(VDialog).findComponent(VCard).find("input[type='text']");
+				const input = wrapper.findComponent(Dialog).findComponent(VCard).find("input[type='text']");
 
 				expect(input.exists()).toBe(true);
 				expect(input.attributes("value")).toBe(name);
@@ -123,7 +127,7 @@ describe("RenameFileDialog", () => {
 
 		it("should not render card", () => {
 			const { wrapper } = setup();
-			const card = wrapper.findComponent(VDialog).findComponent(VCard);
+			const card = wrapper.findComponent(Dialog).findComponent(VCard);
 
 			expect(card.exists()).toBe(false);
 		});

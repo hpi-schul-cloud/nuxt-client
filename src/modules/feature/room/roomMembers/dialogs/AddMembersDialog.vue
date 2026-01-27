@@ -1,121 +1,90 @@
 <template>
-	<VDialog
+	<Dialog
 		v-model="isOpen"
-		:width="xs ? 'auto' : 480"
 		data-testid="dialog-add-participants"
-		max-width="480"
-		persistent
-		@keydown.esc="onClose"
+		title="pages.rooms.members.add"
+		cancel-btn-lang-key="common.actions.cancel"
+		confirm-btn-lang-key="common.actions.add"
+		@cancel="onClose"
+		@confirm="onAddMembers"
 	>
-		<VCard ref="addMembersContent">
-			<template #title>
-				<h2 class="mt-2">
-					{{ t("pages.rooms.members.add") }}
-				</h2>
-			</template>
+		<template #content>
+			<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
+			<VAutocomplete
+				ref="autoCompleteSchool"
+				v-model="selectedSchool"
+				data-testid="add-participant-school"
+				density="comfortable"
+				class="mt-8"
+				item-title="name"
+				item-value="id"
+				:items="schoolItems"
+				:label="t('global.sidebar.item.school')"
+				:disabled="isSchoolSelectionDisabled && !isAdminMode"
+				v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
+				@update:model-value="onValueChange"
+				@update:menu="onItemListToggle"
+			/>
 
-			<template #text>
-				<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
-				<div class="mt-8" data-testid="add-participant-school">
-					<VAutocomplete
-						ref="autoCompleteSchool"
-						v-model="selectedSchool"
-						density="comfortable"
-						item-title="name"
-						item-value="id"
-						:items="schoolItems"
-						:label="t('global.sidebar.item.school')"
-						:disabled="isSchoolSelectionDisabled && !isAdminMode"
-						v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
-						@update:model-value="onValueChange"
-						@update:menu="onItemListToggle"
-					/>
-				</div>
+			<VSelect
+				ref="selectRole"
+				v-model="selectedSchoolRole"
+				class="mt-4"
+				density="comfortable"
+				item-title="name"
+				item-value="id"
+				:item-props="schoolRoleListItemProps"
+				:items="schoolRoles"
+				:label="t('pages.rooms.members.tableHeader.schoolRole')"
+				:disabled="isItemListDisabled && !isAdminMode"
+				:readonly="schoolRoles.length === 1"
+				:data-testid="`role-item-${selectedSchoolRole}`"
+				v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
+				@update:model-value="onValueChange"
+				@update:menu="onItemListToggle"
+			>
+				<template #selection="{ item }">
+					<VIcon class="mr-1" :icon="item.raw.icon" />
+					{{ item.title }}
+				</template>
+			</VSelect>
 
-				<div class="mt-4" data-testid="add-participant-role">
-					<VSelect
-						ref="selectRole"
-						v-model="selectedSchoolRole"
-						density="comfortable"
-						item-title="name"
-						item-value="id"
-						:item-props="schoolRoleListItemProps"
-						:items="schoolRoles"
-						:label="t('pages.rooms.members.tableHeader.schoolRole')"
-						:disabled="isItemListDisabled && !isAdminMode"
-						:readonly="schoolRoles.length === 1"
-						:data-testid="`role-item-${selectedSchoolRole}`"
-						v-bind="isAdminMode ? { menuIcon: '', readonly: true } : undefined"
-						@update:model-value="onValueChange"
-						@update:menu="onItemListToggle"
-					>
-						<template #selection="{ item }">
-							<VIcon class="mr-1" :icon="item.raw.icon" />
-							{{ item.title }}
-						</template>
-					</VSelect>
-				</div>
+			<InfoAlert
+				v-if="!isAdminMode && determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility"
+				data-testid="student-visibility-info-alert"
+			>
+				{{ t("pages.rooms.members.add.students.forbidden") }}
+			</InfoAlert>
 
-				<InfoAlert
-					v-if="!isAdminMode && determineStudentAlertType === StudentAlertTypeEnum.StudentVisibility"
-					data-testid="student-visibility-info-alert"
-				>
-					{{ t("pages.rooms.members.add.students.forbidden") }}
-				</InfoAlert>
+			<InfoAlert
+				v-else-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
+				data-testid="student-admin-info-alert"
+			>
+				{{ t("pages.rooms.members.add.students.studentAdmins") }}
+			</InfoAlert>
 
-				<InfoAlert
-					v-else-if="determineStudentAlertType === StudentAlertTypeEnum.StudentAdmin"
-					data-testid="student-admin-info-alert"
-				>
-					{{ t("pages.rooms.members.add.students.studentAdmins") }}
-				</InfoAlert>
+			<WarningAlert v-if="isStudentSelectionDisabled">
+				{{ t("pages.rooms.members.add.warningText") }}
+			</WarningAlert>
 
-				<WarningAlert v-if="isStudentSelectionDisabled">
-					{{ t("pages.rooms.members.add.warningText") }}
-				</WarningAlert>
-
-				<div class="mt-4" data-testid="add-participant-name">
-					<v-autocomplete
-						ref="autoCompleteUsers"
-						v-model="selectedUsers"
-						chips
-						clear-on-select
-						closable-chips
-						item-value="userId"
-						item-title="fullName"
-						multiple
-						:disabled="isStudentSelectionDisabled"
-						:items="potentialRoomMembers"
-						:label="t('common.labels.name')"
-						@update:menu="onItemListToggle"
-					/>
-				</div>
-			</template>
-
-			<template #actions>
-				<VSpacer />
-				<div class="mr-4 mb-3">
-					<VBtn
-						ref="cancelButton"
-						class="ms-auto mr-2"
-						color="primary"
-						:text="t('common.actions.cancel')"
-						data-testid="add-participant-cancel-btn"
-						@click="onClose"
-					/>
-					<VBtn
-						ref="addButton"
-						class="ms-auto"
-						color="primary"
-						variant="flat"
-						:text="t('common.actions.add')"
-						data-testid="add-participant-save-btn"
-						@click="onAddMembers"
-					/>
-				</div>
-			</template>
-		</VCard>
-	</VDialog>
+			<VAutocomplete
+				ref="autoCompleteUsers"
+				v-model="selectedUsers"
+				class="mt-4"
+				data-testid="add-participant-name"
+				chips
+				clear-on-select
+				closable-chips
+				item-value="userId"
+				item-title="fullName"
+				multiple
+				:disabled="isStudentSelectionDisabled"
+				:items="potentialRoomMembers"
+				:label="t('common.labels.name')"
+				@update:menu="onItemListToggle"
+			/>
+		</template>
+	</Dialog>
 </template>
 
 <script setup lang="ts">
@@ -124,11 +93,12 @@ import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
+import { Dialog } from "@ui-dialog";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
 import { type VAutocomplete, type VCard, type VSelect } from "vuetify/components";
+
 interface SchoolRoleItem {
 	id: RoleName;
 	name: string;
@@ -140,13 +110,14 @@ enum StudentAlertTypeEnum {
 	StudentVisibility = "STUDENT_VISIBILITY",
 }
 
-interface AddMembersDialogProps {
-	isAdminMode?: boolean;
-}
-
-const props = withDefaults(defineProps<AddMembersDialogProps>(), {
-	isAdminMode: false,
-});
+const props = withDefaults(
+	defineProps<{
+		isAdminMode?: boolean;
+	}>(),
+	{
+		isAdminMode: false,
+	}
+);
 
 const isOpen = defineModel({
 	type: Boolean,
@@ -158,7 +129,6 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { isCurrentUserStudent, potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
