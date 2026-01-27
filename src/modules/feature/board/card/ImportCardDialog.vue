@@ -1,5 +1,5 @@
 <template>
-	<SCDialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		:is-loading="isImporting"
 		title="components.molecules.import.card.options.title"
@@ -60,7 +60,7 @@
 				/>
 			</VForm>
 		</template>
-	</SCDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -72,7 +72,7 @@ import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { SCDialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { sortBy } from "lodash-es";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";

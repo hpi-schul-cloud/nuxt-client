@@ -2,7 +2,7 @@ import { useAddCollaboraFile } from "../composables/add-collabora-file.composabl
 import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
-import { SCDialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick, ref } from "vue";
@@ -85,7 +85,7 @@ describe("CollaboraFileDialog", () => {
 		it("should have confirm button disabled initially", async () => {
 			const { wrapper } = await setup();
 
-			const dialog = wrapper.findComponent(SCDialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			expect(dialog.props("confirmBtnDisabled")).toBe(true);
 		});
 
@@ -130,7 +130,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
-				const dialog = wrapper.findComponent(SCDialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(false);
 			});
 		});
@@ -159,7 +159,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
-				const dialog = wrapper.findComponent(SCDialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
@@ -197,7 +197,7 @@ describe("CollaboraFileDialog", () => {
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 
-				const dialog = wrapper.findComponent(SCDialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
@@ -218,7 +218,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue("invalid/filename");
 				await nextTick();
 
-				const dialog = wrapper.findComponent(SCDialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
@@ -226,7 +226,7 @@ describe("CollaboraFileDialog", () => {
 		it("should close modal on close button click", async () => {
 			const { closeCollaboraFileDialog, wrapper } = await setup();
 
-			const dialog = wrapper.findComponent(SCDialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			dialog.vm.$emit("cancel");
 
 			await nextTick();
@@ -250,7 +250,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue("filename");
 				await nextTick();
 
-				const dialog = wrapper.findComponent(SCDialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				await dialog.vm.$emit("after-leave");
 
 				expect(fileNameInput.find("input").element.value).toBe("");

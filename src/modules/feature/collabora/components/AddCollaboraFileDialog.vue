@@ -1,5 +1,5 @@
 <template>
-	<SCDialog
+	<SvsDialog
 		v-model="isCollaboraFileDialogOpen"
 		title="feature.collabora.add-collabora-file-dialog.title"
 		:confirm-btn-disabled="!isFormValid"
@@ -32,14 +32,14 @@
 				/>
 			</VForm>
 		</template>
-	</SCDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
 import type { CreateCollaboraFilePayload } from "../types/collabora-file";
 import { CollaboraFileType } from "@data-file";
-import { SCDialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

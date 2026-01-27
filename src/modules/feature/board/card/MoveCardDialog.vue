@@ -1,5 +1,5 @@
 <template>
-	<SCDialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		:are-actions-disabled="isMoving"
 		title="components.molecules.move.card.title"
@@ -53,7 +53,7 @@
 				/>
 			</VForm>
 		</template>
-	</SCDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -64,7 +64,7 @@ import { RoomItem } from "@/types/room/Room";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
-import { SCDialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { sortBy } from "lodash-es";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";

@@ -1,5 +1,5 @@
 <template>
-	<SCDialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		title="pages.folder.ariaLabels.menu.action.edit"
 		:confirm-btn-disabled="!isNameValid"
@@ -18,11 +18,11 @@
 				:rules="[rules.validateOnOpeningTag]"
 			/>
 		</template>
-	</SCDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import { SCDialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

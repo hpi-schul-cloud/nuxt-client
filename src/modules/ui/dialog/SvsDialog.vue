@@ -22,13 +22,13 @@
 				</VCardText>
 				<VCardActions v-if="!noActions" class="pa-6 pt-2 ga-2 justify-end">
 					<slot name="actions">
-						<ScDialogBtnCancel
+						<SvsDialogBtnCancel
 							:text-lang-key="cancelBtnLangKey"
 							:data-testid="`${testId}-cancel`"
 							:disabled="areActionsDisabled"
 							@click="onCancel"
 						/>
-						<ScDialogBtnConfirm
+						<SvsDialogBtnConfirm
 							v-if="!noConfirm"
 							:data-testid="`${testId}-confirm`"
 							:text-lang-key="confirmBtnLangKey"
@@ -43,8 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import ScDialogBtnCancel from "./SCDialogBtnCancel.vue";
-import ScDialogBtnConfirm from "./SCDialogBtnConfirm.vue";
+import SvsDialogBtnCancel from "./SvsDialogBtnCancel.vue";
+import SvsDialogBtnConfirm from "./SvsDialogBtnConfirm.vue";
 import { i18nKeyExists } from "@/plugins/i18n";
 import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";

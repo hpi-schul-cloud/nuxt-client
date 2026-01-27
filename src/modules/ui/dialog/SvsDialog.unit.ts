@@ -1,4 +1,4 @@
-import SCDialog from "./SCDialog.vue";
+import SvsDialog from "./SvsDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -15,7 +15,7 @@ describe("Dialog", () => {
 		const slotContent = "<div>content</div>";
 		const confirmBtnLangKey = "language.key";
 
-		const wrapper = mount(SCDialog, {
+		const wrapper = mount(SvsDialog, {
 			props: {
 				modelValue: isOpened,
 				title,

@@ -1,5 +1,5 @@
 <template>
-	<SCDialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		:title="t('ui.rename.dialog.title', { entity: entityName })"
 		:confirm-btn-disabled="!isNameValid"
@@ -18,13 +18,13 @@
 				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames, rules.checkInvalidCharacters]"
 			/>
 		</template>
-	</SCDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
-import { SCDialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

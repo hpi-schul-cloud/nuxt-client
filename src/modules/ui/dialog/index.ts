@@ -1,5 +1,5 @@
-import SCDialog from "./SCDialog.vue";
-import SCDialogBtnCancel from "./SCDialogBtnCancel.vue";
-import SCDialogBtnConfirm from "./SCDialogBtnConfirm.vue";
+import SvsDialog from "./SvsDialog.vue";
+import SvsDialogBtnCancel from "./SvsDialogBtnCancel.vue";
+import SvsDialogBtnConfirm from "./SvsDialogBtnConfirm.vue";
 
-export { SCDialog, SCDialogBtnCancel, SCDialogBtnConfirm };
+export { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm };
