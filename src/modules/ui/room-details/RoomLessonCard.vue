@@ -34,9 +34,7 @@
 			</h2>
 			<div v-if="showChip" class="ma-0 pb-1 pt-0 submitted-section" data-testid="content-card-lesson-info">
 				<div class="chip-items-group">
-					<v-chip size="small" class="chip-item">
-						<span class="chip-value">{{ taskChipValue }}</span>
-					</v-chip>
+					<v-chip size="small" :text="taskChipValue" />
 				</div>
 			</div>
 		</v-card-text>
