@@ -15,7 +15,7 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<v-card-text data-testid="content-card-task-content">
+		<v-card-text class="pt-2" data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" :data-testid="`task-card-title-${taskCardIndex}`">
 					<v-icon size="14" class="fill" :icon="mdiFormatListChecks" />
@@ -29,7 +29,7 @@
 					/>
 				</div>
 			</div>
-			<h2 class="text-h4 mt-1 mb-2 task-name" tabindex="-1" :data-testid="`task-title-${taskCardIndex}`">
+			<h2 class="text-h4 mt-1 mb-1 task-name" tabindex="-1" :data-testid="`task-title-${taskCardIndex}`">
 				{{ task.name }}
 			</h2>
 			<RenderHTML
@@ -65,7 +65,7 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1" data-testid="content-card-task-actions">
+		<v-card-actions v-if="cardActions[userRole]?.length" class="pt-1" data-testid="content-card-task-actions">
 			<v-btn
 				v-for="(action, index) in cardActions[userRole]"
 				:key="index"
@@ -425,10 +425,6 @@ const getStyleClasses = () => (isPlanned.value || (isDraft.value && !isFinished.
 		text-align: right;
 		height: 36px;
 	}
-}
-
-.task-name {
-	line-height: var(--line-height-md);
 }
 
 .text-description {
