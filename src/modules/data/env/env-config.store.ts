@@ -87,6 +87,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
 	LICENSE_SUMMARY_URL: "",
 	ROOM_MEMBER_INFO_URL: "",
+	ROOM_MEMBER_ADD_EXTERNAL_PERSON_REQUIREMENTS_URL: "",
 };
 export const useEnvStore = defineStore("envConfigStore", () => {
 	const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);

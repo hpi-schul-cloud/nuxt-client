@@ -1557,6 +1557,16 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.lernstore.info.banner.title": "У майбутньому медіа будуть доступні через медіаполицю",
+	"pages.lernstore.info.banner.helpLinkText": "cторінки допомоги",
+	"pages.lernstore.info.banner.item.0.brb":
+		"З цього моменту медіатеки з Навчальний магазин (Mundo, Wir lernen online та FWU Медіа) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.n21":
+		"З цього моменту медіатеки з Навчальний магазин (Mundo і Wir lernen online) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
+	"pages.lernstore.info.banner.item.0.thr":
+		"З цього моменту медіатеки з Навчальний магазин (Mundo, Wir lernen online та Mediothek/Pixiothek) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
+	"pages.lernstore.info.banner.item.1":
+		"Тому Навчальний магазин буде вимкнено в 10-му тижні (04.03.2026). Вміст Навчальний магазин, вже інтегрований у теми, залишиться доступним.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
