@@ -106,6 +106,7 @@
 <script>
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
@@ -146,6 +147,25 @@ export default {
 			type: Boolean,
 		},
 	},
+	setup() {
+		const {
+			initializeUserType,
+			getPaginationState,
+			setPaginationState,
+			getSortingState,
+			setSortingState,
+			getFilterStorage,
+		} = useFilterLocalStorage();
+		initializeUserType("student");
+
+		return {
+			getPaginationState,
+			setPaginationState,
+			getSortingState,
+			setSortingState,
+			getFilterStorage,
+		};
+	},
 	data() {
 		return {
 			mdiAccountPlus,
@@ -160,23 +180,27 @@ export default {
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
-			currentFilterQuery: this.getUiState("filter", "pages.administration.students.index"),
-			page:
-				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index").page) ||
-				1,
-			limit:
-				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index").limit) ||
-				25,
-			sortBy:
-				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index").sortBy) ||
-				"firstName",
-			sortOrder:
-				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index").sortOrder) ||
-				"asc",
+			currentFilterQuery: this.getFilterStorage(),
+			// page:
+			// 	(this.getUiState("pagination", "pages.administration.students.index") &&
+			// 		this.getUiState("pagination", "pages.administration.students.index").page) ||
+			// 	1,
+			page: this.getPaginationState()?.page || 1,
+			limit: this.getPaginationState()?.limit || 25,
+			// limit:
+			// 	(this.getUiState("pagination", "pages.administration.students.index") &&
+			// 		this.getUiState("pagination", "pages.administration.students.index").limit) ||
+			// 	25,
+			sortBy: this.getSortingState()?.sortBy || "firstName",
+			sortOrder: this.getSortingState()?.sortOrder || "asc",
+			// sortBy:
+			// 	(this.getUiState("sorting", "pages.administration.students.index") &&
+			// 		this.getUiState("sorting", "pages.administration.students.index").sortBy) ||
+			// 	"firstName",
+			// sortOrder:
+			// 	(this.getUiState("sorting", "pages.administration.students.index") &&
+			// 		this.getUiState("sorting", "pages.administration.students.index").sortOrder) ||
+			// 	"asc",
 			tableColumns: [
 				{
 					field: "firstName",

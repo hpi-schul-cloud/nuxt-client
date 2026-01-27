@@ -29,17 +29,31 @@ type FilterQuery = {
 
 type Query = {
 	query: FilterQuery;
+	searchQuery?: string;
 };
 
 type StorageFilterState = {
-	"pages.administration.students.index"?: Query;
-	"pages.administration.teachers.index"?: Query;
+	[key: string]: Query | undefined;
+};
+
+type StoragePaginationState = {
+	[key: string]: {
+		page: number;
+		limit: number;
+	};
+};
+
+type StorageSortingState = {
+	[key: string]: {
+		sortBy: string;
+		sortOrder: string;
+	};
 };
 
 type UiState = {
-	pagination: object;
+	pagination: StoragePaginationState;
 	filter: StorageFilterState;
-	sorting: object;
+	sorting: StorageSortingState;
 	version: number;
 };
 

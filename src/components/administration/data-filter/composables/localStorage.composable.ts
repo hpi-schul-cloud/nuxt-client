@@ -1,6 +1,6 @@
 import { UiState, User } from "../types";
 import { useStorage } from "@vueuse/core";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 
 export const useFilterLocalStorage = () => {
 	const userType = ref<string>();
@@ -24,32 +24,63 @@ export const useFilterLocalStorage = () => {
 		filter: {
 			[filterStorageKey[User.STUDENT]]: {
 				query: {},
+				searchQuery: "",
 			},
 			[filterStorageKey[User.TEACHER]]: {
 				query: {},
+				searchQuery: "",
 			},
 		},
 		sorting: {},
 		version: 1,
 	};
 
-	const state = useStorage("uiState", defaultState);
+	const state: Ref<UiState> = useStorage("uiState", defaultState);
 
-	const getFilterStorage = () =>
-		userType.value === User.STUDENT
-			? state.value.filter["pages.administration.students.index"]?.query
-			: state.value.filter["pages.administration.teachers.index"]?.query;
-
-	const setFilterState = (val: object) => {
-		if (userType.value === User.STUDENT)
-			state.value.filter["pages.administration.students.index"] = {
-				query: val,
-			};
-		if (userType.value === User.TEACHER)
-			state.value.filter["pages.administration.teachers.index"] = {
-				query: val,
-			};
+	const getFilterStorage = () => {
+		const user = userType.value as User;
+		return state.value.filter[filterStorageKey[user]]?.query;
 	};
 
-	return { getFilterStorage, setFilterState, initializeUserType, state };
+	const setFilterState = (val: object) => {
+		const user = userType.value as User;
+		if (user && filterStorageKey[user]) {
+			state.value.filter[filterStorageKey[user]] = { query: val };
+		}
+	};
+
+	const getPaginationState = () => {
+		const user = userType.value as User;
+		return state.value.pagination[filterStorageKey[user]];
+	};
+
+	const setPaginationState = (val: { page: number; limit: number }) => {
+		const user = userType.value as User;
+		if (user && filterStorageKey[user]) {
+			state.value.pagination[filterStorageKey[user]] = val;
+		}
+	};
+
+	const getSortingState = () => {
+		const user = userType.value as User;
+		return state.value.sorting[filterStorageKey[user]];
+	};
+
+	const setSortingState = (val: { sortBy: string; sortOrder: string }) => {
+		const user = userType.value as User;
+		if (user && filterStorageKey[user]) {
+			state.value.sorting[filterStorageKey[user]] = val;
+		}
+	};
+
+	return {
+		getFilterStorage,
+		setFilterState,
+		initializeUserType,
+		state,
+		getPaginationState,
+		setPaginationState,
+		getSortingState,
+		setSortingState,
+	};
 };
