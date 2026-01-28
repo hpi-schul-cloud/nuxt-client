@@ -155,7 +155,8 @@ export const inputDateFormat = (date) => {
  */
 export const printDate = (date) => {
 	if (date) {
-		const result = fromUTC(date).format(DATETIME_FORMAT.date);
+		const tz = fromUTC(date).tz();
+		const result = tz.format(DATETIME_FORMAT.date);
 		return result;
 	}
 	return null;
