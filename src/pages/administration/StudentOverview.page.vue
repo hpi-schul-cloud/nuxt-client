@@ -155,6 +155,7 @@ export default {
 			getSortingState,
 			setSortingState,
 			getFilterStorage,
+			setFilterState,
 		} = useFilterLocalStorage();
 		initializeUserType("student");
 
@@ -164,6 +165,7 @@ export default {
 			getSortingState,
 			setSortingState,
 			getFilterStorage,
+			setFilterState,
 		};
 	},
 	data() {
@@ -259,10 +261,11 @@ export default {
 			tableSelection: [],
 			tableSelectionType: "inclusive",
 			active: false,
-			searchQuery:
-				(this.getUiState("filter", "pages.administration.students.index") &&
-					this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
-				"",
+			searchQuery: this.getFilterStorage()?.searchQuery || "",
+			// searchQuery:
+			// 	(this.getUiState("filter", "pages.administration.students.index") &&
+			// 		this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
+			// 	"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
@@ -414,17 +417,19 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.getUiState("filter", "pages.administration.students.index");
+			// const uiState = this.getUiState("filter", "pages.administration.students.index");
+			const uiState = this.getFilterStorage();
 
 			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
 
 			this.currentFilterQuery = query;
-			if (JSON.stringify(query) !== JSON.stringify(this.getUiState("filter", "pages.administration.students.index"))) {
+			if (JSON.stringify(query) !== JSON.stringify(this.getFilterStorage())) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.setUiState("filter", "pages.administration.students.index", {
-				query,
-			});
+			this.setFilterState({ query });
+			// this.setUiState("filter", "pages.administration.students.index", {
+			// 	query,
+			// });
 		},
 	},
 	created() {
@@ -459,27 +464,39 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.setUiState("sorting", "pages.administration.students.index", {
+			this.setSortingState({
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
+			// this.setUiState("sorting", "pages.administration.students.index", {
+			// 	sortBy: this.sortBy,
+			// 	sortOrder: this.sortOrder,
+			// });
 			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.setUiState("pagination", "pages.administration.students.index", {
-				currentPage: page,
+			this.setPaginationState({
+				limit: this.limit,
+				page: this.page,
 			});
+			// this.setUiState("pagination", "pages.administration.students.index", {
+			// 	currentPage: page,
+			// });
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
 			//this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
-			this.setUiState("pagination", "pages.administration.students.index", {
-				itemsPerPage: limit,
-				currentPage: this.page,
+			this.setPaginationState({
+				limit: this.limit,
+				page: this.page,
 			});
+			// this.setUiState("pagination", "pages.administration.students.index", {
+			// 	itemsPerPage: limit,
+			// 	currentPage: this.page,
+			// });
 			this.find();
 		},
 		printDate,
@@ -587,23 +604,24 @@ export default {
 					const query = this.currentFilterQuery;
 
 					this.find();
+					this.setFilterState({ query });
 
-					this.setUiState("filter", "pages.administration.students.index", {
-						query,
-					});
+					// this.setUiState("filter", "pages.administration.students.index", {
+					// 	query,
+					// });
 				}
 			}, 400);
 		},
-		setUiState(key, identifier, data) {
-			this.$store?.commit("uiState/set", {
-				key,
-				identifier,
-				object: data,
-			});
-		},
-		getUiState(key, identifier) {
-			return this.$store?.getters["uiState/get"]({ key, identifier });
-		},
+		// setUiState(key, identifier, data) {
+		// 	this.$store?.commit("uiState/set", {
+		// 		key,
+		// 		identifier,
+		// 		object: data,
+		// 	});
+		// },
+		// getUiState(key, identifier) {
+		// 	return this.$store?.getters["uiState/get"]({ key, identifier });
+		// },
 		dialogConfirm(confirmDialogProps) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
