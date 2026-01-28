@@ -37,41 +37,20 @@ export const useFilterLocalStorage = () => {
 
 	const state: Ref<UiState> = useStorage("uiState", defaultState);
 
-	const getFilterStorage = () => {
-		const user = userType.value as User;
-		return state.value.filter[filterStorageKey[user]]?.query;
-	};
+	const getFilterStorage = () => state.value.filter[filterStorageKey[userType.value as User]]?.query;
 
-	const setFilterState = (val: object) => {
-		const user = userType.value as User;
-		if (user && filterStorageKey[user]) {
-			state.value.filter[filterStorageKey[user]] = { query: val };
-		}
-	};
+	const setFilterState = (val: object) =>
+		(state.value.filter[filterStorageKey[userType.value as User]] = { query: val });
 
-	const getPaginationState = () => {
-		const user = userType.value as User;
-		return state.value.pagination[filterStorageKey[user]];
-	};
+	const getPaginationState = () => state.value.pagination[filterStorageKey[userType.value as User]];
 
-	const setPaginationState = (val: { page: number; limit: number }) => {
-		const user = userType.value as User;
-		if (user && filterStorageKey[user]) {
-			state.value.pagination[filterStorageKey[user]] = val;
-		}
-	};
+	const setPaginationState = (val: { page: number; limit: number }) =>
+		(state.value.pagination[filterStorageKey[userType.value as User]] = val);
 
-	const getSortingState = () => {
-		const user = userType.value as User;
-		return state.value.sorting[filterStorageKey[user]];
-	};
+	const getSortingState = () => state.value.sorting[filterStorageKey[userType.value as User]];
 
-	const setSortingState = (val: { sortBy: string; sortOrder: string }) => {
-		const user = userType.value as User;
-		if (user && filterStorageKey[user]) {
-			state.value.sorting[filterStorageKey[user]] = val;
-		}
-	};
+	const setSortingState = (val: { sortBy: string; sortOrder: string }) =>
+		(state.value.sorting[filterStorageKey[userType.value as User]] = val);
 
 	return {
 		getFilterStorage,
