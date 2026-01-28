@@ -51,6 +51,13 @@ const dateSelection = ref<DateSelection>({
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
 const onUpdateDate = (date: string | null, fromUntil: "$gte" | "$lte") => {
+	if (date && fromUntil === "$lte") {
+		const lte = new Date(date);
+		// add one day to make the until date inclusive
+		lte.setDate(lte.getDate() + 1);
+		lte.setTime(lte.getTime() - 1000);
+		date = lte.toISOString();
+	}
 	dateSelection.value[fromUntil] = date ?? "";
 };
 
