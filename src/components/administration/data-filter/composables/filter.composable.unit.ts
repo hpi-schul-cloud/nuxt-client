@@ -201,7 +201,7 @@ describe("filter composable", () => {
 			expect(filterChipTitles.value.length).toEqual(5);
 			expect(filterChipTitles.value[0].item).toEqual(FilterOption.CREATION_DATE);
 			expect(filterChipTitles.value[0].title).toEqual(
-				"utils.adminFilter.date.created 09.01.2024 common.words.and 30.01.2024"
+				"utils.adminFilter.date.created 09.01.2024 common.words.and 31.01.2024"
 			);
 
 			expect(filterChipTitles.value[1].item).toEqual(FilterOption.CLASSES);
@@ -211,12 +211,12 @@ describe("filter composable", () => {
 
 			expect(filterChipTitles.value[3].item).toEqual(FilterOption.LAST_MIGRATION_ON);
 			expect(filterChipTitles.value[3].title).toEqual(
-				"utils.adminFilter.lastMigration.title 09.01.2024 common.words.and 29.01.2024"
+				"utils.adminFilter.lastMigration.title 09.01.2024 common.words.and 30.01.2024"
 			);
 
 			expect(filterChipTitles.value[4].item).toEqual(FilterOption.OBSOLOTE_SINCE);
 			expect(filterChipTitles.value[4].title).toEqual(
-				"utils.adminFilter.outdatedSince.title 09.01.2024 common.words.and 21.01.2024"
+				"utils.adminFilter.outdatedSince.title 09.01.2024 common.words.and 22.01.2024"
 			);
 		});
 

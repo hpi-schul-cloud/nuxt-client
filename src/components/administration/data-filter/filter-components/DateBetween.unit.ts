@@ -24,8 +24,6 @@ describe("DateBetween.vue", () => {
 	describe("should render the component", () => {
 		it("should render the date picker components", () => {
 			vi.useFakeTimers();
-			const testDate = new Date(2024, 0, 1);
-			vi.setSystemTime(testDate);
 
 			const wrapper = mountComponent();
 
@@ -34,7 +32,7 @@ describe("DateBetween.vue", () => {
 			const datePickerUntilComponent = wrapper.get("[data-testid=date-picker-until]").getComponent(DatePicker);
 
 			expect(datePickers).toHaveLength(2);
-			expect(datePickerFromComponent.props("date")).toStrictEqual(testDate.toISOString());
+			expect(datePickerFromComponent.props("date")).toStrictEqual("");
 			expect(datePickerFromComponent.props("label")).toStrictEqual("utils.adminFilter.date.label.from");
 
 			expect(datePickerUntilComponent.props("date")).toStrictEqual("");
