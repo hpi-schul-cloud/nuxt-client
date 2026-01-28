@@ -407,6 +407,9 @@ export default defineComponent({
 				});
 			}
 		},
+		roomData() {
+			this.isLocked = this.courseRoomDetailsModule.getIsLocked;
+		}
 	},
 	async created() {
 		await this.initialize(this.courseId, this.$route.query?.tab);

@@ -78,6 +78,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		try {
 			const { data } = await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
+			this.setLocked(false);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (isAxiosError(error)) {
