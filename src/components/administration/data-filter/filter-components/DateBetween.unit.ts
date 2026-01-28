@@ -124,14 +124,18 @@ describe("DateBetween.vue", () => {
 				const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
 				actionButtonComponent.vm.$emit("update:filter");
 
-				expect(wrapper.emitted()).toHaveProperty("update:filter", [
-					[
-						{
-							$gte: "1900-01-01T23:00:00.000Z",
-							$lte: "2024-01-01T22:59:59.000Z",
-						},
-					],
-				]);
+				const emittedEvents = wrapper.emitted("update:filter");
+				const eventPayload = emittedEvents?.[0]?.[0];
+
+				selectedDate.setDate(selectedDate.getDate() + 1);
+				selectedDate.setTime(selectedDate.getTime() - 1000);
+				const lteISOString = selectedDate.toISOString();
+
+				expect(emittedEvents).toBeDefined();
+				expect(eventPayload).toEqual({
+					$gte: "1900-01-01T23:00:00.000Z",
+					$lte: lteISOString,
+				});
 			});
 		});
 

@@ -55,7 +55,7 @@ const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 const onUpdateDate = (date: string | null, fromUntil: "$gte" | "$lte") => {
 	if (date && fromUntil === "$lte") {
 		const lte = new Date(date);
-		// add one day to make the until date inclusive
+		// add one day to make the until date inclusive until 23:59:59
 		lte.setDate(lte.getDate() + 1);
 		lte.setTime(lte.getTime() - 1000);
 		date = lte.toISOString();
