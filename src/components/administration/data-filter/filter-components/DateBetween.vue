@@ -3,6 +3,7 @@
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"
+		aria-label="utils.adminFilter.date.label.from"
 		data-testid="date-picker-from"
 		@update:date="onUpdateDate($event, '$gte')"
 	/>
@@ -11,6 +12,7 @@
 		class="mr-2"
 		:date="dateSelection.$lte"
 		:label="t('utils.adminFilter.date.label.until')"
+		aria-label="utils.adminFilter.date.label.until"
 		data-testid="date-picker-until"
 		@update:date="onUpdateDate($event, '$lte')"
 	/>
@@ -44,7 +46,7 @@ const defaultDates: DateSelection = {
 };
 
 const dateSelection = ref<DateSelection>({
-	$gte: new Date().toISOString(),
+	$gte: "",
 	$lte: "",
 });
 
@@ -81,6 +83,10 @@ const onRemoveFilter = () => {
 };
 
 onMounted(() => {
-	if (props.selectedDate) dateSelection.value = props.selectedDate;
+	if (props.selectedDate) {
+		dateSelection.value = props.selectedDate;
+		return;
+	}
+	dateSelection.value.$gte = new Date().toISOString();
 });
 </script>
