@@ -39,7 +39,7 @@
 			</div>
 		</v-card-text>
 		<v-card-actions
-			v-if="userRole === Roles.Teacher && cardActions.length"
+			v-if="userRole === Roles.Teacher && cardActions.length > 0"
 			class="pt-1"
 			:data-testid="`lesson-card-actions-${lessonCardIndex}`"
 		>
