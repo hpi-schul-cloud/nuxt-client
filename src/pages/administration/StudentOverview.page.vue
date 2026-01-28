@@ -183,26 +183,10 @@ export default {
 			mdiPlus,
 			mdiQrcode,
 			currentFilterQuery: this.getFilterStorage(),
-			// page:
-			// 	(this.getUiState("pagination", "pages.administration.students.index") &&
-			// 		this.getUiState("pagination", "pages.administration.students.index").page) ||
-			// 	1,
 			page: this.getPaginationState()?.page || 1,
 			limit: this.getPaginationState()?.limit || 25,
-			// limit:
-			// 	(this.getUiState("pagination", "pages.administration.students.index") &&
-			// 		this.getUiState("pagination", "pages.administration.students.index").limit) ||
-			// 	25,
 			sortBy: this.getSortingState()?.sortBy || "firstName",
 			sortOrder: this.getSortingState()?.sortOrder || "asc",
-			// sortBy:
-			// 	(this.getUiState("sorting", "pages.administration.students.index") &&
-			// 		this.getUiState("sorting", "pages.administration.students.index").sortBy) ||
-			// 	"firstName",
-			// sortOrder:
-			// 	(this.getUiState("sorting", "pages.administration.students.index") &&
-			// 		this.getUiState("sorting", "pages.administration.students.index").sortOrder) ||
-			// 	"asc",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -262,10 +246,6 @@ export default {
 			tableSelectionType: "inclusive",
 			active: false,
 			searchQuery: this.getFilterStorage()?.searchQuery || "",
-			// searchQuery:
-			// 	(this.getUiState("filter", "pages.administration.students.index") &&
-			// 		this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
-			// 	"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
@@ -417,7 +397,6 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			// const uiState = this.getUiState("filter", "pages.administration.students.index");
 			const uiState = this.getFilterStorage();
 
 			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
@@ -426,10 +405,7 @@ export default {
 			if (JSON.stringify(query) !== JSON.stringify(this.getFilterStorage())) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.setFilterState({ query });
-			// this.setUiState("filter", "pages.administration.students.index", {
-			// 	query,
-			// });
+			this.setFilterState(query);
 		},
 	},
 	created() {
@@ -468,10 +444,6 @@ export default {
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
-			// this.setUiState("sorting", "pages.administration.students.index", {
-			// 	sortBy: this.sortBy,
-			// 	sortOrder: this.sortOrder,
-			// });
 			this.onUpdateCurrentPage(1); // implicitly triggers new find
 		},
 		onUpdateCurrentPage(page) {
@@ -480,23 +452,15 @@ export default {
 				limit: this.limit,
 				page: this.page,
 			});
-			// this.setUiState("pagination", "pages.administration.students.index", {
-			// 	currentPage: page,
-			// });
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			//this.page = 1;
 			this.limit = limit;
 			// save user settings in uiState
 			this.setPaginationState({
 				limit: this.limit,
 				page: this.page,
 			});
-			// this.setUiState("pagination", "pages.administration.students.index", {
-			// 	itemsPerPage: limit,
-			// 	currentPage: this.page,
-			// });
 			this.find();
 		},
 		printDate,
@@ -604,24 +568,10 @@ export default {
 					const query = this.currentFilterQuery;
 
 					this.find();
-					this.setFilterState({ query });
-
-					// this.setUiState("filter", "pages.administration.students.index", {
-					// 	query,
-					// });
+					this.setFilterState(query);
 				}
 			}, 400);
 		},
-		// setUiState(key, identifier, data) {
-		// 	this.$store?.commit("uiState/set", {
-		// 		key,
-		// 		identifier,
-		// 		object: data,
-		// 	});
-		// },
-		// getUiState(key, identifier) {
-		// 	return this.$store?.getters["uiState/get"]({ key, identifier });
-		// },
 		dialogConfirm(confirmDialogProps) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
