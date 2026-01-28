@@ -109,6 +109,30 @@ describe("DateBetween.vue", () => {
 					expect(wrapper.emitted()).toHaveProperty("update:filter");
 				}
 			);
+
+			it("should emit 'update:filter' with untilDate inclusive", () => {
+				const wrapper = mountComponent();
+				const selectedDate = new Date(2024, 0, 1);
+				vi.setSystemTime(selectedDate);
+
+				const datePickerFrom = wrapper.get(`[data-testid=date-picker-from]`).getComponent(DatePicker);
+				datePickerFrom.vm.$emit("update:date", null); // reset default for from date picker
+
+				const datePicker = wrapper.get(`[data-testid=date-picker-until]`).getComponent(DatePicker);
+				datePicker.vm.$emit("update:date", selectedDate.toISOString());
+
+				const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
+				actionButtonComponent.vm.$emit("update:filter");
+
+				expect(wrapper.emitted()).toHaveProperty("update:filter", [
+					[
+						{
+							$gte: "1900-01-01T23:00:00.000Z",
+							$lte: "2024-01-01T22:59:59.000Z",
+						},
+					],
+				]);
+			});
 		});
 
 		it("should emit 'remove:filter 'when remove button is clicked", () => {
