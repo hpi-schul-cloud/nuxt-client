@@ -7,7 +7,7 @@ import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
 // Note: you shouldn't need to import store modules here.
 import { initializeStores, modules } from "@/store/store-accessor";
-import uiState from "@/store/uiState";
+// import uiState from "@/store/uiState";
 import users from "@/store/users";
 import { createStore, Store } from "vuex";
 
@@ -29,7 +29,7 @@ export default createStore({
 		classes,
 		courses,
 		"ldap-config": ldapConfig,
-		uiState,
+		// uiState,
 		users,
 	},
 	state: {},
