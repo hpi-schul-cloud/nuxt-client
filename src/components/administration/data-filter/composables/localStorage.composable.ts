@@ -37,7 +37,7 @@ export const useFilterLocalStorage = () => {
 
 	const state: Ref<UiState> = useStorage("uiState", defaultState);
 
-	const getFilterStorage = () => state.value.filter[filterStorageKey[userType.value as User]]?.query;
+	const getFilterState = () => state.value.filter[filterStorageKey[userType.value as User]]?.query;
 
 	const setFilterState = (val: object) =>
 		(state.value.filter[filterStorageKey[userType.value as User]] = { query: val });
@@ -53,7 +53,7 @@ export const useFilterLocalStorage = () => {
 		(state.value.sorting[filterStorageKey[userType.value as User]] = val);
 
 	return {
-		getFilterStorage,
+		getFilterState,
 		setFilterState,
 		initializeUserType,
 		state,

@@ -6,9 +6,11 @@ const defaultState = {
 	filter: {
 		"pages.administration.students.index": {
 			query: {},
+			searchQuery: "",
 		},
 		"pages.administration.teachers.index": {
 			query: {},
+			searchQuery: "",
 		},
 	},
 	sorting: {},
@@ -21,9 +23,11 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 		filter: {
 			"pages.administration.students.index": {
 				query: {},
+				searchQuery: "",
 			},
 			"pages.administration.teachers.index": {
 				query: {},
+				searchQuery: "",
 			},
 		},
 		sorting: {},
@@ -48,27 +52,29 @@ describe("localStorage composable", () => {
 		expect(useStorage).toHaveBeenCalledWith("uiState", defaultState);
 	});
 
-	it("should return the correct filter storage for students' filter", () => {
-		const { initializeUserType, getFilterStorage, setFilterState, state } = useFilterLocalStorage();
-		initializeUserType("student");
-		const testQuery = { test: "test" };
+	describe("filter storage", () => {
+		it("should return the correct filter storage for students' filter", () => {
+			const { initializeUserType, getFilterState, setFilterState, state } = useFilterLocalStorage();
+			initializeUserType("student");
+			const testQuery = { test: "test" };
 
-		setFilterState(testQuery);
+			setFilterState(testQuery);
 
-		expect(getFilterStorage()).toEqual(testQuery);
-		expect(state.value.filter["pages.administration.students.index"]?.query).toEqual(testQuery);
+			expect(getFilterState()).toEqual(testQuery);
+			expect(state.value.filter["pages.administration.students.index"]?.query).toEqual(testQuery);
 
-		expect(state.value.filter["pages.administration.teachers.index"]?.query).toEqual({});
-	});
+			expect(state.value.filter["pages.administration.teachers.index"]?.query).toEqual({});
+		});
 
-	it("should return the correct filter storage for teachers' filter", () => {
-		const { initializeUserType, getFilterStorage, setFilterState, state } = useFilterLocalStorage();
-		initializeUserType("teacher");
-		const testQuery = { test: "teachers" };
+		it("should return the correct filter storage for teachers' filter", () => {
+			const { initializeUserType, getFilterState, setFilterState, state } = useFilterLocalStorage();
+			initializeUserType("teacher");
+			const testQuery = { test: "teachers" };
 
-		setFilterState(testQuery);
+			setFilterState(testQuery);
 
-		expect(getFilterStorage()).toEqual(testQuery);
-		expect(state.value.filter["pages.administration.teachers.index"]?.query).toEqual(testQuery);
+			expect(getFilterState()).toEqual(testQuery);
+			expect(state.value.filter["pages.administration.teachers.index"]?.query).toEqual(testQuery);
+		});
 	});
 });

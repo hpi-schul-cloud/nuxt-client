@@ -154,7 +154,7 @@ export default {
 			setPaginationState,
 			getSortingState,
 			setSortingState,
-			getFilterStorage,
+			getFilterState,
 			setFilterState,
 		} = useFilterLocalStorage();
 		initializeUserType("student");
@@ -164,7 +164,7 @@ export default {
 			setPaginationState,
 			getSortingState,
 			setSortingState,
-			getFilterStorage,
+			getFilterState,
 			setFilterState,
 		};
 	},
@@ -182,7 +182,7 @@ export default {
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
-			currentFilterQuery: this.getFilterStorage(),
+			currentFilterQuery: this.getFilterState(),
 			page: this.getPaginationState()?.page || 1,
 			limit: this.getPaginationState()?.limit || 25,
 			sortBy: this.getSortingState()?.sortBy || "firstName",
@@ -245,7 +245,7 @@ export default {
 			tableSelection: [],
 			tableSelectionType: "inclusive",
 			active: false,
-			searchQuery: this.getFilterStorage()?.searchQuery || "",
+			searchQuery: this.getFilterState()?.searchQuery || "",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
@@ -397,12 +397,12 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.getFilterStorage();
+			const uiState = this.getFilterState();
 
 			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
 
 			this.currentFilterQuery = query;
-			if (JSON.stringify(query) !== JSON.stringify(this.getFilterStorage())) {
+			if (JSON.stringify(query) !== JSON.stringify(this.getFilterState())) {
 				this.onUpdateCurrentPage(1);
 			}
 			this.setFilterState(query);

@@ -18,7 +18,7 @@ import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterStorage, initializeUserType } = useFilterLocalStorage();
+	const { setFilterState, getFilterState, initializeUserType } = useFilterLocalStorage();
 	initializeUserType(userType);
 	const yearName = schoolsModule.getCurrentYear?.name;
 
@@ -172,7 +172,7 @@ export const useDataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
-		filterQuery.value = getFilterStorage() ?? {};
+		filterQuery.value = getFilterState() ?? {};
 		if (filterQuery.value) setFilterChipTitles();
 		setFilterMenuItems();
 	});
