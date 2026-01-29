@@ -20,9 +20,10 @@
 				<VCardText v-if="$slots.content" class="pa-6 pt-4">
 					<slot name="content" />
 				</VCardText>
-				<VCardActions v-if="!noActions" class="pa-6 pt-2 ga-2 justify-end">
+				<VCardActions v-if="!noActions" class="pa-6 pt-2 ga-2 justify-end flex-wrap">
 					<slot name="actions">
 						<SvsDialogBtnCancel
+							v-if="!noCancel"
 							:text-lang-key="cancelBtnLangKey"
 							:data-testid="`${testId}-cancel`"
 							:disabled="areActionsDisabled"
@@ -62,6 +63,7 @@ const props = defineProps({
 	cancelBtnLangKey: { type: String, default: "common.actions.cancel" },
 	noActions: { type: Boolean, default: false },
 	noConfirm: { type: Boolean, default: false },
+	noCancel: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
