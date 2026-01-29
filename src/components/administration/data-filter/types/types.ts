@@ -32,7 +32,7 @@ type Query = {
 	searchQuery?: string;
 };
 
-type StorageFilterState = {
+type FilterStateType = {
 	[key: string]: Query | undefined;
 };
 
@@ -52,7 +52,7 @@ type StorageSortingState = {
 
 type UiState = {
 	pagination: StoragePaginationState;
-	filter: StorageFilterState;
+	filter: FilterStateType;
 	sorting: StorageSortingState;
 	version: number;
 };
@@ -70,6 +70,7 @@ export type {
 	FilterItem,
 	FilterOptionsType,
 	FilterQuery,
+	FilterStateType,
 	SelectOptionsType,
 	UiState,
 	UpdateFilterParamType,

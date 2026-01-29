@@ -106,11 +106,11 @@
 <script>
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
-import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
+import { useLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
-import { Permission } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
@@ -156,8 +156,8 @@ export default {
 			setSortingState,
 			getFilterState,
 			setFilterState,
-		} = useFilterLocalStorage();
-		initializeUserType("student");
+		} = useLocalStorage();
+		initializeUserType(RoleName.Student);
 
 		return {
 			getPaginationState,
