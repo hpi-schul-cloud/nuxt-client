@@ -801,7 +801,7 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "Sortierung ändern",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "aufsteigend sortiert",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "absteigend sortiert",
-	"components.organisms.FormNews.cancel.confirm.cancel": "Weiter arbeiten",
+	"components.organisms.FormNews.cancel.confirm.title": "Änderungen verwerfen?",
 	"components.organisms.FormNews.cancel.confirm.confirm": "Änderungen verwerfen",
 	"components.organisms.FormNews.cancel.confirm.message":
 		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",
@@ -815,7 +815,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":
 		"Hier kannst du ein Datum für die automatische Veröffentlichung in der Zukunft setzen (optional):",
-	"components.organisms.FormNews.remove.confirm.cancel": "Abbrechen",
 	"components.organisms.FormNews.remove.confirm.confirm": "Artikel löschen",
 	"components.organisms.FormNews.remove.confirm.message": "Möchtest du diesen Artikel wirklich unwiderruflich löschen?",
 	"components.organisms.FormNews.success.create": "Artikel erstellt.",

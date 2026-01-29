@@ -1,81 +1,76 @@
 <template>
-	<div>
-		<form v-bind="$attrs" @submit.prevent="save">
-			<VTextField
-				v-model="data.title"
-				:focus="true"
-				:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
-				name="title"
-				type="text"
-				:required="true"
-				data-testid="news_title"
-				:label="$t('components.organisms.FormNews.input.title.label')"
-				:rules="[validateOnOpeningTag]"
-			/>
-			<transition name="fade">
-				<div v-if="data.title">
-					<ClassicEditor
-						v-model="data.content"
-						class="mb-4 mt-13"
-						:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
-						@update:value="onUpdateValue"
-					/>
-
-					<transition name="fade">
-						<div v-if="data.content">
-							<p class="mt-13">
-								{{ $t("components.organisms.FormNews.label.planned_publish") }}
-							</p>
-							<base-input
-								v-model="data.date.date"
-								type="date"
-								:label="$t('common.labels.date')"
-								:class="{ hideCurrentDate: !data.date.date }"
-								data-testid="news_date"
-								placeholder="JJJJ-MM-TT"
-							/>
-							<base-input
-								v-model="data.date.time"
-								type="time"
-								:label="$t('common.labels.time')"
-								:class="{ hideCurrentTime: !data.date.time }"
-								data-testid="news_time"
-								placeholder="HH:MM"
-							/>
-						</div>
-					</transition>
-					<form-actions>
-						<template #primary>
-							<v-btn
-								color="primary"
-								variant="flat"
-								type="submit"
-								data-testid="btn_news_submit"
-								:disabled="status === 'pending'"
-							>
-								<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
-								{{ $t("common.actions.save") }}
-							</v-btn>
-							<v-btn v-if="news && news.id" variant="text" color="error" @click="remove">
-								<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
-								{{ $t("common.actions.delete") }}
-							</v-btn>
-							<v-btn variant="text" @click="cancel">
-								<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
-								{{ $t("common.actions.discard") }}
-							</v-btn>
-						</template>
-					</form-actions>
-				</div>
-			</transition>
-		</form>
-		<base-dialog
-			v-if="isConfirmDialogActive"
-			:active="isConfirmDialogActive"
-			v-bind="confirmDialogProps"
-			@update:active="isConfirmDialogActive = false"
+	<form v-bind="$attrs" @submit.prevent="save">
+		<VTextField
+			v-model="data.title"
+			:focus="true"
+			:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
+			name="title"
+			:required="true"
+			data-testid="news_title"
+			:label="$t('components.organisms.FormNews.input.title.label')"
+			:rules="[validateOnOpeningTag]"
 		/>
-	</div>
+		<VFadeTransition>
+			<div v-if="data.title">
+				<ClassicEditor
+					v-model="data.content"
+					class="mb-4 mt-13"
+					:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
+					@update:value="onUpdateValue"
+				/>
+				<VFadeTransition>
+					<div v-if="data.content">
+						<p class="mt-13">
+							{{ $t("components.organisms.FormNews.label.planned_publish") }}
+						</p>
+						<base-input
+							v-model="data.date.date"
+							type="date"
+							:label="$t('common.labels.date')"
+							:class="{ hideCurrentDate: !data.date.date }"
+							data-testid="news_date"
+							placeholder="JJJJ-MM-TT"
+						/>
+						<base-input
+							v-model="data.date.time"
+							type="time"
+							:label="$t('common.labels.time')"
+							:class="{ hideCurrentTime: !data.date.time }"
+							data-testid="news_time"
+							placeholder="HH:MM"
+						/>
+					</div>
+				</VFadeTransition>
+				<FormActions>
+					<template #primary>
+						<v-btn
+							color="primary"
+							variant="flat"
+							type="submit"
+							data-testid="btn_news_submit"
+							:disabled="status === 'pending'"
+						>
+							<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
+							{{ $t("common.actions.save") }}
+						</v-btn>
+						<v-btn v-if="news && news.id" variant="text" color="error" @click="onDelete">
+							<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
+							{{ $t("common.actions.delete") }}
+						</v-btn>
+						<v-btn variant="text" @click="onCancel">
+							<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
+							{{ $t("common.actions.discard") }}
+						</v-btn>
+					</template>
+				</FormActions>
+			</div>
+		</VFadeTransition>
+	</form>
+	<ConfirmationDialog>
+		<template v-if="showDialogWarning" #alert>
+			<WarningAlert> {{ $t("components.organisms.FormNews.cancel.confirm.message") }}</WarningAlert>
+		</template>
+	</ConfirmationDialog>
 </template>
 
 <script lang="ts">
@@ -85,7 +80,9 @@ import { newsModule } from "@/store";
 import { News } from "@/store/types/news";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
-import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
+import { mdiCalendar, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import { defineComponent, PropType } from "vue";
@@ -94,6 +91,8 @@ export default defineComponent({
 	components: {
 		FormActions,
 		ClassicEditor,
+		ConfirmationDialog,
+		WarningAlert,
 	},
 	inheritAttrs: false,
 	props: {
@@ -112,8 +111,10 @@ export default defineComponent({
 	emits: ["update:news", "save", "delete", "cancel"],
 	setup() {
 		const { validateOnOpeningTag } = useOpeningTagValidator();
+		const { askConfirmation } = useConfirmationDialog();
 
 		return {
+			askConfirmation,
 			validateOnOpeningTag,
 		};
 	},
@@ -126,8 +127,9 @@ export default defineComponent({
 		mdiClose: string;
 		mdiCheck: string;
 		mdiDelete: string;
-		confirmDialogProps: Record<string, unknown>;
+		mdiCalendar: string;
 		isConfirmDialogActive: boolean;
+		showDialogWarning: boolean;
 	} {
 		return {
 			data: {
@@ -141,8 +143,9 @@ export default defineComponent({
 			mdiClose,
 			mdiCheck,
 			mdiDelete,
-			confirmDialogProps: {},
+			mdiCalendar,
 			isConfirmDialogActive: false,
+			showDialogWarning: false,
 		};
 	},
 	computed: {
@@ -220,45 +223,31 @@ export default defineComponent({
 		onUpdateValue(newValue: string) {
 			this.data.content = newValue;
 		},
-		async remove() {
-			this.dialogConfirm({
-				icon: mdiAlert,
-				iconColor: "rgba(var(--v-theme-error))",
+		async onDelete() {
+			this.showDialogWarning = false;
+
+			const shouldCancel = await this.askConfirmation({
 				message: this.$t("components.organisms.FormNews.remove.confirm.message"),
-				confirmText: this.$t("components.organisms.FormNews.remove.confirm.confirm"),
-				cancelText: this.$t("components.organisms.FormNews.remove.confirm.cancel"),
-				onConfirm: () => this.$emit("delete"),
+				confirmActionLangKey: "components.organisms.FormNews.remove.confirm.confirm",
 			});
+
+			if (shouldCancel) this.$emit("delete");
 		},
-		async cancel() {
-			this.dialogConfirm({
-				message: this.$t("components.organisms.FormNews.cancel.confirm.message"),
-				icon: mdiAlert,
-				cancelText: this.$t("common.actions.cancel"),
-				confirmText: this.$t("components.organisms.FormNews.cancel.confirm.confirm"),
-				iconColor: "rgba(var(--v-theme-error))",
-				onConfirm: () => this.$emit("cancel"),
+		async onCancel() {
+			this.showDialogWarning = true;
+
+			const shouldCancel = await this.askConfirmation({
+				message: this.$t("components.organisms.FormNews.cancel.confirm.title"),
+				confirmActionLangKey: "components.organisms.FormNews.cancel.confirm.confirm",
 			});
-		},
-		dialogConfirm(confirmDialogProps: Record<string, unknown>) {
-			this.confirmDialogProps = confirmDialogProps;
-			this.isConfirmDialogActive = true;
+
+			if (shouldCancel) this.$emit("cancel");
 		},
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 1s;
-}
-
-.fade-enter,
-.fade-leave-to {
-	opacity: 0;
-}
-
 // hide default current date/time in MacOS/Safari if input date/time is indeed empty
 :deep(.hideCurrentDate) {
 	input[type="date"]::-webkit-datetime-edit-day-field,

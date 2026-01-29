@@ -802,7 +802,7 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "cambiar clasificación",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "ordenados en orden ascendente",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "ordenados en orden descendente",
-	"components.organisms.FormNews.cancel.confirm.cancel": "Continuar",
+	"components.organisms.FormNews.cancel.confirm.title": "¿Descartar cambios?",
 	"components.organisms.FormNews.cancel.confirm.confirm": "Descartar los cambios",
 	"components.organisms.FormNews.cancel.confirm.message":
 		"Si cancelas la edición, se perderán todos los cambios no guardados.",
@@ -816,7 +816,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Empecemos con el título",
 	"components.organisms.FormNews.label.planned_publish":
 		"Aquí puedes establecer una fecha para la publicación automática en el futuro (opcional):",
-	"components.organisms.FormNews.remove.confirm.cancel": "Cancelar",
 	"components.organisms.FormNews.remove.confirm.confirm": "Eliminar artículo",
 	"components.organisms.FormNews.remove.confirm.message":
 		"¿Estás seguro de que quieres borrar este artículo de forma irreversible?",

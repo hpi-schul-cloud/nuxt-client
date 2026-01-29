@@ -30,7 +30,7 @@ import { News, PatchNewsPayload } from "@/store/types/news";
 import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { AlertStatus, useNotificationStore } from "@data-app";
-import { FormNews } from "@feature-news-form";
+import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";

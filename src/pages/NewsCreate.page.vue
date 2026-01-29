@@ -23,7 +23,7 @@
 import { newsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
-import { FormNews } from "@feature-news-form";
+import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 
 export default {

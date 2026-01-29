@@ -799,7 +799,7 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "Змінити сортування",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "відсортовані в порядку зростання",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "відсортовані в порядку спадання",
-	"components.organisms.FormNews.cancel.confirm.cancel": "Продовжити",
+	"components.organisms.FormNews.cancel.confirm.title": "Скасувати зміни?",
 	"components.organisms.FormNews.cancel.confirm.confirm": "Скасувати зміни",
 	"components.organisms.FormNews.cancel.confirm.message":
 		"Якщо ви скасуєте редагування, усі незбережені зміни буде втрачено.",
@@ -813,7 +813,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Почнемо із заголовка",
 	"components.organisms.FormNews.label.planned_publish":
 		"Тут можна встановити дату автоматичної публікації в майбутньому (необов’язково):",
-	"components.organisms.FormNews.remove.confirm.cancel": "Скасувати",
 	"components.organisms.FormNews.remove.confirm.confirm": "Видалити статтю",
 	"components.organisms.FormNews.remove.confirm.message": "Ви дійсно хочете назавжди видалити цю статтю?",
 	"components.organisms.FormNews.success.create": "Статтю створено.",

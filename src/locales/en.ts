@@ -785,7 +785,7 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "change sorting",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "sorted in ascending order",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "sorted in descending order",
-	"components.organisms.FormNews.cancel.confirm.cancel": "Continue",
+	"components.organisms.FormNews.cancel.confirm.title": "Discard changes?",
 	"components.organisms.FormNews.cancel.confirm.confirm": "Discard changes",
 	"components.organisms.FormNews.cancel.confirm.message": "If you cancel editing, all unsaved changes will be lost.",
 	"components.organisms.FormNews.editor.placeholder": "Once upon a time...",
@@ -798,7 +798,6 @@ export default {
 	"components.organisms.FormNews.input.title.placeholder": "Let's start with the title",
 	"components.organisms.FormNews.label.planned_publish":
 		"Here you can set a date for automatic publication in the future (optional):",
-	"components.organisms.FormNews.remove.confirm.cancel": "Cancel",
 	"components.organisms.FormNews.remove.confirm.confirm": "Delete article",
 	"components.organisms.FormNews.remove.confirm.message": "Do you really want to delete this article irrevocably?",
 	"components.organisms.FormNews.success.create": "Article created.",
