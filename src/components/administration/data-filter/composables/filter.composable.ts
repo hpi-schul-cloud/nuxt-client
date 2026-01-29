@@ -11,10 +11,8 @@ import {
 	UserBasedRegistrationOptions,
 } from "../types";
 import { useLocalStorage } from "./localStorage.composable";
-import { printDate } from "@/plugins/datetime";
-import { RoleName } from "@/serverApi/v3";
-import { useFilterLocalStorage } from "./localStorage.composable";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
