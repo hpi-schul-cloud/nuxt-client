@@ -1330,14 +1330,13 @@ export default {
 		"Die Registrierungsmail wurde nicht versendet, weil bereits eine Registrierung erfolgt ist",
 	"pages.administration.sendMail.error": "Registrierungslink(s) konnte(n) nicht erfolgreich verschickt werden",
 	"pages.administration.sendMail.success": "Registrierungslink(s) erfolgreich verschickt",
-	"pages.administration.students.consent.cancel.modal.confirm": "Trotzdem abbrechen",
-	"pages.administration.students.consent.cancel.modal.continue": "Registrierung weiter machen",
+	"pages.administration.students.consent.cancel.modal": "Registrierung beenden",
 	"pages.administration.students.consent.cancel.modal.download.continue": "Zugangsdaten drucken",
+	"pages.administration.students.consent.cancel.modal.title": "Registrierung wirklich beenden?",
 	"pages.administration.students.consent.cancel.modal.download.info":
-		"Achtung: Bist du sicher, dass du den Vorgang abbrechen möchtest ohne die Zugangsdaten heruntergeladen zu haben? Diese Seite kann nicht wieder aufgerufen werden.",
+		"Soll die Registrierung wirklich beendet werden ohne die Zugangsdaten heruntergeladen zu haben? Sie können nicht erneut abgerufen werden.",
 	"pages.administration.students.consent.cancel.modal.info":
-		"Achtung: Bist du sicher, dass du den Vorgang abbrechen möchtest? Vorgenommene Änderungen gehen dabei verloren.",
-	"pages.administration.students.consent.cancel.modal.title": "Bist du sicher?",
+		"Soll die Registrierung wirklich beendet werden? Vorgenommene Änderungen gehen dabei verloren.",
 	"pages.administration.students.consent.handout": "Handzettel",
 	"pages.administration.students.consent.info":
 		"Du kannst im Namen deiner Schüler:innen das Einverständnis zur {dataProtection} und zur {terms} der Schul-Cloud erklären, wenn du im Vorfeld das Einverständnis analog, per {handout}, eingeholt hast.",
