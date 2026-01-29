@@ -167,17 +167,17 @@ describe("filter composable", () => {
 			const filters = {
 				[FilterOption.CREATION_DATE]: {
 					$gte: "2024-01-09T12:21:24.655Z",
-					$lte: "2024-01-30T23:00:00.000Z",
+					$lte: "2024-01-30T12:00:00.000Z",
 				},
 				[FilterOption.CLASSES]: ["1A"],
 				[FilterOption.REGISTRATION]: ["ok"],
 				[FilterOption.LAST_MIGRATION_ON]: {
 					$gte: "2024-01-09T13:07:08.771Z",
-					$lte: "2024-01-29T23:00:00.000Z",
+					$lte: "2024-01-29T12:00:00.000Z",
 				},
 				[FilterOption.OBSOLOTE_SINCE]: {
 					$gte: "2024-01-09T13:07:19.885Z",
-					$lte: "2024-01-21T23:00:00.000Z",
+					$lte: "2024-01-21T12:00:00.000Z",
 				},
 			};
 
