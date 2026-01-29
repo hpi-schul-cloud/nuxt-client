@@ -5,20 +5,24 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
+
 describe("clearApplicationErrorGuard", () => {
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
+
 	function setup() {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
 		const next: NavigationGuardNext = vi.fn();
 		return { to: route, from: route, next };
 	}
+
 	describe("when an application error exists", () => {
-		it("should clear the application error", () => {
+		it("should clear the application error", async () => {
 			const { to, from, next } = setup();
 			const appStore = useAppStore();
 			appStore.handleApplicationError(HttpStatusCode.NotFound);
@@ -27,6 +31,7 @@ describe("clearApplicationErrorGuard", () => {
 			expect(next).toHaveBeenCalled();
 		});
 	});
+
 	describe("when no application error exists", () => {
 		it("should call next without clearing", () => {
 			const { to, from, next } = setup();
