@@ -194,11 +194,7 @@
 				</div>
 			</section>
 
-			<SvsDialog
-				v-model="cancelWarning"
-				title="pages.administration.students.consent.cancel.modal.title"
-				max-width="600"
-			>
+			<SvsDialog v-model="cancelWarning" title="pages.administration.students.consent.cancel.modal.title">
 				<template #content>
 					<ErrorAlert>
 						<p v-if="currentStep === 2">

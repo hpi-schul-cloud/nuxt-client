@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		:model-value="true"
+		v-model="showDialog"
 		title="feature-autoLogout.button.title"
 		no-cancel
 		persistent
