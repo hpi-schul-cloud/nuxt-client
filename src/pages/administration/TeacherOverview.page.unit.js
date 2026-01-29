@@ -1,4 +1,7 @@
 import TeacherPage from "./TeacherOverview.page.vue";
+import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import { useLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
+import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
@@ -16,6 +19,9 @@ import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
+
+vi.mock("@/components/administration/data-filter/composables/localStorage.composable");
+const mockedUseLocalStorage = vi.mocked(useLocalStorage);
 
 const mockData = [
 	{
@@ -113,6 +119,16 @@ const createMockStore = () => {
 describe("teachers/index", () => {
 	const OLD_ENV = process.env;
 
+	const getFilterState = vi.fn().mockReturnValue({
+		searchQuery: "",
+	});
+	const setFilterState = vi.fn();
+	const getSortingState = vi.fn();
+	const setSortingState = vi.fn();
+	const getPaginationState = vi.fn();
+	const setPaginationState = vi.fn();
+	const initializeUserType = vi.fn();
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
@@ -134,24 +150,21 @@ describe("teachers/index", () => {
 				permissions: [Permission.TeacherCreate, Permission.TeacherDelete],
 			},
 		});
+
+		mockedUseLocalStorage.mockReturnValue({
+			initializeUserType,
+			getFilterState,
+			setFilterState,
+			getSortingState,
+			setSortingState,
+			getPaginationState,
+			setPaginationState,
+		});
 	});
 
 	afterAll(() => {
 		process.env = OLD_ENV; // restore old environment
 	});
-
-	const mockUiState = {
-		get: (key) => {
-			const state = {
-				pagination: {},
-				sorting: {},
-				filter: {},
-			};
-			return state[key];
-		},
-
-		set: () => ({}),
-	};
 
 	const setup = () => {
 		const { mockStore, usersActionsStubs, uiStateMutationsStubs } = createMockStore();
@@ -161,7 +174,6 @@ describe("teachers/index", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$store: mockStore,
-					uiState: mockUiState,
 				},
 				components: {
 					"base-input": BaseInput,
@@ -177,6 +189,20 @@ describe("teachers/index", () => {
 
 		return { wrapper, mockStore, usersActionsStubs, uiStateMutationsStubs };
 	};
+
+	describe("useLocalStorage composable", () => {
+		it("should initialize useLocalStorage with 'teacher' userType", () => {
+			setup();
+			expect(initializeUserType).toHaveBeenCalledWith(RoleName.Teacher);
+		});
+
+		it("should call necessary useLocalStorage methods on mount", () => {
+			setup();
+			expect(getFilterState).toHaveBeenCalled();
+			expect(getSortingState).toHaveBeenCalled();
+			expect(getPaginationState).toHaveBeenCalled();
+		});
+	});
 
 	it("should call 'deleteUsers' action", async () => {
 		const { wrapper, usersActionsStubs } = setup();
@@ -422,38 +448,99 @@ describe("teachers/index", () => {
 		expect(externalHint.exists()).toBe(false);
 	});
 
-	it("should call barSearch method when searchbar component's value change", () => {
-		const { wrapper, usersActionsStubs, uiStateMutationsStubs } = setup();
+	describe("filtering and calling uiSetFilterState composable's methods", () => {
+		describe("when searchbar component's value change", () => {
+			it("should call setFilterState method", () => {
+				const { wrapper, usersActionsStubs } = setup();
 
-		// run all existing timers
-		vi.runAllTimers();
+				const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
+				expect(searchBarInput.exists()).toBe(true);
 
-		const searchBarInput = wrapper.find(`[data-testid="searchbar"]`).get("input");
-		expect(searchBarInput.exists()).toBe(true);
+				searchBarInput.setValue("abc");
 
-		searchBarInput.setValue("abc");
+				vi.runAllTimers();
 
-		//run new timer from updating the value
-		vi.runAllTimers();
+				expect(setFilterState).toHaveBeenCalledWith({ searchQuery: "abc" });
+				expect(usersActionsStubs.findTeachers).toHaveBeenCalled();
+			});
+		});
 
-		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
-		expect(usersActionsStubs.findTeachers).toHaveBeenCalled();
-	});
+		describe("when table filter options change", () => {
+			it("should setFilterState method", async () => {
+				const { wrapper } = setup();
 
-	// currently disabled, will be reactivated when the new components are in use
-	it.skip("should table filter options call uiState after passing props", () => {
-		const { wrapper, uiStateMutationsStubs } = setup();
+				await nextTick();
+				const filterComponent = wrapper.findComponent(DataFilter);
+				expect(filterComponent.exists()).toBe(true);
 
-		vi.runAllTimers();
+				const emitValue = {
+					consentStatus: ["ok"],
+				};
 
-		const filterComponent = wrapper.findComponent(`[data-testid="data_filter"]`);
-		expect(filterComponent.exists()).toBe(true);
+				filterComponent.vm.$emit("update:filter", emitValue);
+				await nextTick();
 
-		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
+				expect(setFilterState).toHaveBeenCalledWith(emitValue);
+			});
+		});
 
-		vi.runAllTimers();
+		describe("when table sorting options change", () => {
+			it("should call setSortingState method", async () => {
+				const { wrapper } = setup();
 
-		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
+				await nextTick();
+				const tableComponent = wrapper.findComponent(BackendDataTable);
+				expect(tableComponent.exists()).toBe(true);
+
+				const expectedValue = {
+					sortBy: "firstName",
+					sortOrder: "asc",
+				};
+
+				tableComponent.vm.$emit("update:sort", "firstName", "asc");
+				await nextTick();
+
+				expect(setSortingState).toHaveBeenCalledWith(expectedValue);
+			});
+		});
+
+		describe("when table pagination options change", () => {
+			it("should call setPaginationState method when rows per page changes", async () => {
+				const { wrapper } = setup();
+
+				await nextTick();
+				const tableComponent = wrapper.findComponent(BackendDataTable);
+				expect(tableComponent.exists()).toBe(true);
+
+				tableComponent.vm.$emit("update:rows-per-page", 5);
+				await nextTick();
+
+				const expectedValue = {
+					limit: 5,
+					page: 1,
+				};
+
+				expect(setPaginationState).toHaveBeenCalledWith(expectedValue);
+			});
+
+			it("should call setPaginationState method when page changes", async () => {
+				const { wrapper } = setup();
+
+				await nextTick();
+				const tableComponent = wrapper.findComponent(BackendDataTable);
+				expect(tableComponent.exists()).toBe(true);
+
+				tableComponent.vm.$emit("update:current-page", 2);
+				await nextTick();
+
+				const expectedValue = {
+					limit: 25,
+					page: 2,
+				};
+
+				expect(setPaginationState).toHaveBeenCalledWith(expectedValue);
+			});
+		});
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {

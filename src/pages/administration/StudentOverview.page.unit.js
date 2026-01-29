@@ -18,7 +18,6 @@ import { mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 
@@ -171,12 +170,6 @@ describe("students/index", () => {
 					"base-modal": BaseModal,
 				},
 				stubs: { RouterLink: RouterLinkStub },
-			},
-			// Provide a default value for searchQuery if not present in the component
-			data() {
-				return {
-					searchQuery: "",
-				};
 			},
 		});
 
