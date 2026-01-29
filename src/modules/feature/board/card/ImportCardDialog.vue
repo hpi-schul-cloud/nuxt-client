@@ -13,7 +13,7 @@
 			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
-			<InfoAlert data-testid="import-card-information">
+			<InfoAlert class="text-lg" data-testid="import-card-information">
 				{{ t("components.molecules.import.card.hint.restriction") }}
 				<ul class="ml-6">
 					<li>{{ t("components.molecules.import.card.hint.etherpad") }}</li>

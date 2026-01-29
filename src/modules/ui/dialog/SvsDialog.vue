@@ -10,17 +10,17 @@
 	>
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
-				<VCardItem class="py-4 px-6">
+				<VCardItem class="py-4 px-4">
 					<VCardTitle v-if="titleString">
 						<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
 							{{ titleString }}
 						</h2>
 					</VCardTitle>
 				</VCardItem>
-				<VCardText v-if="$slots.content" class="pa-6 pt-4">
+				<VCardText v-if="$slots.content" class="pa-4 pt-4">
 					<slot name="content" />
 				</VCardText>
-				<VCardActions v-if="!noActions" class="pa-6 pt-2 ga-2 justify-end flex-wrap">
+				<VCardActions v-if="!noActions" class="pa-4 pt-2 ga-4 justify-end flex-wrap">
 					<slot name="actions">
 						<SvsDialogBtnCancel
 							v-if="!noCancel"
