@@ -30,11 +30,15 @@ const { lgAndUp } = useDisplay();
 
 const isDesktop = computed(() => lgAndUp.value);
 
-const sidebarExpanded = useStorage("sidebarExpanded", isDesktop.value);
+const sidebarExpanded = useStorage("sidebarExpanded", false);
 
-watch(isDesktop, () => {
-	sidebarExpanded.value = lgAndUp.value;
-});
+watch(
+	isDesktop,
+	() => {
+		sidebarExpanded.value = lgAndUp.value;
+	},
+	{ immediate: true }
+);
 
 const onToggleSidebar = () => {
 	sidebarExpanded.value = !sidebarExpanded.value;
