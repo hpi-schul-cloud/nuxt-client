@@ -892,6 +892,7 @@ export default {
 	"error.load": "Помилка під час завантаження даних.",
 	"error.proxy.action": "Перезавантажити сторінку",
 	"error.proxy.description": "У нас виникла невелика проблема з нашою інфраструктурою. Ми скоро повернемося.",
+	"feature-autoLogout.button.title": "Подовжити сеанс",
 	"feature-autoLogout.button.confirm": "Подовжити сеанс",
 	"feature-autoLogout.button.confirm.returnToLogin": "Повернутися на сторінку входу",
 	"feature-autoLogout.message.error.401": "Термін дії сеансу минув. Увійдіть ще раз.",
@@ -1325,14 +1326,13 @@ export default {
 		"Не вдалося надіслати посилання на реєстрацію | Не вдалося надіслати посилання на реєстрацію",
 	"pages.administration.sendMail.success":
 		"Посилання на реєстрацію успішно надіслано | Посилання на реєстрацію успішно надіслано",
-	"pages.administration.students.consent.cancel.modal.confirm": "Все одно скасувати",
-	"pages.administration.students.consent.cancel.modal.continue": "Продовжити реєстрацію",
-	"pages.administration.students.consent.cancel.modal.download.continue": "Роздрукувати дані доступу",
+	"pages.administration.students.consent.cancel.modal": "Завершити реєстрацію",
+	"pages.administration.students.consent.cancel.modal.download.continue": "Роздрукувати дані для входу",
+	"pages.administration.students.consent.cancel.modal.title": "Дійсно завершити реєстрацію?",
 	"pages.administration.students.consent.cancel.modal.download.info":
-		"Увага: Ви впевнені, що хочете скасувати процес, не завантаживши дані доступу? Цю сторінку неможливо отримати знову.",
+		"Дійсно завершити реєстрацію без завантаження даних для входу? Їх неможливо буде отримати повторно.",
 	"pages.administration.students.consent.cancel.modal.info":
-		"Попередження. Ви дійсно бажаєте скасувати цей процес? Усі внесені зміни буде втрачено.",
-	"pages.administration.students.consent.cancel.modal.title": "Ви впевнені?",
+		"Дійсно завершити реєстрацію? Внесені зміни будуть втрачені.",
 	"pages.administration.students.consent.handout": "Оголошення",
 	"pages.administration.students.consent.info":
 		"Ви можете заявити про свою згоду на {dataProtection} та {terms} шкільної хмари від імені своїх учнів, якщо ви отримали згоду заздалегідь в аналоговому форматі за допомогою {handout}.",

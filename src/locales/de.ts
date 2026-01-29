@@ -894,6 +894,7 @@ export default {
 	"error.load": "Fehler beim Laden der Daten.",
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description": "Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"feature-autoLogout.button.title": "Sitzung verlängern",
 	"feature-autoLogout.button.confirm": "Sitzung verlängern",
 	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
 	"feature-autoLogout.message.error.401": "Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",

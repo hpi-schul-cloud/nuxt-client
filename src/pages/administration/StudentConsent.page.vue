@@ -194,33 +194,33 @@
 				</div>
 			</section>
 
-			<base-modal v-model:active="cancelWarning">
-				<template #header />
-				<template #body>
-					<modal-body-info :title="$t('pages.administration.students.consent.cancel.modal.title')">
-						<template #icon>
-							<v-icon color="error" size="60">{{ mdiAlert }}</v-icon>
-						</template>
-					</modal-body-info>
-					<span v-if="currentStep === 2">
-						{{ $t("pages.administration.students.consent.cancel.modal.download.info") }}
-					</span>
-					<span v-else>
-						{{ $t("pages.administration.students.consent.cancel.modal.info") }}
-					</span>
+			<SvsDialog
+				v-model="cancelWarning"
+				title="pages.administration.students.consent.cancel.modal.title"
+				max-width="600"
+			>
+				<template #content>
+					<ErrorAlert>
+						<p v-if="currentStep === 2">
+							{{ $t("pages.administration.students.consent.cancel.modal.download.info") }}
+						</p>
+						<p v-else>
+							{{ $t("pages.administration.students.consent.cancel.modal.info") }}
+						</p>
+					</ErrorAlert>
 				</template>
-				<template #footerRight>
-					<v-btn variant="text" @click="cancel">
-						{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
-					</v-btn>
-					<v-btn v-if="currentStep === 2" color="error" variant="flat" @click="download">
-						{{ $t("pages.administration.students.consent.cancel.modal.download.continue") }}
-					</v-btn>
-					<v-btn v-else color="primary" variant="flat" @click="cancelWarning = false">
-						{{ $t("pages.administration.students.consent.cancel.modal.continue") }}
-					</v-btn>
+				<template #actions>
+					<SvsDialogBtnCancel @click="cancelWarning = false" />
+					<VBtn
+						v-if="currentStep === 2"
+						:text="$t('pages.administration.students.consent.cancel.modal.download.continue')"
+						color="error"
+						variant="flat"
+						@click="download"
+					/>
+					<SvsDialogBtnConfirm text-lang-key="pages.administration.students.consent.cancel.modal" @click="cancel" />
 				</template>
-			</base-modal>
+			</SvsDialog>
 
 			<div hidden>
 				<div id="tableStudentsForPrint">
@@ -242,21 +242,25 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 
 export default {
 	components: {
+		SvsDialogBtnConfirm,
+		SvsDialogBtnCancel,
+		ErrorAlert,
 		DefaultWireframe,
+		SvsDialog,
 		BackendDataTable,
 		StepProgress,
-		ModalBodyInfo,
 	},
 	data() {
 		return {
@@ -487,6 +491,7 @@ export default {
 			this.$router.push({
 				path: `/administration/students`,
 			});
+			this.cancelWarning = false;
 		},
 		checkTableData() {
 			this.tableTimeOut = setTimeout(() => {

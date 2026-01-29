@@ -876,6 +876,7 @@ export default {
 	"error.load": "Error while loading the data.",
 	"error.proxy.action": "Reload page",
 	"error.proxy.description": "We have a small problem with our infrastructure. We'll be right back.",
+	"feature-autoLogout.button.title": "Extend session",
 	"feature-autoLogout.button.confirm": "Extend session",
 	"feature-autoLogout.button.confirm.returnToLogin": "Return to login page",
 	"feature-autoLogout.message.error.401": "Your session has already expired. Please log in again.",
@@ -1306,14 +1307,13 @@ export default {
 		"The registration email was not sent because a registration has already been made",
 	"pages.administration.sendMail.error": "Registration link could not be sent | Registration links could not be sent",
 	"pages.administration.sendMail.success": "Registration link sent successfully | Registration links sent successfully",
-	"pages.administration.students.consent.cancel.modal.confirm": "Cancel anyway",
-	"pages.administration.students.consent.cancel.modal.continue": "Continue registration",
-	"pages.administration.students.consent.cancel.modal.download.continue": "Zugangsdaten drucken",
+	"pages.administration.students.consent.cancel.modal": "End registration",
+	"pages.administration.students.consent.cancel.modal.download.continue": "Print access credentials",
+	"pages.administration.students.consent.cancel.modal.title": "Really end registration?",
 	"pages.administration.students.consent.cancel.modal.download.info":
-		"Achtung: Bist du sicher, dass du den Vorgang abbrechen möchtest, ohne die Zugangsdaten heruntergeladen zu haben? Diese Seite kann nicht wieder aufgerufen werden.",
+		"Do you really want to end the registration without having downloaded the access credentials? They cannot be retrieved again.",
 	"pages.administration.students.consent.cancel.modal.info":
-		"Warning: Are you sure you want to cancel the process? Any changes made will be lost.",
-	"pages.administration.students.consent.cancel.modal.title": "Are you sure?",
+		"Do you really want to end the registration? Changes made will be lost.",
 	"pages.administration.students.consent.handout": "Flyer",
 	"pages.administration.students.consent.info":
 		"You can declare the consent to {dataProtection} and {terms} of the school cloud on behalf of your students, if you have obtained the consent in advance analogously, via {handout}.",

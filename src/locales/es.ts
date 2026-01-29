@@ -897,6 +897,7 @@ export default {
 	"error.load": "Error al cargar los datos.",
 	"error.proxy.action": "Volver a cargar la página",
 	"error.proxy.description": "Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",
+	"feature-autoLogout.button.title": "Ampliar sesión",
 	"feature-autoLogout.button.confirm": "Ampliar sesión",
 	"feature-autoLogout.button.confirm.returnToLogin": "Volver a la página de inicio de sesión",
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
@@ -1336,14 +1337,13 @@ export default {
 		"No se ha podido enviar el enlace de registro | No se han podido enviar los enlaces de registro",
 	"pages.administration.sendMail.success":
 		"Enlace de registro enviado correctamente | Enlaces de registro enviados correctamente",
-	"pages.administration.students.consent.cancel.modal.confirm": "Cancelar de todos modos",
-	"pages.administration.students.consent.cancel.modal.continue": "Continuar con el registro",
-	"pages.administration.students.consent.cancel.modal.download.continue": "Imprimir datos de acceso",
+	"pages.administration.students.consent.cancel.modal": "Finalizar registro",
+	"pages.administration.students.consent.cancel.modal.download.continue": "Imprimir credenciales de acceso",
+	"pages.administration.students.consent.cancel.modal.title": "¿Realmente finalizar el registro?",
 	"pages.administration.students.consent.cancel.modal.download.info":
-		"Atención: ¿Está seguro de que quiere cancelar el proceso sin haber descargado los datos de acceso? No se puede volver a acceder a esta página.",
+		"¿Realmente desea finalizar el registro sin haber descargado las credenciales de acceso? No se podrán recuperar nuevamente.",
 	"pages.administration.students.consent.cancel.modal.info":
-		"Advertencia: ¿Estás seguro de que deseas cancelar el proceso? Se perderán los cambios realizados.",
-	"pages.administration.students.consent.cancel.modal.title": "¿Estás seguro?",
+		"¿Realmente desea finalizar el registro? Los cambios realizados se perderán.",
 	"pages.administration.students.consent.handout": "Impreso",
 	"pages.administration.students.consent.info":
 		"Puedes declarar el consentimiento de la {dataProtection} y los {terms} de la nube de la escuela en nombre de tus estudiantes, si has obtenido el consentimiento por adelantado de forma analógica, a través de {handout}.",

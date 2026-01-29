@@ -94,12 +94,34 @@
 				:show-external-sync-hint="schoolIsExternallyManaged"
 			/>
 		</default-wireframe>
-		<base-dialog
-			v-if="isConfirmDialogActive"
-			:active="isConfirmDialogActive"
-			v-bind="confirmDialogProps"
-			@update:active="isConfirmDialogActive = false"
-		/>
+		<ConfirmationDialog />
+
+		<Dialog
+			v-model="isDialogOpen"
+			:title
+			:confirm-btn-lang-key="dialogOptions?.confirmActionLangKey"
+			data-testid="confirmation-dialog"
+			@confirm="confirm"
+			@cancel="cancel"
+		>
+			<template #content>
+				<slot />
+			</template>
+		</Dialog>
+
+		<!--		<SvsDialog v-model="isConfirmDialogActive">-->
+		<!--			<template #content />-->
+
+		<!--      this.dialogConfirm({-->
+		<!--      message,-->
+		<!--      confirmText: this.$t("pages.administration.students.index.remove.confirm.btnText"),-->
+		<!--      cancelText: this.$t("common.actions.cancel"),-->
+		<!--      icon: mdiAlert,-->
+		<!--      iconColor: "rgba(var(&#45;&#45;v-theme-error))",-->
+		<!--      onConfirm,-->
+		<!--      onCancel,-->
+		<!--      });-->
+		<!--		</SvsDialog>-->
 	</div>
 </template>
 
@@ -128,6 +150,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { reactive } from "vue";
@@ -135,6 +158,7 @@ import { mapGetters } from "vuex";
 
 export default {
 	components: {
+		ConfirmationDialog,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
@@ -240,7 +264,7 @@ export default {
 					this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
 				"",
 			confirmDialogProps: {},
-			isConfirmDialogActive: false,
+			isConfirmDialogActive: true,
 			classNameList: [],
 		};
 	},
