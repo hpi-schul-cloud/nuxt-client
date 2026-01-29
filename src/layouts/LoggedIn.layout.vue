@@ -33,9 +33,9 @@ const isDesktop = computed(() => lgAndUp.value);
 const sidebarExpanded = useStorage("sidebarExpanded", false);
 
 watch(
-	isDesktop,
-	() => {
-		sidebarExpanded.value = lgAndUp.value;
+	lgAndUp,
+	(value) => {
+		sidebarExpanded.value = value;
 	},
 	{ immediate: true }
 );
