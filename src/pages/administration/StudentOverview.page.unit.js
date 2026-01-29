@@ -222,7 +222,7 @@ describe("students/index", () => {
 		});
 	});
 
-	it("should dispatch the 'findStudents action on load'", async () => {
+	it("should dispatch the 'findStudents action on load'", () => {
 		const { usersActionsStubs } = setup();
 		expect(usersActionsStubs.findStudents).toHaveBeenCalled();
 	});
