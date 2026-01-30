@@ -131,31 +131,29 @@
 				{{ $t("pages.administration.ldap.save.example.synchronize") }}
 			</v-btn>
 		</div>
-		<base-modal v-model:active="submitted.ok" :background-click-disabled="true" data-testid="confirmModal">
-			<template #header />
-			<template #body>
-				<modal-body-info :title="$t('pages.administration.ldap.activate.message')">
-					<template #icon>
-						<v-icon color="rgba(var(--v-theme-success))" :icon="mdiCheckCircle" />
-					</template>
-				</modal-body-info>
-			</template>
-			<template #footer>
-				<ModalFooterConfirm
-					backgroundcolor="rgba(var(--v-theme-success))"
-					:text="$t('pages.administration.ldap.activate.ok')"
-					data-testid="ldapOkButton"
-					@click="okButtonHandler"
-				/>
-			</template>
-		</base-modal>
+		<VDialog :model-value="submitted.ok" :background-click-disabled="true" data-testid="confirmModal">
+			<VCard>
+				<VCardText class="d-flex flex-column align-center text-center">
+					<VIcon size="60" color="success" :icon="mdiCheckCircle" />
+					<h2 class="mt-4">{{ $t("pages.administration.ldap.activate.message") }}</h2>
+				</VCardText>
+				<VCardActions>
+					<VBtn
+						variant="flat"
+						block
+						color="success"
+						:text="$t('pages.administration.ldap.activate.ok')"
+						data-testid="ldapOkButton"
+						@click="okButtonHandler"
+					/>
+				</VCardActions>
+			</VCard>
+		</VDialog>
 	</default-wireframe>
 </template>
 
 <script>
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
-import ModalFooterConfirm from "@/components/legacy/ModalFooterConfirm.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { unchangedPassword } from "@/utils/ldapConstants";
@@ -184,8 +182,6 @@ const redirectToConfigPage = (page) => {
 
 export default {
 	components: {
-		ModalBodyInfo,
-		ModalFooterConfirm,
 		InfoMessage,
 		DefaultWireframe,
 	},
