@@ -1,39 +1,28 @@
 <template>
-	<base-modal v-bind="$attrs">
-		<template #body>
-			<modal-body-info :title="title" :description="description">
-				<template #icon>
-					<v-progress-circular indeterminate width="2" :color="color" size="60" class="mb-6" />
-				</template>
-			</modal-body-info>
-		</template>
-		<template #footer>
-			<div class="d-flex justify-center align-items mb-4">
-				<v-btn color="primary" variant="flat" @click="emit('update:active', false)">
-					{{ $t(btnText) }}
-				</v-btn>
-			</div>
-		</template>
-	</base-modal>
+	<VDialog v-model="isOpen" width="480">
+		<VCard>
+			<VCardText class="d-flex flex-column align-center">
+				<VProgressCircular indeterminate width="2" color="primary" size="60" class="my-6" />
+				<h2 class="my-4">{{ $t("pages.content.notification.loading") }}</h2>
+			</VCardText>
+			<VCardActions>
+				<VBtn color="primary" variant="flat" @click="emit('update:modelValue', false)">
+					{{ $t("common.actions.cancel") }}
+				</VBtn>
+			</VCardActions>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
-import BaseModal from "../base/BaseModal.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
-
-type Props = {
-	color?: string;
-	title: string;
-	description: string;
-	btnText?: string;
-};
-
-withDefaults(defineProps<Props>(), {
-	color: "rgba(var(--v-theme-primary))",
-	btnText: "common.actions.cancel",
-});
+import { VCardActions, VProgressCircular } from "vuetify/components";
 
 const emit = defineEmits<{
-	(e: "update:active", value: boolean): void;
+	(e: "update:modelValue", value: boolean): void;
 }>();
+
+const isOpen = defineModel({
+	type: Boolean,
+	required: true,
+});
 </script>

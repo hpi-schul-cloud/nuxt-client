@@ -15,7 +15,7 @@
 			</v-icon>
 			{{ btnLabel }}
 		</v-btn>
-		<add-content-modal
+		<AddContentModal
 			v-model:show-copy-modal="copyModalActive"
 			:updatedid="itemId"
 			:url="url"
@@ -24,13 +24,8 @@
 			:items="selectedElements"
 			@close="performAPICall"
 		/>
-		<loading-modal
-			v-model:active="loadingModal.visible"
-			:title="$t('pages.content.notification.loading')"
-			description=""
-			:btn-text="$t('common.labels.close')"
-		/>
-		<notification-modal
+		<LoadingModal v-model="loadingModal.visible" />
+		<NotificationModal
 			v-model:show-notification-modal="notificationModal.visible"
 			:is-success="notificationModal.isSuccess"
 			:backgroundcolor="notificationModal.isSuccess ? 'rgba(var(--v-theme-success))' : 'rgba(var(--v-theme-error))'"
@@ -49,10 +44,11 @@ import { contentModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { getID, getMediatype, getMetadataAttribute, getTitle, getUrl } from "@/utils/helpers";
 import { mdiPlusCircleOutline } from "@icons/material";
+import { defineComponent } from "vue";
 
 let slowAPICall;
 
-export default {
+export default defineComponent({
 	name: "AddContentButton",
 	components: {
 		AddContentModal,
@@ -192,10 +188,5 @@ export default {
 			}, 1000);
 		},
 	},
-};
+});
 </script>
-<style lang="scss" scoped>
-.wide-button {
-	width: 100%;
-}
-</style>
