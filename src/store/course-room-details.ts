@@ -34,7 +34,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		isArchived: false,
 		isSynchronized: false,
 	};
-	isLocked = false;
 	scopePermissions: string[] = [];
 	loading = false;
 	error: unknown = null;
@@ -88,7 +87,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 						...this.roomData,
 						title: error?.response?.data?.message,
 					});
-					this.setLocked(true);
+					return { isLocked: true };
 				}
 			} else {
 				this.setError(error);
@@ -279,11 +278,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Mutation
-	setLocked(isLocked: boolean): void {
-		this.isLocked = isLocked;
-	}
-
-	@Mutation
 	setPermissionData(payload: string[]): void {
 		this.scopePermissions = payload;
 	}
@@ -346,10 +340,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 
 	get getRoomData(): SingleColumnBoardResponse {
 		return this.roomData;
-	}
-
-	get getIsLocked(): boolean {
-		return this.isLocked;
 	}
 
 	get getPermissionData(): string[] {
