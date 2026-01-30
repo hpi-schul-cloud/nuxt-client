@@ -13,7 +13,7 @@ import { useBoardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -83,7 +83,7 @@ describe("MoveCardDialog", () => {
 	it("should notify about the success of the move action.", async () => {
 		const { wrapper } = setup();
 
-		const dialog = wrapper.findComponent(Dialog);
+		const dialog = wrapper.findComponent(SvsDialog);
 		await dialog.vm.$emit("confirm");
 		await flushPromises();
 		expect(useBoardStore().moveCardToBoardRequest).toHaveBeenCalled();
