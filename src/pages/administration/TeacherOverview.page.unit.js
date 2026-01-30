@@ -1,6 +1,6 @@
 import TeacherPage from "./TeacherOverview.page.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
-import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
@@ -20,7 +20,7 @@ import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 
-vi.mock("@/components/administration/data-filter/composables/localStorage.composable");
+vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 
 const mockData = [

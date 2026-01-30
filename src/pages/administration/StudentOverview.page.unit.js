@@ -1,7 +1,7 @@
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
-import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
@@ -103,7 +103,7 @@ const createMockStore = () => {
 	return { mockStore, usersActionsStubs };
 };
 
-vi.mock("@/components/administration/data-filter/composables/localStorage.composable");
+vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 
 describe("students/index", () => {
