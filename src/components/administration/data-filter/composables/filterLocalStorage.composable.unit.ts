@@ -5,11 +5,11 @@ import { useStorage } from "@vueuse/core";
 const defaultState = {
 	pagination: {},
 	filter: {
-		"pages.administration.students.index": {
+		studentsManagementPage: {
 			query: {},
 			searchQuery: "",
 		},
-		"pages.administration.teachers.index": {
+		teachersManagementPage: {
 			query: {},
 			searchQuery: "",
 		},
@@ -19,19 +19,19 @@ const defaultState = {
 };
 
 const filterStorageKey: Partial<Record<RoleName, string>> = {
-	[RoleName.Student]: "pages.administration.students.index",
-	[RoleName.Teacher]: "pages.administration.teachers.index",
+	[RoleName.Student]: "studentsManagementPage",
+	[RoleName.Teacher]: "teachersManagementPage",
 };
 
 vi.mock("@vueuse/core", async (importOriginal) => {
 	const defaultState = {
 		pagination: {},
 		filter: {
-			"pages.administration.students.index": {
+			studentsManagementPage: {
 				query: {},
 				searchQuery: "",
 			},
-			"pages.administration.teachers.index": {
+			teachersManagementPage: {
 				query: {},
 				searchQuery: "",
 			},
