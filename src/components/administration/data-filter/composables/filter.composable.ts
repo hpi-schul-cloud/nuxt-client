@@ -11,7 +11,7 @@ import {
 	UserBasedRegistrationOptions,
 } from "../types";
 import { useFilterLocalStorage } from "./localStorage.composable";
-import { printDate } from "@/plugins/datetime";
+import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import { schoolsModule } from "@/store";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -143,19 +143,19 @@ export const useDataTableFilter = (userType: string) => {
 			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
 
 		if (chipItem[0] === FilterOption.CREATION_DATE)
-			return `${t("utils.adminFilter.date.created")} ${printDate(
+			return `${t("utils.adminFilter.date.created")} ${printFromStringUtcToFullDate(
 				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
 
 		if (chipItem[0] === FilterOption.LAST_MIGRATION_ON)
-			return `${t("utils.adminFilter.lastMigration.title")} ${printDate(
+			return `${t("utils.adminFilter.lastMigration.title")} ${printFromStringUtcToFullDate(
 				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
 
 		if (chipItem[0] === FilterOption.OBSOLOTE_SINCE)
-			return `${t("utils.adminFilter.outdatedSince.title")} ${printDate(
+			return `${t("utils.adminFilter.outdatedSince.title")} ${printFromStringUtcToFullDate(
 				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
 		return [];
 	};
 
