@@ -1,7 +1,7 @@
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
-import { useLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
@@ -104,7 +104,7 @@ const createMockStore = () => {
 };
 
 vi.mock("@/components/administration/data-filter/composables/localStorage.composable");
-const mockedUseLocalStorage = vi.mocked(useLocalStorage);
+const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 
 describe("students/index", () => {
 	const OLD_ENV = process.env;
@@ -116,7 +116,6 @@ describe("students/index", () => {
 	const setSortingState = vi.fn();
 	const getPaginationState = vi.fn();
 	const setPaginationState = vi.fn();
-	const initializeUserType = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -131,8 +130,7 @@ describe("students/index", () => {
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		mockedUseLocalStorage.mockReturnValue({
-			initializeUserType,
+		mockedUseFilterLocalStorage.mockReturnValue({
 			getFilterState,
 			setFilterState,
 			getSortingState,
@@ -178,13 +176,8 @@ describe("students/index", () => {
 		return { wrapper, mockStore, usersActionsStubs };
 	};
 
-	describe("useLocalStorage composable", () => {
-		it("should initialize useLocalStorage with 'student' userType", () => {
-			setup();
-			expect(initializeUserType).toHaveBeenCalledWith(RoleName.Student);
-		});
-
-		it("should call necessary useLocalStorage methods on mount", () => {
+	describe("useFilterLocalStorage composable", () => {
+		it("should call necessary useFilterLocalStorage methods on mount", () => {
 			setup();
 			expect(getFilterState).toHaveBeenCalled();
 			expect(getSortingState).toHaveBeenCalled();

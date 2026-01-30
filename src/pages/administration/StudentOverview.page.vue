@@ -106,7 +106,7 @@
 <script>
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
-import { useLocalStorage } from "@/components/administration/data-filter/composables/localStorage.composable";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
@@ -148,16 +148,8 @@ export default {
 		},
 	},
 	setup() {
-		const {
-			initializeUserType,
-			getPaginationState,
-			setPaginationState,
-			getSortingState,
-			setSortingState,
-			getFilterState,
-			setFilterState,
-		} = useLocalStorage();
-		initializeUserType(RoleName.Student);
+		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
+			useFilterLocalStorage(RoleName.Student);
 
 		return {
 			getPaginationState,

@@ -10,7 +10,7 @@ import {
 	User,
 	UserBasedRegistrationOptions,
 } from "../types";
-import { useLocalStorage } from "./localStorage.composable";
+import { useFilterLocalStorage } from "./filterLocalStorage.composable";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -19,8 +19,7 @@ import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterState, initializeUserType } = useLocalStorage();
-	initializeUserType(userType as RoleName.Student | RoleName.Teacher);
+	const { setFilterState, getFilterState } = useFilterLocalStorage(userType as RoleName.Student | RoleName.Teacher);
 	const yearName = schoolsModule.getCurrentYear?.name;
 
 	const filterQuery = ref<FilterQuery>({});

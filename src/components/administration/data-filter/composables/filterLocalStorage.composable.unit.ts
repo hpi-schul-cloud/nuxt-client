@@ -1,4 +1,4 @@
-import { useLocalStorage } from "./localStorage.composable";
+import { useFilterLocalStorage } from "./filterLocalStorage.composable";
 import { RoleName } from "@/serverApi/v3";
 import { useStorage } from "@vueuse/core";
 
@@ -53,15 +53,14 @@ describe("localStorage composable", () => {
 	});
 
 	it("should initialize the default state", () => {
-		const { initializeUserType } = useLocalStorage();
-		initializeUserType(RoleName.Student);
+		useFilterLocalStorage(RoleName.Student);
+
 		expect(useStorage).toHaveBeenCalledWith("uiState", defaultState);
 	});
 
 	describe("filter storage", () => {
 		it("should return the correct filter storage for students' filter", () => {
-			const { initializeUserType, getFilterState, setFilterState, state } = useLocalStorage();
-			initializeUserType(RoleName.Student);
+			const { getFilterState, setFilterState, state } = useFilterLocalStorage(RoleName.Student);
 
 			const testQuery = { query: "value", searchQuery: "search" };
 
@@ -74,8 +73,7 @@ describe("localStorage composable", () => {
 		});
 
 		it("should return the correct filter storage for teachers' filter", () => {
-			const { initializeUserType, getFilterState, setFilterState, state } = useLocalStorage();
-			initializeUserType(RoleName.Teacher);
+			const { getFilterState, setFilterState, state } = useFilterLocalStorage(RoleName.Teacher);
 			const testQuery = { test: "teachers" };
 
 			setFilterState(testQuery);
@@ -87,8 +85,7 @@ describe("localStorage composable", () => {
 
 	describe("pagination storage", () => {
 		it("should return the correct pagination storage for students' filter", () => {
-			const { initializeUserType, getPaginationState, setPaginationState, state } = useLocalStorage();
-			initializeUserType(RoleName.Student);
+			const { getPaginationState, setPaginationState, state } = useFilterLocalStorage(RoleName.Student);
 			const testPagination = { page: 2, limit: 50 };
 
 			setPaginationState(testPagination);
@@ -100,8 +97,7 @@ describe("localStorage composable", () => {
 		});
 
 		it("should return the correct pagination storage for teachers' filter", () => {
-			const { initializeUserType, getPaginationState, setPaginationState, state } = useLocalStorage();
-			initializeUserType(RoleName.Teacher);
+			const { getPaginationState, setPaginationState, state } = useFilterLocalStorage(RoleName.Teacher);
 			const testPagination = { page: 3, limit: 30 };
 
 			setPaginationState(testPagination);
@@ -113,8 +109,7 @@ describe("localStorage composable", () => {
 
 	describe("sorting storage", () => {
 		it("should return the correct sorting storage for students' filter", () => {
-			const { initializeUserType, getSortingState, setSortingState, state } = useLocalStorage();
-			initializeUserType(RoleName.Student);
+			const { getSortingState, setSortingState, state } = useFilterLocalStorage(RoleName.Student);
 			const testSorting = { sortBy: "firstName", sortOrder: "asc" };
 
 			setSortingState(testSorting);
@@ -126,8 +121,7 @@ describe("localStorage composable", () => {
 		});
 
 		it("should return the correct sorting storage for teachers' filter", () => {
-			const { initializeUserType, getSortingState, setSortingState, state } = useLocalStorage();
-			initializeUserType(RoleName.Teacher);
+			const { getSortingState, setSortingState, state } = useFilterLocalStorage(RoleName.Teacher);
 			const testSorting = { sortBy: "lastName", sortOrder: "desc" };
 
 			setSortingState(testSorting);
