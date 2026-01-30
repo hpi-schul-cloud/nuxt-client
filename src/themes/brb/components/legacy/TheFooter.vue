@@ -39,7 +39,7 @@ const links = computed(() => {
 			target: "_blank",
 		},
 		{
-			href: "mailto:schul-cloud@bildungsserver.berlin-brandenburg.de?subject=Schul-Cloud%20Brandenburg%20Anfrage",
+			href: "mailto:support.scbb@meinlibra.de?subject=Schul-Cloud%20Brandenburg%20Anfrage",
 			text: t("components.legacy.footer.contact"),
 		},
 	];
