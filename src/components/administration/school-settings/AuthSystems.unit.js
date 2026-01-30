@@ -49,7 +49,6 @@ const searchStrings = {
 	tableSystem: ".table-system",
 	editSystemButton: ".edit-system-btn",
 	deleteSystemButton: ".delete-system-btn",
-	dialog: ".custom-dialog",
 	schoolLoginLink: ".school-login-link",
 	emailLink: "#school-login-link-0",
 	oauthAndLdapLink: "#school-login-link-2",
