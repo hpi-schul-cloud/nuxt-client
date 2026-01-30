@@ -13,7 +13,7 @@
 			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
-			<p class="text-lg mt-2" data-testid="move-card-dialog-question">
+			<p class="mt-2" data-testid="move-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
 			<VForm id="moveCardForm" data-testid="move-card-form">

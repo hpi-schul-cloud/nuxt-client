@@ -10,14 +10,14 @@
 	>
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
-				<VCardItem class="py-4 px-4">
+				<VCardItem class="pa-4">
 					<VCardTitle v-if="titleString">
 						<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
 							{{ titleString }}
 						</h2>
 					</VCardTitle>
 				</VCardItem>
-				<VCardText v-if="$slots.content" class="pa-4 pt-4 text-md">
+				<VCardText v-if="$slots.content" class="pa-4 text-body-1">
 					<slot name="content" />
 				</VCardText>
 				<VCardActions v-if="!noActions" class="pa-4 pt-2 ga-2 justify-end flex-wrap">
