@@ -4,14 +4,9 @@ import { useStorage } from "@vueuse/core";
 import { Ref } from "vue";
 
 export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teacher = RoleName.Student) => {
-	type FilterStorage = {
-		[RoleName.Student]: string;
-		[RoleName.Teacher]: string;
-	};
-
-	const filterStorageKey: FilterStorage = {
-		[RoleName.Student]: "pages.administration.students.index",
-		[RoleName.Teacher]: "pages.administration.teachers.index",
+	const filterStorageKey: Record<RoleName.Student | RoleName.Teacher, string> = {
+		[RoleName.Student]: "studentsManagementPage",
+		[RoleName.Teacher]: "teachersManagementPage",
 	};
 
 	const defaultState: UiState = {
