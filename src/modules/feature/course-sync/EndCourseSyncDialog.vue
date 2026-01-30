@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isOpen"
 		data-testid="end-course-sync-dialog"
 		title="feature-course-sync.EndCourseSyncDialog.title"
@@ -17,13 +17,13 @@
 				}}
 			</p>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { notifyError, notifySuccess } from "@data-app";
 import { useCourseApi } from "@data-room";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

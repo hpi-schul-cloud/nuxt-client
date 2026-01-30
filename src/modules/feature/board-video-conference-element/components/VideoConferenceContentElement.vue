@@ -46,7 +46,7 @@
 				<KebabMenuActionDelete scope-language-key="components.cardElement.videoConferenceElement" @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
-		<Dialog
+		<SvsDialog
 			:model-value="isErrorDialogOpen"
 			no-confirm
 			title="error.generic"
@@ -77,7 +77,7 @@ import {
 	useSharedBoardPageInformation,
 } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, onMounted, PropType, ref, toRef } from "vue";

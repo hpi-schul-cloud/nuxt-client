@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		:model-value="isOpen"
 		title="components.molecules.copyResult.title.partial"
 		cancel-btn-lang-key="common.labels.close"
@@ -25,14 +25,14 @@
 				</ul>
 			</WarningAlert>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 

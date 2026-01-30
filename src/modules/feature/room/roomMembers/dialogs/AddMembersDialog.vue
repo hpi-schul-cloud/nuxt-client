@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isOpen"
 		data-testid="dialog-add-participants"
 		title="pages.rooms.members.add"
@@ -84,7 +84,7 @@
 				@update:menu="onItemListToggle"
 			/>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -93,7 +93,7 @@ import { RoleName } from "@/serverApi/v3";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { storeToRefs } from "pinia";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

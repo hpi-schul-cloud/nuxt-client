@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		title="components.elementTypeSelection.dialog.title"
 		:is-loading="isDialogLoading"
@@ -18,14 +18,14 @@
 			</div>
 		</template>
 		<template #actions>
-			<DialogBtnClose @click.stop="closeDialog" />
+			<SvsDialogBtnCancel @click.stop="closeDialog" />
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { Dialog, DialogBtnClose } from "@ui-dialog";
+import { SvsDialog, SvsDialogBtnCancel } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
 const { isDialogOpen, isDialogLoading, closeDialog, elementTypeOptions } = useSharedElementTypeSelection();

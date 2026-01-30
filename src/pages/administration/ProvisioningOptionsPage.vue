@@ -86,7 +86,7 @@
 				{{ t("common.actions.save") }}
 			</v-btn>
 		</v-row>
-		<Dialog
+		<SvsDialog
 			:model-value="isWarningDialogOpen"
 			:title="t('components.administration.provisioningOptions.warning.title')"
 			data-testid="warning-dialog"
@@ -109,7 +109,7 @@
 					}}
 				</WarningAlert>
 			</template>
-		</Dialog>
+		</SvsDialog>
 	</DefaultWireframe>
 </template>
 
@@ -119,7 +119,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { ProvisioningOptions, ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";

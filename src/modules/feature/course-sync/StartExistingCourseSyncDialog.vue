@@ -5,7 +5,7 @@
 		@confirm="onConfirmGroupSelection"
 		@cancel="closeDialog"
 	/>
-	<Dialog
+	<SvsDialog
 		ref="start-existing-course-sync-dialog"
 		:model-value="isOpen && step === 1"
 		title="Synchronisation bestätigen"
@@ -33,7 +33,7 @@
 				}}
 			</p>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -42,7 +42,7 @@ import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

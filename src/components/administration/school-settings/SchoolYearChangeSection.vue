@@ -120,7 +120,7 @@
 					{{ t("components.administration.schoolYearChangeSection.step.three.button") }}
 				</VBtn>
 			</div>
-			<Dialog
+			<SvsDialog
 				v-model="isStartDialogOpen"
 				:title="t('components.administration.schoolYearChangeSection.dialog.start.title')"
 				data-testid="cancel-school-year-change-dialog"
@@ -129,8 +129,8 @@
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.start.content") }}
 				</template>
-			</Dialog>
-			<Dialog
+			</SvsDialog>
+			<SvsDialog
 				v-model="isFinishDialogOpen"
 				:title="t('components.administration.schoolYearChangeSection.dialog.finish.title')"
 				data-testid="finish-school-year-change-dialog"
@@ -139,7 +139,7 @@
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.finish.content") }}
 				</template>
-			</Dialog>
+			</SvsDialog>
 		</div>
 	</div>
 </template>
@@ -150,7 +150,7 @@ import { useEnvConfig } from "@data-env";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

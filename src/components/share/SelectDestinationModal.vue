@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		:model-value="isOpen"
 		:title="`components.molecules.import.${parentType}.options.title`"
 		confirm-btn-lang-key="common.actions.continue"
@@ -32,14 +32,14 @@
 				/>
 			</div>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { ImportDestinationItem } from "@/store/types/rooms";
 import { mdiInformation } from "@icons/material";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

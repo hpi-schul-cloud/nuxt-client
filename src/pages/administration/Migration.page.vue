@@ -65,7 +65,7 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
-				<Dialog
+				<SvsDialog
 					:model-value="isCancelDialogOpen"
 					:title="t('components.administration.adminMigrationSection.migrationWizardCancelDialog.Title')"
 					data-testid="cancel-migration-dialog"
@@ -75,8 +75,8 @@
 					<template #content>
 						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Description") }}
 					</template>
-				</Dialog>
-				<Dialog
+				</SvsDialog>
+				<SvsDialog
 					:model-value="isClearAutoMatchesDialogOpen"
 					:title="t('components.administration.adminMigrationSection.clearAutoMatchesDialog.title')"
 					data-testid="clear-auto-matches-dialog"
@@ -96,7 +96,7 @@
 							>
 						</p>
 					</template>
-				</Dialog>
+				</SvsDialog>
 			</VStepper>
 		</template>
 
@@ -430,7 +430,7 @@ import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { mdiClose } from "@icons/material";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";

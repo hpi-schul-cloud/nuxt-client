@@ -9,7 +9,7 @@
 			@click="onClick"
 			@refresh="onRefresh"
 		/>
-		<Dialog
+		<SvsDialog
 			:model-value="isErrorDialogOpen"
 			no-confirm
 			title="error.generic"
@@ -32,7 +32,7 @@ import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
 import { useAppStore, useAppStoreRefs } from "@data-app";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, ComputedRef, onMounted, ref } from "vue";
 

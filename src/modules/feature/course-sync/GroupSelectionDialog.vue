@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		:model-value="isOpen"
 		title="feature-course-sync.GroupSelectionDialog.title"
 		confirm-btn-lang-key="common.actions.continue"
@@ -48,14 +48,14 @@
 				</span>
 			</WarningAlert>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { useDebounceFn } from "@vueuse/core";
 import { ModelRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		:model-value="isOpen"
 		:title="t('common.words.privacyPolicy')"
 		confirm-btn-lang-key="pages.administration.school.index.schoolPolicy.replace"
@@ -36,7 +36,7 @@
 				</v-file-input>
 			</v-form>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -48,7 +48,7 @@ import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/u
 import { notifySuccess } from "@data-app";
 import { mdiAlert } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

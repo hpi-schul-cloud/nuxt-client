@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isOpen"
 		title="pages.common.tools.configureVideoconferenceDialog.title"
 		data-testid="video-conference-config-dialog"
@@ -30,14 +30,14 @@
 				:hide-details="true"
 			/>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { InfoAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 

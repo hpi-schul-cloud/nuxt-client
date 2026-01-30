@@ -1,5 +1,5 @@
 <template>
-	<Dialog :model-value="isOpen" title="feature-board-external-tool-element.dialog.title" no-actions>
+	<SvsDialog :model-value="isOpen" title="feature-board-external-tool-element.dialog.title" no-actions>
 		<template #content>
 			<ContextExternalToolConfigurator
 				ref="contextExternalToolConfigurator"
@@ -11,7 +11,7 @@
 				@cancel="onCancel"
 			/>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -19,7 +19,7 @@ import ContextExternalToolConfigurator from "@/components/administration/externa
 import { ToolContextType } from "@/serverApi/v3";
 import { notifySuccess } from "@data-app";
 import { ContextExternalTool } from "@data-external-tool";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { nextTick, onMounted, PropType, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

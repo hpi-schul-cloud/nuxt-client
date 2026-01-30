@@ -1,19 +1,19 @@
 <template>
-	<Dialog v-model="isOpen" data-testid="dialog-leave-room-owner" title="pages.rooms.leaveRoom.menu">
+	<SvsDialog v-model="isOpen" data-testid="dialog-leave-room-owner" title="pages.rooms.leaveRoom.menu">
 		<template #content>
 			<WarningAlert class="warning-text">
 				{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
 			</WarningAlert>
 		</template>
 		<template #actions>
-			<DialogBtnClose @click="$emit('update:modelValue', false)" />
+			<SvsDialogBtnCancel @click="$emit('update:modelValue', false)" />
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { WarningAlert } from "@ui-alert";
-import { Dialog, DialogBtnClose } from "@ui-dialog";
+import { SvsDialog, SvsDialogBtnCancel } from "@ui-dialog";
 import { useI18n } from "vue-i18n";
 
 defineEmits(["update:modelValue"]);

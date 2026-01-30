@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		:model-value="isOpen"
 		:title="t(`components.molecules.import.${parentType}.options.title`)"
 		confirm-btn-lang-key="common.actions.import"
@@ -57,12 +57,12 @@
 				/>
 			</div>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { mdiInformation } from "@icons/material";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";

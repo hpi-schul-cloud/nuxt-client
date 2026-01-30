@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-if="selectedItem.status"
 		:model-value="isOpen"
 		:title="t(getTitle, { toolName: selectedItem.name })"
@@ -9,14 +9,14 @@
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
 		<template #actions>
-			<DialogBtnClose data-testid="error-dialog-close-btn" @click="onClose" />
+			<SvsDialogBtnCancel data-testid="error-dialog-close-btn" @click="onClose" />
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { ExternalToolDisplayData, useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { Dialog, DialogBtnClose } from "@ui-dialog";
+import { SvsDialog, SvsDialogBtnCancel } from "@ui-dialog";
 import { computed, ComputedRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 

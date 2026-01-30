@@ -1,5 +1,5 @@
 <template>
-	<Dialog :model-value="isOpen" title="">
+	<SvsDialog :model-value="isOpen" title="">
 		<template #content>
 			<div class="pt-2 room-title">
 				<v-text-field
@@ -26,15 +26,15 @@
 			/>
 		</template>
 		<template #actions>
-			<DialogBtnClose data-testid="room-modal-close-btn" @click="emit('update:isOpen', false)" />
+			<SvsDialogBtnCancel data-testid="room-modal-close-btn" @click="emit('update:isOpen', false)" />
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import { courseRoomListModule } from "@/store";
-import { Dialog, DialogBtnClose } from "@ui-dialog";
+import { SvsDialog, SvsDialogBtnCancel } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";
 

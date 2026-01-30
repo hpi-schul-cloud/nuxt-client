@@ -1,5 +1,5 @@
 <template>
-	<Dialog :model-value="isOpen" :title="modalTitle" data-testid="share-dialog">
+	<SvsDialog :model-value="isOpen" :title="modalTitle" data-testid="share-dialog">
 		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
@@ -61,15 +61,12 @@
 			</v-fade-transition>
 		</template>
 		<template #actions>
+			<SvsDialogBtnCancel data-testid="share-dialog-cancel" @click="onCloseDialog" />
 			<template v-if="step === 'firstStep'">
-				<DialogBtnCancel data-testid="share-dialog-cancel" @click="onCloseDialog" />
-				<DialogBtnConfirm data-testid="share-dialog-next" text-lang-key="common.actions.continue" @click="onNext" />
-			</template>
-			<template v-else>
-				<DialogBtnClose data-testid="share-dialog-close" @click="onCloseDialog" />
+				<SvsDialogBtnConfirm data-testid="share-dialog-next" text-lang-key="common.actions.continue" @click="onNext" />
 			</template>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -80,7 +77,7 @@ import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog, DialogBtnCancel, DialogBtnClose, DialogBtnConfirm } from "@ui-dialog";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		:model-value="isOpen"
 		title="common.words.termsOfUse"
 		confirm-btn-lang-key="pages.administration.school.index.termsOfUse.replace"
@@ -36,7 +36,7 @@
 				</VFileInput>
 			</VForm>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -47,7 +47,7 @@ import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/uti
 import { notifySuccess } from "@data-app";
 import { mdiAlert } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

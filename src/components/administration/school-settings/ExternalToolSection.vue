@@ -85,8 +85,7 @@
 				{{ t("components.administration.externalToolsSection.action.add") }}
 			</VBtn>
 		</div>
-
-		<Dialog
+		<SvsDialog
 			v-if="metadata"
 			v-model="isDeleteDialogOpen"
 			title="components.administration.externalToolsSection.dialog.title"
@@ -127,7 +126,7 @@
 					{{ t("components.administration.externalToolsSection.dialog.content.warning") }}
 				</p>
 			</template>
-		</Dialog>
+		</SvsDialog>
 	</div>
 	<VidisMediaSyncSection v-if="isVidisEnabled" />
 </template>
@@ -146,7 +145,7 @@ import { useEnvConfig } from "@data-env";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";

@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isOpen"
 		:title="t('feature-room.CopyInfoDialog.title')"
 		:confirm-btn-lang-key="'common.actions.duplicate'"
@@ -34,12 +34,12 @@
 				</ul>
 			</WarningAlert>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
