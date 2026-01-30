@@ -1,6 +1,5 @@
 import { default as ldapConfig } from "./LDAPConfig.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { RouterLinkStub } from "@vue/test-utils";
@@ -73,7 +72,6 @@ describe("ldap/config", () => {
 				},
 				components: {
 					"base-input": BaseInput,
-					"base-link": BaseLink,
 				},
 			},
 		});
