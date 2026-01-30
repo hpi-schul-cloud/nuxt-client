@@ -778,8 +778,7 @@ export default {
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Посилання на запрошення до кімнати",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Будь ласка, перевірте вміст на предмет авторських прав та захисту даних.",
-	"components.molecules.TaskItemMenu.confirmDelete.text": 'Ви впевнені, що хочете видалити завдання " {taskTitle} "?',
-	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",
+	"components.molecules.TaskItemMenu.ariaLabel": "Меню завдань",
 	"components.molecules.TaskItemMenu.finish": "Завершити",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Створено",
 	"components.molecules.TaskItemTeacher.graded": "Оцінено",
@@ -1016,7 +1015,6 @@ export default {
 	"pages.administration.classes.createSuccessor": "Перенести клас на наступний навчальний рік",
 	"pages.administration.classes.delete": "Видалити клас",
 	"pages.administration.classes.deleteDialog.content": 'Ви впевнені, що хочете видалити клас "{itemName}"?',
-	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
 	"pages.administration.common.hint":
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
@@ -1030,7 +1028,7 @@ export default {
 	"pages.administration.classes.manage": "Керувати класом",
 	"pages.administration.classes.header.sync": "Синхронізовано з",
 	"pages.administration.courses.delete": "Видалити курс",
-	"pages.administration.courses.deleteDialog.content": 'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
+	"pages.administration.courses.deleteDialog.content": 'Ви справді хочете видалити курс "{itemName}"?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.courses.withoutTeacher": "Відображати тільки курси без викладача",
@@ -1216,7 +1214,6 @@ export default {
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Ви дійсно хочете видалити наступну систему автентифікації?",
 	"pages.administration.school.index.authSystems.delete": "Видалити {system}",
-	"pages.administration.school.index.authSystems.deleteAuthSystem": "Видалити автентифікацію",
 	"pages.administration.school.index.authSystems.edit": "Редагувати {system}",
 	"pages.administration.school.index.authSystems.loginLinkLabel": "Посилання для входу до вашої школи",
 	"pages.administration.school.index.authSystems.title": "Аутентифікація",
@@ -1742,7 +1739,6 @@ export default {
 	"pages.rooms.tools.deactivatedDialog.title": "Інструмент “{toolName}“ вимкнено",
 	"pages.rooms.tools.notLicensedDialog.title": "Інструмент “{toolName}“ Не уповноважений",
 	"pages.rooms.tools.deleteDialog.content": "Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
-	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
 	"pages.rooms.tools.emptyState": "Наразі в цьому курсі немає інструментів",
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",

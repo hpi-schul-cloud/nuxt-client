@@ -519,9 +519,8 @@ describe("ClassOverview", () => {
 				const { wrapper } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
-				await nextTick();
 
-				const dialog = wrapper.findComponent({ name: "CustomDialog" });
+				const dialog = wrapper.findComponent({ name: "Dialog" });
 				expect(dialog.vm.isOpen).toBe(true);
 			});
 		});
@@ -542,9 +541,9 @@ describe("ClassOverview", () => {
 
 					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
+					const dialog = wrapper.findComponent({ name: "Dialog" });
+					dialog.vm.$emit("cancel");
+					await nextTick();
 
 					expect(groupModule.deleteClass).not.toHaveBeenCalled();
 				});
@@ -556,9 +555,9 @@ describe("ClassOverview", () => {
 
 					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
+					const dialog = wrapper.findComponent({ name: "Dialog" });
+					dialog.vm.$emit("confirm");
+					await nextTick();
 
 					expect(groupModule.deleteClass).toHaveBeenCalled();
 				});
@@ -783,7 +782,7 @@ describe("ClassOverview", () => {
 			await wrapper.find('[data-testid="class-table-end-course-sync-btn"]').trigger("click");
 
 			const dialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
-			expect(dialog.vm.isOpen).toBe(true);
+			expect(dialog.props().modelValue).toBe(true);
 		});
 	});
 

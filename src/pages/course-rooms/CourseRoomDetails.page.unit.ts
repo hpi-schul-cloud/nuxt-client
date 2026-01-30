@@ -465,9 +465,9 @@ describe("CourseRoomDetails.page.vue", () => {
 			const modalView = wrapper.findComponent({
 				name: "ShareModal",
 			});
-			const shareDialog = modalView.findComponent({ name: "CustomDialog" });
+			const shareDialog = modalView.findComponent({ name: "Dialog" });
 
-			expect(shareDialog.props("isOpen")).toBe(true);
+			expect(shareDialog.props("modelValue")).toBe(true);
 		});
 	});
 

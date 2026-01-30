@@ -222,13 +222,11 @@ export default {
 		},
 
 		numberOfSelectedItems() {
-			// TODO think about moving selections outside this method
 			const selections = Object.keys(this.selectionKeys);
 			return this.SelectionType === "inclusive" ? selections.length : this.total - selections.length;
 		},
 		allRowsOfAllPagesSelected: {
 			get() {
-				// TODO think about moving selections outside this method
 				const selections = Object.keys(this.selectionKeys);
 				return this.SelectionType === "exclusive" && selections.length === 0;
 			},

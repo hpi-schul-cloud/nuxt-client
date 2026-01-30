@@ -1,7 +1,7 @@
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import { CourseFeatures } from "@/store/types/room";
+import { CourseFeatures } from "@/types/course-room/CourseRoom";
 import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import {
 	businessErrorFactory,

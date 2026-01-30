@@ -1,10 +1,12 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="element-type-selection" :width="dialogWidth">
-		<VCard :loading="isDialogLoading">
-			<VCardTitle class="text-h2 text-break px-6 pt-4">
-				{{ t("components.elementTypeSelection.dialog.title") }}
-			</VCardTitle>
-			<VCardText class="d-flex flex-row flex-wrap align-center">
+	<SvsDialog
+		v-model="isDialogOpen"
+		title="components.elementTypeSelection.dialog.title"
+		:is-loading="isDialogLoading"
+		data-testid="element-type-selection"
+	>
+		<template #content>
+			<div class="d-flex flex-row flex-wrap align-center justify-space-between">
 				<ExtendedIconBtn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
@@ -13,40 +15,18 @@
 					:label="item.label"
 					@click.stop="item.action"
 				/>
-			</VCardText>
-			<VCardActions class="mb-2 px-6">
-				<VBtn data-testid="dialog-close" variant="outlined" @click.stop="closeDialog">
-					{{ t("common.actions.cancel") }}
-				</VBtn>
-			</VCardActions>
-		</VCard>
-	</VDialog>
+			</div>
+		</template>
+		<template #actions>
+			<SvsDialogBtnCancel @click.stop="closeDialog" />
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { SvsDialog, SvsDialogBtnCancel } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { computed, ComputedRef } from "vue";
-import { useI18n } from "vue-i18n";
 
 const { isDialogOpen, isDialogLoading, closeDialog, elementTypeOptions } = useSharedElementTypeSelection();
-
-const { t } = useI18n();
-
-const dialogWidth: ComputedRef<number> = computed(() => {
-	const totalOptions = elementTypeOptions.value.length;
-
-	return totalOptions >= 3 ? 426 : 320;
-});
 </script>
-
-<style scoped>
-.subtitle {
-	overflow-wrap: break-word;
-	white-space: normal;
-}
-
-.button-max-width {
-	max-width: 100px;
-}
-</style>

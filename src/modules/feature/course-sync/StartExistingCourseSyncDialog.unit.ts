@@ -1,12 +1,12 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
 import { createTestAppStore, expectNotification, groupResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
@@ -72,12 +72,12 @@ describe("StartExistingCourseSyncDialog", () => {
 			const { wrapper } = getWrapper({ isOpen: false });
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
+			const confirmationDialog = wrapper.findComponent({
 				ref: "start-existing-course-sync-dialog",
 			});
 
 			expect(groupSelectionDialog.props().isOpen).toEqual(false);
-			expect(confirmationDialog.props().isOpen).toEqual(false);
+			expect(confirmationDialog.props().modelValue).toEqual(false);
 			expect((wrapper.vm as unknown as typeof StartExistingCourseSyncDialog).step).toEqual(0);
 		});
 	});
@@ -101,12 +101,12 @@ describe("StartExistingCourseSyncDialog", () => {
 			await nextTick();
 
 			const groupSelectionDialog = wrapper.getComponent(GroupSelectionDialog);
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof Dialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 
 			expect(groupSelectionDialog.props().isOpen).toEqual(false);
-			expect(confirmationDialog.props().isOpen).toEqual(true);
+			expect(confirmationDialog.props().modelValue).toEqual(true);
 		});
 	});
 
@@ -119,7 +119,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
 
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof Dialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
@@ -168,7 +168,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
 			await nextTick();
 
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof Dialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");
@@ -201,7 +201,7 @@ describe("StartExistingCourseSyncDialog", () => {
 			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", undefined);
 			await nextTick();
 
-			const confirmationDialog = wrapper.getComponent<typeof CustomDialog>({
+			const confirmationDialog = wrapper.getComponent<typeof Dialog>({
 				ref: "start-existing-course-sync-dialog",
 			});
 			const confirmBtn = confirmationDialog.findComponent("[data-testid=dialog-confirm]");

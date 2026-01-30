@@ -85,63 +85,48 @@
 				{{ t("components.administration.externalToolsSection.action.add") }}
 			</VBtn>
 		</div>
-
-		<v-dialog v-if="metadata" v-model="isDeleteDialogOpen" data-testid="delete-dialog" max-width="360">
-			<v-card :ripple="false">
-				<v-card-title data-testid="delete-dialog-title">
-					<h2 class="my-2">
-						{{ t("components.administration.externalToolsSection.dialog.title") }}
-					</h2>
-				</v-card-title>
-				<v-card-text>
-					<div data-testid="delete-dialog-content-header">
-						<i18n-t
-							keypath="components.administration.externalToolsSection.dialog.content.header.firstParagraph"
-							scope="global"
-							tag="p"
-						>
-							<b>{{ getItemName }}</b>
-						</i18n-t>
-						<p class="mb-0">
-							{{ t("components.administration.externalToolsSection.dialog.content.header.secondParagraph") }}
-						</p>
-					</div>
-					<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
-						{{ t("common.tool.context.type.courses") }}
-						<b>({{ metadata.course }})</b>
-					</p>
-					<p
-						data-testid="delete-dialog-content-board-elements"
-						:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
+		<SvsDialog
+			v-if="metadata"
+			v-model="isDeleteDialogOpen"
+			title="components.administration.externalToolsSection.dialog.title"
+			data-testid="delete-dialog"
+			max-width="360"
+			@cancel="onCancelDeleteDialog"
+			@confirm="onDeleteTool"
+		>
+			<template #content>
+				<div data-testid="delete-dialog-content-header">
+					<i18n-t
+						keypath="components.administration.externalToolsSection.dialog.content.header.firstParagraph"
+						scope="global"
+						tag="p"
 					>
-						{{ t("common.tool.context.type.boardElements") }}
-						<b>({{ metadata.boardElement }})</b>
+						<b>{{ getItemName }}</b>
+					</i18n-t>
+					<p class="mb-0">
+						{{ t("components.administration.externalToolsSection.dialog.content.header.secondParagraph") }}
 					</p>
-					<p v-if="isMediaBoardUsageVisible" data-testid="delete-dialog-content-media-shelves" class="text-md">
-						{{ t("common.tool.context.type.mediaShelves") }}
-						<b>({{ metadata.mediaBoard }})</b>
-					</p>
-					<p data-testid="delete-dialog-content-media-warning">
-						{{ t("components.administration.externalToolsSection.dialog.content.warning") }}
-					</p>
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer />
-					<v-btn data-testId="delete-dialog-cancel" class="dialog-closed" variant="text" @click="onCloseDeleteDialog">
-						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn
-						data-testId="delete-dialog-confirm"
-						class="dialog-confirmed px-6"
-						color="primary"
-						variant="flat"
-						@click="onDeleteTool"
-					>
-						{{ t("common.actions.confirm") }}
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+				</div>
+				<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
+					{{ t("common.tool.context.type.courses") }}
+					<b>({{ metadata.course }})</b>
+				</p>
+				<p
+					data-testid="delete-dialog-content-board-elements"
+					:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
+				>
+					{{ t("common.tool.context.type.boardElements") }}
+					<b>({{ metadata.boardElement }})</b>
+				</p>
+				<p v-if="isMediaBoardUsageVisible" data-testid="delete-dialog-content-media-shelves" class="text-md">
+					{{ t("common.tool.context.type.mediaShelves") }}
+					<b>({{ metadata.mediaBoard }})</b>
+				</p>
+				<p data-testid="delete-dialog-content-media-warning">
+					{{ t("components.administration.externalToolsSection.dialog.content.warning") }}
+				</p>
+			</template>
+		</SvsDialog>
 	</div>
 	<VidisMediaSyncSection v-if="isVidisEnabled" />
 </template>
@@ -160,6 +145,7 @@ import { useEnvConfig } from "@data-env";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
+import { SvsDialog } from "@ui-dialog";
 import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -210,7 +196,7 @@ const onDeleteTool = async () => {
 
 	notifySuccess(t("components.administration.externalToolsSection.notification.deleted"));
 
-	onCloseDeleteDialog();
+	onCancelDeleteDialog();
 };
 
 const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
@@ -228,9 +214,8 @@ const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 	}
 };
 
-const onCloseDeleteDialog = () => {
+const onCancelDeleteDialog = () => {
 	itemToDelete.value = undefined;
-
 	isDeleteDialogOpen.value = false;
 };
 

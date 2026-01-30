@@ -120,46 +120,38 @@
 					{{ t("components.administration.schoolYearChangeSection.step.three.button") }}
 				</VBtn>
 			</div>
-			<CustomDialog
-				v-model:is-open="isStartDialogOpen"
-				has-buttons
-				:buttons="['cancel', 'confirm']"
+			<SvsDialog
+				v-model="isStartDialogOpen"
+				:title="t('components.administration.schoolYearChangeSection.dialog.start.title')"
 				data-testid="cancel-school-year-change-dialog"
-				@dialog-confirmed="confirmSchoolYearChange"
+				@confirm="confirmSchoolYearChange"
 			>
-				<template #title>
-					{{ t("components.administration.schoolYearChangeSection.dialog.start.title") }}
-				</template>
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.start.content") }}
 				</template>
-			</CustomDialog>
-			<CustomDialog
-				v-model:is-open="isFinishDialogOpen"
-				has-buttons
-				:buttons="['cancel', 'confirm']"
+			</SvsDialog>
+			<SvsDialog
+				v-model="isFinishDialogOpen"
+				:title="t('components.administration.schoolYearChangeSection.dialog.finish.title')"
 				data-testid="finish-school-year-change-dialog"
-				@dialog-confirmed="finishTransfer"
+				@confirm="finishTransfer"
 			>
-				<template #title>
-					{{ t("components.administration.schoolYearChangeSection.dialog.finish.title") }}
-				</template>
 				<template #content>
 					{{ t("components.administration.schoolYearChangeSection.dialog.finish.content") }}
 				</template>
-			</CustomDialog>
+			</SvsDialog>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SchoolYearModeEnum, useSharedSchoolYearChange } from "@data-school";
 import { mdiNumeric1Circle, mdiNumeric2Circle, mdiNumeric3Circle } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { SvsDialog } from "@ui-dialog";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { setMaintenanceMode, maintenanceStatus } = useSharedSchoolYearChange();
@@ -174,7 +166,7 @@ const { t } = useI18n();
 
 const isLoading = ref(false);
 
-const schoolYearMode: ComputedRef<string> = computed(() => {
+const schoolYearMode = computed(() => {
 	const currentTime = new Date();
 
 	let schoolMaintenanceMode = SchoolYearModeEnum.IDLE.valueOf();
@@ -209,7 +201,7 @@ const finishTransfer = async () => {
 	}
 };
 
-const isStartDialogOpen: Ref<boolean> = ref(false);
+const isStartDialogOpen = ref(false);
 
 const startTransfer = () => {
 	isStartDialogOpen.value = true;

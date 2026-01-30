@@ -269,7 +269,6 @@ export default class CourseRoomListModule extends VuexModule {
 	async delete(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO: delete call to to server
 			const tempData = this.roomsData.filter((item) => item.id !== id);
 			this.setRoomData(tempData);
 			this.setLoading(false);

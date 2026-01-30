@@ -1,6 +1,6 @@
+import { Course } from "../types/course-room/CourseRoom";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { Course } from "./types/room";
 import {
 	BoardApiFactory,
 	CourseRoomsApiFactory,

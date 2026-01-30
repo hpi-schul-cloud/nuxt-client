@@ -1,19 +1,5 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		data-testid="share-dialog"
-		:size="480"
-		has-buttons
-		:buttons="isOpen ? actionButtons : []"
-		@dialog-closed="onCloseDialog"
-		@next="onNext()"
-	>
-		<template #title>
-			<h2 class="mt-2 text-break">
-				{{ modalTitle }}
-			</h2>
-		</template>
-
+	<SvsDialog :model-value="isOpen" :title="modalTitle" data-testid="share-dialog">
 		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
@@ -74,11 +60,16 @@
 				</div>
 			</v-fade-transition>
 		</template>
-	</CustomDialog>
+		<template #actions>
+			<SvsDialogBtnCancel data-testid="share-dialog-cancel" @click="onCloseDialog" />
+			<template v-if="step === 'firstStep'">
+				<SvsDialogBtnConfirm data-testid="share-dialog-next" text-lang-key="common.actions.continue" @click="onNext" />
+			</template>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
@@ -86,10 +77,9 @@ import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { InfoAlert, WarningAlert } from "@ui-alert";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-type VDialogButtonActions = "back" | "edit" | "cancel" | "confirm" | "close" | "next";
 
 const props = defineProps({
 	type: {
@@ -109,24 +99,16 @@ type ShareModalStep = "firstStep" | "secondStep";
 
 const step = computed<ShareModalStep>(() => (shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"));
 
-const modalOptions: Record<ShareModalStep, { title: string; actionButtons: VDialogButtonActions[] }> = {
-	firstStep: {
-		title: t("components.molecules.share.options.title"),
-		actionButtons: ["cancel", "next"],
-	},
-	secondStep: {
-		title: t("components.molecules.share.result.title"),
-		actionButtons: ["close"],
-	},
-};
-
 const shareUrl = computed(() => shareModule.getShareUrl ?? "");
-
-const actionButtons = computed(() => modalOptions[step.value].actionButtons ?? []);
 
 const shareOptions = ref<ShareOptions>();
 
-const modalTitle = computed(() => modalOptions[step.value].title ?? "");
+const modalTitle = computed((): string => {
+	if (step.value === "firstStep") {
+		return t("components.molecules.share.options.title");
+	}
+	return t("components.molecules.share.result.title");
+});
 
 const onShareOptionsChange = (newValue: ShareOptions) => {
 	shareOptions.value = newValue;

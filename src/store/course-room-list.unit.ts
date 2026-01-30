@@ -165,7 +165,6 @@ describe("rooms module", () => {
 
 		describe("delete", () => {
 			it("should call 'setPosition' mutation", async () => {
-				// TODO: call server will be here when server ready
 				const courseRoomListModule = new CourseRoomListModule({});
 
 				const setRoomDataSpy = vi.spyOn(courseRoomListModule, "setRoomData");

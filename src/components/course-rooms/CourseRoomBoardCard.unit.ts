@@ -1,4 +1,4 @@
-import RoomBoardCard from "./RoomBoardCard.vue";
+import CourseRoomBoardCard from "./CourseRoomBoardCard.vue";
 import { BoardLayout, ConfigResponse, ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -66,13 +66,13 @@ const mockCourseData = {
 	courseName: "test-course-name",
 };
 
-describe("RoomBoardCard", () => {
+describe("CourseRoomBoardCard", () => {
 	const setup = (props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum }, options?: object) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
 
-		const wrapper = mount(RoomBoardCard, {
+		const wrapper = mount(CourseRoomBoardCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -105,7 +105,7 @@ describe("RoomBoardCard", () => {
 
 		it("should be found in dom", () => {
 			const { wrapper } = setup({ boardData: mockDraftBoardData, userRole });
-			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
+			expect(wrapper.findComponent(CourseRoomBoardCard).exists()).toBe(true);
 		});
 
 		describe("when board title is defined and not empty", () => {

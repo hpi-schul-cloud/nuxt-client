@@ -16,7 +16,7 @@
 			>
 				<template #item="{ element: item, index }">
 					<div>
-						<RoomBoardCard
+						<CourseRoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
 							:board-card-index="index"
@@ -63,7 +63,7 @@
 							@copy-task="copyTask(item.content.id)"
 							@share-task="getSharedTask(item.content.id)"
 						/>
-						<RoomLessonCard
+						<CourseRoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
 							:lesson-card-index="index"
@@ -93,7 +93,7 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
-				<RoomBoardCard
+				<CourseRoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
 					:board-card-index="index"
@@ -130,7 +130,7 @@
 					@finish-task="finishTask(item.content.id)"
 					@restore-task="restoreTask(item.content.id)"
 				/>
-				<RoomLessonCard
+				<CourseRoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
 					:lesson-card-index="index"
@@ -157,26 +157,14 @@
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
-		<CustomDialog
-			v-model:is-open="itemDelete.isOpen"
-			data-testid="delete-dialog-item"
-			:size="375"
-			has-buttons
-			confirm-btn-title-key="common.actions.delete"
-			@dialog-confirmed="deleteItem"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ deleteDialogTitle(itemDelete.itemType, itemDelete.itemData.name || itemDelete.itemData.title) }}
-				</h2>
-			</template>
-		</CustomDialog>
+		<ConfirmationDialog />
 	</div>
 </template>
 
 <script>
+import CourseRoomBoardCard from "./CourseRoomBoardCard.vue";
+import CourseRoomLessonCard from "./CourseRoomLessonCard.vue";
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
 	BoardElementResponseTypeEnum,
@@ -188,20 +176,21 @@ import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
-import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
+import { defineComponent } from "vue";
 import draggable from "vuedraggable";
 
-export default {
+export default defineComponent({
 	components: {
-		RoomBoardCard,
+		CourseRoomBoardCard,
 		CourseRoomTaskCard,
-		RoomLessonCard,
-		CustomDialog,
+		CourseRoomLessonCard,
 		draggable,
 		EmptyState,
 		ShareModal,
 		LearningContentEmptyStateSvg,
+		ConfirmationDialog,
 	},
 	inject: {
 		shareModule: { from: SHARE_MODULE_KEY },
@@ -214,12 +203,17 @@ export default {
 		role: { type: String, required: true },
 	},
 	emits: ["copy-board-element"],
+	setup() {
+		const { askConfirmation } = useConfirmationDialog();
+
+		return { askConfirmation };
+	},
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNamesEnum,
-			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
+			itemDelete: { itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -323,8 +317,16 @@ export default {
 		},
 		openItemDeleteDialog(itemContent, itemType) {
 			this.itemDelete.itemData = itemContent;
-			this.itemDelete.isOpen = true;
 			this.itemDelete.itemType = itemType;
+
+			this.askConfirmation({
+				message: this.deleteDialogTitle(itemType, itemContent.name || itemContent.title),
+				confirmActionLangKey: "common.actions.delete",
+			}).then((confirmed) => {
+				if (confirmed) {
+					this.deleteItem();
+				}
+			});
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
@@ -391,5 +393,5 @@ export default {
 			});
 		},
 	},
-};
+});
 </script>

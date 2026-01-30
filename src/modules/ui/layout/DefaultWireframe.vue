@@ -23,7 +23,6 @@
 				<SpeedDialMenu :actions="fabItems" />
 			</div>
 		</div>
-
 		<VContainer
 			:fluid="maxWidth !== 'native'"
 			class="main-content"

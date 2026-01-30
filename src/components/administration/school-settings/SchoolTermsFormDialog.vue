@@ -1,28 +1,18 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		:size="425"
-		has-buttons
-		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
-		:confirm-btn-icon="mdiFileReplaceOutline"
-		:confirm-btn-disabled="!isValid"
-		@dialog-canceled="cancel"
-		@dialog-confirmed="submit"
+	<SvsDialog
+		:model-value="isOpen"
+		title="common.words.termsOfUse"
+		confirm-btn-lang-key="pages.administration.school.index.termsOfUse.replace"
+		:confirm-btn-disabled="!isFormValid"
+		@cancel="onCancel"
+		@confirm="onConfirm"
 	>
-		<template #title>
-			<h3 class="text-h2 mt-0">
-				{{ t("common.words.termsOfUse") }}
-			</h3>
-		</template>
 		<template #content>
-			<v-form ref="termsForm" v-model="isValid">
-				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="alert-text">
-						{{ t("pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent") }}
-					</div>
-				</v-alert>
-				<v-file-input
-					ref="input-file"
+			<VForm ref="termsForm" v-model="isFormValid">
+				<WarningAlert class="mb-10">
+					{{ t("pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent") }}
+				</WarningAlert>
+				<VFileInput
 					v-model="file"
 					class="input-file mb-2 truncate-file-input"
 					data-testid="input-file"
@@ -36,124 +26,97 @@
 					@blur="onBlur"
 				>
 					<template #append-inner>
-						<v-icon
-							v-if="!isValid && isTouched"
+						<VIcon
+							v-if="!isFormValid && isFormTouched"
 							color="rgba(var(--v-theme-error))"
 							data-testid="warning-icon"
 							:icon="mdiAlert"
 						/>
 					</template>
-				</v-file-input>
-			</v-form>
+				</VFileInput>
+			</VForm>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
-<script lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
+<script setup lang="ts">
 import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
-import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
-import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
-import { computed, ComputedRef, defineComponent, Ref, ref } from "vue";
+import { mdiAlert } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "SchoolTermsFormDialog",
-	components: {
-		CustomDialog,
-	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	emits: ["close"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
-		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+defineProps<{
+	isOpen: boolean;
+}>();
 
-		const termsForm: Ref<File[]> = ref([]);
-		const isFormValid: Ref<boolean> = ref(false);
-		const isFormTouched: Ref<boolean> = ref(false);
-		const file: Ref<File | null> = ref(null);
+const emit = defineEmits<{
+	(event: "close"): void;
+}>();
 
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+const { t } = useI18n();
+const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const maxFileUploadSizeInKb = 4194304;
-		const validationRules = {
-			required: (value: File | null) => !!value || t("common.validation.required"),
-			mustBePdf: (value: File | null) =>
-				value?.type === "application/pdf" || t("pages.administration.school.index.termsOfUse.validation.notPdf"),
-			maxSize: (value: File | null) =>
-				(!!value && value.size <= maxFileUploadSizeInKb) ||
-				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
+const termsForm = ref<File[]>([]);
+const isFormValid = ref(false);
+const isFormTouched = ref(false);
+const file = ref<File | null>(null);
+
+const school = computed(() => schoolsModule.getSchool);
+
+const maxFileUploadSizeInKb = 4194304;
+const rules = {
+	required: (value: File | null) => !!value || t("common.validation.required"),
+	mustBePdf: (value: File | null) =>
+		value?.type === "application/pdf" || t("pages.administration.school.index.termsOfUse.validation.notPdf"),
+	maxSize: (value: File | null) =>
+		(!!value && value.size <= maxFileUploadSizeInKb) ||
+		t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
+};
+
+const onBlur = () => {
+	isFormTouched.value = true;
+};
+
+const resetForm = () => {
+	termsForm.value = [];
+	isFormValid.value = false;
+	isFormTouched.value = false;
+	file.value = null;
+};
+
+const onCancel = () => {
+	resetForm();
+	emit("close");
+};
+
+const onConfirm = async () => {
+	if (isFormValid.value && file.value) {
+		const newConsentVersion: CreateConsentVersionPayload = {
+			schoolId: school.value.id,
+			title: t("pages.administration.school.index.termsOfUse.fileName"),
+			consentText: "",
+			consentTypes: ["termsOfUse"],
+			publishedAt: currentDate().toString(),
+			consentData: (await toBase64(file.value)) as string,
 		};
 
-		const onBlur = () => {
-			isFormTouched.value = true;
-		};
+		emit("close");
+		await termsOfUseModule.createTermsOfUse(newConsentVersion);
 
-		const resetForm = () => {
-			termsForm.value = [];
-			isFormValid.value = false;
-			isFormTouched.value = false;
-			file.value = null;
-		};
-
-		const cancel = () => {
-			resetForm();
-			emit("close");
-		};
-
-		const submit = async () => {
-			if (isFormValid.value && file.value) {
-				const newConsentVersion: CreateConsentVersionPayload = {
-					schoolId: school.value.id,
-					title: t("pages.administration.school.index.termsOfUse.fileName"),
-					consentText: "",
-					consentTypes: ["termsOfUse"],
-					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(file.value)) as string,
-				};
-
-				emit("close");
-				await termsOfUseModule.createTermsOfUse(newConsentVersion);
-
-				notifySuccess(t("pages.administration.school.index.termsOfUse.success"));
-				resetForm();
-			}
-		};
-
-		return {
-			t,
-			rules: validationRules,
-			cancel,
-			submit,
-			onBlur,
-			isValid: isFormValid,
-			isTouched: isFormTouched,
-			termsForm,
-			school,
-			mdiAlert,
-			mdiFileReplaceOutline,
-			file,
-		};
-	},
-});
+		notifySuccess("pages.administration.school.index.termsOfUse.success");
+		resetForm();
+	}
+};
 </script>
 
-<style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
+<style scoped>
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;

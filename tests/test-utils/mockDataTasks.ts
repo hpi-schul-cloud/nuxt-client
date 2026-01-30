@@ -1,4 +1,5 @@
-import { Task, TaskStatus } from "@/store/types/tasks";
+import { RichTextTypeEnum, TaskResponse } from "@/serverApi/v3/api";
+import { TaskStatus } from "@/store/types/tasks";
 
 /*
 	Mockdata for tasks dashboards
@@ -19,7 +20,7 @@ const generateStatus = (props = {}) =>
 		props
 	);
 
-const overDueTasks = [
+const overDueTasks: TaskResponse[] = [
 	{
 		id: "59cce4171113d1132c98dc07",
 		name: "Aufgabe an Marla (Mathe) - abgelaufen",
@@ -29,6 +30,7 @@ const overDueTasks = [
 		updatedAt: "2017-07-28T11:58:46.601Z",
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
@@ -39,6 +41,7 @@ const overDueTasks = [
 		updatedAt: "2017-09-28T11:49:39.924Z",
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 	{
 		id: "59cce352c6abf042248e888c",
@@ -49,13 +52,15 @@ const overDueTasks = [
 		updatedAt: "2017-09-28T11:56:02.897Z",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 ];
-const openTasksWithDueDate = [
+
+const openTasksWithDueDate: TaskResponse[] = [
 	{
 		id: "59cce4c3c6abf042248e888e",
 		name: "Private Aufgabe von Cord - mit Kurs, offen",
-		description: "Test",
+		description: { content: "Test", type: RichTextTypeEnum.PlainText },
 		dueDate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		courseId: "59cce4171113d1132c00dc07",
@@ -63,6 +68,7 @@ const openTasksWithDueDate = [
 		lessonName: "Malen nach Zahlen",
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
@@ -73,6 +79,7 @@ const openTasksWithDueDate = [
 		updatedAt: "2017-09-28T11:49:39.924Z",
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
@@ -83,6 +90,7 @@ const openTasksWithDueDate = [
 		updatedAt: "2017-09-28T11:58:46.601Z",
 		createdAt: "2017-09-28T11:58:46.601Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
@@ -93,9 +101,10 @@ const openTasksWithDueDate = [
 		updatedAt: "2017-09-28T12:10:46.180Z",
 		createdAt: "2017-09-28T12:10:46.180Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 ];
-const openTasksWithoutDueDate = [
+const openTasksWithoutDueDate: TaskResponse[] = [
 	{
 		id: "59cce4171113d1132c98dc08",
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
@@ -104,10 +113,11 @@ const openTasksWithoutDueDate = [
 		updatedAt: "2017-07-28T11:58:46.601Z",
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: generateStatus(),
+		lessonHidden: false,
 	},
 ];
 
-const submittedTasks = [
+const submittedTasks: TaskResponse[] = [
 	{
 		id: "59cce4c3c6abf042248e968e",
 		name: "Aufgabe von Cord - mit Kurs, abgegeben",
@@ -120,10 +130,11 @@ const submittedTasks = [
 		status: generateStatus({
 			submitted: 1,
 		}),
+		lessonHidden: false,
 	},
 ];
 
-const missedButGradedTasks = [
+const missedButGradedTasks: TaskResponse[] = [
 	{
 		id: "59cce352c6abf001248e888c",
 		name: "Aufgabe von Marla - abgelaufen, bewertet",
@@ -136,10 +147,11 @@ const missedButGradedTasks = [
 		status: generateStatus({
 			graded: 1,
 		}),
+		lessonHidden: false,
 	},
 ];
 
-const gradedTasks = [
+const gradedTasks: TaskResponse[] = [
 	{
 		id: "59cce7u6c6abf042248e888d",
 		name: "Aufgabe an Marla (Mathe) - abgegeben, bewertet",
@@ -153,6 +165,7 @@ const gradedTasks = [
 			submitted: 1,
 			graded: 1,
 		}),
+		lessonHidden: false,
 	},
 	{
 		id: "59cce352c6abf001248e888c",
@@ -166,16 +179,13 @@ const gradedTasks = [
 		status: generateStatus({
 			graded: 1,
 		}),
+		lessonHidden: false,
 	},
 ];
 
-const openTasks = [
-	...openTasksWithDueDate,
-	...overDueTasks,
-	...openTasksWithoutDueDate,
-];
+const openTasks = [...openTasksWithDueDate, ...overDueTasks, ...openTasksWithoutDueDate];
 const completedTasks = [...submittedTasks, ...gradedTasks];
-const tasks: Task[] = [...openTasks, ...completedTasks];
+const tasks: TaskResponse[] = [...openTasks, ...completedTasks];
 
 const invalidTasks = [
 	{
@@ -213,10 +223,9 @@ const invalidTasks = [
 	},
 ];
 
-const overDueTasksTeacher = [
+const overDueTasksTeacher: TaskResponse[] = [
 	{
 		id: "59cce352c6abf042248e888c",
-		_id: "59cce352c6abf042248e888c",
 		name: "Trigonometrie",
 		dueDate: "2017-06-07T09:30:00.000Z",
 		courseName: "Mathe",
@@ -227,10 +236,12 @@ const overDueTasksTeacher = [
 			graded: 1,
 			isFinished: false,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
-		_id: "59cce2c61113d1132c98dc06",
 		name: "Schaubilder und Diagramme auswerten",
 		dueDate: "2017-07-28T13:00:00.000Z",
 		courseName: "Deutsch",
@@ -240,10 +251,12 @@ const overDueTasksTeacher = [
 			maxSubmissions: 15,
 			isFinished: true,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce4171113d1132c98dc07",
-		_id: "59cce4171113d1132c98dc07",
 		name: "Schriftlich multiplizieren mit Dezimalzahlen",
 		dueDate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
@@ -253,27 +266,31 @@ const overDueTasksTeacher = [
 			maxSubmissions: 10,
 			graded: 9,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 ];
 
-const dueDateTasksTeacher = [
+const dueDateTasksTeacher: TaskResponse[] = [
 	{
 		id: "59cce4c3c6abf042248e888e",
-		_id: "59cce4c3c6abf042248e888e",
 		name: "Logarithmus",
 		dueDate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		lessonName: "Malen nach Zahlen",
 		createdAt: "2017-09-28T12:02:11.432Z",
-		description: "Test",
+		description: { content: "Test", type: RichTextTypeEnum.PlainText },
 		status: generateStatus({
 			maxSubmissions: 1,
 			isSubstitutionTeacher: true,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
-		_id: "59cce3f6c6abf042248e888d",
 		name: "Morphologie",
 		dueDate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
@@ -283,10 +300,12 @@ const dueDateTasksTeacher = [
 			maxSubmissions: 15,
 			graded: 7,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
-		_id: "59cce6c6d5e50214e47b601d",
 		name: "Nomen mit Wortbausteinen",
 		dueDate: "2300-10-25T15:00:00.000Z",
 		courseName: "Deutsch",
@@ -295,10 +314,12 @@ const dueDateTasksTeacher = [
 			submitted: 3,
 			maxSubmissions: 15,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
-		_id: "59cce1d381297026d02cdc4b",
 		name: "Bildung des Konjunktiv I",
 		dueDate: "2300-09-28T13:00:00.000Z",
 		courseName: "Deutsch",
@@ -308,10 +329,12 @@ const dueDateTasksTeacher = [
 			maxSubmissions: 12,
 			graded: 4,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
-		_id: "59cce1d381297026d02cdc4b",
 		name: "Task with unpublished lesson",
 		dueDate: "2300-09-28T13:00:00.000Z",
 		courseName: "Deutsch",
@@ -322,13 +345,14 @@ const dueDateTasksTeacher = [
 			maxSubmissions: 12,
 			graded: 4,
 		}),
+		courseId: "",
+		updatedAt: "",
 	},
 ];
 
-const noDueDateTasksTeacher = [
+const noDueDateTasksTeacher: TaskResponse[] = [
 	{
 		id: "59cce4171113d1132c98dc08",
-		_id: "59cce4171113d1132c98dc08",
 		name: "Analytischen Geometrie zusammen mit Vektorrechnung",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
@@ -336,54 +360,58 @@ const noDueDateTasksTeacher = [
 			submitted: 1,
 			maxSubmissions: 1,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 ];
 
-const tasksTeacher = [
-	...overDueTasksTeacher,
-	...dueDateTasksTeacher,
-	...noDueDateTasksTeacher,
-];
+const tasksTeacher = [...overDueTasksTeacher, ...dueDateTasksTeacher, ...noDueDateTasksTeacher];
 
-const drafts = [
+const drafts: TaskResponse[] = [
 	{
 		id: "59cce2c61113d1132c98dcw2",
-		_id: "59cce2c61113d1132c98dcw2",
 		name: "Der Buchstabe O",
 		courseName: "Deutsch",
-		description: "Das Alphabet",
+		description: { content: "Das Alphabet", type: RichTextTypeEnum.PlainText },
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: generateStatus({
 			isDraft: true,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59ccr252c6abf042248e888c",
-		_id: "59ccr252c6abf042248e888c",
 		name: "Das 1x1",
 		courseName: "",
-		description: "",
+		description: { content: "", type: RichTextTypeEnum.PlainText },
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus({
 			isDraft: true,
 			isSubstitutionTeacher: true,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59ccr252c6t5f042248e888c",
-		_id: "59ccr252c6t5f042248e888c",
 		name: "Aufgabe ohne Kurs",
 		courseName: "",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus({
 			isDraft: true,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 ];
 
-const plannedTask = {
+const plannedTask: TaskResponse = {
 	id: "59cce1d38129702re02cdc4b",
-	_id: "59cce1d38129702re02cdc4b",
 	name: "Bildung des Konjunktiv I",
 	availableDate: "2200-09-28T13:00:00.000Z",
 	dueDate: "2300-09-28T13:00:00.000Z",
@@ -394,6 +422,9 @@ const plannedTask = {
 		maxSubmissions: 12,
 		graded: 4,
 	}),
+	courseId: "",
+	lessonHidden: false,
+	updatedAt: "",
 };
 
 const allTasksTeacher = [...tasksTeacher, ...drafts];
@@ -411,10 +442,9 @@ const tasksCountTeacher = {
 	drafts: { Mathe: 0, Deutsch: 1, "": 2 },
 };
 
-const mathTasks = [
+const mathTasks: TaskResponse[] = [
 	{
 		id: "59cce352c6abf042248e888c",
-		_id: "59cce352c6abf042248e888c",
 		name: "Trigonometrie",
 		dueDate: "2017-06-07T09:30:00.000Z",
 		courseName: "Mathe",
@@ -423,10 +453,12 @@ const mathTasks = [
 			submitted: 1,
 			graded: 1,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce4171113d1132c98dc07",
-		_id: "59cce4171113d1132c98dc07",
 		name: "Schriftlich multiplizieren mit Dezimalzahlen",
 		dueDate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
@@ -436,19 +468,23 @@ const mathTasks = [
 			maxSubmissions: 10,
 			graded: 9,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce4c3c6abf042248e888e",
-		_id: "59cce4c3c6abf042248e888e",
 		name: "Logarithmus",
 		dueDate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: generateStatus(),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
-		_id: "59cce3f6c6abf042248e888d",
 		name: "Morphologie",
 		dueDate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
@@ -458,24 +494,29 @@ const mathTasks = [
 			maxSubmissions: 15,
 			graded: 7,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 	{
 		id: "59cce4171113d1132c98dc08",
-		_id: "59cce4171113d1132c98dc08",
 		name: "Analytischen Geometrie zusammen mit Vektorrechnung",
 		courseName: "Mathe",
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: generateStatus({
 			submitted: 1,
 		}),
+		courseId: "",
+		lessonHidden: false,
+		updatedAt: "",
 	},
 ];
 
 const hex = (value: number) => Math.floor(value).toString(16);
 const rnd = () => Math.random() * 16;
-const ObjectId = () =>
-	hex(Date.now() / 1000) + " ".repeat(16).replace(/./g, () => hex(rnd()));
+const ObjectId = () => hex(Date.now() / 1000) + " ".repeat(16).replace(/./g, () => hex(rnd()));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const generateTask = (status: TaskStatus, props: any) => {
 	const id = ObjectId();
 

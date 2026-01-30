@@ -1,3 +1,4 @@
+import LeaveRoomProhibitedDialog from "./LeaveRoomProhibitedDialog.vue";
 import RoomAdminMembersTable from "./manageRoom/tables/RoomAdminMembersTable.vue";
 import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
 import Registration from "./registration/Registration.vue";
@@ -27,6 +28,7 @@ export {
 	Invitations,
 	InvitationTable,
 	InviteMembersDialog,
+	LeaveRoomProhibitedDialog,
 	Members,
 	MembersTable,
 	Registration,

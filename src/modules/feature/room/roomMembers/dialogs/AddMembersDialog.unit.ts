@@ -16,6 +16,7 @@ import { createMock } from "@golevelup/ts-vitest";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
+import { Dialog } from "@ui-dialog";
 import { VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
@@ -275,44 +276,17 @@ describe("AddMembersDialog", () => {
 			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
 			await userComponent.setValue(selectedUsers);
 
-			const addButton = wrapper.getComponent({
-				ref: "addButton",
-			});
-
-			await addButton.trigger("click");
+			wrapper.getComponent(Dialog).vm.$emit("confirm");
 
 			expect(roomMembersStore.addMembers).toHaveBeenCalledTimes(1);
 			expect(roomMembersStore.addMembers).toHaveBeenCalledWith(selectedUsers);
-		});
-
-		it("should emit 'close'", async () => {
-			const { wrapper, potentialRoomMembers } = setup();
-			const userComponent = wrapper.getComponent({
-				ref: "autoCompleteUsers",
-			});
-
-			const selectedUsers = [potentialRoomMembers[0].userId, potentialRoomMembers[1].userId];
-			await userComponent.setValue(selectedUsers);
-
-			const addButton = wrapper.getComponent({
-				ref: "addButton",
-			});
-			await addButton.trigger("click");
-
-			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
 
 	describe("when cancel button clicked", () => {
 		it("should emit 'close''", async () => {
 			const { wrapper } = setup();
-
-			const cancelButton = wrapper.getComponent({
-				ref: "cancelButton",
-			});
-
-			await cancelButton.trigger("click");
-
+			wrapper.getComponent(Dialog).vm.$emit("cancel");
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});

@@ -18,7 +18,6 @@
 						<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 					</KebabMenu>
 				</div>
-
 				<VTabs
 					v-if="isVisibleTabNavigation"
 					v-model="activeTab"
@@ -38,11 +37,9 @@
 				</VTabs>
 			</div>
 		</template>
-
 		<VContainer v-if="isLoading">
 			<VSkeletonLoader type="table" class="mt-6" />
 		</VContainer>
-
 		<VTabsWindow v-else v-model="activeTab" class="room-members-tabs-window" :class="{ 'mt-12': canAddRoomMembers }">
 			<VTabsWindowItem v-for="tabItem in tabs" :key="tabItem.value" :value="tabItem.value">
 				<component :is="tabItem.component" v-if="tabItem.isVisible" :header-bottom="headerBottom" />
@@ -51,9 +48,9 @@
 	</DefaultWireframe>
 	<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-	<ConfirmationDialog />
 	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
 	<AddExternalPersonDialog v-model="isExternalPersonDialogOpen" />
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -76,6 +73,7 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
+import { LeaveRoomProhibitedDialog } from "@feature-room";
 import {
 	mdiAccountClockOutline,
 	mdiAccountMultipleOutline,
@@ -87,7 +85,6 @@ import {
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
-import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";

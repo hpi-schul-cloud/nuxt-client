@@ -173,7 +173,6 @@ export default {
 		finishedTasksIsInitialized() {
 			return this.finishedTasksModule.getIsInitialized;
 		},
-		// TODO: split teacher and student sides
 		isStudent() {
 			return this.role === RoleName.Student;
 		},

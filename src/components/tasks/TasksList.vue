@@ -10,7 +10,7 @@
 		<template v-for="(task, index) of tasks" v-else :key="index">
 			<template v-if="userRole === 'student'">
 				<TasksListItemStudent v-if="isLastTaskItem(index)" :key="index" v-intersect="loadMore" :task="task" />
-				<TasksListItemStudent v-else :task="task" role="article" />
+				<TasksListItemStudent v-else :task="task" />
 				<v-divider v-if="index < tasks.length - 1" />
 			</template>
 			<template v-if="userRole === 'teacher'">
@@ -22,7 +22,7 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<TasksListItemTeacher v-else :task="task" role="article" @copy-task="onCopyTask" @share-task="onShareTask" />
+				<TasksListItemTeacher v-else :task="task" @copy-task="onCopyTask" @share-task="onShareTask" />
 				<v-divider v-if="index < tasks.length - 1" />
 			</template>
 		</template>

@@ -23,6 +23,7 @@ import {
 	Confirmations,
 	Invitations,
 	InviteMembersDialog,
+	LeaveRoomProhibitedDialog,
 	Members,
 } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -31,7 +32,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
-import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";

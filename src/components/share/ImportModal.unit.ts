@@ -1,6 +1,8 @@
 import ImportModal from "@/components/share/ImportModal.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
+import { VCardText } from "vuetify/components";
 
 describe("@components/share/ImportModal", () => {
 	const setup = () => {
@@ -41,11 +43,9 @@ describe("@components/share/ImportModal", () => {
 
 	it("should emit input value on next", async () => {
 		const { wrapper } = setup();
-		const dialog = wrapper.findComponent({
-			ref: "dialog",
-		});
+		const dialog = wrapper.findComponent(Dialog);
 
-		await dialog.vm.$emit("dialog-confirmed");
+		await dialog.vm.$emit("confirm");
 
 		const emitted = wrapper.emitted("import");
 
@@ -56,11 +56,9 @@ describe("@components/share/ImportModal", () => {
 
 	it("should cancel on dialog cancel", async () => {
 		const { wrapper } = setup();
-		const dialog = wrapper.findComponent({
-			ref: "dialog",
-		});
+		const dialog = wrapper.findComponent(Dialog);
 
-		await dialog.vm.$emit("dialog-canceled");
+		await dialog.vm.$emit("cancel");
 		expect(wrapper.emitted("cancel")).toHaveLength(1);
 	});
 
@@ -74,10 +72,8 @@ describe("@components/share/ImportModal", () => {
 		});
 		await nameInput.trigger("input");
 
-		const dialog = wrapper.findComponent({
-			ref: "dialog",
-		});
-		await dialog.vm.$emit("dialog-confirmed");
+		const dialog = wrapper.findComponent(Dialog);
+		await dialog.vm.$emit("confirm");
 
 		const emitted = wrapper.emitted("import");
 		expect(emitted).toBeUndefined();
@@ -100,8 +96,8 @@ describe("@components/share/ImportModal", () => {
 		it("should show ctl tool info", () => {
 			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent({ name: "CustomDialog" });
-			const cardText = dialog.findComponent({ name: "v-card-text" });
+			const dialog = wrapper.findComponent(Dialog);
+			const cardText = dialog.findComponent(VCardText);
 
 			const infoText = cardText.get(`[data-testid="import-modal-external-tools-info"]`);
 
@@ -111,8 +107,8 @@ describe("@components/share/ImportModal", () => {
 		it("should set the right key for ctl tools", () => {
 			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent({ name: "CustomDialog" });
-			const cardText = dialog.findComponent({ name: "v-card-text" });
+			const dialog = wrapper.findComponent(Dialog);
+			const cardText = dialog.findComponent(VCardText);
 
 			const infoText = cardText.get(`[data-testid="import-modal-external-tools-info"]`);
 
@@ -121,8 +117,8 @@ describe("@components/share/ImportModal", () => {
 		it("should also show course file info", () => {
 			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent({ name: "CustomDialog" });
-			const cardText = dialog.findComponent({ name: "v-card-text" });
+			const dialog = wrapper.findComponent(Dialog);
+			const cardText = dialog.findComponent(VCardText);
 
 			const infoText = cardText.find(`[data-testid="import-modal-coursefiles-info"]`);
 

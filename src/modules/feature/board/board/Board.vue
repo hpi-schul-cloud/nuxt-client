@@ -86,7 +86,6 @@
 						/>
 					</div>
 				</div>
-				<ConfirmationDialog />
 				<AddElementDialog />
 				<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 				<LightBox />
@@ -153,12 +152,11 @@ import {
 	useSharedEditMode,
 } from "@data-board";
 import { useEnvConfig } from "@data-env";
+import { SelectBoardLayoutDialog } from "@feature-board";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

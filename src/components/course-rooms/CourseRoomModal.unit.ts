@@ -1,10 +1,10 @@
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CourseRoomModal from "./CourseRoomModal.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Dialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 
 describe("RoomModal", () => {
@@ -47,34 +47,9 @@ describe("RoomModal", () => {
 			it("it should be rendered", () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(CustomDialog);
+				const dialog = wrapper.findComponent(Dialog);
 
 				expect(dialog.exists()).toBe(true);
-			});
-
-			it("it should pass isOpen to CustomDialog", () => {
-				const { wrapper } = setup();
-
-				const dialog = wrapper.findComponent(CustomDialog);
-				expect(dialog.props("isOpen")).toBeFalsy();
-			});
-		});
-
-		describe("when modal receives isOpen as true", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper({ isOpen: false });
-				await wrapper.setProps({
-					isOpen: true,
-				});
-
-				return { wrapper };
-			};
-
-			it("should pass isOpen to CustomDialog", async () => {
-				const { wrapper } = await setup();
-
-				const dialog = wrapper.findComponent(CustomDialog);
-				expect(dialog.props("isOpen")).toBeTruthy();
 			});
 		});
 	});
@@ -303,23 +278,17 @@ describe("RoomModal", () => {
 		});
 	});
 
-	describe("when CustomDialog emits dialog-closed", () => {
-		const setup = () => {
+	describe("when Dialog emits dialog-closed", () => {
+		it("should emit 'update:isOpen", async () => {
 			const { wrapper } = getWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			dialog.vm.$emit("dialog-closed");
+			const dialog = wrapper.findComponent(Dialog);
+			const closeBtn = dialog.findComponent("[data-testid='room-modal-close-btn']");
+			await closeBtn.trigger("click");
 
-			return { wrapper };
-		};
-
-		it("should emit 'update:isOpen", async () => {
-			const { wrapper } = setup();
-
-			// save in var so that check if undefined works
 			const emitted = wrapper.emitted("update:isOpen");
 			expect(emitted).toHaveLength(1);
-			expect(emitted && emitted[0][0]).toBeFalsy();
+			expect(emitted && emitted[0][0]).toBe(false);
 		});
 	});
 });

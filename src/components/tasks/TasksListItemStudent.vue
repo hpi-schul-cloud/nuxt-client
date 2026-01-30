@@ -1,25 +1,18 @@
 <template>
 	<v-list-item
 		:key="task.id"
-		v-outside-click="() => handleFocus(false)"
 		class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 		v-bind="$attrs"
 		:aria-label="ariaLabel"
-		role="article"
 		:ripple="false"
 		@click="handleClick"
-		@focus="handleFocus(true)"
-		@keydown.tab.shift="handleFocus(false)"
 	>
-		<!-- item avatar -->
 		<template #prepend>
 			<v-avatar>
 				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 			</v-avatar>
 		</template>
-		<!-- item main info -->
 		<div class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap">
-			<!-- item title -->
 			<div class="task-item__main-info w-65" :style="conditionalWidth">
 				<v-list-item-subtitle data-testid="taskSubtitle">
 					{{ taskLabel }}
@@ -34,7 +27,7 @@
 					{{ dueDateLabel }}
 				</div>
 				<ChipTimeRemaining
-					v-if="taskState === 'warning'"
+					v-if="task.dueDate && taskState === 'warning'"
 					class="ml-2 ml-sm-0 float-sm-right"
 					:type="taskState"
 					:due-date="task.dueDate"
@@ -49,112 +42,106 @@
 	</v-list-item>
 </template>
 
-<script>
+<script setup lang="ts">
 import TasksListItemMenu from "./TasksListItemMenu.vue";
 import {
 	fromNowToFuture,
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime.js";
+import { TaskResponse } from "@/serverApi/v3";
 import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
-import { vOnClickOutside } from "@vueuse/components";
+import { computed, PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
-const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
+const props = defineProps({
+	task: {
+		type: Object as PropType<TaskResponse>,
+		required: true,
+	},
+});
 
-export default {
-	components: {
-		ChipTimeRemaining,
-		TasksListItemMenu,
-	},
-	directives: {
-		outsideClick: vOnClickOutside,
-	},
-	props: {
-		task: {
-			type: Object,
-			required: true,
-			validator: (task) => taskRequiredKeys.every((key) => key in task),
-		},
-	},
-	data() {
-		return {
-			isActive: false,
-		};
-	},
-	computed: {
-		iconColor() {
-			const defaultColor = "#54616e";
-			return this.task.displayColor || defaultColor;
-		},
-		isCloseToDueDate() {
-			const timeDiff = fromNowToFuture(this.task.dueDate, "hours");
-			if (timeDiff === null) {
-				return false;
-			} else return timeDiff <= 24;
-		},
-		isOverDue() {
-			const dueDate = this.task.dueDate;
-			return dueDate && new Date(dueDate) < new Date();
-		},
-		isGradedButMissed() {
-			const { status } = this.task;
-			return this.isOverDue && !status.submitted && status.graded;
-		},
-		taskState() {
-			const { status } = this.task;
+const { t } = useI18n();
+const { xs } = useDisplay();
 
-			if (this.isCloseToDueDate && !status.submitted) return "warning";
-			if (this.isGradedButMissed) return "gradedOverdue";
-			if (this.isOverDue && !status.submitted) return "overdue";
-			if (status.submitted && !status.graded) return "submitted";
-			if (status.graded) return "graded";
-			return undefined;
-		},
-		taskIcon() {
-			const stateIcons = {
-				warning: "$taskOpenFilled",
-				overdue: "$taskMissed",
-				submitted: mdiCheckCircleOutline,
-				graded: mdiCheckCircleOutline,
-				gradedOverdue: "$taskMissedFilled",
-				open: "$taskOpenFilled",
-			};
-			return stateIcons[this.taskState] || stateIcons["open"];
-		},
-		topic() {
-			return this.task.lessonName ? `${this.$t("common.words.topic")} ${this.task.lessonName}` : "";
-		},
-		dueDateLabel() {
-			const dueDate = this.task.dueDate;
-			const convertedDueDate = this.$vuetify.display.xs ? dateFromUTC(dueDate) : dateTimeFromUTC(dueDate);
+const iconColor = computed(() => {
+	const defaultColor = "#54616e";
+	return props.task.displayColor || defaultColor;
+});
 
-			return !dueDate ? undefined : `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
-		},
-		taskLabel() {
-			return `${this.task.courseName}`;
-		},
-		ariaLabel() {
-			return `${this.$t("common.words.task")} ${this.task.name}`;
-		},
-		conditionalWidth() {
-			if (this.$vuetify.display.xs) {
-				return "width: 96%";
-			}
-			return "width: 65%";
-		},
-	},
-	methods: {
-		handleClick() {
-			this.redirectAction(`/homework/${this.task.id}`);
-		},
-		handleFocus(value) {
-			this.isActive = value;
-		},
-		redirectAction(value) {
-			window.location = value;
-		},
-	},
+const isCloseToDueDate = computed(() => {
+	if (!props.task.dueDate) return false;
+
+	const timeDiff = fromNowToFuture(props.task.dueDate, "hours");
+	if (timeDiff === null) {
+		return false;
+	} else return timeDiff <= 24;
+});
+
+const isOverDue = computed(() => {
+	const dueDate = props.task.dueDate;
+	return dueDate && new Date(dueDate) < new Date();
+});
+
+const isGradedButMissed = computed(() => {
+	const { status } = props.task;
+	return isOverDue.value && !status.submitted && status.graded;
+});
+
+const taskState = computed(() => {
+	const { status } = props.task;
+
+	if (isCloseToDueDate.value && !status.submitted) return "warning";
+	if (isGradedButMissed.value) return "gradedOverdue";
+	if (isOverDue.value && !status.submitted) return "overdue";
+	if (status.submitted && !status.graded) return "submitted";
+	if (status.graded) return "graded";
+	return undefined;
+});
+
+const taskIcon = computed(() => {
+	const stateIcons = {
+		warning: "$taskOpenFilled",
+		overdue: "$taskMissed",
+		submitted: mdiCheckCircleOutline,
+		graded: mdiCheckCircleOutline,
+		gradedOverdue: "$taskMissedFilled",
+		open: "$taskOpenFilled",
+	};
+
+	if (!taskState.value) return stateIcons["open"];
+
+	return stateIcons[taskState.value] || stateIcons["open"];
+});
+
+const topic = computed(() => (props.task.lessonName ? `${t("common.words.topic")} ${props.task.lessonName}` : ""));
+
+const dueDateLabel = computed(() => {
+	const dueDate = props.task.dueDate;
+	const convertedDueDate = xs.value ? dateFromUTC(dueDate) : dateTimeFromUTC(dueDate);
+
+	return !dueDate ? undefined : `${t("pages.tasks.labels.due")} ${convertedDueDate}`;
+});
+
+const taskLabel = computed(() => `${props.task.courseName}`);
+
+const ariaLabel = computed(() => `${t("common.words.task")} ${props.task.name}`);
+
+const conditionalWidth = computed(() => {
+	if (xs.value) {
+		return "width: 96%";
+	}
+	return "width: 65%";
+});
+
+const handleClick = () => {
+	redirectAction(`/homework/${props.task.id}`);
+};
+
+const redirectAction = (value: string) => {
+	window.location.href = value;
 };
 </script>
 

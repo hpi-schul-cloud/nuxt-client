@@ -1,5 +1,5 @@
 <template>
-	<v-alert
+	<VAlert
 		:color="color"
 		:icon="icon"
 		:closable="showCloseIcon"
@@ -9,11 +9,10 @@
 		<template v-if="alertTitle" #title>
 			<span class="alert-text">{{ t(alertTitle) }}</span>
 		</template>
-
 		<div v-if="$slots.default" class="alert-text">
 			<slot />
 		</div>
-	</v-alert>
+	</VAlert>
 </template>
 
 <script setup lang="ts">
@@ -39,7 +38,7 @@ const {
 const { t } = useI18n();
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .alert-text {
 	color: rgba(var(--v-theme-on-background)) !important;
 }

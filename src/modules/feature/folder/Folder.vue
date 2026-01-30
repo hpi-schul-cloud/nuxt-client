@@ -28,7 +28,6 @@
 			@download-files-as-archive="downloadFilesAsArchiveHandler"
 		/>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<RenameFolderDialog
 		v-model:is-dialog-open="isRenameDialogOpen"
 		:name="folderName"
@@ -55,7 +54,6 @@ import { useFolderState } from "@data-folder";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { FabAction } from "@ui-speed-dial-menu";

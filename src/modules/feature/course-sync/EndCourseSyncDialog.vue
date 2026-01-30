@@ -1,18 +1,12 @@
 <template>
-	<CustomDialog
+	<SvsDialog
+		v-model="isOpen"
 		data-testid="end-course-sync-dialog"
-		:has-buttons="true"
-		:buttons="['cancel', 'confirm']"
-		:is-open="isOpen"
+		title="feature-course-sync.EndCourseSyncDialog.title"
 		:confirm-btn-disabled="!courseId"
-		@dialog-confirmed="onConfirm"
-		@dialog-canceled="closeDialog"
+		@confirm="onConfirm"
+		@cancel="closeDialog"
 	>
-		<template #title>
-			<h2 class="my-2 text-break-word">
-				{{ $t("feature-course-sync.EndCourseSyncDialog.title") }}
-			</h2>
-		</template>
 		<template #content>
 			<p data-testid="end-course-sync-dialog-info-text">
 				{{
@@ -23,18 +17,18 @@
 				}}
 			</p>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { notifyError, notifySuccess } from "@data-app";
 import { useCourseApi } from "@data-room";
+import { SvsDialog } from "@ui-dialog";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const isOpen = defineModel("isOpen", {
+const isOpen = defineModel({
 	type: Boolean,
 	required: true,
 });

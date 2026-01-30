@@ -51,13 +51,14 @@
 			</div>
 		</template>
 	</DataTable>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import { isNotNullish } from "@/utils/typeScript";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { mdiShareVariantOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import {
 	KebabMenu,
@@ -106,17 +107,11 @@ const prepareRemovalMessage = (linkIds: string[]) =>
 				invitation: invitationTableData.value.find((link) => link.id === linkIds[0])?.title,
 			});
 
-const confirmDeletion = async (linkIds: string[]) => {
+const onDeleteLinks = async (linkIds: string[]) => {
 	const shouldDelete = await askConfirmation({
 		message: prepareRemovalMessage(linkIds),
 		confirmActionLangKey: "common.actions.delete",
 	});
-
-	return shouldDelete;
-};
-
-const onDeleteLinks = async (linkIds: string[]) => {
-	const shouldDelete = await confirmDeletion(linkIds);
 	if (shouldDelete) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
 	}

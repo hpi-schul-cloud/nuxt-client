@@ -1,26 +1,17 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		:size="425"
-		has-buttons
-		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
-		:confirm-btn-icon="mdiFileReplaceOutline"
+	<SvsDialog
+		:model-value="isOpen"
+		:title="t('common.words.privacyPolicy')"
+		confirm-btn-lang-key="pages.administration.school.index.schoolPolicy.replace"
 		:confirm-btn-disabled="!isValid"
-		@dialog-canceled="cancel"
-		@dialog-confirmed="submit"
+		@cancel="cancel"
+		@confirm="submit"
 	>
-		<template #title>
-			<h4 class="text-h2 mt-0">
-				{{ t("common.words.privacyPolicy") }}
-			</h4>
-		</template>
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="alert-text">
-						{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
-					</div>
-				</v-alert>
+				<WarningAlert type="warning" class="mb-10" :icon="mdiAlert">
+					{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
+				</WarningAlert>
 				<v-file-input
 					ref="input-file"
 					v-model="file"
@@ -45,18 +36,19 @@
 				</v-file-input>
 			</v-form>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
-import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
+import { mdiAlert } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -125,12 +117,7 @@ const submit = async () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
+<style scoped>
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;

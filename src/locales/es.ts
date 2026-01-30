@@ -779,9 +779,7 @@ export default {
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Enlace de invitación a la sala",
 	"components.molecules.share.checkPrivacyAndCopyright":
 		"Por favor, comprueba los contenidos en cuanto a derechos de autor y protección de datos.",
-	"components.molecules.TaskItemMenu.confirmDelete.text":
-		'¿Estás seguro de que deseas eliminar la tarea "{taskTitle}"?',
-	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",
+	"components.molecules.TaskItemMenu.ariaLabel": "Menú de tarea",
 	"components.molecules.TaskItemMenu.finish": "Terminar",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Creado",
 	"components.molecules.TaskItemTeacher.graded": "Calificado",
@@ -1022,7 +1020,6 @@ export default {
 	"pages.administration.classes.createSuccessor": "Mover la clase al próximo año escolar",
 	"pages.administration.classes.delete": "Eliminar clase",
 	"pages.administration.classes.deleteDialog.content": '¿Está seguro de que desea eliminar la clase "{itemName}"?',
-	"pages.administration.classes.deleteDialog.title": "¿Eliminar clase?",
 	"pages.administration.classes.edit": "Editar clase",
 	"pages.administration.common.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
@@ -1036,7 +1033,7 @@ export default {
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
-	"pages.administration.courses.deleteDialog.content": '¿Realmente quieres este curso? "{itemName}" borrar?',
+	"pages.administration.courses.deleteDialog.content": '¿Realmente desea eliminar el curso "{itemName}"?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.courses.withoutTeacher": "Mostrar sólo los cursos sin profesor",
@@ -1224,7 +1221,6 @@ export default {
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"¿Estás seguro de que deseas eliminar la siguiente sistema de autenticación?",
 	"pages.administration.school.index.authSystems.delete": "Eliminar {system}",
-	"pages.administration.school.index.authSystems.deleteAuthSystem": "Eliminar sistema LDAP",
 	"pages.administration.school.index.authSystems.edit": "Editar {system}",
 	"pages.administration.school.index.authSystems.loginLinkLabel": "Enlace de acceso a la escuela",
 	"pages.administration.school.index.authSystems.title": "Autenticación",
@@ -1766,7 +1762,6 @@ export default {
 	"pages.rooms.tools.deactivatedDialog.title": "Herramienta “{toolName}“ desactivada",
 	"pages.rooms.tools.notLicensedDialog.title": "Herramienta “{toolName}“ no autorizada",
 	"pages.rooms.tools.deleteDialog.content": "¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
-	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
 	"pages.rooms.tools.emptyState": "Actualmente no hay herramientas en este curso",
 	"pages.rooms.tools.incomplete": "Configuración incompleta",
 	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",

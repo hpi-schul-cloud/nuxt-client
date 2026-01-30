@@ -3,58 +3,57 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
 } from "@/plugins/datetime";
-import CopyModule from "@/store/copy";
-import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { TaskResponse } from "@/serverApi/v3";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 
-const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } = mocks;
-
-let tasksModuleMock: TasksModule;
-let copyModuleMock: CopyModule;
-
-const mockRouter = {
-	push: vi.fn(),
-};
-
-const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
-	mount(TasksListItemStudent, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				tasksModule: tasksModuleMock,
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-			},
-		},
-		props,
-		mocks: {
-			$router: mockRouter,
-		},
-	});
-
 describe("TasksListItemStudent", () => {
-	beforeEach(() => {
-		tasksModuleMock = createModuleMocks(TasksModule);
-		copyModuleMock = createModuleMocks(CopyModule);
-	});
+	const { tasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
+
+	const mockRouter = {
+		push: vi.fn(),
+	};
+
+	const defineWindowWidth = (width: number) => {
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: width,
+		});
+		window.dispatchEvent(new Event("resize"));
+	};
+
+	defineWindowWidth(1264);
+
+	const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
+		mount(TasksListItemStudent, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					TasksListItemMenu: true,
+				},
+			},
+			props,
+			mocks: {
+				$router: mockRouter,
+			},
+		});
 
 	it("Should direct user to legacy task details page", async () => {
 		Object.defineProperty(window, "location", {
-			set: vi.fn(),
-			get: () => createMock<Location>(),
+			value: {
+				href: "",
+			},
+			writable: true,
 		});
-		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasks[0] });
 		const taskCard = wrapper.findComponent({ name: "v-list-item" });
 		await taskCard.trigger("click");
 
-		expect(locationSpy).toHaveBeenCalledWith(`/homework/${tasks[0].id}`);
+		expect(window.location.href).toStrictEqual(`/homework/${tasks[0].id}`);
 	});
 
 	it("Should display no due date label if task has no dueDate", () => {
@@ -79,9 +78,8 @@ describe("TasksListItemStudent", () => {
 		current.setHours(current.getHours() + 1);
 		const closeToDueDate = current.toISOString();
 
-		const taskCloseToDueDate = {
+		const taskCloseToDueDate: TaskResponse = {
 			id: "59cce2c61113d1132c98dc02",
-			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
 			dueDate: closeToDueDate,
 			courseName: "Mathe",
@@ -89,7 +87,14 @@ describe("TasksListItemStudent", () => {
 			status: {
 				isFinished: false,
 				submitted: 0,
+				maxSubmissions: 0,
+				graded: 0,
+				isDraft: false,
+				isSubstitutionTeacher: false,
 			},
+			courseId: "",
+			lessonHidden: false,
+			updatedAt: "",
 		};
 
 		const wrapper = getWrapper({ task: taskCloseToDueDate });
@@ -102,9 +107,8 @@ describe("TasksListItemStudent", () => {
 		current.setHours(current.getHours() + 1);
 		const closeToDueDate = current.toISOString();
 
-		const taskCloseToDueDate = {
+		const taskCloseToDueDate: TaskResponse = {
 			id: "59cce2c61113d1132c98dc02",
-			_id: "59cce2c61113d1132c98dc02",
 			name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
 			dueDate: closeToDueDate,
 			courseName: "Mathe",
@@ -112,7 +116,14 @@ describe("TasksListItemStudent", () => {
 			status: {
 				isFinished: false,
 				submitted: 1,
+				maxSubmissions: 0,
+				graded: 0,
+				isDraft: false,
+				isSubstitutionTeacher: false,
 			},
+			courseId: "",
+			lessonHidden: false,
+			updatedAt: "",
 		};
 
 		const wrapper = getWrapper({ task: taskCloseToDueDate });
@@ -127,27 +138,14 @@ describe("TasksListItemStudent", () => {
 	});
 
 	it("computed DueDateLabel() method should be able to render a shortened date", () => {
+		defineWindowWidth(500);
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
-
-		wrapper.vm.$vuetify.display.xs = true;
 
 		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
-		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);
-	});
-
-	it("accepts valid task props", () => {
-		const { validator } = TasksListItemStudent.props.task;
-		const validTasks = tasks;
-
-		validTasks.forEach((task) => {
-			expect(validator(task)).toBe(true);
-		});
-
-		invalidTasks.forEach((task) => {
-			expect(validator(task)).toBe(false);
-		});
+		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
+		expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
 	});
 
 	it("should display topic", () => {

@@ -1,6 +1,6 @@
+import { Course } from "../types/course-room/CourseRoom";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { Course } from "./types/room";
 import * as serverApi from "@/serverApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";

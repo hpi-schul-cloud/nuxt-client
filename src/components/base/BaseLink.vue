@@ -13,7 +13,6 @@
 	>
 		<slot />
 	</a>
-	<!-- TODO use RouterLink if used outside nuxt -->
 	<router-link v-else :class="{ link: !noStyles, 'text-only': noStyles }" :to="routerLinkTo" v-bind="$attrs">
 		<slot />
 	</router-link>

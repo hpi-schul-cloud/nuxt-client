@@ -38,7 +38,7 @@ import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import { Course, CourseFeatures } from "@/store/types/room";
+import { Course, CourseFeatures } from "@/types/course-room/CourseRoom";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";

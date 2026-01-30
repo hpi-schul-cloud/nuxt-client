@@ -1,7 +1,7 @@
 import { elementTypeSelectionOptionsFactory } from "../test-utils/ElementTypeSelectionOptions.factory";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { ComponentPublicInstance, nextTick } from "vue";
@@ -30,7 +30,9 @@ describe("ElementTypeSelection", () => {
 
 			const wrapper = mount(AddElementDialog, {
 				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
+					plugins: [createTestingVuetify()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -50,7 +52,9 @@ describe("ElementTypeSelection", () => {
 
 			const wrapper = mount(AddElementDialog, {
 				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
+					plugins: [createTestingVuetify()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -100,7 +104,9 @@ describe("ElementTypeSelection", () => {
 					width: 320,
 				},
 				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
+					plugins: [createTestingVuetify()],
+					stubs: { UseFocusTrap: true },
+					renderStubDefaultSlot: true, // to access content inside focus trap
 				},
 			});
 
@@ -121,17 +127,6 @@ describe("ElementTypeSelection", () => {
 			const option = wrapper.findComponent<typeof ExtendedIconBtn>(`[data-testid="${element.testId}"]`);
 
 			expect(option.isVisible()).toBe(true);
-		});
-
-		it("should adjust the width of the dialog", async () => {
-			const { wrapper, dynamicElementTypeOptions } = await setup();
-
-			const element = elementTypeSelectionOptionsFactory.create();
-			dynamicElementTypeOptions.value = [element];
-
-			await flushPromises();
-
-			expect(wrapper.vm.dialogWidth).toBe(426);
 		});
 	});
 });

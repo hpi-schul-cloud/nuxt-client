@@ -783,9 +783,7 @@ export default {
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
 	"components.molecules.share.roomMemberInvitation.result.linkLabel": "Link Raum-Einladung",
 	"components.molecules.share.checkPrivacyAndCopyright": "Bitte die Inhalte auf Urheberrecht und Datenschutz prüfen.",
-	"components.molecules.TaskItemMenu.confirmDelete.text":
-		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
-	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",
+	"components.molecules.TaskItemMenu.ariaLabel": "Aufgaben-Menü",
 	"components.molecules.TaskItemMenu.finish": "Abschließen",
 	"components.molecules.TaskItemMenu.labels.createdAt": "Erstellt",
 	"components.molecules.TaskItemTeacher.graded": "Bewertet",
@@ -1019,7 +1017,6 @@ export default {
 	"pages.administration.classes.createSuccessor": "Klasse in das nächste Schuljahr versetzen",
 	"pages.administration.classes.delete": "Klasse löschen",
 	"pages.administration.classes.deleteDialog.content": 'Möchten Sie wirklich die Klasse "{itemName}" löschen?',
-	"pages.administration.classes.deleteDialog.title": "Klasse löschen?",
 	"pages.administration.classes.edit": "Klasse bearbeiten",
 	"pages.administration.common.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
@@ -1033,7 +1030,7 @@ export default {
 	"pages.administration.classes.manage": "Klasse verwalten",
 	"pages.administration.classes.header.sync": "Synchronisiert mit",
 	"pages.administration.courses.delete": "Kurs löschen",
-	"pages.administration.courses.deleteDialog.content": 'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
+	"pages.administration.courses.deleteDialog.content": 'Möchten Sie den Kurs "{itemName}" wirklich löschen?',
 	"pages.administration.courses.index.add": "Kurs hinzufügen",
 	"pages.administration.courses.edit": "Kurs bearbeiten",
 	"pages.administration.courses.withoutTeacher": "Nur Kurse ohne Lehrkraft anzeigen",
@@ -1221,7 +1218,6 @@ export default {
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Sind Sie sich sicher, dass Sie folgendes Authentifizierungs-System löschen wollen?",
 	"pages.administration.school.index.authSystems.delete": "{system} löschen",
-	"pages.administration.school.index.authSystems.deleteAuthSystem": "Authentifizierung löschen",
 	"pages.administration.school.index.authSystems.edit": "{system} bearbeiten",
 	"pages.administration.school.index.authSystems.loginLinkLabel": "Login-Link deiner Schule",
 	"pages.administration.school.index.authSystems.title": "Authentifizierung",
@@ -1757,7 +1753,6 @@ export default {
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.notLicensedDialog.title": "Tool „{toolName}“ nicht freigegeben",
 	"pages.rooms.tools.deleteDialog.content": "Möchten Sie wirklich das Tool '{itemName}' aus dem Kurs entfernen?",
-	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
 	"pages.rooms.tools.emptyState": "Aktuell gibt es keine Tools in diesem Kurs",
 	"pages.rooms.tools.incomplete": "Konfiguration unvollständig",
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",

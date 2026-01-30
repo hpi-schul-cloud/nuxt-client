@@ -1,5 +1,5 @@
-import RoomDotMenu from "./RoomDotMenu.vue";
-import { MenuItem } from "./types";
+import CourseRoomDotMenu from "./CourseRoomDotMenu.vue";
+import { MenuItem } from "@/types/course-room/CourseRoom";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount, shallowMount } from "@vue/test-utils";
 import { VBtn, VIcon, VListItem, VMenu } from "vuetify/lib/components/index";
@@ -17,20 +17,20 @@ const testProps: { menuItems: MenuItem[] } = {
 };
 
 const getWrapper = (props: { menuItems: MenuItem[] }, options?: object) =>
-	mount(RoomDotMenu, {
+	mount(CourseRoomDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
 		...options,
 	});
 
 const getShallowWrapper = (props: { menuItems: MenuItem[] }, options?: object) =>
-	shallowMount(RoomDotMenu, {
+	shallowMount(CourseRoomDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
 		...options,
 	});
 
-describe("RoomDotMenu", () => {
+describe("CourseRoomDotMenu", () => {
 	it("should render with correct props", () => {
 		const wrapper = getWrapper(testProps);
 

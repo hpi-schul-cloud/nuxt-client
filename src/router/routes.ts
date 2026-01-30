@@ -119,7 +119,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/administration/rooms/new",
-		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
+		component: () => import("@/pages/administration/CourseRoomOverview.page.vue"),
 		name: "administration-rooms-new",
 		beforeEnter: createPermissionGuard([Permission.CourseAdministration]),
 		props: (route: RouteLocationNormalized) => ({

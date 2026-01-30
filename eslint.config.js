@@ -105,7 +105,7 @@ export default defineConfigWithVueTs([
 			"no-prototype-builtins": "error",
 			"no-undef": "warn",
 			"no-unused-vars": "off",
-			"eqeqeq": ["error", "smart"],
+			eqeqeq: ["error", "smart"],
 			"@typescript-eslint/no-unused-vars": "off",
 			"unused-imports/no-unused-imports": "warn",
 			"unused-imports/no-unused-vars": [
@@ -143,7 +143,7 @@ export default defineConfigWithVueTs([
 					},
 				},
 			],
-			"vue/multi-word-component-names": "off", // TODO - make a final decision about this rule
+			"vue/multi-word-component-names": "off",
 			"vue/no-mutating-props": "error",
 			"vue/no-setup-props-reactivity-loss": "error",
 			"vue/no-useless-template-attributes": "error",

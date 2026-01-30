@@ -71,12 +71,10 @@
 				</div>
 			</div>
 		</VSkeletonLoader>
-
 		<v-row class="justify-end mt-10">
 			<v-btn class="mr-2" data-testid="provisioning-options-cancel-button" variant="outlined" @click="onCancel">
 				{{ t("common.actions.cancel") }}
 			</v-btn>
-
 			<v-btn
 				class="mr-2"
 				data-testid="provisioning-options-save-button"
@@ -88,20 +86,13 @@
 				{{ t("common.actions.save") }}
 			</v-btn>
 		</v-row>
-
-		<CustomDialog
-			:is-open="isWarningDialogOpen"
-			:has-buttons="true"
-			:buttons="['cancel', 'confirm']"
-			data-testId="warning-dialog"
-			@dialog-closed="isWarningDialogOpen = false"
-			@dialog-confirmed="saveOptions"
+		<SvsDialog
+			:model-value="isWarningDialogOpen"
+			:title="t('components.administration.provisioningOptions.warning.title')"
+			data-testid="warning-dialog"
+			@cancel="isWarningDialogOpen = false"
+			@confirm="saveOptions"
 		>
-			<template #title>
-				<h2 class="my-2">
-					{{ t("components.administration.provisioningOptions.warning.title") }}
-				</h2>
-			</template>
 			<template #content>
 				<span class="text-md mt-2">
 					{{
@@ -110,35 +101,34 @@
 						})
 					}}
 				</span>
-				<v-alert type="warning" class="mt-4 mb-0">
+				<WarningAlert class="mt-4 mb-0">
 					{{
 						t("components.administration.provisioningOptions.warning.consequence", {
 							groupTypes: newlyTurnedOffOptions.map(translateProvisioningOption).join(", "),
 						})
 					}}
-				</v-alert>
+				</WarningAlert>
 			</template>
-		</CustomDialog>
+		</SvsDialog>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { ProvisioningOptions, ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-type Props = {
+const props = defineProps<{
 	systemId: string;
-};
-
-const props = defineProps<Props>();
+}>();
 
 const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
@@ -156,7 +146,7 @@ const theme = injectStrict(THEME_KEY);
 const pageTitle = buildPageTitle(t("components.administration.provisioningOptions.page.title"));
 useTitle(pageTitle);
 
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
+const breadcrumbs = computed<Breadcrumb[]>(() => [
 	{
 		title: t("pages.administration.school.index.title"),
 		to: "/administration/school-settings",
@@ -167,9 +157,9 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-const provisioningOptions: ComputedRef<ProvisioningOptions> = computed(() => provisioningOptionsData.value);
+const provisioningOptions = computed(() => provisioningOptionsData.value);
 
-const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
+const initialProvisioningOptions = ref<ProvisioningOptions>({
 	...provisioningOptionsData.value,
 });
 
@@ -182,7 +172,7 @@ const wasOptionTurnedOff = (provisioningOption: ProvisioningOptionsEnum): boolea
 	return wasTurnedOff;
 };
 
-const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> = computed(() => {
+const newlyTurnedOffOptions = computed<ProvisioningOptionsEnum[]>(() => {
 	const options: ProvisioningOptionsEnum[] = Object.values(ProvisioningOptionsEnum);
 
 	return options.filter((option: ProvisioningOptionsEnum): boolean => wasOptionTurnedOff(option));
@@ -195,7 +185,7 @@ const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
 	return t(provisioningOptionTranslations[option]);
 };
 
-const isWarningDialogOpen: Ref<boolean> = ref(false);
+const isWarningDialogOpen = ref(false);
 
 onMounted(async () => {
 	window.scrollTo({ top: 0, behavior: "smooth" });

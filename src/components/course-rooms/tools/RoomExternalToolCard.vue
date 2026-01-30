@@ -1,5 +1,5 @@
 <template>
-	<room-base-card
+	<RoomBaseCard
 		v-if="showTool"
 		:title="toolName"
 		:logo-url="tool.logoUrl"
@@ -15,15 +15,12 @@
 				<WarningChip v-if="isToolDeactivated" data-testId="tool-card-status-deactivated" class="mr-1">
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
-
 				<WarningChip v-if="isToolNotLicensed" data-testId="tool-card-status-not-licensed" class="mr-1">
 					{{ $t("common.medium.chip.notLicensed") }}
 				</WarningChip>
-
 				<InfoChip v-if="showAsIncompleteOperational" data-testId="tool-card-status-incompleteOperational" class="mr-1">
 					{{ $t("pages.rooms.tools.outdated") }}
 				</InfoChip>
-
 				<WarningChip v-if="isToolOutdated || isToolIncomplete" data-testId="tool-card-status" class="mr-1">
 					{{ $t("pages.rooms.tools.outdated") }}
 				</WarningChip>
@@ -31,17 +28,18 @@
 		</template>
 		<template #right>
 			<div v-if="canEdit" class="ml-1 my-auto">
-				<room-dot-menu
+				<CourseRoomDotMenu
 					:menu-items="menuItems"
 					data-testid="room-tool-three-dot-button"
 					:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
 				/>
 			</div>
 		</template>
-	</room-base-card>
+	</RoomBaseCard>
 </template>
 
 <script setup lang="ts">
+import CourseRoomDotMenu from "../CourseRoomDotMenu.vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 import {
 	ExternalToolDisplayData,
@@ -51,7 +49,6 @@ import {
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { InfoChip, WarningChip } from "@ui-chip";
 import { LineClamp } from "@ui-line-clamp";
-import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -107,7 +104,7 @@ const menuItems = [
 	{
 		icon: mdiTrashCanOutline,
 		action: handleDelete,
-		name: t("common.actions.remove"),
+		name: t("common.actions.delete"),
 		dataTestId: "tool-delete",
 	},
 ];

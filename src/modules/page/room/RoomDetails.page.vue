@@ -25,11 +25,11 @@
 			</template>
 		</EmptyState>
 		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
-		<ConfirmationDialog />
 		<SelectBoardLayoutDialog v-if="canEditRoomContent" v-model="boardLayoutDialogIsOpen" @select="onCreateBoard" />
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.Room" />
+		<ConfirmationDialog />
 	</DefaultWireframe>
 </template>
 
@@ -42,12 +42,12 @@ import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAuthorization, useRoomDetailsStore, useRoomStore } from "@data-room";
-import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
+import { SelectBoardLayoutDialog } from "@feature-board";
+import { LeaveRoomProhibitedDialog, RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
-import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";

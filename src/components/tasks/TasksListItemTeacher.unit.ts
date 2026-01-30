@@ -1,9 +1,6 @@
 import TasksListItemMenu from "./TasksListItemMenu.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
-import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
-import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
@@ -11,12 +8,9 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
-import { VBtn, VListItem } from "vuetify/components";
+import { VListItem } from "vuetify/components";
 
 const { tasksTeacher, drafts, plannedTask, dueDateTasksTeacher, noDueDateTasksTeacher } = mocks;
-
-let tasksModuleMock: TasksModule;
-let copyModuleMock: CopyModule;
 
 const mockRouter = {
 	push: vi.fn(),
@@ -26,9 +20,8 @@ const getWrapper = (props: { task: object }) =>
 	mount(TasksListItemTeacher, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				tasksModule: tasksModuleMock,
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+			stubs: {
+				TasksListItemMenu: true,
 			},
 		},
 		props: props,
@@ -52,11 +45,6 @@ describe("TasksListItemTeacher", () => {
 	};
 
 	defineWindowWidth(1264);
-
-	beforeEach(() => {
-		tasksModuleMock = createModuleMocks(TasksModule);
-		copyModuleMock = createModuleMocks(CopyModule);
-	});
 
 	it("accepts valid task props", () => {
 		const { validator } = TasksListItemTeacher.props.task;
@@ -309,74 +297,6 @@ describe("TasksListItemTeacher", () => {
 
 			expect(topicLabel.exists()).toBe(false);
 			expect(wrapper.vm.topic).toStrictEqual("");
-		});
-	});
-
-	describe("when menu is used", () => {
-		describe("mouse events", () => {
-			it("should open menu on btn click", async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				const menuBtn = wrapper.findComponent(VBtn);
-				await menuBtn.trigger("click");
-
-				expect(wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()).toBe(true);
-			});
-
-			it("should close menu on btn click", async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				const menuBtn = wrapper.find(".v-btn");
-				await menuBtn.trigger("click");
-				await menuBtn.trigger("click");
-
-				expect(wrapper.find(".menuable__content__active").exists()).toBe(false);
-			});
-
-			it.todo("should close & hide menu on outside click");
-		});
-
-		describe("keyboard events", () => {
-			it("should show menu btn on tab focus", async () => {
-				const wrapper = getWrapper({
-					task: drafts[1],
-				});
-
-				const vListItem = wrapper.findComponent(VListItem);
-				await vListItem.trigger("focus");
-
-				expect(wrapper.vm.isActive).toBe(true);
-				const menuBtn = wrapper.findComponent(`[data-testid=task-menu]`);
-
-				expect(menuBtn.isVisible()).toBe(true);
-			});
-		});
-
-		it("should link to btn edit page on edit btn click", async () => {
-			const wrapper = getWrapper({
-				task: tasksTeacher[0],
-			});
-
-			const menuBtn = wrapper.findComponent(VBtn);
-			await menuBtn.trigger("click");
-			const editBtn = wrapper.findComponent(`[data-testid="task-edit"]`);
-
-			expect(editBtn.attributes("href")).toBe(`/homework/${tasksTeacher[0].id}/edit`);
-		});
-
-		it("always show menu on mobile", () => {
-			defineWindowWidth(375);
-
-			const wrapper = getWrapper({
-				task: tasksTeacher[0],
-			});
-
-			const menuBtn = wrapper.findComponent(VBtn);
-			expect(menuBtn.isVisible()).toBe(true);
 		});
 	});
 });

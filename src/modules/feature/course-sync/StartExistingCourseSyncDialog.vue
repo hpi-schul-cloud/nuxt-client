@@ -5,18 +5,13 @@
 		@confirm="onConfirmGroupSelection"
 		@cancel="closeDialog"
 	/>
-	<CustomDialog
+	<SvsDialog
 		ref="start-existing-course-sync-dialog"
-		:is-open="isOpen && step === 1"
-		has-buttons
-		:buttons="['cancel', 'confirm']"
-		@dialog-confirmed="onConfirmWarning"
-		@dialog-closed="closeDialog"
+		:model-value="isOpen && step === 1"
+		title="Synchronisation bestätigen"
+		@confirm="onConfirmWarning"
+		@cancel="closeDialog"
 	>
-		<template #title>
-			<div class="text-h2 my-2 text-break">Synchronisation bestätigen</div>
-		</template>
-
 		<template #content>
 			<WarningAlert data-testid="no-teacher-warning">
 				<span data-testid="no-teacher-warning-text">
@@ -38,16 +33,16 @@
 				}}
 			</p>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

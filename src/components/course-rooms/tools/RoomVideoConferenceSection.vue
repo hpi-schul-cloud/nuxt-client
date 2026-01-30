@@ -9,33 +9,17 @@
 			@click="onClick"
 			@refresh="onRefresh"
 		/>
-		<VDialog
-			ref="vDialog"
-			v-model="isErrorDialogOpen"
-			:max-width="480"
+		<SvsDialog
+			:model-value="isErrorDialogOpen"
+			no-confirm
+			title="error.generic"
+			cancel-btn-lang-key="common.labels.close"
 			data-testid="error-dialog"
-			@click:outside="onCloseErrorDialog"
-			@keydown.esc="onCloseErrorDialog"
-		>
-			<VCard :ripple="false">
-				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-					<h2 class="my-2 text-break-word">
-						{{ t("error.generic") }}
-					</h2>
-				</VCardTitle>
-				<VCardActions class="action-buttons px-6">
-					<div class="button-section button-right">
-						<VBtn data-testid="dialog-close" variant="outlined" @click="onCloseErrorDialog">
-							{{ t("common.labels.close") }}
-						</VBtn>
-					</div>
-				</VCardActions>
-			</VCard>
-		</VDialog>
+			@cancel="onCloseErrorDialog"
+		/>
 		<VideoConferenceConfigurationDialog
-			:is-open="isConfigurationDialogOpen"
+			v-model="isConfigurationDialogOpen"
 			:options="videoConferenceOptions"
-			@close="onCloseConfigurationDialog"
 			@start-video-conference="startVideoConference"
 		/>
 	</div>
@@ -48,9 +32,9 @@ import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
 import { useAppStore, useAppStoreRefs } from "@data-app";
+import { SvsDialog } from "@ui-dialog";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 
 const props = defineProps({
 	roomId: {
@@ -59,7 +43,6 @@ const props = defineProps({
 	},
 });
 
-const { t } = useI18n();
 const { hasPermission: hasAuthPermission } = useAppStore();
 const { isExternalPerson, userRoles } = useAppStoreRefs();
 
@@ -81,7 +64,7 @@ const canJoin = computed(
 
 const hasPermission = computed(() => canJoin.value || canStart.value);
 
-const isConfigurationDialogOpen: Ref<boolean> = ref(false);
+const isConfigurationDialogOpen = ref(false);
 
 const videoConferenceOptions = computed(() => videoConferenceModule.getVideoConferenceInfo.options);
 
@@ -105,7 +88,7 @@ const onRefresh = async () => {
 
 const onClick = async () => {
 	if (videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED && canStart.value) {
-		openConfigurationDiaolog();
+		isConfigurationDialogOpen.value = true;
 	}
 
 	if (videoConferenceInfo.value.state === VideoConferenceState.RUNNING && canJoin.value) {
@@ -113,17 +96,7 @@ const onClick = async () => {
 	}
 };
 
-const openConfigurationDiaolog = () => {
-	isConfigurationDialogOpen.value = true;
-};
-
-const onCloseConfigurationDialog = () => {
-	isConfigurationDialogOpen.value = false;
-};
-
 const startVideoConference = async () => {
-	onCloseConfigurationDialog();
-
 	const logoutUrl: URL = new URL(`/rooms/${props.roomId}`, window.location.origin);
 	logoutUrl.searchParams.append("tab", "tools");
 

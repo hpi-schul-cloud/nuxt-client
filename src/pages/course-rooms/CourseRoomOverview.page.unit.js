@@ -192,21 +192,21 @@ describe("CourseRoomOverview.page", () => {
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		const customDialog = wrapper.findComponent(CourseRoomModal);
-		expect(customDialog.props("isOpen")).toBe(true);
+		const dialog = wrapper.findComponent(CourseRoomModal);
+		expect(dialog.props("isOpen")).toBe(true);
 	});
 
-	it("CustomDialog component should be visible", async () => {
+	it("dialog component should be visible", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		await nextTick();
-		const customDialog = wrapper.findComponent(CourseRoomModal);
+		const dialog = wrapper.findComponent(CourseRoomModal);
 		await nextTick();
-		const input = customDialog.findComponent({ name: "v-text-field" });
-		expect(customDialog.props("isOpen")).toBe(true);
+		const input = dialog.findComponent({ name: "v-text-field" });
+		expect(dialog.props("isOpen")).toBe(true);
 		expect(input.props("modelValue")).toBe("Fourth");
 	});
 

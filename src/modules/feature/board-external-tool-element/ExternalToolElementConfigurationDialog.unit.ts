@@ -1,14 +1,15 @@
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { Dialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
+import { VCardTitle } from "vuetify/components";
 
 vi.mock("@util-board");
 
@@ -60,11 +61,11 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			};
 		};
 
-		it("should display the title", async () => {
-			const { wrapper } = await setup();
+		it("should display the title", () => {
+			const { wrapper } = setup();
 
-			const dialog = wrapper.findComponent(CustomDialog);
-			const title = dialog.findComponent({ name: "v-card-title" });
+			const dialog = wrapper.findComponent(Dialog);
+			const title = dialog.findComponent(VCardTitle);
 
 			expect(title.text()).toEqual("feature-board-external-tool-element.dialog.title");
 		});
