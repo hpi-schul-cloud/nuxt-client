@@ -157,7 +157,7 @@ const breadcrumbs = computed<Breadcrumb[]>(() => [
 	},
 ]);
 
-const provisioningOptions = computed<ProvisioningOptions>(() => provisioningOptionsData.value);
+const provisioningOptions = computed(() => provisioningOptionsData.value);
 
 const initialProvisioningOptions = ref<ProvisioningOptions>({
 	...provisioningOptionsData.value,

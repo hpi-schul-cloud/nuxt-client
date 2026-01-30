@@ -17,7 +17,7 @@ import { useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
-	name?: string | undefined;
+	name?: string;
 	scopeLanguageKey: keyof MessageSchema;
 }>();
 const emit = defineEmits(["click"]);
