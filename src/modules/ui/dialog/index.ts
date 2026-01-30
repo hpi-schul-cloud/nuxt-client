@@ -1,6 +1,5 @@
-import Dialog from "./Dialog.vue";
-import DialogBtnCancel from "./DialogBtnCancel.vue";
-import DialogBtnClose from "./DialogBtnClose.vue";
-import DialogBtnConfirm from "./DialogBtnConfirm.vue";
+import SvsDialog from "./SvsDialog.vue";
+import SvsDialogBtnCancel from "./SvsDialogBtnCancel.vue";
+import SvsDialogBtnConfirm from "./SvsDialogBtnConfirm.vue";
 
-export { Dialog, DialogBtnCancel, DialogBtnClose, DialogBtnConfirm };
+export { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm };

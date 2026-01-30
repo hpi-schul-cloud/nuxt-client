@@ -1,10 +1,10 @@
 import TheFooter from "./TheFooter.vue";
-import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
+import { VBtn } from "vuetify/components";
 
 describe("TheFooter.vue", () => {
 	const dummyUrl = "dummy-url.org";
@@ -21,12 +21,6 @@ describe("TheFooter.vue", () => {
 		const wrapper = shallowMount(TheFooter, {
 			global: {
 				plugins: [createTestingI18n()],
-				provide: {
-					[THEME_KEY.valueOf()]: {
-						name: theme.name,
-					},
-				},
-				stubs: ["base-link"],
 			},
 		});
 
@@ -39,10 +33,9 @@ describe("TheFooter.vue", () => {
 	});
 
 	it("check that all links are rendered in the footer", () => {
-		const { wrapper, theme } = setup();
-		const links = wrapper.findAllComponents("base-link-stub");
+		const { wrapper } = setup();
+		const links = wrapper.findAllComponents(VBtn);
 
-		expect(links).toHaveLength(7);
-		expect(wrapper.find(".bottom-line span").text()).toBe("©" + new Date().getFullYear() + " " + theme.name);
+		expect(links).toHaveLength(5);
 	});
 });

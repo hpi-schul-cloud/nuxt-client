@@ -20,26 +20,13 @@
 				03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
 				<v-icon size="20" class="mr-1">{{ mdiPhone }}</v-icon>
 				03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
-				<v-icon size="20" class="mr-1">{{ mdiChat }}</v-icon>
-				<a
-					href="https://yulinc.netucate.net/live/lisum001/scbb_direct"
-					target="_blank"
-					rel="noopener"
-					:aria-label="
-						$t('components.legacy.footer.ariaLabel', {
-							itemName: 'Online-Chat',
-						})
-					"
-					>Online-Chat</a
-				>
-				(Do. 15–16 Uhr)<br />
 				<v-icon size="20" class="mr-1">{{ mdiEmailOutline }}</v-icon>
 				<a
-					href="mailto:schul-cloud@bildungsserver.berlin-brandenburg.de"
+					href="mailto:support.scbb@meinlibra.de"
 					target="_blank"
 					rel="noopener"
 					:aria-label="$t('components.legacy.footer.ariaLabel', { itemName: 'Mail' })"
-					>schul-cloud@bildungsserver.berlin-brandenburg.de</a
+					>support.scbb@meinlibra.de</a
 				>
 			</p>
 			<p>
@@ -167,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiChat, mdiEmailOutline, mdiPhone } from "@icons/material";
+import { mdiEmailOutline, mdiPhone } from "@icons/material";
 </script>
 
 <style lang="scss" scoped>

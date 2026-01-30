@@ -1,20 +1,19 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		:are-actions-disabled="isMoving"
-		:title="t('components.molecules.move.card.title')"
+		title="components.molecules.move.card.title"
 		confirm-btn-lang-key="common.actions.move"
 		:confirm-btn-disabled="!selectedColumnId"
 		:is-loading="isMoving"
 		data-testid="move-card-dialog"
 		@confirm="onConfirm"
-		@cancel="isDialogOpen = false"
 	>
 		<template #content>
 			<WarningAlert v-if="availableRooms?.length === 0" class="mb-2">
 				{{ t("common.alerts.room.not.available") }}
 			</WarningAlert>
-			<p class="text-lg mt-2" data-testid="move-card-dialog-question">
+			<p class="mt-2" data-testid="move-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
 			<VForm id="moveCardForm" data-testid="move-card-form">
@@ -54,7 +53,7 @@
 				/>
 			</VForm>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -65,7 +64,7 @@ import { RoomItem } from "@/types/room/Room";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { sortBy } from "lodash-es";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";

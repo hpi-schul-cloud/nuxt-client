@@ -1,8 +1,8 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isDialogOpen"
 		:is-loading="isImporting"
-		:title="t('components.molecules.import.card.options.title')"
+		title="components.molecules.import.card.options.title"
 		confirm-btn-lang-key="common.actions.import"
 		:confirm-btn-disabled="!selectedColumnId"
 		data-testid="import-card-dialog"
@@ -21,7 +21,7 @@
 					<li>{{ t("components.molecules.import.card.hint.ctltools") }}</li>
 				</ul>
 			</InfoAlert>
-			<p class="text-lg mt-2" data-testid="import-card-dialog-question">
+			<p class="mt-2" data-testid="import-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
 			<VForm id="importCardForm" data-testid="import-card-form">
@@ -60,7 +60,7 @@
 				/>
 			</VForm>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -72,7 +72,7 @@ import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { InfoAlert, WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { sortBy } from "lodash-es";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";

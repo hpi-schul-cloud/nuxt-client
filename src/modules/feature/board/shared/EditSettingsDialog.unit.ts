@@ -2,7 +2,7 @@ import EditSettingsDialog from "./EditSettingsDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
-import { Dialog, DialogBtnCancel, DialogBtnConfirm } from "@ui-dialog";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { setActivePinia } from "pinia";
 import { VCard, VRadioGroup } from "vuetify/components";
 
@@ -98,8 +98,8 @@ describe("EditSettingsDialog", () => {
 
 			it("should render only the cancel button", () => {
 				const { wrapper } = setup({ isDraftMode: true });
-				const cancelButton = wrapper.findComponent(DialogBtnCancel);
-				const saveButton = wrapper.findComponent(DialogBtnConfirm);
+				const cancelButton = wrapper.findComponent(SvsDialogBtnCancel);
+				const saveButton = wrapper.findComponent(SvsDialogBtnConfirm);
 
 				expect(cancelButton.exists()).toBe(true);
 				expect(saveButton.exists()).toBe(false);
@@ -124,7 +124,7 @@ describe("EditSettingsDialog", () => {
 		describe("when modelValue is changed and the dialog options are submitted", () => {
 			it("should emit 'save' with the selected option", async () => {
 				const { wrapper } = setup({ isEditableSelected: true });
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				const radioGroupComponent = wrapper.findComponent(VRadioGroup);
 				radioGroupComponent.vm.$emit("update:modelValue", "notEditable");
 
@@ -138,7 +138,7 @@ describe("EditSettingsDialog", () => {
 		describe("when modelValue is not changed and the dialog options are submitted", () => {
 			it("should not emit 'save'", async () => {
 				const { wrapper } = setup({ isEditableSelected: true });
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				dialog.vm.$emit("confirm");
 
 				expect(wrapper.emitted("save")).toBeUndefined();

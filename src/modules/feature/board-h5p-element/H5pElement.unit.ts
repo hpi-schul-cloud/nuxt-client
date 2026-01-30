@@ -92,6 +92,16 @@ describe("H5pElement", () => {
 
 				expect(card.isVisible()).toEqual(true);
 			});
+
+			it("should not have role link in edit mode", () => {
+				// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+				// because of nested interactive elements
+				const { wrapper } = setup();
+
+				const elementCard = wrapper.getComponent({ ref: "elementCard" });
+
+				expect(elementCard.attributes("role")).toBeUndefined();
+			});
 		});
 
 		describe("when content is linked", () => {
@@ -114,6 +124,14 @@ describe("H5pElement", () => {
 				const card = wrapper.getComponent({ ref: "elementCard" });
 
 				expect(card.isVisible()).toEqual(true);
+			});
+
+			it("should have role link in view mode", () => {
+				const { wrapper } = setup();
+
+				const elementCard = wrapper.getComponent({ ref: "elementCard" });
+
+				expect(elementCard.attributes("role")).toEqual("link");
 			});
 		});
 

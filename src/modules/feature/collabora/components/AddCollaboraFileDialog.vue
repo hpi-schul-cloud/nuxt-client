@@ -1,7 +1,7 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isCollaboraFileDialogOpen"
-		:title="t('feature.collabora.add-collabora-file-dialog.title')"
+		title="feature.collabora.add-collabora-file-dialog.title"
 		:confirm-btn-disabled="!isFormValid"
 		confirm-btn-lang-key="common.actions.create"
 		data-testid="collabora-file-dialog"
@@ -32,14 +32,14 @@
 				/>
 			</VForm>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
 import type { CreateCollaboraFilePayload } from "../types/collabora-file";
 import { CollaboraFileType } from "@data-file";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { isRequired, useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -110,7 +110,10 @@ const onConfirm = async () => {
 	const { valid } = await form.value.validate();
 	if (!valid) return;
 
-	emit("create-collabora-file", { type: selectedDocType.value, fileName: fileName.value });
+	emit("create-collabora-file", {
+		type: selectedDocType.value,
+		fileName: fileName.value,
+	});
 	closeCollaboraFileDialog();
 };
 </script>

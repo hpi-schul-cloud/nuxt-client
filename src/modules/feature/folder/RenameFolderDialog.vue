@@ -1,11 +1,11 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isDialogOpen"
-		:title="t('pages.folder.ariaLabels.menu.action.edit')"
+		title="pages.folder.ariaLabels.menu.action.edit"
 		:confirm-btn-disabled="!isNameValid"
 		data-testid="rename-folder-dialog"
-		@cancel="onCancel"
 		@confirm="onConfirm"
+		@cancel="onCancel"
 	>
 		<template #content>
 			<VTextField
@@ -18,11 +18,11 @@
 				:rules="[rules.validateOnOpeningTag]"
 			/>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

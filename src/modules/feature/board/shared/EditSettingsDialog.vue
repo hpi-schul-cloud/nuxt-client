@@ -1,5 +1,5 @@
 <template>
-	<Dialog
+	<SvsDialog
 		v-model="isOpen"
 		data-testid="dialog-edit-settings"
 		title="components.board.menu.editing.settings.title"
@@ -39,12 +39,12 @@
 				</VRadioGroup>
 			</template>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { WarningAlert } from "@ui-alert";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

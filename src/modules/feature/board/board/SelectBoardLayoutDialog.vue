@@ -1,13 +1,7 @@
 <template>
-	<Dialog
-		v-model="isOpen"
-		no-confirm
-		max-width="360"
-		title="pages.room.dialog.boardLayout.title"
-		data-testid="board-layout-dialog"
-	>
+	<SvsDialog v-model="isOpen" no-confirm title="pages.room.dialog.boardLayout.title" data-testid="board-layout-dialog">
 		<template #content>
-			<div class="d-flex flex-wrap justify-space-around">
+			<div class="d-flex flex-wrap justify-center">
 				<ExtendedIconBtn
 					v-for="(item, key) in boardLayouts"
 					:key="key"
@@ -19,14 +13,14 @@
 				/>
 			</div>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { PickerOption } from "./types";
 import { BoardLayout } from "@/serverApi/v3";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
-import { Dialog } from "@ui-dialog";
+import { SvsDialog } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";

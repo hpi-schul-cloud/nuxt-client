@@ -10,25 +10,26 @@
 	>
 		<UseFocusTrap>
 			<VCard :loading="isLoading">
-				<VCardItem class="py-4 px-6">
+				<VCardItem class="pa-4">
 					<VCardTitle v-if="titleString">
 						<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
 							{{ titleString }}
 						</h2>
 					</VCardTitle>
 				</VCardItem>
-				<VCardText v-if="$slots.content" class="pa-6 pt-4">
+				<VCardText v-if="$slots.content" class="pa-4">
 					<slot name="content" />
 				</VCardText>
-				<VCardActions v-if="!noActions" class="pa-6 pt-2 ga-2 justify-end">
+				<VCardActions v-if="!noActions" class="pa-4 pt-2 ga-2 justify-end flex-wrap">
 					<slot name="actions">
-						<DialogBtnCancel
+						<SvsDialogBtnCancel
+							v-if="!noCancel"
 							:text-lang-key="cancelBtnLangKey"
 							:data-testid="`${testId}-cancel`"
 							:disabled="areActionsDisabled"
 							@click="onCancel"
 						/>
-						<DialogBtnConfirm
+						<SvsDialogBtnConfirm
 							v-if="!noConfirm"
 							:data-testid="`${testId}-confirm`"
 							:text-lang-key="confirmBtnLangKey"
@@ -43,8 +44,8 @@
 </template>
 
 <script setup lang="ts">
-import DialogBtnCancel from "./DialogBtnCancel.vue";
-import DialogBtnConfirm from "./DialogBtnConfirm.vue";
+import SvsDialogBtnCancel from "./SvsDialogBtnCancel.vue";
+import SvsDialogBtnConfirm from "./SvsDialogBtnConfirm.vue";
 import { i18nKeyExists } from "@/plugins/i18n";
 import { useUid } from "@/utils/uid";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
@@ -62,6 +63,7 @@ const props = defineProps({
 	cancelBtnLangKey: { type: String, default: "common.actions.cancel" },
 	noActions: { type: Boolean, default: false },
 	noConfirm: { type: Boolean, default: false },
+	noCancel: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();

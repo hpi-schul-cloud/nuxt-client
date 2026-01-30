@@ -24,8 +24,6 @@ describe("DateBetween.vue", () => {
 	describe("should render the component", () => {
 		it("should render the date picker components", () => {
 			vi.useFakeTimers();
-			const testDate = new Date(2024, 0, 1);
-			vi.setSystemTime(testDate);
 
 			const wrapper = mountComponent();
 
@@ -34,7 +32,7 @@ describe("DateBetween.vue", () => {
 			const datePickerUntilComponent = wrapper.get("[data-testid=date-picker-until]").getComponent(DatePicker);
 
 			expect(datePickers).toHaveLength(2);
-			expect(datePickerFromComponent.props("date")).toStrictEqual(testDate.toISOString());
+			expect(datePickerFromComponent.props("date")).toStrictEqual("");
 			expect(datePickerFromComponent.props("label")).toStrictEqual("utils.adminFilter.date.label.from");
 
 			expect(datePickerUntilComponent.props("date")).toStrictEqual("");
@@ -111,6 +109,34 @@ describe("DateBetween.vue", () => {
 					expect(wrapper.emitted()).toHaveProperty("update:filter");
 				}
 			);
+
+			it("should emit 'update:filter' with untilDate inclusive", () => {
+				const wrapper = mountComponent();
+				const selectedDate = new Date(2024, 0, 1);
+				vi.setSystemTime(selectedDate);
+
+				const datePickerFrom = wrapper.get(`[data-testid=date-picker-from]`).getComponent(DatePicker);
+				datePickerFrom.vm.$emit("update:date", null); // reset default for from date picker
+
+				const datePicker = wrapper.get(`[data-testid=date-picker-until]`).getComponent(DatePicker);
+				datePicker.vm.$emit("update:date", selectedDate.toISOString());
+
+				const actionButtonComponent = wrapper.getComponent(FilterActionButtons);
+				actionButtonComponent.vm.$emit("update:filter");
+
+				const emittedEvents = wrapper.emitted("update:filter");
+				const eventPayload = emittedEvents?.[0]?.[0];
+
+				selectedDate.setDate(selectedDate.getDate() + 1);
+				selectedDate.setTime(selectedDate.getTime() - 1000);
+				const lteISOString = selectedDate.toISOString();
+
+				expect(emittedEvents).toBeDefined();
+				expect(eventPayload).toEqual({
+					$gte: "1900-01-01T23:00:00.000Z",
+					$lte: lteISOString,
+				});
+			});
 		});
 
 		it("should emit 'remove:filter 'when remove button is clicked", () => {
