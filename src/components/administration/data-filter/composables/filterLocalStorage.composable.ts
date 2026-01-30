@@ -28,16 +28,11 @@ export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teac
 	const state: Ref<UiState> = useStorage("uiState", defaultState);
 
 	const getFilterState = () => state.value.filter[filterStorageKey[userType]]?.query;
-
 	const setFilterState = (val: object) => (state.value.filter[filterStorageKey[userType]] = { query: val });
-
 	const getPaginationState = () => state.value.pagination[filterStorageKey[userType]];
-
 	const setPaginationState = (val: { page: number; limit: number }) =>
 		(state.value.pagination[filterStorageKey[userType]] = val);
-
 	const getSortingState = () => state.value.sorting[filterStorageKey[userType]];
-
 	const setSortingState = (val: { sortBy: string; sortOrder: string }) =>
 		(state.value.sorting[filterStorageKey[userType]] = val);
 
