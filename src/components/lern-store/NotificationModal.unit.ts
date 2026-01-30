@@ -1,15 +1,13 @@
-import ModalBodyInfo from "../legacy/ModalBodyInfo.vue";
 import NotificationModal from "./NotificationModal.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
 import { mount } from "@vue/test-utils";
-import { VIcon } from "vuetify/components";
+import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
 
 const testProps = {
 	showNotificationModal: true,
 	successMsg: "test success",
 	errorMsg: "test error",
-	description: "test description",
 };
 
 describe("@/components/molecules/NotificationModal", () => {
@@ -24,58 +22,54 @@ describe("@/components/molecules/NotificationModal", () => {
 			},
 		});
 
-	it("should render the component", () => {
-		const wrapper = setup(true);
-
-		expect(wrapper.exists()).toBe(true);
-	});
-
 	describe("success case", () => {
-		it("should render corect title and description", () => {
+		it("should render correct title", () => {
 			const wrapper = setup(true);
 
-			const modalBodyInfo = wrapper.findComponent(ModalBodyInfo);
+			const content = wrapper.findComponent(VDialog).findComponent(VCard);
+			const title = content.find("h2");
 
-			expect(modalBodyInfo.props("title")).toBe(testProps.successMsg);
-			expect(modalBodyInfo.props("description")).toBe(testProps.description);
+			expect(title.text()).toBe(testProps.successMsg);
 		});
 
 		it("should render success icon", () => {
 			const wrapper = setup(true);
 
-			const successIcon = wrapper.findComponent(ModalBodyInfo).findComponent(VIcon);
+			const content = wrapper.findComponent(VDialog).findComponent(VCard);
+			const icon = content.findComponent(VIcon);
 
-			expect(successIcon.exists()).toBe(true);
-			expect(successIcon.props("icon")).toBe(mdiCheckCircle);
+			expect(icon.exists()).toBe(true);
+			expect(icon.props("icon")).toBe(mdiCheckCircle);
 		});
 	});
 
 	describe("error case", () => {
-		it("should render corect title and description", () => {
+		it("should render corect title", () => {
 			const wrapper = setup(false);
 
-			const modalBodyInfo = wrapper.findComponent(ModalBodyInfo);
+			const content = wrapper.findComponent(VDialog).findComponent(VCard);
+			const title = content.find("h2");
 
-			expect(modalBodyInfo.props("title")).toBe(testProps.errorMsg);
-			expect(modalBodyInfo.props("description")).toBe(testProps.description);
+			expect(title.text()).toBe(testProps.errorMsg);
 		});
 
 		it("should render error icon", () => {
 			const wrapper = setup(false);
 
-			const errorIcon = wrapper.findComponent(ModalBodyInfo).findComponent(VIcon);
+			const content = wrapper.findComponent(VDialog).findComponent(VCard);
+			const icon = content.findComponent(VIcon);
 
-			expect(errorIcon.exists()).toBe(true);
-			expect(errorIcon.props("icon")).toBe(mdiAlertCircle);
+			expect(icon.exists()).toBe(true);
+			expect(icon.props("icon")).toBe(mdiAlertCircle);
 		});
 	});
 
 	it("executes close action after close", async () => {
 		const wrapper = setup(false);
 
-		const dialogCard = wrapper.findComponent({ name: "v-dialog" }).findComponent({ name: "v-card" });
+		const content = wrapper.findComponent(VDialog).findComponent(VCard);
 
-		const button = dialogCard.get(".btn-confirm");
+		const button = content.getComponent(VBtn);
 		await button.trigger("click");
 
 		expect(wrapper.emitted("close")).toBeDefined();

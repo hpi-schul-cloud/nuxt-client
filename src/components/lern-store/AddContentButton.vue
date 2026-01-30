@@ -28,7 +28,6 @@
 		<NotificationModal
 			v-model:show-notification-modal="notificationModal.visible"
 			:is-success="notificationModal.isSuccess"
-			:backgroundcolor="notificationModal.isSuccess ? 'rgba(var(--v-theme-success))' : 'rgba(var(--v-theme-error))'"
 			:success-msg="$t('pages.content.notification.successMsg')"
 			:error-msg="$t('pages.content.notification.errorMsg')"
 			@close="addResourceAndClose"
