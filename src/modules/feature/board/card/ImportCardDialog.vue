@@ -21,7 +21,7 @@
 					<li>{{ t("components.molecules.import.card.hint.ctltools") }}</li>
 				</ul>
 			</InfoAlert>
-			<p class="text-lg mt-2" data-testid="import-card-dialog-question">
+			<p class="mt-2" data-testid="import-card-dialog-question">
 				{{ dialogQuestion }}
 			</p>
 			<VForm id="importCardForm" data-testid="import-card-form">
