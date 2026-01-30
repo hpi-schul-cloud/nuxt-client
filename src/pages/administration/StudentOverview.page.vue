@@ -2,7 +2,7 @@
 	<div>
 		<default-wireframe :headline="$t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
 			<progress-modal
-				:active="isDeleting"
+				v-model="isDeleting"
 				:percent="deletedPercent"
 				:title="$t('pages.administration.students.index.remove.progress.title')"
 				:description="$t('pages.administration.students.index.remove.progress.description')"

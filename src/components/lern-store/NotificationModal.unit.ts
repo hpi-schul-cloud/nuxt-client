@@ -44,7 +44,7 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	describe("error case", () => {
-		it("should render corect title", () => {
+		it("should render correct title", () => {
 			const wrapper = setup(false);
 
 			const content = wrapper.findComponent(VDialog).findComponent(VCard);

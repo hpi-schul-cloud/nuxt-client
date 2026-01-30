@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<default-wireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
-			<progress-modal
-				:active="isDeleting"
+			<ProgressModal
+				v-model="isDeleting"
 				:percent="deletedPercent"
 				:title="$t('pages.administration.teachers.index.remove.progress.title')"
 				:description="$t('pages.administration.teachers.index.remove.progress.description')"
