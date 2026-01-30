@@ -1,16 +1,16 @@
 <template>
 	<section>
-		<info-modal-full-width
+		<InfoModalFullWidth
+			:model-value="showModal"
 			:title="getTitle"
-			:active="showModal"
 			:description="getDescription"
 			design="primary"
-			@update:active="buttonHandler"
+			@update:model-value="buttonHandler"
 		>
 			<template #icon>
-				<v-icon>{{ activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline }}</v-icon>
+				<v-icon size="60">{{ activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline }}</v-icon>
 			</template>
-		</info-modal-full-width>
+		</InfoModalFullWidth>
 	</section>
 </template>
 
@@ -93,7 +93,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 section {
 	margin-top: 10%;
 }
