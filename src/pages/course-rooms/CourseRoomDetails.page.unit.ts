@@ -25,9 +25,11 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
 import { VBtn } from "vuetify/components";
 
 vi.mock("./tools/RoomExternalToolsOverview.vue");
@@ -270,17 +272,16 @@ describe("CourseRoomDetails.page.vue", () => {
 						permissionData: [Permission.CourseEdit],
 					});
 
-					const layoutDialog = wrapper.findComponent("[data-testid=board-layout-dialog]");
-					expect(layoutDialog.exists()).toBe(false);
+					const openLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+					expect(openLayoutDialog.props().modelValue).toBe(false);
 
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 					await fabComponent.getComponent(VBtn).trigger("click");
 
 					const addBoardButton = wrapper.findComponent("[data-testid=fab_button_add_board]");
 					await addBoardButton.getComponent(VBtn).trigger("click");
-
-					const openLayoutDialog = wrapper.findComponent("[data-testid=board-layout-dialog]");
-					expect(openLayoutDialog.exists()).toBe(true);
+					await nextTick();
+					expect(openLayoutDialog.props().modelValue).toBe(true);
 				});
 			});
 		});
