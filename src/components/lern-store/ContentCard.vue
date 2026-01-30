@@ -2,6 +2,7 @@
 	<v-card v-bind="$attrs">
 		<div class="content-card" data-testid="learningstore-searchresult-item">
 			<RouterLink
+				class="title-link"
 				:to="{
 					name: 'content-id',
 					params: { id: resource.properties['ccm:replicationsourceuuid'][0] },
