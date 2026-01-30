@@ -1,67 +1,47 @@
 <template>
-	<div>
-		<base-modal v-model:active="showModal" class="modal">
-			<template #header>
-				{{ $t("components.molecules.AddContentModal") }}
-			</template>
-			<template #body>
-				<div class="content-modal__body">
-					<v-select
-						v-model="selectedCourse"
-						return-object
-						item-value="_id"
-						item-title="name"
-						:items="coursesOptions"
-						:label="$t('pages.content.label.chooseACourse')"
-						data-testid="topicSelector"
-					/>
-					<transition name="fade">
-						<v-select
-							v-show="!!(selectedCourse || {})._id"
-							v-model="selectedLesson"
-							return-object
-							item-value="_id"
-							item-title="name"
-							:items="lessonsOptions"
-							:label="$t('pages.content.label.chooseALessonTopic')"
-							:no-data-text="$t('pages.content.placeholder.noLessonTopic')"
-							data-testid="courseSelector"
-						/>
-					</transition>
-				</div>
-			</template>
-			<template #footer>
-				<modal-footer>
-					<template #right>
-						<v-btn variant="text" @click="closeModal">
-							{{ $t("common.actions.cancel") }}
-						</v-btn>
-						<v-btn
-							color="primary"
-							variant="flat"
-							:disabled="!isSendEnabled"
-							data-testid="modal_submit_btn"
-							@click="addToLesson"
-						>
-							{{ $t("common.actions.add") }}
-						</v-btn>
-					</template>
-				</modal-footer>
-			</template>
-		</base-modal>
-	</div>
+	<SvsDialog
+		v-model="showModal"
+		:title="$t('components.molecules.AddContentModal')"
+		confirm-btn-lang-key="common.actions.add"
+		:confirm-btn-disabled="!isSendEnabled"
+		@cancel="closeModal"
+		@confirm="addToLesson"
+	>
+		<template #content>
+			<VSelect
+				v-model="selectedCourse"
+				return-object
+				item-value="_id"
+				item-title="name"
+				:items="coursesOptions"
+				:label="$t('pages.content.label.chooseACourse')"
+				data-testid="topicSelector"
+			/>
+			<VFadeTransition>
+				<VSelect
+					v-show="!!(selectedCourse || {})._id"
+					v-model="selectedLesson"
+					return-object
+					item-value="_id"
+					item-title="name"
+					:items="lessonsOptions"
+					:label="$t('pages.content.label.chooseALessonTopic')"
+					:no-data-text="$t('pages.content.placeholder.noLessonTopic')"
+					data-testid="courseSelector"
+				/>
+			</VFadeTransition>
+		</template>
+	</SvsDialog>
 </template>
 
 <script>
-import BaseModal from "../base/BaseModal.vue";
-import ModalFooter from "@/components/legacy/ModalFooter.vue";
 import { contentModule } from "@/store";
+import { SvsDialog } from "@ui-dialog";
 import { mapGetters } from "vuex";
 
 export default {
 	components: {
-		ModalFooter,
-		BaseModal,
+		SvsDialog,
 	},
 	props: {
 		title: { type: String, default: "" },
@@ -161,25 +141,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.modal {
-	width: 100%;
-}
-.content-modal {
-	&__body {
-		min-height: 300px;
-		&--select {
-			margin-top: 32px;
-		}
-	}
-}
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.9s;
-}
-.fade-enter,
-.fade-leave-to {
-	opacity: 0;
-}
-</style>
