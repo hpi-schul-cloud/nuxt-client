@@ -405,9 +405,6 @@ export default defineComponent({
 				});
 			}
 		},
-		roomData() {
-			this.isLocked = this.courseRoomDetailsModule.getIsLocked;
-		},
 	},
 	async created() {
 		await this.initialize(this.courseId, this.$route.query?.tab);
@@ -423,7 +420,8 @@ export default defineComponent({
 			this.setActiveTab(activeTab);
 			this.courseId = courseId;
 
-			await this.courseRoomDetailsModule.fetchContent(courseId);
+			const { isLocked = false } = (await this.courseRoomDetailsModule.fetchContent(courseId)) || {};
+			this.isLocked = isLocked;
 
 			if (this.roomData.roomId) {
 				this.roomVariant = RoomVariant.COURSE_ROOM;
