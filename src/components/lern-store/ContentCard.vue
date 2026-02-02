@@ -58,8 +58,10 @@ import AddContentButton from "@/components/lern-store/AddContentButton";
 import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
 import { mdiFileMultipleOutline } from "@icons/material";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
+export default defineComponent({
 	components: {
 		BaseLink,
 		AddContentButton,
@@ -71,6 +73,10 @@ export default {
 		role: { type: String, default: "" },
 		inline: { type: Boolean, required: false },
 		selectable: { type: Boolean },
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {
@@ -122,7 +128,7 @@ export default {
 			}
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
