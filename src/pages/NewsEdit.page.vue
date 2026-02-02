@@ -1,18 +1,18 @@
 <template>
 	<div v-if="news">
 		<default-wireframe
-			:headline="$t('pages.news.edit.title.default')"
+			:headline="t('pages.news.edit.title.default')"
 			:breadcrumbs="[
 				{
 					to: '/news',
-					title: $t('pages.news.title'),
+					title: t('pages.news.title'),
 				},
 				{
 					to: `/news/${$route.params.id}`,
 					title: news.title,
 				},
 				{
-					title: $t('pages.news.edit.title.default'),
+					title: t('pages.news.edit.title.default'),
 					disabled: true,
 				},
 			]"

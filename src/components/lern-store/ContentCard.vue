@@ -27,7 +27,7 @@
 
 							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
 							<div v-show="isCollection()" class="card-tag">
-								<span>{{ $t("pages.content.card.collection") }}</span>
+								<span>{{ t("pages.content.card.collection") }}</span>
 								<v-icon :icon="mdiFileMultipleOutline" />
 							</div>
 						</div>
