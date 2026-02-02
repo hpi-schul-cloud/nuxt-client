@@ -131,7 +131,7 @@
 				{{ $t("pages.administration.ldap.save.example.synchronize") }}
 			</v-btn>
 		</div>
-		<VDialog :model-value="submitted.ok" :background-click-disabled="true" data-testid="confirmModal">
+		<VDialog :model-value="submitted.ok" :persistent="true" data-testid="confirmModal">
 			<VCard>
 				<VCardText class="d-flex flex-column align-center text-center">
 					<VIcon size="60" color="success" :icon="mdiCheckCircle" />
