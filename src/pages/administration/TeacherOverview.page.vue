@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<default-wireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
+		<DefaultWireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
 			<ProgressModal
 				v-model="isDeleting"
 				:percent="deletedPercent"
@@ -19,13 +19,13 @@
 				@update:model-value="barSearch"
 			>
 				<template #icon>
-					<v-icon :icon="mdiMagnify" />
+					<VIcon :icon="mdiMagnify" />
 				</template>
 			</base-input>
 
 			<DataFilter filter-for="teacher" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
-			<backend-data-table
+			<BackendDataTable
 				v-model:current-page="page"
 				v-model:rows-per-page="limit"
 				v-model:selected-row-ids="tableSelection"
@@ -52,8 +52,8 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<v-icon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
-						<v-icon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+						<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
+						<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
 					</span>
 				</template>
 				<template #datacolumn-lastLoginSystemChange="{ data }">
@@ -64,7 +64,7 @@
 				</template>
 
 				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<v-btn
+					<VBtn
 						icon
 						variant="text"
 						:class="{
@@ -76,16 +76,12 @@
 						:aria-label="$t('pages.administration.teachers.table.edit.ariaLabel')"
 						data-testid="edit_teacher_button"
 					>
-						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
-					</v-btn>
+						<VIcon size="20">{{ mdiPencilOutline }}</VIcon>
+					</VBtn>
 				</template>
-			</backend-data-table>
-			<admin-table-legend
-				:icons="icons"
-				:show-icons="showConsent"
-				:show-external-sync-hint="schoolIsExternallyManaged"
-			/>
-		</default-wireframe>
+			</BackendDataTable>
+			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+		</DefaultWireframe>
 		<ConfirmationDialog />
 	</div>
 </template>

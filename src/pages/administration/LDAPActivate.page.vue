@@ -3,22 +3,22 @@
 		<section class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<v-icon :icon="mdiAccountSchoolOutline" />
+					<VIcon :icon="mdiAccountSchoolOutline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon :icon="mdiHumanMaleBoard" />
+					<VIcon :icon="mdiHumanMaleBoard" />
 					<span>{{ verified.users && verified.users.teacher }}</span>
 					<span>{{ t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon :icon="mdiShieldAccountVariantOutline" />
+					<VIcon :icon="mdiShieldAccountVariantOutline" />
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon :icon="mdiAccountEye" />
+					<VIcon :icon="mdiAccountEye" />
 					<span>{{ verified.classes && verified.classes.total }}</span>
 					<span>{{ t("common.labels.classes") }}</span>
 				</div>
@@ -89,7 +89,7 @@
 			</div>
 		</section>
 		<div v-for="(error, index) in activationErrors" :key="index" class="errors-container">
-			<info-message data-testid="errorInfoMessage" :message="error" type="bc-error" />
+			<InfoMessage data-testid="errorInfoMessage" :message="error" type="bc-error" />
 		</div>
 		<section v-if="showUserMigrationOption" class="section" data-testid="migrateUsersSection">
 			<h2 class="title-class">
@@ -106,18 +106,18 @@
 			</p>
 		</section>
 		<div v-if="schoolErrors" class="errors-container">
-			<info-message
+			<InfoMessage
 				data-testid="school-migration-activation-error"
 				:message="t('pages.administration.ldap.activate.migrateExistingUsers.error')"
 				type="bc-error"
 			/>
 		</div>
 		<div class="bottom-buttons">
-			<v-btn variant="text" data-testid="ldapBackButton" @click="backButtonHandler">
-				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
+			<VBtn variant="text" data-testid="ldapBackButton" @click="backButtonHandler">
+				<VIcon size="20" class="mr-1">{{ mdiChevronLeft }}</VIcon>
 				{{ t("common.actions.back") }}
-			</v-btn>
-			<v-btn
+			</VBtn>
+			<VBtn
 				color="primary"
 				variant="flat"
 				data-testid="ldapSubmitButton"
@@ -125,7 +125,7 @@
 				@click="submitButtonHandler"
 			>
 				{{ t("pages.administration.ldap.save.example.synchronize") }}
-			</v-btn>
+			</VBtn>
 		</div>
 		<VDialog :model-value="submitted.ok" :persistent="true" data-testid="confirmModal">
 			<VCard>

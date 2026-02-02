@@ -4,9 +4,9 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<form-create-user role-name="teacher" @create-user="createTeacher">
+		<FormCreateUser role-name="teacher" @create-user="createTeacher">
 			<template #inputs>
-				<v-checkbox
+				<VCheckbox
 					v-model="sendRegistration"
 					name="switch"
 					class="mt-8"
@@ -14,9 +14,9 @@
 				/>
 			</template>
 			<template #errors>
-				<info-message v-if="error" :message="t('pages.administration.teachers.new.error')" type="bc-error" />
+				<InfoMessage v-if="error" :message="t('pages.administration.teachers.new.error')" type="bc-error" />
 			</template>
-		</form-create-user>
+		</FormCreateUser>
 	</default-wireframe>
 </template>
 

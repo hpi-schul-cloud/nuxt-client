@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.news.new.title')"
 		:breadcrumbs="[
 			{
@@ -14,9 +14,9 @@
 		max-width="short"
 	>
 		<div>
-			<form-news @save="create" @cancel="onCancel" />
+			<FormNews @save="create" @cancel="onCancel" />
 		</div>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>

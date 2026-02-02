@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1>
 				{{ title }}
@@ -20,12 +20,7 @@
 		</template>
 		<section class="section">
 			<div class="mt-6">
-				<step-progress
-					id="progressbar"
-					:steps="progressSteps"
-					:current-step="currentStep"
-					data-testid="step_progress"
-				/>
+				<StepProgress id="progressbar" :steps="progressSteps" :current-step="currentStep" data-testid="step_progress" />
 			</div>
 
 			<section v-if="currentStep === 0">
@@ -34,7 +29,7 @@
 				</h2>
 				{{ t("pages.administration.students.consent.steps.complete.info") }}
 
-				<backend-data-table
+				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
@@ -75,20 +70,20 @@
 							"
 						/>
 					</template>
-				</backend-data-table>
+				</BackendDataTable>
 
 				<p v-if="birthdayWarning" class="text-error" data-testid="error-text">
-					<v-icon color="error">{{ mdiAlert }} </v-icon>
+					<VIcon color="error">{{ mdiAlert }} </VIcon>
 					{{ t("pages.administration.students.consent.steps.complete.warn") }}
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn variant="text" @click="cancelWarning = true">
+					<VBtn variant="text" @click="cancelWarning = true">
 						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" data-testid="button-next" @click="next">
+					</VBtn>
+					<VBtn color="primary" variant="flat" data-testid="button-next" @click="next">
 						{{ t("pages.administration.students.consent.steps.complete.next") }}
-					</v-btn>
+					</VBtn>
 				</div>
 			</section>
 
@@ -99,7 +94,7 @@
 				<p v-if="isConsentNecessary">
 					{{ t("pages.administration.students.consent.steps.register.info") }}
 				</p>
-				<backend-data-table
+				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
@@ -114,7 +109,7 @@
 							{{ printDateFromDeUTC(slotProps.data) }}
 						</div>
 					</template>
-				</backend-data-table>
+				</BackendDataTable>
 
 				<div v-if="isConsentNecessary" id="consent-checkbox">
 					<base-input v-model="check" type="checkbox" name="switch" label="" data-testid="check-confirm" />
@@ -135,12 +130,12 @@
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn variant="text" @click="cancelWarning = true">
+					<VBtn variant="text" @click="cancelWarning = true">
 						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" data-testid="button-next-2" @click="register">
+					</VBtn>
+					<VBtn color="primary" variant="flat" data-testid="button-next-2" @click="register">
 						{{ t("pages.administration.students.consent.steps.register.next") }}
-					</v-btn>
+					</VBtn>
 				</div>
 			</section>
 
@@ -149,7 +144,7 @@
 					{{ t("pages.administration.students.consent.steps.download") }}
 				</h2>
 				{{ t("pages.administration.students.consent.steps.download.info") }}
-				<backend-data-table
+				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
@@ -162,18 +157,18 @@
 					<template #datacolumn-birthday="slotProps">
 						{{ printDateFromDeUTC(slotProps.data) }}
 					</template>
-				</backend-data-table>
+				</BackendDataTable>
 				<p>
 					{{ passwordHint }}
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn variant="text" @click="cancelWarning = true">
+					<VBtn variant="text" @click="cancelWarning = true">
 						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" @click="download">
+					</VBtn>
+					<VBtn color="primary" variant="flat" @click="download">
 						{{ t("pages.administration.students.consent.steps.download.next") }}
-					</v-btn>
+					</VBtn>
 				</div>
 			</section>
 
@@ -188,9 +183,9 @@
 				/>
 
 				<div class="d-flex justify-end">
-					<v-btn color="primary" variant="outlined" @click="success">{{
-						t("pages.administration.students.consent.steps.success.back")
-					}}</v-btn>
+					<VBtn color="primary" variant="outlined" @click="success">
+						{{ t("pages.administration.students.consent.steps.success.back") }}
+					</VBtn>
 				</div>
 			</section>
 
@@ -227,11 +222,11 @@
 						{{ printPageInfo }}
 					</p>
 
-					<backend-data-table :columns="tableColumnsForPrint" :data="tableData" track-by="_id" :paginated="false" />
+					<BackendDataTable :columns="tableColumnsForPrint" :data="tableData" track-by="_id" :paginated="false" />
 				</div>
 			</div>
 		</section>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>

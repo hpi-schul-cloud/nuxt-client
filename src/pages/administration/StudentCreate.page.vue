@@ -1,12 +1,12 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.administration.students.new.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<form-create-user @create-user="createStudent">
+		<FormCreateUser @create-user="createStudent">
 			<template #inputs>
-				<v-text-field
+				<VTextField
 					v-model="date"
 					:label="t('common.labels.birthdate')"
 					:min="minDate"
@@ -15,7 +15,7 @@
 					:class="{ hideCurrentDate: !date }"
 					type="date"
 				/>
-				<v-checkbox
+				<VCheckbox
 					v-model="sendRegistration"
 					name="switch"
 					class="mt-8"
@@ -24,10 +24,10 @@
 				/>
 			</template>
 			<template #errors>
-				<info-message v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
+				<InfoMessage v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
-		</form-create-user>
-	</default-wireframe>
+		</FormCreateUser>
+	</DefaultWireframe>
 </template>
 
 <script>

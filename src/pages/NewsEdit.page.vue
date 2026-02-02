@@ -1,6 +1,6 @@
 <template>
 	<div v-if="news">
-		<default-wireframe
+		<DefaultWireframe
 			:headline="t('pages.news.edit.title.default')"
 			:breadcrumbs="[
 				{
@@ -19,9 +19,9 @@
 			max-width="short"
 		>
 			<div>
-				<form-news v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
+				<FormNews v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
 			</div>
-		</default-wireframe>
+		</DefaultWireframe>
 	</div>
 </template>
 
