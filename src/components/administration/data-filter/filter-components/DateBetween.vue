@@ -3,6 +3,7 @@
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"
+		aria-label="utils.adminFilter.date.label.from"
 		data-testid="date-picker-from"
 		@update:date="onUpdateDate($event, '$gte')"
 	/>
@@ -11,6 +12,7 @@
 		class="mr-2"
 		:date="dateSelection.$lte"
 		:label="t('utils.adminFilter.date.label.until')"
+		aria-label="utils.adminFilter.date.label.until"
 		data-testid="date-picker-until"
 		@update:date="onUpdateDate($event, '$lte')"
 	/>
@@ -44,13 +46,20 @@ const defaultDates: DateSelection = {
 };
 
 const dateSelection = ref<DateSelection>({
-	$gte: new Date().toISOString(),
+	$gte: "",
 	$lte: "",
 });
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
 const onUpdateDate = (date: string | null, fromUntil: "$gte" | "$lte") => {
+	if (date && fromUntil === "$lte") {
+		const lte = new Date(date);
+		// add one day to make the until date inclusive until 23:59:59
+		lte.setDate(lte.getDate() + 1);
+		lte.setTime(lte.getTime() - 1000);
+		date = lte.toISOString();
+	}
 	dateSelection.value[fromUntil] = date ?? "";
 };
 
@@ -74,6 +83,10 @@ const onRemoveFilter = () => {
 };
 
 onMounted(() => {
-	if (props.selectedDate) dateSelection.value = props.selectedDate;
+	if (props.selectedDate) {
+		dateSelection.value = props.selectedDate;
+		return;
+	}
+	dateSelection.value.$gte = new Date().toISOString();
 });
 </script>
