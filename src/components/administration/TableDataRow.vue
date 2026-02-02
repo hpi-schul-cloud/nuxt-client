@@ -7,16 +7,8 @@
 		}"
 	>
 		<td v-if="selectable">
-			<div class="text-content selection-column">
-				<base-input
-					v-model="selectionStatus"
-					type="checkbox"
-					:label="`Zeile ${rowindex + 1} auswählen`"
-					:label-hidden="true"
-					class="select"
-					:color="selected ? 'currentColor' : undefined"
-				/>
-			</div>
+			<!-- TODO: Should color be primary? -->
+			<VCheckbox v-model="selectionStatus" :aria-label="`Zeile ${rowindex + 1} auswählen`" hide-details />
 		</td>
 		<td v-for="(fieldData, index) in rowData" :key="index">
 			<slot
@@ -111,10 +103,6 @@ export default {
 		.text-content {
 			padding: 8px;
 			white-space: nowrap;
-		}
-
-		.select {
-			margin-bottom: 0;
 		}
 	}
 }
