@@ -27,6 +27,7 @@ import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
