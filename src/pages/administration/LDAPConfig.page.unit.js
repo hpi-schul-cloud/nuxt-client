@@ -1,4 +1,4 @@
-import { default as ldapConfig } from "./LDAPConfig.page.vue";
+import LDAPConfigPage from "./LDAPConfig.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
@@ -60,7 +60,7 @@ describe("ldap/config", () => {
 
 		const mockStore = createStore(storeOptions);
 
-		const wrapper = shallowMount(ldapConfig, {
+		const wrapper = shallowMount(LDAPConfigPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
