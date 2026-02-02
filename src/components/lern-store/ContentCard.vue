@@ -13,7 +13,7 @@
 				<div class="content">
 					<div class="content__img">
 						<div class="img-container">
-							<span @click.stop="linkHandler">
+							<span v-show="isSelectable()" @click.stop="linkHandler">
 								<VCheckbox
 									v-model="isChecked"
 									:aria-label="resource.title"
