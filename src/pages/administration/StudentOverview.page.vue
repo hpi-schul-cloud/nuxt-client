@@ -1,18 +1,18 @@
 <template>
 	<div>
-		<default-wireframe :headline="$t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
+		<default-wireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
 			<progress-modal
 				v-model="isDeleting"
 				:percent="deletedPercent"
-				:title="$t('pages.administration.students.index.remove.progress.title')"
-				:description="$t('pages.administration.students.index.remove.progress.description')"
+				:title="t('pages.administration.students.index.remove.progress.title')"
+				:description="t('pages.administration.students.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
 
 			<base-input
 				v-model="searchQuery"
 				type="text"
-				:placeholder="$t('pages.administration.students.index.searchbar.placeholder')"
+				:placeholder="t('pages.administration.students.index.searchbar.placeholder')"
 				class="search-section"
 				label=""
 				data-testid="searchbar"
@@ -81,7 +81,7 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-						:aria-label="$t('pages.administration.students.table.edit.ariaLabel')"
+						:aria-label="t('pages.administration.students.table.edit.ariaLabel')"
 						data-testid="edit_student_button"
 					>
 						<v-icon size="20" :icon="mdiPencilOutline" />
@@ -127,6 +127,7 @@ import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dial
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
@@ -145,7 +146,8 @@ export default defineComponent({
 	},
 	setup() {
 		const { askConfirmation } = useConfirmationDialog();
-		return { askConfirmation };
+		const { t } = useI18n();
+		return { askConfirmation, t };
 	},
 	data() {
 		return {
@@ -181,51 +183,51 @@ export default defineComponent({
 			tableColumns: [
 				{
 					field: "firstName",
-					label: this.$t("common.labels.firstName"),
+					label: this.t("common.labels.firstName"),
 					sortable: true,
 				},
 				{
 					field: "lastName",
-					label: this.$t("common.labels.lastName"),
+					label: this.t("common.labels.lastName"),
 					sortable: true,
 				},
 				{
 					field: "birthday",
-					label: this.$t("common.labels.birthday"),
+					label: this.t("common.labels.birthday"),
 					sortable: true,
 				},
 				{
 					field: "email",
-					label: this.$t("common.labels.email"),
+					label: this.t("common.labels.email"),
 					sortable: true,
 				},
 				{
 					field: "classes",
-					label: this.$t("common.labels.classes"),
+					label: this.t("common.labels.classes"),
 					sortable: true,
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.registration"),
+					label: this.t("common.labels.registration"),
 					sortable: true,
 					infobox: true,
 				},
 				{
 					field: "createdAt",
-					label: this.$t("common.labels.createdAt"),
+					label: this.t("common.labels.createdAt"),
 					sortable: true,
 				},
 				{
 					field: "lastLoginSystemChange",
-					label: this.$t("common.labels.migrated"),
+					label: this.t("common.labels.migrated"),
 					sortable: true,
-					tooltipText: this.$t("common.labels.migrated.tooltip"),
+					tooltipText: this.t("common.labels.migrated.tooltip"),
 				},
 				{
 					field: "outdatedSince",
-					label: this.$t("common.labels.outdated"),
+					label: this.t("common.labels.outdated"),
 					sortable: true,
-					tooltipText: this.$t("common.labels.outdated.tooltip"),
+					tooltipText: this.t("common.labels.outdated.tooltip"),
 				},
 				{
 					// edit column
@@ -262,26 +264,26 @@ export default defineComponent({
 			return [
 				{
 					label: this.isConsentNecessary
-						? this.$t("pages.administration.students.index.tableActions.consent")
-						: this.$t("pages.administration.students.index.tableActions.registration"),
+						? this.t("pages.administration.students.index.tableActions.consent")
+						: this.t("pages.administration.students.index.tableActions.registration"),
 					icon: mdiCheck,
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
 				},
 				{
-					label: this.$t("pages.administration.students.index.tableActions.email"),
+					label: this.t("pages.administration.students.index.tableActions.email"),
 					icon: mdiEmailOutline,
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
-					label: this.$t("pages.administration.students.index.tableActions.qr"),
+					label: this.t("pages.administration.students.index.tableActions.qr"),
 					icon: mdiQrcode,
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
 				},
 				{
-					label: this.$t("pages.administration.students.index.tableActions.delete"),
+					label: this.t("pages.administration.students.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
 					action: this.handleBulkDelete,
 					permission: Permission.StudentDelete,
@@ -306,7 +308,7 @@ export default defineComponent({
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
-					(action) => action.label !== this.$t("pages.administration.students.index.tableActions.delete")
+					(action) => action.label !== this.t("pages.administration.students.index.tableActions.delete")
 				);
 			}
 
@@ -342,21 +344,21 @@ export default defineComponent({
 			instanceBasedIcons.push({
 				icon: mdiCheckAll,
 				color: "rgba(var(--v-theme-success))",
-				label: this.$t("pages.administration.students.legend.icon.success"),
+				label: this.t("pages.administration.students.legend.icon.success"),
 			});
 
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: mdiCheck,
 					color: "rgba(var(--v-theme-warning))",
-					label: this.$t("utils.adminFilter.consent.label.parentsAgreementMissing"),
+					label: this.t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 				});
 			}
 
 			instanceBasedIcons.push({
 				icon: mdiClose,
 				color: "rgba(var(--v-theme-error))",
-				label: this.$t("utils.adminFilter.consent.label.missing"),
+				label: this.t("utils.adminFilter.consent.label.missing"),
 			});
 
 			return instanceBasedIcons;
@@ -369,17 +371,17 @@ export default defineComponent({
 			return [
 				{
 					icon: mdiPlus,
-					label: this.$t("pages.administration.students.fab.add"),
+					label: this.t("pages.administration.students.fab.add"),
 					dataTestId: "fab_button_students_table",
 				},
 				{
-					label: this.$t("pages.administration.students.fab.add"),
+					label: this.t("pages.administration.students.fab.add"),
 					icon: mdiAccountPlus,
 					to: "/administration/students/new",
 					dataTestId: "fab_button_add_students",
 				},
 				{
-					label: this.$t("pages.administration.students.fab.import"),
+					label: this.t("pages.administration.students.fab.import"),
 					icon: mdiCloudDownload,
 					href: "/administration/students/import",
 					dataTestId: "fab_button_import_students",
@@ -407,7 +409,7 @@ export default defineComponent({
 		this.getClassNameList();
 	},
 	mounted() {
-		document.title = buildPageTitle(this.$t("pages.administration.students.index.title"));
+		document.title = buildPageTitle(this.t("pages.administration.students.index.title"));
 	},
 	methods: {
 		find() {
@@ -482,12 +484,12 @@ export default defineComponent({
 					selectionType,
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
+					notifySuccess(this.t("pages.administration.sendMail.success", rowIds.length));
 				} else {
-					notifyInfo(this.$t("pages.administration.sendMail.alreadyRegistered"));
+					notifyInfo(this.t("pages.administration.sendMail.alreadyRegistered"));
 				}
 			} catch {
-				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
+				notifyError(this.t("pages.administration.sendMail.error", rowIds.length));
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -502,10 +504,10 @@ export default defineComponent({
 						printPageTitleKey: "pages.administration.printQr.printPageTitle",
 					});
 				} else {
-					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
+					notifyInfo(this.t("pages.administration.printQr.emptyUser"));
 				}
 			} catch {
-				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
+				notifyError(this.t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
 		async handleBulkDelete(rowIds, selectionType) {
@@ -515,10 +517,10 @@ export default defineComponent({
 						ids: rowIds,
 						userType: "student",
 					});
-					notifySuccess(this.$t("pages.administration.remove.success"));
+					notifySuccess(this.t("pages.administration.remove.success"));
 					this.find();
 				} catch {
-					notifyError(this.$t("pages.administration.remove.error"));
+					notifyError(this.t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {
@@ -527,16 +529,16 @@ export default defineComponent({
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
+				message = this.t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
 					number: rowIds.length,
 				});
 			} else {
 				if (rowIds.length) {
-					message = this.$t("pages.administration.students.index.remove.confirm.message.many", {
+					message = this.t("pages.administration.students.index.remove.confirm.message.many", {
 						number: rowIds.length,
 					});
 				} else {
-					message = this.$t("pages.administration.students.index.remove.confirm.message.all");
+					message = this.t("pages.administration.students.index.remove.confirm.message.all");
 				}
 			}
 

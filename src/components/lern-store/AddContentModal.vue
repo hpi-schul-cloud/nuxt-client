@@ -1,7 +1,7 @@
 <template>
 	<SvsDialog
 		v-model="showModal"
-		:title="$t('components.molecules.AddContentModal')"
+		:title="t('components.molecules.AddContentModal')"
 		confirm-btn-lang-key="common.actions.add"
 		:confirm-btn-disabled="!isSendEnabled"
 		@cancel="closeModal"
@@ -14,7 +14,7 @@
 				item-value="_id"
 				item-title="name"
 				:items="coursesOptions"
-				:label="$t('pages.content.label.chooseACourse')"
+				:label="t('pages.content.label.chooseACourse')"
 				data-testid="topicSelector"
 			/>
 			<VFadeTransition>
@@ -25,8 +25,8 @@
 					item-value="_id"
 					item-title="name"
 					:items="lessonsOptions"
-					:label="$t('pages.content.label.chooseALessonTopic')"
-					:no-data-text="$t('pages.content.placeholder.noLessonTopic')"
+					:label="t('pages.content.label.chooseALessonTopic')"
+					:no-data-text="t('pages.content.placeholder.noLessonTopic')"
 					data-testid="courseSelector"
 				/>
 			</VFadeTransition>
@@ -37,9 +37,11 @@
 <script>
 import { contentModule } from "@/store";
 import { SvsDialog } from "@ui-dialog";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
-export default {
+export default defineComponent({
 	components: {
 		SvsDialog,
 	},
@@ -58,6 +60,12 @@ export default {
 		},
 	},
 	emits: ["update:show-copy-modal", "close"],
+	setup() {
+		const { t } = useI18n();
+		return {
+			t,
+		};
+	},
 	data() {
 		return {
 			selectedCourse: undefined,
@@ -139,5 +147,5 @@ export default {
 			this.selectedLesson = undefined;
 		},
 	},
-};
+});
 </script>

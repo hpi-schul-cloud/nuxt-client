@@ -1,71 +1,67 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.administration.ldap.save.title')"
-		:breadcrumbs="breadcrumbs"
-		max-width="short"
-	>
+	<DefaultWireframe :headline="t('pages.administration.ldap.save.title')" :breadcrumbs="breadcrumbs" max-width="short">
 		<section class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
 					<v-icon :icon="mdiAccountSchoolOutline" />
 					<span>{{ verified.users && verified.users.student }}</span>
-					<span>{{ $t("common.labels.students") }}</span>
+					<span>{{ t("common.labels.students") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<v-icon :icon="mdiHumanMaleBoard" />
 					<span>{{ verified.users && verified.users.teacher }}</span>
-					<span>{{ $t("common.labels.teacher.plural") }}</span>
+					<span>{{ t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<v-icon :icon="mdiShieldAccountVariantOutline" />
 					<span>{{ verified.users && verified.users.admin }}</span>
-					<span>{{ $t("common.labels.admin") }}</span>
+					<span>{{ t("common.labels.admin") }}</span>
 				</div>
 				<div class="icon-text-unit">
 					<v-icon :icon="mdiAccountEye" />
 					<span>{{ verified.classes && verified.classes.total }}</span>
-					<span>{{ $t("common.labels.classes") }}</span>
+					<span>{{ t("common.labels.classes") }}</span>
 				</div>
 			</div>
 			<p class="subtitle-text">
-				{{ $t("pages.administration.ldap.save.subtitle") }}
+				{{ t("pages.administration.ldap.save.subtitle") }}
 			</p>
 
 			<div v-if="verified.users.sample">
 				<p class="category-title">
-					{{ $t("pages.administration.ldap.save.example.user") }}
+					{{ t("pages.administration.ldap.save.example.user") }}
 				</p>
 				<div>
 					<table data-testid="ldapUsersActivateTable">
 						<tr v-if="verified.users.sample.roles">
-							<td>{{ $t("pages.administration.ldap.activate.roles") }}</td>
+							<td>{{ t("pages.administration.ldap.activate.roles") }}</td>
 							<td>{{ verified.users.sample.roles[0] }}</td>
 						</tr>
 
 						<tr v-if="verified.users.sample.lastName">
-							<td>{{ $t("pages.administration.ldap.activate.lastName") }}</td>
+							<td>{{ t("pages.administration.ldap.activate.lastName") }}</td>
 							<td>{{ verified.users.sample.lastName }}</td>
 						</tr>
 
 						<tr v-if="verified.users.sample.firstName">
 							<td>
-								{{ $t("pages.administration.ldap.activate.firstName") }}
+								{{ t("pages.administration.ldap.activate.firstName") }}
 							</td>
 							<td>{{ verified.users.sample.firstName }}</td>
 						</tr>
 
 						<tr v-if="verified.users.sample.email">
-							<td>{{ $t("pages.administration.ldap.activate.email") }}</td>
+							<td>{{ t("pages.administration.ldap.activate.email") }}</td>
 							<td>{{ verified.users.sample.email }}</td>
 						</tr>
 
 						<tr v-if="verified.users.sample.ldapUID">
-							<td>{{ $t("pages.administration.ldap.activate.uid") }}</td>
+							<td>{{ t("pages.administration.ldap.activate.uid") }}</td>
 							<td>{{ verified.users.sample.ldapUID }}</td>
 						</tr>
 
 						<tr v-if="verified.users.sample.ldapUUID">
-							<td>{{ $t("pages.administration.ldap.activate.uuid") }}</td>
+							<td>{{ t("pages.administration.ldap.activate.uuid") }}</td>
 							<td>{{ verified.users.sample.ldapUUID }}</td>
 						</tr>
 					</table>
@@ -74,18 +70,18 @@
 
 			<div v-if="verified.classes.sample">
 				<p class="category-title">
-					{{ $t("pages.administration.ldap.save.example.class") }}
+					{{ t("pages.administration.ldap.save.example.class") }}
 				</p>
 				<div>
 					<table data-testid="ldapClassesActivateTable">
 						<tr v-if="verified.classes.sample.className">
 							<td>
-								{{ $t("pages.administration.ldap.activate.className") }}
+								{{ t("pages.administration.ldap.activate.className") }}
 							</td>
 							<td>{{ verified.classes.sample.className }}</td>
 						</tr>
 						<tr v-if="verified.classes.sample.ldapDn">
-							<td>{{ $t("pages.administration.ldap.activate.dN") }}</td>
+							<td>{{ t("pages.administration.ldap.activate.dN") }}</td>
 							<td>{{ verified.classes.sample.ldapDn }}</td>
 						</tr>
 					</table>
@@ -97,29 +93,29 @@
 		</div>
 		<section v-if="showUserMigrationOption" class="section" data-testid="migrateUsersSection">
 			<h2 class="title-class">
-				{{ $t("pages.administration.ldap.activate.migrateExistingUsers.title") }}
+				{{ t("pages.administration.ldap.activate.migrateExistingUsers.title") }}
 			</h2>
 			<base-input
 				v-model="migrateUsersCheckbox"
 				type="checkbox"
-				:label="$t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')"
+				:label="t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')"
 				data-testid="migrateUsersCheckbox"
 			/>
 			<p>
-				{{ $t("pages.administration.ldap.activate.migrateExistingUsers.info") }}
+				{{ t("pages.administration.ldap.activate.migrateExistingUsers.info") }}
 			</p>
 		</section>
 		<div v-if="schoolErrors" class="errors-container">
 			<info-message
 				data-testid="school-migration-activation-error"
-				:message="$t('pages.administration.ldap.activate.migrateExistingUsers.error')"
+				:message="t('pages.administration.ldap.activate.migrateExistingUsers.error')"
 				type="bc-error"
 			/>
 		</div>
 		<div class="bottom-buttons">
 			<v-btn variant="text" data-testid="ldapBackButton" @click="backButtonHandler">
 				<v-icon size="20" class="mr-1">{{ mdiChevronLeft }}</v-icon>
-				{{ $t("common.actions.back") }}
+				{{ t("common.actions.back") }}
 			</v-btn>
 			<v-btn
 				color="primary"
@@ -128,28 +124,28 @@
 				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
 			>
-				{{ $t("pages.administration.ldap.save.example.synchronize") }}
+				{{ t("pages.administration.ldap.save.example.synchronize") }}
 			</v-btn>
 		</div>
 		<VDialog :model-value="submitted.ok" :persistent="true" data-testid="confirmModal">
 			<VCard>
 				<VCardText class="d-flex flex-column align-center text-center">
 					<VIcon size="60" color="success" :icon="mdiCheckCircle" />
-					<h2 class="mt-4">{{ $t("pages.administration.ldap.activate.message") }}</h2>
+					<h2 class="mt-4">{{ t("pages.administration.ldap.activate.message") }}</h2>
 				</VCardText>
 				<VCardActions>
 					<VBtn
 						variant="flat"
 						block
 						color="success"
-						:text="$t('pages.administration.ldap.activate.ok')"
+						:text="t('pages.administration.ldap.activate.ok')"
 						data-testid="ldapOkButton"
 						@click="okButtonHandler"
 					/>
 				</VCardActions>
 			</VCard>
 		</VDialog>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>
@@ -169,6 +165,8 @@ import {
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
 const redirectToConfigPage = (page) => {
@@ -180,10 +178,14 @@ const redirectToConfigPage = (page) => {
 	}
 };
 
-export default {
+export default defineComponent({
 	components: {
 		InfoMessage,
 		DefaultWireframe,
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {
@@ -227,15 +229,15 @@ export default {
 		breadcrumbs() {
 			return [
 				{
-					title: this.$t("pages.administration.school.index.title"),
+					title: this.t("pages.administration.school.index.title"),
 					to: "/administration/school-settings",
 				},
 				{
-					title: this.$t("pages.administration.ldap.index.title"),
+					title: this.t("pages.administration.ldap.index.title"),
 					href: this.ldapConfigRoute,
 				},
 				{
-					title: this.$t("pages.administration.ldap.activate.breadcrumb"),
+					title: this.t("pages.administration.ldap.activate.breadcrumb"),
 					disabled: true,
 				},
 			];
@@ -249,7 +251,7 @@ export default {
 	mounted() {
 		this.migrateUsersCheckbox = this.showUserMigrationOption;
 
-		document.title = buildPageTitle(this.$t("pages.administration.ldap.save.title"));
+		document.title = buildPageTitle(this.t("pages.administration.ldap.save.title"));
 	},
 	methods: {
 		backButtonHandler() {
@@ -285,7 +287,7 @@ export default {
 			});
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

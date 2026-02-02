@@ -3,11 +3,11 @@
 		<VTextField
 			v-model="data.title"
 			:focus="true"
-			:placeholder="$t('components.organisms.FormNews.input.title.placeholder')"
+			:placeholder="t('components.organisms.FormNews.input.title.placeholder')"
 			name="title"
 			:required="true"
 			data-testid="news_title"
-			:label="$t('components.organisms.FormNews.input.title.label')"
+			:label="t('components.organisms.FormNews.input.title.label')"
 			:rules="[validateOnOpeningTag]"
 		/>
 		<VFadeTransition>
@@ -15,18 +15,18 @@
 				<ClassicEditor
 					v-model="data.content"
 					class="mb-4 mt-13"
-					:placeholder="$t('components.organisms.FormNews.editor.placeholder')"
+					:placeholder="t('components.organisms.FormNews.editor.placeholder')"
 					@update:value="onUpdateValue"
 				/>
 				<VFadeTransition>
 					<div v-if="data.content">
 						<p class="mt-13">
-							{{ $t("components.organisms.FormNews.label.planned_publish") }}
+							{{ t("components.organisms.FormNews.label.planned_publish") }}
 						</p>
 						<base-input
 							v-model="data.date.date"
 							type="date"
-							:label="$t('common.labels.date')"
+							:label="t('common.labels.date')"
 							:class="{ hideCurrentDate: !data.date.date }"
 							data-testid="news_date"
 							placeholder="JJJJ-MM-TT"
@@ -34,7 +34,7 @@
 						<base-input
 							v-model="data.date.time"
 							type="time"
-							:label="$t('common.labels.time')"
+							:label="t('common.labels.time')"
 							:class="{ hideCurrentTime: !data.date.time }"
 							data-testid="news_time"
 							placeholder="HH:MM"
@@ -43,7 +43,7 @@
 				</VFadeTransition>
 				<FormActions>
 					<template #primary>
-						<v-btn
+						<VBtn
 							color="primary"
 							variant="flat"
 							type="submit"
@@ -51,16 +51,16 @@
 							:disabled="status === 'pending'"
 						>
 							<v-icon size="20" class="mr-1">{{ mdiCheck }}</v-icon>
-							{{ $t("common.actions.save") }}
-						</v-btn>
-						<v-btn v-if="news && news.id" variant="text" color="error" @click="onDelete">
+							{{ t("common.actions.save") }}
+						</VBtn>
+						<VBtn v-if="news && news.id" variant="text" color="error" @click="onDelete">
 							<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
-							{{ $t("common.actions.delete") }}
-						</v-btn>
-						<v-btn variant="text" @click="onCancel">
+							{{ t("common.actions.delete") }}
+						</VBtn>
+						<VBtn variant="text" @click="onCancel">
 							<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>
-							{{ $t("common.actions.discard") }}
-						</v-btn>
+							{{ t("common.actions.discard") }}
+						</VBtn>
 					</template>
 				</FormActions>
 			</div>
@@ -68,7 +68,7 @@
 	</form>
 	<ConfirmationDialog>
 		<template v-if="showDialogWarning" #alert>
-			<WarningAlert> {{ $t("components.organisms.FormNews.cancel.confirm.message") }}</WarningAlert>
+			<WarningAlert> {{ t("components.organisms.FormNews.cancel.confirm.message") }}</WarningAlert>
 		</template>
 	</ConfirmationDialog>
 </template>
@@ -86,6 +86,7 @@ import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dial
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import { defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -112,10 +113,12 @@ export default defineComponent({
 	setup() {
 		const { validateOnOpeningTag } = useOpeningTagValidator();
 		const { askConfirmation } = useConfirmationDialog();
+		const { t } = useI18n();
 
 		return {
 			askConfirmation,
 			validateOnOpeningTag,
+			t,
 		};
 	},
 	data(): {
@@ -163,16 +166,16 @@ export default defineComponent({
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
 				? undefined
-				: this.$t("components.organisms.FormNews.errors.missing_title").toString();
+				: this.t("components.organisms.FormNews.errors.missing_title").toString();
 
 			const titleOpeningTag =
 				this.validateOnOpeningTag(this.data.title) === true
 					? undefined
-					: this.$t("common.validation.containsOpeningTag").toString();
+					: this.t("common.validation.containsOpeningTag").toString();
 
 			const content = this.data.content
 				? undefined
-				: this.$t("components.organisms.FormNews.errors.missing_content").toString();
+				: this.t("components.organisms.FormNews.errors.missing_content").toString();
 
 			return {
 				title: title || titleOpeningTag,
@@ -227,7 +230,7 @@ export default defineComponent({
 			this.showDialogWarning = false;
 
 			const shouldCancel = await this.askConfirmation({
-				message: this.$t("components.organisms.FormNews.remove.confirm.message"),
+				message: this.t("components.organisms.FormNews.remove.confirm.message"),
 				confirmActionLangKey: "components.organisms.FormNews.remove.confirm.confirm",
 			});
 
@@ -237,7 +240,7 @@ export default defineComponent({
 			this.showDialogWarning = true;
 
 			const shouldCancel = await this.askConfirmation({
-				message: this.$t("components.organisms.FormNews.cancel.confirm.title"),
+				message: this.t("components.organisms.FormNews.cancel.confirm.title"),
 				confirmActionLangKey: "components.organisms.FormNews.cancel.confirm.confirm",
 			});
 

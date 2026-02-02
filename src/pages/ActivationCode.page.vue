@@ -8,7 +8,7 @@
 			@update:model-value="buttonHandler"
 		>
 			<template #icon>
-				<v-icon size="60">{{ activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline }}</v-icon>
+				<VIcon size="60">{{ activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline }}</VIcon>
 			</template>
 		</InfoModalFullWidth>
 	</section>
@@ -19,13 +19,19 @@ import InfoModalFullWidth from "@/components/legacy/InfoModalFullWidth.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
 import { logger } from "@util-logger";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
-export default {
+export default defineComponent({
 	components: {
 		InfoModalFullWidth,
 	},
 	layout: "loggedOut",
+	setup() {
+		const { t } = useI18n();
+		return { t };
+	},
 	data() {
 		return {
 			activated: false,
@@ -44,7 +50,7 @@ export default {
 			if (this.activated) {
 				switch (this.keyword) {
 					case "eMailAddress":
-						title = this.$t("pages.activation._activationCode.index.success.email");
+						title = this.t("pages.activation._activationCode.index.success.email");
 						break;
 
 					default:
@@ -53,7 +59,7 @@ export default {
 			} else {
 				switch (this.keyword) {
 					default:
-						title = this.$t("pages.activation._activationCode.index.error.title");
+						title = this.t("pages.activation._activationCode.index.error.title");
 						break;
 				}
 			}
@@ -62,7 +68,7 @@ export default {
 		getDescription() {
 			let description = "";
 			if (!this.activated) {
-				description = this.$t("pages.activation._activationCode.index.error.description");
+				description = this.t("pages.activation._activationCode.index.error.description");
 			}
 			return description;
 		},
@@ -90,7 +96,7 @@ export default {
 			this.showModal = true;
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

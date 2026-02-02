@@ -1,20 +1,20 @@
 <template>
 	<div>
-		<v-btn
+		<VBtn
 			:variant="round ? 'text' : 'elevated'"
 			:size="round ? 'small' : 'large'"
 			:icon="round ? true : false"
 			:color="btnColor"
 			:class="btnClass"
-			:aria-label="btnLabel ? btnLabel : $t('components.molecules.AddContentModal')"
+			:aria-label="btnLabel ? btnLabel : t('components.molecules.AddContentModal')"
 			:disabled="disabled"
 			@click.prevent="addResource"
 		>
-			<v-icon :class="{ 'mr-2': !round }">
+			<VIcon :class="{ 'mr-2': !round }">
 				{{ mdiPlusCircleOutline }}
-			</v-icon>
+			</VIcon>
 			{{ btnLabel }}
-		</v-btn>
+		</VBtn>
 		<AddContentModal
 			v-model:show-copy-modal="copyModalActive"
 			:updatedid="itemId"
@@ -28,8 +28,8 @@
 		<NotificationModal
 			v-model:show-notification-modal="notificationModal.visible"
 			:is-success="notificationModal.isSuccess"
-			:success-msg="$t('pages.content.notification.successMsg')"
-			:error-msg="$t('pages.content.notification.errorMsg')"
+			:success-msg="t('pages.content.notification.successMsg')"
+			:error-msg="t('pages.content.notification.errorMsg')"
 			@close="addResourceAndClose"
 		/>
 	</div>
@@ -44,6 +44,7 @@ import { $axios } from "@/utils/api";
 import { getID, getMediatype, getMetadataAttribute, getTitle, getUrl } from "@/utils/helpers";
 import { mdiPlusCircleOutline } from "@icons/material";
 import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 let slowAPICall;
 
@@ -63,6 +64,10 @@ export default defineComponent({
 		resource: { type: Object, default: () => ({}) },
 		disabled: { type: Boolean },
 		multiple: { type: Boolean },
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {

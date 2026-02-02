@@ -14,7 +14,7 @@
 			</VCardText>
 			<VCardActions>
 				<VBtn
-					:text="$t('common.actions.ok')"
+					:text="t('common.actions.ok')"
 					variant="flat"
 					block
 					:color="isSuccess ? 'success' : 'error'"
@@ -27,8 +27,10 @@
 
 <script>
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
+export default defineComponent({
 	name: "NotificationModal",
 	props: {
 		showNotificationModal: {
@@ -48,6 +50,12 @@ export default {
 		},
 	},
 	emits: ["update:show-notification-modal", "close"],
+	setup() {
+		const { t } = useI18n();
+		return {
+			t,
+		};
+	},
 	data() {
 		return {
 			mdiAlertCircle,
@@ -68,5 +76,5 @@ export default {
 			this.$emit("close");
 		},
 	},
-};
+});
 </script>

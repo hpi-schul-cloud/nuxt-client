@@ -7,13 +7,15 @@
 				<p class="text-center">{{ description }}</p>
 			</VCardText>
 			<VCardActions>
-				<VBtn :text="$t('common.actions.ok')" variant="flat" block color="primary" @click="close" />
+				<VBtn :text="t('common.actions.ok')" variant="flat" block color="primary" @click="close" />
 			</VCardActions>
 		</VCard>
 	</VDialog>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+
 withDefaults(
 	defineProps<{
 		title?: string;
@@ -28,6 +30,8 @@ withDefaults(
 const emit = defineEmits<{
 	(e: "update:model-value", value: boolean): void;
 }>();
+
+const { t } = useI18n();
 
 const close = () => {
 	emit("update:model-value", false);

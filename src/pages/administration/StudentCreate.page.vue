@@ -1,6 +1,6 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.administration.students.new.title')"
+		:headline="t('pages.administration.students.new.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
@@ -8,7 +8,7 @@
 			<template #inputs>
 				<v-text-field
 					v-model="date"
-					:label="$t('common.labels.birthdate')"
+					:label="t('common.labels.birthdate')"
 					:min="minDate"
 					:max="maxDate"
 					data-testid="input_create-student_birthdate"
@@ -19,12 +19,12 @@
 					v-model="sendRegistration"
 					name="switch"
 					class="mt-8"
-					:label="$t('pages.administration.students.new.checkbox.label')"
+					:label="t('pages.administration.students.new.checkbox.label')"
 					data-testid="input_create-student_send-registration"
 				/>
 			</template>
 			<template #errors>
-				<info-message v-if="businessError" :message="$t('pages.administration.students.new.error')" type="bc-error" />
+				<info-message v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
 		</form-create-user>
 	</default-wireframe>
@@ -38,13 +38,19 @@ import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
-export default {
+export default defineComponent({
 	components: {
 		FormCreateUser,
 		InfoMessage,
 		DefaultWireframe,
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {
@@ -56,11 +62,11 @@ export default {
 			sendRegistration: false,
 			breadcrumbs: [
 				{
-					title: this.$t("pages.administration.students.index.title"),
+					title: this.t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
-					title: this.$t("pages.administration.students.new.title"),
+					title: this.t("pages.administration.students.new.title"),
 					disabled: true,
 				},
 			],
@@ -75,7 +81,7 @@ export default {
 		this.$store.commit("users/resetBusinessError");
 	},
 	mounted() {
-		document.title = buildPageTitle(this.$t("pages.administration.students.new.title"));
+		document.title = buildPageTitle(this.t("pages.administration.students.new.title"));
 	},
 	methods: {
 		async createStudent(userData) {
@@ -89,14 +95,14 @@ export default {
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {
-				notifySuccess(this.$t("pages.administration.students.new.success"));
+				notifySuccess(this.t("pages.administration.students.new.success"));
 				this.$router.push({
 					path: `/administration/students`,
 				});
 			}
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
