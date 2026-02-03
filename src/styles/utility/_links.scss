@@ -1,4 +1,8 @@
 a {
   color: rgba(var(--v-theme-primary));
   text-decoration: none;
+
+  &:hover:not(.v-btn) {
+    text-decoration: underline;
+  }
 }
