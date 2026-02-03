@@ -1,10 +1,12 @@
 import { useAddCollaboraFile } from "../composables/add-collabora-file.composable";
 import AddCollaboraFileDialog from "./AddCollaboraFileDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { Dialog } from "@ui-dialog";
+import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick, ref } from "vue";
-import { VForm, VSelect } from "vuetify/lib/components/index";
+import { VForm, VSelect } from "vuetify/components";
 
 vi.mock("../composables/add-collabora-file.composable");
 const mockedCollaboraFileSelection = vi.mocked(useAddCollaboraFile);
@@ -15,6 +17,10 @@ mockedCollaboraFileSelection.mockReturnValue({
 });
 
 describe("CollaboraFileDialog", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const setupMocks = () => {
 		const { closeCollaboraFileDialog, isCollaboraFileDialogOpen } = mockedCollaboraFileSelection();
 
@@ -79,7 +85,7 @@ describe("CollaboraFileDialog", () => {
 		it("should have confirm button disabled initially", async () => {
 			const { wrapper } = await setup();
 
-			const dialog = wrapper.findComponent(Dialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			expect(dialog.props("confirmBtnDisabled")).toBe(true);
 		});
 
@@ -88,7 +94,10 @@ describe("CollaboraFileDialog", () => {
 				const { wrapper } = await setup();
 
 				const typeSelect = wrapper.findComponent(VSelect);
-				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				const selectOptions = typeSelect.props("items") as Array<{
+					title: string;
+					value: string;
+				}>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 				expect(typeSelect.find("input").element.value).toBe(selectOptions[0].title);
@@ -109,7 +118,10 @@ describe("CollaboraFileDialog", () => {
 				const { wrapper } = await setup();
 
 				const typeSelect = wrapper.findComponent(VSelect);
-				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				const selectOptions = typeSelect.props("items") as Array<{
+					title: string;
+					value: string;
+				}>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 
@@ -118,7 +130,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(false);
 			});
 		});
@@ -147,7 +159,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue(FILENAME);
 				await nextTick();
 
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
@@ -157,7 +169,10 @@ describe("CollaboraFileDialog", () => {
 				const { wrapper } = await setup();
 
 				const typeSelect = wrapper.findComponent(VSelect);
-				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				const selectOptions = typeSelect.props("items") as Array<{
+					title: string;
+					value: string;
+				}>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 
@@ -175,11 +190,14 @@ describe("CollaboraFileDialog", () => {
 				const { wrapper } = await setup();
 
 				const typeSelect = wrapper.findComponent(VSelect);
-				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				const selectOptions = typeSelect.props("items") as Array<{
+					title: string;
+					value: string;
+				}>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
@@ -189,7 +207,10 @@ describe("CollaboraFileDialog", () => {
 				const { wrapper } = await setup();
 
 				const typeSelect = wrapper.findComponent(VSelect);
-				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				const selectOptions = typeSelect.props("items") as Array<{
+					title: string;
+					value: string;
+				}>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 
@@ -197,7 +218,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue("invalid/filename");
 				await nextTick();
 
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				expect(dialog.props("confirmBtnDisabled")).toBe(true);
 			});
 		});
@@ -205,7 +226,7 @@ describe("CollaboraFileDialog", () => {
 		it("should close modal on close button click", async () => {
 			const { closeCollaboraFileDialog, wrapper } = await setup();
 
-			const dialog = wrapper.findComponent(Dialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			dialog.vm.$emit("cancel");
 
 			await nextTick();
@@ -218,7 +239,10 @@ describe("CollaboraFileDialog", () => {
 				const { wrapper } = await setup();
 
 				const typeSelect = wrapper.findComponent(VSelect);
-				const selectOptions = typeSelect.props("items") as Array<{ title: string; value: string }>;
+				const selectOptions = typeSelect.props("items") as Array<{
+					title: string;
+					value: string;
+				}>;
 				typeSelect.vm.$emit("update:modelValue", selectOptions[0].value);
 				await nextTick();
 
@@ -226,7 +250,7 @@ describe("CollaboraFileDialog", () => {
 				await fileNameInput.find("input").setValue("filename");
 				await nextTick();
 
-				const dialog = wrapper.findComponent(Dialog);
+				const dialog = wrapper.findComponent(SvsDialog);
 				await dialog.vm.$emit("after-leave");
 
 				expect(fileNameInput.find("input").element.value).toBe("");

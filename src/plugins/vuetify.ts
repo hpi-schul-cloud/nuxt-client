@@ -12,6 +12,11 @@ export default (i18n: ReturnType<typeof createI18n>) =>
 			adapter: createVueI18nAdapter({ i18n, useI18n }),
 		},
 		defaults: {
+			VDialog: {
+				VCardText: {
+					class: "text-body-1",
+				},
+			},
 			VAlert: { variant: "tonal" },
 			VAutocomplete: { color: "primary", variant: "underlined" },
 			VCheckbox: { color: "primary" },

@@ -5,6 +5,7 @@ import KebabMenuActionDownloadFiles from "./file-table/KebabMenuActionDownloadFi
 import RenameFileDialog from "./file-table/RenameFileDialog.vue";
 import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
+import RenameFolderDialog from "./RenameFolderDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
@@ -34,7 +35,7 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { ComputedRef, nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { VBtn, VCard, VSkeletonLoader } from "vuetify/lib/components/index";
+import { VBtn, VSkeletonLoader } from "vuetify/lib/components/index";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -603,9 +604,8 @@ describe("Folder.vue", () => {
 					const renameButton = wrapper.findComponent(KebabMenuActionRename);
 					await renameButton.trigger("click");
 
-					const renameDialog = wrapper.findComponent(VCard);
-					const confirmButton = renameDialog.find("[data-testid='dialog-confirm']");
-					await confirmButton.trigger("click");
+					const renameDialog = wrapper.findComponent(RenameFolderDialog);
+					renameDialog.vm.$emit("confirm", "Test Folder");
 
 					return {
 						folderStateMock,
@@ -627,10 +627,10 @@ describe("Folder.vue", () => {
 				it("should close the dialog", async () => {
 					const { wrapper } = await setup();
 
-					const renameDialog = wrapper.findComponent(VCard);
-					const cancelButton = renameDialog.find("[data-testid='dialog-cancel']");
-
-					expect(cancelButton.isVisible()).toBe(false);
+					const renameDialog = wrapper.findComponent(RenameFolderDialog);
+					renameDialog.vm.$emit("cancel");
+					await nextTick();
+					expect(renameDialog.props().isDialogOpen).toBe(false);
 				});
 
 				it("should emit 'update:folder-name' event", async () => {
@@ -695,9 +695,8 @@ describe("Folder.vue", () => {
 					const renameButton = wrapper.findComponent(KebabMenuActionRename);
 					await renameButton.trigger("click");
 
-					const renameDialog = wrapper.findComponent(VCard);
-					const cancelButton = renameDialog.find("[data-testid='dialog-cancel']");
-					await cancelButton.trigger("click");
+					const renameDialog = wrapper.findComponent(RenameFolderDialog);
+					renameDialog.vm.$emit("cancel");
 
 					return {
 						folderStateMock,
@@ -719,10 +718,10 @@ describe("Folder.vue", () => {
 				it("should close the dialog", async () => {
 					const { wrapper } = await setup();
 
-					const renameDialog = wrapper.findComponent(VCard);
-					const cancelButton = renameDialog.find("[data-testid='dialog-cancel']");
-
-					expect(cancelButton.isVisible()).toBe(false);
+					const renameDialog = wrapper.findComponent(RenameFolderDialog);
+					renameDialog.vm.$emit("cancel");
+					await nextTick();
+					expect(renameDialog.props().isDialogOpen).toBe(false);
 				});
 			});
 
