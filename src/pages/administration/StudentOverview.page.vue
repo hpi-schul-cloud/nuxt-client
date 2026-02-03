@@ -8,20 +8,14 @@
 				:description="$t('pages.administration.students.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
-
-			<base-input
+			<SearchField
 				v-model="searchQuery"
-				type="text"
+				class="mt-10 mb-2"
 				:placeholder="$t('pages.administration.students.index.searchbar.placeholder')"
-				class="search-section"
-				label=""
 				data-testid="searchbar"
+				aria-label="$t('pages.administration.students.index.searchbar.ariaLabel')"
 				@update:model-value="barSearch"
-			>
-				<template #icon>
-					<v-icon :icon="mdiMagnify" />
-				</template>
-			</base-input>
+			/>
 
 			<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
@@ -123,12 +117,12 @@ import {
 	mdiCloudDownload,
 	mdiDeleteOutline,
 	mdiEmailOutline,
-	mdiMagnify,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
+import { SearchField } from "@ui-search-field";
 import { printQrCodes } from "@util-browser";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";
@@ -140,6 +134,7 @@ export default {
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
+		SearchField,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -156,7 +151,6 @@ export default {
 			mdiCloudDownload,
 			mdiDeleteOutline,
 			mdiEmailOutline,
-			mdiMagnify,
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
@@ -557,6 +551,7 @@ export default {
 			}
 
 			this.timer = setTimeout(() => {
+				if (!searchText) searchText = "";
 				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
 					this.currentFilterQuery.searchQuery = searchText.trim();
 
@@ -620,12 +615,5 @@ button:not(.is-none):focus {
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
 		0 0 0 3px var(--button-background);
-}
-
-.search-section {
-	max-width: 100%;
-	margin-top: 8px;
-	margin-bottom: 8px;
-	margin-left: 0;
 }
 </style>

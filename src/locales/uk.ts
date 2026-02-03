@@ -1379,6 +1379,7 @@ export default {
 		"Ви дійсно хочете видалити цього учня?? | Ви дійсно хочете видалити цього {number} учня?",
 	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
+	"pages.administration.students.index.searchbar.ariaLabel": "Пошук учнів за іменами",
 	"pages.administration.students.index.searchbar.placeholder": "Перегляньте студентів для",
 	"pages.administration.students.index.tableActions.consent": "Згода в аналоговій формі",
 	"pages.administration.students.index.tableActions.delete": "Видалити",

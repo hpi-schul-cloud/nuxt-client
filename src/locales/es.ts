@@ -1393,6 +1393,7 @@ export default {
 		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
+	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
 	"pages.administration.students.index.searchbar.placeholder": "Buscar estudiantes",
 	"pages.administration.students.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.students.index.tableActions.delete": "Eliminar",
