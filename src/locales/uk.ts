@@ -1443,12 +1443,13 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.btnText": "Видалити викладача",
 	"pages.administration.teachers.index.remove.confirm.message.all": "Ви дійсно хочете видалити всіх викладачів?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
+		"Ви дійсно хочете видалити всіх викладачів, крім {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
-	"pages.administration.teachers.index.searchbar.placeholder": "Пошук",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Пошук викладачів за іменем",
+	"pages.administration.teachers.index.searchbar.placeholder": "Пошук викладачів",
 	"pages.administration.teachers.index.tableActions.consent": "Згода в аналоговій формі",
 	"pages.administration.teachers.index.tableActions.delete": "Видалити",
 	"pages.administration.teachers.index.tableActions.email": "Надіслати посилання для реєстрації електронною поштою",
