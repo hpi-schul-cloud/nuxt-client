@@ -127,7 +127,7 @@
 				{{ t("pages.administration.ldap.save.example.synchronize") }}
 			</VBtn>
 		</div>
-		<VDialog :model-value="submitted.ok" :persistent="true" data-testid="confirmModal">
+		<VDialog :model-value="submitted.ok" :persistent="true" data-testid="confirmModal" width="480">
 			<VCard>
 				<VCardText class="d-flex flex-column align-center text-center">
 					<VIcon size="60" color="success" :icon="mdiCheckCircle" />
