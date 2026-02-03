@@ -1458,12 +1458,13 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.message.all":
 		"¿Estás seguro de que deseas eliminar a todos los profesores?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
+		"¿Estás seguro de que deseas eliminar a todos los profesores excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este profesor: en? | ¿Estás seguro de que deseas eliminar a este profesor de {number}?",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
-	"pages.administration.teachers.index.searchbar.placeholder": "Buscar",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",
+	"pages.administration.teachers.index.searchbar.placeholder": "Buscar profesores",
 	"pages.administration.teachers.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.teachers.index.tableActions.delete": "Eliminar",
 	"pages.administration.teachers.index.tableActions.email": "Enviar los enlaces de registro por correo electrónico",

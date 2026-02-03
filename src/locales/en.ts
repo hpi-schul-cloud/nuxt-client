@@ -1425,12 +1425,13 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.btnText": "Delete teacher",
 	"pages.administration.teachers.index.remove.confirm.message.all": "Are you sure you want to delete all teachers?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Are you sure you want to delete all students except {number}?",
+		"Are you sure you want to delete all teachers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher: in? | Are you sure you want to delete this {number} teacher?",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
-	"pages.administration.teachers.index.searchbar.placeholder": "Search",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",
+	"pages.administration.teachers.index.searchbar.placeholder": "Search teachers",
 	"pages.administration.teachers.index.tableActions.consent": "Analogue consent form",
 	"pages.administration.teachers.index.tableActions.delete": "Delete",
 	"pages.administration.teachers.index.tableActions.email": "Send registration links by e-mail",

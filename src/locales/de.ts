@@ -1451,12 +1451,13 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.message.all":
 		"Bist du sicher, dass du alle Lehrkräfte löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
+		"Bist du sicher, dass du alle Lehrkräfte bis auf {number} löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diesen Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkraft löschen möchtest?",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
-	"pages.administration.teachers.index.searchbar.placeholder": "Lehrkräfte durchsuchen nach",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",
+	"pages.administration.teachers.index.searchbar.placeholder": "Lehrkräfte durchsuchen",
 	"pages.administration.teachers.index.tableActions.consent": "Analoge Einverständniserklärung",
 	"pages.administration.teachers.index.tableActions.delete": "Löschen",
 	"pages.administration.teachers.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
