@@ -49,9 +49,9 @@
 								<br />
 								{{ $t("pages.administration.students.infobox.LDAP.paragraph-4") }}
 								<a
-									style="color: rgba(var(--v-theme-white)); text-decoration: underline"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
+									class="text-white"
 								>
 									{{ $t("pages.administration.students.infobox.LDAP.helpsection") }}.
 								</a>
@@ -69,7 +69,7 @@
 										{{ $t("pages.administration.students.infobox.li-3") }}
 									</li>
 									<a
-										style="color: rgba(var(--v-theme-white)); text-decoration: underline"
+										class="text-white"
 										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
 										target="_blank"
 									>
@@ -87,7 +87,7 @@
 							</div>
 						</template>
 					</info-box>
-					<info-box v-else v-model:active="infoBoxActive" class="info-box">
+					<info-box v-model:active="infoBoxActive" class="info-box">
 						<template #header>{{ $t("pages.administration.students.infobox.registrationOnly.headline") }}</template>
 						<template #body>
 							<div class="content">
@@ -194,7 +194,7 @@ export default {
 	emits: ["update:current-page-selection-state", "update:sort", "update:sort-by", "update:sort-order"],
 	data() {
 		return {
-			infoBoxActive: false,
+			infoBoxActive: true,
 			mdiAlert,
 			mdiMenuDownOutline,
 			mdiInformation,
