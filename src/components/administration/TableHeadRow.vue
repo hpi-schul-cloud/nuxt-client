@@ -87,7 +87,7 @@
 							</div>
 						</template>
 					</info-box>
-					<info-box v-model:active="infoBoxActive" class="info-box">
+					<info-box v-else v-model:active="infoBoxActive" class="info-box">
 						<template #header>{{ $t("pages.administration.students.infobox.registrationOnly.headline") }}</template>
 						<template #body>
 							<div class="content">
@@ -194,7 +194,7 @@ export default {
 	emits: ["update:current-page-selection-state", "update:sort", "update:sort-by", "update:sort-order"],
 	data() {
 		return {
-			infoBoxActive: true,
+			infoBoxActive: false,
 			mdiAlert,
 			mdiMenuDownOutline,
 			mdiInformation,
