@@ -2,13 +2,14 @@ import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { injectStrict } from "@/utils/inject";
 import { COPY_MODULE_KEY } from "@/utils/inject/injection-keys";
-import { notifyError, notifyInfo, notifySuccess } from "@data-app";
+import { notifyError, notifyInfo, notifySuccess, useLoadingStore } from "@data-app";
 import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
+export function useCopy() {
 	const copyModule = injectStrict(COPY_MODULE_KEY);
 	const { t } = useI18n();
+	const { setLoadingState } = useLoadingStore();
 
 	const backgroundCopyProcesses: Ref<CopyParams[]> = ref([]);
 
@@ -34,7 +35,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	};
 
 	const copy = async (copyParams: CopyParams) => {
-		isLoadingDialogOpen.value = true;
+		setLoadingState(true, { text: t("components.molecules.copyResult.title.loading") });
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
 			if (copyParams.type !== CopyParamsTypeEnum.Course && copyResult?.status === CopyApiResponseStatusEnum.Success) {
@@ -48,7 +49,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 			markBackgroundCopyProcess(copyParams);
 			notifyInfo(t("components.molecules.copyResult.timeoutCopy"), false);
 		} finally {
-			isLoadingDialogOpen.value = false;
+			setLoadingState(false);
 		}
 	};
 
