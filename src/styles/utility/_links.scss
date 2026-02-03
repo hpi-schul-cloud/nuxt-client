@@ -2,7 +2,7 @@ a {
   color: rgba(var(--v-theme-primary));
   text-decoration: none;
 
-  &:hover:not(.v-btn) {
+  &:hover:not(.v-btn):not(.v-list-item) {
     text-decoration: underline;
   }
 }
