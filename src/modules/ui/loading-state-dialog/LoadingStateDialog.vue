@@ -18,24 +18,17 @@
 	</div>
 </template>
 
-<script>
-import { computed, defineComponent, inject } from "vue";
+<script setup lang="ts">
+import { useLoadingStore } from "@data-app";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 
-export default defineComponent({
-	name: "LoadingStateDialog",
-	setup() {
-		const loadingStateModule = inject("loadingStateModule");
-		const loadingState = computed(() => loadingStateModule.getLoadingState);
+const loadingStore = useLoadingStore();
+const { loadingState, isLoading } = storeToRefs(loadingStore);
+const { setLoadingState } = loadingStore;
 
-		const isDialogOpen = computed({
-			get: () => loadingStateModule.getIsOpen,
-			set: () => loadingStateModule.close(),
-		});
-
-		return {
-			loadingState,
-			isDialogOpen,
-		};
-	},
+const isDialogOpen = computed({
+	get: () => isLoading.value,
+	set: () => setLoadingState(false),
 });
 </script>

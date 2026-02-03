@@ -29,12 +29,11 @@
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectDestinationModal from "./SelectDestinationModal.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
-import { useLoadingState } from "@/composables/loadingState";
 import { BoardExternalReferenceType, ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3/api";
 import { ImportDestinationItem } from "@/store/types/rooms";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { COPY_MODULE_KEY, injectStrict, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
-import { notifyError } from "@data-app";
+import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifyError, useLoadingStore } from "@data-app";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -62,7 +61,8 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const copyModule = injectStrict(COPY_MODULE_KEY);
-const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
+
+const { setLoadingState } = useLoadingStore();
 
 const parentName = ref("");
 const parentType = ref<ShareTokenInfoResponseParentTypeEnum>(ShareTokenInfoResponseParentTypeEnum.Lessons);
@@ -81,12 +81,16 @@ const isCopyResultModalOpen = computed({
 const copyResultModalItems = computed(() => copyModule.getCopyResultFailedItems);
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.import.options.loadingMessage"));
-
 const openModal = (modalName: string) => {
 	isSelectCourseModalOpen.value = modalName === "selectCourse";
 	isImportModalOpen.value = modalName === "import";
-	isLoadingDialogOpen.value = modalName === "loading";
+	if (modalName === "loading") {
+		setLoadingState(true, {
+			text: t("components.molecules.import.options.loadingMessage"),
+		});
+	} else {
+		setLoadingState(false);
+	}
 	isCopyResultModalOpen.value = modalName === "result";
 };
 
@@ -153,7 +157,7 @@ async function startImport(name: string) {
 			destinationId: destinationId.value,
 		});
 		if (copyResultModalItems.value.length === 0) {
-			loadingStateModule.close();
+			setLoadingState(false);
 			emit("success", newName.value, destinationId.value);
 			copyModule.reset();
 		} else {
