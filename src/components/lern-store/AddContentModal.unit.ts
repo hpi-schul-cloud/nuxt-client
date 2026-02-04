@@ -5,10 +5,13 @@ import { initializeAxios } from "@/utils/api";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import { VBtn, VSelect } from "vuetify/lib/components/index";
+import { VSelect } from "vuetify/components";
 import { createStore } from "vuex";
 
 const testProps = {
@@ -103,7 +106,7 @@ const createMockStore = () => {
 	return { mockStore, createStudentStub };
 };
 
-describe("@/components/molecules/AddContentModal", () => {
+describe("@/components/lern-store/AddContentModal", () => {
 	const setup = (props: {
 		showCopyModal: boolean;
 		resource: {
@@ -136,10 +139,14 @@ describe("@/components/molecules/AddContentModal", () => {
 		return { wrapper };
 	};
 
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	describe("Component Initialization", () => {
 		it("nothing selected submit should be disabled", async () => {
 			const { wrapper } = setup(testProps);
-			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
+			const submitBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 
 			expect(wrapper.vm.isSendEnabled).toBe(false);
 			expect(submitBtn.exists()).toBe(true);
@@ -154,7 +161,7 @@ describe("@/components/molecules/AddContentModal", () => {
 				selectedLesson: lessonsMock[0],
 			});
 			await nextTick();
-			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
+			const submitBtn = wrapper.findComponent('[data-testid="dialog-confirm"]');
 
 			expect(wrapper.vm.isSendEnabled).toBe(true);
 			expect(submitBtn.attributes().disabled).toBeUndefined();
@@ -186,8 +193,8 @@ describe("@/components/molecules/AddContentModal", () => {
 			expect(wrapper.vm.isSendEnabled).toBe(true);
 
 			await nextTick();
-			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
-			await submitBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 			expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBe(false);
@@ -202,8 +209,8 @@ describe("@/components/molecules/AddContentModal", () => {
 			expect(wrapper.vm.isSendEnabled).toBe(true);
 
 			await nextTick();
-			const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
-			await submitBtn.trigger("click");
+			const dialog = wrapper.findComponent(SvsDialog);
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 			expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBe(false);
@@ -211,7 +218,7 @@ describe("@/components/molecules/AddContentModal", () => {
 
 		it("cancel modal action", async () => {
 			const { wrapper } = setup(testProps);
-			const cancelBtn = wrapper.findComponent(VBtn);
+			const dialog = wrapper.findComponent(SvsDialog);
 			const courseSelection = wrapper.findAllComponents(VSelect)[0];
 			const lessonSelection = wrapper.findAllComponents(VSelect)[1];
 
@@ -223,7 +230,7 @@ describe("@/components/molecules/AddContentModal", () => {
 			expect(lessonSelection.props("modelValue")).toEqual(lessonsMock[0]._id);
 			expect(courseSelection.props("modelValue")).toEqual(courseOptions[0]._id);
 
-			await cancelBtn.trigger("click");
+			await dialog.vm.$emit("cancel");
 
 			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 			expect(lessonSelection.props("modelValue")).toBeNull();

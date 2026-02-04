@@ -1,26 +1,26 @@
 import LoadingModal from "./LoadingModal.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VBtn } from "vuetify/lib/components/index";
+import { VBtn, VCard, VDialog, VProgressCircular } from "vuetify/components";
 
-describe("@/components/molecules/LoadingModal", () => {
-	it(`check props are set correctly `, () => {
+describe("@/components/lern-store/LoadingModal", () => {
+	it(`should render correctly `, () => {
 		const wrapper = mount(LoadingModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			props: {
-				title: "title",
-				description: "description",
-				btnText: "button",
-				active: true,
+				modelValue: true,
 			},
 		});
 
-		const info = wrapper.findComponent(ModalBodyInfo);
-		const btn = wrapper.findComponent(VBtn);
+		const dialogContent = wrapper.findComponent(VDialog).findComponent(VCard);
 
-		expect(info.props("title")).toContain("title");
-		expect(info.props("description")).toContain("description");
-		expect(btn.text()).toContain("button");
+		const spinner = dialogContent.findComponent(VProgressCircular);
+		const title = dialogContent.find("h2");
+		const cancelButton = dialogContent.findComponent(VBtn);
+
+		expect(spinner.exists()).toBe(true);
+		expect(title.text()).toBe("pages.content.notification.loading");
+		expect(cancelButton.exists()).toBe(true);
+		expect(cancelButton.text()).toBe("common.actions.cancel");
 	});
 });

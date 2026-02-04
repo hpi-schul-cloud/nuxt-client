@@ -1,27 +1,19 @@
 <template>
-	<base-modal v-bind="$attrs">
-		<template #body>
-			<modal-body-info :title="title" :description="description" />
-			<VProgressLinear :model-value="percent" height="15" bg-color="grey-lighten-1" class="rounded" />
-		</template>
-	</base-modal>
+	<VDialog width="480">
+		<VCard>
+			<VCardText class="d-flex flex-column align-center">
+				<h2>{{ title }}</h2>
+				<p>{{ description }}</p>
+				<VProgressLinear :model-value="percent" height="15" bg-color="grey-lighten-1" class="rounded mt-4" />
+			</VCardText>
+		</VCard>
+	</VDialog>
 </template>
-<script setup lang="ts">
-import BaseModal from "@/components/base/BaseModal.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 
-type Props = {
+<script setup lang="ts">
+defineProps<{
 	title: string;
 	description: string;
 	percent: number;
-};
-
-defineProps<Props>();
+}>();
 </script>
-
-<style lang="scss" scoped>
-.rounded,
-:deep(.v-progress-linear__determinate) {
-	border-radius: 100vmax !important;
-}
-</style>
