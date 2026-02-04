@@ -36,16 +36,16 @@
 				</div>
 				<div class="author-provider">
 					<span v-if="hasAuthor">
-						<base-link :href="'/content/?q=' + author" class="content-link">
+						<a :href="'/content/?q=' + author" class="content-link">
 							{{ author }}
-						</base-link>
+						</a>
 						({{ $t("pages.content._id.metadata.author") }})
 					</span>
 					<span v-if="provider">
 						<span v-if="hasAuthor">,</span>
-						<base-link :href="'/content/?q=' + provider" class="content-link">
+						<a :href="'/content/?q=' + provider" class="content-link">
 							{{ provider }}
-						</base-link>
+						</a>
 						({{ $t("pages.content._id.metadata.provider") }})
 					</span>
 				</div>
@@ -102,7 +102,7 @@
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
 								<span v-for="(tag, index) in tags" :key="index" class="meta-text">
-									<base-link :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </base-link>
+									<a :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </a>
 								</span>
 							</div>
 						</template>
@@ -116,9 +116,9 @@
 						<div class="meta-icon">
 							<v-icon class="custom-icon meta-icon">$ic_collection</v-icon>
 						</div>
-						<base-link design="none" type="button" class="meta-text link" :to="collectionLink">
-							<span>{{ $t("pages.content.card.collection") }}</span>
-						</base-link>
+						<VBtn class="meta-text link" :to="collectionLink">
+							{{ $t("pages.content.card.collection") }}
+						</VBtn>
 					</div>
 				</div>
 			</div>
@@ -137,7 +137,6 @@
 
 <script>
 import UserHasRole from "./UserHasRole.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton.vue";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
 import { printDateFromTimestamp } from "@/plugins/datetime";
@@ -152,7 +151,6 @@ const DEFAULT_AUTHOR = "admin";
 export default {
 	components: {
 		AddContentButton,
-		BaseLink,
 		LernStorePlayer,
 		UserHasRole,
 		RenderHTML,
