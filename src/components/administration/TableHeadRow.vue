@@ -46,9 +46,9 @@
 								<br />
 								{{ $t("pages.administration.students.infobox.LDAP.paragraph-4") }}
 								<a
+									class="text-white"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
-									class="text-white"
 								>
 									{{ $t("pages.administration.students.infobox.LDAP.helpsection") }}.
 								</a>
