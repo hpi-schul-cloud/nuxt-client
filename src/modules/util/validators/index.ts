@@ -1,4 +1,5 @@
 import { containsInvalidCharacters, useInvalidCharactersValidator } from "./invalidCharactersValidator";
+import { isValidLdapPath, isValidLdapUrl, isValidSecuredLdapUrl } from "./ldapValidators";
 import {
 	containsOpeningTagFollowedByString,
 	hasNoOpeningTagFollowedByString,
@@ -33,6 +34,9 @@ export {
 	isRequired,
 	isValidDateFormat,
 	isValidEmail,
+	isValidLdapPath,
+	isValidLdapUrl,
+	isValidSecuredLdapUrl,
 	isValidTimeFormat,
 	isValidUrl,
 	useInvalidCharactersValidator,
