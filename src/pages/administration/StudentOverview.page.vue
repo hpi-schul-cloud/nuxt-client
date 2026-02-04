@@ -88,6 +88,15 @@
 					</VBtn>
 				</template>
 			</BackendDataTable>
+			<InfoAlert
+				v-if="!hasCreatePermission"
+				class="mb-4"
+				:class="{ 'mt-4': !hasCreatePermission }"
+				data-testid="admin-class-info-alert"
+				alert-title="pages.administration.classes.thr.hint.title"
+			>
+				{{ t("pages.administration.classes.thr.hint.text") }}
+			</InfoAlert>
 			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 		</DefaultWireframe>
 		<ConfirmationDialog />
@@ -119,6 +128,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
@@ -134,6 +144,7 @@ export default defineComponent({
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
+		InfoAlert,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -147,6 +158,7 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			hasCreatePermission: this.userHasPermission(Permission.StudentCreate),
 			mdiAccountPlus,
 			mdiAlert,
 			mdiCheck,
