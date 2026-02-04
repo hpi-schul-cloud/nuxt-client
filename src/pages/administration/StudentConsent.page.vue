@@ -56,12 +56,11 @@
 						/>
 					</template>
 					<template #datacolumn-password="slotProps">
-						<base-input
+						<VTextField
 							:model-value="slotProps.data"
-							type="text"
-							label=""
+							hide-details
+							density="compact"
 							data-testid="password-input"
-							class="base-input"
 							@update:model-value="
 								inputPass({
 									id: tableData[slotProps.rowindex]._id,
@@ -570,18 +569,6 @@ export default defineComponent({
 	.info-line {
 		display: none;
 	}
-
-	.input-line {
-		.icon-behind {
-			display: none;
-		}
-	}
-}
-
-:deep(.base-input) {
-	max-width: 10em;
-	margin-bottom: 16px;
-	margin-left: 8px;
 
 	.input-line {
 		.icon-behind {
