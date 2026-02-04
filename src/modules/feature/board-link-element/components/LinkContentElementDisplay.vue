@@ -68,9 +68,6 @@ const isSmallOrLargerListBoard = computed(() => smAndUp.value && isListLayout.va
 </script>
 
 <style scoped>
-a {
-	text-decoration: none;
-}
 .menu {
 	position: absolute;
 	right: 10px;
