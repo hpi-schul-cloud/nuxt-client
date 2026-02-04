@@ -31,7 +31,6 @@ describe("NavigationBar", () => {
 		const wrapper = mount(NavigationBar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: ["base-link"],
 			},
 			props: {
 				links: navbarLinks,

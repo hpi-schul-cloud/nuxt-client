@@ -4,7 +4,6 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -175,7 +174,6 @@ describe("teachers/index", () => {
 				},
 				components: {
 					"base-input": BaseInput,
-					"base-link": BaseLink,
 					"base-dialog": BaseDialog,
 					"base-modal": BaseModal,
 				},

@@ -10,14 +10,14 @@
 				Keßlerstraße 52<br />
 				31134 Hildesheim<br />
 				E-Mail:
-				<base-link href="mailto:poststelle@nlq.niedersachsen.de">poststelle@nlq.niedersachsen.de</base-link><br />
+				<a href="mailto:poststelle@nlq.niedersachsen.de">poststelle@nlq.niedersachsen.de</a><br />
 				Telefon: 05121 1695-0<br />
 				Telefax: 05121 1695-297
 			</p>
 			<p>
 				<b>Support-Anfragen</b> richten Sie bitte direkt an
-				<base-link :href="mailtoSupportMail" data-testid="support-mail">{{ supportMail }}</base-link
-				>.
+				<a :href="mailtoSupportMail" data-testid="support-mail">{{ supportMail }}</a>
+				.
 			</p>
 			<h2>Verantwortliche</h2>
 			<p>Vertretungsberechtigte Verantwortliche gemäß § 5 DDG und § 18 MStV:</p>
@@ -32,7 +32,7 @@
 				Keßlerstraße 52<br />
 				31134 Hildesheim<br />
 				E-Mail:
-				<base-link href="mailto:datenschutz@nlq.niedersachsen.de">datenschutz@nlq.niedersachsen.de</base-link><br />
+				<a href="mailto:datenschutz@nlq.niedersachsen.de">datenschutz@nlq.niedersachsen.de</a><br />
 				Tel.: 05121 1695-0
 			</p>
 			<h2>Rechtliche Hinweise</h2>
@@ -96,7 +96,7 @@ const supportMail: ComputedRef<string> = computed(() => {
 const mailtoSupportMail: ComputedRef<string> = computed(() => `mailto:${supportMail.value}`);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .impressum-container {
 	display: flex;
 	justify-content: center;
