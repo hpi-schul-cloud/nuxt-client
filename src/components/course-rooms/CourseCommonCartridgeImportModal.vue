@@ -87,9 +87,7 @@ function onCancel(): void {
 
 async function onConfirm(): Promise<void> {
 	commonCartridgeImportModule.setIsOpen(false);
-	setLoadingState(true, {
-		text: t("pages.rooms.ccImportCourse.loading"),
-	});
+	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
 
 	if (file.value) {
 		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);

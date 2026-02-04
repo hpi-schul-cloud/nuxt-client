@@ -85,9 +85,7 @@ const openModal = (modalName: string) => {
 	isSelectCourseModalOpen.value = modalName === "selectCourse";
 	isImportModalOpen.value = modalName === "import";
 	if (modalName === "loading") {
-		setLoadingState(true, {
-			text: t("components.molecules.import.options.loadingMessage"),
-		});
+		setLoadingState(true, t("components.molecules.import.options.loadingMessage"));
 	} else {
 		setLoadingState(false);
 	}

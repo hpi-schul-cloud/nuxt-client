@@ -43,9 +43,7 @@ const onCancelCopy = () => {
 
 const onConfirmCopy = async () => {
 	isRoomCopyInfoDialogOpen.value = false;
-	setLoadingState(true, {
-		text: t("data-room.copy.loading"),
-	});
+	setLoadingState(true, t("data-room.copy.loading"));
 
 	const { result } = await copyRoom(props.room?.id);
 

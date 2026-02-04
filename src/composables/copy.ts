@@ -35,7 +35,7 @@ export function useCopy() {
 	};
 
 	const copy = async (copyParams: CopyParams) => {
-		setLoadingState(true, { text: t("components.molecules.copyResult.title.loading") });
+		setLoadingState(true, t("components.molecules.copyResult.title.loading"));
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
 			if (copyParams.type !== CopyParamsTypeEnum.Course && copyResult?.status === CopyApiResponseStatusEnum.Success) {

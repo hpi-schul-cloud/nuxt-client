@@ -1,21 +1,14 @@
 <template>
-	<div>
-		<v-dialog
-			v-model="isDialogOpen"
-			width="300"
-			:scrim="!loadingState.hasOverlay"
-			:persistent="loadingState.isPersistent"
-		>
-			<v-card class="px-2 py-3">
-				<v-card-text class="pb-0">
-					<div class="mb-2 text-center" data-testid="dialog-text">
-						{{ loadingState.text }}
-					</div>
-					<v-progress-linear indeterminate color="primary" class="mb-2" />
-				</v-card-text>
-			</v-card>
-		</v-dialog>
-	</div>
+	<VDialog v-model="isDialogOpen" width="300" :scrim="false" persistent>
+		<VCard class="px-2 py-3">
+			<VCardText class="pb-0">
+				<div class="mb-2 text-center" data-testid="dialog-text">
+					{{ loadingText }}
+				</div>
+				<VProgressLinear indeterminate class="mb-2" />
+			</VCardText>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +17,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
 const loadingStore = useLoadingStore();
-const { loadingState, isLoading } = storeToRefs(loadingStore);
+const { loadingText, isLoading } = storeToRefs(loadingStore);
 const { setLoadingState } = loadingStore;
 
 const isDialogOpen = computed({
