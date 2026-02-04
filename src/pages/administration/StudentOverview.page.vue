@@ -104,6 +104,7 @@ import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
+import { useBulkConsent } from "@/composables/bulkConsent.composable";
 import { printDate } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -141,6 +142,12 @@ export default {
 		showExternalSyncHint: {
 			type: Boolean,
 		},
+	},
+	setup() {
+		const bulkConsent = useBulkConsent();
+		return {
+			bulkConsent,
+		};
 	},
 	data() {
 		return {
@@ -463,7 +470,7 @@ export default {
 			};
 		},
 		handleBulkConsent(rowIds, selectionType) {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
+			this.bulkConsent.setSelectedStudents({
 				students: this.tableSelection,
 				selectionType: selectionType,
 			});

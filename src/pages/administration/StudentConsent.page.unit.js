@@ -7,7 +7,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { createStore } from "vuex";
 
 const mockData = [
@@ -41,6 +41,18 @@ const mockData = [
 	},
 ];
 
+// Mock the composable
+vi.mock("@/composables/bulkConsent.composable", () => ({
+	useBulkConsent: () => ({
+		selectedStudentsData: ref(mockData),
+		selectedStudents: ref(["60c220e2d03a60006502f272", "60c220f4d03a60006502f500"]),
+		findConsentUsers: vi.fn(),
+		updateStudent: vi.fn(),
+		register: vi.fn(),
+		setSelectedStudents: vi.fn(),
+	}),
+}));
+
 const specificFilesMock = {
 	privacy:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
@@ -52,27 +64,6 @@ const specificFilesMock = {
 const createMockStore = () => {
 	const storeOptions = {
 		modules: {
-			bulkConsent: {
-				namespaced: true,
-				actions: {
-					register: vi.fn(),
-					updateStudent: vi.fn(),
-					setStudents: vi.fn(),
-					findConsentUsers: vi.fn(),
-				},
-				getters: {
-					getSelectedStudentsData: () => mockData,
-					getSelectedStudents: () => ["60c220e2d03a60006502f272", "60c220f4d03a60006502f500"],
-				},
-
-				mutations: {
-					setSelectedStudents: vi.fn(),
-					setRegisteredStudents: vi.fn(),
-					setStudentsData: vi.fn(),
-					updateStudentData: vi.fn(),
-					setRegisterError: vi.fn(),
-				},
-			},
 			filePaths: {
 				namespaced: true,
 				getters: {
@@ -83,13 +74,13 @@ const createMockStore = () => {
 	};
 
 	const mockStore = createStore(storeOptions);
-	const bulkConsentActionsStubs = storeOptions.modules.bulkConsent.actions;
 
-	return { mockStore, bulkConsentActionsStubs };
+	return { mockStore };
 };
 
 const setup = () => {
-	const { mockStore, bulkConsentActionsStubs } = createMockStore();
+	const { mockStore } = createMockStore();
+
 	const wrapper = mount(ConsentPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -103,7 +94,7 @@ const setup = () => {
 			},
 		},
 	});
-	return { wrapper, bulkConsentActionsStubs };
+	return { wrapper };
 };
 
 describe("students/consent", () => {
@@ -119,10 +110,12 @@ describe("students/consent", () => {
 		mockData[0].birthday = null;
 	});
 
-	it("should dispatch the users findConsentUsers action on load", () => {
-		const { bulkConsentActionsStubs } = setup();
+	it("should dispatch the users findConsentUsers action on load", async () => {
+		const { useBulkConsent } = await import("@/composables/bulkConsent.composable");
+		const mockComposable = useBulkConsent();
+		setup();
 
-		expect(bulkConsentActionsStubs.findConsentUsers).toHaveBeenCalled();
+		expect(mockComposable.findConsentUsers).toHaveBeenCalled();
 	});
 
 	it("should display StepProgress component", () => {
@@ -152,7 +145,9 @@ describe("students/consent", () => {
 	});
 
 	it("should call inputPass method when password input element's value change", async () => {
-		const { wrapper, bulkConsentActionsStubs } = setup();
+		const { useBulkConsent } = await import("@/composables/bulkConsent.composable");
+		const mockComposable = useBulkConsent();
+		const { wrapper } = setup();
 
 		await nextTick();
 		await nextTick();
@@ -161,11 +156,13 @@ describe("students/consent", () => {
 		await input.trigger("change");
 
 		expect(input.exists()).toBe(true);
-		expect(bulkConsentActionsStubs.updateStudent).toHaveBeenCalled();
+		expect(mockComposable.updateStudent).toHaveBeenCalled();
 	});
 
 	it("should call inputDate method when birthday input element's value change", async () => {
-		const { wrapper, bulkConsentActionsStubs } = setup();
+		const { useBulkConsent } = await import("@/composables/bulkConsent.composable");
+		const mockComposable = useBulkConsent();
+		const { wrapper } = setup();
 
 		await nextTick();
 		await nextTick();
@@ -174,7 +171,7 @@ describe("students/consent", () => {
 		await input.trigger("change");
 
 		expect(input.exists()).toBe(true);
-		expect(bulkConsentActionsStubs.updateStudent).toHaveBeenCalled();
+		expect(mockComposable.updateStudent).toHaveBeenCalled();
 	});
 
 	it("should appear the validation error if birthdayWarning is set to true", async () => {

@@ -243,6 +243,7 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
+import { useBulkConsent } from "@/composables/bulkConsent.composable";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -257,6 +258,12 @@ export default {
 		BackendDataTable,
 		StepProgress,
 		ModalBodyInfo,
+	},
+	setup() {
+		const bulkConsent = useBulkConsent();
+		return {
+			bulkConsent,
+		};
 	},
 	data() {
 		return {
@@ -385,9 +392,9 @@ export default {
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 			};
-			await this.$store.dispatch("bulkConsent/findConsentUsers", query);
+			await this.bulkConsent.findConsentUsers(query);
 
-			this.tableData = this.$store.getters["bulkConsent/getSelectedStudentsData"];
+			this.tableData = this.bulkConsent.selectedStudentsData;
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
@@ -395,10 +402,10 @@ export default {
 			this.find();
 		},
 		inputDate(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
+			this.bulkConsent.updateStudent(student);
 		},
 		inputPass(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
+			this.bulkConsent.updateStudent(student);
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -440,7 +447,7 @@ export default {
 					}),
 					this
 				);
-				this.$store.dispatch("bulkConsent/register", users);
+				this.bulkConsent.register(users);
 
 				notifySuccess(this.$t("pages.administration.students.consent.steps.register.success"));
 				this.next();
@@ -481,7 +488,7 @@ export default {
 			});
 		},
 		cancel() {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
+			this.bulkConsent.setSelectedStudents({
 				students: [],
 			});
 			this.$router.push({
