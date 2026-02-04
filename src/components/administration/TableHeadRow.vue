@@ -4,6 +4,7 @@
 			<!-- TODO: Should indeterminate icon be square? Indeterminate color is grey and can only be change through deep css -->
 			<VCheckbox
 				v-model="selectionStatus"
+				width="45"
 				aria-label="Alle Zeilen auswählen"
 				hide-details
 				:indeterminate="selectionStatus === undefined"

@@ -7,8 +7,10 @@
 		}"
 	>
 		<td v-if="selectable">
-			<!-- TODO: Should color be primary? -->
-			<VCheckbox v-model="selectionStatus" :aria-label="`Zeile ${rowindex + 1} auswählen`" hide-details />
+			<div>
+				<!-- TODO: Should color be primary? -->
+				<VCheckbox v-model="selectionStatus" width="45" :aria-label="`Zeile ${rowindex + 1} auswählen`" hide-details />
+			</div>
 		</td>
 		<td v-for="(fieldData, index) in rowData" :key="index">
 			<slot
