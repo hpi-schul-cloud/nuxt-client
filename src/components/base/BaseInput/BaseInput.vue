@@ -18,13 +18,12 @@
 </template>
 
 <script>
-import BaseInputCheckbox, { supportedTypes as checkboxInputTypes } from "./BaseInputCheckbox.vue";
 import BaseInputDefault, { supportedTypes as defaultInputTypes } from "./BaseInputDefault.vue";
 import { logger } from "@util-logger";
 
 const componentDictionary = {};
 defaultInputTypes.forEach((type) => (componentDictionary[type] = BaseInputDefault));
-checkboxInputTypes.forEach((type) => (componentDictionary[type] = BaseInputCheckbox));
+
 export const supportedTypes = Object.keys(componentDictionary);
 
 export const validationDelay = 800;
