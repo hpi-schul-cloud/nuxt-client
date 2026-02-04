@@ -135,7 +135,7 @@ export default defineComponent({
 	setup() {
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
-    const { askConfirmation } = useConfirmationDialog();
+		const { askConfirmation } = useConfirmationDialog();
 
 		return {
 			getPaginationState,
@@ -144,7 +144,7 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
-      askConfirmation,
+			askConfirmation,
 		};
 	},
 	data() {
