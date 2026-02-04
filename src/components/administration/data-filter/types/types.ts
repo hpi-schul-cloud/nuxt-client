@@ -32,7 +32,7 @@ type Query = {
 	searchQuery?: string;
 };
 
-type FilterStateType = {
+type FilterType = {
 	[key: string]: Query | undefined;
 };
 
@@ -50,9 +50,9 @@ type StorageSortingState = {
 	};
 };
 
-type UIStateType = {
+type FilterLocalStorage = {
 	pagination: StoragePaginationState;
-	filter: FilterStateType;
+	filter: FilterType;
 	sorting: StorageSortingState;
 	version: number;
 };
@@ -68,11 +68,10 @@ export type {
 	ChipTitle,
 	DateSelection,
 	FilterItem,
+	FilterLocalStorage,
 	FilterOptionsType,
 	FilterQuery,
-	FilterStateType,
 	SelectOptionsType,
-	UIStateType,
 	UpdateFilterParamType,
 	UserBasedRegistrationOptions,
 };
