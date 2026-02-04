@@ -7,7 +7,6 @@ import { Resource } from "@@/tests/test-utils/mockDataResource";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
-import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
 describe("@/components/organisms/ContentCard", () => {
@@ -32,7 +31,9 @@ describe("@/components/organisms/ContentCard", () => {
 				},
 				components: {
 					"base-input": BaseInput,
-					"router-link": RouterLinkStub,
+				},
+				stubs: {
+					RouterLink: true,
 				},
 			},
 			props: { resource },

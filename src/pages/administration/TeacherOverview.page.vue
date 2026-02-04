@@ -74,11 +74,7 @@
 					</v-btn>
 				</template>
 			</backend-data-table>
-			<admin-table-legend
-				:icons="icons"
-				:show-icons="showConsent"
-				:show-external-sync-hint="schoolIsExternallyManaged"
-			/>
+			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 		</default-wireframe>
 		<base-dialog
 			v-if="isConfirmDialogActive"
