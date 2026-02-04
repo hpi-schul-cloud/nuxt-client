@@ -1918,6 +1918,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymized)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Room members {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Room members “{roomName}”",
+	"pages.security.headline": "Report security problem",
+	"pages.security.text":
+		"The dBildungscloud regularly undergoes security checks and penetration tests, as the security of our users' data is very important to us. You still found a security problem? Write to us so that we can close the gap as soon as possible: ",
+
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",

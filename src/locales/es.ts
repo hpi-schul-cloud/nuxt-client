@@ -1969,6 +1969,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Miembros de la sala {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Miembros de la sala “{roomName}”",
+	"pages.security.headline": "Informar del problema de seguridad",
+	"pages.security.text":
+		"dBildungscloud está sometido a controles de seguridad y pruebas de intrusión regularmente, ya que la seguridad de los datos de nuestros usuarios es muy importante para nosotros. ¿Sigues con problemas de seguridad? Escríbenos para que podamos cerrar la incidencia lo antes posible: ",
+
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
