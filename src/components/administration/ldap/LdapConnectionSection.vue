@@ -39,15 +39,12 @@
 			:rules="rules.searchUser"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, searchUser: $event })"
 		/>
-		<VTextField
+		<PasswordField
 			:model-value="modelValue.searchUserPassword"
 			data-testid="ldapDataConnectionSearchUserPassword"
-			type="password"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
 			:placeholder="$t('pages.administration.ldap.connection.search.user.password')"
-			:prepend-inner-icon="mdiLockOutline"
-			validate-on="blur"
 			:rules="rules.searchUserPassword"
 			@update:model-value="
 				$emit('update:modelValue', {
@@ -61,7 +58,8 @@
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
-import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline, mdiLockOutline } from "@icons/material";
+import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline } from "@icons/material";
+import { PasswordField } from "@ui-inputs";
 import { isRequired, isValidLdapPath, isValidLdapUrl, isValidSecuredLdapUrl } from "@util-validators";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
