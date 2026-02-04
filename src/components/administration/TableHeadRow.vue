@@ -48,17 +48,13 @@
 								<br />
 								<br />
 								{{ $t("pages.administration.students.infobox.LDAP.paragraph-4") }}
-								<base-link
-									class="link-style"
-									style="color: rgba(var(--v-theme-white)); text-decoration: underline"
-									to="/"
+								<a
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
-									:no-styles="true"
-									traget="_blank"
+									class="text-white"
 								>
 									{{ $t("pages.administration.students.infobox.LDAP.helpsection") }}.
-								</base-link>
+								</a>
 							</div>
 							<div v-else class="content">
 								{{ $t("pages.administration.students.infobox.paragraph-1") }}
@@ -72,17 +68,13 @@
 									<li>
 										{{ $t("pages.administration.students.infobox.li-3") }}
 									</li>
-									<base-link
-										class="link-style"
-										style="color: rgba(var(--v-theme-white)); text-decoration: underline"
-										to="/"
+									<a
+										class="text-white"
 										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
 										target="_blank"
-										:no-styles="true"
-										traget="_blank"
 									>
 										{{ $t("pages.administration.students.infobox.more.info") }}.
-									</base-link>
+									</a>
 								</ul>
 								{{ $t("pages.administration.students.infobox.paragraph-2") }}
 								<br />

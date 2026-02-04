@@ -18,16 +18,9 @@
 			<span v-if="showExternalSyncHint" class="wrapper">
 				<strong class="external-sync-hint">
 					{{ $t("components.molecules.admintablelegend.externalSync") }}
-					<base-link
-						class="link-style"
-						to="/"
-						href="https://docs.dbildungscloud.de/x/PgBVAw"
-						target="_blank"
-						:no-styles="true"
-						traget="_blank"
-					>
+					<a href="https://docs.dbildungscloud.de/x/PgBVAw" target="_blank">
 						{{ $t("components.molecules.admintablelegend.help") }}.
-					</base-link>
+					</a>
 				</strong>
 			</span>
 			<p class="mt-6">
