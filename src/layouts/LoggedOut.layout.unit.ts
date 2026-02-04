@@ -43,7 +43,6 @@ describe("loggedOutLayout", () => {
 						name: "instance name",
 					},
 				},
-				stubs: ["base-link"],
 			},
 		});
 

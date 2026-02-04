@@ -1,7 +1,6 @@
 import BackendDataTable from "./BackendDataTable.vue";
 import users from "./testUserData.js";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
 	mdiCheckboxBlankOutline,
@@ -50,7 +49,6 @@ function getWrapper(props, options) {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			components: {
 				"base-input": BaseInput,
-				"base-link": BaseLink,
 			},
 			mocks: {
 				$t: (key, dynamic) => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),

@@ -9,16 +9,9 @@
 			</p>
 			<div class="help-section">
 				{{ $t("pages.administration.ldap.subtitle.help") }}
-				<base-link
-					class="link-style"
-					to="/"
-					href="https://docs.dbildungscloud.de/x/PgBVAw"
-					target="_blank"
-					:no-styles="true"
-					traget="_blank"
-				>
+				<a href="https://docs.dbildungscloud.de/x/PgBVAw" target="_blank">
 					{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
-				</base-link>
+				</a>
 			</div>
 
 			<div class="form-container">
@@ -223,11 +216,6 @@ export default {
 <style lang="scss" scoped>
 @use "sass:map";
 @use "@/styles/settings.scss" as *;
-
-.link-style {
-	color: rgba(var(--v-theme-primary));
-	text-decoration: none;
-}
 
 .subtitle-text {
 	margin-bottom: 32px;

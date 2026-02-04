@@ -1,59 +1,39 @@
 <template>
-	<base-modal v-bind="$attrs" class="modal-container">
-		<template #header />
-		<template #body>
-			<modal-body-info :title="title" :description="description">
-				<template #icon>
-					<slot name="icon" />
-				</template>
-			</modal-body-info>
-		</template>
-		<template #footer>
-			<div class="d-flex justify-center align-center mb-4 px-4">
-				<v-btn variant="flat" block :color="design" @click="close">{{ btn }}</v-btn>
-			</div>
-		</template>
-	</base-modal>
+	<VDialog width="480">
+		<VCard>
+			<VCardText class="d-flex flex-column align-center">
+				<slot name="icon" />
+				<h2 class="my-4">{{ title }}</h2>
+				<p class="text-center">{{ description }}</p>
+			</VCardText>
+			<VCardActions>
+				<VBtn :text="t('common.actions.ok')" variant="flat" block color="primary" @click="close" />
+			</VCardActions>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
-import ModalBodyInfo from "./ModalBodyInfo.vue";
+import { useI18n } from "vue-i18n";
 
-type Props = {
-	design?: string;
-	title?: string;
-	description?: string;
-	btn?: string;
-};
-
-withDefaults(defineProps<Props>(), {
-	design: "info",
-	title: "",
-	description: "",
-	btn: "OK",
-});
+withDefaults(
+	defineProps<{
+		title?: string;
+		description?: string;
+	}>(),
+	{
+		title: "",
+		description: "",
+	}
+);
 
 const emit = defineEmits<{
-	(e: "update:active", value: boolean): void;
+	(e: "update:model-value", value: boolean): void;
 }>();
 
+const { t } = useI18n();
+
 const close = () => {
-	emit("update:active", false);
+	emit("update:model-value", false);
 };
 </script>
-
-<style lang="scss" scoped>
-.btn {
-	width: 100% !important;
-	margin-right: 16px !important;
-	margin-left: 16px !important;
-}
-
-.modal-mask {
-	position: unset !important;
-}
-
-.modal-container {
-	max-width: calc(0.6 * var(--content-max-width)) !important;
-}
-</style>
