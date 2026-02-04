@@ -1,4 +1,4 @@
-import { UiState } from "../types";
+import { UIStateType } from "../types";
 import { RoleName } from "@/serverApi/v3";
 import { useStorage } from "@vueuse/core";
 import { Ref } from "vue";
@@ -9,7 +9,7 @@ export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teac
 		[RoleName.Teacher]: "teachersManagementPage",
 	};
 
-	const defaultState: UiState = {
+	const defaultState: UIStateType = {
 		pagination: {},
 		filter: {
 			[filterStorageKey[RoleName.Student]]: {
@@ -25,7 +25,7 @@ export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teac
 		version: 1,
 	};
 
-	const state: Ref<UiState> = useStorage("uiState", defaultState);
+	const state: Ref<UIStateType> = useStorage("UIState", defaultState);
 
 	const getFilterState = () => state.value.filter[filterStorageKey[userType]]?.query;
 	const setFilterState = (val: object) => (state.value.filter[filterStorageKey[userType]] = { query: val });

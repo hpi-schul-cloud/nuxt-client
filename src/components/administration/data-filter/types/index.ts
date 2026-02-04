@@ -7,7 +7,7 @@ import {
 	type FilterQuery,
 	type FilterStateType,
 	type SelectOptionsType,
-	type UiState,
+	type UIStateType,
 	type UpdateFilterParamType,
 	type UserBasedRegistrationOptions,
 } from "./types";
@@ -22,7 +22,7 @@ export {
 	FilterStateType,
 	Registration,
 	SelectOptionsType,
-	UiState,
+	UIStateType,
 	UpdateFilterParamType,
 	User,
 	UserBasedRegistrationOptions,

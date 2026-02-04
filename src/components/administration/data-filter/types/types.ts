@@ -50,7 +50,7 @@ type StorageSortingState = {
 	};
 };
 
-type UiState = {
+type UIStateType = {
 	pagination: StoragePaginationState;
 	filter: FilterStateType;
 	sorting: StorageSortingState;
@@ -72,7 +72,7 @@ export type {
 	FilterQuery,
 	FilterStateType,
 	SelectOptionsType,
-	UiState,
+	UIStateType,
 	UpdateFilterParamType,
 	UserBasedRegistrationOptions,
 };

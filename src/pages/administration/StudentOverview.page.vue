@@ -448,7 +448,7 @@ export default {
 		},
 		onUpdateRowsPerPage(limit) {
 			this.limit = limit;
-			// save user settings in uiState
+
 			this.setPaginationState({
 				limit: this.limit,
 				page: this.page,
