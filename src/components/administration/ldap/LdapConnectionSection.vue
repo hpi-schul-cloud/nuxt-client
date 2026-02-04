@@ -1,53 +1,53 @@
 <template>
 	<div class="mb-16">
 		<h2 class="mb-8">
-			{{ $t("pages.administration.ldap.connection.title") }}
+			{{ t("pages.administration.ldap.connection.title") }}
 		</h2>
 		<VTextField
 			:model-value="modelValue.url"
 			data-testid="ldapDataConnectionUrl"
 			class="mt-8"
-			:label="$t('pages.administration.ldap.connection.server.url')"
-			:placeholder="$t('pages.administration.ldap.connection.server.url')"
-			:hint="$t('pages.administration.ldap.connection.server.info')"
+			:label="t('pages.administration.ldap.connection.server.url')"
+			:placeholder="t('pages.administration.ldap.connection.server.url')"
+			:hint="t('pages.administration.ldap.connection.server.info')"
 			:prepend-inner-icon="mdiDnsOutline"
 			validate-on="blur"
 			:rules="rules.url"
-			@update:model-value="$emit('update:modelValue', { ...modelValue, url: $event })"
+			@update:model-value="emit('update:modelValue', { ...modelValue, url: $event })"
 		/>
 		<VTextField
 			:model-value="modelValue.basisPath"
 			data-testid="ldapDataConnectionBasisPath"
 			class="mt-8"
-			:label="$t('pages.administration.ldap.connection.basis.path')"
-			:placeholder="$t('pages.administration.ldap.connection.basis.path')"
-			:hint="$t('pages.administration.ldap.connection.basis.path.info')"
+			:label="t('pages.administration.ldap.connection.basis.path')"
+			:placeholder="t('pages.administration.ldap.connection.basis.path')"
+			:hint="t('pages.administration.ldap.connection.basis.path.info')"
 			:prepend-inner-icon="mdiFileTreeOutline"
 			validate-on="blur"
 			:rules="rules.basisPath"
-			@update:model-value="$emit('update:modelValue', { ...modelValue, basisPath: $event })"
+			@update:model-value="emit('update:modelValue', { ...modelValue, basisPath: $event })"
 		/>
 		<VTextField
 			:model-value="modelValue.searchUser"
 			data-testid="ldapDataConnectionSearchUser"
 			class="mt-8"
-			:label="$t('pages.administration.ldap.connection.search.user')"
-			:placeholder="$t('pages.administration.ldap.connection.search.user')"
-			:hint="$t('pages.administration.ldap.connection.search.user.info')"
+			:label="t('pages.administration.ldap.connection.search.user')"
+			:placeholder="t('pages.administration.ldap.connection.search.user')"
+			:hint="t('pages.administration.ldap.connection.search.user.info')"
 			:prepend-inner-icon="mdiAccountCircleOutline"
 			validate-on="blur"
 			:rules="rules.searchUser"
-			@update:model-value="$emit('update:modelValue', { ...modelValue, searchUser: $event })"
+			@update:model-value="emit('update:modelValue', { ...modelValue, searchUser: $event })"
 		/>
 		<PasswordField
 			:model-value="modelValue.searchUserPassword"
 			data-testid="ldapDataConnectionSearchUserPassword"
 			class="mt-8"
-			:label="$t('pages.administration.ldap.connection.search.user.password')"
-			:placeholder="$t('pages.administration.ldap.connection.search.user.password')"
+			:label="t('pages.administration.ldap.connection.search.user.password')"
+			:placeholder="t('pages.administration.ldap.connection.search.user.password')"
 			:rules="rules.searchUserPassword"
 			@update:model-value="
-				$emit('update:modelValue', {
+				emit('update:modelValue', {
 					...modelValue,
 					searchUserPassword: $event,
 				})
@@ -76,7 +76,7 @@ const props = defineProps<{
 	validate?: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
 	(e: "update:modelValue", value: LdapConnectionModel): void;
 	(e: "update:errors", value: boolean, section: string): void;
 }>();
@@ -109,7 +109,6 @@ watch(
 			// TODO: figure out what it does and refactor to work with Vuetify validation
 			// emit("update:errors", this.v$.$invalid, "connection");
 		}
-	},
-	{ immediate: true }
+	}
 );
 </script>
