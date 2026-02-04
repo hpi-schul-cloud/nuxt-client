@@ -385,9 +385,9 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.getFilterState();
+			const temp = this.getFilterState();
 
-			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
+			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
 			if (JSON.stringify(query) !== JSON.stringify(this.getFilterState())) {

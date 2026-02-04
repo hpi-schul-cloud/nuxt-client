@@ -96,23 +96,13 @@ const createMockStore = () => {
 					getQrLinks: () => [],
 				},
 			},
-			uiState: {
-				namespaced: true,
-				getters: {
-					get: () => () => ({ page: 1 }),
-				},
-				mutations: {
-					set: vi.fn(),
-				},
-			},
 		},
 	};
 
 	const mockStore = createStore(storeOptions);
 	const usersActionsStubs = storeOptions.modules.users.actions;
-	const uiStateMutationsStubs = storeOptions.modules.uiState.mutations;
 
-	return { mockStore, usersActionsStubs, uiStateMutationsStubs };
+	return { mockStore, usersActionsStubs };
 };
 
 describe("teachers/index", () => {
@@ -164,7 +154,7 @@ describe("teachers/index", () => {
 	});
 
 	const setup = () => {
-		const { mockStore, usersActionsStubs, uiStateMutationsStubs } = createMockStore();
+		const { mockStore, usersActionsStubs } = createMockStore();
 
 		const wrapper = mount(TeacherPage, {
 			global: {
@@ -183,7 +173,7 @@ describe("teachers/index", () => {
 
 		mock$objects(wrapper);
 
-		return { wrapper, mockStore, usersActionsStubs, uiStateMutationsStubs };
+		return { wrapper, mockStore, usersActionsStubs };
 	};
 
 	describe("useFilterLocalStorage composable", () => {

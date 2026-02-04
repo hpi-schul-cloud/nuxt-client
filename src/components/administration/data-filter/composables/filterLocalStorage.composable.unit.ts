@@ -55,7 +55,7 @@ describe("localStorage composable", () => {
 	it("should initialize the default state", () => {
 		useFilterLocalStorage(RoleName.Student);
 
-		expect(useStorage).toHaveBeenCalledWith("uiState", defaultState);
+		expect(useStorage).toHaveBeenCalledWith("UIState", defaultState);
 	});
 
 	describe("filter storage", () => {
