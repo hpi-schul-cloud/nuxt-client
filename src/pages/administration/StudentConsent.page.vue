@@ -6,15 +6,15 @@
 			</h1>
 			<i18n-t v-if="isConsentNecessary" keypath="pages.administration.students.consent.info" scope="global" tag="p">
 				<template #dataProtection>
-					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{ $t("common.words.privacyPolicy") }}</a>
+					<a :href="fileLinks.dataProtection" target="_blank">{{ $t("common.words.privacyPolicy") }}</a>
 				</template>
 				<template #terms>
-					<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{ $t("components.legacy.footer.terms") }}</a>
+					<a :href="fileLinks.termsOfUse" target="_blank">{{ $t("components.legacy.footer.terms") }}</a>
 				</template>
 				<template #handout>
-					<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
-						$t("pages.administration.students.consent.handout")
-					}}</a>
+					<a :href="fileLinks.analogConsent" target="_blank">
+						{{ $t("pages.administration.students.consent.handout") }}
+					</a>
 				</template>
 			</i18n-t>
 		</template>
@@ -117,16 +117,19 @@
 				</backend-data-table>
 
 				<div v-if="isConsentNecessary" id="consent-checkbox">
-					<base-input v-model="check" type="checkbox" name="switch" label="" data-testid="check-confirm" />
-					<label @click="check = !check">
-						<i18n-t keypath="pages.administration.students.consent.steps.register.confirm" scope="global">
-							<template #analogConsent>
-								<a class="link" :href="fileLinks.analogConsent" target="_">{{
-									$t("pages.administration.students.consent.steps.register.analog-consent")
-								}}</a>
-							</template>
-						</i18n-t>
-					</label>
+					<VCheckbox v-model="check" name="switch" data-testid="check-confirm" hide-details>
+						<template #label>
+							<div>
+								<i18n-t keypath="pages.administration.students.consent.steps.register.confirm" scope="global">
+									<template #analogConsent>
+										<a :href="fileLinks.analogConsent" target="_">
+											{{ $t("pages.administration.students.consent.steps.register.analog-consent") }}
+										</a>
+									</template>
+								</i18n-t>
+							</div>
+						</template>
+					</VCheckbox>
 				</div>
 
 				<p v-if="checkWarning" class="text-error" data-testid="confirm-error">
@@ -544,10 +547,6 @@ export default {
 	height: auto;
 	display: block;
 	margin: 0 auto;
-}
-
-:deep(.link) {
-	text-decoration: none;
 }
 
 :deep(.table) {
