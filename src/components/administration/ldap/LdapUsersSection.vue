@@ -1,114 +1,88 @@
 <template>
-	<div class="users-container">
-		<h2 class="title-class">
+	<div class="mb-16">
+		<h2 class="mb-8">
 			{{ $t("pages.administration.ldap.users.title") }}
 		</h2>
 		<p>
 			{{ $t("pages.administration.ldap.users.title.info") }}
 		</p>
-
-		<base-input
-			data-testid="ldapDataUsersUserPath"
+		<VTextField
 			:model-value="modelValue.userPath"
-			type="text"
+			data-testid="ldapDataUsersUserPath"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.users.path.title')"
 			:placeholder="$t('pages.administration.ldap.users.path.title')"
-			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="v$.modelValue.userPath"
-			:validation-messages="userPathValidationMessage"
+			:hint="$t('pages.administration.ldap.classes.path.info')"
+			:prepend-inner-icon="mdiFileTreeOutline"
+			validate-on="blur"
+			:rules="[rules.required, rules.isValidLdapPath]"
 			datatest-id="ldapDataUsersUserPath"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, userPath: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiFileTreeOutline" />
-			</template>
-		</base-input>
-		<p class="path-hint">
+		/>
+		<p class="my-8">
 			{{ $t("pages.administration.ldap.users.hint") }}
 		</p>
-		<base-input
-			data-testid="ldapDataUsersFirstName"
+		<VTextField
 			:model-value="modelValue.firstName"
-			type="text"
+			data-testid="ldapDataUsersFirstName"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.users.path.firstname')"
-			:validation-model="v$.modelValue.firstName"
-			:validation-messages="usersValidationMessage"
+			:prepend-inner-icon="mdiAccountCircleOutline"
+			validate-on="blur"
+			:rules="[rules.required]"
 			datatest-id="ldapDataUsersFirstName"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, firstName: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiAccountCircleOutline" />
-			</template>
-		</base-input>
-		<base-input
-			data-testid="ldapDataUsersFamilyName"
+		/>
+		<VTextField
 			:model-value="modelValue.familyName"
-			type="text"
+			data-testid="ldapDataUsersFamilyName"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.users.path.lastname')"
-			:validation-model="v$.modelValue.familyName"
-			:validation-messages="usersValidationMessage"
+			:prepend-inner-icon="mdiAccountCircleOutline"
+			validate-on="blur"
+			:rules="[rules.required]"
 			datatest-id="ldapDataUsersFamilyName"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, familyName: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiAccountCircleOutline" />
-			</template>
-		</base-input>
-		<base-input
-			data-testid="ldapDataUsersEmail"
+		/>
+		<VTextField
 			:model-value="modelValue.email"
-			type="text"
+			data-testid="ldapDataUsersEmail"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.users.path.email')"
-			:validation-model="v$.modelValue.email"
-			:validation-messages="usersValidationMessage"
+			:prepend-inner-icon="mdiEmailOutline"
+			validate-on="blur"
+			:rules="[rules.required]"
 			datatest-id="ldapDataUsersEmail"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, email: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiEmailOutline" />
-			</template>
-		</base-input>
-		<base-input
-			data-testid="ldapDataUsersUid"
+		/>
+		<VTextField
 			:model-value="modelValue.uid"
-			type="text"
+			data-testid="ldapDataUsersUid"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.users.uid.title')"
 			:info="$t('pages.administration.ldap.users.uid.info')"
-			:validation-model="v$.modelValue.uid"
-			:validation-messages="usersValidationMessage"
+			:prepend-inner-icon="mdiCardAccountDetailsOutline"
+			validate-on="blur"
+			:rules="[rules.required]"
 			datatest-id="ldapDataUsersUid"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, uid: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiCardAccountDetailsOutline" />
-			</template>
-		</base-input>
-		<base-input
-			data-testid="ldapDataUsersUuid"
+		/>
+		<VTextField
 			:model-value="modelValue.uuid"
-			type="text"
+			data-testid="ldapDataUsersUuid"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
 			:info="$t('pages.administration.ldap.users.uuid.info')"
-			:validation-model="v$.modelValue.uuid"
-			:validation-messages="usersValidationMessage"
+			:prepend-inner-icon="mdiAccountBoxOutline"
+			validate-on="blur"
+			:rules="[rules.required]"
 			datatest-id="ldapDataUsersUuid"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, uuid: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiAccountBoxOutline" />
-			</template>
-		</base-input>
+		/>
 	</div>
 </template>
 
 <script>
-import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import {
 	mdiAccountBoxOutline,
 	mdiAccountCircleOutline,
@@ -116,9 +90,9 @@ import {
 	mdiEmailOutline,
 	mdiFileTreeOutline,
 } from "@icons/material";
-import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
-import { defineComponent } from "vue";
+import { isRequired, isValidLdapPath } from "@util-validators";
+import { computed, defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	props: {
@@ -134,7 +108,14 @@ export default defineComponent({
 	},
 	emits: ["update:modelValue", "update:errors"],
 	setup() {
-		return { v$: useVuelidate() };
+		const { t } = useI18n();
+
+		const rules = computed(() => ({
+			required: isRequired(t("common.validation.required")),
+			isValidLdapPath: isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
+		}));
+
+		return { rules };
 	},
 	data() {
 		return {
@@ -143,48 +124,12 @@ export default defineComponent({
 			mdiCardAccountDetailsOutline,
 			mdiEmailOutline,
 			mdiFileTreeOutline,
-			usersValidationMessage: [{ key: "required", message: this.$t("common.validation.required") }],
-			userPathValidationMessage: [
-				{
-					key: "ldapPathRegexValidator",
-					message: this.$t("pages.administration.ldapEdit.validation.path"),
-				},
-				{ key: "required", message: this.$t("common.validation.required") },
-			],
 		};
 	},
 	watch: {
 		validate: function () {
-			this.v$.$touch();
 			this.$emit("update:errors", this.v$.$invalid, "users");
 		},
 	},
-	validations() {
-		return {
-			modelValue: {
-				userPath: { required, ldapPathRegexValidator },
-				firstName: { required },
-				familyName: { required },
-				email: { required },
-				uid: { required },
-				uuid: { required },
-			},
-		};
-	},
 });
 </script>
-
-<style lang="scss" scoped>
-.path-hint {
-	margin-top: 32px;
-	margin-bottom: 24px;
-}
-
-.users-container {
-	margin-bottom: 40px;
-}
-
-.title-class {
-	margin-bottom: 40px;
-}
-</style>
