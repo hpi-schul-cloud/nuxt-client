@@ -1,6 +1,5 @@
 import TeacherPage from "./TeacherOverview.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -174,7 +173,6 @@ describe("teachers/index", () => {
 				},
 				components: {
 					"base-input": BaseInput,
-					"base-link": BaseLink,
 				},
 				stubs: { RouterLink: RouterLinkStub },
 			},

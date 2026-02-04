@@ -1,7 +1,6 @@
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -173,7 +172,6 @@ describe("students/index", () => {
 				},
 				components: {
 					"base-input": BaseInput,
-					"base-link": BaseLink,
 				},
 				stubs: { RouterLink: RouterLinkStub },
 			},

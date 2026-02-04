@@ -1,8 +1,6 @@
 <template>
 	<div class="resource">
-		<base-link
-			design="none"
-			type="button"
+		<VBtn
 			class="arrow__back"
 			:to="{
 				name: 'content',
@@ -11,7 +9,7 @@
 		>
 			<v-icon class="material-icon" :icon="mdiChevronLeft" />
 			{{ $t("pages.content.index.backToOverview") }}
-		</base-link>
+		</VBtn>
 		<div class="content">
 			<div class="wrapper">
 				<div class="content-container">
@@ -20,16 +18,16 @@
 					</h1>
 					<div class="author-provider">
 						<span v-if="hasAuthor">
-							<base-link :href="'/content/?q=' + author" class="content-link">
+							<a :href="'/content/?q=' + author" class="content-link">
 								{{ author }}
-							</base-link>
+							</a>
 							({{ $t("pages.content._id.metadata.author") }})
 						</span>
 						<span v-if="provider">
 							<span v-if="hasAuthor">,</span>
-							<base-link :href="'/content/?q=' + provider" class="content-link">
+							<a :href="'/content/?q=' + provider" class="content-link">
 								{{ provider }}
-							</base-link>
+							</a>
 							({{ $t("pages.content._id.metadata.provider") }})
 						</span>
 					</div>
@@ -57,7 +55,7 @@
 							<template v-if="tags.length > 0">
 								<div class="text-wrap">
 									<span v-for="(tag, index) in tags" :key="index" class="meta-text">
-										<base-link :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </base-link>
+										<a :href="'/content/?q=' + tag" class="tag link"> #{{ tag }} </a>
 									</span>
 								</div>
 							</template>
@@ -105,7 +103,6 @@
 </template>
 
 <script>
-import BaseLink from "../base/BaseLink";
 import UserHasRole from "./UserHasRole.vue";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import ContentCard from "@/components/lern-store/ContentCard";
@@ -124,7 +121,6 @@ const DEFAULT_AUTHOR = "admin";
 export default defineComponent({
 	components: {
 		AddContentButton,
-		BaseLink,
 		ContentCard,
 		ContentEduSharingFooter,
 		UserHasRole,
