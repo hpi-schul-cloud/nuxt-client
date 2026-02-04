@@ -1,6 +1,5 @@
 import ConsentPage from "./StudentConsent.page.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseModal from "@/components/base/BaseModal.vue";
 import FilePathsModule from "@/store/filePaths";
 import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -99,7 +98,6 @@ const setup = () => {
 			},
 			components: {
 				"base-input": BaseInput,
-				"base-modal": BaseModal,
 			},
 		},
 	});

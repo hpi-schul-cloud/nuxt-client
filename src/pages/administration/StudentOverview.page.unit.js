@@ -5,16 +5,17 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseModal from "@/components/base/BaseModal.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
@@ -104,8 +105,11 @@ const createMockStore = () => {
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
+vi.mock("@ui-confirmation-dialog");
+vi.mocked(useConfirmationDialog);
 
 describe("students/index", () => {
+	let askConfirmationMock;
 	const OLD_ENV = process.env;
 	const getFilterState = vi.fn().mockReturnValue({
 		searchQuery: "",
@@ -136,9 +140,14 @@ describe("students/index", () => {
 			setSortingState,
 			getPaginationState,
 			setPaginationState,
+	  });
+    
+    askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
 		});
-	});
-
+  });
+    
 	afterAll(() => {
 		process.env = OLD_ENV; // restore old environment
 	});
@@ -162,8 +171,6 @@ describe("students/index", () => {
 				},
 				components: {
 					"base-input": BaseInput,
-					"base-dialog": BaseDialog,
-					"base-modal": BaseModal,
 				},
 				stubs: { RouterLink: RouterLinkStub },
 			},
@@ -184,6 +191,7 @@ describe("students/index", () => {
 	});
 
 	it("should call 'deleteUsers' action", async () => {
+		askConfirmationMock.mockResolvedValue(true);
 		const { wrapper, usersActionsStubs } = setup([Permission.StudentDelete]);
 		await nextTick();
 
@@ -202,9 +210,6 @@ describe("students/index", () => {
 		// click delete menu button
 		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(3);
 		await deleteBtn.trigger("click");
-
-		const confirmBtn = wrapper.findComponent("[data-testid='btn-dialog-confirm']");
-		await confirmBtn.trigger("click");
 
 		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
 		expect(usersActionsStubs.deleteUsers.mock.calls[0][1]).toStrictEqual({

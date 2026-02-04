@@ -1,35 +1,41 @@
 <template>
-	<default-wireframe
-		:headline="$t('pages.news.new.title')"
+	<DefaultWireframe
+		:headline="t('pages.news.new.title')"
 		:breadcrumbs="[
 			{
 				to: '/news',
-				title: $t('pages.news.title'),
+				title: t('pages.news.title'),
 			},
 			{
-				title: $t('pages.news.new.title'),
+				title: t('pages.news.new.title'),
 				disabled: true,
 			},
 		]"
 		max-width="short"
 	>
 		<div>
-			<form-news @save="create" @cancel="onCancel" />
+			<FormNews @save="create" @cancel="onCancel" />
 		</div>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>
 import { newsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
-import { FormNews } from "@feature-news-form";
+import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
+export default defineComponent({
 	components: {
 		DefaultWireframe,
 		FormNews,
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	computed: {
 		news: () => newsModule.getNews,
@@ -37,7 +43,7 @@ export default {
 		createdNews: () => newsModule.getCreatedNews,
 	},
 	mounted() {
-		document.title = buildPageTitle(this.$t("pages.news.new.title"));
+		document.title = buildPageTitle(this.t("pages.news.new.title"));
 	},
 	methods: {
 		getNewsTarget(query, schoolId) {
@@ -60,18 +66,18 @@ export default {
 					targetModel: newsTarget.targetModel,
 				});
 				if (this.status === "completed") {
-					notifySuccess(this.$t("components.organisms.FormNews.success.create"));
+					notifySuccess(this.t("components.organisms.FormNews.success.create"));
 					await this.$router.push({
 						path: `/news/${this.createdNews.id}`,
 					});
 				}
 			} catch {
-				notifyError(this.$t("components.organisms.FormNews.errors.create"));
+				notifyError(this.t("components.organisms.FormNews.errors.create"));
 			}
 		},
 		async onCancel() {
 			this.$router.go(-1);
 		},
 	},
-};
+});
 </script>

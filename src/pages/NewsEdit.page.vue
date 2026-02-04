@@ -1,27 +1,27 @@
 <template>
 	<div v-if="news">
-		<default-wireframe
-			:headline="$t('pages.news.edit.title.default')"
+		<DefaultWireframe
+			:headline="t('pages.news.edit.title.default')"
 			:breadcrumbs="[
 				{
 					to: '/news',
-					title: $t('pages.news.title'),
+					title: t('pages.news.title'),
 				},
 				{
 					to: `/news/${$route.params.id}`,
 					title: news.title,
 				},
 				{
-					title: $t('pages.news.edit.title.default'),
+					title: t('pages.news.edit.title.default'),
 					disabled: true,
 				},
 			]"
 			max-width="short"
 		>
 			<div>
-				<form-news v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
+				<FormNews v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
 			</div>
-		</default-wireframe>
+		</DefaultWireframe>
 	</div>
 </template>
 
@@ -30,7 +30,7 @@ import { News, PatchNewsPayload } from "@/store/types/news";
 import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { AlertStatus, useNotificationStore } from "@data-app";
-import { FormNews } from "@feature-news-form";
+import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";

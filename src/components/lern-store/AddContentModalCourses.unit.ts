@@ -5,6 +5,8 @@ import ContentModule from "@/store/content";
 import courses from "@/store/courses";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VSelect } from "vuetify/lib/components/index";
 import { createStore } from "vuex";
@@ -57,6 +59,7 @@ describe("AddContentModal with real Vuex courses-store", () => {
 			client: string;
 		}>;
 	}) => {
+		setActivePinia(createTestingPinia());
 		setupStores({
 			contentModule: ContentModule,
 		});
