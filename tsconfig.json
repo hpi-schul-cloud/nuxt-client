@@ -58,7 +58,7 @@
       "@feature-course-sync": ["src/modules/feature/course-sync"],
       "@feature-editor": ["src/modules/feature/editor"],
       "@feature-render-html": ["src/modules/feature/render-html"],
-      "@feature-news-form": ["src/modules/feature/news-form"],
+      "@feature-news": ["src/modules/feature/news"],
       "@feature-media-shelf": ["src/modules/feature/media-shelf"],
       "@feature-board-deleted-element": [
         "src/modules/feature/board-deleted-element"

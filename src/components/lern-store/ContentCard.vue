@@ -24,8 +24,8 @@
 							<div class="content__img-background-gradient" />
 
 							<img :src="thumbnail()" class="content__img-thumbnail" alt="" role="img" />
-							<div class="card-tag">
-								<span>{{ $t("pages.content.card.collection") }}</span>
+							<div v-show="isCollection()" class="card-tag">
+								<span>{{ t("pages.content.card.collection") }}</span>
 								<v-icon :icon="mdiFileMultipleOutline" />
 							</div>
 						</div>
@@ -55,9 +55,11 @@ import AddContentButton from "@/components/lern-store/AddContentButton";
 import { contentModule } from "@/store";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
 import { mdiFileMultipleOutline } from "@icons/material";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 import { RouterLink } from "vue-router";
 
-export default {
+export default defineComponent({
 	components: {
 		AddContentButton,
 		UserHasRole,
@@ -69,6 +71,10 @@ export default {
 		role: { type: String, default: "" },
 		inline: { type: Boolean, required: false },
 		selectable: { type: Boolean },
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {
@@ -120,7 +126,7 @@ export default {
 			}
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

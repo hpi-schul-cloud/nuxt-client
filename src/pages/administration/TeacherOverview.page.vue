@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<default-wireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
-			<progress-modal
-				:active="isDeleting"
+		<DefaultWireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
+			<ProgressModal
+				v-model="isDeleting"
 				:percent="deletedPercent"
 				:title="$t('pages.administration.teachers.index.remove.progress.title')"
 				:description="$t('pages.administration.teachers.index.remove.progress.description')"
@@ -13,13 +13,13 @@
 				class="mt-10 mb-2"
 				:placeholder="$t('pages.administration.teachers.index.searchbar.placeholder')"
 				data-testid="searchbar"
-				aria-label="$t('pages.administration.teachers.index.searchbar.ariaLabel')"
+				:aria-label="$t('pages.administration.teachers.index.searchbar.ariaLabel')"
 				@update:model-value="barSearch"
 			/>
 
 			<DataFilter filter-for="teacher" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
-			<backend-data-table
+			<BackendDataTable
 				v-model:current-page="page"
 				v-model:rows-per-page="limit"
 				v-model:selected-row-ids="tableSelection"
@@ -46,8 +46,8 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<v-icon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
-						<v-icon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+						<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
+						<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
 					</span>
 				</template>
 				<template #datacolumn-lastLoginSystemChange="{ data }">
@@ -58,7 +58,7 @@
 				</template>
 
 				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<v-btn
+					<VBtn
 						icon
 						variant="text"
 						:class="{
@@ -70,20 +70,16 @@
 						:aria-label="$t('pages.administration.teachers.table.edit.ariaLabel')"
 						data-testid="edit_teacher_button"
 					>
-						<v-icon size="20">{{ mdiPencilOutline }}</v-icon>
-					</v-btn>
+						<VIcon size="20">{{ mdiPencilOutline }}</VIcon>
+					</VBtn>
 				</template>
-			</backend-data-table>
+			</BackendDataTable>
 			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
-		</default-wireframe>
-		<base-dialog
-			v-if="isConfirmDialogActive"
-			:active="isConfirmDialogActive"
-			v-bind="confirmDialogProps"
-			@update:active="isConfirmDialogActive = false"
-		/>
+		</DefaultWireframe>
+		<ConfirmationDialog />
 	</div>
 </template>
+
 <script>
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
@@ -107,23 +103,30 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
+import { defineComponent } from "vue";
 import { reactive } from "vue";
 import { mapGetters } from "vuex";
 
-export default {
+export default defineComponent({
 	components: {
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
+		ConfirmationDialog,
 	},
 	props: {
 		showExternalSyncHint: {
 			type: Boolean,
 		},
+	},
+	setup() {
+		const { askConfirmation } = useConfirmationDialog();
+		return { askConfirmation };
 	},
 	data() {
 		return {
@@ -242,8 +245,6 @@ export default {
 				(this.getUiState("filter", "pages.administration.teachers.index") &&
 					this.getUiState("filter", "pages.administration.teachers.index").searchQuery) ||
 				"",
-			confirmDialogProps: {},
-			isConfirmDialogActive: false,
 			classNameList: [],
 		};
 	},
@@ -454,7 +455,7 @@ export default {
 				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
-		handleBulkDelete(rowIds, selectionType) {
+		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
 					await this.$store.dispatch("users/deleteUsers", {
@@ -485,15 +486,17 @@ export default {
 					message = this.$t("pages.administration.teachers.index.remove.confirm.message.all");
 				}
 			}
-			this.dialogConfirm({
+
+			const shouldDelete = await this.askConfirmation({
 				message,
-				confirmText: this.$t("pages.administration.teachers.index.remove.confirm.btnText"),
-				cancelText: this.$t("common.actions.cancel"),
-				icon: mdiAlert,
-				iconColor: "rgba(var(--v-theme-error))",
-				onConfirm,
-				onCancel,
+				confirmActionLangKey: "pages.administration.teachers.index.remove.confirm.btnText",
 			});
+
+			if (shouldDelete) {
+				await onConfirm();
+			} else {
+				onCancel();
+			}
 		},
 		barSearch: function (searchText) {
 			if (this.timer) {
@@ -525,10 +528,6 @@ export default {
 		getUiState(key, identifier) {
 			return this.$store?.getters["uiState/get"]({ key, identifier });
 		},
-		dialogConfirm(confirmDialogProps) {
-			this.confirmDialogProps = confirmDialogProps;
-			this.isConfirmDialogActive = true;
-		},
 		onUpdateFilter(query) {
 			this.currentFilterQuery = query;
 			this.find();
@@ -551,7 +550,7 @@ export default {
 			);
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

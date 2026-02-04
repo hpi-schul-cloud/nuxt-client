@@ -1,22 +1,22 @@
 <template>
 	<default-wireframe
-		:headline="$t('pages.administration.teachers.new.title')"
+		:headline="t('pages.administration.teachers.new.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<form-create-user role-name="teacher" @create-user="createTeacher">
+		<FormCreateUser role-name="teacher" @create-user="createTeacher">
 			<template #inputs>
-				<v-checkbox
+				<VCheckbox
 					v-model="sendRegistration"
 					name="switch"
 					class="mt-8"
-					:label="$t('pages.administration.teachers.new.checkbox.label')"
+					:label="t('pages.administration.teachers.new.checkbox.label')"
 				/>
 			</template>
 			<template #errors>
-				<info-message v-if="error" :message="$t('pages.administration.teachers.new.error')" type="bc-error" />
+				<InfoMessage v-if="error" :message="t('pages.administration.teachers.new.error')" type="bc-error" />
 			</template>
-		</form-create-user>
+		</FormCreateUser>
 	</default-wireframe>
 </template>
 
@@ -27,12 +27,18 @@ import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
+export default defineComponent({
 	components: {
 		FormCreateUser,
 		InfoMessage,
 		DefaultWireframe,
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {
@@ -40,18 +46,18 @@ export default {
 			sendRegistration: false,
 			breadcrumbs: [
 				{
-					title: this.$t("pages.administration.teachers.index.title"),
+					title: this.t("pages.administration.teachers.index.title"),
 					to: "/administration/teachers",
 				},
 				{
-					title: this.$t("pages.administration.teachers.new.title"),
+					title: this.t("pages.administration.teachers.new.title"),
 					disabled: true,
 				},
 			],
 		};
 	},
 	mounted() {
-		document.title = buildPageTitle(this.$t("pages.administration.teachers.new.title"));
+		document.title = buildPageTitle(this.t("pages.administration.teachers.new.title"));
 	},
 	methods: {
 		createTeacher(teacherData) {
@@ -67,7 +73,7 @@ export default {
 					generateRegistrationLink: true,
 				})
 				.then(() => {
-					notifySuccess(this.$t("pages.administration.teachers.new.success"));
+					notifySuccess(this.t("pages.administration.teachers.new.success"));
 					this.$router.push({
 						path: `/administration/teachers`,
 					});
@@ -77,5 +83,5 @@ export default {
 				});
 		},
 	},
-};
+});
 </script>

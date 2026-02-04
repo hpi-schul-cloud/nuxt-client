@@ -1,40 +1,35 @@
 <template>
-	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1>
 				{{ title }}
 			</h1>
 			<i18n-t v-if="isConsentNecessary" keypath="pages.administration.students.consent.info" scope="global" tag="p">
 				<template #dataProtection>
-					<a :href="fileLinks.dataProtection" target="_blank">{{ $t("common.words.privacyPolicy") }}</a>
+					<a :href="fileLinks.dataProtection" target="_blank">{{ t("common.words.privacyPolicy") }}</a>
 				</template>
 				<template #terms>
-					<a :href="fileLinks.termsOfUse" target="_blank">{{ $t("components.legacy.footer.terms") }}</a>
+					<a :href="fileLinks.termsOfUse" target="_blank">{{ t("components.legacy.footer.terms") }}</a>
 				</template>
 				<template #handout>
 					<a :href="fileLinks.analogConsent" target="_blank">
-						{{ $t("pages.administration.students.consent.handout") }}
+						{{ t("pages.administration.students.consent.handout") }}
 					</a>
 				</template>
 			</i18n-t>
 		</template>
 		<section class="section">
 			<div class="mt-6">
-				<step-progress
-					id="progressbar"
-					:steps="progressSteps"
-					:current-step="currentStep"
-					data-testid="step_progress"
-				/>
+				<StepProgress id="progressbar" :steps="progressSteps" :current-step="currentStep" data-testid="step_progress" />
 			</div>
 
 			<section v-if="currentStep === 0">
 				<h2>
-					{{ $t("pages.administration.students.consent.steps.complete") }}
+					{{ t("pages.administration.students.consent.steps.complete") }}
 				</h2>
-				{{ $t("pages.administration.students.consent.steps.complete.info") }}
+				{{ t("pages.administration.students.consent.steps.complete.info") }}
 
-				<backend-data-table
+				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
@@ -75,31 +70,31 @@
 							"
 						/>
 					</template>
-				</backend-data-table>
+				</BackendDataTable>
 
 				<p v-if="birthdayWarning" class="text-error" data-testid="error-text">
-					<v-icon color="error">{{ mdiAlert }} </v-icon>
-					{{ $t("pages.administration.students.consent.steps.complete.warn") }}
+					<VIcon color="error">{{ mdiAlert }} </VIcon>
+					{{ t("pages.administration.students.consent.steps.complete.warn") }}
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn variant="text" @click="cancelWarning = true">
-						{{ $t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" data-testid="button-next" @click="next">
-						{{ $t("pages.administration.students.consent.steps.complete.next") }}
-					</v-btn>
+					<VBtn variant="text" @click="cancelWarning = true">
+						{{ t("common.actions.cancel") }}
+					</VBtn>
+					<VBtn color="primary" variant="flat" data-testid="button-next" @click="next">
+						{{ t("pages.administration.students.consent.steps.complete.next") }}
+					</VBtn>
 				</div>
 			</section>
 
 			<section v-if="currentStep === 1">
 				<h2>
-					{{ $t("pages.administration.students.consent.steps.register") }}
+					{{ t("pages.administration.students.consent.steps.register") }}
 				</h2>
 				<p v-if="isConsentNecessary">
-					{{ $t("pages.administration.students.consent.steps.register.info") }}
+					{{ t("pages.administration.students.consent.steps.register.info") }}
 				</p>
-				<backend-data-table
+				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
@@ -114,7 +109,7 @@
 							{{ printDateFromDeUTC(slotProps.data) }}
 						</div>
 					</template>
-				</backend-data-table>
+				</BackendDataTable>
 
 				<div v-if="isConsentNecessary" id="consent-checkbox">
 					<VCheckbox v-model="check" name="switch" data-testid="check-confirm" hide-details>
@@ -123,7 +118,7 @@
 								<i18n-t keypath="pages.administration.students.consent.steps.register.confirm" scope="global">
 									<template #analogConsent>
 										<a :href="fileLinks.analogConsent" target="_">
-											{{ $t("pages.administration.students.consent.steps.register.analog-consent") }}
+											{{ t("pages.administration.students.consent.steps.register.analog-consent") }}
 										</a>
 									</template>
 								</i18n-t>
@@ -134,25 +129,25 @@
 
 				<p v-if="checkWarning" class="text-error" data-testid="confirm-error">
 					<v-icon color="error">{{ mdiAlert }} </v-icon>
-					{{ $t("pages.administration.students.consent.steps.register.confirm.warn") }}
+					{{ t("pages.administration.students.consent.steps.register.confirm.warn") }}
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn variant="text" @click="cancelWarning = true">
-						{{ $t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" data-testid="button-next-2" @click="register">
-						{{ $t("pages.administration.students.consent.steps.register.next") }}
-					</v-btn>
+					<VBtn variant="text" @click="cancelWarning = true">
+						{{ t("common.actions.cancel") }}
+					</VBtn>
+					<VBtn color="primary" variant="flat" data-testid="button-next-2" @click="register">
+						{{ t("pages.administration.students.consent.steps.register.next") }}
+					</VBtn>
 				</div>
 			</section>
 
 			<section v-if="currentStep === 2">
 				<h2>
-					{{ $t("pages.administration.students.consent.steps.download") }}
+					{{ t("pages.administration.students.consent.steps.download") }}
 				</h2>
-				{{ $t("pages.administration.students.consent.steps.download.info") }}
-				<backend-data-table
+				{{ t("pages.administration.students.consent.steps.download.info") }}
+				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
@@ -165,18 +160,18 @@
 					<template #datacolumn-birthday="slotProps">
 						{{ printDateFromDeUTC(slotProps.data) }}
 					</template>
-				</backend-data-table>
+				</BackendDataTable>
 				<p>
 					{{ passwordHint }}
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn variant="text" @click="cancelWarning = true">
-						{{ $t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn color="primary" variant="flat" @click="download">
-						{{ $t("pages.administration.students.consent.steps.download.next") }}
-					</v-btn>
+					<VBtn variant="text" @click="cancelWarning = true">
+						{{ t("common.actions.cancel") }}
+					</VBtn>
+					<VBtn color="primary" variant="flat" @click="download">
+						{{ t("pages.administration.students.consent.steps.download.next") }}
+					</VBtn>
 				</div>
 			</section>
 
@@ -187,79 +182,85 @@
 				<img
 					class="success-image mb-4"
 					:src="image"
-					:alt="$t('pages.administration.students.consent.steps.success.image.alt')"
+					:alt="t('pages.administration.students.consent.steps.success.image.alt')"
 				/>
 
 				<div class="d-flex justify-end">
-					<v-btn color="primary" variant="outlined" @click="success">{{
-						$t("pages.administration.students.consent.steps.success.back")
-					}}</v-btn>
+					<VBtn color="primary" variant="outlined" @click="success">
+						{{ t("pages.administration.students.consent.steps.success.back") }}
+					</VBtn>
 				</div>
 			</section>
 
-			<base-modal v-model:active="cancelWarning">
-				<template #header />
-				<template #body>
-					<modal-body-info :title="$t('pages.administration.students.consent.cancel.modal.title')">
-						<template #icon>
-							<v-icon color="error" size="60">{{ mdiAlert }}</v-icon>
-						</template>
-					</modal-body-info>
-					<span v-if="currentStep === 2">
-						{{ $t("pages.administration.students.consent.cancel.modal.download.info") }}
-					</span>
-					<span v-else>
-						{{ $t("pages.administration.students.consent.cancel.modal.info") }}
-					</span>
+			<SvsDialog v-model="cancelWarning" title="pages.administration.students.consent.cancel.modal.title">
+				<template #content>
+					<ErrorAlert>
+						<p v-if="currentStep === 2">
+							{{ t("pages.administration.students.consent.cancel.modal.download.info") }}
+						</p>
+						<p v-else>
+							{{ t("pages.administration.students.consent.cancel.modal.info") }}
+						</p>
+					</ErrorAlert>
 				</template>
-				<template #footerRight>
-					<v-btn variant="text" @click="cancel">
-						{{ $t("pages.administration.students.consent.cancel.modal.confirm") }}
-					</v-btn>
-					<v-btn v-if="currentStep === 2" color="error" variant="flat" @click="download">
-						{{ $t("pages.administration.students.consent.cancel.modal.download.continue") }}
-					</v-btn>
-					<v-btn v-else color="primary" variant="flat" @click="cancelWarning = false">
-						{{ $t("pages.administration.students.consent.cancel.modal.continue") }}
-					</v-btn>
+				<template #actions>
+					<SvsDialogBtnCancel @click="cancelWarning = false" />
+					<VBtn
+						v-if="currentStep === 2"
+						:text="t('pages.administration.students.consent.cancel.modal.download.continue')"
+						color="error"
+						variant="flat"
+						@click="download"
+					/>
+					<SvsDialogBtnConfirm text-lang-key="pages.administration.students.consent.cancel.modal" @click="cancel" />
 				</template>
-			</base-modal>
+			</SvsDialog>
 
 			<div hidden>
 				<div id="tableStudentsForPrint">
 					<h3 class="text-h1">
-						{{ $t("pages.administration.students.consent.print.title") }}
+						{{ t("pages.administration.students.consent.print.title") }}
 					</h3>
 					<p>
 						{{ printPageInfo }}
 					</p>
 
-					<backend-data-table :columns="tableColumnsForPrint" :data="tableData" track-by="_id" :paginated="false" />
+					<BackendDataTable :columns="tableColumnsForPrint" :data="tableData" track-by="_id" :paginated="false" />
 				</div>
 			</div>
 		</section>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
+import { ErrorAlert } from "@ui-alert";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
+export default defineComponent({
 	components: {
+		SvsDialogBtnConfirm,
+		SvsDialogBtnCancel,
+		ErrorAlert,
 		DefaultWireframe,
+		SvsDialog,
 		BackendDataTable,
 		StepProgress,
-		ModalBodyInfo,
+	},
+	setup() {
+		const { t } = useI18n();
+		return { t };
 	},
 	data() {
 		return {
@@ -267,39 +268,39 @@ export default {
 			tableColumns: [
 				{
 					field: "fullName",
-					label: this.$t("common.labels.name"),
+					label: this.t("common.labels.name"),
 					sortable: true,
 				},
 				{
 					field: "email",
-					label: this.$t("common.labels.email"),
+					label: this.t("common.labels.email"),
 					sortable: true,
 				},
 				{
 					field: "birthday",
-					label: this.$t("common.labels.birthdate"),
+					label: this.t("common.labels.birthdate"),
 					sortable: false,
 				},
 				{
 					field: "password",
-					label: this.$t("common.labels.password"),
+					label: this.t("common.labels.password"),
 					sortable: false,
 				},
 			],
 			tableColumnsForPrint: [
 				{
 					field: "fullName",
-					label: this.$t("common.labels.name"),
+					label: this.t("common.labels.name"),
 					sortable: false,
 				},
 				{
 					field: "email",
-					label: this.$t("common.labels.email"),
+					label: this.t("common.labels.email"),
 					sortable: false,
 				},
 				{
 					field: "password",
-					label: this.$t("common.labels.password"),
+					label: this.t("common.labels.password"),
 					sortable: false,
 				},
 			],
@@ -311,24 +312,24 @@ export default {
 			},
 			progressSteps: [
 				{
-					name: this.$t("pages.administration.students.consent.steps.complete"),
+					name: this.t("pages.administration.students.consent.steps.complete"),
 				},
 				{
-					name: this.$t("pages.administration.students.consent.steps.register"),
+					name: this.t("pages.administration.students.consent.steps.register"),
 				},
 				{
-					name: this.$t("pages.administration.students.consent.steps.download"),
+					name: this.t("pages.administration.students.consent.steps.download"),
 				},
 			],
 			currentStep: 0,
 			birthdayWarning: false,
 			cancelWarning: false,
-			inputError: this.$t("pages.administration.students.consent.input.missing"),
+			inputError: this.t("pages.administration.students.consent.input.missing"),
 			check: false,
 			checkWarning: false,
 			tableTimeOut: null,
 			printTimeOut: null,
-			printPageInfo: this.$t("pages.administration.students.consent.steps.register.print", {
+			printPageInfo: this.t("pages.administration.students.consent.steps.register.print", {
 				hostName: window.location.origin,
 			}),
 			sortBy: "fullName",
@@ -340,7 +341,7 @@ export default {
 		breadcrumbs() {
 			return [
 				{
-					title: this.$t("pages.administration.students.index.title"),
+					title: this.t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
@@ -354,18 +355,18 @@ export default {
 		},
 		title() {
 			return this.isConsentNecessary
-				? this.$t("pages.administration.students.consent.title")
-				: this.$t("pages.administration.students.manualRegistration.title");
+				? this.t("pages.administration.students.consent.title")
+				: this.t("pages.administration.students.manualRegistration.title");
 		},
 		passwordHint() {
 			return this.isConsentNecessary
-				? this.$t("pages.administration.students.consent.steps.download.explanation")
-				: this.$t("pages.administration.students.manualRegistration.steps.download.explanation");
+				? this.t("pages.administration.students.consent.steps.download.explanation")
+				: this.t("pages.administration.students.manualRegistration.steps.download.explanation");
 		},
 		successMessage() {
 			return this.isConsentNecessary
-				? this.$t("pages.administration.students.consent.steps.success")
-				: this.$t("pages.administration.students.manualRegistration.steps.success");
+				? this.t("pages.administration.students.consent.steps.success")
+				: this.t("pages.administration.students.manualRegistration.steps.success");
 		},
 	},
 	async created() {
@@ -445,7 +446,7 @@ export default {
 				);
 				this.$store.dispatch("bulkConsent/register", users);
 
-				notifySuccess(this.$t("pages.administration.students.consent.steps.register.success"));
+				notifySuccess(this.t("pages.administration.students.consent.steps.register.success"));
 				this.next();
 			}
 		},
@@ -490,11 +491,12 @@ export default {
 			this.$router.push({
 				path: `/administration/students`,
 			});
+			this.cancelWarning = false;
 		},
 		checkTableData() {
 			this.tableTimeOut = setTimeout(() => {
 				if (this.tableData.length === 0) {
-					notifyError(this.$t("pages.administration.students.consent.table.empty"));
+					notifyError(this.t("pages.administration.students.consent.table.empty"));
 
 					this.$router.push({
 						path: `/administration/students`,
@@ -516,7 +518,7 @@ export default {
 			}
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

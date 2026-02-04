@@ -13,8 +13,8 @@
 				</div>
 
 				<template #actions>
-					<v-spacer />
-					<div class="d-flex mb-2 gap-2 mx-4">
+					<VSpacer />
+					<div class="d-flex mb-2 ga-2 mx-4">
 						<VBtn data-testid="dialog-cancel" variant="text" :text="t('common.actions.cancel')" @click="cancel" />
 						<VBtn
 							data-testid="dialog-confirm"

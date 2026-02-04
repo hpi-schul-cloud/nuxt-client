@@ -1,33 +1,37 @@
 <template>
-	<base-modal :active="showNotificationModal">
-		<template #body>
-			<modal-body-info :title="msg" :description="description">
-				<template v-if="isSuccess" #icon>
-					<v-icon size="60" color="success" :icon="mdiCheckCircle" />
-				</template>
-				<template v-else #icon>
-					<v-icon size="60" color="error" :icon="mdiAlertCircle" />
-				</template>
-			</modal-body-info>
-		</template>
-		<template #footer>
-			<modal-footer-confirm :is-error="!isSuccess" text="Ok" @click="closeModal" />
-		</template>
-	</base-modal>
+	<VDialog :model-value="showNotificationModal" width="480">
+		<VCard>
+			<VCardText class="d-flex flex-column align-center">
+				<div class="my-4">
+					<template v-if="isSuccess">
+						<VIcon size="60" color="success" :icon="mdiCheckCircle" />
+					</template>
+					<template v-else>
+						<VIcon size="60" color="error" :icon="mdiAlertCircle" />
+					</template>
+				</div>
+				<h2 class="my-4">{{ msg }}</h2>
+			</VCardText>
+			<VCardActions>
+				<VBtn
+					:text="t('common.actions.ok')"
+					variant="flat"
+					block
+					:color="isSuccess ? 'success' : 'error'"
+					@click="closeModal"
+				/>
+			</VCardActions>
+		</VCard>
+	</VDialog>
 </template>
 
 <script>
-import BaseModal from "../base/BaseModal.vue";
-import ModalBodyInfo from "@/components/legacy/ModalBodyInfo.vue";
-import ModalFooterConfirm from "@/components/legacy/ModalFooterConfirm.vue";
 import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
-export default {
+import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
+
+export default defineComponent({
 	name: "NotificationModal",
-	components: {
-		BaseModal,
-		ModalBodyInfo,
-		ModalFooterConfirm,
-	},
 	props: {
 		showNotificationModal: {
 			type: Boolean,
@@ -41,15 +45,17 @@ export default {
 			type: String,
 			default: "",
 		},
-		description: {
-			type: String,
-			default: "",
-		},
 		isSuccess: {
 			type: Boolean,
 		},
 	},
 	emits: ["update:show-notification-modal", "close"],
+	setup() {
+		const { t } = useI18n();
+		return {
+			t,
+		};
+	},
 	data() {
 		return {
 			mdiAlertCircle,
@@ -70,5 +76,5 @@ export default {
 			this.$emit("close");
 		},
 	},
-};
+});
 </script>
