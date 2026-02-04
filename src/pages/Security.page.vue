@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container">
 		<h1>{{ t("pages.security.headline") }}</h1>
 		<p>
 			<span>{{ t("pages.security.text") }}</span>
@@ -17,3 +17,10 @@ const { t } = useI18n();
 
 useTitle(buildPageTitle(t("pages.security.headline")));
 </script>
+
+<style scoped>
+.container {
+	max-width: 900px;
+	margin: auto;
+}
+</style>
