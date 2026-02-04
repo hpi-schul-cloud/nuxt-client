@@ -1,6 +1,6 @@
 <template>
-	<div class="connection-container">
-		<h2 class="mb-10">
+	<div class="mb-16">
+		<h2 class="mb-8">
 			{{ $t("pages.administration.ldap.connection.title") }}
 		</h2>
 		<VTextField
@@ -59,62 +59,59 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useEnvConfig } from "@data-env";
 import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline, mdiLockOutline } from "@icons/material";
 import { isRequired, isValidLdapPath, isValidLdapUrl, isValidSecuredLdapUrl } from "@util-validators";
-import { computed, defineComponent } from "vue";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	props: {
-		modelValue: {
-			type: Object,
-			default() {
-				return {};
-			},
-		},
-		validate: {
-			type: Boolean,
-		},
-	},
-	emits: ["update:modelValue", "update:errors", "update:inputs"],
-	setup() {
-		const { t } = useI18n();
+type LdapConnectionModel = {
+	url?: string;
+	basisPath?: string;
+	searchUser?: string;
+	searchUserPassword?: string;
+};
 
-		const insecureLDAPURLAllowed = computed(() => useEnvConfig().value?.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED);
-		const rules = computed(() => ({
-			url: [
-				isRequired(t("common.validation.required")),
-				insecureLDAPURLAllowed.value
-					? isValidLdapUrl(t("pages.administration.ldapEdit.validation.url"))
-					: isValidSecuredLdapUrl(t("pages.administration.ldapEdit.validation.url")),
-			],
-			basisPath: [
-				isRequired(t("common.validation.required")),
-				isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
-			],
-			searchUser: [
-				isRequired(t("common.validation.required")),
-				isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
-			],
-		}));
+const props = defineProps<{
+	modelValue: LdapConnectionModel;
+	validate?: boolean;
+}>();
 
-		return { rules };
+defineEmits<{
+	(e: "update:modelValue", value: LdapConnectionModel): void;
+	(e: "update:errors", value: boolean, section: string): void;
+}>();
+
+const { t } = useI18n();
+
+const insecureLDAPURLAllowed = computed(() => useEnvConfig().value?.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED);
+const rules = computed(() => ({
+	url: [
+		isRequired(t("common.validation.required")),
+		insecureLDAPURLAllowed.value
+			? isValidLdapUrl(t("pages.administration.ldapEdit.validation.url"))
+			: isValidSecuredLdapUrl(t("pages.administration.ldapEdit.validation.url")),
+	],
+	basisPath: [
+		isRequired(t("common.validation.required")),
+		isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
+	],
+	searchUser: [
+		isRequired(t("common.validation.required")),
+		isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
+	],
+	searchUserPassword: [isRequired(t("common.validation.required"))],
+}));
+
+watch(
+	() => props.validate,
+	(newVal) => {
+		if (newVal) {
+			// TODO: figure out what it does and refactor to work with Vuetify validation
+			// emit("update:errors", this.v$.$invalid, "connection");
+		}
 	},
-	data() {
-		return {
-			mdiAccountCircleOutline,
-			mdiDnsOutline,
-			mdiFileTreeOutline,
-			mdiLockOutline,
-		};
-	},
-});
+	{ immediate: true }
+);
 </script>
-
-<style scoped>
-.connection-container {
-	margin-bottom: 84px;
-}
-</style>
