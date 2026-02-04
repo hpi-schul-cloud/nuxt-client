@@ -1,16 +1,15 @@
 import { useCopy } from "./copy";
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
-import LoadingStateModule from "@/store/loading-state";
 import { COPY_MODULE_KEY } from "@/utils/inject";
-import { expectNotification } from "@@/tests/test-utils";
+import { expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { ref, watch } from "vue";
 
 vi.mock("./loadingState");
 
@@ -25,27 +24,24 @@ describe("copy composable", () => {
 			type: CopyParamsTypeEnum.Lesson,
 		};
 
-		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		const copyModuleMock = createModuleMocks(CopyModule);
 
-		const isLoadingDialogOpen = ref(false);
-
-		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
+		const { copy } = mountComposable(() => useCopy(), {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-					loadingStateModule: loadingStateModuleMock,
 				},
 			},
 		});
 
+		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
+
 		return {
 			copy,
 			payload,
-			loadingStateModuleMock,
 			copyModuleMock,
-			isLoadingDialogOpen,
+			loadingStore,
 		};
 	};
 
@@ -60,16 +56,17 @@ describe("copy composable", () => {
 	});
 
 	it("should open and close loading dialog", async () => {
-		const { copy, copyModuleMock, payload, isLoadingDialogOpen } = setup();
+		const { copy, copyModuleMock, payload, loadingStore } = setup();
 		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
 
-		const isLoadingDialogOpenStates: boolean[] = [];
-		watch(isLoadingDialogOpen, (newValue) => {
-			isLoadingDialogOpenStates.push(newValue);
-		});
-
 		await copy(payload);
-		expect(isLoadingDialogOpenStates).toEqual([true, false]);
+
+		expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(
+			1,
+			true,
+			"components.molecules.copyResult.title.loading"
+		);
+		expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(2, false);
 	});
 
 	it.each([[CopyParamsTypeEnum.Lesson], [CopyParamsTypeEnum.Task]])(
