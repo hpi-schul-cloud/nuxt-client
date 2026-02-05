@@ -1376,9 +1376,9 @@ export default {
 		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього учня?? | Ви дійсно хочете видалити цього {number} учня?",
-  "pages.administration.students.index.remove.confirm.message.warning":
-    "Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці учні залишатимуться видимими в таблиці.",
-  "pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
+	"pages.administration.students.index.remove.confirm.message.warning":
+		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці учні залишатимуться видимими в таблиці.",
+	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
 	"pages.administration.students.index.searchbar.placeholder": "Перегляньте студентів для",
 	"pages.administration.students.index.tableActions.consent": "Згода в аналоговій формі",
@@ -1446,8 +1446,8 @@ export default {
 		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
-  "pages.administration.teachers.index.remove.confirm.message.warning":
-    "Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці викладачі залишатимуться видимими в таблиці.",
+	"pages.administration.teachers.index.remove.confirm.message.warning":
+		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці викладачі залишатимуться видимими в таблиці.",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
 	"pages.administration.teachers.index.searchbar.placeholder": "Пошук",

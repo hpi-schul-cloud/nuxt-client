@@ -1383,8 +1383,9 @@ export default {
 		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diesen Schüler:in löschen möchtest? | Bist du sicher, dass du diese {number} Schüler:innen löschen möchtest?",
-  	"pages.administration.students.index.remove.confirm.message.warning": "Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Schüler:innen weiterhin in der Tabelle sichtbar.",
-    "pages.administration.students.index.remove.progress.description": "Bitte warten...",
+	"pages.administration.students.index.remove.confirm.message.warning":
+		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Schüler:innen weiterhin in der Tabelle sichtbar.",
+	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
 	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
 	"pages.administration.students.index.tableActions.consent": "Analoge Einverständniserklärung",
@@ -1453,7 +1454,7 @@ export default {
 		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diesen Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkraft löschen möchtest?",
-  "pages.administration.teachers.index.remove.confirm.message.warning":
+	"pages.administration.teachers.index.remove.confirm.message.warning":
 		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Lehrkraft weiterhin in der Tabelle sichtbar.",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",

@@ -191,9 +191,9 @@ describe("store/users", () => {
 
 				expect(receivedRequests).toHaveLength(1);
 				expect(receivedRequests[0]).toMatchObject({
-          url: `/v3/deletionRequestsPublic`,
-          params: { ids: payload.ids },
-        });
+					url: `/v3/deletionRequestsPublic`,
+					params: { ids: payload.ids },
+				});
 
 				const removeCommits = spyCommit.mock.calls.filter((c) => c[0] === "remove");
 				expect(removeCommits).toHaveLength(2);

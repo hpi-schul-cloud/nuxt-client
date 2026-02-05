@@ -122,7 +122,7 @@ const usersModule = mergeDeep(base, {
 		async deleteUsers({ commit }, { ids, userType }) {
 			try {
 				if (userType !== "teacher" && userType !== "student") {
-          commit("setBusinessError", { message: "Invalid user type", statusCode: 403 });
+					commit("setBusinessError", { message: "Invalid user type", statusCode: 403 });
 				}
 				commit("startProgress", { action: "delete" });
 				const chunkSize = 5;
@@ -130,7 +130,7 @@ const usersModule = mergeDeep(base, {
 				for (let i = 0; i < numChunks; i++) {
 					const percent = ((i + 1) * chunkSize * 100) / (numChunks * chunkSize);
 					const chunkIds = ids.slice(i * chunkSize, i * chunkSize + chunkSize);
-					await $axios.delete(`/v3/deletionRequestsPublic`, { params: { ids: chunkIds }});
+					await $axios.delete(`/v3/deletionRequestsPublic`, { params: { ids: chunkIds } });
 					chunkIds.forEach((id) => {
 						commit("remove", id);
 					});

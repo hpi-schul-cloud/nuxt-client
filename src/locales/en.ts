@@ -1358,9 +1358,9 @@ export default {
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
-  "pages.administration.students.index.remove.confirm.message.warning":
-    "The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
-  "pages.administration.students.index.remove.progress.description": "Please wait...",
+	"pages.administration.students.index.remove.confirm.message.warning":
+		"The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
+	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
 	"pages.administration.students.index.tableActions.consent": "Analogue consent form",
@@ -1428,7 +1428,7 @@ export default {
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher: in? | Are you sure you want to delete this {number} teacher?",
-  "pages.administration.teachers.index.remove.confirm.message.warning":
+	"pages.administration.teachers.index.remove.confirm.message.warning":
 		"The deletion will start in the background and may take a while. Until then, these teachers will remain visible in the table.",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
