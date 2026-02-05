@@ -96,35 +96,4 @@ watch(
 	padding-left: 15px;
 	margin: 24px auto;
 }
-
-@media (min-width: 576px) {
-	.wrapper {
-		width: 540px;
-		max-width: 100%;
-	}
-}
-
-@media (min-width: 768px) {
-	.wrapper {
-		width: 720px;
-		max-width: 100%;
-	}
-}
-
-@media (min-width: 992px) {
-	.wrapper {
-		width: 960px;
-		max-width: 100%;
-	}
-}
-
-@media (min-width: 1200px) {
-	.wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		width: 1140px;
-		max-width: 100%;
-	}
-}
 </style>
