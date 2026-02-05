@@ -32,6 +32,7 @@ export const isValidSecuredLdapUrl: FormValidatorFn<string> = (errMsg) => (value
  * Regex-based validator for the LDAP path.
  */
 export const isValidLdapPath: FormValidatorFn<string> = (errMsg) => (value) => {
+	if (!value) return true;
 	// The composition of this regex is as follows:
 	//   attributeType = [A-Za-z][\w-]*|\d+(?:\.\d+)*
 	//   attributeValue = #(?:[\dA-Fa-f]{2})+|(?:[^,=\+<>#;\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=\+<>#;\\"]|\\[\dA-Fa-f]{2})*"
