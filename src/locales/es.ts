@@ -1390,7 +1390,9 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
-	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
+  "pages.administration.students.index.remove.confirm.message.warning":
+    "La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos alumnos seguirán siendo visibles en la tabla.",
+  "pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
 	"pages.administration.students.index.searchbar.placeholder": "Buscar estudiantes",
 	"pages.administration.students.index.tableActions.consent": "Formulario de consentimiento analógico",
@@ -1459,6 +1461,8 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este profesor: en? | ¿Estás seguro de que deseas eliminar a este profesor de {number}?",
+  "pages.administration.teachers.index.remove.confirm.message.warning":
+    "La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos profesores seguirán siendo visibles en la tabla.",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
 	"pages.administration.teachers.index.searchbar.placeholder": "Buscar",
