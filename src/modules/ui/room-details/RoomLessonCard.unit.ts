@@ -145,8 +145,8 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 		it("should show information about the visibility of tasks for hidden lesson card", async () => {
 			const { wrapper } = setup({ lesson: hiddenTestLesson, userRole });
-			const chipElement = wrapper.find(".chip-value");
-			expect(chipElement.element.textContent).toContain("pages.room.lessonCard.label.notVisible");
+			const chipText = wrapper.find(".chip-items-group").text();
+			expect(chipText).toContain("pages.room.lessonCard.label.notVisible");
 		});
 	});
 
@@ -285,9 +285,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.published / 4 common.words.planned / 2 common.words.drafts`;
-				const chipElement = wrapper.find(".chip-value");
+				const chipText = wrapper.find(".chip-items-group").text();
 
-				expect(chipElement.element.innerHTML).toContain(expectedString);
+				expect(chipText).toContain(expectedString);
 			});
 
 			it("should have the proper string in the chip element for published tasks when lesson is a draft)", () => {
@@ -305,9 +305,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.ready / 4 common.words.planned / 2 common.words.drafts`;
-				const chipElement = wrapper.find(".chip-value");
+				const chipText = wrapper.find(".chip-items-group").text();
 
-				expect(chipElement.element.innerHTML).toContain(expectedString);
+				expect(chipText).toContain(expectedString);
 			});
 
 			it("should have the proper string in the chip element (not all the 3 numbers are available)", () => {
@@ -326,9 +326,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.published / 2 common.words.drafts`;
 
-				const chipElement = wrapper.find(".chip-value");
+				const chipText = wrapper.find(".chip-items-group").text();
 
-				expect(chipElement.element.innerHTML).toContain(expectedString);
+				expect(chipText).toContain(expectedString);
 			});
 
 			it("should not show the chip section if 'numberOf' properties are '0'", async () => {
@@ -344,7 +344,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					numberOfDraftTasks: 0,
 				};
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
-				const chipElement = wrapper.findAll(".chip-value");
+				const chipElement = wrapper.findAll(".chip-items-group");
 
 				expect(chipElement).toHaveLength(0);
 			});
@@ -362,7 +362,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					numberOfDraftTasks: 0,
 				};
 				const { wrapper } = setup({ lesson: lessonObject, userRole });
-				const chipElement = wrapper.findAll(".chip-value");
+				const chipElement = wrapper.findAll(".chip-items-group");
 
 				expect(chipElement).toHaveLength(0);
 			});
