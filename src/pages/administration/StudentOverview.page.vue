@@ -157,7 +157,6 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			hasCreatePermission: this.userHasPermission(Permission.StudentCreate),
 			mdiAccountPlus,
 			mdiAlert,
 			mdiCheck,
