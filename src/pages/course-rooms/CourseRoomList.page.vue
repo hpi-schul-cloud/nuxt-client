@@ -12,16 +12,13 @@
 		</template>
 		<template #page-content>
 			<v-row class="d-flex justify-center search">
-				<v-text-field
+				<SearchField
 					ref="search"
 					v-model="searchText"
+					density="default"
 					class="px-1"
-					variant="solo"
-					rounded
-					single-line
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
 			</v-row>
@@ -54,12 +51,14 @@ import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiMagnify } from "@icons/material";
+import { SearchField } from "@ui-search-field";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: {
 		CourseRoomWrapper,
 		CourseRoomAvatar,
+		SearchField,
 	},
 	data() {
 		return {

@@ -22,16 +22,13 @@
 		</template>
 		<template #page-content>
 			<div>
-				<v-text-field
+				<SearchField
 					ref="search"
 					v-model="searchText"
-					class="room-search px-1"
-					variant="solo"
-					rounded
-					single-line
+					density="default"
+					class="px-1 mb-6"
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
 				<div v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex" class="room-overview-row">
@@ -123,6 +120,7 @@ import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { mdiCheck, mdiMagnify } from "@icons/material";
+import { SearchField } from "@ui-search-field";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
@@ -133,6 +131,7 @@ export default defineComponent({
 		RoomEmptyAvatar: CourseRoomEmptyAvatar,
 		RoomModal: CourseRoomModal,
 		ImportFlow,
+		SearchField,
 	},
 	layout: "defaultVuetify",
 	setup() {
