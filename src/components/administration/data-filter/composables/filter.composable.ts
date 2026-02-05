@@ -10,16 +10,16 @@ import {
 	User,
 	UserBasedRegistrationOptions,
 } from "../types";
-import { useFilterLocalStorage } from "./localStorage.composable";
+import { useFilterLocalStorage } from "./filterLocalStorage.composable";
 import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterStorage, initializeUserType } = useFilterLocalStorage();
-	initializeUserType(userType);
+	const { setFilterState, getFilterState } = useFilterLocalStorage(userType as RoleName.Student | RoleName.Teacher);
 	const yearName = schoolsModule.getCurrentYear?.name;
 
 	const filterQuery = ref<FilterQuery>({});
@@ -172,7 +172,7 @@ export const useDataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
-		filterQuery.value = getFilterStorage() ?? {};
+		filterQuery.value = getFilterState() ?? {};
 		if (filterQuery.value) setFilterChipTitles();
 		setFilterMenuItems();
 	});
