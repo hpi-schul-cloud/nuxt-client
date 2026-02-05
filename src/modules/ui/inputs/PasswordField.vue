@@ -5,7 +5,7 @@
 		:type="fieldType"
 		:prepend-inner-icon="mdiLockOutline"
 		:append-inner-icon="visibilityIcon"
-		@click:append-inner="isPasswordRevealed.value = !isPasswordRevealed.value"
+		@click:append-inner="isPasswordRevealed = !isPasswordRevealed"
 	/>
 </template>
 
