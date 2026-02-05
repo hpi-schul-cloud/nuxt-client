@@ -47,25 +47,26 @@ import dayjs from "dayjs";
 import { computed, ref, useId, useTemplateRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
-interface Props {
-	date?: string; // ISO 8601 string
-	label?: string;
-	ariaLabel?: string;
-	required?: boolean;
-	disabled?: boolean;
-	minDate?: string;
-	maxDate?: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-	date: undefined,
-	label: undefined,
-	ariaLabel: undefined,
-	disabled: false,
-	required: false,
-	minDate: undefined,
-	maxDate: undefined,
-});
+const props = withDefaults(
+	defineProps<{
+		date?: string; // ISO 8601 string
+		label?: string;
+		ariaLabel?: string;
+		required?: boolean;
+		disabled?: boolean;
+		minDate?: string;
+		maxDate?: string;
+	}>(),
+	{
+		date: undefined,
+		label: undefined,
+		ariaLabel: undefined,
+		disabled: false,
+		required: false,
+		minDate: undefined,
+		maxDate: undefined,
+	}
+);
 
 const emit = defineEmits<{
 	(e: "update:date", value: string | null): void;

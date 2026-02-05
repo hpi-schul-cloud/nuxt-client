@@ -35,7 +35,6 @@
 							:label="t('common.labels.time')"
 							:class="{ hideCurrentTime: !data.date.time }"
 							data-testid="news_time"
-							placeholder="HH:MM"
 							@update:time="(newTime) => (data.date.time = newTime)"
 						/>
 					</div>
