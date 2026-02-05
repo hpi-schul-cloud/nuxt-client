@@ -119,7 +119,7 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { mdiCheck, mdiMagnify } from "@icons/material";
+import { mdiCheck } from "@icons/material";
 import { SearchField } from "@ui-search-field";
 import { defineComponent, reactive } from "vue";
 
@@ -166,7 +166,6 @@ export default defineComponent({
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
-			mdiMagnify,
 			searchText: "",
 			dragging: false,
 			allowDragging: false,

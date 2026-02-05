@@ -50,7 +50,6 @@ import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiMagnify } from "@icons/material";
 import { SearchField } from "@ui-search-field";
 import { defineComponent } from "vue";
 
@@ -63,7 +62,6 @@ export default defineComponent({
 	data() {
 		return {
 			searchText: "",
-			mdiMagnify,
 		};
 	},
 	computed: {
