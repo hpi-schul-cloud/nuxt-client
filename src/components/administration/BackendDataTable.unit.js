@@ -2,7 +2,7 @@ import BackendDataTable from "./BackendDataTable.vue";
 import TableHeadRow from "./TableHeadRow.vue";
 import users from "./testUserData.js";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mdiCheckboxIntermediate, mdiMenuDownOutline, mdiMenuUpOutline } from "@icons/material";
+import { mdiMenuDownOutline, mdiMenuUpOutline } from "@icons/material";
 import { VCheckbox } from "vuetify/components";
 
 const tableData = (n) => users.slice(0, n);
@@ -339,7 +339,7 @@ describe("BackendDataTable", () => {
 				it("intermediate state if some values are selected", async () => {
 					const { checkbox } = setup(Math.round(testData.length / 2));
 
-					expect(checkbox.vm.intermediate).toEqual(true);
+					expect(checkbox.vm.indeterminate).toEqual(true);
 				});
 			});
 			describe("on exclusive selection", () => {
@@ -370,9 +370,9 @@ describe("BackendDataTable", () => {
 				});
 
 				it("intermediate state if some values are unselected", async () => {
-					const { checkboxIcon } = setup(Math.round(testData.length / 2));
+					const { checkbox } = setup(Math.round(testData.length / 2));
 
-					expect(checkboxIcon).toEqual(mdiCheckboxIntermediate);
+					expect(checkbox.vm.indeterminate).toEqual(true);
 				});
 			});
 		});

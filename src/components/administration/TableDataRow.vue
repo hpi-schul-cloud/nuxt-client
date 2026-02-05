@@ -7,8 +7,7 @@
 		}"
 	>
 		<td v-if="selectable">
-			<div>
-				<!-- TODO: Should color be primary? -->
+			<div data-testid="selection-column">
 				<VCheckbox v-model="selectionStatus" width="45" :aria-label="`Zeile ${rowindex + 1} auswählen`" hide-details />
 			</div>
 		</td>

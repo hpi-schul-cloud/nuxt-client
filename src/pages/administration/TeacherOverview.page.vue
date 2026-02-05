@@ -106,6 +106,7 @@ import {
 } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
+import { SearchField } from "@ui-search-field";
 import { printQrCodes } from "@util-browser";
 import { defineComponent } from "vue";
 import { reactive } from "vue";
@@ -119,6 +120,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ConfirmationDialog,
+		SearchField,
 	},
 	props: {
 		showExternalSyncHint: {
