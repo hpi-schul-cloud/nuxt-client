@@ -2,6 +2,7 @@ import FwuMediaPage from "./FwuMedia.page.vue";
 import { FwuItemResponse } from "@/generated/fwu-api/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { SearchField } from "@ui-search-field";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -85,6 +86,12 @@ describe("FwuMediaPage", () => {
 	});
 
 	describe("Search Functionality", () => {
+		it("should render SerachField component", async () => {
+			const { wrapper } = await setup();
+			const searchField = wrapper.findComponent(SearchField);
+			expect(searchField.exists()).toBe(true);
+		});
+
 		it("should filter results by title", async () => {
 			const { wrapper, searchField } = await setup();
 			await advanceInTime();
