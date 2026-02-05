@@ -29,17 +29,31 @@ type FilterQuery = {
 
 type Query = {
 	query: FilterQuery;
+	searchQuery?: string;
 };
 
-type StorageFilterState = {
-	"pages.administration.students.index"?: Query;
-	"pages.administration.teachers.index"?: Query;
+type FilterType = {
+	[key: string]: Query | undefined;
 };
 
-type UiState = {
-	pagination: object;
-	filter: StorageFilterState;
-	sorting: object;
+type StoragePaginationState = {
+	[key: string]: {
+		page: number;
+		limit: number;
+	};
+};
+
+type StorageSortingState = {
+	[key: string]: {
+		sortBy: string;
+		sortOrder: string;
+	};
+};
+
+type FilterLocalStorage = {
+	pagination: StoragePaginationState;
+	filter: FilterType;
+	sorting: StorageSortingState;
 	version: number;
 };
 
@@ -54,10 +68,10 @@ export type {
 	ChipTitle,
 	DateSelection,
 	FilterItem,
+	FilterLocalStorage,
 	FilterOptionsType,
 	FilterQuery,
 	SelectOptionsType,
-	UiState,
 	UpdateFilterParamType,
 	UserBasedRegistrationOptions,
 };
