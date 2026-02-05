@@ -45,6 +45,7 @@
 			class="mt-8"
 			:label="t('pages.administration.ldap.connection.search.user.password')"
 			:placeholder="t('pages.administration.ldap.connection.search.user.password')"
+			validate-on="blur"
 			:rules="rules.searchUserPassword"
 			@update:model-value="
 				emit('update:modelValue', {

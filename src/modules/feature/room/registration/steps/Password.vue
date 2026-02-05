@@ -23,25 +23,23 @@
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters") }}</li>
 	</ul>
 	<div class="d-flex mt-4" :class="{ 'flex-column ga-4': xs, 'ga-6': !xs }">
-		<VTextField
+		<PasswordField
 			v-model="password"
 			aria-describedby="password-instructions"
 			autocomplete="new-password"
 			data-testid="password"
 			class="flex-fill password-error-message"
-			type="password"
 			:width="xs ? '100%' : '50%'"
 			:label="t('common.labels.password')"
 			:rules="passwordRules"
 			@update:model-value="onUpdatePassword"
 		/>
-		<VTextField
+		<PasswordField
 			ref="confirmPasswordField"
 			v-model="confirmPassword"
 			data-testid="confirm-password"
 			autocomplete="new-password"
 			class="flex-fill password-error-message"
-			type="password"
 			:label="t('common.labels.password.confirmation')"
 			:width="xs ? '100%' : '50%'"
 			:rules="passwordConfirmationRules"
@@ -51,6 +49,7 @@
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
+import { PasswordField } from "@ui-inputs";
 import {
 	hasLowercaseLetter,
 	hasNumber,
@@ -62,17 +61,14 @@ import {
 import { computed, nextTick, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-import { VTextField } from "vuetify/components";
 
-type Props = {
+defineProps<{
 	userData: {
 		firstName: string;
 		lastName: string;
 		email: string;
 	} | null;
-};
-
-defineProps<Props>();
+}>();
 
 const { t } = useI18n();
 const { xs } = useDisplay();
@@ -106,7 +102,7 @@ const onUpdatePassword = async () => {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .password-error-message {
 	:deep(.v-input__details) {
 		min-height: 30px;

@@ -1,21 +1,29 @@
 <template>
 	<VTextField
+		ref="passwordFieldRef"
 		v-model="password"
 		:type="fieldType"
 		:prepend-inner-icon="mdiLockOutline"
 		:append-inner-icon="visibilityIcon"
-		validate-on="blur"
 		@click:append-inner="toggleVisibility"
 	/>
 </template>
 
 <script setup lang="ts">
 import { mdiEyeOffOutline, mdiEyeOutline, mdiLockOutline } from "@icons/material";
-import { computed, ref } from "vue";
+import { computed, ref, useTemplateRef } from "vue";
 
 const password = defineModel({
 	type: String,
 	default: "",
+});
+
+const passwordFieldRef = useTemplateRef("passwordFieldRef");
+
+defineExpose({
+	validate: async () => {
+		await passwordFieldRef.value?.validate();
+	},
 });
 
 const isHidden = ref(true);
