@@ -14,12 +14,17 @@ import {
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
-import LoadingStateModule from "@/store/loading-state";
-import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
-import { apiResponseErrorFactory, axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
+import { COPY_MODULE_KEY } from "@/utils/inject";
+import {
+	apiResponseErrorFactory,
+	axiosErrorFactory,
+	expectNotification,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -28,7 +33,6 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
-	let loadingStateModuleMock: LoadingStateModule;
 	let copyResultResponse: CopyApiResponse | undefined = undefined;
 
 	const token = "ACoolToken";
@@ -45,8 +49,6 @@ describe("@components/share/ImportFlow", () => {
 				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-					[LOADING_STATE_MODULE_KEY]: loadingStateModuleMock,
-					loadingStateModule: loadingStateModuleMock,
 				},
 			},
 			props: {
@@ -58,7 +60,9 @@ describe("@components/share/ImportFlow", () => {
 			},
 		});
 
-		return { wrapper };
+		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
+
+		return { wrapper, loadingStore };
 	};
 
 	beforeEach(() => {
@@ -68,7 +72,6 @@ describe("@components/share/ImportFlow", () => {
 			getIsResultModalOpen: false,
 			getCopyResult: copyResultResponse,
 		});
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		setupStores({
 			rooms: CourseRoomListModule,
 		});
@@ -79,7 +82,7 @@ describe("@components/share/ImportFlow", () => {
 		it("should render with props", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper).toBeTruthy();
+			expect(wrapper.exists()).toBe(true);
 		});
 
 		it("should call validateShareToken", () => {
