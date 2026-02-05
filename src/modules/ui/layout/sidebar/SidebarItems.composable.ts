@@ -99,13 +99,6 @@ export const useSidebarItems = () => {
 			testId: "sidebar-calendar",
 		},
 		{
-			title: "common.words.lernstore",
-			to: "/content",
-			icon: mdiLibraryOutline,
-			permissions: [Permission.LernstoreView],
-			testId: "sidebar-learningstore",
-		},
-		{
 			title: "feature.media-shelf.title",
 			to: "/media-shelf",
 			icon: mdiBookshelf,

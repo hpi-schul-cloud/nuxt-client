@@ -222,7 +222,6 @@ export default {
 	"common.words.languages.es": "Español",
 	"common.words.languages.uk": "Ucranio",
 	"common.words.learnContent": "Contenidos de aprendizaje",
-	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Escuela principal",
 	"common.words.no": "No",
 	"common.words.not": "no",
@@ -1258,7 +1257,6 @@ export default {
 	"pages.administration.school.index.info":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Activar función de chat",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Lern-Store para estudiantes",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activar la visibilidad de los estudiantes para los profesores",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Activar la videoconferencia",
@@ -1267,8 +1265,6 @@ export default {
 		"Si los chats están habilitados en tu escuela, los administradores del equipo pueden desbloquear la función de chat de manera selectiva y respectivamente para su equipo.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Se trata de un ajuste no editable que controla la visibilidad de los alumnos para los profesores.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"Si no está seleccionado, los estudiantes no podrán acceder a Lern-Store",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"La activación de esta opción tiene un nivel alto según la ley de protección de datos. Para activar la visibilidad de todos los alumnos de la escuela para cada profesor, es necesario que cada alumno haya dado su consentimiento de manera efectiva para este tratamiento de datos.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1481,65 +1477,6 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Silenciar a los participantes al entrar",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Activar la sala de espera para los participantes",
-	"pages.content._id.addToTopic": "Para ser añadido a",
-	"pages.content._id.collection.selectElements": "Selecciona los elementos que deses añadir al tema",
-	"pages.content._id.metadata.author": "Autor",
-	"pages.content._id.metadata.createdAt": "Creado el",
-	"pages.content._id.metadata.noTags": "Sin etiquetas",
-	"pages.content._id.metadata.provider": "Editor",
-	"pages.content._id.metadata.updatedAt": "Última modificación el",
-	"pages.content.card.collection": "Colección",
-	"pages.content.emptyState.error.message.suggestions": "Sugerencia:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"La consulta de búsqueda debe contener al menos 2 caracteres.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling":
-		"Comprueba si todas las palabras están escritas correctamente.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Prueba otras consultas de búsqueda.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms": "Prueba con consultas más comunes.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Intenta usar una consulta más corta.",
-	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
-	"pages.content.index.backToCourse": "Volver al curso",
-	"pages.content.index.backToOverview": "Volver a la vista general",
-	"pages.content.index.search_for": "Buscar...",
-	"pages.content.index.search_resources": "Recursos",
-	"pages.content.index.search_results": "Resultados de la búsqueda de",
-	"pages.content.index.search.placeholder": "Buscar tienda de aprendizaje",
-	"pages.content.initState.description": "Aquí encontrará contenidos de alta calidad adaptados a su estado.",
-	"pages.content.initState.description.newMaterials":
-		"Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.",
-	"pages.content.initState.description.hint": "Nota:",
-	"pages.content.initState.description.hint.materials":
-		"Los materiales expuestos en la Tienda de Aprendizaje no se encuentran en nuestro servidor, sino que están disponibles a través de interfaces con otros servidores (las fuentes incluyen servidores educativos individuales, WirLernenOnline, Mundo, etc.).",
-	"pages.content.initState.description.hint.availability":
-		"Por esta razón, nuestro equipo no tiene ninguna influencia en la disponibilidad permanente de los materiales individuales y en toda la gama de materiales ofrecidos por las fuentes individuales.",
-	"pages.content.initState.description.usage":
-		"En el contexto del uso en instituciones educativas, se permite la copia de los medios en línea en medios de almacenamiento, en un dispositivo final privado o en plataformas de aprendizaje para un círculo cerrado de usuarios, si es necesario, en la medida en que esto sea necesario para la distribución y/o uso interno.",
-	"pages.content.initState.description.usage.deleteHint":
-		"Una vez finalizado el trabajo con los respectivos medios de comunicación en línea, éstos deben ser eliminados de los dispositivos finales privados, de los soportes de datos y de las plataformas de aprendizaje; a más tardar cuando se abandone la institución educativa.",
-	"pages.content.initState.description.usage.notPermitted":
-		"Por lo general, no se permite la publicación fundamental (por ejemplo, en Internet) de los medios de comunicación en línea o con partes de ellos de obras nuevas y/o editadas, o se requiere el consentimiento del propietario de los derechos.",
-	"pages.content.initState.title": "¡Bienvenido a la nueva Lern-Store!",
-	"pages.content.label.chooseACourse": "Selecciona un curso/asignatura",
-	"pages.content.label.chooseALessonTopic": "Elige un tema de la lección",
-	"pages.content.label.deselect": "Eliminar",
-	"pages.content.label.select": "Seleccionar",
-	"pages.content.label.selected": "Activo",
-	"pages.content.material.leavePageWarningFooter":
-		"El uso de estas ofertas puede estar sujeto a otras condiciones legales. Por lo tanto, consulta la política de privacidad del proveedor externo.",
-	"pages.content.material.leavePageWarningMain": "Nota: al hacer clic en el enlace, te irás de Schul-Cloud Brandenburg",
-	"pages.content.material.showMaterialHint":
-		"Nota: Utilice la parte izquierda de la pantalla para acceder al contenido.",
-	"pages.content.material.showMaterialHintMobile":
-		"Nota: Utilice el elemento anterior de la pantalla para acceder al contenido.",
-	"pages.content.material.toMaterial": "Material",
-	"pages.content.notification.errorMsg": "Algo ha salido mal. No se ha podido añadir material.",
-	"pages.content.notification.lernstoreNotAvailable": "La tienda de aprendizaje no está disponible",
-	"pages.content.notification.loading": "Se añade material",
-	"pages.content.notification.successMsg": "El material se ha añadido correctamente",
-	"pages.content.page.window.title": "Crear tema: {instance} - Tu entorno de aprendizaje digital",
-	"pages.content.placeholder.chooseACourse": "Elige un curso / asignatura",
-	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
-	"pages.content.preview_img.alt": "Vista previa de la imagen",
 	"pages.courseRoomDetails.fab.add.tool": "Agregar herramienta",
 	"pages.courseRoomDetails.fab.add.learnContent": "Crear contenido",
 	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
@@ -1576,16 +1513,6 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
-	"pages.lernstore.info.banner.title": "En el futuro, los medios estarán disponibles a través del estante de medios",
-	"pages.lernstore.info.banner.helpLinkText": "páginas de ayuda",
-	"pages.lernstore.info.banner.item.0.brb":
-		"A partir de ahora, las mediatecas del Lern-Store (Mundo, Wir lernen online y FWU-Medios) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.n21":
-		"A partir de ahora, las mediatecas del Lern-Store (Mundo y Wir lernen online) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.thr":
-		"A partir de ahora, las mediatecas del Lern-Store (Mundo, Wir lernen online y Mediothek/Pixiothek) están disponibles a través del estante de medios y los contenidos pueden integrarse en áreas como herramienta. Más información sobre las opciones avanzadas de búsqueda y filtrado, así como la integración de contenidos mediante enlaces profundos, se encuentra en las {helpLinkText}.",
-	"pages.lernstore.info.banner.item.1":
-		"Por lo tanto, el Lern-Store se desconectará en la semana 10 (04.03.2026). Los contenidos del Lern-Store ya integrados en los temas seguirán estando disponibles.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"La inscripción no pudo completarse. Por favor, inténtelo de nuevo más tarde.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
