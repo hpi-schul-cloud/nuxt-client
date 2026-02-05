@@ -4,26 +4,13 @@
 		:prepend-inner-icon="mdiMagnify"
 		variant="solo-filled"
 		density="compact"
+		single-line
 		flat
 		hide-details
 		clearable
 		:aria-label="ariaLabel"
 		:data-testid="testId"
 	/>
-	<!-- <VTextField
-			v-model="search"
-			density="compact"
-			flat
-			hide-details
-			mobile-breakpoint="sm"
-			single-line
-			variant="solo-filled"
-			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
-			:label="t('common.labels.search')"
-			:prepend-inner-icon="mdiMagnify"
-			:aria-label="t('pages.rooms.members.filter')"
-			data-testid="table-search"
-		/> -->
 </template>
 
 <script setup lang="ts">

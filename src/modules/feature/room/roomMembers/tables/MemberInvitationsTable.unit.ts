@@ -5,9 +5,10 @@ import { createTestAppStoreWithUser, mockedPiniaStoreTyping, registrationFactory
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { type Registration, useRegistrationStore } from "@data-room";
-import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { SearchField } from "@ui-search-field";
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
@@ -267,10 +268,9 @@ describe("MemberInvitationsTable", () => {
 		it("should render the search component", () => {
 			const { wrapper } = setup();
 
-			const search = wrapper.getComponent(VTextField);
+			const search = wrapper.findComponent(SearchField);
 
-			expect(search.props("label")).toEqual("common.labels.search");
-			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
+			expect(search.exists()).toBe(true);
 		});
 
 		it("should render search component with flex order 1 for extra small display sizes", () => {

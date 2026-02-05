@@ -16,26 +16,17 @@
 		>
 			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
-
 		<slot name="left-of-search" />
-		<VTextField
+		<SearchField
 			v-model="search"
-			density="compact"
-			flat
-			hide-details
-			mobile-breakpoint="sm"
-			single-line
-			variant="solo-filled"
 			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
+			mobile-breakpoint="sm"
 			:label="t('common.labels.search')"
-			:prepend-inner-icon="mdiMagnify"
 			:aria-label="t('pages.rooms.members.filter')"
 			data-testid="table-search"
 		/>
 	</div>
-
 	<VDivider role="presentation" />
-
 	<VDataTable
 		v-model:search="search"
 		v-model="selectedIds"
@@ -91,7 +82,8 @@
 
 <script setup lang="ts">
 import BatchActionMenu from "./BatchActionMenu.vue";
-import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { SearchField } from "@ui-search-field";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
