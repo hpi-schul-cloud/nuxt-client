@@ -4,7 +4,7 @@
 			v-model="timeValue"
 			v-time-input-mask
 			data-testid="time-input"
-			:append-inner-icon="mdiClockOutline"
+			:prepend-inner-icon="mdiClockOutline"
 			:label="label"
 			:aria-label="ariaLabel"
 			placeholder="HH:MM"

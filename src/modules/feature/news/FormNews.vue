@@ -30,13 +30,13 @@
 							data-testid="news_date"
 							@update:date="onUpdateDate"
 						/>
-						<base-input
-							v-model="data.date.time"
-							type="time"
+						<TimePicker
+							:time="data.date.time"
 							:label="t('common.labels.time')"
 							:class="{ hideCurrentTime: !data.date.time }"
 							data-testid="news_time"
 							placeholder="HH:MM"
+							@update:time="(newTime) => (data.date.time = newTime)"
 						/>
 					</div>
 				</VFadeTransition>
@@ -82,7 +82,7 @@ import { ClassicEditor } from "@feature-editor";
 import { mdiCalendar, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { DatePicker } from "@ui-date-time-picker";
+import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -96,6 +96,7 @@ export default defineComponent({
 		ConfirmationDialog,
 		WarningAlert,
 		DatePicker,
+		TimePicker,
 	},
 	inheritAttrs: false,
 	props: {
