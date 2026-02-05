@@ -105,10 +105,11 @@
 <script>
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
-import { Permission } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
@@ -151,9 +152,21 @@ export default defineComponent({
 		},
 	},
 	setup() {
+		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
+			useFilterLocalStorage(RoleName.Student);
 		const { askConfirmation } = useConfirmationDialog();
 		const { t } = useI18n();
-		return { askConfirmation, t };
+
+		return {
+			getPaginationState,
+			setPaginationState,
+			getSortingState,
+			setSortingState,
+			getFilterState,
+			setFilterState,
+			askConfirmation,
+			t,
+		};
 	},
 	data() {
 		return {
@@ -169,23 +182,11 @@ export default defineComponent({
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
-			currentFilterQuery: this.getUiState("filter", "pages.administration.students.index"),
-			page:
-				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index").page) ||
-				1,
-			limit:
-				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index").limit) ||
-				25,
-			sortBy:
-				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index").sortBy) ||
-				"firstName",
-			sortOrder:
-				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index").sortOrder) ||
-				"asc",
+			currentFilterQuery: this.getFilterState(),
+			page: this.getPaginationState()?.page || 1,
+			limit: this.getPaginationState()?.limit || 25,
+			sortBy: this.getSortingState()?.sortBy || "firstName",
+			sortOrder: this.getSortingState()?.sortOrder || "asc",
 			tableColumns: [
 				{
 					field: "firstName",
@@ -244,10 +245,9 @@ export default defineComponent({
 			tableSelection: [],
 			tableSelectionType: "inclusive",
 			active: false,
-			searchQuery:
-				(this.getUiState("filter", "pages.administration.students.index") &&
-					this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
-				"",
+			searchQuery: this.getFilterState()?.searchQuery || "",
+			confirmDialogProps: {},
+			isConfirmDialogActive: false,
 			classNameList: [],
 		};
 	},
@@ -397,17 +397,15 @@ export default defineComponent({
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.getUiState("filter", "pages.administration.students.index");
+			const temp = this.getFilterState();
 
-			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
+			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
-			if (JSON.stringify(query) !== JSON.stringify(this.getUiState("filter", "pages.administration.students.index"))) {
+			if (JSON.stringify(query) !== JSON.stringify(this.getFilterState())) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.setUiState("filter", "pages.administration.students.index", {
-				query,
-			});
+			this.setFilterState(query);
 		},
 	},
 	created() {
@@ -442,7 +440,7 @@ export default defineComponent({
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.setUiState("sorting", "pages.administration.students.index", {
+			this.setSortingState({
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
@@ -450,18 +448,18 @@ export default defineComponent({
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.setUiState("pagination", "pages.administration.students.index", {
-				currentPage: page,
+			this.setPaginationState({
+				limit: this.limit,
+				page: this.page,
 			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			//this.page = 1;
 			this.limit = limit;
-			// save user settings in uiState
-			this.setUiState("pagination", "pages.administration.students.index", {
-				itemsPerPage: limit,
-				currentPage: this.page,
+
+			this.setPaginationState({
+				limit: this.limit,
+				page: this.page,
 			});
 			this.find();
 		},
@@ -572,22 +570,13 @@ export default defineComponent({
 					const query = this.currentFilterQuery;
 
 					this.find();
-
-					this.setUiState("filter", "pages.administration.students.index", {
-						query,
-					});
+					this.setFilterState(query);
 				}
 			}, 400);
 		},
-		setUiState(key, identifier, data) {
-			this.$store?.commit("uiState/set", {
-				key,
-				identifier,
-				object: data,
-			});
-		},
-		getUiState(key, identifier) {
-			return this.$store?.getters["uiState/get"]({ key, identifier });
+		dialogConfirm(confirmDialogProps) {
+			this.confirmDialogProps = confirmDialogProps;
+			this.isConfirmDialogActive = true;
 		},
 		onUpdateFilter(query) {
 			this.currentFilterQuery = query;
