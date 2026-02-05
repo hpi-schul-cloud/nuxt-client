@@ -128,6 +128,59 @@ describe("@components/share/ImportFlow", () => {
 		describe("valid token", () => {
 			const originalName = "Nihilismus";
 
+			describe("when import is successfull with no failed items", () => {
+				beforeEach(() => {
+					copyModuleMock = createModuleMocks(CopyModule, {
+						getIsResultModalOpen: false,
+						getCopyResult: copyResultResponse,
+						getCopyResultFailedItems: [],
+					});
+					copyModuleMock.validateShareToken = () =>
+						Promise.resolve({
+							token,
+							parentType: ShareTokenInfoResponseParentTypeEnum.Room,
+							parentName: originalName,
+						});
+					const copyResults: CopyResultItem[] = [
+						{
+							elementId: "a123abc",
+							title: "Great room",
+							elements: [
+								{
+									title: "Lesson with GeoGebra",
+									type: CopyApiResponseTypeEnum.Lesson,
+								},
+							],
+							type: CopyApiResponseTypeEnum.Room,
+							url: "http://abc.de",
+						},
+					];
+					copyModuleMock.copyByShareToken = vi.fn().mockResolvedValue(copyResults);
+
+					copyResultResponse = {
+						type: CopyApiResponseTypeEnum.Room,
+						status: CopyApiResponseStatusEnum.Partial,
+					};
+				});
+
+				it("should set loading state to false and emit success", async () => {
+					const { wrapper, loadingStore } = setup();
+					await nextTick();
+
+					const newName = "new Name";
+					const dialog = wrapper.findComponent(ImportModal);
+					dialog.vm.$emit("import", newName);
+					await flushPromises();
+
+					expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(3, false);
+
+					const successEvent = wrapper.emitted("success");
+					expect(successEvent).toHaveLength(1);
+					expect(successEvent?.[0]).toEqual([newName, undefined]);
+					expect(copyModuleMock.reset).toHaveBeenCalled();
+				});
+			});
+
 			describe("when parent is a lesson", () => {
 				const setupWithValidator = async () => {
 					copyModuleMock.validateShareToken = () =>
