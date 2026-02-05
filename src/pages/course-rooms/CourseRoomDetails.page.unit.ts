@@ -20,15 +20,9 @@ import {
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
-import {
-	createTestAppStore,
-	createTestEnvStore,
-	mockedPiniaStoreTyping,
-	singleColumnBoardResponseFactory,
-} from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useLoadingStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -179,8 +173,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			},
 		});
 
-		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
-		return { wrapper, loadingStore, singleColumnBoard };
+		return { wrapper, singleColumnBoard };
 	};
 
 	it("should fetch data", () => {
