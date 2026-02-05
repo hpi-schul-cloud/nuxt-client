@@ -23,13 +23,12 @@
 						<p class="mt-13">
 							{{ t("components.organisms.FormNews.label.planned_publish") }}
 						</p>
-						<base-input
-							v-model="data.date.date"
-							type="date"
+						<DatePicker
+							:date="data.date.date"
 							:label="t('common.labels.date')"
 							:class="{ hideCurrentDate: !data.date.date }"
 							data-testid="news_date"
-							placeholder="JJJJ-MM-TT"
+							@update:date="onUpdateDate"
 						/>
 						<base-input
 							v-model="data.date.time"
@@ -83,8 +82,10 @@ import { ClassicEditor } from "@feature-editor";
 import { mdiCalendar, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DatePicker } from "@ui-date-time-picker";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -94,6 +95,7 @@ export default defineComponent({
 		ClassicEditor,
 		ConfirmationDialog,
 		WarningAlert,
+		DatePicker,
 	},
 	inheritAttrs: false,
 	props: {
@@ -222,6 +224,9 @@ export default defineComponent({
 			if (displayAt) {
 				[this.data.date.date, this.data.date.time] = createInputDateTime(displayAt);
 			}
+		},
+		onUpdateDate(newDate: string | null) {
+			this.data.date.date = newDate ? dayjs(newDate).format("YYYY-MM-DD") : "";
 		},
 		onUpdateValue(newValue: string) {
 			this.data.content = newValue;

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<v-text-field
+		<VTextField
 			v-model="timeValue"
 			v-time-input-mask
 			data-testid="time-input"
