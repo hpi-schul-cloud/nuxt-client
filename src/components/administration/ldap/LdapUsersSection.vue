@@ -118,7 +118,7 @@ watch(
 	(newVal) => {
 		if (newVal) {
 			// TODO: figure out what it does and refactor to work with Vuetify validation
-			// emit("update:errors", this.v$.$invalid, "connection");
+			// emit("update:errors", this.v$.$invalid, "users");
 		}
 	}
 );
