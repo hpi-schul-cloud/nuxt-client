@@ -15,9 +15,9 @@
 		@keydown.down.prevent="onMoveCardDown"
 		@keydown.up.prevent="onMoveCardUp"
 	>
-		<VCardText class="pb-1">
+		<VCardText class="pt-2">
 			<div class="top-row-container mb-0">
-				<div class="d-flex align-center mb-3 tagline">
+				<div class="d-flex align-center tagline">
 					<VIcon size="14" class="mr-1" :icon="titleIcon" />
 					<span class="title-board-card" :data-testid="`board-card-title-${boardCardIndex}`">
 						{{ cardTitle }}
@@ -31,7 +31,7 @@
 					/>
 				</div>
 			</div>
-			<h2 class="text-h4 board-title mt-2" :data-testid="`board-title-${boardCardIndex}`">
+			<h2 class="text-h4 board-title mt-1 mb-1" :data-testid="`board-title-${boardCardIndex}`">
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
@@ -225,7 +225,7 @@ const actionsMenuItems = computed(() => {
 .top-row-container {
 	display: grid;
 	grid-template-columns: 94% 6%;
-	align-items: center;
+	min-height: 36px;
 
 	.tagline {
 		text-align: left;
