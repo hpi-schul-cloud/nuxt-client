@@ -57,6 +57,7 @@
 		<template #[`header.data-table-select`]="{ someSelected, allSelected, selectAll }">
 			<VCheckboxBtn
 				:model-value="allSelected"
+				color="primary"
 				:indeterminate="someSelected && !allSelected"
 				:aria-label="t('ui.dataTable.select.all')"
 				data-testid="select-all-checkbox"
