@@ -707,13 +707,14 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should render add class button", () => {
+			it("should render add class fab button", () => {
 				const { wrapper } = setup();
 
-				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(true);
+				const fabComponent = wrapper.find(`[data-testid="fab_button_add_class"]`);
+				expect(fabComponent.exists()).toBe(true);
 			});
 
-			describe("when clicking on add class buttton", () => {
+			describe("when clicking on add class fab", () => {
 				const setup = () => {
 					const { wrapper } = createWrapper({});
 
@@ -722,12 +723,12 @@ describe("ClassOverview", () => {
 					};
 				};
 
-				it("should redirect to legacy create class page", () => {
+				it("should have link to legacy create class page", () => {
 					const { wrapper } = setup();
 
-					const addClassBtn = wrapper.find('[data-testid="admin-class-add-button"]');
+					const fabComponent = wrapper.find('[data-testid="fab_button_add_class"]');
 
-					expect(addClassBtn.attributes().href).toStrictEqual("/administration/classes/create");
+					expect(fabComponent.attributes("href")).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});
@@ -746,16 +747,10 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should not render add class button", () => {
+			it("should not render add class fab button", () => {
 				const { wrapper } = setup();
 
-				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(false);
-			});
-
-			it("should render info alert", () => {
-				const { wrapper } = setup();
-
-				expect(wrapper.find('[data-testid="admin-class-info-alert"]').exists()).toEqual(true);
+				expect(wrapper.find('[data-testid="fab_button_add_class"]').exists()).toEqual(false);
 			});
 		});
 	});
