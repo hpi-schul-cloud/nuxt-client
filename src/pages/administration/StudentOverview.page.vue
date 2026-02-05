@@ -1,31 +1,31 @@
 <template>
 	<div>
-		<default-wireframe :headline="$t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
-			<progress-modal
-				:active="isDeleting"
+		<DefaultWireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
+			<ProgressModal
+				v-model="isDeleting"
 				:percent="deletedPercent"
-				:title="$t('pages.administration.students.index.remove.progress.title')"
-				:description="$t('pages.administration.students.index.remove.progress.description')"
+				:title="t('pages.administration.students.index.remove.progress.title')"
+				:description="t('pages.administration.students.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
 
 			<base-input
 				v-model="searchQuery"
 				type="text"
-				:placeholder="$t('pages.administration.students.index.searchbar.placeholder')"
+				:placeholder="t('pages.administration.students.index.searchbar.placeholder')"
 				class="search-section"
 				label=""
 				data-testid="searchbar"
 				@update:model-value="barSearch"
 			>
 				<template #icon>
-					<v-icon :icon="mdiMagnify" />
+					<VIcon :icon="mdiMagnify" />
 				</template>
 			</base-input>
 
 			<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
-			<backend-data-table
+			<BackendDataTable
 				v-model:current-page="page"
 				v-model:rows-per-page="limit"
 				v-model:selected-row-ids="tableSelection"
@@ -66,13 +66,13 @@
 				</template>
 				<template #datacolumn-consentStatus="{ data: status }">
 					<span class="text-content">
-						<v-icon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
-						<v-icon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
-						<v-icon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+						<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
+						<VIcon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
+						<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
 					</span>
 				</template>
 				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<v-btn
+					<VBtn
 						icon
 						variant="text"
 						:class="{
@@ -81,35 +81,27 @@
 							'row-highlighted': highlighted,
 						}"
 						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-						:aria-label="$t('pages.administration.students.table.edit.ariaLabel')"
+						:aria-label="t('pages.administration.students.table.edit.ariaLabel')"
 						data-testid="edit_student_button"
 					>
-						<v-icon size="20" :icon="mdiPencilOutline" />
-					</v-btn>
+						<VIcon size="20" :icon="mdiPencilOutline" />
+					</VBtn>
 				</template>
-			</backend-data-table>
-			<admin-table-legend
-				:icons="icons"
-				:show-icons="showConsent"
-				:show-external-sync-hint="schoolIsExternallyManaged"
-			/>
-		</default-wireframe>
-		<base-dialog
-			v-if="isConfirmDialogActive"
-			:active="isConfirmDialogActive"
-			v-bind="confirmDialogProps"
-			@update:active="isConfirmDialogActive = false"
-		/>
+			</BackendDataTable>
+			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+		</DefaultWireframe>
+		<ConfirmationDialog />
 	</div>
 </template>
 
 <script>
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
+import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
-import { Permission } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
@@ -128,13 +120,16 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
-export default {
+export default defineComponent({
 	components: {
+		ConfirmationDialog,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
@@ -145,6 +140,23 @@ export default {
 		showExternalSyncHint: {
 			type: Boolean,
 		},
+	},
+	setup() {
+		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
+			useFilterLocalStorage(RoleName.Student);
+		const { askConfirmation } = useConfirmationDialog();
+		const { t } = useI18n();
+
+		return {
+			getPaginationState,
+			setPaginationState,
+			getSortingState,
+			setSortingState,
+			getFilterState,
+			setFilterState,
+			askConfirmation,
+			t,
+		};
 	},
 	data() {
 		return {
@@ -160,71 +172,59 @@ export default {
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
-			currentFilterQuery: this.getUiState("filter", "pages.administration.students.index"),
-			page:
-				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index").page) ||
-				1,
-			limit:
-				(this.getUiState("pagination", "pages.administration.students.index") &&
-					this.getUiState("pagination", "pages.administration.students.index").limit) ||
-				25,
-			sortBy:
-				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index").sortBy) ||
-				"firstName",
-			sortOrder:
-				(this.getUiState("sorting", "pages.administration.students.index") &&
-					this.getUiState("sorting", "pages.administration.students.index").sortOrder) ||
-				"asc",
+			currentFilterQuery: this.getFilterState(),
+			page: this.getPaginationState()?.page || 1,
+			limit: this.getPaginationState()?.limit || 25,
+			sortBy: this.getSortingState()?.sortBy || "firstName",
+			sortOrder: this.getSortingState()?.sortOrder || "asc",
 			tableColumns: [
 				{
 					field: "firstName",
-					label: this.$t("common.labels.firstName"),
+					label: this.t("common.labels.firstName"),
 					sortable: true,
 				},
 				{
 					field: "lastName",
-					label: this.$t("common.labels.lastName"),
+					label: this.t("common.labels.lastName"),
 					sortable: true,
 				},
 				{
 					field: "birthday",
-					label: this.$t("common.labels.birthday"),
+					label: this.t("common.labels.birthday"),
 					sortable: true,
 				},
 				{
 					field: "email",
-					label: this.$t("common.labels.email"),
+					label: this.t("common.labels.email"),
 					sortable: true,
 				},
 				{
 					field: "classes",
-					label: this.$t("common.labels.classes"),
+					label: this.t("common.labels.classes"),
 					sortable: true,
 				},
 				{
 					field: "consentStatus",
-					label: this.$t("common.labels.registration"),
+					label: this.t("common.labels.registration"),
 					sortable: true,
 					infobox: true,
 				},
 				{
 					field: "createdAt",
-					label: this.$t("common.labels.createdAt"),
+					label: this.t("common.labels.createdAt"),
 					sortable: true,
 				},
 				{
 					field: "lastLoginSystemChange",
-					label: this.$t("common.labels.migrated"),
+					label: this.t("common.labels.migrated"),
 					sortable: true,
-					tooltipText: this.$t("common.labels.migrated.tooltip"),
+					tooltipText: this.t("common.labels.migrated.tooltip"),
 				},
 				{
 					field: "outdatedSince",
-					label: this.$t("common.labels.outdated"),
+					label: this.t("common.labels.outdated"),
 					sortable: true,
-					tooltipText: this.$t("common.labels.outdated.tooltip"),
+					tooltipText: this.t("common.labels.outdated.tooltip"),
 				},
 				{
 					// edit column
@@ -235,10 +235,7 @@ export default {
 			tableSelection: [],
 			tableSelectionType: "inclusive",
 			active: false,
-			searchQuery:
-				(this.getUiState("filter", "pages.administration.students.index") &&
-					this.getUiState("filter", "pages.administration.students.index").searchQuery) ||
-				"",
+			searchQuery: this.getFilterState()?.searchQuery || "",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
@@ -263,26 +260,26 @@ export default {
 			return [
 				{
 					label: this.isConsentNecessary
-						? this.$t("pages.administration.students.index.tableActions.consent")
-						: this.$t("pages.administration.students.index.tableActions.registration"),
+						? this.t("pages.administration.students.index.tableActions.consent")
+						: this.t("pages.administration.students.index.tableActions.registration"),
 					icon: mdiCheck,
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
 				},
 				{
-					label: this.$t("pages.administration.students.index.tableActions.email"),
+					label: this.t("pages.administration.students.index.tableActions.email"),
 					icon: mdiEmailOutline,
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
-					label: this.$t("pages.administration.students.index.tableActions.qr"),
+					label: this.t("pages.administration.students.index.tableActions.qr"),
 					icon: mdiQrcode,
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
 				},
 				{
-					label: this.$t("pages.administration.students.index.tableActions.delete"),
+					label: this.t("pages.administration.students.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
 					action: this.handleBulkDelete,
 					permission: Permission.StudentDelete,
@@ -307,7 +304,7 @@ export default {
 			// filter the delete action if school is external
 			if (this.schoolIsExternallyManaged) {
 				editedActions = editedActions.filter(
-					(action) => action.label !== this.$t("pages.administration.students.index.tableActions.delete")
+					(action) => action.label !== this.t("pages.administration.students.index.tableActions.delete")
 				);
 			}
 
@@ -343,21 +340,21 @@ export default {
 			instanceBasedIcons.push({
 				icon: mdiCheckAll,
 				color: "rgba(var(--v-theme-success))",
-				label: this.$t("pages.administration.students.legend.icon.success"),
+				label: this.t("pages.administration.students.legend.icon.success"),
 			});
 
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: mdiCheck,
 					color: "rgba(var(--v-theme-warning))",
-					label: this.$t("utils.adminFilter.consent.label.parentsAgreementMissing"),
+					label: this.t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 				});
 			}
 
 			instanceBasedIcons.push({
 				icon: mdiClose,
 				color: "rgba(var(--v-theme-error))",
-				label: this.$t("utils.adminFilter.consent.label.missing"),
+				label: this.t("utils.adminFilter.consent.label.missing"),
 			});
 
 			return instanceBasedIcons;
@@ -370,17 +367,17 @@ export default {
 			return [
 				{
 					icon: mdiPlus,
-					label: this.$t("pages.administration.students.fab.add"),
+					label: this.t("pages.administration.students.fab.add"),
 					dataTestId: "fab_button_students_table",
 				},
 				{
-					label: this.$t("pages.administration.students.fab.add"),
+					label: this.t("pages.administration.students.fab.add"),
 					icon: mdiAccountPlus,
 					to: "/administration/students/new",
 					dataTestId: "fab_button_add_students",
 				},
 				{
-					label: this.$t("pages.administration.students.fab.import"),
+					label: this.t("pages.administration.students.fab.import"),
 					icon: mdiCloudDownload,
 					href: "/administration/students/import",
 					dataTestId: "fab_button_import_students",
@@ -390,17 +387,15 @@ export default {
 	},
 	watch: {
 		currentFilterQuery: function (query) {
-			const uiState = this.getUiState("filter", "pages.administration.students.index");
+			const temp = this.getFilterState();
 
-			if (uiState && uiState.searchQuery) query.searchQuery = uiState.searchQuery;
+			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
 
 			this.currentFilterQuery = query;
-			if (JSON.stringify(query) !== JSON.stringify(this.getUiState("filter", "pages.administration.students.index"))) {
+			if (JSON.stringify(query) !== JSON.stringify(this.getFilterState())) {
 				this.onUpdateCurrentPage(1);
 			}
-			this.setUiState("filter", "pages.administration.students.index", {
-				query,
-			});
+			this.setFilterState(query);
 		},
 	},
 	created() {
@@ -408,7 +403,7 @@ export default {
 		this.getClassNameList();
 	},
 	mounted() {
-		document.title = buildPageTitle(this.$t("pages.administration.students.index.title"));
+		document.title = buildPageTitle(this.t("pages.administration.students.index.title"));
 	},
 	methods: {
 		find() {
@@ -435,7 +430,7 @@ export default {
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
 			this.sortOrder = sortOrder;
-			this.setUiState("sorting", "pages.administration.students.index", {
+			this.setSortingState({
 				sortBy: this.sortBy,
 				sortOrder: this.sortOrder,
 			});
@@ -443,18 +438,18 @@ export default {
 		},
 		onUpdateCurrentPage(page) {
 			this.page = page;
-			this.setUiState("pagination", "pages.administration.students.index", {
-				currentPage: page,
+			this.setPaginationState({
+				limit: this.limit,
+				page: this.page,
 			});
 			this.find();
 		},
 		onUpdateRowsPerPage(limit) {
-			//this.page = 1;
 			this.limit = limit;
-			// save user settings in uiState
-			this.setUiState("pagination", "pages.administration.students.index", {
-				itemsPerPage: limit,
-				currentPage: this.page,
+
+			this.setPaginationState({
+				limit: this.limit,
+				page: this.page,
 			});
 			this.find();
 		},
@@ -483,12 +478,12 @@ export default {
 					selectionType,
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
+					notifySuccess(this.t("pages.administration.sendMail.success", rowIds.length));
 				} else {
-					notifyInfo(this.$t("pages.administration.sendMail.alreadyRegistered"));
+					notifyInfo(this.t("pages.administration.sendMail.alreadyRegistered"));
 				}
 			} catch {
-				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
+				notifyError(this.t("pages.administration.sendMail.error", rowIds.length));
 			}
 		},
 		async handleBulkQR(rowIds, selectionType) {
@@ -503,23 +498,23 @@ export default {
 						printPageTitleKey: "pages.administration.printQr.printPageTitle",
 					});
 				} else {
-					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
+					notifyInfo(this.t("pages.administration.printQr.emptyUser"));
 				}
 			} catch {
-				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
+				notifyError(this.t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
-		handleBulkDelete(rowIds, selectionType) {
+		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
 					await this.$store.dispatch("users/deleteUsers", {
 						ids: rowIds,
 						userType: "student",
 					});
-					notifySuccess(this.$t("pages.administration.remove.success"));
+					notifySuccess(this.t("pages.administration.remove.success"));
 					this.find();
 				} catch {
-					notifyError(this.$t("pages.administration.remove.error"));
+					notifyError(this.t("pages.administration.remove.error"));
 				}
 			};
 			const onCancel = () => {
@@ -528,27 +523,29 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
+				message = this.t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
 					number: rowIds.length,
 				});
 			} else {
 				if (rowIds.length) {
-					message = this.$t("pages.administration.students.index.remove.confirm.message.many", {
+					message = this.t("pages.administration.students.index.remove.confirm.message.many", {
 						number: rowIds.length,
 					});
 				} else {
-					message = this.$t("pages.administration.students.index.remove.confirm.message.all");
+					message = this.t("pages.administration.students.index.remove.confirm.message.all");
 				}
 			}
-			this.dialogConfirm({
+
+			const shouldDelete = await this.askConfirmation({
 				message,
-				confirmText: this.$t("pages.administration.students.index.remove.confirm.btnText"),
-				cancelText: this.$t("common.actions.cancel"),
-				icon: mdiAlert,
-				iconColor: "rgba(var(--v-theme-error))",
-				onConfirm,
-				onCancel,
+				confirmActionLangKey: "pages.administration.students.index.remove.confirm.btnText",
 			});
+
+			if (shouldDelete) {
+				await onConfirm();
+			} else {
+				onCancel();
+			}
 		},
 		barSearch: function (searchText) {
 			if (this.timer) {
@@ -563,22 +560,9 @@ export default {
 					const query = this.currentFilterQuery;
 
 					this.find();
-
-					this.setUiState("filter", "pages.administration.students.index", {
-						query,
-					});
+					this.setFilterState(query);
 				}
 			}, 400);
-		},
-		setUiState(key, identifier, data) {
-			this.$store?.commit("uiState/set", {
-				key,
-				identifier,
-				object: data,
-			});
-		},
-		getUiState(key, identifier) {
-			return this.$store?.getters["uiState/get"]({ key, identifier });
 		},
 		dialogConfirm(confirmDialogProps) {
 			this.confirmDialogProps = confirmDialogProps;
@@ -606,7 +590,7 @@ export default {
 			);
 		},
 	},
-};
+});
 </script>
 
 <style scoped>

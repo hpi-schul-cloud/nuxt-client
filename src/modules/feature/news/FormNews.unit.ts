@@ -81,7 +81,6 @@ describe("FormNews", () => {
 				},
 				stubs: {
 					"base-input": true,
-					"base-dialog": true,
 					ClassicEditor: true,
 				},
 			},
