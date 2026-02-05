@@ -1,6 +1,14 @@
 <template>
 	<div>
 		<DefaultWireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
+			<InfoAlert
+				v-if="schoolIsExternallyManaged"
+				class="mt-4 mb-4"
+				data-testid="admin-class-info-alert"
+				alert-title="pages.administration.classes.thr.hint.title"
+			>
+				{{ $t("pages.administration.classes.thr.hint.text") }}
+			</InfoAlert>
 			<ProgressModal
 				v-model="isDeleting"
 				:percent="deletedPercent"
@@ -110,6 +118,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
@@ -125,6 +134,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ConfirmationDialog,
+		InfoAlert,
 	},
 	props: {
 		showExternalSyncHint: {

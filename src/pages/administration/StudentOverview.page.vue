@@ -1,6 +1,14 @@
 <template>
 	<div>
 		<DefaultWireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
+			<InfoAlert
+				v-if="schoolIsExternallyManaged"
+				class="mt-4 mb-4"
+				data-testid="admin-class-info-alert"
+				alert-title="pages.administration.classes.thr.hint.title"
+			>
+				{{ t("pages.administration.classes.thr.hint.text") }}
+			</InfoAlert>
 			<ProgressModal
 				v-model="isDeleting"
 				:percent="deletedPercent"
@@ -88,15 +96,6 @@
 					</VBtn>
 				</template>
 			</BackendDataTable>
-			<InfoAlert
-				v-if="!hasCreatePermission"
-				class="mb-4"
-				:class="{ 'mt-4': !hasCreatePermission }"
-				data-testid="admin-class-info-alert"
-				alert-title="pages.administration.classes.thr.hint.title"
-			>
-				{{ t("pages.administration.classes.thr.hint.text") }}
-			</InfoAlert>
 			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 		</DefaultWireframe>
 		<ConfirmationDialog />
