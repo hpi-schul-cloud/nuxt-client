@@ -6,8 +6,8 @@
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
 		</div>
+		<TheFooter />
 	</div>
-	<TheFooter />
 </template>
 
 <script setup lang="ts">
@@ -91,7 +91,6 @@ watch(
 
 .wrapper {
 	grid-area: content;
-	min-height: calc(100vh - var(--legacy-topbar-height));
 	padding-right: 15px;
 	padding-left: 15px;
 	margin: 24px auto;
