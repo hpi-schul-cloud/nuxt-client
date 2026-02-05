@@ -61,7 +61,7 @@ import { useEnvConfig } from "@data-env";
 import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline } from "@icons/material";
 import { PasswordField } from "@ui-inputs";
 import { isRequired, isValidLdapPath, isValidLdapUrl, isValidSecuredLdapUrl } from "@util-validators";
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 type LdapConnectionModel = {
@@ -71,14 +71,12 @@ type LdapConnectionModel = {
 	searchUserPassword?: string;
 };
 
-const props = defineProps<{
+defineProps<{
 	modelValue: LdapConnectionModel;
-	validate?: boolean;
 }>();
 
 const emit = defineEmits<{
 	(e: "update:modelValue", value: LdapConnectionModel): void;
-	(e: "update:errors", value: boolean, section: string): void;
 }>();
 
 const { t } = useI18n();
@@ -101,14 +99,4 @@ const rules = computed(() => ({
 	],
 	searchUserPassword: [isRequired(t("common.validation.required"))],
 }));
-
-watch(
-	() => props.validate,
-	(newVal) => {
-		if (newVal) {
-			// TODO: figure out what it does and refactor to work with Vuetify validation
-			// emit("update:errors", this.v$.$invalid, "connection");
-		}
-	}
-);
 </script>

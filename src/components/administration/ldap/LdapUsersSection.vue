@@ -91,7 +91,7 @@ import {
 	mdiFileTreeOutline,
 } from "@icons/material";
 import { isRequired, isValidLdapPath } from "@util-validators";
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 type LdapUsersModel = {
@@ -103,25 +103,13 @@ type LdapUsersModel = {
 	uuid?: string;
 };
 
-const props = defineProps<{
+defineProps<{
 	modelValue: LdapUsersModel;
-	validate?: boolean;
 }>();
 
 const emit = defineEmits<{
 	(e: "update:modelValue", value: LdapUsersModel): void;
-	(e: "update:errors", value: boolean, section: string): void;
 }>();
-
-watch(
-	() => props.validate,
-	(newVal) => {
-		if (newVal) {
-			// TODO: figure out what it does and refactor to work with Vuetify validation
-			// emit("update:errors", this.v$.$invalid, "users");
-		}
-	}
-);
 
 const { t } = useI18n();
 

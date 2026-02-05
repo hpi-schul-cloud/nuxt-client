@@ -70,12 +70,10 @@ type LdapClassesModel = {
 
 const props = defineProps<{
 	modelValue: LdapClassesModel;
-	validate?: boolean;
 }>();
 
 const emit = defineEmits<{
 	(e: "update:modelValue", value: LdapClassesModel): void;
-	(e: "update:errors", value: boolean, section: string): void;
 	(e: "update:inputs"): void;
 }>();
 
@@ -95,7 +93,6 @@ const rules = computed(() => ({
 }));
 
 watch(checked, () => {
-	// emit("update:errors", this.v$.$invalid, "classes");
 	if (checked.value === false) {
 		emit("update:inputs");
 	}
@@ -104,14 +101,4 @@ watch(checked, () => {
 watch(classPathChanged, () => {
 	checked.value = !!props.modelValue.classPath;
 });
-
-watch(
-	() => props.validate,
-	(newVal) => {
-		if (newVal) {
-			// TODO: figure out what it does and refactor to work with Vuetify validation
-			// emit("update:errors", this.v$.$invalid, "classes");
-		}
-	}
-);
 </script>
