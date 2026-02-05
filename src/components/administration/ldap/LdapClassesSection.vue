@@ -1,61 +1,49 @@
 <template>
 	<div>
-		<h2 class="title-class">
+		<h2 class="my-10">
 			{{ $t("pages.administration.ldap.classes.title") }}
 		</h2>
-		<v-switch
-			v-model="checked"
-			:label="$t('pages.administration.ldap.classes.activate.import')"
-			:true-icon="mdiCheck"
-		/>
-		<p class="title-class">
+		<VSwitch v-model="checked" :label="$t('pages.administration.ldap.classes.activate.import')" :true-icon="mdiCheck" />
+		<p class="my-10">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
-		<base-input
-			data-testid="ldapDataClassesPath"
+		<VTextField
 			:model-value="classPathValue"
+			data-testid="ldapDataClassesPath"
 			:disabled="checked === false"
-			type="text"
 			class="mt-8"
 			:placeholder="$t('pages.administration.ldap.classes.path.title')"
 			:label="$t('pages.administration.ldap.classes.path.title')"
-			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="v$.modelValue.classPath"
+			:hint="$t('pages.administration.ldap.classes.path.info')"
+			:prepend-inner-icon="mdiFileTreeOutline"
+			validate-on="blur"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, classPath: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiFileTreeOutline" />
-			</template>
-		</base-input>
-		<p class="title-class">
+		/>
+		<p class="my-10">
 			{{ $t("pages.administration.ldap.classes.hint") }}
 		</p>
-		<base-input
-			data-testid="ldapDataClassesNameAttribute"
+		<VTextField
 			:model-value="modelValue.nameAttribute"
+			data-testid="ldapDataClassesNameAttribute"
 			:disabled="checked === false"
-			type="text"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
-			:validation-model="v$.modelValue.nameAttribute"
+			:prepend-inner-icon="mdiAccountEye"
+			validate-on="blur"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:model-value="$emit('update:modelValue', { ...modelValue, nameAttribute: $event })"
-		>
-			<template #icon>
-				<v-icon :icon="mdiAccountEye" />
-			</template>
-		</base-input>
-		<base-input
-			data-testid="ldapDataClassesNameparticipantAttribute"
+		/>
+		<VTextField
 			:model-value="modelValue.participantAttribute"
+			data-testid="ldapDataClassesNameparticipantAttribute"
 			:disabled="checked === false"
-			type="text"
 			class="mt-8"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			:validation-model="v$.modelValue.participantAttribute"
+			:prepend-inner-icon="mdiAccountGroupOutline"
+			validate-on="blur"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:model-value="
@@ -64,11 +52,7 @@
 					participantAttribute: $event,
 				})
 			"
-		>
-			<template #icon>
-				<v-icon :icon="mdiAccountGroupOutline" />
-			</template>
-		</base-input>
+		/>
 	</div>
 </template>
 
@@ -160,10 +144,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style lang="scss" scoped>
-.title-class {
-	margin-top: 40px;
-	margin-bottom: 40px;
-}
-</style>
