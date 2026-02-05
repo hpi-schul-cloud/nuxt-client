@@ -17,6 +17,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -709,7 +710,6 @@ describe("ClassOverview", () => {
 
 			it("should render add class fab button", () => {
 				const { wrapper } = setup();
-
 				const fabComponent = wrapper.find(`[data-testid="fab_button_add_class"]`);
 				expect(fabComponent.exists()).toBe(true);
 			});
@@ -725,10 +725,8 @@ describe("ClassOverview", () => {
 
 				it("should have link to legacy create class page", () => {
 					const { wrapper } = setup();
-
-					const fabComponent = wrapper.findComponent('[data-testid="fab_button_add_class"]');
-
-					expect(fabComponent.props("href")).toStrictEqual("/administration/classes/create");
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					expect(fabComponent.vm.actions[0].href).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});
