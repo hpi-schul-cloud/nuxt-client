@@ -25,7 +25,7 @@ export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teac
 		version: 1,
 	};
 
-	const state: Ref<FilterLocalStorage> = useStorage("FilterState", defaultState);
+	const state: Ref<FilterLocalStorage> = useStorage("filterState", defaultState);
 
 	const getFilterState = () => state.value.filter[filterStorageKey[userType]]?.query;
 	const setFilterState = (val: object) => (state.value.filter[filterStorageKey[userType]] = { query: val });
