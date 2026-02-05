@@ -25,7 +25,6 @@ export default {
 	components: {
 		InfoModalFullWidth,
 	},
-	layout: "loggedOut",
 	data() {
 		return {
 			activated: false,
