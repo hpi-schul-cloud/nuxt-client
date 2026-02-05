@@ -5,6 +5,7 @@ import { expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
+import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { mount } from "@vue/test-utils";
 import { Dayjs } from "dayjs";
 import { setActivePinia } from "pinia";
@@ -105,12 +106,12 @@ describe("FormNews", () => {
 	it("passes date and time to input fields", () => {
 		const { wrapper } = setup(testNews);
 
-		const dateInput = wrapper.find('[data-testid="news_date"]');
+		const dateInput = wrapper.findComponent(DatePicker);
 
-		expect(dateInput.attributes("modelvalue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputDate));
+		expect(dateInput.props("date")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputDate));
 
-		const timeInput = wrapper.find('[data-testid="news_time"]');
-		expect(timeInput.attributes("modelvalue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
+		const timeInput = wrapper.findComponent(TimePicker);
+		expect(timeInput.props("time")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
 	});
 
 	describe("save", () => {
