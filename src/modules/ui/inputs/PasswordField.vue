@@ -5,7 +5,7 @@
 		:type="fieldType"
 		:prepend-inner-icon="mdiLockOutline"
 		:append-inner-icon="visibilityIcon"
-		@click:append-inner="toggleVisibility"
+		@click:append-inner="isPasswordRevealed.value = !isPasswordRevealed.value"
 	/>
 </template>
 
@@ -26,11 +26,7 @@ defineExpose({
 	},
 });
 
-const isHidden = ref(true);
-const visibilityIcon = computed(() => (isHidden.value ? mdiEyeOffOutline : mdiEyeOutline));
-const fieldType = computed(() => (isHidden.value ? "password" : "text"));
-
-const toggleVisibility = () => {
-	isHidden.value = !isHidden.value;
-};
+const isPasswordRevealed = ref(false);
+const visibilityIcon = computed(() => (isPasswordRevealed.value ? mdiEyeOutline : mdiEyeOffOutline));
+const fieldType = computed(() => (isPasswordRevealed.value ? "text" : "password"));
 </script>
