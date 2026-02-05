@@ -726,9 +726,9 @@ describe("ClassOverview", () => {
 				it("should have link to legacy create class page", () => {
 					const { wrapper } = setup();
 
-					const fabComponent = wrapper.find('[data-testid="fab_button_add_class"]');
+					const fabComponent = wrapper.findComponent('[data-testid="fab_button_add_class"]');
 
-					expect(fabComponent.attributes("href")).toStrictEqual("/administration/classes/create");
+					expect(fabComponent.props("href")).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});
