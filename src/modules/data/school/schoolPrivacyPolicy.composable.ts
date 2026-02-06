@@ -1,6 +1,6 @@
 import { notifySuccess } from "../application/notification-store";
+import { ConsentVersion, CreateConsentVersionPayload } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { $axios } from "@/utils/api";
 import { readonly, ref } from "vue";
 import { useI18n } from "vue-i18n";

@@ -78,11 +78,10 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
-import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { useAppStore } from "@data-app";
-import { useSchoolPrivacyPolicy } from "@data-school";
+import { CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";

@@ -30,10 +30,10 @@
 
 <script setup lang="ts">
 import { currentDate } from "@/plugins/datetime";
-import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { CreateConsentVersionPayload } from "@data-school";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { computed, ComputedRef, Ref, ref } from "vue";

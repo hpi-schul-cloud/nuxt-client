@@ -1,7 +1,7 @@
 import TermsOfUseModule from "./terms-of-use";
 import { BusinessError } from "@/store/types/commons";
-import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { initializeAxios } from "@/utils/api";
+import { ConsentVersion, CreateConsentVersionPayload } from "@data-school";
 import { AxiosHeaders, AxiosInstance, AxiosResponse } from "axios";
 
 let receivedRequests: { path: string }[] = [];
