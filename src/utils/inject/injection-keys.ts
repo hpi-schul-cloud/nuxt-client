@@ -8,7 +8,6 @@ import FilePathsModule from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import NewsModule from "@/store/news";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -30,7 +29,6 @@ export const USER_LOGIN_MIGRATION_MODULE_KEY: InjectionKey<UserLoginMigrationMod
 	Symbol("userLoginMigrationModule");
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> = Symbol("systemsModule");
 export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule");
-export const PRIVACY_POLICY_MODULE_KEY: InjectionKey<PrivacyPolicyModule> = Symbol("privacyPolicyModule");
 export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> = Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
