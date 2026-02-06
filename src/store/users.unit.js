@@ -191,7 +191,7 @@ describe("store/users", () => {
 
 				expect(receivedRequests).toHaveLength(1);
 				expect(receivedRequests[0]).toMatchObject({
-					url: `/v1/users/v2/admin/${payload.userType}`,
+					url: `/v3/deletionRequestsPublic`,
 					params: { ids: payload.ids },
 				});
 
@@ -199,6 +199,26 @@ describe("store/users", () => {
 				expect(removeCommits).toHaveLength(2);
 				expect(removeCommits[0][1]).toStrictEqual(payload.ids[0]);
 				expect(removeCommits[1][1]).toStrictEqual(payload.ids[1]);
+			});
+
+			it("sets business error for invalid userType", async () => {
+				const receivedRequests = [];
+				initializeAxios({
+					delete: async (url, { params }) => {
+						receivedRequests.push({ url, params });
+					},
+				});
+				const spyCommit = vi.fn();
+				const payload = {
+					ids: ["5f2987e020834114b8efd6f1", "5f2987e020834114b8efd6f2"],
+					userType: "invalid",
+				};
+				await actions.deleteUsers({ commit: spyCommit }, payload);
+
+				expect(spyCommit).toHaveBeenCalledWith("setBusinessError", {
+					message: "Invalid user type",
+					statusCode: 403,
+				});
 			});
 		});
 	});
