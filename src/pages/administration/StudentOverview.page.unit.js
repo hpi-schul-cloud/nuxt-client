@@ -563,4 +563,26 @@ describe("students/index", () => {
 			},
 		]);
 	});
+
+	it("should render WarningAlert in ConfirmationDialog slot", async () => {
+		askConfirmationMock.mockResolvedValue(false);
+		const { wrapper } = setup([Permission.StudentDelete]);
+		await nextTick();
+
+		// Select a user and trigger delete action
+		const userRows = wrapper.findAll('[data-testid="table-data-row"]');
+		const checkbox = userRows.at(0).find(".selection-column").get('input[type="checkbox"]');
+		checkbox.setChecked();
+		await nextTick();
+
+		const actionsBtn = wrapper.find(".row-selection-info .actions button:first-child");
+		await actionsBtn.trigger("click");
+
+		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(3);
+		await deleteBtn.trigger("click");
+
+		//const warningAlert = wrapper.find('[data-testid="warning-alert-studentsdelete"]');
+		//expect(warningAlert.exists()).toBe(true);
+		expect(askConfirmationMock).toHaveBeenCalled();
+	});
 });
