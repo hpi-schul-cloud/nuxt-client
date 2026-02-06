@@ -114,7 +114,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 const rules = computed(() => ({
-	required: isRequired(t("common.validation.required")),
-	isValidLdapPath: isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
+	required: isRequired(),
+	isValidLdapPath: isValidLdapPath(),
 }));
 </script>

@@ -88,8 +88,8 @@ const classPathValue = computed(() => (checked.value ? props.modelValue.classPat
 const classPathChanged = computed(() => props.modelValue.classPath);
 
 const rules = computed(() => ({
-	required: isRequired(t("common.validation.required")),
-	isValidLdapPath: isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
+	required: isRequired(),
+	isValidLdapPath: isValidLdapPath(),
 }));
 
 watch(checked, () => {

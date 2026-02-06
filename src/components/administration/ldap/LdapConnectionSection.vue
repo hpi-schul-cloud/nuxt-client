@@ -84,20 +84,9 @@ const { t } = useI18n();
 
 const insecureLDAPURLAllowed = computed(() => useEnvConfig().value?.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED);
 const rules = computed(() => ({
-	url: [
-		isRequired(t("common.validation.required")),
-		insecureLDAPURLAllowed.value
-			? isValidLdapUrl(t("pages.administration.ldapEdit.validation.url"))
-			: isValidSecuredLdapUrl(t("pages.administration.ldapEdit.validation.url")),
-	],
-	basisPath: [
-		isRequired(t("common.validation.required")),
-		isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
-	],
-	searchUser: [
-		isRequired(t("common.validation.required")),
-		isValidLdapPath(t("pages.administration.ldapEdit.validation.path")),
-	],
-	searchUserPassword: [isRequired(t("common.validation.required"))],
+	url: [isRequired(), insecureLDAPURLAllowed.value ? isValidLdapUrl() : isValidSecuredLdapUrl()],
+	basisPath: [isRequired(), isValidLdapPath()],
+	searchUser: [isRequired(), isValidLdapPath()],
+	searchUserPassword: [isRequired()],
 }));
 </script>

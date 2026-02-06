@@ -80,7 +80,7 @@ describe("StepEmail", () => {
 				await emailInput.setValue("invalid-email");
 				await clickAddButton();
 
-				expect(emailInput.text()).toContain("pages.rooms.members.dialog.addExternalPerson.label.email.error");
+				expect(emailInput.text()).toContain("common.validation.email");
 			});
 
 			it("should not emit 'update:email' event", async () => {
@@ -101,7 +101,7 @@ describe("StepEmail", () => {
 				await emailInput.setValue("valid@example.com");
 				await clickAddButton();
 
-				expect(emailInput.text()).not.toContain("pages.rooms.members.dialog.addExternalPerson.label.email.error");
+				expect(emailInput.text()).not.toContain("common.validation.email");
 			});
 		});
 

@@ -117,7 +117,7 @@ describe("AddExternalPersonDialog", () => {
 
 				await clickButton("add-email");
 
-				expect(emailInput.text()).toContain("pages.rooms.members.dialog.addExternalPerson.label.email.error");
+				expect(emailInput.text()).toContain("common.validation.email");
 				expect(useRoomMembersStore().addMemberByEmail).not.toHaveBeenCalled();
 			});
 		});

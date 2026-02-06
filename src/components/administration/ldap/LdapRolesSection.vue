@@ -109,7 +109,7 @@ const groupOption = computed(() => props.modelValue.groupOption || "undefined");
 
 const rules = computed(() => {
 	if (groupOption.value === "group") {
-		return [isValidLdapPath(t("pages.administration.ldapEdit.validation.path"))];
+		return [isValidLdapPath()];
 	} else {
 		return [];
 	}

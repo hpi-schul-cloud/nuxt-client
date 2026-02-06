@@ -101,7 +101,7 @@ const dateObject = computed({
 
 const validationRules = computed(() => [
 	props.required ? isRequired(t("components.datePicker.validation.required")) : true,
-	isValidDateFormat(t("components.datePicker.validation.format")),
+	isValidDateFormat(),
 ]);
 
 const ariaLabelWithFormat = computed(() => {

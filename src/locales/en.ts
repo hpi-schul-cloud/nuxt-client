@@ -188,6 +188,7 @@ export default {
 	"common.validation.required": "Please fill out this field",
 	"common.validation.required2": "This is a mandatory field.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
@@ -1668,7 +1669,6 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Please enter the first and last name of the external person. The person will receive an e-mail with a registration link for {applicationName}. As soon as they have created an account, they will automatically be added to the room.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-mail address",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Please enter a valid e-mail address",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "First name",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Please enter a first name",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Last name",

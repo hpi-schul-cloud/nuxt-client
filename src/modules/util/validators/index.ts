@@ -5,11 +5,8 @@ import {
 	hasNoOpeningTagFollowedByString,
 	useOpeningTagValidator,
 } from "./openingTagValidator";
+import { hasLowercaseLetter, hasNumber, hasSpecialCharacter, hasUppercaseLetter } from "./passwordValidators";
 import {
-	hasLowercaseLetter,
-	hasNumber,
-	hasSpecialCharacter,
-	hasUppercaseLetter,
 	isNonEmptyString,
 	isOfMaxLength,
 	isOfMinLength,
