@@ -134,7 +134,6 @@ export default defineComponent({
 		RoomModal: CourseRoomModal,
 		ImportFlow,
 	},
-	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 

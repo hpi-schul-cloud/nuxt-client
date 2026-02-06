@@ -42,6 +42,10 @@ const links = computed(() => {
 			href: "mailto:support@dbildungscloud.de?subject=dBildungscloud%20Anfrage",
 			text: t("components.legacy.footer.contact"),
 		},
+		{
+			to: "/system/security",
+			text: t("components.legacy.footer.security"),
+		},
 	];
 
 	return useEnvConfig().value.ALERT_STATUS_URL
