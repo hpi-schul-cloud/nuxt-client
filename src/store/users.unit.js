@@ -202,15 +202,17 @@ describe("store/users", () => {
 			});
 
 			it("sets business error for invalid userType", async () => {
+				const receivedRequests = [];
 				initializeAxios({
-					delete: async () => {},
+					delete: async (url, { params }) => {
+						receivedRequests.push({ url, params });
+					},
 				});
 				const spyCommit = vi.fn();
 				const payload = {
-					ids: ["5f2987e020834114b8efd6f1"],
+					ids: ["5f2987e020834114b8efd6f1", "5f2987e020834114b8efd6f2"],
 					userType: "invalid",
 				};
-
 				await actions.deleteUsers({ commit: spyCommit }, payload);
 
 				expect(spyCommit).toHaveBeenCalledWith("setBusinessError", {
