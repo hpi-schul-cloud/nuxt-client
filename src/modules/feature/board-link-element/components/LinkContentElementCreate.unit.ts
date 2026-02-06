@@ -1,12 +1,18 @@
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
 
 describe("LinkContentElementCreate", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});

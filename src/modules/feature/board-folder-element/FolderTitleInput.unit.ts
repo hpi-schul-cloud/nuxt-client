@@ -1,6 +1,8 @@
 import FolderTitleInput from "./FolderTitleInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/lib/components/index";
 
@@ -24,6 +26,10 @@ describe("FolderTitleInput.vue", () => {
 			wrapper,
 		};
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("when valid title was entered", () => {
 		it("should not show error-message", async () => {

@@ -3,7 +3,9 @@ import { RoomFeatures } from "@/serverApi/v3";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
@@ -33,6 +35,10 @@ describe("@feature-room/RoomForm", () => {
 		});
 		return { wrapper, room };
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	afterEach(() => {
 		// needed because of attachTo to remove the component from the DOM
