@@ -3,7 +3,6 @@ import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
-import LoadingStateModule from "@/store/loading-state";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
@@ -20,7 +19,6 @@ const { tasksTeacher } = mocks;
 
 let tasksModuleMock: TasksModule;
 let copyModuleMock: CopyModule;
-let loadingStateModuleMock: LoadingStateModule;
 
 const getWrapper = (
 	props: {
@@ -38,7 +36,6 @@ const getWrapper = (
 			provide: {
 				tasksModule: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				loadingStateModule: loadingStateModuleMock,
 			},
 		},
 		props,
@@ -64,7 +61,6 @@ describe("TasksListItemMenu", () => {
 		});
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 	});
 
 	defineWindowWidth(1264);

@@ -15,7 +15,6 @@ import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
-import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -39,7 +38,6 @@ export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
-export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
@@ -64,7 +62,6 @@ export function initializeStores(store: Store<unknown>): void {
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
-	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
@@ -92,7 +89,6 @@ export const modules = {
 	finishedTasksModule: FinishedTasksModule,
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
-	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,
 	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,

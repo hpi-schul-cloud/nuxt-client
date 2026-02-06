@@ -132,7 +132,6 @@ import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -163,14 +162,12 @@ import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@ut
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
 });
 
-const { t } = useI18n();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
@@ -376,9 +373,7 @@ watch(
 	{ immediate: true }
 );
 
-const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
-
-const { copy } = useCopy(isLoadingDialogOpen);
+const { copy } = useCopy();
 
 const copyModule = injectStrict(COPY_MODULE_KEY);
 

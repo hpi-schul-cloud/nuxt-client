@@ -14,7 +14,6 @@ import {
 	COURSE_ROOM_LIST_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
@@ -39,7 +38,6 @@ import {
 	finishedTasksModule,
 	groupModule,
 	importUsersModule,
-	loadingStateModule,
 	newsModule,
 	privacyPolicyModule,
 	schoolExternalToolsModule,
@@ -117,7 +115,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
-	app.provide("loadingStateModule", loadingStateModule);
 	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
 	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
@@ -132,7 +129,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("tasksModule", tasksModule);
 	app.provide(USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(), userLoginMigrationModule);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
-	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
 	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
 	app.provide(COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(), commonCartridgeImportModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);

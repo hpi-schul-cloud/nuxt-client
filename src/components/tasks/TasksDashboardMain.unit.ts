@@ -4,7 +4,6 @@ import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import { Permission } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
-import LoadingStateModule from "@/store/loading-state";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
@@ -49,7 +48,6 @@ describe("TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
-	let loadingStateModuleMock: LoadingStateModule;
 	let shareModuleMock: ShareModule;
 	let wrapper: VueWrapper;
 
@@ -60,7 +58,6 @@ describe("TasksDashboardMain", () => {
 				provide: {
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
-					loadingStateModule: loadingStateModuleMock,
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[FINISHED_TASKS_MODULE_KEY]: finishedTasksModuleMock,
@@ -100,7 +97,6 @@ describe("TasksDashboardMain", () => {
 			copyModuleMock = createModuleMocks(CopyModule, {
 				getIsResultModalOpen: false,
 			});
-			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
@@ -176,7 +172,6 @@ describe("TasksDashboardMain", () => {
 			copyModuleMock = createModuleMocks(CopyModule, {
 				getIsResultModalOpen: false,
 			});
-			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: false,
 			});

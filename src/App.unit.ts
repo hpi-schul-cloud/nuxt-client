@@ -4,7 +4,6 @@ import LoggedOutLayout from "./layouts/LoggedOut.layout.vue";
 import { Layouts } from "./layouts/types";
 import { SchulcloudTheme } from "./serverApi/v3";
 import FilePathsModule from "./store/filePaths";
-import LoadingStateModule from "./store/loading-state";
 import StatusAlertsModule from "./store/status-alerts";
 import { FILE_PATHS_MODULE_KEY, STATUS_ALERTS_MODULE_KEY, THEME_KEY } from "./utils/inject";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
@@ -35,21 +34,10 @@ const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
 });
 
 describe("App.vue", () => {
-	let loadingStateModuleMock: LoadingStateModule;
-
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 	});
-	beforeEach(() => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			getIsOpen: false,
-			getLoadingState: {
-				hasOverlay: false,
-				isPersistent: false,
-				text: "Loading...",
-			},
-		});
-	});
+
 	const setup = (options: { layout: Layouts | undefined }) => {
 		mockedPiniaStoreTyping(useAppStore);
 		const router = createMock<Router>({});
@@ -72,7 +60,6 @@ describe("App.vue", () => {
 					[THEME_KEY.valueOf()]: {
 						name: SchulcloudTheme.Default,
 					},
-					loadingStateModule: loadingStateModuleMock,
 				},
 				stubs: {
 					RouterView: true,
