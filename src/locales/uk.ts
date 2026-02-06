@@ -654,8 +654,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Важлива інформація про дублювання",
 	"components.molecules.copyResult.title.success": "Дублювання успішне",
 	"components.molecules.copyResult.followingNotCopied": "Наступне не було скопійовано:",
-	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
-	"components.molecules.EdusharingFooter.text": "на платформі",
 	"components.molecules.import.card.options.title": "Імпортувати картку",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.label.room": "Оберіть кімнату",

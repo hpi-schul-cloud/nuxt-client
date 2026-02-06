@@ -645,8 +645,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Important duplication information",
 	"components.molecules.copyResult.title.success": "Duplication successful",
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
-	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
-	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.label.room": "Select room",
