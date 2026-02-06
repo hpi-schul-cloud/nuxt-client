@@ -80,7 +80,7 @@ describe("StepEmail", () => {
 				await emailInput.setValue("invalid-email");
 				await clickAddButton();
 
-				expect(emailInput.text()).toContain("common.validation.email");
+				expect(emailInput.text()).toContain("Bitte eine gültige E-Mail-Adresse eingeben");
 			});
 
 			it("should not emit 'update:email' event", async () => {
@@ -101,7 +101,7 @@ describe("StepEmail", () => {
 				await emailInput.setValue("valid@example.com");
 				await clickAddButton();
 
-				expect(emailInput.text()).not.toContain("common.validation.email");
+				expect(emailInput.text()).not.toContain("Bitte eine gültige E-Mail-Adresse eingeben");
 			});
 		});
 

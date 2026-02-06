@@ -193,7 +193,7 @@ describe("DatePicker", () => {
 					await textField.setValue("22");
 					await flushPromises();
 
-					expect(textField.text()).toBe("components.datePicker.validation.format");
+					expect(textField.text()).toBe("Bitte Format DD.MM.YYYY verwenden.");
 				});
 			});
 		});

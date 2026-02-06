@@ -147,7 +147,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("common.validation.password.upperCase");
+				expect(password.text()).toContain("Das Passwort muss mindestens einen Großbuchstaben enthalten.");
 			});
 
 			it("should show an error if password has no lowercase letter", async () => {
@@ -158,7 +158,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("common.validation.password.lowerCase");
+				expect(password.text()).toContain("Das Passwort muss mindestens einen Kleinbuchstaben enthalten.");
 			});
 
 			it("should show an error if password has no number", async () => {
@@ -169,7 +169,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("common.validation.password.number");
+				expect(password.text()).toContain("Das Passwort muss mindestens eine Zahl enthalten.");
 			});
 
 			it("should show an error if password has no special character", async () => {
@@ -180,7 +180,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("common.validation.password.specialCharacter");
+				expect(password.text()).toContain("Das Passwort muss mindestens ein Sonderzeichen enthalten.");
 			});
 
 			it("should show an error if passwords do not match", async () => {

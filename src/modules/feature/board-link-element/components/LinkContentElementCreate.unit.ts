@@ -74,13 +74,13 @@ describe("LinkContentElementCreate", () => {
 
 				const alerts = wrapper.find('[role="alert"]').text();
 
-				expect(alerts).toEqual("util-validators-invalid-url");
+				expect(alerts).toEqual("Dies ist keine gültige URL.");
 			});
 
 			it("should not emit create:url event", async () => {
 				const { wrapper } = setup();
 
-				const textarea = await wrapper.findComponent({ name: "v-textarea" });
+				const textarea = wrapper.findComponent({ name: "v-textarea" });
 				await textarea.setValue(INVALID_URL);
 				await textarea.trigger("keydown.enter");
 

@@ -58,7 +58,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue("");
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain("common.validation.nonEmptyString");
+			expect(textField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error message when name contains < followed by a string", async () => {
@@ -81,7 +81,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue(exceedsMaxLengthName);
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain("common.validation.tooLong");
+			expect(textField.text()).toContain("Der eingegebene Text überschreitet die Maximallänge");
 		});
 	});
 

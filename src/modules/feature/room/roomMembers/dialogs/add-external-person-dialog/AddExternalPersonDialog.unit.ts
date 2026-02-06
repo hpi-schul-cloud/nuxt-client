@@ -117,7 +117,7 @@ describe("AddExternalPersonDialog", () => {
 
 				await clickButton("add-email");
 
-				expect(emailInput.text()).toContain("common.validation.email");
+				expect(emailInput.text()).toContain("Bitte eine gültige E-Mail-Adresse eingeben");
 				expect(useRoomMembersStore().addMemberByEmail).not.toHaveBeenCalled();
 			});
 		});
