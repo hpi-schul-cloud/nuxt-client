@@ -451,7 +451,7 @@ onMounted(() => {
 
 const { instituteTitle } = storeToRefs(useEnvStore());
 
-const showBannerForThr = computed(() => useEnvConfig().value.SC_THEME === "thr");
+const showBannerForThr = useEnvConfig().value.SC_THEME === "thr";
 </script>
 
 <style scoped>
