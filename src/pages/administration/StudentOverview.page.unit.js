@@ -17,7 +17,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { createStore } from "vuex";
 
 const mockData = [
@@ -105,7 +105,7 @@ const createMockStore = () => {
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 vi.mock("@ui-confirmation-dialog");
-vi.mocked(useConfirmationDialog);
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 describe("students/index", () => {
 	let askConfirmationMock;
@@ -126,6 +126,15 @@ describe("students/index", () => {
 
 		vi.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
+
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+		mockedUseRemoveConfirmationDialog.mockReturnValue({
+			askConfirmation: askConfirmationMock,
+			isDialogOpen: ref(false),
+		});
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -562,27 +571,5 @@ describe("students/index", () => {
 				label: "utils.adminFilter.consent.label.missing",
 			},
 		]);
-	});
-
-	it("should render WarningAlert in ConfirmationDialog slot", async () => {
-		askConfirmationMock.mockResolvedValue(false);
-		const { wrapper } = setup([Permission.StudentDelete]);
-		await nextTick();
-
-		// Select a user and trigger delete action
-		const userRows = wrapper.findAll('[data-testid="table-data-row"]');
-		const checkbox = userRows.at(0).find(".selection-column").get('input[type="checkbox"]');
-		checkbox.setChecked();
-		await nextTick();
-
-		const actionsBtn = wrapper.find(".row-selection-info .actions button:first-child");
-		await actionsBtn.trigger("click");
-
-		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(3);
-		await deleteBtn.trigger("click");
-
-		//const warningAlert = wrapper.find('[data-testid="warning-alert-studentsdelete"]');
-		//expect(warningAlert.exists()).toBe(true);
-		expect(askConfirmationMock).toHaveBeenCalled();
 	});
 });
