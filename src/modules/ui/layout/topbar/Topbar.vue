@@ -52,8 +52,7 @@ import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
 import TopbarItem from "./TopbarItem.vue";
 import UserMenu from "./UserMenu.vue";
-import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
-import { useAppStoreRefs } from "@data-app";
+import { useAppStoreRefs, useStatusAlerts } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
@@ -61,6 +60,7 @@ import { useDisplay } from "vuetify";
 
 const { y } = useWindowScroll();
 const isScrollingDown = ref(false);
+const { fetchStatusAlerts, getStatusAlerts } = useStatusAlerts();
 
 watch(y, (newVal, oldVal) => {
 	isScrollingDown.value = newVal > oldVal;
@@ -75,18 +75,13 @@ defineProps({
 
 defineEmits(["sidebar-toggled"]);
 
-const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-
 const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
 
-onMounted(() => {
-	(async () => {
-		await statusAlertsModule.fetchStatusAlerts();
-	})();
+onMounted(async () => {
+	await fetchStatusAlerts();
 });
 
-const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
-
+const statusAlerts = computed(() => getStatusAlerts.value);
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
 const statusAlertColor = computed(() => {

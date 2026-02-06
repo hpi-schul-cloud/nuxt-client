@@ -5,8 +5,7 @@ import { Layouts } from "./layouts/types";
 import { SchulcloudTheme } from "./serverApi/v3";
 import FilePathsModule from "./store/filePaths";
 import LoadingStateModule from "./store/loading-state";
-import StatusAlertsModule from "./store/status-alerts";
-import { FILE_PATHS_MODULE_KEY, STATUS_ALERTS_MODULE_KEY, THEME_KEY } from "./utils/inject";
+import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "./utils/inject";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -28,10 +27,6 @@ const filePathsModule = createModuleMocks(FilePathsModule, {
 		termsOfUse: "",
 		analogConsent: "",
 	},
-});
-
-const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
-	getStatusAlerts: [],
 });
 
 describe("App.vue", () => {
@@ -68,7 +63,6 @@ describe("App.vue", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 					[THEME_KEY.valueOf()]: {
 						name: SchulcloudTheme.Default,
 					},
