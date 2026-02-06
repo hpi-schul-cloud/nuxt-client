@@ -263,7 +263,6 @@ export default defineComponent({
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
-			showBannerForThr: useEnvConfig().value.SC_THEME === "thr",
 		};
 	},
 	computed: {
@@ -363,6 +362,9 @@ export default defineComponent({
 					dataTestId: "fab_button_import_teachers",
 				},
 			];
+		},
+		showBannerForThr() {
+			return useEnvConfig().value.SC_THEME === "thr";
 		},
 	},
 	watch: {
