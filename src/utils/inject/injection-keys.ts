@@ -13,7 +13,6 @@ import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
-import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
 import TermsOfUseModule from "@/store/terms-of-use";
@@ -26,7 +25,6 @@ export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsM
 	Symbol("schoolExternalToolsModule");
 export const COURSE_ROOM_DETAILS_MODULE_KEY: InjectionKey<CourseRoomDetailsModule> = Symbol("courseRoomDetailsModule");
 export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> = Symbol("videoConferenceModule");
-export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> = Symbol("statusAlertsModule");
 export const USER_LOGIN_MIGRATION_MODULE_KEY: InjectionKey<UserLoginMigrationModule> =
 	Symbol("userLoginMigrationModule");
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> = Symbol("systemsModule");

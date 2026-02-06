@@ -4,7 +4,7 @@ import { StatusAlert } from "@/store/types/status-alert";
 import { $axios } from "@/utils/api";
 import { computed, ref } from "vue";
 
-export function useStatusAlerts() {
+export const useStatusAlerts = () => {
 	const businessError = ref<BusinessError>({
 		statusCode: "",
 		message: "",
@@ -58,4 +58,4 @@ export function useStatusAlerts() {
 		setStatus,
 		setStatusAlerts,
 	};
-}
+};
