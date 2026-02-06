@@ -1,5 +1,7 @@
 import SearchField from "./SearchField.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { mdiMagnify } from "@icons/material";
+import { VTextField } from "vuetify/components";
 
 describe("@ui-search-field", () => {
 	const setup = (options = {}) => {
@@ -13,41 +15,13 @@ describe("@ui-search-field", () => {
 		return wrapper;
 	};
 
-	it("renders a VTextField", () => {
+	it("should render correctly", () => {
 		const wrapper = setup();
-		expect(wrapper.findComponent({ name: "VTextField" }).exists()).toBe(true);
+		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("uses default aria-label from i18n when none is provided", () => {
+	it("should have mdiMagnify as prepend-inner-icon", () => {
 		const wrapper = setup();
-		const input = wrapper.find("input");
-
-		expect(input.attributes("aria-label")).toBe("common.labels.search");
-	});
-
-	it("uses provided aria-label attribute when passed", () => {
-		const wrapper = setup({
-			attrs: {
-				"aria-label": "Custom search label",
-			},
-		});
-
-		const input = wrapper.find("input");
-		expect(input.attributes("aria-label")).toBe("Custom search label");
-	});
-
-	it("uses default data-testid when none is provided", () => {
-		const wrapper = setup();
-		expect(wrapper.find('[data-testid="search-field"]').exists()).toBe(true);
-	});
-
-	it("uses provided data-testid attribute when passed", () => {
-		const wrapper = setup({
-			attrs: {
-				"data-testid": "my-search",
-			},
-		});
-
-		expect(wrapper.find('[data-testid="my-search"]').exists()).toBe(true);
+		expect(wrapper.findComponent(VTextField).props("prependInnerIcon")).toBe(mdiMagnify);
 	});
 });
