@@ -200,6 +200,24 @@ describe("store/users", () => {
 				expect(removeCommits[0][1]).toStrictEqual(payload.ids[0]);
 				expect(removeCommits[1][1]).toStrictEqual(payload.ids[1]);
 			});
+
+			it("sets business error for invalid userType", async () => {
+				initializeAxios({
+					delete: async () => {},
+				});
+				const spyCommit = vi.fn();
+				const payload = {
+					ids: ["5f2987e020834114b8efd6f1"],
+					userType: "invalid",
+				};
+
+				await actions.deleteUsers({ commit: spyCommit }, payload);
+
+				expect(spyCommit).toHaveBeenCalledWith("setBusinessError", {
+					message: "Invalid user type",
+					statusCode: 403,
+				});
+			});
 		});
 	});
 	describe("mutations", () => {
