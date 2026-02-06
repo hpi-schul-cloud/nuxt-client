@@ -43,7 +43,7 @@ const links = computed(() => {
 			text: t("components.legacy.footer.contact"),
 		},
 		{
-			href: "/system/security",
+			to: "/system/security",
 			text: t("components.legacy.footer.security"),
 		},
 	];
