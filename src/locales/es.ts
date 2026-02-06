@@ -186,6 +186,10 @@ export default {
 	"common.validation.email": "Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
 	"common.validation.number": "Se debe ingresar un número entero.",
+	"common.validation.password.upperCase": "La contraseña debe contener al menos una letra mayúscula.",
+	"common.validation.password.lowerCase": "La contraseña debe contener al menos una letra minúscula.",
+	"common.validation.password.number": "La contraseña debe contener al menos un número.",
+	"common.validation.password.specialCharacter": "La contraseña debe contener al menos un carácter especial.",
 	"common.validation.regex": "La entrada debe cumplir con la siguiente regla: {comentario}.",
 	"common.validation.required": "Por favor, rellene este campo",
 	"common.validation.required2": "Este es un campo obligatorio.",
@@ -1638,14 +1642,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Por favor, introduce una contraseña.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"La contraseña debe tener al menos 8 caracteres.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"La contraseña debe contener al menos una letra mayúscula.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"La contraseña debe contener al menos una letra minúscula.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"La contraseña debe contener al menos un número.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"La contraseña debe contener al menos un carácter especial.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Las contraseñas no coinciden.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",

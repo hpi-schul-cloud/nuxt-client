@@ -147,7 +147,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("pages.registrationExternalMembers.steps.password.validation.upperCase");
+				expect(password.text()).toContain("common.validation.password.upperCase");
 			});
 
 			it("should show an error if password has no lowercase letter", async () => {
@@ -158,7 +158,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("pages.registrationExternalMembers.steps.password.validation.lowerCase");
+				expect(password.text()).toContain("common.validation.password.lowerCase");
 			});
 
 			it("should show an error if password has no number", async () => {
@@ -169,7 +169,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain("pages.registrationExternalMembers.steps.password.validation.number");
+				expect(password.text()).toContain("common.validation.password.number");
 			});
 
 			it("should show an error if password has no special character", async () => {
@@ -180,9 +180,7 @@ describe("Password.vue", () => {
 				await password.trigger("blur");
 				await flushPromises();
 
-				expect(password.text()).toContain(
-					"pages.registrationExternalMembers.steps.password.validation.specialCharacter"
-				);
+				expect(password.text()).toContain("common.validation.password.specialCharacter");
 			});
 
 			it("should show an error if passwords do not match", async () => {

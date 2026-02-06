@@ -80,10 +80,10 @@ const confirmPassword = ref("");
 const passwordRules = computed(() => [
 	isRequired(t("pages.registrationExternalMembers.steps.password.validation.required")),
 	isOfMinLength(8)(t("pages.registrationExternalMembers.steps.password.validation.minLength")),
-	hasUppercaseLetter(t("pages.registrationExternalMembers.steps.password.validation.upperCase")),
-	hasLowercaseLetter(t("pages.registrationExternalMembers.steps.password.validation.lowerCase")),
-	hasNumber(t("pages.registrationExternalMembers.steps.password.validation.number")),
-	hasSpecialCharacter(t("pages.registrationExternalMembers.steps.password.validation.specialCharacter")),
+	hasUppercaseLetter(),
+	hasLowercaseLetter(),
+	hasNumber(),
+	hasSpecialCharacter(),
 ]);
 
 const passwordConfirmationRules = computed(() => [

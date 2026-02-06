@@ -192,6 +192,10 @@ export default {
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
+	"common.validation.password.upperCase": "Пароль повинен містити щонайменше одну велику літеру.",
+	"common.validation.password.lowerCase": "Пароль повинен містити щонайменше одну малу літеру.",
+	"common.validation.password.number": "Пароль повинен містити щонайменше одну цифру.",
+	"common.validation.password.specialCharacter": "Пароль повинен містити щонайменше один спеціальний символ.",
 	"common.validation.regex": "Введення має відповідати такому правилу: {comment}.",
 	"common.validation.required": "Заповніть це поле",
 	"common.validation.required2": "Це обов'язкове поле.",
@@ -1617,13 +1621,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Будь ласка, введіть пароль.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Пароль повинен містити щонайменше 8 символів.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"Пароль повинен містити щонайменше одну велику літеру.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"Пароль повинен містити щонайменше одну малу літеру.",
-	"pages.registrationExternalMembers.steps.password.validation.number": "Пароль повинен містити щонайменше одну цифру.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"Пароль повинен містити щонайменше один спеціальний символ.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Паролі не співпадають.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",

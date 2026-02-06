@@ -184,6 +184,10 @@ export default {
 	"common.validation.email": "Please enter a valid email address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
+	"common.validation.password.upperCase": "The password must contain at least one upper case letter.",
+	"common.validation.password.lowerCase": "The password must contain at least one lower case letter.",
+	"common.validation.password.number": "The password must contain at least one number.",
+	"common.validation.password.specialCharacter": "The password must contain at least one special character.",
 	"common.validation.regex": "The input must conform to the following rule: {comment}.",
 	"common.validation.required": "Please fill out this field",
 	"common.validation.required2": "This is a mandatory field.",
@@ -1602,14 +1606,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Please enter a password.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"The password must be at least 8 characters long.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"The password must contain at least one uppercase letter.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"The password must contain at least one lowercase letter.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"The password must contain at least one number.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"The password must contain at least one special character.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "The passwords do not match.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",

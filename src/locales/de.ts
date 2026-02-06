@@ -191,6 +191,10 @@ export default {
 	"common.validation.email": "Bitte eine gültige E-Mail-Adresse eingeben",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
+	"common.validation.password.upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten.",
+	"common.validation.password.lowerCase": "Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
+	"common.validation.password.number": "Das Passwort muss mindestens eine Zahl enthalten.",
+	"common.validation.password.specialCharacter": "Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
@@ -1631,14 +1635,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Das Passwort muss mindestens 8 Zeichen lang sein.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"Das Passwort muss mindestens einen Großbuchstaben enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"Das Passwort muss mindestens eine Zahl enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
