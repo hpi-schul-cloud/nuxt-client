@@ -7,7 +7,7 @@
 			data-testid="admin-class-title"
 		>
 			<InfoAlert
-				v-if="schoolsModule.schoolIsExternallyManaged"
+				v-if="showBannerForThr"
 				class="mt-4 mb-4"
 				data-testid="admin-class-info-alert"
 				alert-title="pages.administration.classes.thr.hint.title"
@@ -450,6 +450,8 @@ onMounted(() => {
 });
 
 const { instituteTitle } = storeToRefs(useEnvStore());
+
+const showBannerForThr = computed(() => useEnvConfig().value.SC_THEME === "thr");
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
 	<div>
 		<DefaultWireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
 			<InfoAlert
-				v-if="schoolIsExternallyManaged"
+				v-if="showBannerForThr"
 				class="mt-4 mb-4"
 				data-testid="admin-class-info-alert"
 				alert-title="pages.administration.classes.thr.hint.title"
@@ -362,6 +362,9 @@ export default defineComponent({
 					dataTestId: "fab_button_import_teachers",
 				},
 			];
+		},
+		showBannerForThr() {
+			return useEnvConfig().value.SC_THEME === "thr";
 		},
 	},
 	watch: {
