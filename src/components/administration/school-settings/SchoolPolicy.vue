@@ -50,7 +50,7 @@
 					</VListItemAction>
 				</template>
 			</VListItem>
-			<school-policy-form-dialog
+			<SchoolPolicyFormDialog
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolPolicyFormDialogOpen"
 				data-testid="form-dialog"
