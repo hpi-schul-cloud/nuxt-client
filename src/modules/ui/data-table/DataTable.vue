@@ -21,7 +21,6 @@
 			v-model="search"
 			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
 			mobile-breakpoint="sm"
-			:label="t('common.labels.search')"
 			:aria-label="t('pages.rooms.members.filter')"
 			data-testid="table-search"
 		/>
