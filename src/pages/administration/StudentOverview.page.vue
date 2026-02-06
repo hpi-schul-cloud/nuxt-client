@@ -11,7 +11,7 @@
 			<SearchField
 				v-model="searchQuery"
 				class="mt-10 mb-2"
-				:placeholder="t('pages.administration.students.index.searchbar.placeholder')"
+				:label="t('pages.administration.students.index.searchbar.placeholder')"
 				data-testid="searchbar"
 				:aria-label="t('pages.administration.students.index.searchbar.ariaLabel')"
 				@update:model-value="barSearch"

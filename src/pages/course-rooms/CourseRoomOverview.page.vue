@@ -14,7 +14,6 @@
 					v-model="allowDragging"
 					class="enable-disable"
 					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>

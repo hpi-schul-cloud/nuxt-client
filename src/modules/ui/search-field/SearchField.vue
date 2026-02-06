@@ -8,6 +8,7 @@
 		flat
 		hide-details
 		clearable
+		:label="t('common.labels.search')"
 		:aria-label="ariaLabel"
 		:data-testid="testId"
 	/>
@@ -20,10 +21,6 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const attrs = useAttrs();
-
-defineProps<{
-	hideLabel?: boolean;
-}>();
 
 const searchQuery = defineModel({
 	type: String,

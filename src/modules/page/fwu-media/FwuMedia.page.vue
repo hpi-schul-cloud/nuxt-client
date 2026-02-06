@@ -10,12 +10,7 @@
 				<VProgressCircular indeterminate size="115" />
 			</div>
 			<template v-else>
-				<SearchField
-					v-model="searchQuery"
-					data-testid="fwu-search"
-					class="mt-4 mb-8"
-					:label="t('common.labels.search')"
-				/>
+				<SearchField v-model="searchQuery" data-testid="fwu-search" class="mt-4 mb-8" />
 				<TransitionGroup name="fwu-grid" tag="div" class="fwu-grid-container">
 					<VCard
 						v-for="item in filteredFwuList"
