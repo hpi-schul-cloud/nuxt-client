@@ -81,13 +81,13 @@ const testId = attrs["data-testid"] ?? "dialog";
 const titleString = computed(() => (i18nKeyExists(props.title) ? t(props.title) : props.title));
 
 const onCancel = () => {
-	isOpen.value = false;
 	emit("cancel");
+	isOpen.value = false;
 };
 
 const onConfirm = () => {
-	isOpen.value = false;
 	emit("confirm");
+	isOpen.value = false;
 };
 </script>
 

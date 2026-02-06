@@ -8,10 +8,10 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 	const defaultState = {
 		pagination: {},
 		filter: {
-			"pages.administration.students.index": {
+			studentsManagementPage: {
 				query: {},
 			},
-			"pages.administration.teachers.index": {
+			teachersManagementPage: {
 				query: {},
 			},
 		},
