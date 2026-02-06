@@ -1,62 +1,41 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		:size="425"
-		has-buttons
-		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
-		:confirm-btn-icon="mdiFileReplaceOutline"
+	<SvsDialog
+		:model-value="isOpen"
+		:title="t('common.words.privacyPolicy')"
+		:confirm-btn-lang-key="'pages.administration.school.index.schoolPolicy.replace'"
 		:confirm-btn-disabled="!isValid"
-		@dialog-canceled="cancel"
-		@dialog-confirmed="submit"
+		@cancel="onCancel"
+		@confirm="onSubmit"
 	>
-		<template #title>
-			<h4 class="text-h2 mt-0">
-				{{ t("common.words.privacyPolicy") }}
-			</h4>
-		</template>
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="alert-text">
-						{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
-					</div>
-				</v-alert>
-				<v-file-input
+				<WarningAlert class="mb-5">
+					{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
+				</WarningAlert>
+				<VFileInput
 					ref="input-file"
 					v-model="file"
 					class="input-file mb-2 truncate-file-input"
 					data-testid="input-file"
-					density="compact"
 					accept="application/pdf"
 					:label="t('pages.administration.school.index.schoolPolicy.labels.uploadFile')"
 					:hint="t('pages.administration.school.index.schoolPolicy.hints.uploadFile')"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
-					@blur="onBlur"
-				>
-					<template #append-inner>
-						<v-icon
-							v-if="!isValid && isTouched"
-							color="rgba(var(--v-theme-error))"
-							data-testid="warning-icon"
-							:icon="mdiAlert"
-						/>
-					</template>
-				</v-file-input>
+				/>
 			</v-form>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { currentDate } from "@/plugins/datetime";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
-import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { notifySuccess } from "@data-app";
-import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -66,17 +45,15 @@ type Props = {
 defineProps<Props>();
 const emit = defineEmits<{
 	(e: "close"): void;
+	(e: "confirm", newConsentVersion: CreateConsentVersionPayload): void;
 }>();
 
 const { t } = useI18n();
-const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
-const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const policyForm: Ref<File[]> = ref([]);
 const isValid: Ref<boolean> = ref(false);
-const isTouched: Ref<boolean> = ref(false);
 const file: Ref<File | null> = ref(null);
-
 const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
 const maxFileUploadSizeInKb = 4194304;
@@ -89,23 +66,18 @@ const rules = {
 		t("pages.administration.school.index.schoolPolicy.validation.fileTooBig"),
 };
 
-const onBlur = () => {
-	isTouched.value = true;
-};
-
 const resetForm = () => {
 	policyForm.value = [];
 	isValid.value = false;
-	isTouched.value = false;
 	file.value = null;
 };
 
-const cancel = () => {
+const onCancel = () => {
 	resetForm();
 	emit("close");
 };
 
-const submit = async () => {
+const onSubmit = async () => {
 	if (isValid.value && file.value) {
 		const newConsentVersion: CreateConsentVersionPayload = {
 			schoolId: school.value.id,
@@ -117,20 +89,14 @@ const submit = async () => {
 		};
 
 		emit("close");
-		await privacyPolicyModule.createPrivacyPolicy(newConsentVersion);
+		emit("confirm", newConsentVersion);
 
-		notifySuccess(t("pages.administration.school.index.schoolPolicy.success"));
 		resetForm();
 	}
 };
 </script>
 
 <style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;

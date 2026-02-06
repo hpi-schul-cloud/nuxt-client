@@ -54,6 +54,7 @@
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolPolicyFormDialogOpen"
 				data-testid="form-dialog"
+				@confirm="onConfirm"
 				@close="closeDialog"
 			/>
 			<SvsDialog
@@ -77,35 +78,34 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
-import { ConsentVersion } from "@/store/types/consent-version";
+import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { downloadFile } from "@/utils/fileHelper";
-import { injectStrict, PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { notifySuccess, useAppStore } from "@data-app";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { useAppStore } from "@data-app";
+import { useSchoolPrivacyPolicy } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ComputedRef, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const isSchoolPolicyFormDialogOpen = ref(false);
 const isDeletePolicyDialogOpen = ref(false);
+const { status, fetchPrivacyPolicy, privacyPolicy, createPrivacyPolicy, deletePrivacyPolicy } =
+	useSchoolPrivacyPolicy();
 
 const school = computed(() => schoolsModule.getSchool);
 watch(
 	school,
 	async (newValue) => {
-		await privacyPolicyModule.fetchPrivacyPolicy(newValue.id);
+		await fetchPrivacyPolicy(newValue.id);
 	},
 	{ immediate: true }
 );
 
 const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
-
-const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(() => privacyPolicyModule.getPrivacyPolicy);
-const status: ComputedRef<string> = computed(() => privacyPolicyModule.getStatus);
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 
@@ -116,12 +116,14 @@ const downloadPolicy = () => {
 };
 
 const deleteFile = async () => {
-	await privacyPolicyModule.deletePrivacyPolicy();
-
-	notifySuccess(t("pages.administration.school.index.schoolPolicy.delete.success"));
+	await deletePrivacyPolicy();
 };
 
 const closeDialog = () => {
 	isSchoolPolicyFormDialogOpen.value = false;
+};
+
+const onConfirm = async (newConsentVersion: CreateConsentVersionPayload) => {
+	await createPrivacyPolicy(newConsentVersion);
 };
 </script>
