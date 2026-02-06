@@ -2,9 +2,8 @@ import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
-import LoadingStateModule from "@/store/loading-state";
 import { RoomItem } from "@/types/room/Room";
-import { COPY_MODULE_KEY, LOADING_STATE_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -55,7 +54,6 @@ describe("RoomsPage", () => {
 		isLoading = false
 	) => {
 		const copyModule = createModuleMocks(CopyModule);
-		const loadingState = createModuleMocks(LoadingStateModule);
 
 		injectRouterMock(router);
 
@@ -68,7 +66,6 @@ describe("RoomsPage", () => {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
 					[COPY_MODULE_KEY]: copyModule,
-					[LOADING_STATE_MODULE_KEY]: loadingState,
 				},
 				stubs: { ImportFlow: true, ImportCardDialog: true, RouterLink: true },
 			},

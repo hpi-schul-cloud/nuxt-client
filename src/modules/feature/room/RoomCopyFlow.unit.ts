@@ -1,8 +1,13 @@
 import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import LoadingStateModule from "@/store/loading-state";
-import { createTestRoomStore, expectNotification, mockApiResponse, roomFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import {
+	createTestRoomStore,
+	expectNotification,
+	mockApiResponse,
+	mockedPiniaStoreTyping,
+	roomFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useLoadingStore } from "@data-app";
 import { RoomCopyFlow } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
@@ -29,15 +34,12 @@ describe("@feature-room/RoomCopyFlow", () => {
 			success: true,
 		});
 
-		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
+		const loadingStore = mockedPiniaStoreTyping(useLoadingStore);
 		const room = roomFactory.build();
 
 		const wrapper = mount(RoomCopyFlow, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					["loadingStateModule"]: loadingStateModuleMock,
-				},
 			},
 			props: {
 				room,
@@ -52,7 +54,7 @@ describe("@feature-room/RoomCopyFlow", () => {
 		return {
 			wrapper,
 			infoDialog,
-			loadingStateModuleMock,
+			loadingStore,
 			roomStore,
 			room,
 		};
@@ -63,6 +65,12 @@ describe("@feature-room/RoomCopyFlow", () => {
 			const { infoDialog } = await mountComponent();
 
 			expect(infoDialog.exists()).toBe(true);
+		});
+
+		it("should set loading state to false", async () => {
+			const { loadingStore } = await mountComponent();
+
+			expect(loadingStore.setLoadingState).toHaveBeenCalledWith(false);
 		});
 	});
 
@@ -109,12 +117,10 @@ describe("@feature-room/RoomCopyFlow", () => {
 			expect(infoDialog.exists()).toBe(false);
 		});
 
-		it("should open the loading dialog", async () => {
-			const { loadingStateModuleMock } = await setupWithConfirm();
+		it("should set the loading status to true with the correct message", async () => {
+			const { loadingStore } = await setupWithConfirm();
 
-			expect(loadingStateModuleMock.open).toHaveBeenCalledWith({
-				text: "data-room.copy.loading",
-			});
+			expect(loadingStore.setLoadingState).toHaveBeenCalledWith(true, "data-room.copy.loading");
 		});
 
 		it("should call the api", async () => {
@@ -133,10 +139,10 @@ describe("@feature-room/RoomCopyFlow", () => {
 			return { infoDialog, ...rest };
 		};
 
-		it("should close the loading dialog", async () => {
-			const { loadingStateModuleMock } = await setupWithApiSuccess();
+		it("should set the loading status to false", async () => {
+			const { loadingStore } = await setupWithApiSuccess();
 
-			expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(3, false);
 		});
 
 		it("should show a success notification", async () => {
@@ -178,10 +184,10 @@ describe("@feature-room/RoomCopyFlow", () => {
 			return { infoDialog, roomStore, ...rest };
 		};
 
-		it("should close the loading dialog", async () => {
-			const { loadingStateModuleMock } = await setupWithFailure();
+		it("should set the loading status to false", async () => {
+			const { loadingStore } = await setupWithFailure();
 
-			expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(3, false);
 		});
 
 		it("should show a failure notification", async () => {
@@ -223,10 +229,10 @@ describe("@feature-room/RoomCopyFlow", () => {
 			return { infoDialog, roomStore, ...rest };
 		};
 
-		it("should close the loading dialog", async () => {
-			const { loadingStateModuleMock } = await setupWithNoId();
+		it("should set the loading status to false", async () => {
+			const { loadingStore } = await setupWithNoId();
 
-			expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(3, false);
 		});
 
 		it("should show a failure notification", async () => {
@@ -257,10 +263,10 @@ describe("@feature-room/RoomCopyFlow", () => {
 			return { infoDialog, ...rest };
 		};
 
-		it("should close the loading dialog", async () => {
-			const { loadingStateModuleMock } = await setupWithError();
+		it("should set the loading status to false", async () => {
+			const { loadingStore } = await setupWithError();
 
-			expect(loadingStateModuleMock.close).toHaveBeenCalled();
+			expect(loadingStore.setLoadingState).toHaveBeenNthCalledWith(3, false);
 		});
 
 		it("should emit 'copy:ended' event", async () => {
