@@ -52,11 +52,11 @@
 <script lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { currentDate } from "@/plugins/datetime";
-import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
+import { CreateConsentVersionPayload } from "@data-school";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
 import { computed, ComputedRef, defineComponent, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";

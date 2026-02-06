@@ -1,9 +1,10 @@
-import PrivacyPolicyModule from "./privacy-policy";
+import PrivacyPolicyModule from "../../../store/privacy-policy";
 import { BusinessError } from "@/store/types/commons";
-import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { initializeAxios } from "@/utils/api";
+import { ConsentVersion, CreateConsentVersionPayload } from "@data-school";
 import { AxiosInstance } from "axios";
 
+// TODO: refactor old vuex test to use new composable and remove old module test
 let receivedRequests: { path: string }[] = [];
 let getRequestReturn: { data: { data: ConsentVersion[] } } | { data: ConsentVersion } = {
 	data: { data: [] },
