@@ -1,204 +1,196 @@
 <template>
-	<div>
-		<DefaultWireframe
-			:headline="t('pages.administration.classes.index.title')"
-			max-width="full"
-			:fab-items="fab"
-			data-testid="admin-class-title"
+	<DefaultWireframe
+		:headline="t('pages.administration.classes.index.title')"
+		max-width="full"
+		:fab-items="fab"
+		data-testid="admin-class-title"
+	>
+		<ThrInfoBanner />
+		<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
+			<v-tabs v-model="activeTab" class="tabs-max-width" grow>
+				<v-tab value="next" data-testid="admin-class-next-year-tab">
+					<span>{{ nextYear }}</span>
+				</v-tab>
+				<v-tab value="current" data-testid="admin-class-current-year-tab">
+					<span>{{ currentYear }}</span>
+				</v-tab>
+				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
+					<span>{{ t("pages.administration.common.label.archive") }}</span>
+				</v-tab>
+			</v-tabs>
+		</div>
+		<v-data-table-server
+			v-model:items-per-page="pagination.limit"
+			:headers="headers"
+			:items="classes"
+			:items-length="pagination.total"
+			:page="page"
+			:items-per-page-text="footerProps.itemsPerPageText"
+			:items-per-page-options="footerProps.itemsPerPageOptions"
+			:loading="isLoading"
+			data-testid="admin-class-table"
+			class="elevation-1"
+			:no-data-text="t('common.nodata')"
+			@update:sort-by="onUpdateSortBy"
+			@update:items-per-page="onUpdateItemsPerPage"
+			@update:page="onUpdateCurrentPage"
 		>
-			<InfoAlert
-				v-if="showBannerForThr"
-				class="mt-4 mb-4"
-				data-testid="admin-class-info-alert"
-				alert-title="pages.administration.classes.thr.hint.title"
-			>
-				{{ t("pages.administration.classes.thr.hint.text") }}
-			</InfoAlert>
-			<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
-					<v-tab value="next" data-testid="admin-class-next-year-tab">
-						<span>{{ nextYear }}</span>
-					</v-tab>
-					<v-tab value="current" data-testid="admin-class-current-year-tab">
-						<span>{{ currentYear }}</span>
-					</v-tab>
-					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-						<span>{{ t("pages.administration.common.label.archive") }}</span>
-					</v-tab>
-				</v-tabs>
-			</div>
-			<v-data-table-server
-				v-model:items-per-page="pagination.limit"
-				:headers="headers"
-				:items="classes"
-				:items-length="pagination.total"
-				:page="page"
-				:items-per-page-text="footerProps.itemsPerPageText"
-				:items-per-page-options="footerProps.itemsPerPageOptions"
-				:loading="isLoading"
-				data-testid="admin-class-table"
-				class="elevation-1"
-				:no-data-text="t('common.nodata')"
-				@update:sort-by="onUpdateSortBy"
-				@update:items-per-page="onUpdateItemsPerPage"
-				@update:page="onUpdateCurrentPage"
-			>
-				<template #[`item.name`]="{ item }">
-					<span data-testid="class-table-name">
-						{{ item.name }}
-					</span>
+			<template #[`item.name`]="{ item }">
+				<span data-testid="class-table-name">
+					{{ item.name }}
+				</span>
+			</template>
+			<template #[`item.synchronizedCourses`]="{ item }">
+				<span data-testid="class-table-synced-courses">
+					{{ (item.synchronizedCourses || []).map((course: CourseInfo) => course.name).join(", ") || "" }}
+				</span>
+			</template>
+			<template #[`item.externalSourceName`]="{ item }">
+				<span data-testid="class-table-source">
+					{{ item.externalSourceName }}
+				</span>
+			</template>
+			<template #[`item.teacherNames`]="{ item }">
+				<span data-testid="class-table-teachers">
+					{{ item.teacherNames?.join(", ") || "" }}
+				</span>
+			</template>
+			<template #[`item.studentCount`]="{ item }">
+				<span data-testid="class-table-student-count">
+					{{ item.studentCount }}
+				</span>
+			</template>
+			<template #[`item.actions`]="{ item }">
+				<template v-if="showClassAction(item)">
+					<v-btn
+						:title="t('pages.administration.classes.manage')"
+						:aria-label="t('pages.administration.classes.manage')"
+						data-testid="legacy-class-table-manage-btn"
+						variant="outlined"
+						size="small"
+						:href="`/administration/classes/${item.id}/manage`"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						:title="t('pages.administration.classes.edit')"
+						:aria-label="t('pages.administration.classes.edit')"
+						data-testid="class-table-edit-btn"
+						variant="outlined"
+						size="small"
+						:href="`/administration/classes/${item.id}/edit`"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiPencilOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						:title="t('pages.administration.classes.delete')"
+						:aria-label="t('pages.administration.classes.delete')"
+						data-testid="class-table-delete-btn"
+						variant="outlined"
+						size="small"
+						class="mx-1 px-1"
+						min-width="0"
+						@click="onClickDeleteIcon(item)"
+					>
+						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						:disabled="!item.isUpgradable"
+						:aria-label="t('pages.administration.classes.createSuccessor')"
+						:title="t('pages.administration.classes.createSuccessor')"
+						data-testid="class-table-successor-btn"
+						variant="outlined"
+						size="small"
+						:href="`/administration/classes/${item.id}/createSuccessor`"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiArrowUp }}</v-icon>
+					</v-btn>
 				</template>
-				<template #[`item.synchronizedCourses`]="{ item }">
-					<span data-testid="class-table-synced-courses">
-						{{ (item.synchronizedCourses || []).map((course: CourseInfo) => course.name).join(", ") || "" }}
-					</span>
+				<template v-else-if="showGroupAction(item)">
+					<v-btn
+						:title="t('pages.administration.classes.manage')"
+						:aria-label="t('pages.administration.classes.manage')"
+						data-testid="class-table-members-manage-btn"
+						variant="outlined"
+						size="small"
+						:to="{
+							name: 'administration-groups-classes-members',
+							params: { groupId: item.id },
+						}"
+						class="mx-1 px-1"
+						min-width="0"
+					>
+						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
+					</v-btn>
+					<v-btn
+						v-if="item.synchronizedCourses && item.synchronizedCourses.length"
+						:title="t('feature-course-sync.EndCourseSyncDialog.title')"
+						:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
+						data-testid="class-table-end-course-sync-btn"
+						variant="outlined"
+						size="small"
+						class="mx-1 px-1"
+						min-width="0"
+						@click="onClickEndSyncIcon(item)"
+					>
+						<v-icon>{{ mdiSyncOff }}</v-icon>
+					</v-btn>
 				</template>
-				<template #[`item.externalSourceName`]="{ item }">
-					<span data-testid="class-table-source">
-						{{ item.externalSourceName }}
-					</span>
-				</template>
-				<template #[`item.teacherNames`]="{ item }">
-					<span data-testid="class-table-teachers">
-						{{ item.teacherNames?.join(", ") || "" }}
-					</span>
-				</template>
-				<template #[`item.studentCount`]="{ item }">
-					<span data-testid="class-table-student-count">
-						{{ item.studentCount }}
-					</span>
-				</template>
-				<template #[`item.actions`]="{ item }">
-					<template v-if="showClassAction(item)">
-						<v-btn
-							:title="t('pages.administration.classes.manage')"
-							:aria-label="t('pages.administration.classes.manage')"
-							data-testid="legacy-class-table-manage-btn"
-							variant="outlined"
-							size="small"
-							:href="`/administration/classes/${item.id}/manage`"
-							class="mx-1 px-1"
-							min-width="0"
-						>
-							<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-						</v-btn>
-						<v-btn
-							:title="t('pages.administration.classes.edit')"
-							:aria-label="t('pages.administration.classes.edit')"
-							data-testid="class-table-edit-btn"
-							variant="outlined"
-							size="small"
-							:href="`/administration/classes/${item.id}/edit`"
-							class="mx-1 px-1"
-							min-width="0"
-						>
-							<v-icon>{{ mdiPencilOutline }}</v-icon>
-						</v-btn>
-						<v-btn
-							:title="t('pages.administration.classes.delete')"
-							:aria-label="t('pages.administration.classes.delete')"
-							data-testid="class-table-delete-btn"
-							variant="outlined"
-							size="small"
-							class="mx-1 px-1"
-							min-width="0"
-							@click="onClickDeleteIcon(item)"
-						>
-							<v-icon>{{ mdiTrashCanOutline }}</v-icon>
-						</v-btn>
-						<v-btn
-							:disabled="!item.isUpgradable"
-							:aria-label="t('pages.administration.classes.createSuccessor')"
-							:title="t('pages.administration.classes.createSuccessor')"
-							data-testid="class-table-successor-btn"
-							variant="outlined"
-							size="small"
-							:href="`/administration/classes/${item.id}/createSuccessor`"
-							class="mx-1 px-1"
-							min-width="0"
-						>
-							<v-icon>{{ mdiArrowUp }}</v-icon>
-						</v-btn>
-					</template>
-					<template v-else-if="showGroupAction(item)">
-						<v-btn
-							:title="t('pages.administration.classes.manage')"
-							:aria-label="t('pages.administration.classes.manage')"
-							data-testid="class-table-members-manage-btn"
-							variant="outlined"
-							size="small"
-							:to="{
-								name: 'administration-groups-classes-members',
-								params: { groupId: item.id },
-							}"
-							class="mx-1 px-1"
-							min-width="0"
-						>
-							<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-						</v-btn>
-						<v-btn
-							v-if="item.synchronizedCourses && item.synchronizedCourses.length"
-							:title="t('feature-course-sync.EndCourseSyncDialog.title')"
-							:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
-							data-testid="class-table-end-course-sync-btn"
-							variant="outlined"
-							size="small"
-							class="mx-1 px-1"
-							min-width="0"
-							@click="onClickEndSyncIcon(item)"
-						>
-							<v-icon>{{ mdiSyncOff }}</v-icon>
-						</v-btn>
-					</template>
-				</template>
-			</v-data-table-server>
-			<CustomDialog
-				:is-open="isDeleteDialogOpen"
-				max-width="360"
-				data-testid="delete-dialog"
-				has-buttons
-				confirm-btn-title-key="common.actions.delete"
-				:buttons="['cancel', 'confirm']"
-				@dialog-closed="onCancelClassDeletion"
-				@dialog-confirmed="onConfirmClassDeletion"
-			>
-				<template #title>
-					<h2 class="my-2">
-						{{ t("pages.administration.classes.deleteDialog.title") }}
-					</h2>
-				</template>
-				<template #content>
-					<p>
-						{{
-							t("pages.administration.classes.deleteDialog.content", {
-								itemName: selectedItemName,
-							})
-						}}
-					</p>
-				</template>
-			</CustomDialog>
-			<end-course-sync-dialog
-				v-model:is-open="isEndSyncDialogOpen"
-				data-testid="end-course-sync-dialog"
-				:course-name="selectedItemForSync.courseName"
-				:group-name="selectedItemForSync.groupName"
-				:course-id="selectedItemForSync.courseId"
-				@success="loadClassList"
-			/>
+			</template>
+		</v-data-table-server>
+		<CustomDialog
+			:is-open="isDeleteDialogOpen"
+			max-width="360"
+			data-testid="delete-dialog"
+			has-buttons
+			confirm-btn-title-key="common.actions.delete"
+			:buttons="['cancel', 'confirm']"
+			@dialog-closed="onCancelClassDeletion"
+			@dialog-confirmed="onConfirmClassDeletion"
+		>
+			<template #title>
+				<h2 class="my-2">
+					{{ t("pages.administration.classes.deleteDialog.title") }}
+				</h2>
+			</template>
+			<template #content>
+				<p>
+					{{
+						t("pages.administration.classes.deleteDialog.content", {
+							itemName: selectedItemName,
+						})
+					}}
+				</p>
+			</template>
+		</CustomDialog>
+		<end-course-sync-dialog
+			v-model:is-open="isEndSyncDialogOpen"
+			data-testid="end-course-sync-dialog"
+			:course-name="selectedItemForSync.courseName"
+			:group-name="selectedItemForSync.groupName"
+			:course-id="selectedItemForSync.courseId"
+			@success="loadClassList"
+		/>
 
-			<p class="mt-4" data-testid="admin-class-hint">
-				{{
-					t("pages.administration.common.hint", {
-						institute_title: instituteTitle,
-					})
-				}}
-			</p>
-		</DefaultWireframe>
-	</div>
+		<p class="mt-4" data-testid="admin-class-hint">
+			{{
+				t("pages.administration.common.hint", {
+					institute_title: instituteTitle,
+				})
+			}}
+		</p>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
 import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
@@ -218,8 +210,8 @@ import {
 	mdiSyncOff,
 	mdiTrashCanOutline,
 } from "@icons/material";
-import { InfoAlert } from "@ui-alert";
 import { DefaultWireframe } from "@ui-layout";
+import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
@@ -292,12 +284,11 @@ const isLoading = computed(() => groupModule.getLoading);
 const hasEditPermission = hasPermission(Permission.ClassEdit);
 const hasCreatePermission = hasPermission(Permission.ClassCreate);
 
-const fab = computed(() => {
+const fab: ComputedRef<FabAction[] | undefined> = computed(() => {
 	if (schoolsModule.schoolIsExternallyManaged || !hasCreatePermission.value) {
 		return;
 	}
-
-	return [
+	const actions: FabAction[] = [
 		{
 			icon: mdiPlus,
 			label: t("pages.administration.classes.index.add"),
@@ -305,6 +296,8 @@ const fab = computed(() => {
 			dataTestId: "fab_button_add_class",
 		},
 	];
+
+	return actions;
 });
 
 const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Class;
@@ -450,8 +443,6 @@ onMounted(() => {
 });
 
 const { instituteTitle } = storeToRefs(useEnvStore());
-
-const showBannerForThr = computed(() => useEnvConfig().value.SC_THEME === "thr");
 </script>
 
 <style scoped>

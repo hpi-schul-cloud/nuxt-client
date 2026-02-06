@@ -1,108 +1,100 @@
 <template>
-	<div>
-		<DefaultWireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
-			<InfoAlert
-				v-if="showBannerForThr"
-				class="mt-4 mb-4"
-				data-testid="admin-class-info-alert"
-				alert-title="pages.administration.classes.thr.hint.title"
-			>
-				{{ t("pages.administration.classes.thr.hint.text") }}
-			</InfoAlert>
-			<ProgressModal
-				v-model="isDeleting"
-				:percent="deletedPercent"
-				:title="t('pages.administration.students.index.remove.progress.title')"
-				:description="t('pages.administration.students.index.remove.progress.description')"
-				data-testid="progress-modal"
-			/>
+	<DefaultWireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
+		<ThrInfoBanner />
+		<ProgressModal
+			v-model="isDeleting"
+			:percent="deletedPercent"
+			:title="t('pages.administration.students.index.remove.progress.title')"
+			:description="t('pages.administration.students.index.remove.progress.description')"
+			data-testid="progress-modal"
+		/>
 
-			<base-input
-				v-model="searchQuery"
-				type="text"
-				:placeholder="t('pages.administration.students.index.searchbar.placeholder')"
-				class="search-section"
-				label=""
-				data-testid="searchbar"
-				@update:model-value="barSearch"
-			>
-				<template #icon>
-					<VIcon :icon="mdiMagnify" />
-				</template>
-			</base-input>
+		<base-input
+			v-model="searchQuery"
+			type="text"
+			:placeholder="t('pages.administration.students.index.searchbar.placeholder')"
+			class="search-section"
+			label=""
+			data-testid="searchbar"
+			@update:model-value="barSearch"
+		>
+			<template #icon>
+				<VIcon :icon="mdiMagnify" />
+			</template>
+		</base-input>
 
-			<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
+		<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
-			<BackendDataTable
-				v-model:current-page="page"
-				v-model:rows-per-page="limit"
-				v-model:selected-row-ids="tableSelection"
-				v-model:selection-type="tableSelectionType"
-				:actions="filteredActions"
-				:columns="filteredColumns"
-				:data="students"
-				:paginated="true"
-				:rows-selectable="true"
-				:total="pagination.total"
-				track-by="_id"
-				:sort-by="sortBy"
-				:sort-order="sortOrder"
-				:show-external-text="schoolIsExternallyManaged"
-				data-testid="students_table"
-				:rows-per-page="limit"
-				:current-page="page"
-				@update:sort="onUpdateSort"
-				@update:current-page="onUpdateCurrentPage"
-				@update:rows-per-page="onUpdateRowsPerPage"
-			>
-				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-classes="{ data }">
-					{{ (data || []).join(", ") }}
-				</template>
-				<template #headcolumn-consent />
-				<template #columnlabel-consent />
-				<template #datacolumn-createdAt="{ data }">
-					<span class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-lastLoginSystemChange="{ data }">
-					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-outdatedSince="{ data }">
-					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-consentStatus="{ data: status }">
-					<span class="text-content">
-						<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
-						<VIcon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
-						<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
-					</span>
-				</template>
-				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<VBtn
-						icon
-						variant="text"
-						:class="{
-							'action-button': true,
-							'row-selected': selected,
-							'row-highlighted': highlighted,
-						}"
-						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-						:aria-label="t('pages.administration.students.table.edit.ariaLabel')"
-						data-testid="edit_student_button"
-					>
-						<VIcon size="20" :icon="mdiPencilOutline" />
-					</VBtn>
-				</template>
-			</BackendDataTable>
-			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
-		</DefaultWireframe>
-		<ConfirmationDialog />
-	</div>
+		<BackendDataTable
+			v-model:current-page="page"
+			v-model:rows-per-page="limit"
+			v-model:selected-row-ids="tableSelection"
+			v-model:selection-type="tableSelectionType"
+			:actions="filteredActions"
+			:columns="filteredColumns"
+			:data="students"
+			:paginated="true"
+			:rows-selectable="true"
+			:total="pagination.total"
+			track-by="_id"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			:show-external-text="schoolIsExternallyManaged"
+			data-testid="students_table"
+			:rows-per-page="limit"
+			:current-page="page"
+			@update:sort="onUpdateSort"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
+		>
+			<template #datacolumn-birthday="{ data }">
+				<span class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
+			<template #headcolumn-consent />
+			<template #columnlabel-consent />
+			<template #datacolumn-createdAt="{ data }">
+				<span class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-lastLoginSystemChange="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-outdatedSince="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-consentStatus="{ data: status }">
+				<span class="text-content">
+					<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
+					<VIcon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
+					<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+				</span>
+			</template>
+			<template #datacolumn-_id="{ data, selected, highlighted }">
+				<VBtn
+					icon
+					variant="text"
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
+					:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
+					:aria-label="t('pages.administration.students.table.edit.ariaLabel')"
+					data-testid="edit_student_button"
+				>
+					<VIcon size="20" :icon="mdiPencilOutline" />
+				</VBtn>
+			</template>
+		</BackendDataTable>
+		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script>
+import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
@@ -128,7 +120,6 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { InfoAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
@@ -144,7 +135,7 @@ export default defineComponent({
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
-		InfoAlert,
+		ThrInfoBanner,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -393,9 +384,6 @@ export default defineComponent({
 					dataTestId: "fab_button_import_students",
 				},
 			];
-		},
-		showBannerForThr() {
-			return useEnvConfig().value.SC_THEME === "thr";
 		},
 	},
 	watch: {
