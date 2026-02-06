@@ -114,8 +114,8 @@ import {
 	mdiQrcode,
 } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { SearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
-import { SearchField } from "@ui-search-field";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";

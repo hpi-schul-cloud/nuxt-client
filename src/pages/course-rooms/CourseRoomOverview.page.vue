@@ -119,7 +119,7 @@ import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { mdiCheck } from "@icons/material";
-import { SearchField } from "@ui-search-field";
+import { SearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({

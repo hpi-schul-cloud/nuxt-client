@@ -1,7 +1,7 @@
 import SearchField from "./SearchField.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
-describe("@ui-search-field", () => {
+describe("@ui-controls/SearchField", () => {
 	const setup = (options = {}) => {
 		const wrapper = mount(SearchField, {
 			global: {

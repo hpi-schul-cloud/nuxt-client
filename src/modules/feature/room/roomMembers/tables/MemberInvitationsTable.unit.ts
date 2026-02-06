@@ -8,7 +8,7 @@ import { type Registration, useRegistrationStore } from "@data-room";
 import { mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import { SearchField } from "@ui-search-field";
+import { SearchField } from "@ui-controls";
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";

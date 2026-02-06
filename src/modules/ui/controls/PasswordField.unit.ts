@@ -3,7 +3,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
-describe("@ui-inputs/PasswordField", () => {
+describe("@ui-controls/PasswordField", () => {
 	const setup = () => {
 		const wrapper = mount(PasswordField, {
 			global: {

@@ -2,7 +2,7 @@ import FwuMediaPage from "./FwuMedia.page.vue";
 import { FwuItemResponse } from "@/generated/fwu-api/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
-import { SearchField } from "@ui-search-field";
+import { SearchField } from "@ui-controls";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";

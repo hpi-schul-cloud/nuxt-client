@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import BatchActionMenu from "./BatchActionMenu.vue";
 import { mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { SearchField } from "@ui-search-field";
+import { SearchField } from "@ui-controls";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";

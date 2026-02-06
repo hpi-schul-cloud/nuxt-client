@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
-import { PasswordField } from "@ui-inputs";
+import { PasswordField } from "@ui-controls";
 import {
 	hasLowercaseLetter,
 	hasNumber,
