@@ -1,6 +1,7 @@
 import LdapClassesSection from "./LdapClassesSection.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
 
 describe("LdapClassesSection", () => {
 	const setup = (props = {}) => {
@@ -19,6 +20,10 @@ describe("LdapClassesSection", () => {
 		});
 		return { wrapper };
 	};
+
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
 
 	it("has correct child components", () => {
 		const { wrapper } = setup();
