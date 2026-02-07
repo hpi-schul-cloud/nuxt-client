@@ -3,7 +3,6 @@ import StudentPage from "./StudentOverview.page.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -18,6 +17,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import { VCheckbox } from "vuetify/components";
 import { createStore } from "vuex";
 
 const mockData = [
@@ -168,9 +168,6 @@ describe("students/index", () => {
 				mocks: {
 					$store: mockStore,
 				},
-				components: {
-					"base-input": BaseInput,
-				},
 				stubs: { RouterLink: RouterLinkStub },
 			},
 		});
@@ -198,7 +195,7 @@ describe("students/index", () => {
 		expect(userRows).toHaveLength(2);
 
 		// select first entry
-		const checkbox = userRows.at(0).find(".selection-column").get('input[type="checkbox"]');
+		const checkbox = userRows.at(0).find("[data-testid='selection-column']").get('input[type="checkbox"]');
 		checkbox.setChecked();
 
 		// open actions menu
@@ -229,7 +226,7 @@ describe("students/index", () => {
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
 		// user row checkbox is clicked
-		const checkBox = dataRow.find(".select");
+		const checkBox = dataRow.findComponent(VCheckbox);
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
@@ -266,7 +263,7 @@ describe("students/index", () => {
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
 		// user row checkbox is clicked
-		const checkBox = dataRow.find(".select");
+		const checkBox = dataRow.findComponent(VCheckbox);
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
@@ -303,7 +300,7 @@ describe("students/index", () => {
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
 		// user row checkbox is clicked
-		const checkBox = dataRow.find(".select");
+		const checkBox = dataRow.findComponent(VCheckbox);
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
@@ -433,7 +430,7 @@ describe("students/index", () => {
 			it("should call setFilterState method", () => {
 				const { wrapper, usersActionsStubs } = setup();
 
-				const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
+				const searchBarInput = wrapper.find("[data-testid=searchbar]").find("input");
 				expect(searchBarInput.exists()).toBe(true);
 
 				searchBarInput.setValue("abc");

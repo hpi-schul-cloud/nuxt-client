@@ -1,5 +1,4 @@
 import LdapUsersSection from "./LdapUsersSection.vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
@@ -8,9 +7,6 @@ describe("LdapUsersSection", () => {
 		mount(LdapUsersSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				components: {
-					"base-input": BaseInput,
-				},
 			},
 			props: {
 				modelValue: {

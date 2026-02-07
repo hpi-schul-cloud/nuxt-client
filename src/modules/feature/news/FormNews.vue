@@ -23,21 +23,20 @@
 						<p class="mt-13">
 							{{ t("components.organisms.FormNews.label.planned_publish") }}
 						</p>
-						<base-input
-							v-model="data.date.date"
-							type="date"
+						<DatePicker
+							:date="data.date.date"
 							:label="t('common.labels.date')"
 							:class="{ hideCurrentDate: !data.date.date }"
 							data-testid="news_date"
-							placeholder="JJJJ-MM-TT"
+							@update:date="onUpdateDate"
 						/>
-						<base-input
+						<VTextField
 							v-model="data.date.time"
-							type="time"
-							:label="t('common.labels.time')"
+							v-time-input-mask
+							:prepend-inner-icon="mdiClockOutline"
 							:class="{ hideCurrentTime: !data.date.time }"
+							:label="t('common.labels.time')"
 							data-testid="news_time"
-							placeholder="HH:MM"
 						/>
 					</div>
 				</VFadeTransition>
@@ -80,11 +79,14 @@ import { newsModule } from "@/store";
 import { News } from "@/store/types/news";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
-import { mdiCalendar, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
+import { mdiCalendar, mdiCheck, mdiClockOutline, mdiClose, mdiDelete } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { DatePicker } from "@ui-date-time-picker";
+import { timeInputMask } from "@util-input-masks";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -94,6 +96,10 @@ export default defineComponent({
 		ClassicEditor,
 		ConfirmationDialog,
 		WarningAlert,
+		DatePicker,
+	},
+	directives: {
+		timeInputMask,
 	},
 	inheritAttrs: false,
 	props: {
@@ -127,6 +133,7 @@ export default defineComponent({
 			content: string;
 			date: { date: string; time: string };
 		};
+		mdiClockOutline: string;
 		mdiClose: string;
 		mdiCheck: string;
 		mdiDelete: string;
@@ -143,6 +150,7 @@ export default defineComponent({
 					time: "",
 				},
 			},
+			mdiClockOutline,
 			mdiClose,
 			mdiCheck,
 			mdiDelete,
@@ -222,6 +230,9 @@ export default defineComponent({
 			if (displayAt) {
 				[this.data.date.date, this.data.date.time] = createInputDateTime(displayAt);
 			}
+		},
+		onUpdateDate(newDate: string | null) {
+			this.data.date.date = newDate ? dayjs(newDate).format("YYYY-MM-DD") : "";
 		},
 		onUpdateValue(newValue: string) {
 			this.data.content = newValue;

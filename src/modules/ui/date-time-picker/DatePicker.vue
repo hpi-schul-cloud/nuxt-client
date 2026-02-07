@@ -5,7 +5,7 @@
 		v-bind.attr="$attrs"
 		v-model="dateString"
 		v-date-input-mask
-		:prepend-inner-icon="mdiCalendar"
+		:prepend-inner-icon="!hideIcon ? mdiCalendar : undefined"
 		:label="label"
 		:aria-label="ariaLabelWithFormat"
 		:placeholder="t('common.placeholder.dateformat')"
@@ -47,25 +47,28 @@ import dayjs from "dayjs";
 import { computed, ref, useId, useTemplateRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
-interface Props {
-	date?: string; // ISO 8601 string
-	label?: string;
-	ariaLabel?: string;
-	required?: boolean;
-	disabled?: boolean;
-	minDate?: string;
-	maxDate?: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-	date: undefined,
-	label: undefined,
-	ariaLabel: undefined,
-	disabled: false,
-	required: false,
-	minDate: undefined,
-	maxDate: undefined,
-});
+const props = withDefaults(
+	defineProps<{
+		date?: string; // ISO 8601 string
+		label?: string;
+		ariaLabel?: string;
+		required?: boolean;
+		disabled?: boolean;
+		minDate?: string;
+		maxDate?: string;
+		hideIcon?: boolean;
+	}>(),
+	{
+		date: undefined,
+		label: undefined,
+		ariaLabel: undefined,
+		disabled: false,
+		required: false,
+		minDate: undefined,
+		maxDate: undefined,
+		hideIcon: false,
+	}
+);
 
 const emit = defineEmits<{
 	(e: "update:date", value: string | null): void;
@@ -100,7 +103,7 @@ const dateObject = computed({
 
 const validationRules = computed(() => [
 	props.required ? isRequired(t("components.datePicker.validation.required")) : true,
-	isValidDateFormat(t("components.datePicker.validation.format")),
+	isValidDateFormat(),
 ]);
 
 const ariaLabelWithFormat = computed(() => {

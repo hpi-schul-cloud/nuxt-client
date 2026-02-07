@@ -1,16 +1,13 @@
 import LdapClassesSection from "./LdapClassesSection.vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
+import { createPinia, setActivePinia } from "pinia";
 
 describe("LdapClassesSection", () => {
 	const setup = (props = {}) => {
 		const wrapper = mount(LdapClassesSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				components: {
-					"base-input": BaseInput,
-				},
 			},
 			props: {
 				modelValue: {
@@ -23,6 +20,10 @@ describe("LdapClassesSection", () => {
 		});
 		return { wrapper };
 	};
+
+	beforeAll(() => {
+		setActivePinia(createPinia());
+	});
 
 	it("has correct child components", () => {
 		const { wrapper } = setup();

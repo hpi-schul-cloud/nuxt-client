@@ -1,6 +1,5 @@
 import { SchulcloudTheme } from "../../serverApi/v3";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import SchoolsModule from "@/store/schools";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -78,9 +77,6 @@ describe("ldap/activate", () => {
 					$router: { push: routerPushStub },
 					$route: route,
 					$store: createStore(storeOptions),
-				},
-				components: {
-					"base-input": BaseInput,
 				},
 			},
 		});

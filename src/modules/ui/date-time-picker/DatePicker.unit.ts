@@ -1,6 +1,8 @@
 import DatePicker from "./DatePicker.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { VDatePicker, VMenu, VTextField } from "vuetify/components";
 
 describe("DatePicker", () => {
@@ -25,6 +27,10 @@ describe("DatePicker", () => {
 
 		return { wrapper, textField };
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should render component", () => {
 		const { wrapper } = setup({ date: new Date().toISOString() });
@@ -187,7 +193,7 @@ describe("DatePicker", () => {
 					await textField.setValue("22");
 					await flushPromises();
 
-					expect(textField.text()).toBe("components.datePicker.validation.format");
+					expect(textField.text()).toBe("Bitte Format DD.MM.YYYY verwenden.");
 				});
 			});
 		});

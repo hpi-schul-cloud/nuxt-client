@@ -20,12 +20,12 @@ import {
 	mdiAccountClockOutline,
 	mdiAccountOutline,
 	mdiAccountSchoolOutline,
-	mdiMagnify,
 	mdiMenuDown,
 	mdiMenuUp,
 } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { SearchField } from "@ui-controls";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
@@ -431,10 +431,9 @@ describe("MembersTable", () => {
 		it("should render the search component", () => {
 			const { wrapper } = setup();
 
-			const search = wrapper.getComponent(VTextField);
+			const search = wrapper.findComponent(SearchField);
 
-			expect(search.props("label")).toEqual("common.labels.search");
-			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
+			expect(search.exists()).toBe(true);
 		});
 
 		it("should render search component with flex order 1 for extra small display sizes", () => {

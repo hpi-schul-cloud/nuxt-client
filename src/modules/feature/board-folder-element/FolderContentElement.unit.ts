@@ -10,9 +10,11 @@ import { useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
 import { Router, RouterLink, useRouter } from "vue-router";
@@ -108,6 +110,10 @@ describe("FolderContentElement", () => {
 
 		return { wrapper, router, mockElement };
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {

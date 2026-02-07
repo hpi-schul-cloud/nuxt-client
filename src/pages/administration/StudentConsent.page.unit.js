@@ -1,10 +1,11 @@
 import ConsentPage from "./StudentConsent.page.vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import FilePathsModule from "@/store/filePaths";
 import { createTestEnvStore, expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
+import { DatePicker } from "@ui-date-time-picker";
+import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
@@ -96,8 +97,8 @@ const setup = () => {
 				$store: mockStore,
 				$t: (key) => key,
 			},
-			components: {
-				"base-input": BaseInput,
+			stubs: {
+				DatePicker: true,
 			},
 		},
 	});
@@ -167,11 +168,10 @@ describe("students/consent", () => {
 
 		await nextTick();
 		await nextTick();
-		const input = wrapper.find(`[data-testid="birthday-input"]`).get("input");
-		input.setValue("2017-10-10");
-		await input.trigger("change");
+		const datePicker = wrapper.findComponent(DatePicker);
+		datePicker.vm.$emit("update:date", "2017-10-10");
+		await nextTick();
 
-		expect(input.exists()).toBe(true);
 		expect(bulkConsentActionsStubs.updateStudent).toHaveBeenCalled();
 	});
 

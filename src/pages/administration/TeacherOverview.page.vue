@@ -8,20 +8,14 @@
 				:description="$t('pages.administration.teachers.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
-
-			<base-input
+			<SearchField
 				v-model="searchQuery"
-				type="text"
-				:placeholder="$t('pages.administration.teachers.index.searchbar.placeholder')"
-				class="search-section"
-				label=""
+				class="mt-10 mb-2"
+				:label="$t('pages.administration.teachers.index.searchbar.placeholder')"
 				data-testid="searchbar"
+				:aria-label="$t('pages.administration.teachers.index.searchbar.ariaLabel')"
 				@update:model-value="barSearch"
-			>
-				<template #icon>
-					<VIcon :icon="mdiMagnify" />
-				</template>
-			</base-input>
+			/>
 
 			<DataFilter filter-for="teacher" :class-names="classNameList" @update:filter="onUpdateFilter" />
 
@@ -106,12 +100,12 @@ import {
 	mdiCloudDownload,
 	mdiDeleteOutline,
 	mdiEmailOutline,
-	mdiMagnify,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { SearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent } from "vue";
@@ -126,6 +120,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ConfirmationDialog,
+		SearchField,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -156,7 +151,6 @@ export default defineComponent({
 			mdiCloudDownload,
 			mdiDeleteOutline,
 			mdiEmailOutline,
-			mdiMagnify,
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
@@ -564,12 +558,5 @@ button:not(.is-none):focus {
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
 		0 0 0 3px var(--button-background);
-}
-
-.search-section {
-	max-width: 100%;
-	margin-top: 8px;
-	margin-bottom: 8px;
-	margin-left: 0;
 }
 </style>

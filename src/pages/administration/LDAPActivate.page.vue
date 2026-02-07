@@ -95,9 +95,8 @@
 			<h2 class="title-class">
 				{{ t("pages.administration.ldap.activate.migrateExistingUsers.title") }}
 			</h2>
-			<base-input
+			<VCheckbox
 				v-model="migrateUsersCheckbox"
-				type="checkbox"
 				:label="t('pages.administration.ldap.activate.migrateExistingUsers.checkbox')"
 				data-testid="migrateUsersCheckbox"
 			/>

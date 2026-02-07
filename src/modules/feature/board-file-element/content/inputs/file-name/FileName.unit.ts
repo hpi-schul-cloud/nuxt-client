@@ -1,6 +1,8 @@
 import FileName from "./FileName.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
@@ -20,6 +22,10 @@ describe("FileName", () => {
 			fileExtension,
 		};
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should be found in dom", () => {
 		const { wrapper } = mountSetup();

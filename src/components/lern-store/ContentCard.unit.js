@@ -1,5 +1,4 @@
 import ContentCard from "./ContentCard";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import ContentModule from "@/store/content";
 import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
@@ -28,9 +27,6 @@ describe("@/components/organisms/ContentCard", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$route: { query: { course: "Kurs" } },
-				},
-				components: {
-					"base-input": BaseInput,
 				},
 				stubs: {
 					RouterLink: true,
