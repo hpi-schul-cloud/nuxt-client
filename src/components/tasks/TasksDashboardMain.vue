@@ -111,7 +111,6 @@ export default {
 		tasksModule: "tasksModule",
 		copyModule: { from: COPY_MODULE_KEY },
 		finishedTasksModule: "finishedTasksModule",
-		loadingStateModule: "loadingStateModule",
 	},
 	props: {
 		role: {

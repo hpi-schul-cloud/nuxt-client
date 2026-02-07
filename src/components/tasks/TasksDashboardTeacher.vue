@@ -70,7 +70,6 @@ import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { CopyParams } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
@@ -93,9 +92,7 @@ defineProps({
 });
 
 const { t } = useI18n();
-const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
-
-const { copy } = useCopy(isLoadingDialogOpen);
+const { copy } = useCopy();
 
 const openTasks = computed(() => tasksModule.getOpenTasksForTeacher);
 const draftTasks = computed(() => tasksModule.getDraftTasksForTeacher);
