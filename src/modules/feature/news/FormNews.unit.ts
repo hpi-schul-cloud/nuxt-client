@@ -5,11 +5,12 @@ import { expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
-import { DatePicker, TimePicker } from "@ui-date-time-picker";
-import { mount } from "@vue/test-utils";
+import { DatePicker } from "@ui-date-time-picker";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { Dayjs } from "dayjs";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
+import { VTextField } from "vuetify/components";
 import { createStore } from "vuex";
 
 const date = "2022-07-05";
@@ -110,8 +111,8 @@ describe("FormNews", () => {
 
 		expect(dateInput.props("date")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputDate));
 
-		const timeInput = wrapper.findComponent(TimePicker);
-		expect(timeInput.props("time")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
+		const timeInput = wrapper.findComponent("[data-testid='news_time']") as VueWrapper<VTextField>;
+		expect(timeInput.props("modelValue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
 	});
 
 	describe("save", () => {

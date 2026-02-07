@@ -30,12 +30,13 @@
 							data-testid="news_date"
 							@update:date="onUpdateDate"
 						/>
-						<TimePicker
-							:time="data.date.time"
-							:label="t('common.labels.time')"
+						<VTextField
+							v-model="data.date.time"
+							v-time-input-mask
+							:prepend-inner-icon="mdiClockOutline"
 							:class="{ hideCurrentTime: !data.date.time }"
+							:label="t('common.labels.time')"
 							data-testid="news_time"
-							@update:time="(newTime) => (data.date.time = newTime)"
 						/>
 					</div>
 				</VFadeTransition>
@@ -78,10 +79,11 @@ import { newsModule } from "@/store";
 import { News } from "@/store/types/news";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
-import { mdiCalendar, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
+import { mdiCalendar, mdiCheck, mdiClockOutline, mdiClose, mdiDelete } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { DatePicker, TimePicker } from "@ui-date-time-picker";
+import { DatePicker } from "@ui-date-time-picker";
+import { timeInputMask } from "@util-input-masks";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -95,7 +97,9 @@ export default defineComponent({
 		ConfirmationDialog,
 		WarningAlert,
 		DatePicker,
-		TimePicker,
+	},
+	directives: {
+		timeInputMask,
 	},
 	inheritAttrs: false,
 	props: {
@@ -129,6 +133,7 @@ export default defineComponent({
 			content: string;
 			date: { date: string; time: string };
 		};
+		mdiClockOutline: string;
 		mdiClose: string;
 		mdiCheck: string;
 		mdiDelete: string;
@@ -145,6 +150,7 @@ export default defineComponent({
 					time: "",
 				},
 			},
+			mdiClockOutline,
 			mdiClose,
 			mdiCheck,
 			mdiDelete,
