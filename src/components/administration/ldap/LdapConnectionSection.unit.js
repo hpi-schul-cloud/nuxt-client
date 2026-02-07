@@ -1,5 +1,4 @@
 import LdapConnectionSection from "./LdapConnectionSection.vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
@@ -13,9 +12,6 @@ describe("LdapConnectionSection", () => {
 		mount(LdapConnectionSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				components: {
-					"base-input": BaseInput,
-				},
 			},
 			props: {
 				modelValue: {

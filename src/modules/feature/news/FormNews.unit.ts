@@ -82,7 +82,6 @@ describe("FormNews", () => {
 					$store,
 				},
 				stubs: {
-					"base-input": true,
 					ClassicEditor: true,
 				},
 			},
