@@ -39,15 +39,16 @@
 					@update:sort="onUpdateSort"
 				>
 					<template #datacolumn-birthday="slotProps">
-						<base-input
-							:error="birthdayWarning && !slotProps.data ? inputError : null"
-							class="date base-input"
-							:model-value="inputDateFromDeUTC(slotProps.data)"
-							type="date"
-							label=""
+						<DatePicker
+							:date="inputDateFromDeUTC(slotProps.data)"
+							class="ml-2"
+							hide-details
+							hide-icon
+							density="compact"
+							:min-date="inputRangeDate(-100, 'y')"
+							:max-date="inputRangeDate(-4, 'y')"
 							data-testid="birthday-input"
-							:birth-date="true"
-							@update:model-value="
+							@update:date="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
 									birthDate: inputDateFormat($event),
@@ -58,6 +59,7 @@
 					<template #datacolumn-password="slotProps">
 						<VTextField
 							:model-value="slotProps.data"
+							class="ml-2"
 							hide-details
 							density="compact"
 							data-testid="password-input"
@@ -236,17 +238,18 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
+import { inputRangeDate } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
+import { DatePicker } from "@ui-date-time-picker";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-
 export default defineComponent({
 	components: {
 		SvsDialogBtnConfirm,
@@ -256,6 +259,7 @@ export default defineComponent({
 		SvsDialog,
 		BackendDataTable,
 		StepProgress,
+		DatePicker,
 	},
 	setup() {
 		const { t } = useI18n();
@@ -506,6 +510,7 @@ export default defineComponent({
 		inputDateFromDeUTC,
 		inputDateFormat,
 		printDateFromDeUTC,
+		inputRangeDate,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.

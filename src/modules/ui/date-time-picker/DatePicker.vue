@@ -5,7 +5,7 @@
 		v-bind.attr="$attrs"
 		v-model="dateString"
 		v-date-input-mask
-		:prepend-inner-icon="mdiCalendar"
+		:prepend-inner-icon="!hideIcon ? mdiCalendar : undefined"
 		:label="label"
 		:aria-label="ariaLabelWithFormat"
 		:placeholder="t('common.placeholder.dateformat')"
@@ -56,6 +56,7 @@ const props = withDefaults(
 		disabled?: boolean;
 		minDate?: string;
 		maxDate?: string;
+		hideIcon?: boolean;
 	}>(),
 	{
 		date: undefined,
@@ -65,6 +66,7 @@ const props = withDefaults(
 		required: false,
 		minDate: undefined,
 		maxDate: undefined,
+		hideIcon: false,
 	}
 );
 
