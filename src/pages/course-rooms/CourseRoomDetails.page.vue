@@ -90,7 +90,6 @@ import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.v
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
 import {
 	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
@@ -129,7 +128,6 @@ import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 export default defineComponent({
@@ -152,11 +150,9 @@ export default defineComponent({
 		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 	},
 	setup() {
-		const { t } = useI18n();
 		const { mdAndUp } = useDisplay();
-		const { isLoadingDialogOpen } = useLoadingState(t("components.molecules.copyResult.title.loading"));
 
-		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy(isLoadingDialogOpen);
+		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy();
 
 		const { roomVariant } = storeToRefs(useRoomDetailsStore());
 
