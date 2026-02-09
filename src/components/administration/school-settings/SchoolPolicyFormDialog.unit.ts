@@ -1,44 +1,29 @@
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolsModule from "@/store/schools";
-import { PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 
 describe("SchoolPolicyFormDialog", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
-	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
 
 	const mockProps = {
 		isOpen: true,
 	};
 
-	const setup = (
-		getters: Partial<PrivacyPolicyModule> = {
-			getPrivacyPolicy: null,
-			getBusinessError: {
-				statusCode: "",
-				message: "",
-			},
-			getStatus: "completed",
-		}
-	) => {
+	const setup = () => {
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: mockSchool,
 		});
 
-		privacyPolicyModule = createModuleMocks(PrivacyPolicyModule, {
-			...getters,
-		});
-
 		const wrapper = mount(SchoolPolicyFormDialog, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 				provide: {
-					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
 			},
