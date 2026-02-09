@@ -30,21 +30,10 @@ const filePathsModule = createModuleMocks(FilePathsModule, {
 });
 
 describe("App.vue", () => {
-	let loadingStateModuleMock: LoadingStateModule;
-
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 	});
-	beforeEach(() => {
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
-			getIsOpen: false,
-			getLoadingState: {
-				hasOverlay: false,
-				isPersistent: false,
-				text: "Loading...",
-			},
-		});
-	});
+
 	const setup = (options: { layout: Layouts | undefined }) => {
 		mockedPiniaStoreTyping(useAppStore);
 		const router = createMock<Router>({});
@@ -66,7 +55,6 @@ describe("App.vue", () => {
 					[THEME_KEY.valueOf()]: {
 						name: SchulcloudTheme.Default,
 					},
-					loadingStateModule: loadingStateModuleMock,
 				},
 				stubs: {
 					RouterView: true,
