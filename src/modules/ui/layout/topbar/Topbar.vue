@@ -38,7 +38,7 @@
 		<img
 			v-if="hasLogo && isDesktop"
 			:src="school!.logo.url"
-			:alt="t('global.topbar.schoolLogoAlt')"
+			alt=""
 			class="school-logo mr-3"
 			data-testid="school-logo"
 		/>
