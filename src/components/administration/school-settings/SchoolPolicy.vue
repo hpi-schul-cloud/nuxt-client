@@ -54,7 +54,7 @@
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolPolicyFormDialogOpen"
 				data-testid="form-dialog"
-				@confirm="onConfirm"
+				@confirm="onCreate"
 				@close="closeDialog"
 			/>
 			<SvsDialog
@@ -122,7 +122,7 @@ const closeDialog = () => {
 	isSchoolPolicyFormDialogOpen.value = false;
 };
 
-const onConfirm = async (newConsentVersion: CreateConsentVersionPayload) => {
+const onCreate = async (newConsentVersion: CreateConsentVersionPayload) => {
 	await createPrivacyPolicy(newConsentVersion);
 };
 </script>

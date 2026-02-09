@@ -41,10 +41,7 @@ export const useSchoolPrivacyPolicy = () => {
 		if (result) {
 			privacyPolicy.value = {
 				...result.data,
-				consentData: {
-					...privacyPolicy.value?.consentData,
-					data: payload.consentData,
-				},
+				consentData: { data: payload.consentData },
 			};
 			notifySuccess(t("pages.administration.school.index.schoolPolicy.success"));
 		}

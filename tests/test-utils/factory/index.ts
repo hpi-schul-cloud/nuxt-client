@@ -14,6 +14,7 @@ export * from "./classInfoResponseFactory";
 export * from "./classInfoSearchListResponseFactory";
 export * from "./collaborativeTextEditorElementResponseFactory";
 export * from "./columnResponseFactory";
+export * from "./consentVersionFactory";
 export * from "./contextExternalToolConfigurationStatusFactory";
 export * from "./contextExternalToolConfigurationStatusResponseFactory";
 export * from "./contextExternalToolConfigurationTemplate.factory";
