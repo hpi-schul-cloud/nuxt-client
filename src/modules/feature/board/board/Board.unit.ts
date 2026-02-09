@@ -14,7 +14,6 @@ import {
 } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import LoadingStateModule from "@/store/loading-state";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -170,7 +169,6 @@ describe("Board", () => {
 			}),
 		});
 
-		const loadingStateModule = createModuleMocks(LoadingStateModule);
 		const shareModule = createModuleMocks(ShareModule);
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
@@ -178,7 +176,6 @@ describe("Board", () => {
 		const schoolExternalToolsModule = createModuleMocks(SchoolExternalToolsModule);
 		return {
 			copyModule,
-			loadingStateModule,
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
@@ -192,14 +189,8 @@ describe("Board", () => {
 		isReadersCanEdit?: boolean;
 		envs?: Partial<ConfigResponse>;
 	}) => {
-		const {
-			copyModule,
-			loadingStateModule,
-			shareModule,
-			courseRoomDetailsModule,
-			copyResultId,
-			schoolExternalToolsModule,
-		} = setupProvideModules();
+		const { copyModule, shareModule, courseRoomDetailsModule, copyResultId, schoolExternalToolsModule } =
+			setupProvideModules();
 
 		setActivePinia(createTestingPinia());
 
@@ -234,7 +225,6 @@ describe("Board", () => {
 				],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
-					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,

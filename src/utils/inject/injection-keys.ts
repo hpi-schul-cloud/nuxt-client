@@ -7,7 +7,6 @@ import CourseRoomListModule from "@/store/course-room-list";
 import FilePathsModule from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
-import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -35,7 +34,6 @@ export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsMo
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
 	Symbol("commonCartridgeExportModule");
 export const COURSE_ROOM_LIST_MODULE_KEY: InjectionKey<CourseRoomListModule> = Symbol("courseRoomListModule");
-export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> = Symbol("loadingStateModule");
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");
 export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> = Symbol("contentModule");
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
