@@ -1,7 +1,6 @@
 <template>
 	<DefaultWireframe max-width="full" :headline="$t('pages.administration.teachers.index.title')" :fab-items="fab">
 		<ThrInfoBanner />
-
 		<ProgressModal
 			v-model="isDeleting"
 			:percent="deletedPercent"
@@ -9,7 +8,6 @@
 			:description="$t('pages.administration.teachers.index.remove.progress.description')"
 			data-testid="progress-modal"
 		/>
-
 		<base-input
 			v-model="searchQuery"
 			type="text"
@@ -23,36 +21,34 @@
 				<VIcon :icon="mdiMagnify" />
 			</template>
 		</base-input>
-
 		<DataFilter filter-for="teacher" :class-names="classNameList" @update:filter="onUpdateFilter" />
-
-				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<VBtn
-						icon
-						variant="text"
-						:class="{
-							'action-button': true,
-							'row-selected': selected,
-							'row-highlighted': highlighted,
-						}"
-						:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
-						:aria-label="$t('pages.administration.teachers.table.edit.ariaLabel')"
-						data-testid="edit_teacher_button"
-					>
-						<VIcon size="20">{{ mdiPencilOutline }}</VIcon>
-					</VBtn>
-				</template>
-			</BackendDataTable>
-			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
-		</DefaultWireframe>
-		<ConfirmationDialog>
-			<template #alert>
-				<WarningAlert data-testid="warning-alert-teachersdelete">
-					{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
-				</WarningAlert>
+		<BackendDataTable>
+			<template #datacolumn-_id="{ data, selected, highlighted }">
+				<VBtn
+					icon
+					variant="text"
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
+					:href="`/administration/teachers/${data}/edit?returnUrl=/administration/teachers`"
+					:aria-label="$t('pages.administration.teachers.table.edit.ariaLabel')"
+					data-testid="edit_teacher_button"
+				>
+					<VIcon size="20">{{ mdiPencilOutline }}</VIcon>
+				</VBtn>
 			</template>
-		</ConfirmationDialog>
-	</div>
+		</BackendDataTable>
+		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+	</DefaultWireframe>
+	<ConfirmationDialog>
+		<template #alert>
+			<WarningAlert data-testid="warning-alert-teachersdelete">
+				{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
+			</WarningAlert>
+		</template>
+	</ConfirmationDialog>
 </template>
 
 <script>
@@ -81,7 +77,6 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
