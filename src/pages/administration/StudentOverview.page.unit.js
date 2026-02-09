@@ -17,7 +17,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { createStore } from "vuex";
 
 const mockData = [
@@ -105,7 +105,7 @@ const createMockStore = () => {
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 vi.mock("@ui-confirmation-dialog");
-vi.mocked(useConfirmationDialog);
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 describe("students/index", () => {
 	let askConfirmationMock;
@@ -126,6 +126,15 @@ describe("students/index", () => {
 
 		vi.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy
+
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+		mockedUseRemoveConfirmationDialog.mockReturnValue({
+			askConfirmation: askConfirmationMock,
+			isDialogOpen: ref(false),
+		});
 
 		setupStores({
 			schoolsModule: SchoolsModule,
