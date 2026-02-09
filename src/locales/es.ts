@@ -1458,9 +1458,9 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.message.all":
 		"¿Estás seguro de que deseas eliminar a todos los profesores?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
+		"¿Estás seguro de que deseas eliminar a todos los profesores excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
-		"¿Estás seguro de que deseas eliminar a este profesor: en? | ¿Estás seguro de que deseas eliminar a este profesor de {number}?",
+		"¿Estás seguro de que deseas eliminar a este profesor? | ¿Estás seguro de que deseas eliminar este {number} de profesores?",
 	"pages.administration.teachers.index.remove.confirm.message.warning":
 		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos profesores seguirán siendo visibles en la tabla.",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
