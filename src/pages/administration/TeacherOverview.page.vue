@@ -22,7 +22,44 @@
 			</template>
 		</base-input>
 		<DataFilter filter-for="teacher" :class-names="classNameList" @update:filter="onUpdateFilter" />
-		<BackendDataTable>
+		<BackendDataTable
+			v-model:current-page="page"
+			v-model:rows-per-page="limit"
+			v-model:selected-row-ids="tableSelection"
+			v-model:selection-type="tableSelectionType"
+			:actions="filteredActions"
+			:columns="filteredColumns"
+			:data="teachers"
+			:paginated="true"
+			:total="pagination.total"
+			:rows-selectable="true"
+			track-by="_id"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			data-testid="teachers_table"
+			@update:sort="onUpdateSort"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
+		>
+			<template #datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
+			<template #datacolumn-createdAt="{ data }">
+				<span class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-consentStatus="{ data: status }">
+				<span class="text-content">
+					<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
+					<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+				</span>
+			</template>
+			<template #datacolumn-lastLoginSystemChange="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-outdatedSince="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+
 			<template #datacolumn-_id="{ data, selected, highlighted }">
 				<VBtn
 					icon
