@@ -3,19 +3,6 @@ import * as serverApi from "@/serverApi/v3/api";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { DeepMocked } from "@golevelup/ts-vitest";
 
-type StatusAlert = {
-	title: string;
-	text: string;
-	status: "info" | "done" | "danger";
-	origin: {
-		page: string;
-		message_id: number;
-	};
-	timestamp: string;
-	url: string;
-	createdAt: string;
-};
-
 let alertApi: DeepMocked<serverApi.AlertApiInterface>;
 
 describe("status alerts composable", () => {
@@ -53,12 +40,12 @@ describe("status alerts composable", () => {
 			const { setStatusAlerts, getStatusAlerts } = useStatusAlerts();
 
 			expect(getStatusAlerts.value).toEqual([]);
-			setStatusAlerts(mockStatusAlerts as StatusAlert[]);
+			setStatusAlerts(mockStatusAlerts);
 			expect(getStatusAlerts.value).toStrictEqual(mockStatusAlerts);
 		});
 	});
 
-	describe("businessError", () => {
+	describe("setBusinessError", () => {
 		it("should set the business error", () => {
 			const { setBusinessError, businessError } = useStatusAlerts();
 			const error = { statusCode: "500", message: "Internal Server Error" };
@@ -77,7 +64,7 @@ describe("status alerts composable", () => {
 		});
 	});
 
-	describe("status", () => {
+	describe("setStatus", () => {
 		it("should set the status", () => {
 			const { setStatus, status } = useStatusAlerts();
 			expect(status.value).toEqual("");

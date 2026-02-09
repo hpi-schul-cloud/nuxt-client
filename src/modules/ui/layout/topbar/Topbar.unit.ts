@@ -11,21 +11,19 @@ import { computed, h, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index";
 
 vi.mock("@data-app/status-alerts.composable");
-const mockedUseStatusAlerts = vi.mocked(useStatusAlerts);
+vi.mocked(useStatusAlerts).mockReturnValue({
+	businessError: ref({ statusCode: "", message: "" }),
+	status: ref(""),
+	statusAlerts: ref(mockStatusAlerts),
+	getStatusAlerts: computed(() => mockStatusAlerts),
+	fetchStatusAlerts: vi.fn(),
+	setBusinessError: vi.fn(),
+	resetBusinessError: vi.fn(),
+	setStatus: vi.fn(),
+	setStatusAlerts: vi.fn(),
+});
 
 describe("@ui-layout/Topbar", () => {
-	mockedUseStatusAlerts.mockReturnValue({
-		businessError: ref({ statusCode: "", message: "" }),
-		status: ref(""),
-		statusAlerts: ref(mockStatusAlerts),
-		getStatusAlerts: computed(() => mockStatusAlerts),
-		fetchStatusAlerts: vi.fn(),
-		setBusinessError: vi.fn(),
-		resetBusinessError: vi.fn(),
-		setStatus: vi.fn(),
-		setStatusAlerts: vi.fn(),
-	});
-
 	const setup = (windowWidth = 1300, isSidebarExpanded?: boolean) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore({
