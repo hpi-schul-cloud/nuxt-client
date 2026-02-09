@@ -2,16 +2,13 @@ import SearchField from "./SearchField.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@ui-controls/SearchField", () => {
-	const setup = (options = {}) => {
-		const wrapper = mount(SearchField, {
+	const setup = (options = {}) =>
+		mount(SearchField, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			...options,
 		});
-
-		return wrapper;
-	};
 
 	it("should render correctly", () => {
 		const wrapper = setup();

@@ -4,15 +4,12 @@ import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
 describe("@ui-controls/PasswordField", () => {
-	const setup = () => {
-		const wrapper = mount(PasswordField, {
+	const setup = () =>
+		mount(PasswordField, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
-
-		return wrapper;
-	};
 
 	it("should initially be of type password", () => {
 		const wrapper = setup();

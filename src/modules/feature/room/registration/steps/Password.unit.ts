@@ -122,7 +122,7 @@ describe("Password.vue", () => {
 				const password = getTextFieldByTestId(wrapper, "password");
 
 				await password.setValue("");
-				await password.trigger("blur");
+				await password.vm.validate();
 
 				expect(password.text()).toContain("pages.registrationExternalMembers.steps.password.validation.required");
 			});

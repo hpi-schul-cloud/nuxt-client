@@ -17,7 +17,7 @@
 			:hint="t('pages.administration.ldap.classes.path.info')"
 			:prepend-inner-icon="mdiFileTreeOutline"
 			validate-on="blur"
-			:rules="[rules.required, rules.isValidLdapPath]"
+			:rules="checked ? [rules.required, rules.isValidLdapPath] : []"
 			datatest-id="ldapDataClassesclassPath"
 			@update:model-value="emit('update:modelValue', { ...modelValue, classPath: $event })"
 		/>
@@ -32,7 +32,7 @@
 			:label="t('pages.administration.ldap.classes.notice.title')"
 			:prepend-inner-icon="mdiAccountEye"
 			validate-on="blur"
-			:rules="[rules.required]"
+			:rules="checked ? [rules.required] : []"
 			datatest-id="ldapDataClassesNameAttribute"
 			@update:model-value="emit('update:modelValue', { ...modelValue, nameAttribute: $event })"
 		/>
@@ -44,7 +44,7 @@
 			:label="t('pages.administration.ldap.classes.participant.title')"
 			:prepend-inner-icon="mdiAccountGroupOutline"
 			validate-on="blur"
-			:rules="[rules.required]"
+			:rules="checked ? [rules.required] : []"
 			datatest-id="ldapDataClassesParticipantsAttribute"
 			@update:model-value="
 				emit('update:modelValue', {

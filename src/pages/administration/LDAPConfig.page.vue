@@ -13,7 +13,7 @@
 					{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
 				</a>
 			</div>
-			<VForm ref="form" validate-on="submit" @submit.prevent="validateHandler">
+			<VForm ref="ldapForm" validate-on="submit" @submit.prevent.stop="validateHandler">
 				<div class="form-container">
 					<LdapConnectionSection v-model="systemData" data-testid="ldapConnectionSection" />
 					<LdapUsersSection v-model="systemData" data-testid="ldapUsersSection" />
@@ -61,7 +61,7 @@ import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { DefaultWireframe } from "@ui-layout";
-import { defineComponent, ref } from "vue";
+import { defineComponent, useTemplateRef } from "vue";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
@@ -74,10 +74,8 @@ export default defineComponent({
 		InfoMessage,
 	},
 	setup() {
-		const form = ref(null);
-		return {
-			form,
-		};
+		const ldapForm = useTemplateRef("ldapForm");
+		return { ldapForm };
 	},
 	data() {
 		return {
@@ -106,9 +104,6 @@ export default defineComponent({
 			temp: "getTemp",
 			status: "getStatus",
 		}),
-		isInvalid() {
-			return !this.form.isValid;
-		},
 		verificationErrors() {
 			return ldapErrorHandler(this.verified.errors, this);
 		},
@@ -133,7 +128,9 @@ export default defineComponent({
 			const systemId = this.$route.query.id;
 
 			this.$nextTick(async () => {
-				if (!this.isInvalid) {
+				const { valid } = await this.ldapForm.validate();
+
+				if (valid) {
 					if (systemId) {
 						if (this.systemData.searchUserPassword === unchangedPassword) {
 							this.systemData.searchUserPassword = undefined;
