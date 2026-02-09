@@ -4,10 +4,9 @@
 
 <script setup lang="ts">
 import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
-import { useLoadingState } from "@/composables/loadingState";
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
-import { notifyError, notifySuccess } from "@data-app";
+import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -29,11 +28,11 @@ const emit = defineEmits<{
 const { copyRoom } = useRoomStore();
 const { t } = useI18n();
 const isRoomCopyInfoDialogOpen = ref(false);
-const { isLoadingDialogOpen } = useLoadingState(t("data-room.copy.loading"));
+const { setLoadingState } = useLoadingStore();
 
 onMounted(() => {
 	isRoomCopyInfoDialogOpen.value = true;
-	isLoadingDialogOpen.value = false;
+	setLoadingState(false);
 });
 
 const onCancelCopy = () => {
@@ -44,7 +43,7 @@ const onCancelCopy = () => {
 
 const onConfirmCopy = async () => {
 	isRoomCopyInfoDialogOpen.value = false;
-	isLoadingDialogOpen.value = true;
+	setLoadingState(true, t("data-room.copy.loading"));
 
 	const { result } = await copyRoom(props.room?.id);
 
@@ -59,7 +58,7 @@ const onConfirmCopy = async () => {
 		}
 	}
 
-	isLoadingDialogOpen.value = false;
+	setLoadingState(false);
 	await nextTick();
 	emit("copy:ended");
 };

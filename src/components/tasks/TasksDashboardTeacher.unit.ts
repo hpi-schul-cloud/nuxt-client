@@ -2,7 +2,6 @@ import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import TasksList from "./TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
-import LoadingStateModule from "@/store/loading-state";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
@@ -24,7 +23,6 @@ describe("TasksDashboardTeacher", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
-	let loadingStateModuleMock: LoadingStateModule;
 	let shareModuleMock: ShareModule;
 
 	beforeAll(() => {
@@ -38,7 +36,7 @@ describe("TasksDashboardTeacher", () => {
 				provide: {
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
-					loadingStateModule: loadingStateModuleMock,
+
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[TASKS_MODULE_KEY]: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
@@ -73,7 +71,6 @@ describe("TasksDashboardTeacher", () => {
 			tasksIsEmpty: true,
 		});
 		copyModuleMock = createModuleMocks(CopyModule);
-		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
 		});

@@ -4,13 +4,7 @@ import { courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
-import LoadingStateModule from "@/store/loading-state";
-import {
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-} from "@/utils/inject";
+import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COPY_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -96,7 +90,6 @@ const spyMocks = {
 };
 
 let copyModuleMock;
-let loadingStateModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
@@ -107,17 +100,14 @@ const getWrapper = () => {
 	copyModuleMock = createModuleMocks(CopyModule, {
 		getIsResultModalOpen: false,
 	});
-	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				loadingStateModule: loadingStateModuleMock,
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
-				[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			},
 			mocks: defaultMocks,
 		},
