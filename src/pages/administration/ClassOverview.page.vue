@@ -284,21 +284,18 @@ const isLoading = computed(() => groupModule.getLoading);
 const hasEditPermission = hasPermission(Permission.ClassEdit);
 const hasCreatePermission = hasPermission(Permission.ClassCreate);
 
-const fab: ComputedRef<FabAction[] | undefined> = computed(() => {
-	if (schoolsModule.schoolIsExternallyManaged || !hasCreatePermission.value) {
-		return;
-	}
-	const actions: FabAction[] = [
-		{
-			icon: mdiPlus,
-			label: t("pages.administration.classes.index.add"),
-			href: "/administration/classes/create",
-			dataTestId: "fab_button_add_class",
-		},
-	];
-
-	return actions;
-});
+const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
+	!schoolsModule.schoolIsExternallyManaged && hasCreatePermission.value
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.administration.classes.index.add"),
+					href: "/administration/classes/create",
+					dataTestId: "fab_button_add_class",
+				},
+			]
+		: undefined
+);
 
 const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Class;
 
