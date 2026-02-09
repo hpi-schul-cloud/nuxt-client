@@ -33,14 +33,12 @@
 import { formatDateForAlerts } from "@/plugins/datetime";
 import { StatusAlert } from "@/store/types/status-alert";
 import { mdiAlertCircle, mdiInformation } from "@icons/material";
-import { PropType } from "vue";
 
-defineProps({
-	statusAlerts: {
-		type: Array as PropType<StatusAlert[]>,
-		default: () => [],
-	},
-});
+type Props = {
+	statusAlerts: StatusAlert[] | readonly StatusAlert[];
+};
+
+defineProps<Props>();
 
 const getIcon = (status: string) =>
 	status === "danger" ? { icon: mdiAlertCircle, color: "error" } : { icon: mdiInformation, color: "info" };

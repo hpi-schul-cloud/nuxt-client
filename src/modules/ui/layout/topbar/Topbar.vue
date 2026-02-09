@@ -17,7 +17,6 @@
 			:icon="mdiAlert"
 			:color="statusAlertColor"
 			:aria-label="t('global.topbar.actions.alerts')"
-			:title="t('global.topbar.actions.alerts')"
 			data-test-id="status-alerts-icon"
 		>
 			<CloudStatusMessages :status-alerts="statusAlerts" />
@@ -27,7 +26,6 @@
 			class="mr-2"
 			:icon="mdiQrcode"
 			:aria-label="t('global.topbar.actions.qrCode')"
-			:title="t('global.topbar.actions.qrCode')"
 			data-test-id="qr-code-btn"
 		>
 			<PageShare />
@@ -61,7 +59,7 @@ import { useDisplay } from "vuetify";
 
 const { y } = useWindowScroll();
 const isScrollingDown = ref(false);
-const { fetchStatusAlerts, getStatusAlerts } = useStatusAlerts();
+const { fetchStatusAlerts, statusAlerts } = useStatusAlerts();
 const { t } = useI18n();
 
 watch(y, (newVal, oldVal) => {
@@ -83,7 +81,6 @@ onMounted(() => {
 	fetchStatusAlerts();
 });
 
-const statusAlerts = computed(() => getStatusAlerts.value);
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
 const statusAlertColor = computed(() => {

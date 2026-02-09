@@ -7,7 +7,7 @@ import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { computed, h, ref } from "vue";
+import { h, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index";
 
 vi.mock("@data-app/status-alerts.composable");
@@ -15,12 +15,7 @@ vi.mocked(useStatusAlerts).mockReturnValue({
 	businessError: ref({ statusCode: "", message: "" }),
 	status: ref(""),
 	statusAlerts: ref(mockStatusAlerts),
-	getStatusAlerts: computed(() => mockStatusAlerts),
 	fetchStatusAlerts: vi.fn(),
-	setBusinessError: vi.fn(),
-	resetBusinessError: vi.fn(),
-	setStatus: vi.fn(),
-	setStatusAlerts: vi.fn(),
 });
 
 describe("@ui-layout/Topbar", () => {

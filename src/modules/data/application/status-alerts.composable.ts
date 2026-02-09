@@ -2,7 +2,7 @@ import { AlertApiFactory } from "@/serverApi/v3";
 import { BusinessError, Status } from "@/store/types/commons";
 import { StatusAlert } from "@/store/types/status-alert";
 import { $axios } from "@/utils/api";
-import { computed, ref } from "vue";
+import { readonly, ref } from "vue";
 
 export const useStatusAlerts = () => {
 	const businessError = ref<BusinessError>({
@@ -12,24 +12,19 @@ export const useStatusAlerts = () => {
 	const status = ref<Status>("");
 	const statusAlerts = ref<StatusAlert[]>([]);
 
-	const getStatusAlerts = computed(() => statusAlerts.value);
-
 	const alertApi = AlertApiFactory(undefined, "v3", $axios);
 
 	const fetchStatusAlerts = async () => {
 		try {
 			resetBusinessError();
-			setStatus("pending");
+			status.value = "pending";
 			const response = await alertApi.alertControllerFind();
-			setStatusAlerts(response.data?.data as StatusAlert[]);
-			setStatus("completed");
+			statusAlerts.value = response.data?.data as StatusAlert[];
+			status.value = "completed";
 		} catch (error) {
-			setBusinessError(error as BusinessError);
+			businessError.value = error as BusinessError;
+			status.value = "error";
 		}
-	};
-
-	const setBusinessError = (error: BusinessError) => {
-		businessError.value = error;
 	};
 
 	const resetBusinessError = () => {
@@ -39,23 +34,10 @@ export const useStatusAlerts = () => {
 		};
 	};
 
-	const setStatus = (newStatus: Status) => {
-		status.value = newStatus;
-	};
-
-	const setStatusAlerts = (alerts: StatusAlert[]) => {
-		statusAlerts.value = alerts;
-	};
-
 	return {
-		businessError,
-		status,
-		statusAlerts,
-		getStatusAlerts,
+		businessError: readonly(businessError),
+		status: readonly(status),
+		statusAlerts: readonly(statusAlerts),
 		fetchStatusAlerts,
-		setBusinessError,
-		resetBusinessError,
-		setStatus,
-		setStatusAlerts,
 	};
 };

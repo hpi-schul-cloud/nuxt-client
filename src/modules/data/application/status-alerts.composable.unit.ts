@@ -19,57 +19,22 @@ describe("status alerts composable", () => {
 
 	describe("fetchStatusAlerts", () => {
 		it("should call api and set the alerts corectly", async () => {
-			const { fetchStatusAlerts, getStatusAlerts } = useStatusAlerts();
+			const { fetchStatusAlerts, statusAlerts, businessError, status } = useStatusAlerts();
 			await fetchStatusAlerts();
 
 			expect(alertApi.alertControllerFind).toHaveBeenCalledOnce();
-			expect(getStatusAlerts.value).toStrictEqual(mockStatusAlerts);
+			expect(statusAlerts.value).toStrictEqual(mockStatusAlerts);
+			expect(businessError.value).toEqual({ statusCode: "", message: "" });
+			expect(status.value).toEqual("completed");
 		});
 
 		it("should handle exception", async () => {
 			const error = { status: 418, statusText: "I'm a teapot" };
 			alertApi.alertControllerFind.mockRejectedValueOnce(error);
-			const { fetchStatusAlerts, businessError } = useStatusAlerts();
+			const { fetchStatusAlerts, businessError, status } = useStatusAlerts();
 			await fetchStatusAlerts();
 			expect(businessError.value).toStrictEqual(error);
-		});
-	});
-
-	describe("setStatusAlerts", () => {
-		it("should set the status alerts", () => {
-			const { setStatusAlerts, getStatusAlerts } = useStatusAlerts();
-
-			expect(getStatusAlerts.value).toEqual([]);
-			setStatusAlerts(mockStatusAlerts);
-			expect(getStatusAlerts.value).toStrictEqual(mockStatusAlerts);
-		});
-	});
-
-	describe("setBusinessError", () => {
-		it("should set the business error", () => {
-			const { setBusinessError, businessError } = useStatusAlerts();
-			const error = { statusCode: "500", message: "Internal Server Error" };
-			expect(businessError.value).toEqual({ statusCode: "", message: "" });
-			setBusinessError(error);
-			expect(businessError.value).toStrictEqual(error);
-		});
-
-		it("should reset the business error", () => {
-			const { setBusinessError, resetBusinessError, businessError } = useStatusAlerts();
-			const error = { statusCode: "500", message: "Internal Server Error" };
-			setBusinessError(error);
-			expect(businessError.value).toStrictEqual(error);
-			resetBusinessError();
-			expect(businessError.value).toEqual({ statusCode: "", message: "" });
-		});
-	});
-
-	describe("setStatus", () => {
-		it("should set the status", () => {
-			const { setStatus, status } = useStatusAlerts();
-			expect(status.value).toEqual("");
-			setStatus("pending");
-			expect(status.value).toEqual("pending");
+			expect(status.value).toEqual("error");
 		});
 	});
 });
