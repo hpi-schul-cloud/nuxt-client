@@ -1,5 +1,3 @@
-// type FormValidatorFn<T> = (errMsg: string) => (value: T) => string | true;
-
 import { FormValidatorFn } from "./validators";
 import { useI18nGlobal } from "@/plugins/i18n";
 
