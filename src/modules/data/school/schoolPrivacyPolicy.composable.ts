@@ -1,5 +1,5 @@
 import { notifySuccess } from "../application/notification-store";
-import { ConsentVersion, CreateConsentVersionPayload } from "./types";
+import { ConsentVersion, CreateConsentVersionPayload, CreateConsentVersionResponse } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { readonly, ref } from "vue";
@@ -25,7 +25,9 @@ export const useSchoolPrivacyPolicy = () => {
 	};
 
 	const createPrivacyPolicy = async (payload: CreateConsentVersionPayload) => {
-		const { result, error } = await execute(() => $axios.post("/v1/consentVersions", payload));
+		const { result, error } = await execute(() =>
+			$axios.post<CreateConsentVersionResponse>("/v1/consentVersions", payload)
+		);
 
 		if (error) return;
 
@@ -39,9 +41,18 @@ export const useSchoolPrivacyPolicy = () => {
 		}
 
 		if (result) {
+			const { consentDataId, ...responseData } = result.data;
 			privacyPolicy.value = {
-				...result.data,
-				consentData: { data: payload.consentData },
+				...responseData,
+				consentData: {
+					_id: consentDataId,
+					schoolId: payload.schoolId,
+					createdAt: responseData.createdAt,
+					updatedAt: responseData.updatedAt,
+					filetype: "pdf",
+					filename: "Privacy Policy",
+					data: payload.consentData,
+				},
 			};
 			notifySuccess(t("pages.administration.school.index.schoolPolicy.success"));
 		}

@@ -13,12 +13,12 @@ const consentVersionFactory = Factory.define<ConsentVersion>(({ sequence }) => {
 		updatedAt: new Date().toISOString(),
 		consentTypes: ["privacy", "termsOfUse"],
 		consentData: {
-			fileName: `fileName #${sequence}`,
 			_id: `consentDataId #${sequence}`,
 			schoolId,
 			createdAt: new Date().toISOString(),
 			updatedAt: new Date().toISOString(),
-			fileType: "pdf",
+			filename: `filename #${sequence}`,
+			filetype: "pdf",
 			data: "data:application/pdf;base64,",
 		},
 	};
@@ -26,8 +26,14 @@ const consentVersionFactory = Factory.define<ConsentVersion>(({ sequence }) => {
 
 export const privacyPolicyFactory = consentVersionFactory.params({
 	consentTypes: ["privacy"],
+	consentData: {
+		filename: "Privacy Policy",
+	},
 });
 
 export const termsOfUsePolicyFactory = consentVersionFactory.params({
 	consentTypes: ["termsOfUse"],
+	consentData: {
+		filename: "Terms of Use",
+	},
 });

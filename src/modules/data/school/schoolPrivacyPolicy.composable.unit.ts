@@ -1,5 +1,5 @@
 import { useSchoolPrivacyPolicy } from "./schoolPrivacyPolicy.composable";
-import { CreateConsentVersionPayload } from "./types";
+import { ConsentVersion, CreateConsentVersionPayload } from "./types";
 import { initializeAxios } from "@/utils/api";
 import { privacyPolicyFactory } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
@@ -30,6 +30,14 @@ describe("schoolPrivacyPolicy composable", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
+
+	const createConsentVersionResponse = (policy: ConsentVersion) => {
+		const { consentData, ...responseData } = policy;
+		return {
+			...responseData,
+			consentDataId: consentData._id,
+		};
+	};
 
 	describe("fetchPrivacyPolicy", () => {
 		it("should fetch the privacy policy for a school", async () => {
@@ -96,22 +104,30 @@ describe("schoolPrivacyPolicy composable", () => {
 		});
 
 		it("should create new privacy policy if no existing policy is present", async () => {
-			const policyResponse = privacyPolicyFactory.build();
-			axiosMock.post.mockResolvedValueOnce({ data: policyResponse });
+			const newPrivacyPolicy = privacyPolicyFactory.build();
+			axiosMock.post.mockResolvedValueOnce({ data: createConsentVersionResponse(newPrivacyPolicy) });
 
 			const { createPrivacyPolicy, privacyPolicy } = useSchoolPrivacyPolicy();
 			await createPrivacyPolicy(consentVersionPayload);
 
 			expect(axiosMock.post).toHaveBeenCalledWith("/v1/consentVersions", consentVersionPayload);
 			expect(privacyPolicy.value).toEqual({
-				...policyResponse,
-				consentData: { data: consentVersionPayload.consentData },
+				...newPrivacyPolicy,
+				consentData: {
+					_id: newPrivacyPolicy.consentData._id,
+					schoolId: consentVersionPayload.schoolId,
+					createdAt: newPrivacyPolicy.createdAt,
+					updatedAt: newPrivacyPolicy.updatedAt,
+					filetype: "pdf",
+					filename: "Privacy Policy",
+					data: consentVersionPayload.consentData,
+				},
 			});
 		});
 
 		it("should notify success if privacy policy is created successfully", async () => {
-			const policyPostResponse = privacyPolicyFactory.build();
-			axiosMock.post.mockResolvedValueOnce({ data: policyPostResponse });
+			const newPrivacyPolicy = privacyPolicyFactory.build();
+			axiosMock.post.mockResolvedValueOnce({ data: createConsentVersionResponse(newPrivacyPolicy) });
 
 			const { createPrivacyPolicy } = useSchoolPrivacyPolicy();
 			await createPrivacyPolicy(consentVersionPayload);
@@ -125,8 +141,10 @@ describe("schoolPrivacyPolicy composable", () => {
 			const existingPolicy = privacyPolicyFactory.build();
 			axiosMock.get.mockResolvedValueOnce({ data: { data: [existingPolicy] } });
 
-			const newPolicyResponse = privacyPolicyFactory.build();
-			axiosMock.post.mockResolvedValueOnce({ data: newPolicyResponse });
+			const newPrivacyPolicy = privacyPolicyFactory.build();
+			axiosMock.post.mockResolvedValueOnce({
+				data: createConsentVersionResponse(newPrivacyPolicy),
+			});
 
 			const { fetchPrivacyPolicy, createPrivacyPolicy, privacyPolicy } = useSchoolPrivacyPolicy();
 			await fetchPrivacyPolicy(existingPolicy.schoolId);
@@ -135,8 +153,14 @@ describe("schoolPrivacyPolicy composable", () => {
 			expect(axiosMock.delete).toHaveBeenCalledWith(`/v1/consentVersions/${existingPolicy._id}`);
 			expect(axiosMock.post).toHaveBeenCalledWith("/v1/consentVersions", consentVersionPayload);
 			expect(privacyPolicy.value).toEqual({
-				...newPolicyResponse,
+				...newPrivacyPolicy,
 				consentData: {
+					_id: newPrivacyPolicy.consentData._id,
+					schoolId: consentVersionPayload.schoolId,
+					createdAt: newPrivacyPolicy.createdAt,
+					updatedAt: newPrivacyPolicy.updatedAt,
+					filetype: "pdf",
+					filename: "Privacy Policy",
 					data: consentVersionPayload.consentData,
 				},
 			});
@@ -149,8 +173,8 @@ describe("schoolPrivacyPolicy composable", () => {
 			axiosMock.get.mockResolvedValueOnce({ data: { data: [existingPolicy] } });
 			axiosMock.delete.mockRejectedValueOnce(new Error("network"));
 
-			const newPolicyResponse = privacyPolicyFactory.build();
-			axiosMock.post.mockResolvedValueOnce({ data: newPolicyResponse });
+			const newPrivacyPolicy = privacyPolicyFactory.build({});
+			axiosMock.post.mockResolvedValueOnce({ data: createConsentVersionResponse(newPrivacyPolicy) });
 
 			const { fetchPrivacyPolicy, createPrivacyPolicy, privacyPolicy } = useSchoolPrivacyPolicy();
 			await fetchPrivacyPolicy(existingPolicy.schoolId);
@@ -159,8 +183,14 @@ describe("schoolPrivacyPolicy composable", () => {
 			expect(axiosMock.delete).toHaveBeenCalledWith(`/v1/consentVersions/${existingPolicy._id}`);
 			expect(axiosMock.post).toHaveBeenCalledWith("/v1/consentVersions", consentVersionPayload);
 			expect(privacyPolicy.value).toEqual({
-				...newPolicyResponse,
+				...newPrivacyPolicy,
 				consentData: {
+					_id: newPrivacyPolicy.consentData._id,
+					schoolId: consentVersionPayload.schoolId,
+					createdAt: newPrivacyPolicy.createdAt,
+					updatedAt: newPrivacyPolicy.updatedAt,
+					filetype: "pdf",
+					filename: "Privacy Policy",
 					data: consentVersionPayload.consentData,
 				},
 			});
