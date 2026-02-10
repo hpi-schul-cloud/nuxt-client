@@ -3,17 +3,16 @@
 		:model-value="isOpen"
 		:title="t('common.words.privacyPolicy')"
 		:confirm-btn-lang-key="'pages.administration.school.index.schoolPolicy.replace'"
-		:confirm-btn-disabled="!isValid"
+		is-open-state-managed-externally
 		@cancel="onCancel"
 		@confirm="onSubmit"
 	>
 		<template #content>
-			<v-form ref="policyForm" v-model="isValid">
+			<VForm ref="policyForm">
 				<WarningAlert class="mb-5">
 					{{ t("pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent") }}
 				</WarningAlert>
 				<VFileInput
-					ref="input-file"
 					v-model="file"
 					class="input-file mb-2 truncate-file-input"
 					data-testid="input-file"
@@ -23,7 +22,7 @@
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 				/>
-			</v-form>
+			</VForm>
 		</template>
 	</SvsDialog>
 </template>
@@ -33,10 +32,11 @@ import { currentDate } from "@/plugins/datetime";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { CreateConsentVersionPayload } from "@data-school";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ComputedRef, Ref, ref } from "vue";
+import { computed, ComputedRef, Ref, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 type Props = {
@@ -51,8 +51,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-const policyForm: Ref<File[]> = ref([]);
-const isValid: Ref<boolean> = ref(false);
+const policyForm = useTemplateRef("policyForm");
 const file: Ref<File | null> = ref(null);
 const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
@@ -67,8 +66,6 @@ const rules = {
 };
 
 const resetForm = () => {
-	policyForm.value = [];
-	isValid.value = false;
 	file.value = null;
 };
 
@@ -78,7 +75,8 @@ const onCancel = () => {
 };
 
 const onSubmit = async () => {
-	if (isValid.value && file.value) {
+	const isValid = await isValidOrFocusFirstInvalidInput(policyForm);
+	if (isValid && file.value) {
 		const newConsentVersion: CreateConsentVersionPayload = {
 			schoolId: school.value.id,
 			title: t("pages.administration.school.index.schoolPolicy.fileName"),
