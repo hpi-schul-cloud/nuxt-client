@@ -79,13 +79,7 @@
 		</BackendDataTable>
 		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 	</DefaultWireframe>
-	<ConfirmationDialog>
-		<template #alert>
-			<WarningAlert data-testid="warning-alert-teachersdelete">
-				{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
-			</WarningAlert>
-		</template>
-	</ConfirmationDialog>
+	<ConfirmationDialog />
 </template>
 
 <script>

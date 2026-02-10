@@ -1358,8 +1358,6 @@ export default {
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
@@ -1428,8 +1426,6 @@ export default {
 		"Are you sure you want to delete all techers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher? | Are you sure you want to delete this {number} of teachers?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these teachers will remain visible in the table.",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
 	"pages.administration.teachers.index.searchbar.placeholder": "Search",
