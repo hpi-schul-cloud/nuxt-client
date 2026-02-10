@@ -13,7 +13,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
@@ -437,7 +437,7 @@ describe("teachers/index", () => {
 			it("should call setFilterState method", () => {
 				const { wrapper, usersActionsStubs } = setup();
 
-				const searchBarInput = wrapper.findComponent(SearchField).find("input");
+				const searchBarInput = wrapper.findComponent(SvsSearchField).find("input");
 				expect(searchBarInput.exists()).toBe(true);
 
 				searchBarInput.setValue("abc");
