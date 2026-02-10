@@ -11,6 +11,8 @@ export const useAutoLogout = () => {
 	const errorOnExtend = ref(false);
 	const sessionStatus: Ref<SessionStatus | null> = ref(null);
 	const isTTLUpdated = ref(false);
+	// TODO brauchen wir das überhaupt?
+	const loggedOut = ref(false);
 
 	let remainingTimePolling: ReturnType<typeof setInterval> | null = null;
 	let ttlTimeoutPolling: ReturnType<typeof setTimeout> | null = null;
@@ -140,6 +142,13 @@ export const useAutoLogout = () => {
 		},
 	};
 
+	const notifyBeingLoggedOut = () => {
+		if (loggedOut.value) return;
+		loggedOut.value = true;
+		// TODO vielleicht lieber einen logout-dialog zeigen (OK button mit dem man zum login kommt) damit Nutzen nicht verwirrt sind, dass die Loginseite kommt
+		useAppStore().logout();
+	};
+
 	watch(
 		() => sessionStatus.value,
 		(newValue) => {
@@ -165,6 +174,7 @@ export const useAutoLogout = () => {
 		remainingTimeInSeconds,
 		sessionStatus,
 		showDialog,
+		notifyBeingLoggedOut,
 		createSession,
 		extendSession,
 	};
