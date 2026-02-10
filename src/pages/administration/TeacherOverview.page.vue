@@ -8,7 +8,7 @@
 				:description="$t('pages.administration.teachers.index.remove.progress.description')"
 				data-testid="progress-modal"
 			/>
-			<SearchField
+			<SvsSearchField
 				v-model="searchQuery"
 				class="mt-10 mb-2"
 				:label="$t('pages.administration.teachers.index.searchbar.placeholder')"
@@ -120,7 +120,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ConfirmationDialog,
-		SearchField: SvsSearchField,
+		SvsSearchField,
 	},
 	props: {
 		showExternalSyncHint: {

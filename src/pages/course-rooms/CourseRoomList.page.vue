@@ -12,7 +12,7 @@
 		</template>
 		<template #page-content>
 			<v-row class="d-flex justify-center search">
-				<SearchField
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
 					density="default"
@@ -57,7 +57,7 @@ export default defineComponent({
 	components: {
 		CourseRoomWrapper,
 		CourseRoomAvatar,
-		SearchField: SvsSearchField,
+		SvsSearchField,
 	},
 	data() {
 		return {

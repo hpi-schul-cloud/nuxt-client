@@ -21,7 +21,7 @@
 		</template>
 		<template #page-content>
 			<div>
-				<SearchField
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
 					density="default"
@@ -130,7 +130,7 @@ export default defineComponent({
 		RoomEmptyAvatar: CourseRoomEmptyAvatar,
 		RoomModal: CourseRoomModal,
 		ImportFlow,
-		SearchField: SvsSearchField,
+		SvsSearchField,
 	},
 	layout: "defaultVuetify",
 	setup() {
