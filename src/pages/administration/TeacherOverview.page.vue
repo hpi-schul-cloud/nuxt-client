@@ -89,7 +89,6 @@
 </template>
 
 <script>
-import { WarningAlert } from "@ui-alert";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
@@ -115,6 +114,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
@@ -131,7 +131,7 @@ export default defineComponent({
 		DataFilter,
 		ConfirmationDialog,
 		ThrInfoBanner,
-    WarningAlert,
+		WarningAlert,
 	},
 	props: {
 		showExternalSyncHint: {
