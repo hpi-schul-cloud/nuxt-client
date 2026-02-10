@@ -1,5 +1,5 @@
-import { useAutoLogout } from "@/modules/feature/auto-logout/autoLogout.composable";
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
+import { useAutoLogout } from "@feature-auto-logout";
 import { isObject } from "@vueuse/core";
 import { AxiosInstance, HttpStatusCode, isAxiosError } from "axios";
 import { getCurrentInstance } from "vue";
