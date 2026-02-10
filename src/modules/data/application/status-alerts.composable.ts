@@ -11,7 +11,7 @@ export const useStatusAlerts = () => {
 
 	const fetchStatusAlerts = async () => {
 		const { result } = await execute(() => alertApi.alertControllerFind());
-		statusAlerts.value = result?.data?.data as StatusAlert[];
+		statusAlerts.value = (result?.data?.data as StatusAlert[]) || [];
 	};
 
 	return {
