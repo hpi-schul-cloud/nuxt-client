@@ -12,7 +12,6 @@ import { VApp } from "vuetify/lib/components/index";
 
 vi.mock("@data-app/status-alerts.composable");
 vi.mocked(useStatusAlerts).mockReturnValue({
-	businessError: ref({ statusCode: "", message: "" }),
 	status: ref(""),
 	statusAlerts: ref(mockStatusAlerts),
 	fetchStatusAlerts: vi.fn(),
