@@ -68,10 +68,6 @@ app.use(pinia);
 
 mountBaseComponents(app);
 
-const { notifyBeingLoggedOut } = useAutoLogout();
-
-// app.config.productionTip = false;
-
 app.config.errorHandler = (err: unknown) => {
 	logger.error(err);
 	useAppStore().handleUnknownError(err);
@@ -87,12 +83,12 @@ const handleUnauthorizedError = async (error: unknown) => {
 	if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
 		try {
 			const response = await axios.get("/v1/accounts/jwtTimer");
-			const ttl = response?.data?.ttl;
-			if (!ttl || ttl <= 0) {
-				notifyBeingLoggedOut();
+			const ttl = response?.data?.ttl ?? 0;
+			if (ttl <= 0) {
+				useAutoLogout().notifyBeingLoggedOut();
 			}
 		} catch {
-			notifyBeingLoggedOut();
+			useAutoLogout().notifyBeingLoggedOut();
 		}
 	}
 };
