@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { WarningAlert } from "@ui-alert";
 import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
@@ -141,6 +142,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ThrInfoBanner,
+    WarningAlert,
 	},
 	props: {
 		showExternalSyncHint: {

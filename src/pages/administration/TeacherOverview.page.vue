@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import { WarningAlert } from "@ui-alert";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
@@ -130,6 +131,7 @@ export default defineComponent({
 		DataFilter,
 		ConfirmationDialog,
 		ThrInfoBanner,
+    WarningAlert,
 	},
 	props: {
 		showExternalSyncHint: {
