@@ -59,7 +59,7 @@ const isSpeedDialOpen = ref(false);
 
 const { y: scrollOffsetY } = useWindowScroll();
 const forceCollapseOnMobileScroll = ref(false);
-const isCollapsed = computed(() => isSpeedDialOpen.value || forceCollapseOnMobileScroll.value);
+const isCollapsed = computed(() => (isSpeedDial.value && isSpeedDialOpen.value) || forceCollapseOnMobileScroll.value);
 
 const onFabClick = () => {
 	if (primaryAction.value.clickHandler && !isSpeedDial.value) primaryAction.value.clickHandler();
