@@ -53,9 +53,10 @@ import {
 import themeConfig from "@/theme.config";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
+import { useAutoLogout } from "@feature-auto-logout";
 import { htmlConfig } from "@feature-render-html";
 import { logger } from "@util-logger";
-import axios from "axios";
+import axios, { HttpStatusCode, isAxiosError } from "axios";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
@@ -66,6 +67,8 @@ const pinia = createPinia();
 app.use(pinia);
 
 mountBaseComponents(app);
+
+const { notifyBeingLoggedOut } = useAutoLogout();
 
 // app.config.productionTip = false;
 
@@ -80,11 +83,25 @@ app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
+const handleUnauthorizedError = async (error: unknown) => {
+	if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
+		try {
+			const response = await axios.get("/v1/accounts/jwtTimer");
+			const ttl = response?.data?.ttl;
+			if (!ttl || ttl <= 0) {
+				notifyBeingLoggedOut();
+			}
+		} catch {
+			notifyBeingLoggedOut();
+		}
+	}
+};
+
 (async () => {
 	const runtimeConfigJson = await axios.get(`${window.location.origin}/runtime.config.json`);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
-	initializeAxios(axios);
+	initializeAxios(axios, handleUnauthorizedError);
 
 	const success = await useEnvStore().loadConfiguration();
 

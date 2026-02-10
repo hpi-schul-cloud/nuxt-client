@@ -7,18 +7,6 @@ import axios, { isAxiosError } from "axios";
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);
 
-vi.mock("@/modules/feature/auto-logout/autoLogout.composable", () => {
-	const mockNotifyBeingLoggedOut = vi.fn();
-	return {
-		useAutoLogout: () => ({
-			notifyBeingLoggedOut: mockNotifyBeingLoggedOut,
-		}),
-	};
-});
-
-const { useAutoLogout } = await import("@/modules/feature/auto-logout/autoLogout.composable");
-const mockNotifyBeingLoggedOut = useAutoLogout().notifyBeingLoggedOut as ReturnType<typeof vi.fn>;
-
 describe("AxiosInstance", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -27,6 +15,13 @@ describe("AxiosInstance", () => {
 	describe("initializeAxios", () => {
 		it("should set $axios", () => {
 			initializeAxios(axios);
+
+			expect($axios).toBe(axios);
+		});
+
+		it("should set $axios with response interceptor when provided", async () => {
+			const responseInterceptor = vi.fn();
+			await initializeAxios(axios, responseInterceptor);
 
 			expect($axios).toBe(axios);
 		});
@@ -61,145 +56,53 @@ describe("AxiosInstance", () => {
 			vi.clearAllMocks();
 		});
 
-		describe("unauthorized error handling", () => {
-			it("should call notifyBeingLoggedOut when 401 error occurs and JWT timer returns expired token", async () => {
-				mockAxios.get = vi.fn().mockResolvedValue({ data: { ttl: 0 } });
-				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
+		describe("when responseInterceptor is provided", () => {
+			it("should setup the response interceptor", async () => {
+				const mockResponseInterceptor = vi.fn();
 
-				const unauthorizedError = axiosErrorFactory.withStatusCode(401).build();
-				mockedIsAxiosError.mockReturnValue(true);
+				await initializeAxios(mockAxios, mockResponseInterceptor);
 
-				if (errorHandler) {
-					try {
-						await errorHandler(unauthorizedError);
-					} catch {
-						// Expected to reject
-					}
-				}
-
-				expect(mockAxios.get).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
-				expect(mockNotifyBeingLoggedOut).toHaveBeenCalled();
+				expect(mockAxios.interceptors.response.use).toHaveBeenCalledWith(expect.any(Function), expect.any(Function));
 			});
 
-			it("should call notifyBeingLoggedOut when 401 error occurs and JWT timer request fails", async () => {
-				mockAxios.get = vi.fn().mockRejectedValue(new Error("Network error"));
-				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
+			it("should call the responseInterceptor with the error", async () => {
+				const mockResponseInterceptor = vi.fn();
 
-				const unauthorizedError = axiosErrorFactory.withStatusCode(401).build();
-				mockedIsAxiosError.mockReturnValue(true);
+				await initializeAxios(mockAxios, mockResponseInterceptor);
+
+				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
+				const testError = new Error("Test error");
 
 				if (errorHandler) {
 					try {
-						await errorHandler(unauthorizedError);
+						await errorHandler(testError);
 					} catch {
 						// Expected to reject
 					}
 				}
 
-				expect(mockAxios.get).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
-				expect(mockNotifyBeingLoggedOut).toHaveBeenCalled();
-			});
-
-			it("should NOT call notifyBeingLoggedOut when 401 error occurs but JWT timer returns valid ttl", async () => {
-				mockAxios.get = vi.fn().mockResolvedValue({ data: { ttl: 300 } }); // 5 minutes remaining
-				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
-
-				const unauthorizedError = axiosErrorFactory.withStatusCode(401).build();
-				mockedIsAxiosError.mockReturnValue(true);
-
-				if (errorHandler) {
-					try {
-						await errorHandler(unauthorizedError);
-					} catch {
-						// Expected to reject
-					}
-				}
-
-				expect(mockAxios.get).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
-				expect(mockNotifyBeingLoggedOut).not.toHaveBeenCalled();
-			});
-
-			it("should NOT handle non-401 errors", async () => {
-				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
-
-				const notFoundError = axiosErrorFactory.withStatusCode(404).build();
-				mockedIsAxiosError.mockReturnValue(true);
-
-				if (errorHandler) {
-					try {
-						await errorHandler(notFoundError);
-					} catch {
-						// Expected to reject
-					}
-				}
-
-				expect(mockAxios.get).not.toHaveBeenCalled();
-				expect(mockNotifyBeingLoggedOut).not.toHaveBeenCalled();
-			});
-
-			it("should NOT handle non-axios errors", async () => {
-				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
-
-				const regularError = new Error("Some error");
-				mockedIsAxiosError.mockReturnValue(false);
-
-				if (errorHandler) {
-					try {
-						await errorHandler(regularError);
-					} catch {
-						// Expected to reject
-					}
-				}
-
-				expect(mockAxios.get).not.toHaveBeenCalled();
-				expect(mockNotifyBeingLoggedOut).not.toHaveBeenCalled();
+				expect(mockResponseInterceptor).toHaveBeenCalledWith(testError);
 			});
 
 			it("should always reject the original error", async () => {
-				mockAxios.get = vi.fn().mockResolvedValue({ data: { ttl: 0 } });
-				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
+				const mockResponseInterceptor = vi.fn();
 
-				const unauthorizedError = axiosErrorFactory.withStatusCode(401).build();
-				mockedIsAxiosError.mockReturnValue(true);
+				await initializeAxios(mockAxios, mockResponseInterceptor);
+
+				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
+				const testError = new Error("Test error");
 
 				if (errorHandler) {
-					await expect(errorHandler(unauthorizedError)).rejects.toEqual(unauthorizedError);
+					await expect(errorHandler(testError)).rejects.toEqual(testError);
 				}
 			});
+		});
 
-			it("should prevent race conditions by not checking JWT multiple times simultaneously", async () => {
-				mockAxios.get = vi
-					.fn()
-					.mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve({ data: { ttl: 0 } }), 100)));
+		describe("when no responseInterceptor is provided", () => {
+			it("should NOT setup the response interceptor", async () => {
 				await initializeAxios(mockAxios);
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
 
-				const unauthorizedError1 = axiosErrorFactory.withStatusCode(401).build();
-				const unauthorizedError2 = axiosErrorFactory.withStatusCode(401).build();
-				mockedIsAxiosError.mockReturnValue(true);
-
-				const promises: Promise<unknown>[] = [];
-				if (errorHandler) {
-					promises.push(
-						errorHandler(unauthorizedError1).catch(() => {
-							// Expected to reject
-						}),
-						errorHandler(unauthorizedError2).catch(() => {
-							// Expected to reject
-						})
-					);
-				}
-
-				await Promise.all(promises);
-
-				expect(mockAxios.get).toHaveBeenCalledTimes(1);
-				expect(mockAxios.get).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
+				expect(mockAxios.interceptors.response.use).not.toHaveBeenCalled();
 			});
 		});
 	});
