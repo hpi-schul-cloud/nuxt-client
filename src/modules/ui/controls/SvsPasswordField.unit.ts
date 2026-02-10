@@ -1,11 +1,11 @@
-import PasswordField from "./PasswordField.vue";
+import SvsPasswordField from "./SvsPasswordField.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
-describe("@ui-controls/PasswordField", () => {
+describe("SvsPasswordField", () => {
 	const setup = () =>
-		mount(PasswordField, {
+		mount(SvsPasswordField, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

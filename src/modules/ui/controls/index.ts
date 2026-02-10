@@ -1,3 +1,3 @@
-import PasswordField from "./PasswordField.vue";
-import SearchField from "./SearchField.vue";
-export { PasswordField, SearchField };
+import SvsPasswordField from "./SvsPasswordField.vue";
+import SvsSearchField from "./SvsSearchField.vue";
+export { SvsPasswordField, SvsSearchField };

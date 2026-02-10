@@ -114,7 +114,7 @@ import {
 	mdiQrcode,
 } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
@@ -129,7 +129,7 @@ export default defineComponent({
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
-		SearchField,
+		SearchField: SvsSearchField,
 	},
 	props: {
 		showExternalSyncHint: {

@@ -39,7 +39,7 @@
 			:rules="rules.searchUser"
 			@update:model-value="emit('update:modelValue', { ...modelValue, searchUser: $event })"
 		/>
-		<PasswordField
+		<SvsPasswordField
 			:model-value="modelValue.searchUserPassword"
 			data-testid="ldapDataConnectionSearchUserPassword"
 			class="mt-8"
@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
 import { mdiAccountCircleOutline, mdiDnsOutline, mdiFileTreeOutline } from "@icons/material";
-import { PasswordField } from "@ui-controls";
+import { SvsPasswordField } from "@ui-controls";
 import { isRequired, isValidLdapPath, isValidLdapUrl, isValidSecuredLdapUrl } from "@util-validators";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";

@@ -23,7 +23,7 @@
 		<li>{{ t("pages.registrationExternalMembers.steps.password.instructions.allowedSpecialCharacters") }}</li>
 	</ul>
 	<div class="d-flex mt-4" :class="{ 'flex-column ga-4': xs, 'ga-6': !xs }">
-		<PasswordField
+		<SvsPasswordField
 			v-model="password"
 			aria-describedby="password-instructions"
 			autocomplete="new-password"
@@ -34,7 +34,7 @@
 			:rules="passwordRules"
 			@update:model-value="onUpdatePassword"
 		/>
-		<PasswordField
+		<SvsPasswordField
 			ref="confirmPasswordField"
 			v-model="confirmPassword"
 			data-testid="confirm-password"
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
-import { PasswordField } from "@ui-controls";
+import { SvsPasswordField } from "@ui-controls";
 import {
 	hasLowercaseLetter,
 	hasNumber,

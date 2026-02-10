@@ -8,12 +8,12 @@ import { type Registration, useRegistrationStore } from "@data-room";
 import { mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
 import { nextTick, ref } from "vue";
-import { VDataTable, VTextField } from "vuetify/lib/components/index";
+import { VDataTable, VTextField } from "vuetify/components";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseConfirmationDialog = vi.mocked(useConfirmationDialog);
@@ -268,7 +268,7 @@ describe("MemberInvitationsTable", () => {
 		it("should render the search component", () => {
 			const { wrapper } = setup();
 
-			const search = wrapper.findComponent(SearchField);
+			const search = wrapper.findComponent(SvsSearchField);
 
 			expect(search.exists()).toBe(true);
 		});

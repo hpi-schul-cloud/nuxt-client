@@ -25,13 +25,13 @@ import {
 } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
 import { computed, nextTick, Ref, ref } from "vue";
-import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/lib/components/index";
+import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/components";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
@@ -431,7 +431,7 @@ describe("MembersTable", () => {
 		it("should render the search component", () => {
 			const { wrapper } = setup();
 
-			const search = wrapper.findComponent(SearchField);
+			const search = wrapper.findComponent(SvsSearchField);
 
 			expect(search.exists()).toBe(true);
 		});

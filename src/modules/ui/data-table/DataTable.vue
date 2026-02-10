@@ -17,7 +17,7 @@
 			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
 		<slot name="left-of-search" />
-		<SearchField
+		<SvsSearchField
 			v-model="search"
 			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
 			mobile-breakpoint="sm"
@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import BatchActionMenu from "./BatchActionMenu.vue";
 import { mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";

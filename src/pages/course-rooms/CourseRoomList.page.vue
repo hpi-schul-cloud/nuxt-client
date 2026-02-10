@@ -50,14 +50,14 @@ import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: {
 		CourseRoomWrapper,
 		CourseRoomAvatar,
-		SearchField,
+		SearchField: SvsSearchField,
 	},
 	data() {
 		return {

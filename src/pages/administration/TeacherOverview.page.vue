@@ -105,7 +105,7 @@ import {
 	mdiQrcode,
 } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { SearchField } from "@ui-controls";
+import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent } from "vue";
@@ -120,7 +120,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ConfirmationDialog,
-		SearchField,
+		SearchField: SvsSearchField,
 	},
 	props: {
 		showExternalSyncHint: {

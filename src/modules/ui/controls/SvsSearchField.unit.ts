@@ -1,9 +1,9 @@
-import SearchField from "./SearchField.vue";
+import SvsSearchField from "./SvsSearchField.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 
-describe("@ui-controls/SearchField", () => {
+describe("SvsSearchField", () => {
 	const setup = (options = {}) =>
-		mount(SearchField, {
+		mount(SvsSearchField, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
