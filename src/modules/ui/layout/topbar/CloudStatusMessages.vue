@@ -35,7 +35,7 @@ import { StatusAlert } from "@/store/types/status-alert";
 import { mdiAlertCircle, mdiInformation } from "@icons/material";
 
 type Props = {
-	statusAlerts: StatusAlert[] | readonly StatusAlert[];
+	statusAlerts: readonly StatusAlert[];
 };
 
 defineProps<Props>();
