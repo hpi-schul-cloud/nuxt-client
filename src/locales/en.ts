@@ -182,6 +182,7 @@ export default {
 	"common.tool.context.type.boardElements": "Boards",
 	"common.tool.context.type.mediaShelves": "Media shelf",
 	"common.validation.email": "Please enter a valid email address",
+	"common.validation.file": "Please upload a file {fileHint}",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
 	"common.validation.regex": "The input must conform to the following rule: {comment}.",
@@ -1265,7 +1266,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.edit": "Edit Privacy Policy",
 	"pages.administration.school.index.schoolPolicy.error": "An error occurred while loading the privacy policy",
 	"pages.administration.school.index.schoolPolicy.fileName": "Privacy Policy of the school",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Upload file (PDF only, 4MB max)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Upload file {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(PDF only, 4 MB max)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Select file",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"The new Privacy Policy will irretrievably replace the old one and will be presented to all users of this school for approval.",
@@ -1274,7 +1276,7 @@ export default {
 	"pages.administration.school.index.schoolPolicy.success": "New file was successfully uploaded.",
 	"pages.administration.school.index.schoolPolicy.uploadedOn": "Uploaded {date}",
 	"pages.administration.school.index.schoolPolicy.validation.fileTooBig":
-		"The file is larger than 4MB. Please reduce the file size",
+		"The file is larger than 4 MB. Please reduce the file size",
 	"pages.administration.school.index.schoolPolicy.validation.notPdf":
 		"This file format is not supported. Please use PDF only",
 	"pages.administration.school.index.termsOfUse.cancel": "Cancel",

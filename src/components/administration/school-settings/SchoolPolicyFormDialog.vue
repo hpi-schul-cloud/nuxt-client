@@ -18,7 +18,11 @@
 					data-testid="input-file"
 					accept="application/pdf"
 					:label="t('pages.administration.school.index.schoolPolicy.labels.uploadFile')"
-					:hint="t('pages.administration.school.index.schoolPolicy.hints.uploadFile')"
+					:hint="
+						t('pages.administration.school.index.schoolPolicy.hints.uploadFile', {
+							fileHint: t('pages.administration.school.index.schoolPolicy.fileHint'),
+						})
+					"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 				/>
@@ -57,7 +61,8 @@ const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
 const maxFileUploadSizeInKb = 4194304;
 const rules = {
-	required: (value: File | null) => !!value || t("common.validation.required"),
+	required: (value: File | null) =>
+		!!value || t("common.validation.file", { fileHint: t("pages.administration.school.index.schoolPolicy.fileHint") }),
 	mustBePdf: (value: File | null) =>
 		value?.type === "application/pdf" || t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
 	maxSize: (value: File | null) =>
