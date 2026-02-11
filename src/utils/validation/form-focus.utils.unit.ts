@@ -1,7 +1,7 @@
 import { isValidOrFocusFirstInvalidInput } from "./form-focus.utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { defineComponent, ref } from "vue";
-import { VForm, VTextField } from "vuetify/components";
+import { VForm } from "vuetify/components";
 
 describe("form focus utils", () => {
 	describe("isValidOrFocusFirstInvalidInput", () => {
@@ -15,6 +15,17 @@ describe("form focus utils", () => {
 				template: `
 					<VForm ref="formRef">
 						<VTextField
+							ref="firstInput"
+							model-value="validValue"
+							:rules="[v => !!v || 'Field is required']"
+						/>
+						<VTextField
+							ref="secondInput"
+							model-value="${initialValue}"
+							:rules="[v => !!v || 'Field is required']"
+						/>
+						<VTextField
+							ref="thirdInput"
 							model-value="${initialValue}"
 							:rules="[v => !!v || 'Field is required']"
 						/>
@@ -48,7 +59,7 @@ describe("form focus utils", () => {
 
 			expect(result).toBe(false);
 			expect(focusSpy).toHaveBeenCalled();
-			expect(document.activeElement).toEqual(wrapper.findComponent(VTextField).find("input").element);
+			expect(document.activeElement).toEqual(wrapper.findComponent({ ref: "secondInput" }).find("input").element);
 
 			focusSpy.mockRestore();
 		});
