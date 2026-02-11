@@ -16,8 +16,7 @@
 			class="mr-2"
 			:icon="mdiAlert"
 			:color="statusAlertColor"
-			:aria-label="$t('global.topbar.actions.alerts')"
-			:title="$t('global.topbar.actions.alerts')"
+			:aria-label="t('global.topbar.actions.alerts')"
 			data-test-id="status-alerts-icon"
 		>
 			<CloudStatusMessages :status-alerts="statusAlerts" />
@@ -26,8 +25,7 @@
 			v-if="isTabletOrBigger"
 			class="mr-2"
 			:icon="mdiQrcode"
-			:aria-label="$t('global.topbar.actions.qrCode')"
-			:title="$t('global.topbar.actions.qrCode')"
+			:aria-label="t('global.topbar.actions.qrCode')"
 			data-test-id="qr-code-btn"
 		>
 			<PageShare />
@@ -52,15 +50,17 @@ import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
 import TopbarItem from "./TopbarItem.vue";
 import UserMenu from "./UserMenu.vue";
-import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
-import { useAppStoreRefs } from "@data-app";
+import { useAppStoreRefs, useStatusAlerts } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
 import { useWindowScroll } from "@vueuse/core";
 import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 
 const { y } = useWindowScroll();
 const isScrollingDown = ref(false);
+const { fetchStatusAlerts, statusAlerts } = useStatusAlerts();
+const { t } = useI18n();
 
 watch(y, (newVal, oldVal) => {
 	isScrollingDown.value = newVal > oldVal;
@@ -75,17 +75,11 @@ defineProps({
 
 defineEmits(["sidebar-toggled"]);
 
-const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-
 const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
 
 onMounted(() => {
-	(async () => {
-		await statusAlertsModule.fetchStatusAlerts();
-	})();
+	fetchStatusAlerts();
 });
-
-const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
 
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
