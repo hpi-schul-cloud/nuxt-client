@@ -1,56 +1,43 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
+import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import { Permission } from "@/serverApi/v3";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolsModule from "@/store/schools";
+import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";
-import { PRIVACY_POLICY_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStoreWithPermissions, privacyPolicyFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ConsentVersion } from "@data-school";
+import { ConsentVersion, CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
+import { nextTick, ref } from "vue";
 
 vi.mock("@/utils/fileHelper");
 
+vi.mock("@data-school/schoolPrivacyPolicy.composable");
+const useSchoolPrivacyMock = vi.mocked(useSchoolPrivacyPolicy);
+
 describe("SchoolPolicy", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
-	let privacyPolicyModule: Mocked<PrivacyPolicyModule>;
-
-	const mockPolicy: ConsentVersion = {
-		_id: "123",
-		schoolId: "mockSchoolId",
-		title: "sometitle",
-		consentText: "",
-		publishedAt: "somedate",
-		createdAt: "somedate",
-		updatedAt: "somedate",
-		consentTypes: ["privacy"],
-		consentData: {
-			_id: "999",
-			schoolId: "333",
-			createdAt: "someotherdate",
-			updatedAt: "someotherdate",
-			fileType: "pdf",
-			fileName: "somefilename",
-			data: "data:application/pdf;base64,SOMEFILEDATA",
-		},
-	};
+	let useSchoolPrivacyPolicyMockReturn: DeepMocked<ReturnType<typeof useSchoolPrivacyPolicy>>;
 
 	const setup = (
-		getters: Partial<PrivacyPolicyModule> = {
-			getPrivacyPolicy: mockPolicy,
-			getBusinessError: {
-				statusCode: "",
-				message: "",
-			},
-			getStatus: "completed",
-		},
-		permissions = [Permission.SchoolEdit]
+		options?: Partial<{ status: Status; permissions: Permission[]; privacyPolicy: ConsentVersion | null }>
 	) => {
+		const existitngPrivacyPolicy = privacyPolicyFactory.build({ schoolId: mockSchool.id });
+		const { privacyPolicy, permissions, status } = {
+			privacyPolicy: existitngPrivacyPolicy,
+			permissions: [Permission.SchoolEdit],
+			status: "completed" as Status,
+			...options,
+		};
+
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions(permissions);
 
@@ -58,34 +45,36 @@ describe("SchoolPolicy", () => {
 			getSchool: mockSchool,
 		});
 
-		privacyPolicyModule = createModuleMocks(PrivacyPolicyModule, {
-			...getters,
-		});
+		useSchoolPrivacyPolicyMockReturn = createMock<ReturnType<typeof useSchoolPrivacyPolicy>>();
+		useSchoolPrivacyMock.mockReturnValue(useSchoolPrivacyPolicyMockReturn);
+
+		useSchoolPrivacyPolicyMockReturn.privacyPolicy = ref(privacyPolicy);
+		useSchoolPrivacyPolicyMockReturn.status = ref(status);
 
 		const wrapper = mount(SchoolPolicy, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
+				stubs: { SvsDialog: true },
 			},
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	describe("when school is set", () => {
 		it("should call fetch privacy policy", () => {
 			setup();
 
-			expect(privacyPolicyModule.fetchPrivacyPolicy).toHaveBeenCalled();
+			expect(useSchoolPrivacyPolicyMockReturn.fetchPrivacyPolicy).toHaveBeenCalled();
 		});
 	});
 
 	describe("when privacy policy is loading", () => {
 		it("should render progress bar", () => {
-			const wrapper = setup({ getStatus: "pending" });
+			const { wrapper } = setup({ status: "pending" });
 
 			expect(wrapper.find('[data-testid="progress-bar"]').exists()).toBe(true);
 		});
@@ -93,7 +82,7 @@ describe("SchoolPolicy", () => {
 
 	describe("when privacy policy is loaded", () => {
 		it("should render privacy policy list item", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="policy-item"]').exists()).toBe(true);
 		});
@@ -101,7 +90,7 @@ describe("SchoolPolicy", () => {
 
 	describe("when privacy policy is found", () => {
 		it("should render delete button", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(true);
 		});
@@ -109,69 +98,125 @@ describe("SchoolPolicy", () => {
 
 	describe("when privacy policy is not found", () => {
 		it("should not render delete button", () => {
-			const wrapper = setup({
-				getPrivacyPolicy: null,
+			const { wrapper } = setup({
+				privacyPolicy: null,
 			});
 
 			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(false);
+		});
+
+		it("should not be possible to click policy item", async () => {
+			const { wrapper } = setup({
+				privacyPolicy: null,
+			});
+
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
+			const policyItem = wrapper.find('[data-testid="policy-item"]');
+			await policyItem.trigger("click");
+
+			expect(downloadFileMock).toHaveBeenCalledTimes(0);
 		});
 	});
 
 	describe("when user has school edit permission", () => {
 		it("should render edit button", () => {
-			const wrapper = setup();
+			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(true);
 		});
 
 		it("should render dialog component", async () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 			const editBtn = wrapper.find('[data-testid="edit-button"]');
 			await editBtn.trigger("click");
 
-			expect(wrapper.findComponent({ name: "school-policy-form-dialog" }).exists()).toBe(true);
+			expect(wrapper.findComponent(SchoolPolicyFormDialog).exists()).toBe(true);
 		});
 	});
 
 	describe("when user does not have school edit permission", () => {
 		it("should not render edit button", () => {
-			const wrapper = setup(undefined, [Permission.SchoolView]);
+			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(false);
 		});
 
 		it("should not render dialog component", () => {
-			const wrapper = setup(undefined, [Permission.SchoolView]);
+			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
 
 			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(false);
 		});
 	});
 
 	describe("when user clicks edit button", () => {
-		it("should change isSchoolPolicyFormDialogOpen to true", () => {
-			const wrapper = setup();
-			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
+		it("should open school policy form dialog", async () => {
+			const { wrapper } = setup();
+			const schoolPolicyFormDialog = wrapper.findComponent(SchoolPolicyFormDialog);
+			expect(schoolPolicyFormDialog.props().isOpen).toBe(false);
 
-			expect(wrapperVm.isSchoolPolicyFormDialogOpen).toBe(false);
-			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect(wrapperVm.isSchoolPolicyFormDialogOpen).toBe(true);
+			const editBtn = wrapper.find('[data-testid="edit-button"]');
+			await editBtn.trigger("click");
+
+			expect(schoolPolicyFormDialog.props().isOpen).toBe(true);
+		});
+
+		it("should create new privacy policy when creation is confirmed", async () => {
+			const { wrapper } = setup();
+			const schoolPolicyFormDialog = wrapper.findComponent(SchoolPolicyFormDialog);
+
+			const consentVersionPayload: CreateConsentVersionPayload = {
+				schoolId: "schoolId",
+				consentTypes: ["privacy"],
+				publishedAt: new Date().toISOString(),
+				title: "New Privacy Policy",
+				consentData: "data:application/pdf;base64,SOMEFILEDATA",
+			};
+
+			schoolPolicyFormDialog.vm.$emit("confirm", consentVersionPayload);
+			await nextTick();
+
+			expect(useSchoolPrivacyPolicyMockReturn.createPrivacyPolicy).toHaveBeenCalledWith(consentVersionPayload);
+		});
+
+		it("should not create new privacy policy and close dialog when creation is cancelled", async () => {
+			const { wrapper } = setup();
+			const schoolPolicyFormDialog = wrapper.findComponent(SchoolPolicyFormDialog);
+
+			schoolPolicyFormDialog.vm.$emit("close");
+			await nextTick();
+
+			expect(useSchoolPrivacyPolicyMockReturn.createPrivacyPolicy).toHaveBeenCalledTimes(0);
+			expect(schoolPolicyFormDialog.props().isOpen).toBe(false);
 		});
 	});
 
 	describe("when user clicks delete button", () => {
-		it("should change isDeletePolicyDialogOpen to true", () => {
-			const wrapper = setup();
-			const wrapperVm = wrapper.vm as unknown as typeof SchoolPolicy;
+		it("should open delete dialog", async () => {
+			const { wrapper } = setup();
 
-			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(false);
-			wrapper.find('[data-testid="delete-button"]').trigger("click");
-			expect(wrapperVm.isDeletePolicyDialogOpen).toBe(true);
+			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]').findComponent(SvsDialog);
+			expect(deleteDialog.props().modelValue).toBe(false);
+
+			const deleteBtn = wrapper.find('[data-testid="delete-button"]');
+			await deleteBtn.trigger("click");
+
+			expect(deleteDialog.props().modelValue).toBe(true);
+		});
+
+		it("should call delete privacy policy method when deletion is confirmed", async () => {
+			const { wrapper } = setup();
+
+			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]').findComponent(SvsDialog);
+			deleteDialog.vm.$emit("confirm");
+			await nextTick();
+
+			expect(useSchoolPrivacyPolicyMockReturn.deletePrivacyPolicy).toHaveBeenCalled();
 		});
 	});
 
 	describe("when user clicks policy item", () => {
 		it("should call downloadFile method", async () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 			const policyItem = wrapper.find('[data-testid="policy-item"]');
@@ -183,8 +228,8 @@ describe("SchoolPolicy", () => {
 
 	describe("when error is thrown in privacyPolicyModule", () => {
 		it("should render error alert", () => {
-			const wrapper = setup({
-				getStatus: "error",
+			const { wrapper } = setup({
+				status: "error",
 			});
 
 			expect(wrapper.find('[data-testid="error-alert"]').exists()).toBe(true);
