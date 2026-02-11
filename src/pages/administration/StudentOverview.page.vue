@@ -119,6 +119,7 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
@@ -135,6 +136,7 @@ export default defineComponent({
 		ProgressModal,
 		DataFilter,
 		ThrInfoBanner,
+		WarningAlert,
 	},
 	props: {
 		showExternalSyncHint: {
