@@ -34,8 +34,8 @@ describe("SchoolTerms", () => {
 			schoolId: "333",
 			createdAt: "someotherdate",
 			updatedAt: "someotherdate",
-			fileType: "pdf",
-			fileName: "somefilename",
+			filetype: "pdf",
+			filename: "somefilename",
 			data: "data:application/pdf;base64,SOMEFILEDATA",
 		},
 	};
