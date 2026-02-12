@@ -91,3 +91,21 @@ defineProps<{
 
 const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_NECESSARY);
 </script>
+<style lang="css" scoped>
+.info-menu-card {
+	min-width: 320px;
+	max-width: 450px;
+	background: white !important;
+
+	.v-card-title,
+	.v-card-text {
+		background: rgba(var(--v-theme-info), 0.12) !important;
+	}
+}
+.info-slot {
+	position: absolute;
+	top: -20%;
+	left: 56%;
+	z-index: 10;
+}
+</style>
