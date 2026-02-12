@@ -52,7 +52,6 @@ describe("AutoLogoutWarning", () => {
 		sessionStatus: ref<SessionStatus | null>(null),
 		createSession: vi.fn(),
 		extendSession: vi.fn(),
-		notifyBeingLoggedOut: vi.fn(),
 	};
 
 	const setup = (options?: { autoLogoutVariables?: Partial<typeof defaultVars> }) => {

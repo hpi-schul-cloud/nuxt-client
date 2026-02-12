@@ -4,8 +4,9 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
+import { useBroadcastChannel } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, readonly, ref } from "vue";
+import { computed, readonly, ref, watch } from "vue";
 
 // use of vueuse "useCookies" ?
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
@@ -18,9 +19,11 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
+	const broadcast = useBroadcastChannel({ name: "schulcloud-session" });
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
+	const isJwtExpired = ref(false);
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -58,9 +61,14 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
+		broadcast.post("logout");
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
+	};
+
+	const setJwtExpired = () => {
+		isJwtExpired.value = true;
 	};
 
 	const externalLogout = () => logout("/logout/external");
@@ -119,6 +127,17 @@ export const useAppStore = defineStore("applicationStore", () => {
 		applicationError.value = undefined;
 	};
 
+	watch(
+		() => broadcast.data.value,
+		(newValue) => {
+			if (newValue) {
+				if (newValue === "logout") {
+					isJwtExpired.value = true;
+				}
+			}
+		}
+	);
+
 	return {
 		isLoggedIn,
 		userLocale,
@@ -130,12 +149,14 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isTeacher,
 		isStudent,
 		isExternalPerson,
+		isJwtExpired,
 		school,
 		userRoles,
 		systemId,
 		login,
 		logout,
 		externalLogout,
+		setJwtExpired,
 		updateUserLanguage,
 		clearApplicationError,
 		handleUnknownError,

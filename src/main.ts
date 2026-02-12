@@ -53,7 +53,6 @@ import {
 import themeConfig from "@/theme.config";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
-import { useAutoLogout } from "@feature-auto-logout";
 import { htmlConfig } from "@feature-render-html";
 import { logger } from "@util-logger";
 import axios, { HttpStatusCode, isAxiosError } from "axios";
@@ -82,13 +81,15 @@ app.use(VueDOMPurifyHTML, {
 const handleUnauthorizedError = async (error: unknown) => {
 	if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
 		try {
-			const response = await axios.get("/v1/accounts/jwtTimer");
+			const pristineAxios = axios.create();
+			pristineAxios.defaults.baseURL = axios.defaults.baseURL;
+			const response = await pristineAxios.get("/v1/accounts/jwtTimer");
 			const ttl = response?.data?.ttl ?? 0;
 			if (ttl <= 0) {
-				useAutoLogout().notifyBeingLoggedOut();
+				useAppStore().setJwtExpired();
 			}
 		} catch {
-			useAutoLogout().notifyBeingLoggedOut();
+			useAppStore().setJwtExpired();
 		}
 	}
 };

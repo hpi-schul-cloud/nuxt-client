@@ -140,11 +140,6 @@ export const useAutoLogout = () => {
 		},
 	};
 
-	const notifyBeingLoggedOut = () => {
-		// TODO vielleicht lieber einen logout-dialog zeigen (OK button mit dem man zum login kommt) damit Nutzen nicht verwirrt sind, dass die Loginseite kommt
-		useAppStore().logout();
-	};
-
 	watch(
 		() => sessionStatus.value,
 		(newValue) => {
@@ -170,7 +165,6 @@ export const useAutoLogout = () => {
 		remainingTimeInSeconds,
 		sessionStatus,
 		showDialog,
-		notifyBeingLoggedOut,
 		createSession,
 		extendSession,
 	};
