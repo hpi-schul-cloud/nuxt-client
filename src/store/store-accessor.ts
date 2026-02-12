@@ -19,7 +19,6 @@ import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
-import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
 import TermsOfUseModule from "@/store/terms-of-use";
@@ -44,7 +43,6 @@ export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
-export let statusAlertsModule: StatusAlertsModule;
 export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
@@ -67,7 +65,6 @@ export function initializeStores(store: Store<unknown>): void {
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
-	statusAlertsModule = getModule(StatusAlertsModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
@@ -93,7 +90,6 @@ export const modules = {
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,
-	statusAlertsModule: StatusAlertsModule,
 	systemsModule: SystemsModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,

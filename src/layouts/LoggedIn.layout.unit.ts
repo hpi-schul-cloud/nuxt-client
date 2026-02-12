@@ -1,8 +1,7 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
-import StatusAlertsModule from "@/store/status-alerts";
-import { FILE_PATHS_MODULE_KEY, STATUS_ALERTS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
@@ -18,10 +17,6 @@ vi.mock("vue-router", () => ({
 }));
 
 const setup = () => {
-	const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
-		getStatusAlerts: [],
-	});
-
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
 			accessibilityStatement: "statement",
@@ -42,7 +37,6 @@ const setup = () => {
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,
 				},
-				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			},
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },

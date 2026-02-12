@@ -17,6 +17,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -707,13 +708,13 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should render add class button", () => {
+			it("should render add class fab button", () => {
 				const { wrapper } = setup();
-
-				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(true);
+				const fabComponent = wrapper.find(`[data-testid="fab_button_add_class"]`);
+				expect(fabComponent.exists()).toBe(true);
 			});
 
-			describe("when clicking on add class buttton", () => {
+			describe("when clicking on add class fab", () => {
 				const setup = () => {
 					const { wrapper } = createWrapper({});
 
@@ -722,12 +723,10 @@ describe("ClassOverview", () => {
 					};
 				};
 
-				it("should redirect to legacy create class page", () => {
+				it("should have link to legacy create class page", () => {
 					const { wrapper } = setup();
-
-					const addClassBtn = wrapper.find('[data-testid="admin-class-add-button"]');
-
-					expect(addClassBtn.attributes().href).toStrictEqual("/administration/classes/create");
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					expect(fabComponent.vm.actions[0].href).toStrictEqual("/administration/classes/create");
 				});
 			});
 		});
@@ -746,16 +745,10 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			it("should not render add class button", () => {
+			it("should not render add class fab button", () => {
 				const { wrapper } = setup();
 
-				expect(wrapper.find('[data-testid="admin-class-add-button"]').exists()).toEqual(false);
-			});
-
-			it("should render info alert", () => {
-				const { wrapper } = setup();
-
-				expect(wrapper.find('[data-testid="admin-class-info-alert"]').exists()).toEqual(true);
+				expect(wrapper.find('[data-testid="fab_button_add_class"]').exists()).toEqual(false);
 			});
 		});
 	});
