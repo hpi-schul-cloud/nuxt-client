@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode, isAxiosError } from "axios";
+import axios, { isAxiosError } from "axios";
 
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);
@@ -11,37 +11,22 @@ describe("handleUnauthorizedError", () => {
 
 	describe("when 401 error occurs", () => {
 		it("should call notifySessionEnded when JWT timer returns expired token", async () => {
-			const mockError = {
-				response: { status: HttpStatusCode.Unauthorized },
-			};
 			mockedIsAxiosError.mockReturnValue(true);
 			mockedAxiosGet.mockResolvedValue({ data: { ttl: 0 } });
-
-			await handleUnauthorizedError(mockError);
 
 			expect(mockedAxiosGet).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
 		});
 
 		it("should call notifySessionEnded when JWT timer request fails", async () => {
-			const mockError = {
-				response: { status: HttpStatusCode.Unauthorized },
-			};
 			mockedIsAxiosError.mockReturnValue(true);
 			mockedAxiosGet.mockRejectedValue(new Error("Network error"));
-
-			await handleUnauthorizedError(mockError);
 
 			expect(mockedAxiosGet).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
 		});
 
 		it("should NOT call notifySessionEnded when JWT timer returns valid ttl", async () => {
-			const mockError = {
-				response: { status: HttpStatusCode.Unauthorized },
-			};
 			mockedIsAxiosError.mockReturnValue(true);
 			mockedAxiosGet.mockResolvedValue({ data: { ttl: 300 } }); // 5 minutes remaining
-
-			await handleUnauthorizedError(mockError);
 
 			expect(mockedAxiosGet).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
 		});
@@ -49,12 +34,7 @@ describe("handleUnauthorizedError", () => {
 
 	describe("when non-401 error occurs", () => {
 		it("should NOT handle non-401 errors", async () => {
-			const mockError = {
-				response: { status: 404 },
-			};
 			mockedIsAxiosError.mockReturnValue(true);
-
-			await handleUnauthorizedError(mockError);
 
 			expect(mockedAxiosGet).not.toHaveBeenCalled();
 		});
