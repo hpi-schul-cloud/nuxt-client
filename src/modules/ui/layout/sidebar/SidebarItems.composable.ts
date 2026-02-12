@@ -12,7 +12,6 @@ import {
 	mdiFolderOpenOutline,
 	mdiFormatListChecks,
 	mdiHelpCircleOutline,
-	mdiLibraryOutline,
 	mdiNewspaperVariantOutline,
 	mdiPuzzleOutline,
 	mdiSchoolOutline,

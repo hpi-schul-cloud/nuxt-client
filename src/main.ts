@@ -29,7 +29,6 @@ import { mountBaseComponents } from "@/components/base/components";
 import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
-	contentModule,
 	copyModule,
 	courseRoomDetailsModule,
 	courseRoomListModule,
@@ -88,7 +87,6 @@ app.use(VueDOMPurifyHTML, {
 	const success = await useEnvStore().loadConfiguration();
 
 	if (success) {
-		contentModule.init();
 		filePathsModule.init();
 	}
 
