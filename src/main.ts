@@ -19,7 +19,6 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 	THEME_KEY,
@@ -43,7 +42,6 @@ import {
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
-	statusAlertsModule,
 	systemsModule,
 	tasksModule,
 	termsOfUseModule,
@@ -138,7 +136,6 @@ const handleUnauthorizedError = async (error: unknown) => {
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
-	app.provide(STATUS_ALERTS_MODULE_KEY.valueOf(), statusAlertsModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
 	app.provide(USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(), userLoginMigrationModule);
