@@ -17,11 +17,11 @@
 <script>
 import InfoModalFullWidth from "@/components/legacy/InfoModalFullWidth.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useActivation } from "@data-activation";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
 import { logger } from "@util-logger";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
@@ -30,7 +30,8 @@ export default defineComponent({
 	layout: "loggedOut",
 	setup() {
 		const { t } = useI18n();
-		return { t };
+		const { updateActivations, list } = useActivation();
+		return { t, updateActivations, list };
 	},
 	data() {
 		return {
@@ -42,9 +43,6 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("activation", {
-			data: "getList",
-		}),
 		getTitle() {
 			let title = "";
 			if (this.activated) {
@@ -87,9 +85,9 @@ export default defineComponent({
 		async submitHandler() {
 			const { activationCode } = this.$route.params;
 			try {
-				await this.$store.dispatch("activation/update", [activationCode]);
-				this.keyword = this.data[0].keyword;
-				this.activated = this.data[0].success;
+				await this.updateActivations([activationCode]);
+				this.keyword = this.list[0].keyword;
+				this.activated = this.list[0].success;
 			} catch (e) {
 				logger.error(e);
 			}

@@ -1,8 +1,6 @@
 // idea from: https://github.com/garyo/vuex-module-decorators-example/blob/master/src/store/index.ts
 
-import activation from "@/store/activation";
 import { bulkConsent } from "@/store/bulkConsent";
-import classes from "@/store/classes";
 import courses from "@/store/courses";
 import { ldapConfig } from "@/store/ldap-config";
 // Note: you shouldn't need to import store modules here.
@@ -23,9 +21,7 @@ export default createStore({
 	plugins: [initializer], // triggers initializeStores
 	modules: {
 		...modules,
-		activation,
 		bulkConsent,
-		classes,
 		courses,
 		"ldap-config": ldapConfig,
 		users,
