@@ -20,104 +20,85 @@
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 			>
-				<span v-if="column.infobox">
-					<span class="info-slot">
-						<v-btn
-							icon
-							variant="text"
-							color="info"
-							class="info-button"
-							:aria-label="$t('pages.administration.students.infobox.registrationOnly.headline')"
-							@click="infoBoxActive = !infoBoxActive"
-						>
-							<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
-						</v-btn>
-					</span>
-					<info-box v-if="isConsentNecessary" v-model:active="infoBoxActive" class="info-box">
-						<template #header>{{ $t("pages.administration.students.infobox.headline") }}</template>
-						<template #body>
-							<div v-if="showExternalText" class="content">
-								{{ $t("pages.administration.students.infobox.LDAP.paragraph-1") }}
-								<br />
-								<br />
-								{{ $t("pages.administration.students.infobox.LDAP.paragraph-2") }}
-								<br />
-								<br />
-								<v-icon color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
-								{{ $t("pages.administration.students.infobox.LDAP.paragraph-3") }}
-								<br />
-								<br />
-								{{ $t("pages.administration.students.infobox.LDAP.paragraph-4") }}
-								<a
-									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
-									target="_blank"
-									class="text-white"
-								>
-									{{ $t("pages.administration.students.infobox.LDAP.helpsection") }}.
-								</a>
-							</div>
-							<div v-else class="content">
-								{{ $t("pages.administration.students.infobox.paragraph-1") }}
-								<ul class="list">
-									<li>
-										{{ $t("pages.administration.students.infobox.li-1") }}
-									</li>
-									<li>
-										{{ $t("pages.administration.students.infobox.li-2") }}
-									</li>
-									<li>
-										{{ $t("pages.administration.students.infobox.li-3") }}
-									</li>
-									<a
-										class="text-white"
-										href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
-										target="_blank"
-									>
-										{{ $t("pages.administration.students.infobox.more.info") }}.
-									</a>
+				<v-menu v-if="column.infobox" location="bottom end" :close-on-content-click="false">
+					<template #activator="{ props }">
+						<span class="info-slot">
+							<v-btn
+								v-bind="props"
+								icon
+								variant="text"
+								color="info"
+								:aria-label="$t('pages.administration.students.infobox.registrationOnly.headline')"
+							>
+								<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
+							</v-btn>
+						</span>
+					</template>
+					<v-card class="info-menu-card">
+						<v-card-title data-testid="infobox-title">
+							<h2 class="my-2">
+								{{
+									isConsentNecessary
+										? $t("pages.administration.students.infobox.headline")
+										: $t("pages.administration.students.infobox.registrationOnly.headline")
+								}}
+							</h2>
+						</v-card-title>
+						<v-card-text>
+							<template v-if="isConsentNecessary">
+								<div v-if="showExternalText">
+									<p>
+										{{ $t("pages.administration.students.infobox.LDAP.paragraph-1") }}
+										{{ $t("pages.administration.students.infobox.LDAP.paragraph-2") }}
+									</p>
+									<p>
+										<v-icon color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
+										{{ $t("pages.administration.students.infobox.LDAP.paragraph-3") }}
+										{{ $t("pages.administration.students.infobox.LDAP.paragraph-4") }}
+										<a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189" target="_blank">
+											{{ $t("pages.administration.students.infobox.LDAP.helpsection") }}.
+										</a>
+									</p>
+								</div>
+								<div v-else>
+									<p>{{ $t("pages.administration.students.infobox.paragraph-1") }}</p>
+									<ul class="pl-5 mb-2">
+										<li>{{ $t("pages.administration.students.infobox.li-1") }}</li>
+										<li>{{ $t("pages.administration.students.infobox.li-2") }}</li>
+										<li>{{ $t("pages.administration.students.infobox.li-3") }}</li>
+										<a
+											href="https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf"
+											target="_blank"
+										>
+											{{ $t("pages.administration.students.infobox.more.info") }}.
+										</a>
+									</ul>
+									<p>
+										{{ $t("pages.administration.students.infobox.paragraph-2") }}
+										{{ $t("pages.administration.students.infobox.paragraph-3") }}
+									</p>
+									<p>
+										<v-icon color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
+										{{ $t("pages.administration.students.infobox.paragraph-4") }}
+									</p>
+								</div>
+							</template>
+							<template v-else>
+								<p>
+									{{ $t("pages.administration.students.infobox.registrationOnly.paragraph-1") }}
+									{{ $t("pages.administration.students.infobox.registrationOnly.paragraph-2") }}
+									{{ $t("pages.administration.students.infobox.registrationOnly.paragraph-3") }}
+								</p>
+								<ul class="pl-5 mb-2">
+									<li>{{ $t("pages.administration.students.infobox.registrationOnly.li-1") }}</li>
+									<li>{{ $t("pages.administration.students.infobox.registrationOnly.li-2") }}</li>
+									<li>{{ $t("pages.administration.students.infobox.registrationOnly.li-3") }}</li>
+									<li>{{ $t("pages.administration.students.infobox.registrationOnly.li-4") }}</li>
 								</ul>
-								{{ $t("pages.administration.students.infobox.paragraph-2") }}
-								<br />
-								<br />
-								{{ $t("pages.administration.students.infobox.paragraph-3") }}
-								<br />
-								<br />
-								<v-icon color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
-								{{ $t("pages.administration.students.infobox.paragraph-4") }}
-							</div>
-						</template>
-					</info-box>
-					<info-box v-else v-model:active="infoBoxActive" class="info-box">
-						<template #header>{{ $t("pages.administration.students.infobox.registrationOnly.headline") }}</template>
-						<template #body>
-							<div class="content">
-								{{ $t("pages.administration.students.infobox.registrationOnly.paragraph-1") }}
-								<br />
-								<br />
-								{{ $t("pages.administration.students.infobox.registrationOnly.paragraph-2") }}
-								<br />
-								<br />
-								{{ $t("pages.administration.students.infobox.registrationOnly.paragraph-3") }}
-								<br />
-								<br />
-								<ul class="list">
-									<li>
-										{{ $t("pages.administration.students.infobox.registrationOnly.li-1") }}
-									</li>
-									<li>
-										{{ $t("pages.administration.students.infobox.registrationOnly.li-2") }}
-									</li>
-									<li>
-										{{ $t("pages.administration.students.infobox.registrationOnly.li-3") }}
-									</li>
-									<li>
-										{{ $t("pages.administration.students.infobox.registrationOnly.li-4") }}
-									</li>
-								</ul>
-							</div>
-						</template>
-					</info-box>
-				</span>
+							</template>
+						</v-card-text>
+					</v-card>
+				</v-menu>
 				<v-btn
 					v-if="column.sortable"
 					variant="text"
@@ -150,7 +131,6 @@
 </template>
 
 <script>
-import InfoBox from "./InfoBox.vue";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert, mdiInformation, mdiMenuDownOutline, mdiMenuSwapOutline, mdiMenuUpOutline } from "@icons/material";
 
@@ -164,9 +144,6 @@ const selectionStateMap = new Map([
 ]);
 
 export default {
-	components: {
-		InfoBox,
-	},
 	props: {
 		allRowsSelectable: Boolean,
 		currentPageSelectionState: {
@@ -194,7 +171,6 @@ export default {
 	emits: ["update:current-page-selection-state", "update:sort", "update:sort-by", "update:sort-order"],
 	data() {
 		return {
-			infoBoxActive: false,
 			mdiAlert,
 			mdiMenuDownOutline,
 			mdiInformation,
@@ -270,10 +246,6 @@ export default {
 	th {
 		border-bottom: 2px solid;
 
-		&.is-current-sort {
-			opacity: 1;
-		}
-
 		.th-wrap {
 			display: flex;
 			align-items: center;
@@ -294,37 +266,14 @@ export default {
 	}
 }
 
-.info-button {
-	z-index: 101;
-}
-
-.info-box {
-	position: absolute;
-	right: 0%;
-	z-index: 101;
+.info-menu-card {
 	min-width: 320px;
-	margin-top: 40px;
-	margin-right: 24px;
-	margin-left: 24px;
+	max-width: 450px;
+	background: white !important;
 
-	@media #{map.get($display-breakpoints, 'sm-and-up')} {
-		min-width: 450px;
-		max-width: 50%;
-		margin-right: 32px;
-	}
-
-	.content {
-		max-height: 35vh;
-		overflow-y: scroll;
-		font-weight: normal;
-	}
-
-	button:not(.is-none):focus {
-		z-index: 100;
-		outline: none;
-		box-shadow:
-			0 0 0 0 rgba(var(--v-theme-white)),
-			0 0 0 3px var(--button-background);
+	.v-card-title,
+	.v-card-text {
+		background: rgba(var(--v-theme-info), 0.12) !important;
 	}
 }
 
@@ -336,10 +285,7 @@ export default {
 	position: absolute;
 	top: -20%;
 	left: 56%;
-}
-
-:deep(.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover) .v-btn__content) {
-	opacity: 1;
+	z-index: 10;
 }
 
 .tooltip {
