@@ -100,6 +100,7 @@ import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
@@ -142,6 +143,7 @@ export default defineComponent({
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
+		const { fetchClasses, list } = useClasses();
 
 		return {
 			getPaginationState,
@@ -151,6 +153,8 @@ export default defineComponent({
 			getFilterState,
 			setFilterState,
 			askConfirmation,
+			fetchClasses,
+			list,
 		};
 	},
 	data() {
@@ -536,13 +540,12 @@ export default defineComponent({
 		},
 		async getClassNameList() {
 			const currentYear = schoolsModule.getCurrentYear;
-			await this.$store.dispatch("classes/find", {
-				query: {
-					$limit: 1000,
-					year: currentYear?.id,
-				},
+
+			await this.fetchClasses({
+				$limit: 1000,
+				year: currentYear?.id || "",
 			});
-			this.classNameList = this.$store.state["classes"].list.reduce(
+			this.classNameList = this.list.reduce(
 				(acc, item) =>
 					acc.concat({
 						label: item.displayName,
