@@ -76,11 +76,7 @@ const initialRoomData = ref(JSON.stringify(roomData.value));
 const roomForm = useTemplateRef("roomForm");
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
-const validationRules = [
-	isNonEmptyString(t("common.validation.nonEmptyString")),
-	isOfMaxLength(100)(t("common.validation.tooLong")),
-	validateOnOpeningTag,
-];
+const validationRules = [isNonEmptyString(), isOfMaxLength(100)(), validateOnOpeningTag];
 
 const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 	const features = roomData.value.features;
