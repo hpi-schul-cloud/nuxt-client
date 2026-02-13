@@ -1,4 +1,5 @@
 import { FormValidatorFn } from "./validators";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { useI18n } from "vue-i18n";
 
 const containsOpeningTagFollowedByString = (input: string) => {
@@ -7,12 +8,14 @@ const containsOpeningTagFollowedByString = (input: string) => {
 	return regex.test(input);
 };
 
-const hasNoOpeningTagFollowedByString: FormValidatorFn<string> = (errMsg) => (value) => {
-	if (containsOpeningTagFollowedByString(value)) {
-		return errMsg;
-	}
-	return true;
-};
+const hasNoOpeningTagFollowedByString: FormValidatorFn<string> =
+	(errMsg = useI18nGlobal().t("common.validation.containsOpeningTag")) =>
+	(value) => {
+		if (containsOpeningTagFollowedByString(value)) {
+			return errMsg;
+		}
+		return true;
+	};
 
 const useOpeningTagValidator = () => {
 	const { t } = useI18n();

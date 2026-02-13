@@ -25,7 +25,6 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
-import { mountBaseComponents } from "@/components/base/components";
 import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
@@ -63,7 +62,7 @@ export const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);
 
-mountBaseComponents(app);
+// app.config.productionTip = false;
 
 app.config.errorHandler = (err: unknown) => {
 	logger.error(err);
@@ -109,7 +108,7 @@ const handleUnauthorizedError = async (error: unknown) => {
 		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
-		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
+		// this is handled by the axios response interceptor
 		logger.info("probably not logged in", error);
 	}
 

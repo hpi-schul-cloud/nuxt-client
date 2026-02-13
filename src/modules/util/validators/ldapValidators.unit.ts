@@ -1,4 +1,4 @@
-import { ldapPathRegexValidator, ldapSecuredURLRegexValidator, ldapURLRegexValidator } from "./ldapConstants";
+import { isValidLdapPath, isValidLdapUrl, isValidSecuredLdapUrl } from "./ldapValidators";
 
 const ldapURLDomainWithPort = "ldap://asdf.de:123";
 const ldapURLDomainWithoutPort = "ldap://asdf.de";
@@ -13,122 +13,130 @@ const ldapsProtocol = "ldaps://";
 const randomDomain = "example.com";
 const randomText = "asdf";
 
-describe("ldapConstant", () => {
-	describe("ldapPathRegexValidator", () => {
-		it("should accept simple LDAP path", () => {
-			expect(ldapPathRegexValidator("ou=groups")).toBe(true);
-		});
+describe("util-validators/ldapValidators", () => {
+	const error = "my error";
 
-		it("should accept typical LDAP path", () => {
-			expect(ldapPathRegexValidator("o=school0,dc=de,dc=example,dc=org")).toBe(true);
-		});
+	describe("isValidLdapUrl", () => {
+		const isValid = isValidLdapUrl(error);
 
-		it("should reject some random domain", () => {
-			expect(ldapPathRegexValidator(randomDomain)).toBe(false);
-		});
-
-		it("should reject some random text", () => {
-			expect(ldapPathRegexValidator(randomText)).toBe(false);
-		});
-	});
-
-	describe("ldapURLRegexValidator", () => {
 		it("should accept URL with ldaps:// protocol and domain without port", () => {
-			expect(ldapURLRegexValidator(ldapsURLDomainWithoutPort)).toBe(true);
+			expect(isValid(ldapsURLDomainWithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and domain with port", () => {
-			expect(ldapURLRegexValidator(ldapsURLDomainWithPort)).toBe(true);
+			expect(isValid(ldapsURLDomainWithPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and IPv4 without port", () => {
-			expect(ldapURLRegexValidator(ldapsURLIPv4WithoutPort)).toBe(true);
+			expect(isValid(ldapsURLIPv4WithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and IPv4 with port", () => {
-			expect(ldapURLRegexValidator(ldapsURLIPv4WithPort)).toBe(true);
+			expect(isValid(ldapsURLIPv4WithPort)).toBe(true);
 		});
 
 		it("should accept URL with ldap:// protocol and domain without port", () => {
-			expect(ldapURLRegexValidator(ldapURLDomainWithoutPort)).toBe(true);
+			expect(isValid(ldapURLDomainWithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldap:// protocol and domain with port", () => {
-			expect(ldapURLRegexValidator(ldapURLDomainWithPort)).toBe(true);
+			expect(isValid(ldapURLDomainWithPort)).toBe(true);
 		});
 
 		it("should accept URL with ldap:// protocol and IPv4 without port", () => {
-			expect(ldapURLRegexValidator(ldapURLIPv4WithoutPort)).toBe(true);
+			expect(isValid(ldapURLIPv4WithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldap:// protocol and IPv4 with port", () => {
-			expect(ldapURLRegexValidator(ldapURLIPv4WithPort)).toBe(true);
+			expect(isValid(ldapURLIPv4WithPort)).toBe(true);
 		});
 
 		it("should reject URL with just an ldap:// protocol", () => {
-			expect(ldapURLRegexValidator(ldapProtocol)).toBe(false);
+			expect(isValid(ldapProtocol)).toBe(error);
 		});
 
 		it("should reject URL with just an ldaps:// protocol", () => {
-			expect(ldapURLRegexValidator(ldapsProtocol)).toBe(false);
+			expect(isValid(ldapsProtocol)).toBe(error);
 		});
 
 		it("should reject URL with just a domain", () => {
-			expect(ldapURLRegexValidator(randomDomain)).toBe(false);
+			expect(isValid(randomDomain)).toBe(error);
 		});
 
 		it("should reject some random text", () => {
-			expect(ldapURLRegexValidator(randomText)).toBe(false);
+			expect(isValid(randomText)).toBe(error);
 		});
 	});
 
-	describe("ldapSecuredURLRegexValidator", () => {
+	describe("isValidSecuredLdapUrl", () => {
+		const isValid = isValidSecuredLdapUrl(error);
+
 		it("should accept URL with ldaps:// protocol and domain without port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsURLDomainWithoutPort)).toBe(true);
+			expect(isValid(ldapsURLDomainWithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and domain with port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsURLDomainWithPort)).toBe(true);
+			expect(isValid(ldapsURLDomainWithPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and IPv4 without port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsURLIPv4WithoutPort)).toBe(true);
+			expect(isValid(ldapsURLIPv4WithoutPort)).toBe(true);
 		});
 
 		it("should accept URL with ldaps:// protocol and IPv4 with port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsURLIPv4WithPort)).toBe(true);
+			expect(isValid(ldapsURLIPv4WithPort)).toBe(true);
 		});
 
 		it("should reject URL with ldap:// protocol and domain without port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapURLDomainWithoutPort)).toBe(false);
+			expect(isValid(ldapURLDomainWithoutPort)).toBe(error);
 		});
 
 		it("should reject URL with ldap:// protocol and domain with port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapURLDomainWithPort)).toBe(false);
+			expect(isValid(ldapURLDomainWithPort)).toBe(error);
 		});
 
 		it("should reject URL with ldap:// protocol and IPv4 without port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapURLIPv4WithoutPort)).toBe(false);
+			expect(isValid(ldapURLIPv4WithoutPort)).toBe(error);
 		});
 
 		it("should reject URL with ldap:// protocol and IPv4 with port", () => {
-			expect(ldapSecuredURLRegexValidator(ldapURLIPv4WithPort)).toBe(false);
+			expect(isValid(ldapURLIPv4WithPort)).toBe(error);
 		});
 
 		it("should reject URL with just an ldaps:// protocol", () => {
-			expect(ldapSecuredURLRegexValidator(ldapsProtocol)).toBe(false);
+			expect(isValid(ldapsProtocol)).toBe(error);
 		});
 
 		it("should reject URL with just an ldap:// protocol", () => {
-			expect(ldapSecuredURLRegexValidator(ldapProtocol)).toBe(false);
+			expect(isValid(ldapProtocol)).toBe(error);
 		});
 
 		it("should reject URL with just a domain", () => {
-			expect(ldapSecuredURLRegexValidator(randomDomain)).toBe(false);
+			expect(isValid(randomDomain)).toBe(error);
 		});
 
 		it("should reject some random text", () => {
-			expect(ldapSecuredURLRegexValidator(randomText)).toBe(false);
+			expect(isValid(randomText)).toBe(error);
+		});
+	});
+
+	describe("isValidLdapPath", () => {
+		const isValid = isValidLdapPath(error);
+
+		it("should accept simple LDAP path", () => {
+			expect(isValid("ou=groups")).toBe(true);
+		});
+
+		it("should accept typical LDAP path", () => {
+			expect(isValid("o=school0,dc=de,dc=example,dc=org")).toBe(true);
+		});
+
+		it("should reject some random domain", () => {
+			expect(isValid(randomDomain)).toBe(error);
+		});
+
+		it("should reject some random text", () => {
+			expect(isValid(randomText)).toBe(error);
 		});
 	});
 });

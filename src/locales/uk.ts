@@ -192,10 +192,15 @@ export default {
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
+	"common.validation.password.upperCase": "Пароль повинен містити щонайменше одну велику літеру.",
+	"common.validation.password.lowerCase": "Пароль повинен містити щонайменше одну малу літеру.",
+	"common.validation.password.number": "Пароль повинен містити щонайменше одну цифру.",
+	"common.validation.password.specialCharacter": "Пароль повинен містити щонайменше один спеціальний символ.",
 	"common.validation.regex": "Введення має відповідати такому правилу: {comment}.",
 	"common.validation.required": "Заповніть це поле",
 	"common.validation.required2": "Це обов'язкове поле.",
 	"common.validation.tooLong": "Введений текст перевищує максимально дозволену довжину",
+	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
@@ -1380,6 +1385,7 @@ export default {
 		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці учні залишатимуться видимими в таблиці.",
 	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
+	"pages.administration.students.index.searchbar.ariaLabel": "Пошук учнів за іменами",
 	"pages.administration.students.index.searchbar.placeholder": "Перегляньте студентів для",
 	"pages.administration.students.index.tableActions.consent": "Згода в аналоговій формі",
 	"pages.administration.students.index.tableActions.delete": "Видалити",
@@ -1443,14 +1449,15 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.btnText": "Видалити викладача",
 	"pages.administration.teachers.index.remove.confirm.message.all": "Ви дійсно хочете видалити всіх викладачів?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
+		"Ви дійсно хочете видалити всіх викладачів, крім {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
 	"pages.administration.teachers.index.remove.confirm.message.warning":
 		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці викладачі залишатимуться видимими в таблиці.",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
-	"pages.administration.teachers.index.searchbar.placeholder": "Пошук",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Пошук викладачів за іменем",
+	"pages.administration.teachers.index.searchbar.placeholder": "Пошук викладачів",
 	"pages.administration.teachers.index.tableActions.consent": "Згода в аналоговій формі",
 	"pages.administration.teachers.index.tableActions.delete": "Видалити",
 	"pages.administration.teachers.index.tableActions.email": "Надіслати посилання для реєстрації електронною поштою",
@@ -1618,13 +1625,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Будь ласка, введіть пароль.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Пароль повинен містити щонайменше 8 символів.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"Пароль повинен містити щонайменше одну велику літеру.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"Пароль повинен містити щонайменше одну малу літеру.",
-	"pages.registrationExternalMembers.steps.password.validation.number": "Пароль повинен містити щонайменше одну цифру.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"Пароль повинен містити щонайменше один спеціальний символ.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Паролі не співпадають.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",
@@ -1684,7 +1684,6 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Будь ласка, введіть ім'я та прізвище зовнішньої особи. Особа отримає електронний лист із посиланням на реєстрацію в {applicationName}. Щойно вона створить обліковий запис, її буде автоматично додано до кімнати.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "Електронна адреса",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Будь ласка, введіть дійсну електронну адресу",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Ім'я",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Будь ласка, введіть ім'я",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Прізвище",
