@@ -21,8 +21,7 @@
 
 <script setup lang="ts">
 import { AutoLogoutWarning, LoggedOutDialog } from "@feature-auto-logout";
-import { AlertContainer, ApplicationError } from "@ui-layout";
-import { Sidebar, Topbar } from "@ui-layout";
+import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
