@@ -187,10 +187,15 @@ export default {
 	"common.validation.file": "Por favor, suba un archivo {fileHint}",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
 	"common.validation.number": "Se debe ingresar un número entero.",
+	"common.validation.password.upperCase": "La contraseña debe contener al menos una letra mayúscula.",
+	"common.validation.password.lowerCase": "La contraseña debe contener al menos una letra minúscula.",
+	"common.validation.password.number": "La contraseña debe contener al menos un número.",
+	"common.validation.password.specialCharacter": "La contraseña debe contener al menos un carácter especial.",
 	"common.validation.regex": "La entrada debe cumplir con la siguiente regla: {comentario}.",
 	"common.validation.required": "Por favor, rellene este campo",
 	"common.validation.required2": "Este es un campo obligatorio.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.tooShort": "El texto que ingresó es inferior a la longitud mínima",
 	"common.validation.containsOpeningTag": "Inserte un espacio después del signo menos-que.",
 	"common.validation.nonEmptyString": "Este campo es obligatorio y no debe contener sólo espacios.",
 	"common.words.also": "también",
@@ -1396,6 +1401,7 @@ export default {
 		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos alumnos seguirán siendo visibles en la tabla.",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
+	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
 	"pages.administration.students.index.searchbar.placeholder": "Buscar estudiantes",
 	"pages.administration.students.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.students.index.tableActions.delete": "Eliminar",
@@ -1467,7 +1473,8 @@ export default {
 		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos profesores seguirán siendo visibles en la tabla.",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
-	"pages.administration.teachers.index.searchbar.placeholder": "Buscar",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",
+	"pages.administration.teachers.index.searchbar.placeholder": "Buscar profesores",
 	"pages.administration.teachers.index.tableActions.consent": "Formulario de consentimiento analógico",
 	"pages.administration.teachers.index.tableActions.delete": "Eliminar",
 	"pages.administration.teachers.index.tableActions.email": "Enviar los enlaces de registro por correo electrónico",
@@ -1641,14 +1648,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Por favor, introduce una contraseña.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"La contraseña debe tener al menos 8 caracteres.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"La contraseña debe contener al menos una letra mayúscula.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"La contraseña debe contener al menos una letra minúscula.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"La contraseña debe contener al menos un número.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"La contraseña debe contener al menos un carácter especial.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Las contraseñas no coinciden.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registro exitoso",
 	"pages.registrationExternalMembers.steps.language.heading": "Por favor seleccione su idioma",
@@ -1708,8 +1707,6 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Por favor, introduzca el nombre y apellido de la persona externa. La persona recibirá un correo electrónico con un enlace de registro para {applicationName}. En cuanto haya creado una cuenta, se añadirá automáticamente a la sala.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "Dirección de correo electrónico",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error":
-		"Por favor, introduzca una dirección de correo electrónico válida",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Nombre",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Por favor, introduzca un nombre",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Apellido",

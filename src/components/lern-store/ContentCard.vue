@@ -13,13 +13,12 @@
 					<div class="content__img">
 						<div class="img-container">
 							<span v-show="isSelectable()" @click.stop="linkHandler">
-								<base-input
+								<VCheckbox
 									v-model="isChecked"
-									type="checkbox"
-									:label="resource.title"
-									:label-hidden="true"
-									class="select"
-									style="color: rgba(var(--v-theme-white)); margin-bottom: 0"
+									:aria-label="resource.title"
+									hide-details
+									density="compact"
+									color="white"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -172,10 +171,8 @@ export default defineComponent({
 	background-color: rgba(var(--v-theme-on-surface));
 	border-radius: 100vmax;
 	opacity: 0.7;
-	// stylelint-disable
 	z-index: 2;
-	padding: 6px 4px 2px;
-	// stylelint-enable
+	padding: 0px 6px;
 }
 
 .custom-icon {

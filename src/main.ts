@@ -24,7 +24,6 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
-import { mountBaseComponents } from "@/components/base/components";
 import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
@@ -60,8 +59,6 @@ export const app = createApp(App);
 
 const pinia = createPinia();
 app.use(pinia);
-
-mountBaseComponents(app);
 
 // app.config.productionTip = false;
 

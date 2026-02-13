@@ -192,10 +192,15 @@ export default {
 	"common.validation.file": "Bitte eine Datei hochladen {fileHint}",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
+	"common.validation.password.upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten.",
+	"common.validation.password.lowerCase": "Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
+	"common.validation.password.number": "Das Passwort muss mindestens eine Zahl enthalten.",
+	"common.validation.password.specialCharacter": "Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"common.validation.regex": "Die Eingabe muss der folgenden Regel entsprechen: {comment}.",
 	"common.validation.required": "Bitte fülle dieses Feld aus",
 	"common.validation.required2": "Dies ist ein Pflichtfeld.",
 	"common.validation.tooLong": "Der eingegebene Text überschreitet die Maximallänge",
+	"common.validation.tooShort": "Der eingegebene Text unterschreitet die Mindestlänge",
 	"common.validation.containsOpeningTag": "Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.validation.nonEmptyString": "Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.",
 	"common.words.also": "auch",
@@ -1389,7 +1394,8 @@ export default {
 		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Schüler:innen weiterhin in der Tabelle sichtbar.",
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
-	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
+	"pages.administration.students.index.searchbar.ariaLabel": "Schüler:innen nach Namen durchsuchen",
+	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen",
 	"pages.administration.students.index.tableActions.consent": "Analoge Einverständniserklärung",
 	"pages.administration.students.index.tableActions.delete": "Löschen",
 	"pages.administration.students.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
@@ -1460,7 +1466,8 @@ export default {
 		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Lehrkräfte weiterhin in der Tabelle sichtbar.",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
-	"pages.administration.teachers.index.searchbar.placeholder": "Lehrkräfte durchsuchen nach",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",
+	"pages.administration.teachers.index.searchbar.placeholder": "Lehrkräfte durchsuchen",
 	"pages.administration.teachers.index.tableActions.consent": "Analoge Einverständniserklärung",
 	"pages.administration.teachers.index.tableActions.delete": "Löschen",
 	"pages.administration.teachers.index.tableActions.email": "Registrierungslinks per E-Mail versenden",
@@ -1634,14 +1641,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Bitte ein Passwort eingeben.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Das Passwort muss mindestens 8 Zeichen lang sein.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"Das Passwort muss mindestens einen Großbuchstaben enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"Das Passwort muss mindestens einen Kleinbuchstaben enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"Das Passwort muss mindestens eine Zahl enthalten.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"Das Passwort muss mindestens ein Sonderzeichen enthalten.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Die Passwörter stimmen nicht überein.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registrierung erfolgreich",
 	"pages.registrationExternalMembers.steps.language.heading": "Bitte Sprache wählen",
@@ -1702,7 +1701,7 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Bitte Vor- und Nachnamen der schulfremden Person eingeben. Die Person erhält eine E-Mail mit einem Registrierungslink für die {applicationName}. Sobald sie einen Account erstellt hat, wird sie automatisch zum Raum hinzugefügt.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-Mail-Adresse",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Bitte eine gültige E-Mail-Adresse eingeben",
+
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Vorname",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Bitte einen Vornamen eingeben",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Nachname",
