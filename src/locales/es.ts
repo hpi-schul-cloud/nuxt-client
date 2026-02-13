@@ -184,6 +184,7 @@ export default {
 	"common.tool.context.type.boardElements": "Tableros",
 	"common.tool.context.type.mediaShelves": "Estante multimedia",
 	"common.validation.email": "Por favor, introduzca una dirección de correo electrónico válida",
+	"common.validation.file": "Por favor, suba un archivo {fileHint}",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
 	"common.validation.number": "Se debe ingresar un número entero.",
 	"common.validation.password.upperCase": "La contraseña debe contener al menos una letra mayúscula.",
@@ -1297,7 +1298,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.error":
 		"Se ha producido un error al cargar la Política de Privacidad",
 	"pages.administration.school.index.schoolPolicy.fileName": "Política de Privacidad de la escuela",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Cargar archivo {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(sólo PDF, 4 MB como máximo)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"La nueva Política de Privacidad sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",

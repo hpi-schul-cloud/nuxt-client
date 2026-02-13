@@ -3,8 +3,8 @@ export type Base64File = {
 	schoolId: string;
 	createdAt: string;
 	updatedAt: string;
-	fileType: string;
-	fileName: string;
+	filetype: string;
+	filename: string;
 	data: string;
 };
 
@@ -27,4 +27,8 @@ export type CreateConsentVersionPayload = {
 	publishedAt: string;
 	consentTypes: ("privacy" | "termsOfUse")[];
 	consentData: string;
+};
+
+export type CreateConsentVersionResponse = Omit<ConsentVersion, "consentData"> & {
+	consentDataId: string;
 };

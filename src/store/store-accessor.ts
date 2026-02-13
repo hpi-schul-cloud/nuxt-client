@@ -16,7 +16,6 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import NewsModule from "@/store/news";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -38,7 +37,6 @@ export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let newsModule: NewsModule;
-export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let courseRoomListModule: CourseRoomListModule;
@@ -61,7 +59,6 @@ export function initializeStores(store: Store<unknown>): void {
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	newsModule = getModule(NewsModule, store);
-	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	courseRoomListModule = getModule(CourseRoomListModule, store);
@@ -87,7 +84,6 @@ export const modules = {
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	newsModule: NewsModule,
-	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	courseRoomListModule: CourseRoomListModule,
