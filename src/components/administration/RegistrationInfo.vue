@@ -1,20 +1,20 @@
 <template>
-	<v-menu location="bottom end" :close-on-content-click="false">
+	<VMenu location="bottom end" :close-on-content-click="false">
 		<template #activator="{ props }">
 			<span class="info-slot">
-				<v-btn
+				<VBtn
 					v-bind="props"
 					icon
 					variant="text"
 					color="info"
 					:aria-label="$t('pages.administration.students.infobox.registrationOnly.headline')"
 				>
-					<v-icon class="ma-0" size="20">{{ mdiInformation }}</v-icon>
-				</v-btn>
+					<VIcon class="ma-0" size="20">{{ mdiInformation }}</VIcon>
+				</VBtn>
 			</span>
 		</template>
-		<v-card class="info-menu-card">
-			<v-card-title data-testid="infobox-title">
+		<VCard class="info-menu-card">
+			<VCardTitle data-testid="infobox-title">
 				<h2 class="my-2">
 					{{
 						isConsentNecessary
@@ -22,8 +22,8 @@
 							: $t("pages.administration.students.infobox.registrationOnly.headline")
 					}}
 				</h2>
-			</v-card-title>
-			<v-card-text>
+			</VCardTitle>
+			<VCardText>
 				<template v-if="isConsentNecessary">
 					<div v-if="showExternalText">
 						<p>
@@ -75,15 +75,16 @@
 						<li>{{ $t("pages.administration.students.infobox.registrationOnly.li-4") }}</li>
 					</ul>
 				</template>
-			</v-card-text>
-		</v-card>
-	</v-menu>
+			</VCardText>
+		</VCard>
+	</VMenu>
 </template>
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
 import { mdiAlert, mdiInformation } from "@icons/material";
 import { computed } from "vue";
+import { VBtn } from "vuetify/components";
 
 defineProps<{
 	showExternalText?: boolean;
