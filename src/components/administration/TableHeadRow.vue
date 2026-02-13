@@ -20,8 +20,8 @@
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 			>
-				<RegistrationInfo v-if="column.infobox" class="info-slot" />
-				<v-btn
+				<RegistrationInfo v-if="column.infobox" class="info-slot" :show-external-text="showExternalText" />
+				<VBtn
 					v-if="column.sortable"
 					variant="text"
 					:ripple="false"
@@ -43,7 +43,7 @@
 						{{ sortOrder === "asc" ? mdiMenuUpOutline : mdiMenuDownOutline }}
 					</v-icon>
 					<v-icon v-else-if="column.sortable" :icon="mdiMenuSwapOutline" />
-				</v-btn>
+				</VBtn>
 				<div v-else class="th-wrap">
 					<span>{{ column.label }}</span>
 				</div>
