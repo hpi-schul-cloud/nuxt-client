@@ -42,6 +42,7 @@ import NotificationModal from "@/components/lern-store/NotificationModal";
 import { contentModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { getID, getMediatype, getMetadataAttribute, getTitle, getUrl } from "@/utils/helpers";
+import { useCourses } from "@data-courses";
 import { mdiPlusCircleOutline } from "@icons/material";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
@@ -67,7 +68,9 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		return { t };
+		const { fetchCourses } = useCourses();
+
+		return { t, fetchCourses };
 	},
 	data() {
 		return {
@@ -182,7 +185,7 @@ export default defineComponent({
 			contentModule.setNotificationModal(null);
 			if (!(await this.addResourceAndClose())) {
 				this.copyModalActive = true;
-				this.$store.dispatch("courses/find");
+				this.fetchCourses();
 			}
 		},
 		performAPICall() {

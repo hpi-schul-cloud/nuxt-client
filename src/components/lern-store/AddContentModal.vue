@@ -36,10 +36,10 @@
 
 <script>
 import { contentModule } from "@/store";
+import { useCourses } from "@data-courses";
 import { SvsDialog } from "@ui-dialog";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
@@ -62,8 +62,11 @@ export default defineComponent({
 	emits: ["update:show-copy-modal", "close"],
 	setup() {
 		const { t } = useI18n();
+		const { getCoursesOptions } = useCourses();
+
 		return {
 			t,
+			getCoursesOptions,
 		};
 	},
 	data() {
@@ -73,9 +76,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("courses", {
-			coursesOptions: "getCoursesOptions",
-		}),
+		coursesOptions() {
+			return this.getCoursesOptions();
+		},
 		lessons() {
 			return contentModule.getLessonsGetter;
 		},
