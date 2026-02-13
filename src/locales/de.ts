@@ -1459,7 +1459,7 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.message.many":
 		"Bist du sicher, dass du alle Lehrkräfte bis auf {number} löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
-		"Bist du sicher, dass du diesen Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkräfte löschen möchtest?",
+		"Bist du sicher, dass du diese Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkräfte löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.warning":
 		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Lehrkräfte weiterhin in der Tabelle sichtbar.",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
