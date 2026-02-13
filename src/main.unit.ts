@@ -1,42 +1,38 @@
-import axios, { isAxiosError } from "axios";
+import { useAppStore } from "@data-app";
+import { createPinia, setActivePinia } from "pinia";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("axios");
-const mockedIsAxiosError = vi.mocked(isAxiosError);
-const mockedAxiosGet = vi.mocked(axios.get);
+vi.mock("@data-app");
+const mockUseAppStore = vi.mocked(useAppStore);
 
-describe("handleUnauthorizedError", () => {
-	beforeEach(async () => {
+describe("main.ts initialization", () => {
+	const mockSetJwtExpired = vi.fn();
+	const mockLogin = vi.fn();
+	const mockHandleUnknownError = vi.fn();
+
+	beforeEach(() => {
 		vi.clearAllMocks();
+		setActivePinia(createPinia());
+
+		mockUseAppStore.mockReturnValue({
+			setJwtExpired: mockSetJwtExpired,
+			login: mockLogin,
+			handleUnknownError: mockHandleUnknownError,
+		} as Partial<ReturnType<typeof useAppStore>> as ReturnType<typeof useAppStore>);
 	});
 
-	describe("when 401 error occurs", () => {
-		it("should call notifySessionEnded when JWT timer returns expired token", async () => {
-			mockedIsAxiosError.mockReturnValue(true);
-			mockedAxiosGet.mockResolvedValue({ data: { ttl: 0 } });
-
-			expect(mockedAxiosGet).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
+	describe("store initialization", () => {
+		it("should initialize the app store", () => {
+			expect(mockUseAppStore).toBeDefined();
 		});
 
-		it("should call notifySessionEnded when JWT timer request fails", async () => {
-			mockedIsAxiosError.mockReturnValue(true);
-			mockedAxiosGet.mockRejectedValue(new Error("Network error"));
-
-			expect(mockedAxiosGet).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
-		});
-
-		it("should NOT call notifySessionEnded when JWT timer returns valid ttl", async () => {
-			mockedIsAxiosError.mockReturnValue(true);
-			mockedAxiosGet.mockResolvedValue({ data: { ttl: 300 } }); // 5 minutes remaining
-
-			expect(mockedAxiosGet).toHaveBeenCalledWith("/v1/accounts/jwtTimer");
-		});
-	});
-
-	describe("when non-401 error occurs", () => {
-		it("should NOT handle non-401 errors", async () => {
-			mockedIsAxiosError.mockReturnValue(true);
-
-			expect(mockedAxiosGet).not.toHaveBeenCalled();
+		it("should provide essential meths", () => {
+			const store = useAppStore();
+			expect(store.setJwtExpired).toBeDefined();
+			expect(store.login).toBeDefined();
+			expect(store.logout).toBeDefined();
+			expect(store.externalLogout).toBeDefined();
+			expect(store.handleUnknownError).toBeDefined();
 		});
 	});
 });

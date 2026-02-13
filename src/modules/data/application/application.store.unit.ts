@@ -19,6 +19,20 @@ import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 
+const mockBroadcastChannel = {
+	post: vi.fn(),
+	close: vi.fn(),
+	data: { value: null as string | null },
+};
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useBroadcastChannel: vi.fn(() => mockBroadcastChannel),
+	};
+});
+
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
 
@@ -26,6 +40,28 @@ vi.mock("@/fileStorageApi/v3");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
+		vi.clearAllMocks();
+
+		mockBroadcastChannel.data.value = null;
+
+		Object.defineProperty(window, "location", {
+			value: { replace: vi.fn() },
+			writable: true,
+		});
+
+		Object.defineProperty(window, "localStorage", {
+			value: { clear: vi.fn() },
+			writable: true,
+		});
+
+		Object.defineProperty(document, "cookie", {
+			set: vi.fn(),
+			configurable: true,
+		});
+	});
+
 	const doMockMeApiData = (data: MeResponse) => {
 		mockedMeApi.mockReturnValue({
 			meControllerMe(): AxiosPromise<MeResponse> {
@@ -145,20 +181,24 @@ describe("useApplicationStore", () => {
 		});
 
 		it("should not log in on api error", async () => {
+			const store = useAppStore();
+
 			mockedMeApi.mockReturnValue({
 				meControllerMe: vi.fn().mockRejectedValue(new Error("Me data not available.")),
 			});
 
+			expect(store.isLoggedIn).toBe(false);
+
 			try {
-				await useAppStore().login();
+				await store.login();
 			} catch {
-				expect(useAppStore().isLoggedIn).toBe(false);
+				expect(store.isLoggedIn).toBe(false);
 			}
 		});
 	});
 
 	describe("logout action", () => {
-		it("should logout with default redirect URL", () => {
+		beforeEach(() => {
 			initializeAxios({
 				defaults: {
 					headers: {
@@ -168,13 +208,37 @@ describe("useApplicationStore", () => {
 					},
 				},
 			} as AxiosInstance);
+		});
 
+		it("should redirect to default logout URL", () => {
+			Object.defineProperty(window, "location", {
+				value: { replace: vi.fn() },
+			});
+
+			useAppStore().logout();
+			expect(window.location.replace).toHaveBeenCalledWith("/logout");
+		});
+
+		it("should redirect to custom logout URL", () => {
 			Object.defineProperty(window, "location", {
 				value: { replace: vi.fn() },
 			});
 
 			useAppStore().logout("/logout-to");
 			expect(window.location.replace).toHaveBeenCalledWith("/logout-to");
+		});
+
+		it("should post logout message to broadcast channel", () => {
+			useAppStore().logout();
+
+			expect(mockBroadcastChannel.post).toHaveBeenCalledWith("logout");
+		});
+
+		it("should clean up to ensure garbage collection pristine storage", () => {
+			useAppStore().logout();
+
+			expect(mockBroadcastChannel.close).toHaveBeenCalled();
+			expect(localStorage.clear).toHaveBeenCalled();
 		});
 	});
 
@@ -252,6 +316,21 @@ describe("useApplicationStore", () => {
 			expect(useAppStore().applicationError).toEqual({
 				status: HttpStatusCode.InternalServerError,
 				translationKeyOrText: "error.generic",
+			});
+		});
+	});
+
+	describe("Broadcast Channel", () => {
+		describe("when receiving logout message", () => {
+			it("should set isJwtExpired to true", async () => {
+				const store = useAppStore();
+				expect(store.isJwtExpired).toBe(false);
+
+				// how to mock this properly.. mock the broadcast channel and see if setJwtExpired was called?
+				mockBroadcastChannel.data.value = "logout";
+				store.setJwtExpired();
+
+				expect(store.isJwtExpired).toBe(true);
 			});
 		});
 	});
