@@ -21,7 +21,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
@@ -37,7 +36,6 @@ export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let newsModule: NewsModule;
-export let termsOfUseModule: TermsOfUseModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
@@ -59,7 +57,6 @@ export function initializeStores(store: Store<unknown>): void {
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	newsModule = getModule(NewsModule, store);
-	termsOfUseModule = getModule(TermsOfUseModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	courseRoomListModule = getModule(CourseRoomListModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
@@ -84,7 +81,6 @@ export const modules = {
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	newsModule: NewsModule,
-	termsOfUseModule: TermsOfUseModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	courseRoomListModule: CourseRoomListModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
