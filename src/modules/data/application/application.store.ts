@@ -62,16 +62,17 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	const logout = (redirectUrl = "/logout") => {
 		broadcast.post("logout");
+		broadcast.close();
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
 	};
 
+	const externalLogout = () => logout("/logout/external");
+
 	const setJwtExpired = () => {
 		isJwtExpired.value = true;
 	};
-
-	const externalLogout = () => logout("/logout/external");
 
 	const updateUserLanguage = (language: LanguageType) =>
 		userApi
