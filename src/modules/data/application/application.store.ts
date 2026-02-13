@@ -4,6 +4,7 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
+import { useBroadcastChannel } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
 
@@ -18,9 +19,17 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
+	const broadcast = useBroadcastChannel({ name: "schulcloud-session" });
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
+	const isJwtExpired = ref(false);
+
+	broadcast.channel.value?.addEventListener("message", (event) => {
+		if (event.data === "logout") {
+			isJwtExpired.value = true;
+		}
+	});
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -58,12 +67,18 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
+		broadcast.post("logout");
+		broadcast.close();
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
 	};
 
 	const externalLogout = () => logout("/logout/external");
+
+	const setJwtExpired = () => {
+		isJwtExpired.value = true;
+	};
 
 	const updateUserLanguage = (language: LanguageType) =>
 		userApi
@@ -130,12 +145,14 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isTeacher,
 		isStudent,
 		isExternalPerson,
+		isJwtExpired,
 		school,
 		userRoles,
 		systemId,
 		login,
 		logout,
 		externalLogout,
+		setJwtExpired,
 		updateUserLanguage,
 		clearApplicationError,
 		handleUnknownError,

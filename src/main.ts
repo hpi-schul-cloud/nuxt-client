@@ -50,7 +50,7 @@ import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
 import { htmlConfig } from "@feature-render-html";
 import { logger } from "@util-logger";
-import axios from "axios";
+import axios, { HttpStatusCode, isAxiosError } from "axios";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
@@ -73,11 +73,27 @@ app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
+const handleUnauthorizedError = async (error: unknown) => {
+	if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
+		try {
+			const pristineAxios = axios.create();
+			pristineAxios.defaults.baseURL = axios.defaults.baseURL;
+			const response = await pristineAxios.get("/v1/accounts/jwtTimer");
+			const ttl = response?.data?.ttl ?? 0;
+			if (ttl <= 0) {
+				useAppStore().setJwtExpired();
+			}
+		} catch {
+			useAppStore().setJwtExpired();
+		}
+	}
+};
+
 (async () => {
 	const runtimeConfigJson = await axios.get(`${window.location.origin}/runtime.config.json`);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
-	initializeAxios(axios);
+	initializeAxios(axios, handleUnauthorizedError);
 
 	const success = await useEnvStore().loadConfiguration();
 
@@ -90,7 +106,7 @@ app.use(VueDOMPurifyHTML, {
 		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
-		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
+		// this is handled by the axios response interceptor
 		logger.info("probably not logged in", error);
 	}
 
