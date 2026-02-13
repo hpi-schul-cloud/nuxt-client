@@ -1,56 +1,35 @@
 <template>
-	<CustomDialog
-		:is-open="isOpen"
-		:size="425"
-		has-buttons
-		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
-		:confirm-btn-icon="mdiFileReplaceOutline"
-		:confirm-btn-disabled="!isValid"
-		@dialog-canceled="cancel"
-		@dialog-confirmed="submit"
+	<SvsDialog
+		:model-value="isOpen"
+		:title="t('common.words.termsOfUse')"
+		:confirm-btn-lang-key="'pages.administration.school.index.termsOfUse.replace'"
+		is-open-state-managed-externally
+		@cancel="cancel"
+		@confirm="submit"
 	>
-		<template #title>
-			<h3 class="text-h2 mt-0">
-				{{ t("common.words.termsOfUse") }}
-			</h3>
-		</template>
 		<template #content>
-			<v-form ref="termsForm" v-model="isValid">
-				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="alert-text">
-						{{ t("pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent") }}
-					</div>
-				</v-alert>
-				<v-file-input
+			<VForm ref="termsForm" v-model="isValid">
+				<WarningAlert class="mb-5">
+					{{ t("pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent") }}
+				</WarningAlert>
+				<VFileInput
 					ref="input-file"
 					v-model="file"
 					class="input-file mb-2 truncate-file-input"
 					data-testid="input-file"
-					:multiple="false"
-					density="compact"
 					accept="application/pdf"
 					:label="t('pages.administration.school.index.termsOfUse.labels.uploadFile')"
 					:hint="t('pages.administration.school.index.termsOfUse.hints.uploadFile')"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
-				>
-					<template #append-inner>
-						<v-icon
-							v-if="!isValid && isTouched"
-							color="rgba(var(--v-theme-error))"
-							data-testid="warning-icon"
-							:icon="mdiAlert"
-						/>
-					</template>
-				</v-file-input>
-			</v-form>
+				/>
+			</VForm>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { currentDate } from "@/plugins/datetime";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
@@ -58,13 +37,16 @@ import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/uti
 import { notifySuccess } from "@data-app";
 import { CreateConsentVersionPayload } from "@data-school";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { computed, ComputedRef, defineComponent, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
 	components: {
-		CustomDialog,
+		SvsDialog,
+		WarningAlert,
 	},
 	props: {
 		isOpen: {
@@ -149,11 +131,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
-}
-
 :deep(.truncate-file-input .v-field__input) {
 	white-space: nowrap;
 	overflow: hidden;
