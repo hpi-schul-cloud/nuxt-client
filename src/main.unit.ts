@@ -9,6 +9,8 @@ describe("main.ts initialization", () => {
 	const mockSetJwtExpired = vi.fn();
 	const mockLogin = vi.fn();
 	const mockHandleUnknownError = vi.fn();
+	const mockLogout = vi.fn();
+	const mockExternalLogout = vi.fn();
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -17,6 +19,8 @@ describe("main.ts initialization", () => {
 		mockUseAppStore.mockReturnValue({
 			setJwtExpired: mockSetJwtExpired,
 			login: mockLogin,
+			logout: mockLogout,
+			externalLogout: mockExternalLogout,
 			handleUnknownError: mockHandleUnknownError,
 		} as Partial<ReturnType<typeof useAppStore>> as ReturnType<typeof useAppStore>);
 	});
