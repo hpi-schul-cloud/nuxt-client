@@ -466,6 +466,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "The files could not be deleted.",
 	"components.board.notifications.errors.fileToBig":
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"The number of files exceeds the permitted limit of {fileLimitPerParent} files.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
