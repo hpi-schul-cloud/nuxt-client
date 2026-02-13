@@ -1317,7 +1317,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Nutzungsordnung bearbeiten",
 	"pages.administration.school.index.termsOfUse.error": "Beim Laden der Nutzungsordnung ist ein Fehler aufgetreten",
 	"pages.administration.school.index.termsOfUse.fileName": "Nutzungsordnung der Schule",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Datei hochladen (nur PDF, max. 4MB)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Datei hochladen {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(nur PDF, max. 4 MB)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Datei auswählen",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Die neue Nutzungsordnung wird die alte unwiderruflich ersetzen und allen Nutzern dieser Schule zur Genehmigung vorgelegt werden.",
@@ -1326,7 +1327,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "Neue Datei wurde erfolgreich hochgeladen.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Hochgeladen {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"Die Datei ist größer als 4MB. Bitte reduzieren sie die Dateigröße",
+		"Die Datei ist größer als 4 MB. Bitte reduzieren sie die Dateigröße",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"Dieses Dateiformat wird nicht unterstützt. Verwenden Sie bitte PDF",
 	"pages.administration.school.index.title": "Schule verwalten",

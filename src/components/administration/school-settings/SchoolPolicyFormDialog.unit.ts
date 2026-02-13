@@ -6,7 +6,7 @@ import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
-import { flushPromises, mount } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import type { Mocked } from "vitest";
 import { VFileInput } from "vuetify/components";
 
@@ -32,7 +32,7 @@ describe("SchoolPolicyFormDialog", () => {
 		return { wrapper };
 	};
 
-	const triggerValidFileInput = async (wrapper: ReturnType<typeof setup>["wrapper"]) => {
+	const triggerValidFileInput = async (wrapper: VueWrapper) => {
 		const file = new File(["dummy"], "FileName.pdf", {
 			type: "application/pdf",
 		});
@@ -42,7 +42,7 @@ describe("SchoolPolicyFormDialog", () => {
 		await fileInput.trigger("blur");
 	};
 
-	const triggerConfirm = async (wrapper: ReturnType<typeof setup>["wrapper"]) => {
+	const triggerConfirm = async (wrapper: VueWrapper) => {
 		const dialog = wrapper.findComponent(SvsDialog);
 		dialog.vm.$emit("confirm");
 		await flushPromises();

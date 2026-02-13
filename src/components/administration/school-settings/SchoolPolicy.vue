@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ErrorAlert v-if="status === 'error'" data-testid="error-alert">
+		<ErrorAlert v-if="status === 'error'" data-testid="error-alert" class="mb-6">
 			{{ t("pages.administration.school.index.schoolPolicy.error") }}
 		</ErrorAlert>
 		<template v-else>

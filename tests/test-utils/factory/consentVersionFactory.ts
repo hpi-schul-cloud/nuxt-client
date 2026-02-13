@@ -31,7 +31,7 @@ export const privacyPolicyFactory = consentVersionFactory.params({
 	},
 });
 
-export const termsOfUsePolicyFactory = consentVersionFactory.params({
+export const termsOfUseFactory = consentVersionFactory.params({
 	consentTypes: ["termsOfUse"],
 	consentData: {
 		filename: "Terms of Use",

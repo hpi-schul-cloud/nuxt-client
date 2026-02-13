@@ -1321,7 +1321,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.fileName": "Condiciones de Uso de la escuela",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(sólo PDF, 4 MB como máximo)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"La nueva Condiciones de Uso sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",

@@ -1310,7 +1310,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Редагувати Умови використання",
 	"pages.administration.school.index.termsOfUse.error": "Виникла помилка під час завантаження Умови використання",
 	"pages.administration.school.index.termsOfUse.fileName": "Умови використання школи",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл (тільки PDF, максимум 4 МБ)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(тільки PDF, максимум 4 МБ)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Виберіть файл",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Нова Умови використання безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
