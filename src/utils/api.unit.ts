@@ -2,7 +2,7 @@ import { $axios, initializeAxios, mapAxiosErrorToResponseError } from "./api";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { mount } from "@vue/test-utils";
-import axios, { isAxiosError } from "axios";
+import axios, { AxiosResponse, isAxiosError } from "axios";
 
 vi.mock("axios");
 const mockedIsAxiosError = vi.mocked(isAxiosError);
@@ -56,69 +56,57 @@ describe("AxiosInstance", () => {
 			vi.clearAllMocks();
 		});
 
-		describe("when responseInterceptor is provided", () => {
-			it("should setup the response interceptor", async () => {
-				const mockResponseInterceptor = vi.fn();
+		describe("when errorHandler is provided", () => {
+			describe("when the response is successful", () => {
+				it.each([
+					{ status: 200, statusText: "OK" },
+					{ status: 201, statusText: "Created" },
+					{ status: 204, statusText: "No Content" },
+				])("should return HTTP $status response without calling errorHandler", async ({ status, statusText }) => {
+					const mockErrorHandler = vi.fn();
+					await initializeAxios(mockAxios, mockErrorHandler);
 
-				await initializeAxios(mockAxios, mockResponseInterceptor);
+					const successHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][0];
+					const testResponse = {
+						data: "Test data",
+						status,
+						statusText,
+						headers: {},
+						config: {},
+						request: {},
+					} as AxiosResponse;
 
-				expect(mockAxios.interceptors.response.use).toHaveBeenCalledWith(expect.any(Function), expect.any(Function));
-			});
-
-			it("should call the responseInterceptor with the error", async () => {
-				const mockResponseInterceptor = vi.fn();
-
-				await initializeAxios(mockAxios, mockResponseInterceptor);
-
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
-				const testError = new Error("Test error");
-
-				if (errorHandler) {
-					try {
-						await errorHandler(testError);
-					} catch {
-						// Expected to reject
+					if (successHandler) {
+						const result = successHandler(testResponse);
+						expect(result).toBe(testResponse);
+						expect(mockErrorHandler).not.toHaveBeenCalled();
 					}
-				}
-
-				expect(mockResponseInterceptor).toHaveBeenCalledWith(testError);
+				});
 			});
 
-			it("should always reject the original error", async () => {
-				const mockResponseInterceptor = vi.fn();
+			describe("when the response is not successful", () => {
+				it.each([
+					{ status: 401, statusText: "Unauthorized", errorCode: "UNAUTHORIZED" },
+					{ status: 403, statusText: "Forbidden", errorCode: "FORBIDDEN" },
+					{ status: 404, statusText: "Not Found", errorCode: "NOT_FOUND" },
+					{ status: 500, statusText: "Internal Server Error", errorCode: "INTERNAL_SERVER_ERROR" },
+				])("should call failureHandler for HTTP $status", async ({ status, statusText, errorCode }) => {
+					const mockErrorHandler = vi.fn();
+					await initializeAxios(mockAxios, mockErrorHandler);
 
-				await initializeAxios(mockAxios, mockResponseInterceptor);
+					const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
+					const testError = Object.assign(new Error(`HTTP ${status}: ${statusText}`), {
+						code: errorCode,
+						response: { status, statusText },
+					});
 
-				const errorHandler = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0][1];
-				const testError = new Error("Test error");
+					expect(errorHandler).toBeTypeOf("function");
 
-				if (errorHandler) {
-					await expect(errorHandler(testError)).rejects.toEqual(testError);
-				}
-			});
-
-			it("should call responseInterceptor and ensure interceptor is properly configured", async () => {
-				const mockResponseInterceptor = vi.fn().mockResolvedValue(undefined);
-				await initializeAxios(mockAxios, mockResponseInterceptor);
-
-				const [successHandler, errorHandler] = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0];
-
-				expect(successHandler).toBeTypeOf("function");
-				expect(errorHandler).toBeTypeOf("function");
-
-				const testError = new Error("Test error");
-				if (errorHandler) {
-					await expect(errorHandler(testError)).rejects.toEqual(testError);
-					expect(mockResponseInterceptor).toHaveBeenCalledWith(testError);
-				}
-			});
-		});
-
-		describe("when no responseInterceptor is provided", () => {
-			it("should NOT setup the response interceptor", async () => {
-				await initializeAxios(mockAxios);
-
-				expect(mockAxios.interceptors.response.use).not.toHaveBeenCalled();
+					if (errorHandler) {
+						await expect(errorHandler(testError)).rejects.toEqual(testError);
+						expect(mockErrorHandler).toHaveBeenCalledWith(testError);
+					}
+				});
 			});
 		});
 	});

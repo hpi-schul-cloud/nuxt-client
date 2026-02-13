@@ -5,16 +5,13 @@ import { getCurrentInstance } from "vue";
 
 let $axios: AxiosInstance;
 
-export const initializeAxios = async (
-	axios: AxiosInstance,
-	responseInterceptor?: (error: unknown) => Promise<void>
-) => {
+export const initializeAxios = async (axios: AxiosInstance, errorHandler?: (error: unknown) => Promise<void>) => {
 	$axios = axios;
-	if (responseInterceptor) {
+	if (errorHandler) {
 		$axios.interceptors.response.use(
 			(response) => response,
 			async (error) => {
-				await responseInterceptor(error);
+				await errorHandler(error);
 				return Promise.reject(error);
 			}
 		);
