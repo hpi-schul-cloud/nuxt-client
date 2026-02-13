@@ -24,6 +24,7 @@
 			"@data-activation": ["src/modules/data/activation"],
       "@data-board": ["src/modules/data/board"],
 			"@data-classes": ["src/modules/data/classes"],
+			"@data-courses": ["src/modules/data/courses"],
       "@data-external-tool": ["src/modules/data/external-tool"],
       "@data-group": ["src/modules/data/group"],
       "@data-system": ["src/modules/data/system"],

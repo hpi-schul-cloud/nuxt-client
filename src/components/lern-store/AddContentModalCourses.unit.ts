@@ -2,7 +2,6 @@
 // The course-store is only invoked at this point, making it crucial to test it here.
 import AddContentModal from "./AddContentModal.vue";
 import ContentModule from "@/store/content";
-import courses from "@/store/courses";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
@@ -38,7 +37,7 @@ const courseOptions = [
 const createMockStore = () => {
 	const mockStore = createStore({
 		modules: {
-			courses,
+			// courses, // TODO: check this module is necessary
 		},
 	});
 	return { mockStore };
