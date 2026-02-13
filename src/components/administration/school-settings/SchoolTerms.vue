@@ -49,6 +49,7 @@
 			v-if="hasSchoolEditPermission"
 			:is-open="isSchoolTermsFormDialogOpen"
 			data-testid="form-dialog"
+			@confirm="onCreate"
 			@close="closeDialog"
 		/>
 		<SvsDialog
@@ -75,7 +76,7 @@ import { School } from "@/store/types/schools";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess, useAppStore } from "@data-app";
-import { ConsentVersion } from "@data-school";
+import { ConsentVersion, CreateConsentVersionPayload } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -117,5 +118,9 @@ const deleteFile = async () => {
 
 const closeDialog = () => {
 	isSchoolTermsFormDialogOpen.value = false;
+};
+
+const onCreate = async (newConsentVersion: CreateConsentVersionPayload) => {
+	await termsOfUseModule.createTermsOfUse(newConsentVersion);
 };
 </script>

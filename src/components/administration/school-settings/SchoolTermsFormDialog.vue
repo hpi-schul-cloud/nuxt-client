@@ -8,126 +8,97 @@
 		@confirm="submit"
 	>
 		<template #content>
-			<VForm ref="termsForm" v-model="isValid">
+			<VForm ref="termsForm">
 				<WarningAlert class="mb-5">
 					{{ t("pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent") }}
 				</WarningAlert>
 				<VFileInput
-					ref="input-file"
 					v-model="file"
 					class="input-file mb-2 truncate-file-input"
 					data-testid="input-file"
 					accept="application/pdf"
 					:label="t('pages.administration.school.index.termsOfUse.labels.uploadFile')"
-					:hint="t('pages.administration.school.index.termsOfUse.hints.uploadFile')"
+					:hint="
+						t('pages.administration.school.index.termsOfUse.hints.uploadFile', {
+							fileHint: t('pages.administration.school.index.termsOfUse.fileHint'),
+						})
+					"
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
-					@blur="onBlur"
 				/>
 			</VForm>
 		</template>
 	</SvsDialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { currentDate } from "@/plugins/datetime";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
-import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
-import { notifySuccess } from "@data-app";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { CreateConsentVersionPayload } from "@data-school";
-import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
-import { computed, ComputedRef, defineComponent, Ref, ref } from "vue";
+import { computed, ComputedRef, Ref, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "SchoolTermsFormDialog",
-	components: {
-		SvsDialog,
-		WarningAlert,
-	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	emits: ["close"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
-		const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+type Props = {
+	isOpen: boolean;
+};
+defineProps<Props>();
 
-		const termsForm: Ref<File[]> = ref([]);
-		const isFormValid: Ref<boolean> = ref(false);
-		const isFormTouched: Ref<boolean> = ref(false);
-		const file: Ref<File | null> = ref(null);
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "confirm", newConsentVersion: CreateConsentVersionPayload): void;
+}>();
 
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+const { t } = useI18n();
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const maxFileUploadSizeInKb = 4194304;
-		const validationRules = {
-			required: (value: File | null) => !!value || t("common.validation.required"),
-			mustBePdf: (value: File | null) =>
-				value?.type === "application/pdf" || t("pages.administration.school.index.termsOfUse.validation.notPdf"),
-			maxSize: (value: File | null) =>
-				(!!value && value.size <= maxFileUploadSizeInKb) ||
-				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
+const termsForm = useTemplateRef("termsForm");
+const file: Ref<File | null> = ref(null);
+
+const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+
+const maxFileUploadSizeInKb = 4194304;
+const rules = {
+	required: (value: File | null) =>
+		!!value || t("common.validation.file", { fileHint: t("pages.administration.school.index.termsOfUse.fileHint") }),
+	mustBePdf: (value: File | null) =>
+		value?.type === "application/pdf" || t("pages.administration.school.index.termsOfUse.validation.notPdf"),
+	maxSize: (value: File | null) =>
+		(!!value && value.size <= maxFileUploadSizeInKb) ||
+		t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
+};
+
+const resetForm = () => {
+	file.value = null;
+};
+
+const cancel = () => {
+	resetForm();
+	emit("close");
+};
+
+const submit = async () => {
+	const isValid = await isValidOrFocusFirstInvalidInput(termsForm);
+	if (isValid && file.value) {
+		const newConsentVersion: CreateConsentVersionPayload = {
+			schoolId: school.value.id,
+			title: t("pages.administration.school.index.termsOfUse.fileName"),
+			consentText: "",
+			consentTypes: ["termsOfUse"],
+			publishedAt: currentDate().toString(),
+			consentData: (await toBase64(file.value)) as string,
 		};
 
-		const onBlur = () => {
-			isFormTouched.value = true;
-		};
+		emit("close");
+		emit("confirm", newConsentVersion);
 
-		const resetForm = () => {
-			termsForm.value = [];
-			isFormValid.value = false;
-			isFormTouched.value = false;
-			file.value = null;
-		};
-
-		const cancel = () => {
-			resetForm();
-			emit("close");
-		};
-
-		const submit = async () => {
-			if (isFormValid.value && file.value) {
-				const newConsentVersion: CreateConsentVersionPayload = {
-					schoolId: school.value.id,
-					title: t("pages.administration.school.index.termsOfUse.fileName"),
-					consentText: "",
-					consentTypes: ["termsOfUse"],
-					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(file.value)) as string,
-				};
-
-				emit("close");
-				await termsOfUseModule.createTermsOfUse(newConsentVersion);
-
-				notifySuccess(t("pages.administration.school.index.termsOfUse.success"));
-				resetForm();
-			}
-		};
-
-		return {
-			t,
-			rules: validationRules,
-			cancel,
-			submit,
-			onBlur,
-			isValid: isFormValid,
-			isTouched: isFormTouched,
-			termsForm,
-			school,
-			mdiAlert,
-			mdiFileReplaceOutline,
-			file,
-		};
-	},
-});
+		resetForm();
+	}
+};
 </script>
 
 <style lang="scss" scoped>
