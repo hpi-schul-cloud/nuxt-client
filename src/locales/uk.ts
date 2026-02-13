@@ -908,6 +908,9 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"feature-autoLogout.warning":
 		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
+	"feature-loggedout.title": "Термін сеансу минув",
+	"feature-loggedout.message": "Термін дії сеансу минув з міркувань безпеки.",
+	"feature-loggedout.button": "Увійти знову",
 	"feature-board-external-tool-element.alert.error.student":
 		"Інструмент зараз неможливо запустити. Будь ласка, оновіть дошку або зверніться до вчителя чи інструктора курсу.",
 	"feature-board-external-tool-element.alert.error.teacher":
