@@ -350,7 +350,7 @@ describe("FileStorageApi Composable", () => {
 			});
 		});
 
-		describe("when file api returns error", () => {
+		describe("when file api returns file too big error", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParent.BOARDNODES;
@@ -382,6 +382,43 @@ describe("FileStorageApi Composable", () => {
 					expect.objectContaining({
 						status: "error",
 						text: "components.board.notifications.errors.fileToBig",
+					})
+				);
+			});
+		});
+
+		describe("when file api returns file limit per parent exceeded error", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParent.BOARDNODES;
+				const file = new File([""], "filename");
+
+				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.FILE_LIMIT_PER_PARENT_EXCEEDED);
+
+				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.upload.mockRejectedValue(responseError);
+
+				return {
+					parentId,
+					parentType,
+					file,
+					responseError,
+				};
+			};
+
+			it("should notify file limit per parent exceeded error and pass error", async () => {
+				const { parentId, parentType, file, responseError } = setup();
+				const { upload } = useFileStorageApi();
+
+				await expect(upload(file, parentId, parentType)).rejects.toBe(responseError);
+
+				expect(useNotificationStore().notify).toHaveBeenCalledWith(
+					expect.objectContaining({
+						status: "error",
+						text: "components.board.notifications.errors.fileLimitPerParentExceeded",
 					})
 				);
 			});

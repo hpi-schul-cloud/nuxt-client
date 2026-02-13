@@ -22,6 +22,7 @@ export enum ErrorType {
 	FILE_NAME_EMPTY = "FILE_NAME_EMPTY",
 	COULD_NOT_CREATE_PATH = "COULD_NOT_CREATE_PATH",
 	FILE_TOO_BIG = "FILE_TOO_BIG",
+	FILE_LIMIT_PER_PARENT_EXCEEDED = "FILE_LIMIT_PER_PARENT_EXCEEDED",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
 }
@@ -36,6 +37,7 @@ export const useFileStorageApi = () => {
 	const { t } = useI18n();
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
+	const fileConfig = useEnvFileConfig();
 
 	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, getFileRecordById } = useFileRecordsStore();
 
@@ -212,6 +214,13 @@ export const useFileStorageApi = () => {
 				break;
 			case ErrorType.Forbidden:
 				notifyError(t("error.403"));
+				break;
+			case ErrorType.FILE_LIMIT_PER_PARENT_EXCEEDED:
+				notifyError(
+					t("components.board.notifications.errors.fileLimitPerParentExceeded", {
+						fileLimitPerParent: fileConfig.value.FILES_STORAGE_MAX_FILES_PER_PARENT,
+					})
+				);
 				break;
 			default:
 				notifyError(t("components.board.notifications.errors.fileServiceNotAvailable"));
