@@ -6,7 +6,7 @@ import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useBroadcastChannel } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, readonly, ref, watch } from "vue";
+import { computed, readonly, ref } from "vue";
 
 // use of vueuse "useCookies" ?
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
@@ -24,6 +24,12 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
 	const isJwtExpired = ref(false);
+
+	broadcast.channel.value?.addEventListener("message", (event) => {
+		if (event.data === "logout") {
+			isJwtExpired.value = true;
+		}
+	});
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -127,17 +133,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const clearApplicationError = () => {
 		applicationError.value = undefined;
 	};
-
-	watch(
-		() => broadcast.data.value,
-		(newValue) => {
-			if (newValue) {
-				if (newValue === "logout") {
-					isJwtExpired.value = true;
-				}
-			}
-		}
-	);
 
 	return {
 		isLoggedIn,

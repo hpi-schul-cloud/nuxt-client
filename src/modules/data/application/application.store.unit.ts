@@ -23,6 +23,13 @@ const mockBroadcastChannel = {
 	post: vi.fn(),
 	close: vi.fn(),
 	data: { value: null as string | null },
+	channel: {
+		value: {
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			postMessage: vi.fn(),
+		},
+	},
 };
 
 vi.mock("@vueuse/core", async (importOriginal) => {
@@ -334,26 +341,66 @@ describe("useApplicationStore", () => {
 	});
 
 	describe("Broadcast Channel", () => {
-		describe("when receiving logout message", () => {
-			it("should set isJwtExpired to true", async () => {
+		describe("when the store is initialized", () => {
+			it("should setup event listener on broadcast channel", () => {
+				useAppStore();
+
+				expect(mockBroadcastChannel.channel.value.addEventListener).toHaveBeenCalledWith(
+					"message",
+					expect.any(Function)
+				);
+			});
+		});
+
+		describe("when receiving messages via event listener", () => {
+			it("should set isJwtExpired to true when receiving logout message", () => {
 				const store = useAppStore();
 				expect(store.isJwtExpired).toBe(false);
 
-				// Difficult to test without mocking the entire BroadcastChannel implementation
-				mockBroadcastChannel.data.value = "logout";
-				store.setJwtExpired();
+				const eventHandler = vi
+					.mocked(mockBroadcastChannel.channel.value.addEventListener)
+					.mock.calls.find(([eventType]) => eventType === "message")?.[1];
+
+				expect(eventHandler).toBeDefined();
+
+				const logoutEvent = {
+					data: "logout",
+					type: "message",
+					target: mockBroadcastChannel.channel.value,
+				};
+
+				if (eventHandler) {
+					eventHandler(logoutEvent);
+				}
 
 				expect(store.isJwtExpired).toBe(true);
 			});
 
-			it("should handle non-logout broadcast messages", async () => {
+			it("should not change isJwtExpired when receiving non-logout messages", () => {
 				const store = useAppStore();
 				expect(store.isJwtExpired).toBe(false);
 
-				// Simulate broadcast channel receiving other message
-				mockBroadcastChannel.data.value = "other-message";
+				const eventHandler = vi
+					.mocked(mockBroadcastChannel.channel.value.addEventListener)
+					.mock.calls.find(([eventType]) => eventType === "message")?.[1];
 
-				expect(store.isJwtExpired).toBe(false);
+				expect(eventHandler).toBeDefined();
+
+				const testMessages = ["login", "change-language", ""];
+
+				testMessages.forEach((message) => {
+					const messageEvent = {
+						data: message,
+						type: "message",
+						target: mockBroadcastChannel.channel.value,
+					};
+
+					if (eventHandler) {
+						eventHandler(messageEvent);
+					}
+
+					expect(store.isJwtExpired).toBe(false);
+				});
 			});
 		});
 	});
