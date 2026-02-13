@@ -1,6 +1,6 @@
 <template>
 	<SvsDialog
-		v-model="isJwtExpired"
+		:model-value="isJwtExpired"
 		title="feature-loggedout.title"
 		no-cancel
 		persistent
