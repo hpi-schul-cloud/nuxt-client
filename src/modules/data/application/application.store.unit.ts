@@ -282,6 +282,19 @@ describe("useApplicationStore", () => {
 			expect(store.applicationError?.translationKeyOrText).toBe("error.generic");
 		});
 
+		it.each([
+			[HttpStatusCode.Unauthorized, "error.401"],
+			[HttpStatusCode.Forbidden, "error.403"],
+			[HttpStatusCode.NotFound, "error.404"],
+			[HttpStatusCode.RequestTimeout, "error.408"],
+		])("handles status code %s and returns translation key %s", (statusCode, expectedTranslationKey) => {
+			const store = useAppStore();
+
+			store.handleApplicationError(statusCode);
+
+			expect(store.applicationError?.translationKeyOrText).toBe(expectedTranslationKey);
+		});
+
 		it("puts unknown error codes to generic", () => {
 			useAppStore().handleApplicationError(999 as HttpStatusCode);
 			expect(useAppStore().applicationError).toEqual({ status: 999, translationKeyOrText: "error.generic" });
@@ -326,11 +339,21 @@ describe("useApplicationStore", () => {
 				const store = useAppStore();
 				expect(store.isJwtExpired).toBe(false);
 
-				// how to mock this properly.. mock the broadcast channel and see if setJwtExpired was called?
+				// Difficult to test without mocking the entire BroadcastChannel implementation
 				mockBroadcastChannel.data.value = "logout";
 				store.setJwtExpired();
 
 				expect(store.isJwtExpired).toBe(true);
+			});
+
+			it("should handle non-logout broadcast messages", async () => {
+				const store = useAppStore();
+				expect(store.isJwtExpired).toBe(false);
+
+				// Simulate broadcast channel receiving other message
+				mockBroadcastChannel.data.value = "other-message";
+
+				expect(store.isJwtExpired).toBe(false);
 			});
 		});
 	});

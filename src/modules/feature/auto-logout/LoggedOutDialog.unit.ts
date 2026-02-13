@@ -3,7 +3,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockPush = vi.fn();
 vi.mock("vue-router", () => ({
@@ -73,6 +73,19 @@ describe("LoggedOutDialog", () => {
 
 				expect(dialog.props("confirmBtnLangKey")).toBe("feature-loggedout.button");
 				expect(dialog.props("title")).toBe("feature-loggedout.title");
+			});
+
+			it("should render with all required props", () => {
+				const { dialog } = setup(true);
+
+				expect(dialog.props("noCancel")).toBe(true);
+			});
+
+			it("should render warning alert content", () => {
+				const { wrapper } = setup(true);
+
+				const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+				expect(warningAlert.exists()).toBe(true);
 			});
 		});
 	});

@@ -96,6 +96,22 @@ describe("AxiosInstance", () => {
 					await expect(errorHandler(testError)).rejects.toEqual(testError);
 				}
 			});
+
+			it("should call responseInterceptor and ensure interceptor is properly configured", async () => {
+				const mockResponseInterceptor = vi.fn().mockResolvedValue(undefined);
+				await initializeAxios(mockAxios, mockResponseInterceptor);
+
+				const [successHandler, errorHandler] = vi.mocked(mockAxios.interceptors.response.use).mock.calls[0];
+
+				expect(successHandler).toBeTypeOf("function");
+				expect(errorHandler).toBeTypeOf("function");
+
+				const testError = new Error("Test error");
+				if (errorHandler) {
+					await expect(errorHandler(testError)).rejects.toEqual(testError);
+					expect(mockResponseInterceptor).toHaveBeenCalledWith(testError);
+				}
+			});
 		});
 
 		describe("when no responseInterceptor is provided", () => {
