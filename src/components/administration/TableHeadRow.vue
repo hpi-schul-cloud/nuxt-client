@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import RegistrationInfo from "@/components/administration/RegistrationInfo.vue";
+import RegistrationInfo from "./RegistrationInfo.vue";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert, mdiInformation, mdiMenuDownOutline, mdiMenuSwapOutline, mdiMenuUpOutline } from "@icons/material";
 
