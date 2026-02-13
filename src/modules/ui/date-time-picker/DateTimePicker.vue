@@ -1,7 +1,7 @@
 <template>
 	<div class="wrapper">
 		<div class="d-flex flex-row">
-			<date-picker
+			<DatePicker
 				class="mr-4 picker-width"
 				:date="date"
 				:label="dateInputLabel"
@@ -12,7 +12,7 @@
 				@update:date="onDateUpdate"
 				@error="onError('date')"
 			/>
-			<time-picker
+			<TimePicker
 				class="picker-width"
 				:time="time"
 				:label="timeInputLabel"
@@ -21,11 +21,11 @@
 				@error="onError('time')"
 			/>
 		</div>
-		<v-slide-y-transition>
+		<VSlideYTransition>
 			<span v-if="hintMessage" class="v-messages theme--light message">
 				{{ hintMessage }}
 			</span>
-		</v-slide-y-transition>
+		</VSlideYTransition>
 	</div>
 </template>
 

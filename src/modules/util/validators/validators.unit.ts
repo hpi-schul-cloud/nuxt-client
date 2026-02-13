@@ -20,6 +20,14 @@ describe("util-validators", () => {
 		it("should not accept empty value", () => {
 			const isValid = isRequired(ERROR);
 			expect(isValid("")).toBe(ERROR);
+			expect(isValid(undefined)).toBe(ERROR);
+			expect(isValid(null)).toBe(ERROR);
+		});
+
+		it("should accept non empty values", () => {
+			const isValid = isRequired(ERROR);
+			expect(isValid("A")).toBe(true);
+			expect(isValid(1)).toBe(true);
 		});
 	});
 
@@ -66,7 +74,7 @@ describe("util-validators", () => {
 			});
 
 			it("should accept urls with https-protocol", () => {
-				expect(isValid("http://medium.com/my-article")).toBe(true);
+				expect(isValid("https://medium.com/my-article")).toBe(true);
 			});
 
 			it("should return ERROR when urls with other protocols than http and https", () => {

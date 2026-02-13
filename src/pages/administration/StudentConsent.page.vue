@@ -6,15 +6,15 @@
 			</h1>
 			<i18n-t v-if="isConsentNecessary" keypath="pages.administration.students.consent.info" scope="global" tag="p">
 				<template #dataProtection>
-					<a class="link" :href="fileLinks.dataProtection" target="_blank">{{ t("common.words.privacyPolicy") }}</a>
+					<a :href="fileLinks.dataProtection" target="_blank">{{ t("common.words.privacyPolicy") }}</a>
 				</template>
 				<template #terms>
-					<a class="link" :href="fileLinks.termsOfUse" target="_blank">{{ t("components.legacy.footer.terms") }}</a>
+					<a :href="fileLinks.termsOfUse" target="_blank">{{ t("components.legacy.footer.terms") }}</a>
 				</template>
 				<template #handout>
-					<a class="link" :href="fileLinks.analogConsent" target="_blank">{{
-						t("pages.administration.students.consent.handout")
-					}}</a>
+					<a :href="fileLinks.analogConsent" target="_blank">
+						{{ t("pages.administration.students.consent.handout") }}
+					</a>
 				</template>
 			</i18n-t>
 		</template>
@@ -39,15 +39,16 @@
 					@update:sort="onUpdateSort"
 				>
 					<template #datacolumn-birthday="slotProps">
-						<base-input
-							:error="birthdayWarning && !slotProps.data ? inputError : null"
-							class="date base-input"
-							:model-value="inputDateFromDeUTC(slotProps.data)"
-							type="date"
-							label=""
+						<DatePicker
+							:date="inputDateFromDeUTC(slotProps.data)"
+							class="ml-2"
+							hide-details
+							hide-icon
+							density="compact"
+							:min-date="inputRangeDate(-100, 'y')"
+							:max-date="inputRangeDate(-4, 'y')"
 							data-testid="birthday-input"
-							:birth-date="true"
-							@update:model-value="
+							@update:date="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
 									birthDate: inputDateFormat($event),
@@ -56,12 +57,12 @@
 						/>
 					</template>
 					<template #datacolumn-password="slotProps">
-						<base-input
+						<VTextField
 							:model-value="slotProps.data"
-							type="text"
-							label=""
+							class="ml-2"
+							hide-details
+							density="compact"
 							data-testid="password-input"
-							class="base-input"
 							@update:model-value="
 								inputPass({
 									id: tableData[slotProps.rowindex]._id,
@@ -112,16 +113,19 @@
 				</BackendDataTable>
 
 				<div v-if="isConsentNecessary" id="consent-checkbox">
-					<base-input v-model="check" type="checkbox" name="switch" label="" data-testid="check-confirm" />
-					<label @click="check = !check">
-						<i18n-t keypath="pages.administration.students.consent.steps.register.confirm" scope="global">
-							<template #analogConsent>
-								<a class="link" :href="fileLinks.analogConsent" target="_">{{
-									t("pages.administration.students.consent.steps.register.analog-consent")
-								}}</a>
-							</template>
-						</i18n-t>
-					</label>
+					<VCheckbox v-model="check" name="switch" data-testid="check-confirm" hide-details>
+						<template #label>
+							<div>
+								<i18n-t keypath="pages.administration.students.consent.steps.register.confirm" scope="global">
+									<template #analogConsent>
+										<a :href="fileLinks.analogConsent" target="_">
+											{{ t("pages.administration.students.consent.steps.register.analog-consent") }}
+										</a>
+									</template>
+								</i18n-t>
+							</div>
+						</template>
+					</VCheckbox>
 				</div>
 
 				<p v-if="checkWarning" class="text-error" data-testid="confirm-error">
@@ -234,17 +238,18 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
+import { inputRangeDate } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiAlert } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
+import { DatePicker } from "@ui-date-time-picker";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-
 export default defineComponent({
 	components: {
 		SvsDialogBtnConfirm,
@@ -254,6 +259,7 @@ export default defineComponent({
 		SvsDialog,
 		BackendDataTable,
 		StepProgress,
+		DatePicker,
 	},
 	setup() {
 		const { t } = useI18n();
@@ -504,6 +510,7 @@ export default defineComponent({
 		inputDateFromDeUTC,
 		inputDateFormat,
 		printDateFromDeUTC,
+		inputRangeDate,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.
@@ -548,10 +555,6 @@ export default defineComponent({
 	margin: 0 auto;
 }
 
-:deep(.link) {
-	text-decoration: none;
-}
-
 :deep(.table) {
 	margin-top: 24px;
 
@@ -571,18 +574,6 @@ export default defineComponent({
 	.info-line {
 		display: none;
 	}
-
-	.input-line {
-		.icon-behind {
-			display: none;
-		}
-	}
-}
-
-:deep(.base-input) {
-	max-width: 10em;
-	margin-bottom: 16px;
-	margin-left: 8px;
 
 	.input-line {
 		.icon-behind {
