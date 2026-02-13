@@ -29,7 +29,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { validateOnOpeningTag } = useOpeningTagValidator();
 
-const rules = [(value: string) => validateOnOpeningTag(value), isRequired(t("common.validation.required"))];
+const rules = [(value: string) => validateOnOpeningTag(value), isRequired()];
 
 const titleInput = ref<string | undefined>(undefined);
 const titleRef = computed({

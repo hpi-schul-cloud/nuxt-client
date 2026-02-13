@@ -184,10 +184,15 @@ export default {
 	"common.validation.email": "Please enter a valid email address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
+	"common.validation.password.upperCase": "The password must contain at least one upper case letter.",
+	"common.validation.password.lowerCase": "The password must contain at least one lower case letter.",
+	"common.validation.password.number": "The password must contain at least one number.",
+	"common.validation.password.specialCharacter": "The password must contain at least one special character.",
 	"common.validation.regex": "The input must conform to the following rule: {comment}.",
 	"common.validation.required": "Please fill out this field",
 	"common.validation.required2": "This is a mandatory field.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
@@ -1362,7 +1367,8 @@ export default {
 		"The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
-	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
+	"pages.administration.students.index.searchbar.ariaLabel": "Search students by name",
+	"pages.administration.students.index.searchbar.placeholder": "Search students",
 	"pages.administration.students.index.tableActions.consent": "Analogue consent form",
 	"pages.administration.students.index.tableActions.delete": "Delete",
 	"pages.administration.students.index.tableActions.email": "Send registration links by e-mail",
@@ -1425,14 +1431,15 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.btnText": "Delete teacher",
 	"pages.administration.teachers.index.remove.confirm.message.all": "Are you sure you want to delete all teachers?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Are you sure you want to delete all techers except {number}?",
+		"Are you sure you want to delete all teachers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher? | Are you sure you want to delete this {number} of teachers?",
 	"pages.administration.teachers.index.remove.confirm.message.warning":
 		"The deletion will start in the background and may take a while. Until then, these teachers will remain visible in the table.",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
-	"pages.administration.teachers.index.searchbar.placeholder": "Search",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",
+	"pages.administration.teachers.index.searchbar.placeholder": "Search teachers",
 	"pages.administration.teachers.index.tableActions.consent": "Analogue consent form",
 	"pages.administration.teachers.index.tableActions.delete": "Delete",
 	"pages.administration.teachers.index.tableActions.email": "Send registration links by e-mail",
@@ -1603,14 +1610,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Please enter a password.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"The password must be at least 8 characters long.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"The password must contain at least one uppercase letter.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"The password must contain at least one lowercase letter.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"The password must contain at least one number.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"The password must contain at least one special character.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "The passwords do not match.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
@@ -1670,7 +1669,6 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Please enter the first and last name of the external person. The person will receive an e-mail with a registration link for {applicationName}. As soon as they have created an account, they will automatically be added to the room.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-mail address",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Please enter a valid e-mail address",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "First name",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Please enter a first name",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Last name",
