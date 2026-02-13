@@ -74,9 +74,9 @@ import { formatDateForAlerts } from "@/plugins/datetime";
 import { Permission } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
 import { downloadFile } from "@/utils/fileHelper";
-import { injectStrict, SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
-import { notifySuccess, useAppStore } from "@data-app";
-import { ConsentVersion, CreateConsentVersionPayload } from "@data-school";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { useAppStore } from "@data-app";
+import { CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
 import { ErrorAlert, InfoAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
@@ -84,24 +84,21 @@ import { computed, ComputedRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const termsOfUseModule = injectStrict(TERMS_OF_USE_MODULE_KEY);
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
 const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
+const { status, fetchTermsOfUse, termsOfUse, createTermsOfUse, deleteTermsOfUse } = useSchoolTermsOfUse();
 
 const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 watch(
 	school,
 	async (newValue) => {
-		await termsOfUseModule.fetchTermsOfUse(newValue.id);
+		await fetchTermsOfUse(newValue.id);
 	},
 	{ immediate: true }
 );
 
 const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
-
-const termsOfUse: ComputedRef<ConsentVersion | null> = computed(() => termsOfUseModule.getTermsOfUse);
-const status: ComputedRef<string> = computed(() => termsOfUseModule.getStatus);
 
 const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
 
@@ -112,8 +109,7 @@ const downloadTerms = () => {
 };
 
 const deleteFile = async () => {
-	await termsOfUseModule.deleteTermsOfUse();
-	notifySuccess(t("pages.administration.school.index.termsOfUse.delete.success"));
+	await deleteTermsOfUse();
 };
 
 const closeDialog = () => {
@@ -121,6 +117,6 @@ const closeDialog = () => {
 };
 
 const onCreate = async (newConsentVersion: CreateConsentVersionPayload) => {
-	await termsOfUseModule.createTermsOfUse(newConsentVersion);
+	await createTermsOfUse(newConsentVersion);
 };
 </script>
