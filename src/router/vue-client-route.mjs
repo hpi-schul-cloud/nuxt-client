@@ -35,8 +35,6 @@ const vueRoutes = [
 	`^/administration/rooms/manage/${mongoId}?$`,
 	`^/boards/${mongoId}/?$`,
 	`^/collabora/${mongoId}/?$`,
-	`^/content/?$`,
-	`^/content/${uuid}/?$`,
 	`^/error/?$`,
 	`^/h5p/player/${h5pId}/?$`,
 	`^/h5p/editor/?$`,
