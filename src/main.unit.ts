@@ -30,7 +30,7 @@ describe("main.ts initialization", () => {
 			expect(mockUseAppStore).toBeDefined();
 		});
 
-		it("should provide essential meths", () => {
+		it("should provide essential methods", () => {
 			const store = useAppStore();
 			expect(store.setJwtExpired).toBeDefined();
 			expect(store.login).toBeDefined();

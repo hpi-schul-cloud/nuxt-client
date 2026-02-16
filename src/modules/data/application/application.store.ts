@@ -27,7 +27,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	broadcast.channel.value?.addEventListener("message", (event) => {
 		if (event.data === "logout") {
-			isJwtExpired.value = true;
+			setJwtExpired();
 		}
 	});
 
@@ -145,7 +145,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isTeacher,
 		isStudent,
 		isExternalPerson,
-		isJwtExpired,
+		isJwtExpired: readonly(isJwtExpired),
 		school,
 		userRoles,
 		systemId,

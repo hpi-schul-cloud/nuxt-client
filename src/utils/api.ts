@@ -19,8 +19,6 @@ export const initializeAxios = async (axios: AxiosInstance, errorHandler?: (erro
 
 	const app = getCurrentInstance()?.appContext.app;
 	if (app) {
-		// warum hier das riginale axios? Damit wir keine neue Instanz aufmachen?
-		// eher so? app.config.globalProperties.$axios = $axios;
 		app.config.globalProperties.$axios = axios;
 	}
 };
