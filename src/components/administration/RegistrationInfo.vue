@@ -15,13 +15,13 @@
 		</template>
 		<VCard class="info-menu-card">
 			<VCardTitle data-testid="infobox-title">
-				<h2 class="my-2">
+				<h6 class="my-2">
 					{{
 						isConsentNecessary
 							? $t("pages.administration.students.infobox.headline")
 							: $t("pages.administration.students.infobox.registrationOnly.headline")
 					}}
-				</h2>
+				</h6>
 			</VCardTitle>
 			<VCardText>
 				<template v-if="isConsentNecessary">
