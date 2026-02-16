@@ -8,16 +8,16 @@
 		@confirm="onConfirm"
 	>
 		<template #content>
-			<WarningAlert>
+			<ErrorAlert>
 				{{ t("feature-loggedout.message") }}
-			</WarningAlert>
+			</ErrorAlert>
 		</template>
 	</SvsDialog>
 </template>
 
 <script lang="ts" setup>
 import { useAppStoreRefs } from "@data-app";
-import { WarningAlert } from "@ui-alert";
+import { ErrorAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";

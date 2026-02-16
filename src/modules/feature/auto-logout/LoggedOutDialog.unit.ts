@@ -81,10 +81,10 @@ describe("LoggedOutDialog", () => {
 				expect(dialog.props("noCancel")).toBe(true);
 			});
 
-			it("should render warning alert content", () => {
+			it("should render error alert content", () => {
 				const { wrapper } = setup(true);
 
-				const warningAlert = wrapper.findComponent({ name: "WarningAlert" });
+				const warningAlert = wrapper.findComponent({ name: "ErrorAlert" });
 				expect(warningAlert.exists()).toBe(true);
 			});
 		});
