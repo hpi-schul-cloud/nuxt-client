@@ -179,14 +179,6 @@ export default {
 			font-size: var(--text-md);
 			font-weight: normal;
 		}
-
-		.select-wrap {
-			padding: 8px;
-
-			.select {
-				margin-bottom: 0;
-			}
-		}
 	}
 }
 
