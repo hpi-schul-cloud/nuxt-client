@@ -4,14 +4,7 @@ import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryP
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Permission, ToolContextType } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import {
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
-	REGEX_ACTIVATION_CODE,
-	REGEX_ID,
-	REGEX_UUID,
-} from "@/utils/validation";
+import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ACTIVATION_CODE, REGEX_ID } from "@/utils/validation";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
@@ -163,21 +156,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		meta: {
 			layout: Layouts.BORDERLESS,
 		},
-	},
-	{
-		path: "/content",
-		component: () => import("@/pages/LernStoreOverview.page.vue"),
-		name: "content",
-		beforeEnter: createPermissionGuard([Permission.LernstoreView]),
-	},
-	{
-		path: `/content/:id(${REGEX_UUID})`,
-		component: () => import("@/pages/LernStoreDetails.page.vue"),
-		name: "content-id",
-		meta: {
-			layout: Layouts.LERN_STORE,
-		},
-		beforeEnter: createPermissionGuard([Permission.LernstoreView]),
 	},
 	{
 		path: "/error",
