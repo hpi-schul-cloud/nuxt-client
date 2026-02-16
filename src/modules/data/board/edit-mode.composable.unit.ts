@@ -1,23 +1,26 @@
-import { useBoardPermissions } from "./BoardPermissions.composable";
+import { useBoardAllowedOperations } from "./boardAllowedOperations.composable";
 import { useCourseBoardEditMode, useMediaBoardEditMode } from "./edit-mode.composable";
-import { BoardPermissionChecks } from "@/types/board/Permissions";
-import { Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 
-vi.mock("./BoardPermissions.composable");
-const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
+vi.mock("./boardAllowedOperations.composable");
+const mockedUseBoardAllowedOperations = vi.mocked(useBoardAllowedOperations);
 
 describe("edit-mode.composable", () => {
 	describe("when using edit mode for course boards", () => {
-		const setup = (hasEditPermission: Ref<boolean>) => {
-			mockedUseBoardPermissions.mockReturnValue({
-				hasEditPermission,
-			} as BoardPermissionChecks);
+		const setup = ({ hasEditPermission }: { hasEditPermission: Ref<boolean> }) => {
+			mockedUseBoardAllowedOperations.mockReturnValue({
+				allowedOperations: computed(() => ({
+					updateElement: hasEditPermission.value,
+				})),
+			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			return useCourseBoardEditMode("testId");
 		};
 
 		it("should set edit mode with permissions", () => {
-			const { isEditMode, startEditMode, stopEditMode } = setup(ref(true));
+			const hasEditPermission = ref(true);
+			const { isEditMode, startEditMode, stopEditMode } = setup({ hasEditPermission });
+
 			expect(isEditMode.value).toBe(false);
 			startEditMode();
 			expect(isEditMode.value).toBe(true);
@@ -26,7 +29,8 @@ describe("edit-mode.composable", () => {
 		});
 
 		it("should not set edit mode without permissions ", () => {
-			const { isEditMode, startEditMode, stopEditMode } = setup(ref(false));
+			const hasEditPermission = ref(false);
+			const { isEditMode, startEditMode, stopEditMode } = setup({ hasEditPermission });
 
 			expect(isEditMode.value).toBe(false);
 			startEditMode();
@@ -36,7 +40,7 @@ describe("edit-mode.composable", () => {
 		});
 	});
 
-	describe("when using edit mode for course boards", () => {
+	describe("when using edit mode for media boards", () => {
 		it("should set edit mode", () => {
 			const { isEditMode, startEditMode, stopEditMode } = useMediaBoardEditMode("testId");
 

@@ -28,13 +28,13 @@
 				</template>
 				<div :class="boardClasses" :style="boardStyle">
 					<Sortable
-						:list="board.columns"
+						:list="columns"
 						item-key="id"
 						:class="boardColumnClass"
 						tag="div"
 						:options="{
 							direction: 'horizontal',
-							disabled: isEditMode || !hasMovePermission,
+							disabled: isEditMode || !(allowedOperations.moveColumn ?? false),
 							group: 'columns',
 							delayOnTouchOnly: true,
 							delay: 300,
@@ -80,7 +80,7 @@
 					</Sortable>
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
-							v-if="hasCreateColumnPermission"
+							v-if="allowedOperations.createColumn ?? false"
 							:is-list-board="isListBoard"
 							@create:column="onCreateColumn"
 						/>
@@ -94,7 +94,7 @@
 					v-if="roomId"
 					v-model:is-dialog-open="moveCardOptions.isDialogOpen"
 					:room-id="roomId"
-					:has-relocate-board-content-permission="hasRelocateBoardContentPermission"
+					:has-relocate-board-content-permission="allowedOperations?.relocateContent ?? false"
 					:card-id="moveCardOptions.cardId"
 				/>
 				<CopyResultModal
@@ -135,6 +135,7 @@ import { useCopy } from "@/composables/copy";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
+	ColumnResponse,
 	ShareTokenBodyParamsParentTypeEnum,
 	ToolContextType,
 } from "@/serverApi/v3";
@@ -144,8 +145,8 @@ import { ColumnMove } from "@/types/board/DragAndDrop";
 import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
+	useBoardAllowedOperations,
 	useBoardInactivity,
-	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
 	useSharedBoardPageInformation,
@@ -161,7 +162,7 @@ import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { BOARD_IS_LIST_LAYOUT, extractDataAttribute, useElementFocus } from "@util-board";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, ComputedRef, onMounted, onUnmounted, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const props = defineProps({
@@ -173,6 +174,8 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
+const columns: ComputedRef<ColumnResponse[]> = computed(() => board.value?.columns ?? []);
+const { allowedOperations } = useBoardAllowedOperations();
 const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInformation } =
 	useSharedBoardPageInformation();
 const isDragging = ref(false);
@@ -196,18 +199,6 @@ watch(
 
 useBodyScrolling();
 
-const {
-	hasMovePermission,
-	hasCreateCardPermission,
-	hasCreateColumnPermission,
-	hasCreateToolPermission,
-	hasDeletePermission,
-	hasRelocateBoardContentPermission,
-	hasEditPermission,
-	hasManageReadersCanEditPermission,
-	arePermissionsLoaded,
-} = useBoardPermissions();
-
 const isBoardVisible = computed(() => board.value?.isVisible);
 const isEditableChipVisible = computed(() => board.value?.readersCanEdit ?? false);
 const hasReadersEditPermission = ref(false);
@@ -217,15 +208,15 @@ const moveCardOptions = ref<{ isDialogOpen: boolean; cardId: string }>({
 });
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
+	if (allowedOperations.value.createCard) boardStore.createCardRequest({ columnId });
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission.value) boardStore.createColumnRequest({ boardId: props.boardId });
+	if (allowedOperations.value.createColumn) boardStore.createColumnRequest({ boardId: props.boardId });
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission.value) {
+	if (allowedOperations.value.deleteCard) {
 		cardStore.deleteCardRequest({ cardId });
 	}
 };
@@ -248,7 +239,7 @@ const onShareCard = async (cardId: string) => {
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission.value) boardStore.deleteColumnRequest({ columnId });
+	if (allowedOperations.value.deleteColumn) boardStore.deleteColumnRequest({ columnId });
 };
 
 const onDragStart = () => {
@@ -257,7 +248,7 @@ const onDragStart = () => {
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
 	isDragging.value = false;
-	if (!hasMovePermission.value) return;
+	if (!allowedOperations.value.moveColumn) return;
 
 	const columnId = extractDataAttribute(columnPayload.item, "columnId");
 	if (columnId && columnPayload.newIndex !== undefined && columnPayload.oldIndex !== undefined) {
@@ -271,7 +262,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 };
 
 const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
-	if (!hasMovePermission.value) return;
+	if (!allowedOperations.value.moveColumn) return;
 	if (columnIndex === 0) return;
 
 	const columnMove: ColumnMove = {
@@ -284,7 +275,7 @@ const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 };
 
 const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
-	if (!hasMovePermission.value) return;
+	if (!allowedOperations.value.moveColumn) return;
 	if (board.value && columnIndex === board.value.columns.length - 1) return;
 
 	const columnMove: ColumnMove = {
@@ -301,7 +292,7 @@ const onReloadBoard = async () => {
 };
 
 const onUpdateBoardVisibility = async (isVisible: boolean) => {
-	if (!hasEditPermission.value) return;
+	if (!allowedOperations.value.updateBoardVisibility) return;
 
 	boardStore.updateBoardVisibilityRequest({
 		boardId: props.boardId,
@@ -317,11 +308,12 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-	if (hasEditPermission.value) boardStore.updateColumnTitleRequest({ columnId, newTitle });
+	if (allowedOperations.value.updateColumnTitle) boardStore.updateColumnTitleRequest({ columnId, newTitle });
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission.value) boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
+	if (allowedOperations.value.updateBoardTitle)
+		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
 const { focusNodeFromHash } = useElementFocus();
@@ -333,7 +325,7 @@ onMounted(async () => {
 		boardId: props.boardId,
 	});
 
-	if (hasCreateToolPermission.value) {
+	if (allowedOperations.value.createExternalToolElement) {
 		cardStore.loadPreferredTools(ToolContextType.BoardElement);
 	}
 
@@ -356,18 +348,17 @@ watch(
 );
 
 watch(
-	[isBoardVisible, arePermissionsLoaded],
+	[isBoardVisible, allowedOperations],
 	() => {
-		const canAccessBoard = isBoardVisible.value || hasEditPermission.value;
+		const canAccessBoard = isBoardVisible.value || allowedOperations.value.createCard;
 
-		if (arePermissionsLoaded?.value && !canAccessBoard) {
+		if (allowedOperations.value && !canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			useAppStore().handleApplicationError(HttpStatusCode.Forbidden, "components.board.error.403");
 		}
 
 		hasReadersEditPermission.value =
-			arePermissionsLoaded?.value &&
-			hasManageReadersCanEditPermission?.value &&
+			(allowedOperations.value.updateReadersCanEditSetting ?? false) &&
 			useEnvConfig().value.FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE;
 	},
 	{ immediate: true }
@@ -422,6 +413,8 @@ const onCopyResultModalClosed = () => {
 const router = useRouter();
 
 const onCopyBoard = async () => {
+	if (!allowedOperations.value.copyBoard) return;
+
 	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
 	const copyId = copyModule.getCopyResult?.id;
 	router.push({ name: "boards-id", params: { id: copyId } });
@@ -430,6 +423,8 @@ const onCopyBoard = async () => {
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 
 const onShareBoard = () => {
+	if (!allowedOperations.value.shareBoard) return;
+
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 		shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
 
@@ -448,7 +443,7 @@ const openDeleteBoardDialog = async (id: string) => {
 const isSelectBoardLayoutDialogOpen = ref(false);
 
 const onUpdateBoardLayout = async () => {
-	if (!hasEditPermission.value) return;
+	if (!allowedOperations.value.updateBoardLayout) return;
 
 	isSelectBoardLayoutDialogOpen.value = true;
 };
@@ -456,7 +451,7 @@ const onUpdateBoardLayout = async () => {
 const onSelectBoardLayout = async (layout: BoardLayout) => {
 	isSelectBoardLayoutDialogOpen.value = false;
 
-	if (!hasEditPermission.value || board.value?.layout === layout) return;
+	if (!allowedOperations.value.updateBoardLayout || board.value?.layout === layout) return;
 
 	boardStore.updateBoardLayoutRequest({
 		boardId: props.boardId,

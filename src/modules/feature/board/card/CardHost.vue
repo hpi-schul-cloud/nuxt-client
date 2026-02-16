@@ -16,7 +16,7 @@
 				min-height="120px"
 				:elevation="cardElevation"
 				:ripple="false"
-				:hover="isHovered && hasEditPermission"
+				:hover="isHovered && allowedOperations?.moveCard"
 				:data-testid="cardTestId"
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
@@ -30,29 +30,29 @@
 						scope="card"
 						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
-						:has-edit-permission="hasEditPermission"
+						:has-edit-permission="allowedOperations?.updateCardTitle"
 						@update:value="onUpdateCardTitle($event, cardId)"
 						@enter="onEnter"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu
-							v-if="hasEditPermission"
+							v-if="allowedOperations?.updateCardTitle"
 							:scope="BoardMenuScope.CARD"
 							has-background
 							:data-testid="boardMenuTestId"
 						>
-							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
+							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<KebabMenuActionDuplicate
-								v-if="hasEditPermission"
+								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
 								@click="duplicateCard"
 							/>
-							<KebabMenuActionExport v-if="hasEditPermission" @click="onMoveCard(cardId)" />
-							<KebabMenuActionShare v-if="hasShareBoardPermission" @click="onShareCard" />
+							<KebabMenuActionExport v-if="allowedOperations?.moveCard" @click="onMoveCard(cardId)" />
+							<KebabMenuActionShare v-if="allowedOperations?.shareBoard" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
-								v-if="hasDeletePermission"
+								v-if="allowedOperations?.deleteCard"
 								:name="card.title"
 								:scope="BoardMenuScope.CARD"
 								scope-language-key="components.boardCard"
@@ -113,7 +113,7 @@ import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
-import { useBoardFocusHandler, useBoardPermissions, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -143,11 +143,11 @@ const emit = defineEmits<{
 	(e: "share:card", cardId: string): void;
 }>();
 
+const { allowedOperations } = useBoardAllowedOperations();
 const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission, hasShareBoardPermission } = useBoardPermissions();
 
 const isHovered = useElementHover(cardHost);
 const isDetailView = ref(false);
@@ -167,7 +167,7 @@ const cardElevation = computed(() => {
 	if (isEditMode.value) {
 		return 6;
 	}
-	if (isHovered.value && hasEditPermission.value) {
+	if (isHovered.value && allowedOperations.value.moveCard) {
 		return 4;
 	}
 	return 2;

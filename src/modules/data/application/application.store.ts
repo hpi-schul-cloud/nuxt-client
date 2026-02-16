@@ -45,7 +45,13 @@ export const useAppStore = defineStore("applicationStore", () => {
 
 	// Helpers/Utils
 	const hasPermission = (permission: Permission) =>
-		computed(() => userPermissions.value?.includes(permission) ?? false);
+		computed(() => {
+			console.log("userPermissions", userPermissions.value);
+			console.log("checking permission", permission, "=>", userPermissions.value?.includes(permission) ?? false);
+			return userPermissions.value?.includes(permission) ?? false;
+		});
+
+	const hasPermissionNow = (permission: Permission) => userPermissions.value?.includes(permission) ?? false;
 
 	// Actions
 
@@ -127,6 +133,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		user,
 		userPermissions,
 		hasPermission,
+		hasPermissionNow,
 		isTeacher,
 		isStudent,
 		isExternalPerson,

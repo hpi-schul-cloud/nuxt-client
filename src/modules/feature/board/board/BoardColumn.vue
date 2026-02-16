@@ -1,6 +1,8 @@
 <template>
 	<div :key="renderKey" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
+			:can-edit-column="allowedOperations?.updateColumnTitle ?? false"
+			:can-delete-column="allowedOperations?.deleteColumn ?? false"
 			:column-id="column.id"
 			:title="column.title"
 			:index="index"
@@ -28,7 +30,7 @@
 					delay: 200,
 					touchStartThreshold: 3, // needed for sensitive touch devices
 					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
-					disabled: !hasMovePermission,
+					disabled: !allowedOperations?.moveColumn,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
 					draggable: '.draggable',
@@ -51,7 +53,7 @@
 						:data-card-id="element.cardId"
 						class="draggable mb-3"
 						:class="{
-							'drag-disabled': !hasMovePermission,
+							'drag-disabled': !allowedOperations?.moveCard,
 							'mx-2': !isListBoard,
 						}"
 						:card-id="element.cardId"
@@ -75,8 +77,9 @@
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { useBoardAllowedOperations } from "@/modules/data/board/boardAllowedOperations.composable";
 import { BoardColumn } from "@/types/board/Board";
-import { useBoardPermissions, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
+import { useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
@@ -107,9 +110,9 @@ const emit = defineEmits<{
 }>();
 
 const boardStore = useBoardStore();
+const { allowedOperations } = useBoardAllowedOperations();
 const reactiveIndex = toRef(props, "index");
 const { editModeId } = useSharedEditMode();
-const { hasEditPermission, hasMovePermission, hasCreateColumnPermission } = useBoardPermissions();
 
 const columnClasses = computed(() => {
 	const classes = ["column-drag-handle", "bg-white"];
@@ -128,7 +131,7 @@ const isCardOfColumnInEditMode = computed(
 );
 
 const showAddButton = computed(
-	() => hasCreateColumnPermission.value && isDragging.value === false && !isCardOfColumnInEditMode.value
+	() => allowedOperations.value.createCard && isDragging.value === false && !isCardOfColumnInEditMode.value
 );
 
 const isNotFirstColumn = computed(() => props.index !== 0);
@@ -181,7 +184,7 @@ const onDragEnd = (event: SortableEvent) => {
 
 const onMoveCardKeyboard = (cardIndex: number, cardId: string | undefined, keyString: string) => {
 	if (cardId === undefined) return;
-	if (!hasEditPermission.value) return;
+	if (!allowedOperations.value.moveCard) return;
 
 	const fromColumnId = props.column.id;
 	const fromColumnIndex = boardStore.getColumnIndex(fromColumnId);

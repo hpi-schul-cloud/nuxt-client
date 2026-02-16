@@ -7,7 +7,7 @@ import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFeatures, useBoardFocusHandler, useBoardPermissions, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -24,6 +24,7 @@ vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@data-board/BoardPermissions.composable");
 vi.mock("../composables/VideoConference.composable");
+vi.mock("@data-board/BoardAllowedOperations.composable");
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -45,7 +46,6 @@ describe("VideoConferenceContentElement", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let useBoardPermissionsMock: DeepMocked<ReturnType<typeof useBoardPermissions>>;
 
 	beforeEach(() => {
 		route = createMock<ReturnType<typeof useRoute>>();
@@ -99,7 +99,6 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex = 2,
 			isRunning = false,
 			error = null,
-			hasManageVideoConferencePermission = false,
 		} = options;
 
 		const element = {
@@ -136,13 +135,10 @@ describe("VideoConferenceContentElement", () => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(role);
 
-		useBoardPermissionsMock = createMock<ReturnType<typeof useBoardPermissions>>({
-			hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
-			isTeacher: ref(role === "teacher"),
-			isStudent: ref(role === "student"),
-		});
-
-		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
+		const manageVideoConference = role === RoleName.Teacher;
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => ({ manageVideoConference }) as unknown),
+		} as ReturnType<typeof useBoardAllowedOperations>);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {

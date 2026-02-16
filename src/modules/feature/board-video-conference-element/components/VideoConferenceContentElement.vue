@@ -86,9 +86,9 @@ import VideoConferenceContentElementDisplay from "./VideoConferenceContentElemen
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@/serverApi/v3";
 import { useAppStoreRefs } from "@data-app";
 import {
+	useBoardAllowedOperations,
 	useBoardFeatures,
 	useBoardFocusHandler,
-	useBoardPermissions,
 	useContentElementState,
 	useSharedBoardPageInformation,
 } from "@data-board";
@@ -111,7 +111,10 @@ const props = defineProps({
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
+
 const emit = defineEmits(["delete:element", "move-down:edit", "move-up:edit", "move-keyboard:edit"]);
+
+const { allowedOperations } = useBoardAllowedOperations();
 
 const element = toRef(props, "element");
 const videoConferenceElement = ref(null);
@@ -154,7 +157,6 @@ const boardId = route.params.id;
 
 const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
-const { hasManageVideoConferencePermission } = useBoardPermissions();
 const { t } = useI18n();
 
 const isHidden = computed(() => !props.isEditMode && !computedElement.value.content.title);
@@ -170,7 +172,7 @@ const canJoin = computed(
 	() => isStudent.value || isTeacher.value || (isExternalPerson.value && isWaitingRoomActive.value)
 );
 
-const canStart = computed(() => hasManageVideoConferencePermission.value);
+const canStart = computed(() => allowedOperations.value.manageVideoConference);
 const isCreating = computed(() => props.isEditMode && !computedElement.value.content.title);
 
 const boardParentType = computed(() => contextType.value);
