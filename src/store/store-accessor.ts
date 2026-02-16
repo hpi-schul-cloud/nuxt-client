@@ -7,7 +7,6 @@
 
 import CommonCartridgeExportModule from "./common-cartridge-export";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import CourseRoomListModule from "@/store/course-room-list";
@@ -16,7 +15,6 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import NewsModule from "@/store/news";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -31,14 +29,12 @@ import { getModule } from "vuex-module-decorators";
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
-export let contentModule: ContentModule;
 export let copyModule: CopyModule;
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let newsModule: NewsModule;
-export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let courseRoomListModule: CourseRoomListModule;
@@ -54,14 +50,12 @@ export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
-	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	newsModule = getModule(NewsModule, store);
-	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	courseRoomListModule = getModule(CourseRoomListModule, store);
@@ -80,14 +74,12 @@ export function initializeStores(store: Store<unknown>): void {
 // appears as an element of the root store's state.
 // (This is required!)
 export const modules = {
-	contentModule: ContentModule,
 	copyModule: CopyModule,
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	newsModule: NewsModule,
-	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	courseRoomListModule: CourseRoomListModule,

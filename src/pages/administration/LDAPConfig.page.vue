@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe :headline="$t('pages.administration.ldap.title')" :breadcrumbs="breadcrumbs" max-width="short">
+	<DefaultWireframe :headline="$t('pages.administration.ldap.title')" :breadcrumbs="breadcrumbs" max-width="short">
 		<section class="section">
 			<p class="subtitle-text">
 				{{ $t("pages.administration.ldap.subtitle.one") }}
@@ -13,79 +13,69 @@
 					{{ $t("pages.administration.ldap.subtitle.helping.link") }}.
 				</a>
 			</div>
-
-			<div class="form-container">
-				<connection-section
-					v-model="systemData"
-					:validate="triggerValidation"
-					data-testid="ldapConnectionSection"
-					@update:errors="updateValidationData"
-				/>
-				<users-section
-					v-model="systemData"
-					:validate="triggerValidation"
-					data-testid="ldapUsersSection"
-					@update:errors="updateValidationData"
-				/>
-				<roles-section
-					v-model="systemData"
-					:validate="triggerValidation"
-					data-testid="ldapRolesSection"
-					@update:errors="updateValidationData"
-				/>
-				<classes-section
-					v-model="systemData"
-					:validate="triggerValidation"
-					data-testid="ldapClassesSection"
-					@update:errors="updateValidationData"
-					@update:inputs="clearClassesSectionData"
-				/>
-			</div>
-			<div class="errors-container">
-				<info-message v-if="validationError" :message="validationError" type="bc-error" />
-				<span v-for="(error, index) in verificationErrors" :key="index">
-					<info-message :message="error" type="bc-error" />
-				</span>
-			</div>
-			<div class="buttons-container">
-				<v-btn variant="text" data-testid="ldapResetInputsButton" @click="clearInputsHandler">
-					{{ $t("pages.administration.ldap.index.buttons.reset") }}
-				</v-btn>
-				<v-btn
-					color="primary"
-					variant="flat"
-					data-testid="ldapVerifyButton"
-					:disabled="status === 'pending'"
-					@click="validateHandler"
-				>
-					{{ $t("pages.administration.ldap.index.buttons.verify") }}
-				</v-btn>
-			</div>
+			<VForm ref="ldapForm" validate-on="submit" @submit.prevent.stop="validateHandler">
+				<div class="form-container">
+					<LdapConnectionSection v-model="systemData" data-testid="ldapConnectionSection" />
+					<LdapUsersSection v-model="systemData" data-testid="ldapUsersSection" />
+					<LdapRolesSection v-model="systemData" data-testid="ldapRolesSection" />
+					<LdapClassesSection
+						v-model="systemData"
+						data-testid="ldapClassesSection"
+						@update:inputs="clearClassesSectionData"
+					/>
+				</div>
+				<div class="errors-container">
+					<InfoMessage v-if="validationError" :message="validationError" type="bc-error" />
+					<span v-for="(error, index) in verificationErrors" :key="index">
+						<InfoMessage :message="error" type="bc-error" />
+					</span>
+				</div>
+				<div class="buttons-container">
+					<VBtn variant="text" data-testid="ldapResetInputsButton" @click="clearInputsHandler">
+						{{ $t("pages.administration.ldap.index.buttons.reset") }}
+					</VBtn>
+					<VBtn
+						color="primary"
+						variant="flat"
+						type="submit"
+						data-testid="ldapVerifyButton"
+						:disabled="status === 'pending'"
+						@click="validateHandler"
+					>
+						{{ $t("pages.administration.ldap.index.buttons.verify") }}
+					</VBtn>
+				</div>
+			</VForm>
 		</section>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script>
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import ClassesSection from "@/components/administration/ldap/LdapClassesSection.vue";
-import ConnectionSection from "@/components/administration/ldap/LdapConnectionSection.vue";
-import RolesSection from "@/components/administration/ldap/LdapRolesSection.vue";
-import UsersSection from "@/components/administration/ldap/LdapUsersSection.vue";
+import LdapClassesSection from "@/components/administration/ldap/LdapClassesSection.vue";
+import LdapConnectionSection from "@/components/administration/ldap/LdapConnectionSection.vue";
+import LdapRolesSection from "@/components/administration/ldap/LdapRolesSection.vue";
+import LdapUsersSection from "@/components/administration/ldap/LdapUsersSection.vue";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
 import { DefaultWireframe } from "@ui-layout";
+import { defineComponent, useTemplateRef } from "vue";
 import { mapGetters } from "vuex";
 
-export default {
+export default defineComponent({
 	components: {
 		DefaultWireframe,
-		RolesSection,
-		ConnectionSection,
-		UsersSection,
-		ClassesSection,
+		LdapRolesSection,
+		LdapConnectionSection,
+		LdapUsersSection,
+		LdapClassesSection,
 		InfoMessage,
+	},
+	setup() {
+		const ldapForm = useTemplateRef("ldapForm");
+		return { ldapForm };
 	},
 	data() {
 		return {
@@ -99,13 +89,6 @@ export default {
 					disabled: true,
 				},
 			],
-			isInvalidData: {
-				connection: null,
-				users: null,
-				roles: null,
-				classes: null,
-			},
-			triggerValidation: false,
 			validationError: "",
 			systemData: {
 				// default input values
@@ -121,16 +104,6 @@ export default {
 			temp: "getTemp",
 			status: "getStatus",
 		}),
-		isInvalid() {
-			if (
-				!Object.keys(this.isInvalidData).some(
-					(section) => this.isInvalidData[section] === true || this.isInvalidData[section] === null
-				)
-			) {
-				return false;
-			}
-			return true;
-		},
 		verificationErrors() {
 			return ldapErrorHandler(this.verified.errors, this);
 		},
@@ -146,18 +119,18 @@ export default {
 		}
 	},
 	mounted() {
-		window.scrollTo({ top: 0, behavior: "smooth" });
 		document.title = buildPageTitle(this.$t("pages.administration.ldap.title"));
 	},
 	methods: {
 		validateHandler() {
-			this.triggerValidation = !this.triggerValidation;
 			this.validationError = "";
 
 			const systemId = this.$route.query.id;
 
 			this.$nextTick(async () => {
-				if (!this.isInvalid) {
+				const { valid } = await this.ldapForm.validate();
+
+				if (valid) {
 					if (systemId) {
 						if (this.systemData.searchUserPassword === unchangedPassword) {
 							this.systemData.searchUserPassword = undefined;
@@ -191,9 +164,6 @@ export default {
 				this.validationError = this.$t("common.validation.invalid");
 			});
 		},
-		updateValidationData(v, section) {
-			this.isInvalidData[section] = v;
-		},
 		clearInputsHandler() {
 			this.systemData = {
 				// default input values
@@ -210,7 +180,7 @@ export default {
 			};
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

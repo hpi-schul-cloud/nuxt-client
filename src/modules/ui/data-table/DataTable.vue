@@ -16,26 +16,16 @@
 		>
 			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
-
 		<slot name="left-of-search" />
-		<VTextField
+		<SvsSearchField
 			v-model="search"
-			density="compact"
-			flat
-			hide-details
-			mobile-breakpoint="sm"
-			single-line
-			variant="solo-filled"
 			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
-			:label="t('common.labels.search')"
-			:prepend-inner-icon="mdiMagnify"
+			mobile-breakpoint="sm"
 			:aria-label="t('pages.rooms.members.filter')"
 			data-testid="table-search"
 		/>
 	</div>
-
 	<VDivider role="presentation" />
-
 	<VDataTable
 		v-model:search="search"
 		v-model="selectedIds"
@@ -57,6 +47,7 @@
 		<template #[`header.data-table-select`]="{ someSelected, allSelected, selectAll }">
 			<VCheckboxBtn
 				:model-value="allSelected"
+				color="primary"
 				:indeterminate="someSelected && !allSelected"
 				:aria-label="t('ui.dataTable.select.all')"
 				data-testid="select-all-checkbox"
@@ -90,7 +81,8 @@
 
 <script setup lang="ts">
 import BatchActionMenu from "./BatchActionMenu.vue";
-import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";

@@ -1,16 +1,14 @@
 <template>
 	<tr class="table__row">
 		<th v-if="allRowsSelectable">
-			<div class="th-wrap select-wrap">
-				<base-input
-					v-model="selectionStatus"
-					type="checkbox"
-					label="Alle Zeilen auswählen"
-					:label-hidden="true"
-					class="select"
-					:show-undefined-state="true"
-				/>
-			</div>
+			<!-- TODO: Should indeterminate icon be square? Indeterminate color is grey and can only be change through deep css -->
+			<VCheckbox
+				v-model="selectionStatus"
+				width="45"
+				aria-label="Alle Zeilen auswählen"
+				hide-details
+				:indeterminate="selectionStatus === undefined"
+			/>
 		</th>
 		<th v-for="(column, index) in columns" :key="index" class="th-slot" cellspacing="0" :data-testid="column.field">
 			<slot
