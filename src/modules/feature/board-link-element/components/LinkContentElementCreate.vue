@@ -52,7 +52,7 @@ export default defineComponent({
 		const url = ref<string>("");
 		const form = ref<VuetifyFormApi | null>(null);
 
-		const rules = [isRequired(t("common.validation.required2")), isValidUrl(t("util-validators-invalid-url"))];
+		const rules = [isRequired(t("common.validation.required2")), isValidUrl()];
 
 		const onSubmit = async () => {
 			if (form?.value) {

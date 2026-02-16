@@ -379,7 +379,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
-    LernstoreView = 'LERNSTORE_VIEW',
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
@@ -1570,7 +1569,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ES_COLLECTIONS_ENABLED: boolean;
+    FEATURE_EXTENSIONS_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1582,19 +1581,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_LERNSTORE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_FWU_CONTENT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -8142,7 +8129,6 @@ export enum Permission {
     InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
-    LernstoreView = 'LERNSTORE_VIEW',
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
@@ -9741,10 +9727,10 @@ export interface SchoolPermissionsParams {
     teacher?: TeacherPermissionParams;
     /**
      * 
-     * @type {StudentPermissionParams}
+     * @type {object}
      * @memberof SchoolPermissionsParams
      */
-    student?: StudentPermissionParams;
+    student?: object;
 }
 /**
  * 
@@ -10400,19 +10386,6 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isSynchronized: boolean;
-}
-/**
- * 
- * @export
- * @interface StudentPermissionParams
- */
-export interface StudentPermissionParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof StudentPermissionParams
-     */
-    LERNSTORE_VIEW?: boolean;
 }
 /**
  * 
