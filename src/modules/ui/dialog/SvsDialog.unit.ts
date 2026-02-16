@@ -13,7 +13,15 @@ describe("SvsDialog", () => {
 		setActivePinia(createTestingPinia());
 	});
 
-	const setup = (props: { isOpen?: boolean; noCancel?: boolean; noConfirm?: boolean; noActions?: boolean } = {}) => {
+	const setup = (
+		props: {
+			isOpen?: boolean;
+			noCancel?: boolean;
+			noConfirm?: boolean;
+			noActions?: boolean;
+			isOpenStateManagedExternally?: boolean;
+		} = {}
+	) => {
 		const title = "title of dialog";
 		const slotContent = "<div>content</div>";
 		const confirmBtnLangKey = "language.key";
@@ -26,6 +34,7 @@ describe("SvsDialog", () => {
 				noActions: props.noActions ?? false,
 				noConfirm: props.noConfirm ?? false,
 				noCancel: props.noCancel ?? false,
+				isOpenStateManagedExternally: props.isOpenStateManagedExternally ?? false,
 			},
 			slots: {
 				content: slotContent,
@@ -33,7 +42,6 @@ describe("SvsDialog", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { UseFocusTrap: true },
-				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 		});
 		const dialog = wrapper.findComponent(VDialog);
@@ -88,6 +96,14 @@ describe("SvsDialog", () => {
 
 				expect(wrapper.emitted("cancel")).toHaveLength(1);
 			});
+
+			it("should not close dialog when open state is managed externally", async () => {
+				const { card, dialog } = setup({ isOpenStateManagedExternally: true });
+				const cancelButton = card.find('[data-testid="dialog-cancel"]');
+				await cancelButton.trigger("click");
+
+				expect(dialog.props().modelValue).toBe(true);
+			});
 		});
 
 		describe("when confirm button is clicked", () => {
@@ -97,6 +113,14 @@ describe("SvsDialog", () => {
 				await confirmButton.trigger("click");
 
 				expect(wrapper.emitted("confirm")).toHaveLength(1);
+			});
+
+			it("should not close dialog when open state is managed externally", async () => {
+				const { card, dialog } = setup({ isOpenStateManagedExternally: true });
+				const confirmButton = card.find('[data-testid="dialog-confirm"]');
+				await confirmButton.trigger("click");
+
+				expect(dialog.props().modelValue).toBe(true);
 			});
 		});
 

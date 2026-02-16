@@ -189,6 +189,7 @@ export default {
 	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
 	"common.validation.email": "Bitte eine gültige E-Mail-Adresse eingeben",
+	"common.validation.file": "Bitte eine Datei hochladen {fileHint}",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
 	"common.validation.password.upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten.",
@@ -1287,7 +1288,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.error":
 		"Beim Laden der Datenschutzerklärung ist ein Fehler aufgetreten",
 	"pages.administration.school.index.schoolPolicy.fileName": "Datenschutzerklärung der Schule",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Datei hochladen (nur PDF, max. 4MB)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Datei hochladen {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(nur PDF, max. 4 MB)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Datei auswählen",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"Die neue Datenschutzerklärung wird die alte unwiderruflich ersetzen und allen Nutzern dieser Schule zur Genehmigung vorgelegt werden.",
@@ -1296,7 +1298,7 @@ export default {
 	"pages.administration.school.index.schoolPolicy.success": "Neue Datei wurde erfolgreich hochgeladen.",
 	"pages.administration.school.index.schoolPolicy.uploadedOn": "Hochgeladen {date}",
 	"pages.administration.school.index.schoolPolicy.validation.fileTooBig":
-		"Die Datei ist größer als 4MB. Bitte reduzieren sie die Dateigröße",
+		"Die Datei ist größer als 4 MB. Bitte reduzieren sie die Dateigröße",
 	"pages.administration.school.index.schoolPolicy.validation.notPdf":
 		"Dieses Dateiformat wird nicht unterstützt. Verwenden Sie bitte PDF",
 	"pages.administration.school.index.termsOfUse.cancel": "Abbrechen",

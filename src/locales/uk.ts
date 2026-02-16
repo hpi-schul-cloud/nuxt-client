@@ -190,6 +190,7 @@ export default {
 	"common.tool.context.type.boardElements": "Дошки",
 	"common.tool.context.type.mediaShelves": "Полиця для медіа",
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
+	"common.validation.file": "Будь ласка, завантажте файл {fileHint}",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
 	"common.validation.password.upperCase": "Пароль повинен містити щонайменше одну велику літеру.",
@@ -1281,7 +1282,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.error":
 		"Виникла помилка під час завантаження політики конфіденційності",
 	"pages.administration.school.index.schoolPolicy.fileName": "Політика конфіденційності школи",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Завантажити файл (тільки PDF, максимум 4 МБ)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Завантажити файл {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(тільки PDF, максимум 4 МБ)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Виберіть файл",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"Нова політика конфіденційності безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
