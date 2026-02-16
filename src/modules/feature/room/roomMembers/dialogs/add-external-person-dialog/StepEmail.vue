@@ -17,7 +17,7 @@
 					:readonly="hasError"
 					:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
 					data-testid="add-external-person-email"
-					:rules="[isValidEmail(t('pages.rooms.members.dialog.addExternalPerson.label.email.error'))]"
+					:rules="[isValidEmail()]"
 					validate-on="submit"
 					@keydown.enter.prevent="onConfirmEmail()"
 				/>

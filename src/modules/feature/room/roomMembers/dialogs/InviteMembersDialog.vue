@@ -234,11 +234,7 @@ const defaultFormData: RoomInvitationFormData = {
 const formData = ref({ ...defaultFormData });
 const inviteMembersForm = useTemplateRef("inviteMembersForm");
 
-const validationRules = [
-	isNonEmptyString(t("common.validation.nonEmptyString")),
-	isOfMaxLength(100)(t("common.validation.tooLong")),
-	validateOnOpeningTag,
-];
+const validationRules = [isNonEmptyString(), isOfMaxLength(100)(), validateOnOpeningTag];
 
 const isDatePickerDisabled = computed(() => !formData.value.activeUntilChecked);
 

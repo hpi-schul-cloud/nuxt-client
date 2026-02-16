@@ -1,7 +1,7 @@
 import TermsOfUseModule from "./terms-of-use";
 import { BusinessError } from "@/store/types/commons";
-import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { initializeAxios } from "@/utils/api";
+import { ConsentVersion, CreateConsentVersionPayload } from "@data-school";
 import { AxiosHeaders, AxiosInstance, AxiosResponse } from "axios";
 
 let receivedRequests: { path: string }[] = [];
@@ -108,8 +108,8 @@ describe("terms of use module", () => {
 						schoolId: "333",
 						createdAt: "someotherdate",
 						updatedAt: "someotherdate",
-						fileType: "pdf",
-						fileName: "somefilename",
+						filetype: "pdf",
+						filename: "somefilename",
 						data: "data:application/pdf;base64,SOMEFILEDATA",
 					},
 				};
@@ -167,8 +167,8 @@ describe("terms of use module", () => {
 						schoolId: "333",
 						createdAt: "someotherdate",
 						updatedAt: "someotherdate",
-						fileType: "pdf",
-						fileName: "somefilename",
+						filetype: "pdf",
+						filename: "somefilename",
 						data: "data:application/pdf;base64,SOMEFILEDATA",
 					},
 				};
@@ -204,8 +204,8 @@ describe("terms of use module", () => {
 						schoolId: "333",
 						createdAt: "someotherdate",
 						updatedAt: "someotherdate",
-						fileType: "pdf",
-						fileName: "somefilename",
+						filetype: "pdf",
+						filename: "somefilename",
 						data: "data:application/pdf;base64,SOMEFILEDATA",
 					},
 				};
@@ -239,8 +239,8 @@ describe("terms of use module", () => {
 						schoolId: "333",
 						createdAt: "someotherdate",
 						updatedAt: "someotherdate",
-						fileType: "pdf",
-						fileName: "somefilename",
+						filetype: "pdf",
+						filename: "somefilename",
 						data: "data:application/pdf;base64,SOMEFILEDATA",
 					},
 				};
@@ -318,8 +318,8 @@ describe("terms of use module", () => {
 						schoolId: "333",
 						createdAt: "someotherdate",
 						updatedAt: "someotherdate",
-						fileType: "pdf",
-						fileName: "somefilename",
+						filetype: "pdf",
+						filename: "somefilename",
 						data: "data:application/pdf;base64,SOMEFILEDATA",
 					},
 				};

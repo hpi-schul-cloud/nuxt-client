@@ -1,14 +1,9 @@
 import BackendDataTable from "./BackendDataTable.vue";
+import TableHeadRow from "./TableHeadRow.vue";
 import users from "./testUserData.js";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import {
-	mdiCheckboxBlankOutline,
-	mdiCheckboxIntermediate,
-	mdiCheckboxOutline,
-	mdiMenuDownOutline,
-	mdiMenuUpOutline,
-} from "@icons/material";
+import { mdiMenuDownOutline, mdiMenuUpOutline } from "@icons/material";
+import { VCheckbox } from "vuetify/components";
 
 const tableData = (n) => users.slice(0, n);
 
@@ -47,9 +42,6 @@ function getWrapper(props, options) {
 	return mount(BackendDataTable, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			components: {
-				"base-input": BaseInput,
-			},
 			mocks: {
 				$t: (key, dynamic) => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 			},
@@ -325,26 +317,29 @@ describe("BackendDataTable", () => {
 						selectionType: "inclusive",
 						rowsSelectable: true,
 					});
-					const checkboxIcon = wrapper.get("thead tr .v-icon path").attributes("d");
-					return { checkboxIcon };
+
+					const checkbox = wrapper.getComponent(TableHeadRow).getComponent(VCheckbox);
+					const input = checkbox.get("input");
+
+					return { checkbox, input };
 				};
 
 				it("checked state if all values are selected", async () => {
-					const { checkboxIcon } = setup(testData.length);
+					const { input } = setup(testData.length);
 
-					expect(checkboxIcon).toEqual(mdiCheckboxOutline);
+					expect(input.element.checked).toBe(true);
 				});
 
 				it("unchecked state if no values are selected", async () => {
-					const { checkboxIcon } = setup(0);
+					const { input } = setup(0);
 
-					expect(checkboxIcon).toEqual(mdiCheckboxBlankOutline);
+					expect(input.element.checked).toBe(false);
 				});
 
 				it("intermediate state if some values are selected", async () => {
-					const { checkboxIcon } = setup(Math.round(testData.length / 2));
+					const { checkbox } = setup(Math.round(testData.length / 2));
 
-					expect(checkboxIcon).toEqual(mdiCheckboxIntermediate);
+					expect(checkbox.vm.indeterminate).toEqual(true);
 				});
 			});
 			describe("on exclusive selection", () => {
@@ -356,26 +351,28 @@ describe("BackendDataTable", () => {
 						selectionType: "exclusive",
 						rowsSelectable: true,
 					});
-					const checkboxIcon = wrapper.get("thead tr .v-icon path").attributes("d");
-					return { checkboxIcon };
+					const checkbox = wrapper.getComponent(TableHeadRow).getComponent(VCheckbox);
+					const input = checkbox.get("input");
+
+					return { checkbox, input };
 				};
 
 				it("checked state if no values are unselected", async () => {
-					const { checkboxIcon } = setup(0);
+					const { input } = setup(0);
 
-					expect(checkboxIcon).toEqual(mdiCheckboxOutline);
+					expect(input.element.checked).toEqual(true);
 				});
 
 				it("unchecked state if all values are unselected", async () => {
-					const { checkboxIcon } = setup(testData.length);
+					const { input } = setup(testData.length);
 
-					expect(checkboxIcon).toEqual(mdiCheckboxBlankOutline);
+					expect(input.element.checked).toEqual(false);
 				});
 
 				it("intermediate state if some values are unselected", async () => {
-					const { checkboxIcon } = setup(Math.round(testData.length / 2));
+					const { checkbox } = setup(Math.round(testData.length / 2));
 
-					expect(checkboxIcon).toEqual(mdiCheckboxIntermediate);
+					expect(checkbox.vm.indeterminate).toEqual(true);
 				});
 			});
 		});
