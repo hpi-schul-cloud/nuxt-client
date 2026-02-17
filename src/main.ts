@@ -8,30 +8,24 @@ import { initializeAxios } from "./utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	CONTENT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
-import { mountBaseComponents } from "@/components/base/components";
 import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
-	contentModule,
 	copyModule,
 	courseRoomDetailsModule,
 	courseRoomListModule,
@@ -39,13 +33,10 @@ import {
 	finishedTasksModule,
 	groupModule,
 	importUsersModule,
-	loadingStateModule,
 	newsModule,
-	privacyPolicyModule,
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
-	statusAlertsModule,
 	systemsModule,
 	tasksModule,
 	termsOfUseModule,
@@ -66,8 +57,6 @@ export const app = createApp(App);
 
 const pinia = createPinia();
 app.use(pinia);
-
-mountBaseComponents(app);
 
 // app.config.productionTip = false;
 
@@ -91,7 +80,6 @@ app.use(VueDOMPurifyHTML, {
 	const success = await useEnvStore().loadConfiguration();
 
 	if (success) {
-		contentModule.init();
 		filePathsModule.init();
 	}
 
@@ -110,16 +98,13 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
-	app.provide("loadingStateModule", loadingStateModule);
 	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
-	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
 	app.provide("CourseRoomListModule", courseRoomListModule);
@@ -127,12 +112,10 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
-	app.provide(STATUS_ALERTS_MODULE_KEY.valueOf(), statusAlertsModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
 	app.provide(USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(), userLoginMigrationModule);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
-	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
 	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
 	app.provide(COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(), commonCartridgeImportModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);

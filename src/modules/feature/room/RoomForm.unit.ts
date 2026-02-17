@@ -3,7 +3,9 @@ import { RoomFeatures } from "@/serverApi/v3";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
@@ -34,6 +36,10 @@ describe("@feature-room/RoomForm", () => {
 		return { wrapper, room };
 	};
 
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	afterEach(() => {
 		// needed because of attachTo to remove the component from the DOM
 		// and ensure a clean state for subsequent tests.
@@ -52,7 +58,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue("");
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain("common.validation.nonEmptyString");
+			expect(textField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error message when name contains < followed by a string", async () => {
@@ -75,7 +81,7 @@ describe("@feature-room/RoomForm", () => {
 			await textField.setValue(exceedsMaxLengthName);
 			await textField.trigger("blur");
 
-			expect(textField.text()).toContain("common.validation.tooLong");
+			expect(textField.text()).toContain("Der eingegebene Text überschreitet die Maximallänge");
 		});
 	});
 

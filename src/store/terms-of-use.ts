@@ -1,6 +1,6 @@
 import { BusinessError, Status } from "@/store/types/commons";
-import { ConsentVersion, CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { $axios } from "@/utils/api";
+import { ConsentVersion, CreateConsentVersionPayload } from "@data-school";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({

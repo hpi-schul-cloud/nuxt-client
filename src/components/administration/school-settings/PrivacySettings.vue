@@ -20,22 +20,6 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="toggleStudentLernstoreViewEnabled">
-			<v-col>
-				<v-switch
-					:model-value="lernStoreVisibility"
-					:label="$t('pages.administration.school.index.privacySettings.labels.lernStore')"
-					:aria-label="$t('pages.administration.school.index.privacySettings.labels.lernStore')"
-					class="ml-1 mt-0"
-					data-testid="admin-school-toggle-learning-store"
-					:true-icon="mdiCheck"
-					@update:model-value="($event) => $emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')"
-				/>
-				<p class="switch-hint">
-					{{ $t("pages.administration.school.index.privacySettings.longText.lernStore") }}
-				</p>
-			</v-col>
-		</v-row>
 		<v-row v-if="rocketChatEnabled">
 			<v-col>
 				<v-switch
@@ -108,10 +92,6 @@ defineEmits(["update-privacy-settings", "update-feature-settings"]);
 
 const envConfig = useEnvConfig();
 
-const toggleStudentLernstoreViewEnabled = computed(
-	() => envConfig.value.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED
-);
-
 const isTeacherStudentVisibilityConfigurable = computed(
 	() => envConfig.value.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE
 );
@@ -144,10 +124,6 @@ const studentVisibilityTextKey = computed(() => {
 			return "pages.administration.school.index.privacySettings.longText.studentVisibility";
 	}
 });
-
-const lernStoreVisibility = computed(() =>
-	props.permissions.student ? props.permissions.student.LERNSTORE_VIEW : true
-);
 </script>
 
 <style lang="scss" scoped>

@@ -48,12 +48,13 @@
 				closable-chips
 				multiple
 				clearable
-				variant="solo"
-				rounded
+				variant="solo-filled"
+				flat
 				chips
 				data-testid="courseFilter"
 				item-title="text"
 				item-value="value"
+				:prepend-inner-icon="mdiMagnify"
 				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
@@ -88,6 +89,7 @@ import {
 	mdiCheck,
 	mdiCheckCircleOutline,
 	mdiFormatListChecks,
+	mdiMagnify,
 	mdiPlaylistEdit,
 	mdiPlus,
 } from "@icons/material";
@@ -109,7 +111,6 @@ export default {
 		tasksModule: "tasksModule",
 		copyModule: { from: COPY_MODULE_KEY },
 		finishedTasksModule: "finishedTasksModule",
-		loadingStateModule: "loadingStateModule",
 	},
 	props: {
 		role: {
@@ -119,7 +120,7 @@ export default {
 		},
 	},
 	data() {
-		return { mdiPlus, mdiCheck };
+		return { mdiPlus, mdiCheck, mdiMagnify };
 	},
 	computed: {
 		hasTasks() {

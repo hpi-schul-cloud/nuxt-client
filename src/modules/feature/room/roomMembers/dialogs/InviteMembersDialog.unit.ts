@@ -568,7 +568,7 @@ describe("InviteMembersDialog", () => {
 
 				expect(roomInvitationLinkStore.createLink).not.toHaveBeenCalled();
 				expect(roomInvitationLinkStore.updateLink).not.toHaveBeenCalled();
-				expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+				expect(descriptionField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 			});
 
 			it("should focus the description field when it is the first invalid input", async () => {
@@ -631,7 +631,7 @@ describe("InviteMembersDialog", () => {
 
 			const descriptionField = await setDescription(wrapper, "");
 
-			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+			expect(descriptionField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error when description contains only whitespaces", async () => {
@@ -639,7 +639,7 @@ describe("InviteMembersDialog", () => {
 
 			const descriptionField = await setDescription(wrapper, "   ");
 
-			expect(descriptionField.text()).toContain("common.validation.nonEmptyString");
+			expect(descriptionField.text()).toContain("Dies ist ein Pflichtfeld und darf nicht nur Leerzeichen enthalten.");
 		});
 
 		it("should show error when description contains < followed by a string", async () => {
@@ -662,7 +662,7 @@ describe("InviteMembersDialog", () => {
 			const descriptionField = wrapper.findComponent({
 				ref: "descriptionField",
 			});
-			expect(descriptionField.text()).toContain("common.validation.tooLong");
+			expect(descriptionField.text()).toContain("Der eingegebene Text überschreitet die Maximallänge");
 		});
 	});
 });

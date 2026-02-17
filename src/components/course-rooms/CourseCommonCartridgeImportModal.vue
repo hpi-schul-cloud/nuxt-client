@@ -10,14 +10,14 @@
 		<v-card :ripple="false">
 			<template #title>
 				<h2 class="mt-2">
-					{{ $t("pages.rooms.ccImportCourse.title") }}
+					{{ t("pages.rooms.ccImportCourse.title") }}
 				</h2>
 			</template>
 			<template #text>
 				<v-file-input
 					v-model="file"
 					class="truncate-file-input"
-					:label="$t('pages.rooms.ccImportCourse.fileInputLabel')"
+					:label="t('pages.rooms.ccImportCourse.fileInputLabel')"
 					:prepend-icon="mdiTrayArrowUp"
 					accept=".imscc, .zip"
 					clearable
@@ -29,7 +29,7 @@
 				<v-spacer />
 				<div class="mb-2">
 					<v-btn data-testid="dialog-cancel-btn" variant="outlined" class="ml-2 mr-2" @click="onCancel">
-						{{ $t("common.labels.close") }}
+						{{ t("common.labels.close") }}
 					</v-btn>
 				</div>
 				<div class="mb-2">
@@ -42,7 +42,7 @@
 						class="ml-2 mr-2"
 						@click="onConfirm"
 					>
-						{{ $t("pages.rooms.ccImportCourse.confirm") }}
+						{{ t("pages.rooms.ccImportCourse.confirm") }}
 					</v-btn>
 				</div>
 			</template>
@@ -51,21 +51,17 @@
 </template>
 
 <script setup lang="ts">
-import {
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
-	injectStrict,
-	LOADING_STATE_MODULE_KEY,
-} from "@/utils/inject";
-import { notifyError, notifySuccess } from "@data-app";
+import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
 import { mdiTrayArrowUp } from "@icons/material";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-const i18n = useI18n();
+const { t } = useI18n();
 const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
-const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
 const commonCartridgeImportModule = injectStrict(COMMON_CARTRIDGE_IMPORT_MODULE_KEY);
+const { setLoadingState } = useLoadingStore();
+
 const props = withDefaults(
 	defineProps<{
 		maxWidth?: number;
@@ -91,22 +87,20 @@ function onCancel(): void {
 
 async function onConfirm(): Promise<void> {
 	commonCartridgeImportModule.setIsOpen(false);
-	loadingStateModule.open({
-		text: i18n.t("pages.rooms.ccImportCourse.loading"),
-	});
+	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
 
 	if (file.value) {
 		await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
 	}
 
-	loadingStateModule.close();
+	setLoadingState(false);
 
 	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
 
 	if (commonCartridgeImportModule.isSuccess) {
-		notifySuccess(i18n.t("pages.rooms.ccImportCourse.success"));
+		notifySuccess(t("pages.rooms.ccImportCourse.success"));
 	} else {
-		notifyError(i18n.t("pages.rooms.ccImportCourse.error"));
+		notifyError(t("pages.rooms.ccImportCourse.error"));
 	}
 
 	file.value = undefined;

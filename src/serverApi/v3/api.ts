@@ -379,7 +379,6 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
-    LernstoreView = 'LERNSTORE_VIEW',
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
@@ -1570,12 +1569,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ES_COLLECTIONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_EXTENSIONS_ENABLED: boolean;
     /**
      * 
@@ -1588,19 +1581,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_LERNSTORE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_FWU_CONTENT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -8148,7 +8129,6 @@ export enum Permission {
     InviteExternalPersons = 'INVITE_EXTERNAL_PERSONS',
     JoinMeeting = 'JOIN_MEETING',
     LeaveTeam = 'LEAVE_TEAM',
-    LernstoreView = 'LERNSTORE_VIEW',
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
@@ -9747,10 +9727,10 @@ export interface SchoolPermissionsParams {
     teacher?: TeacherPermissionParams;
     /**
      * 
-     * @type {StudentPermissionParams}
+     * @type {object}
      * @memberof SchoolPermissionsParams
      */
-    student?: StudentPermissionParams;
+    student?: object;
 }
 /**
  * 
@@ -10406,19 +10386,6 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isSynchronized: boolean;
-}
-/**
- * 
- * @export
- * @interface StudentPermissionParams
- */
-export interface StudentPermissionParams {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof StudentPermissionParams
-     */
-    LERNSTORE_VIEW?: boolean;
 }
 /**
  * 
@@ -19038,6 +19005,136 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
      */
     public dashboardControllerPatchGroup(dashboardId: string, x: number, y: number, patchGroupParams: PatchGroupParams, options?: any) {
         return DashboardApiFp(this.configuration).dashboardControllerPatchGroup(dashboardId, x, y, patchGroupParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * DeletionRequestApi - axios parameter creator
+ * @export
+ */
+export const DeletionRequestApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary \"Queueing\" a deletion request
+         * @param {Array<string>} ids The IDs of the users to be deleted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletionRequestPublicControllerCreateDeletionRequestPublic: async (ids: Array<string>, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'ids' is not null or undefined
+            assertParamExists('deletionRequestPublicControllerCreateDeletionRequestPublic', 'ids', ids)
+            const localVarPath = `/deletionRequestsPublic`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (ids) {
+                localVarQueryParameter['ids'] = ids;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DeletionRequestApi - functional programming interface
+ * @export
+ */
+export const DeletionRequestApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DeletionRequestApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary \"Queueing\" a deletion request
+         * @param {Array<string>} ids The IDs of the users to be deleted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletionRequestPublicControllerCreateDeletionRequestPublic(ids, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DeletionRequestApi - factory interface
+ * @export
+ */
+export const DeletionRequestApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DeletionRequestApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary \"Queueing\" a deletion request
+         * @param {Array<string>} ids The IDs of the users to be deleted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any): AxiosPromise<void> {
+            return localVarFp.deletionRequestPublicControllerCreateDeletionRequestPublic(ids, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DeletionRequestApi - interface
+ * @export
+ * @interface DeletionRequestApi
+ */
+export interface DeletionRequestApiInterface {
+    /**
+     * 
+     * @summary \"Queueing\" a deletion request
+     * @param {Array<string>} ids The IDs of the users to be deleted
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DeletionRequestApiInterface
+     */
+    deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * DeletionRequestApi - object-oriented interface
+ * @export
+ * @class DeletionRequestApi
+ * @extends {BaseAPI}
+ */
+export class DeletionRequestApi extends BaseAPI implements DeletionRequestApiInterface {
+    /**
+     * 
+     * @summary \"Queueing\" a deletion request
+     * @param {Array<string>} ids The IDs of the users to be deleted
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DeletionRequestApi
+     */
+    public deletionRequestPublicControllerCreateDeletionRequestPublic(ids: Array<string>, options?: any) {
+        return DeletionRequestApiFp(this.configuration).deletionRequestPublicControllerCreateDeletionRequestPublic(ids, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
