@@ -191,7 +191,7 @@
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
+import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
@@ -285,7 +285,7 @@ const hasEditPermission = hasPermission(Permission.ClassEdit);
 const hasCreatePermission = hasPermission(Permission.ClassCreate);
 
 const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
-	!schoolsModule.schoolIsExternallyManaged && hasCreatePermission.value
+	!(useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr) && hasCreatePermission.value
 		? [
 				{
 					icon: mdiPlus,
