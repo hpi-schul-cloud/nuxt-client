@@ -14,70 +14,84 @@
 		max-width="short"
 	>
 		<div>
-			<FormNews @save="create" @cancel="onCancel" />
+			<FormNews :status="status" @save="create" @cancel="onCancel" />
 		</div>
 	</DefaultWireframe>
 </template>
 
-<script>
-import { newsModule } from "@/store";
+<script setup lang="ts">
+import { CreateNewsParams, CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
+import { Status } from "@/store/types/commons";
+import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
-import { defineComponent } from "vue";
+import { useTitle } from "@vueuse/core";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { LocationQuery, LocationQueryValue, useRoute, useRouter } from "vue-router";
 
-export default defineComponent({
-	components: {
-		DefaultWireframe,
-		FormNews,
-	},
-	setup() {
-		const { t } = useI18n();
-		return { t };
-	},
-	computed: {
-		news: () => newsModule.getNews,
-		status: () => newsModule.getStatus,
-		createdNews: () => newsModule.getCreatedNews,
-	},
-	mounted() {
-		document.title = buildPageTitle(this.t("pages.news.new.title"));
-	},
-	methods: {
-		getNewsTarget(query, schoolId) {
-			if (query.target && query.targetmodel) {
-				return { targetId: query.target, targetModel: query.targetmodel };
-			} else if (query.context && query.contextId) {
-				return { targetId: query.contextId, targetModel: query.context };
-			} else {
-				return { targetId: schoolId, targetModel: "schools" };
-			}
-		},
-		create: async function (news) {
-			try {
-				const newsTarget = this.getNewsTarget(this.$route.query, useAppStore().school.id);
-				await newsModule.createNews({
-					title: news.title,
-					content: news.content,
-					displayAt: news.displayAt,
-					targetId: newsTarget.targetId,
-					targetModel: newsTarget.targetModel,
-				});
-				if (this.status === "completed") {
-					notifySuccess(this.t("components.organisms.FormNews.success.create"));
-					await this.$router.push({
-						path: `/news/${this.createdNews.id}`,
-					});
-				}
-			} catch {
-				notifyError(this.t("components.organisms.FormNews.errors.create"));
-			}
-		},
-		async onCancel() {
-			this.$router.go(-1);
-		},
-	},
-});
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const newsModule = injectStrict(NEWS_MODULE_KEY);
+
+const status = computed(() => newsModule.getStatus as Status);
+const createdNews = computed(() => newsModule.getCreatedNews);
+
+const pageTitle = computed(() => buildPageTitle(`${t("pages.news.new.title")}`));
+useTitle(pageTitle);
+
+const parseNewstarget = (
+	targetId: LocationQueryValue | LocationQueryValue[],
+	targetModel: LocationQueryValue | LocationQueryValue[]
+) => {
+	if (
+		targetId &&
+		typeof targetId === "string" &&
+		targetModel &&
+		typeof targetModel === "string"
+		// Object.values(CreateNewsParamsTargetModelEnum).includes(targetModel as CreateNewsParamsTargetModelEnum) // Todo: think about improvement error handling if targetModel (context) is invalid
+	) {
+		return { targetId, targetModel: targetModel as CreateNewsParamsTargetModelEnum };
+	} else {
+		return undefined;
+	}
+};
+
+const getNewsTarget = (
+	query: LocationQuery,
+	schoolId: string | undefined
+): Pick<CreateNewsParams, "targetId" | "targetModel"> =>
+	parseNewstarget(query.target, query.targetmodel) ??
+	parseNewstarget(query.contextId, query.context) ?? {
+		targetId: schoolId ?? "",
+		targetModel: CreateNewsParamsTargetModelEnum.Schools,
+	};
+
+const create = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
+	try {
+		const newsTarget = getNewsTarget(route.query, useAppStore()?.school?.id);
+		await newsModule.createNews({
+			title: news.title,
+			content: news.content,
+			displayAt: news.displayAt,
+			targetId: newsTarget.targetId,
+			targetModel: newsTarget.targetModel,
+		});
+		if (status.value === "completed") {
+			notifySuccess(t("components.organisms.FormNews.success.create"));
+			await router.push({
+				path: `/news/${createdNews.value.id}`,
+			});
+		}
+	} catch {
+		notifyError(t("components.organisms.FormNews.errors.create"));
+	}
+};
+
+const onCancel = () => {
+	router.go(-1);
+};
 </script>
