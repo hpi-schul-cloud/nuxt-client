@@ -71,8 +71,8 @@
 <script setup lang="ts">
 import FormActions from "./FormActions.vue";
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
-import { UpdateNewsParams } from "@/serverApi/v3";
-import { newsModule } from "@/store";
+import { Status } from "@/store/types/commons";
+import { FormNews } from "@/store/types/news";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
 import { mdiClockOutline } from "@icons/material";
@@ -90,6 +90,7 @@ type Props = {
 	content?: string;
 	displayAt?: string;
 	showDeleteButton?: boolean;
+	status: Status;
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -100,7 +101,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-	(e: "save", news: UpdateNewsParams): void;
+	(e: "save", formNews: FormNews): void;
 	(e: "delete"): void;
 	(e: "cancel"): void;
 }>();
@@ -114,8 +115,6 @@ const newsTitle = ref("");
 const newsContent = ref("");
 const newsDate = ref("");
 const newsTime = ref("");
-
-const status = computed(() => newsModule.getStatus);
 
 const getDisplayAt = () => {
 	if (!newsDate.value || !newsTime.value) {
