@@ -235,7 +235,6 @@ export default {
 	"common.words.languages.uk": "Ukrainisch",
 	"common.words.learnContent": "Lerninhalte",
 	"common.words.export": "Kurs-Export wird heruntergeladen",
-	"common.words.lernstore": "Lern-Store",
 	"common.words.mainSchool": "Stammschule",
 	"common.words.no": "Nein",
 	"common.words.not": "nicht",
@@ -665,8 +664,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Wichtige Kopier-Informationen",
 	"components.molecules.copyResult.title.success": "Duplizieren erfolgreich",
 	"components.molecules.copyResult.followingNotCopied": "Folgendes wurde nicht kopiert:",
-	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
-	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.label.room": "Raum wählen",
 	"components.molecules.label.board": "Bereich wählen",
 	"components.molecules.label.section": "Abschnitt wählen",
@@ -1260,7 +1257,6 @@ export default {
 	"pages.administration.school.index.info":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Chatfunktion aktivieren",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Lern-Store für Schüler:innen",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Videokonferenzen aktivieren",
@@ -1269,8 +1265,6 @@ export default {
 		"Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team die Chatfunktion gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Dies ist eine instanzweite, nicht editierbare Einstellung, die die Sichtbarkeit von Schüler:innen für Lehrkräfte steuert.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"Wenn diese Option nicht aktiviert ist, können die Schüler:innen nicht auf den Lern-Store zugreifen.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"Die Aktivierung dieser Option hat datenschutzrechtlich eine hohe Schwelle. Um die Sichtbarkeit aller Schüler:innen der Schule für jede Lehrkraft zu aktivieren, ist es erforderlich, dass jede/r Schüler:in wirksam in diese Datenverarbeitung eingewilligt hat.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1486,67 +1480,6 @@ export default {
 		"Moderationsrechte für alle Teilnehmenden",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Teilnehmende beim Betreten stummschalten",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom": "Warteraum für Teilnehmende aktivieren",
-	"pages.content._id.addToTopic": "Hinzufügen zu",
-	"pages.content._id.collection.selectElements": "Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
-	"pages.content._id.metadata.author": "Autor",
-	"pages.content._id.metadata.createdAt": "abgerufen am",
-	"pages.content._id.metadata.noTags": "Keine Tags",
-	"pages.content._id.metadata.provider": "Herausgeber",
-	"pages.content._id.metadata.updatedAt": "zuletzt geändert am",
-	"pages.content.card.collection": "Lernobjekt",
-	"pages.content.emptyState.error.message.suggestions": "Vorschlag:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"Der Suchbegriff muss mindestens 2 Zeichen enthalten.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling":
-		"Achte darauf, dass alle Wörter richtig geschrieben sind.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Probiere es mit anderen Suchbegriffen.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
-		"Probiere es mit allgemeineren Suchbegriffen.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Probiere es mit weniger Suchbegriffen.",
-	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
-	"pages.content.index.backToCourse": "Zurück zum Kurs",
-	"pages.content.index.backToOverview": "Zurück zur Übersicht",
-	"pages.content.index.search_for": "Suche nach …",
-	"pages.content.index.search_resources": "Ressourcen",
-	"pages.content.index.search_results": "Suchergebnisse für",
-	"pages.content.index.search.placeholder": "Lern-Store durchsuchen",
-	"pages.content.initState.description": "Hier findest du hochwertige, auf dein Bundesland abgestimmte Inhalte.",
-	"pages.content.initState.description.newMaterials":
-		"Unser Team erschließt fortlaufend neue Materialien, um so dein Lernerlebnis weiter zu verbessern.",
-	"pages.content.initState.description.hint": "Hinweis:",
-	"pages.content.initState.description.hint.materials":
-		"Die im Lernstore angezeigten Materialien liegen nicht auf unserem Server, sondern werden über Schnittstellen zu anderen Servern verfügbar gemacht (Quellen sind zum Beispiel einzelne Bildungsserver, WirLernenOnline, Mundo u.a.).",
-	"pages.content.initState.description.hint.availability":
-		"Aus diesem Grund hat unser Team auch keinen Einfluss auf die dauerhafte Verfügbarkeit einzelner Materialien und auf das vollumfängliche Materialangebot der einzelnen Quellen.",
-	"pages.content.initState.description.usage":
-		"Im Rahmen der Nutzung in Bildungseinrichtungen ist das Kopieren der Online-Medien auf Speichermedien, auf ein privates Endgerät oder auf Lernplattformen für einen geschlossenen Benutzerkreis ggf. erlaubt, soweit dies für die interne Verteilung und/oder Nutzung erforderlich ist.",
-	"pages.content.initState.description.usage.deleteHint":
-		"Nach Beendigung der Arbeiten mit den jeweiligen Online-Medien sind diese von den privaten Endgeräten, Datenträgern und Lernplattformen zu löschen; spätestens beim Verlassen der Bildungseinrichtung.",
-	"pages.content.initState.description.usage.notPermitted":
-		"Eine grundsätzliche Veröffentlichung (z.B. im Internet) der Online-Medien oder mit Teilen daraus neu hergestellten neuen und/oder bearbeiteten Werken ist grundsätzlich nicht zulässig, bzw. bedarf der Zustimmung des Rechtegebers.",
-	"pages.content.initState.title": "Willkommen im Lern-Store!",
-	"pages.content.label.chooseACourse": "Wähle einen Kurs / Fach",
-	"pages.content.label.chooseALessonTopic": "Wähle ein Unterrichtsthema",
-	"pages.content.label.deselect": "Entfernen",
-	"pages.content.label.select": "Auswählen",
-	"pages.content.label.selected": "Aktiv",
-	"pages.content.material.leavePageWarningFooter":
-		"Die Nutzung dieser Angebote unterliegt gegebenenfalls anderen rechtlichen Bedingungen. Bitte schauen Sie daher in die Datenschutzerklärung des externen Anbieters!",
-	"pages.content.material.leavePageWarningMain":
-		"Hinweis: Beim Klicken des Links verlassen Sie das Angebot der Schul-Cloud Brandenburg.",
-	"pages.content.material.showMaterialHint":
-		"Hinweis: Um auf den Inhalt zuzugreifen, bitte den linken Bereich bearbeiten.",
-	"pages.content.material.showMaterialHintMobile":
-		"Hinweis: Um auf den Inhalt zuzugreifen, bitte den oberen Bereich bearbeiten.",
-	"pages.content.material.toMaterial": "Zum Inhalt",
-	"pages.content.notification.errorMsg": "Material konnte nicht hinzugefügt werden",
-	"pages.content.notification.lernstoreNotAvailable": "Lern-Store ist nicht verfügbar",
-	"pages.content.notification.loading": "Material wird hinzugefügt",
-	"pages.content.notification.successMsg": "Material wurde erfolgreich hinzugefügt",
-	"pages.content.page.window.title": "Thema anlegen - {instance} - Deine digitale Lernumgebung",
-	"pages.content.placeholder.chooseACourse": "Wähle einen Kurs / Fach",
-	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
-	"pages.content.preview_img.alt": "Bildvorschau",
 	"pages.courseRoomDetails.fab.add.tool": "Tool hinzufügen",
 	"pages.courseRoomDetails.fab.add.learnContent": "Lerninhalt erstellen",
 	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
@@ -1583,16 +1516,6 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.lernstore.info.banner.title": "Die Medien sind künftig über das Medienregal erreichbar",
-	"pages.lernstore.info.banner.helpLinkText": "Hilfeseiten",
-	"pages.lernstore.info.banner.item.0.brb":
-		"Ab sofort sind die Mediatheken aus dem Lern-Store (Mundo, Wir lernen online und FWU-Medien) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
-	"pages.lernstore.info.banner.item.0.n21":
-		"Ab sofort sind die Mediatheken aus dem Lern-Store (Mundo und Wir lernen online) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
-	"pages.lernstore.info.banner.item.0.thr":
-		"Ab sofort sind die Mediatheken aus dem Lern-Store (Mundo, Wir lernen online und Mediothek/Pixiothek) über das Medienregal verfügbar und die Inhalte können in Bereichen als Tool eingebunden werden. Weitere Infos zu den erweiterten Such- und Filtermöglichkeiten sowie der Einbindung von Inhalten via Deeplink sind auf den {helpLinkText} zu finden.",
-	"pages.lernstore.info.banner.item.1":
-		"Der Lern-Store wird daher in KW 10 (04.03.2026) abgeschaltet. In den Themen bereits eingebundene Lern-Store-Inhalte sind weiterhin verfügbar.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Die Registrierung konnte leider nicht abgeschlossen werden. Bitte später erneut versuchen.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":

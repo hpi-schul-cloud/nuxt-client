@@ -8,7 +8,6 @@ import { initializeAxios } from "./utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	CONTENT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
@@ -27,7 +26,6 @@ import {
 import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
-	contentModule,
 	copyModule,
 	courseRoomDetailsModule,
 	courseRoomListModule,
@@ -82,7 +80,6 @@ app.use(VueDOMPurifyHTML, {
 	const success = await useEnvStore().loadConfiguration();
 
 	if (success) {
-		contentModule.init();
 		filePathsModule.init();
 	}
 
@@ -101,7 +98,6 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
