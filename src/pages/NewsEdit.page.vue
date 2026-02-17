@@ -19,7 +19,16 @@
 			max-width="short"
 		>
 			<div>
-				<FormNews v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
+				<FormNews
+					v-if="news"
+					:title="news?.title"
+					:content="news?.content"
+					:display-at="news?.displayAt"
+					:show-delete-button="!!news?.id"
+					@save="onSave"
+					@delete="onDelete"
+					@cancel="onCancel"
+				/>
 			</div>
 		</DefaultWireframe>
 	</div>
@@ -41,7 +50,7 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const newsModule = injectStrict(NEWS_MODULE_KEY);
-const news = ref<News | null>();
+const news = ref<News | null>(null);
 
 const fetchNews = async () => {
 	await newsModule.fetchNews(route.params.id as string).then(() => {

@@ -1,5 +1,5 @@
 <template>
-	<form v-bind="$attrs" @submit.prevent="save">
+	<VForm @submit.prevent="save">
 		<VTextField
 			v-model="newsTitle"
 			autofocus
@@ -49,7 +49,7 @@
 							:text="t('common.actions.save')"
 						/>
 						<VBtn
-							v-if="news && news.id"
+							v-if="showDeleteButton"
 							variant="text"
 							color="error"
 							:text="t('common.actions.delete')"
@@ -60,7 +60,7 @@
 				</FormActions>
 			</div>
 		</VFadeTransition>
-	</form>
+	</VForm>
 	<ConfirmationDialog>
 		<template v-if="showDialogWarning" #alert>
 			<WarningAlert> {{ t("components.organisms.FormNews.cancel.confirm.message") }}</WarningAlert>
@@ -73,7 +73,6 @@ import FormActions from "./FormActions.vue";
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { UpdateNewsParams } from "@/serverApi/v3";
 import { newsModule } from "@/store";
-import { News } from "@/store/types/news";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
 import { mdiClockOutline } from "@icons/material";
@@ -83,24 +82,21 @@ import { DatePicker } from "@ui-date-time-picker";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
 import { useOpeningTagValidator } from "@util-validators";
 import dayjs, { Dayjs } from "dayjs";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
-defineOptions({ inheritAttrs: false });
-
 type Props = {
-	news?: News;
+	title?: string;
+	content?: string;
+	displayAt?: string;
+	showDeleteButton?: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
-	news: () => ({
-		title: "",
-		content: "",
-		date: {
-			date: undefined,
-			time: undefined,
-		},
-	}),
+	title: "",
+	content: "",
+	displayAt: undefined,
+	showDeleteButton: false,
 });
 
 const emit = defineEmits<{
@@ -121,14 +117,14 @@ const newsTime = ref("");
 
 const status = computed(() => newsModule.getStatus);
 
-const displayAt = computed<string | undefined>(() => {
+const getDisplayAt = () => {
 	if (!newsDate.value || !newsTime.value) {
 		return undefined;
 	}
 	const dateTimeCombined = fromInputDateTime(newsDate.value, newsTime.value);
 	const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
 	return dateTimeCombinedString.toISOString();
-});
+};
 
 const errors = computed(() => {
 	const title = newsTitle.value ? undefined : t("components.organisms.FormNews.errors.missing_title").toString();
@@ -145,10 +141,18 @@ const errors = computed(() => {
 });
 
 watch(
-	() => props.news,
-	(newNews) => {
-		updateFromParent(newNews);
-	}
+	props,
+	(newProps) => {
+		newsTitle.value = newProps.title ?? "";
+		newsContent.value = newProps.content ?? "";
+		if (newProps.displayAt) {
+			[newsDate.value, newsTime.value] = createInputDateTime(newProps.displayAt);
+		} else {
+			newsDate.value = "";
+			newsTime.value = "";
+		}
+	},
+	{ immediate: true }
 );
 
 watch(
@@ -168,25 +172,13 @@ watch(
 	{ deep: true }
 );
 
-onMounted(() => {
-	updateFromParent(props.news);
-});
-
 const save = () => {
-	const errorsArray = Object.values(errors.value).filter((a) => a);
+	const errorsArray = Object.values(errors.value).filter(Boolean);
 	if (errorsArray.length && errorsArray[0]) {
 		notifyError(String(errorsArray[0]));
 		return errorsArray[0];
 	}
-	emit("save", { title: newsTitle.value, content: newsContent.value, displayAt: displayAt.value });
-};
-
-const updateFromParent = ({ title, content, displayAt }: News) => {
-	newsTitle.value = title;
-	newsContent.value = content;
-	if (displayAt) {
-		[newsDate.value, newsTime.value] = createInputDateTime(displayAt);
-	}
+	emit("save", { title: newsTitle.value, content: newsContent.value, displayAt: getDisplayAt() });
 };
 
 const onUpdateDate = (newDate: string | null) => {
