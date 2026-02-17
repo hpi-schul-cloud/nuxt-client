@@ -18,32 +18,33 @@
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 			>
-				<RegistrationInfo v-if="column.infobox" class="info-slot" :show-external-text="showExternalText" />
-				<VBtn
-					v-if="column.sortable"
-					variant="text"
-					:ripple="false"
-					:class="{
-						'is-current-sort': sortBy === column.field,
-						'is-sortable': column.sortable,
-					}"
-					class="th-wrap"
-					:aria-label="ariaLabel(column)"
-					@click.stop="sort(column)"
-				>
-					<div class="tooltip">
-						<span>
-							{{ column.label }}
-						</span>
-						<span v-if="column.tooltipText" class="tooltiptext">{{ column.tooltipText }}</span>
+				<div :class="column.infobox ? 'th-btn-wrap' : 'th-btn'">
+					<VBtn
+						v-if="column.sortable"
+						variant="text"
+						:ripple="false"
+						:class="{
+							'is-current-sort': sortBy === column.field,
+							'is-sortable': column.sortable,
+						}"
+						:aria-label="ariaLabel(column)"
+						@click.stop="sort(column)"
+					>
+						<div class="tooltip">
+							<span>
+								{{ column.label }}
+							</span>
+							<span v-if="column.tooltipText" class="tooltiptext">{{ column.tooltipText }}</span>
+						</div>
+						<v-icon v-if="sortBy === column.field">
+							{{ sortOrder === "asc" ? mdiMenuUpOutline : mdiMenuDownOutline }}
+						</v-icon>
+						<v-icon v-else-if="column.sortable" :icon="mdiMenuSwapOutline" />
+					</VBtn>
+					<div v-else class="th-label px-3">
+						<span>{{ column.label }}</span>
 					</div>
-					<v-icon v-if="sortBy === column.field">
-						{{ sortOrder === "asc" ? mdiMenuUpOutline : mdiMenuDownOutline }}
-					</v-icon>
-					<v-icon v-else-if="column.sortable" :icon="mdiMenuSwapOutline" />
-				</VBtn>
-				<div v-else class="th-wrap">
-					<span>{{ column.label }}</span>
+					<RegistrationInfo v-if="column.infobox" class="info-slot" :show-external-text="showExternalText" />
 				</div>
 			</slot>
 		</th>
@@ -165,25 +166,29 @@ export default {
 @use "@/styles/settings" as *;
 
 .table__row {
-	font-weight: bold;
-
 	th {
-		border-bottom: 2px solid;
+		border-bottom: 1px solid;
 
-		.th-wrap {
+		button,
+		.th-label {
+			font-weight: 400;
+		}
+
+		.th-btn > button {
+			justify-content: left;
+			width: 100%;
+		}
+
+		.th-btn-wrap {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
-			width: 100%;
-			padding: 8px;
-			font-size: var(--text-md);
-			font-weight: normal;
+		}
+
+		.th-label {
+			display: flex;
+			align-items: center;
 		}
 	}
-}
-
-.th-slot {
-	position: relative;
 }
 
 .tooltip {

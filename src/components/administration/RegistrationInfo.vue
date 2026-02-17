@@ -1,17 +1,15 @@
 <template>
 	<VMenu location="bottom end" :close-on-content-click="false">
 		<template #activator="{ props }">
-			<span class="info-slot">
-				<VBtn
-					v-bind="props"
-					icon
-					variant="text"
-					color="info"
-					:aria-label="$t('pages.administration.students.infobox.registrationOnly.headline')"
-				>
-					<VIcon class="ma-0" size="20">{{ mdiInformation }}</VIcon>
-				</VBtn>
-			</span>
+			<VBtn
+				v-bind="props"
+				icon
+				variant="text"
+				color="info"
+				:aria-label="$t('pages.administration.students.infobox.registrationOnly.headline')"
+			>
+				<VIcon class="ma-0" size="20">{{ mdiInformation }}</VIcon>
+			</VBtn>
 		</template>
 		<VCard class="info-menu-card">
 			<VCardTitle data-testid="infobox-title">
@@ -102,11 +100,5 @@ const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_N
 	.v-card-text {
 		background: rgba(var(--v-theme-info), 0.12) !important;
 	}
-}
-.info-slot {
-	position: absolute;
-	top: -20%;
-	left: 56%;
-	z-index: 10;
 }
 </style>
