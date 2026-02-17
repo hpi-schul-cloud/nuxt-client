@@ -1,1 +1,1 @@
-export * from "./activation";
+export * from "./activation.composable";

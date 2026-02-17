@@ -24,7 +24,7 @@
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
-			:data="teachers"
+			:data="userList"
 			:paginated="true"
 			:total="pagination.total"
 			:rows-selectable="true"
@@ -97,6 +97,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
+import { useUsers } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -140,6 +141,7 @@ export default defineComponent({
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
 		const { fetchClasses, list } = useClasses();
+		const { fetchUsers, userList } = useUsers(RoleName.Teacher);
 
 		return {
 			getPaginationState,
@@ -151,6 +153,8 @@ export default defineComponent({
 			askConfirmation,
 			fetchClasses,
 			list,
+			fetchUsers,
+			userList,
 		};
 	},
 	data() {
@@ -262,7 +266,7 @@ export default defineComponent({
 	},
 	computed: {
 		...mapGetters("users", {
-			teachers: "getList",
+			// teachers: "getList",
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
@@ -388,7 +392,7 @@ export default defineComponent({
 				? !permission || this.userPermissions.includes(permission)
 				: !permission() || permission(this.userPermissions);
 		},
-		find() {
+		async find() {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -397,9 +401,8 @@ export default defineComponent({
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findTeachers", {
-				query,
-			});
+
+			await this.fetchUsers(query);
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;

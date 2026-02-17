@@ -26,7 +26,7 @@
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
-			:data="students"
+			:data="userList"
 			:paginated="true"
 			:rows-selectable="true"
 			:total="pagination.total"
@@ -107,6 +107,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
+import { useUsers } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -147,23 +148,28 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
+		const { getFilterState, getPaginationState, getSortingState, setFilterState, setPaginationState, setSortingState } =
 			useFilterLocalStorage(RoleName.Student);
 		const { askConfirmation } = useConfirmationDialog();
 		const { t } = useI18n();
 		const { fetchClasses, list } = useClasses();
+		const { deletingProgress, deleteUsers, fetchUsers, userList } = useUsers(RoleName.Student);
 
 		return {
-			getPaginationState,
-			setPaginationState,
-			getSortingState,
-			setSortingState,
-			getFilterState,
-			setFilterState,
 			askConfirmation,
-			t,
+			deletingProgress,
+			deleteUsers,
 			fetchClasses,
+			fetchUsers,
+			getFilterState,
+			getPaginationState,
+			getSortingState,
 			list,
+			setFilterState,
+			setPaginationState,
+			setSortingState,
+			t,
+			userList,
 		};
 	},
 	data() {
@@ -250,7 +256,6 @@ export default defineComponent({
 	},
 	computed: {
 		...mapGetters("users", {
-			students: "getList",
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
@@ -413,7 +418,7 @@ export default defineComponent({
 		document.title = buildPageTitle(this.t("pages.administration.students.index.title"));
 	},
 	methods: {
-		find() {
+		async find() {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -422,9 +427,7 @@ export default defineComponent({
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findStudents", {
-				query,
-			});
+			await this.fetchUsers(query);
 		},
 		userHasPermission(permission) {
 			if (!permission) {
@@ -514,10 +517,11 @@ export default defineComponent({
 		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "student",
-					});
+					await this.deleteUsers(rowIds);
+					// await this.$store.dispatch("users/deleteUsers", {
+					// 	ids: rowIds,
+					// 	userType: "student",
+					// });
 					notifySuccess(this.t("pages.administration.remove.success"));
 					this.find();
 				} catch {
