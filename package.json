@@ -56,9 +56,8 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@eslint/js": "^10.0.1",
+		"@eslint/js": "^9.39.2",
 		"@golevelup/ts-vitest": "^0.5.2",
-		"@intlify/unplugin-vue-i18n": "^6.0.8",
 		"@mdi/js": "^7.4.47",
 		"@openapitools/openapi-generator-cli": "^2.25.2",
 		"@pinia/testing": "^1.0.3",
@@ -71,8 +70,8 @@
 		"@vue/test-utils": "^2.4.6",
 		"arg": "^5.0.2",
 		"connect": "^3.7.0",
-		"eslint": "^10.0.0",
-		"eslint-config-prettier": "^10.1.8",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^9.1.2",
 		"eslint-plugin-prettier": "^5.5.5",
 		"eslint-plugin-simple-import-sort": "^12.1.1",
 		"eslint-plugin-unused-imports": "^4.4.1",
