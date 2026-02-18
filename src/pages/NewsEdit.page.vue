@@ -1,5 +1,5 @@
 <template>
-	<div v-if="news">
+	<div v-if="currentNews">
 		<DefaultWireframe
 			:headline="t('pages.news.edit.title.default')"
 			:breadcrumbs="[
@@ -9,7 +9,7 @@
 				},
 				{
 					to: `/news/${$route.params.id}`,
-					title: news.title,
+					title: currentNews.title,
 				},
 				{
 					title: t('pages.news.edit.title.default'),
@@ -18,67 +18,63 @@
 			]"
 			max-width="short"
 		>
-			<div>
-				<FormNews
-					v-if="news"
-					:title="news?.title"
-					:content="news?.content"
-					:display-at="news?.displayAt"
-					:show-delete-button="!!news?.id"
-					@save="onSave"
-					@delete="onDelete"
-					@cancel="onCancel"
-				/>
-			</div>
+			<FormNews
+				v-if="currentNews"
+				:title="currentNews?.title"
+				:content="currentNews?.content"
+				:display-at="currentNews?.displayAt"
+				:show-delete-button="!!currentNews?.id"
+				:status="status"
+				@save="onSave"
+				@delete="onDelete"
+				@cancel="onCancel"
+			/>
 		</DefaultWireframe>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { News, PatchNewsPayload } from "@/store/types/news";
-import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
+import { type UpdateNewsParams } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { AlertStatus, useNotificationStore } from "@data-app";
+import { type AlertStatus, useNotificationStore } from "@data-app";
+import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { ref } from "vue";
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const newsModule = injectStrict(NEWS_MODULE_KEY);
-const news = ref<News | null>(null);
 
-const fetchNews = async () => {
-	await newsModule.fetchNews(route.params.id as string).then(() => {
-		news.value = newsModule.getCurrentNews;
-		setPageTitle();
-	});
-};
-fetchNews();
+const { status, fetchNews, current: currentNews, patchNews, removeNews } = useNews();
+
+onMounted(async () => {
+	await fetchNews(route.params.id as string);
+	setPageTitle();
+});
 
 const setPageTitle = () => {
 	let pageTitle = t("pages.news.edit.title.default");
-	if (news.value?.title) {
+	if (currentNews.value?.title) {
 		pageTitle = t("pages.news.edit.title", {
-			title: news.value?.title,
+			title: currentNews.value?.title,
 		});
 	}
 	useTitle(buildPageTitle(pageTitle));
 };
 
-const onSave = async (newsToPatch: Partial<PatchNewsPayload>) => {
-	if (!news.value?.id) {
+const onSave = async (newsToPatch: UpdateNewsParams) => {
+	if (!currentNews.value?.id) {
 		showNotifier("error", "patch");
 		return;
 	}
 
 	try {
-		await newsModule.patchNews({
-			id: news.value.id,
+		await patchNews({
+			id: currentNews.value.id,
 			title: newsToPatch.title,
 			content: newsToPatch.content,
 			displayAt: newsToPatch.displayAt,
@@ -86,20 +82,20 @@ const onSave = async (newsToPatch: Partial<PatchNewsPayload>) => {
 
 		showNotifier("success", "patch");
 
-		await router.push({ path: `/news/${news.value?.id}` });
+		await router.push({ path: `/news/${currentNews.value?.id}` });
 	} catch {
 		showNotifier("error", "patch");
 	}
 };
 
 const onDelete = async () => {
-	if (!news.value?.id) {
+	if (!currentNews.value?.id) {
 		showNotifier("error", "remove");
 		return;
 	}
 
 	try {
-		await newsModule.removeNews(news.value.id);
+		await removeNews(currentNews.value.id);
 		showNotifier("success", "remove");
 
 		router.push({ path: "/news" });
