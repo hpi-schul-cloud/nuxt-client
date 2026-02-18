@@ -23,7 +23,7 @@
 	},
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.1",
-		"@ckeditor/ckeditor5-core": "^41.4.2",
+		"@ckeditor/ckeditor5-core": "^47.5.0",
 		"@ckeditor/ckeditor5-vue": "^5.1.0",
 		"@hpi-schul-cloud/ckeditor": "^2.1.1",
 		"@lumieducation/h5p-webcomponents": "^10.0.4",
@@ -37,7 +37,7 @@
 		"dayjs": "^1.11.18",
 		"focus-trap": "^7.6.6",
 		"katex": "^0.16.21",
-		"lodash-es": "^4.17.21",
+		"lodash-es": "^4.17.23",
 		"maska": "^3.2.0",
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
