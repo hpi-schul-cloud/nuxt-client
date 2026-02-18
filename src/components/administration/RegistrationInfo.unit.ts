@@ -4,7 +4,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { VBtn, VCardTitle } from "vuetify/components";
+import { VBtn, VCardText, VCardTitle } from "vuetify/components";
 
 describe("RegistrationInfo", () => {
 	const setup = async (props = {}, { isConsentNecessary = true } = {}) => {
@@ -28,45 +28,42 @@ describe("RegistrationInfo", () => {
 		return { wrapper, title };
 	};
 
-	//afterEach(() => {
-	//	wrapper?.unmount();
-	//	vi.clearAllMocks();
-	//});
-
 	describe("when consent is necessary", () => {
 		it("should render consent headline", async () => {
 			const { title } = await setup();
 			expect(title.text()).toContain("pages.administration.students.infobox.headline");
 		});
 
-		it("should render default consent content when showExternalText is false", async () => {
-			await setup({ showExternalText: false });
+		it("when showExternalText is false it should render default consent content ", async () => {
+			const { wrapper } = await setup({ showExternalText: false });
+			const textContent = wrapper.findComponent(VCardText);
 
-			expect(document.body.textContent).toContain("pages.administration.students.infobox.paragraph-1");
-			expect(document.body.textContent).toContain("pages.administration.students.infobox.li-1");
+			expect(textContent.text()).toContain("pages.administration.students.infobox.paragraph-1");
+			expect(textContent.text()).toContain("pages.administration.students.infobox.li-1");
 		});
 
 		it("should render LDAP content when showExternalText is true", async () => {
-			await setup({ showExternalText: true });
+			const { wrapper } = await setup({ showExternalText: true });
+			const textContent = wrapper.findComponent(VCardText);
 
-			expect(document.body.textContent).toContain("pages.administration.students.infobox.LDAP.paragraph-1");
-			expect(document.body.textContent).toContain("pages.administration.students.infobox.LDAP.paragraph-3");
+			expect(textContent.text()).toContain("pages.administration.students.infobox.LDAP.paragraph-1");
+			expect(textContent.text()).toContain("pages.administration.students.infobox.LDAP.paragraph-3");
 		});
 	});
 
 	describe("when consent is not necessary", () => {
 		it("should render registration only headline", async () => {
-			await setup({}, { isConsentNecessary: false });
-			const title = document.querySelector('[data-testid="infobox-title"]');
+			const { title } = await setup({}, { isConsentNecessary: false });
 
-			expect(title?.textContent).toContain("pages.administration.students.infobox.registrationOnly.headline");
+			expect(title.text()).toContain("pages.administration.students.infobox.registrationOnly.headline");
 		});
 
 		it("should render registration only content", async () => {
-			await setup({}, { isConsentNecessary: false });
+			const { wrapper } = await setup({}, { isConsentNecessary: false });
+			const textContent = wrapper.findComponent(VCardText);
 
-			expect(document.body.textContent).toContain("pages.administration.students.infobox.registrationOnly.paragraph-1");
-			expect(document.body.textContent).toContain("pages.administration.students.infobox.registrationOnly.li-1");
+			expect(textContent.text()).toContain("pages.administration.students.infobox.registrationOnly.paragraph-1");
+			expect(textContent.text()).toContain("pages.administration.students.infobox.registrationOnly.li-1");
 		});
 	});
 });
