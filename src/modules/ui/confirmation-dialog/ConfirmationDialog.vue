@@ -12,6 +12,10 @@
 					<slot name="alert" />
 				</div>
 
+				<VCardText v-if="$slots.content" class="pa-4">
+					<slot name="content" />
+				</VCardText>
+
 				<template #actions>
 					<VSpacer />
 					<div class="d-flex mb-2 ga-2 mx-4">
