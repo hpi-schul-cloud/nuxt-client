@@ -21,24 +21,21 @@
 
 <script setup lang="ts">
 import { CreateNewsParams, CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
-import { Status } from "@/store/types/commons";
-import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { LocationQuery, LocationQueryValue, useRoute, useRouter } from "vue-router";
+import { type LocationQuery, type LocationQueryValue, useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const newsModule = injectStrict(NEWS_MODULE_KEY);
 
-const status = computed(() => newsModule.getStatus as Status);
-const createdNews = computed(() => newsModule.getCreatedNews);
+const { status, createdNews, createNews } = useNews();
 
 const pageTitle = computed(() => buildPageTitle(`${t("pages.news.new.title")}`));
 useTitle(pageTitle);
@@ -73,7 +70,7 @@ const getNewsTarget = (
 const create = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
 	try {
 		const newsTarget = getNewsTarget(route.query, useAppStore()?.school?.id);
-		await newsModule.createNews({
+		await createNews({
 			title: news.title,
 			content: news.content,
 			displayAt: news.displayAt,
