@@ -7,11 +7,10 @@ import { setActivePinia } from "pinia";
 import { VBtn, VCardTitle } from "vuetify/components";
 
 describe("RegistrationInfo", () => {
-	const setup = async (props = {}, envConfig = {}) => {
+	const setup = async (props = {}, { isConsentNecessary = true } = {}) => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
-			FEATURE_CONSENT_NECESSARY: true,
-			...envConfig,
+			FEATURE_CONSENT_NECESSARY: isConsentNecessary,
 		});
 
 		const wrapper = mount(RegistrationInfo, {
@@ -57,14 +56,14 @@ describe("RegistrationInfo", () => {
 
 	describe("when consent is not necessary", () => {
 		it("should render registration only headline", async () => {
-			await setup({}, { FEATURE_CONSENT_NECESSARY: false });
+			await setup({}, { isConsentNecessary: false });
 			const title = document.querySelector('[data-testid="infobox-title"]');
 
 			expect(title?.textContent).toContain("pages.administration.students.infobox.registrationOnly.headline");
 		});
 
 		it("should render registration only content", async () => {
-			await setup({}, { FEATURE_CONSENT_NECESSARY: false });
+			await setup({}, { isConsentNecessary: false });
 
 			expect(document.body.textContent).toContain("pages.administration.students.infobox.registrationOnly.paragraph-1");
 			expect(document.body.textContent).toContain("pages.administration.students.infobox.registrationOnly.li-1");
