@@ -67,7 +67,7 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	};
 
 	const getQrRegistrationLinks = async (payload: { userIds: string[]; selectionType: string }) => {
-		await $axios.post(registrationQrApi, payload);
+		await $axios.post(registrationQrApi, { ...payload, role: userType });
 	};
 	// const findConsentUsers = async (query: { $limit: number; year: string }) => 0;
 
