@@ -1,6 +1,9 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { RoleName, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
+import { notifySuccess } from "@data-app";
 import { Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export type UserCreatingData = {
 	firstName: string;
@@ -19,6 +22,8 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const registrationLinksApi = "/v1/users/mail/registrationLink";
 	const registrationQrApi = "/v1/users/qrRegistrationLink";
 
+	const { t } = useI18n();
+
 	const userList = ref<UserResponse[]>([]);
 	const deletingProgress: Ref<{ delete: { active: boolean; percent: number } }> = ref({
 		delete: { active: false, percent: 0 },
@@ -27,10 +32,12 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const consentList = ref([]);
 	const registrationLinks = ref([]);
 
-	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
-		const { data } = await $axios.get(usersApi, { params: query });
+	const { execute, isRunning, reset, status, error } = useSafeAxiosTask();
 
-		userList.value = data.data;
+	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
+		const { result } = await execute(() => $axios.get(usersApi, { params: query }));
+
+		userList.value = result?.data?.data || [];
 	};
 
 	const deleteUsers = async (userIds: string | string[]) => {
@@ -56,6 +63,24 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		deletingProgress.value.delete.active = false;
 	};
 
+	const createUser = async (userData: UserCreatingData): Promise<{ result: UserResponse | null; error: unknown }> => {
+		const createUserErrorMessage =
+			userType === RoleName.Student
+				? t("pages.administration.students.new.error'")
+				: t("pages.administration.teachers.new.error");
+		const createUserSuccessMessage =
+			userType === RoleName.Student
+				? t("pages.administration.students.new.success")
+				: t("pages.administration.teachers.new.success");
+
+		const { result, error } = await execute(() => $axios.post(usersApi, userData), createUserErrorMessage);
+
+		return {
+			result: result?.data,
+			error,
+		};
+	};
+
 	const createTeacher = async (teacherData: UserCreatingData): Promise<UserResponse> =>
 		(await $axios.post(usersApiV1, teacherData)).data;
 
@@ -63,18 +88,29 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		(await $axios.post(usersApiV1, studentData)).data;
 
 	const sendRegistrationLink = async (payload: { userIds: string[]; selectionType: string }) => {
-		await $axios.post(registrationLinksApi, payload);
+		const { result } = await execute(
+			async () => $axios.post(registrationLinksApi, payload),
+			t("pages.administration.sendMail.error", payload.userIds.length)
+		);
+
+		registrationLinks.value = result?.data || [];
+		notifySuccess(t("pages.administration.sendMail.success", payload.userIds.length));
 	};
 
 	const getQrRegistrationLinks = async (payload: { userIds: string[]; selectionType: string }) => {
-		await $axios.post(registrationQrApi, { ...payload, role: userType });
+		const { result } = await execute(
+			() => $axios.post(registrationQrApi, { ...payload, roleName: userType }),
+			t("pages.administration.printQr.error", payload.userIds.length)
+		);
+
+		qrLinks.value = result?.data || [];
 	};
 	// const findConsentUsers = async (query: { $limit: number; year: string }) => 0;
 
 	return {
 		userList,
 		fetchUsers,
-		// findConsentUsers,
+		createUser,
 		deleteUsers,
 		createTeacher,
 		createStudent,

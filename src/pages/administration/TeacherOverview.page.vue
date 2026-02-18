@@ -141,7 +141,7 @@ export default defineComponent({
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
 		const { fetchClasses, list } = useClasses();
-		const { fetchUsers, userList, deleteUsers, sendRegistrationLink, getQrRegistrationLinks } = useUsers(
+		const { fetchUsers, userList, deleteUsers, sendRegistrationLink, getQrRegistrationLinks, qrLinks } = useUsers(
 			RoleName.Teacher
 		);
 
@@ -160,6 +160,7 @@ export default defineComponent({
 			sendRegistrationLink,
 			deleteUsers,
 			getQrRegistrationLinks,
+			qrLinks,
 		};
 	},
 	data() {
@@ -275,7 +276,7 @@ export default defineComponent({
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
-			qrLinks: "getQrLinks",
+			// qrLinks: "getQrLinks",
 		}),
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
@@ -444,53 +445,29 @@ export default defineComponent({
 			};
 		},
 		async handleBulkEMail(rowIds, selectionType) {
-			try {
-				// TODO wrong use of store (not so bad)
-				await this.sendRegistrationLink({
-					userIds: rowIds,
-					selectionType,
-				});
-				// await this.$store.dispatch("users/sendRegistrationLink", {
-				// 	userIds: rowIds,
-				// 	selectionType,
-				// });
-
-				// TODO: move this logic to the composable
-				notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
-			} catch {
-				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
-			}
+			await this.sendRegistrationLink({
+				userIds: rowIds,
+				selectionType,
+			});
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			try {
-				await this.getQrRegistrationLinks({
-					userIds: rowIds,
-					selectionType,
+			await this.getQrRegistrationLinks({
+				userIds: rowIds,
+				selectionType,
+			});
+
+			if (this.qrLinks.value.length) {
+				printQrCodes(this.qrLinks.value, {
+					printPageTitleKey: "pages.administration.printQr.printPageTitle",
 				});
-				// await this.$store.dispatch("users/getQrRegistrationLinks", {
-				// 	userIds: rowIds,
-				// 	selectionType,
-				// 	roleName: "teacher",
-				// });
-				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks, {
-						printPageTitleKey: "pages.administration.printQr.printPageTitle",
-					});
-				} else {
-					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
-				}
-			} catch {
-				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
+			} else {
+				notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 			}
 		},
 		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
 					await this.deleteUsers(rowIds);
-					// await this.$store.dispatch("users/deleteUsers", {
-					// 	ids: rowIds,
-					// 	userType: "teacher",
-					// });
 					notifySuccess(this.$t("pages.administration.remove.success"));
 					this.find();
 				} catch {

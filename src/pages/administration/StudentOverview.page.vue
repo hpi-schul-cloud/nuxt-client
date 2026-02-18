@@ -153,8 +153,16 @@ export default defineComponent({
 		const { askConfirmation } = useConfirmationDialog();
 		const { t } = useI18n();
 		const { fetchClasses, list } = useClasses();
-		const { deletingProgress, deleteUsers, fetchUsers, userList, sendRegistrationLink, getQrRegistrationLinks } =
-			useUsers(RoleName.Student);
+		const {
+			deletingProgress,
+			deleteUsers,
+			fetchUsers,
+			userList,
+			sendRegistrationLink,
+			getQrRegistrationLinks,
+			registrationLinks,
+			qrLinks,
+		} = useUsers(RoleName.Student);
 
 		return {
 			askConfirmation,
@@ -173,6 +181,8 @@ export default defineComponent({
 			userList,
 			sendRegistrationLink,
 			getQrRegistrationLinks,
+			registrationLinks,
+			qrLinks,
 		};
 	},
 	data() {
@@ -262,8 +272,8 @@ export default defineComponent({
 			pagination: "getPagination",
 			isDeleting: "getActive",
 			deletedPercent: "getPercent",
-			qrLinks: "getQrLinks",
-			registrationLinks: "getRegistrationLinks",
+			// qrLinks: "getQrLinks",
+			// registrationLinks: "getRegistrationLinks",
 		}),
 		getFeatureUserLoginMigrationEnabled() {
 			return useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
@@ -485,55 +495,29 @@ export default defineComponent({
 			});
 		},
 		async handleBulkEMail(rowIds, selectionType) {
-			try {
-				await this.sendRegistrationLink({
-					userIds: rowIds,
-					selectionType,
-				});
-
-				// await this.$store.dispatch("users/sendRegistrationLink", {
-				// 	userIds: rowIds,
-				// 	selectionType,
-				// });
-				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					notifySuccess(this.t("pages.administration.sendMail.success", rowIds.length));
-				} else {
-					notifyInfo(this.t("pages.administration.sendMail.alreadyRegistered"));
-				}
-			} catch {
-				notifyError(this.t("pages.administration.sendMail.error", rowIds.length));
-			}
+			await this.sendRegistrationLink({
+				userIds: rowIds,
+				selectionType,
+			});
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			try {
-				await this.getQrRegistrationLinks({
-					userIds: rowIds,
-					selectionType,
+			await this.getQrRegistrationLinks({
+				userIds: rowIds,
+				selectionType,
+			});
+
+			if (this.qrLinks.value.length) {
+				printQrCodes(this.qrLinks.value, {
+					printPageTitleKey: "pages.administration.printQr.printPageTitle",
 				});
-				// await this.$store.dispatch("users/getQrRegistrationLinks", {
-				// 	userIds: rowIds,
-				// 	selectionType,
-				// 	roleName: "student",
-				// });
-				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks, {
-						printPageTitleKey: "pages.administration.printQr.printPageTitle",
-					});
-				} else {
-					notifyInfo(this.t("pages.administration.printQr.emptyUser"));
-				}
-			} catch {
-				notifyError(this.t("pages.administration.printQr.error", rowIds.length));
+			} else {
+				notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 			}
 		},
 		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
 					await this.deleteUsers(rowIds);
-					// await this.$store.dispatch("users/deleteUsers", {
-					// 	ids: rowIds,
-					// 	userType: "student",
-					// });
 					notifySuccess(this.t("pages.administration.remove.success"));
 					this.find();
 				} catch {
