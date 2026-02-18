@@ -226,7 +226,6 @@ export default {
 	"common.words.languages.es": "Spanish",
 	"common.words.languages.uk": "Ukrainian",
 	"common.words.learnContent": "Learning content",
-	"common.words.lernstore": "Learning Store",
 	"common.words.mainSchool": "Main School",
 	"common.words.no": "No",
 	"common.words.not": "not",
@@ -652,8 +651,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Important duplication information",
 	"components.molecules.copyResult.title.success": "Duplication successful",
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
-	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
-	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.label.room": "Select room",
@@ -1239,7 +1236,6 @@ export default {
 	"pages.administration.school.index.info":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Activate chat function",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Learning Store for students",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activate student visibility for teachers",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Activate video conferencing",
@@ -1248,8 +1244,6 @@ export default {
 		"If chats are enabled at your school, team administrators can selectively unlock the chat function respectively for their team.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"This is an instance-wide, non-editable setting that controls the visibility of students to teachers.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"If unchecked, students will not be able to access the Learning Store",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"Activating this option has a high threshold under data protection law. In order to activate the visibility of all students in the school for each teacher, it is necessary that each student has effectively consented to this data processing.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1293,7 +1287,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Edit Terms of Use",
 	"pages.administration.school.index.termsOfUse.error": "An error occurred while loading the terms of use",
 	"pages.administration.school.index.termsOfUse.fileName": "Terms of Use of the school",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file (PDF only, 4MB max)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(PDF only, 4 MB max)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Select file",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"The new Terms of Use will irretrievably replace the old one and will be presented to all users of this school for approval.",
@@ -1302,7 +1297,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "New file was successfully uploaded.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Uploaded {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"The file is larger than 4MB. Please reduce the file size",
+		"The file is larger than 4 MB. Please reduce the file size",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"This file format is not supported. Please use PDF only",
 	"pages.administration.school.index.title": "Manage school",
@@ -1460,63 +1455,6 @@ export default {
 		"Moderation rights for all participants",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Mute participants on entering",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom": "Activate waiting room for participants",
-	"pages.content._id.addToTopic": "To be added to",
-	"pages.content._id.collection.selectElements": "Select the items you want to add to the topic",
-	"pages.content._id.metadata.author": "Author",
-	"pages.content._id.metadata.createdAt": "requested at",
-	"pages.content._id.metadata.noTags": "No tags",
-	"pages.content._id.metadata.provider": "Publisher",
-	"pages.content._id.metadata.updatedAt": "Last modified on",
-	"pages.content.card.collection": "Collection",
-	"pages.content.emptyState.error.message.suggestions": "Suggestion:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"The search query should contain at least 2 characters.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling": "Check if all words are spelled correctly.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Try out other search queries.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms": "Try out more common queries.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Try to use a shorter query.",
-	"pages.content.emptyState.error.title": "Whoops, no results!",
-	"pages.content.index.backToCourse": "Back to the Course",
-	"pages.content.index.backToOverview": "Back to Overview",
-	"pages.content.index.search_for": "Search for...",
-	"pages.content.index.search_resources": "Resources",
-	"pages.content.index.search_results": "Search results for",
-	"pages.content.index.search.placeholder": "Search Learning store",
-	"pages.content.initState.description": "Here you find high quality content adapted to your federal state.",
-	"pages.content.initState.description.newMaterials":
-		"Our team is constantly developing new materials to further improve your learning experience.",
-	"pages.content.initState.description.hint": "Note:",
-	"pages.content.initState.description.hint.materials":
-		"The materials displayed in the Learning Store are not located on our server, but are made available via interfaces to other servers (sources include individual educational servers, WirLernenOnline, Mundo, etc.).",
-	"pages.content.initState.description.hint.availability":
-		"For this reason, our team has no influence on the permanent availability of individual materials and on the full range of materials offered by the individual sources.",
-	"pages.content.initState.description.usage":
-		"In the context of use in educational institutions, copying of the online media to storage media, to a private end device or to learning platforms for a closed circle of users is permitted if necessary, insofar as this is required for internal distribution and/or use.",
-	"pages.content.initState.description.usage.deleteHint":
-		"After completion of the work with the respective online media, these are to be deleted from the private end devices, data carriers and learning platforms; at the latest when leaving the educational institution.",
-	"pages.content.initState.description.usage.notPermitted":
-		"A fundamental publication (e.g. on the internet) of the online media or with parts of it newly produced new and/or edited works is generally not permitted or requires the consent of the rights owner.",
-	"pages.content.initState.title": "Welcome to the Learning Store!",
-	"pages.content.label.chooseACourse": "Select a course/subject",
-	"pages.content.label.chooseALessonTopic": "Choose a lesson topic",
-	"pages.content.label.deselect": "Remove",
-	"pages.content.label.select": "Select",
-	"pages.content.label.selected": "Active",
-	"pages.content.material.leavePageWarningFooter":
-		"The use of these offers may be subject to other legal conditions. Therefore, please take a look at the privacy policy of the external provider!",
-	"pages.content.material.leavePageWarningMain":
-		"Note: Clicking the link will take you away from Schul-Cloud Brandenburg",
-	"pages.content.material.showMaterialHint": "Note: Use the left side of the display to access the content.",
-	"pages.content.material.showMaterialHintMobile": "Note: Use the above element of the display to access the content.",
-	"pages.content.material.toMaterial": "Material",
-	"pages.content.notification.errorMsg": "Something has gone wrong. Material could not be added.",
-	"pages.content.notification.lernstoreNotAvailable": "Learning Store is not available",
-	"pages.content.notification.loading": "Material is added",
-	"pages.content.notification.successMsg": "Material was successfully added",
-	"pages.content.page.window.title": "Create topic - {instance} - Your digital learning environment",
-	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
-	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
-	"pages.content.preview_img.alt": "Image preview",
 	"pages.courseRoomDetails.fab.add.tool": "Add tool",
 	"pages.courseRoomDetails.fab.add.learnContent": "Create learning content",
 	"pages.courseRoomDetails.fab.add.board": "New board",
@@ -1553,16 +1491,6 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.lernstore.info.banner.title": "In the future, the media will be accessible via the media shelf",
-	"pages.lernstore.info.banner.helpLinkText": "help pages",
-	"pages.lernstore.info.banner.item.0.brb":
-		"From now on, the media libraries from learning store (Mundo, Wir lernen online and FWU-Media) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.n21":
-		"From now on, the media libraries from learning store (Mundo and Wir lernen online) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.thr":
-		"From now on, the media libraries from learning store (Mundo, Wir lernen online and Mediothek/Pixiothek) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
-	"pages.lernstore.info.banner.item.1":
-		"The learning store will therefore be shut down in week 10 (03/04/2026). Learning store content already integrated into topics will remain available.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
