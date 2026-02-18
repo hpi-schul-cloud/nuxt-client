@@ -2,10 +2,23 @@ import { RoleName, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
 import { Ref, ref } from "vue";
 
+export type UserCreatingData = {
+	firstName: string;
+	lastName: string;
+	email: string;
+	roles: [RoleName.Teacher] | [RoleName.Student];
+	schoolId: string;
+	sendRegistration: boolean;
+	generateRegistrationLink: boolean;
+	birthday?: Date;
+};
+
 export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleName.Student) => {
 	const usersApi = "/v3/users/admin/" + (userType === RoleName.Student ? "students" : "teachers");
-
 	const usersApiV1 = "/v1/users/admin/" + (userType === RoleName.Student ? "students" : "teachers");
+	const registrationLinksApi = "/v1/users/mail/registrationLink";
+	const registrationQrApi = "/v1/users/qrRegistrationLink";
+
 	const userList = ref<UserResponse[]>([]);
 	const deletingProgress: Ref<{ delete: { active: boolean; percent: number } }> = ref({
 		delete: { active: false, percent: 0 },
@@ -31,7 +44,9 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		for (let i = 0; i < numChunks; i++) {
 			const percent = ((i + 1) * chunkSize * 100) / (numChunks * chunkSize);
 			const chunkIds = ids.slice(i * chunkSize, i * chunkSize + chunkSize);
-			await $axios.delete(`/v3/deletionRequestsPublic`, { params: { ids: chunkIds } });
+			await $axios.delete(`/v3/deletionRequestsPublic`, {
+				params: { ids: chunkIds },
+			});
 			chunkIds.forEach((id) => {
 				userList.value = userList.value.filter((user) => user._id !== id);
 			});
@@ -41,16 +56,25 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		deletingProgress.value.delete.active = false;
 	};
 
-	const findConsentUsers = async (query: { $limit: number; year: string }) => 0;
-	const createTeacher = async (teacherData: { name: string; email: string; password: string }) => 0;
-	const createStudent = async (studentData: { name: string; email: string; password: string }) => 0;
-	const sendRegistrationLink = async (email: string) => 0;
-	const getQrRegistrationLinks = async (userId: string) => 0;
+	const createTeacher = async (teacherData: UserCreatingData): Promise<UserResponse> =>
+		(await $axios.post(usersApiV1, teacherData)).data;
+
+	const createStudent = async (studentData: UserCreatingData): Promise<UserResponse> =>
+		(await $axios.post(usersApiV1, studentData)).data;
+
+	const sendRegistrationLink = async (payload: { userIds: string[]; selectionType: string }) => {
+		await $axios.post(registrationLinksApi, payload);
+	};
+
+	const getQrRegistrationLinks = async (payload: { userIds: string[]; selectionType: string }) => {
+		await $axios.post(registrationQrApi, payload);
+	};
+	// const findConsentUsers = async (query: { $limit: number; year: string }) => 0;
 
 	return {
 		userList,
 		fetchUsers,
-		findConsentUsers,
+		// findConsentUsers,
 		deleteUsers,
 		createTeacher,
 		createStudent,
