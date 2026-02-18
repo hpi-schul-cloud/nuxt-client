@@ -97,14 +97,10 @@ export default {
 		border-bottom: 1px solid rgba(var(--v-theme-white));
 	}
 
-	td {
-		padding: 0;
+	td:not(:first-child) {
 		vertical-align: middle;
-
-		.text-content {
-			padding: 8px;
-			white-space: nowrap;
-		}
+		white-space: nowrap;
+		padding: 0 8px 0 16px;
 	}
 }
 </style>
