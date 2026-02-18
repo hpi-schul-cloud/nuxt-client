@@ -80,6 +80,11 @@
 				{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
 			</WarningAlert>
 		</template>
+		<template #content>
+			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
+				<li v-for="teacher in selectedTeachers" :key="teacher._id">{{ teacher.firstName }} {{ teacher.lastName }}</li>
+			</ul>
+		</template>
 	</ConfirmationDialog>
 </template>
 
@@ -353,6 +358,10 @@ export default defineComponent({
 					dataTestId: "fab_button_import_teachers",
 				},
 			];
+		},
+		selectedTeachers() {
+			const selectedTeachers = this.teachers.filter((teacher) => this.tableSelection.includes(teacher._id));
+			return selectedTeachers;
 		},
 	},
 	watch: {
