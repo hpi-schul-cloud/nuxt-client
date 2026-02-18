@@ -141,7 +141,9 @@ export default defineComponent({
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
 		const { fetchClasses, list } = useClasses();
-		const { fetchUsers, userList } = useUsers(RoleName.Teacher);
+		const { fetchUsers, userList, deleteUsers, sendRegistrationLink, getQrRegistrationLinks } = useUsers(
+			RoleName.Teacher
+		);
 
 		return {
 			getPaginationState,
@@ -155,6 +157,9 @@ export default defineComponent({
 			list,
 			fetchUsers,
 			userList,
+			sendRegistrationLink,
+			deleteUsers,
+			getQrRegistrationLinks,
 		};
 	},
 	data() {
@@ -441,10 +446,16 @@ export default defineComponent({
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
 				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("users/sendRegistrationLink", {
+				await this.sendRegistrationLink({
 					userIds: rowIds,
 					selectionType,
 				});
+				// await this.$store.dispatch("users/sendRegistrationLink", {
+				// 	userIds: rowIds,
+				// 	selectionType,
+				// });
+
+				// TODO: move this logic to the composable
 				notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
 			} catch {
 				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
@@ -452,11 +463,15 @@ export default defineComponent({
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
-				await this.$store.dispatch("users/getQrRegistrationLinks", {
+				await this.getQrRegistrationLinks({
 					userIds: rowIds,
 					selectionType,
-					roleName: "teacher",
 				});
+				// await this.$store.dispatch("users/getQrRegistrationLinks", {
+				// 	userIds: rowIds,
+				// 	selectionType,
+				// 	roleName: "teacher",
+				// });
 				if (this.qrLinks.length) {
 					printQrCodes(this.qrLinks, {
 						printPageTitleKey: "pages.administration.printQr.printPageTitle",
@@ -471,10 +486,11 @@ export default defineComponent({
 		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "teacher",
-					});
+					await this.deleteUsers(rowIds);
+					// await this.$store.dispatch("users/deleteUsers", {
+					// 	ids: rowIds,
+					// 	userType: "teacher",
+					// });
 					notifySuccess(this.$t("pages.administration.remove.success"));
 					this.find();
 				} catch {

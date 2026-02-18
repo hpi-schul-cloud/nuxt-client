@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<FormCreateUser @create-user="createStudent">
+		<FormCreateUser @create-user="createStudentHandler">
 			<template #inputs>
 				<VTextField
 					v-model="date"
@@ -36,7 +36,8 @@ import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifySuccess, useAppStore } from "@data-app";
+import { useAppStore } from "@data-app";
+import { useUsers } from "@data-users";
 import { DefaultWireframe } from "@ui-layout";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
@@ -50,7 +51,9 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		return { t };
+		const { createStudent } = useUsers(RoleName.Student);
+
+		return { t, createStudent };
 	},
 	data() {
 		return {
@@ -84,8 +87,8 @@ export default defineComponent({
 		document.title = buildPageTitle(this.t("pages.administration.students.new.title"));
 	},
 	methods: {
-		async createStudent(userData) {
-			await this.$store.dispatch("users/createStudent", {
+		async createStudentHandler(userData) {
+			await this.createStudent({
 				firstName: userData.firstName,
 				lastName: userData.lastName,
 				email: userData.email,
@@ -94,12 +97,14 @@ export default defineComponent({
 				schoolId: useAppStore().school?.id,
 				sendRegistration: this.sendRegistration,
 			});
-			if (!this.businessError) {
-				notifySuccess(this.t("pages.administration.students.new.success"));
-				this.$router.push({
-					path: `/administration/students`,
-				});
-			}
+			// TODO: move this logic to the composable and
+
+			// if (!this.businessError) {
+			// 	notifySuccess(this.t("pages.administration.students.new.success"));
+			// 	this.$router.push({
+			// 		path: `/administration/students`,
+			// 	});
+			// }
 		},
 	},
 });

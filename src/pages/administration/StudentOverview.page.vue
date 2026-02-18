@@ -153,7 +153,8 @@ export default defineComponent({
 		const { askConfirmation } = useConfirmationDialog();
 		const { t } = useI18n();
 		const { fetchClasses, list } = useClasses();
-		const { deletingProgress, deleteUsers, fetchUsers, userList } = useUsers(RoleName.Student);
+		const { deletingProgress, deleteUsers, fetchUsers, userList, sendRegistrationLink, getQrRegistrationLinks } =
+			useUsers(RoleName.Student);
 
 		return {
 			askConfirmation,
@@ -170,6 +171,8 @@ export default defineComponent({
 			setSortingState,
 			t,
 			userList,
+			sendRegistrationLink,
+			getQrRegistrationLinks,
 		};
 	},
 	data() {
@@ -483,10 +486,15 @@ export default defineComponent({
 		},
 		async handleBulkEMail(rowIds, selectionType) {
 			try {
-				await this.$store.dispatch("users/sendRegistrationLink", {
+				await this.sendRegistrationLink({
 					userIds: rowIds,
 					selectionType,
 				});
+
+				// await this.$store.dispatch("users/sendRegistrationLink", {
+				// 	userIds: rowIds,
+				// 	selectionType,
+				// });
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
 					notifySuccess(this.t("pages.administration.sendMail.success", rowIds.length));
 				} else {
@@ -498,11 +506,15 @@ export default defineComponent({
 		},
 		async handleBulkQR(rowIds, selectionType) {
 			try {
-				await this.$store.dispatch("users/getQrRegistrationLinks", {
+				await this.getQrRegistrationLinks({
 					userIds: rowIds,
 					selectionType,
-					roleName: "student",
 				});
+				// await this.$store.dispatch("users/getQrRegistrationLinks", {
+				// 	userIds: rowIds,
+				// 	selectionType,
+				// 	roleName: "student",
+				// });
 				if (this.qrLinks.length) {
 					printQrCodes(this.qrLinks, {
 						printPageTitleKey: "pages.administration.printQr.printPageTitle",
