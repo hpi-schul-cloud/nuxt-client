@@ -12,7 +12,7 @@
 					<slot name="alert" />
 				</div>
 
-				<VCardText v-if="$slots.content" class="pa-4">
+				<VCardText v-if="$slots.content">
 					<slot name="content" />
 				</VCardText>
 
