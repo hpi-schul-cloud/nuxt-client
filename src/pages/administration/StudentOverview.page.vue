@@ -91,7 +91,7 @@
 			</WarningAlert>
 		</template>
 		<template #content>
-			<ul class="mx-6 mb-4" data-testid="confirmation-dialog-message-list">
+			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
 				<li v-for="student in selectedStudents" :key="student._id">{{ student.firstName }} {{ student.lastName }}</li>
 			</ul>
 		</template>
