@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { type UpdateNewsParams } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { type AlertStatus, useNotificationStore } from "@data-app";
+import { notifyError, notifySuccess } from "@data-app";
 import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
@@ -68,7 +68,7 @@ const setPageTitle = () => {
 
 const onSave = async (newsToPatch: UpdateNewsParams) => {
 	if (!currentNews.value?.id) {
-		showNotifier("error", "patch");
+		notifyError(t("components.organisms.FormNews.error.patch"));
 		return;
 	}
 
@@ -80,38 +80,31 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 			displayAt: newsToPatch.displayAt,
 		});
 
-		showNotifier("success", "patch");
+		notifySuccess(t("components.organisms.FormNews.success.patch"));
 
 		await router.push({ path: `/news/${currentNews.value?.id}` });
 	} catch {
-		showNotifier("error", "patch");
+		notifyError(t("components.organisms.FormNews.error.patch"));
 	}
 };
 
 const onDelete = async () => {
 	if (!currentNews.value?.id) {
-		showNotifier("error", "remove");
+		notifyError(t("components.organisms.FormNews.error.remove"));
 		return;
 	}
 
 	try {
 		await deleteNews(currentNews.value.id);
-		showNotifier("success", "remove");
+		notifySuccess(t("components.organisms.FormNews.success.remove"));
 
 		router.push({ path: "/news" });
 	} catch {
-		showNotifier("error", "remove");
+		notifyError(t("components.organisms.FormNews.error.remove"));
 	}
 };
 
 const onCancel = () => {
 	router.go(-1);
-};
-
-const showNotifier = (status: AlertStatus, method: "remove" | "patch") => {
-	useNotificationStore().notify({
-		text: t(`components.organisms.FormNews.${status}.${method}`),
-		status,
-	});
 };
 </script>
