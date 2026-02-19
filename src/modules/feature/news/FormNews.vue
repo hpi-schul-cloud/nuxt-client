@@ -1,5 +1,5 @@
 <template>
-	<VForm ref="newsForm">
+	<VForm ref="newsForm" @submit.prevent.stop="onSave">
 		<VTextField
 			v-model="newsTitle"
 			autofocus
@@ -59,10 +59,10 @@
 			<VBtn
 				color="primary"
 				variant="flat"
+				type="submit"
 				data-testid="btn_news_submit"
 				:disabled="status === 'pending'"
 				:text="t('common.actions.save')"
-				@click="onSave"
 			/>
 		</div>
 	</VForm>
