@@ -1,63 +1,70 @@
 <template>
-	<VForm @submit.prevent="save">
+	<VForm ref="newsForm">
 		<VTextField
 			v-model="newsTitle"
 			autofocus
 			:placeholder="t('components.organisms.FormNews.input.title.placeholder')"
-			name="title"
 			data-testid="news_title"
 			:label="t('components.organisms.FormNews.input.title.label')"
 			:rules="[validateOnOpeningTag, isRequired()]"
 		/>
-		<VFadeTransition>
-			<div v-if="newsTitle">
-				<ClassicEditor
-					v-model="newsContent"
-					class="mb-4 mt-13"
-					:placeholder="t('components.organisms.FormNews.editor.placeholder')"
-					@update:value="onUpdateContent"
-				/>
-				<VFadeTransition>
-					<div v-if="newsContent">
-						<p class="mt-13">
-							{{ t("components.organisms.FormNews.label.planned_publish") }}
-						</p>
-						<DatePicker
-							:date="newsDate"
-							:label="t('common.labels.date')"
-							data-testid="news_date"
-							@update:date="onUpdateDate"
-						/>
-						<VTextField
-							v-model="newsTime"
-							v-time-input-mask
-							:prepend-inner-icon="mdiClockOutline"
-							:label="t('common.labels.time')"
-							data-testid="news_time"
-						/>
-					</div>
-				</VFadeTransition>
-				<div class="d-flex ga-3 mt-2">
-					<VSpacer />
-					<VBtn
-						v-if="showDeleteButton"
-						variant="text"
-						color="error"
-						:text="t('common.actions.delete')"
-						@click="onDelete"
-					/>
-					<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
-					<VBtn
-						color="primary"
-						variant="flat"
-						type="submit"
-						data-testid="btn_news_submit"
-						:disabled="status === 'pending'"
-						:text="t('common.actions.save')"
-					/>
-				</div>
-			</div>
-		</VFadeTransition>
+
+		<div class="mt-5">
+			<ClassicEditor
+				ref="classicEditor"
+				v-model="newsContent"
+				class="mb-4 mt-13"
+				:placeholder="t('components.organisms.FormNews.editor.placeholder')"
+				aria-describedby="news-content-error"
+				@update:value="onUpdateContent"
+				@blur="shouldNewsContentValidation = true"
+			/>
+			<VMessages
+				id="news-content-error"
+				:active="!newsContent && shouldNewsContentValidation"
+				color="error"
+				:messages="t('components.organisms.FormNews.errors.missing_content')"
+				class="mt-1 opacity-100 news-content-error"
+			>
+				<template #message="{ message }">
+					<VDivider class="border-opacity-100 mb-2" />
+					{{ message }}
+				</template>
+			</VMessages>
+		</div>
+
+		<div>
+			<p class="mt-13">
+				{{ t("components.organisms.FormNews.label.planned_publish") }}
+			</p>
+			<DatePicker
+				:date="newsDate"
+				:label="t('common.labels.date')"
+				data-testid="news_date"
+				@update:date="onUpdateDate"
+			/>
+			<VTextField
+				v-model="newsTime"
+				v-time-input-mask
+				:prepend-inner-icon="mdiClockOutline"
+				:label="t('common.labels.time')"
+				data-testid="news_time"
+			/>
+		</div>
+
+		<div class="d-flex ga-3 mt-2">
+			<VSpacer />
+			<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
+			<VBtn v-if="showDeleteButton" variant="text" color="error" :text="t('common.actions.delete')" @click="onDelete" />
+			<VBtn
+				color="primary"
+				variant="flat"
+				data-testid="btn_news_submit"
+				:disabled="status === 'pending'"
+				:text="t('common.actions.save')"
+				@click="onSave"
+			/>
+		</div>
 	</VForm>
 	<ConfirmationDialog>
 		<template v-if="showDialogWarning" #alert>
@@ -70,7 +77,7 @@
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
-import { notifyError } from "@data-app";
+import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
 import { mdiClockOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
@@ -79,8 +86,9 @@ import { DatePicker } from "@ui-date-time-picker";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
 import dayjs, { Dayjs } from "dayjs";
-import { computed, ref, watch } from "vue";
+import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { VMessages } from "vuetify/components";
 
 type Props = {
 	title?: string;
@@ -112,20 +120,9 @@ const newsTitle = ref("");
 const newsContent = ref("");
 const newsDate = ref("");
 const newsTime = ref("");
-
-const errors = computed(() => {
-	const title = newsTitle.value ? undefined : t("components.organisms.FormNews.errors.missing_title").toString();
-
-	const titleOpeningTag =
-		validateOnOpeningTag(newsTitle.value) === true ? undefined : t("common.validation.containsOpeningTag").toString();
-
-	const content = newsContent.value ? undefined : t("components.organisms.FormNews.errors.missing_content").toString();
-
-	return {
-		title: title || titleOpeningTag,
-		content,
-	};
-});
+const newsForm = useTemplateRef("newsForm");
+const classicEditor = useTemplateRef("classicEditor");
+const shouldNewsContentValidation = ref(false);
 
 watch(
 	props,
@@ -168,11 +165,13 @@ const getDisplayAt = () => {
 	return dateTimeCombinedString.toISOString();
 };
 
-const save = () => {
-	const errorsArray = Object.values(errors.value).filter(Boolean);
-	if (errorsArray.length && errorsArray[0]) {
-		notifyError(String(errorsArray[0]));
-		return errorsArray[0];
+const onSave = async () => {
+	shouldNewsContentValidation.value = true;
+	const isValid = await isValidOrFocusFirstInvalidInput(newsForm);
+	if (!isValid) return;
+	if (!newsContent.value && isValid) {
+		classicEditor.value?.focus();
+		return;
 	}
 	emit("save", { title: newsTitle.value, content: newsContent.value, displayAt: getDisplayAt() });
 };
@@ -207,3 +206,8 @@ const onCancel = async () => {
 	if (shouldCancel) emit("cancel");
 };
 </script>
+<style lang="scss" scoped>
+.news-content-error {
+	letter-spacing: 0.4px;
+}
+</style>
