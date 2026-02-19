@@ -21,15 +21,16 @@
 
 <script setup lang="ts">
 import { CreateNewsParams, CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import { type LocationQuery, type LocationQueryValue, useRoute, useRouter } from "vue-router";
+import { type LocationQueryValue, useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -40,36 +41,41 @@ const { status, createdNews, createNews } = useNews();
 const pageTitle = computed(() => buildPageTitle(`${t("pages.news.new.title")}`));
 useTitle(pageTitle);
 
-const parseNewstarget = (
-	targetId: LocationQueryValue | LocationQueryValue[],
-	targetModel: LocationQueryValue | LocationQueryValue[]
-) => {
-	if (
+onMounted(() => {
+	if (!newsTargetFromQueryParams.value) return;
+
+	const { targetId, targetModel } = newsTargetFromQueryParams.value;
+	const areQueryParamsValid =
 		targetId &&
 		typeof targetId === "string" &&
-		targetModel &&
-		typeof targetModel === "string"
-		// Object.values(CreateNewsParamsTargetModelEnum).includes(targetModel as CreateNewsParamsTargetModelEnum) // Todo: think about improvement error handling if targetModel (context) is invalid
-	) {
-		return { targetId, targetModel: targetModel as CreateNewsParamsTargetModelEnum };
+		Object.values(CreateNewsParamsTargetModelEnum).includes(targetModel as CreateNewsParamsTargetModelEnum);
+
+	if (!areQueryParamsValid) useAppStore().handleApplicationError(HttpStatusCode.BadRequest);
+});
+
+const newsTargetFromQueryParams = computed(() => {
+	const { target, targetmodel, context, contextId } = route.query;
+
+	return parseNewsTarget(target, targetmodel) ?? parseNewsTarget(contextId, context);
+});
+
+const parseNewsTarget = (
+	targetId: LocationQueryValue | LocationQueryValue[],
+	targetModel: LocationQueryValue | LocationQueryValue[]
+): Pick<CreateNewsParams, "targetId" | "targetModel"> | undefined => {
+	if (targetModel && typeof targetModel === "string") {
+		return { targetId: targetId as string, targetModel: targetModel as CreateNewsParamsTargetModelEnum };
 	} else {
 		return undefined;
 	}
 };
 
-const getNewsTarget = (
-	query: LocationQuery,
-	schoolId: string | undefined
-): Pick<CreateNewsParams, "targetId" | "targetModel"> =>
-	parseNewstarget(query.target, query.targetmodel) ??
-	parseNewstarget(query.contextId, query.context) ?? {
-		targetId: schoolId ?? "",
-		targetModel: CreateNewsParamsTargetModelEnum.Schools,
-	};
-
 const create = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
 	try {
-		const newsTarget = getNewsTarget(route.query, useAppStore()?.school?.id);
+		const newsTarget = newsTargetFromQueryParams.value ?? {
+			targetId: useAppStore()?.school?.id ?? "",
+			targetModel: CreateNewsParamsTargetModelEnum.Schools,
+		};
 		await createNews({
 			title: news.title,
 			content: news.content,
