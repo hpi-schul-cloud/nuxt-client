@@ -1,15 +1,21 @@
 <template>
 	<KebabMenu class="mx-2" :aria-label="t('pages.roomDetails.ariaLabels.menu')" data-testid="room-menu">
-		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
+		<KebabMenuActionEdit v-if="allowedOperations.updateRoom" @click="() => $emit('room:edit')" />
 		<KebabMenuActionRoomMembers
-			v-if="canSeeMembersList"
+			v-if="allowedOperations.viewMemberlist"
 			:members-info-text="membersInfoText"
 			@click="() => $emit('room:manage-members')"
 		/>
-		<KebabMenuActionRoomCopy v-if="isRoomCopyFeatureEnabled && canCopyRoom" @click="() => $emit('room:copy')" />
-		<KebabMenuActionShare v-if="isRoomShareFeatureEnabled && canShareRoom" @click="() => $emit('room:share')" />
+		<KebabMenuActionRoomCopy
+			v-if="isRoomCopyFeatureEnabled && allowedOperations.copyRoom"
+			@click="() => $emit('room:copy')"
+		/>
+		<KebabMenuActionShare
+			v-if="isRoomShareFeatureEnabled && allowedOperations.shareRoom"
+			@click="() => $emit('room:share')"
+		/>
 		<KebabMenuActionDelete
-			v-if="canDeleteRoom"
+			v-if="allowedOperations.deleteRoom"
 			scope-language-key="common.labels.room"
 			:name="roomName"
 			@click="onDeleteRoom"
@@ -20,7 +26,7 @@
 
 <script setup lang="ts">
 import { useEnvConfig } from "@data-env";
-import { useRoomAuthorization } from "@data-room";
+import { useRoomAllowedOperations } from "@data-room";
 import {
 	KebabMenu,
 	KebabMenuActionDelete,
@@ -44,11 +50,10 @@ const { t } = useI18n();
 const isRoomCopyFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_COPY_ENABLED);
 const isRoomShareFeatureEnabled = computed(() => useEnvConfig().value.FEATURE_ROOM_SHARE);
 
-const { canAddRoomMembers, canCopyRoom, canShareRoom, canEditRoom, canDeleteRoom, canSeeMembersList } =
-	useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const membersInfoText = computed(() =>
-	canAddRoomMembers.value ? t("pages.rooms.members.manage") : t("pages.rooms.members.view")
+	allowedOperations.value.addMembers ? t("pages.rooms.members.manage") : t("pages.rooms.members.view")
 );
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {

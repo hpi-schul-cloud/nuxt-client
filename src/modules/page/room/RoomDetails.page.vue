@@ -26,7 +26,11 @@
 		</EmptyState>
 		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
 		<ConfirmationDialog />
-		<SelectBoardLayoutDialog v-if="canEditRoomContent" v-model="boardLayoutDialogIsOpen" @select="onCreateBoard" />
+		<SelectBoardLayoutDialog
+			v-if="allowedOperations.editRoomContent"
+			v-model="boardLayoutDialogIsOpen"
+			@select="onCreateBoard"
+		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
 		<ShareModal :type="ShareTokenParentType.Room" />
@@ -41,7 +45,7 @@ import { ShareTokenParentType } from "@/types/sharing/Token";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
-import { useRoomAuthorization, useRoomDetailsStore, useRoomStore } from "@data-room";
+import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -75,11 +79,12 @@ const isLeaveRoomProhibitedDialogOpen = ref(false);
 const pageTitle = computed(() => buildPageTitle(room.value.name, t("pages.roomDetails.title")));
 useTitle(pageTitle);
 
-const { canDeleteRoom, canEditRoomContent, canLeaveRoom, canCopyRoom, canShareRoom, canListDrafts, canViewRoom } =
-	useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const visibleBoards = computed(() =>
-	roomBoards.value?.filter((board) => (board.isVisible ? canViewRoom.value : canListDrafts.value))
+	roomBoards.value?.filter((board) =>
+		board.isVisible ? allowedOperations.value.viewContent : allowedOperations.value.viewDraftContent
+	)
 );
 
 const roomTitle = computed(() => room.value.name);
@@ -98,7 +103,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 ]);
 
 const fabAction = computed<FabAction[] | undefined>(() =>
-	canEditRoomContent.value
+	allowedOperations.value.editRoomContent
 		? [
 				{
 					icon: mdiPlus,
@@ -133,7 +138,7 @@ const onManageMembers = () => {
 const hasRoomCopyStarted = ref(false);
 
 const onCopy = () => {
-	if (canCopyRoom.value) {
+	if (allowedOperations.value.copyRoom) {
 		hasRoomCopyStarted.value = true;
 	}
 };
@@ -152,7 +157,7 @@ const onCopyEnded = () => {
 };
 
 const onShare = () => {
-	if (canShareRoom.value) {
+	if (allowedOperations.value.shareRoom) {
 		shareModule.startShareFlow({
 			id: room.value.id,
 			type: ShareTokenParentType.Room,
@@ -161,7 +166,7 @@ const onShare = () => {
 };
 
 const onDelete = async () => {
-	if (!canDeleteRoom.value) return;
+	if (!allowedOperations.value.deleteRoom) return;
 
 	await deleteRoom(room.value.id);
 	router.push({ name: "rooms" });
@@ -170,7 +175,7 @@ const onDelete = async () => {
 const { user } = useAppStoreRefs();
 
 const onLeaveRoom = async () => {
-	if (!canLeaveRoom.value) {
+	if (!allowedOperations.value.leaveRoom) {
 		isLeaveRoomProhibitedDialogOpen.value = true;
 		return;
 	}

@@ -29,7 +29,11 @@
 				{{ t("common.words.draft") }}
 			</VChip>
 			<BoardEditableChip v-if="isEditableChipVisible" />
-			<BoardMenu v-if="hasManageBoardPermission" :scope="BoardMenuScope.BOARD" data-testid="board-menu-btn">
+			<BoardMenu
+				v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
+				:scope="BoardMenuScope.BOARD"
+				data-testid="board-menu-btn"
+			>
 				<KebabMenuActionRename @click="onStartEditMode" />
 				<KebabMenuActionDuplicate data-testid="kebab-menu-action-duplicate-board" @click="onCopyBoard" />
 				<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
@@ -52,9 +56,8 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-import { useBoardAllowedOperations } from "@/modules/data/board/boardAllowedOperations.composable";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
-import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
