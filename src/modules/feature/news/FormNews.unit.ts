@@ -1,68 +1,21 @@
+import ClassicEditor from "../editor/ClassicEditor.vue";
 import FormNews from "./FormNews.vue";
 import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
+import { Status } from "@/store/types/commons";
 import { News } from "@/store/types/news";
-import { expectNotification } from "@@/tests/test-utils";
+import { expectNotification, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { Dayjs } from "dayjs";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import { VTextField } from "vuetify/components";
-import { createStore } from "vuex";
+import { VForm, VTextField } from "vuetify/components";
 
 const date = "2022-07-05";
 const time = "11:00";
 const testDate = fromInputDateTime(date, time) as unknown as Dayjs;
-
-type NewsPayload = {
-	title: string;
-	content: string;
-	displayAt: string;
-	date: { date: string; time: string };
-};
-
-const testNewsPayload: NewsPayload = {
-	title: "Hi",
-	content: "lalaland",
-	displayAt: testDate.toISOString(),
-	date: {
-		date: "2022-07-05",
-		time: "11:00",
-	},
-};
-
-const testNews: News = {
-	...testNewsPayload,
-	id: "",
-	createdAt: "",
-	creator: {
-		id: "",
-		firstName: "",
-		lastName: "",
-	},
-	school: {
-		id: "",
-		name: "",
-	},
-	targetId: "",
-	targetModel: "",
-};
-
-const $store = createStore({
-	modules: {
-		news: {
-			state: "",
-			mutations: {},
-			actions: {},
-			getters: {
-				getStatus: () => "completed",
-			},
-		},
-	},
-});
 
 const $route = {
 	name: "news-id",
@@ -73,38 +26,49 @@ const $route = {
 };
 
 describe("FormNews", () => {
-	const setup = (news: News) => {
+	const setup = (options?: Partial<{ status: Status; news: News | null; showDeleteButton: boolean }>) => {
+		const currentNews = newsResponseFactory.build({ displayAt: testDate.toISOString() });
+		const { news, status, showDeleteButton } = {
+			news: currentNews,
+			status: "completed" as Status,
+			showDeleteButton: false,
+			...options,
+		};
+
 		const wrapper = mount(FormNews, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$route,
-					$store,
 				},
 				stubs: {
 					ClassicEditor: true,
 				},
 			},
 			props: {
-				news,
+				title: news?.title ?? "",
+				content: news?.content ?? "",
+				displayAt: news?.displayAt ?? undefined,
+				status: status ?? "",
+				showDeleteButton: showDeleteButton ?? false,
 			},
 		});
 
-		return { wrapper };
+		return { wrapper, news };
 	};
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		setupStores({});
 	});
 
 	it("should render component", () => {
-		const { wrapper } = setup(testNews);
+		const { wrapper } = setup();
+
 		expect(wrapper.findComponent(FormNews).exists()).toBe(true);
 	});
 
 	it("passes date and time to input fields", () => {
-		const { wrapper } = setup(testNews);
+		const { wrapper } = setup();
 
 		const dateInput = wrapper.findComponent(DatePicker);
 
@@ -116,31 +80,44 @@ describe("FormNews", () => {
 
 	describe("save", () => {
 		it("emits save event on submit with correct payload", async () => {
-			const { wrapper } = setup({ ...testNews });
+			const { wrapper, news } = setup();
 
-			await wrapper.find("form").trigger("submit");
+			await wrapper.findComponent(VForm).trigger("submit");
 
 			expect(wrapper.emitted()).toHaveProperty("save");
 			expect(wrapper.emitted().save).toHaveLength(1);
-			expect(wrapper.emitted().save[0]).toEqual([testNewsPayload]);
+			expect(wrapper.emitted().save[0]).toEqual([
+				{ title: news?.title, content: news?.content, displayAt: news?.displayAt },
+			]);
 		});
 
 		it("shows validation error on empty title", async () => {
-			const { wrapper } = setup({ ...testNews, title: "" });
+			const { wrapper } = setup();
+
+			const titleInput = wrapper.find("[data-testid='news_title']").findComponent(VTextField);
+			await titleInput.setValue("");
+			await nextTick();
 
 			await wrapper.find("form").trigger("submit");
 			expectNotification("error");
 		});
 
 		it("shows validation error on empty content", async () => {
-			const { wrapper } = setup({ ...testNews, content: "" });
+			const { wrapper } = setup();
+			const contentInput = wrapper.findComponent(ClassicEditor);
+			await contentInput.setValue("");
+			await nextTick();
 
 			await wrapper.find("form").trigger("submit");
 			expectNotification("error");
 		});
 
 		it("does not emit save event on empty title", async () => {
-			const { wrapper } = setup({ ...testNews, title: "" });
+			const { wrapper } = setup();
+
+			const titleInput = wrapper.find("[data-testid='news_title']").findComponent(VTextField);
+			await titleInput.setValue("");
+			await nextTick();
 
 			await wrapper.find("form").trigger("submit");
 
@@ -149,7 +126,11 @@ describe("FormNews", () => {
 		});
 
 		it("does not emit save event on empty content", async () => {
-			const { wrapper } = setup({ ...testNews, content: "" });
+			const { wrapper } = setup();
+
+			const contentInput = wrapper.findComponent(ClassicEditor);
+			await contentInput.setValue("");
+			await nextTick();
 
 			await wrapper.find("form").trigger("submit");
 
@@ -160,9 +141,10 @@ describe("FormNews", () => {
 
 	describe("when title contains < sign directly followed by a string", () => {
 		it("shows contain error hint", async () => {
-			const { wrapper } = setup(testNews);
+			const { wrapper } = setup();
+			await nextTick();
 
-			const textField = wrapper.findComponent({ name: "VTextField" });
+			const textField = wrapper.findComponent(VTextField);
 			await textField.setValue("<abc123");
 			await nextTick();
 
