@@ -18,7 +18,7 @@
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
 				:max-length="100"
-				:has-edit-permission="hasEditPermission"
+				:has-edit-permission="allowedOperations.updateBoardTitle"
 				@update:value="updateBoardTitle"
 				@blur="onBoardTitleBlur"
 			/>
@@ -29,13 +29,20 @@
 				{{ t("common.words.draft") }}
 			</VChip>
 			<BoardEditableChip v-if="isEditableChipVisible" />
-			<BoardMenu v-if="hasManageBoardPermission" :scope="BoardMenuScope.BOARD" data-testid="board-menu-btn">
+			<BoardMenu
+				v-if="allowedOperations.updateBoardTitle || allowedOperations.shareBoard"
+				:scope="BoardMenuScope.BOARD"
+				data-testid="board-menu-btn"
+			>
 				<KebabMenuActionRename @click="onStartEditMode" />
 				<KebabMenuActionDuplicate data-testid="kebab-menu-action-duplicate-board" @click="onCopyBoard" />
-				<KebabMenuActionShare v-if="isShareEnabled && hasShareBoardPermission" @click="onShareBoard" />
+				<KebabMenuActionShare v-if="isShareEnabled && allowedOperations.shareBoard" @click="onShareBoard" />
 				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-				<KebabMenuActionEditingSettings v-if="hasReadersEditPermission && isRoomBoard" @click="onEditBoardSettings" />
+				<KebabMenuActionEditingSettings
+					v-if="allowedOperations.updateReadersCanEditSetting && isRoomBoard"
+					@click="onEditBoardSettings"
+				/>
 				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 				<KebabMenuActionDelete :name="title" scope-language-key="common.words.board" @click="onDeleteBoard" />
 			</BoardMenu>
@@ -50,7 +57,7 @@ import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
-import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
@@ -92,7 +99,7 @@ const boardId = toRef(props, "boardId");
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(boardId.value);
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission, hasManageBoardPermission, hasShareBoardPermission } = useBoardPermissions();
+const { allowedOperations } = useBoardAllowedOperations();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref("0px");
@@ -108,12 +115,10 @@ const boardTitleFallback = computed(() => {
 const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.Room);
 
 const onStartEditMode = () => {
-	if (!hasEditPermission.value) return;
 	startEditMode();
 };
 
 const onEndEditMode = () => {
-	if (!hasEditPermission.value) return;
 	stopEditMode();
 };
 
@@ -126,22 +131,18 @@ const onToggleEditMode = () => {
 };
 
 const onCopyBoard = () => {
-	if (!hasEditPermission.value) return;
 	emit("copy:board");
 };
 
 const onShareBoard = () => {
-	if (!hasShareBoardPermission.value) return;
 	emit("share:board");
 };
 
 const onPublishBoard = () => {
-	if (!hasEditPermission.value) return;
 	emit("update:visibility", true);
 };
 
 const onUnpublishBoard = () => {
-	if (!hasEditPermission.value) return;
 	emit("update:visibility", false);
 };
 

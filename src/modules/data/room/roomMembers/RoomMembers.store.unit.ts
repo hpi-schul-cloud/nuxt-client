@@ -479,15 +479,27 @@ describe("useRoomMembers", () => {
 		it("should add teachers to the room", async () => {
 			const { roomMembersStore, roomDetailsStore } = setup();
 
-			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
-			);
-
 			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.Roomadmin,
 				schoolRoleNames: [RoleName.Teacher],
 			});
 			const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
+			roomApiMock.roomControllerAddMembers.mockResolvedValue(
+				mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
+			);
+			roomApiMock.roomControllerGetMembers.mockResolvedValue(
+				mockApiResponse({
+					data: {
+						data: [
+							{
+								...firstPotentialMember,
+								displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+								displaySchoolRole: "common.labels.teacher.neutral",
+							},
+						],
+					},
+				})
+			);
 
 			await roomMembersStore.addMembers([firstPotentialMember.userId]);
 

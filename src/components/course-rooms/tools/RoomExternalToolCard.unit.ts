@@ -1,8 +1,10 @@
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
+import { Permission } from "@/serverApi/v3";
 import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
 import {
 	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,
@@ -14,6 +16,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 vi.mock("@data-external-tool");
+vi.mock("@data-app");
 
 describe("RoomExternalToolCard", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
@@ -23,6 +26,11 @@ describe("RoomExternalToolCard", () => {
 	>;
 
 	beforeEach(() => {
+		vi.mocked(useAppStore).mockReturnValue({
+			hasPermission: (permission: Permission) => permission === Permission.ContextToolAdmin,
+			userRoles: [],
+		} as unknown as ReturnType<typeof useAppStore>);
+
 		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>();
 
 		useContextExternalToolConfigurationStatusMock =
@@ -357,7 +365,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display incomplete operational chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find('[data-testId="tool-card-status-incompleteOperational"]');
+				const statusChip = wrapper.get('[data-testId="tool-card-status-incompleteOperational"]');
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});

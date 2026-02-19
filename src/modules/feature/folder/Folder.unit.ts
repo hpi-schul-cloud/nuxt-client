@@ -18,8 +18,8 @@ import {
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardStore } from "@data-board";
 import * as BoardApi from "@data-board";
+import { useBoardAllowedOperations, useBoardStore } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { CollaboraFileType } from "@data-file";
 import * as FolderState from "@data-folder";
@@ -33,7 +33,7 @@ import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { ComputedRef, nextTick, ref } from "vue";
+import { computed, ComputedRef, nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VBtn, VSkeletonLoader } from "vuetify/lib/components/index";
 
@@ -42,6 +42,8 @@ const useRouterMock = <Mock>useRouter;
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
+
+vi.mock("@data-board/BoardAllowedOperations.composable");
 
 vi.mock("@feature-collabora/composables/add-collabora-file.composable");
 const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);
@@ -113,10 +115,9 @@ describe("Folder.vue", () => {
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -125,9 +126,8 @@ describe("Folder.vue", () => {
 
 					const { wrapper } = setupWrapper();
 					const useBoardStoreMock = mockedPiniaStoreTyping(useBoardStore);
-					const board = boardResponseFactory.build({
-						id: boardInStoreIsParent ? parent.id : "different-board-id",
-					});
+					const id = boardInStoreIsParent && parent["id"] ? parent.id : "different-board-id";
+					const board = boardResponseFactory.build({ id });
 					useBoardStoreMock.board = boardInStoreUndefined ? undefined : board;
 
 					const windowOpenMock = vi.fn();
@@ -242,10 +242,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -301,10 +300,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -372,10 +370,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -449,10 +446,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -517,10 +513,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -586,10 +581,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -677,10 +671,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -755,10 +748,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -824,10 +816,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -897,10 +888,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -973,10 +963,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -1045,10 +1034,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -1124,10 +1112,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1194,10 +1181,9 @@ describe("Folder.vue", () => {
 				const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
 				mockedUseBoardApi.mockReturnValue(boardApiMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1243,10 +1229,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const mockedOpenCollaboraFileDialog = vi.fn();
 				mockedUseAddCollaboraFile.mockReturnValue({
@@ -1378,10 +1363,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1487,10 +1471,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1622,10 +1605,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1726,10 +1708,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(false),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1788,10 +1769,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(false),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1861,10 +1841,9 @@ describe("Folder.vue", () => {
 				const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 				vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-				const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-					hasEditPermission: ref(false),
-				});
-				vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: false }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 					isCollaboraFileDialogOpen: ref(false),
@@ -1934,10 +1913,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),
@@ -2002,10 +1980,9 @@ describe("Folder.vue", () => {
 					const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
 					vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
-					const useBoardPermissionsMock = createMock<ReturnType<typeof BoardApi.useBoardPermissions>>({
-						hasEditPermission: ref(false),
-					});
-					vi.spyOn(BoardApi, "useBoardPermissions").mockReturnValueOnce(useBoardPermissionsMock);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: false }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
 						isCollaboraFileDialogOpen: ref(false),

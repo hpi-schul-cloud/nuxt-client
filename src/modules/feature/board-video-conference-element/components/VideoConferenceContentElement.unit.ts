@@ -7,7 +7,7 @@ import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFeatures, useBoardFocusHandler, useBoardPermissions, useContentElementState } from "@data-board";
+import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -24,6 +24,7 @@ vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@data-board/BoardPermissions.composable");
 vi.mock("../composables/VideoConference.composable");
+vi.mock("@data-board/BoardAllowedOperations.composable");
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -45,7 +46,6 @@ describe("VideoConferenceContentElement", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let useBoardPermissionsMock: DeepMocked<ReturnType<typeof useBoardPermissions>>;
 
 	beforeEach(() => {
 		route = createMock<ReturnType<typeof useRoute>>();
@@ -65,32 +65,22 @@ describe("VideoConferenceContentElement", () => {
 		vi.clearAllMocks();
 	});
 
-	const setupWrapper = (
-		options: {
-			content?: VideoConferenceElementContent;
-			isEditMode: boolean;
-			isNotFirstElement?: boolean;
-			isNotLastElement?: boolean;
-			role?: RoleName;
-			columnIndex?: number;
-			rowIndex?: number;
-			elementIndex?: number;
-			isRunning?: boolean;
-			error?: Error | null;
-			hasManageVideoConferencePermission?: boolean;
-		} = {
-			content: undefined,
-			isEditMode: true,
-			role: RoleName.Teacher,
-			columnIndex: 0,
-			rowIndex: 1,
-			elementIndex: 2,
-			hasManageVideoConferencePermission: false,
-		}
-	) => {
+	const setupWrapper = (options: {
+		content?: VideoConferenceElementContent;
+		isEditMode: boolean;
+		isNotFirstElement?: boolean;
+		isNotLastElement?: boolean;
+		role?: RoleName;
+		columnIndex?: number;
+		rowIndex?: number;
+		elementIndex?: number;
+		isRunning?: boolean;
+		error?: Error | null;
+		hasManageVideoConferencePermission?: boolean;
+	}) => {
 		const {
 			content,
-			isEditMode,
+			isEditMode = true,
 			isNotFirstElement,
 			isNotLastElement,
 			role = RoleName.Teacher,
@@ -136,17 +126,21 @@ describe("VideoConferenceContentElement", () => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(role);
 
-		useBoardPermissionsMock = createMock<ReturnType<typeof useBoardPermissions>>({
-			hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
-			isTeacher: ref(role === "teacher"),
-			isStudent: ref(role === "student"),
-		});
-
-		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
-
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								room: {
+									allowedOperations: { manageVideoConference: hasManageVideoConferencePermission },
+								},
+							},
+						},
+					}),
+				],
 				provide: {
 					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},

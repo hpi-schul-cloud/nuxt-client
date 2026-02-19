@@ -47,6 +47,8 @@ export const useAppStore = defineStore("applicationStore", () => {
 	const hasPermission = (permission: Permission) =>
 		computed(() => userPermissions.value?.includes(permission) ?? false);
 
+	const hasPermissionNow = (permission: Permission) => userPermissions.value?.includes(permission) ?? false;
+
 	// Actions
 
 	const login = async () => {
@@ -127,6 +129,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		user,
 		userPermissions,
 		hasPermission,
+		hasPermissionNow,
 		isTeacher,
 		isStudent,
 		isExternalPerson,

@@ -1,6 +1,6 @@
 import RoomContentGrid from "./RoomContentGrid.vue";
 import RoomContentGridItem from "./RoomContentGridItem.vue";
-import { Permission } from "@/serverApi/v3";
+import { Permission, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { roomBoardGridItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomDetailsStore } from "@data-room";
@@ -14,12 +14,30 @@ describe("@feature-room/RoomContentGrid", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = () => {
+	const setup = (
+		options: Partial<{
+			allowedOperations: Partial<RoomItemResponseAllowedOperations> | undefined;
+		}> = {}
+	) => {
 		const boards = roomBoardGridItemFactory.buildList(3);
 
 		const wrapper = mount(RoomContentGrid, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								room: {
+									id: "test-room",
+									name: "Test Room",
+									allowedOperations: options?.allowedOperations,
+								},
+							},
+						},
+					}),
+				],
 				stubs: { RoomContentGridItem: true },
 			},
 			props: {
@@ -60,7 +78,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		});
 
 		it("should handle keyboard navigation - ArrowRight", () => {
-			const { wrapper, boards } = setup();
+			const { wrapper, boards } = setup({ allowedOperations: { editRoomContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(0);
 			boardItem?.vm.$emit("keydown", { key: "ArrowRight" });
@@ -69,7 +87,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		});
 
 		it("should handle keyboard navigation - ArrowLeft", () => {
-			const { wrapper, boards } = setup();
+			const { wrapper, boards } = setup({ allowedOperations: { editRoomContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomContentGridItem).at(2);
 			boardItem?.vm.$emit("keydown", { key: "ArrowLeft" });
@@ -78,7 +96,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		});
 
 		it("should handle keyboard navigation - ArrowDown", () => {
-			const { wrapper, boards } = setup();
+			const { wrapper, boards } = setup({ allowedOperations: { editRoomContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomContentGridItem)[0];
 			boardItem.vm.$emit("keydown", { key: "ArrowDown" });
@@ -87,7 +105,7 @@ describe("@feature-room/RoomContentGrid", () => {
 		});
 
 		it("should handle keyboard navigation - ArrowUp", () => {
-			const { wrapper, boards } = setup();
+			const { wrapper, boards } = setup({ allowedOperations: { editRoomContent: true } });
 
 			const boardItem = wrapper.findAllComponents(RoomContentGridItem)[2];
 			boardItem.vm.$emit("keydown", { key: "ArrowUp" });
@@ -107,8 +125,7 @@ describe("@feature-room/RoomContentGrid", () => {
 	});
 
 	it("should disable sorting when user cannot edit room content", async () => {
-		useRoomDetailsStore().$patch({ room: { permissions: [] } });
-		const { wrapper } = setup();
+		const { wrapper } = setup({ allowedOperations: { editRoomContent: false } });
 		const sortable = wrapper.findComponent({ name: "Sortable" });
 		expect(sortable.props("options").disabled).toBe(true);
 	});

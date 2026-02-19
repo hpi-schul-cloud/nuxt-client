@@ -3,7 +3,7 @@
 		<DataTable
 			:items="tableData"
 			:table-headers="tableHeader"
-			:show-select="canAddRoomMembers"
+			:show-select="allowedOperations.addMembers"
 			:external-selected-ids="selectedIds"
 			:header-bottom="headerBottom"
 			data-testid="participants-table"
@@ -12,7 +12,7 @@
 			@update:selected-ids="onUpdateSelectedIds"
 		>
 			<template #[`action-menu-items`]>
-				<KebabMenuActionChangePermission v-if="canAddRoomMembers" @click="onChangePermission(selectedIds)" />
+				<KebabMenuActionChangePermission v-if="allowedOperations.addMembers" @click="onChangePermission(selectedIds)" />
 				<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
 			</template>
 			<template #[`item.displaySchoolRole`]="{ item }">
@@ -21,20 +21,25 @@
 					{{ item.displaySchoolRole }}
 				</span>
 			</template>
-			<template v-if="canAddRoomMembers" #[`item.actions`]="{ item, index }">
+			<template v-if="allowedOperations.addMembers" #[`item.actions`]="{ item: member, index }">
 				<KebabMenu
-					v-if="isNeitherRoomOwnerNorCurrentUser(item.userId)"
+					v-if="
+						member.allowedOperations?.changeRole ||
+						member.allowedOperations?.passOwnershipTo ||
+						member.allowedOperations?.removeMember
+					"
 					:data-testid="`kebab-menu-${index}`"
-					:aria-label="getAriaLabel(item)"
+					:aria-label="getAriaLabel(member)"
 				>
 					<KebabMenuActionChangePermission
-						:aria-label="getAriaLabel(item, 'changeRole')"
-						@click="onChangePermission([item.userId])"
+						v-if="member.allowedOperations?.changeRole || member.allowedOperations?.passOwnershipTo"
+						:aria-label="getAriaLabel(member, 'changeRole')"
+						@click="onChangePermission([member.userId])"
 					/>
 					<KebabMenuActionRemoveMember
-						v-if="!isRoomOwner(item.userId)"
-						:aria-label="getAriaLabel(item, 'remove')"
-						@click="onRemoveMembers([item.userId])"
+						v-if="member.allowedOperations?.removeMember"
+						:aria-label="getAriaLabel(member, 'remove')"
+						@click="onRemoveMembers([member.userId])"
 					/>
 				</KebabMenu>
 			</template>
@@ -47,8 +52,7 @@
 <script setup lang="ts">
 import ChangeRole from "../dialogs/ChangeRole.vue";
 import { RoleName } from "@/serverApi/v3";
-import { useAppStore } from "@data-app";
-import { RoomMember, useRoomAuthorization, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import { RoomMember, useRoomAllowedOperations, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
@@ -68,24 +72,18 @@ withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
-const { canAddRoomMembers } = useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 const { room, fetchRoom } = useRoomDetailsStore();
 
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 
-const { isRoomOwner, removeMembers } = roomMembersStore;
+const { removeMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
 const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
-
-const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-	const isNotCurrentUser = userId !== useAppStore().user?.id;
-	const isNotRoomOwner = !isRoomOwner(userId);
-	return isNotCurrentUser && isNotRoomOwner;
-};
 
 const onDialogClose = () => {
 	isChangeRoleDialogOpen.value = false;
@@ -140,7 +138,7 @@ const getAriaLabel = (member: RoomMember, actionFor: "remove" | "changeRole" | "
 const tableHeader = computed(() => [
 	...baseTableHeaders.value,
 	{
-		title: canAddRoomMembers.value ? t("pages.rooms.members.tableHeader.actions") : "",
+		title: allowedOperations.value.addMembers ? t("pages.rooms.members.tableHeader.actions") : "",
 		key: "actions",
 		sortable: false,
 		width: 50,
