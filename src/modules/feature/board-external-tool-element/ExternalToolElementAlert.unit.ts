@@ -214,7 +214,6 @@ describe("ExternalToolElementAlert", () => {
 							isIncompleteOnScopeContext: true,
 						}),
 					},
-					isTeacher: false,
 				});
 				const alerts = wrapper.findAllComponents(WarningAlert);
 				expect(alerts).toHaveLength(1);
