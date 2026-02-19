@@ -36,6 +36,6 @@ describe("TheFooter.vue", () => {
 		const { wrapper } = setup();
 		const links = wrapper.findAllComponents(VBtn);
 
-		expect(links).toHaveLength(5);
+		expect(links).toHaveLength(6);
 	});
 });

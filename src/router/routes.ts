@@ -359,6 +359,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: "/system/security",
+		component: () => import("@/pages/Security.page.vue"),
+		meta: {
+			isPublic: true,
+		},
+	},
+	{
 		path: "/tasks",
 		component: () => import("@/pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
