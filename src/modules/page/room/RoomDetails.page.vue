@@ -27,7 +27,7 @@
 		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
-			v-if="allowedOperations.editRoomContent"
+			v-if="allowedOperations.editContent"
 			v-model="boardLayoutDialogIsOpen"
 			@select="onCreateBoard"
 		/>
@@ -103,7 +103,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 ]);
 
 const fabAction = computed<FabAction[] | undefined>(() =>
-	allowedOperations.value.editRoomContent
+	allowedOperations.value.editContent
 		? [
 				{
 					icon: mdiPlus,

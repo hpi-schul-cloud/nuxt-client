@@ -5,7 +5,7 @@
 		:list="boards"
 		class="room-content-grid mt-8"
 		item-key="id"
-		:options="getSortableOptions({ disabled: !allowedOperations.editRoomContent })"
+		:options="getSortableOptions({ disabled: !allowedOperations.editContent })"
 		@start="isDragging = true"
 		@end="onDropEnd"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
@@ -13,7 +13,7 @@
 		<template #item="{ element, index }">
 			<RoomContentGridItem
 				class="draggable user-select-none room-content-grid-item"
-				:class="{ 'cursor-grab': allowedOperations.editRoomContent }"
+				:class="{ 'cursor-grab': allowedOperations.editContent }"
 				:board="element"
 				:index
 				@contextmenu.prevent
@@ -90,7 +90,7 @@ const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
 };
 
 const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
-	if (!allowedOperations.value.editRoomContent) return;
+	if (!allowedOperations.value.editContent) return;
 
 	let newIndex = 0;
 	const cols = getGridContainerColumnsCount(gridRef.value?.containerRef);
