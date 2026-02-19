@@ -96,7 +96,7 @@
 			</ul>
 		</template>
 	</ConfirmationDialog>-->
-	<SvsDialog>fdfdf</SvsDialog>
+	<DeleteUserDialog v-model:is-dialog-open="isConfirmDialogActive" :message="message" />
 </template>
 
 <script>
@@ -106,6 +106,7 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
+import DeleteUserDialog from "@/pages/administration/DeleteUserDialog.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
@@ -125,10 +126,8 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
-import { SvsDialog } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
@@ -137,8 +136,6 @@ import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
-		SvsDialog,
-		ConfirmationDialog,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
@@ -146,7 +143,7 @@ export default defineComponent({
 		DataFilter,
 		ThrInfoBanner,
 		SvsSearchField,
-		WarningAlert,
+		DeleteUserDialog,
 	},
 	props: {
 		showExternalSyncHint: {
