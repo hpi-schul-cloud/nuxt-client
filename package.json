@@ -80,7 +80,7 @@
 		"globals": "^17.3.0",
 		"http-proxy-middleware": "^3.0.5",
 		"jsdom": "^28.1.0",
-		"npm-run-all2": "^7.0.2",
+		"npm-run-all2": "^8.0.4",
 		"prettier": "^3.8.1",
 		"resize-observer-polyfill": "^1.5.1",
 		"sass-embedded": "^1.97.3",
