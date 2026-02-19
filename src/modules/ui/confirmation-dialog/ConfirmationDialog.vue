@@ -1,6 +1,6 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="delete-dialog-item" :max-width="480">
-		<UseFocusTrap>
+	<UseFocusTrap>
+		<VDialog v-model="isDialogOpen" data-testid="delete-dialog-item" :max-width="480">
 			<VCard>
 				<template #title>
 					<h2 class="ma-2 dialog-title" data-testid="dialog-title">
@@ -31,8 +31,8 @@
 					</div>
 				</template>
 			</VCard>
-		</UseFocusTrap>
-	</VDialog>
+		</VDialog>
+	</UseFocusTrap>
 </template>
 
 <script setup lang="ts">
