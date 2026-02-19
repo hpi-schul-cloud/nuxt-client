@@ -45,3 +45,9 @@ export type News = {
 };
 
 export type PatchNewsPayload = UpdateNewsParams & { id: string };
+
+export type FormNews = {
+	title: string;
+	content: string;
+	displayAt?: string;
+};

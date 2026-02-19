@@ -56,7 +56,9 @@ const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
 const handleDelete = () => emit("keyboard:delete");
 
+const editorInstance = ref<Editor | null>(null);
 const handleReady = (editor: Editor) => {
+	editorInstance.value = editor;
 	emit("ready");
 
 	if (props.autofocus) {
@@ -65,6 +67,12 @@ const handleReady = (editor: Editor) => {
 
 	registerDeletionHandler(editor, handleDelete);
 };
+
+defineExpose({
+	focus: () => {
+		editorInstance.value?.editing.view.focus();
+	},
+});
 </script>
 
 <style lang="scss">
