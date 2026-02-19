@@ -132,7 +132,6 @@ export default defineComponent({
 		ImportFlow,
 		SvsSearchField,
 	},
-	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 

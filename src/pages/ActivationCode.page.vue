@@ -27,7 +27,6 @@ export default defineComponent({
 	components: {
 		InfoModalFullWidth,
 	},
-	layout: "loggedOut",
 	setup() {
 		const { t } = useI18n();
 		return { t };

@@ -1860,6 +1860,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(анонімізовано)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Учасники кімнати {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Учасники кімнати “{roomName}“",
+	"pages.security.headline": "Повідомити про проблему безпеки",
+	"pages.security.text":
+		"dBildungscloud регулярно проходить перевірки безпеки та тести на проникнення, оскільки безпека даних наших користувачів дуже важлива для нас. Ви все ще виявили проблему безпеки? Напишіть нам, щоб ми могли закрити прогалину якомога швидше: ",
+
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",
