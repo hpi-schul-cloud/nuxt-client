@@ -64,6 +64,7 @@ const props = defineProps({
 	noActions: { type: Boolean, default: false },
 	noConfirm: { type: Boolean, default: false },
 	noCancel: { type: Boolean, default: false },
+	isOpenStateManagedExternally: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
@@ -82,12 +83,16 @@ const titleString = computed(() => (i18nKeyExists(props.title) ? t(props.title) 
 
 const onCancel = () => {
 	emit("cancel");
-	isOpen.value = false;
+	if (!props.isOpenStateManagedExternally) {
+		isOpen.value = false;
+	}
 };
 
 const onConfirm = () => {
 	emit("confirm");
-	isOpen.value = false;
+	if (!props.isOpenStateManagedExternally) {
+		isOpen.value = false;
+	}
 };
 </script>
 

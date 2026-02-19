@@ -1,100 +1,94 @@
 <template>
-	<div>
-		<DefaultWireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
-			<ProgressModal
-				v-model="isDeleting"
-				:percent="deletedPercent"
-				:title="t('pages.administration.students.index.remove.progress.title')"
-				:description="t('pages.administration.students.index.remove.progress.description')"
-				data-testid="progress-modal"
-			/>
+	<DefaultWireframe :headline="t('pages.administration.students.index.title')" max-width="full" :fab-items="fab">
+		<ThrInfoBanner />
+		<ProgressModal
+			v-model="isDeleting"
+			:percent="deletedPercent"
+			:title="t('pages.administration.students.index.remove.progress.title')"
+			:description="t('pages.administration.students.index.remove.progress.description')"
+			data-testid="progress-modal"
+		/>
 
-			<base-input
-				v-model="searchQuery"
-				type="text"
-				:placeholder="t('pages.administration.students.index.searchbar.placeholder')"
-				class="search-section"
-				label=""
-				data-testid="searchbar"
-				@update:model-value="barSearch"
-			>
-				<template #icon>
-					<VIcon :icon="mdiMagnify" />
-				</template>
-			</base-input>
+		<SvsSearchField
+			v-model="searchQuery"
+			class="mt-10 mb-2"
+			:label="t('pages.administration.students.index.searchbar.placeholder')"
+			data-testid="searchbar"
+			:aria-label="t('pages.administration.students.index.searchbar.ariaLabel')"
+			@update:model-value="barSearch"
+		/>
 
-			<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
-
-			<BackendDataTable
-				v-model:current-page="page"
-				v-model:rows-per-page="limit"
-				v-model:selected-row-ids="tableSelection"
-				v-model:selection-type="tableSelectionType"
-				:actions="filteredActions"
-				:columns="filteredColumns"
-				:data="students"
-				:paginated="true"
-				:rows-selectable="true"
-				:total="pagination.total"
-				track-by="_id"
-				:sort-by="sortBy"
-				:sort-order="sortOrder"
-				:show-external-text="schoolIsExternallyManaged"
-				data-testid="students_table"
-				:rows-per-page="limit"
-				:current-page="page"
-				@update:sort="onUpdateSort"
-				@update:current-page="onUpdateCurrentPage"
-				@update:rows-per-page="onUpdateRowsPerPage"
-			>
-				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-classes="{ data }">
-					{{ (data || []).join(", ") }}
-				</template>
-				<template #headcolumn-consent />
-				<template #columnlabel-consent />
-				<template #datacolumn-createdAt="{ data }">
-					<span class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-lastLoginSystemChange="{ data }">
-					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-outdatedSince="{ data }">
-					<span v-if="data" class="text-content">{{ printDate(data) }}</span>
-				</template>
-				<template #datacolumn-consentStatus="{ data: status }">
-					<span class="text-content">
-						<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
-						<VIcon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
-						<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
-					</span>
-				</template>
-				<template #datacolumn-_id="{ data, selected, highlighted }">
-					<VBtn
-						icon
-						variant="text"
-						:class="{
-							'action-button': true,
-							'row-selected': selected,
-							'row-highlighted': highlighted,
-						}"
-						:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
-						:aria-label="t('pages.administration.students.table.edit.ariaLabel')"
-						data-testid="edit_student_button"
-					>
-						<VIcon size="20" :icon="mdiPencilOutline" />
-					</VBtn>
-				</template>
-			</BackendDataTable>
-			<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
-		</DefaultWireframe>
-		<ConfirmationDialog />
-	</div>
+		<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
+		<BackendDataTable
+			v-model:current-page="page"
+			v-model:rows-per-page="limit"
+			v-model:selected-row-ids="tableSelection"
+			v-model:selection-type="tableSelectionType"
+			:actions="filteredActions"
+			:columns="filteredColumns"
+			:data="students"
+			:paginated="true"
+			:rows-selectable="true"
+			:total="pagination.total"
+			track-by="_id"
+			:sort-by="sortBy"
+			:sort-order="sortOrder"
+			:show-external-text="schoolIsExternallyManaged"
+			data-testid="students_table"
+			:rows-per-page="limit"
+			:current-page="page"
+			@update:sort="onUpdateSort"
+			@update:current-page="onUpdateCurrentPage"
+			@update:rows-per-page="onUpdateRowsPerPage"
+		>
+			<template #datacolumn-birthday="{ data }">
+				<span class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-classes="{ data }">
+				{{ (data || []).join(", ") }}
+			</template>
+			<template #headcolumn-consent />
+			<template #columnlabel-consent />
+			<template #datacolumn-createdAt="{ data }">
+				<span class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-lastLoginSystemChange="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-outdatedSince="{ data }">
+				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+			</template>
+			<template #datacolumn-consentStatus="{ data: status }">
+				<span class="text-content">
+					<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
+					<VIcon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
+					<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+				</span>
+			</template>
+			<template #datacolumn-_id="{ data, selected, highlighted }">
+				<VBtn
+					icon
+					variant="text"
+					:class="{
+						'action-button': true,
+						'row-selected': selected,
+						'row-highlighted': highlighted,
+					}"
+					:href="`/administration/students/${data}/edit?returnUrl=/administration/students`"
+					:aria-label="t('pages.administration.students.table.edit.ariaLabel')"
+					data-testid="edit_student_button"
+				>
+					<VIcon size="20" :icon="mdiPencilOutline" />
+				</VBtn>
+			</template>
+		</BackendDataTable>
+		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
+	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script>
+import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
@@ -115,12 +109,12 @@ import {
 	mdiCloudDownload,
 	mdiDeleteOutline,
 	mdiEmailOutline,
-	mdiMagnify,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
+import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
@@ -135,6 +129,8 @@ export default defineComponent({
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
+		ThrInfoBanner,
+		SvsSearchField,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -168,7 +164,6 @@ export default defineComponent({
 			mdiCloudDownload,
 			mdiDeleteOutline,
 			mdiEmailOutline,
-			mdiMagnify,
 			mdiPencilOutline,
 			mdiPlus,
 			mdiQrcode,
@@ -554,6 +549,7 @@ export default defineComponent({
 			}
 
 			this.timer = setTimeout(() => {
+				if (!searchText) searchText = "";
 				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
 					this.currentFilterQuery.searchQuery = searchText.trim();
 
@@ -604,12 +600,5 @@ button:not(.is-none):focus {
 	box-shadow:
 		0 0 0 0 rgba(var(--v-theme-white)),
 		0 0 0 3px var(--button-background);
-}
-
-.search-section {
-	max-width: 100%;
-	margin-top: 8px;
-	margin-bottom: 8px;
-	margin-left: 0;
 }
 </style>

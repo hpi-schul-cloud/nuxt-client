@@ -1,27 +1,24 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.administration.classes.index.title')"
 		max-width="full"
+		:fab-items="fab"
 		data-testid="admin-class-title"
 	>
-		<template #header>
-			<h1>
-				{{ t("pages.administration.classes.index.title") }}
-			</h1>
-			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
-					<v-tab value="next" data-testid="admin-class-next-year-tab">
-						<span>{{ nextYear }}</span>
-					</v-tab>
-					<v-tab value="current" data-testid="admin-class-current-year-tab">
-						<span>{{ currentYear }}</span>
-					</v-tab>
-					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-						<span>{{ t("pages.administration.common.label.archive") }}</span>
-					</v-tab>
-				</v-tabs>
-			</div>
-		</template>
+		<ThrInfoBanner />
+		<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
+			<v-tabs v-model="activeTab" class="tabs-max-width" grow>
+				<v-tab value="next" data-testid="admin-class-next-year-tab">
+					<span>{{ nextYear }}</span>
+				</v-tab>
+				<v-tab value="current" data-testid="admin-class-current-year-tab">
+					<span>{{ currentYear }}</span>
+				</v-tab>
+				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
+					<span>{{ t("pages.administration.common.label.archive") }}</span>
+				</v-tab>
+			</v-tabs>
+		</div>
 		<v-data-table-server
 			v-model:items-per-page="pagination.limit"
 			:headers="headers"
@@ -181,40 +178,20 @@
 			@success="loadClassList"
 		/>
 
-		<v-btn
-			v-if="hasCreatePermission"
-			class="my-5 button-start"
-			color="primary"
-			variant="flat"
-			data-testid="admin-class-add-button"
-			href="/administration/classes/create"
-		>
-			{{ t("pages.administration.classes.index.add") }}
-		</v-btn>
-
-		<InfoAlert
-			v-if="!hasCreatePermission"
-			class="mb-4"
-			:class="{ 'mt-4': !hasCreatePermission }"
-			data-testid="admin-class-info-alert"
-			alert-title="pages.administration.classes.thr.hint.title"
-		>
-			{{ t("pages.administration.classes.thr.hint.text") }}
-		</InfoAlert>
-
-		<p class="text-muted">
+		<p class="mt-4" data-testid="admin-class-hint">
 			{{
 				t("pages.administration.common.hint", {
 					institute_title: instituteTitle,
 				})
 			}}
 		</p>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
+import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
+import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
@@ -225,9 +202,16 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
-import { mdiAccountGroupOutline, mdiArrowUp, mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
-import { InfoAlert } from "@ui-alert";
+import {
+	mdiAccountGroupOutline,
+	mdiArrowUp,
+	mdiPencilOutline,
+	mdiPlus,
+	mdiSyncOff,
+	mdiTrashCanOutline,
+} from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";
+import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
@@ -299,6 +283,19 @@ const isLoading = computed(() => groupModule.getLoading);
 
 const hasEditPermission = hasPermission(Permission.ClassEdit);
 const hasCreatePermission = hasPermission(Permission.ClassCreate);
+
+const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
+	!(useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr) && hasCreatePermission.value
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.administration.classes.index.add"),
+					href: "/administration/classes/create",
+					dataTestId: "fab_button_add_class",
+				},
+			]
+		: undefined
+);
 
 const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Class;
 

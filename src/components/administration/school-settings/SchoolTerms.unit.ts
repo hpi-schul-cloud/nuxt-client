@@ -1,56 +1,43 @@
 import SchoolTerms from "./SchoolTerms.vue";
+import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
 import { Permission } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
-import TermsOfUseModule from "@/store/terms-of-use";
-import { ConsentVersion } from "@/store/types/consent-version";
+import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";
-import { SCHOOLS_MODULE_KEY, TERMS_OF_USE_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStoreWithPermissions, termsOfUseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConsentVersion, CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
+import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { SvsDialog } from "@ui-dialog";
+import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
+import { nextTick, ref } from "vue";
 
 vi.mock("@/utils/fileHelper");
 
+vi.mock("@data-school/schoolTermsOfUse.composable");
+const useSchoolTermsOfUseMock = vi.mocked(useSchoolTermsOfUse);
+
 describe("SchoolTerms", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
-	let termsOfUseModule: Mocked<TermsOfUseModule>;
-
-	const mockTerms: ConsentVersion = {
-		_id: "123",
-		schoolId: "mockSchoolId",
-		title: "sometitle",
-		consentText: "",
-		publishedAt: "somedate",
-		createdAt: "somedate",
-		updatedAt: "somedate",
-		consentTypes: ["termsOfUse"],
-		consentData: {
-			_id: "999",
-			schoolId: "333",
-			createdAt: "someotherdate",
-			updatedAt: "someotherdate",
-			fileType: "pdf",
-			fileName: "somefilename",
-			data: "data:application/pdf;base64,SOMEFILEDATA",
-		},
-	};
+	let useSchoolTermsOfUseMockReturn: DeepMocked<ReturnType<typeof useSchoolTermsOfUse>>;
 
 	const setup = (
-		getters: Partial<TermsOfUseModule> = {
-			getTermsOfUse: mockTerms,
-			getBusinessError: {
-				statusCode: "",
-				message: "",
-			},
-			getStatus: "completed",
-		},
-		permissions = [Permission.SchoolEdit]
+		options?: Partial<{ status: Status; permissions: Permission[]; termsOfUse: ConsentVersion | null }>
 	) => {
+		const existitngTermsOfUse = termsOfUseFactory.build({ schoolId: mockSchool.id });
+		const { termsOfUse, permissions, status } = {
+			termsOfUse: existitngTermsOfUse,
+			permissions: [Permission.SchoolEdit],
+			status: "completed" as Status,
+			...options,
+		};
+
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions(permissions);
 
@@ -58,34 +45,36 @@ describe("SchoolTerms", () => {
 			getSchool: mockSchool,
 		});
 
-		termsOfUseModule = createModuleMocks(TermsOfUseModule, {
-			...getters,
-		});
+		useSchoolTermsOfUseMockReturn = createMock<ReturnType<typeof useSchoolTermsOfUse>>();
+		useSchoolTermsOfUseMock.mockReturnValue(useSchoolTermsOfUseMockReturn);
+
+		useSchoolTermsOfUseMockReturn.termsOfUse = ref(termsOfUse);
+		useSchoolTermsOfUseMockReturn.status = ref(status);
 
 		const wrapper = mount(SchoolTerms, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
+				stubs: { SvsDialog: true },
 			},
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	describe("when school is set", () => {
 		it("should call fetch terms of use", () => {
 			setup();
 
-			expect(termsOfUseModule.fetchTermsOfUse).toHaveBeenCalled();
+			expect(useSchoolTermsOfUseMockReturn.fetchTermsOfUse).toHaveBeenCalled();
 		});
 	});
 
 	describe("when terms of use is loading", () => {
 		it("should render progress bar", () => {
-			const wrapper = setup({ getStatus: "pending" });
+			const { wrapper } = setup({ status: "pending" });
 
 			expect(wrapper.find('[data-testid="progress-bar"]').exists()).toBe(true);
 		});
@@ -93,7 +82,7 @@ describe("SchoolTerms", () => {
 
 	describe("when terms of use are loaded", () => {
 		it("should render terms of use list item", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="terms-item"]').exists()).toBe(true);
 		});
@@ -101,7 +90,7 @@ describe("SchoolTerms", () => {
 
 	describe("when terms of use are found", () => {
 		it("should render delete button", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(true);
 		});
@@ -109,80 +98,136 @@ describe("SchoolTerms", () => {
 
 	describe("when terms of use are not found", () => {
 		it("should not render delete button", () => {
-			const wrapper = setup({
-				getTermsOfUse: null,
+			const { wrapper } = setup({
+				termsOfUse: null,
 			});
 
 			expect(wrapper.find('[data-testid="delete-button"]').exists()).toBe(false);
+		});
+
+		it("should not be possible to click terms item", async () => {
+			const { wrapper } = setup({
+				termsOfUse: null,
+			});
+
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
+			const termsItem = wrapper.find('[data-testid="terms-item"]');
+			await termsItem.trigger("click");
+
+			expect(downloadFileMock).toHaveBeenCalledTimes(0);
 		});
 	});
 
 	describe("when user has school edit permission", () => {
 		it("should render edit button", () => {
-			const wrapper = setup();
+			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(true);
 		});
 
 		it("should render dialog component", () => {
-			const wrapper = setup();
+			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
 
-			expect(wrapper.findComponent({ name: "school-terms-form-dialog" }).exists()).toBe(true);
+			expect(wrapper.findComponent(SchoolTermsFormDialog).exists()).toBe(true);
 		});
 	});
 
 	describe("when user does not have school edit permission", () => {
 		it("should not render edit button", () => {
-			const wrapper = setup(undefined, [Permission.SchoolView]);
+			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(false);
 		});
 
 		it("should not render dialog component", () => {
-			const wrapper = setup(undefined, [Permission.SchoolView]);
+			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
 
 			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(false);
 		});
 	});
 
 	describe("when user clicks edit button", () => {
-		it("should change isSchoolTermsFormDialogOpen to true", () => {
-			const wrapper = setup();
-			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
+		it("should change isSchoolTermsFormDialogOpen to true", async () => {
+			const { wrapper } = setup();
+			const schoolTermsDialog = wrapper.findComponent(SchoolTermsFormDialog);
+			expect(schoolTermsDialog.props().isOpen).toBe(false);
 
-			expect(wrapperVm.isSchoolTermsFormDialogOpen).toBe(false);
-			wrapper.find('[data-testid="edit-button"]').trigger("click");
-			expect(wrapperVm.isSchoolTermsFormDialogOpen).toBe(true);
+			const editBtn = wrapper.find('[data-testid="edit-button"]');
+			await editBtn.trigger("click");
+
+			expect(schoolTermsDialog.props().isOpen).toBe(true);
+		});
+
+		it("should create new privacy policy when creation is confirmed", async () => {
+			const { wrapper } = setup();
+			const schoolTermsDialog = wrapper.findComponent(SchoolTermsFormDialog);
+
+			const consentVersionPayload: CreateConsentVersionPayload = {
+				schoolId: "schoolId",
+				consentTypes: ["termsOfUse"],
+				publishedAt: new Date().toISOString(),
+				title: "New Terms of Use",
+				consentData: "data:application/pdf;base64,SOMEFILEDATA",
+			};
+
+			schoolTermsDialog.vm.$emit("confirm", consentVersionPayload);
+			await nextTick();
+
+			expect(useSchoolTermsOfUseMockReturn.createTermsOfUse).toHaveBeenCalledWith(consentVersionPayload);
+		});
+
+		it("should not create new terms of use and close dialog when creation is cancelled", async () => {
+			const { wrapper } = setup();
+			const schoolTermsDialog = wrapper.findComponent(SchoolTermsFormDialog);
+
+			schoolTermsDialog.vm.$emit("close");
+			await nextTick();
+
+			expect(useSchoolTermsOfUseMockReturn.createTermsOfUse).toHaveBeenCalledTimes(0);
+			expect(schoolTermsDialog.props().isOpen).toBe(false);
 		});
 	});
 
 	describe("when user clicks delete button", () => {
-		it("should change isDeleteTermsDialogOpen to true", async () => {
-			const wrapper = setup();
-			const wrapperVm = wrapper.vm as unknown as typeof SchoolTerms;
+		it("should open delete dialog", async () => {
+			const { wrapper } = setup();
 
-			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(false);
-			await wrapper.findComponent('[data-testid="delete-button"]').trigger("click");
-			expect(wrapperVm.isDeleteTermsDialogOpen).toBe(true);
+			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]').findComponent(SvsDialog);
+			expect(deleteDialog.props().modelValue).toBe(false);
+
+			const deleteBtn = wrapper.find('[data-testid="delete-button"]');
+			await deleteBtn.trigger("click");
+
+			expect(deleteDialog.props().modelValue).toBe(true);
+		});
+
+		it("should call delete terms of use method when deletion is confirmed", async () => {
+			const { wrapper } = setup();
+
+			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]').findComponent(SvsDialog);
+			deleteDialog.vm.$emit("confirm");
+			await nextTick();
+
+			expect(useSchoolTermsOfUseMockReturn.deleteTermsOfUse).toHaveBeenCalled();
 		});
 	});
 
 	describe("when user clicks terms item", () => {
-		it("should call downloadFile method", () => {
-			const wrapper = setup();
+		it("should call downloadFile method", async () => {
+			const { wrapper } = setup();
 
 			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
-			const termsItem = wrapper.findComponent('[data-testid="terms-item"]') as VueWrapper<typeof SchoolTerms>;
+			const termsItem = wrapper.findComponent('[data-testid="terms-item"]');
+			await termsItem.trigger("click");
 
-			termsItem.vm.$emit("click");
 			expect(downloadFileMock).toHaveBeenCalledTimes(1);
 		});
 	});
 
 	describe("when error is thrown in termsOfUseModule", () => {
 		it("should render error alert", () => {
-			const wrapper = setup({
-				getStatus: "error",
+			const { wrapper } = setup({
+				status: "error",
 			});
 
 			expect(wrapper.find('[data-testid="error-alert"]').exists()).toBe(true);

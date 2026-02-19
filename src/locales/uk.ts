@@ -190,12 +190,18 @@ export default {
 	"common.tool.context.type.boardElements": "Дошки",
 	"common.tool.context.type.mediaShelves": "Полиця для медіа",
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
+	"common.validation.file": "Будь ласка, завантажте файл {fileHint}",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
+	"common.validation.password.upperCase": "Пароль повинен містити щонайменше одну велику літеру.",
+	"common.validation.password.lowerCase": "Пароль повинен містити щонайменше одну малу літеру.",
+	"common.validation.password.number": "Пароль повинен містити щонайменше одну цифру.",
+	"common.validation.password.specialCharacter": "Пароль повинен містити щонайменше один спеціальний символ.",
 	"common.validation.regex": "Введення має відповідати такому правилу: {comment}.",
 	"common.validation.required": "Заповніть це поле",
 	"common.validation.required2": "Це обов'язкове поле.",
 	"common.validation.tooLong": "Введений текст перевищує максимально дозволену довжину",
+	"common.validation.tooShort": "Введений текст не досягає мінімальної довжини",
 	"common.validation.containsOpeningTag": "Будь ласка, вставте пробіл після знаку менше.",
 	"common.validation.nonEmptyString": "Це обов'язкове поле і не повинно містити лише пробіли.",
 	"common.words.also": "також",
@@ -228,7 +234,6 @@ export default {
 	"common.words.languages.es": "Іспанська",
 	"common.words.languages.uk": "Українська",
 	"common.words.learnContent": "Зміст навчання",
-	"common.words.lernstore": "Навчальний магазин",
 	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
 	"common.words.not": "не",
@@ -655,8 +660,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Важлива інформація про дублювання",
 	"components.molecules.copyResult.title.success": "Дублювання успішне",
 	"components.molecules.copyResult.followingNotCopied": "Наступне не було скопійовано:",
-	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
-	"components.molecules.EdusharingFooter.text": "на платформі",
 	"components.molecules.import.card.options.title": "Імпортувати картку",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
 	"components.molecules.label.room": "Оберіть кімнату",
@@ -1249,7 +1252,6 @@ export default {
 	"pages.administration.school.index.info":
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони здійснені адміністратором школи, який має повноваження вносити корективи в хмарну систему школи. Налаштування, зроблені адміністратором школи, вважаються інструкціями від школи до оператора хмари {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Активувати функцію чату",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Навчальний магазин для учнів",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Активувати видимість учнів для вчителів",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Увімкнути відеоконференцію",
@@ -1258,8 +1260,6 @@ export default {
 		"Якщо у вашому навчальному закладі увімкнені чати, адміністратори команд можуть вибірково увімкнути функцію чату для своєї команди.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"Це налаштування, яке не підлягає редагуванню і контролює видимість учнів для вчителів у всьому екземплярі.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"Якщо цей прапорець не встановлено, учні не зможуть отримати доступ до Learning Store",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"Активація цієї опції має високе граничне значення згідно із законодавством про захист даних. Щоб активувати видимість усіх учнів у школі для кожного викладача, необхідно, щоб кожен учень надав свою фактичну згоду на таку обробку даних.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1282,7 +1282,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.error":
 		"Виникла помилка під час завантаження політики конфіденційності",
 	"pages.administration.school.index.schoolPolicy.fileName": "Політика конфіденційності школи",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Завантажити файл (тільки PDF, максимум 4 МБ)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Завантажити файл {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(тільки PDF, максимум 4 МБ)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Виберіть файл",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"Нова політика конфіденційності безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
@@ -1303,7 +1304,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Редагувати Умови використання",
 	"pages.administration.school.index.termsOfUse.error": "Виникла помилка під час завантаження Умови використання",
 	"pages.administration.school.index.termsOfUse.fileName": "Умови використання школи",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл (тільки PDF, максимум 4 МБ)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(тільки PDF, максимум 4 МБ)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Виберіть файл",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Нова Умови використання безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
@@ -1378,6 +1380,7 @@ export default {
 		"Ви дійсно хочете видалити цього учня?? | Ви дійсно хочете видалити цього {number} учня?",
 	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
+	"pages.administration.students.index.searchbar.ariaLabel": "Пошук учнів за іменами",
 	"pages.administration.students.index.searchbar.placeholder": "Перегляньте студентів для",
 	"pages.administration.students.index.tableActions.consent": "Згода в аналоговій формі",
 	"pages.administration.students.index.tableActions.delete": "Видалити",
@@ -1441,12 +1444,13 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.btnText": "Видалити викладача",
 	"pages.administration.teachers.index.remove.confirm.message.all": "Ви дійсно хочете видалити всіх викладачів?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
+		"Ви дійсно хочете видалити всіх викладачів, крім {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
-	"pages.administration.teachers.index.searchbar.placeholder": "Пошук",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Пошук викладачів за іменем",
+	"pages.administration.teachers.index.searchbar.placeholder": "Пошук викладачів",
 	"pages.administration.teachers.index.tableActions.consent": "Згода в аналоговій формі",
 	"pages.administration.teachers.index.tableActions.delete": "Видалити",
 	"pages.administration.teachers.index.tableActions.email": "Надіслати посилання для реєстрації електронною поштою",
@@ -1463,65 +1467,6 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission": "Права модерації для всіх учасників",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Вимкнути звук учасникам при вході",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom": "Активуйте кімнату очікування для учасників",
-	"pages.content._id.addToTopic": "Для додавання в",
-	"pages.content._id.collection.selectElements": "Виберіть елементи, які треба додати до теми",
-	"pages.content._id.metadata.author": "Автор",
-	"pages.content._id.metadata.createdAt": "час створення запиту",
-	"pages.content._id.metadata.noTags": "Немає тегів",
-	"pages.content._id.metadata.provider": "Видавець",
-	"pages.content._id.metadata.updatedAt": "Дата останнього змінення",
-	"pages.content.card.collection": "Колекція",
-	"pages.content.emptyState.error.message.suggestions": "Рекомендація:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"Пошуковий запит має містити щонайменше 2 символи.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling": "Перевірте правильність написання всіх слів.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Спробуйте інші пошукові запити.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms": "Спробуйте більш поширені запити.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Спробуйте використати коротший запит.",
-	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
-	"pages.content.index.backToCourse": "Назад до курсу",
-	"pages.content.index.backToOverview": "Назад до огляду",
-	"pages.content.index.search_for": "Пошук...",
-	"pages.content.index.search_resources": "Ресурси",
-	"pages.content.index.search_results": "Результати пошуку для",
-	"pages.content.index.search.placeholder": "Пошук у Learning store",
-	"pages.content.initState.description":
-		"Тут ви знайдете високоякісний вміст, адаптований до вашого суб'єкта федерації.",
-	"pages.content.initState.description.newMaterials":
-		"Наша команда постійно розробляє нові матеріали, щоб покращити ваш досвід навчання.",
-	"pages.content.initState.description.hint": "Підказка:",
-	"pages.content.initState.description.hint.materials":
-		"Матеріали, що відображаються в навчальному магазині, не зберігаються на нашому сервері, а надаються через інтерфейси на інші сервери (джерелами є, наприклад, індивідуальні освітні сервери, WirLernenOnline, Mundo і т.д.).",
-	"pages.content.initState.description.hint.availability":
-		"З цієї причини наша команда не впливає на постійну доступність окремих матеріалів і на весь спектр матеріалів, пропонованих окремими джерелами.",
-	"pages.content.initState.description.usage":
-		"У контексті використання в навчальних закладах може бути дозволено копіювання онлайн-носіїв на носії інформації, на приватний пристрій або на навчальні платформи для закритої групи користувачів, якщо це необхідно для внутрішнього розповсюдження та/або використання.",
-	"pages.content.initState.description.usage.deleteHint":
-		"Після завершення роботи з відповідними онлайн-медіа вони повинні бути видалені з приватних кінцевих пристроїв, носіїв даних та навчальних платформ; найпізніше при виході з навчального закладу.",
-	"pages.content.initState.description.usage.notPermitted":
-		"Фундаментальна публікація (е.B. в Інтернеті) інтернет-змі або нових та /або відредагованих творів, нещодавно створених з їх частинами, як правило, не допускається або вимагає згоди постачальника прав.",
-	"pages.content.initState.title": "Ласкаво просимо до Learning Store!",
-	"pages.content.label.chooseACourse": "Вибрати курс/предмет",
-	"pages.content.label.chooseALessonTopic": "Вибрати тему уроку",
-	"pages.content.label.deselect": "Вилучити",
-	"pages.content.label.select": "Вибрати",
-	"pages.content.label.selected": "Активний",
-	"pages.content.material.leavePageWarningFooter":
-		"Використання цих пропозицій може регулюватися іншими правовими умовами. Тому ознайомтеся з політикою конфіденційності зовнішнього постачальника!",
-	"pages.content.material.leavePageWarningMain":
-		"Примітка. Натиснувши на посилання, ви перейдете з Schul-Cloud Brandenburg.",
-	"pages.content.material.showMaterialHint": "Примітка: Використовуйте ліву частину оголошення для доступу до вмісту.",
-	"pages.content.material.showMaterialHintMobile":
-		"Примітка: Використовуйте вищевказаний елемент дисплея для доступу до вмісту.",
-	"pages.content.material.toMaterial": "Матеріал",
-	"pages.content.notification.errorMsg": "Щось пішло не так. Не вдалося додати матеріал.",
-	"pages.content.notification.lernstoreNotAvailable": "Learning Store недоступний",
-	"pages.content.notification.loading": "Матеріал додано",
-	"pages.content.notification.successMsg": "Матеріал успішно додано",
-	"pages.content.page.window.title": "Створити тему - {instance} - Ваше цифрове середовище навчання",
-	"pages.content.placeholder.chooseACourse": "Вибрати курс/предмет",
-	"pages.content.placeholder.noLessonTopic": "Створити тему в курсі",
-	"pages.content.preview_img.alt": "Попередній перегляд зображення",
 	"pages.courseRoomDetails.fab.add.lesson": "Створити тему",
 	"pages.courseRoomDetails.fab.add.task": "Створити завдання",
 	"pages.courseRoomDetails.fab.add.board": "Нова дошка",
@@ -1556,16 +1501,6 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
-	"pages.lernstore.info.banner.title": "У майбутньому медіа будуть доступні через медіаполицю",
-	"pages.lernstore.info.banner.helpLinkText": "cторінки допомоги",
-	"pages.lernstore.info.banner.item.0.brb":
-		"З цього моменту медіатеки з Навчальний магазин (Mundo, Wir lernen online та FWU Медіа) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.n21":
-		"З цього моменту медіатеки з Навчальний магазин (Mundo і Wir lernen online) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.thr":
-		"З цього моменту медіатеки з Навчальний магазин (Mundo, Wir lernen online та Mediothek/Pixiothek) доступні через медіаполицю, а вміст можна інтегрувати в розділи як інструмент. Додаткову інформацію про розширені можливості пошуку та фільтрації, а також інтеграцію вмісту через глибокі посилання можна знайти на {helpLinkText}.",
-	"pages.lernstore.info.banner.item.1":
-		"Тому Навчальний магазин буде вимкнено в 10-му тижні (04.03.2026). Вміст Навчальний магазин, вже інтегрований у теми, залишиться доступним.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Реєстрацію не вдалося завершити. Будь ласка, спробуйте пізніше.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
@@ -1614,13 +1549,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Будь ласка, введіть пароль.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"Пароль повинен містити щонайменше 8 символів.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"Пароль повинен містити щонайменше одну велику літеру.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"Пароль повинен містити щонайменше одну малу літеру.",
-	"pages.registrationExternalMembers.steps.password.validation.number": "Пароль повинен містити щонайменше одну цифру.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"Пароль повинен містити щонайменше один спеціальний символ.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "Паролі не співпадають.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Реєстрація успішна",
 	"pages.registrationExternalMembers.steps.language.heading": "Будь ласка, виберіть свою мову",
@@ -1680,7 +1608,6 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Будь ласка, введіть ім'я та прізвище зовнішньої особи. Особа отримає електронний лист із посиланням на реєстрацію в {applicationName}. Щойно вона створить обліковий запис, її буде автоматично додано до кімнати.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "Електронна адреса",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Будь ласка, введіть дійсну електронну адресу",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "Ім'я",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Будь ласка, введіть ім'я",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Прізвище",
