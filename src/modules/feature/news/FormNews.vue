@@ -37,26 +37,25 @@
 						/>
 					</div>
 				</VFadeTransition>
-				<FormActions>
-					<template #primary>
-						<VBtn
-							color="primary"
-							variant="flat"
-							type="submit"
-							data-testid="btn_news_submit"
-							:disabled="status === 'pending'"
-							:text="t('common.actions.save')"
-						/>
-						<VBtn
-							v-if="showDeleteButton"
-							variant="text"
-							color="error"
-							:text="t('common.actions.delete')"
-							@click="onDelete"
-						/>
-						<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
-					</template>
-				</FormActions>
+				<div class="d-flex ga-3 mt-2">
+					<VSpacer />
+					<VBtn
+						v-if="showDeleteButton"
+						variant="text"
+						color="error"
+						:text="t('common.actions.delete')"
+						@click="onDelete"
+					/>
+					<VBtn variant="text" :text="t('common.actions.discard')" @click="onCancel" />
+					<VBtn
+						color="primary"
+						variant="flat"
+						type="submit"
+						data-testid="btn_news_submit"
+						:disabled="status === 'pending'"
+						:text="t('common.actions.save')"
+					/>
+				</div>
 			</div>
 		</VFadeTransition>
 	</VForm>
@@ -68,14 +67,12 @@
 </template>
 
 <script setup lang="ts">
-import FormActions from "./FormActions.vue";
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
 import { notifyError } from "@data-app";
 import { ClassicEditor } from "@feature-editor";
 import { mdiClockOutline } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DatePicker } from "@ui-date-time-picker";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
