@@ -121,7 +121,6 @@ import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
@@ -262,13 +261,12 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("users", {
-			pagination: "getPagination",
-			isDeleting: "getActive",
-			deletedPercent: "getPercent",
-			// qrLinks: "getQrLinks",
-			// registrationLinks: "getRegistrationLinks",
-		}),
+		isDeleting() {
+			return this.deletingProgress.active;
+		},
+		deletedPercent() {
+			return this.deletingProgress.percent;
+		},
 		getFeatureUserLoginMigrationEnabled() {
 			return useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
 		},

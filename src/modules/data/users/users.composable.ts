@@ -42,11 +42,10 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
 		const { result } = await execute(() => $axios.get(usersApi, { params: query }));
 
-		const { data } = result?.data || {};
-		userList.value = data?.data;
-		pagination.value.limit = data?.limit || 0;
-		pagination.value.skip = data?.skip || 0;
-		pagination.value.total = data?.total || 0;
+		userList.value = result?.data?.data;
+		pagination.value.limit = result?.data?.limit;
+		pagination.value.skip = result?.data?.skip;
+		pagination.value.total = result?.data?.total;
 	};
 
 	const deleteUsers = async (userIds: string | string[]) => {

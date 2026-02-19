@@ -110,7 +110,6 @@ import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent } from "vue";
 import { reactive } from "vue";
-import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
@@ -133,8 +132,17 @@ export default defineComponent({
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
 		const { fetchClasses, list } = useClasses();
-		const { fetchUsers, userList, deleteUsers, sendRegistrationLink, getQrRegistrationLinks, pagination, qrLinks } =
-			useUsers(RoleName.Teacher);
+
+		const {
+			fetchUsers,
+			userList,
+			deleteUsers,
+			sendRegistrationLink,
+			getQrRegistrationLinks,
+			pagination,
+			qrLinks,
+			deletingProgress,
+		} = useUsers(RoleName.Teacher);
 
 		return {
 			getPaginationState,
@@ -147,6 +155,7 @@ export default defineComponent({
 			fetchClasses,
 			list,
 			fetchUsers,
+			deletingProgress,
 			userList,
 			sendRegistrationLink,
 			deleteUsers,
@@ -263,13 +272,12 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("users", {
-			// teachers: "getList",
-			pagination: "getPagination",
-			isDeleting: "getActive",
-			deletedPercent: "getPercent",
-			// qrLinks: "getQrLinks",
-		}),
+		isDeleting() {
+			return this.deletingProgress.active;
+		},
+		deletedPercent() {
+			return this.deletingProgress.percent;
+		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
