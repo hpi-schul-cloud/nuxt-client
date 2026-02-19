@@ -96,7 +96,7 @@
 			</ul>
 		</template>
 	</ConfirmationDialog>-->
-	<DeleteUserDialog v-model:is-dialog-open="isConfirmDialogActive" :message="message" />
+	<DeleteUserDialog v-model:is-dialog-open="isConfirmDialogOpen" :message="message" />
 </template>
 
 <script>
@@ -247,6 +247,7 @@ export default defineComponent({
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
+			isConfirmDialogOpen: false,
 		};
 	},
 	computed: {
@@ -517,6 +518,7 @@ export default defineComponent({
 			}
 		},
 		async handleBulkDelete(rowIds, selectionType) {
+			this.isConfirmDialogOpen = true;
 			const onConfirm = async () => {
 				try {
 					await this.$store.dispatch("users/deleteUsers", {
