@@ -140,7 +140,7 @@ watch(
 );
 
 watch(
-	[newsDate, newsTime],
+	newsDate,
 	() => {
 		/**
 		 * current news object,
