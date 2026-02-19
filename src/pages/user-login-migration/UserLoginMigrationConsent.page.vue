@@ -65,7 +65,6 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
-	layout: "loggedOut",
 	setup() {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
 		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);

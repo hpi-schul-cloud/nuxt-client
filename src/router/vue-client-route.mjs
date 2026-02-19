@@ -60,6 +60,7 @@ const vueRoutes = [
 	`^/rooms/courses-list/?$`,
 	`^/rooms/courses-overview/?$`,
 	`^/rooms-overview/?$`,
+	`^/system/security`,
 	`^/tasks/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
