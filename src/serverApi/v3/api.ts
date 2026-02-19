@@ -866,12 +866,6 @@ export interface BoardResponse {
     features: Array<BoardFeature>;
     /**
      * 
-     * @type {Array<Permission>}
-     * @memberof BoardResponse
-     */
-    permissions: Array<Permission>;
-    /**
-     * 
      * @type {BoardResponseAllowedOperations}
      * @memberof BoardResponse
      */
@@ -9108,10 +9102,10 @@ export interface RoomDetailsResponse {
     updatedAt: string;
     /**
      * 
-     * @type {Array<Permission>}
+     * @type {RoomItemResponseAllowedOperations}
      * @memberof RoomDetailsResponse
      */
-    permissions: Array<Permission>;
+    allowedOperations?: RoomItemResponseAllowedOperations;
     /**
      * 
      * @type {Array<RoomFeatures>}
@@ -9328,16 +9322,143 @@ export interface RoomItemResponse {
     updatedAt: string;
     /**
      * 
-     * @type {Array<Permission>}
+     * @type {RoomItemResponseAllowedOperations}
      * @memberof RoomItemResponse
      */
-    permissions: Array<Permission>;
+    allowedOperations?: RoomItemResponseAllowedOperations;
     /**
      * 
      * @type {boolean}
      * @memberof RoomItemResponse
      */
     isLocked: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface RoomItemResponseAllowedOperations
+ */
+export interface RoomItemResponseAllowedOperations {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    accessRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    addAllStudents: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    addExternalPersonByEmail: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    addMembers: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    arrangeRooms: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    changeRolesOfMembers: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    copyRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    createRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    deleteRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    editContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    editRoomContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    getRoomMembers: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    getRoomMembersRedacted: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    leaveRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    shareRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    updateRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    updateRoomInvitationLinks: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    viewContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    viewDraftContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    viewMemberlist: boolean;
 }
 /**
  * 
@@ -9413,6 +9534,37 @@ export interface RoomMemberResponse {
      * @memberof RoomMemberResponse
      */
     userId: string;
+    /**
+     * 
+     * @type {RoomMemberResponseAllowedOperations}
+     * @memberof RoomMemberResponse
+     */
+    allowedOperations?: RoomMemberResponseAllowedOperations;
+}
+/**
+ * 
+ * @export
+ * @interface RoomMemberResponseAllowedOperations
+ */
+export interface RoomMemberResponseAllowedOperations {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomMemberResponseAllowedOperations
+     */
+    changeRole: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomMemberResponseAllowedOperations
+     */
+    passOwnershipTo: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomMemberResponseAllowedOperations
+     */
+    removeMember: boolean;
 }
 /**
  * 
