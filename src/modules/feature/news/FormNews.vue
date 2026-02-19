@@ -5,10 +5,9 @@
 			autofocus
 			:placeholder="t('components.organisms.FormNews.input.title.placeholder')"
 			name="title"
-			:required="true"
 			data-testid="news_title"
 			:label="t('components.organisms.FormNews.input.title.label')"
-			:rules="[validateOnOpeningTag]"
+			:rules="[validateOnOpeningTag, isRequired()]"
 		/>
 		<VFadeTransition>
 			<div v-if="newsTitle">
@@ -80,7 +79,7 @@ import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DatePicker } from "@ui-date-time-picker";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
-import { useOpeningTagValidator } from "@util-validators";
+import { isRequired, useOpeningTagValidator } from "@util-validators";
 import dayjs, { Dayjs } from "dayjs";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -115,15 +114,6 @@ const newsTitle = ref("");
 const newsContent = ref("");
 const newsDate = ref("");
 const newsTime = ref("");
-
-const getDisplayAt = () => {
-	if (!newsDate.value || !newsTime.value) {
-		return undefined;
-	}
-	const dateTimeCombined = fromInputDateTime(newsDate.value, newsTime.value);
-	const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
-	return dateTimeCombinedString.toISOString();
-};
 
 const errors = computed(() => {
 	const title = newsTitle.value ? undefined : t("components.organisms.FormNews.errors.missing_title").toString();
@@ -170,6 +160,15 @@ watch(
 	},
 	{ deep: true }
 );
+
+const getDisplayAt = () => {
+	if (!newsDate.value || !newsTime.value) {
+		return undefined;
+	}
+	const dateTimeCombined = fromInputDateTime(newsDate.value, newsTime.value);
+	const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
+	return dateTimeCombinedString.toISOString();
+};
 
 const save = () => {
 	const errorsArray = Object.values(errors.value).filter(Boolean);
