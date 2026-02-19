@@ -1,16 +1,27 @@
-import { useActivation } from "./activation.composable";
+import { useClasses } from "./classes.composable";
 import { initializeAxios } from "@/utils/api";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 
-describe("useActivation", () => {
+describe("useClasses", () => {
 	const mockResponse = {
 		data: {
+			total: 2,
+			limit: 1000,
+			skip: 0,
 			data: [
-				{ code: "ACT123", status: "active" },
-				{ code: "ACT456", status: "inactive" },
+				{
+					id: "some-id-1",
+					gradeLevel: 1,
+					name: "a",
+				},
+				{
+					id: "some-id-2",
+					gradeLevel: 1,
+					name: "b",
+				},
 			],
 		},
 	};
@@ -19,7 +30,7 @@ describe("useActivation", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		axiosMock = createMock<AxiosInstance>();
-		axiosMock.put.mockResolvedValueOnce(mockResponse);
+		axiosMock.get.mockResolvedValueOnce(mockResponse);
 		initializeAxios(axiosMock);
 	});
 
@@ -27,9 +38,9 @@ describe("useActivation", () => {
 		vi.clearAllMocks();
 	});
 
-	it("should update list ", async () => {
-		const { list, updateActivations } = useActivation();
-		await updateActivations("ACT123");
+	it("should fetch and update list ", async () => {
+		const { list, fetchClasses } = useClasses();
+		await fetchClasses({ $limit: 1000, year: "year-id" });
 
 		expect(list.value).toEqual(mockResponse.data.data);
 	});
