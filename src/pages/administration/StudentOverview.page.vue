@@ -290,7 +290,8 @@ export default defineComponent({
 				{
 					label: this.t("pages.administration.students.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
-					action: this.handleBulkDelete,
+					//action: this.handleBulkDelete,
+					action: this.openDeleteDialog,
 					permission: Permission.StudentDelete,
 					dataTestId: "delete_action",
 				},
@@ -517,8 +518,10 @@ export default defineComponent({
 				notifyError(this.t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
-		async handleBulkDelete(rowIds, selectionType) {
+		openDeleteDialog() {
 			this.isConfirmDialogOpen = true;
+		},
+		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
 					await this.$store.dispatch("users/deleteUsers", {

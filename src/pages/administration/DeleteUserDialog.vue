@@ -9,23 +9,20 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecord } from "@/types/file/File";
 import { SvsDialog } from "@ui-dialog";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
+const { t: translate } = useI18n();
 
 const props = defineProps({
-	message: {
-		type: String,
-		default: "",
-	},
 	fileRecords: {
 		type: Array as PropType<FileRecord[]>,
 		required: true,
 	},
 });
+
+const message = translate("pages.administration.students.index.remove.confirm.message.all");
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,
