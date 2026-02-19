@@ -813,8 +813,8 @@ export default {
 	"components.organisms.FormNews.error.patch": "Error al actualizar.",
 	"components.organisms.FormNews.error.remove": "Error durante la eliminación.",
 	"components.organisms.FormNews.errors.create": "Error durante la creación.",
-	"components.organisms.FormNews.errors.missing_content": "Tu artículo está vacío. ;)",
-	"components.organisms.FormNews.errors.missing_title": "Cada artículo debe tener un título.",
+	"components.organisms.FormNews.errors.missing_content": "Por favor, ingrese contenido",
+	"components.organisms.FormNews.errors.missing_title": "Por favor, ingrese un título",
 	"components.organisms.FormNews.input.title.label": "Título de la noticia",
 	"components.organisms.FormNews.input.title.placeholder": "Empecemos con el título",
 	"components.organisms.FormNews.label.planned_publish":

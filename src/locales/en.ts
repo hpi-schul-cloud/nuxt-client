@@ -795,8 +795,8 @@ export default {
 	"components.organisms.FormNews.error.patch": "Error while updating.",
 	"components.organisms.FormNews.error.remove": "Error during deletion.",
 	"components.organisms.FormNews.errors.create": "Error during creation.",
-	"components.organisms.FormNews.errors.missing_content": "Your article is empty. ;)",
-	"components.organisms.FormNews.errors.missing_title": "Every article must have a title.",
+	"components.organisms.FormNews.errors.missing_content": "Please enter content",
+	"components.organisms.FormNews.errors.missing_title": "Please enter a title",
 	"components.organisms.FormNews.input.title.label": "Title of the news",
 	"components.organisms.FormNews.input.title.placeholder": "Let's start with the title",
 	"components.organisms.FormNews.label.planned_publish":

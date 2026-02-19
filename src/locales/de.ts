@@ -812,8 +812,8 @@ export default {
 	"components.organisms.FormNews.error.patch": "Fehler beim Aktualisieren.",
 	"components.organisms.FormNews.error.remove": "Fehler beim Löschen.",
 	"components.organisms.FormNews.errors.create": "Fehler beim Erstellen.",
-	"components.organisms.FormNews.errors.missing_content": "Deinem Artikel fehlt es an Inhalt. ;)",
-	"components.organisms.FormNews.errors.missing_title": "Jeder Artikel braucht einen Titel.",
+	"components.organisms.FormNews.errors.missing_content": "Bitte einen Inhalt eingeben",
+	"components.organisms.FormNews.errors.missing_title": "Bitte einen Titel eingeben",
 	"components.organisms.FormNews.input.title.label": "Titel der Neuigkeit",
 	"components.organisms.FormNews.input.title.placeholder": "Los geht's mit dem Titel",
 	"components.organisms.FormNews.label.planned_publish":

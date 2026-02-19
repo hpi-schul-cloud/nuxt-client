@@ -6,7 +6,7 @@
 			:placeholder="t('components.organisms.FormNews.input.title.placeholder')"
 			data-testid="news_title"
 			:label="t('components.organisms.FormNews.input.title.label')"
-			:rules="[validateOnOpeningTag, isRequired()]"
+			:rules="[validateOnOpeningTag, isRequired(t('components.organisms.FormNews.errors.missing_title'))]"
 		/>
 
 		<div class="mt-5">
