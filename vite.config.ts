@@ -47,7 +47,6 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 			include: [
 				"axios",
 				"dayjs",
-				"object-hash",
 				"sortablejs",
 				"socket.io-client",
 				"focus-trap",
