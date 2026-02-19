@@ -86,7 +86,7 @@ const create = async (news: Pick<CreateNewsParams, "title" | "content" | "displa
 		if (status.value === "completed") {
 			notifySuccess(t("components.organisms.FormNews.success.create"));
 			await router.push({
-				path: `/news/${createdNews.value.id}`,
+				path: `/news/${createdNews?.value?.id}`,
 			});
 		}
 	} catch {

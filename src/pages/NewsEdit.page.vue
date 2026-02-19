@@ -49,10 +49,10 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const { status, fetchNews, current: currentNews, patchNews, removeNews } = useNews();
+const { status, findOneNews, currentNews, updateNews, deleteNews } = useNews();
 
 onMounted(async () => {
-	await fetchNews(route.params.id as string);
+	await findOneNews(route.params.id as string);
 	setPageTitle();
 });
 
@@ -73,7 +73,7 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 	}
 
 	try {
-		await patchNews({
+		await updateNews({
 			id: currentNews.value.id,
 			title: newsToPatch.title,
 			content: newsToPatch.content,
@@ -95,7 +95,7 @@ const onDelete = async () => {
 	}
 
 	try {
-		await removeNews(currentNews.value.id);
+		await deleteNews(currentNews.value.id);
 		showNotifier("success", "remove");
 
 		router.push({ path: "/news" });
