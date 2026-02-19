@@ -14,7 +14,6 @@ import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
-import NewsModule from "@/store/news";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -33,7 +32,6 @@ export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
 export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
-export let newsModule: NewsModule;
 export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
@@ -53,7 +51,6 @@ export function initializeStores(store: Store<unknown>): void {
 	finishedTasksModule = getModule(FinishedTasksModule, store);
 	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
-	newsModule = getModule(NewsModule, store);
 	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	courseRoomListModule = getModule(CourseRoomListModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
@@ -76,7 +73,6 @@ export const modules = {
 	finishedTasksModule: FinishedTasksModule,
 	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
-	newsModule: NewsModule,
 	courseRoomDetailsModule: CourseRoomDetailsModule,
 	courseRoomListModule: CourseRoomListModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
