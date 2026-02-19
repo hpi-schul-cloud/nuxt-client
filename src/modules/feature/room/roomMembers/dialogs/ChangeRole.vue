@@ -161,7 +161,7 @@ const { room } = storeToRefs(useRoomDetailsStore());
 
 const roomMembersStore = useRoomMembersStore();
 const { selectedIds } = storeToRefs(roomMembersStore);
-const { updateMembersRole, changeRoomOwner } = roomMembersStore;
+const { updateMembersRole, changeRoomOwner, fetchMembers } = roomMembersStore;
 
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members");
@@ -247,6 +247,7 @@ const onConfirm = async () => {
 		selectedRole.value as RoleEnum,
 		props.members.length === 1 ? memberToChangeRole.value[0].userId : undefined
 	);
+	fetchMembers();
 	selectedIds.value = [];
 	emit("close");
 };

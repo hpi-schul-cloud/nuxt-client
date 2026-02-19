@@ -95,7 +95,7 @@
 			@move-keyboard:element="onMoveContentElementKeyboard"
 			@add:element="onAddElement"
 			@enter:title="onEnter"
-			@update:title="onUpdateCardTitle"
+			@update:title="(newTitle) => onUpdateCardTitle(newTitle, cardId)"
 			@close:detail-view="onCloseDetailView"
 			@delete:card="onDeleteCard"
 		/>
@@ -185,7 +185,8 @@ const _updateCardTitle = (newTitle: string, cardId: string) => {
 	cardStore.updateCardTitleRequest({ newTitle, cardId });
 };
 
-const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
+const onUpdateCardTitle = (newTitle: string, cardId: string) =>
+	useDebounceFn(() => _updateCardTitle(newTitle, cardId), 600)();
 
 const onDeleteCard = async (confirmation: Promise<boolean>) => {
 	stopEditMode();

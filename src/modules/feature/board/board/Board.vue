@@ -181,6 +181,7 @@ const { breadcrumbs, contextType, roomId, createPageInformation, resetPageInform
 const isDragging = ref(false);
 const isEditSettingsDialogOpen = ref(false);
 const shareModalContextType = ref();
+const router = useRouter();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -352,7 +353,7 @@ watch(
 	() => {
 		const canAccessBoard = isBoardVisible.value || allowedOperations.value.createCard;
 
-		if (allowedOperations.value && !canAccessBoard) {
+		if (board.value !== undefined && !canAccessBoard) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			useAppStore().handleApplicationError(HttpStatusCode.Forbidden, "components.board.error.403");
 		}
@@ -409,8 +410,6 @@ const boardColumnClass = computed(() => {
 const onCopyResultModalClosed = () => {
 	copyModule.reset();
 };
-
-const router = useRouter();
 
 const onCopyBoard = async () => {
 	if (!allowedOperations.value.copyBoard) return;

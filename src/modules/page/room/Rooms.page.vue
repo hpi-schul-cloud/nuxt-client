@@ -26,10 +26,10 @@
 
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import { BoardExternalReferenceType, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifySuccess } from "@data-app";
-import { useRoomAuthorization, useRoomStore } from "@data-room";
+import { notifySuccess, useAppStore } from "@data-app";
+import { useRoomStore } from "@data-room";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid, RoomsWelcomeInfo } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -47,13 +47,13 @@ const router = useRouter();
 const { rooms, isLoading, isEmpty } = storeToRefs(useRoomStore());
 
 const { fetchRooms } = useRoomStore();
-const { canCreateRoom } = useRoomAuthorization();
 
 const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const fabAction = computed(() => {
-	if (!canCreateRoom.value) return;
+	const canCreateRoom = useAppStore().hasPermission(Permission.SchoolCreateRoom);
+	if (!canCreateRoom) return;
 
 	return [
 		{

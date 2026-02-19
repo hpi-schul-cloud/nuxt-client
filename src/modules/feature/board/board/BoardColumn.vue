@@ -77,9 +77,8 @@
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { useBoardAllowedOperations } from "@/modules/data/board/boardAllowedOperations.composable";
 import { BoardColumn } from "@/types/board/Board";
-import { useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
+import { useBoardAllowedOperations, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
