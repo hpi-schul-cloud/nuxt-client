@@ -1287,7 +1287,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Edit Terms of Use",
 	"pages.administration.school.index.termsOfUse.error": "An error occurred while loading the terms of use",
 	"pages.administration.school.index.termsOfUse.fileName": "Terms of Use of the school",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file (PDF only, 4MB max)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(PDF only, 4 MB max)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Select file",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"The new Terms of Use will irretrievably replace the old one and will be presented to all users of this school for approval.",
@@ -1296,7 +1297,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "New file was successfully uploaded.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Uploaded {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"The file is larger than 4MB. Please reduce the file size",
+		"The file is larger than 4 MB. Please reduce the file size",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"This file format is not supported. Please use PDF only",
 	"pages.administration.school.index.title": "Manage school",
@@ -1359,8 +1360,6 @@ export default {
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.searchbar.ariaLabel": "Search students by name",
@@ -1430,8 +1429,6 @@ export default {
 		"Are you sure you want to delete all teachers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher? | Are you sure you want to delete this {number} of teachers?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these teachers will remain visible in the table.",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",

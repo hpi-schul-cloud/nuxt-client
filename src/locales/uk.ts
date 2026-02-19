@@ -1304,7 +1304,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Редагувати Умови використання",
 	"pages.administration.school.index.termsOfUse.error": "Виникла помилка під час завантаження Умови використання",
 	"pages.administration.school.index.termsOfUse.fileName": "Умови використання школи",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл (тільки PDF, максимум 4 МБ)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(тільки PDF, максимум 4 МБ)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Виберіть файл",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Нова Умови використання безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
@@ -1377,8 +1378,6 @@ export default {
 		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього учня?? | Ви дійсно хочете видалити цього {number} учня?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці учні залишатимуться видимими в таблиці.",
 	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
 	"pages.administration.students.index.searchbar.ariaLabel": "Пошук учнів за іменами",
@@ -1448,8 +1447,6 @@ export default {
 		"Ви дійсно хочете видалити всіх викладачів, крім {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці викладачі залишатимуться видимими в таблиці.",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Пошук викладачів за іменем",

@@ -1315,7 +1315,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.fileName": "Condiciones de Uso de la escuela",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(sólo PDF, 4 MB como máximo)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"La nueva Condiciones de Uso sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
@@ -1391,8 +1392,6 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos alumnos seguirán siendo visibles en la tabla.",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
 	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
@@ -1463,8 +1462,6 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los profesores excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este profesor? | ¿Estás seguro de que deseas eliminar este {number} de profesores?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos profesores seguirán siendo visibles en la tabla.",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",
