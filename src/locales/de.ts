@@ -1385,8 +1385,6 @@ export default {
 		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diesen Schüler:in löschen möchtest? | Bist du sicher, dass du diese {number} Schüler:innen löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Schüler:innen weiterhin in der Tabelle sichtbar.",
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
 	"pages.administration.students.index.searchbar.ariaLabel": "Schüler:innen nach Namen durchsuchen",
@@ -1457,8 +1455,6 @@ export default {
 		"Bist du sicher, dass du alle Lehrkräfte bis auf {number} löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diese Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkräfte löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Lehrkräfte weiterhin in der Tabelle sichtbar.",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",
@@ -1880,6 +1876,9 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymisiert)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Raum-Mitglieder {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Raum-Mitglieder „{roomName}“",
+	"pages.security.headline": "Sicherheitsproblem melden",
+	"pages.security.text":
+		"Die dBildungscloud wird regelmäßig Sicherheitsüberprüfungen und Penetrationstests unterzogen, da uns die Sicherheit der Daten unserer Nutzer:innen sehr wichtig ist. Du hast trotzdem ein Sicherheitsproblem gefunden? Schreib uns, damit wir die Lücke schnellstmöglich schließen können: ",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",
