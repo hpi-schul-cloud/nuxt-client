@@ -14,7 +14,7 @@
 				/>
 			</template>
 			<template #errors>
-				<InfoMessage v-if="error" :message="t('pages.administration.teachers.new.error')" type="bc-error" />
+				<InfoMessage v-if="businessError" :message="t('pages.administration.teachers.new.error')" type="bc-error" />
 			</template>
 		</FormCreateUser>
 	</default-wireframe>
@@ -30,11 +30,13 @@ import { UserCreatingData, useUsers } from "@data-users";
 import { DefaultWireframe } from "@ui-layout";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-const { createTeacher } = useUsers(RoleName.Teacher);
+const { createUser } = useUsers(RoleName.Teacher);
 
-const error = ref(false);
+const businessError = ref(false);
+const router = useRouter();
 const sendRegistration = ref(false);
 const breadcrumbs = [
 	{
@@ -46,12 +48,10 @@ const breadcrumbs = [
 		disabled: true,
 	},
 ];
-
 document.title = buildPageTitle(t("pages.administration.teachers.new.title"));
 
-const createTeacherHandler = (teacherData: UserCreatingData) => {
-	error.value = false;
-	createTeacher({
+const createTeacherHandler = async (teacherData: UserCreatingData) => {
+	const { error } = await createUser({
 		firstName: teacherData.firstName,
 		lastName: teacherData.lastName,
 		email: teacherData.email,
@@ -60,15 +60,9 @@ const createTeacherHandler = (teacherData: UserCreatingData) => {
 		sendRegistration: sendRegistration.value,
 		generateRegistrationLink: true,
 	});
-	// .then(() => {
-	//   // TODO: move this logic to the composable
-	//   notifySuccess(t("pages.administration.teachers.new.success"));
-	//   $router.push({
-	//     path: `/administration/teachers`,
-	//   });
-	// })
-	// .catch(() => {
-	//   error.value = true;
-	// });
+	if (error) {
+		businessError.value = true;
+	}
+	router.push("/administration/teachers");
 };
 </script>

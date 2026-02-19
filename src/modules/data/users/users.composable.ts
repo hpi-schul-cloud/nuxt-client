@@ -10,9 +10,9 @@ export type UserCreatingData = {
 	lastName: string;
 	email: string;
 	roles: [RoleName.Teacher] | [RoleName.Student];
-	schoolId: string;
+	schoolId: string | undefined;
 	sendRegistration: boolean;
-	generateRegistrationLink: boolean;
+	generateRegistrationLink?: boolean;
 	birthday?: Date;
 };
 
@@ -32,7 +32,7 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const consentList = ref([]);
 	const registrationLinks = ref([]);
 
-	const { execute, isRunning, reset, status, error } = useSafeAxiosTask();
+	const { execute } = useSafeAxiosTask();
 
 	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
 		const { result } = await execute(() => $axios.get(usersApi, { params: query }));
@@ -73,19 +73,17 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 				? t("pages.administration.students.new.success")
 				: t("pages.administration.teachers.new.success");
 
-		const { result, error } = await execute(() => $axios.post(usersApi, userData), createUserErrorMessage);
+		const { result, error } = await execute(() => $axios.post(usersApiV1, userData), createUserErrorMessage);
+
+		if (!error) {
+			notifySuccess(createUserSuccessMessage);
+		}
 
 		return {
 			result: result?.data,
 			error,
 		};
 	};
-
-	const createTeacher = async (teacherData: UserCreatingData): Promise<UserResponse> =>
-		(await $axios.post(usersApiV1, teacherData)).data;
-
-	const createStudent = async (studentData: UserCreatingData): Promise<UserResponse> =>
-		(await $axios.post(usersApiV1, studentData)).data;
 
 	const sendRegistrationLink = async (payload: { userIds: string[]; selectionType: string }) => {
 		const { result } = await execute(
@@ -105,15 +103,12 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 
 		qrLinks.value = result?.data || [];
 	};
-	// const findConsentUsers = async (query: { $limit: number; year: string }) => 0;
 
 	return {
 		userList,
 		fetchUsers,
 		createUser,
 		deleteUsers,
-		createTeacher,
-		createStudent,
 		sendRegistrationLink,
 		getQrRegistrationLinks,
 		deletingProgress,
