@@ -52,7 +52,7 @@ const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const fabAction = computed(() => {
-	const canCreateRoom = useAppStore().hasPermission(Permission.SchoolCreateRoom);
+	const canCreateRoom = useAppStore().hasPermissionNow(Permission.SchoolCreateRoom);
 	if (!canCreateRoom) return;
 
 	return [

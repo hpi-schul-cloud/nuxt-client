@@ -162,7 +162,7 @@ watchEffect(() => {
 		? t("pages.rooms.members.management")
 		: t("pages.rooms.members.label");
 
-	if (room.value?.permissions) {
+	if (room.value?.allowedOperations) {
 		const permissionRestrictedTabs = [Tab.Invitations, Tab.Confirmations];
 
 		if (permissionRestrictedTabs.includes(activeTab.value) && !allowedOperations.value.updateRoomInvitationLinks) {

@@ -7,7 +7,7 @@ import { createTestAppStoreWithRole } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardAllowedOperations, useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -65,32 +65,22 @@ describe("VideoConferenceContentElement", () => {
 		vi.clearAllMocks();
 	});
 
-	const setupWrapper = (
-		options: {
-			content?: VideoConferenceElementContent;
-			isEditMode: boolean;
-			isNotFirstElement?: boolean;
-			isNotLastElement?: boolean;
-			role?: RoleName;
-			columnIndex?: number;
-			rowIndex?: number;
-			elementIndex?: number;
-			isRunning?: boolean;
-			error?: Error | null;
-			hasManageVideoConferencePermission?: boolean;
-		} = {
-			content: undefined,
-			isEditMode: true,
-			role: RoleName.Teacher,
-			columnIndex: 0,
-			rowIndex: 1,
-			elementIndex: 2,
-			hasManageVideoConferencePermission: false,
-		}
-	) => {
+	const setupWrapper = (options: {
+		content?: VideoConferenceElementContent;
+		isEditMode: boolean;
+		isNotFirstElement?: boolean;
+		isNotLastElement?: boolean;
+		role?: RoleName;
+		columnIndex?: number;
+		rowIndex?: number;
+		elementIndex?: number;
+		isRunning?: boolean;
+		error?: Error | null;
+		hasManageVideoConferencePermission?: boolean;
+	}) => {
 		const {
 			content,
-			isEditMode,
+			isEditMode = true,
 			isNotFirstElement,
 			isNotLastElement,
 			role = RoleName.Teacher,
@@ -99,6 +89,7 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex = 2,
 			isRunning = false,
 			error = null,
+			hasManageVideoConferencePermission = false,
 		} = options;
 
 		const element = {
@@ -135,14 +126,21 @@ describe("VideoConferenceContentElement", () => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(role);
 
-		const manageVideoConference = role === RoleName.Teacher;
-		vi.mocked(useBoardAllowedOperations).mockReturnValue({
-			allowedOperations: computed(() => ({ manageVideoConference }) as unknown),
-		} as ReturnType<typeof useBoardAllowedOperations>);
-
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								room: {
+									allowedOperations: { manageVideoConference: hasManageVideoConferencePermission },
+								},
+							},
+						},
+					}),
+				],
 				provide: {
 					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},
