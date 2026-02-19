@@ -84,7 +84,7 @@
 		</BackendDataTable>
 		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 	</DefaultWireframe>
-	<ConfirmationDialog>
+	<!--<ConfirmationDialog>
 		<template #alert>
 			<WarningAlert data-testid="warning-alert-studentsdelete">
 				{{ t("pages.administration.students.index.remove.confirm.message.warning") }}
@@ -95,7 +95,8 @@
 				<li v-for="student in selectedStudents" :key="student._id">{{ student.firstName }} {{ student.lastName }}</li>
 			</ul>
 		</template>
-	</ConfirmationDialog>
+	</ConfirmationDialog>-->
+	<SvsDialog>fdfdf</SvsDialog>
 </template>
 
 <script>
@@ -127,6 +128,7 @@ import {
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
+import { SvsDialog } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
@@ -135,6 +137,7 @@ import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
+		SvsDialog,
 		ConfirmationDialog,
 		DefaultWireframe,
 		BackendDataTable,
