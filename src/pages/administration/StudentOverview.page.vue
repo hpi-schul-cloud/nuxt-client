@@ -96,7 +96,12 @@
 			</ul>
 		</template>
 	</ConfirmationDialog>-->
-	<DeleteUserDialog v-model:is-dialog-open="isConfirmDialogOpen" :message="message" />
+	<DeleteUserDialog
+		v-model:is-dialog-open="isConfirmDialogOpen"
+		:message="message"
+		:selected-users="selectedStudents"
+		@confirm="onConfirmDelete"
+	/>
 </template>
 
 <script>
@@ -520,6 +525,21 @@ export default defineComponent({
 		},
 		openDeleteDialog() {
 			this.isConfirmDialogOpen = true;
+		},
+		async onConfirmDelete() {
+			try {
+				await this.$store.dispatch("users/deleteUsers", {
+					ids: this.tableSelection,
+					userType: "student",
+				});
+				notifySuccess(this.t("pages.administration.remove.success"));
+				this.find();
+			} catch {
+				notifyError(this.t("pages.administration.remove.error"));
+			} finally {
+				this.tableSelection = reactive([]);
+				this.tableSelectionType = "inclusive";
+			}
 		},
 		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {

@@ -5,7 +5,15 @@
 		data-testid="delete-file-dialog"
 		@confirm="emit('confirm')"
 		@cancel="emit('cancel')"
-	/>
+	>
+		<template #content>
+			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
+				<li v-for="student in props.selectedUsers" :key="student._id">
+					{{ student.firstName }} {{ student.lastName }}
+				</li>
+			</ul>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -16,8 +24,8 @@ import { useI18n } from "vue-i18n";
 const { t: translate } = useI18n();
 
 const props = defineProps({
-	fileRecords: {
-		type: Array as PropType<FileRecord[]>,
+	selectedUsers: {
+		type: Array as PropType<{ _id: string; firstName: string; lastName: string }[]>,
 		required: true,
 	},
 });
