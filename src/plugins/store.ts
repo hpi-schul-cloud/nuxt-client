@@ -4,7 +4,6 @@ import { bulkConsent } from "@/store/bulkConsent";
 import { ldapConfig } from "@/store/ldap-config";
 // Note: you shouldn't need to import store modules here.
 import { initializeStores, modules } from "@/store/store-accessor";
-import users from "@/store/users";
 import { createStore, Store } from "vuex";
 
 // Initialize the modules using a Vuex plugin that runs when the root store is
@@ -22,7 +21,6 @@ export default createStore({
 		...modules,
 		bulkConsent,
 		"ldap-config": ldapConfig,
-		users,
 	},
 	state: {},
 	mutations: {},

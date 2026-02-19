@@ -31,13 +31,22 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const qrLinks = ref([]);
 	const consentList = ref([]);
 	const registrationLinks = ref([]);
+	const pagination = ref({
+		limit: 0,
+		skip: 0,
+		total: 0,
+	});
 
 	const { execute } = useSafeAxiosTask();
 
 	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
 		const { result } = await execute(() => $axios.get(usersApi, { params: query }));
 
-		userList.value = result?.data?.data || [];
+		const { data } = result?.data || {};
+		userList.value = data?.data;
+		pagination.value.limit = data?.limit || 0;
+		pagination.value.skip = data?.skip || 0;
+		pagination.value.total = data?.total || 0;
 	};
 
 	const deleteUsers = async (userIds: string | string[]) => {
@@ -112,6 +121,7 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		sendRegistrationLink,
 		getQrRegistrationLinks,
 		deletingProgress,
+		pagination,
 		qrLinks,
 		consentList,
 		registrationLinks,

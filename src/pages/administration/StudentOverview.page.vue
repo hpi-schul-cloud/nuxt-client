@@ -154,6 +154,7 @@ export default defineComponent({
 			getQrRegistrationLinks,
 			registrationLinks,
 			qrLinks,
+			pagination,
 		} = useUsers(RoleName.Student);
 
 		return {
@@ -175,6 +176,7 @@ export default defineComponent({
 			getQrRegistrationLinks,
 			registrationLinks,
 			qrLinks,
+			pagination,
 		};
 	},
 	data() {

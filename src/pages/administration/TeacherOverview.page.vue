@@ -133,9 +133,8 @@ export default defineComponent({
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
 		const { fetchClasses, list } = useClasses();
-		const { fetchUsers, userList, deleteUsers, sendRegistrationLink, getQrRegistrationLinks, qrLinks } = useUsers(
-			RoleName.Teacher
-		);
+		const { fetchUsers, userList, deleteUsers, sendRegistrationLink, getQrRegistrationLinks, pagination, qrLinks } =
+			useUsers(RoleName.Teacher);
 
 		return {
 			getPaginationState,
@@ -153,6 +152,7 @@ export default defineComponent({
 			deleteUsers,
 			getQrRegistrationLinks,
 			qrLinks,
+			pagination,
 		};
 	},
 	data() {
