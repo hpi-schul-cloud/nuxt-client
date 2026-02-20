@@ -103,13 +103,16 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		notifySuccess(t("pages.administration.sendMail.success", payload.userIds.length));
 	};
 
+	const { log } = console;
+
 	const getQrRegistrationLinks = async (payload: { userIds: string[]; selectionType: string }) => {
 		const { result } = await execute(
 			() => $axios.post(registrationQrApi, { ...payload, roleName: userType }),
 			t("pages.administration.printQr.error", payload.userIds.length)
 		);
+		log("QR Registration Links Response:", result);
 
-		qrLinks.value = result?.data || [];
+		qrLinks.value = result?.data;
 	};
 
 	return {
