@@ -1,6 +1,6 @@
 <template>
-	<VDialog v-model="isDialogOpen" data-testid="delete-dialog-item" :max-width="480">
-		<UseFocusTrap>
+	<UseFocusTrap>
+		<VDialog v-model="isDialogOpen" data-testid="delete-dialog-item" :max-width="480">
 			<VCard>
 				<template #title>
 					<h2 class="ma-2 dialog-title" data-testid="dialog-title">
@@ -11,6 +11,10 @@
 				<div v-if="$slots.alert" class="alert-text mx-6 mb-4">
 					<slot name="alert" />
 				</div>
+
+				<VCardText v-if="$slots.content">
+					<slot name="content" />
+				</VCardText>
 
 				<template #actions>
 					<VSpacer />
@@ -27,8 +31,8 @@
 					</div>
 				</template>
 			</VCard>
-		</UseFocusTrap>
-	</VDialog>
+		</VDialog>
+	</UseFocusTrap>
 </template>
 
 <script setup lang="ts">

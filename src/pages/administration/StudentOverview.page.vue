@@ -84,10 +84,29 @@
 		</BackendDataTable>
 		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 	</DefaultWireframe>
-	<ConfirmationDialog />
+	<!--<ConfirmationDialog>
+		<template #alert>
+			<WarningAlert data-testid="warning-alert-studentsdelete">
+				{{ t("pages.administration.students.index.remove.confirm.message.warning") }}
+			</WarningAlert>
+		</template>
+		<template #content>
+			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
+				<li v-for="student in selectedStudents" :key="student._id">{{ student.firstName }} {{ student.lastName }}</li>
+			</ul>
+		</template>
+	</ConfirmationDialog>-->
+	<DeleteUserDialog
+		v-if="isConfirmDialogOpen"
+		v-model:is-dialog-open="isConfirmDialogOpen"
+		:user-type="'student'"
+		:selected-users="selectedStudents"
+		@confirm="onConfirmDelete"
+	/>
 </template>
 
 <script>
+import DeleteUserDialog from "./DeleteUserDialog.vue";
 import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
@@ -113,7 +132,6 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
@@ -123,7 +141,6 @@ import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
-		ConfirmationDialog,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
@@ -131,6 +148,7 @@ export default defineComponent({
 		DataFilter,
 		ThrInfoBanner,
 		SvsSearchField,
+		DeleteUserDialog,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -140,7 +158,7 @@ export default defineComponent({
 	setup() {
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Student);
-		const { askConfirmation } = useConfirmationDialog();
+
 		const { t } = useI18n();
 
 		return {
@@ -150,7 +168,6 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
-			askConfirmation,
 			t,
 		};
 	},
@@ -234,6 +251,7 @@ export default defineComponent({
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
+			isConfirmDialogOpen: false,
 		};
 	},
 	computed: {
@@ -276,7 +294,8 @@ export default defineComponent({
 				{
 					label: this.t("pages.administration.students.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
-					action: this.handleBulkDelete,
+					//action: this.handleBulkDelete,
+					action: this.openDeleteDialog,
 					permission: Permission.StudentDelete,
 					dataTestId: "delete_action",
 				},
@@ -378,6 +397,10 @@ export default defineComponent({
 					dataTestId: "fab_button_import_students",
 				},
 			];
+		},
+		selectedStudents() {
+			const selectedStudents = this.students.filter((student) => this.tableSelection.includes(student._id));
+			return selectedStudents;
 		},
 	},
 	watch: {
@@ -499,49 +522,25 @@ export default defineComponent({
 				notifyError(this.t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
-		async handleBulkDelete(rowIds, selectionType) {
-			const onConfirm = async () => {
-				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "student",
-					});
-					notifySuccess(this.t("pages.administration.remove.success"));
-					this.find();
-				} catch {
-					notifyError(this.t("pages.administration.remove.error"));
-				}
-			};
-			const onCancel = () => {
+		openDeleteDialog() {
+			this.isConfirmDialogOpen = true;
+		},
+		async onConfirmDelete() {
+			try {
+				await this.$store.dispatch("users/deleteUsers", {
+					ids: this.tableSelection,
+					userType: "student",
+				});
+				notifySuccess(this.t("pages.administration.remove.success"));
+				this.find();
+			} catch {
+				notifyError(this.t("pages.administration.remove.error"));
+			} finally {
 				this.tableSelection = reactive([]);
 				this.tableSelectionType = "inclusive";
-			};
-			let message;
-			if (selectionType === "inclusive") {
-				message = this.t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
-					number: rowIds.length,
-				});
-			} else {
-				if (rowIds.length) {
-					message = this.t("pages.administration.students.index.remove.confirm.message.many", {
-						number: rowIds.length,
-					});
-				} else {
-					message = this.t("pages.administration.students.index.remove.confirm.message.all");
-				}
-			}
-
-			const shouldDelete = await this.askConfirmation({
-				message,
-				confirmActionLangKey: "pages.administration.students.index.remove.confirm.btnText",
-			});
-
-			if (shouldDelete) {
-				await onConfirm();
-			} else {
-				onCancel();
 			}
 		},
+
 		barSearch: function (searchText) {
 			if (this.timer) {
 				clearTimeout(this.timer);
