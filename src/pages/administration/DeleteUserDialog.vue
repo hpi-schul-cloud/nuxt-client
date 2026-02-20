@@ -7,6 +7,9 @@
 		@cancel="emit('cancel')"
 	>
 		<template #content>
+			<WarningAlert>
+				{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
+			</WarningAlert>
 			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
 				<li v-for="student in props.selectedUsers" :key="student._id">
 					{{ student.firstName }} {{ student.lastName }}
@@ -17,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
@@ -28,9 +32,28 @@ const props = defineProps({
 		type: Array as PropType<{ _id: string; firstName: string; lastName: string }[]>,
 		required: true,
 	},
+	userType: {
+		type: String as PropType<"student" | "teacher">,
+		required: true,
+	},
 });
 
-const message = translate("pages.administration.students.index.remove.confirm.message.all");
+import { computed } from "vue";
+
+const message = computed(() => {
+	switch (props.userType) {
+		case "student":
+			return translate(`pages.administration.students.index.remove.confirm.message.some`, {
+				number: props.selectedUsers.length,
+			});
+		case "teacher":
+			return translate(`pages.administration.teachers.index.remove.confirm.message.some`, {
+				number: props.selectedUsers.length,
+			});
+		default:
+			return "";
+	}
+});
 
 const isDialogOpen = defineModel("is-dialog-open", {
 	type: Boolean,

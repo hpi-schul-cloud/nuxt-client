@@ -86,9 +86,16 @@
 			</ul>
 		</template>
 	</ConfirmationDialog>-->
+	<DeleteUserDialog
+		v-model:is-dialog-open="isConfirmDialogOpen"
+		:user-type="'teacher'"
+		:selected-users="selectedTeachers"
+		@confirm="onConfirmDelete"
+	/>
 </template>
 
 <script>
+import DeleteUserDialog from "./DeleteUserDialog.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
@@ -113,12 +120,10 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
-import { defineComponent } from "vue";
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
@@ -128,9 +133,9 @@ export default defineComponent({
 		AdminTableLegend,
 		ProgressModal,
 		DataFilter,
-		ConfirmationDialog,
 		ThrInfoBanner,
 		SvsSearchField,
+		DeleteUserDialog,
 	},
 	props: {
 		showExternalSyncHint: {
@@ -140,7 +145,6 @@ export default defineComponent({
 	setup() {
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
-		const { askConfirmation } = useConfirmationDialog();
 
 		return {
 			getPaginationState,
@@ -149,7 +153,6 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
-			askConfirmation,
 		};
 	},
 	data() {
@@ -185,7 +188,7 @@ export default defineComponent({
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
-					action: this.handleBulkDelete,
+					action: this.openDeleteDialog,
 					permission: "TEACHER_DELETE",
 					dataTestId: "delete_action",
 				},
@@ -257,6 +260,7 @@ export default defineComponent({
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
 			classNameList: [],
+			isConfirmDialogOpen: false,
 		};
 	},
 	computed: {
@@ -468,47 +472,22 @@ export default defineComponent({
 				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
 			}
 		},
-		async handleBulkDelete(rowIds, selectionType) {
-			const onConfirm = async () => {
-				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "teacher",
-					});
-					notifySuccess(this.$t("pages.administration.remove.success"));
-					this.find();
-				} catch {
-					notifyError(this.$t("pages.administration.remove.error"));
-				}
-			};
-			const onCancel = () => {
+		openDeleteDialog() {
+			this.isConfirmDialogOpen = true;
+		},
+		async onConfirmDelete() {
+			try {
+				await this.$store.dispatch("users/deleteUsers", {
+					ids: this.tableSelection,
+					userType: "teacher",
+				});
+				notifySuccess(this.t("pages.administration.remove.success"));
+				this.find();
+			} catch {
+				notifyError(this.t("pages.administration.remove.error"));
+			} finally {
 				this.tableSelection = reactive([]);
 				this.tableSelectionType = "inclusive";
-			};
-			let message;
-			if (selectionType === "inclusive") {
-				message = this.$t("pages.administration.teachers.index.remove.confirm.message.some", rowIds.length, {
-					number: rowIds.length,
-				});
-			} else {
-				if (rowIds.length) {
-					message = this.$t("pages.administration.teachers.index.remove.confirm.message.many", {
-						number: rowIds.length,
-					});
-				} else {
-					message = this.$t("pages.administration.teachers.index.remove.confirm.message.all");
-				}
-			}
-
-			const shouldDelete = await this.askConfirmation({
-				message,
-				confirmActionLangKey: "pages.administration.teachers.index.remove.confirm.btnText",
-			});
-
-			if (shouldDelete) {
-				await onConfirm();
-			} else {
-				onCancel();
 			}
 		},
 		barSearch: function (searchText) {

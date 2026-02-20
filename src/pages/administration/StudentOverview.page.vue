@@ -99,19 +99,20 @@
 	<DeleteUserDialog
 		v-if="isConfirmDialogOpen"
 		v-model:is-dialog-open="isConfirmDialogOpen"
+		:user-type="'student'"
 		:selected-users="selectedStudents"
 		@confirm="onConfirmDelete"
 	/>
 </template>
 
 <script>
+import DeleteUserDialog from "./DeleteUserDialog.vue";
 import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
-import DeleteUserDialog from "@/pages/administration/DeleteUserDialog.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
