@@ -24,7 +24,7 @@
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
-			:data="teachers"
+			:data="userList"
 			:paginated="true"
 			:total="pagination.total"
 			:rows-selectable="true"
@@ -89,7 +89,9 @@ import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
+import { useUsers } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -108,7 +110,6 @@ import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent } from "vue";
 import { reactive } from "vue";
-import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
@@ -130,6 +131,18 @@ export default defineComponent({
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
 		const { askConfirmation } = useConfirmationDialog();
+		const { fetchClasses, list } = useClasses();
+
+		const {
+			fetchUsers,
+			userList,
+			deleteUsers,
+			sendRegistrationLink,
+			getQrRegistrationLinks,
+			pagination,
+			qrLinks,
+			deletingProgress,
+		} = useUsers(RoleName.Teacher);
 
 		return {
 			getPaginationState,
@@ -139,6 +152,16 @@ export default defineComponent({
 			getFilterState,
 			setFilterState,
 			askConfirmation,
+			fetchClasses,
+			list,
+			fetchUsers,
+			deletingProgress,
+			userList,
+			sendRegistrationLink,
+			deleteUsers,
+			getQrRegistrationLinks,
+			qrLinks,
+			pagination,
 		};
 	},
 	data() {
@@ -249,13 +272,12 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("users", {
-			teachers: "getList",
-			pagination: "getPagination",
-			isDeleting: "getActive",
-			deletedPercent: "getPercent",
-			qrLinks: "getQrLinks",
-		}),
+		isDeleting() {
+			return this.deletingProgress.active;
+		},
+		deletedPercent() {
+			return this.deletingProgress.percent;
+		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
@@ -376,7 +398,7 @@ export default defineComponent({
 				? !permission || this.userPermissions.includes(permission)
 				: !permission() || permission(this.userPermissions);
 		},
-		find() {
+		async find() {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -385,9 +407,8 @@ export default defineComponent({
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findTeachers", {
-				query,
-			});
+
+			await this.fetchUsers(query);
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy;
@@ -424,42 +445,29 @@ export default defineComponent({
 			};
 		},
 		async handleBulkEMail(rowIds, selectionType) {
-			try {
-				// TODO wrong use of store (not so bad)
-				await this.$store.dispatch("users/sendRegistrationLink", {
-					userIds: rowIds,
-					selectionType,
-				});
-				notifySuccess(this.$t("pages.administration.sendMail.success", rowIds.length));
-			} catch {
-				notifyError(this.$t("pages.administration.sendMail.error", rowIds.length));
-			}
+			await this.sendRegistrationLink({
+				userIds: rowIds,
+				selectionType,
+			});
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			try {
-				await this.$store.dispatch("users/getQrRegistrationLinks", {
-					userIds: rowIds,
-					selectionType,
-					roleName: "teacher",
+			await this.getQrRegistrationLinks({
+				userIds: rowIds,
+				selectionType,
+			});
+
+			if (this.qrLinks.length) {
+				printQrCodes(this.qrLinks, {
+					printPageTitleKey: "pages.administration.printQr.printPageTitle",
 				});
-				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks, {
-						printPageTitleKey: "pages.administration.printQr.printPageTitle",
-					});
-				} else {
-					notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
-				}
-			} catch {
-				notifyError(this.$t("pages.administration.printQr.error", rowIds.length));
+			} else {
+				notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 			}
 		},
 		async handleBulkDelete(rowIds, selectionType) {
 			const onConfirm = async () => {
 				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "teacher",
-					});
+					await this.deleteUsers(rowIds);
 					notifySuccess(this.$t("pages.administration.remove.success"));
 					this.find();
 				} catch {
@@ -523,13 +531,12 @@ export default defineComponent({
 		},
 		async getClassNameList() {
 			const currentYear = schoolsModule.getCurrentYear;
-			await this.$store.dispatch("classes/find", {
-				query: {
-					$limit: 1000,
-					year: currentYear?.id,
-				},
+
+			await this.fetchClasses({
+				$limit: 1000,
+				year: currentYear?.id || "",
 			});
-			this.classNameList = this.$store.state["classes"].list.reduce(
+			this.classNameList = this.list.reduce(
 				(acc, item) =>
 					acc.concat({
 						label: item.displayName,
