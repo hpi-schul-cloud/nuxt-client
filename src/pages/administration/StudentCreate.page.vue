@@ -74,8 +74,9 @@ const createStudentHandler = async (userData: UserCreatingData) => {
 		schoolId: useAppStore().school?.id,
 		sendRegistration: sendRegistration.value,
 	});
-	if (error) {
+	if (error!) {
 		businessError.value = true;
+		return;
 	}
 	router.push("/administration/students");
 };

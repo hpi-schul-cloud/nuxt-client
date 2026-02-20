@@ -2,7 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { RoleName, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
 import { notifySuccess } from "@data-app";
-import { Ref, ref } from "vue";
+import { readonly, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export type UserCreatingData = {
@@ -89,7 +89,7 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 
 		return {
 			result: result?.data,
-			error,
+			error: readonly(error ?? {}),
 		};
 	};
 
