@@ -456,8 +456,8 @@ export default defineComponent({
 				selectionType,
 			});
 
-			if (this.qrLinks.value.length) {
-				printQrCodes(this.qrLinks.value, {
+			if (this.qrLinks.length) {
+				printQrCodes(this.qrLinks, {
 					printPageTitleKey: "pages.administration.printQr.printPageTitle",
 				});
 			} else {
