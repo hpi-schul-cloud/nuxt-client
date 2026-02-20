@@ -1,16 +1,12 @@
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import { RenderHTML } from "@feature-render-html";
 import { mount } from "@vue/test-utils";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("RichTextContentElementDisplay", () => {
 	const setup = (options: { value: string }) => {
 		const wrapper = mount(RichTextContentElementDisplay, {
 			props: {
 				...options,
-			},
-			global: {
-				plugins: [vueDompurifyHTMLPlugin],
 			},
 		});
 

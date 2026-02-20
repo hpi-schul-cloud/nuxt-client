@@ -11,7 +11,6 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 vi.mock("@data-room");
 
@@ -31,7 +30,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					GroupSelectionDialog: true,
 					VDialog: true,

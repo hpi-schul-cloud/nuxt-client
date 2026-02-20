@@ -339,7 +339,7 @@ const cardTitle = (dueDate: string | undefined) => {
 	}
 
 	const titlePrefix = t("common.words.task");
-	let titleSuffix = "";
+	let titleSuffix: string;
 
 	if (isDraft.value) {
 		titleSuffix = t("common.words.draft");

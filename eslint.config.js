@@ -51,7 +51,7 @@ export default defineConfigWithVueTs([
 			"unused-imports": unusedImports,
 		},
 		rules: {
-			// "require-await": "warn", // Turn it on on demand
+			// "require-await": "warn", // Turn it on, on demand
 			"arrow-body-style": ["warn", "as-needed", { requireReturnForObjectLiteral: false }],
 			"simple-import-sort/imports": [
 				"warn",

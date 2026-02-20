@@ -6,7 +6,6 @@ import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 vi.mock("@data-group/GroupState.composable");
 
@@ -22,7 +21,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 		const wrapper = mount(ClassMembersPage, {
 			props,
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { ClassMembersInfoBox: true },
 			},
 		});

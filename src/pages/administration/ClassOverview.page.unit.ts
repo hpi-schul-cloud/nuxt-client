@@ -22,7 +22,6 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
 
@@ -101,7 +100,7 @@ const createWrapper = ({
 
 	const wrapper = mount(ClassOverview, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
