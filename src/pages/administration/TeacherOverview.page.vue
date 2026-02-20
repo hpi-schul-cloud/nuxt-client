@@ -74,13 +74,7 @@
 		</BackendDataTable>
 		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 	</DefaultWireframe>
-	<ConfirmationDialog>
-		<template #alert>
-			<WarningAlert data-testid="warning-alert-teachersdelete">
-				{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
-			</WarningAlert>
-		</template>
-	</ConfirmationDialog>
+	<ConfirmationDialog />
 </template>
 
 <script>
@@ -108,7 +102,6 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
@@ -127,7 +120,6 @@ export default defineComponent({
 		ConfirmationDialog,
 		ThrInfoBanner,
 		SvsSearchField,
-		WarningAlert,
 	},
 	props: {
 		showExternalSyncHint: {
