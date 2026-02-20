@@ -97,8 +97,8 @@
 		</template>
 	</ConfirmationDialog>-->
 	<DeleteUserDialog
+		v-if="isConfirmDialogOpen"
 		v-model:is-dialog-open="isConfirmDialogOpen"
-		:message="message"
 		:selected-users="selectedStudents"
 		@confirm="onConfirmDelete"
 	/>
@@ -134,7 +134,7 @@ import {
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
@@ -523,6 +523,21 @@ export default defineComponent({
 		},
 		openDeleteDialog() {
 			this.isConfirmDialogOpen = true;
+		},
+		async onConfirmDelete() {
+			try {
+				await this.$store.dispatch("users/deleteUsers", {
+					ids: this.tableSelection,
+					userType: "student",
+				});
+				notifySuccess(this.t("pages.administration.remove.success"));
+				this.find();
+			} catch {
+				notifyError(this.t("pages.administration.remove.error"));
+			} finally {
+				this.tableSelection = reactive([]);
+				this.tableSelectionType = "inclusive";
+			}
 		},
 
 		barSearch: function (searchText) {
