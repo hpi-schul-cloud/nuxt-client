@@ -131,11 +131,10 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
@@ -158,7 +157,7 @@ export default defineComponent({
 	setup() {
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Student);
-		const { askConfirmation } = useConfirmationDialog();
+
 		const { t } = useI18n();
 
 		return {
@@ -168,7 +167,6 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
-			askConfirmation,
 			t,
 		};
 	},
@@ -526,64 +524,7 @@ export default defineComponent({
 		openDeleteDialog() {
 			this.isConfirmDialogOpen = true;
 		},
-		async onConfirmDelete() {
-			try {
-				await this.$store.dispatch("users/deleteUsers", {
-					ids: this.tableSelection,
-					userType: "student",
-				});
-				notifySuccess(this.t("pages.administration.remove.success"));
-				this.find();
-			} catch {
-				notifyError(this.t("pages.administration.remove.error"));
-			} finally {
-				this.tableSelection = reactive([]);
-				this.tableSelectionType = "inclusive";
-			}
-		},
-		async handleBulkDelete(rowIds, selectionType) {
-			const onConfirm = async () => {
-				try {
-					await this.$store.dispatch("users/deleteUsers", {
-						ids: rowIds,
-						userType: "student",
-					});
-					notifySuccess(this.t("pages.administration.remove.success"));
-					this.find();
-				} catch {
-					notifyError(this.t("pages.administration.remove.error"));
-				}
-			};
-			const onCancel = () => {
-				this.tableSelection = reactive([]);
-				this.tableSelectionType = "inclusive";
-			};
-			let message;
-			if (selectionType === "inclusive") {
-				message = this.t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
-					number: rowIds.length,
-				});
-			} else {
-				if (rowIds.length) {
-					message = this.t("pages.administration.students.index.remove.confirm.message.many", {
-						number: rowIds.length,
-					});
-				} else {
-					message = this.t("pages.administration.students.index.remove.confirm.message.all");
-				}
-			}
 
-			const shouldDelete = await this.askConfirmation({
-				message,
-				confirmActionLangKey: "pages.administration.students.index.remove.confirm.btnText",
-			});
-
-			if (shouldDelete) {
-				await onConfirm();
-			} else {
-				onCancel();
-			}
-		},
 		barSearch: function (searchText) {
 			if (this.timer) {
 				clearTimeout(this.timer);

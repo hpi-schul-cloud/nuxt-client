@@ -54,4 +54,18 @@ const deleteMessage = computed(() => {
 		return "";
 	}
 });*/
+//let message;
+//if (selectionType === "inclusive") {
+//	message = this.t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
+//		number: rowIds.length,
+//	});
+//} else {
+//	if (rowIds.length) {
+//		message = this.t("pages.administration.students.index.remove.confirm.message.many", {
+//			number: rowIds.length,
+//		});
+//	} else {
+//		message = this.t("pages.administration.students.index.remove.confirm.message.all");
+//	}
+//}
 </script>
