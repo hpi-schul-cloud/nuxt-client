@@ -49,6 +49,7 @@
 				:prepend-inner-icon="mdiClockOutline"
 				:label="t('common.labels.time')"
 				data-testid="news_time"
+				:rules="[isValidTimeFormatVuetify()]"
 			/>
 		</div>
 
@@ -84,7 +85,7 @@ import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DatePicker } from "@ui-date-time-picker";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
-import { isRequired, useOpeningTagValidator } from "@util-validators";
+import { isRequired, isValidTimeFormatVuetify, useOpeningTagValidator } from "@util-validators";
 import dayjs, { Dayjs } from "dayjs";
 import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
