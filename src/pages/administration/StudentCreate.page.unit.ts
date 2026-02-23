@@ -1,12 +1,12 @@
-import NewStudent from "./StudentCreate.page.vue";
+import StudentCreate from "./StudentCreate.page.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useUsers } from "@data-users";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 
 vi.mock("vue-i18n", () => ({
@@ -38,7 +38,7 @@ describe("students/new", () => {
 	});
 
 	const setup = () => {
-		const wrapper = mount(NewStudent, {
+		const wrapper = mount(StudentCreate, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -73,8 +73,7 @@ describe("students/new", () => {
 			sendRegistration: false,
 		};
 
-		await nextTick();
-		await nextTick();
+		await flushPromises();
 
 		expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
 	});
