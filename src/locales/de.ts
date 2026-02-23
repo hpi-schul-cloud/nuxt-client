@@ -1378,12 +1378,9 @@ export default {
 	"pages.administration.students.consent.title": "Analoge Registrierung",
 	"pages.administration.students.fab.add": "Schüler:in erstellen",
 	"pages.administration.students.fab.import": "Schüler:in importieren",
-	"pages.administration.students.index.remove.confirm.btnText": "Schüler:in löschen",
-	"pages.administration.students.index.remove.confirm.message.all":
-		"Bist du sicher, dass du alle Schüler:innen löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.many":
-		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.some": "Folgende Schüler wirklich löschen?",
+	"pages.administration.students.index.remove.confirm.message": "Soll diese:r Schüler:in wirklich gelöscht werden?",
+	"pages.administration.students.index.remove.confirm.message.multiple":
+		"Sollen diese Schüler:innen wirklich gelöscht werden?",
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
 	"pages.administration.students.index.searchbar.ariaLabel": "Schüler:innen nach Namen durchsuchen",
@@ -1447,12 +1444,9 @@ export default {
 	"pages.administration.students.table.edit.ariaLabel": "Schüler:in bearbeiten",
 	"pages.administration.teachers.fab.add": "Lehrkraft erstellen",
 	"pages.administration.teachers.fab.import": "Lehrkraft importieren",
-	"pages.administration.teachers.index.remove.confirm.btnText": "Lehrkraft löschen",
-	"pages.administration.teachers.index.remove.confirm.message.all":
-		"Bist du sicher, dass du alle Lehrkräfte löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Bist du sicher, dass du alle Lehrkräfte bis auf {number} löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.some": "Folgende Lehrkräfte wirklich löschen?",
+	"pages.administration.teachers.index.remove.confirm.message": "Soll diese Lehrkraft wirklich gelöscht werden?",
+	"pages.administration.teachers.index.remove.confirm.message.multiple":
+		"Sollen diese Lehrkräfte wirklich gelöscht werden?",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",

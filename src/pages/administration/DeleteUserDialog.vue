@@ -40,13 +40,17 @@ import { computed } from "vue";
 const message = computed(() => {
 	switch (props.userType) {
 		case "student":
-			return translate(`pages.administration.students.index.remove.confirm.message.some`, {
-				number: props.selectedUsers.length,
-			});
+			return props.selectedUsers.length === 1
+				? translate(`pages.administration.students.index.remove.confirm.message`)
+				: translate(`pages.administration.students.index.remove.confirm.message.multiple`, {
+						number: props.selectedUsers.length,
+					});
 		case "teacher":
-			return translate(`pages.administration.teachers.index.remove.confirm.message.some`, {
-				number: props.selectedUsers.length,
-			});
+			return props.selectedUsers.length === 1
+				? translate(`pages.administration.teachers.index.remove.confirm.message`)
+				: translate(`pages.administration.teachers.index.remove.confirm.message.multiple`, {
+						number: props.selectedUsers.length,
+					});
 		default:
 			return "";
 	}
@@ -74,18 +78,4 @@ const deleteMessage = computed(() => {
 		return "";
 	}
 });*/
-//let message;
-//if (selectionType === "inclusive") {
-//	message = this.t("pages.administration.students.index.remove.confirm.message.some", rowIds.length, {
-//		number: rowIds.length,
-//	});
-//} else {
-//	if (rowIds.length) {
-//		message = this.t("pages.administration.students.index.remove.confirm.message.many", {
-//			number: rowIds.length,
-//		});
-//	} else {
-//		message = this.t("pages.administration.students.index.remove.confirm.message.all");
-//	}
-//}
 </script>

@@ -1354,12 +1354,8 @@ export default {
 	"pages.administration.students.consent.title": "Register analogously",
 	"pages.administration.students.fab.add": "Create student",
 	"pages.administration.students.fab.import": "Import student",
-	"pages.administration.students.index.remove.confirm.btnText": "Delete student",
-	"pages.administration.students.index.remove.confirm.message.all": "Are you sure you want to delete all students?",
-	"pages.administration.students.index.remove.confirm.message.many":
-		"Are you sure you want to delete all students except {number}?",
-	"pages.administration.students.index.remove.confirm.message.some":
-		"Do I really want to delete the following students?",
+	"pages.administration.students.index.remove.confirm.message": "Should this student really be deleted?",
+	"pages.administration.students.index.remove.confirm.message.multiple": "Should these students really be deleted?",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.searchbar.ariaLabel": "Search students by name",
@@ -1423,12 +1419,8 @@ export default {
 	"pages.administration.students.table.edit.ariaLabel": "Edit student",
 	"pages.administration.teachers.fab.add": "Create teacher",
 	"pages.administration.teachers.fab.import": "Import teacher",
-	"pages.administration.teachers.index.remove.confirm.btnText": "Delete teacher",
-	"pages.administration.teachers.index.remove.confirm.message.all": "Are you sure you want to delete all teachers?",
-	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Are you sure you want to delete all teachers except {number}?",
-	"pages.administration.teachers.index.remove.confirm.message.some":
-		"Do I really want to delete the following teachers?",
+	"pages.administration.teachers.index.remove.confirm.message": "Should this teacher really be deleted?",
+	"pages.administration.teachers.index.remove.confirm.message.multiple": "Should these teachers really be deleted?",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",
