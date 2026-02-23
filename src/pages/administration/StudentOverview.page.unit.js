@@ -105,14 +105,12 @@ describe("students/index", () => {
 	});
 
 	const mockCreateUser = vi.fn();
-
 	const mockDeleteUsers = vi.fn().mockReturnValue({
 		result: {
 			data: {},
 		},
 		error: null,
 	});
-
 	const mockGetQrRegistrationLinks = vi.fn().mockReturnValue({
 		result: {
 			data: [{ id: "some-id-1" }, { id: "some-id-2" }],

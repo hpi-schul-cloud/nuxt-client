@@ -456,7 +456,7 @@ export default defineComponent({
 				selectionType,
 			});
 
-			if (this.qrLinks.length) {
+			if (this.qrLinks?.length) {
 				printQrCodes(this.qrLinks, {
 					printPageTitleKey: "pages.administration.printQr.printPageTitle",
 				});
@@ -536,7 +536,7 @@ export default defineComponent({
 				$limit: 1000,
 				year: currentYear?.id || "",
 			});
-			this.classNameList = this.list.reduce(
+			this.classNameList = this.list?.reduce(
 				(acc, item) =>
 					acc.concat({
 						label: item.displayName,
