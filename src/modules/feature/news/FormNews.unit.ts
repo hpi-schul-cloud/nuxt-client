@@ -3,11 +3,11 @@ import FormNews from "./FormNews.vue";
 import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
 import { Status } from "@/store/types/commons";
 import { News } from "@/store/types/news";
-import { expectNotification, newsResponseFactory } from "@@/tests/test-utils";
+import { newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { Dayjs } from "dayjs";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
@@ -23,6 +23,12 @@ const $route = {
 		id: "randomId",
 	},
 	query: {},
+};
+const classicEditorMock = {
+	template: "<div></div>",
+	methods: {
+		focus: vi.fn(),
+	},
 };
 
 describe("FormNews", () => {
@@ -42,7 +48,7 @@ describe("FormNews", () => {
 					$route,
 				},
 				stubs: {
-					ClassicEditor: true,
+					ClassicEditor: classicEditorMock,
 				},
 			},
 			props: {
@@ -81,8 +87,10 @@ describe("FormNews", () => {
 	describe("save", () => {
 		it("emits save event on submit with correct payload", async () => {
 			const { wrapper, news } = setup();
+			await nextTick();
 
 			await wrapper.findComponent(VForm).trigger("submit");
+			await flushPromises();
 
 			expect(wrapper.emitted()).toHaveProperty("save");
 			expect(wrapper.emitted().save).toHaveLength(1);
@@ -99,17 +107,22 @@ describe("FormNews", () => {
 			await nextTick();
 
 			await wrapper.find("form").trigger("submit");
-			expectNotification("error");
+			expect(titleInput.text()).toContain("components.organisms.FormNews.errors.missing_title");
 		});
 
 		it("shows validation error on empty content", async () => {
 			const { wrapper } = setup();
+			await nextTick();
+
 			const contentInput = wrapper.findComponent(ClassicEditor);
 			await contentInput.setValue("");
 			await nextTick();
 
-			await wrapper.find("form").trigger("submit");
-			expectNotification("error");
+			await wrapper.findComponent(VForm).trigger("submit");
+			await nextTick();
+
+			const errorMessages = wrapper.get('[id="news-content-error"]');
+			expect(errorMessages.text()).toBe("components.organisms.FormNews.errors.missing_content");
 		});
 
 		it("does not emit save event on empty title", async () => {
