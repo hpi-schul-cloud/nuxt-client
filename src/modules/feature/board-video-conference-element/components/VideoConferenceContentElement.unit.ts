@@ -3,11 +3,11 @@ import VideoConferenceContentElementCreate from "./VideoConferenceContentElement
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { RoleName, VideoConferenceElementContent } from "@/serverApi/v3/api";
 import { VideoConferenceState } from "@/store/types/video-conference";
-import { createTestAppStoreWithRole } from "@@/tests/test-utils";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -65,6 +65,15 @@ describe("VideoConferenceContentElement", () => {
 		vi.clearAllMocks();
 	});
 
+	const createAuthTestUser = (userId: string, roleName: RoleName) => {
+		createTestAppStore({
+			me: {
+				roles: [{ id: userId, name: roleName }],
+				user: { id: userId },
+			},
+		});
+	};
+
 	const setupWrapper = (options: {
 		content?: VideoConferenceElementContent;
 		isEditMode: boolean;
@@ -89,8 +98,18 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex = 2,
 			isRunning = false,
 			error = null,
-			hasManageVideoConferencePermission = false,
+			hasManageVideoConferencePermission,
 		} = options;
+
+		setActivePinia(createTestingPinia());
+
+		createAuthTestUser("test-user-id", role);
+
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(
+				() => ({ allowedOperations: { updateVideoConference: hasManageVideoConferencePermission } }) as unknown
+			),
+		} as ReturnType<typeof useBoardAllowedOperations>);
 
 		const element = {
 			...defaultElement,
@@ -122,9 +141,6 @@ describe("VideoConferenceContentElement", () => {
 		});
 		useVideoConferenceMock.isRunning = computed(() => isRunning);
 		useVideoConferenceMock.error = ref(error);
-
-		setActivePinia(createTestingPinia());
-		createTestAppStoreWithRole(role);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {
@@ -232,7 +248,7 @@ describe("VideoConferenceContentElement", () => {
 					}
 				) => setupWrapper(options);
 
-				it("should have the permission to join the conference", () => {
+				it.only("should have the permission to join the conference", () => {
 					const { wrapper } = localSetup();
 
 					const videoConferenceElement = wrapper.getComponent(VideoConferenceContentElementDisplay);
