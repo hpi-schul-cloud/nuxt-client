@@ -75,7 +75,7 @@
 		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 	</DefaultWireframe>
 	<DeleteUserDialog
-		v-model:is-dialog-open="isConfirmDialogOpen"
+		v-model="isConfirmDialogOpen"
 		:user-type="'teacher'"
 		:selected-users="selectedTeachers"
 		@confirm="onConfirmDelete"
