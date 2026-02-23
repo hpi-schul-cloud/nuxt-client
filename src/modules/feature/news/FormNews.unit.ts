@@ -5,6 +5,7 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { Status } from "@/store/types/commons";
 import { News } from "@/store/types/news";
 import { newsResponseFactory } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
@@ -13,7 +14,7 @@ import { Dayjs } from "dayjs";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
-import { VForm, VMessages, VTextField } from "vuetify/components";
+import { VBtn, VForm, VMessages, VTextField } from "vuetify/components";
 
 const date = "2022-07-05";
 const time = "11:00";
@@ -36,11 +37,19 @@ const classicEditorMock = {
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
+vi.mock("@ui-confirmation-dialog");
+
 describe("FormNews", () => {
 	let wrapper: VueWrapper<InstanceType<typeof FormNews>>;
+	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		askConfirmationMock = vi.fn();
+
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
 	});
 
 	const setup = (options?: Partial<{ status: Status; news: News | null; showDeleteButton: boolean }>) => {
@@ -61,6 +70,7 @@ describe("FormNews", () => {
 				},
 				stubs: {
 					ClassicEditor: classicEditorMock,
+					ConfirmationDialog: true,
 				},
 			},
 			props: {
@@ -86,20 +96,31 @@ describe("FormNews", () => {
 		expect(wrapper.findComponent(FormNews).exists()).toBe(true);
 	});
 
-	it("passes date and time to input fields", () => {
+	it("should pass date and time to input fields", () => {
 		const { wrapper } = setup();
 
 		const dateInput = wrapper.findComponent(DatePicker);
 
 		expect(dateInput.props("date")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputDate));
 
-		const timeInput = wrapper.findComponent("[data-testid='news_time']") as VueWrapper<VTextField>;
+		const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
 		expect(timeInput.props("modelValue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
 	});
 
-	describe("save", () => {
+	it("should set time to 00:00 when date is set but time is empty", async () => {
+		const { wrapper } = setup({ news: newsResponseFactory.build({ displayAt: undefined }) });
+
+		const dateInput = wrapper.findComponent(DatePicker);
+		await dateInput.vm.$emit("update:date", "2022-07-05");
+		await nextTick();
+
+		const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
+		expect(timeInput.props("modelValue")).toBe("00:00");
+	});
+
+	describe("onSave", () => {
 		describe("invalid form", () => {
-			it("shows validation error on empty title and focus title", async () => {
+			it("should show validation error on empty title and focus title", async () => {
 				const { wrapper } = setup();
 				await nextTick();
 
@@ -114,7 +135,7 @@ describe("FormNews", () => {
 				expect(document.activeElement).toEqual(titleField.find("input").element);
 			});
 
-			it("does not emit save event on empty title", async () => {
+			it("should not emit save event on empty title", async () => {
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.find("[data-testid='news_title']").findComponent(VTextField);
@@ -127,7 +148,7 @@ describe("FormNews", () => {
 				expect(wrapper.emitted()).not.toHaveProperty("save");
 			});
 
-			it("shows validation error on empty content and call editor focus method", async () => {
+			it("should show validation error on empty content and call editor focus method", async () => {
 				const { wrapper } = setup();
 
 				const contentInput = wrapper.findComponent(ClassicEditor);
@@ -142,7 +163,7 @@ describe("FormNews", () => {
 				expect(classicEditorMock.methods.focus).toHaveBeenCalled();
 			});
 
-			it("does not emit save event on empty content", async () => {
+			it("should not emit save event on empty content", async () => {
 				const { wrapper } = setup();
 
 				const contentInput = wrapper.findComponent(ClassicEditor);
@@ -155,7 +176,7 @@ describe("FormNews", () => {
 				expect(wrapper.emitted()).not.toHaveProperty("save");
 			});
 
-			it("shows validation error on invalid time format and focus time input", async () => {
+			it("should show validation error on invalid time format and focus time input", async () => {
 				const { wrapper } = setup();
 
 				const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
@@ -169,7 +190,7 @@ describe("FormNews", () => {
 				expect(document.activeElement).toEqual(timeInput.find("input").element);
 			});
 
-			it("does not emit save event on invalid time format", async () => {
+			it("should not emit save event on invalid time format", async () => {
 				const { wrapper } = setup();
 
 				const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
@@ -186,7 +207,6 @@ describe("FormNews", () => {
 		describe("valid form", () => {
 			it("emits save event on submit with correct payload", async () => {
 				const { wrapper, news } = setup();
-				await nextTick();
 
 				await wrapper.findComponent(VForm).trigger("submit");
 				await flushPromises();
@@ -200,9 +220,91 @@ describe("FormNews", () => {
 		});
 	});
 
+	describe("onDelete", () => {
+		const getDeleteButton = (wrapper: VueWrapper) =>
+			wrapper.findAllComponents(VBtn).find((btn) => btn.props("text") === "common.actions.delete");
+
+		it("should show delete button when showDeleteButton prop is true", async () => {
+			const { wrapper } = setup({ showDeleteButton: true });
+
+			const deleteButton = getDeleteButton(wrapper);
+
+			expect(deleteButton?.exists()).toBe(true);
+		});
+
+		it("should not show delete button when showDeleteButton prop is false", async () => {
+			const { wrapper } = setup({ showDeleteButton: false });
+
+			const deleteButton = getDeleteButton(wrapper);
+
+			expect(deleteButton).toBeUndefined();
+		});
+
+		it("should not emit delete event on delete button click when deletion cancelled", async () => {
+			askConfirmationMock.mockResolvedValue(false);
+			const { wrapper } = setup({ showDeleteButton: true });
+
+			const deleteButton = getDeleteButton(wrapper);
+			await deleteButton?.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.emitted()).not.toHaveProperty("delete");
+		});
+
+		it("should emit delete event on delete button click when deletion confirmed", async () => {
+			askConfirmationMock.mockResolvedValue(true);
+			const { wrapper } = setup({ showDeleteButton: true });
+
+			const deleteButton = getDeleteButton(wrapper);
+			await deleteButton?.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.emitted()).toHaveProperty("delete");
+			expect(wrapper.emitted().delete).toHaveLength(1);
+			expect(askConfirmationMock).toHaveBeenCalledWith({
+				message: "components.organisms.FormNews.remove.confirm.message",
+				confirmActionLangKey: "components.organisms.FormNews.remove.confirm.confirm",
+			});
+		});
+	});
+
+	describe("onCancel", () => {
+		const getCancelButton = (wrapper: VueWrapper) =>
+			wrapper.findAllComponents(VBtn).find((btn) => btn.props("text") === "common.actions.discard");
+
+		it("should emit cancel event on cancel button click when cancel is confirmed", async () => {
+			askConfirmationMock.mockResolvedValue(true);
+			const { wrapper } = setup();
+			await nextTick();
+
+			const cancelButton = getCancelButton(wrapper);
+			await cancelButton?.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.emitted()).toHaveProperty("cancel");
+			expect(wrapper.emitted().cancel).toHaveLength(1);
+			expect(askConfirmationMock).toHaveBeenCalledWith({
+				message: "components.organisms.FormNews.cancel.confirm.title",
+				confirmActionLangKey: "components.organisms.FormNews.cancel.confirm.confirm",
+			});
+		});
+
+		it("should not emit cancel event on cancel button click when cancellation is cancelled", async () => {
+			askConfirmationMock.mockResolvedValue(false);
+			const { wrapper } = setup();
+			await nextTick();
+
+			const cancelButton = getCancelButton(wrapper);
+			await cancelButton?.trigger("click");
+			await flushPromises();
+
+			expect(wrapper.emitted()).not.toHaveProperty("cancel");
+		});
+	});
+
 	describe("validation", () => {
 		describe("title validation", () => {
-			it("show error message when title contains < sign directly followed by a string", async () => {
+			it("should show error message when title contains < sign directly followed by a string", async () => {
 				const { wrapper } = setup();
 				await nextTick();
 
@@ -213,7 +315,7 @@ describe("FormNews", () => {
 				expect(titleInput.text()).toContain("common.validation.containsOpeningTag");
 			});
 
-			it("show error message when title is empty", async () => {
+			it("should show error message when title is empty", async () => {
 				const { wrapper } = setup();
 				await nextTick();
 
@@ -226,7 +328,7 @@ describe("FormNews", () => {
 		});
 
 		describe("content validation", () => {
-			it("show error message when content is empty", async () => {
+			it("should show error message when content is empty", async () => {
 				const { wrapper } = setup();
 				await nextTick();
 
@@ -243,7 +345,7 @@ describe("FormNews", () => {
 				expect(errorMessages?.props("active")).toBe(true);
 			});
 
-			it("does not show error message when content is not empty", async () => {
+			it("should not show error message when content is not empty", async () => {
 				const { wrapper } = setup();
 				await nextTick();
 
@@ -262,7 +364,7 @@ describe("FormNews", () => {
 		});
 
 		describe("time input validation", () => {
-			it("shows error message when time is in wrong format", async () => {
+			it("should show error message when time is in wrong format", async () => {
 				const { wrapper } = setup();
 				await nextTick();
 

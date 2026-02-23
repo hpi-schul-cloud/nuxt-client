@@ -27,7 +27,7 @@
 				class="mt-1 opacity-100 news-content-error"
 			>
 				<template #message="{ message }">
-					<VDivider class="border-opacity-100 mb-2" />
+					<VDivider class="border-opacity-100 mb-2" role="presentation" />
 					{{ message }}
 				</template>
 			</VMessages>
@@ -48,8 +48,8 @@
 				v-time-input-mask
 				:prepend-inner-icon="mdiClockOutline"
 				:label="t('common.labels.time')"
-				data-testid="news_time"
 				:rules="[isValidTimeFormatVuetify()]"
+				data-testid="news_time"
 			/>
 		</div>
 
