@@ -65,7 +65,7 @@
 		"@types/katex": "^0.16.7",
 		"@types/object-hash": "^3.0.6",
 		"@types/sortablejs": "^1.15.9",
-		"@vitejs/plugin-vue": "^6.0.1",
+		"@vitejs/plugin-vue": "^6.0.4",
 		"@vitest/coverage-v8": "^4.0.16",
 		"@vue/eslint-config-typescript": "^14.6.0",
 		"@vue/test-utils": "^2.4.6",
