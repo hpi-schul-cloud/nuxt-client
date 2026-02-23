@@ -308,7 +308,7 @@ export default defineComponent({
 			return useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
 		},
 		filteredActions() {
-			let editedActions = this.tableActions;
+			let editedActions;
 
 			// filter actions by permissions
 			editedActions = this.tableActions.filter((action) =>
