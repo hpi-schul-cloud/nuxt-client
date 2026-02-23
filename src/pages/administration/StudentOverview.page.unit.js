@@ -11,6 +11,8 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useClasses } from "@data-classes";
+import { useUsers } from "@data-users";
 import { mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -56,56 +58,30 @@ const envs = {
 const createMockStore = () => {
 	const storeOptions = {
 		modules: {
-			classes: {
-				namespaced: true,
-				actions: {
-					find: () => ({ data: [] }),
-				},
-				state: () => ({
-					list: [],
-				}),
-			},
 			schools: {
 				namespaced: true,
 				getters: {
 					schoolIsExternallyManaged: () => false,
 				},
 			},
-			users: {
-				namespaced: true,
-				actions: {
-					findStudents: vi.fn(),
-					deleteUsers: vi.fn(),
-					getQrRegistrationLinks: vi.fn(),
-					sendRegistrationLink: vi.fn(),
-				},
-				getters: {
-					getList: () => mockData,
-					getPagination: () => ({
-						limit: 25,
-						skip: 0,
-						total: 2,
-						query: "",
-					}),
-					getActive: () => false,
-					getPercent: () => 0,
-					getQrLinks: () => [],
-					getRegistrationLinks: () => [],
-				},
-			},
 		},
 	};
 
 	const mockStore = createStore(storeOptions);
-	const usersActionsStubs = storeOptions.modules.users.actions;
 
-	return { mockStore, usersActionsStubs };
+	return { mockStore };
 };
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
+
+vi.mock("@data-users/users.composable");
+const mockedUseUsers = vi.mocked(useUsers);
+
+vi.mock("@data-classes/classes.composable");
+const mockedUseClasses = vi.mocked(useClasses);
 
 describe("students/index", () => {
 	let askConfirmationMock;
@@ -118,6 +94,48 @@ describe("students/index", () => {
 	const setSortingState = vi.fn();
 	const getPaginationState = vi.fn();
 	const setPaginationState = vi.fn();
+
+	const mockFetchUsers = vi.fn().mockReturnValue({
+		result: {
+			data: {
+				data: mockData,
+			},
+		},
+		error: null,
+	});
+
+	const mockCreateUser = vi.fn();
+
+	const mockDeleteUsers = vi.fn().mockReturnValue({
+		result: {
+			data: {},
+		},
+		error: null,
+	});
+
+	const mockGetQrRegistrationLinks = vi.fn().mockReturnValue({
+		result: {
+			data: [{ id: "some-id-1" }, { id: "some-id-2" }],
+		},
+		error: null,
+	});
+	const mockSendRegistrationLink = vi.fn().mockReturnValue({
+		result: {
+			data: [{ id: "some-id-1" }, { id: "some-id-2" }],
+		},
+		error: null,
+	});
+
+	mockedUseClasses.mockReturnValue({
+		fetchClasses: vi.fn().mockReturnValue({
+			result: {
+				data: {
+					data: [],
+				},
+			},
+			error: null,
+		}),
+	});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -150,6 +168,26 @@ describe("students/index", () => {
 			setPaginationState,
 		});
 
+		mockedUseUsers.mockReturnValue({
+			fetchUsers: mockFetchUsers,
+			createUser: mockCreateUser,
+			deleteUsers: mockDeleteUsers,
+			getQrRegistrationLinks: mockGetQrRegistrationLinks,
+			sendRegistrationLink: mockSendRegistrationLink,
+			userList: ref(mockData),
+			deletingProgress: ref({
+				delete: {
+					active: false,
+					percent: 0,
+				},
+			}),
+			pagination: ref({
+				limit: 25,
+				skip: 0,
+				total: 2,
+			}),
+		});
+
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
 			askConfirmationMock,
@@ -161,7 +199,7 @@ describe("students/index", () => {
 	});
 
 	const setup = (permissions, roleName) => {
-		const { mockStore, usersActionsStubs } = createMockStore();
+		const { mockStore } = createMockStore();
 
 		createTestAppStore({
 			me: {
@@ -183,7 +221,7 @@ describe("students/index", () => {
 
 		mock$objects(wrapper);
 
-		return { wrapper, mockStore, usersActionsStubs };
+		return { wrapper, mockStore };
 	};
 
 	describe("useFilterLocalStorage composable", () => {
@@ -197,7 +235,7 @@ describe("students/index", () => {
 
 	it("should call 'deleteUsers' action", async () => {
 		askConfirmationMock.mockResolvedValue(true);
-		const { wrapper, usersActionsStubs } = setup([Permission.StudentDelete]);
+		const { wrapper } = setup([Permission.StudentDelete]);
 		await nextTick();
 
 		const userRows = wrapper.findAll('[data-testid="table-data-row"]');
@@ -216,16 +254,13 @@ describe("students/index", () => {
 		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(3);
 		await deleteBtn.trigger("click");
 
-		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
-		expect(usersActionsStubs.deleteUsers.mock.calls[0][1]).toStrictEqual({
-			ids: [mockData[0]._id],
-			userType: "student",
-		});
+		expect(mockDeleteUsers.mock.calls).toHaveLength(1);
+		expect(mockDeleteUsers.mock.calls[0][0]).toStrictEqual([mockData[0]._id]);
 	});
 
 	it("should dispatch the 'findStudents action on load'", () => {
-		const { usersActionsStubs } = setup();
-		expect(usersActionsStubs.findStudents).toHaveBeenCalled();
+		setup();
+		expect(mockFetchUsers).toHaveBeenCalled();
 	});
 
 	it("should emit the 'delete' action when deleting a user", async () => {
@@ -266,7 +301,7 @@ describe("students/index", () => {
 	});
 
 	it("should emit the 'registration_link' action when the action button is clicked", async () => {
-		const { wrapper, usersActionsStubs } = setup();
+		const { wrapper } = setup();
 
 		// user row exists
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
@@ -299,11 +334,11 @@ describe("students/index", () => {
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("registration_link");
 
 		// store action is called
-		expect(usersActionsStubs.sendRegistrationLink).toHaveBeenCalled();
+		expect(mockSendRegistrationLink).toHaveBeenCalled();
 	});
 
 	it("should emit the 'qr_code' action when the action button is clicked", async () => {
-		const { wrapper, usersActionsStubs } = setup();
+		const { wrapper } = setup();
 
 		// user row exists
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
@@ -337,7 +372,7 @@ describe("students/index", () => {
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual("qr_code");
 
 		// store action is called
-		expect(usersActionsStubs.getQrRegistrationLinks).toHaveBeenCalled();
+		expect(mockGetQrRegistrationLinks).toHaveBeenCalled();
 	});
 
 	it("should display the same number of elements as in the mockData object", () => {
@@ -437,7 +472,7 @@ describe("students/index", () => {
 	describe("filtering and calling uiSetFilterState composable's methods", () => {
 		describe("when searchbar component's value change", () => {
 			it("should call setFilterState method", () => {
-				const { wrapper, usersActionsStubs } = setup();
+				const { wrapper } = setup();
 
 				const searchBarInput = wrapper.find("[data-testid=searchbar]").find("input");
 				expect(searchBarInput.exists()).toBe(true);
@@ -447,7 +482,7 @@ describe("students/index", () => {
 				vi.runAllTimers();
 
 				expect(setFilterState).toHaveBeenCalledWith({ searchQuery: "abc" });
-				expect(usersActionsStubs.findStudents).toHaveBeenCalled();
+				expect(mockFetchUsers).toHaveBeenCalled();
 			});
 		});
 
