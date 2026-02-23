@@ -1383,8 +1383,7 @@ export default {
 		"Bist du sicher, dass du alle Schüler:innen löschen möchtest?",
 	"pages.administration.students.index.remove.confirm.message.many":
 		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.some":
-		"Bist du sicher, dass du diesen Schüler:in löschen möchtest? | Bist du sicher, dass du diese {number} Schüler:innen löschen möchtest?",
+	"pages.administration.students.index.remove.confirm.message.some": "Folgende Schüler wirklich löschen?",
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
 	"pages.administration.students.index.searchbar.ariaLabel": "Schüler:innen nach Namen durchsuchen",
@@ -1453,8 +1452,7 @@ export default {
 		"Bist du sicher, dass du alle Lehrkräfte löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
 		"Bist du sicher, dass du alle Lehrkräfte bis auf {number} löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.some":
-		"Bist du sicher, dass du diese Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkräfte löschen möchtest?",
+	"pages.administration.teachers.index.remove.confirm.message.some": "Folgende Lehrkräfte wirklich löschen?",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",

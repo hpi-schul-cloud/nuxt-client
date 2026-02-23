@@ -1376,8 +1376,7 @@ export default {
 	"pages.administration.students.index.remove.confirm.message.all": "Дійсно видалити всіх учнів?",
 	"pages.administration.students.index.remove.confirm.message.many":
 		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
-	"pages.administration.students.index.remove.confirm.message.some":
-		"Ви дійсно хочете видалити цього учня?? | Ви дійсно хочете видалити цього {number} учня?",
+	"pages.administration.students.index.remove.confirm.message.some": "Чи справді я хочу видалити наступних студентів?",
 	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
 	"pages.administration.students.index.searchbar.ariaLabel": "Пошук учнів за іменами",
@@ -1445,8 +1444,7 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.message.all": "Ви дійсно хочете видалити всіх викладачів?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
 		"Ви дійсно хочете видалити всіх викладачів, крім {number}?",
-	"pages.administration.teachers.index.remove.confirm.message.some":
-		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
+	"pages.administration.teachers.index.remove.confirm.message.some": "Я справді хочу видалити наступних вчителів?",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Пошук викладачів за іменем",

@@ -3,13 +3,11 @@
 		v-model="isDialogOpen"
 		:title="message"
 		data-testid="delete-file-dialog"
+		confirm-btn-lang-key="common.actions.delete"
 		@confirm="emit('confirm')"
 		@cancel="emit('cancel')"
 	>
 		<template #content>
-			<WarningAlert>
-				{{ $t("pages.administration.teachers.index.remove.confirm.message.warning") }}
-			</WarningAlert>
 			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
 				<li v-for="student in props.selectedUsers" :key="student._id">
 					{{ student.firstName }} {{ student.lastName }}
@@ -20,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { PropType } from "vue";
 import { useI18n } from "vue-i18n";

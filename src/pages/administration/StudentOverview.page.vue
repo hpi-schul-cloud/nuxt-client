@@ -84,20 +84,7 @@
 		</BackendDataTable>
 		<AdminTableLegend :icons="icons" :show-icons="showConsent" :show-external-sync-hint="schoolIsExternallyManaged" />
 	</DefaultWireframe>
-	<!--<ConfirmationDialog>
-		<template #alert>
-			<WarningAlert data-testid="warning-alert-studentsdelete">
-				{{ t("pages.administration.students.index.remove.confirm.message.warning") }}
-			</WarningAlert>
-		</template>
-		<template #content>
-			<ul class="ml-6" data-testid="confirmation-dialog-message-list">
-				<li v-for="student in selectedStudents" :key="student._id">{{ student.firstName }} {{ student.lastName }}</li>
-			</ul>
-		</template>
-	</ConfirmationDialog>-->
 	<DeleteUserDialog
-		v-if="isConfirmDialogOpen"
 		v-model:is-dialog-open="isConfirmDialogOpen"
 		:user-type="'student'"
 		:selected-users="selectedStudents"

@@ -1359,7 +1359,7 @@ export default {
 	"pages.administration.students.index.remove.confirm.message.many":
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
-		"Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
+		"Do I really want to delete the following students?",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.searchbar.ariaLabel": "Search students by name",
@@ -1428,7 +1428,7 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.message.many":
 		"Are you sure you want to delete all teachers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
-		"Are you sure you want to delete this teacher? | Are you sure you want to delete this {number} of teachers?",
+		"Do I really want to delete the following teachers?",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",

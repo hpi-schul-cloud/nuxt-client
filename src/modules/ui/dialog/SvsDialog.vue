@@ -1,14 +1,14 @@
 <template>
-	<VDialog
-		v-model="isOpen"
-		:data-testid="testId"
-		:max-width="maxWidth"
-		:aria-labelledby="`dialog-${uid}-title`"
-		@after-leave="emit('after-leave')"
-		@click:outside="emit('cancel')"
-		@keydown.esc="emit('cancel')"
-	>
-		<UseFocusTrap>
+	<UseFocusTrap>
+		<VDialog
+			v-model="isOpen"
+			:data-testid="testId"
+			:max-width="maxWidth"
+			:aria-labelledby="`dialog-${uid}-title`"
+			@after-leave="emit('after-leave')"
+			@click:outside="emit('cancel')"
+			@keydown.esc="emit('cancel')"
+		>
 			<VCard :loading="isLoading">
 				<VCardItem class="pa-4">
 					<VCardTitle v-if="titleString">
@@ -39,8 +39,8 @@
 					</slot>
 				</VCardActions>
 			</VCard>
-		</UseFocusTrap>
-	</VDialog>
+		</VDialog>
+	</UseFocusTrap>
 </template>
 
 <script setup lang="ts">
