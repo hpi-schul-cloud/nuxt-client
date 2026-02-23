@@ -92,7 +92,6 @@
 			@enter:title="onEnter"
 			@update:title="(newTitle) => onUpdateCardTitle(newTitle, cardId)"
 			@close:detail-view="onCloseDetailView"
-			@delete:card="onDeleteCard"
 		/>
 	</div>
 </template>
