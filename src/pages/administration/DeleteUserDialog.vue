@@ -9,7 +9,7 @@
 	>
 		<template #content>
 			<VList class="ml-6" data-testid="delete-user-dialog-user-list">
-				<VListItem v-for="user in props.selectedUsers" :key="user._id">
+				<VListItem v-for="user in props.selectedUsers" :key="user._id" density="compact">
 					{{ user.firstName }} {{ user.lastName }}
 				</VListItem>
 			</VList>
