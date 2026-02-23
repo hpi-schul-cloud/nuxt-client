@@ -29,7 +29,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
@@ -46,7 +45,7 @@ describe("@components/share/ImportFlow", () => {
 	const setup = (props = {}) => {
 		const wrapper = mount(ImportFlow, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				},
