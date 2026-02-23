@@ -23,7 +23,7 @@
 import { CreateNewsParams, CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError, notifySuccess, useAppStore } from "@data-app";
+import { useAppStore } from "@data-app";
 import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
@@ -71,26 +71,22 @@ const parseNewsTarget = (
 };
 
 const create = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
-	try {
-		const newsTarget = newsTargetFromQueryParams.value ?? {
-			targetId: useAppStore()?.school?.id ?? "",
-			targetModel: CreateNewsParamsTargetModelEnum.Schools,
-		};
-		await createNews({
-			title: news.title,
-			content: news.content,
-			displayAt: news.displayAt,
-			targetId: newsTarget.targetId,
-			targetModel: newsTarget.targetModel,
+	const newsTarget = newsTargetFromQueryParams.value ?? {
+		targetId: useAppStore()?.school?.id ?? "",
+		targetModel: CreateNewsParamsTargetModelEnum.Schools,
+	};
+	await createNews({
+		title: news.title,
+		content: news.content,
+		displayAt: news.displayAt,
+		targetId: newsTarget.targetId,
+		targetModel: newsTarget.targetModel,
+	});
+
+	if (status.value === "completed") {
+		await router.push({
+			path: `/news/${createdNews?.value?.id}`,
 		});
-		if (status.value === "completed") {
-			notifySuccess(t("components.organisms.FormNews.success.create"));
-			await router.push({
-				path: `/news/${createdNews?.value?.id}`,
-			});
-		}
-	} catch {
-		notifyError(t("components.organisms.FormNews.errors.create"));
 	}
 };
 

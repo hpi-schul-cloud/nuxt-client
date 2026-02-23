@@ -3,10 +3,21 @@ import * as serverApi from "@/serverApi/v3";
 import { CreateNewsParams, CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import { newsResponseFactory } from "@@/tests/test-utils";
+import { useNotificationStore } from "@data-app";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
+
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
+	return {
+		...actual,
+		useI18n: vi.fn(() => ({
+			t: vi.fn((key: string) => key),
+		})),
+	};
+});
 
 describe("news composable", () => {
 	let newsApi: DeepMocked<NewsApiInterface>;
@@ -60,7 +71,7 @@ describe("news composable", () => {
 			targetModel: CreateNewsParamsTargetModelEnum.Schools,
 		};
 
-		it("should create a news", async () => {
+		it("should create a news and notify success", async () => {
 			newsApi.newsControllerCreate.mockResolvedValue({ data: createdNewsResponse });
 
 			const { createNews, createdNews } = useNews();
@@ -68,9 +79,12 @@ describe("news composable", () => {
 
 			expect(newsApi.newsControllerCreate).toHaveBeenCalledWith(createNewsPayload);
 			expect(createdNews.value).toEqual(createdNewsResponse);
+			expect(useNotificationStore().notify).toHaveBeenCalledWith(
+				expect.objectContaining({ text: "components.organisms.FormNews.success.create" })
+			);
 		});
 
-		it("should not set createdNews if API call fails", async () => {
+		it("should not set createdNews if API call fails and notify error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 			newsApi.newsControllerCreate.mockRejectedValue(new Error("Failed to create news"));
 
@@ -78,6 +92,9 @@ describe("news composable", () => {
 			await createNews(createNewsPayload);
 
 			expect(createdNews.value).toBeNull();
+			expect(useNotificationStore().notify).toHaveBeenCalledWith(
+				expect.objectContaining({ text: "components.organisms.FormNews.error.create" })
+			);
 
 			consoleErrorSpy.mockRestore();
 		});

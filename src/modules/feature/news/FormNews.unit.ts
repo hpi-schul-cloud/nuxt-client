@@ -111,7 +111,7 @@ describe("FormNews", () => {
 		const { wrapper } = setup({ news: newsResponseFactory.build({ displayAt: undefined }) });
 
 		const dateInput = wrapper.findComponent(DatePicker);
-		await dateInput.vm.$emit("update:date", "2022-07-05");
+		dateInput.vm.$emit("update:date", "2022-07-05");
 		await nextTick();
 
 		const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
@@ -275,7 +275,6 @@ describe("FormNews", () => {
 		it("should emit cancel event on cancel button click when cancel is confirmed", async () => {
 			askConfirmationMock.mockResolvedValue(true);
 			const { wrapper } = setup();
-			await nextTick();
 
 			const cancelButton = getCancelButton(wrapper);
 			await cancelButton?.trigger("click");
@@ -292,7 +291,6 @@ describe("FormNews", () => {
 		it("should not emit cancel event on cancel button click when cancellation is cancelled", async () => {
 			askConfirmationMock.mockResolvedValue(false);
 			const { wrapper } = setup();
-			await nextTick();
 
 			const cancelButton = getCancelButton(wrapper);
 			await cancelButton?.trigger("click");
@@ -317,7 +315,6 @@ describe("FormNews", () => {
 
 			it("should show error message when title is empty", async () => {
 				const { wrapper } = setup();
-				await nextTick();
 
 				const titleInput = wrapper.find("[data-testid='news_title']").findComponent(VTextField);
 				await titleInput.setValue("");
@@ -330,7 +327,6 @@ describe("FormNews", () => {
 		describe("content validation", () => {
 			it("should show error message when content is empty", async () => {
 				const { wrapper } = setup();
-				await nextTick();
 
 				const contentInput = wrapper.findComponent(ClassicEditor);
 				await contentInput.setValue("");
@@ -347,7 +343,6 @@ describe("FormNews", () => {
 
 			it("should not show error message when content is not empty", async () => {
 				const { wrapper } = setup();
-				await nextTick();
 
 				const contentInput = wrapper.findComponent(ClassicEditor);
 				await contentInput.setValue("Some content");
@@ -366,7 +361,6 @@ describe("FormNews", () => {
 		describe("time input validation", () => {
 			it("should show error message when time is in wrong format", async () => {
 				const { wrapper } = setup();
-				await nextTick();
 
 				const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
 				await timeInput.setValue("33:33");
