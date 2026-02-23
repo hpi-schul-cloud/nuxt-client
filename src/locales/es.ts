@@ -1392,8 +1392,6 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos alumnos seguirán siendo visibles en la tabla.",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
 	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
@@ -1464,8 +1462,6 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los profesores excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este profesor? | ¿Estás seguro de que deseas eliminar este {number} de profesores?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos profesores seguirán siendo visibles en la tabla.",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",
@@ -1897,6 +1893,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Miembros de la sala {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Miembros de la sala “{roomName}”",
+	"pages.security.headline": "Informar del problema de seguridad",
+	"pages.security.text":
+		"dBildungscloud está sometido a controles de seguridad y pruebas de intrusión regularmente, ya que la seguridad de los datos de nuestros usuarios es muy importante para nosotros. ¿Sigues con problemas de seguridad? Escríbenos para que podamos cerrar la incidencia lo antes posible: ",
+
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
