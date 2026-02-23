@@ -67,7 +67,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 						initialState: {
 							roomDetailsStore: {
 								isLoading: options?.isLoading ?? false,
-								room,
+								room: options?.isLoading ? undefined : room,
 							},
 						},
 					}),
