@@ -53,22 +53,41 @@ import { computed, useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 import { VCard, VDialog } from "vuetify/components";
 
-const props = defineProps({
-	title: { type: String, required: true }, // Allowing text or i18n key
-	isLoading: { type: Boolean, default: false },
-	maxWidth: { type: [Number, String], default: 480 },
-	areActionsDisabled: { type: Boolean, default: false },
-	confirmBtnDisabled: { type: Boolean, default: false },
-	confirmBtnLangKey: { type: String, default: "common.actions.confirm" },
-	cancelBtnLangKey: { type: String, default: "common.actions.cancel" },
-	noActions: { type: Boolean, default: false },
-	noConfirm: { type: Boolean, default: false },
-	noCancel: { type: Boolean, default: false },
-	isOpenStateManagedExternally: { type: Boolean, default: false },
-});
+const props = withDefaults(
+	defineProps<{
+		title: string; // Allowing text or i18n key
+		isLoading?: boolean;
+		maxWidth?: number | string;
+		areActionsDisabled?: boolean;
+		confirmBtnDisabled?: boolean;
+		confirmBtnLangKey?: string;
+		cancelBtnLangKey?: string;
+		noActions?: boolean;
+		noConfirm?: boolean;
+		noCancel?: boolean;
+		isOpenStateManagedExternally?: boolean;
+	}>(),
+	{
+		isLoading: false,
+		maxWidth: 480,
+		areActionsDisabled: false,
+		confirmBtnDisabled: false,
+		confirmBtnLangKey: "common.actions.confirm",
+		cancelBtnLangKey: "common.actions.cancel",
+		noActions: false,
+		noConfirm: false,
+		noCancel: false,
+		isOpenStateManagedExternally: false,
+	}
+);
+
+const emit = defineEmits<{
+	(e: "cancel"): void;
+	(e: "confirm"): void;
+	(e: "after-leave"): void;
+}>();
 
 const { t } = useI18n();
-const emit = defineEmits(["cancel", "confirm", "after-leave"]);
 
 const isOpen = defineModel({
 	type: Boolean,
