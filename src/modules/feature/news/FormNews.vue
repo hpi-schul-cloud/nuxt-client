@@ -15,7 +15,7 @@
 				v-model="newsContent"
 				class="mb-4 mt-13"
 				:placeholder="t('components.organisms.FormNews.editor.placeholder')"
-				aria-describedby="news-content-error"
+				:aria-described-by-id="'news-content-error'"
 				@update:value="onUpdateContent"
 				@blur="shouldNewsContentValidation = true"
 			/>

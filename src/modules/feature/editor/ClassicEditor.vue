@@ -32,6 +32,10 @@ const props = defineProps({
 	autofocus: {
 		type: Boolean,
 	},
+	ariaDescribedById: {
+		type: String,
+		default: undefined,
+	},
 });
 
 const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
@@ -63,6 +67,15 @@ const handleReady = (editor: Editor) => {
 
 	if (props.autofocus) {
 		editor.editing.view.focus();
+	}
+
+	if (props.ariaDescribedById) {
+		editor.editing.view.change((writer) => {
+			const root = editor.editing.view.document.getRoot();
+			if (root) {
+				writer.setAttribute("aria-describedby", props.ariaDescribedById, root);
+			}
+		});
 	}
 
 	registerDeletionHandler(editor, handleDelete);
