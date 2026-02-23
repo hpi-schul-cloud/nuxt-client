@@ -36,12 +36,7 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu
-							v-if="allowedOperations?.updateCardTitle"
-							:scope="BoardMenuScope.CARD"
-							has-background
-							:data-testid="boardMenuTestId"
-						>
+						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
@@ -49,7 +44,7 @@
 								@click="duplicateCard"
 							/>
 							<KebabMenuActionExport v-if="allowedOperations?.moveCard" @click="onMoveCard(cardId)" />
-							<KebabMenuActionShare v-if="allowedOperations?.shareBoard" @click="onShareCard" />
+							<KebabMenuActionShare v-if="allowedOperations?.shareCard" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
 								v-if="allowedOperations?.deleteCard"
@@ -174,6 +169,12 @@ const cardElevation = computed(() => {
 });
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
+
+const hasMenuItem = computed(() =>
+	Object.keys(allowedOperations.value || {}).some((key) =>
+		["copyCard", "deleteCard", "moveCard", "shareBoard", "shareCard", "updateCardTitle"].includes(key)
+	)
+);
 
 const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
 const onMoveCard = (cardId: string) => emit("move:card", cardId);

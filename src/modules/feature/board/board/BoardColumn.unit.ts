@@ -1,22 +1,19 @@
 import BoardColumnVue from "./BoardColumn.vue";
-import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { BoardResponseAllowedOperations } from "@/serverApi/v3/api";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardPermissions, useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
+import { useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick } from "vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
 vi.mock("vue-router");
-
-vi.mock("@data-board/BoardPermissions.composable");
-const mockedUserPermissions = vi.mocked(useBoardPermissions);
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -41,20 +38,22 @@ describe("BoardColumn", () => {
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
-	const setup = (options?: { permissions?: Partial<BoardPermissionChecks>; cardsCount?: number }) => {
+	const setup = (options?: { cardsCount?: number; allowedOperations?: Partial<BoardResponseAllowedOperations> }) => {
 		const cards = cardSkeletonResponseFactory.buildList(options?.cardsCount ?? 3);
 		const column = columnResponseFactory.build({
 			cards,
 		});
 		const { setEditModeId } = useSharedEditMode();
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			...options?.permissions,
-		});
 
 		const wrapper = mount(BoardColumnVue, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify(), createTestingPinia()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia({
+						initialState: { boardStore: { board: { allowedOperations: options?.allowedOperations } } },
+					}),
+				],
 			},
 			props: {
 				column,
@@ -113,7 +112,7 @@ describe("BoardColumn", () => {
 
 		describe("when a card is moved to its column and the same position", () => {
 			it("should not call 'moveCardRequest' method", () => {
-				const { wrapper, store } = setup({ cardsCount: 1 });
+				const { wrapper, store } = setup({ cardsCount: 1, allowedOperations: { moveCard: true } });
 
 				const emitObject = {
 					item: {
@@ -143,7 +142,7 @@ describe("BoardColumn", () => {
 		describe("when a card is moved by keyboard", () => {
 			describe("when ArrowDown key is pressed for first card", () => {
 				it("should call 'moveCardRequest' method", () => {
-					const { wrapper, store } = setup({ cardsCount: 3 });
+					const { wrapper, store } = setup({ cardsCount: 3, allowedOperations: { moveCard: true } });
 
 					const cardHostComponents = wrapper.findAllComponents({
 						name: "CardHost",
@@ -157,7 +156,7 @@ describe("BoardColumn", () => {
 
 			describe("when ArrowDown key is pressed for last card", () => {
 				it("should call 'moveCardRequest' method", () => {
-					const { wrapper, store } = setup({ cardsCount: 3 });
+					const { wrapper, store } = setup({ cardsCount: 3, allowedOperations: { moveCard: true } });
 
 					const cardHostComponents = wrapper.findAllComponents({
 						name: "CardHost",
@@ -255,7 +254,7 @@ describe("BoardColumn", () => {
 		describe("when user is not permitted to move a column", () => {
 			it("should set drag-disabled", () => {
 				const { wrapper } = setup({
-					permissions: { hasMovePermission: ref(false) },
+					// permissions: { hasMovePermission: ref(false) },
 				});
 
 				const dndContainer = wrapper.findComponent({ name: "Sortable" });
@@ -266,7 +265,7 @@ describe("BoardColumn", () => {
 		describe("when user is not permitted to create a card", () => {
 			it("addCardButton should not be visible", () => {
 				const { wrapper } = setup({
-					permissions: { hasCreateColumnPermission: ref(false) },
+					// permissions: { hasCreateColumnPermission: ref(false) },
 				});
 
 				const addCardButton = wrapper.findComponent({
@@ -350,8 +349,10 @@ describe("BoardColumn", () => {
 		});
 
 		it("should show addCardButton in any other column", async () => {
-			const { setEditModeId: originalSetEditModeId, wrapper: originalWrapper } = setup();
-			const { cards: siblingCards } = setup();
+			const { setEditModeId: originalSetEditModeId, wrapper: originalWrapper } = setup({
+				allowedOperations: { createCard: true },
+			});
+			const { cards: siblingCards } = setup({ allowedOperations: { createCard: true } });
 
 			originalSetEditModeId(siblingCards[0].cardId);
 			await nextTick();
@@ -361,8 +362,9 @@ describe("BoardColumn", () => {
 			});
 			expect(addCardButtons).toHaveLength(1);
 		});
+
 		it("should show addCardButton in same column if edit mode is stopped", async () => {
-			const { wrapper, setEditModeId, cards } = setup();
+			const { wrapper, setEditModeId, cards } = setup({ allowedOperations: { createCard: true } });
 
 			const cardId = cards[0].cardId;
 			setEditModeId(cardId);

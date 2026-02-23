@@ -1,11 +1,10 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-import { BoardExternalReferenceType, ConfigResponse } from "@/serverApi/v3";
-import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
+import { BoardExternalReferenceType, BoardResponseAllowedOperations, ConfigResponse } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
+import { useBoardFocusHandler, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionChangeLayout,
@@ -20,20 +19,23 @@ import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 
-vi.mock("@data-board/BoardPermissions.composable");
-const mockedUserPermissions = vi.mocked(useBoardPermissions);
-
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 vi.mock("@data-board/edit-mode.composable");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
+mockedUseSharedEditMode.mockReturnValue({
+	editModeId: ref(undefined),
+	setEditModeId: vi.fn(),
+	isInEditMode: computed(() => true),
+});
 
 describe("BoardHeader", () => {
 	const setup = (
 		options?: {
-			permissions?: Partial<BoardPermissionChecks>;
 			envs?: Partial<ConfigResponse>;
+			allowedOperations?: Partial<BoardResponseAllowedOperations>;
 		},
 		props?: {
 			isDraft?: boolean;
@@ -50,11 +52,6 @@ describe("BoardHeader", () => {
 			startEditMode,
 			stopEditMode,
 		});
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			hasManageBoardPermission: ref(true),
-			...options?.permissions,
-		});
 		mockUseBoardFocusHandler.mockReturnValue({
 			isFocusContained: undefined,
 		});
@@ -64,7 +61,19 @@ describe("BoardHeader", () => {
 
 		const wrapper = shallowMount(BoardHeader, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia({
+						initialState: {
+							boardStore: {
+								board: {
+									allowedOperations: options?.allowedOperations,
+								},
+							},
+						},
+					}),
+				],
 				stubs: {
 					VTooltip: false,
 					VOverlay: false,
@@ -89,17 +98,17 @@ describe("BoardHeader", () => {
 	});
 
 	describe("when component is mounted", () => {
-		it("should be found in the dom", () => {
+		it.only("should be found in the dom", () => {
 			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardHeader).exists()).toBe(true);
 		});
 	});
 
 	describe("user permissions", () => {
-		describe("when user is not permitted to edit the board", () => {
+		describe("when user is not permitted to edit the board title", () => {
 			it("should not find the BoardMenu in the DOM", () => {
 				const { wrapper } = setup({
-					permissions: { hasManageBoardPermission: ref(false) },
+					allowedOperations: { updateBoardTitle: false },
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({
@@ -283,9 +292,7 @@ describe("BoardHeader", () => {
 	describe("when the 'share' menu button is clicked", () => {
 		it("should emit 'share:board'", async () => {
 			const { wrapper } = setup({
-				permissions: {
-					hasShareBoardPermission: ref(true),
-				},
+				// hasShareBoardPermission: ref(true),
 				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 			});
 

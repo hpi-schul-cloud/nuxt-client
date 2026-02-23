@@ -9404,12 +9404,6 @@ export interface RoomItemResponseAllowedOperations {
      * @type {boolean}
      * @memberof RoomItemResponseAllowedOperations
      */
-    editRoomContent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof RoomItemResponseAllowedOperations
-     */
     getRoomMembers: boolean;
     /**
      * 

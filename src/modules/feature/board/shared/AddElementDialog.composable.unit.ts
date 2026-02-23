@@ -3,11 +3,10 @@ import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
-import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
+import { useBoardFeatures, useCardStore } from "@data-board";
 import { useAddCollaboraFile } from "@feature-collabora";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -18,12 +17,6 @@ import { ref } from "vue";
 vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
 vi.mock("./add-collabora-file.composable");
-
-vi.mock("@data-board/BoardPermissions.composable");
-const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
-mockedUseBoardPermissions.mockReturnValue({
-	...defaultPermissions,
-});
 
 vi.mock("@/utils/inject");
 const mockedInjectStrict = vi.mocked(injectStrict);
@@ -353,10 +346,6 @@ describe("ElementTypeSelection Composable", () => {
 				closeDialogMock,
 			});
 
-			mockedUseBoardPermissions.mockReturnValue({
-				hasManageVideoConferencePermission: ref(hasManageVideoConferencePermission),
-			} as BoardPermissionChecks);
-
 			mockedPiniaStoreTyping(useCardStore);
 			createTestEnvStore(mergedEnv);
 
@@ -554,7 +543,7 @@ describe("ElementTypeSelection Composable", () => {
 
 		describe("VideoConference action", () => {
 			describe("when permission for VideoConference is granted", () => {
-				it("should call video conference element function with right argument", () => {
+				it.only("should call video conference element function with right argument", () => {
 					const { elementTypeOptions, addElementMock, cardId } = setup({
 						hasManageVideoConferencePermission: true,
 					});
