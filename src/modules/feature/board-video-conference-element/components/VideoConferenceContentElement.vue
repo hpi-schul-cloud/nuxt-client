@@ -13,6 +13,7 @@
 		@keydown.stop.up.down="onKeydownArrow"
 		@keyup.enter="onContentEnter"
 	>
+		{{ isStudent }}
 		<VideoConferenceContentElementDisplay
 			v-if="computedElement.content.title"
 			:board-parent-type="boardParentType"
@@ -20,6 +21,7 @@
 			:has-participation-permission="hasParticipationPermission"
 			:is-video-conference-enabled="isVideoConferenceEnabled"
 			:can-start="canStart"
+			:can-join="canJoin"
 			:is-running="isRunning"
 			:is-edit-mode="isEditMode"
 			@click="onContentClick"

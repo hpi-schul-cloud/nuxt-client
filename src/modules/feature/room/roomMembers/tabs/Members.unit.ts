@@ -17,8 +17,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 
-vi.mock("@data-room/roomAuthorization.composable");
-
 describe("Members", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());

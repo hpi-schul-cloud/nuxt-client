@@ -15,7 +15,7 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 
@@ -83,7 +83,7 @@ describe("BoardHeader", () => {
 				title: "title-text",
 				titlePlaceholder: "Board 1",
 				boardId: "abc123",
-				isDraft: props?.isDraft || false,
+				isDraft: props?.isDraft ?? false,
 				isEditableChipVisible: true,
 				hasReadersEditPermission: props?.hasReadersEditPermission || false,
 				boardContextType: BoardExternalReferenceType.Room,
@@ -98,7 +98,7 @@ describe("BoardHeader", () => {
 	});
 
 	describe("when component is mounted", () => {
-		it.only("should be found in the dom", () => {
+		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardHeader).exists()).toBe(true);
 		});
@@ -121,7 +121,7 @@ describe("BoardHeader", () => {
 
 		describe("when user is permitted to edit the board", () => {
 			it("should find the BoardMenu in the DOM", () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 				const boardMenuComponent = wrapper.findAllComponents({
 					name: "BoardMenu",
@@ -133,6 +133,7 @@ describe("BoardHeader", () => {
 			it("should enable copying", () => {
 				const { wrapper } = setup({
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
+					allowedOperations: { updateBoardTitle: true, shareBoard: true },
 				});
 
 				const shareButton = wrapper.findComponent(KebabMenuActionShare);
@@ -143,6 +144,7 @@ describe("BoardHeader", () => {
 			it("should enable sharing with feature flag", () => {
 				const { wrapper } = setup({
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
+					allowedOperations: { updateBoardTitle: true, shareBoard: true },
 				});
 
 				const shareButton = wrapper.findComponent(KebabMenuActionShare);
@@ -164,7 +166,7 @@ describe("BoardHeader", () => {
 
 	describe("when the 'edit' menu button is clicked", () => {
 		it("should call startEditMode", async () => {
-			const { startEditMode, wrapper } = setup();
+			const { startEditMode, wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 			const editButton = wrapper.findComponent(KebabMenuActionRename);
 			await editButton.trigger("click");
@@ -178,7 +180,7 @@ describe("BoardHeader", () => {
 			it("should not emit 'update:title'", () => {
 				vi.useFakeTimers();
 
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "");
@@ -194,7 +196,7 @@ describe("BoardHeader", () => {
 			it("should emit 'update:title'", () => {
 				vi.useFakeTimers();
 
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "new-title");
@@ -246,7 +248,7 @@ describe("BoardHeader", () => {
 			it("should emit 'update:title'", () => {
 				vi.useFakeTimers();
 
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "");
@@ -264,7 +266,7 @@ describe("BoardHeader", () => {
 			it("should not emit 'update:title'", () => {
 				vi.useFakeTimers();
 
-				const { wrapper } = setup();
+				const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "newTitle");
@@ -280,7 +282,7 @@ describe("BoardHeader", () => {
 
 	describe("when the 'copy' menu button is clicked", () => {
 		it("should emit 'copy:board'", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true, copyBoard: true } });
 
 			const duplicateButton = wrapper.findComponent(KebabMenuActionDuplicate);
 			await duplicateButton.trigger("click");
@@ -292,12 +294,14 @@ describe("BoardHeader", () => {
 	describe("when the 'share' menu button is clicked", () => {
 		it("should emit 'share:board'", async () => {
 			const { wrapper } = setup({
-				// hasShareBoardPermission: ref(true),
 				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
+				allowedOperations: { updateBoardTitle: true, shareBoard: true },
 			});
 
-			const copyButton = wrapper.findComponent(KebabMenuActionShare);
-			await copyButton.trigger("click");
+			const shareButton = wrapper.findComponent(KebabMenuActionShare);
+			await shareButton.trigger("click");
+
+			await flushPromises();
 
 			expect(wrapper.emitted("share:board")).toHaveLength(1);
 		});
@@ -305,7 +309,7 @@ describe("BoardHeader", () => {
 
 	describe("when the 'revert' menu button is clicked", () => {
 		it("should emit 'revert'", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } });
 
 			const revertButton = wrapper.findComponent(KebabMenuActionRevert);
 			expect(revertButton.exists()).toBe(true);
@@ -320,7 +324,7 @@ describe("BoardHeader", () => {
 
 	describe("when the 'delete' menu button is clicked", () => {
 		it("should emit 'delete:board'", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true, deleteBoard: true } });
 
 			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 			await deleteButton.trigger("click");
@@ -331,10 +335,12 @@ describe("BoardHeader", () => {
 
 	describe("when the 'change layout' menu button is clicked", () => {
 		it("should emit 'change-layout'", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ allowedOperations: { updateBoardLayout: true, updateBoardTitle: true } });
 
 			const changeLayoutButton = wrapper.findComponent(KebabMenuActionChangeLayout);
 			await changeLayoutButton.trigger("click");
+
+			await flushPromises();
 
 			expect(wrapper.emitted("change-layout")).toHaveLength(1);
 		});
@@ -342,11 +348,15 @@ describe("BoardHeader", () => {
 
 	describe("when board's editable settings are changed", () => {
 		it("should emit 'update:editable'", async () => {
-			const { wrapper } = setup({}, { hasReadersEditPermission: true });
+			const { wrapper } = setup(
+				{ allowedOperations: { updateReadersCanEditSetting: true, updateBoardTitle: true } },
+				{ hasReadersEditPermission: true }
+			);
 
 			const editableSwitch = wrapper.findComponent(KebabMenuActionEditingSettings);
-
 			await editableSwitch.trigger("click");
+
+			await flushPromises();
 
 			expect(wrapper.emitted("edit:settings")).toHaveLength(1);
 		});
@@ -361,7 +371,7 @@ describe("BoardHeader", () => {
 		});
 
 		it("should display 'publish' button instead of 'revert' button in menu", () => {
-			const { wrapper } = setup({}, { isDraft: true });
+			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } }, { isDraft: true });
 
 			const revertButton = wrapper.findComponent(KebabMenuActionRevert);
 			expect(revertButton.exists()).toBe(false);
@@ -372,7 +382,7 @@ describe("BoardHeader", () => {
 
 		describe("when the 'publish' menu button is clicked", () => {
 			it("should emit 'publish", async () => {
-				const { wrapper } = setup({}, { isDraft: true });
+				const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true } }, { isDraft: true });
 
 				const publishButton = wrapper.findComponent(KebabMenuActionPublish);
 				expect(publishButton.exists()).toBe(true);

@@ -765,7 +765,9 @@ describe("Board", () => {
 
 					describe("when the user has edit permissions for board visibility", () => {
 						it("should not call 'handleApplicationError' method", async () => {
-							const { boardStore, wrapperVM } = setup({ allowedOperations: { updateBoardVisibility: true } });
+							const { boardStore, wrapperVM } = setup({
+								allowedOperations: { updateBoardVisibility: true, createCard: true },
+							});
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
 							boardStore.board!.isVisible = false;

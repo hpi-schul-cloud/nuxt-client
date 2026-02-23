@@ -543,7 +543,7 @@ describe("ElementTypeSelection Composable", () => {
 
 		describe("VideoConference action", () => {
 			describe("when permission for VideoConference is granted", () => {
-				it.only("should call video conference element function with right argument", () => {
+				it("should call video conference element function with right argument", async () => {
 					const { elementTypeOptions, addElementMock, cardId } = setup({
 						hasManageVideoConferencePermission: true,
 					});
@@ -553,6 +553,7 @@ describe("ElementTypeSelection Composable", () => {
 
 					const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-video-conference");
 					option?.action();
+					await flushPromises();
 
 					expect(addElementMock).toHaveBeenCalledTimes(1);
 					expect(addElementMock).toHaveBeenCalledWith({
