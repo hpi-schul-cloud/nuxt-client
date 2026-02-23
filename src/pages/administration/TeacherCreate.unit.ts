@@ -1,4 +1,4 @@
-import StudentCreate from "./StudentCreate.page.vue";
+import TeacherCreate from "./TeacherCreate.page.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useUsers } from "@data-users";
@@ -24,7 +24,7 @@ const useRouterMock = <Mock>useRouter;
 vi.mock("@data-users");
 const useUsersMock = vi.mocked(useUsers);
 
-describe("students/new", () => {
+describe("teachers/new", () => {
 	let useUsersMockHandler: DeepMocked<ReturnType<typeof useUsers>>;
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
@@ -42,7 +42,7 @@ describe("students/new", () => {
 	});
 
 	const setup = () => {
-		const wrapper = mount(StudentCreate, {
+		const wrapper = mount(TeacherCreate, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -51,34 +51,29 @@ describe("students/new", () => {
 		return { wrapper };
 	};
 
-	it("should call 'createStudent' action", async () => {
+	it("should call 'createTeacher' action", async () => {
 		const { wrapper } = setup();
 
 		const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
 		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
 		const inputEmail = wrapper.find('[data-testid="input_create-user_email"] input');
-		const inputBirthday = wrapper.find('[data-testid="input_create-student_birthdate"] input');
 
 		await inputFirstName.setValue("Klara");
 		await inputLastName.setValue("Fall");
 		await inputEmail.setValue("klara.fall@mail.de");
-		await inputBirthday.setValue("01.01.2000");
-		await inputBirthday.trigger("input");
-		const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
-		await submitButton.trigger("click");
+		await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
 
 		const expectedPayload = {
 			firstName: "Klara",
 			lastName: "Fall",
 			email: "klara.fall@mail.de",
-			birthday: "",
-			roles: ["student"],
+			generateRegistrationLink: true,
+			roles: ["teacher"],
 			schoolId: "school-1",
 			sendRegistration: false,
 		};
 
 		await flushPromises();
-
 		expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
 	});
 });
