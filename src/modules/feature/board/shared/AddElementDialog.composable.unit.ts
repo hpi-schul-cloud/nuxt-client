@@ -6,17 +6,20 @@ import { ConfigResponse } from "@/serverApi/v3/api";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { useBoardFeatures, useCardStore } from "@data-board";
+import { useBoardAllowedOperations, useBoardFeatures, useCardStore } from "@data-board";
 import { useAddCollaboraFile } from "@feature-collabora";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
 vi.mock("./add-collabora-file.composable");
+
+vi.mock("@data-board/BoardAllowedOperations.composable");
+const mockedUseBoardAllowedOperations = vi.mocked(useBoardAllowedOperations);
 
 vi.mock("@/utils/inject");
 const mockedInjectStrict = vi.mocked(injectStrict);
@@ -55,6 +58,12 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when element is created successfully", () => {
 			const setup = () => {
 				const cardId = "cardId";
+
+				mockedUseBoardAllowedOperations.mockReturnValue({
+					allowedOperations: computed(() => ({
+						manageVideoConference: false,
+					})),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				setupSharedElementTypeSelectionMock();
 
@@ -222,7 +231,7 @@ describe("ElementTypeSelection Composable", () => {
 
 			askType();
 
-			expect(staticElementTypeOptions.value.length).toBe(10);
+			expect(staticElementTypeOptions.value.length).toBe(9);
 		});
 
 		describe("when preferred tools have finished loading", () => {
@@ -336,8 +345,15 @@ describe("ElementTypeSelection Composable", () => {
 
 		const setup = (options?: { env?: Partial<ConfigResponse>; hasManageVideoConferencePermission?: boolean }) => {
 			const mergedEnv = { ...defaultEnv, ...options?.env };
+
 			const hasManageVideoConferencePermission =
 				options?.hasManageVideoConferencePermission ?? defaultHasManageVideoConferencePermission;
+
+			mockedUseBoardAllowedOperations.mockReturnValue({
+				allowedOperations: computed(() => ({
+					manageVideoConference: hasManageVideoConferencePermission,
+				})),
+			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			const cardId = "cardId";
 			const addElementMock = vi.fn();
