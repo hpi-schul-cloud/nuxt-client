@@ -156,7 +156,6 @@ describe("NewsEditPage", () => {
 			await flushPromises();
 
 			expect(useNewsMockReturn.deleteNews).toHaveBeenCalledWith(news.id);
-			expect(useRouterMock().push).toHaveBeenCalledWith({ path: "/news" });
 		});
 
 		it("should navigate to news list page after successful deletion", async () => {
