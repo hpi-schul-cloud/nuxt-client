@@ -31,6 +31,7 @@ describe("NewsCreatePage", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
+
 	const setup = (options?: Partial<{ query: LocationQuery; status: Status }>) => {
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
@@ -100,15 +101,16 @@ describe("NewsCreatePage", () => {
 		});
 
 		describe("when save event is emitted", () => {
+			const createParams = {
+				title: "Test News",
+				content: "This is a test news content.",
+				displayAt: new Date().toISOString(),
+			};
+
 			it("should create news with context and contextId from query params", () => {
 				const query = { contextId: "123", context: CreateNewsParamsTargetModelEnum.Teams };
 				const { wrapper } = setup({ query });
-				const formNews = wrapper.findComponent(FormNews);
-				const createParams = {
-					title: "Test News",
-					content: "This is a test news content.",
-					displayAt: new Date().toISOString(),
-				};
+				const formNews = wrapper.getComponent(FormNews);
 
 				formNews.vm.$emit("save", createParams);
 
@@ -124,12 +126,7 @@ describe("NewsCreatePage", () => {
 			it("should create news with target and targetmodel from query params", () => {
 				const query = { target: "456", targetmodel: CreateNewsParamsTargetModelEnum.Courses };
 				const { wrapper } = setup({ query });
-				const formNews = wrapper.findComponent(FormNews);
-				const createParams = {
-					title: "Test News",
-					content: "This is a test news content.",
-					displayAt: new Date().toISOString(),
-				};
+				const formNews = wrapper.getComponent(FormNews);
 
 				formNews.vm.$emit("save", createParams);
 
@@ -144,12 +141,7 @@ describe("NewsCreatePage", () => {
 
 			it("should create news for school when no query params provided", () => {
 				const { wrapper, schoolId } = setup();
-				const formNews = wrapper.findComponent(FormNews);
-				const createParams = {
-					title: "Test News",
-					content: "This is a test news content.",
-					displayAt: new Date().toISOString(),
-				};
+				const formNews = wrapper.getComponent(FormNews);
 
 				formNews.vm.$emit("save", createParams);
 
@@ -165,12 +157,7 @@ describe("NewsCreatePage", () => {
 			it("should navigate to news details page after successful creation", async () => {
 				const { wrapper } = setup({ status: "completed" });
 				useNewsMockReturn.createdNews = ref(newsResponseFactory.build());
-				const formNews = wrapper.findComponent(FormNews);
-				const createParams = {
-					title: "Test News",
-					content: "This is a test news content.",
-					displayAt: new Date().toISOString(),
-				};
+				const formNews = wrapper.getComponent(FormNews);
 
 				formNews.vm.$emit("save", createParams);
 				await flushPromises();
@@ -183,7 +170,7 @@ describe("NewsCreatePage", () => {
 	describe("cancel news creation", () => {
 		it("should navigate back to previous page", async () => {
 			const { wrapper } = setup();
-			const formNews = wrapper.findComponent(FormNews);
+			const formNews = wrapper.getComponent(FormNews);
 
 			formNews.vm.$emit("cancel");
 			await flushPromises();

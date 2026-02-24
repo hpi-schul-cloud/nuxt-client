@@ -30,15 +30,25 @@ export const useNews = () => {
 	};
 
 	const updateNews = async (payload: PatchNewsPayload) => {
-		const { result, error } = await execute(() => newsApi.newsControllerUpdate(payload.id, payload));
+		const { result, error } = await execute(
+			() => newsApi.newsControllerUpdate(payload.id, payload),
+			t("components.organisms.FormNews.error.patch")
+		);
 		if (error) return;
+
 		currentNews.value = result?.data ?? null;
+		notifySuccess(t("components.organisms.FormNews.success.patch"));
 	};
 
 	const deleteNews = async (newsId: string) => {
-		const { error } = await execute(() => newsApi.newsControllerDelete(newsId));
+		const { error } = await execute(
+			() => newsApi.newsControllerDelete(newsId),
+			t("components.organisms.FormNews.error.remove")
+		);
 		if (error) return;
+
 		currentNews.value = null;
+		notifySuccess(t("components.organisms.FormNews.success.remove"));
 	};
 
 	return {

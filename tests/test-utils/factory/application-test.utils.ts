@@ -62,6 +62,10 @@ export const expectNotification = (status: AlertStatus) => {
 	expect(useNotificationStore().notify).toHaveBeenCalledWith(expect.objectContaining({ status }));
 };
 
+export const expectNotificationWithMessage = (status: AlertStatus, message: string) => {
+	expect(useNotificationStore().notify).toHaveBeenCalledWith(expect.objectContaining({ status, text: message }));
+};
+
 export const expectNoNotification = () => {
 	expect(useNotificationStore().notify).not.toHaveBeenCalled();
 };

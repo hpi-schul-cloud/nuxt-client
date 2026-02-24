@@ -8,7 +8,7 @@
 					title: t('pages.news.title'),
 				},
 				{
-					to: `/news/${$route.params.id}`,
+					to: `/news/${route.params.id}`,
 					title: currentNews.title,
 				},
 				{
@@ -20,11 +20,11 @@
 		>
 			<FormNews
 				v-if="currentNews"
-				:title="currentNews?.title"
-				:content="currentNews?.content"
-				:display-at="currentNews?.displayAt"
-				:show-delete-button="!!currentNews?.id"
+				:title="currentNews.title"
+				:content="currentNews.content"
+				:display-at="currentNews.displayAt"
 				:status="status"
+				show-delete-button
 				@save="onSave"
 				@delete="onDelete"
 				@cancel="onCancel"
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { type UpdateNewsParams } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError, notifySuccess } from "@data-app";
+import { notifyError } from "@data-app";
 import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
@@ -72,20 +72,14 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 		return;
 	}
 
-	try {
-		await updateNews({
-			id: currentNews.value.id,
-			title: newsToPatch.title,
-			content: newsToPatch.content,
-			displayAt: newsToPatch.displayAt,
-		});
+	await updateNews({
+		id: currentNews.value.id,
+		title: newsToPatch.title,
+		content: newsToPatch.content,
+		displayAt: newsToPatch.displayAt,
+	});
 
-		notifySuccess(t("components.organisms.FormNews.success.patch"));
-
-		await router.push({ path: `/news/${currentNews.value?.id}` });
-	} catch {
-		notifyError(t("components.organisms.FormNews.error.patch"));
-	}
+	if (status.value === "completed") await router.push({ path: `/news/${currentNews.value?.id}` });
 };
 
 const onDelete = async () => {
@@ -94,14 +88,9 @@ const onDelete = async () => {
 		return;
 	}
 
-	try {
-		await deleteNews(currentNews.value.id);
-		notifySuccess(t("components.organisms.FormNews.success.remove"));
+	await deleteNews(currentNews.value.id);
 
-		router.push({ path: "/news" });
-	} catch {
-		notifyError(t("components.organisms.FormNews.error.remove"));
-	}
+	if (status.value === "completed") await router.push({ path: "/news" });
 };
 
 const onCancel = () => {

@@ -2,8 +2,7 @@ import { useNews } from "./news.composable";
 import * as serverApi from "@/serverApi/v3";
 import { CreateNewsParams, CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { expectNotification, newsResponseFactory } from "@@/tests/test-utils";
-import { useNotificationStore } from "@data-app";
+import { expectNotificationWithMessage, newsResponseFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
@@ -79,10 +78,7 @@ describe("news composable", () => {
 
 			expect(newsApi.newsControllerCreate).toHaveBeenCalledWith(createNewsPayload);
 			expect(createdNews.value).toEqual(createdNewsResponse);
-			expectNotification("success");
-			expect(useNotificationStore().notify).toHaveBeenCalledWith(
-				expect.objectContaining({ text: "components.organisms.FormNews.success.create" })
-			);
+			expectNotificationWithMessage("success", "components.organisms.FormNews.success.create");
 		});
 
 		it("should not set createdNews if API call fails and notify error", async () => {
@@ -93,7 +89,7 @@ describe("news composable", () => {
 			await createNews(createNewsPayload);
 
 			expect(createdNews.value).toBeNull();
-			expectNotification("error");
+			expectNotificationWithMessage("error", "components.organisms.FormNews.errors.create");
 
 			consoleErrorSpy.mockRestore();
 		});
@@ -109,7 +105,7 @@ describe("news composable", () => {
 	});
 
 	describe("updateNews", () => {
-		it("should update current news", async () => {
+		it("should update current news and notify success", async () => {
 			const existingNews = newsResponseFactory.build();
 			const updatedNews = { ...existingNews, title: "Updated Title" };
 			newsApi.newsControllerUpdate.mockResolvedValue({ data: updatedNews });
@@ -121,9 +117,10 @@ describe("news composable", () => {
 				title: "Updated Title",
 			});
 			expect(currentNews.value).toEqual(updatedNews);
+			expectNotificationWithMessage("success", "components.organisms.FormNews.success.patch");
 		});
 
-		it("should not update current news if API call fails", async () => {
+		it("should not update current news if API call fails and notify error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 			newsApi.newsControllerUpdate.mockRejectedValue(new Error("Failed to update news"));
 
@@ -131,6 +128,7 @@ describe("news composable", () => {
 			await updateNews({ id: "newsId", title: "New Title" });
 
 			expect(currentNews.value).toBeNull();
+			expectNotificationWithMessage("error", "components.organisms.FormNews.error.patch");
 
 			consoleErrorSpy.mockRestore();
 		});
@@ -146,7 +144,7 @@ describe("news composable", () => {
 	});
 
 	describe("deleteNews", () => {
-		it("should delete current news", async () => {
+		it("should delete current news and notify success", async () => {
 			newsApi.newsControllerDelete.mockResolvedValue({});
 
 			const { deleteNews, currentNews } = useNews();
@@ -156,9 +154,10 @@ describe("news composable", () => {
 
 			expect(newsApi.newsControllerDelete).toHaveBeenCalledWith(newsToDelete.id);
 			expect(currentNews.value).toBeNull();
+			expectNotificationWithMessage("success", "components.organisms.FormNews.success.remove");
 		});
 
-		it("should not delete current news if API call fails", async () => {
+		it("should not delete current news if API call fails and notify error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 			newsApi.newsControllerDelete.mockRejectedValue(new Error("Failed to delete news"));
 
@@ -168,6 +167,7 @@ describe("news composable", () => {
 			await deleteNews(newsToDelete.id);
 
 			expect(currentNews.value).toEqual(newsToDelete);
+			expectNotificationWithMessage("error", "components.organisms.FormNews.error.remove");
 
 			consoleErrorSpy.mockRestore();
 		});
