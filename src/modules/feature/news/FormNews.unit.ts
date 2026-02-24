@@ -20,13 +20,6 @@ const date = "2022-07-05";
 const time = "11:00";
 const testDate = fromInputDateTime(date, time) as unknown as Dayjs;
 
-const $route = {
-	name: "news-id",
-	params: {
-		id: "randomId",
-	},
-	query: {},
-};
 const classicEditorMock = {
 	template: "<div></div>",
 	methods: {
@@ -65,9 +58,6 @@ describe("FormNews", () => {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$route,
-				},
 				stubs: {
 					ClassicEditor: classicEditorMock,
 					ConfirmationDialog: true,
