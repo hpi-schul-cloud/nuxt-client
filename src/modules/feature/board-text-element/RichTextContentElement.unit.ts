@@ -5,7 +5,6 @@ import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 const mockElement: RichTextElementResponse = {
 	id: "test-id",
@@ -42,7 +41,7 @@ describe("RichTextContentElement", () => {
 	}) => {
 		const wrapper = mount(RichTextContentElementComponent, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					RichTextContentElementEdit: true,
 				},
