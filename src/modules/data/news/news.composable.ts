@@ -2,7 +2,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { CreateNewsParams, NewsApiFactory } from "@/serverApi/v3";
 import { News, PatchNewsPayload } from "@/store/types/news";
 import { $axios } from "@/utils/api";
-import { notifyError, notifySuccess } from "@data-app";
+import { notifySuccess } from "@data-app";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -19,11 +19,12 @@ export const useNews = () => {
 	};
 
 	const createNews = async (payload: CreateNewsParams) => {
-		const { result, error } = await execute(() => newsApi.newsControllerCreate(payload));
-		if (error) {
-			notifyError(t("components.organisms.FormNews.errors.create"));
-			return;
-		}
+		const { result, error } = await execute(
+			() => newsApi.newsControllerCreate(payload),
+			t("components.organisms.FormNews.errors.create")
+		);
+		if (error) return;
+
 		createdNews.value = result?.data ?? null;
 		notifySuccess(t("components.organisms.FormNews.success.create"));
 	};

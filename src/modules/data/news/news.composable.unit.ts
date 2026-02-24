@@ -2,7 +2,7 @@ import { useNews } from "./news.composable";
 import * as serverApi from "@/serverApi/v3";
 import { CreateNewsParams, CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { newsResponseFactory } from "@@/tests/test-utils";
+import { expectNotification, newsResponseFactory } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -79,6 +79,7 @@ describe("news composable", () => {
 
 			expect(newsApi.newsControllerCreate).toHaveBeenCalledWith(createNewsPayload);
 			expect(createdNews.value).toEqual(createdNewsResponse);
+			expectNotification("success");
 			expect(useNotificationStore().notify).toHaveBeenCalledWith(
 				expect.objectContaining({ text: "components.organisms.FormNews.success.create" })
 			);
@@ -92,9 +93,7 @@ describe("news composable", () => {
 			await createNews(createNewsPayload);
 
 			expect(createdNews.value).toBeNull();
-			expect(useNotificationStore().notify).toHaveBeenCalledWith(
-				expect.objectContaining({ text: "components.organisms.FormNews.error.create" })
-			);
+			expectNotification("error");
 
 			consoleErrorSpy.mockRestore();
 		});
