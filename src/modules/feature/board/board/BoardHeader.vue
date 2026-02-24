@@ -55,6 +55,11 @@
 </template>
 
 <script setup lang="ts">
+import { BoardExternalReferenceType } from "../../../../serverApi/v3";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+import BoardEditableChip from "./BoardEditableChip.vue";
+import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -71,11 +76,6 @@ import {
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
-import { BoardExternalReferenceType } from "../../../../serverApi/v3";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
-import BoardEditableChip from "./BoardEditableChip.vue";
-import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
 
 type Props = {
 	boardId: string;
@@ -188,7 +188,7 @@ const calculateWidth = () => {
 	if (!inputWidthCalcSpan.value) return;
 	const title = boardTitle.value || t("components.cardElement.titleElement.placeholder");
 
-	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
+	inputWidthCalcSpan.value.innerHTML = title.replaceAll(/\s/g, "&nbsp;");
 
 	const width = inputWidthCalcSpan.value.offsetWidth;
 
