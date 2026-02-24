@@ -126,12 +126,12 @@ const classicEditor = useTemplateRef("classicEditor");
 const shouldNewsContentValidation = ref(false);
 
 watch(
-	props,
-	(newProps) => {
-		newsTitle.value = newProps.title ?? "";
-		newsContent.value = newProps.content ?? "";
-		if (newProps.displayAt) {
-			[newsDate.value, newsTime.value] = createInputDateTime(newProps.displayAt);
+	() => [props.title, props.content, props.displayAt],
+	([newTitle, newContent, newDisplayAt]) => {
+		newsTitle.value = newTitle ?? "";
+		newsContent.value = newContent ?? "";
+		if (newDisplayAt) {
+			[newsDate.value, newsTime.value] = createInputDateTime(newDisplayAt);
 		} else {
 			newsDate.value = "";
 			newsTime.value = "";
