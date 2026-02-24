@@ -42,13 +42,13 @@ describe("SidebarItems Composable", () => {
 	it("should have correct amount of page links", () => {
 		const { pageLinks } = setup();
 
-		expect(pageLinks.value).toHaveLength(10);
+		expect(pageLinks.value).toHaveLength(9);
 	});
 
 	it("should have correct amount of page links", () => {
 		const { pageLinks } = setup();
 
-		expect(pageLinks.value).toHaveLength(10);
+		expect(pageLinks.value).toHaveLength(9);
 		expect(pageLinks.value[1].permissions).toBeUndefined();
 
 		const roomsLink = pageLinks.value.find((link) => link.title === "global.sidebar.item.rooms");

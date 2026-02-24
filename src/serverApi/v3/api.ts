@@ -1822,12 +1822,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_EXTENSIONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_TEAMS_ENABLED: boolean;
     /**
      * 
