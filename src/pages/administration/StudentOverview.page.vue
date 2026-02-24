@@ -86,19 +86,19 @@
 	</DefaultWireframe>
 	<DeleteUserDialog
 		v-model="isConfirmDialogOpen"
-		:user-type="'student'"
+		user-type="student"
 		:selected-users="selectedStudents"
 		@confirm="onConfirmDelete"
 	/>
 </template>
 
 <script>
-import DeleteUserDialog from "./DeleteUserDialog.vue";
 import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
+import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
