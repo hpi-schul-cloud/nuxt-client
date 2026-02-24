@@ -1,8 +1,8 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
 import { CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { Status } from "@/store/types/commons";
+import { createTestAppStoreWithSchool, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useAppStore } from "@data-app";
 import { useNews } from "@data-news";
 import { FormNews } from "@feature-news";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -31,7 +31,7 @@ describe("NewsCreatePage", () => {
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
-	const setup = (options?: Partial<{ query: LocationQuery }>) => {
+	const setup = (options?: Partial<{ query: LocationQuery; status: Status }>) => {
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
 		useRouteMock.mockReturnValue({
@@ -42,8 +42,7 @@ describe("NewsCreatePage", () => {
 		useNewsMockReturn = createMock<ReturnType<typeof useNews>>();
 		useNewsMock.mockReturnValue(useNewsMockReturn);
 
-		useNewsMockReturn.createdNews = ref(null);
-		useNewsMockReturn.status = ref("");
+		useNewsMockReturn.status = ref(options?.status || "");
 
 		const wrapper = mount(NewsCreatePage, {
 			attachTo: document.body,
@@ -54,9 +53,10 @@ describe("NewsCreatePage", () => {
 				},
 			},
 		});
-		const appStore = mockedPiniaStoreTyping(useAppStore);
+		const schoolId = "schoolId";
+		const { appStore } = createTestAppStoreWithSchool(schoolId);
 
-		return { wrapper, appStore };
+		return { wrapper, appStore, schoolId };
 	};
 
 	it("should render component", () => {
@@ -64,12 +64,32 @@ describe("NewsCreatePage", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should handle application error when query params are not valid", async () => {
-		const { appStore } = setup({ query: { contextId: "123", context: "invalid" } });
-		await flushPromises();
+	it.each([
+		{
+			condition: "context query param is not valid",
+			query: { contextId: "123", context: "invalid" },
+		},
+		{
+			condition: "targetmodel query param is not valid",
+			query: { target: "123", targetmodel: "invalid" },
+		},
+		{
+			condition: "context is valid but contextId is missing",
+			query: { context: CreateNewsParamsTargetModelEnum.Teams },
+		},
+		{
+			condition: "targetmodel is valid but target is missing",
+			query: { targetmodel: CreateNewsParamsTargetModelEnum.Courses },
+		},
+	] as { condition: string; query: LocationQuery }[])(
+		"should handle application error when $condition",
+		async ({ query }) => {
+			const { appStore } = setup({ query });
+			await flushPromises();
 
-		expect(appStore.handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest);
-	});
+			expect(appStore.handleApplicationError).toHaveBeenCalledWith(HttpStatusCode.BadRequest);
+		}
+	);
 
 	describe("create news", () => {
 		it("should render FormNews component", () => {
@@ -121,6 +141,54 @@ describe("NewsCreatePage", () => {
 					targetModel: query.targetmodel,
 				});
 			});
+
+			it("should create news for school when no query params provided", () => {
+				const { wrapper, schoolId } = setup();
+				const formNews = wrapper.findComponent(FormNews);
+				const createParams = {
+					title: "Test News",
+					content: "This is a test news content.",
+					displayAt: new Date().toISOString(),
+				};
+
+				formNews.vm.$emit("save", createParams);
+
+				expect(useNewsMockReturn.createNews).toHaveBeenCalledWith({
+					title: createParams.title,
+					content: createParams.content,
+					displayAt: createParams.displayAt,
+					targetId: schoolId,
+					targetModel: CreateNewsParamsTargetModelEnum.Schools,
+				});
+			});
+
+			it("should navigate to news details page after successful creation", async () => {
+				const { wrapper } = setup({ status: "completed" });
+				useNewsMockReturn.createdNews = ref(newsResponseFactory.build());
+				const formNews = wrapper.findComponent(FormNews);
+				const createParams = {
+					title: "Test News",
+					content: "This is a test news content.",
+					displayAt: new Date().toISOString(),
+				};
+
+				formNews.vm.$emit("save", createParams);
+				await flushPromises();
+
+				expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${useNewsMockReturn.createdNews.value?.id}` });
+			});
+		});
+	});
+
+	describe("cancel news creation", () => {
+		it("should navigate back to previous page", async () => {
+			const { wrapper } = setup();
+			const formNews = wrapper.findComponent(FormNews);
+
+			formNews.vm.$emit("cancel");
+			await flushPromises();
+
+			expect(useRouterMock().go).toHaveBeenCalled();
 		});
 	});
 });

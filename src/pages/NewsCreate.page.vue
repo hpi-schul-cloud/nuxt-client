@@ -14,7 +14,7 @@
 		max-width="short"
 	>
 		<div>
-			<FormNews :status="status" @save="create" @cancel="onCancel" />
+			<FormNews :status="status" @save="onCreate" @cancel="onCancel" />
 		</div>
 	</DefaultWireframe>
 </template>
@@ -70,7 +70,7 @@ const parseNewsTarget = (
 	}
 };
 
-const create = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
+const onCreate = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
 	const newsTarget = newsTargetFromQueryParams.value ?? {
 		targetId: useAppStore()?.school?.id ?? "",
 		targetModel: CreateNewsParamsTargetModelEnum.Schools,
