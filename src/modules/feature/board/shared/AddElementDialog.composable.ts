@@ -186,8 +186,9 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		const options: ElementTypeSelectionOptions[] = [];
 
 		const hasPreferredTools = !cardStore.isPreferredToolsLoading && cardStore.preferredTools.length > 0;
+		const canCreateExternalToolElement = allowedOperations.value.createExternalToolElement;
 
-		if (useEnvConfig().value.FEATURE_PREFERRED_CTL_TOOLS_ENABLED && hasPreferredTools) {
+		if (useEnvConfig().value.FEATURE_PREFERRED_CTL_TOOLS_ENABLED && hasPreferredTools && canCreateExternalToolElement) {
 			cardStore.preferredTools.forEach((tool: PreferredToolResponse) => {
 				if (!tool.iconName) {
 					tool.iconName = "mdiPuzzleOutline";

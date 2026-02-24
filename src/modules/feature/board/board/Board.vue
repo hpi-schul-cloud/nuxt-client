@@ -322,15 +322,9 @@ const { focusNodeFromHash } = useElementFocus();
 onMounted(async () => {
 	resetPageInformation();
 	useBoardInactivity();
-	const boardFetchPromise = boardStore.fetchBoardRequest({
-		boardId: props.boardId,
-	});
 
-	if (allowedOperations.value.createExternalToolElement) {
-		cardStore.loadPreferredTools(ToolContextType.BoardElement);
-	}
-
-	await boardFetchPromise;
+	cardStore.loadPreferredTools(ToolContextType.BoardElement);
+	await boardStore.fetchBoardRequest({ boardId: props.boardId });
 
 	focusNodeFromHash();
 });
