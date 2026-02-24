@@ -19,7 +19,6 @@
 			max-width="short"
 		>
 			<FormNews
-				v-if="currentNews"
 				:title="currentNews.title"
 				:content="currentNews.content"
 				:display-at="currentNews.displayAt"
