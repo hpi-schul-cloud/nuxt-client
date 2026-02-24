@@ -914,7 +914,7 @@ describe("Folder.vue", () => {
 
 		describe("when breadcrumbs are present", () => {
 			const setup = () => {
-				const { folderStateMock, fileStorageApiMock } = setupMocks({
+				const { fileStorageApiMock } = setupMocks({
 					breadcrumbs: [
 						{
 							title: "Test Folder",
@@ -945,7 +945,7 @@ describe("Folder.vue", () => {
 
 		describe("when fab button is clicked", () => {
 			const setup = async (collaboraEnabled = false) => {
-				const { folderStateMock, fileStorageApiMock } = setupMocks();
+				const { fileStorageApiMock } = setupMocks();
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
@@ -1055,7 +1055,7 @@ describe("Folder.vue", () => {
 
 		describe("when collabora file should be created", () => {
 			const setup = async () => {
-				const { folderStateMock, fileStorageApiMock } = setupMocks();
+				const { fileStorageApiMock } = setupMocks();
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 

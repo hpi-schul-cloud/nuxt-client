@@ -695,11 +695,7 @@ describe("ElementTypeSelection Composable", () => {
 
 	describe("dynamicElementTypeOptions actions", () => {
 		describe("when the PreferredToolsElement action is called", () => {
-			const setup = (
-				env: Partial<ConfigResponse> = {
-					FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
-				}
-			) => {
+			const setup = (env: Partial<ConfigResponse>) => {
 				const cardId = "cardId";
 				const closeDialogMock = vi.fn();
 				const { dynamicElementTypeOptions } = setupSharedElementTypeSelectionMock({
@@ -715,8 +711,13 @@ describe("ElementTypeSelection Composable", () => {
 				const cardStore = mockedPiniaStoreTyping(useCardStore);
 				cardStore.preferredTools = [preferredTool];
 
+				const getEnvValues = {
+					FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
+					...env,
+				};
+
 				mockedInjectStrict.mockImplementation(() => ({
-					getEnv: env,
+					getEnv: getEnvValues,
 				}));
 
 				const { askType } = useAddElementDialog(vi.fn(), cardId);
@@ -732,7 +733,7 @@ describe("ElementTypeSelection Composable", () => {
 			};
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, askType, closeDialogMock, preferredTool } = setup();
+				const { elementTypeOptions, askType, closeDialogMock, preferredTool } = setup({});
 
 				askType();
 
@@ -745,7 +746,7 @@ describe("ElementTypeSelection Composable", () => {
 			});
 
 			it("should call add element function with right argument", async () => {
-				const { elementTypeOptions, cardId, askType, cardStore, preferredTool } = setup();
+				const { elementTypeOptions, cardId, askType, cardStore, preferredTool } = setup({});
 
 				askType();
 
