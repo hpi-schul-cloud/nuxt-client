@@ -8,8 +8,13 @@
 		@cancel="emit('cancel')"
 	>
 		<template #content>
-			<VList class="ml-6" data-testid="delete-user-dialog-user-list">
-				<VListItem v-for="user in props.selectedUsers" :key="user._id" density="compact">
+			<VList class="overflow-y-scroll" max-height="320" data-testid="delete-user-dialog-user-list">
+				<VListItem
+					v-for="(user, index) in props.selectedUsers"
+					:key="user._id"
+					density="compact"
+					:variant="index % 2 === 0 ? 'tonal' : 'text'"
+				>
 					{{ user.firstName }} {{ user.lastName }}
 				</VListItem>
 			</VList>
