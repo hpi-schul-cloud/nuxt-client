@@ -5,27 +5,19 @@ import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
-vi.mock("vue-router");
-const router = vi.mocked(useRouter);
+const router = createRouterMock();
 
 describe("loggedOutLayout", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
-		router.mockReturnValue(
-			createMock<Router>({
-				currentRoute: ref({ path: "/" }),
-				replace: vi.fn(),
-			})
-		);
+		injectRouterMock(router);
 	});
 
 	const mountComponent = () => {
@@ -64,12 +56,12 @@ describe("loggedOutLayout", () => {
 
 	it("should not routeToErrorPage without any errors", () => {
 		mountComponent();
-		expect(useRouter().replace).not.toHaveBeenCalledWith("/error");
+		expect(router.replace).not.toHaveBeenCalledWith("/error");
 	});
 
 	it("should execute routeToErrorPage with any errors", () => {
 		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized, "error.401");
 		mountComponent();
-		expect(useRouter().replace).toHaveBeenCalledWith("/error");
+		expect(router.replace).toHaveBeenCalledWith("/error");
 	});
 });

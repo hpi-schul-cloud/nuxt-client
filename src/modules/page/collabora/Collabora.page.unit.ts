@@ -13,7 +13,7 @@ import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { useTitle } from "@vueuse/core";
-import { AxiosPromise } from "axios";
+import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 
 // Mock useTitle from @vueuse/core
@@ -63,7 +63,7 @@ describe("Collabora.page", () => {
 					element: fileElement,
 					parentHierarchy: [parentNodeInfos],
 				},
-			} as unknown as AxiosPromise);
+			} as AxiosResponse);
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 
 			mockBuildPageTitle.mockReturnValue("test-file.xlsx - Course Board - Instance Title");
@@ -137,7 +137,7 @@ describe("Collabora.page", () => {
 					element: fileElement,
 					parentHierarchy: [parentNodeInfos],
 				},
-			} as unknown as AxiosPromise);
+			} as AxiosResponse);
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 
 			mockBuildPageTitle.mockReturnValueOnce("fetched-file.xlsx - Course Board - Instance Title");
@@ -177,7 +177,7 @@ describe("Collabora.page", () => {
 			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(undefined);
+			fileStorageApiMock.getFileRecordById.mockReturnValue(undefined);
 			fileStorageApiMock.fetchFileById.mockRejectedValueOnce(new Error("Fetch failed"));
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 				"https://collabora.example.com/wopi/files/123"
@@ -185,6 +185,7 @@ describe("Collabora.page", () => {
 
 			const boardApi = createMock<serverApi.BoardElementApiInterface>();
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(new Error("Fetch parent failed"));
 
 			const expectedTitle = "Instance Title";
 			mockBuildPageTitle.mockReturnValueOnce(expectedTitle);
@@ -280,7 +281,7 @@ describe("Collabora.page", () => {
 					element: fileElement,
 					parentHierarchy: [parentNodeInfos],
 				},
-			} as unknown as AxiosPromise);
+			} as AxiosResponse);
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
 			const expectedTitle = "Task Board - Instance Title";
@@ -319,7 +320,7 @@ describe("Collabora.page", () => {
 			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-			fileStorageApiMock.getFileRecordById.mockReturnValueOnce(undefined);
+			fileStorageApiMock.getFileRecordById.mockReturnValue(undefined);
 			fileStorageApiMock.fetchFileById.mockRejectedValueOnce(new Error());
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 				"https://collabora.example.com/wopi/files/123"
@@ -327,6 +328,7 @@ describe("Collabora.page", () => {
 
 			const boardApi = createMock<serverApi.BoardElementApiInterface>();
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(new Error("Fetch parent failed"));
 
 			const instanceTitle = "Instance Title";
 			mockBuildPageTitle.mockReturnValueOnce(instanceTitle);
