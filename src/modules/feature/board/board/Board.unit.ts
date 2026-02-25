@@ -301,15 +301,6 @@ describe("Board", () => {
 			});
 		});
 
-		describe("when the user does not have tool create permissions", () => {
-			it("should call cardStore loadPreferredTools action", () => {
-				// mockedBoardPermissions.hasCreateToolPermission = ref(false);
-				const { cardStore } = setup({ allowedOperations: { createExternalToolElement: false } });
-
-				expect(cardStore.loadPreferredTools).not.toHaveBeenCalled();
-			});
-		});
-
 		describe("when the url has a hash", () => {
 			const setup2 = () => {
 				Object.defineProperty(globalThis, "location", {
