@@ -15,6 +15,8 @@ import {
 	useCourseBoardEditMode,
 	useSharedEditMode,
 } from "@data-board";
+import * as CardRestApi from "@data-board/cardActions/cardRestApi.composable";
+import * as CardSocketApi from "@data-board/cardActions/cardSocketApi.composable";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
@@ -51,6 +53,37 @@ const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 vi.mock("../shared/AddElementDialog.composable");
 vi.mock("@ui-confirmation-dialog");
 const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
+
+const useCardRestApiMock: ReturnType<typeof CardRestApi.useCardRestApi> = {
+	createElementRequest: vi.fn(),
+	createPreferredElement: vi.fn(),
+	getPreferredTools: vi.fn(),
+	deleteElementRequest: vi.fn(),
+	moveElementRequest: vi.fn(),
+	updateElementRequest: vi.fn(),
+	duplicateCardRequest: vi.fn(),
+	deleteCardRequest: vi.fn(),
+	fetchCardRequest: vi.fn(),
+	updateCardTitleRequest: vi.fn(),
+	updateCardHeightRequest: vi.fn(),
+	disconnectSocketRequest: vi.fn(),
+};
+vi.spyOn(CardRestApi, "useCardRestApi").mockReturnValue(useCardRestApiMock);
+
+const useCardSocketApiMock: ReturnType<typeof CardSocketApi.useCardSocketApi> = {
+	dispatch: vi.fn(),
+	disconnectSocketRequest: vi.fn(),
+	createElementRequest: vi.fn(),
+	deleteElementRequest: vi.fn(),
+	moveElementRequest: vi.fn(),
+	updateElementRequest: vi.fn(),
+	deleteCardRequest: vi.fn(),
+	fetchCardRequest: vi.fn(),
+	updateCardTitleRequest: vi.fn(),
+	updateCardHeightRequest: vi.fn(),
+	duplicateCardRequest: vi.fn(),
+};
+vi.spyOn(CardSocketApi, "useCardSocketApi").mockReturnValue(useCardSocketApiMock);
 
 describe("CardHost", () => {
 	let mockedBoardPermissionsHandler: DeepMocked<ReturnType<typeof useBoardPermissions>>;
