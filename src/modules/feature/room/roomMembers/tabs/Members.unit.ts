@@ -12,7 +12,6 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
@@ -26,6 +25,52 @@ type RefPropertiesOnly<T> = {
 };
 
 type RoomAuthorizationRefs = Partial<RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>>;
+
+const createRoomAuthorizationMock = (
+	overrides: RoomAuthorizationRefs = {}
+): ReturnType<typeof useRoomAuthorization> => {
+	const defaults: RoomAuthorizationRefs = {
+		canAddAllStudents: false,
+		canAddRoomMembers: false,
+		canChangeOwner: false,
+		canCopyRoom: false,
+		canCreateRoom: false,
+		canDeleteRoom: false,
+		canEditRoom: false,
+		canEditRoomContent: false,
+		canLeaveRoom: false,
+		canListDrafts: false,
+		canManageRoomInvitationLinks: false,
+		canManageVideoconferences: false,
+		canRemoveRoomMembers: false,
+		canSeeAllStudents: false,
+		canSeeMembersList: false,
+		canShareRoom: false,
+		canViewRoom: false,
+	};
+
+	const merged = { ...defaults, ...overrides };
+
+	return {
+		canAddAllStudents: computed(() => merged.canAddAllStudents ?? false),
+		canAddRoomMembers: computed(() => merged.canAddRoomMembers ?? false),
+		canChangeOwner: computed(() => merged.canChangeOwner ?? false),
+		canCopyRoom: computed(() => merged.canCopyRoom ?? false),
+		canCreateRoom: computed(() => merged.canCreateRoom ?? false),
+		canDeleteRoom: computed(() => merged.canDeleteRoom ?? false),
+		canEditRoom: computed(() => merged.canEditRoom ?? false),
+		canEditRoomContent: computed(() => merged.canEditRoomContent ?? false),
+		canLeaveRoom: computed(() => merged.canLeaveRoom ?? false),
+		canListDrafts: computed(() => merged.canListDrafts ?? false),
+		canManageRoomInvitationLinks: computed(() => merged.canManageRoomInvitationLinks ?? false),
+		canManageVideoconferences: computed(() => merged.canManageVideoconferences ?? false),
+		canRemoveRoomMembers: computed(() => merged.canRemoveRoomMembers ?? false),
+		canSeeAllStudents: computed(() => merged.canSeeAllStudents ?? false),
+		canSeeMembersList: computed(() => merged.canSeeMembersList ?? false),
+		canShareRoom: computed(() => merged.canShareRoom ?? false),
+		canViewRoom: computed(() => merged.canViewRoom ?? false),
+	};
+};
 
 describe("Members", () => {
 	beforeEach(() => {
@@ -61,12 +106,7 @@ describe("Members", () => {
 			roomMembers.push(currentUser);
 		}
 
-		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
-
-		for (const [key, value] of Object.entries(options.roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(() => value ?? false);
-		}
-		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
+		roomAuthorizationMock.mockReturnValue(createRoomAuthorizationMock(options.roomAuthorization));
 
 		const wrapper = shallowMount(Members, {
 			global: {

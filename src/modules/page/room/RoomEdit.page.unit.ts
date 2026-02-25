@@ -9,12 +9,8 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomEditPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
-import { Mock } from "vitest";
 import { computed, nextTick } from "vue";
-import { useRoute, useRouter } from "vue-router";
-
-vi.mock("vue-router");
-const useRouteMock = useRoute as Mock;
+import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = vi.mocked(useRoomAuthorization);
@@ -27,15 +23,13 @@ const roomParams: RoomUpdateParams = {
 
 describe("@pages/RoomEdit.page.vue", () => {
 	let roomPermissions: DeepMocked<ReturnType<typeof useRoomAuthorization>>;
-	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
 		roomPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
 		roomAuthorization.mockReturnValue(roomPermissions);
 
-		useRouterMock = createMock<ReturnType<typeof useRouter>>();
-		vi.mocked(useRouter).mockReturnValue(useRouterMock);
-		useRouterMock.replace = vi.fn();
+		router = createRouterMock();
 	});
 
 	afterEach(() => {
@@ -52,11 +46,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const room = isRoomDefined ? roomFactory.build() : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
-		useRouteMock.mockImplementation(() => ({
-			params: {
-				id: roomId,
-			},
-		}));
+		injectRouterMock(router);
+		router.setParams({ id: roomId });
 
 		const wrapper = mount(RoomEditPage, {
 			global: {
@@ -80,7 +71,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		return {
 			wrapper,
 			isLoading,
-			useRoute,
 			updateRoom,
 			fetchRoom,
 			room,
@@ -128,7 +118,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const { roomId } = setup({ isLoading: false });
 				await nextTick();
 
-				expect(useRouterMock.replace).toHaveBeenCalledWith({
+				expect(router.replace).toHaveBeenCalledWith({
 					name: "room-details",
 					params: { id: roomId },
 				});
@@ -197,7 +187,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 					await nextTick();
 
-					expect(useRouterMock.push).toHaveBeenCalledWith({
+					expect(router.push).toHaveBeenCalledWith({
 						name: "room-details",
 						params: { id: roomId },
 					});
@@ -238,7 +228,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const roomFormComponent = wrapper.findComponent(RoomForm);
 				roomFormComponent.vm.$emit("cancel");
 
-				expect(useRouterMock.push).toHaveBeenCalledWith({
+				expect(router.push).toHaveBeenCalledWith({
 					name: "room-details",
 					params: { id: roomId },
 				});
