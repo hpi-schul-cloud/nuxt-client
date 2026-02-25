@@ -479,6 +479,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"El número de archivos supera el límite permitido de {fileLimitPerParent} archivos.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
 	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
@@ -905,7 +907,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
 	"feature-autoLogout.message.error":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"feature-autoLogout.component.image.alt": "Perezoso",
 	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
