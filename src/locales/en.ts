@@ -471,6 +471,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "The files could not be deleted.",
 	"components.board.notifications.errors.fileToBig":
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"The number of files exceeds the permitted limit of {fileLimitPerParent} files.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
@@ -884,7 +886,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Your session has already expired. Please log in again.",
 	"feature-autoLogout.message.error":
 		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"feature-autoLogout.component.image.alt": "Sloth",
 	"feature-autoLogout.message.success": "Session successfully extended.",
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":

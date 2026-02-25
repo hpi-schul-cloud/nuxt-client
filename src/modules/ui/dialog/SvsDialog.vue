@@ -1,46 +1,45 @@
 <template>
-	<UseFocusTrap>
-		<VDialog
-			v-model="isOpen"
-			:data-testid="testId"
-			:max-width="maxWidth"
-			:aria-labelledby="`dialog-${uid}-title`"
-			@after-leave="emit('after-leave')"
-			@click:outside="emit('cancel')"
-			@keydown.esc="emit('cancel')"
-		>
-			<VCard :loading="isLoading">
-				<VCardItem class="pa-4">
-					<VCardTitle v-if="titleString">
-						<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
-							{{ titleString }}
-						</h2>
-					</VCardTitle>
-				</VCardItem>
-				<VCardText v-if="$slots.content" class="pa-4">
-					<slot name="content" />
-				</VCardText>
-				<VCardActions v-if="!noActions" class="pa-4 pt-2 ga-2 justify-end flex-wrap">
-					<slot name="actions">
-						<SvsDialogBtnCancel
-							v-if="!noCancel"
-							:text-lang-key="cancelBtnLangKey"
-							:data-testid="`${testId}-cancel`"
-							:disabled="areActionsDisabled"
-							@click="onCancel"
-						/>
-						<SvsDialogBtnConfirm
-							v-if="!noConfirm"
-							:data-testid="`${testId}-confirm`"
-							:text-lang-key="confirmBtnLangKey"
-							:disabled="areActionsDisabled || confirmBtnDisabled"
-							@click="onConfirm"
-						/>
-					</slot>
-				</VCardActions>
-			</VCard>
-		</VDialog>
-	</UseFocusTrap>
+	<VDialog
+		v-model="isOpen"
+		capture-focus
+		:data-testid="testId"
+		:max-width="maxWidth"
+		:aria-labelledby="`dialog-${uid}-title`"
+		@after-leave="emit('after-leave')"
+		@click:outside="emit('cancel')"
+		@keydown.esc="emit('cancel')"
+	>
+		<VCard :loading="isLoading">
+			<VCardItem class="pa-4">
+				<VCardTitle v-if="titleString">
+					<h2 :id="`dialog-${uid}-title`" class="ma-0 dialog-title" :data-testid="`${testId}-title`">
+						{{ titleString }}
+					</h2>
+				</VCardTitle>
+			</VCardItem>
+			<VCardText v-if="$slots.content" class="pa-4">
+				<slot name="content" />
+			</VCardText>
+			<VCardActions v-if="!noActions" class="pa-4 pt-2 ga-2 justify-end flex-wrap">
+				<slot name="actions">
+					<SvsDialogBtnCancel
+						v-if="!noCancel"
+						:text-lang-key="cancelBtnLangKey"
+						:data-testid="`${testId}-cancel`"
+						:disabled="areActionsDisabled"
+						@click="onCancel"
+					/>
+					<SvsDialogBtnConfirm
+						v-if="!noConfirm"
+						:data-testid="`${testId}-confirm`"
+						:text-lang-key="confirmBtnLangKey"
+						:disabled="areActionsDisabled || confirmBtnDisabled"
+						@click="onConfirm"
+					/>
+				</slot>
+			</VCardActions>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
@@ -48,7 +47,6 @@ import SvsDialogBtnCancel from "./SvsDialogBtnCancel.vue";
 import SvsDialogBtnConfirm from "./SvsDialogBtnConfirm.vue";
 import { i18nKeyExists } from "@/plugins/i18n";
 import { useUid } from "@/utils/uid";
-import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { computed, useAttrs } from "vue";
 import { useI18n } from "vue-i18n";
 import { VCard, VDialog } from "vuetify/components";
