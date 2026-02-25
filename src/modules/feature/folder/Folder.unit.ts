@@ -45,116 +45,108 @@ type MockedAddCollaboraFile = Mocked<ReturnType<typeof useAddCollaboraFile>>;
 type MockedConfirmationDialog = Mocked<ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>>;
 type MockedBoardStore = Mocked<ReturnType<typeof BoardApi.useBoardStore>>;
 
-const createFolderStateMock = (overrides: Partial<MockedFolderState> = {}): MockedFolderState =>
-	({
-		breadcrumbs: ref([]) as unknown as ComputedRef,
-		fileFolderElement: ref(undefined),
-		folderName: ref("") as unknown as ComputedRef<string>,
-		pageTitle: ref("") as unknown as ComputedRef<string>,
-		parent: ref(undefined) as unknown as ComputedRef,
-		fetchFileFolderElement: vi.fn().mockResolvedValue(undefined),
-		mapNodeTypeToPathType: vi.fn().mockReturnValue("boards"),
-		renameFolder: vi.fn().mockResolvedValue(undefined),
-		...overrides,
-	}) as unknown as MockedFolderState;
+const createFolderStateMock = (overrides: Partial<MockedFolderState> = {}): MockedFolderState => ({
+	breadcrumbs: ref([]) as unknown as ComputedRef,
+	fileFolderElement: ref(undefined),
+	folderName: ref("") as unknown as ComputedRef<string>,
+	pageTitle: ref("") as unknown as ComputedRef<string>,
+	parent: ref(undefined) as unknown as ComputedRef,
+	fetchFileFolderElement: vi.fn().mockResolvedValue(undefined),
+	mapNodeTypeToPathType: vi.fn().mockReturnValue("boards"),
+	renameFolder: vi.fn().mockResolvedValue(undefined),
+	...overrides,
+});
 
-const createBoardPageInfoMock = (overrides: Partial<MockedBoardPageInfo> = {}): MockedBoardPageInfo =>
-	({
-		createPageInformation: vi.fn().mockResolvedValue(undefined),
-		breadcrumbs: ref([]) as unknown as ComputedRef,
-		contextType: ref(undefined) as unknown as ComputedRef,
-		pageTitle: ref("") as unknown as ComputedRef<string>,
-		roomId: ref(undefined) as unknown as ComputedRef,
-		resetPageInformation: vi.fn(),
-		...overrides,
-	}) as unknown as MockedBoardPageInfo;
+const createBoardPageInfoMock = (overrides: Partial<MockedBoardPageInfo> = {}): MockedBoardPageInfo => ({
+	createPageInformation: vi.fn().mockResolvedValue(undefined),
+	breadcrumbs: ref([]) as unknown as ComputedRef,
+	contextType: ref(undefined) as unknown as ComputedRef,
+	pageTitle: ref("") as unknown as ComputedRef<string>,
+	roomId: ref(undefined) as unknown as ComputedRef,
+	resetPageInformation: vi.fn(),
+	...overrides,
+});
 
-const createBoardApiMock = (overrides: Partial<MockedBoardApi> = {}): MockedBoardApi =>
-	({
-		fetchBoardCall: vi.fn().mockResolvedValue({}),
-		createColumnCall: vi.fn().mockResolvedValue({}),
-		createElementCall: vi.fn().mockResolvedValue({}),
-		deleteElementCall: vi.fn().mockResolvedValue(undefined),
-		deleteCardCall: vi.fn().mockResolvedValue(undefined),
-		deleteColumnCall: vi.fn().mockResolvedValue(undefined),
-		moveCardCall: vi.fn().mockResolvedValue(undefined),
-		moveCardToBoardCall: vi.fn().mockResolvedValue(undefined),
-		moveColumnCall: vi.fn().mockResolvedValue(undefined),
-		moveElementCall: vi.fn().mockResolvedValue(undefined),
-		updateBoardTitleCall: vi.fn().mockResolvedValue(undefined),
-		updateBoardVisibilityCall: vi.fn().mockResolvedValue(undefined),
-		updateReadersCanEditCall: vi.fn().mockResolvedValue(undefined),
-		updateCardHeightCall: vi.fn().mockResolvedValue(undefined),
-		updateCardTitle: vi.fn().mockResolvedValue(undefined),
-		updateColumnTitleCall: vi.fn().mockResolvedValue(undefined),
-		updateElementCall: vi.fn().mockResolvedValue(undefined),
-		createCardCall: vi.fn().mockResolvedValue({}),
-		duplicateCardCall: vi.fn().mockResolvedValue({}),
-		getContextInfo: vi.fn().mockResolvedValue({}),
-		updateBoardLayoutCall: vi.fn().mockResolvedValue(undefined),
-		getElementWithParentHierarchyCall: vi.fn().mockResolvedValue({}),
-		...overrides,
-	}) as unknown as MockedBoardApi;
+const createBoardApiMock = (overrides: Partial<MockedBoardApi> = {}): MockedBoardApi => ({
+	fetchBoardCall: vi.fn().mockResolvedValue({}),
+	createColumnCall: vi.fn().mockResolvedValue({}),
+	createElementCall: vi.fn().mockResolvedValue({}),
+	deleteElementCall: vi.fn().mockResolvedValue(undefined),
+	deleteCardCall: vi.fn().mockResolvedValue(undefined),
+	deleteColumnCall: vi.fn().mockResolvedValue(undefined),
+	moveCardCall: vi.fn().mockResolvedValue(undefined),
+	moveCardToBoardCall: vi.fn().mockResolvedValue(undefined),
+	moveColumnCall: vi.fn().mockResolvedValue(undefined),
+	moveElementCall: vi.fn().mockResolvedValue(undefined),
+	updateBoardTitleCall: vi.fn().mockResolvedValue(undefined),
+	updateBoardVisibilityCall: vi.fn().mockResolvedValue(undefined),
+	updateReadersCanEditCall: vi.fn().mockResolvedValue(undefined),
+	updateCardHeightCall: vi.fn().mockResolvedValue(undefined),
+	updateCardTitle: vi.fn().mockResolvedValue(undefined),
+	updateColumnTitleCall: vi.fn().mockResolvedValue(undefined),
+	updateElementCall: vi.fn().mockResolvedValue(undefined),
+	createCardCall: vi.fn().mockResolvedValue({}),
+	duplicateCardCall: vi.fn().mockResolvedValue({}),
+	getContextInfo: vi.fn().mockResolvedValue({}),
+	updateBoardLayoutCall: vi.fn().mockResolvedValue(undefined),
+	getElementWithParentHierarchyCall: vi.fn().mockResolvedValue({}),
+	...overrides,
+});
 
-const createFileStorageApiMock = (overrides: Partial<MockedFileStorageApi> = {}): MockedFileStorageApi =>
-	({
-		fetchFiles: vi.fn().mockResolvedValue(undefined),
-		rename: vi.fn().mockResolvedValue(undefined),
-		upload: vi.fn().mockResolvedValue(undefined),
-		uploadFromUrl: vi.fn().mockResolvedValue(undefined),
-		getFileRecordsByParentId: vi.fn().mockReturnValue([]),
-		getFileRecordById: vi.fn().mockReturnValue(undefined),
-		deleteFiles: vi.fn().mockResolvedValue(undefined),
-		getStatisticByParentId: vi.fn().mockReturnValue(undefined),
-		tryGetParentStatisticFromApi: vi.fn().mockResolvedValue(undefined),
-		getAuthorizedCollaboraDocumentUrl: vi.fn().mockResolvedValue(""),
-		fetchFileById: vi.fn().mockResolvedValue(undefined),
-		uploadCollaboraFile: vi.fn().mockResolvedValue({ id: "mock-file-id" }),
-		...overrides,
-	}) as unknown as MockedFileStorageApi;
+const createFileStorageApiMock = (overrides: Partial<MockedFileStorageApi> = {}): MockedFileStorageApi => ({
+	fetchFiles: vi.fn().mockResolvedValue(undefined),
+	rename: vi.fn().mockResolvedValue(undefined),
+	upload: vi.fn().mockResolvedValue(undefined),
+	uploadFromUrl: vi.fn().mockResolvedValue(undefined),
+	getFileRecordsByParentId: vi.fn().mockReturnValue([]),
+	getFileRecordById: vi.fn().mockReturnValue(undefined),
+	deleteFiles: vi.fn().mockResolvedValue(undefined),
+	getStatisticByParentId: vi.fn().mockReturnValue(undefined),
+	tryGetParentStatisticFromApi: vi.fn().mockResolvedValue(undefined),
+	getAuthorizedCollaboraDocumentUrl: vi.fn().mockResolvedValue(""),
+	fetchFileById: vi.fn().mockResolvedValue(undefined),
+	uploadCollaboraFile: vi.fn().mockResolvedValue({ id: "mock-file-id" }),
+	...overrides,
+});
 
-const createBoardPermissionsMock = (overrides: Partial<MockedBoardPermissions> = {}): MockedBoardPermissions =>
-	({
-		arePermissionsLoaded: ref(true) as unknown as ComputedRef<boolean>,
-		hasMovePermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasCreateCardPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasCreateColumnPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasCreateToolPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasEditPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasDeletePermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasManageBoardPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasRelocateBoardContentPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasManageReadersCanEditPermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasManageVideoConferencePermission: ref(true) as unknown as ComputedRef<boolean>,
-		hasShareBoardPermission: ref(true) as unknown as ComputedRef<boolean>,
-		isTeacher: ref(false) as unknown as ComputedRef<boolean>,
-		isStudent: ref(false) as unknown as ComputedRef<boolean>,
-		...overrides,
-	}) as unknown as MockedBoardPermissions;
+const createBoardPermissionsMock = (overrides: Partial<MockedBoardPermissions> = {}): MockedBoardPermissions => ({
+	arePermissionsLoaded: ref(true) as unknown as ComputedRef<boolean>,
+	hasMovePermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasCreateCardPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasCreateColumnPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasCreateToolPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasEditPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasDeletePermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasManageBoardPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasRelocateBoardContentPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasManageReadersCanEditPermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasManageVideoConferencePermission: ref(true) as unknown as ComputedRef<boolean>,
+	hasShareBoardPermission: ref(true) as unknown as ComputedRef<boolean>,
+	isTeacher: ref(false) as unknown as ComputedRef<boolean>,
+	isStudent: ref(false) as unknown as ComputedRef<boolean>,
+	...overrides,
+});
 
-const createAddCollaboraFileMock = (overrides: Partial<MockedAddCollaboraFile> = {}): MockedAddCollaboraFile =>
-	({
-		isCollaboraFileDialogOpen: ref(false),
-		openCollaboraFileDialog: vi.fn(),
-		closeCollaboraFileDialog: vi.fn(),
-		...overrides,
-	}) as unknown as MockedAddCollaboraFile;
+const createAddCollaboraFileMock = (overrides: Partial<MockedAddCollaboraFile> = {}): MockedAddCollaboraFile => ({
+	isCollaboraFileDialogOpen: ref(false),
+	openCollaboraFileDialog: vi.fn(),
+	closeCollaboraFileDialog: vi.fn(),
+	...overrides,
+});
 
-const createConfirmationDialogMock = (overrides: Partial<MockedConfirmationDialog> = {}): MockedConfirmationDialog =>
-	({
-		askDeleteConfirmation: vi.fn().mockResolvedValue(false),
-		isDeleteDialogOpen: ref(false),
-		...overrides,
-	}) as unknown as MockedConfirmationDialog;
+const createConfirmationDialogMock = (overrides: Partial<MockedConfirmationDialog> = {}): MockedConfirmationDialog => ({
+	askDeleteConfirmation: vi.fn().mockResolvedValue(false),
+	isDeleteDialogOpen: ref(false),
+	...overrides,
+});
 
 const createBoardStoreMock = (overrides: Partial<MockedBoardStore> = {}): MockedBoardStore =>
 	({
-		board: undefined,
-		isLoading: false,
-		isReady: vi.fn().mockReturnValue(true),
+		board: ref(undefined),
+		isLoading: ref(false),
 		fetchBoardRequest: vi.fn().mockResolvedValue(undefined),
 		...overrides,
-	}) as unknown as MockedBoardStore;
+	}) as MockedBoardStore;
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
