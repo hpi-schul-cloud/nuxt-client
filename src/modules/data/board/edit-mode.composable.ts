@@ -1,4 +1,4 @@
-import { useBoardAllowedOperations } from "./boardAllowedOperations.composable";
+import { useBoardAllowedOperations } from "./board-allowed-operations.composable";
 import { createSharedComposable } from "@vueuse/core";
 import { computed, ComputedRef, Ref, ref } from "vue";
 

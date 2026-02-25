@@ -11,7 +11,7 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { useForceRender } from "./fixSamePositionDnD.composable";
 import { useSocketConnection } from "./socket/socket";
 
-export { useBoardAllowedOperations } from "./boardAllowedOperations.composable";
+export { useBoardAllowedOperations } from "./board-allowed-operations.composable";
 export * from "./cardActions/cardActionPayload.types";
 export * from "./edit-mode.composable";
 

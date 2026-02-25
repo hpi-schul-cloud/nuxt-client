@@ -1,8 +1,8 @@
-import { useBoardAllowedOperations } from "./boardAllowedOperations.composable";
+import { useBoardAllowedOperations } from "./board-allowed-operations.composable";
 import { useCourseBoardEditMode, useMediaBoardEditMode } from "./edit-mode.composable";
 import { computed, Ref, ref } from "vue";
 
-vi.mock("./boardAllowedOperations.composable");
+vi.mock("./board-allowed-operations.composable");
 const mockedUseBoardAllowedOperations = vi.mocked(useBoardAllowedOperations);
 
 describe("edit-mode.composable", () => {

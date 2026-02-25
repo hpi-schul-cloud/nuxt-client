@@ -44,7 +44,7 @@ const useRouterMock = <Mock>useRouter;
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
 
-vi.mock("@data-board/BoardAllowedOperations.composable");
+vi.mock("@data-board/board-allowed-operations.composable");
 
 vi.mock("@feature-collabora/composables/add-collabora-file.composable");
 const mockedUseAddCollaboraFile = vi.mocked(useAddCollaboraFile);

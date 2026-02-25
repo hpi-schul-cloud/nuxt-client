@@ -37,7 +37,7 @@ import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, toValue, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -52,7 +52,7 @@ const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const fabAction = computed(() => {
-	const canCreateRoom = useAppStore().hasPermissionNow(Permission.SchoolCreateRoom);
+	const canCreateRoom = toValue(useAppStore().hasPermission(Permission.SchoolCreateRoom));
 	if (!canCreateRoom) return;
 
 	return [

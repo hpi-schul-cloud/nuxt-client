@@ -18,7 +18,7 @@ vi.mock("vue-router");
 vi.mock("./SharedElementTypeSelection.composable");
 vi.mock("./add-collabora-file.composable");
 
-vi.mock("@data-board/BoardAllowedOperations.composable");
+vi.mock("@data-board/board-allowed-operations.composable");
 const mockedUseBoardAllowedOperations = vi.mocked(useBoardAllowedOperations);
 
 vi.mock("@/utils/inject");

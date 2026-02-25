@@ -31,7 +31,7 @@
 						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
 						:has-edit-permission="allowedOperations?.updateCardTitle"
-						@update:value="onUpdateCardTitle($event, cardId)"
+						@update:value="onUpdateCardTitle"
 						@enter="onEnter"
 					/>
 
@@ -90,7 +90,7 @@
 			@move-keyboard:element="onMoveContentElementKeyboard"
 			@add:element="onAddElement"
 			@enter:title="onEnter"
-			@update:title="(newTitle) => onUpdateCardTitle(newTitle, cardId)"
+			@update:title="onUpdateCardTitle"
 			@close:detail-view="onCloseDetailView"
 		/>
 	</div>
@@ -181,12 +181,11 @@ const onShareCard = () => {
 	emit("share:card", props.cardId);
 };
 
-const _updateCardTitle = (newTitle: string, cardId: string) => {
-	cardStore.updateCardTitleRequest({ newTitle, cardId });
+const _updateCardTitle = (newTitle: string) => {
+	cardStore.updateCardTitleRequest({ newTitle, cardId: props.cardId });
 };
-
 const _debouncedUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
-const onUpdateCardTitle = (newTitle: string, cardId: string) => _debouncedUpdateCardTitle(newTitle, cardId);
+const onUpdateCardTitle = (newTitle: string) => _debouncedUpdateCardTitle(newTitle);
 
 const onDeleteCard = async (confirmation: Promise<boolean>) => {
 	stopEditMode();

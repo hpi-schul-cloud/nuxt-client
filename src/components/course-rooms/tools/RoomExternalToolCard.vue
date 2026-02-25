@@ -108,7 +108,7 @@ const menuItems = [
 	},
 ];
 
-const canAdministrationTools = () => useAppStore().hasPermission(Permission.ContextToolAdmin);
+const canAdministrateTools = () => useAppStore().hasPermission(Permission.ContextToolAdmin);
 
 const isDeepLinkingTool: ComputedRef = computed(() => !!props.tool.isLtiDeepLinkingTool);
 
@@ -127,7 +127,7 @@ const toolName: ComputedRef = computed(() => {
 });
 
 const showTool: ComputedRef = computed(
-	() => !(isDeepLinkingTool.value && !hasDeepLink.value && !canAdministrationTools())
+	() => !(isDeepLinkingTool.value && !hasDeepLink.value && !canAdministrateTools())
 );
 
 const isToolOutdated: ComputedRef = computed(
@@ -137,7 +137,7 @@ const isToolOutdated: ComputedRef = computed(
 const isToolIncomplete: ComputedRef = computed(() => props.tool.status.isIncompleteOnScopeContext);
 
 const showAsIncompleteOperational: ComputedRef = computed(
-	() => props.tool.status.isIncompleteOperationalOnScopeContext && canAdministrationTools()
+	() => props.tool.status.isIncompleteOperationalOnScopeContext && canAdministrateTools()
 );
 
 const isToolDeactivated: ComputedRef = computed(() => props.tool.status.isDeactivated);

@@ -191,7 +191,6 @@ describe("Board", () => {
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_SHARE: true,
-			// FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true,
 			...(options?.envs ?? {}),
 		});
 
@@ -394,8 +393,6 @@ describe("Board", () => {
 
 		describe("when user has edit permission", () => {
 			it("should not be rendered on DOM", () => {
-				// mockedBoardPermissions.hasEditPermission = ref(true);
-
 				const { wrapper } = setup({ allowedOperations: { createColumn: true } });
 
 				const ghostColumnComponent = wrapper.findComponent({
@@ -408,8 +405,6 @@ describe("Board", () => {
 
 		describe("when user doesn't have create column permission", () => {
 			it("should not be rendered on DOM", () => {
-				// mockedBoardPermissions.hasCreateColumnPermission = ref(false);
-
 				const { wrapper } = setup();
 
 				const ghostColumnComponent = wrapper.findComponent({
@@ -446,7 +441,6 @@ describe("Board", () => {
 	describe("user permissions", () => {
 		describe("when user is not permitted to move", () => {
 			it("should set drag-disabled", () => {
-				// mockedBoardPermissions.hasMovePermission = ref(false);
 				const { wrapper } = setup();
 
 				const dndContainer = wrapper.findComponent({ name: "Sortable" });
@@ -457,7 +451,6 @@ describe("Board", () => {
 		describe("@onCreateCard", () => {
 			describe("when user is permitted to create card", () => {
 				it("should call the createCard method", () => {
-					// mockedBoardPermissions.hasCreateCardPermission = ref(true);
 					const { wrapper, boardStore } = setup({ allowedOperations: { createCard: true } });
 
 					const columnComponent = wrapper.findComponent({
@@ -471,7 +464,6 @@ describe("Board", () => {
 
 			describe("when user is not permitted to create card", () => {
 				it("should not call the createCard method", () => {
-					// mockedBoardPermissions.hasCreateCardPermission = ref(false);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -581,7 +573,6 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					// mockedBoardPermissions.hasMovePermission = ref(false);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const containerComponent = wrapper.findAllComponents({
@@ -871,8 +862,6 @@ describe("Board", () => {
 		describe("readersCanEdit", () => {
 			describe("when set/unset the board for the user with the 'read' permission", () => {
 				it("should call updateReaderCanEditRequest with correct payload", async () => {
-					// mockedBoardPermissions.hasManageBoardPermission = ref(false);
-					// mockedBoardPermissions.arePermissionsLoaded = ref(true);
 					const { wrapper, boardStore } = setup({
 						isBoardVisible: true,
 						envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },

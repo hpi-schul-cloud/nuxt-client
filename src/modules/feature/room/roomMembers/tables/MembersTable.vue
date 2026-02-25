@@ -78,7 +78,7 @@ const { room, fetchRoom } = useRoomDetailsStore();
 const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 
-const { removeMembers } = roomMembersStore;
+const { fetchMembers, removeMembers } = roomMembersStore;
 const { askConfirmation } = useConfirmationDialog();
 
 const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
@@ -86,6 +86,7 @@ const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
 const onDialogClose = () => {
+	fetchMembers();
 	isChangeRoleDialogOpen.value = false;
 
 	setTimeout(() => {
