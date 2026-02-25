@@ -10,7 +10,7 @@ export type UserCreatingData = {
 	lastName: string;
 	email: string;
 	roles: [RoleName.Teacher] | [RoleName.Student];
-	schoolId: string | undefined;
+	schoolId: string;
 	sendRegistration: boolean;
 	generateRegistrationLink?: boolean;
 	birthday?: Date;

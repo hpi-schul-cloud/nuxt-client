@@ -123,6 +123,7 @@ describe("teachers/index", () => {
 			},
 			error: null,
 		}),
+		list: ref([]),
 	});
 
 	beforeEach(() => {
@@ -179,6 +180,8 @@ describe("teachers/index", () => {
 				skip: 0,
 				total: 2,
 			}),
+			qrLinks: ref([]),
+			registrationLinks: ref([]),
 		});
 	});
 

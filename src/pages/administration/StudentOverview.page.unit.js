@@ -133,6 +133,7 @@ describe("students/index", () => {
 			},
 			error: null,
 		}),
+		list: ref([]),
 	});
 
 	beforeEach(() => {
@@ -184,6 +185,8 @@ describe("students/index", () => {
 				skip: 0,
 				total: 2,
 			}),
+			qrLinks: ref([]),
+			registrationLinks: ref([]),
 		});
 
 		askConfirmationMock = vi.fn();

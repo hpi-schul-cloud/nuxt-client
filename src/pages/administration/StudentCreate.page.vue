@@ -47,7 +47,7 @@ const { t } = useI18n();
 const { createUser } = useUsers(RoleName.Student);
 const router = useRouter();
 
-const date = ref<Date | undefined>(undefined);
+const date = ref<string | undefined>(undefined);
 const minDate = inputRangeDate(-100, "y");
 const maxDate = inputRangeDate(-4, "y");
 const sendRegistration = ref(false);
@@ -69,9 +69,9 @@ const createStudentHandler = async (userData: UserCreatingData) => {
 		firstName: userData.firstName,
 		lastName: userData.lastName,
 		email: userData.email,
-		birthday: date?.value,
+		birthday: new Date(date.value ?? ""),
 		roles: [RoleName.Student],
-		schoolId: useAppStore().school?.id,
+		schoolId: useAppStore().school?.id ?? "",
 		sendRegistration: sendRegistration.value,
 	});
 	if (error) {
