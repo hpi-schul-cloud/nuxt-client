@@ -281,7 +281,6 @@ export default defineComponent({
 				{
 					label: this.t("pages.administration.students.index.tableActions.delete"),
 					icon: mdiDeleteOutline,
-					//action: this.handleBulkDelete,
 					action: this.openDeleteDialog,
 					permission: Permission.StudentDelete,
 					dataTestId: "delete_action",
