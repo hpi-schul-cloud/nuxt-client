@@ -130,7 +130,7 @@ describe("NewsEditPage", () => {
 			expect(useNewsMockReturn.updateNews).toHaveBeenCalledWith(updateParams);
 		});
 
-		it("should navigate to news detail pagen when update is successful", async () => {
+		it("should navigate to news detail page when update is successful", async () => {
 			const { wrapper, news } = setup({ status: "completed" });
 			const formNews = wrapper.getComponent(FormNews);
 			const updateParams = {
