@@ -13,7 +13,6 @@
 		@keydown.stop.up.down="onKeydownArrow"
 		@keyup.enter="onContentEnter"
 	>
-		{{ isStudent }}
 		<VideoConferenceContentElementDisplay
 			v-if="computedElement.content.title"
 			:board-parent-type="boardParentType"

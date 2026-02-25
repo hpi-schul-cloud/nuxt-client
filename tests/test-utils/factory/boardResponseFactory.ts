@@ -1,7 +1,6 @@
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { BoardLayout, BoardResponse, BoardResponseAllowedOperations } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import {} from "vue";
 
 export const boardResponseFactory = Factory.define<BoardResponse>(({ sequence, params }) => ({
 	id: `board${sequence}`,
