@@ -62,6 +62,7 @@ const createTeacherHandler = async (teacherData: UserCreatingData) => {
 	});
 	if (error) {
 		businessError.value = true;
+		return;
 	}
 	router.push("/administration/teachers");
 };

@@ -51,8 +51,42 @@ describe("teachers/new", () => {
 		return { wrapper };
 	};
 
-	it("should call 'createTeacher' action", async () => {
+	describe("create teacher", () => {
+		it("should call 'createTeacher' action", async () => {
+			useUsersMockHandler.createUser = vi.fn().mockResolvedValue({ error: false, result: {} });
+			const { wrapper } = setup();
+
+			const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
+			const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
+			const inputEmail = wrapper.find('[data-testid="input_create-user_email"] input');
+
+			await inputFirstName.setValue("Klara");
+			await inputLastName.setValue("Fall");
+			await inputEmail.setValue("klara.fall@mail.de");
+			await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
+
+			const expectedPayload = {
+				firstName: "Klara",
+				lastName: "Fall",
+				email: "klara.fall@mail.de",
+				generateRegistrationLink: true,
+				roles: ["teacher"],
+				schoolId: "school-1",
+				sendRegistration: false,
+			};
+
+			await flushPromises();
+			expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
+			expect(router.push).toHaveBeenCalledWith("/administration/teachers");
+		});
+	});
+
+	it("should set businessError to true if there is an error", async () => {
+		useUsersMockHandler.createUser = vi.fn().mockResolvedValue({ error: true, result: {} });
 		const { wrapper } = setup();
+		const infoMessageBefore = wrapper.findComponent({ name: "InfoMessage" });
+
+		expect(infoMessageBefore.exists()).toBe(false);
 
 		const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
 		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
@@ -63,18 +97,11 @@ describe("teachers/new", () => {
 		await inputEmail.setValue("klara.fall@mail.de");
 		await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
 
-		const expectedPayload = {
-			firstName: "Klara",
-			lastName: "Fall",
-			email: "klara.fall@mail.de",
-			generateRegistrationLink: true,
-			roles: ["teacher"],
-			schoolId: "school-1",
-			sendRegistration: false,
-		};
-
 		await flushPromises();
-		expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
-		expect(router.push).toHaveBeenCalledWith("/administration/teachers");
+
+		const infoMessageAfter = wrapper.findComponent({ name: "InfoMessage" });
+		expect(infoMessageAfter.exists()).toBe(true);
+		expect(useUsersMockHandler.createUser).toHaveBeenCalled();
+		expect(router.push).not.toHaveBeenCalled();
 	});
 });
