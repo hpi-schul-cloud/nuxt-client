@@ -35,7 +35,6 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_SHOW_MIGRATION_WIZARD: false,
 	FEATURE_TLDRAW_ENABLED: false,
 	ALERT_STATUS_URL: null,
-	FEATURE_EXTENSIONS_ENABLED: false,
 	FEATURE_TEAMS_ENABLED: false,
 	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 	TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
@@ -93,6 +92,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const envFile = reactive<FilesStorageConfigResponse>({
 		MAX_FILE_SIZE: 2684354560,
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
+		FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
 	});
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
 

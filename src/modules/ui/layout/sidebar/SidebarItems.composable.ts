@@ -13,7 +13,6 @@ import {
 	mdiFormatListChecks,
 	mdiHelpCircleOutline,
 	mdiNewspaperVariantOutline,
-	mdiPuzzleOutline,
 	mdiSchoolOutline,
 	mdiViewGridOutline,
 } from "@icons/material";
@@ -103,13 +102,6 @@ export const useSidebarItems = () => {
 			icon: mdiBookshelf,
 			feature: "FEATURE_MEDIA_SHELF_ENABLED",
 			testId: "sidebar-mediashelf",
-		},
-		{
-			title: "global.sidebar.item.addons",
-			href: "/addons",
-			icon: mdiPuzzleOutline,
-			feature: "FEATURE_EXTENSIONS_ENABLED",
-			testId: "sidebar-addons",
 		},
 	]);
 
