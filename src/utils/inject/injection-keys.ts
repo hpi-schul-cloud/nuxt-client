@@ -1,6 +1,5 @@
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import CourseRoomListModule from "@/store/course-room-list";
@@ -8,13 +7,11 @@ import FilePathsModule from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
 import GroupModule from "@/store/group";
 import NewsModule from "@/store/news";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { InjectionKey } from "vue";
@@ -28,14 +25,11 @@ export const USER_LOGIN_MIGRATION_MODULE_KEY: InjectionKey<UserLoginMigrationMod
 	Symbol("userLoginMigrationModule");
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> = Symbol("systemsModule");
 export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule");
-export const PRIVACY_POLICY_MODULE_KEY: InjectionKey<PrivacyPolicyModule> = Symbol("privacyPolicyModule");
-export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> = Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
 	Symbol("commonCartridgeExportModule");
 export const COURSE_ROOM_LIST_MODULE_KEY: InjectionKey<CourseRoomListModule> = Symbol("courseRoomListModule");
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");
-export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> = Symbol("contentModule");
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const COMMON_CARTRIDGE_IMPORT_MODULE_KEY: InjectionKey<CommonCartridgeImportModule> =
 	Symbol("commonCartridgeImportModule");

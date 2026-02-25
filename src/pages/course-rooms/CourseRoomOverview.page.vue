@@ -14,7 +14,6 @@
 					v-model="allowDragging"
 					class="enable-disable"
 					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>
@@ -22,16 +21,13 @@
 		</template>
 		<template #page-content>
 			<div>
-				<v-text-field
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
-					class="room-search px-1"
-					variant="solo"
-					rounded
-					single-line
+					density="default"
+					class="px-1 mb-6"
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
 				<div v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex" class="room-overview-row">
@@ -122,7 +118,8 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { mdiCheck, mdiMagnify } from "@icons/material";
+import { mdiCheck } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
@@ -133,8 +130,8 @@ export default defineComponent({
 		RoomEmptyAvatar: CourseRoomEmptyAvatar,
 		RoomModal: CourseRoomModal,
 		ImportFlow,
+		SvsSearchField,
 	},
-	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 
@@ -167,7 +164,6 @@ export default defineComponent({
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
-			mdiMagnify,
 			searchText: "",
 			dragging: false,
 			allowDragging: false,

@@ -1,14 +1,13 @@
-import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
-import Vue from "@vitejs/plugin-vue";
-import { defineConfig, type UserConfig } from "vite";
-import VueDevTools from "vite-plugin-vue-devtools";
-import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { DevServerProxy } from "./config/vite/dev-server-proxy-plugin";
 import { CspNoncePlaceholder } from "./config/vite/nonce-placeholder-plugin";
 import { generateAliases } from "./config/vite/theme-aliases";
 import { ThemeResolver } from "./config/vite/theme-resolver-plugin";
 import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
+import Vue from "@vitejs/plugin-vue";
+import { defineConfig, type UserConfig } from "vite";
 import Checker from "vite-plugin-checker";
+import VueDevTools from "vite-plugin-vue-devtools";
+import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 	const replacements = await generateAliases(__dirname);
@@ -31,9 +30,6 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 					configFile: "src/styles/settings.scss",
 				},
 			}),
-			VueI18nPlugin({
-				include: "src/locales/!(schema).ts",
-			}),
 			DevServerProxy(),
 			ThemeResolver(replacements),
 			CspNoncePlaceholder("**CSP_NONCE**"),
@@ -51,7 +47,6 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 			include: [
 				"axios",
 				"dayjs",
-				"object-hash",
 				"sortablejs",
 				"socket.io-client",
 				"focus-trap",

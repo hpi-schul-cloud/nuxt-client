@@ -182,12 +182,18 @@ export default {
 	"common.tool.context.type.boardElements": "Boards",
 	"common.tool.context.type.mediaShelves": "Media shelf",
 	"common.validation.email": "Please enter a valid email address",
+	"common.validation.file": "Please upload a file {fileHint}",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
+	"common.validation.password.upperCase": "The password must contain at least one upper case letter.",
+	"common.validation.password.lowerCase": "The password must contain at least one lower case letter.",
+	"common.validation.password.number": "The password must contain at least one number.",
+	"common.validation.password.specialCharacter": "The password must contain at least one special character.",
 	"common.validation.regex": "The input must conform to the following rule: {comment}.",
 	"common.validation.required": "Please fill out this field",
 	"common.validation.required2": "This is a mandatory field.",
 	"common.validation.tooLong": "The text you entered exceeds the maximum length",
+	"common.validation.tooShort": "The text you entered is below the minimum length",
 	"common.validation.containsOpeningTag": "Please insert a space after the less-than sign.",
 	"common.validation.nonEmptyString": "This is a mandatory field and must not contain only spaces.",
 	"common.words.also": "also",
@@ -220,7 +226,6 @@ export default {
 	"common.words.languages.es": "Spanish",
 	"common.words.languages.uk": "Ukrainian",
 	"common.words.learnContent": "Learning content",
-	"common.words.lernstore": "Learning Store",
 	"common.words.mainSchool": "Main School",
 	"common.words.no": "No",
 	"common.words.not": "not",
@@ -648,8 +653,6 @@ export default {
 	"components.molecules.copyResult.title.partial": "Important duplication information",
 	"components.molecules.copyResult.title.success": "Duplication successful",
 	"components.molecules.copyResult.followingNotCopied": "The following was not copied:",
-	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
-	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.card.options.title": "Import card",
 	"components.molecules.import.columnBoard.label": "Board title",
 	"components.molecules.label.room": "Select room",
@@ -1235,7 +1238,6 @@ export default {
 	"pages.administration.school.index.info":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {instituteTitle}.",
 	"pages.administration.school.index.privacySettings.labels.chatFunction": "Activate chat function",
-	"pages.administration.school.index.privacySettings.labels.lernStore": "Learning Store for students",
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activate student visibility for teachers",
 	"pages.administration.school.index.privacySettings.labels.videoConference": "Activate video conferencing",
@@ -1244,8 +1246,6 @@ export default {
 		"If chats are enabled at your school, team administrators can selectively unlock the chat function respectively for their team.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
 		"This is an instance-wide, non-editable setting that controls the visibility of students to teachers.",
-	"pages.administration.school.index.privacySettings.longText.lernStore":
-		"If unchecked, students will not be able to access the Learning Store",
 	"pages.administration.school.index.privacySettings.longText.studentVisibility":
 		"Activating this option has a high threshold under data protection law. In order to activate the visibility of all students in the school for each teacher, it is necessary that each student has effectively consented to this data processing.",
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg":
@@ -1267,7 +1267,8 @@ export default {
 	"pages.administration.school.index.schoolPolicy.edit": "Edit Privacy Policy",
 	"pages.administration.school.index.schoolPolicy.error": "An error occurred while loading the privacy policy",
 	"pages.administration.school.index.schoolPolicy.fileName": "Privacy Policy of the school",
-	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Upload file (PDF only, 4MB max)",
+	"pages.administration.school.index.schoolPolicy.hints.uploadFile": "Upload file {fileHint}",
+	"pages.administration.school.index.schoolPolicy.fileHint": "(PDF only, 4 MB max)",
 	"pages.administration.school.index.schoolPolicy.labels.uploadFile": "Select file",
 	"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent":
 		"The new Privacy Policy will irretrievably replace the old one and will be presented to all users of this school for approval.",
@@ -1276,7 +1277,7 @@ export default {
 	"pages.administration.school.index.schoolPolicy.success": "New file was successfully uploaded.",
 	"pages.administration.school.index.schoolPolicy.uploadedOn": "Uploaded {date}",
 	"pages.administration.school.index.schoolPolicy.validation.fileTooBig":
-		"The file is larger than 4MB. Please reduce the file size",
+		"The file is larger than 4 MB. Please reduce the file size",
 	"pages.administration.school.index.schoolPolicy.validation.notPdf":
 		"This file format is not supported. Please use PDF only",
 	"pages.administration.school.index.termsOfUse.cancel": "Cancel",
@@ -1288,7 +1289,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Edit Terms of Use",
 	"pages.administration.school.index.termsOfUse.error": "An error occurred while loading the terms of use",
 	"pages.administration.school.index.termsOfUse.fileName": "Terms of Use of the school",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file (PDF only, 4MB max)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(PDF only, 4 MB max)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Select file",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"The new Terms of Use will irretrievably replace the old one and will be presented to all users of this school for approval.",
@@ -1297,7 +1299,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "New file was successfully uploaded.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Uploaded {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"The file is larger than 4MB. Please reduce the file size",
+		"The file is larger than 4 MB. Please reduce the file size",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"This file format is not supported. Please use PDF only",
 	"pages.administration.school.index.title": "Manage school",
@@ -1360,11 +1362,10 @@ export default {
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
-	"pages.administration.students.index.searchbar.placeholder": "Schüler:innen durchsuchen nach",
+	"pages.administration.students.index.searchbar.ariaLabel": "Search students by name",
+	"pages.administration.students.index.searchbar.placeholder": "Search students",
 	"pages.administration.students.index.tableActions.consent": "Analogue consent form",
 	"pages.administration.students.index.tableActions.delete": "Delete",
 	"pages.administration.students.index.tableActions.email": "Send registration links by e-mail",
@@ -1427,14 +1428,13 @@ export default {
 	"pages.administration.teachers.index.remove.confirm.btnText": "Delete teacher",
 	"pages.administration.teachers.index.remove.confirm.message.all": "Are you sure you want to delete all teachers?",
 	"pages.administration.teachers.index.remove.confirm.message.many":
-		"Are you sure you want to delete all techers except {number}?",
+		"Are you sure you want to delete all teachers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher? | Are you sure you want to delete this {number} of teachers?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these teachers will remain visible in the table.",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
-	"pages.administration.teachers.index.searchbar.placeholder": "Search",
+	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",
+	"pages.administration.teachers.index.searchbar.placeholder": "Search teachers",
 	"pages.administration.teachers.index.tableActions.consent": "Analogue consent form",
 	"pages.administration.teachers.index.tableActions.delete": "Delete",
 	"pages.administration.teachers.index.tableActions.email": "Send registration links by e-mail",
@@ -1453,63 +1453,6 @@ export default {
 		"Moderation rights for all participants",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute": "Mute participants on entering",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom": "Activate waiting room for participants",
-	"pages.content._id.addToTopic": "To be added to",
-	"pages.content._id.collection.selectElements": "Select the items you want to add to the topic",
-	"pages.content._id.metadata.author": "Author",
-	"pages.content._id.metadata.createdAt": "requested at",
-	"pages.content._id.metadata.noTags": "No tags",
-	"pages.content._id.metadata.provider": "Publisher",
-	"pages.content._id.metadata.updatedAt": "Last modified on",
-	"pages.content.card.collection": "Collection",
-	"pages.content.emptyState.error.message.suggestions": "Suggestion:",
-	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
-		"The search query should contain at least 2 characters.",
-	"pages.content.emptyState.error.message.suggestions.correctSpelling": "Check if all words are spelled correctly.",
-	"pages.content.emptyState.error.message.suggestions.otherSearchTerms": "Try out other search queries.",
-	"pages.content.emptyState.error.message.suggestions.generalSearchTerms": "Try out more common queries.",
-	"pages.content.emptyState.error.message.suggestions.lessSearchTerms": "Try to use a shorter query.",
-	"pages.content.emptyState.error.title": "Whoops, no results!",
-	"pages.content.index.backToCourse": "Back to the Course",
-	"pages.content.index.backToOverview": "Back to Overview",
-	"pages.content.index.search_for": "Search for...",
-	"pages.content.index.search_resources": "Resources",
-	"pages.content.index.search_results": "Search results for",
-	"pages.content.index.search.placeholder": "Search Learning store",
-	"pages.content.initState.description": "Here you find high quality content adapted to your federal state.",
-	"pages.content.initState.description.newMaterials":
-		"Our team is constantly developing new materials to further improve your learning experience.",
-	"pages.content.initState.description.hint": "Note:",
-	"pages.content.initState.description.hint.materials":
-		"The materials displayed in the Learning Store are not located on our server, but are made available via interfaces to other servers (sources include individual educational servers, WirLernenOnline, Mundo, etc.).",
-	"pages.content.initState.description.hint.availability":
-		"For this reason, our team has no influence on the permanent availability of individual materials and on the full range of materials offered by the individual sources.",
-	"pages.content.initState.description.usage":
-		"In the context of use in educational institutions, copying of the online media to storage media, to a private end device or to learning platforms for a closed circle of users is permitted if necessary, insofar as this is required for internal distribution and/or use.",
-	"pages.content.initState.description.usage.deleteHint":
-		"After completion of the work with the respective online media, these are to be deleted from the private end devices, data carriers and learning platforms; at the latest when leaving the educational institution.",
-	"pages.content.initState.description.usage.notPermitted":
-		"A fundamental publication (e.g. on the internet) of the online media or with parts of it newly produced new and/or edited works is generally not permitted or requires the consent of the rights owner.",
-	"pages.content.initState.title": "Welcome to the Learning Store!",
-	"pages.content.label.chooseACourse": "Select a course/subject",
-	"pages.content.label.chooseALessonTopic": "Choose a lesson topic",
-	"pages.content.label.deselect": "Remove",
-	"pages.content.label.select": "Select",
-	"pages.content.label.selected": "Active",
-	"pages.content.material.leavePageWarningFooter":
-		"The use of these offers may be subject to other legal conditions. Therefore, please take a look at the privacy policy of the external provider!",
-	"pages.content.material.leavePageWarningMain":
-		"Note: Clicking the link will take you away from Schul-Cloud Brandenburg",
-	"pages.content.material.showMaterialHint": "Note: Use the left side of the display to access the content.",
-	"pages.content.material.showMaterialHintMobile": "Note: Use the above element of the display to access the content.",
-	"pages.content.material.toMaterial": "Material",
-	"pages.content.notification.errorMsg": "Something has gone wrong. Material could not be added.",
-	"pages.content.notification.lernstoreNotAvailable": "Learning Store is not available",
-	"pages.content.notification.loading": "Material is added",
-	"pages.content.notification.successMsg": "Material was successfully added",
-	"pages.content.page.window.title": "Create topic - {instance} - Your digital learning environment",
-	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
-	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
-	"pages.content.preview_img.alt": "Image preview",
 	"pages.courseRoomDetails.fab.add.tool": "Add tool",
 	"pages.courseRoomDetails.fab.add.learnContent": "Create learning content",
 	"pages.courseRoomDetails.fab.add.board": "New board",
@@ -1546,16 +1489,6 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.lernstore.info.banner.title": "In the future, the media will be accessible via the media shelf",
-	"pages.lernstore.info.banner.helpLinkText": "help pages",
-	"pages.lernstore.info.banner.item.0.brb":
-		"From now on, the media libraries from learning store (Mundo, Wir lernen online and FWU-Media) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.n21":
-		"From now on, the media libraries from learning store (Mundo and Wir lernen online) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
-	"pages.lernstore.info.banner.item.0.thr":
-		"From now on, the media libraries from learning store (Mundo, Wir lernen online and Mediothek/Pixiothek) are available via the media shelf, and the contents can be integrated into areas as a tool. Further information on the extended search and filter options as well as the integration of content via deep links can be found on the {helpLinkText}.",
-	"pages.lernstore.info.banner.item.1":
-		"The learning store will therefore be shut down in week 10 (03/04/2026). Learning store content already integrated into topics will remain available.",
 	"pages.registrationExternalMembers.error.failedCompleteRegistration":
 		"Registration could not be completed. Please try again later.",
 	"pages.registrationExternalMembers.error.failedFetchRegistrations":
@@ -1605,14 +1538,6 @@ export default {
 	"pages.registrationExternalMembers.steps.password.validation.required": "Please enter a password.",
 	"pages.registrationExternalMembers.steps.password.validation.minLength":
 		"The password must be at least 8 characters long.",
-	"pages.registrationExternalMembers.steps.password.validation.upperCase":
-		"The password must contain at least one uppercase letter.",
-	"pages.registrationExternalMembers.steps.password.validation.lowerCase":
-		"The password must contain at least one lowercase letter.",
-	"pages.registrationExternalMembers.steps.password.validation.number":
-		"The password must contain at least one number.",
-	"pages.registrationExternalMembers.steps.password.validation.specialCharacter":
-		"The password must contain at least one special character.",
 	"pages.registrationExternalMembers.steps.password.validation.passwordsMatch": "The passwords do not match.",
 	"pages.registrationExternalMembers.steps.registration.heading": "Registration successful",
 	"pages.registrationExternalMembers.steps.language.heading": "Please select your language",
@@ -1672,7 +1597,6 @@ export default {
 	"pages.rooms.members.dialog.addExternalPerson.steps.details.text":
 		"Please enter the first and last name of the external person. The person will receive an e-mail with a registration link for {applicationName}. As soon as they have created an account, they will automatically be added to the room.",
 	"pages.rooms.members.dialog.addExternalPerson.label.email": "E-mail address",
-	"pages.rooms.members.dialog.addExternalPerson.label.email.error": "Please enter a valid e-mail address",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName": "First name",
 	"pages.rooms.members.dialog.addExternalPerson.label.firstName.error": "Please enter a first name",
 	"pages.rooms.members.dialog.addExternalPerson.label.lastName": "Last name",
@@ -1923,6 +1847,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymized)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Room members {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Room members “{roomName}”",
+	"pages.security.headline": "Report security problem",
+	"pages.security.text":
+		"The dBildungscloud regularly undergoes security checks and penetration tests, as the security of our users' data is very important to us. You still found a security problem? Write to us so that we can close the gap as soon as possible: ",
+
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",

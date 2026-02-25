@@ -8,28 +8,23 @@ import { initializeAxios } from "./utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	CONTENT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	NEWS_MODULE_KEY,
-	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
 	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
-import { mountBaseComponents } from "@/components/base/components";
 import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
-	contentModule,
 	copyModule,
 	courseRoomDetailsModule,
 	courseRoomListModule,
@@ -38,13 +33,11 @@ import {
 	groupModule,
 	importUsersModule,
 	newsModule,
-	privacyPolicyModule,
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
 	systemsModule,
 	tasksModule,
-	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
@@ -62,8 +55,6 @@ export const app = createApp(App);
 
 const pinia = createPinia();
 app.use(pinia);
-
-mountBaseComponents(app);
 
 // app.config.productionTip = false;
 
@@ -87,7 +78,6 @@ app.use(VueDOMPurifyHTML, {
 	const success = await useEnvStore().loadConfiguration();
 
 	if (success) {
-		contentModule.init();
 		filePathsModule.init();
 	}
 
@@ -106,7 +96,6 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
@@ -114,8 +103,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
 	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
-	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
-	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
+
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
 	app.provide("CourseRoomListModule", courseRoomListModule);
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);

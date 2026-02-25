@@ -5,22 +5,12 @@
 				{{ t("pages.fwu-media.title") }}
 			</h1>
 		</template>
-
 		<template #default>
 			<div v-if="debouncedIsLoading" class="d-flex mt-10 justify-center align-center">
 				<VProgressCircular indeterminate size="115" />
 			</div>
 			<template v-else>
-				<VTextField
-					v-model="searchQuery"
-					data-testid="fwu-search"
-					class="mt-4 mb-8"
-					variant="filled"
-					:label="t('common.labels.search')"
-					:prepend-inner-icon="mdiMagnify"
-					clearable
-				/>
-
+				<SvsSearchField v-model="searchQuery" data-testid="fwu-search" class="mt-4 mb-8" />
 				<TransitionGroup name="fwu-grid" tag="div" class="fwu-grid-container">
 					<VCard
 						v-for="item in filteredFwuList"
@@ -47,7 +37,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { FwuApiFactory, FwuItemResponse } from "@/generated/fwu-api/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiMagnify } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { refDebounced, useTitle, useUrlSearchParams } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";

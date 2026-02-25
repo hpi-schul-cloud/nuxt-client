@@ -14,7 +14,6 @@ import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrappe
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { ComponentPublicInstance, nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { NamedValue } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
@@ -52,7 +51,7 @@ const getWrapper = (
 
 	return mount(MigrationWizard, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[THEME_KEY.valueOf()]: $theme,
 			},

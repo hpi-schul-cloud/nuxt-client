@@ -12,9 +12,7 @@ import {
 	mdiFolderOpenOutline,
 	mdiFormatListChecks,
 	mdiHelpCircleOutline,
-	mdiLibraryOutline,
 	mdiNewspaperVariantOutline,
-	mdiPuzzleOutline,
 	mdiSchoolOutline,
 	mdiViewGridOutline,
 } from "@icons/material";
@@ -99,25 +97,11 @@ export const useSidebarItems = () => {
 			testId: "sidebar-calendar",
 		},
 		{
-			title: "common.words.lernstore",
-			to: "/content",
-			icon: mdiLibraryOutline,
-			permissions: [Permission.LernstoreView],
-			testId: "sidebar-learningstore",
-		},
-		{
 			title: "feature.media-shelf.title",
 			to: "/media-shelf",
 			icon: mdiBookshelf,
 			feature: "FEATURE_MEDIA_SHELF_ENABLED",
 			testId: "sidebar-mediashelf",
-		},
-		{
-			title: "global.sidebar.item.addons",
-			href: "/addons",
-			icon: mdiPuzzleOutline,
-			feature: "FEATURE_EXTENSIONS_ENABLED",
-			testId: "sidebar-addons",
 		},
 	]);
 
