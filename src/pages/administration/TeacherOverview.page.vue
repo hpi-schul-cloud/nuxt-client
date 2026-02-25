@@ -112,6 +112,7 @@ import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
+import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
@@ -134,6 +135,8 @@ export default defineComponent({
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
 
+		const { t } = useI18n();
+
 		return {
 			getPaginationState,
 			setPaginationState,
@@ -141,6 +144,7 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
+			t,
 		};
 	},
 	data() {
