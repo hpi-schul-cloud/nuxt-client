@@ -92,6 +92,7 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 	const envFile = reactive<FilesStorageConfigResponse>({
 		MAX_FILE_SIZE: 2684354560,
 		COLLABORA_MAX_FILE_SIZE_IN_BYTES: 104857600,
+		FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
 	});
 	const env = reactive<ConfigResponse>(defaultConfigEnvs);
 
