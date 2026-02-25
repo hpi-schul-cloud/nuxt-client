@@ -75,5 +75,6 @@ describe("teachers/new", () => {
 
 		await flushPromises();
 		expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
+		expect(router.push).toHaveBeenCalledWith("/administration/teachers");
 	});
 });

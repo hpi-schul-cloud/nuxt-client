@@ -76,7 +76,6 @@ const createStudentHandler = async (userData: UserCreatingData) => {
 	});
 	if (error!) {
 		businessError.value = true;
-		return;
 	}
 	router.push("/administration/students");
 };
