@@ -1,6 +1,6 @@
 import RoomMenu from "./RoomMenu.vue";
 import { ConfigResponse } from "@/serverApi/v3";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createRoomAuthorizationMock, createTestEnvStore } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomAuthorization } from "@data-room";
@@ -31,25 +31,7 @@ describe("@feature-room/RoomMenu", () => {
 	let askDeleteConfirmationMock: Mock;
 
 	beforeEach(() => {
-		roomPermissions = {
-			canAddRoomMembers: computed(() => false),
-			canCreateRoom: computed(() => false),
-			canChangeOwner: computed(() => false),
-			canViewRoom: computed(() => false),
-			canAddAllStudents: computed(() => false),
-			canEditRoom: computed(() => false),
-			canDeleteRoom: computed(() => false),
-			canCopyRoom: computed(() => false),
-			canLeaveRoom: computed(() => false),
-			canRemoveRoomMembers: computed(() => false),
-			canEditRoomContent: computed(() => false),
-			canSeeAllStudents: computed(() => false),
-			canShareRoom: computed(() => false),
-			canListDrafts: computed(() => false),
-			canManageRoomInvitationLinks: computed(() => false),
-			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => false),
-		};
+		roomPermissions = createRoomAuthorizationMock();
 		roomAuthorization.mockReturnValue(roomPermissions);
 
 		askDeleteConfirmationMock = vi.fn();

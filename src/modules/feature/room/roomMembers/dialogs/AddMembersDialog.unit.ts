@@ -3,8 +3,10 @@ import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
+	createRoomAuthorizationMock,
 	createTestAppStoreWithRole,
 	mockedPiniaStoreTyping,
+	RoomAuthorizationRefs,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
@@ -19,65 +21,12 @@ import { VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { computed, Ref } from "vue";
 import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
 vi.mock("@data-room/roomAuthorization.composable");
 const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
-
-type RefPropertiesOnly<T> = {
-	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
-};
-
-type RoomAuthorizationRefs = Partial<RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>>;
-
-const createRoomAuthorizationMock = (
-	overrides: RoomAuthorizationRefs = {}
-): ReturnType<typeof useRoomAuthorization> => {
-	const defaults: RoomAuthorizationRefs = {
-		canAddAllStudents: false,
-		canAddRoomMembers: false,
-		canChangeOwner: false,
-		canCopyRoom: false,
-		canCreateRoom: false,
-		canDeleteRoom: false,
-		canEditRoom: false,
-		canEditRoomContent: false,
-		canLeaveRoom: false,
-		canListDrafts: false,
-		canManageRoomInvitationLinks: false,
-		canManageVideoconferences: false,
-		canRemoveRoomMembers: false,
-		canSeeAllStudents: false,
-		canSeeMembersList: false,
-		canShareRoom: false,
-		canViewRoom: false,
-	};
-
-	const merged = { ...defaults, ...overrides };
-
-	return {
-		canAddAllStudents: computed(() => merged.canAddAllStudents ?? false),
-		canAddRoomMembers: computed(() => merged.canAddRoomMembers ?? false),
-		canChangeOwner: computed(() => merged.canChangeOwner ?? false),
-		canCopyRoom: computed(() => merged.canCopyRoom ?? false),
-		canCreateRoom: computed(() => merged.canCreateRoom ?? false),
-		canDeleteRoom: computed(() => merged.canDeleteRoom ?? false),
-		canEditRoom: computed(() => merged.canEditRoom ?? false),
-		canEditRoomContent: computed(() => merged.canEditRoomContent ?? false),
-		canLeaveRoom: computed(() => merged.canLeaveRoom ?? false),
-		canListDrafts: computed(() => merged.canListDrafts ?? false),
-		canManageRoomInvitationLinks: computed(() => merged.canManageRoomInvitationLinks ?? false),
-		canManageVideoconferences: computed(() => merged.canManageVideoconferences ?? false),
-		canRemoveRoomMembers: computed(() => merged.canRemoveRoomMembers ?? false),
-		canSeeAllStudents: computed(() => merged.canSeeAllStudents ?? false),
-		canSeeMembersList: computed(() => merged.canSeeMembersList ?? false),
-		canShareRoom: computed(() => merged.canShareRoom ?? false),
-		canViewRoom: computed(() => merged.canViewRoom ?? false),
-	};
-};
 
 describe("AddMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembersDialog>>;

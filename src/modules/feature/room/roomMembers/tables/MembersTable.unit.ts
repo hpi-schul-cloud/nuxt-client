@@ -5,6 +5,7 @@ import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
+	createRoomAuthorizationMock,
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -15,7 +16,6 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
-import { createMock } from "@golevelup/ts-vitest";
 import {
 	mdiAccountClockOutline,
 	mdiAccountOutline,
@@ -30,7 +30,7 @@ import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@u
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
-import { computed, nextTick, Ref, ref } from "vue";
+import { nextTick, Ref, ref } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/components";
 
 vi.mock("@ui-confirmation-dialog");
@@ -124,15 +124,10 @@ describe("MembersTable", () => {
 			canAddRoomMembers: true,
 		};
 
-		const roomAuthorization = {
+		const authorizationPermissions = createRoomAuthorizationMock({
 			...roomAuthDefaults,
 			...options?.customRoomAuthorization,
-		};
-		const authorizationPermissions = createMock<ReturnType<typeof useRoomAuthorization>>();
-
-		for (const [key, value] of Object.entries(roomAuthorization ?? {})) {
-			authorizationPermissions[key as keyof RoomAuthorizationRefs] = computed(() => value ?? false);
-		}
+		});
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
 		const currentUser = roomMemberFactory.build({});

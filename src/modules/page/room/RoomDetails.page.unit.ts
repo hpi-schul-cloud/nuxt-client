@@ -3,7 +3,12 @@ import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStore, createTestRoomStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	createRoomAuthorizationMock,
+	createTestAppStore,
+	createTestRoomStore,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -49,25 +54,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			askConfirmationMock,
 		});
 
-		roomPermissions = {
-			canAddRoomMembers: computed(() => false),
-			canCreateRoom: computed(() => false),
-			canChangeOwner: computed(() => false),
-			canViewRoom: computed(() => false),
-			canAddAllStudents: computed(() => false),
-			canEditRoom: computed(() => false),
-			canDeleteRoom: computed(() => false),
-			canCopyRoom: computed(() => false),
-			canLeaveRoom: computed(() => true),
-			canRemoveRoomMembers: computed(() => false),
-			canEditRoomContent: computed(() => false),
-			canSeeAllStudents: computed(() => false),
-			canShareRoom: computed(() => false),
-			canListDrafts: computed(() => false),
-			canManageRoomInvitationLinks: computed(() => false),
-			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => false),
-		};
+		roomPermissions = createRoomAuthorizationMock({ canLeaveRoom: true });
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 

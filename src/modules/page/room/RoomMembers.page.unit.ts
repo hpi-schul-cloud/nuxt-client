@@ -3,7 +3,13 @@ import { ConfigResponse, RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
-import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
+import {
+	createRoomAuthorizationMock,
+	createTestEnvStore,
+	mockedPiniaStoreTyping,
+	roomMemberFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
@@ -100,25 +106,10 @@ describe("RoomMembersPage", () => {
 			askConfirmationMock,
 		});
 
-		roomPermissions = {
-			canAddRoomMembers: computed(() => true),
-			canAddAllStudents: computed(() => false),
-			canCreateRoom: computed(() => false),
-			canChangeOwner: computed(() => false),
-			canCopyRoom: computed(() => false),
-			canViewRoom: computed(() => false),
-			canEditRoom: computed(() => false),
-			canDeleteRoom: computed(() => false),
-			canLeaveRoom: computed(() => false),
-			canRemoveRoomMembers: computed(() => false),
-			canEditRoomContent: computed(() => false),
-			canSeeAllStudents: computed(() => false),
-			canShareRoom: computed(() => false),
-			canManageRoomInvitationLinks: computed(() => false),
-			canListDrafts: computed(() => false),
-			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => true),
-		};
+		roomPermissions = createRoomAuthorizationMock({
+			canAddRoomMembers: true,
+			canSeeMembersList: true,
+		});
 		roomAuthorization.mockReturnValue(roomPermissions);
 
 		pauseMock = vi.fn();

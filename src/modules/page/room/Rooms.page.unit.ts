@@ -4,7 +4,12 @@ import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY } from "@/utils/inject";
-import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tests/test-utils";
+import {
+	createRoomAuthorizationMock,
+	createTestRoomStore,
+	expectNotification,
+	roomItemFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomAuthorization } from "@data-room";
@@ -27,25 +32,9 @@ describe("RoomsPage", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 
 	beforeEach(() => {
-		roomPermissions = {
-			canAddRoomMembers: computed(() => true),
-			canAddAllStudents: computed(() => false),
-			canCreateRoom: computed(() => false),
-			canChangeOwner: computed(() => false),
-			canCopyRoom: computed(() => false),
-			canViewRoom: computed(() => false),
-			canEditRoom: computed(() => false),
-			canDeleteRoom: computed(() => false),
-			canLeaveRoom: computed(() => false),
-			canRemoveRoomMembers: computed(() => false),
-			canEditRoomContent: computed(() => false),
-			canSeeAllStudents: computed(() => false),
-			canShareRoom: computed(() => false),
-			canListDrafts: computed(() => false),
-			canManageRoomInvitationLinks: computed(() => false),
-			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => false),
-		};
+		roomPermissions = createRoomAuthorizationMock({
+			canAddRoomMembers: true,
+		});
 		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
