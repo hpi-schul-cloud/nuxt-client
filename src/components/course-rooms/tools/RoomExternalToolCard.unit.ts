@@ -346,7 +346,32 @@ describe("RoomExternalToolCard", () => {
 			});
 		});
 
-		describe("when tool status is incomplete operational", () => {
+		describe("when tool status is incomplete operational and user can edit tools", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build({
+					status: contextExternalToolConfigurationStatusFactory.build({
+						isIncompleteOperationalOnScopeContext: true,
+					}),
+				});
+
+				const { wrapper } = getWrapper(tool, true);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display incomplete operational chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.get('[data-testId="tool-card-status-incompleteOperational"]');
+
+				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
+			});
+		});
+
+		describe("when tool status is incomplete operational and user can not edit tools", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build({
 					status: contextExternalToolConfigurationStatusFactory.build({
@@ -365,9 +390,9 @@ describe("RoomExternalToolCard", () => {
 			it("should display incomplete operational chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.get('[data-testId="tool-card-status-incompleteOperational"]');
+				const statusChip = wrapper.find('[data-testId="tool-card-status-incompleteOperational"]');
 
-				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
+				expect(statusChip.exists()).toEqual(false);
 			});
 		});
 
