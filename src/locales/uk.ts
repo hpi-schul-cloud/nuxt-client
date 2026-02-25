@@ -900,7 +900,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Термін дії сеансу минув. Увійдіть ще раз.",
 	"feature-autoLogout.message.error":
 		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"feature-autoLogout.component.image.alt": "Лінивець",
 	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
 	"feature-autoLogout.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"feature-autoLogout.warning":
