@@ -47,7 +47,7 @@ describe("news composable", () => {
 			expect(currentNews.value).toEqual(singleNews);
 		});
 
-		it("shoudl return null if the news cannot be find", async () => {
+		it("should return null if the news cannot be found", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 			newsApi.newsControllerFindOne.mockRejectedValue(new Error("News not found"));
 
