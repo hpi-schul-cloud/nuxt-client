@@ -907,7 +907,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
 	"feature-autoLogout.message.error":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"feature-autoLogout.component.image.alt": "Perezoso",
 	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
