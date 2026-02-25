@@ -68,8 +68,8 @@ describe("useUsers", () => {
 
 			const deletePromise = composable.deleteUsers(userIds);
 
-			expect(composable.deletingProgress.value.delete.active).toBe(true);
-			expect(composable.deletingProgress.value.delete.percent).toBe(0);
+			expect(composable.deletingProgress.value.active).toBe(true);
+			expect(composable.deletingProgress.value.percent).toBe(0);
 
 			await deletePromise;
 
@@ -78,8 +78,8 @@ describe("useUsers", () => {
 				params: { ids: ["user1", "user2", "user3", "user4", "user5"] },
 			});
 			expect(axiosMock.delete).toHaveBeenNthCalledWith(2, "/v3/deletionRequestsPublic", { params: { ids: ["user6"] } });
-			expect(composable.deletingProgress.value.delete.active).toBe(false);
-			expect(composable.deletingProgress.value.delete.percent).toBe(100);
+			expect(composable.deletingProgress.value.active).toBe(false);
+			expect(composable.deletingProgress.value.percent).toBe(100);
 		});
 	});
 

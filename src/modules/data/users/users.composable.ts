@@ -25,8 +25,9 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const { t } = useI18n();
 
 	const userList = ref<UserResponse[]>([]);
-	const deletingProgress: Ref<{ delete: { active: boolean; percent: number } }> = ref({
-		delete: { active: false, percent: 0 },
+	const deletingProgress: Ref<{ active: boolean; percent: number }> = ref({
+		active: false,
+		percent: 0,
 	});
 	const qrLinks = ref([]);
 	const consentList = ref([]);
@@ -49,8 +50,8 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	};
 
 	const deleteUsers = async (userIds: string | string[]) => {
-		deletingProgress.value.delete.active = true;
-		deletingProgress.value.delete.percent = 0;
+		deletingProgress.value.active = true;
+		deletingProgress.value.percent = 0;
 
 		const ids = Array.isArray(userIds) ? userIds : [userIds];
 		const chunkSize = 5;
@@ -65,10 +66,10 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 			chunkIds.forEach((id) => {
 				userList.value = userList.value.filter((user) => user._id !== id);
 			});
-			deletingProgress.value.delete.percent = percent;
+			deletingProgress.value.percent = percent;
 		}
 
-		deletingProgress.value.delete.active = false;
+		deletingProgress.value.active = false;
 	};
 
 	const createUser = async (userData: UserCreatingData): Promise<{ result: UserResponse | null; error: unknown }> => {

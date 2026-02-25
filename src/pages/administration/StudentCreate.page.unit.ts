@@ -56,24 +56,26 @@ describe("students/new", () => {
 			useUsersMockHandler.createUser = vi.fn().mockResolvedValue({ error: false, result: {} });
 			const { wrapper } = setup();
 
+			const testDate = new Date("2000-01-01T00:00:00.000Z");
+
 			const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
 			const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
 			const inputEmail = wrapper.find('[data-testid="input_create-user_email"] input');
-			const inputBirthday = wrapper.find('[data-testid="input_create-student_birthdate"] input');
 
 			await inputFirstName.setValue("Klara");
 			await inputLastName.setValue("Fall");
 			await inputEmail.setValue("klara.fall@mail.de");
-			await inputBirthday.setValue("01.01.2000");
-			await inputBirthday.trigger("input");
 			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
 			await submitButton.trigger("click");
+
+			const inputBirthdayValue = wrapper.findComponent('[data-testid="input_create-student_birthdate"]');
+			inputBirthdayValue.setValue(testDate);
 
 			const expectedPayload = {
 				firstName: "Klara",
 				lastName: "Fall",
 				email: "klara.fall@mail.de",
-				birthday: "",
+				birthday: testDate,
 				roles: ["student"],
 				schoolId: useAppStore().school?.id,
 				sendRegistration: false,
