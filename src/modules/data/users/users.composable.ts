@@ -74,7 +74,7 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	const createUser = async (userData: UserCreatingData): Promise<{ result: UserResponse | null; error: unknown }> => {
 		const createUserErrorMessage =
 			userType === RoleName.Student
-				? t("pages.administration.students.new.error'")
+				? t("pages.administration.students.new.error")
 				: t("pages.administration.teachers.new.error");
 		const createUserSuccessMessage =
 			userType === RoleName.Student
