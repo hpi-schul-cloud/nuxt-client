@@ -8,7 +8,7 @@
 		@cancel="emit('cancel')"
 	>
 		<template #content>
-			<VList class="overflow-y-scroll" max-height="320" data-testid="delete-user-dialog-user-list">
+			<VList data-testid="delete-user-dialog-user-list">
 				<VListItem
 					v-for="(user, index) in props.selectedUsers"
 					:key="user._id"
