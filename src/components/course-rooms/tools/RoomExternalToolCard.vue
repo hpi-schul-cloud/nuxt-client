@@ -53,6 +53,8 @@ import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
+const appStore = useAppStore();
+
 const props = defineProps({
 	tool: {
 		type: Object as PropType<ExternalToolDisplayData>,
@@ -108,7 +110,7 @@ const menuItems = [
 	},
 ];
 
-const canAdministrateTools = () => useAppStore().hasPermission(Permission.ContextToolAdmin);
+const canAdministrateTools = appStore.hasPermission(Permission.ContextToolAdmin);
 
 const isDeepLinkingTool: ComputedRef = computed(() => !!props.tool.isLtiDeepLinkingTool);
 
@@ -127,7 +129,7 @@ const toolName: ComputedRef = computed(() => {
 });
 
 const showTool: ComputedRef = computed(
-	() => !(isDeepLinkingTool.value && !hasDeepLink.value && !canAdministrateTools())
+	() => !(isDeepLinkingTool.value && !hasDeepLink.value && !canAdministrateTools.value)
 );
 
 const isToolOutdated: ComputedRef = computed(
@@ -137,7 +139,7 @@ const isToolOutdated: ComputedRef = computed(
 const isToolIncomplete: ComputedRef = computed(() => props.tool.status.isIncompleteOnScopeContext);
 
 const showAsIncompleteOperational: ComputedRef = computed(
-	() => props.tool.status.isIncompleteOperationalOnScopeContext && canAdministrateTools()
+	() => props.tool.status.isIncompleteOperationalOnScopeContext && canAdministrateTools.value
 );
 
 const isToolDeactivated: ComputedRef = computed(() => props.tool.status.isDeactivated);
