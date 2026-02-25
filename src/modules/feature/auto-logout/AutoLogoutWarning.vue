@@ -22,7 +22,12 @@
 					</span>
 				</i18n-t>
 			</WarningAlert>
-			<img :src="image" role="presentation" :alt="t('feature-autoLogout.component.image.alt')" />
+			<img
+				:src="image"
+				class="w-75 d-block mx-auto"
+				role="presentation"
+				:alt="t('feature-autoLogout.component.image.alt')"
+			/>
 		</template>
 	</SvsDialog>
 </template>
