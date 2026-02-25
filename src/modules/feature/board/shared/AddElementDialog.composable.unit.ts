@@ -195,6 +195,12 @@ describe("ElementTypeSelection Composable", () => {
 			const { isDialogOpen, isDialogLoading, staticElementTypeOptions, dynamicElementTypeOptions } =
 				setupSharedElementTypeSelectionMock();
 
+			mockedUseBoardAllowedOperations.mockReturnValue({
+				allowedOperations: computed(() => ({
+					createExternalToolElement: true,
+				})),
+			} as ReturnType<typeof useBoardAllowedOperations>);
+
 			createTestEnvStore({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
@@ -702,6 +708,12 @@ describe("ElementTypeSelection Composable", () => {
 					closeDialogMock,
 				});
 
+				mockedUseBoardAllowedOperations.mockReturnValue({
+					allowedOperations: computed(() => ({
+						createExternalToolElement: true,
+					})),
+				} as ReturnType<typeof useBoardAllowedOperations>);
+
 				const preferredTool = {
 					schoolExternalToolId: ObjectIdMock(),
 					name: "test-tool-name-1",
@@ -777,6 +789,12 @@ describe("ElementTypeSelection Composable", () => {
 			const { dynamicElementTypeOptions, isDialogLoading } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
+
+			mockedUseBoardAllowedOperations.mockReturnValue({
+				allowedOperations: computed(() => ({
+					createExternalToolElement: true,
+				})),
+			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			cardStore.preferredTools = [];

@@ -49,7 +49,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	const onPreferredElementClick = async (elementType: ContentElementType, tool: PreferredToolResponse) => {
 		closeDialog();
-		await cardStore.createPreferredElement({ cardId, type: elementType }, tool);
+		cardStore.createPreferredElement({ cardId, type: elementType }, tool);
 
 		showNotificationByElementType(elementType);
 	};
@@ -193,7 +193,6 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				if (!tool.iconName) {
 					tool.iconName = "mdiPuzzleOutline";
 				}
-
 				options.push({
 					icon: "$" + tool.iconName,
 					label: tool.name,
