@@ -83,9 +83,9 @@ const onCreate = async (news: Pick<CreateNewsParams, "title" | "content" | "disp
 		targetModel: newsTarget.targetModel,
 	});
 
-	if (status.value === "completed") {
+	if (status.value === "completed" && createdNews.value?.id) {
 		await router.push({
-			path: `/news/${createdNews?.value?.id}`,
+			path: `/news/${createdNews.value.id}`,
 		});
 	}
 };
