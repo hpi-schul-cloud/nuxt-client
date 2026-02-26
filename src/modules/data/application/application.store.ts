@@ -5,6 +5,7 @@ import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useBroadcastChannel } from "@vueuse/core";
+import axios, { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
 
@@ -134,6 +135,22 @@ export const useAppStore = defineStore("applicationStore", () => {
 		applicationError.value = undefined;
 	};
 
+	const handleUnauthorizedError = (onError: () => void) => async (error: unknown) => {
+		if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
+			try {
+				const pristineAxios = axios.create();
+				pristineAxios.defaults.baseURL = axios.defaults.baseURL;
+				const response = await pristineAxios.get("/v1/accounts/jwtTimer");
+				const ttl = response?.data?.ttl ?? 0;
+				if (ttl <= 0) {
+					onError();
+				}
+			} catch {
+				onError();
+			}
+		}
+	};
+
 	return {
 		isLoggedIn,
 		userLocale,
@@ -156,6 +173,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		updateUserLanguage,
 		clearApplicationError,
 		handleUnknownError,
+		handleUnauthorizedError,
 		handleApplicationError,
 		applicationError: readonly(applicationError),
 	};

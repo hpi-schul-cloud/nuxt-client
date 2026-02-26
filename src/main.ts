@@ -48,7 +48,7 @@ import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
 import { htmlConfig } from "@feature-render-html";
 import { logger } from "@util-logger";
-import axios, { HttpStatusCode, isAxiosError } from "axios";
+import axios from "axios";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
@@ -71,27 +71,13 @@ app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
-const handleUnauthorizedError = async (error: unknown) => {
-	if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
-		try {
-			const pristineAxios = axios.create();
-			pristineAxios.defaults.baseURL = axios.defaults.baseURL;
-			const response = await pristineAxios.get("/v1/accounts/jwtTimer");
-			const ttl = response?.data?.ttl ?? 0;
-			if (ttl <= 0) {
-				useAppStore().setJwtExpired();
-			}
-		} catch {
-			useAppStore().setJwtExpired();
-		}
-	}
-};
-
 (async () => {
 	const runtimeConfigJson = await axios.get(`${window.location.origin}/runtime.config.json`);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
-	initializeAxios(axios, handleUnauthorizedError);
+	const handler = useAppStore().handleUnauthorizedError(useAppStore().setJwtExpired);
+
+	initializeAxios(axios, handler);
 
 	const success = await useEnvStore().loadConfiguration();
 
