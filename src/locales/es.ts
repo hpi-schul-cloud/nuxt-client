@@ -1386,9 +1386,8 @@ export default {
 	"pages.administration.students.consent.title": "Registrarse de forma analógica",
 	"pages.administration.students.fab.add": "Crear estudiante",
 	"pages.administration.students.fab.import": "Importar estudiante",
-	"pages.administration.students.index.remove.confirm.message": "¿Desea eliminar a este alumno?",
-	"pages.administration.students.index.remove.confirm.message.multiple":
-		"¿Desea eliminar a los siguientes estudiantes?",
+	"pages.administration.students.index.remove.confirm.message":
+		"¿Desea eliminar a este alumno? | ¿Desea eliminar a los siguientes estudiantes?",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
 	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
@@ -1452,8 +1451,8 @@ export default {
 	"pages.administration.students.table.edit.ariaLabel": "Editar estudiante",
 	"pages.administration.teachers.fab.add": "Crear profesor",
 	"pages.administration.teachers.fab.import": "Importar profesor",
-	"pages.administration.teachers.index.remove.confirm.message": "¿Desea eliminar a este profesor?",
-	"pages.administration.teachers.index.remove.confirm.message.multiple": "¿Desea eliminar a estos profesores?",
+	"pages.administration.teachers.index.remove.confirm.message":
+		"¿Desea eliminar a este profesor? | ¿Desea eliminar a estos profesores?",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",

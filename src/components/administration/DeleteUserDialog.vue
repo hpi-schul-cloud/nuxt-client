@@ -13,7 +13,7 @@
 					v-for="(user, index) in props.selectedUsers"
 					:key="user._id"
 					density="compact"
-					:variant="index % 2 === 0 ? 'tonal' : 'text'"
+					:variant="setListItemVariant(index)"
 				>
 					{{ user.firstName }} {{ user.lastName }}
 				</VListItem>
@@ -52,15 +52,13 @@ const isDialogOpen = defineModel({
 
 const title = computed(() => {
 	if (props.userType === "student") {
-		return props.selectedUsers.length === 1
-			? t(`pages.administration.students.index.remove.confirm.message`)
-			: t(`pages.administration.students.index.remove.confirm.message.multiple`);
+		return t("pages.administration.students.index.remove.confirm.message", props.selectedUsers.length);
 	} else if (props.userType === "teacher") {
-		return props.selectedUsers.length === 1
-			? t(`pages.administration.teachers.index.remove.confirm.message`)
-			: t(`pages.administration.teachers.index.remove.confirm.message.multiple`);
+		return t("pages.administration.teachers.index.remove.confirm.message", props.selectedUsers.length);
 	}
 
 	return "";
 });
+
+const setListItemVariant = (index: number) => (index % 2 === 0 ? "tonal" : "text");
 </script>
