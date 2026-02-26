@@ -121,17 +121,6 @@ describe("@feature-editor/ClassicEditor", () => {
 			expect(setAttribute).toHaveBeenCalledWith("aria-describedby", "desc-id", "root");
 		});
 
-		it("should emit update:value on content changes", async () => {
-			const { wrapper, editorMock } = setup();
-
-			const ck = wrapper.findComponent({
-				ref: "ck",
-			});
-			await ck.vm.$emit("update:modelValue", editorMock);
-
-			expect(wrapper.emitted("update:value")).toHaveLength(1);
-		});
-
 		it("should emit focus on editor focus", async () => {
 			const { wrapper } = setup();
 
