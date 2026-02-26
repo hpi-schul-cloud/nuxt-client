@@ -33,7 +33,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	const setup = (
 		envs: Partial<ConfigResponse> = {},
-		options?: { allowedOperations: Partial<RoomItemResponseAllowedOperations> }
+		options?: { allowedOperations: Partial<RoomItemResponseAllowedOperations>; roomName?: string }
 	) => {
 		options ??= { allowedOperations: {} };
 		setActivePinia(createTestingPinia());
@@ -44,6 +44,9 @@ describe("@feature-room/RoomMenu", () => {
 		});
 
 		const wrapper = mount(RoomMenu, {
+			props: {
+				roomName: options.roomName,
+			},
 			global: {
 				plugins: [
 					createTestingVuetify(),
@@ -255,6 +258,19 @@ describe("@feature-room/RoomMenu", () => {
 		});
 	});
 
+	describe("when roomName is provided", () => {
+		it("should pass roomName to delete action", async () => {
+			const roomName = "My Room";
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true }, roomName });
+			await menuBtn.trigger("click");
+
+			const { kebabActionDelete } = findKebabActions(wrapper);
+
+			expect(kebabActionDelete.exists()).toBe(true);
+			expect(kebabActionDelete.props("name")).toBe(roomName);
+		});
+	});
+
 	describe("when clicking on menu button", () => {
 		describe("and clicking on edit menu item", () => {
 			it("should emit 'room:edit' event", async () => {
@@ -283,6 +299,30 @@ describe("@feature-room/RoomMenu", () => {
 				await kebabActionRoomMembers.trigger("click");
 
 				expect(wrapper.emitted("room:manage-members")).toHaveLength(1);
+			});
+		});
+
+		describe("and clicking on copy menu item", () => {
+			it("should emit 'room:copy' event", async () => {
+				const { wrapper, menuBtn } = setup({}, { allowedOperations: { copyRoom: true } });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomCopy } = findKebabActions(wrapper);
+				await kebabActionRoomCopy.trigger("click");
+
+				expect(wrapper.emitted("room:copy")).toHaveLength(1);
+			});
+		});
+
+		describe("and clicking on share menu item", () => {
+			it("should emit 'room:share' event", async () => {
+				const { wrapper, menuBtn } = setup({}, { allowedOperations: { shareRoom: true } });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomShare } = findKebabActions(wrapper);
+				await kebabActionRoomShare.trigger("click");
+
+				expect(wrapper.emitted("room:share")).toHaveLength(1);
 			});
 		});
 

@@ -295,6 +295,20 @@ describe("BoardColumnHeader", () => {
 
 			expect(mockedStartEditMode).toHaveBeenCalled();
 		});
+
+		describe("when user cannot edit columns", () => {
+			it("should not start the edit mode", () => {
+				const wrapper = setup({
+					isEditMode: false,
+					canEditColumn: false,
+				});
+
+				const action = wrapper.findComponent(KebabMenuActionRename);
+				action.trigger("click");
+
+				expect(mockedStartEditMode).not.toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("when end-edit-mode event is received", () => {
@@ -308,6 +322,20 @@ describe("BoardColumnHeader", () => {
 			interactionHandler.vm.$emit("end-edit-mode");
 
 			expect(mockedStopEditMode).toHaveBeenCalled();
+		});
+
+		describe("when user cannot edit columns", () => {
+			it("should not stop the edit mode", () => {
+				const wrapper = setup({
+					isEditMode: false,
+					canEditColumn: false,
+				});
+
+				const interactionHandler = wrapper.findComponent(BoardColumnInteractionHandler);
+				interactionHandler.vm.$emit("end-edit-mode");
+
+				expect(mockedStopEditMode).not.toHaveBeenCalled();
+			});
 		});
 	});
 
@@ -358,6 +386,17 @@ describe("BoardColumnHeader", () => {
 
 				expect(boardMenuComponent.length).toStrictEqual(0);
 			});
+		});
+	});
+
+	describe("when the title prop changes externally", () => {
+		it("should update the input value", async () => {
+			const wrapper = setup();
+			const newTitle = "Externally updated title";
+			await wrapper.setProps({ title: newTitle });
+
+			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+			expect(titleInput.props("value")).toBe(newTitle);
 		});
 	});
 });
