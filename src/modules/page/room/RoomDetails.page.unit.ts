@@ -2,6 +2,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
+import { ShareTokenParentType } from "@/types/sharing/Token";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestRoomStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
@@ -9,7 +10,7 @@ import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/facto
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { RoomContentGrid, RoomMenu } from "@feature-room";
+import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -100,6 +101,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			room,
 			router: useRouter(),
 			roomStore,
+			shareModule,
 		};
 	};
 
@@ -134,14 +136,27 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when user deletes the room", () => {
 		it("should reroute to rooms overview page", async () => {
-			const { wrapper, router } = setup({ allowedOperations: { accessRoom: true, deleteRoom: true } });
+			const { wrapper, router, roomStore } = setup({ allowedOperations: { accessRoom: true, deleteRoom: true } });
 
 			const menu = wrapper.getComponent({ name: "RoomMenu" });
 			await menu.vm.$emit("room:delete");
 
+			expect(roomStore.deleteRoom).toHaveBeenCalled();
 			expect(router.push).toHaveBeenCalledWith({
 				name: "rooms",
 			});
+		});
+
+		it("should not delete the room without permission", async () => {
+			const { wrapper, router, roomStore } = setup({
+				allowedOperations: { accessRoom: true, deleteRoom: false },
+			});
+
+			const menu = wrapper.getComponent({ name: "RoomMenu" });
+			await menu.vm.$emit("room:delete");
+
+			expect(roomStore.deleteRoom).not.toHaveBeenCalled();
+			expect(router.push).not.toHaveBeenCalled();
 		});
 	});
 
@@ -220,6 +235,67 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 			});
 		});
+
+		describe("and user clicks on share room", () => {
+			describe("when user has permission to share room", () => {
+				it("should start the share flow", () => {
+					const { wrapper, room, shareModule } = setup({
+						allowedOperations: { accessRoom: true, shareRoom: true },
+					});
+
+					const menu = wrapper.getComponent({ name: "RoomMenu" });
+					menu.vm.$emit("room:share");
+
+					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+						id: room.id,
+						type: ShareTokenParentType.Room,
+					});
+				});
+			});
+
+			describe("when user does not have permission to share room", () => {
+				it("should not start the share flow", () => {
+					const { wrapper, shareModule } = setup({
+						allowedOperations: { accessRoom: true, shareRoom: false },
+					});
+
+					const menu = wrapper.getComponent({ name: "RoomMenu" });
+					menu.vm.$emit("room:share");
+
+					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when user clicks on copy room", () => {
+			describe("when user has permission to copy room", () => {
+				it("should open the copy flow", async () => {
+					const { wrapper } = setup({
+						allowedOperations: { accessRoom: true, copyRoom: true },
+					});
+
+					const menu = wrapper.getComponent({ name: "RoomMenu" });
+					await menu.vm.$emit("room:copy");
+
+					const copyFlow = wrapper.findComponent(RoomCopyFlow);
+					expect(copyFlow.exists()).toBe(true);
+				});
+			});
+
+			describe("when user does not have permission to copy room", () => {
+				it("should not open the copy flow", async () => {
+					const { wrapper } = setup({
+						allowedOperations: { accessRoom: true, copyRoom: false },
+					});
+
+					const menu = wrapper.getComponent({ name: "RoomMenu" });
+					await menu.vm.$emit("room:copy");
+
+					const copyFlow = wrapper.findComponent(RoomCopyFlow);
+					expect(copyFlow.exists()).toBe(false);
+				});
+			});
+		});
 	});
 
 	describe("when user wants to create a board", () => {
@@ -229,6 +305,39 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 				const fabButton = wrapper.findComponent("[data-testid='add-content-button']");
 				expect(fabButton.exists()).toBe(false);
+			});
+
+			it("should navigate to copied room on successful copy", async () => {
+				const { wrapper, router } = setup({
+					allowedOperations: { accessRoom: true, copyRoom: true },
+				});
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:copy");
+
+				const copyFlow = wrapper.getComponent(RoomCopyFlow);
+				const copiedRoomId = "copied-room-id";
+				await copyFlow.vm.$emit("copy:success", copiedRoomId);
+
+				expect(router.push).toHaveBeenCalledWith({
+					name: "room-details",
+					params: { id: copiedRoomId },
+				});
+			});
+
+			it("should close the copy flow when copy ends", async () => {
+				const { wrapper } = setup({
+					allowedOperations: { accessRoom: true, copyRoom: true },
+				});
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:copy");
+
+				const copyFlow = wrapper.getComponent(RoomCopyFlow);
+				await copyFlow.vm.$emit("copy:ended");
+				await wrapper.vm.$nextTick();
+
+				expect(wrapper.findComponent(RoomCopyFlow).exists()).toBe(false);
 			});
 		});
 
@@ -256,9 +365,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and user selects a multi-column layout", () => {
 			it("should create a board with multi-column layout", async () => {
-				const { wrapper, roomDetailsStore, room } = setup({
+				const { wrapper, roomDetailsStore, room, router } = setup({
 					allowedOperations: { accessRoom: true, editContent: true },
 				});
+				const createdBoardId = "created-board-id";
+				roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
 				await openDialog(wrapper);
 
 				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
@@ -269,14 +380,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					serverApi.BoardLayout.Columns,
 					"pages.roomDetails.board.defaultName"
 				);
+				expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
 			});
 		});
 
 		describe("and user selects a single-column layout", () => {
 			it("should create a board with single-column layout", async () => {
-				const { wrapper, roomDetailsStore, room } = setup({
+				const { wrapper, roomDetailsStore, room, router } = setup({
 					allowedOperations: { accessRoom: true, editContent: true },
 				});
+				const createdBoardId = "created-list-board-id";
+				roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
 				await openDialog(wrapper);
 				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
 				await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
@@ -286,6 +400,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					serverApi.BoardLayout.List,
 					"pages.roomDetails.board.defaultName"
 				);
+				expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
 			});
 		});
 	});
