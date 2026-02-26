@@ -1,7 +1,7 @@
 <template>
 	<CKEditorVue
 		ref="ck"
-		v-model="modelValue"
+		v-model="content"
 		:editor="ClassicEditor"
 		:config="config"
 		data-testid="ckeditor"
@@ -17,14 +17,9 @@ import { useEditorConfig } from "./EditorConfig.composable";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
-import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
 
 const props = defineProps({
-	value: {
-		type: String,
-		default: "",
-	},
 	placeholder: {
 		type: String,
 		default: "",
@@ -38,13 +33,14 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["ready", "focus", "update:value", "blur", "keyboard:delete"]);
+const emit = defineEmits(["ready", "focus", "blur", "keyboard:delete"]);
 
 const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const ck = ref(null);
-const modelValue = useVModel(props, "value", emit);
+
+const content = defineModel({ type: String, default: "" });
 
 const config = computed(() => ({
 	...generalConfig,

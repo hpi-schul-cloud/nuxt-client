@@ -16,7 +16,6 @@
 				class="mb-4 mt-13"
 				:placeholder="t('components.organisms.FormNews.editor.placeholder')"
 				:aria-described-by-id="'news-content-error'"
-				@update:value="onUpdateContent"
 				@blur="shouldNewsContentValidation = true"
 			/>
 			<VMessages
@@ -179,10 +178,6 @@ const onSave = async () => {
 
 const onUpdateDate = (newDate: string | null) => {
 	newsDate.value = newDate ? dayjs(newDate).format("YYYY-MM-DD") : "";
-};
-
-const onUpdateContent = (newContent: string) => {
-	newsContent.value = newContent;
 };
 
 const onDelete = async () => {
