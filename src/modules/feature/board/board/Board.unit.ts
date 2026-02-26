@@ -250,6 +250,7 @@ describe("Board", () => {
 			copyResultId,
 			shareModule,
 			courseRoomDetailsModule,
+			copyModule,
 		};
 	};
 
@@ -274,6 +275,18 @@ describe("Board", () => {
 			setup();
 			await nextTick();
 			expect(mockUseBoardInactivity).toHaveBeenCalled();
+		});
+
+		it("should create page information when board changes", async () => {
+			const { boardStore, board } = setup();
+
+			const { createPageInformation } = mockedUseSharedBoardPageInformation();
+			expect(createPageInformation).not.toHaveBeenCalled();
+
+			boardStore.board = { ...board };
+			await nextTick();
+
+			expect(createPageInformation).toHaveBeenCalledWith(board.id);
 		});
 
 		describe("BoardHeader component", () => {
@@ -428,6 +441,15 @@ describe("Board", () => {
 
 			expect(wrapper.findComponent(MoveCardDialog).exists()).toBe(true);
 		});
+
+		it("should reset copy module when copy result modal is closed", async () => {
+			const { wrapper, copyModule } = setup();
+
+			const copyResultModal = wrapper.findComponent(CopyResultModal);
+			await copyResultModal.vm.$emit("copy-dialog-closed");
+
+			expect(copyModule.reset).toHaveBeenCalled();
+		});
 	});
 
 	describe("when component is unmounted", () => {
@@ -573,12 +595,21 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
+					const { wrapper, boardStore } = setup({
+						numberOfColumns: 2,
+						allowedOperations: { moveColumn: false },
+					});
 
 					const containerComponent = wrapper.findAllComponents({
 						name: "Sortable",
 					});
-					containerComponent[0].vm.$emit("move");
+					const payload = {
+						item: document.createElement("div"),
+						newIndex: 1,
+						oldIndex: 0,
+					};
+
+					containerComponent[0].vm.$emit("end", payload);
 
 					expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
 				});
@@ -597,6 +628,17 @@ describe("Board", () => {
 
 					expect(boardStore.moveColumnRequest).toHaveBeenCalled();
 				});
+			});
+
+			it("should not move the first column backward", () => {
+				const { wrapper, boardStore } = setup({ numberOfColumns: 2, allowedOperations: { moveColumn: true } });
+
+				const boardColumnComponent = wrapper.findAllComponents({
+					name: "BoardColumn",
+				});
+				boardColumnComponent[0].vm.$emit("move:column-left");
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
 			});
 
 			describe("when user is not permitted to move a column", () => {
@@ -625,6 +667,17 @@ describe("Board", () => {
 
 					expect(boardStore.moveColumnRequest).toHaveBeenCalled();
 				});
+			});
+
+			it("should not move the last column forward", () => {
+				const { wrapper, boardStore } = setup({ numberOfColumns: 2, allowedOperations: { moveColumn: true } });
+
+				const boardColumnComponent = wrapper.findAllComponents({
+					name: "BoardColumn",
+				});
+				boardColumnComponent[1].vm.$emit("move:column-right");
+
+				expect(boardStore.moveColumnRequest).not.toHaveBeenCalled();
 			});
 
 			describe("when user is not permitted to move a column", () => {
@@ -914,6 +967,23 @@ describe("Board", () => {
 					expect(wrapperVM.isEditSettingsDialogOpen).toBe(false);
 				});
 			});
+
+			describe("when feature is enabled but user does have 'read' permission", () => {
+				it("should set 'hasReadersEditPermission' to true", async () => {
+					const { wrapper } = setup({
+						isBoardVisible: true,
+						allowedOperations: { updateReadersCanEditSetting: true },
+						envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },
+					});
+
+					await nextTick();
+
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					expect(boardHeader.props("hasReadersEditPermission")).toBe(true);
+				});
+			});
 		});
 
 		describe("@share:board", () => {
@@ -961,6 +1031,20 @@ describe("Board", () => {
 					type: ShareTokenBodyParamsParentTypeEnum.Card,
 					destinationType: BoardExternalReferenceType.Room,
 				});
+			});
+		});
+
+		describe("@onMoveCard", () => {
+			it("should open the move card dialog with the correct card id", async () => {
+				const { wrapper } = setup();
+
+				const boardColumn = wrapper.findComponent(BoardColumn);
+				await boardColumn.vm.$emit("move:card", "card-id-123");
+				await nextTick();
+
+				const moveCardDialog = wrapper.findComponent(MoveCardDialog);
+				expect(moveCardDialog.props("isDialogOpen")).toBe(true);
+				expect(moveCardDialog.props("cardId")).toBe("card-id-123");
 			});
 		});
 
