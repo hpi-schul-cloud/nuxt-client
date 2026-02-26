@@ -4,11 +4,11 @@ import { ref } from "vue";
 
 export const useClasses = () => {
 	const url = "/v1/classes";
-	const list = ref([]);
+	const list = ref<unknown>([]);
+	const { execute } = useSafeAxiosTask();
 
 	const fetchClasses = async (query: { $limit: number; year: string }) => {
-		const { execute } = useSafeAxiosTask();
-		const { result } = await execute(async () => await $axios.get(url, { params: query }));
+		const { result } = await execute(() => $axios.get(url, { params: query }));
 		list.value = result?.data?.data || [];
 	};
 

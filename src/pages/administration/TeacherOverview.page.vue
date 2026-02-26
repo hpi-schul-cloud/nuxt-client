@@ -108,8 +108,7 @@ import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dial
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
-import { defineComponent } from "vue";
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	components: {

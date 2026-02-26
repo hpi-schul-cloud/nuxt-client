@@ -29,9 +29,9 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		active: false,
 		percent: 0,
 	});
-	const qrLinks = ref([]);
-	const consentList = ref([]);
-	const registrationLinks = ref([]);
+	const qrLinks = ref<unknown>([]);
+	const consentList = ref<unknown>([]);
+	const registrationLinks = ref<unknown>([]);
 	const pagination = ref({
 		limit: 0,
 		skip: 0,
@@ -96,7 +96,7 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 
 	const sendRegistrationLink = async (payload: { userIds: string[]; selectionType: string }) => {
 		const { result } = await execute(
-			async () => $axios.post(registrationLinksApi, payload),
+			() => $axios.post(registrationLinksApi, payload),
 			t("pages.administration.sendMail.error", payload.userIds.length)
 		);
 

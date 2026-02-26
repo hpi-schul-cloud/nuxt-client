@@ -69,7 +69,7 @@ const createStudentHandler = async (userData: UserCreatingData) => {
 		firstName: userData.firstName,
 		lastName: userData.lastName,
 		email: userData.email,
-		birthday: new Date(date.value ?? ""),
+		birthday: date.value ? new Date(date.value) : undefined,
 		roles: [RoleName.Student],
 		schoolId: useAppStore().school?.id ?? "",
 		sendRegistration: sendRegistration.value,

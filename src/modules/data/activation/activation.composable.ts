@@ -4,11 +4,11 @@ import { ref } from "vue";
 
 export const useActivation = () => {
 	const url = "/v1/activation";
-	const list = ref([]);
+	const list = ref<unknown>([]);
+	const { execute } = useSafeAxiosTask();
 
 	const updateActivations = async (activationCode: string | string[]) => {
-		const { execute } = useSafeAxiosTask();
-		const { result } = await execute(async () => await $axios.put(url + "/" + activationCode));
+		const { result } = await execute(() => $axios.put(url + "/" + activationCode));
 		list.value = result?.data?.data || [];
 	};
 
