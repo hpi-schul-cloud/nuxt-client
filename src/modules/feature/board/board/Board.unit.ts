@@ -892,8 +892,6 @@ describe("Board", () => {
 				});
 
 				it("should set 'isEditSettingsDialogOpen' to false", async () => {
-					// mockedBoardPermissions.hasManageBoardPermission = ref(false);
-					// mockedBoardPermissions.arePermissionsLoaded = ref(true);
 					const { wrapper, wrapperVM } = setup({
 						isBoardVisible: true,
 						envs: { FEATURE_BOARD_READERS_CAN_EDIT_TOGGLE: true },

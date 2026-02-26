@@ -71,7 +71,6 @@ describe("ExternalToolElementAlert", () => {
 	};
 
 	afterEach(() => {
-		// vi.clearAllMocks();
 		vi.resetAllMocks();
 	});
 
