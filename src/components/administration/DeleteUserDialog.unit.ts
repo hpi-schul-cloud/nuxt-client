@@ -47,7 +47,7 @@ describe("DeleteUserDialog", () => {
 		const { dialog } = setup();
 
 		expect(dialog.findComponent(VCard).findComponent(VCardTitle).text()).toContain(
-			"pages.administration.students.index.remove.confirm.message.multiple"
+			"pages.administration.students.index.remove.confirm.message"
 		);
 	});
 
