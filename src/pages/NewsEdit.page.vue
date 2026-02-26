@@ -78,7 +78,8 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 		displayAt: newsToPatch.displayAt,
 	});
 
-	if (status.value === "completed") await router.push({ path: `/news/${currentNews.value?.id}` });
+	if (status.value === "completed" && currentNews.value?.id)
+		await router.push({ path: `/news/${currentNews.value.id}` });
 };
 
 const onDelete = async () => {
