@@ -23,9 +23,9 @@ export const useNews = () => {
 			() => newsApi.newsControllerCreate(payload),
 			t("components.organisms.FormNews.errors.create")
 		);
-		if (error) return;
+		if (error || !result) return;
 
-		createdNews.value = result?.data ?? null;
+		createdNews.value = result.data;
 		notifySuccess(t("components.organisms.FormNews.success.create"));
 	};
 
@@ -34,9 +34,9 @@ export const useNews = () => {
 			() => newsApi.newsControllerUpdate(payload.id, payload),
 			t("components.organisms.FormNews.error.patch")
 		);
-		if (error) return;
+		if (error || !result) return;
 
-		currentNews.value = result?.data ?? null;
+		currentNews.value = result.data;
 		notifySuccess(t("components.organisms.FormNews.success.patch"));
 	};
 

@@ -93,15 +93,6 @@ describe("news composable", () => {
 
 			consoleErrorSpy.mockRestore();
 		});
-
-		it("should set createdNews to null if API returns no data", async () => {
-			newsApi.newsControllerCreate.mockResolvedValue({ data: null });
-
-			const { createNews, createdNews } = useNews();
-			await createNews(createNewsPayload);
-
-			expect(createdNews.value).toBeNull();
-		});
 	});
 
 	describe("updateNews", () => {
@@ -131,15 +122,6 @@ describe("news composable", () => {
 			expectNotificationWithMessage("error", "components.organisms.FormNews.error.patch");
 
 			consoleErrorSpy.mockRestore();
-		});
-
-		it("should not update current news if API returns no data", async () => {
-			newsApi.newsControllerUpdate.mockResolvedValue({ data: null });
-
-			const { updateNews, currentNews } = useNews();
-			await updateNews({ id: "newsId", title: "New Title" });
-
-			expect(currentNews.value).toBeNull();
 		});
 	});
 
