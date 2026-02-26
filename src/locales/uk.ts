@@ -481,6 +481,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "Видалити файли не вдалося.",
 	"components.board.notifications.errors.fileToBig":
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"Кількість файлів перевищує допустимий ліміт {fileLimitPerParent} файлів.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
 	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
@@ -900,7 +902,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Термін дії сеансу минув. Увійдіть ще раз.",
 	"feature-autoLogout.message.error":
 		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"feature-autoLogout.component.image.alt": "Лінивець",
 	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
 	"feature-autoLogout.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"feature-autoLogout.warning":

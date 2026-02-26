@@ -480,6 +480,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "Die Datei/en konnte/n nicht gelöscht werden.",
 	"components.board.notifications.errors.fileToBig":
 		"Die angehängte Datei überschreitet die maximal zulässige Größe von {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"Die Anzahl der Dateien überschreitet das zulässige Limit von {fileLimitPerParent} Dateien.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
 	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
@@ -902,7 +904,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
 	"feature-autoLogout.message.error":
 		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"feature-autoLogout.component.image.alt": "Faultier",
 	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
 	"feature-autoLogout.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"feature-autoLogout.warning":
