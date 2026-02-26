@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<VTextField
+			ref="time-text-field"
 			v-model="timeValue"
 			v-time-input-mask
 			data-testid="time-input"
@@ -8,7 +9,7 @@
 			:label="label"
 			:aria-label="ariaLabel"
 			placeholder="HH:MM"
-			:error-messages="errorMessages"
+			:rules="validationRules"
 			@update:model-value="validate"
 			@keydown.up.down.stop
 		/>
@@ -18,11 +19,8 @@
 <script setup lang="ts">
 import { mdiClockOutline } from "@icons/material";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
-import { isValidTimeFormat } from "@util-validators";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, requiredIf } from "@vuelidate/validators";
-import { computedAsync, useDebounceFn } from "@vueuse/core";
-import { computed, ref, unref, watchEffect } from "vue";
+import { isRequired, isValidTimeFormat } from "@util-validators";
+import { computed, ref, useTemplateRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -31,43 +29,36 @@ const props = defineProps({
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
 });
-const emit = defineEmits(["update:time", "error"]);
+
+const emit = defineEmits<{
+	(e: "update:time", value: string | undefined): void;
+	(e: "error"): void;
+}>();
 
 const { t } = useI18n();
-const timeValue = ref<undefined | string>();
+
+const timeValue = ref<string>();
+const timeTextField = useTemplateRef("time-text-field");
 
 watchEffect(() => {
 	timeValue.value = props.time;
 });
 
-const rules = computed(() => ({
-	timeValue: {
-		requiredIfProp: helpers.withMessage(t("components.timePicker.validation.required"), requiredIf(props.required)),
-		validDateFormat: helpers.withMessage(t("components.timePicker.validation.format"), isValidTimeFormat),
-	},
-}));
+const validationRules = computed(() => [
+	props.required ? isRequired(t("components.timePicker.validation.required")) : true,
+	isValidTimeFormat(),
+]);
 
-const v$ = useVuelidate(rules, { timeValue }, { $lazy: true });
+const validate = async () => {
+	if (timeTextField.value === null) return;
 
-const errorMessages = computedAsync(async () => await getErrorMessages(v$.value.timeValue.$errors), null);
+	await timeTextField.value.validate();
+	const isValid = timeTextField.value.isValid;
 
-const getErrorMessages = useDebounceFn((errors: ErrorObject[] | undefined) => {
-	const messages = errors?.map((e: ErrorObject) => unref(e.$message));
-	return messages;
-}, 700);
-
-const validate = () => {
-	v$.value.timeValue.$touch();
-	v$.value.$validate();
-
-	if (!v$.value.timeValue.$invalid) {
-		emitTime();
+	if (isValid) {
+		emit("update:time", timeValue.value);
 	} else {
 		emit("error");
 	}
-};
-
-const emitTime = () => {
-	emit("update:time", timeValue.value);
 };
 </script>

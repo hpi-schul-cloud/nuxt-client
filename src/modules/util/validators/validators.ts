@@ -48,18 +48,20 @@ export const isValidUrl: FormValidatorFn<string> =
 	};
 
 /**
- * Vuelidate Validator
+ * Vuetify Rules Validator
  * Checks if given value has valid time format
  */
-export const isValidTimeFormat = (value: string | null) => {
-	if (value === "" || value === null || value === undefined) {
-		return true;
-	}
+export const isValidTimeFormat: FormValidatorFn<string | null> =
+	(errorMessage = useI18nGlobal().t("components.timePicker.validation.format")) =>
+	(value) => {
+		if (value === "" || value === null || value === undefined) {
+			return true;
+		}
 
-	const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
+		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
 
-	return !!value.match(timeRegex);
-};
+		return !!value.match(timeRegex) || errorMessage;
+	};
 
 /**
  * Vuetify Rules Validator

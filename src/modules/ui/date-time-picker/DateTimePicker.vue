@@ -110,8 +110,8 @@ const onDateUpdate = (newDate: string | null) => {
 	emitDateTime();
 };
 
-const onTimeUpdate = (newTime: string) => {
-	time.value = newTime;
+const onTimeUpdate = (newTime: string | undefined) => {
+	time.value = newTime ?? "";
 	errors.value = errors.value.filter((item) => item !== "time");
 	emitDateTime();
 };
