@@ -1,6 +1,7 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
 import { CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
 import { Status } from "@/store/types/commons";
+import { News } from "@/store/types/news";
 import { createTestAppStoreWithSchool, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useNews } from "@data-news";
@@ -32,7 +33,7 @@ describe("NewsCreatePage", () => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: Partial<{ query: LocationQuery; status: Status }>) => {
+	const setup = (options?: Partial<{ query: LocationQuery; status: Status; createdNews: News }>) => {
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
 		useRouteMock.mockReturnValue({
@@ -43,7 +44,8 @@ describe("NewsCreatePage", () => {
 		useNewsMockReturn = createMock<ReturnType<typeof useNews>>();
 		useNewsMock.mockReturnValue(useNewsMockReturn);
 
-		useNewsMockReturn.status = ref(options?.status || "");
+		useNewsMockReturn.status = ref(options?.status ?? "");
+		useNewsMockReturn.createdNews = ref(options?.createdNews ?? null);
 
 		const wrapper = mount(NewsCreatePage, {
 			attachTo: document.body,
@@ -155,8 +157,8 @@ describe("NewsCreatePage", () => {
 			});
 
 			it("should navigate to news details page after successful creation", async () => {
-				const { wrapper } = setup({ status: "completed" });
-				useNewsMockReturn.createdNews = ref(newsResponseFactory.build());
+				const { wrapper } = setup({ status: "completed", createdNews: newsResponseFactory.build() });
+
 				const formNews = wrapper.getComponent(FormNews);
 
 				formNews.vm.$emit("save", createParams);
