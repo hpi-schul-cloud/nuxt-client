@@ -17,7 +17,7 @@
 						</v-btn>
 						<v-spacer />
 						<v-btn class="mr-4" @click="onToggleFullscreen"> toggle fullscreen (debug) </v-btn>
-						<v-btn class="mr-4" @click="onToggleEdit">
+						<v-btn class="mr-4" data-testid="toolbar-edit-button" @click="onToggleEdit">
 							{{
 								isEditMode ? $t("common.actions.edit") + " " + $t("common.actions.finish") : $t("common.actions.edit")
 							}}
