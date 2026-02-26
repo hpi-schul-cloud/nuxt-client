@@ -480,6 +480,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "Die Datei/en konnte/n nicht gelöscht werden.",
 	"components.board.notifications.errors.fileToBig":
 		"Die angehängte Datei überschreitet die maximal zulässige Größe von {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"Die Anzahl der Dateien überschreitet das zulässige Limit von {fileLimitPerParent} Dateien.",
 	"components.board.notifications.errors.notCreated": "{type} konnte nicht erstellt werden.",
 	"components.board.notifications.errors.notDeleted": "{type} konnte nicht gelöscht werden.",
 	"components.board.notifications.errors.notDuplicated": "{type} konnte nicht dupliziert werden.",
@@ -902,7 +904,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
 	"feature-autoLogout.message.error":
 		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"feature-autoLogout.component.image.alt": "Faultier",
 	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
 	"feature-autoLogout.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"feature-autoLogout.warning":
@@ -1314,7 +1315,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Nutzungsordnung bearbeiten",
 	"pages.administration.school.index.termsOfUse.error": "Beim Laden der Nutzungsordnung ist ein Fehler aufgetreten",
 	"pages.administration.school.index.termsOfUse.fileName": "Nutzungsordnung der Schule",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Datei hochladen (nur PDF, max. 4MB)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Datei hochladen {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(nur PDF, max. 4 MB)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Datei auswählen",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Die neue Nutzungsordnung wird die alte unwiderruflich ersetzen und allen Nutzern dieser Schule zur Genehmigung vorgelegt werden.",
@@ -1323,7 +1325,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "Neue Datei wurde erfolgreich hochgeladen.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Hochgeladen {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"Die Datei ist größer als 4MB. Bitte reduzieren sie die Dateigröße",
+		"Die Datei ist größer als 4 MB. Bitte reduzieren sie die Dateigröße",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"Dieses Dateiformat wird nicht unterstützt. Verwenden Sie bitte PDF",
 	"pages.administration.school.index.title": "Schule verwalten",
@@ -1387,8 +1389,6 @@ export default {
 		"Bist du sicher, dass du alle Schüler:innen bis auf {number} löschen möchtest?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diesen Schüler:in löschen möchtest? | Bist du sicher, dass du diese {number} Schüler:innen löschen möchtest?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Schüler:innen weiterhin in der Tabelle sichtbar.",
 	"pages.administration.students.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.students.index.remove.progress.title": "Schüler:innen werden gelöscht",
 	"pages.administration.students.index.searchbar.ariaLabel": "Schüler:innen nach Namen durchsuchen",
@@ -1459,8 +1459,6 @@ export default {
 		"Bist du sicher, dass du alle Lehrkräfte bis auf {number} löschen möchtest?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Bist du sicher, dass du diese Lehrkraft löschen möchtest? | Bist du sicher, dass du diese {number} Lehrkräfte löschen möchtest?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"Die Löschung wird im Hintergrund gestartet und kann eine Weile dauern. Bis dahin sind diese Lehrkräfte weiterhin in der Tabelle sichtbar.",
 	"pages.administration.teachers.index.remove.progress.description": "Bitte warten...",
 	"pages.administration.teachers.index.remove.progress.title": "Lehrkräfte löschen",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Lehrkräfte nach Namen durchsuchen",
@@ -1882,6 +1880,9 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymisiert)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Raum-Mitglieder {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Raum-Mitglieder „{roomName}“",
+	"pages.security.headline": "Sicherheitsproblem melden",
+	"pages.security.text":
+		"Die dBildungscloud wird regelmäßig Sicherheitsüberprüfungen und Penetrationstests unterzogen, da uns die Sicherheit der Daten unserer Nutzer:innen sehr wichtig ist. Du hast trotzdem ein Sicherheitsproblem gefunden? Schreib uns, damit wir die Lücke schnellstmöglich schließen können: ",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text": "Bist du dir sicher, dass du das Element löschen möchtest?",
 	"pages.taskCard.deleteElement.title": "Element löschen",

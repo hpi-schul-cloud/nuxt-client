@@ -7,7 +7,6 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 const testTask = {
 	id: "123",
@@ -197,7 +196,7 @@ const getWrapper = (
 
 	return mount(CourseRoomTaskCard, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			mocks: {
 				$router: mockRouter,
 			},

@@ -1,7 +1,3 @@
-// It looks like we have to use default exports and no additional imports in the language files. Otherwise resource pre-compilation will fail.
-// https://github.com/intlify/bundle-tools/blob/b245313be48c089db3f325f9bc96ad37ab2011b8/packages/bundle-utils/src/js.ts#L83C1-L109C6
-// Pre-compilation is needed in order to make CSP work
-// https://github.com/intlify/bundle-tools/blob/main/packages/vue-i18n-loader/README.md#-i18n-resource-pre-compilation
 import deDE from "../locales/de";
 import enGB from "../locales/en";
 import esES from "../locales/es";

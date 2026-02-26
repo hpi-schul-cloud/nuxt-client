@@ -126,8 +126,7 @@ export default defineComponent({
 		const onDeleteElement = (elementId: string) => emit("delete:element", elementId);
 
 		const onDeleteCard = async () => {
-			let shouldDelete = true;
-			shouldDelete = await askDeleteConfirmation(props.card.title, "components.boardCard");
+			const shouldDelete = await askDeleteConfirmation(props.card.title, "components.boardCard");
 
 			if (shouldDelete) {
 				emit("delete:card");

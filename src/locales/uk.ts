@@ -481,6 +481,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "Видалити файли не вдалося.",
 	"components.board.notifications.errors.fileToBig":
 		"Вкладені файли перевищують максимально дозволений розмір {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"Кількість файлів перевищує допустимий ліміт {fileLimitPerParent} файлів.",
 	"components.board.notifications.errors.notCreated": "{type}: Не вдалося створити.",
 	"components.board.notifications.errors.notDeleted": "{type}: Не вдалося видалити.",
 	"components.board.notifications.errors.notDuplicated": "{type} не вдалося дублікувати.",
@@ -900,7 +902,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Термін дії сеансу минув. Увійдіть ще раз.",
 	"feature-autoLogout.message.error":
 		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"feature-autoLogout.component.image.alt": "Лінивець",
 	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
 	"feature-autoLogout.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"feature-autoLogout.warning":
@@ -1307,7 +1308,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Редагувати Умови використання",
 	"pages.administration.school.index.termsOfUse.error": "Виникла помилка під час завантаження Умови використання",
 	"pages.administration.school.index.termsOfUse.fileName": "Умови використання школи",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл (тільки PDF, максимум 4 МБ)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Завантажити файл {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(тільки PDF, максимум 4 МБ)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Виберіть файл",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"Нова Умови використання безповоротно замінить стару і буде представлена всім користувачам цієї школи для затвердження.",
@@ -1380,8 +1382,6 @@ export default {
 		"Ви дійсно хочете видалити всіх учнів, крім {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього учня?? | Ви дійсно хочете видалити цього {number} учня?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці учні залишатимуться видимими в таблиці.",
 	"pages.administration.students.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.students.index.remove.progress.title": "Видалення учнів",
 	"pages.administration.students.index.searchbar.ariaLabel": "Пошук учнів за іменами",
@@ -1451,8 +1451,6 @@ export default {
 		"Ви дійсно хочете видалити всіх викладачів, крім {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Ви дійсно хочете видалити цього викладача? | Ви дійсно хочете видалити цього {number} викладача?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"Видалення розпочнеться у фоновому режимі і може зайняти деякий час. До цього моменту ці викладачі залишатимуться видимими в таблиці.",
 	"pages.administration.teachers.index.remove.progress.description": "Зачекайте хвильку...",
 	"pages.administration.teachers.index.remove.progress.title": "Видалення викладачів",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Пошук викладачів за іменем",
@@ -1866,6 +1864,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(анонімізовано)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Учасники кімнати {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Учасники кімнати “{roomName}“",
+	"pages.security.headline": "Повідомити про проблему безпеки",
+	"pages.security.text":
+		"dBildungscloud регулярно проходить перевірки безпеки та тести на проникнення, оскільки безпека даних наших користувачів дуже важлива для нас. Ви все ще виявили проблему безпеки? Напишіть нам, щоб ми могли закрити прогалину якомога швидше: ",
+
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text": "Ви впевнені, що хочете видалити цей елемент?",
 	"pages.taskCard.deleteElement.title": "Видалити елемент",

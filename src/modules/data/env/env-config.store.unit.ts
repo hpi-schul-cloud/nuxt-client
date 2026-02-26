@@ -36,6 +36,7 @@ describe("useEnvStore", () => {
 		dataFileApi: FilesStorageConfigResponse = {
 			MAX_FILE_SIZE: 10,
 			COLLABORA_MAX_FILE_SIZE_IN_BYTES: 20,
+			FILES_STORAGE_MAX_FILES_PER_PARENT: 30,
 		}
 	) => {
 		doMockServerApiData({ ...defaultConfigEnvs, ...dataServerApi });
@@ -130,6 +131,7 @@ describe("useEnvStore", () => {
 		it("should request, process and provide env file data.", async () => {
 			const mockFileData: FilesStorageConfigResponse = {
 				MAX_FILE_SIZE: 1,
+				FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
 				COLLABORA_MAX_FILE_SIZE_IN_BYTES: 2,
 			};
 			await setup(true, undefined, mockFileData);

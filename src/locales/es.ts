@@ -479,6 +479,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "No se han podido eliminar los archivos.",
 	"components.board.notifications.errors.fileToBig":
 		"Los archivos adjuntos superan el tamaño máximo permitido de {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"El número de archivos supera el límite permitido de {fileLimitPerParent} archivos.",
 	"components.board.notifications.errors.notCreated": "{type} no se ha podido crear.",
 	"components.board.notifications.errors.notDeleted": "{type} no se ha podido eliminar.",
 	"components.board.notifications.errors.notDuplicated": "{type} no se ha podido duplicar.",
@@ -905,7 +907,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
 	"feature-autoLogout.message.error":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"feature-autoLogout.component.image.alt": "Perezoso",
 	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
@@ -1318,7 +1319,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Editar Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.error": "Se ha producido un error al cargar la Condiciones de Uso",
 	"pages.administration.school.index.termsOfUse.fileName": "Condiciones de Uso de la escuela",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo (sólo PDF, 4 MB como máximo)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Cargar archivo {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(sólo PDF, 4 MB como máximo)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Seleccionar archivo",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"La nueva Condiciones de Uso sustituirá irremediablemente a la anterior y se presentará a todos los usuarios de esta escuela para su aprobación.",
@@ -1394,8 +1396,6 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los estudiantes excepto a {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este estudiante? | ¿Estás seguro de que deseas eliminar a este estudiante de {number}?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos alumnos seguirán siendo visibles en la tabla.",
 	"pages.administration.students.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.students.index.remove.progress.title": "Eliminando alumn{'@'}s",
 	"pages.administration.students.index.searchbar.ariaLabel": "Buscar estudiantes por nombre",
@@ -1466,8 +1466,6 @@ export default {
 		"¿Estás seguro de que deseas eliminar a todos los profesores excepto a {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"¿Estás seguro de que deseas eliminar a este profesor? | ¿Estás seguro de que deseas eliminar este {number} de profesores?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"La eliminación se inicia en segundo plano y puede tardar un tiempo. Hasta entonces, estos profesores seguirán siendo visibles en la tabla.",
 	"pages.administration.teachers.index.remove.progress.description": "Por favor, espera...",
 	"pages.administration.teachers.index.remove.progress.title": "Eliminando profesor{'@'}s",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Buscar profesores por nombre",
@@ -1899,6 +1897,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anónimo)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Miembros de la sala {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Miembros de la sala “{roomName}”",
+	"pages.security.headline": "Informar del problema de seguridad",
+	"pages.security.text":
+		"dBildungscloud está sometido a controles de seguridad y pruebas de intrusión regularmente, ya que la seguridad de los datos de nuestros usuarios es muy importante para nosotros. ¿Sigues con problemas de seguridad? Escríbenos para que podamos cerrar la incidencia lo antes posible: ",
+
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text": "¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",

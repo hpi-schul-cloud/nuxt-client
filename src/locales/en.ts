@@ -471,6 +471,8 @@ export default {
 	"components.board.notifications.errors.fileNotDeleted": "The files could not be deleted.",
 	"components.board.notifications.errors.fileToBig":
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
+	"components.board.notifications.errors.fileLimitPerParentExceeded":
+		"The number of files exceeds the permitted limit of {fileLimitPerParent} files.",
 	"components.board.notifications.errors.notCreated": "{type} could not be created.",
 	"components.board.notifications.errors.notDeleted": "{type} could not be deleted.",
 	"components.board.notifications.errors.notDuplicated": "{type} could not be duplicated.",
@@ -884,7 +886,6 @@ export default {
 	"feature-autoLogout.message.error.401": "Your session has already expired. Please log in again.",
 	"feature-autoLogout.message.error":
 		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"feature-autoLogout.component.image.alt": "Sloth",
 	"feature-autoLogout.message.success": "Session successfully extended.",
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":
@@ -1290,7 +1291,8 @@ export default {
 	"pages.administration.school.index.termsOfUse.edit": "Edit Terms of Use",
 	"pages.administration.school.index.termsOfUse.error": "An error occurred while loading the terms of use",
 	"pages.administration.school.index.termsOfUse.fileName": "Terms of Use of the school",
-	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file (PDF only, 4MB max)",
+	"pages.administration.school.index.termsOfUse.hints.uploadFile": "Upload file {fileHint}",
+	"pages.administration.school.index.termsOfUse.fileHint": "(PDF only, 4 MB max)",
 	"pages.administration.school.index.termsOfUse.labels.uploadFile": "Select file",
 	"pages.administration.school.index.termsOfUse.longText.willReplaceAndSendConsent":
 		"The new Terms of Use will irretrievably replace the old one and will be presented to all users of this school for approval.",
@@ -1299,7 +1301,7 @@ export default {
 	"pages.administration.school.index.termsOfUse.success": "New file was successfully uploaded.",
 	"pages.administration.school.index.termsOfUse.uploadedOn": "Uploaded {date}",
 	"pages.administration.school.index.termsOfUse.validation.fileTooBig":
-		"The file is larger than 4MB. Please reduce the file size",
+		"The file is larger than 4 MB. Please reduce the file size",
 	"pages.administration.school.index.termsOfUse.validation.notPdf":
 		"This file format is not supported. Please use PDF only",
 	"pages.administration.school.index.title": "Manage school",
@@ -1362,8 +1364,6 @@ export default {
 		"Are you sure you want to delete all students except {number}?",
 	"pages.administration.students.index.remove.confirm.message.some":
 		"Are you sure you want to delete this student? | Are you sure you want to delete this {number} student?",
-	"pages.administration.students.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these students will remain visible in the table.",
 	"pages.administration.students.index.remove.progress.description": "Please wait...",
 	"pages.administration.students.index.remove.progress.title": "Deleting students",
 	"pages.administration.students.index.searchbar.ariaLabel": "Search students by name",
@@ -1433,8 +1433,6 @@ export default {
 		"Are you sure you want to delete all teachers except {number}?",
 	"pages.administration.teachers.index.remove.confirm.message.some":
 		"Are you sure you want to delete this teacher? | Are you sure you want to delete this {number} of teachers?",
-	"pages.administration.teachers.index.remove.confirm.message.warning":
-		"The deletion will start in the background and may take a while. Until then, these teachers will remain visible in the table.",
 	"pages.administration.teachers.index.remove.progress.description": "Please wait...",
 	"pages.administration.teachers.index.remove.progress.title": "Deleting teachers",
 	"pages.administration.teachers.index.searchbar.ariaLabel": "Search teachers by name",
@@ -1851,6 +1849,10 @@ export default {
 	"pages.rooms.administration.roomDetail.anonymized": "(anonymized)",
 	"pages.rooms.administration.roomDetail.breadcrumb": "Room members {roomName}",
 	"pages.rooms.administration.roomDetail.header.text": "Room members “{roomName}”",
+	"pages.security.headline": "Report security problem",
+	"pages.security.text":
+		"The dBildungscloud regularly undergoes security checks and penetration tests, as the security of our users' data is very important to us. You still found a security problem? Write to us so that we can close the gap as soon as possible: ",
+
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text": "Are you sure, you want to remove this element?",
 	"pages.taskCard.deleteElement.title": "Remove element",

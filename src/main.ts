@@ -18,7 +18,6 @@ import {
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
-	TERMS_OF_USE_MODULE_KEY,
 	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
@@ -39,7 +38,6 @@ import {
 	shareModule,
 	systemsModule,
 	tasksModule,
-	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
@@ -107,7 +105,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
 	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
-	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
+
 	app.provide(COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(), courseRoomDetailsModule);
 	app.provide("CourseRoomListModule", courseRoomListModule);
 	app.provide(SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(), schoolExternalToolsModule);
