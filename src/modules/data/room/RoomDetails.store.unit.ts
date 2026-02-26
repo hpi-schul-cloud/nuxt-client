@@ -62,7 +62,7 @@ describe("useRoomDetailsStore", () => {
 			it("should throw an error", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("test error"));
 
 				await expect(store.fetchRoom("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);
@@ -86,7 +86,7 @@ describe("useRoomDetailsStore", () => {
 			it("should set roomVariant to COURSE_ROOM", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("not found"));
 				mockErrorResponse({ code: 404 });
 
 				await store.fetchRoomAndBoards("room-id");
@@ -100,7 +100,7 @@ describe("useRoomDetailsStore", () => {
 			it("should set lockedRoomName to the error message", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("forbidden"));
 				mockErrorResponse({
 					code: 403,
 					type: "LOCKED_ROOM",
@@ -117,7 +117,7 @@ describe("useRoomDetailsStore", () => {
 			it("should throw an error", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("test error"));
 
 				await expect(store.fetchRoomAndBoards("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);

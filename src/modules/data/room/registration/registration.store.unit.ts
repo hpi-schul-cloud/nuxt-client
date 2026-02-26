@@ -1,6 +1,7 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { type RegistrationList, useRegistrationStore } from "./registration.store";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { RegistrationListResponse } from "@/serverApi/v3/api";
 import * as serverApi from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
@@ -8,13 +9,13 @@ import {
 	createTestEnvStore,
 	expectNoNotification,
 	expectNotification,
+	mockApiResponse,
 	mockedPiniaStoreTyping,
 	registrationFactory,
 	roomFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { AxiosPromise } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
@@ -66,7 +67,11 @@ describe("registration.store", () => {
 				const registration = registrationFactory.buildList(1)[0];
 				const { registrationStore, roomDetailsStore } = setup({ registrations: [registration] });
 
-				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce([registration]);
+				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(
+					mockApiResponse<serverApi.RegistrationListResponse>({
+						data: { data: [registration] },
+					})
+				);
 
 				await registrationStore.fetchRegistrationsForCurrentRoom();
 
@@ -79,7 +84,7 @@ describe("registration.store", () => {
 			it("should notify", async () => {
 				const { registrationStore, roomDetailsStore } = setup();
 
-				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerFindByRoom.mockRejectedValueOnce(new Error("Error"));
 
 				await registrationStore.fetchRegistrationsForCurrentRoom();
 
@@ -93,7 +98,7 @@ describe("registration.store", () => {
 				const { registrationStore } = setup({
 					envConfig: { FEATURE_EXTERNAL_PERSON_REGISTRATION_ENABLED: false },
 				});
-				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(new Error("Error"));
+				registrationApi.registrationControllerFindByRoom.mockRejectedValueOnce(new Error("Error"));
 
 				await registrationStore.fetchRegistrationsForCurrentRoom();
 
@@ -110,9 +115,11 @@ describe("registration.store", () => {
 				const { registrationStore } = setup({ registrationSecret: mockedSecret });
 
 				const mockedRegistrationData = { firstName: "Max", lastName: "Mustermann", email: "sample-mail@de.de" };
-				registrationApi.registrationControllerGetBySecret.mockResolvedValueOnce({
-					data: mockedRegistrationData,
-				});
+				registrationApi.registrationControllerGetBySecret.mockResolvedValueOnce(
+					mockApiResponse<serverApi.RegistrationItemResponse>({
+						data: mockedRegistrationData as serverApi.RegistrationItemResponse,
+					})
+				);
 
 				await registrationStore.fetchUserData();
 
@@ -162,7 +169,9 @@ describe("registration.store", () => {
 				const mockedSecret = "secret-123";
 				const { registrationStore } = setup({ registrationSecret: mockedSecret });
 
-				registrationApi.registrationControllerCompleteRegistration.mockResolvedValueOnce({});
+				registrationApi.registrationControllerCompleteRegistration.mockResolvedValueOnce(
+					mockApiResponse({ data: undefined })
+				);
 
 				const result = await registrationStore.completeRegistration(serverApi.LanguageType.En, "SuperSecret123");
 
@@ -193,7 +202,9 @@ describe("registration.store", () => {
 				const registration = registrationFactory.buildList(1)[0];
 				const { registrationStore, roomDetailsStore } = setup({ registrations: [registration] });
 
-				registrationApi.registrationControllerCancelRegistrations.mockResolvedValueOnce({});
+				registrationApi.registrationControllerCancelRegistrations.mockResolvedValueOnce(
+					mockApiResponse<RegistrationListResponse>({ data: { data: [] } })
+				);
 
 				await registrationStore.removeInvitations([registration.id]);
 
@@ -311,7 +322,11 @@ describe("registration.store", () => {
 				const registrations = registrationFactory.buildList(2);
 				const { registrationStore, roomDetailsStore } = setup({ registrations });
 
-				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce({});
+				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce(
+					mockApiResponse<serverApi.RegistrationListResponse>({
+						data: { data: registrations },
+					})
+				);
 
 				await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
 
@@ -325,10 +340,16 @@ describe("registration.store", () => {
 				const registrations = registrationFactory.buildList(1);
 				const { registrationStore, roomDetailsStore } = setup({ registrations });
 
-				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce({
-					data: { data: registrations },
-				} as unknown as AxiosPromise<serverApi.RegistrationListResponse>);
-				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(registrations);
+				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce(
+					mockApiResponse<serverApi.RegistrationListResponse>({
+						data: { data: registrations },
+					})
+				);
+				registrationApi.registrationControllerFindByRoom.mockResolvedValueOnce(
+					mockApiResponse<serverApi.RegistrationListResponse>({
+						data: { data: registrations },
+					})
+				);
 
 				await registrationStore.resendInvitations([registrations[0].id]);
 
@@ -339,9 +360,11 @@ describe("registration.store", () => {
 				const registrations = registrationFactory.buildList(2);
 				const { registrationStore } = setup({ registrations });
 
-				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce({
-					data: { data: registrations },
-				} as unknown as AxiosPromise<serverApi.RegistrationListResponse>);
+				registrationApi.registrationControllerResendRegistrationMails.mockResolvedValueOnce(
+					mockApiResponse<serverApi.RegistrationListResponse>({
+						data: { data: registrations },
+					})
+				);
 
 				await registrationStore.resendInvitations([registrations[0].id, registrations[1].id]);
 

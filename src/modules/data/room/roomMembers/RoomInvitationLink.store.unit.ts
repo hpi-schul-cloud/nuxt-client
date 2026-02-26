@@ -17,7 +17,7 @@ import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-error-handling";
-import { AxiosInstance, AxiosPromise } from "axios";
+import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 
 describe("useRoomInvitationLinkStore", () => {
@@ -281,9 +281,11 @@ describe("useRoomInvitationLinkStore", () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
 				const roomId = "some-id";
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue({
-					data: { id: roomId },
-				} as unknown as AxiosPromise<RoomIdResponse>);
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue(
+					mockApiResponse<RoomIdResponse>({
+						data: { id: roomId },
+					})
+				);
 				const firstLink = links[0];
 
 				const result = await roomInvitationLinkStore.useLink(firstLink.id);

@@ -5,7 +5,7 @@ import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory, mountComposable } from "@@/tests/test-utils";
+import { axiosErrorFactory, mountComposable, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { nextTick } from "vue";
@@ -28,7 +28,7 @@ describe("ExternalToolLaunchState.composable", () => {
 	describe("fetchContextLaunchRequest", () => {
 		describe("when fetching a tool", () => {
 			const setup = () => {
-				const response = toolLaunchRequestFactory.build();
+				const response = toolLaunchRequestResponseFactory.build();
 
 				useExternalToolApiMock.fetchContextLaunchDataCall.mockResolvedValue(response);
 
@@ -108,7 +108,7 @@ describe("ExternalToolLaunchState.composable", () => {
 	describe("fetchSchoolLaunchRequest", () => {
 		describe("when fetching a tool", () => {
 			const setup = () => {
-				const response = toolLaunchRequestFactory.build();
+				const response = toolLaunchRequestResponseFactory.build();
 
 				const bodyParams: ContextExternalToolBodyParams = {
 					contextId: "contextId",

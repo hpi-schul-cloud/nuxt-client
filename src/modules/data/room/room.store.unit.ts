@@ -1,7 +1,7 @@
 import { useRoomStore } from "./room.store";
-import { RoomApiFactory, RoomColor } from "@/serverApi/v3";
+import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomItemResponse, RoomListResponse } from "@/serverApi/v3";
 import { RoomCreateParams } from "@/types/room/Room";
-import { createTestRoomStore, expectNotification, roomItemFactory } from "@@/tests/test-utils";
+import { createTestRoomStore, expectNotification, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -25,7 +25,9 @@ describe("useRoomStore", () => {
 				{ id: "1", name: "Room 1" },
 				{ id: "2", name: "Room 2" },
 			];
-			roomApiMock.roomControllerGetRooms.mockResolvedValue({ data: { data: mockRooms } });
+			roomApiMock.roomControllerGetRooms.mockResolvedValue(
+				mockApiResponse<RoomListResponse>({ data: { data: mockRooms as RoomItemResponse[] } })
+			);
 
 			const store = useRoomStore();
 			await store.fetchRooms();
@@ -50,7 +52,7 @@ describe("useRoomStore", () => {
 		const createParams: RoomCreateParams = { name: "New Room", color: RoomColor.Blue, features: [] };
 
 		it("should create room successfully", async () => {
-			roomApiMock.roomControllerCreateRoom.mockResolvedValue();
+			roomApiMock.roomControllerCreateRoom.mockResolvedValue(mockApiResponse<RoomCreatedResponse>({ data: undefined }));
 			await useRoomStore().createRoom(createParams);
 			expect(roomApiMock.roomControllerCreateRoom).toHaveBeenCalled();
 		});
@@ -65,7 +67,7 @@ describe("useRoomStore", () => {
 
 	describe("deleteRoom", () => {
 		it("should delete room successfully", async () => {
-			roomApiMock.roomControllerDeleteRoom.mockResolvedValue();
+			roomApiMock.roomControllerDeleteRoom.mockResolvedValue(mockApiResponse({ data: undefined }));
 			await useRoomStore().deleteRoom("room-123");
 			expect(roomApiMock.roomControllerDeleteRoom).toHaveBeenCalledWith("room-123");
 		});
@@ -80,7 +82,7 @@ describe("useRoomStore", () => {
 
 	describe("leaveRoom", () => {
 		it("should leave room successfully", async () => {
-			roomApiMock.roomControllerLeaveRoom.mockResolvedValue();
+			roomApiMock.roomControllerLeaveRoom.mockResolvedValue(mockApiResponse({ data: "room-123" }));
 			await useRoomStore().leaveRoom("room-123");
 			expect(roomApiMock.roomControllerLeaveRoom).toHaveBeenCalledWith("room-123");
 		});
@@ -107,7 +109,7 @@ describe("useRoomStore", () => {
 
 	describe("isLoading", () => {
 		it("should be true during API call", async () => {
-			roomApiMock.roomControllerLeaveRoom.mockResolvedValue();
+			roomApiMock.roomControllerLeaveRoom.mockResolvedValue(mockApiResponse({ data: "room-123" }));
 			const leavePromise = useRoomStore().leaveRoom("room-123");
 
 			expect(useRoomStore().isLoading).toBe(true);

@@ -2,7 +2,13 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { FileRecordResponse } from "@/fileStorageApi/v3/models/file-record-response";
+import {
+	CollaborativeTextEditorElementResponse,
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import {
 	collaborativeTextEditorElementResponseFactory,
@@ -999,18 +1005,16 @@ describe("CardStore", () => {
 			editModeId.value = editMode ? "cardId" : undefined;
 
 			const createElementRequestReturnValue = createElementFails
-				? Promise.resolve(undefined)
-				: Promise.resolve({
+				? undefined
+				: ({
 						id: "elementId",
 						type: ContentElementType.File,
 						content: {},
-					});
-			mockedCardRestApiActions.createElementRequest.mockReturnValue(createElementRequestReturnValue);
+					} as CollaborativeTextEditorElementResponse);
+			mockedCardRestApiActions.createElementRequest.mockResolvedValue(createElementRequestReturnValue);
 
-			const uploadCollaboraFileReturnValue = uploadFails
-				? Promise.resolve(undefined)
-				: Promise.resolve({ id: "fileId" });
-			mockedFileStorageActions.uploadCollaboraFile.mockReturnValue(uploadCollaboraFileReturnValue);
+			const uploadCollaboraFileReturnValue = uploadFails ? undefined : ({ id: "fileId" } as FileRecordResponse);
+			mockedFileStorageActions.uploadCollaboraFile.mockResolvedValue(uploadCollaboraFileReturnValue);
 
 			return {
 				cardStore,

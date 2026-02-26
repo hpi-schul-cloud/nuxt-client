@@ -18,17 +18,24 @@ import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
 
 vi.mock("@data-board");
 vi.mock("@feature-board");
 vi.mock("./content/alert/useFileAlerts.composable");
-vi.mock("vue-router");
 
 describe("FileContentElement", () => {
+	let router: RouterMock;
+
+	beforeEach(() => {
+		router = createRouterMock({
+			routes: [{ path: "/collabora/:id", name: "collabora", component: { template: "<div />" } }],
+		});
+		injectRouterMock(router);
+	});
+
 	const getWrapper = (props: {
 		element: FileElementResponse;
 		isEditMode: boolean;
@@ -214,12 +221,6 @@ describe("FileContentElement", () => {
 					mimeType: props?.mimeType ?? "application/pdf",
 					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
-
-				const collaboraPageUrl = "/collabora/" + fileRecordResponse.id + "?editorMode=edit";
-				const router = createMock<Router>();
-				const useRouterMock = <Mock>useRouter;
-				useRouterMock.mockReturnValue(router);
-				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -457,7 +458,7 @@ describe("FileContentElement", () => {
 
 						card.trigger("click");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 						windowOpenSpy.mockRestore();
 					});
 				});
@@ -477,7 +478,7 @@ describe("FileContentElement", () => {
 
 						await card.trigger("keydown.enter");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 
 						windowOpenSpy.mockRestore();
 					});
@@ -654,12 +655,6 @@ describe("FileContentElement", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
 
-					const collaboraPageUrl = "/collabora/" + "123" + "?editorMode=edit";
-					const router = createMock<Router>();
-					const useRouterMock = <Mock>useRouter;
-					useRouterMock.mockReturnValue(router);
-					router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
-
 					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -833,13 +828,6 @@ describe("FileContentElement", () => {
 					mimeType: props?.mimeType ?? "application/pdf",
 					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
-
-				const collaboraPageUrl = "/collabora/" + fileRecordResponse.id + "?editorMode=edit";
-				const router = createMock<Router>();
-				const useRouterMock = <Mock>useRouter;
-
-				useRouterMock.mockReturnValue(router);
-				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
 
 				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
@@ -1062,7 +1050,7 @@ describe("FileContentElement", () => {
 
 						card.trigger("click");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 						windowOpenSpy.mockRestore();
 					});
 				});
@@ -1082,7 +1070,7 @@ describe("FileContentElement", () => {
 
 						await card.trigger("keydown.enter");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 
 						windowOpenSpy.mockRestore();
 					});

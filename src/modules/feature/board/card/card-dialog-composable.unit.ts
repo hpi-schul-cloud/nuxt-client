@@ -1,5 +1,10 @@
 import { useCardDialogData } from "./card-dialog-composable";
-import { columnResponseFactory, mockedPiniaStoreTyping, roomBoardGridItemFactory } from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	columnResponseFactory,
+	mockedPiniaStoreTyping,
+	roomBoardGridItemFactory,
+} from "@@/tests/test-utils";
 import { useBoardApi } from "@data-board";
 import { useRoomDetailsStore, useRoomStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -56,7 +61,7 @@ describe("useCardDialogData", () => {
 
 	it("should fetch columns when selectedBoardId changes and add default titles", async () => {
 		setup();
-		useBoardApiMock.fetchBoardCall.mockResolvedValue({ columns: mockColumns });
+		useBoardApiMock.fetchBoardCall.mockResolvedValue(boardResponseFactory.build({ columns: mockColumns }));
 
 		const { selectedBoardId, columns } = result;
 

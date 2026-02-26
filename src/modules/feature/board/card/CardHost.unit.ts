@@ -2,6 +2,8 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import { CardResponse } from "@/serverApi/v3";
 import { BoardPermissionChecks, defaultPermissions } from "@/types/board/Permissions";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
@@ -15,8 +17,6 @@ import {
 	useCourseBoardEditMode,
 	useSharedEditMode,
 } from "@data-board";
-import { useCardRestApi } from "@data-board/cardActions/cardRestApi.composable";
-import { useCardSocketApi } from "@data-board/cardActions/cardSocketApi.composable";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";

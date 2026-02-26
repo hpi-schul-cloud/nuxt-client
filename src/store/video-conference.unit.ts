@@ -339,8 +339,6 @@ describe("VideoConferenceModule", () => {
 					everybodyJoinsAsModerator: false,
 				};
 
-				videoconferenceApi.videoConferenceControllerStart.mockImplementation();
-
 				return {
 					videoconferenceApi,
 					videoConferenceOptions,
