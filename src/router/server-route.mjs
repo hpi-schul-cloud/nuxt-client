@@ -10,6 +10,11 @@ const isH5pEditor = (path) => path.startsWith("/api/v3/h5p-editor");
 /**
  * @param {string} path
  */
+const isArchiveDownload = (path) => path.startsWith("/api/v3/download-archive");
+
+/**
+ * @param {string} path
+ */
 const isFWUEndpoint = (path) => path.startsWith("/api/v3/fwu");
 
 /**
@@ -22,4 +27,4 @@ const isH5pStaticFiles = (path) => path.startsWith("/api/v3/h5p-editor/h5pstatic
  */
 const isCommonCartridge = (path) => path.startsWith("/api/v3/common-cartridge");
 
-export { isCommonCartridge, isFileStorage, isFWUEndpoint, isH5pEditor, isH5pStaticFiles, isServer };
+export { isArchiveDownload, isCommonCartridge, isFileStorage, isFWUEndpoint, isH5pEditor, isH5pStaticFiles, isServer };
