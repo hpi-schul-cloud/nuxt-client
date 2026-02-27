@@ -2,6 +2,7 @@ import TeacherPage from "./TeacherOverview.page.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
+import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import { Permission, RoleName, SchulcloudTheme } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
@@ -210,6 +211,9 @@ describe("teachers/index", () => {
 		// click delete menu button
 		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(2);
 		await deleteBtn.trigger("click");
+
+		wrapper.findComponent(DeleteUserDialog).vm.$emit("confirm");
+		await nextTick();
 
 		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
 		expect(usersActionsStubs.deleteUsers.mock.calls[0][1]).toStrictEqual({
