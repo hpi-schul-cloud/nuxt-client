@@ -9719,12 +9719,6 @@ export interface SchoolPermissionsParams {
      * @memberof SchoolPermissionsParams
      */
     teacher?: TeacherPermissionParams;
-    /**
-     * 
-     * @type {object}
-     * @memberof SchoolPermissionsParams
-     */
-    student?: object;
 }
 /**
  * 
