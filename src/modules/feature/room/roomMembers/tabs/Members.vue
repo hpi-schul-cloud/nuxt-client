@@ -1,5 +1,5 @@
 <template>
-	<div v-if="canAddRoomMembers" data-testid="info-text">
+	<div v-if="allowedOperations.addMembers" data-testid="info-text">
 		<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 			<a :href="informationLink!" target="_blank" rel="noopener" :ariaLabel="linkAriaLabel">
 				{{ t("pages.rooms.members.infoText.moreInformation") }}
@@ -14,7 +14,9 @@
 		<MembersTable v-if="!isLoadingMembers" :header-bottom="headerBottom" />
 	</div>
 
-	<div v-if="!isLoadingInvitations && canManageRoomInvitationLinks && isInviteExternalPersonsFeatureEnabled">
+	<div
+		v-if="!isLoadingInvitations && allowedOperations.updateRoomInvitationLinks && isInviteExternalPersonsFeatureEnabled"
+	>
 		<h2 class="mb-0">
 			{{ t("pages.rooms.members.title.invitations") }}
 		</h2>
@@ -28,7 +30,7 @@ import MembersTable from "../tables/MembersTable.vue";
 import { useEnvConfig } from "@data-env";
 import {
 	useRegistrationStore,
-	useRoomAuthorization,
+	useRoomAllowedOperations,
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
 } from "@data-room";
@@ -50,7 +52,7 @@ const { isInviteExternalPersonsFeatureEnabled } = storeToRefs(useRoomInvitationL
 const registrationStore = useRegistrationStore();
 const { isLoading: isLoadingMembers } = storeToRefs(roomMembersStore);
 const { isLoading: isLoadingInvitations } = storeToRefs(registrationStore);
-const { canAddRoomMembers, canManageRoomInvitationLinks } = useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const linkAriaLabel = computed(
 	() => `${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`

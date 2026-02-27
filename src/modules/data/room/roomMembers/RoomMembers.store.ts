@@ -227,24 +227,9 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const addMembers = async (userIds: string[]) => {
-		const newMembers = potentialRoomMembers.value.filter((member) => userIds.includes(member.userId));
-
 		try {
-			const { roomRoleName } = (
-				await roomApi.roomControllerAddMembers(getRoomId(), {
-					userIds,
-				})
-			).data;
-			roomMembers.value.push(
-				...newMembers.map((member) => ({
-					...member,
-					fullName: `${member.firstName} ${member.lastName}`,
-					roomRoleName: roomRoleName as RoleName,
-					displayRoomRole: roomRole[roomRoleName],
-					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
-					schoolId: member.schoolId,
-				}))
-			);
+			await roomApi.roomControllerAddMembers(getRoomId(), { userIds });
+			await fetchMembers();
 		} catch {
 			notifyError(t("pages.rooms.members.error.add"));
 		}

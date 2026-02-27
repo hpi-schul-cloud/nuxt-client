@@ -15,7 +15,7 @@
 						:data-testid="`column-title-${index}`"
 						scope="column"
 						:is-edit-mode="isEditMode"
-						:has-edit-permission="hasEditPermission"
+						:has-edit-permission="canEditColumn"
 						class="w-100"
 						:is-focused="isFocusedById"
 						@update:value="onUpdateTitle"
@@ -24,7 +24,7 @@
 				</BoardColumnInteractionHandler>
 			</div>
 			<div class="mt-2 mr-3">
-				<BoardMenu v-if="hasDeletePermission" :scope="BoardMenuScope.COLUMN" :data-testid="`column-menu-btn-${index}`">
+				<BoardMenu v-if="canDeleteColumn" :scope="BoardMenuScope.COLUMN" :data-testid="`column-menu-btn-${index}`">
 					<KebabMenuActionRename v-if="!isEditMode" @click="onStartEditMode" />
 					<template v-if="isListBoard">
 						<KebabMenuActionMoveUp v-if="isNotFirstColumn" @click="onMoveColumnUp" />
@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { useBoardFocusHandler, useBoardPermissions, useCourseBoardEditMode } from "@data-board";
+import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -60,11 +60,13 @@ import { ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
+	canEditColumn: { type: Boolean, required: true },
+	canDeleteColumn: { type: Boolean, required: true },
 	columnId: { type: String, required: true },
 	index: { type: Number, required: true },
 	isListBoard: { type: Boolean, required: true },
-	isNotFirstColumn: { type: Boolean, requried: false },
-	isNotLastColumn: { type: Boolean, requried: false },
+	isNotFirstColumn: { type: Boolean, required: false },
+	isNotLastColumn: { type: Boolean, required: false },
 	title: { type: String, required: true },
 });
 
@@ -80,21 +82,22 @@ const { t } = useI18n();
 
 const columnId = toRef(props, "columnId");
 const columnTitle = toRef(props, "title");
+const canEditColumn = toRef(props, "canEditColumn");
+const canDeleteColumn = toRef(props, "canDeleteColumn");
 const updatedTitle = ref(columnTitle.value);
 const lastEmittedTitle = ref(columnTitle.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(columnId.value);
 
 const columnHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
 
 const onStartEditMode = () => {
-	if (!hasEditPermission.value) return;
+	if (!canEditColumn.value) return;
 	startEditMode();
 };
 
 const onEndEditMode = () => {
-	if (!hasEditPermission.value) return;
+	if (!canEditColumn.value) return;
 	emitTitleUpdate();
 	stopEditMode();
 };

@@ -1,9 +1,8 @@
 import RoomMenu from "./RoomMenu.vue";
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRoomAuthorization } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
@@ -17,48 +16,26 @@ import {
 import { VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { computed } from "vue";
 import { RouterLink } from "vue-router";
-
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = vi.mocked(useRoomAuthorization);
 
 vi.mock("@ui-confirmation-dialog");
 vi.mocked(useDeleteConfirmationDialog);
 
 describe("@feature-room/RoomMenu", () => {
-	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let askDeleteConfirmationMock: Mock;
 
 	beforeEach(() => {
-		roomPermissions = {
-			canAddRoomMembers: computed(() => false),
-			canCreateRoom: computed(() => false),
-			canChangeOwner: computed(() => false),
-			canViewRoom: computed(() => false),
-			canAddAllStudents: computed(() => false),
-			canEditRoom: computed(() => false),
-			canDeleteRoom: computed(() => false),
-			canCopyRoom: computed(() => false),
-			canLeaveRoom: computed(() => false),
-			canRemoveRoomMembers: computed(() => false),
-			canEditRoomContent: computed(() => false),
-			canSeeAllStudents: computed(() => false),
-			canShareRoom: computed(() => false),
-			canListDrafts: computed(() => false),
-			canManageRoomInvitationLinks: computed(() => false),
-			canManageVideoconferences: computed(() => false),
-			canSeeMembersList: computed(() => false),
-		};
-		roomAuthorization.mockReturnValue(roomPermissions);
-
 		askDeleteConfirmationMock = vi.fn();
 		setupDeleteConfirmationComposableMock({
 			askDeleteConfirmationMock,
 		});
 	});
 
-	const setup = (envs: Partial<ConfigResponse> = {}) => {
+	const setup = (
+		envs: Partial<ConfigResponse> = {},
+		options?: { allowedOperations: Partial<RoomItemResponseAllowedOperations>; roomName?: string }
+	) => {
+		options ??= { allowedOperations: {} };
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_ROOM_COPY_ENABLED: true,
@@ -67,8 +44,23 @@ describe("@feature-room/RoomMenu", () => {
 		});
 
 		const wrapper = mount(RoomMenu, {
+			props: {
+				roomName: options.roomName,
+			},
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								room: {
+									allowedOperations: options.allowedOperations,
+								},
+							},
+						},
+					}),
+				],
 				stubs: {
 					RouterLink,
 				},
@@ -106,9 +98,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has edit permission", () => {
 		it("should contain edit menu and leave items", async () => {
-			roomPermissions.canEditRoom = computed(() => true);
-
-			const { wrapper, menuBtn } = setup();
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { updateRoom: true } });
 			await menuBtn.trigger("click");
 
 			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
@@ -123,9 +113,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has delete permission", () => {
 		it("should only contain delete and leave menu items", async () => {
-			roomPermissions.canDeleteRoom = computed(() => true);
-
-			const { wrapper, menuBtn } = setup();
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true } });
 			await menuBtn.trigger("click");
 
 			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
@@ -140,10 +128,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has view members permission", () => {
 		it("should contain room members menu item with correct membersInfoText and leave menu item", async () => {
-			roomPermissions.canSeeMembersList = computed(() => true);
-			roomPermissions.canAddRoomMembers = computed(() => false);
-
-			const { wrapper, menuBtn } = setup();
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { addMembers: false, viewMemberlist: true } });
 			await menuBtn.trigger("click");
 
 			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
@@ -159,11 +144,11 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user has view room, edit, delete and leave permissions", () => {
 		it("should show all menu items", async () => {
-			roomPermissions.canSeeMembersList = computed(() => true);
-			roomPermissions.canEditRoom = computed(() => true);
-			roomPermissions.canDeleteRoom = computed(() => true);
+			const { wrapper, menuBtn } = setup(
+				{},
+				{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
+			);
 
-			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
 			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete, kebabActionLeaveRoom } =
@@ -179,9 +164,10 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can copy room", () => {
 		describe("and copy feature is enabled", () => {
 			it("should show copy menu item", async () => {
-				roomPermissions.canCopyRoom = computed(() => true);
-
-				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_COPY_ENABLED: true });
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_COPY_ENABLED: true },
+					{ allowedOperations: { copyRoom: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomCopy } = findKebabActions(wrapper);
@@ -192,11 +178,12 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and copy feature is NOT enabled", () => {
 			it("should NOT show copy menu item", async () => {
-				roomPermissions.canCopyRoom = computed(() => true);
-
-				const { wrapper, menuBtn } = setup({
-					FEATURE_ROOM_COPY_ENABLED: false,
-				});
+				const { wrapper, menuBtn } = setup(
+					{
+						FEATURE_ROOM_COPY_ENABLED: false,
+					},
+					{ allowedOperations: { copyRoom: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomCopy } = findKebabActions(wrapper);
@@ -209,9 +196,10 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can NOT copy room", () => {
 		describe("and copy feature is enabled", () => {
 			it("should NOT show copy menu item", async () => {
-				roomPermissions.canCopyRoom = computed(() => false);
-
-				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_COPY_ENABLED: true });
+				const { wrapper, menuBtn } = setup(
+					{ FEATURE_ROOM_COPY_ENABLED: true },
+					{ allowedOperations: { copyRoom: false } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomCopy } = findKebabActions(wrapper);
@@ -224,9 +212,7 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can share room", () => {
 		describe("and share feature is enabled", () => {
 			it("should show share menu item", async () => {
-				roomPermissions.canShareRoom = computed(() => true);
-
-				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true });
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true }, { allowedOperations: { shareRoom: true } });
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomShare } = findKebabActions(wrapper);
@@ -237,9 +223,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and share feature is NOT enabled", () => {
 			it("should NOT show share menu item", async () => {
-				roomPermissions.canShareRoom = computed(() => true);
-
-				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: false });
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: false }, { allowedOperations: { shareRoom: true } });
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomShare } = findKebabActions(wrapper);
@@ -252,9 +236,7 @@ describe("@feature-room/RoomMenu", () => {
 	describe("when user can NOT share room", () => {
 		describe("and share feature is enabled", () => {
 			it("should NOT show share menu item", async () => {
-				roomPermissions.canShareRoom = computed(() => false);
-
-				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true });
+				const { wrapper, menuBtn } = setup({ FEATURE_ROOM_SHARE: true }, { allowedOperations: { shareRoom: false } });
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomShare } = findKebabActions(wrapper);
@@ -266,10 +248,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user can add room members", () => {
 		it("should show the correct membersInfoText", async () => {
-			roomPermissions.canSeeMembersList = computed(() => true);
-			roomPermissions.canAddRoomMembers = computed(() => true);
-
-			const { wrapper, menuBtn } = setup();
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { addMembers: true, viewMemberlist: true } });
 			await menuBtn.trigger("click");
 
 			const { kebabActionRoomMembers } = findKebabActions(wrapper);
@@ -279,16 +258,26 @@ describe("@feature-room/RoomMenu", () => {
 		});
 	});
 
-	describe("when clicking on menu button", () => {
-		beforeEach(() => {
-			roomPermissions.canSeeMembersList = computed(() => true);
-			roomPermissions.canEditRoom = computed(() => true);
-			roomPermissions.canDeleteRoom = computed(() => true);
-		});
+	describe("when roomName is provided", () => {
+		it("should pass roomName to delete action", async () => {
+			const roomName = "My Room";
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true }, roomName });
+			await menuBtn.trigger("click");
 
+			const { kebabActionDelete } = findKebabActions(wrapper);
+
+			expect(kebabActionDelete.exists()).toBe(true);
+			expect(kebabActionDelete.props("name")).toBe(roomName);
+		});
+	});
+
+	describe("when clicking on menu button", () => {
 		describe("and clicking on edit menu item", () => {
 			it("should emit 'room:edit' event", async () => {
-				const { wrapper, menuBtn } = setup();
+				const { wrapper, menuBtn } = setup(
+					{},
+					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionEdit } = findKebabActions(wrapper);
@@ -300,7 +289,10 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and clicking on room members menu item", () => {
 			it("should emit 'room:manage-members' event", async () => {
-				const { wrapper, menuBtn } = setup();
+				const { wrapper, menuBtn } = setup(
+					{},
+					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionRoomMembers } = findKebabActions(wrapper);
@@ -310,10 +302,37 @@ describe("@feature-room/RoomMenu", () => {
 			});
 		});
 
+		describe("and clicking on copy menu item", () => {
+			it("should emit 'room:copy' event", async () => {
+				const { wrapper, menuBtn } = setup({}, { allowedOperations: { copyRoom: true } });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomCopy } = findKebabActions(wrapper);
+				await kebabActionRoomCopy.trigger("click");
+
+				expect(wrapper.emitted("room:copy")).toHaveLength(1);
+			});
+		});
+
+		describe("and clicking on share menu item", () => {
+			it("should emit 'room:share' event", async () => {
+				const { wrapper, menuBtn } = setup({}, { allowedOperations: { shareRoom: true } });
+				await menuBtn.trigger("click");
+
+				const { kebabActionRoomShare } = findKebabActions(wrapper);
+				await kebabActionRoomShare.trigger("click");
+
+				expect(wrapper.emitted("room:share")).toHaveLength(1);
+			});
+		});
+
 		describe("and clicking on delete menu item", () => {
 			it("should emit 'room:delete' event if confirmed", async () => {
 				askDeleteConfirmationMock.mockResolvedValue(true);
-				const { wrapper, menuBtn } = setup();
+				const { wrapper, menuBtn } = setup(
+					{},
+					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionDelete } = findKebabActions(wrapper);
@@ -324,7 +343,10 @@ describe("@feature-room/RoomMenu", () => {
 
 			it("should not emit 'room:delete' if not confirmed ", async () => {
 				askDeleteConfirmationMock.mockResolvedValue(false);
-				const { wrapper, menuBtn } = setup();
+				const { wrapper, menuBtn } = setup(
+					{},
+					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionDelete } = findKebabActions(wrapper);
@@ -336,8 +358,10 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and clicking on leave button", () => {
 			it("should emit 'room:leave' event", async () => {
-				roomPermissions.canLeaveRoom = computed(() => true);
-				const { wrapper, menuBtn } = setup();
+				const { wrapper, menuBtn } = setup(
+					{},
+					{ allowedOperations: { deleteRoom: true, leaveRoom: true, updateRoom: true, viewMemberlist: true } }
+				);
 				await menuBtn.trigger("click");
 
 				const { kebabActionLeaveRoom } = findKebabActions(wrapper);

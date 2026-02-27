@@ -2,49 +2,59 @@ import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 import { deletedElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
+import { computed, nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("@data-board");
 
 describe("DeletedElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let useBoardPermissionsMock: DeepMocked<ReturnType<typeof useBoardPermissions>>;
 
 	beforeEach(() => {
 		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useBoardPermissionsMock = createMock<ReturnType<typeof useBoardPermissions>>({ isTeacher: ref(true) });
-
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		vi.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	const getWrapper = (
-		props: ComponentProps<typeof DeletedElement> = {
-			element: deletedElementResponseFactory.build(),
-			isEditMode: false,
-			columnIndex: 0,
-			rowIndex: 1,
-			elementIndex: 2,
-		}
-	) => {
+	type DeletedElementSetupOptions = {
+		isEditMode?: boolean;
+		allowedOperations?: Record<string, boolean>;
+		props?: Partial<ComponentProps<typeof DeletedElement>>;
+	};
+
+	const setup = (options: DeletedElementSetupOptions = {}) => {
+		const { isEditMode = false, allowedOperations = { deleteElement: true }, props: overriddenProps = {} } = options;
+
+		const element = overriddenProps.element ?? deletedElementResponseFactory.build();
+
+		vi.mocked(useBoardAllowedOperations).mockReturnValue({
+			allowedOperations: computed(() => allowedOperations as unknown),
+		} as ReturnType<typeof useBoardAllowedOperations>);
+
 		const wrapper = mount(DeletedElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props,
+			props: {
+				element,
+				isEditMode,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+				...overriddenProps,
+			},
 		});
 
 		return {
 			wrapper,
+			deletedElement: element,
 		};
 	};
 
@@ -52,50 +62,42 @@ describe("DeletedElement", () => {
 		vi.resetAllMocks();
 	});
 
-	describe("when the user is not a teacher", () => {
-		const setup = () => {
-			useBoardPermissionsMock.isTeacher.value = false;
+	describe("when the user is not a teacher (aka has not the right to delete elements)", () => {
+		describe("when edit mode is active", () => {
+			it("should not show the element", async () => {
+				const isEditMode = true;
+				const allowedOperations = { deleteElement: false };
 
-			const { wrapper } = getWrapper({
-				element: deletedElementResponseFactory.build(),
-				isEditMode: true,
-				columnIndex: 0,
-				rowIndex: 1,
-				elementIndex: 2,
+				const { wrapper } = setup({ isEditMode, allowedOperations });
+
+				const deletedElement = wrapper.findComponent({ ref: "deletedElement" });
+
+				expect(deletedElement.isVisible()).toEqual(false);
 			});
+		});
 
-			return {
-				wrapper,
-			};
-		};
+		describe("when edit mode is inactive", () => {
+			it("should not show the element and not render the menu", async () => {
+				const isEditMode = false;
+				const allowedOperations = { deleteElement: false };
 
-		it("should not show the element", async () => {
-			const { wrapper } = setup();
+				const { wrapper } = setup({ isEditMode, allowedOperations });
 
-			const deletedElement = wrapper.findComponent({ ref: "deletedElement" });
+				const deletedElement = wrapper.findComponent({ ref: "deletedElement" });
+				expect(deletedElement.isVisible()).toEqual(false);
 
-			expect(deletedElement.isVisible()).toEqual(false);
+				const threeDotMenu = wrapper.findComponent(DeletedElementMenu);
+				expect(threeDotMenu.exists()).toEqual(false);
+			});
 		});
 	});
 
 	describe("Menu", () => {
 		describe("when in edit mode", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: deletedElementResponseFactory.build(),
-					isEditMode: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
-				});
+			it("should display the three dot menu", async () => {
+				const isEditMode = true;
 
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display the tree dot menu", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ isEditMode });
 
 				const threeDotMenu = wrapper.findComponent(DeletedElementMenu);
 
@@ -104,22 +106,10 @@ describe("DeletedElement", () => {
 		});
 
 		describe("when not in edit mode", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: deletedElementResponseFactory.build(),
-					isEditMode: false,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
-				});
+			it("should not display the three dot menu", async () => {
+				const isEditMode = false;
 
-				return {
-					wrapper,
-				};
-			};
-
-			it("should not display the tree dot menu", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ isEditMode });
 
 				const threeDotMenu = wrapper.findComponent(DeletedElementMenu);
 
@@ -128,24 +118,10 @@ describe("DeletedElement", () => {
 		});
 
 		describe("when deleting the element", () => {
-			const setup = () => {
-				const deletedElement = deletedElementResponseFactory.build();
-				const { wrapper } = getWrapper({
-					element: deletedElement,
-					isEditMode: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
-				});
-
-				return {
-					wrapper,
-					deletedElement,
-				};
-			};
-
 			it("should emit an event", async () => {
-				const { wrapper, deletedElement } = setup();
+				const isEditMode = true;
+
+				const { wrapper, deletedElement } = setup({ isEditMode });
 
 				wrapper.findComponent(DeletedElementMenu).vm.$emit("delete:element");
 				await nextTick();
@@ -157,22 +133,10 @@ describe("DeletedElement", () => {
 
 	describe("Alert", () => {
 		describe("when the deleted element was an external tool element", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: deletedElementResponseFactory.build(),
-					isEditMode: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should display a warning", async () => {
-				const { wrapper } = setup();
+				const isEditMode = true;
+
+				const { wrapper } = setup({ isEditMode });
 
 				const alert = wrapper.findComponent(WarningAlert);
 
