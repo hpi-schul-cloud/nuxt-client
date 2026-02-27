@@ -20,7 +20,7 @@ import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { expect, Mock, Mocked } from "vitest";
-import { computed, Ref, ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { createRouterMock, type RouterMock } from "vue-router-mock";
 
@@ -156,7 +156,7 @@ describe("BoardStore", () => {
 		});
 
 		mockedUseSharedFileSelectActions = {
-			isFileSelectOnMountEnabled: ref(true) as Ref<boolean>,
+			isFileSelectOnMountEnabled: ref(true),
 			resetFileSelectOnMountEnabled: vi.fn(),
 			disableFileSelectOnMount: vi.fn(),
 		};
