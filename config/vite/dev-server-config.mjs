@@ -1,4 +1,5 @@
 import {
+	isArchiveDownload,
 	isCommonCartridge,
 	isFileStorage,
 	isFWUEndpoint,
@@ -36,6 +37,14 @@ const createVueClientProxy = () => {
 const createFileStorageProxy = () => {
 	const fileStorageProxy = createProxyMiddleware({
 		target: "http://localhost:4444",
+		changeOrigin: true,
+	});
+	return fileStorageProxy;
+};
+
+const createArchiveDownloadProxy = () => {
+	const fileStorageProxy = createProxyMiddleware({
+		target: "http://localhost:3351",
 		changeOrigin: true,
 	});
 	return fileStorageProxy;
@@ -83,6 +92,7 @@ const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
 	const fwuEditorProxy = createFwuEditorProxy();
 	const h5pStaticFilesProxy = createH5pStaticFilesProxy();
 	const commonCartridgeProxy = createCommonCartridgeProxy();
+	const archiveDownloadProxy = createArchiveDownloadProxy();
 
 	return (req, res, next) => {
 		const url = req.originalUrl || req.url;
@@ -97,6 +107,8 @@ const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
 			h5pStaticFilesProxy(req, res, next);
 		} else if (isH5pEditor(path)) {
 			h5pEditorProxy(req, res, next);
+		} else if (isArchiveDownload(path)) {
+			archiveDownloadProxy(req, res, next);
 		} else if (isFWUEndpoint(path)) {
 			fwuEditorProxy(req, res, next);
 		} else if (isCommonCartridge(path)) {
