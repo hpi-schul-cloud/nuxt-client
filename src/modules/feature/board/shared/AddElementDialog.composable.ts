@@ -2,7 +2,12 @@ import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./Sh
 import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { notifyInfo } from "@data-app";
-import { type CreateElementRequestPayload, useBoardFeatures, useBoardPermissions, useCardStore } from "@data-board";
+import {
+	type CreateElementRequestPayload,
+	useBoardAllowedOperations,
+	useBoardFeatures,
+	useCardStore,
+} from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useAddCollaboraFile } from "@feature-collabora";
 import {
@@ -25,9 +30,7 @@ type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<
 export const useAddElementDialog = (createElementRequestFn: CreateElementRequestFn, cardId: string) => {
 	const { isFeatureEnabled } = useBoardFeatures();
 	const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.Videoconference));
-
-	const { hasManageVideoConferencePermission } = useBoardPermissions();
-
+	const { allowedOperations } = useBoardAllowedOperations();
 	const cardStore = useCardStore();
 
 	const { t } = useI18n();
@@ -46,7 +49,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 
 	const onPreferredElementClick = async (elementType: ContentElementType, tool: PreferredToolResponse) => {
 		closeDialog();
-		await cardStore.createPreferredElement({ cardId, type: elementType }, tool);
+		cardStore.createPreferredElement({ cardId, type: elementType }, tool);
 
 		showNotificationByElementType(elementType);
 	};
@@ -139,7 +142,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		if (
 			envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
 			isVideoConferenceEnabled.value &&
-			hasManageVideoConferencePermission.value
+			allowedOperations.value.manageVideoConference
 		) {
 			options.push({
 				icon: mdiVideoOutline,
@@ -183,13 +186,13 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		const options: ElementTypeSelectionOptions[] = [];
 
 		const hasPreferredTools = !cardStore.isPreferredToolsLoading && cardStore.preferredTools.length > 0;
+		const canCreateExternalToolElement = allowedOperations.value.createExternalToolElement;
 
-		if (useEnvConfig().value.FEATURE_PREFERRED_CTL_TOOLS_ENABLED && hasPreferredTools) {
+		if (useEnvConfig().value.FEATURE_PREFERRED_CTL_TOOLS_ENABLED && hasPreferredTools && canCreateExternalToolElement) {
 			cardStore.preferredTools.forEach((tool: PreferredToolResponse) => {
 				if (!tool.iconName) {
 					tool.iconName = "mdiPuzzleOutline";
 				}
-
 				options.push({
 					icon: "$" + tool.iconName,
 					label: tool.name,
