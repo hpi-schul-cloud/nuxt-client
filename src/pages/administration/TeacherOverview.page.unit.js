@@ -12,14 +12,15 @@ import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useClasses } from "@data-classes";
+import { useUsers } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { VCheckbox } from "vuetify/components";
-import { createStore } from "vuex";
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
@@ -63,50 +64,14 @@ const envs = {
 	SC_TITLE: "",
 };
 
-const createMockStore = () => {
-	const storeOptions = {
-		modules: {
-			classes: {
-				namespaced: true,
-				actions: {
-					find: () => ({ data: [] }),
-				},
-				state: () => ({
-					list: [],
-				}),
-			},
-			users: {
-				namespaced: true,
-				actions: {
-					findTeachers: vi.fn(),
-					deleteUsers: vi.fn(),
-					getQrRegistrationLinks: vi.fn(),
-					sendRegistrationLink: vi.fn(),
-				},
-				getters: {
-					getList: () => mockData,
-					getPagination: () => ({
-						limit: 25,
-						skip: 0,
-						total: 2,
-						query: "",
-					}),
-					getActive: () => false,
-					getPercent: () => 0,
-					getQrLinks: () => [],
-				},
-			},
-		},
-	};
-
-	const mockStore = createStore(storeOptions);
-	const usersActionsStubs = storeOptions.modules.users.actions;
-
-	return { mockStore, usersActionsStubs };
-};
-
 vi.mock("@ui-confirmation-dialog");
 vi.mocked(useConfirmationDialog);
+
+vi.mock("@data-users/users.composable");
+const mockedUseUsers = vi.mocked(useUsers);
+
+vi.mock("@data-classes/classes.composable");
+const mockedUseClasses = vi.mocked(useClasses);
 
 describe("teachers/index", () => {
 	let askConfirmationMock;
@@ -120,6 +85,47 @@ describe("teachers/index", () => {
 	const setSortingState = vi.fn();
 	const getPaginationState = vi.fn();
 	const setPaginationState = vi.fn();
+
+	const mockFetchUsers = vi.fn().mockReturnValue({
+		result: {
+			data: {
+				data: mockData,
+			},
+		},
+		error: null,
+	});
+
+	const mockCreateUser = vi.fn();
+	const mockDeleteUsers = vi.fn().mockReturnValue({
+		result: {
+			data: {},
+		},
+		error: null,
+	});
+	const mockGetQrRegistrationLinks = vi.fn().mockReturnValue({
+		result: {
+			data: [{ id: "some-id-1" }, { id: "some-id-2" }],
+		},
+		error: null,
+	});
+	const mockSendRegistrationLink = vi.fn().mockReturnValue({
+		result: {
+			data: [{ id: "some-id-1" }, { id: "some-id-2" }],
+		},
+		error: null,
+	});
+
+	mockedUseClasses.mockReturnValue({
+		fetchClasses: vi.fn().mockReturnValue({
+			result: {
+				data: {
+					data: [],
+				},
+			},
+			error: null,
+		}),
+		list: ref([]),
+	});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -156,6 +162,28 @@ describe("teachers/index", () => {
 			getPaginationState,
 			setPaginationState,
 		});
+
+		mockedUseUsers.mockReturnValue({
+			fetchUsers: mockFetchUsers,
+			createUser: mockCreateUser,
+			deleteUsers: mockDeleteUsers,
+			getQrRegistrationLinks: mockGetQrRegistrationLinks,
+			sendRegistrationLink: mockSendRegistrationLink,
+			userList: ref(mockData),
+			deletingProgress: ref({
+				delete: {
+					active: false,
+					percent: 0,
+				},
+			}),
+			pagination: ref({
+				limit: 25,
+				skip: 0,
+				total: 2,
+			}),
+			qrLinks: ref([]),
+			registrationLinks: ref([]),
+		});
 	});
 
 	afterAll(() => {
@@ -163,21 +191,16 @@ describe("teachers/index", () => {
 	});
 
 	const setup = () => {
-		const { mockStore, usersActionsStubs } = createMockStore();
-
 		const wrapper = mount(TeacherPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$store: mockStore,
-				},
 				stubs: { RouterLink: RouterLinkStub },
 			},
 		});
 
 		mock$objects(wrapper);
 
-		return { wrapper, mockStore, usersActionsStubs };
+		return { wrapper };
 	};
 
 	describe("useFilterLocalStorage composable", () => {
@@ -191,7 +214,7 @@ describe("teachers/index", () => {
 
 	it("should call 'deleteUsers' action", async () => {
 		askConfirmationMock.mockResolvedValue(true);
-		const { wrapper, usersActionsStubs } = setup();
+		const { wrapper } = setup();
 
 		await nextTick();
 
@@ -215,17 +238,14 @@ describe("teachers/index", () => {
 		wrapper.findComponent(DeleteUserDialog).vm.$emit("confirm");
 		await nextTick();
 
-		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
-		expect(usersActionsStubs.deleteUsers.mock.calls[0][1]).toStrictEqual({
-			ids: [mockData[0]._id],
-			userType: "teacher",
-		});
+		expect(mockDeleteUsers.mock.calls).toHaveLength(1);
+		expect(mockDeleteUsers.mock.calls[0][0]).toStrictEqual([mockData[0]._id]);
 	});
 
 	it("should dispatch the 'findTeachers' action on load'", () => {
-		const { usersActionsStubs } = setup();
+		setup();
 
-		expect(usersActionsStubs.findTeachers).toHaveBeenCalled();
+		expect(mockFetchUsers).toHaveBeenCalled();
 	});
 
 	it("should emit the 'delete' action when deleting a user", async () => {
@@ -437,7 +457,7 @@ describe("teachers/index", () => {
 	describe("filtering and calling uiSetFilterState composable's methods", () => {
 		describe("when searchbar component's value change", () => {
 			it("should call setFilterState method", () => {
-				const { wrapper, usersActionsStubs } = setup();
+				const { wrapper } = setup();
 
 				const searchBarInput = wrapper.findComponent(SvsSearchField).find("input");
 				expect(searchBarInput.exists()).toBe(true);
@@ -447,7 +467,7 @@ describe("teachers/index", () => {
 				vi.runAllTimers();
 
 				expect(setFilterState).toHaveBeenCalledWith({ searchQuery: "abc" });
-				expect(usersActionsStubs.findTeachers).toHaveBeenCalled();
+				expect(mockFetchUsers).toHaveBeenCalled();
 			});
 		});
 

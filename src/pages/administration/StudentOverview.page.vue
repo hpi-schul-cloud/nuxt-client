@@ -26,7 +26,7 @@
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
-			:data="students"
+			:data="userList"
 			:paginated="true"
 			:rows-selectable="true"
 			:total="pagination.total"
@@ -105,7 +105,9 @@ import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
+import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
+import { useUsers } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiAlert,
@@ -124,7 +126,6 @@ import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
@@ -143,19 +144,42 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
+		const { getFilterState, getPaginationState, getSortingState, setFilterState, setPaginationState, setSortingState } =
 			useFilterLocalStorage(RoleName.Student);
 
 		const { t } = useI18n();
+		const { fetchClasses, list } = useClasses();
+		const {
+			deletingProgress,
+			deleteUsers,
+			fetchUsers,
+			userList,
+			sendRegistrationLink,
+			getQrRegistrationLinks,
+			registrationLinks,
+			qrLinks,
+			pagination,
+		} = useUsers(RoleName.Student);
 
 		return {
-			getPaginationState,
-			setPaginationState,
-			getSortingState,
-			setSortingState,
+			deletingProgress,
+			deleteUsers,
+			fetchClasses,
+			fetchUsers,
 			getFilterState,
+			getPaginationState,
+			getSortingState,
+			list,
 			setFilterState,
+			setPaginationState,
+			setSortingState,
 			t,
+			userList,
+			sendRegistrationLink,
+			getQrRegistrationLinks,
+			registrationLinks,
+			qrLinks,
+			pagination,
 		};
 	},
 	data() {
@@ -242,14 +266,15 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		...mapGetters("users", {
-			students: "getList",
-			pagination: "getPagination",
-			isDeleting: "getActive",
-			deletedPercent: "getPercent",
-			qrLinks: "getQrLinks",
-			registrationLinks: "getRegistrationLinks",
-		}),
+		qrList() {
+			return this.qrLinks;
+		},
+		isDeleting() {
+			return this.deletingProgress.active;
+		},
+		deletedPercent() {
+			return this.deletingProgress.percent;
+		},
 		getFeatureUserLoginMigrationEnabled() {
 			return useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
 		},
@@ -385,8 +410,8 @@ export default defineComponent({
 			];
 		},
 		selectedStudents() {
-			const selectedStudents = this.students.filter((student) => this.tableSelection.includes(student._id));
-			return selectedStudents;
+			const selectedStudents = this.userList?.filter((student) => this.tableSelection.includes(student._id));
+			return selectedStudents || [];
 		},
 	},
 	watch: {
@@ -410,7 +435,7 @@ export default defineComponent({
 		document.title = buildPageTitle(this.t("pages.administration.students.index.title"));
 	},
 	methods: {
-		find() {
+		async find() {
 			const query = {
 				$limit: this.limit,
 				$skip: (this.page - 1) * this.limit,
@@ -419,9 +444,7 @@ export default defineComponent({
 				},
 				...this.currentFilterQuery,
 			};
-			this.$store.dispatch("users/findStudents", {
-				query,
-			});
+			await this.fetchUsers(query);
 		},
 		userHasPermission(permission) {
 			if (!permission) {
@@ -476,36 +499,23 @@ export default defineComponent({
 			});
 		},
 		async handleBulkEMail(rowIds, selectionType) {
-			try {
-				await this.$store.dispatch("users/sendRegistrationLink", {
-					userIds: rowIds,
-					selectionType,
-				});
-				if (this.registrationLinks.totalMailsSend === rowIds.length) {
-					notifySuccess(this.t("pages.administration.sendMail.success", rowIds.length));
-				} else {
-					notifyInfo(this.t("pages.administration.sendMail.alreadyRegistered"));
-				}
-			} catch {
-				notifyError(this.t("pages.administration.sendMail.error", rowIds.length));
-			}
+			await this.sendRegistrationLink({
+				userIds: rowIds,
+				selectionType,
+			});
 		},
 		async handleBulkQR(rowIds, selectionType) {
-			try {
-				await this.$store.dispatch("users/getQrRegistrationLinks", {
-					userIds: rowIds,
-					selectionType,
-					roleName: "student",
+			await this.getQrRegistrationLinks({
+				userIds: rowIds,
+				selectionType,
+			});
+
+			if (this.qrLinks?.length) {
+				printQrCodes(this.qrLinks, {
+					printPageTitleKey: "pages.administration.printQr.printPageTitle",
 				});
-				if (this.qrLinks.length) {
-					printQrCodes(this.qrLinks, {
-						printPageTitleKey: "pages.administration.printQr.printPageTitle",
-					});
-				} else {
-					notifyInfo(this.t("pages.administration.printQr.emptyUser"));
-				}
-			} catch {
-				notifyError(this.t("pages.administration.printQr.error", rowIds.length));
+			} else {
+				notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
 			}
 		},
 		openDeleteDialog() {
@@ -513,10 +523,7 @@ export default defineComponent({
 		},
 		async onConfirmDelete() {
 			try {
-				await this.$store.dispatch("users/deleteUsers", {
-					ids: this.tableSelection,
-					userType: "student",
-				});
+				await this.deleteUsers(this.tableSelection);
 				notifySuccess(this.t("pages.administration.remove.success"));
 				this.find();
 			} catch {
@@ -555,13 +562,12 @@ export default defineComponent({
 		},
 		async getClassNameList() {
 			const currentYear = schoolsModule.getCurrentYear;
-			await this.$store.dispatch("classes/find", {
-				query: {
-					$limit: 1000,
-					year: currentYear?.id,
-				},
+
+			await this.fetchClasses({
+				$limit: 1000,
+				year: currentYear?.id || "",
 			});
-			this.classNameList = this.$store.state["classes"].list.reduce(
+			this.classNameList = this.list?.reduce(
 				(acc, item) =>
 					acc.concat({
 						label: item.displayName,
