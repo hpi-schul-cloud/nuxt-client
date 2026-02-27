@@ -135,7 +135,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		applicationError.value = undefined;
 	};
 
-	const handleUnauthorizedError = (onError: () => void) => async (error: unknown) => {
+	const handleUnauthorizedError = async (error: unknown) => {
 		if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
 			try {
 				const pristineAxios = axios.create();
@@ -143,10 +143,10 @@ export const useAppStore = defineStore("applicationStore", () => {
 				const response = await pristineAxios.get("/v1/accounts/jwtTimer");
 				const ttl = response?.data?.ttl ?? 0;
 				if (ttl <= 0) {
-					onError();
+					setJwtExpired();
 				}
 			} catch {
-				onError();
+				setJwtExpired();
 			}
 		}
 	};
