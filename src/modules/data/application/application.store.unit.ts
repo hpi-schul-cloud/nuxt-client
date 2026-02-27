@@ -19,6 +19,27 @@ import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 
+const mockBroadcastChannel = {
+	post: vi.fn(),
+	close: vi.fn(),
+	data: { value: null as string | null },
+	channel: {
+		value: {
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			postMessage: vi.fn(),
+		},
+	},
+};
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useBroadcastChannel: vi.fn(() => mockBroadcastChannel),
+	};
+});
+
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
 
@@ -26,6 +47,28 @@ vi.mock("@/fileStorageApi/v3");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
+		vi.clearAllMocks();
+
+		mockBroadcastChannel.data.value = null;
+
+		Object.defineProperty(window, "location", {
+			value: { replace: vi.fn() },
+			writable: true,
+		});
+
+		Object.defineProperty(window, "localStorage", {
+			value: { clear: vi.fn() },
+			writable: true,
+		});
+
+		Object.defineProperty(document, "cookie", {
+			set: vi.fn(),
+			configurable: true,
+		});
+	});
+
 	const doMockMeApiData = (data: MeResponse) => {
 		mockedMeApi.mockReturnValue({
 			meControllerMe(): AxiosPromise<MeResponse> {
@@ -145,20 +188,24 @@ describe("useApplicationStore", () => {
 		});
 
 		it("should not log in on api error", async () => {
+			const store = useAppStore();
+
 			mockedMeApi.mockReturnValue({
 				meControllerMe: vi.fn().mockRejectedValue(new Error("Me data not available.")),
 			});
 
+			expect(store.isLoggedIn).toBe(false);
+
 			try {
-				await useAppStore().login();
+				await store.login();
 			} catch {
-				expect(useAppStore().isLoggedIn).toBe(false);
+				expect(store.isLoggedIn).toBe(false);
 			}
 		});
 	});
 
 	describe("logout action", () => {
-		it("should logout with default redirect URL", () => {
+		beforeEach(() => {
 			initializeAxios({
 				defaults: {
 					headers: {
@@ -168,13 +215,37 @@ describe("useApplicationStore", () => {
 					},
 				},
 			} as AxiosInstance);
+		});
 
+		it("should redirect to default logout URL", () => {
+			Object.defineProperty(window, "location", {
+				value: { replace: vi.fn() },
+			});
+
+			useAppStore().logout();
+			expect(window.location.replace).toHaveBeenCalledWith("/logout");
+		});
+
+		it("should redirect to custom logout URL", () => {
 			Object.defineProperty(window, "location", {
 				value: { replace: vi.fn() },
 			});
 
 			useAppStore().logout("/logout-to");
 			expect(window.location.replace).toHaveBeenCalledWith("/logout-to");
+		});
+
+		it("should post logout message to broadcast channel", () => {
+			useAppStore().logout();
+
+			expect(mockBroadcastChannel.post).toHaveBeenCalledWith("logout");
+		});
+
+		it("should clean up to ensure garbage collection pristine storage", () => {
+			useAppStore().logout();
+
+			expect(mockBroadcastChannel.close).toHaveBeenCalled();
+			expect(localStorage.clear).toHaveBeenCalled();
 		});
 	});
 
@@ -218,6 +289,19 @@ describe("useApplicationStore", () => {
 			expect(store.applicationError?.translationKeyOrText).toBe("error.generic");
 		});
 
+		it.each([
+			[HttpStatusCode.Unauthorized, "error.401"],
+			[HttpStatusCode.Forbidden, "error.403"],
+			[HttpStatusCode.NotFound, "error.404"],
+			[HttpStatusCode.RequestTimeout, "error.408"],
+		])("handles status code %s and returns translation key %s", (statusCode, expectedTranslationKey) => {
+			const store = useAppStore();
+
+			store.handleApplicationError(statusCode);
+
+			expect(store.applicationError?.translationKeyOrText).toBe(expectedTranslationKey);
+		});
+
 		it("puts unknown error codes to generic", () => {
 			useAppStore().handleApplicationError(999 as HttpStatusCode);
 			expect(useAppStore().applicationError).toEqual({ status: 999, translationKeyOrText: "error.generic" });
@@ -252,6 +336,71 @@ describe("useApplicationStore", () => {
 			expect(useAppStore().applicationError).toEqual({
 				status: HttpStatusCode.InternalServerError,
 				translationKeyOrText: "error.generic",
+			});
+		});
+	});
+
+	describe("Broadcast Channel", () => {
+		describe("when the store is initialized", () => {
+			it("should setup event listener on broadcast channel", () => {
+				useAppStore();
+
+				expect(mockBroadcastChannel.channel.value.addEventListener).toHaveBeenCalledWith(
+					"message",
+					expect.any(Function)
+				);
+			});
+		});
+
+		describe("when receiving messages via event listener", () => {
+			it("should set isJwtExpired to true when receiving logout message", () => {
+				const store = useAppStore();
+				expect(store.isJwtExpired).toBe(false);
+
+				const eventHandler = vi
+					.mocked(mockBroadcastChannel.channel.value.addEventListener)
+					.mock.calls.find(([eventType]) => eventType === "message")?.[1];
+
+				expect(eventHandler).toBeDefined();
+
+				const logoutEvent = {
+					data: "logout",
+					type: "message",
+					target: mockBroadcastChannel.channel.value,
+				};
+
+				if (eventHandler) {
+					eventHandler(logoutEvent);
+				}
+
+				expect(store.isJwtExpired).toBe(true);
+			});
+
+			it("should not change isJwtExpired when receiving non-logout messages", () => {
+				const store = useAppStore();
+				expect(store.isJwtExpired).toBe(false);
+
+				const eventHandler = vi
+					.mocked(mockBroadcastChannel.channel.value.addEventListener)
+					.mock.calls.find(([eventType]) => eventType === "message")?.[1];
+
+				expect(eventHandler).toBeDefined();
+
+				const testMessages = ["login", "change-language", ""];
+
+				testMessages.forEach((message) => {
+					const messageEvent = {
+						data: message,
+						type: "message",
+						target: mockBroadcastChannel.channel.value,
+					};
+
+					if (eventHandler) {
+						eventHandler(messageEvent);
+					}
+
+					expect(store.isJwtExpired).toBe(false);
+				});
 			});
 		});
 	});

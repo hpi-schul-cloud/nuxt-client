@@ -890,6 +890,9 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":
 		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
+	"feature-loggedout.title": "Session expired",
+	"feature-loggedout.message": "The session has expired for security reasons.",
+	"feature-loggedout.button": "Log in again",
 	"feature-board-external-tool-element.alert.error.student":
 		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
 	"feature-board-external-tool-element.alert.error.teacher":

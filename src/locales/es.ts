@@ -910,6 +910,9 @@ export default {
 	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
+	"feature-loggedout.title": "Sesión expirada",
+	"feature-loggedout.message": "La sesión ha expirado por razones de seguridad.",
+	"feature-loggedout.button": "Iniciar sesión de nuevo",
 	"feature-board-external-tool-element.alert.error.student":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el maestro o instructor del curso.",
 	"feature-board-external-tool-element.alert.error.teacher":

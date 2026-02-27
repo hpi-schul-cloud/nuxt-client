@@ -908,6 +908,9 @@ export default {
 	"feature-autoLogout.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"feature-autoLogout.warning":
 		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
+	"feature-loggedout.title": "Sitzung abgelaufen",
+	"feature-loggedout.message": "Die Sitzung ist aus Sicherheitsgründen abgelaufen.",
+	"feature-loggedout.button": "Erneut anmelden",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":

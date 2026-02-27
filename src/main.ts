@@ -73,7 +73,7 @@ app.use(VueDOMPurifyHTML, {
 	const runtimeConfigJson = await axios.get(`${window.location.origin}/runtime.config.json`);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
-	initializeAxios(axios);
+	initializeAxios(axios, useAppStore().handleUnauthorizedError);
 
 	const success = await useEnvStore().loadConfiguration();
 
@@ -85,7 +85,7 @@ app.use(VueDOMPurifyHTML, {
 		await useAppStore().login();
 		await schoolsModule.fetchSchool(); // fetch school relies on successful login to know the school id
 	} catch (error) {
-		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
+		// this is handled by the axios response interceptor
 		logger.info("probably not logged in", error);
 	}
 

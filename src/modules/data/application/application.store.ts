@@ -4,6 +4,8 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
+import { useBroadcastChannel } from "@vueuse/core";
+import axios, { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
 
@@ -18,9 +20,17 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
+	const broadcast = useBroadcastChannel({ name: "schulcloud-session" });
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
+	const isJwtExpired = ref(false);
+
+	broadcast.channel.value?.addEventListener("message", (event) => {
+		if (event.data === "logout") {
+			setJwtExpired();
+		}
+	});
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -58,12 +68,18 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
+		broadcast.post("logout");
+		broadcast.close();
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
 	};
 
 	const externalLogout = () => logout("/logout/external");
+
+	const setJwtExpired = () => {
+		isJwtExpired.value = true;
+	};
 
 	const updateUserLanguage = (language: LanguageType) =>
 		userApi
@@ -119,6 +135,22 @@ export const useAppStore = defineStore("applicationStore", () => {
 		applicationError.value = undefined;
 	};
 
+	const handleUnauthorizedError = async (error: unknown) => {
+		if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
+			try {
+				const pristineAxios = axios.create();
+				pristineAxios.defaults.baseURL = axios.defaults.baseURL;
+				const response = await pristineAxios.get("/v1/accounts/jwtTimer");
+				const ttl = response?.data?.ttl ?? 0;
+				if (ttl <= 0) {
+					setJwtExpired();
+				}
+			} catch {
+				setJwtExpired();
+			}
+		}
+	};
+
 	return {
 		isLoggedIn,
 		userLocale,
@@ -130,15 +162,18 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isTeacher,
 		isStudent,
 		isExternalPerson,
+		isJwtExpired: readonly(isJwtExpired),
 		school,
 		userRoles,
 		systemId,
 		login,
 		logout,
 		externalLogout,
+		setJwtExpired,
 		updateUserLanguage,
 		clearApplicationError,
 		handleUnknownError,
+		handleUnauthorizedError,
 		handleApplicationError,
 		applicationError: readonly(applicationError),
 	};

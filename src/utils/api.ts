@@ -5,8 +5,18 @@ import { getCurrentInstance } from "vue";
 
 let $axios: AxiosInstance;
 
-export const initializeAxios = (axios: AxiosInstance) => {
+export const initializeAxios = async (axios: AxiosInstance, errorHandler?: (error: unknown) => Promise<void>) => {
 	$axios = axios;
+	if (errorHandler) {
+		$axios.interceptors.response.use(
+			(response) => response,
+			async (error) => {
+				await errorHandler(error);
+				return Promise.reject(error);
+			}
+		);
+	}
+
 	const app = getCurrentInstance()?.appContext.app;
 	if (app) {
 		app.config.globalProperties.$axios = axios;

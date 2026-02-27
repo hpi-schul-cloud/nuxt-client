@@ -3,23 +3,23 @@
 		<SkipLink />
 		<Sidebar v-model="sidebarExpanded" />
 		<Topbar :sidebar-expanded="sidebarExpanded" @sidebar-toggled="onToggleSidebar" />
-		<v-main id="main-content" :class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }">
+		<VMain id="main-content" :class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }">
 			<ApplicationError>
 				<AlertContainer />
 				<router-view />
 			</ApplicationError>
-		</v-main>
-		<loading-state-dialog />
-		<keep-alive>
+		</VMain>
+		<LoadingStateDialog />
+		<KeepAlive>
 			<AutoLogoutWarning />
-		</keep-alive>
+			<LoggedOutDialog />
+		</KeepAlive>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { AutoLogoutWarning } from "@feature-auto-logout";
-import { AlertContainer, ApplicationError } from "@ui-layout";
-import { Sidebar, Topbar } from "@ui-layout";
+import { AutoLogoutWarning, LoggedOutDialog } from "@feature-auto-logout";
+import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
