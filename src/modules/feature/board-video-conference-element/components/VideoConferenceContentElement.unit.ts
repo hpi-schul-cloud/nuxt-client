@@ -96,7 +96,7 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex = 2,
 			isRunning = false,
 			error = null,
-			hasManageVideoConferencePermission,
+			hasManageVideoConferencePermission = false,
 		} = options;
 
 		setActivePinia(createTestingPinia());
@@ -114,23 +114,26 @@ describe("VideoConferenceContentElement", () => {
 			computedElement: computed(() => element),
 		});
 
-		const useVideoConferenceMock: DeepMocked<ReturnType<typeof useVideoConference>> =
-			createMock<ReturnType<typeof useVideoConference>>();
+		const useVideoConferenceMock = {
+			videoConferenceInfo: ref({
+				state: VideoConferenceState.NOT_STARTED,
+				options: {
+					everyAttendeeJoinsMuted: false,
+					everybodyJoinsAsModerator: false,
+					moderatorMustApproveJoinRequests: true,
+				},
+			}),
+			loading: ref(false),
+			error: ref(error),
+			isRunning: computed(() => isRunning),
+			isWaitingRoomActive: computed(() => true),
+			fetchVideoConferenceInfo: vi.fn(),
+			startVideoConference: vi.fn(),
+			joinVideoConference: vi.fn().mockResolvedValue("https://example.com"),
+			resetError: vi.fn(),
+		};
 
 		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
-
-		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(vi.fn());
-		useVideoConferenceMock.joinVideoConference.mockImplementation(() => Promise.resolve("https://example.com"));
-		useVideoConferenceMock.videoConferenceInfo = ref({
-			state: VideoConferenceState.NOT_STARTED,
-			options: {
-				everyAttendeeJoinsMuted: false,
-				everybodyJoinsAsModerator: false,
-				moderatorMustApproveJoinRequests: true,
-			},
-		});
-		useVideoConferenceMock.isRunning = computed(() => isRunning);
-		useVideoConferenceMock.error = ref(error);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {

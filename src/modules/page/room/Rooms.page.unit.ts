@@ -1,5 +1,6 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
+import * as serverApi from "@/serverApi/v3";
 import { Permission, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
@@ -14,6 +15,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid } from "@feature-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
@@ -22,8 +24,22 @@ import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
+vi.mock("@/serverApi/v3", async (importOriginal) => {
+	const actual = await importOriginal<typeof serverApi>();
+	return {
+		...actual,
+		RoomApiFactory: vi.fn(),
+	};
+});
+
 describe("RoomsPage", () => {
 	const router = createRouterMock();
+	const roomApiMock = createMock<ReturnType<typeof serverApi.RoomApiFactory>>();
+
+	beforeEach(() => {
+		vi.mocked(serverApi.RoomApiFactory).mockReturnValue(roomApiMock);
+		roomApiMock.roomControllerGetRooms.mockResolvedValue({ data: { data: [] } } as never);
+	});
 
 	const setup = (
 		roomItems: RoomItem[] = [roomItemFactory.build({ isLocked: false }), roomItemFactory.build({ isLocked: true })],

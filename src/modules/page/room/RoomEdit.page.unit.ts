@@ -1,23 +1,19 @@
-import { RoomApiFactory, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
+import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
-import { expectNotification, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { expectNotification, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import { useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { RoomEditPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
-import { Mock } from "vitest";
 import { nextTick } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 
 vi.mock("@/serverApi/v3");
-
-vi.mock("vue-router");
-const useRouteMock = useRoute as Mock;
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
@@ -27,12 +23,10 @@ const roomParams: RoomUpdateParams = {
 
 describe("@pages/RoomEdit.page.vue", () => {
 	const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
-	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
-		useRouterMock = createMock<ReturnType<typeof useRouter>>();
-		vi.mocked(useRouter).mockReturnValue(useRouterMock);
-		useRouterMock.replace = vi.fn();
+		router = createRouterMock();
 	});
 
 	afterEach(() => {
@@ -51,11 +45,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const room = isRoomDefined ? roomFactory.build({ allowedOperations }) : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
-		useRouteMock.mockImplementation(() => ({
-			params: {
-				id: roomId,
-			},
-		}));
+		injectRouterMock(router);
+		router.setParams({ id: roomId });
 
 		const wrapper = mount(RoomEditPage, {
 			global: {
@@ -80,7 +71,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		return {
 			wrapper,
 			isLoading,
-			useRoute,
 			updateRoom,
 			fetchRoom,
 			room,
@@ -124,7 +114,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const { roomId } = setup({ isLoading: false, allowedOperations: { updateRoom: false } });
 				await nextTick();
 
-				expect(useRouterMock.replace).toHaveBeenCalledWith({
+				expect(router.replace).toHaveBeenCalledWith({
 					name: "room-details",
 					params: { id: roomId },
 				});
@@ -183,7 +173,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should navigate to 'room-details' with correct room id on save", async () => {
-					roomApiMock.roomControllerUpdateRoom.mockResolvedValueOnce(undefined);
+					roomApiMock.roomControllerUpdateRoom.mockResolvedValueOnce(mockApiResponse<RoomDetailsResponse>({}));
 					const { updateRoom, wrapper, roomId } = setup({ allowedOperations: { updateRoom: true } });
 					updateRoom.mockResolvedValueOnce(undefined);
 					await nextTick();
@@ -192,7 +182,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 					roomFormComponent.vm.$emit("save", { room: roomParams });
 					await nextTick();
 
-					expect(useRouterMock.push).toHaveBeenCalledWith({
+					expect(router.push).toHaveBeenCalledWith({
 						name: "room-details",
 						params: { id: roomId },
 					});
@@ -233,7 +223,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				const roomFormComponent = wrapper.findComponent(RoomForm);
 				roomFormComponent.vm.$emit("cancel");
 
-				expect(useRouterMock.push).toHaveBeenCalledWith({
+				expect(router.push).toHaveBeenCalledWith({
 					name: "room-details",
 					params: { id: roomId },
 				});

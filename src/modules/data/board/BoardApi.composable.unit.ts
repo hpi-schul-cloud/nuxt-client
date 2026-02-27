@@ -10,9 +10,9 @@ import * as serverApi from "@/serverApi/v3/api";
 import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { mockApiResponse } from "@@/tests/test-utils";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosPromise } from "axios";
 
 let boardApi: DeepMocked<serverApi.BoardApiInterface>;
 let columnApi: DeepMocked<serverApi.BoardColumnApiInterface>;
@@ -368,16 +368,14 @@ describe("BoardApi.composable", () => {
 		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<CardResponse>({
 				status: 200,
 				data: {
 					id: "my-little-fake-id",
-				},
-			};
+				} as CardResponse,
+			});
 
-			columnApi.columnControllerCreateCard.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<CardResponse>
-			);
+			columnApi.columnControllerCreateCard.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			const payload = "column-id";
 			const INITIAL_ELEMENTS = {

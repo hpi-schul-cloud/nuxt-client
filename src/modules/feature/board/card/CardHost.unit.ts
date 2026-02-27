@@ -2,6 +2,8 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import { BoardResponseAllowedOperations, CardResponse } from "@/serverApi/v3";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
@@ -41,6 +43,37 @@ const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 vi.mock("../shared/AddElementDialog.composable");
 vi.mock("@ui-confirmation-dialog");
 const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
+
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue({
+	createElementRequest: vi.fn(),
+	createPreferredElement: vi.fn(),
+	getPreferredTools: vi.fn(),
+	deleteElementRequest: vi.fn(),
+	moveElementRequest: vi.fn(),
+	updateElementRequest: vi.fn(),
+	duplicateCardRequest: vi.fn(),
+	deleteCardRequest: vi.fn(),
+	fetchCardRequest: vi.fn(),
+	updateCardTitleRequest: vi.fn(),
+	updateCardHeightRequest: vi.fn(),
+	disconnectSocketRequest: vi.fn(),
+});
+
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue({
+	dispatch: vi.fn(),
+	disconnectSocketRequest: vi.fn(),
+	createElementRequest: vi.fn(),
+	deleteElementRequest: vi.fn(),
+	moveElementRequest: vi.fn(),
+	updateElementRequest: vi.fn(),
+	deleteCardRequest: vi.fn(),
+	fetchCardRequest: vi.fn(),
+	updateCardTitleRequest: vi.fn(),
+	updateCardHeightRequest: vi.fn(),
+	duplicateCardRequest: vi.fn(),
+});
 
 describe("CardHost", () => {
 	let mockedSharedLastCreatedElementCalls: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;

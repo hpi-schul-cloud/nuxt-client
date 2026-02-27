@@ -218,7 +218,7 @@ describe("socket.ts", () => {
 		});
 
 		it("should report successful connection restoration after retry", () => {
-			boardErrorReportApi.boardErrorReportControllerReportError.mockResolvedValue(mockApiResponse({ data: {} }));
+			boardErrorReportApi.boardErrorReportControllerReportError.mockResolvedValue(mockApiResponse({ data: undefined }));
 			const { eventCallbacks } = setup({
 				doInitializeTimeout: true,
 			});

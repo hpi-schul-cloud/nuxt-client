@@ -1,6 +1,11 @@
 import { useI18nGlobal } from "@/plugins/i18n";
 import * as serverApi from "@/serverApi/v3/api";
-import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName, SchoolUserListResponse } from "@/serverApi/v3/api";
+import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
+	RoleName,
+	RoomMemberListResponse,
+	SchoolUserListResponse,
+} from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -489,13 +494,12 @@ describe("useRoomMembers", () => {
 					mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
 				);
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
-					mockApiResponse({
+					mockApiResponse<RoomMemberListResponse>({
 						data: {
 							data: [
 								{
 									...firstPotentialMember,
-									displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-									displaySchoolRole: "common.labels.teacher.neutral",
+									roomRoleName: RoleName.Roomadmin,
 								},
 							],
 						},
@@ -531,13 +535,12 @@ describe("useRoomMembers", () => {
 				});
 				const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
-					mockApiResponse({
+					mockApiResponse<serverApi.RoomMemberListResponse>({
 						data: {
 							data: [
 								{
 									...firstPotentialMember,
-									displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-									displaySchoolRole: "common.labels.teacher.neutral",
+									roomRoleName: RoleName.Roomviewer,
 								},
 							],
 						},
