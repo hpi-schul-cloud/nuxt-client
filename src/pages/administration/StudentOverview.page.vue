@@ -162,7 +162,6 @@ export default defineComponent({
 		} = useUsers(RoleName.Student);
 
 		return {
-			askConfirmation,
 			deletingProgress,
 			deleteUsers,
 			fetchClasses,
@@ -411,8 +410,8 @@ export default defineComponent({
 			];
 		},
 		selectedStudents() {
-			const selectedStudents = this.students.filter((student) => this.tableSelection.includes(student._id));
-			return selectedStudents;
+			const selectedStudents = this.userList?.filter((student) => this.tableSelection.includes(student._id));
+			return selectedStudents || [];
 		},
 	},
 	watch: {
@@ -524,7 +523,7 @@ export default defineComponent({
 		},
 		async onConfirmDelete() {
 			try {
-			  await this.deleteUsers(this.tableSelection);
+				await this.deleteUsers(this.tableSelection);
 				notifySuccess(this.t("pages.administration.remove.success"));
 				this.find();
 			} catch {

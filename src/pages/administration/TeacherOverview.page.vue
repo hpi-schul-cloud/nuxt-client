@@ -110,12 +110,12 @@ import {
 	mdiPlus,
 	mdiQrcode,
 } from "@icons/material";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-
 
 export default defineComponent({
 	components: {
@@ -379,7 +379,7 @@ export default defineComponent({
 			];
 		},
 		selectedTeachers() {
-			const selectedTeachers = this.teachers.filter((teacher) => this.tableSelection.includes(teacher._id));
+			const selectedTeachers = this.userList.filter((teacher) => this.tableSelection.includes(teacher._id));
 			return selectedTeachers;
 		},
 	},
@@ -483,7 +483,7 @@ export default defineComponent({
 		},
 		async onConfirmDelete() {
 			try {
-			  await this.deleteUsers(this.tableSelection);
+				await this.deleteUsers(this.tableSelection);
 				notifySuccess(this.t("pages.administration.remove.success"));
 				this.find();
 			} catch {

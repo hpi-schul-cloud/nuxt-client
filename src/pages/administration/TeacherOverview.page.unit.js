@@ -235,6 +235,9 @@ describe("teachers/index", () => {
 		const deleteBtn = wrapper.findAll(".row-selection-info .context-menu button").at(2);
 		await deleteBtn.trigger("click");
 
+		wrapper.findComponent(DeleteUserDialog).vm.$emit("confirm");
+		await nextTick();
+
 		expect(mockDeleteUsers.mock.calls).toHaveLength(1);
 		expect(mockDeleteUsers.mock.calls[0][0]).toStrictEqual([mockData[0]._id]);
 	});
