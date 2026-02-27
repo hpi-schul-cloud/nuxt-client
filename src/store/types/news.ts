@@ -31,19 +31,6 @@ export type SchoolInfo = {
 	name?: string;
 };
 
-export type News = {
-	id: string;
-	content: string;
-	createdAt: string;
-	creator: UserInfo;
-	displayAt: string;
-	school: SchoolInfo;
-	title: string;
-	updater?: UserInfo;
-	targetId: string;
-	targetModel: string;
-};
-
 export type PatchNewsPayload = UpdateNewsParams & { id: string };
 
 export type FormNews = {

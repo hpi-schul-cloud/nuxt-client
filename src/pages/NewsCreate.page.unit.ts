@@ -1,39 +1,40 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
-import { CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
-import { Status } from "@/store/types/commons";
-import { News } from "@/store/types/news";
-import { createTestAppStoreWithSchool, newsResponseFactory } from "@@/tests/test-utils";
+import { CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3";
+import { initializeAxios } from "@/utils/api";
+import { createTestAppStoreWithSchool, expectNotification, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useNews } from "@data-news";
-import { FormNews } from "@feature-news";
+import { NewsForm } from "@feature-news";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
-import { HttpStatusCode } from "axios";
+import { AxiosInstance, HttpStatusCode } from "axios";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { ref } from "vue";
 import { LocationQuery, Router, useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 const useRouteMock = <Mock>useRoute;
 
-vi.mock("@data-news/news.composable");
-const useNewsMock = vi.mocked(useNews);
-
 describe("NewsCreatePage", () => {
-	let useNewsMockReturn: DeepMocked<ReturnType<typeof useNews>>;
+	let newsApi: DeepMocked<NewsApiInterface>;
+	let axiosMock: DeepMocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
+
+		newsApi = createMock<NewsApiInterface>();
+		axiosMock = createMock<AxiosInstance>();
+		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
+		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: Partial<{ query: LocationQuery; status: Status; createdNews: News }>) => {
+	const setup = (options?: Partial<{ query: LocationQuery }>) => {
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
 		useRouteMock.mockReturnValue({
@@ -41,18 +42,12 @@ describe("NewsCreatePage", () => {
 			query: options?.query || {},
 		});
 
-		useNewsMockReturn = createMock<ReturnType<typeof useNews>>();
-		useNewsMock.mockReturnValue(useNewsMockReturn);
-
-		useNewsMockReturn.status = ref(options?.status ?? "");
-		useNewsMockReturn.createdNews = ref(options?.createdNews ?? null);
-
 		const wrapper = mount(NewsCreatePage, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 				stubs: {
-					FormNews: true,
+					NewsForm: true,
 				},
 			},
 		});
@@ -95,11 +90,11 @@ describe("NewsCreatePage", () => {
 	);
 
 	describe("create news", () => {
-		it("should render FormNews component", () => {
+		it("should render NewsForm component", () => {
 			const { wrapper } = setup();
-			const formNews = wrapper.findComponent(FormNews);
+			const newsForm = wrapper.findComponent(NewsForm);
 
-			expect(formNews.exists()).toBe(true);
+			expect(newsForm.exists()).toBe(true);
 		});
 
 		describe("when save event is emitted", () => {
@@ -112,11 +107,11 @@ describe("NewsCreatePage", () => {
 			it("should create news with context and contextId from query params", () => {
 				const query = { contextId: "123", context: CreateNewsParamsTargetModelEnum.Teams };
 				const { wrapper } = setup({ query });
-				const formNews = wrapper.getComponent(FormNews);
+				const newsForm = wrapper.getComponent(NewsForm);
 
-				formNews.vm.$emit("save", createParams);
+				newsForm.vm.$emit("save", createParams);
 
-				expect(useNewsMockReturn.createNews).toHaveBeenCalledWith({
+				expect(newsApi.newsControllerCreate).toHaveBeenCalledWith({
 					title: createParams.title,
 					content: createParams.content,
 					displayAt: createParams.displayAt,
@@ -128,11 +123,11 @@ describe("NewsCreatePage", () => {
 			it("should create news with target and targetmodel from query params", () => {
 				const query = { target: "456", targetmodel: CreateNewsParamsTargetModelEnum.Courses };
 				const { wrapper } = setup({ query });
-				const formNews = wrapper.getComponent(FormNews);
+				const newsForm = wrapper.getComponent(NewsForm);
 
-				formNews.vm.$emit("save", createParams);
+				newsForm.vm.$emit("save", createParams);
 
-				expect(useNewsMockReturn.createNews).toHaveBeenCalledWith({
+				expect(newsApi.newsControllerCreate).toHaveBeenCalledWith({
 					title: createParams.title,
 					content: createParams.content,
 					displayAt: createParams.displayAt,
@@ -143,11 +138,11 @@ describe("NewsCreatePage", () => {
 
 			it("should create news for school when no query params provided", () => {
 				const { wrapper, schoolId } = setup();
-				const formNews = wrapper.getComponent(FormNews);
+				const newsForm = wrapper.getComponent(NewsForm);
 
-				formNews.vm.$emit("save", createParams);
+				newsForm.vm.$emit("save", createParams);
 
-				expect(useNewsMockReturn.createNews).toHaveBeenCalledWith({
+				expect(newsApi.newsControllerCreate).toHaveBeenCalledWith({
 					title: createParams.title,
 					content: createParams.content,
 					displayAt: createParams.displayAt,
@@ -156,15 +151,34 @@ describe("NewsCreatePage", () => {
 				});
 			});
 
-			it("should navigate to news details page after successful creation", async () => {
-				const { wrapper } = setup({ status: "completed", createdNews: newsResponseFactory.build() });
+			it("should notify success and navigate to news details page after successful creation", async () => {
+				const { wrapper } = setup();
+				const createdNewsResponse = newsResponseFactory.build();
+				newsApi.newsControllerCreate.mockResolvedValue({ data: createdNewsResponse });
 
-				const formNews = wrapper.getComponent(FormNews);
+				const newsForm = wrapper.getComponent(NewsForm);
 
-				formNews.vm.$emit("save", createParams);
+				newsForm.vm.$emit("save", createParams);
 				await flushPromises();
 
-				expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${useNewsMockReturn.createdNews.value?.id}` });
+				expectNotification("success");
+				expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${createdNewsResponse.id}` });
+			});
+
+			it("should not navigate to news details page if update was not successfull", async () => {
+				const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+				newsApi.newsControllerCreate.mockRejectedValue(new Error("Failed to create news"));
+
+				const { wrapper } = setup();
+				const newsForm = wrapper.getComponent(NewsForm);
+
+				newsForm.vm.$emit("save", createParams);
+				await flushPromises();
+
+				expect(useRouterMock().push).not.toHaveBeenCalled();
+				expectNotification("error");
+
+				consoleErrorSpy.mockRestore();
 			});
 		});
 	});
@@ -172,9 +186,9 @@ describe("NewsCreatePage", () => {
 	describe("cancel news creation", () => {
 		it("should navigate back to previous page", async () => {
 			const { wrapper } = setup();
-			const formNews = wrapper.getComponent(FormNews);
+			const newsForm = wrapper.getComponent(NewsForm);
 
-			formNews.vm.$emit("cancel");
+			newsForm.vm.$emit("cancel");
 			await flushPromises();
 
 			expect(useRouterMock().go).toHaveBeenCalled();

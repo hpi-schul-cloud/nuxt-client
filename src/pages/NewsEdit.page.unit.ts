@@ -1,76 +1,76 @@
 import NewsEditPage from "./NewsEdit.page.vue";
-import { NewsResponse } from "@/serverApi/v3";
-import { Status } from "@/store/types/commons";
-import { newsResponseFactory } from "@@/tests/test-utils";
+import { NewsApiInterface, NewsResponse } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3";
+import { initializeAxios } from "@/utils/api";
+import { expectNotification, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useNews } from "@data-news";
-import { FormNews } from "@feature-news";
+import { NewsForm } from "@feature-news";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
+import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 const useRouteMock = <Mock>useRoute;
 
-vi.mock("@data-news/news.composable");
-const useNewsMock = vi.mocked(useNews);
-
 describe("NewsEditPage", () => {
-	let useNewsMockReturn: DeepMocked<ReturnType<typeof useNews>>;
+	let newsApi: DeepMocked<NewsApiInterface>;
+	let axiosMock: DeepMocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
+		newsApi = createMock<NewsApiInterface>();
+		axiosMock = createMock<AxiosInstance>();
+
+		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
+		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	const setup = (options?: Partial<{ currentNews: NewsResponse; status: Status }>) => {
+	const setup = async (options?: Partial<{ currentNews: NewsResponse | undefined }>) => {
 		const news = newsResponseFactory.build();
-		const { currentNews, status } = {
+		const { currentNews } = {
 			currentNews: news,
-			status: "" as Status,
 			...options,
 		};
+
+		newsApi.newsControllerFindOne.mockResolvedValue({ data: currentNews });
+
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
 		useRouteMock.mockReturnValue({
 			params: { id: news.id },
 		});
 
-		useNewsMockReturn = createMock<ReturnType<typeof useNews>>();
-		useNewsMock.mockReturnValue(useNewsMockReturn);
-
-		useNewsMockReturn.currentNews = ref(currentNews);
-		useNewsMockReturn.status = ref(status);
-
 		const wrapper = mount(NewsEditPage, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()],
 				stubs: {
-					FormNews: true,
+					NewsForm: true,
 				},
 			},
 		});
+		await flushPromises();
 
 		return { wrapper, news };
 	};
 
-	it("should render component", () => {
-		const { wrapper } = setup();
+	it("should render component", async () => {
+		const { wrapper } = await setup();
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should render breadcrumbs with news title", () => {
-		const { wrapper, news } = setup();
+	it("should render breadcrumbs with news title", async () => {
+		const { wrapper, news } = await setup();
 		const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
 		expect(defaultWireframe.exists()).toBe(true);
@@ -81,58 +81,59 @@ describe("NewsEditPage", () => {
 		]);
 	});
 
-	it("should not render form news when news is not loaded", () => {
-		const { wrapper } = setup({ currentNews: undefined });
-		const formNews = wrapper.findComponent(FormNews);
-		expect(formNews.exists()).toBe(false);
+	it("should not render form news when news is not loaded", async () => {
+		const { wrapper } = await setup({ currentNews: undefined });
+
+		const newsForm = wrapper.findComponent(NewsForm);
+		expect(newsForm.exists()).toBe(false);
 	});
 
-	it("should render form news when news is loaded", () => {
-		const { wrapper } = setup();
-		const formNews = wrapper.findComponent(FormNews);
-		expect(formNews.exists()).toBe(true);
+	it("should render form news when news is loaded", async () => {
+		const { wrapper } = await setup();
+
+		const newsForm = wrapper.findComponent(NewsForm);
+		expect(newsForm.exists()).toBe(true);
 	});
 
-	it("should find one news on mount", () => {
-		const { news } = setup();
-		expect(useNewsMockReturn.findOneNews).toHaveBeenCalledWith(news.id);
+	it("should find one news on mount", async () => {
+		const { news } = await setup();
+
+		expect(newsApi.newsControllerFindOne).toHaveBeenCalledWith(news.id);
 	});
 
 	it("should set default page title when news title is not available", async () => {
-		setup({ currentNews: undefined });
-		await flushPromises();
+		await setup({ currentNews: undefined });
 
 		expect(document.title).toEqual("pages.news.edit.title.default");
 	});
 
 	it("should set page title with news title", async () => {
-		setup();
-		await flushPromises();
+		await setup();
 
 		expect(document.title).toEqual("pages.news.edit.title");
 	});
 
 	describe("save news editing", () => {
-		it("should update news and navigate to news detail page", async () => {
-			const { wrapper, news } = setup();
-			const formNews = wrapper.getComponent(FormNews);
+		it("should call update news", async () => {
+			const { wrapper, news } = await setup();
+
+			const newsForm = wrapper.getComponent(NewsForm);
 			const updatedNews = { ...news, title: "Updated Title" };
 			const updateParams = {
-				id: news.id,
 				title: updatedNews.title,
 				content: updatedNews.content,
 				displayAt: updatedNews.displayAt,
 			};
 
-			formNews.vm.$emit("save", updateParams);
+			newsForm.vm.$emit("save", updateParams);
 			await flushPromises();
 
-			expect(useNewsMockReturn.updateNews).toHaveBeenCalledWith(updateParams);
+			expect(newsApi.newsControllerUpdate).toHaveBeenCalledWith(news.id, updateParams);
 		});
 
-		it("should navigate to news detail page when update is successful", async () => {
-			const { wrapper, news } = setup({ status: "completed" });
-			const formNews = wrapper.getComponent(FormNews);
+		it("should notify success and navigate to news detail page when update is successful", async () => {
+			const { wrapper, news } = await setup();
+			const newsForm = wrapper.getComponent(NewsForm);
 			const updateParams = {
 				id: news.id,
 				title: news.title,
@@ -140,41 +141,80 @@ describe("NewsEditPage", () => {
 				displayAt: news.displayAt,
 			};
 
-			formNews.vm.$emit("save", updateParams);
+			newsApi.newsControllerUpdate.mockResolvedValue({ data: updateParams });
+
+			newsForm.vm.$emit("save", updateParams);
 			await flushPromises();
 
+			expectNotification("success");
 			expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${news.id}` });
+		});
+
+		it("should not navigate to news detail page when update fails and notify error", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+			const { wrapper } = await setup();
+			const newsForm = wrapper.getComponent(NewsForm);
+
+			newsApi.newsControllerUpdate.mockRejectedValue(new Error("Failed to update news"));
+
+			newsForm.vm.$emit("save", {
+				title: "Updated Title",
+				content: "Updated Content",
+				displayAt: new Date().toISOString(),
+			});
+			await flushPromises();
+
+			expect(useRouterMock().push).not.toHaveBeenCalled();
+			expectNotification("error");
+
+			consoleErrorSpy.mockRestore();
 		});
 	});
 
 	describe("delete news", () => {
 		it("should delete news", async () => {
-			const { wrapper, news } = setup();
-			const formNews = wrapper.getComponent(FormNews);
+			const { wrapper, news } = await setup();
+			const newsForm = wrapper.getComponent(NewsForm);
 
-			formNews.vm.$emit("delete");
+			newsForm.vm.$emit("delete");
 			await flushPromises();
 
-			expect(useNewsMockReturn.deleteNews).toHaveBeenCalledWith(news.id);
+			expect(newsApi.newsControllerDelete).toHaveBeenCalledWith(news.id);
 		});
 
-		it("should navigate to news list page after successful deletion", async () => {
-			const { wrapper } = setup({ status: "completed" });
-			const formNews = wrapper.getComponent(FormNews);
+		it("should notify success and navigate to news list page after successful deletion", async () => {
+			const { wrapper } = await setup();
+			const newsForm = wrapper.getComponent(NewsForm);
 
-			formNews.vm.$emit("delete");
+			newsForm.vm.$emit("delete");
 			await flushPromises();
 
 			expect(useRouterMock().push).toHaveBeenCalledWith({ path: "/news" });
+			expectNotification("success");
+		});
+
+		it("should not navigate to news list page when deletion fails and notify error", async () => {
+			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
+			const { wrapper } = await setup();
+			const newsForm = wrapper.getComponent(NewsForm);
+
+			newsApi.newsControllerDelete.mockRejectedValue(new Error("Failed to delete news"));
+
+			newsForm.vm.$emit("delete");
+			await flushPromises();
+
+			expect(useRouterMock().push).not.toHaveBeenCalled();
+			expectNotification("error");
+			consoleErrorSpy.mockRestore();
 		});
 	});
 
 	describe("cancel news editing", () => {
 		it("should navigate back to previous page", async () => {
-			const { wrapper } = setup();
-			const formNews = wrapper.findComponent(FormNews);
+			const { wrapper } = await setup();
+			const newsForm = wrapper.findComponent(NewsForm);
 
-			formNews.vm.$emit("cancel");
+			newsForm.vm.$emit("cancel");
 			await flushPromises();
 
 			expect(useRouterMock().go).toHaveBeenCalled();

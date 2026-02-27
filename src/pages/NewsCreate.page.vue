@@ -14,18 +14,19 @@
 		max-width="short"
 	>
 		<div>
-			<FormNews :status="status" @save="onCreate" @cancel="onCancel" />
+			<NewsForm :status="status" @save="onCreate" @cancel="onCancel" />
 		</div>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { CreateNewsParams, CreateNewsParamsTargetModelEnum } from "@/serverApi/v3";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { CreateNewsParams, CreateNewsParamsTargetModelEnum, NewsApiFactory } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useAppStore } from "@data-app";
-import { useNews } from "@data-news";
-import { FormNews } from "@feature-news";
+import { notifySuccess, useAppStore } from "@data-app";
+import { NewsForm } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted } from "vue";
@@ -36,7 +37,8 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const { status, createdNews, createNews } = useNews();
+const { execute, status } = useSafeAxiosTask();
+const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 const pageTitle = computed(() => buildPageTitle(`${t("pages.news.new.title")}`));
 useTitle(pageTitle);
@@ -75,19 +77,22 @@ const onCreate = async (news: Pick<CreateNewsParams, "title" | "content" | "disp
 		targetId: useAppStore()?.school?.id ?? "",
 		targetModel: CreateNewsParamsTargetModelEnum.Schools,
 	};
-	await createNews({
-		title: news.title,
-		content: news.content,
-		displayAt: news.displayAt,
-		targetId: newsTarget.targetId,
-		targetModel: newsTarget.targetModel,
-	});
 
-	if (status.value === "completed" && createdNews.value?.id) {
-		await router.push({
-			path: `/news/${createdNews.value.id}`,
-		});
-	}
+	const { result, success } = await execute(
+		() =>
+			newsApi.newsControllerCreate({
+				title: news.title,
+				content: news.content,
+				displayAt: news.displayAt,
+				targetId: newsTarget.targetId,
+				targetModel: newsTarget.targetModel,
+			}),
+		t("components.organisms.FormNews.errors.create")
+	);
+	if (!success) return;
+
+	notifySuccess(t("components.organisms.FormNews.success.create"));
+	await router.push({ path: `/news/${result.data.id}` });
 };
 
 const onCancel = () => {

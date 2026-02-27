@@ -18,7 +18,7 @@
 			]"
 			max-width="short"
 		>
-			<FormNews
+			<NewsForm
 				:title="currentNews.title"
 				:content="currentNews.content"
 				:display-at="currentNews.displayAt"
@@ -33,14 +33,15 @@
 </template>
 
 <script setup lang="ts">
-import { type UpdateNewsParams } from "@/serverApi/v3";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifyError } from "@data-app";
-import { useNews } from "@data-news";
-import { FormNews } from "@feature-news";
+import { notifyError, notifySuccess } from "@data-app";
+import { NewsForm } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -48,10 +49,14 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const { status, findOneNews, currentNews, updateNews, deleteNews } = useNews();
+const { execute, status } = useSafeAxiosTask();
+const currentNews = ref<NewsResponse | undefined>(undefined);
+const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 onMounted(async () => {
-	await findOneNews(route.params.id as string);
+	const { result } = await execute(() => newsApi.newsControllerFindOne(route.params.id as string));
+	currentNews.value = result?.data;
+
 	setPageTitle();
 });
 
@@ -71,15 +76,14 @@ const onSave = async (newsToPatch: UpdateNewsParams) => {
 		return;
 	}
 
-	await updateNews({
-		id: currentNews.value.id,
-		title: newsToPatch.title,
-		content: newsToPatch.content,
-		displayAt: newsToPatch.displayAt,
-	});
+	const { result, success } = await execute(
+		() => newsApi.newsControllerUpdate(currentNews.value!.id, newsToPatch),
+		t("components.organisms.FormNews.error.patch")
+	);
+	if (!success) return;
 
-	if (status.value === "completed" && currentNews.value?.id)
-		await router.push({ path: `/news/${currentNews.value.id}` });
+	notifySuccess(t("components.organisms.FormNews.success.patch"));
+	await router.push({ path: `/news/${result.data.id}` });
 };
 
 const onDelete = async () => {
@@ -87,10 +91,17 @@ const onDelete = async () => {
 		notifyError(t("components.organisms.FormNews.error.remove"));
 		return;
 	}
+	const newsId = currentNews.value.id;
 
-	await deleteNews(currentNews.value.id);
+	const { success } = await execute(
+		() => newsApi.newsControllerDelete(newsId),
+		t("components.organisms.FormNews.error.remove")
+	);
+	if (!success) return;
 
-	if (status.value === "completed") await router.push({ path: "/news" });
+	currentNews.value = undefined;
+	notifySuccess(t("components.organisms.FormNews.success.remove"));
+	await router.push({ path: "/news" });
 };
 
 const onCancel = () => {

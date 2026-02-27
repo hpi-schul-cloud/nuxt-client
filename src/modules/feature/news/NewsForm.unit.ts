@@ -1,12 +1,12 @@
 import ClassicEditor from "../editor/ClassicEditor.vue";
-import FormNews from "./FormNews.vue";
 import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { NewsResponse } from "@/serverApi/v3";
 import { Status } from "@/store/types/commons";
-import { News } from "@/store/types/news";
 import { newsResponseFactory } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
@@ -32,8 +32,8 @@ vi.mock("@/plugins/i18n");
 
 vi.mock("@ui-confirmation-dialog");
 
-describe("FormNews", () => {
-	let wrapper: VueWrapper<InstanceType<typeof FormNews>>;
+describe("NewsForm", () => {
+	let wrapper: VueWrapper<InstanceType<typeof NewsForm>>;
 	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
@@ -45,7 +45,7 @@ describe("FormNews", () => {
 		});
 	});
 
-	const setup = (options?: Partial<{ status: Status; news: News | null; showDeleteButton: boolean }>) => {
+	const setup = (options?: Partial<{ status: Status; news: NewsResponse | undefined; showDeleteButton: boolean }>) => {
 		const currentNews = newsResponseFactory.build({ displayAt: testDate.toISOString() });
 		const { news, status, showDeleteButton } = {
 			news: currentNews,
@@ -54,7 +54,7 @@ describe("FormNews", () => {
 			...options,
 		};
 
-		wrapper = mount(FormNews, {
+		wrapper = mount(NewsForm, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -83,7 +83,7 @@ describe("FormNews", () => {
 	it("should render component", () => {
 		const { wrapper } = setup();
 
-		expect(wrapper.findComponent(FormNews).exists()).toBe(true);
+		expect(wrapper.findComponent(NewsForm).exists()).toBe(true);
 	});
 
 	it("should pass date and time to input fields", () => {
