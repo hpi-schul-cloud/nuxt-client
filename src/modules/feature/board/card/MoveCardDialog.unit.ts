@@ -1,6 +1,5 @@
 import { useCardDialogData } from "./card-dialog-composable";
 import MoveCardDialog from "./MoveCardDialog.vue";
-import { Permission } from "@/serverApi/v3";
 import {
 	columnResponseFactory,
 	mockApiResponse,
@@ -33,9 +32,9 @@ const mockCardDialogData: ReturnType<typeof useCardDialogData> = {
 };
 
 const mockRooms = [
-	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-	roomItemFactory.build({ permissions: [] }),
+	roomItemFactory.build({ allowedOperations: { editContent: true } }),
+	roomItemFactory.build({ allowedOperations: { editContent: true } }),
+	roomItemFactory.build({ allowedOperations: { editContent: false } }),
 ];
 
 vi.mock("./card-dialog-composable", () => ({

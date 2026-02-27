@@ -1,11 +1,10 @@
 import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
-	createRoomAuthorizationMock,
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
@@ -14,7 +13,7 @@ import {
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { RoomMember, useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import {
 	mdiAccountClockOutline,
@@ -30,22 +29,13 @@ import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@u
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
-import { nextTick, Ref, ref } from "vue";
+import { nextTick, ref } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/components";
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
-
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
-
-type RefPropertiesOnly<T> = {
-	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
-};
-
-type RoomAuthorizationRefs = RefPropertiesOnly<ReturnType<typeof useRoomAuthorization>>;
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
@@ -109,30 +99,27 @@ describe("MembersTable", () => {
 			members: RoomMember[];
 			isRoomOwner: boolean;
 			currentUserId: string;
-			customRoomAuthorization: Partial<RoomAuthorizationRefs>;
+			allowedOperations: Partial<RoomItemResponseAllowedOperations> | undefined;
+			memberOperations: Partial<RoomMemberResponseAllowedOperations> | undefined;
 		}>
 	) => {
 		const members =
 			options?.members ??
 			roomMemberFactory.buildList(3, {
 				roomRoleName: RoleName.Roomadmin,
+				allowedOperations: {
+					passOwnershipTo: false,
+					removeMember: false,
+					changeRole: false,
+					...options?.memberOperations,
+				},
 			});
 
 		const windowWidth = options?.windowWidth ?? 1280;
 
-		const roomAuthDefaults = {
-			canAddRoomMembers: true,
-		};
-
-		const authorizationPermissions = createRoomAuthorizationMock({
-			...roomAuthDefaults,
-			...options?.customRoomAuthorization,
-		});
-		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
-
 		const currentUser = roomMemberFactory.build({});
 
-		Object.defineProperty(window, "innerWidth", {
+		Object.defineProperty(globalThis, "innerWidth", {
 			writable: true,
 			configurable: true,
 			value: windowWidth,
@@ -143,6 +130,14 @@ describe("MembersTable", () => {
 				roomMembersStore: {
 					roomMembers: [...members, currentUser],
 					isRoomOwner: vi.fn(),
+				},
+				roomDetailsStore: {
+					room: {
+						id: "room-id",
+						name: "Room 1",
+						schoolId: "school-id",
+						allowedOperations: options?.allowedOperations,
+					},
 				},
 			},
 		});
@@ -162,7 +157,7 @@ describe("MembersTable", () => {
 		roomMembersStore.isRoomOwner.mockReturnValue(options?.isRoomOwner ?? false);
 		const roomMembers = roomMembersStore.roomMembers;
 
-		return { wrapper, roomMembersStore, roomMembers, authorizationPermissions };
+		return { wrapper, roomMembersStore, roomMembers };
 	};
 
 	// index 0 is the header checkbox
@@ -213,7 +208,8 @@ describe("MembersTable", () => {
 
 	it("should render data table", () => {
 		const { wrapper, roomMembers } = setup({
-			customRoomAuthorization: { canAddRoomMembers: true },
+			allowedOperations: { addMembers: true },
+			memberOperations: { changeRole: true },
 		});
 
 		const dataTable = wrapper.getComponent(VDataTable);
@@ -255,6 +251,8 @@ describe("MembersTable", () => {
 						schoolRoleNames,
 					}),
 				],
+				allowedOperations: { addMembers: true },
+				memberOperations: { changeRole: true },
 			});
 
 			const dataTable = wrapper.getComponent(VDataTable);
@@ -271,6 +269,8 @@ describe("MembersTable", () => {
 						schoolRoleNames: [],
 					}),
 				],
+				allowedOperations: { addMembers: true },
+				memberOperations: { changeRole: true },
 			});
 
 			const dataTable = wrapper.getComponent(VDataTable);
@@ -283,7 +283,8 @@ describe("MembersTable", () => {
 
 	it("should render checkboxes if user can add members", () => {
 		const { wrapper, roomMembers } = setup({
-			customRoomAuthorization: { canAddRoomMembers: true },
+			allowedOperations: { addMembers: true },
+			memberOperations: { changeRole: true },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -294,7 +295,8 @@ describe("MembersTable", () => {
 
 	it("should not render checkboxes if user can not add members", () => {
 		const { wrapper } = setup({
-			customRoomAuthorization: { canAddRoomMembers: false },
+			allowedOperations: { addMembers: false },
+			memberOperations: { changeRole: true },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -305,10 +307,12 @@ describe("MembersTable", () => {
 	it("non-selectable members should have their checkboxes disabled", () => {
 		const nonSelectableMembers = roomMemberFactory.buildList(3, {
 			isSelectable: false,
+			allowedOperations: { changeRole: false, removeMember: false, passOwnershipTo: false },
 		});
 
 		const { wrapper } = setup({
 			members: nonSelectableMembers,
+			allowedOperations: { addMembers: true },
 		});
 
 		const checkboxes = wrapper.getComponent(VDataTable).findAll("input[type='checkbox']:disabled");
@@ -337,7 +341,10 @@ describe("MembersTable", () => {
 
 	describe("when selecting members", () => {
 		it("should select all members when header checkbox is clicked", async () => {
-			const { wrapper, roomMembers } = setup();
+			const { wrapper, roomMembers } = setup({
+				allowedOperations: { addMembers: true },
+				memberOperations: { changeRole: true },
+			});
 
 			const { checkboxes } = await selectCheckboxes([0], wrapper);
 			const checkedIndices = getCheckedIndices(checkboxes);
@@ -347,7 +354,10 @@ describe("MembersTable", () => {
 		});
 
 		it("should select single member", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				allowedOperations: { addMembers: true },
+				memberOperations: { changeRole: true },
+			});
 
 			const { checkboxes } = await selectCheckboxes([1], wrapper);
 			const checkedIndices = getCheckedIndices(checkboxes);
@@ -366,7 +376,11 @@ describe("MembersTable", () => {
 		});
 
 		it("should not render remove button if it shouldn't be there", async () => {
-			const { wrapper } = setup({ isRoomOwner: true });
+			const { wrapper } = setup({
+				isRoomOwner: true,
+				allowedOperations: { addMembers: true },
+				memberOperations: { changeRole: true, removeMember: false },
+			});
 
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menuButton = dataTable.findComponent(`[data-testid=kebab-menu-1]`);
@@ -389,7 +403,10 @@ describe("MembersTable", () => {
 			};
 
 			it("should open confirmation dialog with remove message for single member", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({
+					allowedOperations: { addMembers: true },
+					memberOperations: { removeMember: true },
+				});
 
 				askConfirmationMock.mockResolvedValue(true);
 
@@ -402,7 +419,10 @@ describe("MembersTable", () => {
 			});
 
 			it("should call removeMembers after confirmation", async () => {
-				const { wrapper, roomMembersStore, roomMembers } = setup({});
+				const { wrapper, roomMembersStore, roomMembers } = setup({
+					allowedOperations: { addMembers: true },
+					memberOperations: { removeMember: true },
+				});
 
 				askConfirmationMock.mockResolvedValue(true);
 
@@ -411,7 +431,10 @@ describe("MembersTable", () => {
 			});
 
 			it("should not call removeMembers when dialog is cancelled", async () => {
-				const { wrapper, roomMembersStore } = setup({});
+				const { wrapper, roomMembersStore } = setup({
+					allowedOperations: { addMembers: true },
+					memberOperations: { removeMember: true },
+				});
 
 				askConfirmationMock.mockResolvedValue(false);
 
@@ -472,7 +495,8 @@ describe("MembersTable", () => {
 	describe("action column", () => {
 		it("should be rendered when user can add members", () => {
 			const { wrapper } = setup({
-				customRoomAuthorization: { canAddRoomMembers: true },
+				allowedOperations: { addMembers: true },
+				memberOperations: { changeRole: true },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -482,7 +506,7 @@ describe("MembersTable", () => {
 
 		it("should not be rendered when user can not add members", () => {
 			const { wrapper } = setup({
-				customRoomAuthorization: { canAddRoomMembers: false },
+				allowedOperations: { addMembers: false },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -497,8 +521,8 @@ describe("MembersTable", () => {
 			});
 			const { wrapper } = setup({
 				members: [roomOwner],
-				customRoomAuthorization: { canAddRoomMembers: true },
 				currentUserId: roomOwner.userId,
+				allowedOperations: { addMembers: true },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
@@ -509,7 +533,8 @@ describe("MembersTable", () => {
 		describe("change role button", () => {
 			it("should be rendered when user can add members", async () => {
 				const { wrapper } = setup({
-					customRoomAuthorization: { canAddRoomMembers: true },
+					allowedOperations: { addMembers: true, changeRolesOfMembers: true },
+					memberOperations: { changeRole: true },
 				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
@@ -523,7 +548,8 @@ describe("MembersTable", () => {
 
 			it("should open change role dialog when clicked", async () => {
 				const { wrapper } = setup({
-					customRoomAuthorization: { canAddRoomMembers: true },
+					allowedOperations: { addMembers: true, changeRolesOfMembers: true },
+					memberOperations: { changeRole: true },
 				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
@@ -542,7 +568,8 @@ describe("MembersTable", () => {
 	describe("change role dialog", () => {
 		it("should close dialog on @cancel", async () => {
 			const { wrapper } = setup({
-				customRoomAuthorization: { canAddRoomMembers: true },
+				allowedOperations: { addMembers: true, changeRolesOfMembers: true },
+				memberOperations: { changeRole: true },
 			});
 
 			const dataTable = wrapper.getComponent(VDataTable);
@@ -560,7 +587,10 @@ describe("MembersTable", () => {
 		});
 
 		it("should close dialog on escape key", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				allowedOperations: { addMembers: true, changeRolesOfMembers: true },
+				memberOperations: { changeRole: true },
+			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
 			await menuBtn.trigger("click");

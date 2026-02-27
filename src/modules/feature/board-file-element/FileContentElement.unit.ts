@@ -12,7 +12,7 @@ import { createTestEnvStore } from "@@/tests/test-utils";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardPermissions, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -82,11 +82,9 @@ describe("FileContentElement", () => {
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.fetchFiles.mockRejectedValueOnce(new Error());
 
-			const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-			const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-				hasEditPermission: ref(true),
-			});
-			useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+			vi.mocked(useBoardAllowedOperations).mockReturnValue({
+				allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			const useContentElementStateMock = vi.mocked(useContentElementState);
 			const fileContentElement = fileElementResponseFactory.build();
@@ -135,11 +133,9 @@ describe("FileContentElement", () => {
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-				const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const useContentElementStateMock = vi.mocked(useContentElementState);
 				const fileContentElement = fileElementResponseFactory.build();
@@ -197,7 +193,6 @@ describe("FileContentElement", () => {
 
 			it("should not render slot menu component", async () => {
 				const { wrapper, menu } = setup();
-
 				await nextTick();
 
 				expect(wrapper.html()).not.toContain(menu);
@@ -238,11 +233,9 @@ describe("FileContentElement", () => {
 					isCollaboraEditable: fileRecordResponse.isCollaboraEditable,
 				};
 
-				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-				const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const useContentElementStateMock = vi.mocked(useContentElementState);
 				const fileContentElement = fileElementResponseFactory.build();
@@ -659,11 +652,9 @@ describe("FileContentElement", () => {
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-					const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const useContentElementStateMock = vi.mocked(useContentElementState);
 					const fileContentElement = fileElementResponseFactory.build();
@@ -760,11 +751,9 @@ describe("FileContentElement", () => {
 					fileStorageApiMock.upload.mockRejectedValueOnce(new Error("test"));
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-					const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const useContentElementStateMock = vi.mocked(useContentElementState);
 					const fileContentElement = fileElementResponseFactory.build();
@@ -844,12 +833,9 @@ describe("FileContentElement", () => {
 					mimeType: fileRecordResponse.mimeType,
 					isCollaboraEditable: fileRecordResponse.isCollaboraEditable,
 				};
-
-				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-				const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const useContentElementStateMock = vi.mocked(useContentElementState);
 				const fileContentElement = fileElementResponseFactory.build();
@@ -1248,11 +1234,9 @@ describe("FileContentElement", () => {
 			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-			const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-			const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-				hasEditPermission: ref(true),
-			});
-			useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+			vi.mocked(useBoardAllowedOperations).mockReturnValue({
+				allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			const useContentElementStateMock = vi.mocked(useContentElementState);
 			const fileContentElement = fileElementResponseFactory.build();

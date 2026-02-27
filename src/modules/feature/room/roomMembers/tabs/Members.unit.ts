@@ -1,25 +1,21 @@
 import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
+import { RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
-	createRoomAuthorizationMock,
 	createTestAppStoreWithUser,
 	createTestEnvStore,
 	mockedPiniaStoreTyping,
-	RoomAuthorizationRefs,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 describe("Members", () => {
 	beforeEach(() => {
@@ -44,7 +40,7 @@ describe("Members", () => {
 		options: Partial<{
 			isLoading: boolean;
 			isCurrentUser: boolean;
-			roomAuthorization: RoomAuthorizationRefs;
+			allowedOperations: Partial<RoomItemResponseAllowedOperations> | undefined;
 		}> = {}
 	) => {
 		const currentUser = roomMemberFactory.build();
@@ -54,8 +50,6 @@ describe("Members", () => {
 		if (options?.isCurrentUser) {
 			roomMembers.push(currentUser);
 		}
-
-		roomAuthorizationMock.mockReturnValue(createRoomAuthorizationMock(options.roomAuthorization));
 
 		const wrapper = shallowMount(Members, {
 			global: {
@@ -67,6 +61,14 @@ describe("Members", () => {
 							roomMembersStore: {
 								isLoading: options?.isLoading ?? false,
 								roomMembers,
+							},
+							roomDetailsStore: {
+								room: {
+									id: "room-id",
+									name: "Room 1",
+									schoolId: "school-id",
+									allowedOperations: options?.allowedOperations,
+								},
 							},
 						},
 					}),
@@ -87,7 +89,9 @@ describe("Members", () => {
 	describe("when user is allowed to add room members", () => {
 		it("should render info text", () => {
 			const { wrapper } = setup({
-				roomAuthorization: { canAddRoomMembers: true },
+				allowedOperations: {
+					addMembers: true,
+				},
 			});
 
 			const infoText = wrapper.find("[data-testid=info-text]");
@@ -99,7 +103,9 @@ describe("Members", () => {
 	describe("when user is not allowed to add room members", () => {
 		it("should not render info text", () => {
 			const { wrapper } = setup({
-				roomAuthorization: { canAddRoomMembers: false },
+				allowedOperations: {
+					addMembers: false,
+				},
 			});
 
 			const infoText = wrapper.find("[data-testid=info-text]");
@@ -139,7 +145,9 @@ describe("Members", () => {
 			it("should not render pending invitations table", () => {
 				createTestEnvStore({ FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: false });
 				const { wrapper } = setup({
-					roomAuthorization: { canManageRoomInvitationLinks: false },
+					allowedOperations: {
+						updateRoomInvitationLinks: false,
+					},
 				});
 
 				const invitationsTable = wrapper.findComponent(MemberInvitationsTable);
@@ -152,7 +160,9 @@ describe("Members", () => {
 				it("should render pending invitations table", () => {
 					createTestEnvStore({ FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true });
 					const { wrapper } = setup({
-						roomAuthorization: { canManageRoomInvitationLinks: true },
+						allowedOperations: {
+							updateRoomInvitationLinks: true,
+						},
 					});
 
 					const invitationsTable = wrapper.findComponent(MemberInvitationsTable);
@@ -164,7 +174,9 @@ describe("Members", () => {
 				it("should not render pending invitations table", () => {
 					createTestEnvStore({ FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true });
 					const { wrapper } = setup({
-						roomAuthorization: { canManageRoomInvitationLinks: false },
+						allowedOperations: {
+							updateRoomInvitationLinks: false,
+						},
 					});
 
 					const invitationsTable = wrapper.findComponent(MemberInvitationsTable);

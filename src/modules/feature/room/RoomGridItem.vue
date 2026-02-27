@@ -23,6 +23,7 @@
 		<VCardActions class="justify-end pr-4">
 			<VBtn
 				:data-testid="`room-open-button-${index}`"
+				:disabled="room.isLocked"
 				variant="text"
 				color="primary"
 				:to="roomPath"

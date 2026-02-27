@@ -866,10 +866,263 @@ export interface BoardResponse {
     features: Array<BoardFeature>;
     /**
      * 
-     * @type {Array<Permission>}
+     * @type {BoardResponseAllowedOperations}
      * @memberof BoardResponse
      */
-    permissions: Array<Permission>;
+    allowedOperations?: BoardResponseAllowedOperations;
+}
+/**
+ * 
+ * @export
+ * @interface BoardResponseAllowedOperations
+ */
+export interface BoardResponseAllowedOperations {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    copyBoard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    deleteBoard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    findBoard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    relocateContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    shareBoard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateBoardLayout: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateBoardTitle: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateReadersCanEditSetting: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createColumn: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    deleteColumn: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    moveColumn: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateColumnTitle: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    copyCard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createCard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    deleteCard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    findCards: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    moveCard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    shareCard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateCardHeight: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateCardTitle: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    deleteElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    moveElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    viewElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createExternalToolElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createFileElement: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createSubmissionItemContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    deleteSubmissionItem: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateSubmissionItem: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    manageVideoConference: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    collapseMediaBoard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateBoardVisibility: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateMediaBoardColor: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateMediaBoardLayout: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    viewMediaBoard: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    collapseMediaBoardLine: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    createMediaBoardLine: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    deleteMediaBoardLine: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateMediaBoardLine: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponseAllowedOperations
+     */
+    updateMediaBoardLineColor: boolean;
 }
 /**
  * 
@@ -8843,10 +9096,10 @@ export interface RoomDetailsResponse {
     updatedAt: string;
     /**
      * 
-     * @type {Array<Permission>}
+     * @type {RoomItemResponseAllowedOperations}
      * @memberof RoomDetailsResponse
      */
-    permissions: Array<Permission>;
+    allowedOperations?: RoomItemResponseAllowedOperations;
     /**
      * 
      * @type {Array<RoomFeatures>}
@@ -9063,16 +9316,137 @@ export interface RoomItemResponse {
     updatedAt: string;
     /**
      * 
-     * @type {Array<Permission>}
+     * @type {RoomItemResponseAllowedOperations}
      * @memberof RoomItemResponse
      */
-    permissions: Array<Permission>;
+    allowedOperations?: RoomItemResponseAllowedOperations;
     /**
      * 
      * @type {boolean}
      * @memberof RoomItemResponse
      */
     isLocked: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface RoomItemResponseAllowedOperations
+ */
+export interface RoomItemResponseAllowedOperations {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    accessRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    addAllStudents: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    addExternalPersonByEmail: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    addMembers: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    arrangeRooms: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    changeRolesOfMembers: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    copyRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    createRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    deleteRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    editContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    getRoomMembers: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    getRoomMembersRedacted: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    leaveRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    shareRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    updateRoom: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    updateRoomInvitationLinks: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    viewContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    viewDraftContent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomItemResponseAllowedOperations
+     */
+    viewMemberlist: boolean;
 }
 /**
  * 
@@ -9148,6 +9522,37 @@ export interface RoomMemberResponse {
      * @memberof RoomMemberResponse
      */
     userId: string;
+    /**
+     * 
+     * @type {RoomMemberResponseAllowedOperations}
+     * @memberof RoomMemberResponse
+     */
+    allowedOperations?: RoomMemberResponseAllowedOperations;
+}
+/**
+ * 
+ * @export
+ * @interface RoomMemberResponseAllowedOperations
+ */
+export interface RoomMemberResponseAllowedOperations {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomMemberResponseAllowedOperations
+     */
+    changeRole: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomMemberResponseAllowedOperations
+     */
+    passOwnershipTo: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomMemberResponseAllowedOperations
+     */
+    removeMember: boolean;
 }
 /**
  * 

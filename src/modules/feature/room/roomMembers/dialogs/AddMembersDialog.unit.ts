@@ -3,17 +3,15 @@ import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
-	createRoomAuthorizationMock,
 	createTestAppStoreWithRole,
 	mockedPiniaStoreTyping,
-	RoomAuthorizationRefs,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
@@ -24,9 +22,6 @@ import { Mock } from "vitest";
 import { VAutocomplete, VIcon } from "vuetify/lib/components/index";
 
 vi.mock("@vueuse/integrations/useFocusTrap");
-
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorizationMock = vi.mocked(useRoomAuthorization);
 
 describe("AddMembersDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembersDialog>>;
@@ -55,19 +50,10 @@ describe("AddMembersDialog", () => {
 	});
 
 	const setup = (options?: {
-		customRoomAuthorization?: RoomAuthorizationRefs;
 		schoolRole?: RoleName.Teacher | RoleName.Student | RoleName.Administrator;
 		isOpen?: boolean;
 		isAdminMode?: boolean;
 	}) => {
-		const configDefaults = {
-			canAddRoomMembers: true,
-			canSeeAllStudents: true,
-		};
-		const roomAuthorization = {
-			...configDefaults,
-			...options?.customRoomAuthorization,
-		};
 		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 		const roomMembers = roomMemberFactory.buildList(2, {
@@ -80,9 +66,6 @@ describe("AddMembersDialog", () => {
 		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
 		roomMembers[0].userId = mockedMe.user.id;
 		roomMembersSchools[0].id = mockedMe.school.id;
-
-		const authorizationPermissions = createRoomAuthorizationMock(roomAuthorization);
-		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 
 		wrapper = mount(AddMembersDialog, {
 			props: {
@@ -393,9 +376,7 @@ describe("AddMembersDialog", () => {
 	describe("when user is not allowed to see all students", () => {
 		describe("and the role is set to student", () => {
 			it("should show info message", async () => {
-				const { wrapper } = setup({
-					customRoomAuthorization: { canSeeAllStudents: false },
-				});
+				const { wrapper } = setup({});
 
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
@@ -407,11 +388,10 @@ describe("AddMembersDialog", () => {
 				expect(infoAlert.text()).toBe("pages.rooms.members.add.students.forbidden");
 			});
 		});
+
 		describe("and the role is set to teacher", () => {
 			it("should not show info message", async () => {
-				const { wrapper } = setup({
-					customRoomAuthorization: { canSeeAllStudents: false },
-				});
+				const { wrapper } = setup({});
 
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
@@ -423,11 +403,10 @@ describe("AddMembersDialog", () => {
 				expect(infoAlert.exists()).toEqual(false);
 			});
 		});
+
 		describe("and external school and student role are set", () => {
 			it("should not show info message", async () => {
-				const { wrapper } = setup({
-					customRoomAuthorization: { canSeeAllStudents: false },
-				});
+				const { wrapper } = setup({});
 
 				const schoolComponent = wrapper.getComponent({
 					ref: "autoCompleteSchool",
@@ -443,10 +422,10 @@ describe("AddMembersDialog", () => {
 				expect(infoAlert.exists()).toEqual(false);
 			});
 		});
+
 		describe("and the current user is a student and student role is set", () => {
 			it("should not show info message", async () => {
 				const { wrapper } = setup({
-					customRoomAuthorization: { canSeeAllStudents: false },
 					schoolRole: RoleName.Student,
 				});
 
@@ -462,7 +441,6 @@ describe("AddMembersDialog", () => {
 
 			it("should show specific student admin info message", async () => {
 				const { wrapper } = setup({
-					customRoomAuthorization: { canSeeAllStudents: false },
 					schoolRole: RoleName.Student,
 				});
 
@@ -488,6 +466,7 @@ describe("AddMembersDialog", () => {
 			expect(roleSelect.props("readonly")).toBe(true);
 			expect(roleSelect.props("menuIcon")).toBe("");
 		});
+
 		it("the school role should be set to teacher", () => {
 			const { wrapper } = setup({ schoolRole: RoleName.Administrator, isOpen: true, isAdminMode: true });
 			const roleSelect = wrapper.getComponent({

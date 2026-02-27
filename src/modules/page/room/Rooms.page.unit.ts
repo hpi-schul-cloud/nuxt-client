@@ -1,41 +1,44 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3";
+import { Permission, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import {
-	createRoomAuthorizationMock,
+	createTestAppStoreWithPermissions,
 	createTestRoomStore,
 	expectNotification,
 	roomItemFactory,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useRoomAuthorization } from "@data-room";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid } from "@feature-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { setActivePinia } from "pinia";
-import { computed } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = vi.mocked(useRoomAuthorization);
+vi.mock("@/serverApi/v3", async (importOriginal) => {
+	const actual = await importOriginal<typeof serverApi>();
+	return {
+		...actual,
+		RoomApiFactory: vi.fn(),
+	};
+});
 
 describe("RoomsPage", () => {
 	const router = createRouterMock();
-	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
+	const roomApiMock = createMock<ReturnType<typeof serverApi.RoomApiFactory>>();
 
 	beforeEach(() => {
-		roomPermissions = createRoomAuthorizationMock({
-			canAddRoomMembers: true,
-		});
-		roomAuthorization.mockReturnValue(roomPermissions);
+		vi.mocked(serverApi.RoomApiFactory).mockReturnValue(roomApiMock);
+		roomApiMock.roomControllerGetRooms.mockResolvedValue({ data: { data: [] } } as never);
 	});
 
 	const setup = (
@@ -46,9 +49,11 @@ describe("RoomsPage", () => {
 
 		injectRouterMock(router);
 
-		setActivePinia(createTestingPinia());
+		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
+
+		createTestAppStoreWithPermissions([Permission.SchoolCreateRoom]);
 
 		const wrapper = mount(RoomsPage, {
 			global: {
@@ -182,9 +187,7 @@ describe("RoomsPage", () => {
 				expect(wireframe.exists()).toBe(true);
 			});
 
-			it("should have the correct props", () => {
-				roomPermissions.canCreateRoom = computed(() => true);
-
+			it("should have the correct props", async () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
 

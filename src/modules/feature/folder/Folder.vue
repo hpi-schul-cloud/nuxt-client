@@ -6,7 +6,7 @@
 					{{ folderName }}
 				</h1>
 				<FolderMenu
-					v-if="hasEditPermission"
+					v-if="allowedOperations.createFileElement"
 					:folder-name="folderName"
 					@delete="onDelete"
 					@rename="onRenameActionClick"
@@ -17,7 +17,7 @@
 			:is-loading="isLoading"
 			:is-empty="isEmpty"
 			:file-storage-error="fileStorageError"
-			:has-edit-permission="hasEditPermission"
+			:has-edit-permission="allowedOperations.createFileElement"
 			:file-records="uploadedFileRecords"
 			:upload-progress="uploadProgress"
 			:are-upload-stats-visible="areUploadStatsVisible"
@@ -48,7 +48,7 @@ import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useBoardApi, useBoardPermissions, useBoardStore, useSharedBoardPageInformation } from "@data-board";
+import { useBoardAllowedOperations, useBoardApi, useBoardStore, useSharedBoardPageInformation } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
@@ -81,6 +81,8 @@ const emit = defineEmits<{
 	(update: "update:folder-name", pageTitle: string): void;
 }>();
 
+const { allowedOperations } = useBoardAllowedOperations();
+
 const { breadcrumbs, folderName, fetchFileFolderElement, parent, mapNodeTypeToPathType, renameFolder } =
 	useFolderState();
 
@@ -90,7 +92,6 @@ const { fetchFiles, upload, uploadCollaboraFile, getFileRecordsByParentId, delet
 
 const boardStore = useBoardStore();
 
-const { hasEditPermission } = useBoardPermissions();
 const { handleError, notifyWithTemplate } = useErrorHandler();
 
 const { openCollaboraFileDialog } = useAddCollaboraFile();
@@ -104,7 +105,7 @@ const isRenameDialogOpen = ref(false);
 const isCollaboraEnabled = computed(() => useEnvConfig().value.FEATURE_COLUMN_BOARD_COLLABORA_ENABLED);
 
 const fabItems = computed(() => {
-	if (!hasEditPermission.value) return;
+	if (!allowedOperations.value.createFileElement) return;
 
 	const actions: FabAction[] = [
 		{
@@ -234,7 +235,7 @@ const onCreateCollaboraFile = async (payload: CreateCollaboraFilePayload) => {
 			id: newFile.id,
 		},
 		query: {
-			edit: hasEditPermission.value.toString(),
+			edit: allowedOperations.value.createFileElement.toString(),
 		},
 	}).href;
 	window.open(url, "_blank");

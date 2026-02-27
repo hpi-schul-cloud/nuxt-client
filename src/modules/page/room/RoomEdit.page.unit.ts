@@ -1,24 +1,19 @@
+import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { RoomColor, RoomUpdateParams } from "@/types/room/Room";
-import {
-	createRoomAuthorizationMock,
-	expectNotification,
-	mockedPiniaStoreTyping,
-	RoomAuthorizationRefs,
-	roomFactory,
-} from "@@/tests/test-utils";
+import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
+import { expectNotification, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
-import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
+import { createMock } from "@golevelup/ts-vitest";
 import { RoomEditPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 
-vi.mock("@data-room/roomAuthorization.composable");
-const roomAuthorization = vi.mocked(useRoomAuthorization);
+vi.mock("@/serverApi/v3");
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
@@ -27,6 +22,7 @@ const roomParams: RoomUpdateParams = {
 };
 
 describe("@pages/RoomEdit.page.vue", () => {
+	const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
 	let router: RouterMock;
 
 	beforeEach(() => {
@@ -41,12 +37,12 @@ describe("@pages/RoomEdit.page.vue", () => {
 		options?: Partial<{
 			isLoading: boolean;
 			isRoomDefined: boolean;
-			roomAuthorization: RoomAuthorizationRefs;
+			room: RoomDetails | undefined;
+			allowedOperations: Partial<RoomItemResponseAllowedOperations> | undefined;
 		}>
 	) => {
-		roomAuthorization.mockReturnValue(createRoomAuthorizationMock(options?.roomAuthorization));
-		const { isRoomDefined } = { isRoomDefined: true, ...options };
-		const room = isRoomDefined ? roomFactory.build() : undefined;
+		const { isRoomDefined = true, allowedOperations = {} } = options ?? {};
+		const room = isRoomDefined ? roomFactory.build({ allowedOperations }) : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
 		injectRouterMock(router);
@@ -58,10 +54,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 					createTestingVuetify(),
 					createTestingI18n(),
 					createTestingPinia({
+						stubActions: false,
 						initialState: {
 							roomDetailsStore: {
 								isLoading: options?.isLoading ?? false,
-								room,
+								room: options?.isLoading ? undefined : room,
 							},
 						},
 					}),
@@ -89,7 +86,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 	describe("is room undefined", () => {
 		it("should fetch room details on mount", () => {
-			const { fetchRoom, roomId } = setup({ isRoomDefined: false });
+			const { fetchRoom, roomId } = setup({ isRoomDefined: false, allowedOperations: { updateRoom: true } });
 
 			expect(fetchRoom).toHaveBeenCalledWith(roomId);
 		});
@@ -107,20 +104,14 @@ describe("@pages/RoomEdit.page.vue", () => {
 	describe("loading is done", () => {
 		describe("when user has no edit room permissions", () => {
 			it("should not render DefaultWireframe", () => {
-				const { wrapper } = setup({
-					isLoading: false,
-					roomAuthorization: { canEditRoom: false },
-				});
+				const { wrapper } = setup({ isLoading: false, allowedOperations: { updateRoom: false } });
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
 				expect(defaultWireframe.exists()).toBe(false);
 			});
 
 			it("should navigate to room details page", async () => {
-				const { roomId } = setup({
-					isLoading: false,
-					roomAuthorization: { canEditRoom: false },
-				});
+				const { roomId } = setup({ isLoading: false, allowedOperations: { updateRoom: false } });
 				await nextTick();
 
 				expect(router.replace).toHaveBeenCalledWith({
@@ -131,18 +122,15 @@ describe("@pages/RoomEdit.page.vue", () => {
 		});
 
 		describe("when user has edit room permissions ", () => {
-			const setupWithEditPermission = (opts?: Partial<{ isLoading: boolean; isRoomDefined: boolean }>) =>
-				setup({ ...opts, roomAuthorization: { canEditRoom: true } });
-
 			it("should render DefaultWireframe", () => {
-				const { wrapper } = setupWithEditPermission();
+				const { wrapper } = setup({ allowedOperations: { updateRoom: true } });
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 
 				expect(defaultWireframe.exists()).toBe(true);
 			});
 
 			it("should have roomFormComponent", async () => {
-				const { wrapper } = setupWithEditPermission();
+				const { wrapper } = setup({ allowedOperations: { updateRoom: true } });
 				await nextTick();
 
 				const roomFormComponent = wrapper.findComponent(RoomForm);
@@ -150,7 +138,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should render roomFormComponent with correct props", async () => {
-				const { wrapper, room } = setupWithEditPermission();
+				const { wrapper, room } = setup({ allowedOperations: { updateRoom: true } });
 				await nextTick();
 
 				const roomFormComponent = wrapper.findComponent(RoomForm);
@@ -161,7 +149,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should have breadcrumbs prop in DefaultWireframe component", async () => {
-				const { wrapper, roomId, room } = setupWithEditPermission();
+				const { wrapper, roomId, room } = setup({ allowedOperations: { updateRoom: true } });
 				await nextTick();
 
 				const defaultWireframe = wrapper.findComponent({
@@ -175,7 +163,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 			describe("when roomFormComponent emits save event", () => {
 				it("should call updateRoom with correct parameters on save event", async () => {
-					const { updateRoom, roomId, wrapper } = setupWithEditPermission();
+					const { updateRoom, roomId, wrapper } = setup({ allowedOperations: { updateRoom: true } });
 					await nextTick();
 
 					const roomFormComponent = wrapper.findComponent(RoomForm);
@@ -185,7 +173,9 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should navigate to 'room-details' with correct room id on save", async () => {
-					const { wrapper, roomId } = setupWithEditPermission();
+					roomApiMock.roomControllerUpdateRoom.mockResolvedValueOnce(mockApiResponse<RoomDetailsResponse>({}));
+					const { updateRoom, wrapper, roomId } = setup({ allowedOperations: { updateRoom: true } });
+					updateRoom.mockResolvedValueOnce(undefined);
 					await nextTick();
 
 					const roomFormComponent = wrapper.findComponent(RoomForm);
@@ -199,14 +189,14 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should show error notification on invalid request error", async () => {
-					const { updateRoom, wrapper } = setupWithEditPermission();
+					const { updateRoom, wrapper } = setup({ allowedOperations: { updateRoom: true } });
 					await nextTick();
 
 					const apiError = {
 						code: HttpStatusCode.BadRequest,
 						message: "Bad Request",
 					};
-					updateRoom.mockRejectedValue(apiError);
+					updateRoom.mockRejectedValueOnce(apiError);
 
 					const roomFormComponent = wrapper.findComponent(RoomForm);
 					roomFormComponent.vm.$emit("save", { room: roomParams });
@@ -216,7 +206,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 				});
 
 				it("should create an application error if not due to invalid request", async () => {
-					const { updateRoom, wrapper } = setupWithEditPermission();
+					const { updateRoom, wrapper } = setup({ allowedOperations: { updateRoom: true } });
 					updateRoom.mockRejectedValue({ code: HttpStatusCode.Unauthorized });
 
 					await (wrapper.vm as unknown as typeof RoomEditPage).onSave({
@@ -227,7 +217,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			});
 
 			it("should navigate to 'rooms' on cancel", async () => {
-				const { wrapper, roomId } = setupWithEditPermission();
+				const { wrapper, roomId } = setup({ allowedOperations: { updateRoom: true } });
 				await nextTick();
 
 				const roomFormComponent = wrapper.findComponent(RoomForm);
