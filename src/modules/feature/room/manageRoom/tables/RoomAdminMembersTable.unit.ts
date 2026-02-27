@@ -9,6 +9,7 @@ import {
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -16,18 +17,33 @@ import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
-import { DOMWrapper } from "@vue/test-utils";
+import { DOMWrapper, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock, vi } from "vitest";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { VDataTable, VIcon } from "vuetify/components";
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
+vi.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
+
 describe("RoomAdminMembersTable", () => {
+	let askConfirmationMock: Mock;
+
 	beforeEach(() => {
+		askConfirmationMock = vi.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+		mockedUseRemoveConfirmationDialog.mockReturnValue({
+			askConfirmation: askConfirmationMock,
+			isDialogOpen: ref(false),
+		});
+
 		setActivePinia(createTestingPinia());
 
 		setupStores({
@@ -276,6 +292,77 @@ describe("RoomAdminMembersTable", () => {
 
 			expect(roomMembersStore.selectedIds).toEqual([]);
 			expect(roomMembersStore.fetchMembers).toHaveBeenCalled();
+		});
+	});
+
+	describe("when member actions are triggered", () => {
+		describe("when change-permission action is clicked", () => {
+			it("should open change-role dialog with selected member", async () => {
+				const member = roomMemberFactory.build({ allowedOperations: { passOwnershipTo: true } });
+				const { wrapper, roomMembersWithoutApplicants } = setup({ members: [member] });
+
+				const targetMember = roomMembersWithoutApplicants[0];
+				const menuButton = wrapper.findComponent(`[data-testid="kebab-menu-${targetMember.userId}"]`);
+				await menuButton.trigger("click");
+				await nextTick();
+
+				const changePermissionAction = wrapper.findComponent(
+					`[data-testid="kebab-menu-${targetMember.userId}-change-permission"]`
+				);
+				expect(changePermissionAction.exists()).toBe(true);
+				await changePermissionAction.trigger("click");
+				await nextTick();
+
+				const changeRoleDialog = wrapper.getComponent(ChangeRole);
+				expect(changeRoleDialog.props("modelValue")).toBe(true);
+				expect(changeRoleDialog.props("members")).toEqual([expect.objectContaining({ userId: targetMember.userId })]);
+			});
+		});
+
+		describe("when remove-member action is clicked", () => {
+			describe("when the user confirms the action", () => {
+				it("should remove member", async () => {
+					const member = roomMemberFactory.build({ allowedOperations: { removeMember: true } });
+					const { wrapper, roomMembersWithoutApplicants, roomMembersStore } = setup({ members: [member] });
+
+					const targetMember = roomMembersWithoutApplicants[0];
+					const menuButton = wrapper.findComponent(`[data-testid="kebab-menu-${targetMember.userId}"]`);
+					await menuButton.trigger("click");
+					await nextTick();
+
+					askConfirmationMock.mockResolvedValue(true);
+					const removeMemberAction = wrapper.findComponent(
+						`[data-testid="kebab-menu-${targetMember.userId}-remove-member"]`
+					);
+					expect(removeMemberAction.exists()).toBe(true);
+					await removeMemberAction.trigger("click");
+					await flushPromises();
+
+					expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([targetMember.userId]);
+				});
+			});
+
+			describe("when the user cancels the confirmation", () => {
+				it("should not remove member", async () => {
+					const member = roomMemberFactory.build({ allowedOperations: { removeMember: true } });
+					const { wrapper, roomMembersWithoutApplicants, roomMembersStore } = setup({ members: [member] });
+
+					const targetMember = roomMembersWithoutApplicants[0];
+					const menuButton = wrapper.findComponent(`[data-testid="kebab-menu-${targetMember.userId}"]`);
+					await menuButton.trigger("click");
+					await nextTick();
+
+					askConfirmationMock.mockResolvedValue(false);
+					const removeMemberAction = wrapper.findComponent(
+						`[data-testid="kebab-menu-${targetMember.userId}-remove-member"]`
+					);
+					expect(removeMemberAction.exists()).toBe(true);
+					await removeMemberAction.trigger("click");
+					await flushPromises();
+
+					expect(roomMembersStore.removeMembers).not.toHaveBeenCalled();
+				});
+			});
 		});
 	});
 });

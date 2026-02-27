@@ -1,5 +1,5 @@
 import ImportCardDialog from "./ImportCardDialog.vue";
-import { Permission, ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3";
+import { ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { mockApiResponse, mockedPiniaStoreTyping, roomItemFactory } from "@@/tests/test-utils";
@@ -18,9 +18,9 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
 
 const mockRooms = [
-	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-	roomItemFactory.build({ permissions: [Permission.RoomEditContent] }),
-	roomItemFactory.build({ permissions: [] }),
+	roomItemFactory.build({ allowedOperations: { editContent: true } }),
+	roomItemFactory.build({ allowedOperations: { editContent: true } }),
+	roomItemFactory.build({ allowedOperations: { editContent: false } }),
 ];
 
 let copyModuleMock: CopyModule;
