@@ -64,6 +64,23 @@ export const isValidTimeFormat = (value: string | null) => {
 /**
  * Vuetify Rules Validator
  * Checks if given value has valid time format
+ * Change name to isValidTimeFormat when vuelidate is removed
+ */
+export const isValidTimeFormatVuetify: FormValidatorFn<string | null> =
+	(errMsg = useI18nGlobal().t("components.timePicker.validation.format")) =>
+	(value) => {
+		if (value === "" || value === null || value === undefined) {
+			return true;
+		}
+
+		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
+
+		return !!value.match(timeRegex) || errMsg;
+	};
+
+/**
+ * Vuetify Rules Validator
+ * Checks if given value has valid date format
  */
 export const isValidDateFormat: FormValidatorFn<string | null> =
 	(errorMessage = useI18nGlobal().t("components.datePicker.validation.format")) =>

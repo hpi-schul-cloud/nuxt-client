@@ -10,6 +10,7 @@ import {
 	isValidDateFormat,
 	isValidEmail,
 	isValidTimeFormat,
+	isValidTimeFormatVuetify,
 	isValidUrl,
 } from "@util-validators";
 
@@ -121,6 +122,18 @@ describe("util-validators", () => {
 		it("should not accept invalid time format", () => {
 			expect(isValidTimeFormat("55:5")).toBe(false);
 			expect(isValidTimeFormat("55:55")).toBe(false);
+		});
+	});
+
+	describe("isValidTimeFormatVuetify", () => {
+		const isValid = isValidTimeFormatVuetify(ERROR);
+		it("should accept valid time format", () => {
+			expect(isValid("12:12")).toBe(true);
+		});
+
+		it("should not accept invalid time format", () => {
+			expect(isValid("55:5")).toBe(ERROR);
+			expect(isValid("55:55")).toBe(ERROR);
 		});
 	});
 

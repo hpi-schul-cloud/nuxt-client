@@ -14,6 +14,7 @@ import {
 	isValidDateFormat,
 	isValidEmail,
 	isValidTimeFormat,
+	isValidTimeFormatVuetify,
 	isValidUrl,
 } from "./validators";
 
@@ -35,6 +36,7 @@ export {
 	isValidLdapUrl,
 	isValidSecuredLdapUrl,
 	isValidTimeFormat,
+	isValidTimeFormatVuetify,
 	isValidUrl,
 	useInvalidCharactersValidator,
 	useOpeningTagValidator,
