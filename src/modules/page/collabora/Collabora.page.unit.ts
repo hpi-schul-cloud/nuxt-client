@@ -1,9 +1,11 @@
 import CollaboraPage from "./Collabora.page.vue";
+import { ElementWithParentHierarchyResponse } from "@/serverApi/v3/api";
 import * as serverApi from "@/serverApi/v3/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	fileElementResponseFactory,
 	fileRecordFactory,
+	mockApiResponse,
 	ObjectIdMock,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
@@ -13,7 +15,6 @@ import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { useTitle } from "@vueuse/core";
-import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 
 // Mock useTitle from @vueuse/core
@@ -58,12 +59,14 @@ describe("Collabora.page", () => {
 			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Course Board" });
 			const fileElement = fileElementResponseFactory.build();
 			const boardApi = createMock<serverApi.BoardElementApiInterface>();
-			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce({
-				data: {
-					element: fileElement,
-					parentHierarchy: [parentNodeInfos],
-				},
-			} as AxiosResponse);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce(
+				mockApiResponse<ElementWithParentHierarchyResponse>({
+					data: {
+						element: fileElement,
+						parentHierarchy: [parentNodeInfos],
+					},
+				})
+			);
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 
 			mockBuildPageTitle.mockReturnValue("test-file.xlsx - Course Board - Instance Title");
@@ -132,12 +135,14 @@ describe("Collabora.page", () => {
 			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Course Board" });
 			const fileElement = fileElementResponseFactory.build();
 			const boardApi = createMock<serverApi.BoardElementApiInterface>();
-			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce({
-				data: {
-					element: fileElement,
-					parentHierarchy: [parentNodeInfos],
-				},
-			} as AxiosResponse);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce(
+				mockApiResponse<ElementWithParentHierarchyResponse>({
+					data: {
+						element: fileElement,
+						parentHierarchy: [parentNodeInfos],
+					},
+				})
+			);
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 
 			mockBuildPageTitle.mockReturnValueOnce("fetched-file.xlsx - Course Board - Instance Title");
@@ -276,12 +281,14 @@ describe("Collabora.page", () => {
 			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Task Board" });
 			const fileElement = fileElementResponseFactory.build();
 			const boardApi = createMock<serverApi.BoardElementApiInterface>();
-			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue({
-				data: {
-					element: fileElement,
-					parentHierarchy: [parentNodeInfos],
-				},
-			} as AxiosResponse);
+			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue(
+				mockApiResponse<ElementWithParentHierarchyResponse>({
+					data: {
+						element: fileElement,
+						parentHierarchy: [parentNodeInfos],
+					},
+				})
+			);
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
 			const expectedTitle = "Task Board - Instance Title";

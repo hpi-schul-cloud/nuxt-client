@@ -19,7 +19,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { expect, Mock } from "vitest";
+import { expect, Mock, Mocked } from "vitest";
 import { computed, Ref, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { createRouterMock, type RouterMock } from "vue-router-mock";
@@ -58,14 +58,14 @@ vi.mock("vue-i18n", () => ({
 }));
 
 describe("BoardStore", () => {
-	let mockedErrorHandlerCalls: ReturnType<typeof useErrorHandler>;
-	let mockedSocketConnectionHandler: ReturnType<typeof useSocketConnection>;
-	let mockedSocketApiActions: ReturnType<typeof useBoardSocketApi>;
-	let mockedBoardRestApiActions: ReturnType<typeof useBoardRestApi>;
-	let mockedCardSocketApiActions: ReturnType<typeof useCardSocketApi>;
-	let mockedUseSharedFileSelectActions: ReturnType<typeof useSharedFileSelect>;
+	let mockedErrorHandlerCalls: Mocked<ReturnType<typeof useErrorHandler>>;
+	let mockedSocketConnectionHandler: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedSocketApiActions: Mocked<ReturnType<typeof useBoardSocketApi>>;
+	let mockedBoardRestApiActions: Mocked<ReturnType<typeof useBoardRestApi>>;
+	let mockedCardSocketApiActions: Mocked<ReturnType<typeof useCardSocketApi>>;
+	let mockedUseSharedFileSelectActions: Mocked<ReturnType<typeof useSharedFileSelect>>;
 	let setEditModeId: Mock;
-	let mockedBoardFocusCalls: ReturnType<typeof useBoardFocusHandler>;
+	let mockedBoardFocusCalls: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 	let router: RouterMock;
 
 	beforeEach(() => {

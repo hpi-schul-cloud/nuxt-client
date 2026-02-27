@@ -111,7 +111,7 @@ describe("LinkContentElement", () => {
 		});
 
 		useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue({
-			url: element.content.url ?? "",
+			url: "https://imagestock.com/great-article",
 			title: "Super duper mega page title",
 			description: "This page is sooo cool!",
 			originalImageUrl: "https://imagestock.com/great-image.jpg",
