@@ -47,7 +47,7 @@ describe("AutoLogoutWarning", () => {
 		errorOnExtend: ref(false),
 		isTTLUpdated: ref(false),
 		remainingTimeInMinutes: computed(() => 0),
-		remainingTimeInSeconds: 0,
+		remainingTimeInSeconds: ref(0),
 		showWarningOnRemainingSeconds: 0,
 		sessionStatus: ref<SessionStatus | null>(null),
 		createSession: vi.fn(),

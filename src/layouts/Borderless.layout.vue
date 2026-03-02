@@ -10,6 +10,8 @@
 		<LoadingStateDialog />
 		<KeepAlive>
 			<AutoLogoutWarning />
+		</KeepAlive>
+		<KeepAlive>
 			<LoggedOutDialog />
 		</KeepAlive>
 	</div>

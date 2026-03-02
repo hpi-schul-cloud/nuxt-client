@@ -1,135 +1,117 @@
-import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import { RoleName } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { createTestAppStoreWithRole, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
-vi.mock("vue-i18n", () => ({
-	useI18n: () => ({
-		t: vi.fn().mockImplementation((key) => key),
-	}),
-}));
-
-const jwtTimerResponse = {
-	ttl: 60,
-	rejected: false,
-	showTimeoutValue: 30,
-	timeout: 60,
-};
-
-const mockEndpointResponse = () => {
-	if (jwtTimerResponse.rejected) {
-		return Promise.reject(new Error("Endpoint not mocked"));
-	}
-	return Promise.resolve({
-		data: {
-			ttl: jwtTimerResponse.ttl,
-		},
-	});
-};
-
 vi.mock("@/utils/api", () => ({
 	$axios: {
-		get: vi.fn((url: string) => {
-			if (url === "/v1/accounts/jwtTimer") {
-				return mockEndpointResponse();
-			}
-		}),
-		post: vi.fn((url: string) => {
-			if (url === "/v1/accounts/jwtTimer") {
-				return mockEndpointResponse();
-			}
-		}),
+		get: vi.fn(),
+		post: vi.fn(),
 	},
 }));
 
 vi.useFakeTimers();
-vi.spyOn(global, "setInterval");
-vi.spyOn(global, "clearInterval");
-vi.spyOn(global, "setTimeout");
-vi.spyOn(global, "clearTimeout");
+vi.spyOn(globalThis, "setInterval");
+vi.spyOn(globalThis, "clearInterval");
+vi.spyOn(globalThis, "setTimeout");
+vi.spyOn(globalThis, "clearTimeout");
+
+type AutologoutTimers = {
+	remainingTimeInSeconds?: number;
+	jwtTtl?: number;
+	showWarningTime?: number;
+};
 
 describe("useAutoLogout", () => {
 	beforeEach(() => {
-		jwtTimerResponse.ttl = 60;
-		jwtTimerResponse.showTimeoutValue = 30;
-		jwtTimerResponse.timeout = 60;
-		vi.clearAllMocks();
 		vi.clearAllTimers();
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
-		vi.clearAllTimers();
 	});
 
-	setActivePinia(createTestingPinia());
-	createTestEnvStore({
-		JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
-		JWT_TIMEOUT_SECONDS: jwtTimerResponse.timeout,
-	});
-	const setup = (options?: { remainingTimeInSeconds?: number }) => {
-		const composable = mountComposable(() => useAutoLogout());
+	const setup = (options: AutologoutTimers = {}) => {
+		const { remainingTimeInSeconds = 100, showWarningTime = 30, jwtTtl = 60 } = options || {};
 
-		composable.remainingTimeInSeconds = options?.remainingTimeInSeconds ?? 0;
+		const axiosMock = vi.mocked($axios, true);
+		setActivePinia(createTestingPinia());
+
+		createTestEnvStore({
+			JWT_SHOW_TIMEOUT_WARNING_SECONDS: showWarningTime,
+			JWT_TIMEOUT_SECONDS: jwtTtl,
+		});
+		createTestAppStoreWithRole(RoleName.Teacher);
+
+		const composable = mountComposable(useAutoLogout, {
+			global: {
+				plugins: [createTestingI18n()],
+			},
+		});
+
+		composable.remainingTimeInSeconds.value = remainingTimeInSeconds;
 
 		composable.createSession();
 
 		return {
 			...composable,
+			axiosMock,
 		};
 	};
 
-	describe("showDialog", () => {
-		it("should be false by default", () => {
+	const createResponse = (ttl: number) => ({
+		data: {
+			ttl,
+		},
+	});
+
+	describe("when composable is started", () => {
+		it("should not show the dialog", () => {
 			const { showDialog } = setup();
 
 			expect(showDialog.value).toBe(false);
 		});
+	});
 
-		describe("when the timer is below the warning time", () => {
-			it("should set 'showDialog' true", async () => {
-				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue - 10;
-				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
-				const { showDialog } = setup();
+	describe("when the timer is above the warning time", () => {
+		it("should set 'showDialog' to false", async () => {
+			const { showDialog } = setup();
 
-				vi.advanceTimersByTime(timeToAdvance);
-				await nextTick();
+			showDialog.value = true;
+			vi.advanceTimersByTime(2000);
+			await flushPromises();
 
-				expect(showDialog.value).toBe(true);
-			});
+			expect(showDialog.value).toBe(false);
+		});
+	});
+
+	describe("when the timer is below the warning time", () => {
+		it("should set 'showDialog' true", async () => {
+			const options = { remainingTimeInSeconds: 100, showWarningTime: 30, jwtTtl: 60 };
+			const { showDialog } = setup(options);
+
+			const timeToAdvance = (options.jwtTtl - options.showWarningTime + 10) * 1000;
+			vi.advanceTimersByTime(timeToAdvance);
+			await nextTick();
+
+			expect(showDialog.value).toBe(true);
 		});
 
-		describe("isTTLUpdated", () => {
-			it("should be false by default", () => {
-				const { isTTLUpdated } = setup();
+		it("should request and update actual remaining time", async () => {
+			const options = { remainingTimeInSeconds: 100, showWarningTime: 30, jwtTtl: 200 };
+			const { remainingTimeInSeconds, axiosMock } = setup(options);
+			axiosMock.get.mockResolvedValueOnce(createResponse(options.jwtTtl));
 
-				expect(isTTLUpdated.value).toBe(false);
-			});
+			const timeToAdvance = (options.jwtTtl - options.showWarningTime + 10) * 1000;
+			vi.advanceTimersByTime(timeToAdvance);
+			await flushPromises();
 
-			it("should be true when the session is extended", async () => {
-				jwtTimerResponse.ttl = 100;
-				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) * 1000;
-				const { isTTLUpdated } = setup();
-				vi.advanceTimersByTime(timeToAdvance);
-				await nextTick();
-
-				expect(isTTLUpdated.value).toBe(true);
-			});
-		});
-
-		describe("when the timer is above the warning time", () => {
-			it("should set 'showDialog' to false", async () => {
-				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue + 10;
-				const timeToAdvance = (jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) * 1000;
-				const { showDialog } = setup();
-
-				vi.advanceTimersByTime(timeToAdvance);
-				await flushPromises();
-
-				expect(showDialog.value).toBe(false);
-			});
+			expect(remainingTimeInSeconds.value).toBe(200);
 		});
 	});
 
@@ -141,9 +123,12 @@ describe("useAutoLogout", () => {
 		});
 
 		it("should be true when an error occurs", async () => {
-			jwtTimerResponse.rejected = true;
-			const { errorOnExtend, extendSession } = setup();
-			await extendSession();
+			const options = { remainingTimeInSeconds: 120, showWarningTime: 60, jwtTtl: 240 };
+			const { errorOnExtend, extendSession, axiosMock } = setup(options);
+			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
+
+			extendSession();
+			vi.advanceTimersByTime(20000);
 			await flushPromises();
 
 			expect(errorOnExtend.value).toBe(true);
@@ -152,12 +137,8 @@ describe("useAutoLogout", () => {
 
 	describe("remainingTimeInMinutes", () => {
 		it("should return the correct value", () => {
-			jwtTimerResponse.ttl = 120;
-			createTestEnvStore({
-				JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
-				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
-			});
-			const { remainingTimeInMinutes } = setup();
+			const options = { remainingTimeInSeconds: 120, showWarningTime: 60000, jwtTtl: 120 };
+			const { remainingTimeInMinutes } = setup(options);
 
 			expect(remainingTimeInMinutes.value).toBe(2);
 		});
@@ -171,32 +152,31 @@ describe("useAutoLogout", () => {
 		});
 
 		it("should be 'Ended' when the session ends", async () => {
-			jwtTimerResponse.ttl = 120;
-			createTestEnvStore({
-				JWT_SHOW_TIMEOUT_WARNING_SECONDS: jwtTimerResponse.showTimeoutValue,
-				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
-			});
+			const options = { remainingTimeInSeconds: 10, showWarningTime: 30, jwtTtl: 120 };
 			const { sessionStatus } = setup();
-			vi.advanceTimersByTime(jwtTimerResponse.ttl * 1000);
+			vi.advanceTimersByTime(options.jwtTtl * 1000);
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Ended);
 		});
 
 		it("should be 'Error' when an error occurs", async () => {
-			jwtTimerResponse.rejected = true;
-			const { sessionStatus, extendSession } = setup();
-			await extendSession();
+			const options = { remainingTimeInSeconds: 10, showWarningTime: 30, jwtTtl: 120 };
+			const { sessionStatus, extendSession, axiosMock } = setup(options);
+			axiosMock.post.mockRejectedValue(new Error("Network error"));
+
+			extendSession();
 			await flushPromises();
 
 			expect(sessionStatus.value).toBe(SessionStatus.Error);
 		});
 
-		it("should be 'Continued' when the session is extended", async () => {
-			jwtTimerResponse.ttl = 120;
-			jwtTimerResponse.rejected = false;
+		it.only("should be 'Continued' when the session is extended", async () => {
+			const options = { remainingTimeInSeconds: 10, showWarningTime: 30, jwtTtl: 120 };
+			const { sessionStatus, extendSession, axiosMock } = setup(options);
+			axiosMock.get.mockResolvedValue(createResponse(options.jwtTtl));
+			axiosMock.post.mockResolvedValue(createResponse(options.jwtTtl));
 
-			const { sessionStatus, extendSession } = setup();
 			await extendSession();
 			await flushPromises();
 

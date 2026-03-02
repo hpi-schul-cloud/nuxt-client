@@ -1,4 +1,5 @@
 import { SessionStatus } from "./types";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -7,98 +8,92 @@ import { useI18n } from "vue-i18n";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
+	const { execute } = useSafeAxiosTask();
 	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
 	const sessionStatus: Ref<SessionStatus | null> = ref(null);
 	const isTTLUpdated = ref(false);
 
-	let remainingTimePolling: ReturnType<typeof setInterval> | null = null;
-	let ttlTimeoutPolling: ReturnType<typeof setTimeout> | null = null;
-	let retry = 0;
+	let remainingTimeInterval: ReturnType<typeof setInterval> | null = null;
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
 
 	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
 	const DEFAULT_SHOW_WARNING_TIME = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
 
-	let remainingTimeInSeconds = defaultRemainingTime;
-	let ttlCount = 0;
+	const remainingTimeInSeconds = ref(defaultRemainingTime);
 
-	const remainingTimeInMinutes = computed(() => Math.max(Math.floor(remainingTimeInSeconds / 60), 0));
+	const remainingTimeInMinutes = computed(() => Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0));
 
-	const clearPollings = () => {
-		if (remainingTimePolling) {
-			clearInterval(remainingTimePolling);
-			remainingTimePolling = null;
-		}
-		if (ttlTimeoutPolling) {
-			clearTimeout(ttlTimeoutPolling);
-			ttlTimeoutPolling = null;
+	const stopInterval = () => {
+		if (remainingTimeInterval) {
+			clearInterval(remainingTimeInterval);
+			remainingTimeInterval = null;
 		}
 	};
 
-	const startTimeout = () =>
-		setTimeout(
-			async () => {
-				retry++;
-				try {
-					const response = await $axios.get("/v1/accounts/jwtTimer");
-					ttlCount = response.data.ttl;
+	const updateRemainingTime = async (maxRetries = 3, retryCount = 0) => {
+		const { result, error } = await execute(() => $axios.get("/v1/accounts/jwtTimer"));
+		if (error) {
+			if (retryCount < maxRetries) {
+				await new Promise((resolve) => setTimeout(resolve, 2 ** retryCount * 1000));
+				return updateRemainingTime(maxRetries, retryCount + 1);
+			} else {
+				sessionStatus.value = SessionStatus.Error;
+				return;
+			}
+		}
+		if (result.data.ttl === undefined) {
+			useNotificationStore().notify({ text: "no ttl was transmited", status: "error" });
+		}
+		remainingTimeInSeconds.value = result?.data?.ttl;
+	};
 
-					if (ttlCount > remainingTimeInSeconds) {
-						isTTLUpdated.value = true;
-						showDialog.value = false;
-					} else {
-						showDialog.value = true;
-					}
-					return ttlCount;
-				} catch {
-					sessionStatus.value = SessionStatus.Error;
-					return -1;
-				} finally {
-					if (ttlTimeoutPolling) {
-						clearTimeout(ttlTimeoutPolling);
-						ttlTimeoutPolling = null;
-					}
-				}
-			},
-			2 ** retry * 1000
-		);
+	const handleState = async () => {
+		await handleExpiration();
+		await handleWarning();
+		await handleDefault();
+	};
 
-	const checkTTL = async () => {
-		if (ttlTimeoutPolling) return ttlCount;
+	const handleExpiration = async () => {
+		if (remainingTimeInSeconds.value <= 0) {
+			showDialog.value = true;
+			sessionStatus.value = SessionStatus.Ended;
+			stopInterval();
+		}
+	};
 
-		ttlTimeoutPolling = startTimeout();
+	const handleWarning = async () => {
+		if (remainingTimeInSeconds.value > 0 && remainingTimeInSeconds.value <= DEFAULT_SHOW_WARNING_TIME) {
+			showDialog.value = true;
+			sessionStatus.value = SessionStatus.Continued;
+			await updateRemainingTime();
+		}
+	};
+
+	const handleDefault = async () => {
+		if (remainingTimeInSeconds.value > DEFAULT_SHOW_WARNING_TIME) {
+			showDialog.value = false;
+		}
 	};
 
 	const createSession = () => {
-		clearPollings();
+		stopInterval();
 
-		remainingTimeInSeconds = defaultRemainingTime;
+		remainingTimeInSeconds.value = defaultRemainingTime;
 		if (showDialog.value) showDialog.value = false;
 		sessionStatus.value = null;
 		errorOnExtend.value = false;
 		isTTLUpdated.value = false;
-		retry = 0;
 
-		remainingTimePolling = setInterval(async () => {
-			remainingTimeInSeconds -= 1;
-
-			if (remainingTimeInSeconds <= DEFAULT_SHOW_WARNING_TIME) {
-				sessionStatus.value = null;
-				await checkTTL();
-			}
-
-			if (remainingTimeInSeconds <= 0) {
-				sessionStatus.value = SessionStatus.Ended;
-				clearInterval(remainingTimePolling!);
-				remainingTimePolling = null;
-			}
+		remainingTimeInterval = setInterval(async () => {
+			remainingTimeInSeconds.value -= 1;
+			handleState();
 		}, 1000);
 	};
 
 	const extendSession = async () => {
-		clearPollings();
+		stopInterval();
 
 		if (sessionStatus.value === SessionStatus.Ended) {
 			useAppStore().logout();
@@ -107,16 +102,12 @@ export const useAutoLogout = () => {
 
 		try {
 			await $axios.post("/v1/accounts/jwtTimer");
-			const response = await $axios.get("/v1/accounts/jwtTimer");
-			const ttlCount = response.data.ttl;
-
-			remainingTimeInSeconds = ttlCount;
+			await updateRemainingTime();
 			showDialog.value = false;
 			errorOnExtend.value = false;
 			isTTLUpdated.value = true;
 
 			createSession();
-			retry = 0;
 			sessionStatus.value = SessionStatus.Continued;
 		} catch {
 			errorOnExtend.value = true;
@@ -148,15 +139,15 @@ export const useAutoLogout = () => {
 		}
 	);
 
-	watch(
-		() => isTTLUpdated.value,
-		(newValue) => {
-			if (newValue) {
-				createSession();
-				isTTLUpdated.value = false;
-			}
-		}
-	);
+	// watch(
+	// 	() => isTTLUpdated.value,
+	// 	(newValue) => {
+	// 		if (newValue) {
+	// 			createSession();
+	// 			isTTLUpdated.value = false;
+	// 		}
+	// 	}
+	// );
 
 	return {
 		errorOnExtend,

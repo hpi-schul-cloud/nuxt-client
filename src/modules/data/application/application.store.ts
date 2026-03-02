@@ -20,13 +20,13 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const broadcast = useBroadcastChannel({ name: "schulcloud-session" });
+	const logoutBroadcast = useBroadcastChannel({ name: "logout-channel" });
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
 	const isJwtExpired = ref(false);
 
-	broadcast.channel.value?.addEventListener("message", (event) => {
+	logoutBroadcast.channel.value?.addEventListener("message", (event) => {
 		if (event.data === "logout") {
 			setJwtExpired();
 		}
@@ -68,8 +68,8 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
-		broadcast.post("logout");
-		broadcast.close();
+		logoutBroadcast.post("logout");
+		logoutBroadcast.close();
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
@@ -93,7 +93,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 			.catch(logger.error);
 
 	const handleApplicationError = (status: HttpStatusCode, translationKeyOrText?: string) => {
-		if (translationKeyOrText !== undefined) {
+		if (translationKeyOrText) {
 			applicationError.value = { status, translationKeyOrText: translationKeyOrText };
 		} else {
 			switch (status) {
