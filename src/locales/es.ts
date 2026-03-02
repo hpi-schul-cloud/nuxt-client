@@ -145,7 +145,6 @@ export default {
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "DD/MM/YYYY",
 	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",
 	"common.placeholder.email.update": "Nueva dirección de correo electrónico",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -886,7 +885,7 @@ export default {
 		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
 		"La fecha de inicio debe ser anterior a la fecha de finalización.",
-	"components.timePicker.validation.format": "Por favor utilice el formato HH:MM",
+	"components.timePicker.validation.format": "Por favor utilice el formato {timePlaceHolder}",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
 	"data-room.copy.alert.success": "Sala duplicada con éxito.",
 	"data-room.copy.alert.error": "No se pudo completar el proceso de duplicación.",

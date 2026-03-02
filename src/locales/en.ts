@@ -143,7 +143,6 @@ export default {
 	"common.notifications.errors.notExited": "{type} could not be exited.",
 	"common.notification.connection.restored": "The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "DD/MM/YYYY",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
 	"common.placeholder.email.update": "New e-mail address",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -865,7 +864,7 @@ export default {
 	"components.roomForm.validation.generalSaveError":
 		"An error occurred while saving. Please check your inputs and try again.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd": "The start date must be before the end date.",
-	"components.timePicker.validation.format": "Please use format HH:MM",
+	"components.timePicker.validation.format": "Please use format {timePlaceHolder}",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"data-room.copy.alert.success": "Room successfully duplicated.",
 	"data-room.copy.alert.error": "The duplication process could not be completed.",

@@ -1,5 +1,7 @@
+import { useI18nGlobal } from "@/plugins/i18n";
 import { useAppStore } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
+import dayjs from "dayjs";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
@@ -8,6 +10,13 @@ const LOCALIZED_DATE_PLACEHOLDER_TOKENS: { [localeCode: string]: { day: string; 
 	en: { day: "DD", month: "MM", year: "YYYY" },
 	es: { day: "DD", month: "MM", year: "AAAA" },
 	uk: { day: "ДД", month: "ММ", year: "РРРР" },
+};
+
+const DAYJS_FORMAT_TOKENS: { [localeCode: string]: string } = {
+	de: "DD.MM.YYYY",
+	en: "DD/MM/YYYY",
+	es: "DD/MM/YYYY",
+	uk: "DD.MM.YYYY",
 };
 
 const DATE_REGEX_PATTERNS: Record<string, string> = {
@@ -45,9 +54,57 @@ export const useLocalizedDateTime = createSharedComposable(() => {
 		const pattern = order.map((k) => DATE_REGEX_PATTERNS[k]).join(escapedDelimiter);
 		return new RegExp(`^${pattern}$`);
 	});
-
+	const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/;
 	const timePlaceHolder = "HH:mm";
 	const timeMask = "##:##";
 
-	return { datePlaceHolder, dateMask, dateRegex, timePlaceHolder, timeMask };
+	return {
+		datePlaceHolder,
+		dateMask,
+		dateRegex,
+		timePlaceHolder,
+		timeMask,
+		timeRegex,
+		locale,
+	};
 });
+
+export const useDateConversion = () => {
+	const { locale } = useLocalizedDateTime();
+	const { d } = useI18nGlobal();
+
+	const dayjsFormat = computed(() => DAYJS_FORMAT_TOKENS[locale.value] ?? "DD/MM/YYYY");
+
+	/**
+	 * Parse a date from local representation to date object.
+	 *
+	 * @param dateString - The date string in local representation (e.g. "31.12.2024" for German locale)
+	 */
+	const convertDateStringToDate = (dateString: string | undefined) => {
+		const parsed = dayjs(dateString, dayjsFormat.value);
+		return parsed.isValid() ? parsed.toDate() : undefined;
+	};
+
+	/**
+	 * Parse a date from local representation to an iso date string.
+	 *
+	 * @param dateString - The date string in local representation (e.g. "31.12.2024" for German locale)
+	 */
+	const convertDateStringToIso = (dateString: string | undefined) => {
+		const parsed = convertDateStringToDate(dateString);
+		return parsed ? parsed?.toISOString() : null;
+	};
+
+	/**
+	 * Converts an ISO date string to a localized date string based on the current locale.
+	 *
+	 * @param isoString - The ISO date string to convert (e.g. "2024-12-31T00:00:00.000Z")
+	 */
+	const convertIsoToDateString = (isoString: string | undefined) => (isoString ? d(isoString, "date") : undefined);
+
+	return {
+		convertDateStringToIso,
+		convertDateStringToDate,
+		convertIsoToDateString,
+	};
+};

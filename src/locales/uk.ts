@@ -151,7 +151,6 @@ export default {
 		"{type} не вдалося вийти. | {type} не вдалося вийти. | {type} не вдалося вийти.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
-	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation": "Повторно введіть адресу електронної пошти",
 	"common.placeholder.email.update": "Нова адреса електронної пошти",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -881,7 +880,7 @@ export default {
 	"components.roomForm.validation.generalSaveError":
 		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd": "Дата початку повинна передувати даті закінчення.",
-	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
+	"components.timePicker.validation.format": "Використовуйте формат {timePlaceHolder}",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"data-room.copy.alert.success": "Кімнату успішно дубльовано.",
 	"data-room.copy.alert.error": "Не вдалося завершити процес копіювання.",

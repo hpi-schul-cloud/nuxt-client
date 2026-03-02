@@ -52,33 +52,15 @@ export const isValidUrl: FormValidatorFn<string> =
  * Vuelidate Validator
  * Checks if given value has valid time format
  */
-export const isValidTimeFormat = (value: string | null) => {
-	if (value === "" || value === null || value === undefined) {
+export const isValidTime = (value: string | undefined): string | true => {
+	if (value === "" || !value) {
 		return true;
 	}
-
-	const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
-
-	return !!value.match(timeRegex);
+	const { timeRegex, timePlaceHolder } = useLocalizedDateTime();
+	return !!value.match(timeRegex) || useI18nGlobal().t("components.timePicker.validation.format", { timePlaceHolder });
 };
 
-/**
- * Vuetify Rules Validator
- * Checks if given value has valid time format
- */
-export const isValidDateFormat: FormValidatorFn<string | undefined> =
-	(errorMessage = useI18nGlobal().t("components.datePicker.validation.format")) =>
-	(value) => {
-		if (value === "" || !value) {
-			return true;
-		}
-
-		const dateRegex = /^(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/g;
-
-		return !!value.match(dateRegex) || errorMessage;
-	};
-
-export const isValidDate = (value: string | undefined) => {
+export const isValidDate = (value: string | undefined): string | true => {
 	if (value === "" || !value) {
 		return true;
 	}

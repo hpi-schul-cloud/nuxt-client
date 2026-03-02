@@ -25,18 +25,16 @@
 						</p>
 						<DatePicker
 							:date="data.date.date"
-							:label="t('common.labels.date')"
 							:class="{ hideCurrentDate: !data.date.date }"
 							data-testid="news_date"
 							@update:date="onUpdateDate"
 						/>
-						<VTextField
-							v-model="data.date.time"
-							v-time-input-mask
-							:prepend-inner-icon="mdiClockOutline"
-							:class="{ hideCurrentTime: !data.date.time }"
+						<TimePicker
 							:label="t('common.labels.time')"
+							:class="{ hideCurrentTime: !data.date.time }"
 							data-testid="news_time"
+							:time="data.date.time"
+							@update:time="data.date.time = $event"
 						/>
 					</div>
 				</VFadeTransition>
@@ -82,7 +80,7 @@ import { ClassicEditor } from "@feature-editor";
 import { mdiCalendar, mdiCheck, mdiClockOutline, mdiClose, mdiDelete } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { DatePicker } from "@ui-date-time-picker";
+import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -91,6 +89,7 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
+		TimePicker,
 		FormActions,
 		ClassicEditor,
 		ConfirmationDialog,

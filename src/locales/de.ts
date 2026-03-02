@@ -150,7 +150,6 @@ export default {
 	"common.notifications.errors.notExited":
 		"{type} konnte nicht verlassen werden. | {type} konnten nicht verlassen werden.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
 	"common.placeholder.email.update": "Neue E-Mail-Adresse",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -883,7 +882,7 @@ export default {
 	"components.roomForm.validation.generalSaveError":
 		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd": "Das Startdatum muss vor dem Enddatum liegen.",
-	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
+	"components.timePicker.validation.format": "Bitte Format {timePlaceHolder} verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"data-room.copy.alert.success": "Raum erfolgreich dupliziert.",
 	"data-room.copy.alert.error": "Der Dupliziervorgang konnte nicht abgeschlossen werden.",

@@ -1,5 +1,5 @@
 <template>
-	<DatePicker
+  <DatePicker
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"

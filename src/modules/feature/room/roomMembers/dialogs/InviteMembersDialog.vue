@@ -102,7 +102,7 @@
 								/>
 								<DatePicker
 									ref="datePicker"
-									aria-label="pages.rooms.members.tableHeader.expirationDate)"
+									aria-label="pages.rooms.members.tableHeader.expirationDate"
 									:disabled="isDatePickerDisabled"
 									:required="!isDatePickerDisabled"
 									:min-date="new Date().toString()"

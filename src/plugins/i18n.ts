@@ -45,7 +45,7 @@ const datetimeFormats: IntlDateTimeFormats = {
 		date: dateFormat,
 		time: timeFormat,
 	},
-	en: {
+	"en-GB": {
 		date: dateFormat,
 		time: timeFormat,
 	},
@@ -65,7 +65,7 @@ const localCreateI18n = () => {
 
 	const i18n = createI18n<false>({
 		legacy: false,
-		locale: useAppStore().locale,
+		locale: useAppStore().locale === "en" ? "en-GB" : useAppStore().locale,
 		fallbackLocale: useEnvStore().fallBackLanguage,
 		messages: messages,
 		datetimeFormats,

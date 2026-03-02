@@ -6,7 +6,7 @@ import {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./types";
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { useDateConversion } from "@/composables/date-time-composables";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
@@ -20,6 +20,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	const { t } = useI18nGlobal();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
+	const { convertIsoToDateString } = useDateConversion();
 
 	const roomInvitationLinks: Ref<RoomInvitationLink[]> = ref([]);
 	const isLoading = ref<boolean>(false);
@@ -170,7 +171,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 				title: link.title,
 				isUsableByStudents: link.isUsableByStudents ? YES : NO,
 				isUsableByExternalPersons: link.isUsableByExternalPersons ? YES : NO,
-				activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : NO,
+				activeUntil: link.activeUntil ? convertIsoToDateString(link.activeUntil) : NO,
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!) ? EXPIRED : ACTIVE,
 				restrictedToCreatorSchool: link.restrictedToCreatorSchool ? YES : NO,
