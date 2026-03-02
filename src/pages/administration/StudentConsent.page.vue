@@ -40,7 +40,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="inputDateFromDeUTC(slotProps.data)"
+							:date="convertDateStringToIso(slotProps.data)"
 							class="ml-2"
 							hide-details
 							hide-icon
@@ -107,7 +107,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<div class="text-content">
-							{{ printDateFromDeUTC(slotProps.data) }}
+							{{ convertIsoToDateString(slotProps.data) }}
 						</div>
 					</template>
 				</BackendDataTable>
@@ -237,6 +237,7 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
+import { useDateConversion } from "@/composables/date-time-composables.ts";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime.ts";
 import { inputRangeDate } from "@/plugins/datetime.ts";
 import { filePathsModule } from "@/store";
@@ -263,7 +264,8 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		return { t };
+		const { convertDateStringToIso, convertIsoToDateString } = useDateConversion();
+		return { t, convertDateStringToIso, convertIsoToDateString };
 	},
 	data() {
 		return {

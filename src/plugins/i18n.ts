@@ -12,10 +12,10 @@ import { default as enVuetify } from "vuetify/lib/locale/en";
 import { default as esVuetify } from "vuetify/lib/locale/es";
 import { default as ukVuetify } from "vuetify/lib/locale/uk";
 
-declare type SupportedLanguages = "en" | "de" | "es" | "uk";
+declare type SupportedLanguages = "en-GB" | "de" | "es" | "uk";
 
 const messages: Record<SupportedLanguages, MessageSchema> = {
-	en: { ...enGB, $vuetify: enVuetify },
+	"en-GB": { ...enGB, $vuetify: enVuetify },
 	de: { ...deDE, $vuetify: deVuetify },
 	es: { ...esES, $vuetify: esVuetify },
 	uk: { ...ukUA, $vuetify: ukVuetify },

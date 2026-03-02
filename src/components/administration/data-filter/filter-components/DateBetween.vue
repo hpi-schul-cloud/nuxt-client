@@ -1,5 +1,5 @@
 <template>
-  <DatePicker
+	<DatePicker
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"
@@ -52,7 +52,7 @@ const dateSelection = ref<DateSelection>({
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const onUpdateDate = (date: string | null, fromUntil: "$gte" | "$lte") => {
+const onUpdateDate = (date: string | undefined, fromUntil: "$gte" | "$lte") => {
 	if (date && fromUntil === "$lte") {
 		const lte = new Date(date);
 		// add one day to make the until date inclusive until 23:59:59

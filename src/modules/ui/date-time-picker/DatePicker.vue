@@ -70,7 +70,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-	(e: "update:date", value: string | null): void;
+	(e: "update:date", value: string | undefined): void;
 	(e: "error"): void;
 }>();
 
@@ -120,7 +120,7 @@ const validateAndEmitDate = async () => {
 		const isoDate = convertDateStringToIso(dateString.value);
 		emit("update:date", isoDate);
 	} else {
-		emit("update:date", null);
+		emit("update:date", undefined);
 		emit("error");
 	}
 };

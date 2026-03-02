@@ -258,7 +258,7 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (isoDate: string | null) => {
+const onUpdateDate = (isoDate: string | undefined) => {
 	formData.value.activeUntil = isoDate ?? undefined;
 	unpause();
 };

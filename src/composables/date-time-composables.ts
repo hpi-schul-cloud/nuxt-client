@@ -92,7 +92,7 @@ export const useDateConversion = () => {
 	 */
 	const convertDateStringToIso = (dateString: string | undefined) => {
 		const parsed = convertDateStringToDate(dateString);
-		return parsed ? parsed?.toISOString() : null;
+		return parsed ? parsed?.toISOString() : undefined;
 	};
 
 	/**
