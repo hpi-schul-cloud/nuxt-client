@@ -106,7 +106,7 @@
 
 <script>
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime.js";
+import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime.ts";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];

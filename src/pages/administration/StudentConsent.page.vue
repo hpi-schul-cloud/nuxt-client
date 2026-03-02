@@ -237,8 +237,8 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
-import { inputRangeDate } from "@/plugins/datetime";
+import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime.ts";
+import { inputRangeDate } from "@/plugins/datetime.ts";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";

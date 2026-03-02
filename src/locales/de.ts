@@ -585,7 +585,7 @@ export default {
 	"components.cardElement.h5pElement.create": "Lernelement erstellen...",
 	"components.cardElement.h5pElement.title.error.load":
 		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
-	"components.datePicker.validation.format": "Bitte Format DD.MM.YYYY verwenden.",
+	"components.datePicker.validation.format": "Bitte Format {datePlaceHolder} verwenden",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
 	"components.dateTimePicker.messages.dateInPast": "Datum und Uhrzeit liegen in der Vergangenheit.",
 	"components.dateTimePicker.messages.dateRequired": "Uhrzeitangabe ohne Datum nicht möglich.",

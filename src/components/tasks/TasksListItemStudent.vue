@@ -55,7 +55,7 @@ import {
 	fromNowToFuture,
 	printDateFromStringUTC as dateFromUTC,
 	printDateTimeFromStringUTC as dateTimeFromUTC,
-} from "@/plugins/datetime.js";
+} from "@/plugins/datetime.ts";
 import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
 import { vOnClickOutside } from "@vueuse/components";

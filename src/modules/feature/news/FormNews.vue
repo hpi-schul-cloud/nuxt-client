@@ -83,7 +83,6 @@ import { mdiCalendar, mdiCheck, mdiClockOutline, mdiClose, mdiDelete } from "@ic
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DatePicker } from "@ui-date-time-picker";
-import { timeInputMask } from "@util-input-masks";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -97,9 +96,6 @@ export default defineComponent({
 		ConfirmationDialog,
 		WarningAlert,
 		DatePicker,
-	},
-	directives: {
-		timeInputMask,
 	},
 	inheritAttrs: false,
 	props: {

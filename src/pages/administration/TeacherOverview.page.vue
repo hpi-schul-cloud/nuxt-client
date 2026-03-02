@@ -84,7 +84,7 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { printDate } from "@/plugins/datetime";
+import { printDate } from "@/plugins/datetime.ts";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";

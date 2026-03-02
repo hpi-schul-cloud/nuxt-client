@@ -1,3 +1,4 @@
+import { useLocalizedDateTime } from "@/composables/date-time-composables";
 import { useI18nGlobal } from "@/plugins/i18n";
 
 export type FormValidatorFn<T> = (errMsg?: string) => (value: T) => string | true;
@@ -65,10 +66,10 @@ export const isValidTimeFormat = (value: string | null) => {
  * Vuetify Rules Validator
  * Checks if given value has valid time format
  */
-export const isValidDateFormat: FormValidatorFn<string | null> =
+export const isValidDateFormat: FormValidatorFn<string | undefined> =
 	(errorMessage = useI18nGlobal().t("components.datePicker.validation.format")) =>
 	(value) => {
-		if (value === "" || value === null || value === undefined) {
+		if (value === "" || !value) {
 			return true;
 		}
 
@@ -76,6 +77,17 @@ export const isValidDateFormat: FormValidatorFn<string | null> =
 
 		return !!value.match(dateRegex) || errorMessage;
 	};
+
+export const isValidDate = (value: string | undefined) => {
+	if (value === "" || !value) {
+		return true;
+	}
+	const { dateRegex, datePlaceHolder } = useLocalizedDateTime();
+	return (
+		!!value.match(dateRegex.value) ||
+		useI18nGlobal().t("components.datePicker.validation.format", { datePlaceHolder: datePlaceHolder.value })
+	);
+};
 
 /**
  * Checks if given value is of given max length

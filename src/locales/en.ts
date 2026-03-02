@@ -143,7 +143,7 @@ export default {
 	"common.notifications.errors.notExited": "{type} could not be exited.",
 	"common.notification.connection.restored": "The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "DD.MM.YYYY",
+	"common.placeholder.dateformat": "DD/MM/YYYY",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
 	"common.placeholder.email.update": "New e-mail address",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -570,7 +570,7 @@ export default {
 	"components.cardElement.h5pElement.create": "Create learning element...",
 	"components.cardElement.h5pElement.title.error.load":
 		"The title of an interactive learning element could not be loaded.",
-	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
+	"components.datePicker.validation.format": "Please use format {datePlaceHolder}",
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.dateTimePicker.messages.dateInPast": "The date and time are in the past.",
 	"components.dateTimePicker.messages.dateRequired": "Time cannot be entered without a date.",

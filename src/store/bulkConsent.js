@@ -1,4 +1,4 @@
-import { inputDateFormat } from "@/plugins/datetime";
+import { inputDateFormat } from "@/plugins/datetime.ts";
 import { $axios } from "@/utils/api";
 
 const words = [

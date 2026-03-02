@@ -145,7 +145,7 @@ const isOverDue = computed(() => {
 const isFinished = computed(() => props.task.status.isFinished);
 const isCloseToDueDate = computed(() => {
 	const timeDiff = fromNowToFuture(props.task.dueDate, "hours");
-	if (timeDiff !== null) {
+	if (timeDiff !== undefined) {
 		return timeDiff <= 24;
 	}
 	return false;

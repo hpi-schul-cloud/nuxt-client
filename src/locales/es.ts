@@ -145,7 +145,7 @@ export default {
 	"common.notifications.errors.notExited": "{type} no se ha podido salir. | {type} no se han podido salir.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
-	"common.placeholder.dateformat": "DD.MM.AAAA",
+	"common.placeholder.dateformat": "DD/MM/YYYY",
 	"common.placeholder.email.confirmation": "Repetir la dirección de correo electrónico",
 	"common.placeholder.email.update": "Nueva dirección de correo electrónico",
 	"common.placeholder.email": "clara.fall{'@'}mail.de",
@@ -580,7 +580,7 @@ export default {
 	"components.cardElement.h5pElement.create": "Crear elemento de aprendizaje...",
 	"components.cardElement.h5pElement.title.error.load":
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
-	"components.datePicker.validation.format": "Por favor utilice el formato DD.MM.AAAA",
+	"components.datePicker.validation.format": "Por favor utilice el formato {datePlaceHolder}",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
 	"components.dateTimePicker.messages.dateInPast": "La fecha y la hora están en el pasado.",
 	"components.dateTimePicker.messages.dateRequired": "Sin fecha no es posible especificar la hora.",

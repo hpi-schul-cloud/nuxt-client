@@ -20,7 +20,7 @@ import datetime, {
 	printDateTimeFromStringUTC,
 	setDefaultFormats,
 	setDefaultTimezone,
-} from "@/plugins/datetime";
+} from "@/plugins/datetime.ts";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import dayjs from "dayjs";
