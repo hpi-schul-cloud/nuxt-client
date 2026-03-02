@@ -12,7 +12,6 @@ export const useAutoLogout = () => {
 	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
 	const sessionStatus: Ref<SessionStatus | null> = ref(null);
-	const isTTLUpdated = ref(false);
 
 	let remainingTimeInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -84,7 +83,6 @@ export const useAutoLogout = () => {
 		if (showDialog.value) showDialog.value = false;
 		sessionStatus.value = null;
 		errorOnExtend.value = false;
-		isTTLUpdated.value = false;
 
 		remainingTimeInterval = setInterval(async () => {
 			remainingTimeInSeconds.value -= 1;
@@ -105,7 +103,6 @@ export const useAutoLogout = () => {
 			await updateRemainingTime();
 			showDialog.value = false;
 			errorOnExtend.value = false;
-			isTTLUpdated.value = true;
 
 			createSession();
 			sessionStatus.value = SessionStatus.Continued;
@@ -139,19 +136,8 @@ export const useAutoLogout = () => {
 		}
 	);
 
-	// watch(
-	// 	() => isTTLUpdated.value,
-	// 	(newValue) => {
-	// 		if (newValue) {
-	// 			createSession();
-	// 			isTTLUpdated.value = false;
-	// 		}
-	// 	}
-	// );
-
 	return {
 		errorOnExtend,
-		isTTLUpdated,
 		remainingTimeInMinutes,
 		remainingTimeInSeconds,
 		sessionStatus,

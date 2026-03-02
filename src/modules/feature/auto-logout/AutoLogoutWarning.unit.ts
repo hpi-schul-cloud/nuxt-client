@@ -31,6 +31,7 @@ describe("AutoLogoutWarning", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
@@ -45,7 +46,6 @@ describe("AutoLogoutWarning", () => {
 	const defaultVars = {
 		showDialog: ref(true),
 		errorOnExtend: ref(false),
-		isTTLUpdated: ref(false),
 		remainingTimeInMinutes: computed(() => 0),
 		remainingTimeInSeconds: ref(0),
 		showWarningOnRemainingSeconds: 0,

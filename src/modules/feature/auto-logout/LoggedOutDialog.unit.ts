@@ -1,8 +1,10 @@
 import LoggedOutDialog from "./LoggedOutDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockPush = vi.fn();
@@ -24,14 +26,13 @@ describe("LoggedOutDialog", () => {
 	});
 
 	const setup = (isJwtExpired = false) => {
-		const pinia = createTestingPinia({
-			createSpy: vi.fn,
-			initialState: {
-				applicationStore: {
-					isJwtExpired,
-				},
-			},
-		});
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
+
+		const applicationStore = useAppStore();
+		if (isJwtExpired) {
+			applicationStore.setJwtExpired();
+		}
 
 		wrapper = mount(LoggedOutDialog, {
 			global: {
@@ -57,6 +58,8 @@ describe("LoggedOutDialog", () => {
 			it("should show", async () => {
 				const { dialog } = setup(true);
 
+				await flushPromises();
+
 				expect(dialog.props("modelValue")).toBe(true);
 			});
 
@@ -81,8 +84,10 @@ describe("LoggedOutDialog", () => {
 				expect(dialog.props("noCancel")).toBe(true);
 			});
 
-			it("should render error alert content", () => {
+			it("should render error alert content", async () => {
 				const { wrapper } = setup(true);
+
+				await flushPromises();
 
 				const warningAlert = wrapper.findComponent({ name: "ErrorAlert" });
 				expect(warningAlert.exists()).toBe(true);
