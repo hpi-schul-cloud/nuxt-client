@@ -4,7 +4,9 @@ import { SessionStatus } from "./types";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
+import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
@@ -28,11 +30,15 @@ vi.mock("vue-router", () => ({
 }));
 
 describe("AutoLogoutWarning", () => {
+	let currentWrapper: ReturnType<typeof mount> | undefined;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
 	afterEach(() => {
+		currentWrapper?.unmount();
+		currentWrapper = undefined;
 		vi.clearAllMocks();
 	});
 
@@ -57,14 +63,16 @@ describe("AutoLogoutWarning", () => {
 	const setup = (options?: { autoLogoutVariables?: Partial<typeof defaultVars> }) => {
 		mockedUseAutoLogout.mockReturnValue({
 			...defaultVars,
-			...(options?.autoLogoutVariables ?? {}),
+			...options?.autoLogoutVariables,
 		});
 
 		const wrapper = mount(AutoLogoutWarning, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
 		});
+		currentWrapper = wrapper;
 		const dialog = wrapper.findComponent(SvsDialog);
 		return { wrapper, dialog, useAutoLogout: mockedUseAutoLogout() };
 	};
@@ -78,6 +86,36 @@ describe("AutoLogoutWarning", () => {
 		setup();
 		const mockedCreateSession = mockedUseAutoLogout().createSession;
 		expect(mockedCreateSession).toHaveBeenCalled();
+	});
+
+	describe("when route changes", () => {
+		it("should call createSession when route changes to a valid value", async () => {
+			const { useAutoLogout } = setup();
+			const createSessionMock = vi.mocked(useAutoLogout.createSession);
+
+			// Reset mock after initial call from immediate watch
+			createSessionMock.mockClear();
+
+			// Trigger route change to a new valid value
+			(router.currentRoute as ReturnType<typeof ref>).value = { path: "/new-route" };
+			await Promise.resolve();
+
+			expect(createSessionMock).toHaveBeenCalledTimes(1);
+		});
+
+		it("should not call createSession when route becomes undefined", async () => {
+			const { useAutoLogout } = setup();
+			const createSessionMock = vi.mocked(useAutoLogout.createSession);
+
+			// Reset mock after initial call from immediate watch
+			createSessionMock.mockClear();
+
+			// Trigger route change to undefined
+			(router.currentRoute as ReturnType<typeof ref>).value = undefined;
+			await Promise.resolve();
+
+			expect(createSessionMock).not.toHaveBeenCalled();
+		});
 	});
 
 	describe("showDialog", () => {
@@ -104,6 +142,21 @@ describe("AutoLogoutWarning", () => {
 				expect(dialog.props("modelValue")).toBe(false);
 			});
 		});
+
+		describe("when dialog emits update:modelValue", () => {
+			it("should update showDialog value", async () => {
+				const showDialogRef = ref(true);
+				const { dialog } = setup({
+					autoLogoutVariables: {
+						showDialog: showDialogRef,
+					},
+				});
+
+				await dialog.vm.$emit("update:modelValue", false);
+
+				expect(showDialogRef.value).toBe(false);
+			});
+		});
 	});
 
 	describe("confirm button", () => {
@@ -111,7 +164,7 @@ describe("AutoLogoutWarning", () => {
 			it("should set the correct title", () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Ended),
+						sessionStatus: ref(SessionStatus.Expired),
 					},
 				});
 
@@ -121,7 +174,7 @@ describe("AutoLogoutWarning", () => {
 			it("should call router.push when clicked", async () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Ended),
+						sessionStatus: ref(SessionStatus.Expired),
 					},
 				});
 
@@ -134,7 +187,7 @@ describe("AutoLogoutWarning", () => {
 			it("should set the correct title", () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Continued),
+						sessionStatus: ref(SessionStatus.Extended),
 					},
 				});
 
@@ -144,13 +197,77 @@ describe("AutoLogoutWarning", () => {
 			it("should call the extendSession method when clicked", async () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Continued),
+						sessionStatus: ref(SessionStatus.Extended),
 					},
 				});
 				dialog.vm.$emit("confirm");
 
 				expect(mockedUseAutoLogout().extendSession).toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe("image", () => {
+		describe("when errorOnExtend is true", () => {
+			it("should display the error image", () => {
+				setup({
+					autoLogoutVariables: {
+						errorOnExtend: ref(true),
+					},
+				});
+
+				const img = document.body.querySelector("img");
+				expect(img?.getAttribute("src")).toContain("Sloth_error");
+			});
+		});
+
+		describe("when errorOnExtend is false", () => {
+			it("should display the default image", () => {
+				setup({
+					autoLogoutVariables: {
+						errorOnExtend: ref(false),
+					},
+				});
+
+				const img = document.body.querySelector("img");
+				expect(img?.getAttribute("src")).not.toContain("Sloth_error");
+			});
+		});
+	});
+
+	describe("dialog content", () => {
+		describe("when session is ended", () => {
+			it("should display the error message", () => {
+				setup({
+					autoLogoutVariables: {
+						sessionStatus: ref(SessionStatus.Expired),
+					},
+				});
+
+				expect(document.body.textContent).toContain("feature-autoLogout.message.error.401");
+			});
+		});
+
+		describe("when session is continued", () => {
+			it("should display the warning instead of the error message", () => {
+				const remainingTime = 5;
+				setup({
+					autoLogoutVariables: {
+						sessionStatus: ref(SessionStatus.Extended),
+						remainingTimeInMinutes: computed(() => remainingTime),
+					},
+				});
+
+				expect(document.body.textContent).toContain("feature-autoLogout.warning");
+				expect(document.body.textContent).not.toContain("feature-autoLogout.message.error.401");
+			});
+		});
+
+		it("should render the WarningAlert component", () => {
+			const { wrapper } = setup();
+
+			const warningAlert = wrapper.findComponent(WarningAlert);
+			expect(warningAlert.exists()).toBe(true);
 		});
 	});
 });

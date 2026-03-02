@@ -905,9 +905,9 @@ export default {
 	"feature-autoLogout.button.confirm": "Ampliar sesión",
 	"feature-autoLogout.button.confirm.returnToLogin": "Volver a la página de inicio de sesión",
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
+	"feature-autoLogout.message.extending-session-success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"feature-loggedout.title": "Sesión expirada",

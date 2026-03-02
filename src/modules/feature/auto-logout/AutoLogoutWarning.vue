@@ -50,7 +50,7 @@ const image = computed(() => {
 	return SlothSvg;
 });
 
-const isSessionEnded = computed(() => sessionStatus.value === SessionStatus.Ended);
+const isSessionEnded = computed(() => sessionStatus.value === SessionStatus.Expired);
 
 const confirmButtonKey = computed(() =>
 	isSessionEnded.value ? "feature-autoLogout.button.confirm.returnToLogin" : "feature-autoLogout.button.confirm"

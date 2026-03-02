@@ -884,9 +884,9 @@ export default {
 	"feature-autoLogout.button.confirm": "Extend session",
 	"feature-autoLogout.button.confirm.returnToLogin": "Return to login page",
 	"feature-autoLogout.message.error.401": "Your session has already expired. Please log in again.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"feature-autoLogout.message.success": "Session successfully extended.",
+	"feature-autoLogout.message.extending-session-success": "Session successfully extended.",
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":
 		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",

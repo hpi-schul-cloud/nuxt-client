@@ -1,5 +1,7 @@
 export enum SessionStatus {
-	Continued = "continued",
-	Ended = "ended",
+	Extended = "extended",
+	AboutToExpire = "aboutToExpire",
+	Expired = "expired",
 	Error = "error",
+	Started = "started",
 }

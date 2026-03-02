@@ -1,28 +1,71 @@
 import { SessionStatus } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
-import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
+import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { computed, Ref, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
+const MAX_RETRIES = 3;
+const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60;
+const DEFAULT_WARNING_SECONDS = 1 * 60 * 60;
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
+
 	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
-	const sessionStatus: Ref<SessionStatus | null> = ref(null);
+	const sessionStatus = ref<SessionStatus | null>(null);
+	const remainingTimeInSeconds = ref(0);
+
+	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
+	const SESSION_TIMEOUT = JWT_TIMEOUT_SECONDS || DEFAULT_TIMEOUT_SECONDS;
+	const WARNING_THRESHOLD = JWT_SHOW_TIMEOUT_WARNING_SECONDS || DEFAULT_WARNING_SECONDS;
+
+	const remainingTimeInMinutes = computed(() => Math.max(Math.ceil(remainingTimeInSeconds.value / 60), 0));
+
+	// --- Session Management ---
+
+	const createSession = () => {
+		stopInterval();
+
+		remainingTimeInSeconds.value = SESSION_TIMEOUT;
+		showDialog.value = false;
+		sessionStatus.value = SessionStatus.Started;
+		errorOnExtend.value = false;
+
+		startInterval();
+	};
+
+	const extendSession = async () => {
+		stopInterval();
+
+		if (sessionStatus.value === SessionStatus.Expired) {
+			useAppStore().logout();
+			return;
+		}
+
+		try {
+			await $axios.post(JWT_TIMER_ENDPOINT);
+			await updateRemainingTime();
+			goExtendedState();
+		} catch {
+			goErrorState();
+		}
+	};
+
+	// --- Interval Management ---
 
 	let remainingTimeInterval: ReturnType<typeof setInterval> | null = null;
 
-	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
-
-	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
-	const DEFAULT_SHOW_WARNING_TIME = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
-
-	const remainingTimeInSeconds = ref(defaultRemainingTime);
-
-	const remainingTimeInMinutes = computed(() => Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0));
+	const startInterval = () => {
+		remainingTimeInterval = setInterval(() => {
+			remainingTimeInSeconds.value -= 1;
+			handleTimerTick();
+		}, 1000);
+	};
 
 	const stopInterval = () => {
 		if (remainingTimeInterval) {
@@ -31,110 +74,90 @@ export const useAutoLogout = () => {
 		}
 	};
 
-	const updateRemainingTime = async (maxRetries = 3, retryCount = 0) => {
-		const { result, error } = await execute(() => $axios.get("/v1/accounts/jwtTimer"));
-		if (error) {
-			if (retryCount < maxRetries) {
-				await new Promise((resolve) => setTimeout(resolve, 2 ** retryCount * 1000));
-				return updateRemainingTime(maxRetries, retryCount + 1);
-			} else {
-				sessionStatus.value = SessionStatus.Error;
-				return;
-			}
-		}
-		if (result.data.ttl === undefined) {
-			useNotificationStore().notify({ text: "no ttl was transmited", status: "error" });
-		}
-		remainingTimeInSeconds.value = result?.data?.ttl;
-	};
+	// --- State Handling ---
 
-	const handleState = async () => {
-		await handleExpiration();
-		await handleWarning();
-		await handleDefault();
-	};
-
-	const handleExpiration = async () => {
+	const handleTimerTick = async () => {
 		if (remainingTimeInSeconds.value <= 0) {
-			showDialog.value = true;
-			sessionStatus.value = SessionStatus.Ended;
-			stopInterval();
+			sessionStatus.value = SessionStatus.Expired;
+		} else if (remainingTimeInSeconds.value <= WARNING_THRESHOLD) {
+			sessionStatus.value = SessionStatus.AboutToExpire;
 		}
 	};
 
-	const handleWarning = async () => {
-		if (remainingTimeInSeconds.value > 0 && remainingTimeInSeconds.value <= DEFAULT_SHOW_WARNING_TIME) {
-			showDialog.value = true;
-			sessionStatus.value = SessionStatus.Continued;
-			await updateRemainingTime();
-		}
-	};
-
-	const handleDefault = async () => {
-		if (remainingTimeInSeconds.value > DEFAULT_SHOW_WARNING_TIME) {
-			showDialog.value = false;
-		}
-	};
-
-	const createSession = () => {
-		stopInterval();
-
-		remainingTimeInSeconds.value = defaultRemainingTime;
-		if (showDialog.value) showDialog.value = false;
-		sessionStatus.value = null;
+	const goStartedState = () => {
+		sessionStatus.value = SessionStatus.Started;
+		showDialog.value = false;
 		errorOnExtend.value = false;
-
-		remainingTimeInterval = setInterval(async () => {
-			remainingTimeInSeconds.value -= 1;
-			handleState();
-		}, 1000);
 	};
 
-	const extendSession = async () => {
-		stopInterval();
+	const goWarningState = async () => {
+		showDialog.value = true;
+		await updateRemainingTime();
+	};
 
-		if (sessionStatus.value === SessionStatus.Ended) {
-			useAppStore().logout();
+	const goExtendedState = () => {
+		sessionStatus.value = SessionStatus.Extended;
+		showDialog.value = false;
+		errorOnExtend.value = false;
+		notify("success", t("feature-autoLogout.message.extending-session-success"));
+	};
+
+	const goExpiredState = () => {
+		showDialog.value = true;
+		notify("error", t("feature-autoLogout.message.error.401"), false);
+		stopInterval();
+	};
+
+	const goErrorState = () => {
+		sessionStatus.value = SessionStatus.Error;
+		errorOnExtend.value = true;
+		notify("error", t("feature-autoLogout.message.extending-session-failure"));
+	};
+
+	const map: Record<SessionStatus, () => void | Promise<void>> = {
+		[SessionStatus.Started]: goStartedState,
+		[SessionStatus.AboutToExpire]: goWarningState,
+		[SessionStatus.Extended]: goExtendedState,
+		[SessionStatus.Expired]: goExpiredState,
+		[SessionStatus.Error]: goErrorState,
+	};
+
+	watch(sessionStatus, async (newStatus, oldStatus) => {
+		if (newStatus !== oldStatus && newStatus !== null) {
+			await map[newStatus]();
+		}
+	});
+
+	const updateRemainingTime = async (retryCount = 0): Promise<void> => {
+		const { result, error } = await execute(() => $axios.get(JWT_TIMER_ENDPOINT));
+
+		if (error) {
+			if (retryCount < MAX_RETRIES) {
+				const delayMs = 2 ** retryCount * 1000;
+				await new Promise((resolve) => setTimeout(resolve, delayMs));
+				return updateRemainingTime(retryCount + 1);
+			}
+			sessionStatus.value = SessionStatus.Error;
 			return;
 		}
 
-		try {
-			await $axios.post("/v1/accounts/jwtTimer");
-			await updateRemainingTime();
-			showDialog.value = false;
-			errorOnExtend.value = false;
-
-			createSession();
-			sessionStatus.value = SessionStatus.Continued;
-		} catch {
-			errorOnExtend.value = true;
-			sessionStatus.value = SessionStatus.Error;
+		if (result.data.ttl === undefined) {
+			// No TTL was transmitted
+			return;
 		}
+
+		remainingTimeInSeconds.value = result.data.ttl;
 	};
 
-	const notificationMap: Record<SessionStatus, AlertPayload> = {
-		[SessionStatus.Continued]: {
-			text: t("feature-autoLogout.message.success"),
-			status: "success",
-		},
-		[SessionStatus.Error]: {
-			text: t("feature-autoLogout.message.error"),
-			status: "error",
-		},
-		[SessionStatus.Ended]: {
-			text: t("feature-autoLogout.message.error.401"),
-			status: "error",
-			autoClose: false,
-		},
-	};
+	// --- Helpers ---
 
-	watch(
-		() => sessionStatus.value,
-		(newValue) => {
-			if (newValue === null) return;
-			useNotificationStore().notify(notificationMap[newValue]);
-		}
-	);
+	const notify = (status: AlertStatus, text: string, autoClose = true) => {
+		useNotificationStore().notify({
+			text,
+			status,
+			autoClose,
+		});
+	};
 
 	return {
 		errorOnExtend,
