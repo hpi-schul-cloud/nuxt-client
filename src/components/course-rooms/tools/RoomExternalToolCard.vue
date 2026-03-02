@@ -43,11 +43,7 @@
 
 <script setup lang="ts">
 import RoomBaseCard from "./RoomBaseCard.vue";
-import {
-	ExternalToolDisplayData,
-	useContextExternalToolConfigurationStatus,
-	useExternalToolLaunchState,
-} from "@data-external-tool";
+import { ExternalToolDisplayData, useExternalToolLaunchState } from "@data-external-tool";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { InfoChip, WarningChip } from "@ui-chip";
 import { LineClamp } from "@ui-line-clamp";
@@ -71,8 +67,6 @@ const emit = defineEmits(["edit", "delete", "error", "refresh"]);
 const { t } = useI18n();
 
 const { fetchContextLaunchRequest, launchTool, error: launchError } = useExternalToolLaunchState(() => emit("refresh"));
-
-const { isTeacher } = useContextExternalToolConfigurationStatus();
 
 const handleClick = async () => {
 	if (!isToolLaunchable.value) {
@@ -128,7 +122,7 @@ const toolName: ComputedRef = computed(() => {
 	return props.tool.name;
 });
 
-const showTool: ComputedRef = computed(() => !(isDeepLinkingTool.value && !hasDeepLink.value && !isTeacher()));
+const showTool: ComputedRef = computed(() => !(isDeepLinkingTool.value && !hasDeepLink.value && !props.canEdit));
 
 const isToolOutdated: ComputedRef = computed(
 	() => props.tool.status.isOutdatedOnScopeSchool || props.tool.status.isOutdatedOnScopeContext
@@ -137,7 +131,7 @@ const isToolOutdated: ComputedRef = computed(
 const isToolIncomplete: ComputedRef = computed(() => props.tool.status.isIncompleteOnScopeContext);
 
 const showAsIncompleteOperational: ComputedRef = computed(
-	() => props.tool.status.isIncompleteOperationalOnScopeContext && isTeacher()
+	() => props.tool.status.isIncompleteOperationalOnScopeContext && props.canEdit
 );
 
 const isToolDeactivated: ComputedRef = computed(() => props.tool.status.isDeactivated);

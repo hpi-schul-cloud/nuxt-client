@@ -63,7 +63,7 @@ import FileUpload from "./upload/FileUpload.vue";
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
-import { useBoardFocusHandler, useBoardPermissions, useContentElementState } from "@data-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -92,6 +92,8 @@ const emit = defineEmits<{
 	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 }>();
 
+const { allowedOperations } = useBoardAllowedOperations();
+
 const { t } = useI18n();
 const router = useRouter();
 
@@ -103,7 +105,6 @@ useBoardFocusHandler(element.value.id, fileContentElement);
 
 const { modelValue } = useContentElementState(props);
 const { fetchFiles, upload, getFileRecordsByParentId, rename } = useFileStorageApi();
-const { hasEditPermission } = useBoardPermissions();
 
 const fileRecord = computed(() => getFileRecordsByParentId(element.value.id)[0]);
 
@@ -228,7 +229,7 @@ const openCollabora = () => {
 			id: fileRecord.value.id,
 		},
 		query: {
-			edit: hasEditPermission.value.toString(),
+			edit: allowedOperations.value.createFileElement.toString(),
 		},
 	}).href;
 

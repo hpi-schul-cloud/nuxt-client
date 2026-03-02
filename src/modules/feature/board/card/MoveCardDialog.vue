@@ -59,7 +59,6 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { Permission } from "@/serverApi/v3";
 import { RoomItem } from "@/types/room/Room";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useRoomStore } from "@data-room";
@@ -86,10 +85,7 @@ const isDialogOpen = defineModel("is-dialog-open", {
 
 const availableRooms = computed(() => {
 	if (props.hasRelocateBoardContentPermission) {
-		return sortBy(
-			rooms.value?.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
-			(r) => r.name
-		);
+		return sortBy(rooms.value?.filter((room) => room.allowedOperations?.editContent ?? false) ?? [], (r) => r.name);
 	} else {
 		return rooms.value?.filter((r) => r.id === props.roomId);
 	}
