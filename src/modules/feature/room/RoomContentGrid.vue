@@ -5,7 +5,7 @@
 		:list="boards"
 		class="room-content-grid mt-8"
 		item-key="id"
-		:options="getSortableOptions({ disabled: !canEditRoomContent })"
+		:options="getSortableOptions({ disabled: !allowedOperations.editContent })"
 		@start="isDragging = true"
 		@end="onDropEnd"
 		@focusin.once="notifyOnScreenReader(t('common.instructions.orderBy.arrowKeys'))"
@@ -13,7 +13,7 @@
 		<template #item="{ element, index }">
 			<RoomContentGridItem
 				class="draggable user-select-none room-content-grid-item"
-				:class="{ 'cursor-grab': canEditRoomContent }"
+				:class="{ 'cursor-grab': allowedOperations.editContent }"
 				:board="element"
 				:index
 				@contextmenu.prevent
@@ -31,7 +31,7 @@ import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useSafeTask } from "@/composables/async-tasks.composable";
 import { RoomBoardItem } from "@/types/room/Room";
 import { notifyError } from "@data-app";
-import { useRoomAuthorization, useRoomDetailsStore } from "@data-room";
+import { useRoomAllowedOperations, useRoomDetailsStore } from "@data-room";
 import { getGridContainerColumnsCount } from "@util-browser";
 import { useErrorHandler } from "@util-error-handling";
 import { getSortableOptions } from "@util-sorting";
@@ -49,7 +49,7 @@ const { execute, error: reorderError } = useSafeTask();
 
 const { fetchRoomAndBoards, moveBoard } = useRoomDetailsStore();
 const { generateErrorText } = useErrorHandler();
-const { canEditRoomContent } = useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const gridRef = useTemplateRef("gridRef");
 const focusedBoard = ref();
@@ -90,7 +90,7 @@ const onDropEnd = async ({ newIndex, oldIndex }: SortableEvent) => {
 };
 
 const onArrowKeyDown = (e: KeyboardEvent, oldIndex: number) => {
-	if (!canEditRoomContent.value) return;
+	if (!allowedOperations.value.editContent) return;
 
 	let newIndex = 0;
 	const cols = getGridContainerColumnsCount(gridRef.value?.containerRef);
