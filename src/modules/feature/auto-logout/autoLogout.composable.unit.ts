@@ -7,7 +7,6 @@ import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -26,6 +25,11 @@ type AutologoutTimers = {
 	remainingTimeInSeconds?: number;
 	jwtTtl?: number;
 	showWarningTime?: number;
+};
+
+const advanceTimersBySeconds = async (seconds: number) => {
+	vi.advanceTimersByTime(seconds * 1000);
+	await flushPromises();
 };
 
 describe("useAutoLogout", () => {
@@ -128,13 +132,19 @@ describe("useAutoLogout", () => {
 			expect(showDialog.value).toBe(false);
 		});
 
+		it("should set sessionStatus to 'Started'", () => {
+			const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 10 };
+			const { sessionStatus } = setupAndCreateSession(options);
+
+			expect(sessionStatus.value).toBe(SessionStatus.Started);
+		});
+
 		describe("when the timer is below the warning time", () => {
 			it("should change session status to 'aboutToExpire'", async () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 49 };
 				const { sessionStatus } = setupAndCreateSession(options);
 
-				vi.advanceTimersByTime(40000);
-				await nextTick();
+				await advanceTimersBySeconds(40);
 
 				expect(sessionStatus.value).toBe(SessionStatus.AboutToExpire);
 			});
@@ -143,8 +153,7 @@ describe("useAutoLogout", () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 49 };
 				const { showDialog } = setupAndCreateSession(options);
 
-				vi.advanceTimersByTime(60000);
-				await nextTick();
+				await advanceTimersBySeconds(60);
 
 				expect(showDialog.value).toBe(true);
 			});
@@ -154,7 +163,7 @@ describe("useAutoLogout", () => {
 				const { remainingTimeInSeconds, axiosMock } = setupAndCreateSession(options);
 				axiosMock.get.mockResolvedValueOnce(createResponse(options.jwtTtl));
 
-				vi.advanceTimersByTime(1000);
+				await advanceTimersBySeconds(1);
 				await flushPromises();
 
 				expect(remainingTimeInSeconds.value).toBe(100);
@@ -165,31 +174,21 @@ describe("useAutoLogout", () => {
 				const { showDialog, axiosMock } = setupAndCreateSession(options);
 				axiosMock.get.mockResolvedValueOnce(createResponse(options.jwtTtl));
 
-				vi.advanceTimersByTime(1000);
+				await advanceTimersBySeconds(1);
 				await flushPromises();
 
 				expect(showDialog.value).toBe(true);
 			});
 		});
 
-		describe("sessionStatus", () => {
-			it("should be 'Started' by default", () => {
+		describe("when the remaining time reaches zero", () => {
+			it("should set sessionStatus to 'Expired'", async () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 10 };
 				const { sessionStatus } = setupAndCreateSession(options);
 
-				expect(sessionStatus.value).toBe(SessionStatus.Started);
-			});
+				await advanceTimersBySeconds(10);
 
-			describe("when the remaining time reaches zero", () => {
-				it("should be 'Expired'", async () => {
-					const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 10 };
-					const { sessionStatus } = setupAndCreateSession(options);
-
-					vi.advanceTimersByTime(10 * 1000);
-					await flushPromises();
-
-					expect(sessionStatus.value).toBe(SessionStatus.Expired);
-				});
+				expect(sessionStatus.value).toBe(SessionStatus.Expired);
 			});
 		});
 
@@ -217,7 +216,7 @@ describe("useAutoLogout", () => {
 					const { sessionStatus, extendSession, axiosMock } = setupAndCreateSession(options);
 					axiosMock.post.mockRejectedValue(new Error("Network error"));
 
-					extendSession();
+					await extendSession();
 					await flushPromises();
 
 					expect(sessionStatus.value).toBe(SessionStatus.Error);
@@ -228,9 +227,8 @@ describe("useAutoLogout", () => {
 					const { errorOnExtend, extendSession, axiosMock } = setupAndCreateSession(options);
 					axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
 
-					extendSession();
-					vi.advanceTimersByTime(20000);
-					await flushPromises();
+					await extendSession();
+					await advanceTimersBySeconds(20);
 
 					expect(errorOnExtend.value).toBe(true);
 				});
@@ -248,30 +246,13 @@ describe("useAutoLogout", () => {
 		});
 
 		describe("when extendSession() is called and session is already expired", () => {
-			it("should call logout", async () => {
-				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 1 };
-				const { extendSession, sessionStatus, axiosMock } = setupAndCreateSession(options);
-				axiosMock.post.mockResolvedValue(createResponse(100));
-
-				// Let the timer expire
-				vi.advanceTimersByTime(2000);
-				await flushPromises();
-
-				expect(sessionStatus.value).toBe(SessionStatus.Expired);
-
-				await extendSession();
-
-				expect(useAppStore().logout).toHaveBeenCalled();
-			});
-
 			it("should not make API call", async () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 1 };
 				const { extendSession, sessionStatus, axiosMock } = setupAndCreateSession(options);
 				axiosMock.post.mockResolvedValue(createResponse(100));
 
 				// Let the timer expire
-				vi.advanceTimersByTime(2000);
-				await flushPromises();
+				await advanceTimersBySeconds(2);
 
 				expect(sessionStatus.value).toBe(SessionStatus.Expired);
 				axiosMock.post.mockClear();
@@ -291,20 +272,16 @@ describe("useAutoLogout", () => {
 				axiosMock.get.mockRejectedValue(new Error("Network error"));
 
 				// Trigger updateRemainingTime by crossing warning threshold
-				vi.advanceTimersByTime(1000);
-				await flushPromises();
+				await advanceTimersBySeconds(1);
 
 				// First retry after 1s (2^0 * 1000ms)
-				vi.advanceTimersByTime(1000);
-				await flushPromises();
+				await advanceTimersBySeconds(1);
 
 				// Second retry after 2s (2^1 * 1000ms)
-				vi.advanceTimersByTime(2000);
-				await flushPromises();
+				await advanceTimersBySeconds(2);
 
 				// Third retry after 4s (2^2 * 1000ms)
-				vi.advanceTimersByTime(4000);
-				await flushPromises();
+				await advanceTimersBySeconds(4);
 
 				// After MAX_RETRIES (3), should be in error state
 				expect(axiosMock.get).toHaveBeenCalledTimes(4); // Initial + 3 retries
@@ -320,8 +297,7 @@ describe("useAutoLogout", () => {
 				// Response without ttl
 				axiosMock.get.mockResolvedValueOnce({ data: {} });
 
-				vi.advanceTimersByTime(1000);
-				await flushPromises();
+				await advanceTimersBySeconds(1);
 
 				// remainingTimeInSeconds should have decremented by timer, not been updated by response
 				expect(remainingTimeInSeconds.value).toBe(48);
@@ -333,8 +309,7 @@ describe("useAutoLogout", () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 2 };
 				setupAndCreateSession(options);
 
-				vi.advanceTimersByTime(3000);
-				await flushPromises();
+				await advanceTimersBySeconds(3);
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(
 					expect.objectContaining({ status: "error", autoClose: false })
@@ -345,10 +320,21 @@ describe("useAutoLogout", () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 2 };
 				const { showDialog } = setupAndCreateSession(options);
 
-				vi.advanceTimersByTime(3000);
-				await flushPromises();
+				await advanceTimersBySeconds(3);
 
 				expect(showDialog.value).toBe(true);
+			});
+
+			it("should call logout on app store", async () => {
+				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 2 };
+				const { sessionStatus } = setupAndCreateSession(options);
+				const appStore = useAppStore();
+				vi.spyOn(appStore, "logout");
+
+				await advanceTimersBySeconds(3);
+
+				expect(sessionStatus.value).toBe(SessionStatus.Expired);
+				expect(appStore.logout).toHaveBeenCalled();
 			});
 		});
 

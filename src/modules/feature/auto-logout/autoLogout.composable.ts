@@ -43,7 +43,6 @@ export const useAutoLogout = () => {
 		stopInterval();
 
 		if (sessionStatus.value === SessionStatus.Expired) {
-			useAppStore().logout();
 			return;
 		}
 
@@ -104,6 +103,7 @@ export const useAutoLogout = () => {
 
 	const goExpiredState = () => {
 		showDialog.value = true;
+		useAppStore().logout();
 		notify("error", t("feature-autoLogout.message.error.401"), false);
 		stopInterval();
 	};
