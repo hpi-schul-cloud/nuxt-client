@@ -57,7 +57,7 @@
 
 			<template #datacolumn-_id="{ data, selected, highlighted }">
 				<VBtn
-					:icon="mdiPencilOutline"
+					icon
 					variant="text"
 					:class="{
 						'action-button': true,
@@ -68,7 +68,7 @@
 					:aria-label="t('pages.administration.teachers.table.edit.ariaLabel')"
 					data-testid="edit_teacher_button"
 				>
-					<VIcon size="20">{{ mdiPencilOutline }}</VIcon>
+					<VIcon size="20" :icon="mdiPencilOutline" />
 				</VBtn>
 			</template>
 		</BackendDataTable>
