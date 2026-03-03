@@ -44,8 +44,8 @@
 			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
-					<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheck" />
-					<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+					<VIcon v-if="status === 'ok'" color="success" :icon="mdiCheck" />
+					<VIcon v-else-if="status === 'missing'" color="error" :icon="mdiClose" />
 				</span>
 			</template>
 			<template #datacolumn-lastLoginSystemChange="{ data }">
@@ -237,12 +237,12 @@ const tableColumns = [
 const icons = [
 	{
 		icon: mdiCheck,
-		color: "rgba(var(--v-theme-success))",
+		color: "success",
 		label: t("pages.administration.students.legend.icon.success"),
 	},
 	{
 		icon: mdiClose,
-		color: "rgba(var(--v-theme-error))",
+		color: "error",
 		label: t("utils.adminFilter.consent.label.missing"),
 	},
 ];
@@ -363,7 +363,7 @@ const fetchFilteredTeachers = async () => {
 const onUpdateSort = (newSortBy: string, newSortOrder: "asc" | "desc") => {
 	sortBy.value = newSortBy;
 	sortOrder.value = newSortOrder;
-	onUpdateCurrentPage(1); // implicitly triggers new find
+	onUpdateCurrentPage(1);
 };
 
 const onUpdateCurrentPage = (newPage: number) => {
@@ -373,7 +373,7 @@ const onUpdateCurrentPage = (newPage: number) => {
 
 const onUpdateRowsPerPage = (newLimit: number) => {
 	limit.value = newLimit;
-	onUpdateCurrentPage(1); // implicitly triggers new find
+	onUpdateCurrentPage(1);
 };
 
 const onConfirmDelete = async () => {

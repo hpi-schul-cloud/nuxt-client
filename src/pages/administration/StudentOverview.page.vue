@@ -10,15 +10,15 @@
 		/>
 
 		<SvsSearchField
-			v-model="searchQuery"
+			:model-value="searchQuery"
 			class="mt-10 mb-2"
 			:label="t('pages.administration.students.index.searchbar.placeholder')"
 			data-testid="searchbar"
 			:aria-label="t('pages.administration.students.index.searchbar.ariaLabel')"
-			@update:model-value="barSearch"
+			@update:model-value="onUpdateSearch"
 		/>
 
-		<DataFilter filter-for="student" :class-names="classNameList" @update:filter="onUpdateFilter" />
+		<DataFilter :filter-for="User.STUDENT" :class-names="classNameList" @update:filter="onUpdateFilter" />
 		<BackendDataTable
 			v-model:current-page="page"
 			v-model:rows-per-page="limit"
@@ -35,8 +35,6 @@
 			:sort-order="sortOrder"
 			:show-external-text="schoolIsExternallyManaged"
 			data-testid="students_table"
-			:rows-per-page="limit"
-			:current-page="page"
 			@update:sort="onUpdateSort"
 			@update:current-page="onUpdateCurrentPage"
 			@update:rows-per-page="onUpdateRowsPerPage"
@@ -60,9 +58,9 @@
 			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
-					<VIcon v-if="status === 'ok'" color="rgba(var(--v-theme-success))" :icon="mdiCheckAll" />
-					<VIcon v-else-if="status === 'parentsAgreed'" color="rgba(var(--v-theme-warning))" :icon="mdiCheck" />
-					<VIcon v-else-if="status === 'missing'" color="rgba(var(--v-theme-error))" :icon="mdiClose" />
+					<VIcon v-if="status === 'ok'" color="success" :icon="mdiCheckAll" />
+					<VIcon v-else-if="status === 'parentsAgreed'" color="warning" :icon="mdiCheck" />
+					<VIcon v-else-if="status === 'missing'" color="error" :icon="mdiClose" />
 				</span>
 			</template>
 			<template #datacolumn-_id="{ data, selected, highlighted }">
@@ -92,12 +90,13 @@
 	/>
 </template>
 
-<script>
+<script setup lang="ts">
 import ThrInfoBanner from "./ThrInfoBanner.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
+import { FilterQuery, User } from "@/components/administration/data-filter/types";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import { printDate } from "@/plugins/datetime";
@@ -110,7 +109,6 @@ import { useEnvConfig } from "@data-env";
 import { useUsers } from "@data-users";
 import {
 	mdiAccountPlus,
-	mdiAlert,
 	mdiCheck,
 	mdiCheckAll,
 	mdiClose,
@@ -124,458 +122,346 @@ import {
 import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
-import { defineComponent, reactive } from "vue";
+import { useDebounceFn, useTitle } from "@vueuse/core";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-export default defineComponent({
-	components: {
-		DefaultWireframe,
-		BackendDataTable,
-		AdminTableLegend,
-		ProgressModal,
-		DataFilter,
-		ThrInfoBanner,
-		SvsSearchField,
-		DeleteUserDialog,
+const { t } = useI18n();
+const router = useRouter();
+const store = useStore();
+
+const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.STUDENT);
+const { fetchClasses, classNameList } = useClasses();
+const {
+	deletingProgress,
+	deleteUsers,
+	fetchUsers,
+	userList,
+	sendRegistrationLink,
+	getQrRegistrationLinks,
+	qrLinks,
+	pagination,
+} = useUsers(RoleName.Student);
+
+const tableColumns = [
+	{
+		field: "firstName",
+		label: t("common.labels.firstName"),
+		sortable: true,
 	},
-	props: {
-		showExternalSyncHint: {
-			type: Boolean,
-		},
+	{
+		field: "lastName",
+		label: t("common.labels.lastName"),
+		sortable: true,
 	},
-	setup() {
-		const { getFilterState, getPaginationState, getSortingState, setFilterState, setPaginationState, setSortingState } =
-			useFilterLocalStorage(RoleName.Student);
-
-		const { t } = useI18n();
-		const { fetchClasses, list } = useClasses();
-		const {
-			deletingProgress,
-			deleteUsers,
-			fetchUsers,
-			userList,
-			sendRegistrationLink,
-			getQrRegistrationLinks,
-			qrLinks,
-			pagination,
-		} = useUsers(RoleName.Student);
-
-		return {
-			deletingProgress,
-			deleteUsers,
-			fetchClasses,
-			fetchUsers,
-			getFilterState,
-			getPaginationState,
-			getSortingState,
-			list,
-			setFilterState,
-			setPaginationState,
-			setSortingState,
-			t,
-			userList,
-			sendRegistrationLink,
-			getQrRegistrationLinks,
-			qrLinks,
-			pagination,
-		};
+	{
+		field: "birthday",
+		label: t("common.labels.birthday"),
+		sortable: true,
 	},
-	data() {
-		return {
-			mdiAccountPlus,
-			mdiAlert,
-			mdiCheck,
-			mdiCheckAll,
-			mdiClose,
-			mdiCloudDownload,
-			mdiDeleteOutline,
-			mdiEmailOutline,
-			mdiPencilOutline,
-			mdiPlus,
-			mdiQrcode,
-			currentFilterQuery: this.getFilterState(),
-			page: this.getPaginationState()?.page || 1,
-			limit: this.getPaginationState()?.limit || 25,
-			sortBy: this.getSortingState()?.sortBy || "firstName",
-			sortOrder: this.getSortingState()?.sortOrder || "asc",
-			tableColumns: [
-				{
-					field: "firstName",
-					label: this.t("common.labels.firstName"),
-					sortable: true,
-				},
-				{
-					field: "lastName",
-					label: this.t("common.labels.lastName"),
-					sortable: true,
-				},
-				{
-					field: "birthday",
-					label: this.t("common.labels.birthday"),
-					sortable: true,
-				},
-				{
-					field: "email",
-					label: this.t("common.labels.email"),
-					sortable: true,
-				},
-				{
-					field: "classes",
-					label: this.t("common.labels.classes"),
-					sortable: true,
-				},
-				{
-					field: "consentStatus",
-					label: this.t("common.labels.registration"),
-					sortable: true,
-					infobox: true,
-				},
-				{
-					field: "createdAt",
-					label: this.t("common.labels.createdAt"),
-					sortable: true,
-				},
-				{
-					field: "lastLoginSystemChange",
-					label: this.t("common.labels.migrated"),
-					sortable: true,
-					tooltipText: this.t("common.labels.migrated.tooltip"),
-				},
-				{
-					field: "outdatedSince",
-					label: this.t("common.labels.outdated"),
-					sortable: true,
-					tooltipText: this.t("common.labels.outdated.tooltip"),
-				},
-				{
-					// edit column
-					field: "_id",
-					label: "",
-				},
-			],
-			tableSelection: [],
-			tableSelectionType: "inclusive",
-			active: false,
-			searchQuery: this.getFilterState()?.searchQuery || "",
-			confirmDialogProps: {},
-			isConfirmDialogActive: false,
-			classNameList: [],
-			isConfirmDialogOpen: false,
-		};
+	{
+		field: "email",
+		label: t("common.labels.email"),
+		sortable: true,
 	},
-	computed: {
-		qrList() {
-			return this.qrLinks;
-		},
-		isDeleting() {
-			return this.deletingProgress.active;
-		},
-		deletedPercent() {
-			return this.deletingProgress.percent;
-		},
-		getFeatureUserLoginMigrationEnabled() {
-			return useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
-		},
-		schoolIsExternallyManaged() {
-			return schoolsModule.schoolIsExternallyManaged;
-		},
-		tableActions() {
-			return [
-				{
-					label: this.isConsentNecessary
-						? this.t("pages.administration.students.index.tableActions.consent")
-						: this.t("pages.administration.students.index.tableActions.registration"),
-					icon: mdiCheck,
-					action: this.handleBulkConsent,
-					dataTestId: "consent_action",
-				},
-				{
-					label: this.t("pages.administration.students.index.tableActions.email"),
-					icon: mdiEmailOutline,
-					action: this.handleBulkEMail,
-					dataTestId: "registration_link",
-				},
-				{
-					label: this.t("pages.administration.students.index.tableActions.qr"),
-					icon: mdiQrcode,
-					action: this.handleBulkQR,
-					dataTestId: "qr_code",
-				},
-				{
-					label: this.t("pages.administration.students.index.tableActions.delete"),
-					icon: mdiDeleteOutline,
-					action: this.openDeleteDialog,
-					permission: Permission.StudentDelete,
-					dataTestId: "delete_action",
-				},
-			];
-		},
-		isConsentNecessary() {
-			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
-		},
-		showConsent() {
-			return useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN;
-		},
-		filteredActions() {
-			let editedActions;
-
-			// filter actions by permissions
-			editedActions = this.tableActions.filter((action) =>
-				action.permission ? this.userHasPermission(action.permission) : true
-			);
-
-			// filter the delete action if school is external
-			if (this.schoolIsExternallyManaged) {
-				editedActions = editedActions.filter(
-					(action) => action.label !== this.t("pages.administration.students.index.tableActions.delete")
-				);
-			}
-
-			return editedActions;
-		},
-		filteredColumns() {
-			let editedColumns = this.tableColumns;
-			// filters out edit column if school is external
-			if (this.schoolIsExternallyManaged) {
-				editedColumns = this.tableColumns.filter(
-					//_id field sets the edit column
-					(col) => col.field !== "_id"
-				);
-			}
-
-			// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
-			if (!this.showConsent) {
-				editedColumns = editedColumns.filter((col) => col.field !== "consentStatus");
-			}
-
-			// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_USER_LOGIN_MIGRATION_ENABLED env is disabled
-			if (!this.getFeatureUserLoginMigrationEnabled) {
-				editedColumns = editedColumns
-					.filter((col) => col.field !== "lastLoginSystemChange")
-					.filter((col) => col.field !== "outdatedSince");
-			}
-
-			return editedColumns;
-		},
-		icons() {
-			const instanceBasedIcons = [];
-
-			instanceBasedIcons.push({
-				icon: mdiCheckAll,
-				color: "rgba(var(--v-theme-success))",
-				label: this.t("pages.administration.students.legend.icon.success"),
-			});
-
-			if (this.isConsentNecessary) {
-				instanceBasedIcons.push({
-					icon: mdiCheck,
-					color: "rgba(var(--v-theme-warning))",
-					label: this.t("utils.adminFilter.consent.label.parentsAgreementMissing"),
-				});
-			}
-
-			instanceBasedIcons.push({
-				icon: mdiClose,
-				color: "rgba(var(--v-theme-error))",
-				label: this.t("utils.adminFilter.consent.label.missing"),
-			});
-
-			return instanceBasedIcons;
-		},
-		fab() {
-			if (this.schoolIsExternallyManaged || !this.userHasPermission(Permission.StudentCreate)) {
-				return;
-			}
-
-			return [
-				{
-					icon: mdiPlus,
-					label: this.t("pages.administration.students.fab.add"),
-					dataTestId: "fab_button_students_table",
-				},
-				{
-					label: this.t("pages.administration.students.fab.add"),
-					icon: mdiAccountPlus,
-					to: "/administration/students/new",
-					dataTestId: "fab_button_add_students",
-				},
-				{
-					label: this.t("pages.administration.students.fab.import"),
-					icon: mdiCloudDownload,
-					href: "/administration/students/import",
-					dataTestId: "fab_button_import_students",
-				},
-			];
-		},
-		selectedStudents() {
-			const selectedStudents = this.userList?.filter((student) => this.tableSelection.includes(student._id));
-			return selectedStudents || [];
-		},
+	{
+		field: "classes",
+		label: t("common.labels.classes"),
+		sortable: true,
 	},
-	watch: {
-		currentFilterQuery: function (query) {
-			const temp = this.getFilterState();
-
-			if (temp && temp.searchQuery) query.searchQuery = temp.searchQuery;
-
-			this.currentFilterQuery = query;
-			if (JSON.stringify(query) !== JSON.stringify(this.getFilterState())) {
-				this.onUpdateCurrentPage(1);
-			}
-			this.setFilterState(query);
-		},
+	{
+		field: "consentStatus",
+		label: t("common.labels.registration"),
+		sortable: true,
+		infobox: true,
 	},
-	created() {
-		this.find();
-		this.getClassNameList();
+	{
+		field: "createdAt",
+		label: t("common.labels.createdAt"),
+		sortable: true,
 	},
-	mounted() {
-		document.title = buildPageTitle(this.t("pages.administration.students.index.title"));
+	{
+		field: "lastLoginSystemChange",
+		label: t("common.labels.migrated"),
+		sortable: true,
+		tooltipText: t("common.labels.migrated.tooltip"),
 	},
-	methods: {
-		async find() {
-			const query = {
-				$limit: this.limit,
-				$skip: (this.page - 1) * this.limit,
-				$sort: {
-					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
-				},
-				...this.currentFilterQuery,
-			};
-			await this.fetchUsers(query);
-		},
-		userHasPermission(permission) {
-			if (!permission) {
-				throw new Error("parameter permission is missing");
-			}
-			return typeof permission === "string"
-				? !permission || useAppStore().userPermissions.includes(permission)
-				: !permission() || permission(useAppStore().userPermissions);
-		},
-		onUpdateSort(sortBy, sortOrder) {
-			this.sortBy = sortBy;
-			this.sortOrder = sortOrder;
-			this.setSortingState({
-				sortBy: this.sortBy,
-				sortOrder: this.sortOrder,
-			});
-			this.onUpdateCurrentPage(1); // implicitly triggers new find
-		},
-		onUpdateCurrentPage(page) {
-			this.page = page;
-			this.setPaginationState({
-				limit: this.limit,
-				page: this.page,
-			});
-			this.find();
-		},
-		onUpdateRowsPerPage(limit) {
-			this.limit = limit;
-
-			this.setPaginationState({
-				limit: this.limit,
-				page: this.page,
-			});
-			this.find();
-		},
-		printDate,
-		getQueryForSelection(rowIds, selectionType) {
-			return {
-				...this.currentFilterQuery,
-				selectionType,
-				_ids: rowIds,
-			};
-		},
-		handleBulkConsent(rowIds, selectionType) {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
-				students: this.tableSelection,
-				selectionType: selectionType,
-			});
-
-			this.$router.push({
-				path: "/administration/students/consent",
-			});
-		},
-		async handleBulkEMail(rowIds, selectionType) {
-			await this.sendRegistrationLink({
-				userIds: rowIds,
-				selectionType,
-			});
-		},
-		async handleBulkQR(rowIds, selectionType) {
-			await this.getQrRegistrationLinks({
-				userIds: rowIds,
-				selectionType,
-			});
-
-			if (this.qrLinks?.length) {
-				printQrCodes(this.qrLinks, {
-					printPageTitleKey: "pages.administration.printQr.printPageTitle",
-				});
-			} else {
-				notifyInfo(this.$t("pages.administration.printQr.emptyUser"));
-			}
-		},
-		openDeleteDialog() {
-			this.isConfirmDialogOpen = true;
-		},
-		async onConfirmDelete() {
-			try {
-				await this.deleteUsers(this.tableSelection);
-				notifySuccess(this.t("pages.administration.remove.success"));
-				this.find();
-			} catch {
-				notifyError(this.t("pages.administration.remove.error"));
-			} finally {
-				this.tableSelection = reactive([]);
-				this.tableSelectionType = "inclusive";
-			}
-		},
-
-		barSearch: function (searchText) {
-			if (this.timer) {
-				clearTimeout(this.timer);
-				this.timer = null;
-			}
-
-			this.timer = setTimeout(() => {
-				if (!searchText) searchText = "";
-				if (this.currentFilterQuery.searchQuery !== searchText.trim()) {
-					this.currentFilterQuery.searchQuery = searchText.trim();
-
-					const query = this.currentFilterQuery;
-
-					this.find();
-					this.setFilterState(query);
-				}
-			}, 400);
-		},
-		dialogConfirm(confirmDialogProps) {
-			this.confirmDialogProps = confirmDialogProps;
-			this.isConfirmDialogActive = true;
-		},
-		onUpdateFilter(query) {
-			this.currentFilterQuery = query;
-			this.find();
-		},
-		async getClassNameList() {
-			const currentYear = schoolsModule.getCurrentYear;
-
-			await this.fetchClasses({
-				$limit: 1000,
-				year: currentYear?.id || "",
-			});
-			this.classNameList = this.list?.reduce(
-				(acc, item) =>
-					acc.concat({
-						label: item.displayName,
-						value: item.displayName,
-					}),
-				[]
-			);
-		},
+	{
+		field: "outdatedSince",
+		label: t("common.labels.outdated"),
+		sortable: true,
+		tooltipText: t("common.labels.outdated.tooltip"),
 	},
+	{
+		// edit column
+		field: "_id",
+		label: "",
+	},
+];
+
+const tableSelection = ref<string[]>([]);
+const tableSelectionType = ref("inclusive");
+const isConfirmDialogOpen = ref(false);
+
+const isDeleting = computed(() => deletingProgress.value.active);
+const deletedPercent = computed(() => deletingProgress.value.percent);
+const getFeatureUserLoginMigrationEnabled = computed(() => useEnvConfig().value.FEATURE_USER_LOGIN_MIGRATION_ENABLED);
+const schoolIsExternallyManaged = computed(() => schoolsModule.schoolIsExternallyManaged);
+const showConsent = computed(() => useEnvConfig().value.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN);
+
+const filteredActions = computed(() => {
+	let editedActions;
+
+	// filter actions by permissions
+	editedActions = tableActions.value.filter((action) =>
+		action.permission ? useAppStore().userPermissions.includes(action.permission) : true
+	);
+
+	// filter the delete action if school is external
+	if (schoolIsExternallyManaged.value) {
+		editedActions = editedActions.filter(
+			(action) => action.label !== t("pages.administration.students.index.tableActions.delete")
+		);
+	}
+
+	return editedActions;
 });
+
+const filteredColumns = computed(() => {
+	let editedColumns = tableColumns;
+	// filters out edit column if school is external
+	if (schoolIsExternallyManaged.value) {
+		editedColumns = tableColumns.filter(
+			//_id field sets the edit column
+			(col) => col.field !== "_id"
+		);
+	}
+
+	// filters out the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN env is disabled
+	if (!showConsent.value) {
+		editedColumns = editedColumns.filter((col) => col.field !== "consentStatus");
+	}
+
+	// filters out the lastLoginSystemChange and outdatedSince columns if FEATURE_USER_LOGIN_MIGRATION_ENABLED env is disabled
+	if (!getFeatureUserLoginMigrationEnabled.value) {
+		editedColumns = editedColumns
+			.filter((col) => col.field !== "lastLoginSystemChange")
+			.filter((col) => col.field !== "outdatedSince");
+	}
+
+	return editedColumns;
+});
+
+const icons = computed(() => {
+	const instanceBasedIcons = [];
+
+	instanceBasedIcons.push({
+		icon: mdiCheckAll,
+		color: "success",
+		label: t("pages.administration.students.legend.icon.success"),
+	});
+
+	if (isConsentNecessary.value) {
+		instanceBasedIcons.push({
+			icon: mdiCheck,
+			color: "warning",
+			label: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
+		});
+	}
+
+	instanceBasedIcons.push({
+		icon: mdiClose,
+		color: "error",
+		label: t("utils.adminFilter.consent.label.missing"),
+	});
+
+	return instanceBasedIcons;
+});
+
+const fab = computed(() => {
+	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.StudentCreate)) {
+		return;
+	}
+
+	return [
+		{
+			icon: mdiPlus,
+			label: t("pages.administration.students.fab.add"),
+			dataTestId: "fab_button_students_table",
+		},
+		{
+			label: t("pages.administration.students.fab.add"),
+			icon: mdiAccountPlus,
+			to: "/administration/students/new",
+			dataTestId: "fab_button_add_students",
+		},
+		{
+			label: t("pages.administration.students.fab.import"),
+			icon: mdiCloudDownload,
+			href: "/administration/students/import",
+			dataTestId: "fab_button_import_students",
+		},
+	];
+});
+
+const selectedStudents = computed(() => {
+	const selectedStudents = userList?.value.filter((student) => tableSelection.value.includes(student._id));
+	return selectedStudents || [];
+});
+
+useTitle(buildPageTitle(t("pages.administration.students.index.title")));
+
+onMounted(() => {
+	fetchFilteredStudents();
+	getClassNameList();
+});
+
+const fetchFilteredStudents = async () => {
+	const query = {
+		$limit: limit.value,
+		$skip: (page.value - 1) * limit.value,
+		$sort: {
+			[sortBy.value]: sortOrder.value === "asc" ? 1 : -1,
+		},
+		searchQuery: searchQuery.value,
+		...currentFilterQuery.value,
+	};
+	await fetchUsers(query);
+};
+
+const userHasPermission = (permission: Permission | ((permissions?: Permission[]) => boolean)) => {
+	if (!permission) {
+		throw new Error("parameter permission is missing");
+	}
+	return typeof permission === "string"
+		? !permission || useAppStore().userPermissions.includes(permission)
+		: !permission() || permission(useAppStore().userPermissions);
+};
+
+const onUpdateSort = (newSortBy: string, newSortOrder: "asc" | "desc") => {
+	sortBy.value = newSortBy;
+	sortOrder.value = newSortOrder;
+	onUpdateCurrentPage(1);
+};
+
+const onUpdateCurrentPage = (newPage: number) => {
+	page.value = newPage;
+	fetchFilteredStudents();
+};
+
+const onUpdateRowsPerPage = (newLimit: number) => {
+	limit.value = newLimit;
+	onUpdateCurrentPage(1);
+};
+
+const handleBulkConsent = (rowIds: string[], selectionType: string) => {
+	store.commit("bulkConsent/setSelectedStudents", {
+		students: tableSelection,
+		selectionType: selectionType,
+	});
+
+	router.push({
+		path: "/administration/students/consent",
+	});
+};
+
+const handleBulkEMail = async (rowIds: string[], selectionType: string) => {
+	await sendRegistrationLink({
+		userIds: rowIds,
+		selectionType,
+	});
+};
+
+const handleBulkQR = async (rowIds: string[], selectionType: string) => {
+	await getQrRegistrationLinks({
+		userIds: rowIds,
+		selectionType,
+	});
+
+	if (qrLinks?.value.length) {
+		printQrCodes(qrLinks.value, {
+			printPageTitleKey: "pages.administration.printQr.printPageTitle",
+		});
+	} else {
+		notifyInfo(t("pages.administration.printQr.emptyUser"));
+	}
+};
+
+const openDeleteDialog = () => {
+	isConfirmDialogOpen.value = true;
+};
+
+const onConfirmDelete = async () => {
+	try {
+		await deleteUsers(tableSelection.value);
+		notifySuccess(t("pages.administration.remove.success"));
+		fetchFilteredStudents();
+	} catch {
+		notifyError(t("pages.administration.remove.error"));
+	} finally {
+		tableSelection.value = reactive([]);
+		tableSelectionType.value = "inclusive";
+	}
+};
+
+const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_NECESSARY);
+
+const tableActions = computed(() => [
+	{
+		label: isConsentNecessary.value
+			? t("pages.administration.students.index.tableActions.consent")
+			: t("pages.administration.students.index.tableActions.registration"),
+		icon: mdiCheck,
+		action: handleBulkConsent,
+		dataTestId: "consent_action",
+	},
+	{
+		label: t("pages.administration.students.index.tableActions.email"),
+		icon: mdiEmailOutline,
+		action: handleBulkEMail,
+		dataTestId: "registration_link",
+	},
+	{
+		label: t("pages.administration.students.index.tableActions.qr"),
+		icon: mdiQrcode,
+		action: handleBulkQR,
+		dataTestId: "qr_code",
+	},
+	{
+		label: t("pages.administration.students.index.tableActions.delete"),
+		icon: mdiDeleteOutline,
+		action: openDeleteDialog,
+		permission: Permission.StudentDelete,
+		dataTestId: "delete_action",
+	},
+]);
+
+const debouncedFetchStudents = useDebounceFn(fetchFilteredStudents, 400);
+
+const onUpdateSearch = (searchText: string | null) => {
+	const newSearchQuery = searchText ?? "";
+	const shouldFetch = newSearchQuery.trim() !== searchQuery.value.trim();
+	searchQuery.value = newSearchQuery;
+	if (shouldFetch) {
+		debouncedFetchStudents();
+	}
+};
+
+const onUpdateFilter = (query: FilterQuery) => {
+	currentFilterQuery.value = query;
+	fetchFilteredStudents();
+};
+
+const getClassNameList = async () => {
+	const currentYear = schoolsModule.getCurrentYear;
+
+	await fetchClasses({
+		$limit: 1000,
+		year: currentYear?.id || "",
+	});
+};
 </script>
 
 <style scoped>
