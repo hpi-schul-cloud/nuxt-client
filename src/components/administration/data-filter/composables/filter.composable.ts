@@ -11,7 +11,7 @@ import {
 	UserBasedRegistrationOptions,
 } from "../types";
 import { useFilterLocalStorage } from "./filterLocalStorage.composable";
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
+import { useDateConversion } from "@/composables/date-time-composables";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { computed, onMounted, ref } from "vue";
@@ -19,6 +19,7 @@ import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
+	const { convertIsoToDateString } = useDateConversion();
 	const { setFilterState, getFilterState } = useFilterLocalStorage(userType as RoleName.Student | RoleName.Teacher);
 	const yearName = schoolsModule.getCurrentYear?.name;
 
@@ -143,19 +144,19 @@ export const useDataTableFilter = (userType: string) => {
 			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
 
 		if (chipItem[0] === FilterOption.CREATION_DATE)
-			return `${t("utils.adminFilter.date.created")} ${printFromStringUtcToFullDate(
+			return `${t("utils.adminFilter.date.created")} ${convertIsoToDateString(
 				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
+			)} ${t("common.words.and")} ${convertIsoToDateString(chipItem[1].$lte)}`;
 
 		if (chipItem[0] === FilterOption.LAST_MIGRATION_ON)
-			return `${t("utils.adminFilter.lastMigration.title")} ${printFromStringUtcToFullDate(
+			return `${t("utils.adminFilter.lastMigration.title")} ${convertIsoToDateString(
 				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
+			)} ${t("common.words.and")} ${convertIsoToDateString(chipItem[1].$lte)}`;
 
 		if (chipItem[0] === FilterOption.OBSOLOTE_SINCE)
-			return `${t("utils.adminFilter.outdatedSince.title")} ${printFromStringUtcToFullDate(
+			return `${t("utils.adminFilter.outdatedSince.title")} ${convertIsoToDateString(
 				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
+			)} ${t("common.words.and")} ${convertIsoToDateString(chipItem[1].$lte)}`;
 		return [];
 	};
 

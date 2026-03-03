@@ -40,7 +40,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="convertDateStringToIso(slotProps.data)"
+							:date="inputDateFromDeUTC(slotProps.data)"
 							class="ml-2"
 							hide-details
 							hide-icon
@@ -95,6 +95,7 @@
 				<p v-if="isConsentNecessary">
 					{{ t("pages.administration.students.consent.steps.register.info") }}
 				</p>
+
 				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
@@ -107,7 +108,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<div class="text-content">
-							{{ convertIsoToDateString(slotProps.data) }}
+							{{ convertDbGermanDateStringToDateString(slotProps.data) }}
 						</div>
 					</template>
 				</BackendDataTable>
@@ -159,7 +160,7 @@
 					@update:sort="onUpdateSort"
 				>
 					<template #datacolumn-birthday="slotProps">
-						{{ printDateFromDeUTC(slotProps.data) }}
+						{{ convertDbGermanDateStringToDateString(slotProps.data) }}
 					</template>
 				</BackendDataTable>
 				<p>
@@ -238,7 +239,7 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { useDateConversion } from "@/composables/date-time-composables.ts";
-import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime.ts";
+import { inputDateFormat, inputDateFromDeUTC } from "@/plugins/datetime.ts";
 import { inputRangeDate } from "@/plugins/datetime.ts";
 import { filePathsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -264,8 +265,9 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		const { convertDateStringToIso, convertIsoToDateString } = useDateConversion();
-		return { t, convertDateStringToIso, convertIsoToDateString };
+		const { convertDbGermanDateStringToDateString, convertIsoToDateString } =
+			useDateConversion();
+		return { t, convertDbGermanDateStringToDateString, convertIsoToDateString };
 	},
 	data() {
 		return {
@@ -511,7 +513,6 @@ export default defineComponent({
 		},
 		inputDateFromDeUTC,
 		inputDateFormat,
-		printDateFromDeUTC,
 		inputRangeDate,
 		warningEventHandler() {
 			if (this.currentStep === 2) {

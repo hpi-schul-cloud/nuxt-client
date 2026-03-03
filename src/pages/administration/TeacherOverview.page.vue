@@ -40,7 +40,7 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template #datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(data) }}</span>
+				<span class="text-content">{{ convertIsoToDateString(data) }}</span>
 			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -49,10 +49,10 @@
 				</span>
 			</template>
 			<template #datacolumn-lastLoginSystemChange="{ data }">
-				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				<span v-if="data" class="text-content">{{ convertIsoToDateString(data) }}</span>
 			</template>
 			<template #datacolumn-outdatedSince="{ data }">
-				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				<span v-if="data" class="text-content">{{ convertIsoToDateString(data) }}</span>
 			</template>
 
 			<template #datacolumn-_id="{ data, selected, highlighted }">
@@ -83,8 +83,8 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
+import { useDateConversion } from "@/composables/date-time-composables.ts";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { printDate } from "@/plugins/datetime.ts";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -129,6 +129,7 @@ export default defineComponent({
 	setup() {
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
+		const { convertIsoToDateString } = useDateConversion();
 		const { askConfirmation } = useConfirmationDialog();
 
 		return {
@@ -139,6 +140,7 @@ export default defineComponent({
 			getFilterState,
 			setFilterState,
 			askConfirmation,
+			convertIsoToDateString,
 		};
 	},
 	data() {
@@ -415,7 +417,6 @@ export default defineComponent({
 			});
 			this.find();
 		},
-		printDate,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,

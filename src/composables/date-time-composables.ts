@@ -2,8 +2,17 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { useAppStore } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+
+dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(relativeTime);
 
 const LOCALIZED_DATE_PLACEHOLDER_TOKENS: { [localeCode: string]: { day: string; month: string; year: string } } = {
 	de: { day: "TT", month: "MM", year: "JJJJ" },
@@ -86,14 +95,12 @@ export const useDateConversion = () => {
 	};
 
 	/**
-	 * Parse a date from local representation to an iso date string.
+	 * Parse a date from local representation to an iso date string. It's not used for date and time representation.
 	 *
 	 * @param dateString - The date string in local representation (e.g. "31.12.2024" for German locale)
 	 */
-	const convertDateStringToIso = (dateString: string | undefined) => {
-		const parsed = convertDateStringToDate(dateString);
-		return parsed ? parsed?.toISOString() : undefined;
-	};
+	const convertDateStringToIso = (dateString: string | undefined) =>
+		dateString ? dayjs(dateString, dayjsFormat.value).format("YYYY-MM-DD") : undefined;
 
 	/**
 	 * Converts an ISO date string to a localized date string based on the current locale.
@@ -102,9 +109,32 @@ export const useDateConversion = () => {
 	 */
 	const convertIsoToDateString = (isoString: string | undefined) => (isoString ? d(isoString, "date") : undefined);
 
+	/**
+	 * Parse a date from DB representation (DD.MM.YYYY) to an iso date string. Deprecated - in DB there should only be ISO date strings, so this is only needed for legacy data and should not be used for new code.
+	 * @deprecated - Use convertIsoToDateString() if possible.
+	 *
+	 * @param dbDateString - The date string in DB format (e.g. "01.03.2022")
+	 */
+	const convertDbGermanDateStringToDateString = (dbDateString: string | undefined) => {
+		const iso = dayjs(dbDateString, "DD.MM.YYYY").toISOString();
+		return convertIsoToDateString(iso);
+	};
+
+	/**
+	 * Converts a date-only string (YYYY-MM-DD) to an end-of-day ISO timestamp.
+	 *
+	 * @param dateString - The date string in YYYY-MM-DD format (e.g. "2026-03-04")
+	 */
+	const convertDateToEndOfDayIso = (dateString: string | undefined) => {
+		if (!dateString) return undefined;
+		return dayjs(dateString).endOf("day").toISOString();
+	};
+
 	return {
+		convertDbGermanDateStringToDateString,
 		convertDateStringToIso,
 		convertDateStringToDate,
 		convertIsoToDateString,
+		convertDateToEndOfDayIso,
 	};
 };

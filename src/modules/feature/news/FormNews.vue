@@ -83,7 +83,6 @@ import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dial
 import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { useOpeningTagValidator } from "@util-validators";
 import { Dayjs } from "dayjs";
-import dayjs from "dayjs";
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -126,7 +125,7 @@ export default defineComponent({
 		data: {
 			title: string;
 			content: string;
-			date: { date: string; time: string };
+			date: { date: string; time: string | undefined };
 		};
 		mdiClockOutline: string;
 		mdiClose: string;
@@ -226,8 +225,8 @@ export default defineComponent({
 				[this.data.date.date, this.data.date.time] = createInputDateTime(displayAt);
 			}
 		},
-		onUpdateDate(newDate: string | null) {
-			this.data.date.date = newDate ? dayjs(newDate).format("YYYY-MM-DD") : "";
+		onUpdateDate(newDate: string | undefined) {
+			this.data.date.date = newDate ?? "";
 		},
 		onUpdateValue(newValue: string) {
 			this.data.content = newValue;

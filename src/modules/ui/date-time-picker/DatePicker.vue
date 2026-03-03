@@ -77,7 +77,7 @@ const emit = defineEmits<{
 const { dateMask, datePlaceHolder } = useLocalizedDateTime();
 const { convertDateStringToIso, convertDateStringToDate, convertIsoToDateString } = useDateConversion();
 
-const { t, d } = useI18n();
+const { t } = useI18n();
 
 const showDatePicker = ref(false);
 const dateTextField = useTemplateRef("date-text-field");

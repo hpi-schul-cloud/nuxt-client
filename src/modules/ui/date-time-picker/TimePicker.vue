@@ -25,7 +25,7 @@ import { computed, ref, useTemplateRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
-	time: { type: String, required: true },
+	time: { type: String },
 	label: { type: String, default: "" },
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
