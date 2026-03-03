@@ -2,7 +2,9 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import { BoardResponseAllowedOperations, CardResponse } from "@/serverApi/v3";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
