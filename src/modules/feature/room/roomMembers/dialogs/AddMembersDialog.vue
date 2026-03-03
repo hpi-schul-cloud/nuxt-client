@@ -121,7 +121,7 @@
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { RoleName } from "@/serverApi/v3";
-import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
+import { useRoomAllowedOperations, useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
@@ -172,7 +172,7 @@ const schoolItems = computed(() => {
 	}
 });
 
-const { canAddAllStudents } = useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const selectedSchool = ref(schools.value[0].id);
 
@@ -213,7 +213,7 @@ const isStudentSelectionDisabled = computed(() => {
 });
 
 const isRestrictedStudentVisibilityCase = computed(
-	() => selectedSchoolRole.value === RoleName.Student && !canAddAllStudents.value
+	() => selectedSchoolRole.value === RoleName.Student && !allowedOperations.value.addAllStudents
 );
 
 const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {

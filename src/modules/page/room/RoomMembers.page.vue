@@ -1,5 +1,10 @@
 <template>
-	<DefaultWireframe v-if="canSeeMembersList" max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabItems">
+	<DefaultWireframe
+		v-if="allowedOperations.viewMemberlist"
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fab-items="fabItems"
+	>
 		<template #header>
 			<div ref="header">
 				<div class="d-flex align-center">
@@ -43,7 +48,12 @@
 			<VSkeletonLoader type="table" class="mt-6" />
 		</VContainer>
 
-		<VTabsWindow v-else v-model="activeTab" class="room-members-tabs-window" :class="{ 'mt-12': canAddRoomMembers }">
+		<VTabsWindow
+			v-else
+			v-model="activeTab"
+			class="room-members-tabs-window"
+			:class="{ 'mt-12': allowedOperations.addMembers }"
+		>
 			<VTabsWindowItem v-for="tabItem in tabs" :key="tabItem.value" :value="tabItem.value">
 				<component :is="tabItem.component" v-if="tabItem.isVisible" :header-bottom="headerBottom" />
 			</VTabsWindowItem>
@@ -63,7 +73,7 @@ import { useAppStoreRefs } from "@data-app";
 import {
 	InvitationStep,
 	useRegistrationStore,
-	useRoomAuthorization,
+	useRoomAllowedOperations,
 	useRoomDetailsStore,
 	useRoomInvitationLinkStore,
 	useRoomMembersStore,
@@ -129,7 +139,7 @@ const { fetchRegistrationsForCurrentRoom, resetStore: resetRegistrationStore } =
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
-const { canAddRoomMembers, canLeaveRoom, canManageRoomInvitationLinks, canSeeMembersList } = useRoomAuthorization();
+const { allowedOperations } = useRoomAllowedOperations();
 
 const { isInvitationDialogOpen, invitationStep, isInviteExternalPersonsFeatureEnabled } =
 	storeToRefs(useRoomInvitationLinkStore());
@@ -148,16 +158,14 @@ const activeTab = computed<Tab>({
 });
 
 watchEffect(() => {
-	if (canAddRoomMembers.value !== undefined) {
-		membersInfoText.value = canAddRoomMembers.value
-			? t("pages.rooms.members.management")
-			: t("pages.rooms.members.label");
-	}
+	membersInfoText.value = allowedOperations.value.addMembers
+		? t("pages.rooms.members.management")
+		: t("pages.rooms.members.label");
 
-	if (room.value?.permissions) {
+	if (room.value?.allowedOperations) {
 		const permissionRestrictedTabs = [Tab.Invitations, Tab.Confirmations];
 
-		if (permissionRestrictedTabs.includes(activeTab.value) && !canManageRoomInvitationLinks.value) {
+		if (permissionRestrictedTabs.includes(activeTab.value) && !allowedOperations.value.updateRoomInvitationLinks) {
 			activeTab.value = Tab.Members;
 		}
 	}
@@ -166,7 +174,7 @@ watchEffect(() => {
 const pageTitle = computed(() => buildPageTitle(membersInfoText.value, room.value?.name));
 useTitle(pageTitle);
 
-const isVisibleTabNavigation = computed(() => canManageRoomInvitationLinks.value);
+const isVisibleTabNavigation = computed(() => allowedOperations.value.updateRoomInvitationLinks);
 
 const tabs: Array<{
 	title: string;
@@ -242,7 +250,7 @@ const onDialogClose = () => {
 };
 
 const onLeaveRoom = async () => {
-	if (!canLeaveRoom.value) {
+	if (!allowedOperations.value.leaveRoom) {
 		isLeaveRoomProhibitedDialogOpen.value = true;
 		return;
 	}
@@ -265,12 +273,12 @@ onMounted(async () => {
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
-	if (canSeeMembersList.value === false) {
+	if (allowedOperations.value.viewMemberlist === false) {
 		router.replace("/rooms");
 		return;
 	}
 	const promises = [fetchMembers()];
-	if (canManageRoomInvitationLinks.value) {
+	if (allowedOperations.value.updateRoomInvitationLinks) {
 		promises.push(fetchRegistrationsForCurrentRoom());
 	}
 	await Promise.all(promises);
@@ -301,7 +309,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabItems = computed<FabAction[] | undefined>(() => {
-	if (!canAddRoomMembers.value) return;
+	if (!allowedOperations.value.addMembers) return;
 
 	if (activeTab.value === Tab.Members) {
 		const actions: FabAction[] = [

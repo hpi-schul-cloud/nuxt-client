@@ -4,7 +4,7 @@
 			scope="card"
 			:value="modelValue"
 			:is-edit-mode="isEditMode"
-			:has-edit-permission="hasEditPermission"
+			:has-edit-permission="allowedOperations.updateCardTitle"
 			:is-focused="isFocused"
 			data-testid="card-title"
 			@update:value="onUpdateValue"
@@ -15,7 +15,10 @@
 
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardAllowedOperations } from "@data-board";
 import { useVModel } from "@vueuse/core";
+
+const { allowedOperations } = useBoardAllowedOperations();
 
 const props = defineProps({
 	value: {
@@ -28,10 +31,6 @@ const props = defineProps({
 	},
 	isFocused: {
 		type: Boolean,
-	},
-	hasEditPermission: {
-		type: Boolean,
-		default: false,
 	},
 });
 const emit = defineEmits(["update:value", "enter"]);
