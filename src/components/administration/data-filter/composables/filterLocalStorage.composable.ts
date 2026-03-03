@@ -1,22 +1,21 @@
-import { FilterLocalStorage, FilterQuery } from "../types";
-import { RoleName } from "@/serverApi/v3";
+import { FilterLocalStorage, FilterQuery, User } from "../types";
 import { useStorage } from "@vueuse/core";
 import { computed, Ref } from "vue";
 
-export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teacher) => {
-	const filterStorageKey: Record<RoleName.Student | RoleName.Teacher, string> = {
-		[RoleName.Student]: "studentsManagementPage",
-		[RoleName.Teacher]: "teachersManagementPage",
+export const useFilterLocalStorage = (userType: User) => {
+	const filterStorageKey: Record<User, string> = {
+		[User.STUDENT]: "studentsManagementPage",
+		[User.TEACHER]: "teachersManagementPage",
 	};
 
 	const state: Ref<FilterLocalStorage> = useStorage("filterState", {
 		pagination: {},
 		filter: {
-			[filterStorageKey[RoleName.Student]]: {
+			[filterStorageKey[User.STUDENT]]: {
 				query: {},
 				searchQuery: "",
 			},
-			[filterStorageKey[RoleName.Teacher]]: {
+			[filterStorageKey[User.TEACHER]]: {
 				query: {},
 				searchQuery: "",
 			},

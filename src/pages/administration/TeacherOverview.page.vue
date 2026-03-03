@@ -117,7 +117,7 @@ import { useDebounceFn, useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(RoleName.Teacher);
+const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.TEACHER);
 const { fetchClasses, classNameList } = useClasses();
 
 const {
