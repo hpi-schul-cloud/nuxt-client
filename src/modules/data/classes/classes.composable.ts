@@ -3,14 +3,16 @@ import { $axios } from "@/utils/api";
 import { ref } from "vue";
 
 export const useClasses = () => {
-	const url = "/v1/classes";
-	const list = ref<unknown>([]);
+	const classNameList = ref<{ label: string; value: string }[]>([]);
 	const { execute } = useSafeAxiosTask();
 
 	const fetchClasses = async (query: { $limit: number; year: string }) => {
-		const { result } = await execute(() => $axios.get(url, { params: query }));
-		list.value = result?.data?.data || [];
+		const { result } = await execute(() => $axios.get("/v1/classes", { params: query }));
+		classNameList.value = (result?.data?.data ?? []).map((item: { displayName: string }) => ({
+			label: item.displayName,
+			value: item.displayName,
+		}));
 	};
 
-	return { list, fetchClasses };
+	return { fetchClasses, classNameList };
 };

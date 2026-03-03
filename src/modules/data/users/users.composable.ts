@@ -1,5 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { RoleName, UserResponse } from "@/serverApi/v3/api";
+import { RoleName, UserListResponse, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
 import { notifySuccess } from "@data-app";
 import { Ref, ref } from "vue";
@@ -16,37 +16,38 @@ export type UserCreatingData = {
 	birthday?: Date;
 };
 
-export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleName.Student) => {
-	const usersApi = "/v3/users/admin/" + (userType === RoleName.Student ? "students" : "teachers");
-	const usersApiV1 = "/v1/users/admin/" + (userType === RoleName.Student ? "students" : "teachers");
-	const registrationLinksApi = "/v1/users/mail/registrationLink";
-	const registrationQrApi = "/v1/users/qrRegistrationLink";
-
+export const useUsers = (userType: RoleName.Student | RoleName.Teacher) => {
 	const { t } = useI18n();
+	const { execute } = useSafeAxiosTask();
+
+	const userTypePath = userType === RoleName.Student ? "students" : "teachers";
+	const usersApi = `/v3/users/admin/${userTypePath}`;
+	const usersApiV1 = `/v1/users/admin/${userTypePath}`;
 
 	const userList = ref<UserResponse[]>([]);
 	const deletingProgress: Ref<{ active: boolean; percent: number }> = ref({
 		active: false,
 		percent: 0,
 	});
-	const qrLinks = ref<unknown>([]);
-	const consentList = ref<unknown>([]);
-	const registrationLinks = ref<unknown>([]);
+	// The type of the following ref is not mirroring the full backend type but for now only what's used
+	const qrLinks = ref<{ title?: string; qrContent: string }[]>([]);
 	const pagination = ref({
 		limit: 0,
 		skip: 0,
 		total: 0,
 	});
 
-	const { execute } = useSafeAxiosTask();
-
 	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
-		const { result } = await execute(() => $axios.get(usersApi, { params: query }));
+		const { result } = await execute(() => $axios.get<UserListResponse>(usersApi, { params: query }));
 
-		userList.value = result?.data?.data;
-		pagination.value.limit = result?.data?.limit;
-		pagination.value.skip = result?.data?.skip;
-		pagination.value.total = result?.data?.total;
+		const { data, ...paginationResponse } = result?.data || {
+			data: [],
+			limit: 0,
+			skip: 0,
+			total: 0,
+		};
+		userList.value = data;
+		pagination.value = paginationResponse;
 	};
 
 	const deleteUsers = async (userIds: string | string[]) => {
@@ -95,22 +96,23 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 	};
 
 	const sendRegistrationLink = async (payload: { userIds: string[]; selectionType: string }) => {
-		const { result } = await execute(
-			() => $axios.post(registrationLinksApi, payload),
+		const { success } = await execute(
+			() => $axios.post("/v1/users/mail/registrationLink", payload),
 			t("pages.administration.sendMail.error", payload.userIds.length)
 		);
 
-		registrationLinks.value = result?.data || [];
+		if (!success) return;
 		notifySuccess(t("pages.administration.sendMail.success", payload.userIds.length));
 	};
 
 	const getQrRegistrationLinks = async (payload: { userIds: string[]; selectionType: string }) => {
-		const { result } = await execute(
-			() => $axios.post(registrationQrApi, { ...payload, roleName: userType }),
+		const { success, result } = await execute(
+			() => $axios.post("/v1/users/qrRegistrationLink", { ...payload, roleName: userType }),
 			t("pages.administration.printQr.error", payload.userIds.length)
 		);
 
-		qrLinks.value = result?.data;
+		if (!success) return;
+		qrLinks.value = result?.data || [];
 	};
 
 	return {
@@ -123,7 +125,5 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher = RoleNam
 		deletingProgress,
 		pagination,
 		qrLinks,
-		consentList,
-		registrationLinks,
 	};
 };

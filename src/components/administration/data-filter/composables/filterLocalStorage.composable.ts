@@ -1,15 +1,15 @@
-import { FilterLocalStorage } from "../types";
+import { FilterLocalStorage, FilterQuery } from "../types";
 import { RoleName } from "@/serverApi/v3";
 import { useStorage } from "@vueuse/core";
-import { Ref } from "vue";
+import { computed, Ref } from "vue";
 
-export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teacher = RoleName.Student) => {
+export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teacher) => {
 	const filterStorageKey: Record<RoleName.Student | RoleName.Teacher, string> = {
 		[RoleName.Student]: "studentsManagementPage",
 		[RoleName.Teacher]: "teachersManagementPage",
 	};
 
-	const defaultState: FilterLocalStorage = {
+	const state: Ref<FilterLocalStorage> = useStorage("filterState", {
 		pagination: {},
 		filter: {
 			[filterStorageKey[RoleName.Student]]: {
@@ -23,26 +23,66 @@ export const useFilterLocalStorage = (userType: RoleName.Student | RoleName.Teac
 		},
 		sorting: {},
 		version: 1,
-	};
+	});
 
-	const state: Ref<FilterLocalStorage> = useStorage("filterState", defaultState);
-
-	const getFilterState = () => state.value.filter[filterStorageKey[userType]]?.query;
-	const setFilterState = (val: object) => (state.value.filter[filterStorageKey[userType]] = { query: val });
-	const getPaginationState = () => state.value.pagination[filterStorageKey[userType]];
-	const setPaginationState = (val: { page: number; limit: number }) =>
-		(state.value.pagination[filterStorageKey[userType]] = val);
-	const getSortingState = () => state.value.sorting[filterStorageKey[userType]];
-	const setSortingState = (val: { sortBy: string; sortOrder: string }) =>
-		(state.value.sorting[filterStorageKey[userType]] = val);
+	const currentFilterQuery = computed({
+		get: () => state.value.filter[filterStorageKey[userType]]?.query ?? {},
+		set: (query: FilterQuery) => {
+			state.value.filter[filterStorageKey[userType]] = { ...state.value.filter[filterStorageKey[userType]], query };
+		},
+	});
+	const searchQuery = computed({
+		get: () => state.value.filter[filterStorageKey[userType]]?.searchQuery ?? "",
+		set: (searchQuery: string) => {
+			state.value.filter[filterStorageKey[userType]] = {
+				query: state.value.filter[filterStorageKey[userType]]?.query ?? {},
+				searchQuery,
+			};
+		},
+	});
+	const page = computed({
+		get: () => state.value.pagination[filterStorageKey[userType]]?.page ?? 1,
+		set: (page: number) => {
+			state.value.pagination[filterStorageKey[userType]] = {
+				...state.value.pagination[filterStorageKey[userType]],
+				page,
+			};
+		},
+	});
+	const limit = computed({
+		get: () => state.value.pagination[filterStorageKey[userType]]?.limit ?? 25,
+		set: (limit: number) => {
+			state.value.pagination[filterStorageKey[userType]] = {
+				...state.value.pagination[filterStorageKey[userType]],
+				limit,
+			};
+		},
+	});
+	const sortBy = computed({
+		get: () => state.value.sorting[filterStorageKey[userType]]?.sortBy ?? "firstName",
+		set: (sortBy: string) => {
+			state.value.sorting[filterStorageKey[userType]] = {
+				...state.value.sorting[filterStorageKey[userType]],
+				sortBy,
+			};
+		},
+	});
+	const sortOrder = computed({
+		get: () => state.value.sorting[filterStorageKey[userType]]?.sortOrder ?? "asc",
+		set: (sortOrder: string) => {
+			state.value.sorting[filterStorageKey[userType]] = {
+				...state.value.sorting[filterStorageKey[userType]],
+				sortOrder,
+			};
+		},
+	});
 
 	return {
-		getFilterState,
-		setFilterState,
-		state,
-		getPaginationState,
-		setPaginationState,
-		getSortingState,
-		setSortingState,
+		currentFilterQuery,
+		page,
+		limit,
+		sortBy,
+		sortOrder,
+		searchQuery,
 	};
 };

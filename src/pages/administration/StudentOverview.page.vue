@@ -156,7 +156,6 @@ export default defineComponent({
 			userList,
 			sendRegistrationLink,
 			getQrRegistrationLinks,
-			registrationLinks,
 			qrLinks,
 			pagination,
 		} = useUsers(RoleName.Student);
@@ -177,7 +176,6 @@ export default defineComponent({
 			userList,
 			sendRegistrationLink,
 			getQrRegistrationLinks,
-			registrationLinks,
 			qrLinks,
 			pagination,
 		};

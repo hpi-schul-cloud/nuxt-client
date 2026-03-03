@@ -19,7 +19,7 @@ import { useI18n } from "vue-i18n";
 
 export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterState } = useFilterLocalStorage(userType as RoleName.Student | RoleName.Teacher);
+	const { currentFilterQuery } = useFilterLocalStorage(userType as RoleName.Student | RoleName.Teacher);
 	const yearName = schoolsModule.getCurrentYear?.name;
 
 	const filterQuery = ref<FilterQuery>({});
@@ -102,7 +102,7 @@ export const useDataTableFilter = (userType: string) => {
 
 		setFilterChipTitles();
 
-		setFilterState(filterQuery.value);
+		currentFilterQuery.value = filterQuery.value;
 		setFilterMenuItems();
 	};
 
@@ -110,14 +110,14 @@ export const useDataTableFilter = (userType: string) => {
 		if (selectedFilterType.value) delete filterQuery.value[selectedFilterType.value];
 
 		setFilterChipTitles();
-		setFilterState(filterQuery.value);
+		currentFilterQuery.value = filterQuery.value;
 		setFilterMenuItems();
 	};
 
 	const removeChipFilter = (val: FilterOption) => {
 		delete filterQuery.value[val];
 
-		setFilterState(filterQuery.value);
+		currentFilterQuery.value = filterQuery.value;
 		setFilterMenuItems();
 	};
 
@@ -172,7 +172,7 @@ export const useDataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
-		filterQuery.value = getFilterState() ?? {};
+		filterQuery.value = currentFilterQuery.value;
 		if (filterQuery.value) setFilterChipTitles();
 		setFilterMenuItems();
 	});
