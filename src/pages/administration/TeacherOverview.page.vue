@@ -112,7 +112,6 @@ import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
-import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
 export default defineComponent({

@@ -265,8 +265,7 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		const { convertDbGermanDateStringToDateString, convertIsoToDateString } =
-			useDateConversion();
+		const { convertDbGermanDateStringToDateString, convertIsoToDateString } = useDateConversion();
 		return { t, convertDbGermanDateStringToDateString, convertIsoToDateString };
 	},
 	data() {
