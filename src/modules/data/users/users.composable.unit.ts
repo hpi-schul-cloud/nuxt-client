@@ -1,7 +1,7 @@
 import { useUsers } from "./users.composable";
 import { RoleName } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { mountComposable, userCreationDataFactory, userResponseFactory } from "@@/tests/test-utils";
+import { expectNotification, mountComposable, userCreationDataFactory, userResponseFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
@@ -97,7 +97,7 @@ describe("useUsers", () => {
 	});
 
 	describe("sendRegistrationLink", () => {
-		it("should send a registration link to the specified email", async () => {
+		it("should send a registration link to the specified email and notify success", async () => {
 			const composable = setup();
 			const responseData = [{ id: "some-id-1" }, { id: "some-id-2" }];
 			axiosMock.post.mockResolvedValueOnce({ data: responseData });
@@ -107,7 +107,7 @@ describe("useUsers", () => {
 				userIds: ["user1"],
 				selectionType: "inclusive",
 			});
-			expect(composable.registrationLinks.value).toEqual(responseData);
+			expectNotification("success");
 		});
 
 		describe("generateRegistrationLink", () => {
