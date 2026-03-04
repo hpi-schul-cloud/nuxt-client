@@ -1,4 +1,3 @@
-import { useAutoLogout } from "./autoLogout.composable";
 import { RoleName } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { createTestAppStoreWithRole, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
@@ -9,6 +8,7 @@ import { SessionState } from "@util-broadcast-channel";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { type Ref, ref } from "vue";
+import { useAutoLogout } from "./autoLogout.composable";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -267,6 +267,41 @@ describe("useAutoLogout", () => {
 			});
 		});
 
+		describe("when extendSession() is called and session is already in error state", () => {
+			it("should not make API call", async () => {
+				const options = { jwtTtl: 51, showWarningTime: 50 };
+				const { extendSession, sessionState, axiosMock } = setupAndCreateSession(options);
+
+				// First fail the extend to get into error state
+				axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
+				await extendSession();
+
+				expect(sessionState.value).toBe(SessionState.Error);
+				axiosMock.post.mockClear();
+
+				// Try to extend again while in error state
+				await extendSession();
+
+				expect(axiosMock.post).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the same state is set twice", () => {
+			it("should not broadcast duplicate state for Started", async () => {
+				const { createSession } = setup();
+
+				createSession();
+				await flushPromises();
+				const callCountAfterFirst = broadcastPostMock.mock.calls.length;
+
+				// Call createSession again - should not broadcast since already in Started state
+				createSession();
+				await flushPromises();
+
+				expect(broadcastPostMock).toHaveBeenCalledTimes(callCountAfterFirst);
+			});
+		});
+
 		describe("when updateRemainingTime() retries on error", () => {
 			it("should retry up to MAX_RETRIES times with exponential backoff", async () => {
 				const options = { jwtTtl: 51, showWarningTime: 50 };
@@ -402,6 +437,21 @@ describe("useAutoLogout", () => {
 				await advanceTimersBySeconds(3);
 
 				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("expired:"));
+			});
+		});
+
+		describe("when receiving broadcast from another tab", () => {
+			it("should not re-process when receiving the same state", async () => {
+				const { sessionState } = setupAndCreateSession();
+
+				expect(sessionState.value).toBe(SessionState.Started);
+
+				// Simulate receiving a broadcast message with the same state from another tab
+				broadcastDataRef.value = "started:100";
+				await flushPromises();
+
+				// State should still be Started (no change, early return hit)
+				expect(sessionState.value).toBe(SessionState.Started);
 			});
 		});
 	});

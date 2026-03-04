@@ -150,21 +150,22 @@ describe("useCountdownTimer", () => {
 		});
 	});
 
-	describe("unmounting", () => {
-		it("should stop interval when component is unmounted", async () => {
+	describe("when component is unmounted", () => {
+		it("should stop interval", async () => {
 			const handleTimerTick = vi.fn();
-			const wrapper = mountComposable(() => useCountdownTimer(handleTimerTick));
+			const composable = mountComposable(() => useCountdownTimer(handleTimerTick));
 
-			wrapper.setTime(10);
-			wrapper.startTimer();
+			composable.setTime(10);
+			composable.startTimer();
 			await advanceTimersBySeconds(2);
 
-			// Simulate unmount by stopping interval
-			wrapper.stopTimer();
+			composable.wrapper.unmount();
 
+			handleTimerTick.mockClear();
 			await advanceTimersBySeconds(3);
 
-			expect(wrapper.remainingTimeInSeconds.value).toBe(8);
+			expect(composable.remainingTimeInSeconds.value).toBe(8);
+			expect(handleTimerTick).not.toHaveBeenCalled();
 		});
 	});
 });
