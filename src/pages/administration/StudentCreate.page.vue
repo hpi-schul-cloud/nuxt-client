@@ -6,14 +6,13 @@
 	>
 		<FormCreateUser @create-user="createStudent">
 			<template #inputs>
-				<VTextField
-					v-model="date"
+				<DatePicker
 					:label="t('common.labels.birthdate')"
-					:min="minDate"
-					:max="maxDate"
 					data-testid="input_create-student_birthdate"
-					:class="{ hideCurrentDate: !date }"
-					type="date"
+					:min-date="minDate"
+					:max-date="maxDate"
+					:date="date"
+					@update:date="date = $event"
 				/>
 				<VCheckbox
 					v-model="sendRegistration"
@@ -37,6 +36,7 @@ import { inputRangeDate } from "@/plugins/datetime.ts";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
+import { DatePicker } from "@ui-date-time-picker";
 import { DefaultWireframe } from "@ui-layout";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
@@ -44,6 +44,7 @@ import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
+		DatePicker,
 		FormCreateUser,
 		InfoMessage,
 		DefaultWireframe,

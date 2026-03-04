@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDateConversion, useLocalizedDateTime } from "@/composables/date-time-composables";
+import { useDateConversion, useLocalizedDateTime } from "@/composables/date-time.composables";
 import { mdiCalendar } from "@icons/material";
 import { isRequired, isValidDate } from "@util-validators";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
@@ -107,8 +107,8 @@ const validationRules = computed(() => [
 ]);
 
 const ariaLabelWithFormat = computed(() => {
-	const prefix = props.ariaLabel || props.label || "common.labels.date";
-	return `${t(prefix)} (${datePlaceHolder.value})`;
+	const prefix = props.ariaLabel || props.label || t("common.labels.date");
+	return `${prefix} (${datePlaceHolder.value})`;
 });
 
 const validateAndEmitDate = async () => {

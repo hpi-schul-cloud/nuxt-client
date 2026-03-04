@@ -11,7 +11,7 @@ import {
 	UserBasedRegistrationOptions,
 } from "../types";
 import { useFilterLocalStorage } from "./filterLocalStorage.composable";
-import { useDateConversion } from "@/composables/date-time-composables";
+import { useDateConversion } from "@/composables/date-time.composables";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { computed, onMounted, ref } from "vue";

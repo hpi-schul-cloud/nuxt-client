@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalizedDateTime } from "@/composables/date-time-composables";
+import { useLocalizedDateTime } from "@/composables/date-time.composables";
 import { mdiClockOutline } from "@icons/material";
 import { isRequired, isValidTime } from "@util-validators";
 import { vMaska } from "maska/vue";

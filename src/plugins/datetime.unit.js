@@ -14,8 +14,6 @@ import datetime, {
 	inputDateFromDeUTC,
 	inputRangeDate,
 	isDateTimeInPast,
-	printDate,
-	printDateFromDeUTC,
 	printDateFromStringUTC,
 	printDateTimeFromStringUTC,
 	setDefaultFormats,
@@ -48,27 +46,6 @@ const defaultFormats = {
 const getUTCOffsetForTimezone = (tz) => {
 	const expectedOffsetMin = dayjs().tz(tz).utcOffset();
 	return calculateUTC(expectedOffsetMin);
-};
-
-const localizedFormats = {
-	de: {
-		...defaultFormats,
-		date: translations["de"]["format.date"],
-		dateYY: translations["de"]["format.dateYY"],
-		dateTime: translations["de"]["format.dateTime"],
-		dateTimeYY: translations["de"]["format.dateTimeYY"],
-		dateLong: translations["de"]["format.dateLong"],
-		time: translations["de"]["format.time"],
-	},
-	en: {
-		...defaultFormats,
-		date: translations["en"]["format.date"],
-		dateYY: translations["en"]["format.dateYY"],
-		dateTime: translations["en"]["format.dateTime"],
-		dateTimeYY: translations["en"]["format.dateTimeYY"],
-		dateLong: translations["en"]["format.dateLong"],
-		time: translations["en"]["format.time"],
-	},
 };
 
 setDefaultTimezone(TEST_DATETIME_TIMEZONE);
@@ -106,13 +83,6 @@ describe("@/plugins/datetime", () => {
 		expect(result).toBe(new Date().toISOString().slice(0, -5));
 	});
 
-	it("printDateFromDeUTC", () => {
-		const result = printDateFromDeUTC(dateUTCString);
-		expect(result).toBe(dateLocalString);
-		expect(printDateFromDeUTC(null)).toBeNull();
-		expect(printDateFromDeUTC("")).toBeNull();
-	});
-
 	it("printDateFromStringUTC", () => {
 		const result = printDateFromStringUTC(dateString);
 		expect(result).toBe(dateLocalStringYY);
@@ -130,11 +100,6 @@ describe("@/plugins/datetime", () => {
 		expect(result).toBe(dateLocal.format("YYYY-MM-DD"));
 		expect(inputDateFromDeUTC(null)).toBeNull();
 		expect(inputDateFromDeUTC("")).toBeNull();
-	});
-
-	it("printDate", () => {
-		const result = printDate(dateLocal.format("YYYY-MM-DD HH:mm"));
-		expect(result).toBe(dateLocal.format("DD.MM.YYYY"));
 	});
 
 	it("inputRangeDate", () => {

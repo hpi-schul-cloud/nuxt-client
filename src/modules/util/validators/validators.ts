@@ -1,4 +1,4 @@
-import { useLocalizedDateTime } from "@/composables/date-time-composables";
+import { useLocalizedDateTime } from "@/composables/date-time.composables";
 import { useI18nGlobal } from "@/plugins/i18n";
 
 export type FormValidatorFn<T> = (errMsg?: string) => (value: T) => string | true;

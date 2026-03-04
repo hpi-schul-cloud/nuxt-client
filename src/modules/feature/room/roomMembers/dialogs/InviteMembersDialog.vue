@@ -177,7 +177,7 @@
 
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { useDateConversion } from "@/composables/date-time-composables";
+import { useDateConversion } from "@/composables/date-time.composables";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";

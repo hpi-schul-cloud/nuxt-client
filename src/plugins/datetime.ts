@@ -18,7 +18,6 @@ export const DATETIME_FORMAT = {
 	dateYY: "DD.MM.YY",
 	dateTime: "DD.MM.YYYY HH:mm",
 	dateTimeYY: "DD.MM.YY HH:mm",
-	dateLong: "dddd, DD. MMMM YYYY",
 	time: "HH:mm",
 	inputDate: "YYYY-MM-DD", // Don't change this! Format defined by HTML standards
 	inputTime: "HH:mm", // Don't change this! Format defined by HTML standards
@@ -33,20 +32,6 @@ export const fromUTC = (date: string) => {
 	const dateObject = new Date(date);
 
 	return dayjs.tz(dateObject, "UTC");
-};
-
-/**
- * Returns formated date string based on a given date string in German format
- * TODO: Currently the server is returning this date in German format. Please check, if this is needed or can be reverted to international date format, i.e. (DD.MM.YYYY -> YYYY-MM-DD)
- * @param date UTC date string in german format
- * @return Date string based on current timezone using locale date formating
- */
-export const printDateFromDeUTC = (date: string) => {
-	if (date) {
-		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
-		return result.format(DATETIME_FORMAT.date);
-	}
-	return null;
 };
 
 /**
@@ -72,17 +57,6 @@ export const inputDateFormat = (date: string) => {
 	if (date) {
 		const result = dayjs(date, DATETIME_FORMAT.inputDate).tz();
 		return result.format("DD.MM.YYYY");
-	}
-	return null;
-};
-
-/**
- * Returns formated date string based on a given date
- * @return Date string based on current timezone using locale date formating
- */
-export const printDate = (date: string) => {
-	if (date) {
-		return fromUTC(date).format(DATETIME_FORMAT.date);
 	}
 	return null;
 };

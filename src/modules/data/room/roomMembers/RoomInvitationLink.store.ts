@@ -6,7 +6,7 @@ import {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./types";
-import { useDateConversion } from "@/composables/date-time-composables";
+import { useDateConversion } from "@/composables/date-time.composables";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
