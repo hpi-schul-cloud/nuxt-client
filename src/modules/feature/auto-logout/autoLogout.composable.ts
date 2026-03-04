@@ -5,13 +5,15 @@ import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useBroadcastChannel } from "@vueuse/core";
-import { computed, readonly, Ref, ref, watch } from "vue";
+import { computed, onUnmounted, readonly, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 const MAX_RETRIES = 3;
 const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60; // 2 hours
 const DEFAULT_WARNING_SECONDS = 1 * 60 * 60; // 1 hour
+const BROADCAST_CHANNEL_NAME = "user-session-channel";
+const BROADCAST_MESSAGE_LOGOUT = "logout";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -52,6 +54,10 @@ export const useAutoLogout = () => {
 			remainingTimeInSeconds.value = seconds;
 		};
 
+		onUnmounted(() => {
+			stopInterval();
+		});
+
 		return {
 			remainingTimeInSeconds: readonly(remainingTimeInSeconds),
 			remainingTimeInMinutes: readonly(remainingTimeInMinutes),
@@ -68,7 +74,7 @@ export const useAutoLogout = () => {
 		setState: (status: SessionStatus) => Promise<void> | void,
 		countdownTimer: ReturnType<typeof useCountdownTimer>
 	) => {
-		const sessionBroadcast = useBroadcastChannel({ name: "user-session-channel" });
+		const sessionBroadcast = useBroadcastChannel({ name: BROADCAST_CHANNEL_NAME });
 		const { remainingTimeInSeconds, setTimer } = countdownTimer;
 
 		// share current state and timing
@@ -79,7 +85,7 @@ export const useAutoLogout = () => {
 		// handle incoming broadcast messages to sync session status across tabs
 		watch(sessionBroadcast.data, (message) => {
 			logger.log("Received broadcast message:", message);
-			if (message === "logout") {
+			if (message === BROADCAST_MESSAGE_LOGOUT) {
 				setState(SessionStatus.Expired);
 				globalThis.location.assign("/logout");
 			}
@@ -93,6 +99,12 @@ export const useAutoLogout = () => {
 				if (Object.values(SessionStatus).includes(status as SessionStatus)) {
 					setState(status as SessionStatus);
 				}
+			}
+		});
+
+		onUnmounted(() => {
+			if (sessionBroadcast.isClosed.value === false) {
+				sessionBroadcast.close();
 			}
 		});
 
