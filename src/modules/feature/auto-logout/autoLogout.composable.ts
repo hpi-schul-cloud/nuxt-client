@@ -3,6 +3,8 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { logger } from "@util-logger";
+import { useBroadcastChannel } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -29,14 +31,8 @@ export const useAutoLogout = () => {
 	// --- Session Management ---
 
 	const createSession = () => {
-		stopInterval();
-
-		remainingTimeInSeconds.value = SESSION_TIMEOUT;
-		showDialog.value = false;
-		sessionStatus.value = SessionStatus.Started;
-		errorOnExtend.value = false;
-
 		startInterval();
+		goToState(SessionStatus.Started);
 	};
 
 	const extendSession = async () => {
@@ -49,9 +45,9 @@ export const useAutoLogout = () => {
 		try {
 			await $axios.post(JWT_TIMER_ENDPOINT);
 			await updateRemainingTime();
-			goExtendedState();
+			await goToState(SessionStatus.Extended);
 		} catch {
-			goErrorState();
+			await goToState(SessionStatus.Error);
 		}
 	};
 
@@ -60,6 +56,8 @@ export const useAutoLogout = () => {
 	let remainingTimeInterval: ReturnType<typeof setInterval> | null = null;
 
 	const startInterval = () => {
+		stopInterval();
+
 		remainingTimeInterval = setInterval(() => {
 			remainingTimeInSeconds.value -= 1;
 			handleTimerTick();
@@ -73,61 +71,86 @@ export const useAutoLogout = () => {
 		}
 	};
 
-	// --- State Handling ---
-
 	const handleTimerTick = async () => {
 		if (remainingTimeInSeconds.value <= 0) {
-			sessionStatus.value = SessionStatus.Expired;
+			await goToState(SessionStatus.Expired);
 		} else if (remainingTimeInSeconds.value <= WARNING_THRESHOLD) {
-			sessionStatus.value = SessionStatus.AboutToExpire;
+			await goToState(SessionStatus.AboutToExpire);
 		}
+		logger.log("Remaining Time (s):", remainingTimeInSeconds.value, "Status:", sessionStatus.value);
 	};
 
-	const goStartedState = () => {
+	// --- State Handling ---
+
+	const setStartedState = () => {
 		sessionStatus.value = SessionStatus.Started;
+		remainingTimeInSeconds.value = SESSION_TIMEOUT;
 		showDialog.value = false;
 		errorOnExtend.value = false;
 	};
 
-	const goWarningState = async () => {
+	const setAboutToExpireState = async () => {
+		sessionStatus.value = SessionStatus.AboutToExpire;
 		showDialog.value = true;
 		await updateRemainingTime();
 	};
 
-	const goExtendedState = () => {
+	const setExtendedState = () => {
 		sessionStatus.value = SessionStatus.Extended;
+		stopInterval();
 		showDialog.value = false;
 		errorOnExtend.value = false;
+		startInterval();
 		notify("success", t("feature-autoLogout.message.extending-session-success"));
 	};
 
-	const goExpiredState = () => {
-		showDialog.value = true;
-		useAppStore().logout();
-		notify("error", t("feature-autoLogout.message.error.401"), false);
+	const setExpiredState = async () => {
+		sessionStatus.value = SessionStatus.Expired;
+		remainingTimeInSeconds.value = 0;
 		stopInterval();
+		showDialog.value = true;
+		notify("error", t("feature-autoLogout.message.error.401"), false);
+		useAppStore().clearUserSession();
+		await fetch("/logout").catch((error) => {
+			logger.error("Error during logout fetch call:", error);
+		});
 	};
 
-	const goErrorState = () => {
+	const setErrorState = () => {
 		sessionStatus.value = SessionStatus.Error;
 		errorOnExtend.value = true;
 		notify("error", t("feature-autoLogout.message.extending-session-failure"));
 	};
 
-	const map: Record<SessionStatus, () => void | Promise<void>> = {
-		[SessionStatus.Started]: goStartedState,
-		[SessionStatus.AboutToExpire]: goWarningState,
-		[SessionStatus.Extended]: goExtendedState,
-		[SessionStatus.Expired]: goExpiredState,
-		[SessionStatus.Error]: goErrorState,
+	const stateFunctions: Record<SessionStatus, () => Promise<void> | void> = {
+		[SessionStatus.Started]: setStartedState,
+		[SessionStatus.AboutToExpire]: setAboutToExpireState,
+		[SessionStatus.Extended]: setExtendedState,
+		[SessionStatus.Expired]: setExpiredState,
+		[SessionStatus.Error]: setErrorState,
 	};
 
-	watch(sessionStatus, async (newStatus, oldStatus) => {
-		if (newStatus !== oldStatus && newStatus !== null) {
-			await map[newStatus]();
-		}
-	});
+	// set a state and call the corresponding function without broadcasting
+	const setState = async (status: SessionStatus) => {
+		if (sessionStatus.value === status) return;
 
+		const stateFunction = stateFunctions[status];
+		if (stateFunction) {
+			await stateFunction();
+		} else {
+			logger.warn("Unknown session status:", status);
+		}
+	};
+
+	// set a state and broadcast the new state to other tabs
+	const goToState = async (status: SessionStatus) => {
+		if (sessionStatus.value === status) return;
+
+		await setState(status);
+		broadcastState();
+	};
+
+	// call the server to receive the remaining time to live of the JWT
 	const updateRemainingTime = async (retryCount = 0): Promise<void> => {
 		const { result, error } = await execute(() => $axios.get(JWT_TIMER_ENDPOINT));
 
@@ -141,13 +164,36 @@ export const useAutoLogout = () => {
 			return;
 		}
 
-		if (result.data.ttl === undefined) {
-			// No TTL was transmitted
-			return;
+		if (result.data.ttl) {
+			remainingTimeInSeconds.value = result.data.ttl;
+		}
+	};
+
+	// --- Broadcast Session Status Changes ---
+
+	const sessionBroadcast = useBroadcastChannel({ name: "user-session-channel" });
+
+	const broadcastState = () => {
+		sessionBroadcast.post(`${sessionStatus.value ?? ""}:${remainingTimeInSeconds.value ?? "0"}`);
+	};
+
+	// handle incoming broadcast messages to sync session status across tabs
+	watch(sessionBroadcast.data, (message) => {
+		logger.log("Received broadcast message:", message);
+		if (message === "logout") {
+			setState(SessionStatus.Expired);
+			globalThis.location.assign("/logout");
 		}
 
-		remainingTimeInSeconds.value = result.data.ttl;
-	};
+		if (typeof message === "string" && message.includes(":")) {
+			const [status, time] = message.split(":");
+			const timeInSeconds = Number.parseInt(time, 10);
+			if (!Number.isNaN(timeInSeconds)) {
+				remainingTimeInSeconds.value = timeInSeconds;
+			}
+			setState(status as SessionStatus);
+		}
+	});
 
 	// --- Helpers ---
 

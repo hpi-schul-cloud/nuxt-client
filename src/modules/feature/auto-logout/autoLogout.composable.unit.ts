@@ -7,6 +7,7 @@ import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { type Ref, ref } from "vue";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -14,6 +15,31 @@ vi.mock("@/utils/api", () => ({
 		post: vi.fn(),
 	},
 }));
+
+const broadcastDataRef: Ref<string | undefined> = ref(undefined);
+const broadcastPostMock = vi.fn();
+const broadcastChannelMock = ref({
+	addEventListener: vi.fn(),
+	removeEventListener: vi.fn(),
+	postMessage: vi.fn(),
+	close: vi.fn(),
+});
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useBroadcastChannel: () => ({
+			data: broadcastDataRef,
+			post: broadcastPostMock,
+			error: ref(null),
+			isSupported: ref(true),
+			isClosed: ref(false),
+			close: vi.fn(),
+			channel: broadcastChannelMock,
+		}),
+	};
+});
 
 vi.useFakeTimers();
 vi.spyOn(globalThis, "setInterval");
@@ -34,7 +60,9 @@ const advanceTimersBySeconds = async (seconds: number) => {
 
 describe("useAutoLogout", () => {
 	beforeEach(() => {
+		vi.clearAllMocks();
 		vi.clearAllTimers();
+		broadcastDataRef.value = undefined;
 	});
 
 	afterEach(() => {
@@ -327,14 +355,16 @@ describe("useAutoLogout", () => {
 
 			it("should call logout on app store", async () => {
 				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 2 };
-				const { sessionStatus } = setupAndCreateSession(options);
+				const { sessionStatus, axiosMock } = setupAndCreateSession(options);
 				const appStore = useAppStore();
 				vi.spyOn(appStore, "logout");
+				globalThis.fetch = vi.fn();
+				axiosMock.get.mockResolvedValue(createResponse(200));
 
 				await advanceTimersBySeconds(3);
 
 				expect(sessionStatus.value).toBe(SessionStatus.Expired);
-				expect(appStore.logout).toHaveBeenCalled();
+				expect(globalThis.fetch).toHaveBeenCalledWith("/logout");
 			});
 		});
 
@@ -373,6 +403,126 @@ describe("useAutoLogout", () => {
 				await extendSession();
 
 				expect(showDialog.value).toBe(false);
+			});
+		});
+	});
+
+	describe("BroadcastChannel communication", () => {
+		describe("when state changes", () => {
+			it("should broadcast state when session is created", async () => {
+				const { createSession } = setup();
+
+				createSession();
+				await flushPromises();
+
+				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("started:"));
+			});
+
+			it("should broadcast state when session is extended", async () => {
+				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 10 };
+				const { extendSession, axiosMock } = setupAndCreateSession(options);
+
+				axiosMock.get.mockResolvedValue(createResponse(200));
+				axiosMock.post.mockResolvedValue(createResponse(200));
+
+				await extendSession();
+				await flushPromises();
+
+				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("extended:"));
+			});
+
+			it("should broadcast state when session expires", async () => {
+				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 1 };
+				setupAndCreateSession(options);
+
+				await advanceTimersBySeconds(2);
+
+				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("expired:"));
+			});
+		});
+
+		describe("when receiving a 'logout' message from another tab", () => {
+			it("should set session status to Expired", async () => {
+				const { sessionStatus, createSession } = setup();
+				createSession();
+
+				// Simulate receiving logout message from another tab
+				broadcastDataRef.value = "logout";
+				await flushPromises();
+
+				expect(sessionStatus.value).toBe(SessionStatus.Expired);
+			});
+
+			it("should redirect to /logout", async () => {
+				const locationAssignMock = vi.fn();
+				vi.stubGlobal("location", { assign: locationAssignMock });
+				const { createSession } = setup();
+				createSession();
+
+				broadcastDataRef.value = "logout";
+				await flushPromises();
+
+				expect(locationAssignMock).toHaveBeenCalledWith("/logout");
+			});
+		});
+
+		describe("when receiving a state sync message from another tab", () => {
+			it("should update remainingTimeInSeconds from the message", async () => {
+				const { remainingTimeInSeconds, createSession } = setup();
+				createSession();
+
+				broadcastDataRef.value = "started:500";
+				await flushPromises();
+
+				expect(remainingTimeInSeconds.value).toBe(500);
+			});
+
+			it("should update sessionStatus from the message", async () => {
+				const { sessionStatus, createSession } = setup();
+				createSession();
+
+				broadcastDataRef.value = "aboutToExpire:30";
+				await flushPromises();
+
+				expect(sessionStatus.value).toBe(SessionStatus.AboutToExpire);
+			});
+
+			it("should handle Extended status from another tab", async () => {
+				const { sessionStatus, remainingTimeInSeconds, createSession } = setup();
+				createSession();
+
+				broadcastDataRef.value = "extended:7200";
+				await flushPromises();
+
+				expect(sessionStatus.value).toBe(SessionStatus.Extended);
+				expect(remainingTimeInSeconds.value).toBe(7200);
+			});
+
+			it("should ignore invalid time values in the message", async () => {
+				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 100 };
+				const { remainingTimeInSeconds, createSession } = setup(options);
+				createSession();
+				remainingTimeInSeconds.value = 100;
+
+				broadcastDataRef.value = "started:invalid";
+				await flushPromises();
+
+				// Should not change since "invalid" is not a number
+				expect(remainingTimeInSeconds.value).toBe(100);
+			});
+
+			it("should ignore messages without colon separator", async () => {
+				const options = { jwtTtl: 100, showWarningTime: 50, remainingTimeInSeconds: 100 };
+				const { sessionStatus, remainingTimeInSeconds, createSession } = setup(options);
+				createSession();
+				const initialStatus = sessionStatus.value;
+				remainingTimeInSeconds.value = 100;
+
+				broadcastDataRef.value = "someinvalidmessage";
+				await flushPromises();
+
+				expect(sessionStatus.value).toBe(initialStatus);
+				expect(remainingTimeInSeconds.value).toBe(100);
 			});
 		});
 	});
