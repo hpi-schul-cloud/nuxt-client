@@ -3,8 +3,9 @@ import { useCardStore } from "../Card.store";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { Action } from "@/types/board/ActionFactory";
 import { $axios } from "@/utils/api";
-import { notifyError, notifySuccess, useAppStoreRefs } from "@data-app";
+import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { useTimeoutFn } from "@vueuse/shared";
 import { io, type Socket } from "socket.io-client";
@@ -32,7 +33,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
 
-	const { isJwtExpired } = useAppStoreRefs();
+	const { isJwtExpired } = useSessionBroadcast();
 
 	const getConnectedSocket = () => {
 		if (instance === null && isJwtExpired.value === false) {

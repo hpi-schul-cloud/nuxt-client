@@ -1,4 +1,4 @@
-import { useAppStore } from "./application.store";
+import { useAppStore, useAppStoreRefs } from "./application.store";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -18,11 +18,16 @@ import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
+import { ref } from "vue";
+
+const mockBroadcastData = ref<string | null>(null);
+const mockBroadcastIsClosed = ref(false);
 
 const mockBroadcastChannel = {
 	post: vi.fn(),
 	close: vi.fn(),
-	data: { value: null as string | null },
+	isClosed: mockBroadcastIsClosed,
+	data: mockBroadcastData,
 	channel: {
 		value: {
 			addEventListener: vi.fn(),
@@ -52,6 +57,9 @@ describe("useApplicationStore", () => {
 		vi.clearAllMocks();
 
 		mockBroadcastChannel.data.value = null;
+
+		// Reset shared isJwtExpired state from sessionBroadcast
+		useAppStore().setJwtExpired(false);
 
 		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
@@ -108,6 +116,10 @@ describe("useApplicationStore", () => {
 			expect(useAppStore().isTeacher).toBe(false);
 			expect(useAppStore().isStudent).toBe(false);
 			expect(useAppStore().isExternalPerson).toBe(false);
+		});
+
+		it("should have isJwtExpired as false initially", () => {
+			expect(useAppStore().isJwtExpired).toBe(false);
 		});
 
 		it("should return correct computed from meResponse", async () => {
@@ -244,6 +256,16 @@ describe("useApplicationStore", () => {
 			expect(mockBroadcastChannel.post).toHaveBeenCalledWith("logout");
 		});
 
+		it("should call sendLogout before clearing session and redirecting", () => {
+			const postCallOrder: string[] = [];
+			mockBroadcastChannel.post.mockImplementation(() => postCallOrder.push("post"));
+			mockBroadcastChannel.close.mockImplementation(() => postCallOrder.push("close"));
+
+			useAppStore().logout();
+
+			expect(postCallOrder).toEqual(["post", "close"]);
+		});
+
 		it("should clean up to ensure garbage collection pristine storage", () => {
 			useAppStore().logout();
 
@@ -343,68 +365,201 @@ describe("useApplicationStore", () => {
 		});
 	});
 
-	describe("Broadcast Channel", () => {
-		describe("when the store is initialized", () => {
-			it("should setup event listener on broadcast channel", () => {
-				useAppStore();
+	describe("setJwtExpired action", () => {
+		it("should set isJwtExpired to true by default", () => {
+			const store = useAppStore();
+			expect(store.isJwtExpired).toBe(false);
 
-				expect(mockBroadcastChannel.channel.value.addEventListener).toHaveBeenCalledWith(
-					"message",
-					expect.any(Function)
-				);
+			store.setJwtExpired();
+
+			expect(store.isJwtExpired).toBe(true);
+		});
+
+		it("should set isJwtExpired to the provided value", () => {
+			const store = useAppStore();
+
+			store.setJwtExpired(true);
+			expect(store.isJwtExpired).toBe(true);
+
+			store.setJwtExpired(false);
+			expect(store.isJwtExpired).toBe(false);
+		});
+	});
+
+	describe("Broadcast Channel", () => {
+		beforeEach(() => {
+			useAppStore().setJwtExpired(false);
+		});
+
+		describe("onLogoutEvent registration", () => {
+			it("should register a logout event handler that sets isJwtExpired", async () => {
+				const store = useAppStore();
+				expect(store.isJwtExpired).toBe(false);
+
+				// Trigger the onLogoutEvent callback by sending logout via broadcast
+				mockBroadcastChannel.data.value = "logout";
+
+				await vi.waitFor(() => {
+					expect(store.isJwtExpired).toBe(true);
+				});
 			});
 		});
 
-		describe("when receiving messages via event listener", () => {
-			it("should set isJwtExpired to true when receiving logout message", () => {
+		describe("when receiving logout message via broadcast channel", () => {
+			it("should set isJwtExpired to true", async () => {
 				const store = useAppStore();
 				expect(store.isJwtExpired).toBe(false);
 
-				const eventHandler = vi
-					.mocked(mockBroadcastChannel.channel.value.addEventListener)
-					.mock.calls.find(([eventType]) => eventType === "message")?.[1];
+				// Simulate receiving a logout message via the broadcast channel data
+				mockBroadcastChannel.data.value = "logout";
 
-				expect(eventHandler).toBeDefined();
-
-				const logoutEvent = {
-					data: "logout",
-					type: "message",
-					target: mockBroadcastChannel.channel.value,
-				};
-
-				if (eventHandler) {
-					eventHandler(logoutEvent);
-				}
-
-				expect(store.isJwtExpired).toBe(true);
-			});
-
-			it("should not change isJwtExpired when receiving non-logout messages", () => {
-				const store = useAppStore();
-				expect(store.isJwtExpired).toBe(false);
-
-				const eventHandler = vi
-					.mocked(mockBroadcastChannel.channel.value.addEventListener)
-					.mock.calls.find(([eventType]) => eventType === "message")?.[1];
-
-				expect(eventHandler).toBeDefined();
-
-				const testMessages = ["login", "change-language", ""];
-
-				testMessages.forEach((message) => {
-					const messageEvent = {
-						data: message,
-						type: "message",
-						target: mockBroadcastChannel.channel.value,
-					};
-
-					if (eventHandler) {
-						eventHandler(messageEvent);
-					}
-
-					expect(store.isJwtExpired).toBe(false);
+				// Wait for the watch to trigger
+				await vi.waitFor(() => {
+					expect(store.isJwtExpired).toBe(true);
 				});
 			});
+		});
+
+		describe("when receiving non-logout messages via broadcast channel", () => {
+			it("should not change isJwtExpired", async () => {
+				const store = useAppStore();
+				expect(store.isJwtExpired).toBe(false);
+
+				const testMessages = ["login", "change-language", "started:100"];
+
+				for (const message of testMessages) {
+					mockBroadcastChannel.data.value = message;
+					await Promise.resolve();
+					expect(store.isJwtExpired).toBe(false);
+				}
+			});
+		});
+	});
+
+	describe("externalLogout action", () => {
+		beforeEach(() => {
+			initializeAxios({
+				defaults: {
+					headers: {
+						common: {
+							Authorization: "",
+						},
+					},
+				},
+			} as AxiosInstance);
+		});
+
+		it("should redirect to external logout URL", () => {
+			Object.defineProperty(globalThis, "location", {
+				value: { replace: vi.fn() },
+				writable: true,
+			});
+
+			useAppStore().externalLogout();
+			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout/external");
+		});
+	});
+
+	describe("clearApplicationError action", () => {
+		it("should clear the application error", () => {
+			const store = useAppStore();
+			store.handleApplicationError(HttpStatusCode.BadRequest);
+
+			expect(store.applicationError).toBeDefined();
+
+			store.clearApplicationError();
+
+			expect(store.applicationError).toBeUndefined();
+		});
+	});
+
+	describe("handleUnauthorizedError action", () => {
+		beforeEach(() => {
+			useAppStore().setJwtExpired(false);
+		});
+
+		it("should not set jwt expired for non-axios errors", async () => {
+			const store = useAppStore();
+
+			await store.handleUnauthorizedError(new Error("regular error"));
+
+			expect(store.isJwtExpired).toBe(false);
+		});
+
+		it("should not set jwt expired for non-401 axios errors", async () => {
+			const store = useAppStore();
+			const { AxiosError } = await import("axios");
+			const axiosError = new AxiosError("error", "500", undefined, undefined, {
+				status: HttpStatusCode.InternalServerError,
+			} as never);
+
+			await store.handleUnauthorizedError(axiosError);
+
+			expect(store.isJwtExpired).toBe(false);
+		});
+
+		it("should not set jwt expired when ttl is greater than 0", async () => {
+			const store = useAppStore();
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockResolvedValue({ data: { ttl: 100 } }),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await store.handleUnauthorizedError(axiosError);
+
+			expect(store.isJwtExpired).toBe(false);
+		});
+
+		it("should set jwt expired when ttl is 0", async () => {
+			const store = useAppStore();
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockResolvedValue({ data: { ttl: 0 } }),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await store.handleUnauthorizedError(axiosError);
+
+			expect(store.isJwtExpired).toBe(true);
+		});
+
+		it("should set jwt expired when jwt timer request fails", async () => {
+			const store = useAppStore();
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockRejectedValue(new Error("Network error")),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await store.handleUnauthorizedError(axiosError);
+
+			expect(store.isJwtExpired).toBe(true);
+		});
+	});
+
+	describe("useAppStoreRefs", () => {
+		it("should return refs to store properties", () => {
+			const refs = useAppStoreRefs();
+
+			expect(refs.isLoggedIn).toBeDefined();
+			expect(refs.locale).toBeDefined();
+			expect(refs.userRoles).toBeDefined();
 		});
 	});
 });

@@ -37,11 +37,17 @@
 
 import { SessionState } from "./types";
 import { logger } from "@util-logger";
-import { useBroadcastChannel } from "@vueuse/core";
-import { onUnmounted, watch } from "vue";
+import { tryOnScopeDispose, useBroadcastChannel } from "@vueuse/core";
+import { readonly, ref, watch } from "vue";
 
 const BROADCAST_CHANNEL_NAME = "user-session-channel";
 const BROADCAST_MESSAGE_LOGOUT = "logout";
+
+const isJwtExpired = ref(false);
+
+const setJwtExpired = (value = true) => {
+	isJwtExpired.value = value;
+};
 
 type LogoutHandler = () => void;
 
@@ -80,6 +86,7 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		logger.log("Received broadcast message:", message);
 
 		if (message === BROADCAST_MESSAGE_LOGOUT) {
+			setJwtExpired(true);
 			logoutHandlers.forEach((handler) => handler());
 
 			if (onLogoutReceived) {
@@ -103,11 +110,13 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		}
 	});
 
-	onUnmounted(() => {
+	tryOnScopeDispose(() => {
 		close();
 	});
 
 	return {
+		isJwtExpired: readonly(isJwtExpired),
+		setJwtExpired,
 		onLogoutEvent,
 		sendLogout,
 		sendStateAndTime,

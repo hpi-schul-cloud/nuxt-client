@@ -35,6 +35,9 @@ describe("useSessionBroadcast", () => {
 		vi.unstubAllGlobals();
 		broadcastDataRef.value = undefined;
 		broadcastIsClosedRef.value = false;
+		// Reset shared isJwtExpired state
+		const { setJwtExpired } = useSessionBroadcast();
+		setJwtExpired(false);
 	});
 
 	afterEach(() => {
@@ -197,6 +200,52 @@ describe("useSessionBroadcast", () => {
 
 			expect(eventHandler).toHaveBeenCalledOnce();
 			expect(optionHandler).toHaveBeenCalledOnce();
+		});
+	});
+
+	describe("isJwtExpired", () => {
+		it("should be false initially", () => {
+			const { isJwtExpired } = mountComposable(() => useSessionBroadcast());
+
+			expect(isJwtExpired.value).toBe(false);
+		});
+
+		it("should be set to true when logout message is received", async () => {
+			const { isJwtExpired } = mountComposable(() => useSessionBroadcast());
+
+			broadcastDataRef.value = "logout";
+			await flushPromises();
+
+			expect(isJwtExpired.value).toBe(true);
+		});
+
+		it("should not change for non-logout messages", async () => {
+			const { isJwtExpired } = mountComposable(() => useSessionBroadcast());
+
+			broadcastDataRef.value = "started:100";
+			await flushPromises();
+
+			expect(isJwtExpired.value).toBe(false);
+		});
+	});
+
+	describe("setJwtExpired", () => {
+		it("should set isJwtExpired to true by default", () => {
+			const { isJwtExpired, setJwtExpired } = mountComposable(() => useSessionBroadcast());
+
+			setJwtExpired();
+
+			expect(isJwtExpired.value).toBe(true);
+		});
+
+		it("should set isJwtExpired to the provided value", () => {
+			const { isJwtExpired, setJwtExpired } = mountComposable(() => useSessionBroadcast());
+
+			setJwtExpired(true);
+			expect(isJwtExpired.value).toBe(true);
+
+			setJwtExpired(false);
+			expect(isJwtExpired.value).toBe(false);
 		});
 	});
 });

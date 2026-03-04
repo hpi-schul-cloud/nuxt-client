@@ -31,7 +31,8 @@
  * ```
  */
 
-import { computed, onUnmounted, readonly, ref } from "vue";
+import { tryOnScopeDispose } from "@vueuse/core";
+import { computed, readonly, ref } from "vue";
 
 export const useCountdownTimer = (handleTimerTick: () => void) => {
 	const remainingTimeInSeconds = ref(0);
@@ -58,7 +59,7 @@ export const useCountdownTimer = (handleTimerTick: () => void) => {
 		remainingTimeInSeconds.value = seconds;
 	};
 
-	onUnmounted(() => {
+	tryOnScopeDispose(() => {
 		stopTimer();
 	});
 

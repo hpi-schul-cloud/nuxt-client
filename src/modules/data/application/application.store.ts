@@ -20,15 +20,10 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const { sendLogout, close, onLogoutEvent } = useSessionBroadcast();
+	const { sendLogout, close, isJwtExpired, setJwtExpired } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
-	const isJwtExpired = ref(false);
-
-	onLogoutEvent(() => {
-		setJwtExpired();
-	});
 
 	const userLocale = ref<LanguageType>();
 	const meResponse = ref<MeResponse>();
@@ -84,10 +79,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const externalLogout = () => logout("/logout/external");
-
-	const setJwtExpired = (value = true) => {
-		isJwtExpired.value = value;
-	};
 
 	const updateUserLanguage = (language: LanguageType) =>
 		userApi
@@ -170,7 +161,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isTeacher,
 		isStudent,
 		isExternalPerson,
-		isJwtExpired: readonly(isJwtExpired),
+		isJwtExpired,
 		school,
 		userRoles,
 		systemId,
