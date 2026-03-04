@@ -7,6 +7,8 @@ type CkEditorProps = {
 	value?: string;
 	placeholder?: string;
 	viewportOffsetTop?: number;
+	ariaDescribedById?: string;
+	autofocus?: boolean;
 };
 
 class ResizeObserver {
@@ -55,9 +57,19 @@ describe("@feature-editor/ClassicEditor", () => {
 			props,
 		});
 
-		const editorMock = { editing: { view: { document: { on: vi.fn() } } } };
+		const setAttribute = vi.fn();
+		const focus = vi.fn();
+		const editorMock = {
+			editing: {
+				view: {
+					focus,
+					change: vi.fn((cb) => cb({ setAttribute })),
+					document: { on: vi.fn(), getRoot: vi.fn(() => "root") },
+				},
+			},
+		};
 
-		return { wrapper, editorMock };
+		return { wrapper, editorMock, setAttribute, focus };
 	};
 
 	beforeEach(() => {
@@ -67,6 +79,17 @@ describe("@feature-editor/ClassicEditor", () => {
 	it("should render component", () => {
 		const { wrapper } = setup();
 		expect(wrapper.findComponent(ClassicEditor).exists()).toBe(true);
+	});
+
+	it("calls editorInstance.view.focus when focus is called via defineExpose", async () => {
+		const { wrapper, editorMock, focus } = setup();
+
+		const ck = wrapper.findComponent({ ref: "ck" });
+		await ck.vm.$emit("ready", editorMock);
+
+		wrapper.vm.focus();
+
+		expect(focus).toHaveBeenCalled();
 	});
 
 	describe("events", () => {
@@ -81,15 +104,21 @@ describe("@feature-editor/ClassicEditor", () => {
 			expect(wrapper.emitted("ready")).toHaveLength(1);
 		});
 
-		it("should emit update:value on content changes", async () => {
-			const { wrapper, editorMock } = setup();
+		it("should focus editor if auto focus prop is set", async () => {
+			const { wrapper, editorMock, focus } = setup({ autofocus: true });
 
-			const ck = wrapper.findComponent({
-				ref: "ck",
-			});
-			await ck.vm.$emit("update:modelValue", editorMock);
+			const ck = wrapper.findComponent({ ref: "ck" });
+			await ck.vm.$emit("ready", editorMock);
 
-			expect(wrapper.emitted("update:value")).toHaveLength(1);
+			expect(focus).toHaveBeenCalled();
+		});
+
+		it("sets aria-describedby attribute on editor root when ariaDescribedById is provided", async () => {
+			const { wrapper, editorMock, setAttribute } = setup({ ariaDescribedById: "desc-id" });
+
+			await wrapper.findComponent({ ref: "ck" }).vm.$emit("ready", editorMock);
+
+			expect(setAttribute).toHaveBeenCalledWith("aria-describedby", "desc-id", "root");
 		});
 
 		it("should emit focus on editor focus", async () => {

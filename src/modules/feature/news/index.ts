@@ -1,3 +1,3 @@
-import FormNews from "./FormNews.vue";
+import NewsForm from "./NewsForm.vue";
 
-export { FormNews };
+export { NewsForm };
