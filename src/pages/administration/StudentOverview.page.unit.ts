@@ -1,25 +1,21 @@
-import TeacherPage from "./TeacherOverview.page.vue";
+import StudentPage from "./StudentOverview.page.vue";
 import AdminTableLegend from "@/components/administration/AdminTableLegend.vue";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
+import store from "@/plugins/store";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import {
-	createTestAppStore,
-	createTestAppStoreWithPermissions,
-	createTestEnvStore,
-	expectNotification,
-	userResponseFactory,
-} from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore, expectNotification, userResponseFactory } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useClasses } from "@data-classes";
 import { useUsers } from "@data-users";
+import { mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
@@ -27,19 +23,23 @@ import { flushPromises, RouterLinkStub, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
+import { useRouter } from "vue-router";
 import { VCheckbox } from "vuetify/components";
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 
 vi.mock("@ui-confirmation-dialog");
-vi.mocked(useConfirmationDialog);
+const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 vi.mock("@data-users/users.composable");
 const mockedUseUsers = vi.mocked(useUsers);
 
 vi.mock("@data-classes/classes.composable");
 const mockedUseClasses = vi.mocked(useClasses);
+
+vi.mock("vue-router");
+const useRouterMock = <Mock>useRouter;
 
 vi.mock("@util-browser");
 
@@ -53,7 +53,7 @@ function writableComputed<T>(initial: T) {
 	});
 }
 
-describe("teacher overview page", () => {
+describe("student overview page", () => {
 	let askConfirmationMock: Mock;
 
 	beforeEach(() => {
@@ -65,24 +65,39 @@ describe("teacher overview page", () => {
 			askConfirmationMock,
 		});
 
+		mockedUseRemoveConfirmationDialog.mockReturnValue({
+			askConfirmation: askConfirmationMock,
+			isDialogOpen: ref(false),
+		});
+
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
-
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		createTestAppStore({
-			me: {
-				school: mockSchool,
-				roles: [{ id: RoleName.Administrator, name: RoleName.Administrator }],
-				permissions: [Permission.TeacherCreate, Permission.TeacherDelete],
-			},
-		});
 
 		window.open = vi.fn();
 		window.scrollTo = vi.fn();
 	});
 
-	const setup = () => {
+	afterEach(() => {
+		vi.resetModules();
+	});
+
+	const setup = (options?: Partial<{ permissions: Permission[]; roleName: RoleName }>) => {
+		const { permissions, roleName } = {
+			permissions: options?.permissions ?? [],
+			roleName: options?.roleName ?? RoleName.Administrator,
+			...options,
+		};
+
+		createTestAppStore({
+			me: {
+				school: mockSchool,
+				roles: [{ id: roleName, name: roleName }],
+				permissions: permissions,
+			},
+		});
+
 		const useFilterLocalStorageMockReturn: ReturnType<typeof useFilterLocalStorage> = {
 			currentFilterQuery: writableComputed({}),
 			page: writableComputed(1),
@@ -120,9 +135,12 @@ describe("teacher overview page", () => {
 		};
 		mockedUseUsers.mockReturnValue(useUserMock);
 
-		const wrapper = mount(TeacherPage, {
+		useRouterMock.mockReturnValue({
+			push: vi.fn(),
+		});
+		const wrapper = mount(StudentPage, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingVuetify(), createTestingI18n(), store],
 				stubs: { RouterLink: RouterLinkStub },
 			},
 		});
@@ -135,10 +153,6 @@ describe("teacher overview page", () => {
 			firstUser: userResponseList[0],
 		};
 	};
-
-	afterEach(() => {
-		vi.resetModules();
-	});
 
 	it("should render the component", () => {
 		const { wrapper } = setup();
@@ -181,7 +195,7 @@ describe("teacher overview page", () => {
 
 		it("should call delete users, notify success and refresh the user list", async () => {
 			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, useUserMock, firstUser } = setup();
+			const { wrapper, useUserMock, firstUser } = setup({ permissions: [Permission.StudentDelete] });
 
 			await openContextMenu(wrapper, 0);
 
@@ -200,7 +214,7 @@ describe("teacher overview page", () => {
 
 		it("should notify error when delete users fails", async () => {
 			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, firstUser, useUserMock } = setup();
+			const { wrapper, useUserMock, firstUser } = setup({ permissions: [Permission.StudentDelete] });
 			(useUserMock.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
 
 			await openContextMenu(wrapper, 0);
@@ -264,14 +278,13 @@ describe("teacher overview page", () => {
 	it("should display the same number of elements as in the mockData object", () => {
 		const { wrapper, useUserMock } = setup();
 
-		const table = wrapper.find(`[data-testid="teachers_table"]`).findComponent(BackendDataTable);
+		const table = wrapper.find(`[data-testid="students_table"]`).findComponent(BackendDataTable);
 		expect(table.props("data")).toHaveLength(useUserMock.userList.value.length);
 	});
 
 	it("should display the columns behind the migration feature flag", () => {
 		createTestEnvStore({ FEATURE_USER_LOGIN_MIGRATION_ENABLED: true });
 		const { wrapper } = setup();
-
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
@@ -280,9 +293,11 @@ describe("teacher overview page", () => {
 	});
 
 	it("should not display the columns behind the migration feature flag", () => {
-		createTestEnvStore({ FEATURE_USER_LOGIN_MIGRATION_ENABLED: false });
-		const { wrapper } = setup();
+		createTestEnvStore({
+			FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
+		});
 
+		const { wrapper } = setup();
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
@@ -293,7 +308,7 @@ describe("teacher overview page", () => {
 	it("should display the edit button if school is not external", () => {
 		const { wrapper } = setup();
 
-		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(true);
 	});
 
@@ -301,43 +316,44 @@ describe("teacher overview page", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 		const { wrapper } = setup();
 
-		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(false);
 	});
 
 	it("editBtn's to property should have the expected URL", () => {
 		const { wrapper, firstUser } = setup();
-		const expectedURL = `/administration/teachers/${firstUser._id}/edit?returnUrl=/administration/teachers`;
+		const expectedURL = `/administration/students/${firstUser._id}/edit?returnUrl=/administration/students`;
 
-		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.attributes("href")).toStrictEqual(expectedURL);
 	});
 
-	it("should render the fab component if user has TEACHER_CREATE permission", () => {
-		const { wrapper } = setup();
+	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
+		const { wrapper } = setup({ permissions: [Permission.StudentCreate] });
 
-		const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(true);
 	});
 
-	it("should not render the fab component if user does not have TEACHER_CREATE permission", () => {
-		createTestAppStoreWithPermissions([]);
-		const { wrapper } = setup();
+	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
+		const { wrapper } = setup({ permissions: [Permission.StudentDelete], roleName: RoleName.Administrator });
 
-		const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	it("should not render the fab component if isExternal is true", () => {
+	it("should not render the fab-floating component if isExternal is true", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+
 		const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
+		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(false);
 	});
 
 	it("should render the adminTableLegend component when school is external", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+
 		const { wrapper } = setup();
 
 		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
@@ -353,11 +369,10 @@ describe("teacher overview page", () => {
 
 	describe("filtering", () => {
 		describe("when searchbar component's value change", () => {
-			it("should set searchQuery and fetch filtered teachers", async () => {
+			it("should set search query and fetch filtered users", async () => {
 				const { wrapper, useFilterLocalStorageMockReturn, useUserMock } = setup();
 
 				const searchBarInput = wrapper.findComponent(SvsSearchField);
-
 				await searchBarInput.setValue("abc");
 				await flushPromises();
 
@@ -368,7 +383,7 @@ describe("teacher overview page", () => {
 		});
 
 		describe("when table filter options change", () => {
-			it("should fetch filtered teachers", async () => {
+			it("should set filter query and fetch filtered users", async () => {
 				const { wrapper, useFilterLocalStorageMockReturn, useUserMock } = setup();
 
 				const filterComponent = wrapper.findComponent(DataFilter);
@@ -387,7 +402,7 @@ describe("teacher overview page", () => {
 		});
 
 		describe("when table sorting options change", () => {
-			it("should fetch filtered teachers", async () => {
+			it("should fetch filtered users", async () => {
 				const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
 
 				const tableComponent = wrapper.findComponent(BackendDataTable);
@@ -406,7 +421,7 @@ describe("teacher overview page", () => {
 		});
 
 		describe("when table pagination options change", () => {
-			it("should fetch filtered teachers when rows per page changes", async () => {
+			it("should fetch filtered users when rows per page changes", async () => {
 				const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
 
 				const tableComponent = wrapper.findComponent(BackendDataTable);
@@ -422,7 +437,7 @@ describe("teacher overview page", () => {
 				expect(useUserMock.fetchUsers).toHaveBeenCalled();
 			});
 
-			it("should fetch filtered teachers when page changes", async () => {
+			it("should fetch filtered users when page changes", async () => {
 				const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
 
 				const tableComponent = wrapper.findComponent(BackendDataTable);
@@ -449,9 +464,34 @@ describe("teacher overview page", () => {
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		createTestEnvStore({ ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
+
+		const { wrapper } = setup();
+		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
+		expect(adminTableLegend.props().showIcons).toBe(true);
+	});
+
+	it("should not display consent warning icon if FEATURE_CONSENT_NECESSARY is false", () => {
+		createTestEnvStore({
+			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+			FEATURE_CONSENT_NECESSARY: false,
+		});
+
 		const { wrapper } = setup();
 
 		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
-		expect(adminTableLegend.props().showIcons).toBe(true);
+		const icons = adminTableLegend.props().icons;
+
+		expect(icons).toStrictEqual([
+			{
+				icon: mdiCheckAll,
+				color: "success",
+				label: "pages.administration.students.legend.icon.success",
+			},
+			{
+				icon: mdiClose,
+				color: "error",
+				label: "utils.adminFilter.consent.label.missing",
+			},
+		]);
 	});
 });
