@@ -20,13 +20,13 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const logoutBroadcast = useBroadcastChannel({ name: "logout-channel" });
+	const sessionBroadcast = useBroadcastChannel({ name: "user-session-channel" });
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
 	const isJwtExpired = ref(false);
 
-	logoutBroadcast.channel.value?.addEventListener("message", (event) => {
+	sessionBroadcast.channel.value?.addEventListener("message", (event) => {
 		if (event.data === "logout") {
 			setJwtExpired();
 		}
@@ -68,17 +68,27 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
-		logoutBroadcast.post("logout");
-		logoutBroadcast.close();
+		sessionBroadcast.post("logout");
+		clearUserSession();
+		globalThis.location.replace(redirectUrl);
+	};
+
+	const clearUserSession = () => {
+		logger.log("logoutWithoutRedirect");
 		localStorage.clear();
+		sessionStorage.clear();
+
+		document.cookie.split(";").forEach(function (c) {
+			document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+		});
 		delete $axios.defaults.headers.common["Authorization"];
-		window.location.replace(redirectUrl);
+		sessionBroadcast.close();
 	};
 
 	const externalLogout = () => logout("/logout/external");
 
-	const setJwtExpired = () => {
-		isJwtExpired.value = true;
+	const setJwtExpired = (value = true) => {
+		isJwtExpired.value = value;
 	};
 
 	const updateUserLanguage = (language: LanguageType) =>
@@ -168,6 +178,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		systemId,
 		login,
 		logout,
+		clearUserSession,
 		externalLogout,
 		setJwtExpired,
 		updateUserLanguage,
