@@ -3,11 +3,11 @@ import { LanguageType } from "@/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { nextTick } from "vue";
 
 describe("date-time-composable", () => {
-	beforeEach(() => {
+	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 	});
 

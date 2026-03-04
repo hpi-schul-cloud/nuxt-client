@@ -32,8 +32,8 @@
 <script>
 import FormCreateUser from "@/components/administration/FormCreateUser.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { inputRangeDate } from "@/plugins/datetime.ts";
 import { RoleName } from "@/serverApi/v3";
+import { dateFromToday } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
 import { DatePicker } from "@ui-date-time-picker";
@@ -58,8 +58,8 @@ export default defineComponent({
 			birthday: null,
 			date: null,
 			menu: false,
-			minDate: inputRangeDate(-100, "y"),
-			maxDate: inputRangeDate(-4, "y"),
+			minDate: dateFromToday(-100, "year"),
+			maxDate: dateFromToday(-4, "year"),
 			sendRegistration: false,
 			breadcrumbs: [
 				{

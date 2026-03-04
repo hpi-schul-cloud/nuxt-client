@@ -1,70 +1,11 @@
+import { createTestableGlobaleState } from "@/utils/create-global-state";
+import { DATE_REGEX_PATTERNS, getLocaleFormats } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import relativeTime from "dayjs/plugin/relativeTime";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
-dayjs.extend(customParseFormat);
-dayjs.extend(localizedFormat);
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-
-/**
- * Central format definitions per locale.
- * All date/time formatting, parsing, placeholders, and masks are derived from these.
- */
-const LOCALE_FORMATS = {
-	de: {
-		date: "DD.MM.YYYY",
-		dateTime: "DD.MM.YYYY HH:mm",
-		dateTimeYY: "DD.MM.YY HH:mm",
-		dateYY: "DD.MM.YY",
-		time: "HH:mm",
-		placeholder: { day: "TT", month: "MM", year: "JJJJ" },
-	},
-	// refers to en-gb
-	en: {
-		date: "DD/MM/YYYY",
-		dateTime: "DD/MM/YYYY HH:mm",
-		dateTimeYY: "DD/MM/YY HH:mm",
-		dateYY: "DD/MM/YY",
-		time: "HH:mm",
-		placeholder: { day: "DD", month: "MM", year: "YYYY" },
-	},
-	es: {
-		date: "DD/MM/YYYY",
-		dateTime: "DD/MM/YYYY HH:mm",
-		dateTimeYY: "DD/MM/YY HH:mm",
-		dateYY: "DD/MM/YY",
-		time: "HH:mm",
-		placeholder: { day: "DD", month: "MM", year: "AAAA" },
-	},
-	uk: {
-		date: "DD.MM.YYYY",
-		dateTime: "DD.MM.YYYY HH:mm",
-		dateTimeYY: "DD.MM.YY HH:mm",
-		dateYY: "DD.MM.YY",
-		time: "HH:mm",
-		placeholder: { day: "ДД", month: "ММ", year: "РРРР" },
-	},
-} as const;
-
-type LocaleKey = keyof typeof LOCALE_FORMATS;
-
-const DATE_REGEX_PATTERNS: Record<string, string> = {
-	D: "(0[1-9]|[12]\\d|3[01])",
-	M: "(0[1-9]|1[0-2])",
-	Y: "\\d{4}",
-};
-
-const getLocaleFormats = (locale: string) => LOCALE_FORMATS[locale as LocaleKey] ?? LOCALE_FORMATS.de;
-
-export const useLocalizedDateTime = () => {
+export const useLocalizedDateTime = createTestableGlobaleState(() => {
 	const locale = storeToRefs(useAppStore()).locale;
 
 	const formats = computed(() => getLocaleFormats(locale.value));
@@ -102,7 +43,7 @@ export const useLocalizedDateTime = () => {
 		locale,
 		formats,
 	};
-};
+});
 
 export const useDateConversion = () => {
 	const { formats } = useLocalizedDateTime();

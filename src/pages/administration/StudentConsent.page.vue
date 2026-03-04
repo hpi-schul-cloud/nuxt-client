@@ -45,8 +45,8 @@
 							hide-details
 							hide-icon
 							density="compact"
-							:min-date="inputRangeDate(-100, 'y')"
-							:max-date="inputRangeDate(-4, 'y')"
+							:min-date="dateFromToday(-100, 'year')"
+							:max-date="dateFromToday(-4, 'year')"
 							data-testid="birthday-input"
 							@update:date="
 								inputDate({
@@ -240,8 +240,8 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { useDateConversion } from "@/composables/date-time.composables.ts";
 import { inputDateFormat, inputDateFromDeUTC } from "@/plugins/datetime.ts";
-import { inputRangeDate } from "@/plugins/datetime.ts";
 import { filePathsModule } from "@/store";
+import { dateFromToday } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -389,6 +389,7 @@ export default defineComponent({
 		document.title = buildPageTitle(this.title);
 	},
 	methods: {
+		dateFromToday,
 		async find() {
 			const query = {
 				$sort: {
@@ -512,7 +513,6 @@ export default defineComponent({
 		},
 		inputDateFromDeUTC,
 		inputDateFormat,
-		inputRangeDate,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.
