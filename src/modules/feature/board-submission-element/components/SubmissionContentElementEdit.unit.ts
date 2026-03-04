@@ -2,7 +2,6 @@ import { TeacherSubmission } from "../types/submission";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { DateTimePicker } from "@ui-date-time-picker";
 import { shallowMount } from "@vue/test-utils";
 
 const mockedSubmissions: TeacherSubmission[] = [
@@ -39,14 +38,6 @@ describe("SubmissionContentElementEdit", () => {
 
 		const submissionContentElement = wrapper.findComponent(SubmissionContentElementEdit);
 		expect(submissionContentElement.exists()).toBe(true);
-	});
-
-	it("should render DateTimePicker", () => {
-		const { wrapper } = setup();
-
-		const dateTimePicker = wrapper.findComponent(DateTimePicker);
-
-		expect(dateTimePicker.exists()).toBe(true);
 	});
 
 	it("should hand over submissions prop to SubmissionItemsTeacherDisplay", () => {

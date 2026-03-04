@@ -587,8 +587,6 @@ export default {
 		"Der Titel eines interaktiven Lernelements konnte nicht geladen werden.",
 	"components.datePicker.validation.format": "Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
-	"components.dateTimePicker.messages.dateInPast": "Datum und Uhrzeit liegen in der Vergangenheit.",
-	"components.dateTimePicker.messages.dateRequired": "Uhrzeitangabe ohne Datum nicht möglich.",
 	"components.editor.fonts.colors.oliveGreen": "Olivgrün",
 	"components.editor.fonts.colors.indigo": "Indigo",
 	"components.editor.fonts.colors.darkPurple": "Dunkelviolett",

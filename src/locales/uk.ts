@@ -581,8 +581,6 @@ export default {
 		"Не вдалося завантажити назву інтерактивного навчального елемента.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
-	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
-	"components.dateTimePicker.messages.dateRequired": "Без дати неможливо вказати час.",
 	"components.editor.fonts.colors.oliveGreen": "Оливковий",
 	"components.editor.fonts.colors.indigo": "Індиго",
 	"components.editor.fonts.colors.darkPurple": "Темно-фіолетовий",

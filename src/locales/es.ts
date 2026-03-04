@@ -582,8 +582,6 @@ export default {
 		"No se pudo cargar el título de un elemento de aprendizaje interactivo.",
 	"components.datePicker.validation.format": "Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
-	"components.dateTimePicker.messages.dateInPast": "La fecha y la hora están en el pasado.",
-	"components.dateTimePicker.messages.dateRequired": "Sin fecha no es posible especificar la hora.",
 	"components.editor.fonts.colors.oliveGreen": "Verde Oliva",
 	"components.editor.fonts.colors.indigo": "Índigo",
 	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",

@@ -572,8 +572,6 @@ export default {
 		"The title of an interactive learning element could not be loaded.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
 	"components.datePicker.validation.required": "Please enter a date.",
-	"components.dateTimePicker.messages.dateInPast": "The date and time are in the past.",
-	"components.dateTimePicker.messages.dateRequired": "Time cannot be entered without a date.",
 	"components.editor.fonts.colors.oliveGreen": "Olive Green",
 	"components.editor.fonts.colors.indigo": "Indigo",
 	"components.editor.fonts.colors.darkPurple": "Dark Purple",
