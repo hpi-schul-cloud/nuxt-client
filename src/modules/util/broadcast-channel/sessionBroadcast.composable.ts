@@ -40,6 +40,7 @@ import { logger } from "@util-logger";
 import { tryOnScopeDispose, useBroadcastChannel } from "@vueuse/core";
 import { readonly, ref, watch } from "vue";
 
+// these constants are also used inside of the schulcloud-client to communicate logouts between both application parts
 const BROADCAST_CHANNEL_NAME = "user-session-channel";
 const BROADCAST_MESSAGE_LOGOUT = "logout";
 
@@ -71,14 +72,14 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		sessionBroadcast.post(BROADCAST_MESSAGE_LOGOUT);
 	};
 
+	const onLogoutEvent = (handler: LogoutHandler) => {
+		logoutHandlers.push(handler);
+	};
+
 	const close = () => {
 		if (sessionBroadcast.isClosed.value === false) {
 			sessionBroadcast.close();
 		}
-	};
-
-	const onLogoutEvent = (handler: LogoutHandler) => {
-		logoutHandlers.push(handler);
 	};
 
 	// handle incoming broadcast messages to sync session state across tabs
