@@ -10,15 +10,6 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
 
-vi.mock("vue-i18n", () => ({
-	useI18n: () => ({ t: (key: string) => key }),
-	createI18n: () => ({
-		global: {
-			t: (key: string) => key,
-		},
-	}),
-}));
-
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
 
