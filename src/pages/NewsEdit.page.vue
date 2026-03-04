@@ -1,5 +1,5 @@
 <template>
-	<div v-if="news">
+	<div v-if="currentNews">
 		<DefaultWireframe
 			:headline="t('pages.news.edit.title.default')"
 			:breadcrumbs="[
@@ -8,8 +8,8 @@
 					title: t('pages.news.title'),
 				},
 				{
-					to: `/news/${$route.params.id}`,
-					title: news.title,
+					to: `/news/${route.params.id}`,
+					title: currentNews.title,
 				},
 				{
 					title: t('pages.news.edit.title.default'),
@@ -18,95 +18,93 @@
 			]"
 			max-width="short"
 		>
-			<div>
-				<FormNews v-if="news" :news="news" @save="onSave" @delete="onDelete" @cancel="onCancel" />
-			</div>
+			<NewsForm
+				:title="currentNews.title"
+				:content="currentNews.content"
+				:display-at="currentNews.displayAt"
+				:status="status"
+				show-delete-button
+				@save="onSave"
+				@delete="onDelete"
+				@cancel="onCancel"
+			/>
 		</DefaultWireframe>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { News, PatchNewsPayload } from "@/store/types/news";
-import { injectStrict, NEWS_MODULE_KEY } from "@/utils/inject";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { AlertStatus, useNotificationStore } from "@data-app";
-import { FormNews } from "@feature-news";
+import { notifyError, notifySuccess } from "@data-app";
+import { NewsForm } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const newsModule = injectStrict(NEWS_MODULE_KEY);
-const news = ref<News | null>();
 
-const fetchNews = async () => {
-	await newsModule.fetchNews(route.params.id as string).then(() => {
-		news.value = newsModule.getCurrentNews;
-		setPageTitle();
-	});
-};
-fetchNews();
+const { execute, status } = useSafeAxiosTask();
+const currentNews = ref<NewsResponse | undefined>(undefined);
+const newsApi = NewsApiFactory(undefined, "/v3", $axios);
+
+onMounted(async () => {
+	const { result } = await execute(() => newsApi.newsControllerFindOne(route.params.id as string));
+	currentNews.value = result?.data;
+
+	setPageTitle();
+});
 
 const setPageTitle = () => {
 	let pageTitle = t("pages.news.edit.title.default");
-	if (news.value?.title) {
+	if (currentNews.value?.title) {
 		pageTitle = t("pages.news.edit.title", {
-			title: news.value?.title,
+			title: currentNews.value?.title,
 		});
 	}
 	useTitle(buildPageTitle(pageTitle));
 };
 
-const onSave = async (newsToPatch: Partial<PatchNewsPayload>) => {
-	if (!news.value?.id) {
-		showNotifier("error", "patch");
+const onSave = async (newsToPatch: UpdateNewsParams) => {
+	if (!currentNews.value?.id) {
+		notifyError(t("components.organisms.FormNews.error.patch"));
 		return;
 	}
 
-	try {
-		await newsModule.patchNews({
-			id: news.value.id,
-			title: newsToPatch.title,
-			content: newsToPatch.content,
-			displayAt: newsToPatch.displayAt,
-		});
+	const { result, success } = await execute(
+		() => newsApi.newsControllerUpdate(currentNews.value!.id, newsToPatch),
+		t("components.organisms.FormNews.error.patch")
+	);
+	if (!success) return;
 
-		showNotifier("success", "patch");
-
-		await router.push({ path: `/news/${news.value?.id}` });
-	} catch {
-		showNotifier("error", "patch");
-	}
+	notifySuccess(t("components.organisms.FormNews.success.patch"));
+	await router.push({ path: `/news/${result.data.id}` });
 };
 
 const onDelete = async () => {
-	if (!news.value?.id) {
-		showNotifier("error", "remove");
+	if (!currentNews.value?.id) {
+		notifyError(t("components.organisms.FormNews.error.remove"));
 		return;
 	}
+	const newsId = currentNews.value.id;
 
-	try {
-		await newsModule.removeNews(news.value.id);
-		showNotifier("success", "remove");
+	const { success } = await execute(
+		() => newsApi.newsControllerDelete(newsId),
+		t("components.organisms.FormNews.error.remove")
+	);
+	if (!success) return;
 
-		router.push({ path: "/news" });
-	} catch {
-		showNotifier("error", "remove");
-	}
+	currentNews.value = undefined;
+	notifySuccess(t("components.organisms.FormNews.success.remove"));
+	await router.push({ path: "/news" });
 };
 
 const onCancel = () => {
 	router.go(-1);
-};
-
-const showNotifier = (status: AlertStatus, method: "remove" | "patch") => {
-	useNotificationStore().notify({
-		text: t(`components.organisms.FormNews.${status}.${method}`),
-		status,
-	});
 };
 </script>
