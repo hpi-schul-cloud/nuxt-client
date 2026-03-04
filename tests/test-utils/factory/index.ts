@@ -61,8 +61,6 @@ export * from "./schoolExternalToolResponseFactory";
 export * from "./schoolExternalToolSaveFactory";
 export * from "./schoolFactory";
 export * from "./singleColumnBoardResponseFactory";
-export * from "./submissionItemResponseFactory";
-export * from "./submissionsResponseFactory";
 export * from "./taskResponseFactory";
 export * from "./timestampsResponseFactory";
 export * from "./toolConfigurationTemplateFactory";
