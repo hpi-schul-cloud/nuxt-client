@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { Permission, ShareTokenInfoResponse } from "@/serverApi/v3";
+import { ShareTokenInfoResponse } from "@/serverApi/v3";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
@@ -91,10 +91,7 @@ const isDialogOpen = defineModel("is-dialog-open", {
 });
 
 const availableRooms = computed(() =>
-	sortBy(
-		rooms.value?.filter((room) => room.permissions.includes(Permission.RoomEditContent)),
-		(r) => r.name
-	)
+	sortBy(rooms.value?.filter((room) => room.allowedOperations?.editContent ?? false) ?? [], (r) => r.name)
 );
 
 onBeforeMount(async () => {

@@ -363,7 +363,6 @@ export default {
 		fireAction(action) {
 			const selections = Object.keys(this.selectionKeys);
 			action.action(selections, this.SelectionType);
-			this.unselectAllRowsOfAllPages();
 		},
 	},
 };
