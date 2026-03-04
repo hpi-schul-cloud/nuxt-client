@@ -3,8 +3,8 @@ import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
+import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
-import { useBroadcastChannel } from "@vueuse/core";
 import axios, { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
@@ -20,16 +20,14 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const sessionBroadcast = useBroadcastChannel({ name: "user-session-channel" });
+	const { sendLogout, close, onLogoutEvent } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
 	const isJwtExpired = ref(false);
 
-	sessionBroadcast.channel.value?.addEventListener("message", (event) => {
-		if (event.data === "logout") {
-			setJwtExpired();
-		}
+	onLogoutEvent(() => {
+		setJwtExpired();
 	});
 
 	const userLocale = ref<LanguageType>();
@@ -68,7 +66,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
-		sessionBroadcast.post("logout");
+		sendLogout();
 		clearUserSession();
 		globalThis.location.replace(redirectUrl);
 	};
@@ -82,7 +80,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 			document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
 		});
 		delete $axios.defaults.headers.common["Authorization"];
-		sessionBroadcast.close();
+		close();
 	};
 
 	const externalLogout = () => logout("/logout/external");

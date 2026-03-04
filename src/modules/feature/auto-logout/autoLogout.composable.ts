@@ -1,10 +1,50 @@
+/**
+ * Composable for managing automatic session timeout and logout functionality.
+ * Handles session expiration warnings, session extension, and cross-tab synchronization.
+ *
+ * Uses environment variables for configuration:
+ * - JWT_TIMEOUT_SECONDS: Total session duration (default: 2 hours)
+ * - JWT_SHOW_TIMEOUT_WARNING_SECONDS: Time before expiry to show warning (default: 1 hour)
+ *
+ * @returns remainingTimeInSeconds - Readonly ref with remaining session time
+ * @returns remainingTimeInMinutes - Readonly ref with remaining time in minutes
+ * @returns sessionState - Current session state (Started, AboutToExpire, Extended, Expired, Error)
+ * @returns showDialog - Whether to display the timeout warning/expired dialog
+ * @returns createSession - Initialize and start the session timer
+ * @returns extendSession - Attempt to extend the current session
+ *
+ * @example Basic usage in a layout component:
+ * ```ts
+ * const {
+ *   showDialog,
+ *   sessionState,
+ *   remainingTimeInMinutes,
+ *   createSession,
+ *   extendSession,
+ * } = useAutoLogout();
+ *
+ * onMounted(() => {
+ *   createSession();
+ * });
+ * ```
+ *
+ * @example Handling session states:
+ * ```vue
+ * <AutoLogoutWarning
+ *   v-if="showDialog && sessionState === SessionState.AboutToExpire"
+ *   :remaining-minutes="remainingTimeInMinutes"
+ *   @extend="extendSession"
+ * />
+ * <LoggedOutDialog v-if="sessionState === SessionState.Expired" />
+ * ```
+ */
+
 import { useCountdownTimer } from "./countdownTimer.composable";
-import { useSessionBroadcast } from "./sessionBroadcast.composable";
-import { SessionState } from "./types";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { SessionState, useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { readonly, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -19,7 +59,6 @@ export const useAutoLogout = () => {
 	const { execute } = useSafeAxiosTask();
 
 	const showDialog = ref(false);
-	const errorOnExtend = ref(false);
 	const sessionState = ref<SessionState | null>(null);
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
@@ -68,7 +107,6 @@ export const useAutoLogout = () => {
 		sessionState.value = SessionState.Started;
 		setTime(SESSION_TIMEOUT);
 		showDialog.value = false;
-		errorOnExtend.value = false;
 	};
 
 	const setAboutToExpireState = async () => {
@@ -80,7 +118,6 @@ export const useAutoLogout = () => {
 	const setExtendedState = () => {
 		sessionState.value = SessionState.Extended;
 		showDialog.value = false;
-		errorOnExtend.value = false;
 		startTimer();
 		notify("success", t("feature-autoLogout.message.extending-session-success"));
 	};
@@ -97,7 +134,6 @@ export const useAutoLogout = () => {
 
 	const setErrorState = () => {
 		sessionState.value = SessionState.Error;
-		errorOnExtend.value = true;
 		stopTimer();
 		notify("error", t("feature-autoLogout.message.extending-session-failure"));
 	};
@@ -127,15 +163,13 @@ export const useAutoLogout = () => {
 		if (sessionState.value === state) return;
 
 		await setState(state);
-		sendState();
+		sendStateAndTime(sessionState.value, remainingTimeInSeconds.value);
 	};
 
 	// --- api interactions ---
 
 	const logoutUserSilently = async () => {
-		await fetch("/logout").catch((error) => {
-			logger.error("Error during logout fetch call:", error);
-		});
+		await fetch("/logout");
 	};
 
 	const extendSessionRequest = async () => {
@@ -157,14 +191,14 @@ export const useAutoLogout = () => {
 			return;
 		}
 
-		if (result.data.ttl) {
+		if (result?.data?.ttl) {
 			setTime(result.data.ttl);
 		}
 	};
 
 	// --- Broadcast Session State Changes ---
 
-	const { sendState } = useSessionBroadcast(sessionState, setState, countdownTimer);
+	const { sendStateAndTime } = useSessionBroadcast({ setState, setTime });
 
 	// --- Helpers ---
 
@@ -177,7 +211,6 @@ export const useAutoLogout = () => {
 	};
 
 	return {
-		errorOnExtend,
 		remainingTimeInSeconds: readonly(remainingTimeInSeconds),
 		remainingTimeInMinutes: readonly(remainingTimeInMinutes),
 		sessionState,

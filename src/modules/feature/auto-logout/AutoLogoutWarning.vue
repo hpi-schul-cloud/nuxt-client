@@ -22,18 +22,17 @@
 					</span>
 				</i18n-t>
 			</WarningAlert>
-			<img :src="image" class="w-75 d-block mx-auto" role="presentation" alt="" />
+			<img :src="SlothSvg" class="w-75 d-block mx-auto" role="presentation" alt="" />
 		</template>
 	</SvsDialog>
 </template>
 
 <script lang="ts" setup>
 import { useAutoLogout } from "../auto-logout/autoLogout.composable";
-import { SessionState } from "../auto-logout/types";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
-import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
+import { SessionState } from "@util-broadcast-channel";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -42,13 +41,7 @@ const router = useRouter();
 
 const { t } = useI18n();
 
-const { remainingTimeInMinutes, showDialog, errorOnExtend, sessionState, extendSession, createSession } =
-	useAutoLogout();
-
-const image = computed(() => {
-	if (errorOnExtend.value) return SlothErrorSvg;
-	return SlothSvg;
-});
+const { remainingTimeInMinutes, showDialog, sessionState, extendSession, createSession } = useAutoLogout();
 
 const isSessionEnded = computed(() => sessionState.value === SessionState.Expired);
 

@@ -1,11 +1,11 @@
 import { useAutoLogout } from "./autoLogout.composable";
 import AutoLogoutWarning from "./AutoLogoutWarning.vue";
-import { SessionState } from "./types";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
+import { SessionState } from "@util-broadcast-channel";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -203,34 +203,6 @@ describe("AutoLogoutWarning", () => {
 				dialog.vm.$emit("confirm");
 
 				expect(mockedUseAutoLogout().extendSession).toHaveBeenCalled();
-			});
-		});
-	});
-
-	describe("image", () => {
-		describe("when errorOnExtend is true", () => {
-			it("should display the error image", () => {
-				setup({
-					autoLogoutVariables: {
-						errorOnExtend: ref(true),
-					},
-				});
-
-				const img = document.body.querySelector("img");
-				expect(img?.getAttribute("src")).toContain("Sloth_error");
-			});
-		});
-
-		describe("when errorOnExtend is false", () => {
-			it("should display the default image", () => {
-				setup({
-					autoLogoutVariables: {
-						errorOnExtend: ref(false),
-					},
-				});
-
-				const img = document.body.querySelector("img");
-				expect(img?.getAttribute("src")).not.toContain("Sloth_error");
 			});
 		});
 	});

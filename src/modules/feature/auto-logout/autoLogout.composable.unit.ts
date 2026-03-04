@@ -62,10 +62,12 @@ describe("useAutoLogout", () => {
 		vi.clearAllMocks();
 		vi.clearAllTimers();
 		broadcastDataRef.value = undefined;
+		vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
+		vi.unstubAllGlobals();
 	});
 
 	const setup = (options: AutologoutTimers = {}) => {
@@ -106,10 +108,9 @@ describe("useAutoLogout", () => {
 
 	describe("initial state", () => {
 		it("should have the correct default values", () => {
-			const { showDialog, errorOnExtend, sessionState, remainingTimeInSeconds } = setup({});
+			const { showDialog, sessionState, remainingTimeInSeconds } = setup({});
 
 			expect(showDialog.value).toBe(false);
-			expect(errorOnExtend.value).toBe(false);
 			expect(sessionState.value).toBe(null);
 			expect(remainingTimeInSeconds.value).toBe(0);
 		});
@@ -235,17 +236,6 @@ describe("useAutoLogout", () => {
 					expect(sessionState.value).toBe(SessionState.Error);
 				});
 
-				it("should set errorOnExtend to true", async () => {
-					const options = { jwtTtl: 100, showWarningTime: 50 };
-					const { errorOnExtend, extendSession, axiosMock } = setupAndCreateSession(options);
-					axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
-
-					await extendSession();
-					await advanceTimersBySeconds(20);
-
-					expect(errorOnExtend.value).toBe(true);
-				});
-
 				it("should show error notification", async () => {
 					const options = { jwtTtl: 100, showWarningTime: 50 };
 					const { extendSession, axiosMock } = setupAndCreateSession(options);
@@ -344,7 +334,6 @@ describe("useAutoLogout", () => {
 				const { sessionState, axiosMock } = setupAndCreateSession(options);
 				const appStore = useAppStore();
 				vi.spyOn(appStore, "logout");
-				globalThis.fetch = vi.fn();
 				axiosMock.get.mockResolvedValue(createResponse(200));
 
 				await advanceTimersBySeconds(4);
@@ -365,18 +354,6 @@ describe("useAutoLogout", () => {
 				await extendSession();
 
 				expect(useNotificationStore().notify).toHaveBeenCalledWith(expect.objectContaining({ status: "success" }));
-			});
-
-			it("should reset errorOnExtend", async () => {
-				const options = { jwtTtl: 100, showWarningTime: 50 };
-				const { extendSession, errorOnExtend, axiosMock } = setupAndCreateSession(options);
-
-				axiosMock.get.mockResolvedValue(createResponse(200));
-				axiosMock.post.mockResolvedValue(createResponse(200));
-
-				await extendSession();
-
-				expect(errorOnExtend.value).toBe(false);
 			});
 
 			it("should hide the dialog", async () => {
