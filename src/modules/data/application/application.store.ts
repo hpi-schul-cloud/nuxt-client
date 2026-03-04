@@ -5,7 +5,6 @@ import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
-import axios, { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
 
@@ -20,7 +19,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
-	const { sendLogout, close, isJwtExpired, setJwtExpired } = useSessionBroadcast();
+	const { sendLogout, close } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
@@ -70,7 +69,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 		logger.log("logoutWithoutRedirect");
 		localStorage.clear();
 		sessionStorage.clear();
-
 		document.cookie.split(";").forEach(function (c) {
 			document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
 		});
@@ -134,22 +132,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 		applicationError.value = undefined;
 	};
 
-	const handleUnauthorizedError = async (error: unknown) => {
-		if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
-			try {
-				const pristineAxios = axios.create();
-				pristineAxios.defaults.baseURL = axios.defaults.baseURL;
-				const response = await pristineAxios.get("/v1/accounts/jwtTimer");
-				const ttl = response?.data?.ttl ?? 0;
-				if (ttl <= 0) {
-					setJwtExpired();
-				}
-			} catch {
-				setJwtExpired();
-			}
-		}
-	};
-
 	return {
 		isLoggedIn,
 		userLocale,
@@ -161,7 +143,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 		isTeacher,
 		isStudent,
 		isExternalPerson,
-		isJwtExpired,
 		school,
 		userRoles,
 		systemId,
@@ -169,11 +150,9 @@ export const useAppStore = defineStore("applicationStore", () => {
 		logout,
 		clearUserSession,
 		externalLogout,
-		setJwtExpired,
 		updateUserLanguage,
 		clearApplicationError,
 		handleUnknownError,
-		handleUnauthorizedError,
 		handleApplicationError,
 		applicationError: readonly(applicationError),
 	};

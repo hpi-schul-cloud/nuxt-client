@@ -68,7 +68,7 @@ app.use(VueDOMPurifyHTML, {
 });
 
 (async () => {
-	const runtimeConfigJson = await axios.get(`${window.location.origin}/runtime.config.json`);
+	const runtimeConfigJson = await axios.get(`${globalThis.location.origin}/runtime.config.json`);
 	axios.defaults.baseURL = runtimeConfigJson.data.apiURL;
 
 	initializeAxios(axios, useAppStore().handleUnauthorizedError);

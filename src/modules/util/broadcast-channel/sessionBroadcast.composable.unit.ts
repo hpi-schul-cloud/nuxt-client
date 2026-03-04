@@ -1,5 +1,6 @@
 import { useSessionBroadcast } from "./sessionBroadcast.composable";
 import { SessionState } from "./types";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mountComposable } from "@@/tests/test-utils";
 import { flushPromises } from "@vue/test-utils";
 import { type Ref, ref } from "vue";
@@ -246,6 +247,87 @@ describe("useSessionBroadcast", () => {
 
 			setJwtExpired(false);
 			expect(isJwtExpired.value).toBe(false);
+		});
+	});
+
+	describe("handleUnauthorizedError", () => {
+		beforeEach(() => {
+			const { setJwtExpired } = useSessionBroadcast();
+			setJwtExpired(false);
+		});
+
+		it("should not set jwt expired for non-axios errors", async () => {
+			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+
+			await handleUnauthorizedError(new Error("regular error"));
+
+			expect(isJwtExpired.value).toBe(false);
+		});
+
+		it("should not set jwt expired for non-401 axios errors", async () => {
+			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { AxiosError } = await import("axios");
+			const axiosError = new AxiosError("error", "500", undefined, undefined, {
+				status: HttpStatusCode.InternalServerError,
+			} as never);
+
+			await handleUnauthorizedError(axiosError);
+
+			expect(isJwtExpired.value).toBe(false);
+		});
+
+		it("should not set jwt expired when ttl is greater than 0", async () => {
+			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockResolvedValue({ data: { ttl: 100 } }),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await handleUnauthorizedError(axiosError);
+
+			expect(isJwtExpired.value).toBe(false);
+		});
+
+		it("should set jwt expired when ttl is 0", async () => {
+			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockResolvedValue({ data: { ttl: 0 } }),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await handleUnauthorizedError(axiosError);
+
+			expect(isJwtExpired.value).toBe(true);
+		});
+
+		it("should set jwt expired when jwt timer request fails", async () => {
+			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { AxiosError, default: axios } = await import("axios");
+			const axiosError = new AxiosError("error", "401", undefined, undefined, {
+				status: HttpStatusCode.Unauthorized,
+			} as never);
+
+			const mockAxiosInstance = {
+				defaults: { baseURL: "" },
+				get: vi.fn().mockRejectedValue(new Error("Network error")),
+			};
+			vi.spyOn(axios, "create").mockReturnValue(mockAxiosInstance as never);
+
+			await handleUnauthorizedError(axiosError);
+
+			expect(isJwtExpired.value).toBe(true);
 		});
 	});
 });

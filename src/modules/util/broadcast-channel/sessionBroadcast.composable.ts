@@ -36,9 +36,13 @@
  */
 
 import { SessionState } from "./types";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { logger } from "@util-logger";
 import { tryOnScopeDispose, useBroadcastChannel } from "@vueuse/core";
+import axios, { isAxiosError } from "axios";
 import { readonly, ref, watch } from "vue";
+
+const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 
 // these constants are also used inside of the schulcloud-client to communicate logouts between both application parts
 const BROADCAST_CHANNEL_NAME = "user-session-channel";
@@ -111,6 +115,22 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		}
 	});
 
+	const handleUnauthorizedError = async (error: unknown) => {
+		if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
+			try {
+				const pristineAxios = axios.create();
+				pristineAxios.defaults.baseURL = axios.defaults.baseURL;
+				const response = await pristineAxios.get(JWT_TIMER_ENDPOINT);
+				const ttl = response?.data?.ttl ?? 0;
+				if (ttl <= 0) {
+					setJwtExpired();
+				}
+			} catch {
+				setJwtExpired();
+			}
+		}
+	};
+
 	tryOnScopeDispose(() => {
 		close();
 	});
@@ -122,5 +142,6 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 		sendLogout,
 		sendStateAndTime,
 		close,
+		handleUnauthorizedError,
 	};
 };

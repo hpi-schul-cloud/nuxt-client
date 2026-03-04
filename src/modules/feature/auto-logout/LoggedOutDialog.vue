@@ -16,16 +16,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useAppStoreRefs } from "@data-app";
 import { ErrorAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
+import { useSessionBroadcast } from "@util-broadcast-channel";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const { t } = useI18n();
-const { isJwtExpired } = useAppStoreRefs();
+const { isJwtExpired } = useSessionBroadcast();
 
 const onConfirm = () => {
 	router.push("/login");
