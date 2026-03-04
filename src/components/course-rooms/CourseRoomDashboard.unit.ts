@@ -9,19 +9,15 @@ import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 const mockData = {
 	roomId: "123",
@@ -119,8 +115,7 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 });
 
 const getWrapper = (props: ComponentProps<typeof CourseRoomDashboard>, options?: object) => {
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
+	injectRouterMock(createRouterMock());
 
 	const wrapper = mount(CourseRoomDashboard, {
 		global: {

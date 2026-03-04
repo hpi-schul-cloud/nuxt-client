@@ -17,7 +17,8 @@ import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
-import { Router, RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VAlert } from "vuetify/components";
 
 vi.mock("./useFolderAlerts.composable");
@@ -28,18 +29,6 @@ vi.mock("@data-board", () => ({
 		modelValue: { value: { title: "test" } },
 	})),
 }));
-
-vi.mock("vue-router", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("vue-router")>();
-	return {
-		...actual,
-		useRoute: vi.fn(),
-		useRouter: vi.fn(() => ({
-			push: vi.fn(),
-		})),
-	};
-});
-const useRouterMock = <Mock>useRouter;
 
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
@@ -62,8 +51,8 @@ describe("FolderContentElement", () => {
 		alerts?: FolderAlert[];
 		fileStatistics?: ReturnType<typeof parentStatisticFactory.build>;
 	}) => {
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
+
 		const statistic =
 			options.fileStatistics ||
 			parentStatisticFactory.build({

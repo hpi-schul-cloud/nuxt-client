@@ -21,7 +21,7 @@ import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { setActivePinia } from "pinia";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
 vi.mock("@/serverApi/v3", async (importOriginal) => {
@@ -33,12 +33,14 @@ vi.mock("@/serverApi/v3", async (importOriginal) => {
 });
 
 describe("RoomsPage", () => {
-	const router = createRouterMock();
+	let router: RouterMock;
 	const roomApiMock = createMock<ReturnType<typeof serverApi.RoomApiFactory>>();
 
 	beforeEach(() => {
 		vi.mocked(serverApi.RoomApiFactory).mockReturnValue(roomApiMock);
 		roomApiMock.roomControllerGetRooms.mockResolvedValue({ data: { data: [] } } as never);
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	const setup = (
@@ -46,8 +48,6 @@ describe("RoomsPage", () => {
 		isLoading = false
 	) => {
 		const copyModule = createModuleMocks(CopyModule);
-
-		injectRouterMock(router);
 
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);

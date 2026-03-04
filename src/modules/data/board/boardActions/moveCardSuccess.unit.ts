@@ -12,7 +12,8 @@ import { useErrorHandler } from "@util-error-handling";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 
 vi.mock("../boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
@@ -40,8 +41,8 @@ vi.mock("../BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
+const useRouterMock = vi.mocked(useRouter);
+const useRouteMock = vi.mocked(useRoute);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
@@ -58,8 +59,6 @@ describe("BoardStore - moveCardSuccess", () => {
 	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
 	let setEditModeId: Mock;
 	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -112,11 +111,9 @@ describe("BoardStore - moveCardSuccess", () => {
 		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-
-		router = createMock<Router>();
+		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
+		useRouteMock.mockReturnValue(router.currentRoute as unknown as ReturnType<typeof useRoute>);
 	});
 
 	afterEach(() => {

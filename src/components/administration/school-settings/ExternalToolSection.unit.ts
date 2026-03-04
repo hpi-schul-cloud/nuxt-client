@@ -26,16 +26,13 @@ import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { expect, Mock } from "vitest";
+import { expect } from "vitest";
 import { nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCardText } from "vuetify/components";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	const schoolId = "schoolId";
@@ -64,8 +61,7 @@ describe("ExternalToolSection", () => {
 		createTestAppStoreWithSchool(schoolId);
 		createTestEnvStore(envs);
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(ExternalToolSection, {
 			global: {

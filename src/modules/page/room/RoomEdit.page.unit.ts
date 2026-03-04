@@ -27,6 +27,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 	beforeEach(() => {
 		router = createRouterMock();
+		injectRouterMock(router);
 	});
 
 	afterEach(() => {
@@ -45,7 +46,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const room = isRoomDefined ? roomFactory.build({ allowedOperations }) : undefined;
 		const roomId = room ? room.id : "test-room-id";
 
-		injectRouterMock(router);
 		router.setParams({ id: roomId });
 
 		const wrapper = mount(RoomEditPage, {

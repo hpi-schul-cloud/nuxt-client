@@ -12,7 +12,8 @@ import * as socketModule from "socket.io-client";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 vi.mock("axios");
 
 vi.mock("vue-i18n");
@@ -35,7 +36,7 @@ vi.mock("@vueuse/shared", () => ({
 }));
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouterMock = vi.mocked(useRouter);
 
 const startMock = vi.fn();
 const stopMock = vi.fn();
@@ -86,7 +87,7 @@ describe("socket.ts", () => {
 		boardErrorReportApi = createMock<serverApi.BoardErrorReportApi>();
 		vi.spyOn(serverApi, "BoardErrorReportApiFactory").mockReturnValue(boardErrorReportApi);
 
-		const router = createMock<Router>();
+		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
 	});
 

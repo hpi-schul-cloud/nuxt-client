@@ -12,7 +12,8 @@ import { setActivePinia } from "pinia";
 import type { Mock } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock, RouterMock } from "vue-router-mock";
 import { VCheckboxBtn } from "vuetify/components";
 
 vi.mock("@data-provisioning-options");
@@ -27,7 +28,7 @@ describe("ProvisioningOptionsPage", () => {
 	}));
 
 	let useProvisioningOptionsStateMock: DeepMocked<ReturnType<typeof useProvisioningOptionsState>>;
-	const router = createMock<Router>();
+	let router: RouterMock;
 
 	const getWrapper = (
 		props: ComponentProps<typeof ProvisioningOptionsPage> = {
@@ -60,6 +61,7 @@ describe("ProvisioningOptionsPage", () => {
 	};
 
 	beforeEach(() => {
+		router = createRouterMock();
 		useProvisioningOptionsStateMock = createMock<ReturnType<typeof useProvisioningOptionsState>>({
 			isLoading: ref(false),
 			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),

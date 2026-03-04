@@ -50,8 +50,8 @@ vi.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
+const useRouterMock = vi.mocked(useRouter);
+const useRouteMock = vi.mocked(useRoute);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
@@ -70,6 +70,10 @@ describe("BoardStore", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
+
+		router = createRouterMock();
+		useRouterMock.mockReturnValue(router);
+		useRouteMock.mockReturnValue(router.currentRoute as unknown as ReturnType<typeof useRoute>);
 
 		mockedErrorHandlerCalls = {
 			handleError: vi.fn(),
@@ -168,10 +172,6 @@ describe("BoardStore", () => {
 			focusedId: ref<string | undefined>(undefined),
 		};
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
-
-		router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue(router.currentRoute);
 	});
 
 	const setup = (options?: { createBoard?: boolean; socketFlag?: boolean }) => {

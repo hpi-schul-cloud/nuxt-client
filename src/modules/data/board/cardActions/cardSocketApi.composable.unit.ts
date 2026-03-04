@@ -26,7 +26,8 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -39,7 +40,7 @@ const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@util-board/LastCreatedElement.composable");
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouterMock = vi.mocked(useRouter);
 
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
@@ -63,7 +64,7 @@ describe("useCardSocketApi", () => {
 			resetLastCreatedElementId: vi.fn(),
 		});
 
-		const router = createMock<Router>();
+		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
 	});
 

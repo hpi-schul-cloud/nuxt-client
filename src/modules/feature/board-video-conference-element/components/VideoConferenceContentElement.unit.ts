@@ -16,18 +16,12 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("../composables/VideoConference.composable");
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 vi.mock("@data-board/BoardFeatures.composable");
 vi.mocked(useBoardFeatures).mockImplementation(() => ({
@@ -41,17 +35,11 @@ let defaultElement = videoConferenceElementResponseFactory.build();
 describe("VideoConferenceContentElement", () => {
 	window.open = vi.fn();
 
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
 
 	beforeEach(() => {
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-		useRouteMock.mockReturnValue({ params: { id: "room-id" } });
-
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
+		router.setParams({ id: "room-id" });
 
 		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);

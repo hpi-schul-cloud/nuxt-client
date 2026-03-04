@@ -3,15 +3,13 @@ import { useSidebarSelection } from "./SidebarSelection.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia, storeToRefs } from "pinia";
-import { Mock } from "vitest";
 import { computed } from "vue";
-import { RouteLocationNormalized, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 
 vi.mock("vue-router");
-const useRouteMock = <Mock>useRoute;
+const useRouteMock = vi.mocked(useRoute);
 
 vi.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformation);
@@ -19,12 +17,7 @@ const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformat
 describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useRouteMock.mockReturnValue(
-			createMock<RouteLocationNormalized>({
-				path: "",
-				name: "",
-			})
-		);
+		useRouteMock.mockReturnValue({ path: "", name: "" } as ReturnType<typeof useRoute>);
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
 			createPageInformation: vi.fn(),
@@ -41,7 +34,8 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 	});
 
 	const setup = (routeProps: { path: string; name: string }) => {
-		useRouteMock.mockReturnValue(createMock<RouteLocationNormalized>(routeProps));
+		useRouteMock.mockReturnValue(routeProps as ReturnType<typeof useRoute>);
+
 		const coursesItem: SidebarSingleItem = {
 			title: "courses",
 			testId: "courses-item",

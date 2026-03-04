@@ -6,7 +6,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
-import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -21,12 +21,9 @@ vi.mock("./autoLogout.composable", () => ({
 }));
 
 describe("AutoLogoutWarning", () => {
-	let router: RouterMock;
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		router = createRouterMock();
-		injectRouterMock(router);
+		injectRouterMock(createRouterMock());
 	});
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -118,7 +115,7 @@ describe("AutoLogoutWarning", () => {
 				});
 
 				dialog.vm.$emit("confirm");
-				expect(router.push).toHaveBeenCalledWith("/login");
+				expect(getRouter().push).toHaveBeenCalledWith("/login");
 			});
 		});
 

@@ -13,23 +13,14 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VDataTableServer } from "vuetify/lib/components/index";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
 
 vi.mock("@data-room", () => ({
 	useCourseList: vi.fn(),
 	useCourseApi: vi.fn(),
 }));
-
-const useRouteMock = <Mock>useRoute;
-const useRouterMock = <Mock>useRouter;
 
 describe("RoomsOverview", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
@@ -51,11 +42,8 @@ describe("RoomsOverview", () => {
 		pagination?: { limit: number; skip: number; total: number };
 		envs?: Partial<ConfigResponse>;
 	} = {}) => {
-		const route = { query: { tab } };
-		useRouteMock.mockReturnValue(route);
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
+		const { router } = injectRouterMock(createRouterMock());
+		const route = router.currentRoute;
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
 

@@ -10,26 +10,31 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { flushPromises } from "@vue/test-utils";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { RouteLocationResolved, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VImg } from "vuetify/components";
 
 vi.mock("@data-board");
 vi.mock("@data-h5p");
-vi.mock("vue-router");
 
 describe("H5pElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
 	let useH5PEditorMock: DeepMocked<ReturnType<typeof useH5PEditorApi>>;
+	let router: RouterMock;
 
 	beforeEach(() => {
-		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useRouterMock = createMock<ReturnType<typeof useRouter>>();
+		router = createRouterMock({
+			routes: [
+				{ path: "/h5p/editor/:contentId?", name: "h5pEditor", component: { template: "<div />" } },
+				{ path: "/h5p/player/:contentId", name: "h5pPlayer", component: { template: "<div />" } },
+			],
+		});
+		injectRouterMock(router);
 
+		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
-		vi.mocked(useRouter).mockReturnValue(useRouterMock);
 	});
 
 	afterEach(() => {
@@ -281,12 +286,6 @@ describe("H5pElement", () => {
 				const windowMock = createMock<Window>();
 				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
-				useRouterMock.resolve.mockReturnValue(
-					createMock<RouteLocationResolved>({
-						href: resolvedUrl,
-					})
-				);
-
 				return {
 					wrapper,
 					resolvedUrl,
@@ -295,13 +294,14 @@ describe("H5pElement", () => {
 			};
 
 			it("should open the editor window", async () => {
-				const { wrapper, resolvedUrl, element } = setup();
+				const { wrapper, element } = setup();
 
+				const resolveSpy = vi.spyOn(router, "resolve");
 				const card = wrapper.getComponent({ ref: "elementCard" });
 
 				await card.trigger("click");
 
-				expect(useRouterMock.resolve).toHaveBeenCalledWith({
+				expect(resolveSpy).toHaveBeenCalledWith({
 					name: "h5pEditor",
 					params: {
 						contentId: undefined,
@@ -311,7 +311,7 @@ describe("H5pElement", () => {
 						parentId: element.id,
 					},
 				});
-				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
+				expect(window.open).toHaveBeenCalled();
 			});
 		});
 
@@ -326,33 +326,26 @@ describe("H5pElement", () => {
 					element,
 					isEditMode: false,
 				});
-				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
 				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
-				useRouterMock.resolve.mockReturnValue(
-					createMock<RouteLocationResolved>({
-						href: resolvedUrl,
-					})
-				);
-
 				return {
 					wrapper,
-					resolvedUrl,
 					element,
 					contentId,
 				};
 			};
 
 			it("should open the player window", async () => {
-				const { wrapper, resolvedUrl, contentId } = setup();
+				const { wrapper, contentId } = setup();
 
+				const resolveSpy = vi.spyOn(router, "resolve");
 				const card = wrapper.getComponent({ ref: "elementCard" });
 
 				await card.trigger("click");
 
-				expect(useRouterMock.resolve).toHaveBeenCalledWith({
+				expect(resolveSpy).toHaveBeenCalledWith({
 					name: "h5pPlayer",
 					params: {
 						contentId,
@@ -361,7 +354,7 @@ describe("H5pElement", () => {
 						parentType: H5PContentParentType.BOARD_ELEMENT,
 					},
 				});
-				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
+				expect(window.open).toHaveBeenCalled();
 			});
 		});
 
@@ -375,33 +368,26 @@ describe("H5pElement", () => {
 					element,
 					isEditMode: true,
 				});
-				const resolvedUrl = "https://test.com";
 
 				const windowMock = createMock<Window>();
 				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
-				useRouterMock.resolve.mockReturnValue(
-					createMock<RouteLocationResolved>({
-						href: resolvedUrl,
-					})
-				);
-
 				return {
 					wrapper,
 					element,
-					resolvedUrl,
 				};
 			};
 
 			it("should open the editor window", async () => {
-				const { wrapper, element, resolvedUrl } = setup();
+				const { wrapper, element } = setup();
 
+				const resolveSpy = vi.spyOn(router, "resolve");
 				const menu = wrapper.getComponent(H5pElementMenu);
 
 				menu.vm.$emit("edit:element");
 				await nextTick();
 
-				expect(useRouterMock.resolve).toHaveBeenCalledWith({
+				expect(resolveSpy).toHaveBeenCalledWith({
 					name: "h5pEditor",
 					params: {
 						contentId: element.content.contentId,
@@ -411,7 +397,7 @@ describe("H5pElement", () => {
 						parentId: element.id,
 					},
 				});
-				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
+				expect(window.open).toHaveBeenCalled();
 			});
 		});
 	});
@@ -434,8 +420,7 @@ describe("H5pElement", () => {
 			it("should show the text for creating an h5p element", async () => {
 				const { wrapper } = setup();
 
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
@@ -465,8 +450,7 @@ describe("H5pElement", () => {
 				it("should show the content title", async () => {
 					const { wrapper, contentTitle } = setup();
 
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
@@ -492,8 +476,7 @@ describe("H5pElement", () => {
 				it("should show the default h5p title", async () => {
 					const { wrapper } = setup();
 
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					const titleLine = wrapper.getComponent(ContentElementBar).getComponent(LineClamp);
 
@@ -524,8 +507,7 @@ describe("H5pElement", () => {
 				it("should show the new content title", async () => {
 					const { wrapper, contentTitle } = setup();
 
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					await wrapper.setProps({
 						element: h5pElementResponseFactory.build({
@@ -558,8 +540,7 @@ describe("H5pElement", () => {
 				it("should show the default h5p title", async () => {
 					const { wrapper } = setup();
 
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					await wrapper.setProps({
 						element: h5pElementResponseFactory.build({

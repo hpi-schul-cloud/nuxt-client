@@ -48,7 +48,7 @@ import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -66,19 +66,13 @@ const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformat
 vi.mock("@/composables/copy");
 const mockUseCopy = vi.mocked(useCopy);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 describe("Board", () => {
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
-	let router: DeepMocked<Router>;
+	let router: RouterMock;
 	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof useBoardInactivity>>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	const hash = "";
 
 	beforeEach(() => {
 		vi.useFakeTimers();
@@ -114,13 +108,8 @@ describe("Board", () => {
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
-		route = createMock<ReturnType<typeof useRoute>>({
-			hash,
-		});
-		useRouteMock.mockReturnValue(route);
-
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		router = createRouterMock();
+		injectRouterMock(router);
 
 		mockedUsePageInactivity = createMock<ReturnType<typeof useBoardInactivity>>();
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
@@ -316,10 +305,9 @@ describe("Board", () => {
 		describe("when the url has a hash", () => {
 			const setup2 = () => {
 				Object.defineProperty(globalThis, "location", {
-					get: () =>
-						createMock<Location>({
-							hash: "#card-12345",
-						}),
+					get: () => ({
+						hash: "#card-12345",
+					}),
 				});
 
 				const domElementMock = createMock<HTMLElement>();

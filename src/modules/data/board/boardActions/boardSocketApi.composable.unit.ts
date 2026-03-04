@@ -22,8 +22,8 @@ import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -41,7 +41,7 @@ vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouterMock = vi.mocked(useRouter);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
@@ -57,7 +57,7 @@ describe("useBoardSocketApi", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		const router = createMock<Router>();
+		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
 
 		socketMock = createMock<ReturnType<typeof useSocketConnection>>();

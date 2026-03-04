@@ -9,15 +9,12 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
-
-const router = createRouterMock();
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("loggedOutLayout", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-
-		injectRouterMock(router);
+		injectRouterMock(createRouterMock());
 	});
 
 	const mountComponent = () => {
@@ -56,12 +53,12 @@ describe("loggedOutLayout", () => {
 
 	it("should not routeToErrorPage without any errors", () => {
 		mountComponent();
-		expect(router.replace).not.toHaveBeenCalledWith("/error");
+		expect(getRouter().replace).not.toHaveBeenCalledWith("/error");
 	});
 
 	it("should execute routeToErrorPage with any errors", () => {
 		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized, "error.401");
 		mountComponent();
-		expect(router.replace).toHaveBeenCalledWith("/error");
+		expect(getRouter().replace).toHaveBeenCalledWith("/error");
 	});
 });

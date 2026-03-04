@@ -10,10 +10,9 @@ describe("elementFocus.composable", () => {
 
 	const setup = () => {
 		Object.defineProperty(window, "location", {
-			get: () =>
-				createMock<Location>({
-					hash: "#card-12345",
-				}),
+			get: () => ({
+				hash: "#card-12345",
+			}),
 		});
 
 		const domElementMock = createMock<HTMLElement>();
@@ -44,7 +43,7 @@ describe("elementFocus.composable", () => {
 	describe("when hash is empty", () => {
 		it("should do nothing if hash is empty", async () => {
 			Object.defineProperty(window, "location", {
-				get: () => createMock<Location>({ hash: "" }),
+				get: () => ({ hash: "" }),
 			});
 
 			const { focusNodeFromHash } = setup();
@@ -55,7 +54,7 @@ describe("elementFocus.composable", () => {
 	describe("when element is not found after attempts", () => {
 		it("should log error if element not found after attempts", async () => {
 			Object.defineProperty(window, "location", {
-				get: () => createMock<Location>({ hash: "#not-found" }),
+				get: () => ({ hash: "#not-found" }),
 			});
 
 			const querySelectorSpy = vi.spyOn(document, "querySelector");

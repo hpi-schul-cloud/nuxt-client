@@ -19,7 +19,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, nextTick, ref } from "vue";
-import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
 
 vi.mock("@data-board");
@@ -27,10 +27,8 @@ vi.mock("@feature-board");
 vi.mock("./content/alert/useFileAlerts.composable");
 
 describe("FileContentElement", () => {
-	let router: RouterMock;
-
 	beforeEach(() => {
-		router = createRouterMock({
+		const router = createRouterMock({
 			routes: [{ path: "/collabora/:id", name: "collabora", component: { template: "<div />" } }],
 		});
 		injectRouterMock(router);
