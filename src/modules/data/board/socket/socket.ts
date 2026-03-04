@@ -3,7 +3,7 @@ import { useCardStore } from "../Card.store";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import { Action } from "@/types/board/ActionFactory";
 import { $axios } from "@/utils/api";
-import { notifyError, notifySuccess } from "@data-app";
+import { notifyError, notifySuccess, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useTimeoutFn } from "@vueuse/shared";
@@ -32,8 +32,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const boardErrorReportApi = BoardErrorReportApiFactory(undefined, "/v3", $axios);
 
+	const { isJwtExpired } = useAppStoreRefs();
+
 	const getConnectedSocket = () => {
-		if (instance === null) {
+		if (instance === null && isJwtExpired.value === false) {
 			instance = io(useEnvConfig().value.BOARD_COLLABORATION_URI, {
 				path: "/board-collaboration",
 				withCredentials: true,
@@ -70,7 +72,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 			addErrorHandling(instance);
 		}
-		if (!instance.connected) {
+		if (instance?.connected === false) {
 			instance.connect();
 		}
 
@@ -79,12 +81,12 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const emitOnSocket = (action: string, data: unknown) => {
 		const socket = getConnectedSocket();
-		socket.emit(action, data);
+		socket?.emit(action, data);
 	};
 
 	const emitWithAck = (action: string, data: unknown) => {
 		const socket = getConnectedSocket();
-		return socket.timeout(30000).emitWithAck(action, data);
+		return socket?.timeout(30000).emitWithAck(action, data);
 	};
 
 	const disconnectSocket = () => {
