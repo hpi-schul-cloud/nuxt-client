@@ -1,7 +1,7 @@
 <template>
 	<SvsDialog
 		v-model="showDialog"
-		title="feature-autoLogout.button.title"
+		:title="dialogTitle"
 		no-cancel
 		persistent
 		:confirm-btn-lang-key="confirmButtonKey"
@@ -54,6 +54,10 @@ const isSessionEnded = computed(() => sessionStatus.value === SessionStatus.Expi
 
 const confirmButtonKey = computed(() =>
 	isSessionEnded.value ? "feature-autoLogout.button.confirm.returnToLogin" : "feature-autoLogout.button.confirm"
+);
+
+const dialogTitle = computed(() =>
+	isSessionEnded.value ? "feature-loggedout.title" : "feature-autoLogout.button.title"
 );
 
 const onConfirm = () => {
