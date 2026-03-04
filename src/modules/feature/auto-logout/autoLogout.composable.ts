@@ -5,13 +5,13 @@ import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { logger } from "@util-logger";
 import { useBroadcastChannel } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed, readonly, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 const MAX_RETRIES = 3;
-const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60;
-const DEFAULT_WARNING_SECONDS = 1 * 60 * 60;
+const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60; // 2 hours
+const DEFAULT_WARNING_SECONDS = 1 * 60 * 60; // 1 hour
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
@@ -20,71 +20,128 @@ export const useAutoLogout = () => {
 	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
 	const sessionStatus = ref<SessionStatus | null>(null);
-	const remainingTimeInSeconds = ref(0);
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } = useEnvConfig().value;
 	const SESSION_TIMEOUT = JWT_TIMEOUT_SECONDS || DEFAULT_TIMEOUT_SECONDS;
 	const WARNING_THRESHOLD = JWT_SHOW_TIMEOUT_WARNING_SECONDS || DEFAULT_WARNING_SECONDS;
 
-	const remainingTimeInMinutes = computed(() => Math.max(Math.ceil(remainingTimeInSeconds.value / 60), 0));
+	// --- Countdown Timer Management ---
+
+	const useCountdownTimer = (handleTimerTick: () => void) => {
+		const remainingTimeInSeconds = ref(0);
+		const remainingTimeInMinutes = computed(() => Math.max(Math.ceil(remainingTimeInSeconds.value / 60), 0));
+		let remainingTimeInterval: ReturnType<typeof setInterval> | null = null;
+
+		const startInterval = () => {
+			stopInterval();
+
+			remainingTimeInterval = setInterval(() => {
+				remainingTimeInSeconds.value -= 1;
+				handleTimerTick();
+			}, 1000);
+		};
+
+		const stopInterval = () => {
+			if (remainingTimeInterval) {
+				clearInterval(remainingTimeInterval);
+				remainingTimeInterval = null;
+			}
+		};
+
+		const setTimer = (seconds: number) => {
+			remainingTimeInSeconds.value = seconds;
+		};
+
+		return {
+			remainingTimeInSeconds: readonly(remainingTimeInSeconds),
+			remainingTimeInMinutes: readonly(remainingTimeInMinutes),
+			setTimer,
+			startInterval,
+			stopInterval,
+		};
+	};
+
+	// --- Broadcast Channel Management ---
+
+	const useSessionBroadcast = (
+		sessionStatus: Ref<SessionStatus | null>,
+		setState: (status: SessionStatus) => Promise<void> | void,
+		countdownTimer: ReturnType<typeof useCountdownTimer>
+	) => {
+		const sessionBroadcast = useBroadcastChannel({ name: "user-session-channel" });
+		const { remainingTimeInSeconds, setTimer } = countdownTimer;
+
+		// share current state and timing
+		const sendState = () => {
+			sessionBroadcast.post(`${sessionStatus.value ?? ""}:${remainingTimeInSeconds.value ?? "0"}`);
+		};
+
+		// handle incoming broadcast messages to sync session status across tabs
+		watch(sessionBroadcast.data, (message) => {
+			logger.log("Received broadcast message:", message);
+			if (message === "logout") {
+				setState(SessionStatus.Expired);
+				globalThis.location.assign("/logout");
+			}
+
+			if (typeof message === "string" && message.includes(":")) {
+				const [status, time] = message.split(":");
+				const timeInSeconds = Number.parseInt(time, 10);
+				if (!Number.isNaN(timeInSeconds)) {
+					setTimer(timeInSeconds);
+				}
+				if (Object.values(SessionStatus).includes(status as SessionStatus)) {
+					setState(status as SessionStatus);
+				}
+			}
+		});
+
+		return {
+			sendState,
+		};
+	};
 
 	// --- Session Management ---
 
 	const createSession = () => {
 		startInterval();
-		goToState(SessionStatus.Started);
+		setStateAndBroadcast(SessionStatus.Started);
 	};
 
 	const extendSession = async () => {
 		stopInterval();
 
-		if (sessionStatus.value === SessionStatus.Expired) {
+		if (sessionStatus.value && [SessionStatus.Expired, SessionStatus.Error].includes(sessionStatus.value)) {
 			return;
 		}
 
 		try {
-			await $axios.post(JWT_TIMER_ENDPOINT);
-			await updateRemainingTime();
-			await goToState(SessionStatus.Extended);
+			await extendSessionRequest();
+			await setStateAndBroadcast(SessionStatus.Extended);
 		} catch {
-			await goToState(SessionStatus.Error);
+			await setStateAndBroadcast(SessionStatus.Error);
 		}
 	};
 
 	// --- Interval Management ---
 
-	let remainingTimeInterval: ReturnType<typeof setInterval> | null = null;
-
-	const startInterval = () => {
-		stopInterval();
-
-		remainingTimeInterval = setInterval(() => {
-			remainingTimeInSeconds.value -= 1;
-			handleTimerTick();
-		}, 1000);
-	};
-
-	const stopInterval = () => {
-		if (remainingTimeInterval) {
-			clearInterval(remainingTimeInterval);
-			remainingTimeInterval = null;
-		}
-	};
-
-	const handleTimerTick = async () => {
+	const checkEverySecond = async () => {
 		if (remainingTimeInSeconds.value <= 0) {
-			await goToState(SessionStatus.Expired);
+			await setStateAndBroadcast(SessionStatus.Expired);
 		} else if (remainingTimeInSeconds.value <= WARNING_THRESHOLD) {
-			await goToState(SessionStatus.AboutToExpire);
+			await setStateAndBroadcast(SessionStatus.AboutToExpire);
 		}
 		logger.log("Remaining Time (s):", remainingTimeInSeconds.value, "Status:", sessionStatus.value);
 	};
+
+	const countdownTimer = useCountdownTimer(checkEverySecond);
+	const { remainingTimeInSeconds, remainingTimeInMinutes, setTimer, startInterval, stopInterval } = countdownTimer;
 
 	// --- State Handling ---
 
 	const setStartedState = () => {
 		sessionStatus.value = SessionStatus.Started;
-		remainingTimeInSeconds.value = SESSION_TIMEOUT;
+		setTimer(SESSION_TIMEOUT);
 		showDialog.value = false;
 		errorOnExtend.value = false;
 	};
@@ -97,7 +154,6 @@ export const useAutoLogout = () => {
 
 	const setExtendedState = () => {
 		sessionStatus.value = SessionStatus.Extended;
-		stopInterval();
 		showDialog.value = false;
 		errorOnExtend.value = false;
 		startInterval();
@@ -106,19 +162,18 @@ export const useAutoLogout = () => {
 
 	const setExpiredState = async () => {
 		sessionStatus.value = SessionStatus.Expired;
-		remainingTimeInSeconds.value = 0;
+		setTimer(0);
 		stopInterval();
 		showDialog.value = true;
 		notify("error", t("feature-autoLogout.message.error.401"), false);
 		useAppStore().clearUserSession();
-		await fetch("/logout").catch((error) => {
-			logger.error("Error during logout fetch call:", error);
-		});
+		await logoutUserSilently();
 	};
 
 	const setErrorState = () => {
 		sessionStatus.value = SessionStatus.Error;
 		errorOnExtend.value = true;
+		stopInterval();
 		notify("error", t("feature-autoLogout.message.extending-session-failure"));
 	};
 
@@ -143,11 +198,24 @@ export const useAutoLogout = () => {
 	};
 
 	// set a state and broadcast the new state to other tabs
-	const goToState = async (status: SessionStatus) => {
+	const setStateAndBroadcast = async (status: SessionStatus) => {
 		if (sessionStatus.value === status) return;
 
 		await setState(status);
-		broadcastState();
+		sendState();
+	};
+
+	// --- api interactions ---
+
+	const logoutUserSilently = async () => {
+		await fetch("/logout").catch((error) => {
+			logger.error("Error during logout fetch call:", error);
+		});
+	};
+
+	const extendSessionRequest = async () => {
+		const result = await $axios.post(JWT_TIMER_ENDPOINT);
+		setTimer(result.data.ttl);
 	};
 
 	// call the server to receive the remaining time to live of the JWT
@@ -160,40 +228,18 @@ export const useAutoLogout = () => {
 				await new Promise((resolve) => setTimeout(resolve, delayMs));
 				return updateRemainingTime(retryCount + 1);
 			}
-			sessionStatus.value = SessionStatus.Error;
+			setErrorState();
 			return;
 		}
 
 		if (result.data.ttl) {
-			remainingTimeInSeconds.value = result.data.ttl;
+			setTimer(result.data.ttl);
 		}
 	};
 
 	// --- Broadcast Session Status Changes ---
 
-	const sessionBroadcast = useBroadcastChannel({ name: "user-session-channel" });
-
-	const broadcastState = () => {
-		sessionBroadcast.post(`${sessionStatus.value ?? ""}:${remainingTimeInSeconds.value ?? "0"}`);
-	};
-
-	// handle incoming broadcast messages to sync session status across tabs
-	watch(sessionBroadcast.data, (message) => {
-		logger.log("Received broadcast message:", message);
-		if (message === "logout") {
-			setState(SessionStatus.Expired);
-			globalThis.location.assign("/logout");
-		}
-
-		if (typeof message === "string" && message.includes(":")) {
-			const [status, time] = message.split(":");
-			const timeInSeconds = Number.parseInt(time, 10);
-			if (!Number.isNaN(timeInSeconds)) {
-				remainingTimeInSeconds.value = timeInSeconds;
-			}
-			setState(status as SessionStatus);
-		}
-	});
+	const { sendState } = useSessionBroadcast(sessionStatus, setState, countdownTimer);
 
 	// --- Helpers ---
 
@@ -207,8 +253,8 @@ export const useAutoLogout = () => {
 
 	return {
 		errorOnExtend,
-		remainingTimeInMinutes,
-		remainingTimeInSeconds,
+		remainingTimeInSeconds: readonly(remainingTimeInSeconds),
+		remainingTimeInMinutes: readonly(remainingTimeInMinutes),
 		sessionStatus,
 		showDialog,
 		createSession,
