@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { useAutoLogout } from "../auto-logout/autoLogout.composable";
-import { SessionStatus } from "../auto-logout/types";
+import { SessionState } from "../auto-logout/types";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
 import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
 import { WarningAlert } from "@ui-alert";
@@ -42,7 +42,7 @@ const router = useRouter();
 
 const { t } = useI18n();
 
-const { remainingTimeInMinutes, showDialog, errorOnExtend, sessionStatus, extendSession, createSession } =
+const { remainingTimeInMinutes, showDialog, errorOnExtend, sessionState, extendSession, createSession } =
 	useAutoLogout();
 
 const image = computed(() => {
@@ -50,7 +50,7 @@ const image = computed(() => {
 	return SlothSvg;
 });
 
-const isSessionEnded = computed(() => sessionStatus.value === SessionStatus.Expired);
+const isSessionEnded = computed(() => sessionState.value === SessionState.Expired);
 
 const confirmButtonKey = computed(() =>
 	isSessionEnded.value ? "feature-autoLogout.button.confirm.returnToLogin" : "feature-autoLogout.button.confirm"

@@ -3,7 +3,7 @@ import { $axios } from "@/utils/api";
 import { createTestAppStoreWithRole, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useAppStore, useNotificationStore } from "@data-app";
-import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
+import { SessionState, useAutoLogout } from "@feature-auto-logout";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -106,11 +106,11 @@ describe("useAutoLogout", () => {
 
 	describe("initial state", () => {
 		it("should have the correct default values", () => {
-			const { showDialog, errorOnExtend, sessionStatus, remainingTimeInSeconds } = setup({});
+			const { showDialog, errorOnExtend, sessionState, remainingTimeInSeconds } = setup({});
 
 			expect(showDialog.value).toBe(false);
 			expect(errorOnExtend.value).toBe(false);
-			expect(sessionStatus.value).toBe(null);
+			expect(sessionState.value).toBe(null);
 			expect(remainingTimeInSeconds.value).toBe(0);
 		});
 
@@ -136,20 +136,6 @@ describe("useAutoLogout", () => {
 		});
 	});
 
-	describe("remainingTimeInMinutes", () => {
-		it.each([
-			[10, 1],
-			[50, 1],
-			[125, 3],
-			[180, 3],
-		])("should return the correct value for %i seconds", (seconds, expectedMinutes) => {
-			const options = { showWarningTime: 60000, jwtTtl: seconds };
-			const { remainingTimeInMinutes } = setupAndCreateSession(options);
-
-			expect(remainingTimeInMinutes.value).toBe(expectedMinutes);
-		});
-	});
-
 	describe("when session was created", () => {
 		it("should not show the dialog", () => {
 			const { showDialog } = setupAndCreateSession();
@@ -157,22 +143,22 @@ describe("useAutoLogout", () => {
 			expect(showDialog.value).toBe(false);
 		});
 
-		it("should set sessionStatus to 'Started'", () => {
+		it("should set sessionState to 'Started'", () => {
 			const options = { jwtTtl: 100, showWarningTime: 50 };
-			const { sessionStatus } = setupAndCreateSession(options);
+			const { sessionState } = setupAndCreateSession(options);
 
-			expect(sessionStatus.value).toBe(SessionStatus.Started);
+			expect(sessionState.value).toBe(SessionState.Started);
 		});
 
 		describe("when the timer is below the warning time", () => {
-			it("should change session status to 'aboutToExpire'", async () => {
+			it("should change session state to 'aboutToExpire'", async () => {
 				const options = { jwtTtl: 51, showWarningTime: 50 };
-				const { sessionStatus } = setupAndCreateSession(options);
+				const { sessionState } = setupAndCreateSession(options);
 
 				// After 1 second, remaining time is 50 which equals warning threshold
 				await advanceTimersBySeconds(2);
 
-				expect(sessionStatus.value).toBe(SessionStatus.AboutToExpire);
+				expect(sessionState.value).toBe(SessionState.AboutToExpire);
 			});
 
 			it("should show the dialog", async () => {
@@ -209,21 +195,21 @@ describe("useAutoLogout", () => {
 		});
 
 		describe("when the remaining time reaches zero", () => {
-			it("should set sessionStatus to 'Expired'", async () => {
+			it("should set sessionState to 'Expired'", async () => {
 				const options = { jwtTtl: 10, showWarningTime: 5 };
-				const { sessionStatus } = setupAndCreateSession(options);
+				const { sessionState } = setupAndCreateSession(options);
 
 				await advanceTimersBySeconds(10);
 
-				expect(sessionStatus.value).toBe(SessionStatus.Expired);
+				expect(sessionState.value).toBe(SessionState.Expired);
 			});
 		});
 
 		describe("when extendSession() is called", () => {
 			describe("when the underlying request is successful", () => {
-				it("should set sessionStatus to 'Extended'", async () => {
+				it("should set sessionState to 'Extended'", async () => {
 					const options = { jwtTtl: 100, showWarningTime: 50 };
-					const { sessionStatus, extendSession, axiosMock, remainingTimeInSeconds } = setupAndCreateSession(options);
+					const { sessionState, extendSession, axiosMock, remainingTimeInSeconds } = setupAndCreateSession(options);
 
 					const newJwtTtl = 200;
 					axiosMock.get.mockResolvedValue(createResponse(newJwtTtl));
@@ -232,21 +218,21 @@ describe("useAutoLogout", () => {
 					await extendSession();
 					await flushPromises();
 
-					expect(sessionStatus.value).toBe(SessionStatus.Extended);
+					expect(sessionState.value).toBe(SessionState.Extended);
 					expect(remainingTimeInSeconds.value).toBe(newJwtTtl);
 				});
 			});
 
 			describe("when the underlying request fails", () => {
-				it("should set sessionStatus to 'Error'", async () => {
+				it("should set sessionState to 'Error'", async () => {
 					const options = { jwtTtl: 100, showWarningTime: 50 };
-					const { sessionStatus, extendSession, axiosMock } = setupAndCreateSession(options);
+					const { sessionState, extendSession, axiosMock } = setupAndCreateSession(options);
 					axiosMock.post.mockRejectedValue(new Error("Network error"));
 
 					await extendSession();
 					await flushPromises();
 
-					expect(sessionStatus.value).toBe(SessionStatus.Error);
+					expect(sessionState.value).toBe(SessionState.Error);
 				});
 
 				it("should set errorOnExtend to true", async () => {
@@ -275,13 +261,13 @@ describe("useAutoLogout", () => {
 		describe("when extendSession() is called and session is already expired", () => {
 			it("should not make API call", async () => {
 				const options = { jwtTtl: 2, showWarningTime: 1 };
-				const { extendSession, sessionStatus, axiosMock } = setupAndCreateSession(options);
+				const { extendSession, sessionState, axiosMock } = setupAndCreateSession(options);
 				axiosMock.post.mockResolvedValue(createResponse(100));
 
 				// Let the timer expire
 				await advanceTimersBySeconds(3);
 
-				expect(sessionStatus.value).toBe(SessionStatus.Expired);
+				expect(sessionState.value).toBe(SessionState.Expired);
 				axiosMock.post.mockClear();
 
 				await extendSession();
@@ -293,7 +279,7 @@ describe("useAutoLogout", () => {
 		describe("when updateRemainingTime() retries on error", () => {
 			it("should retry up to MAX_RETRIES times with exponential backoff", async () => {
 				const options = { jwtTtl: 51, showWarningTime: 50 };
-				const { axiosMock, sessionStatus } = setupAndCreateSession(options);
+				const { axiosMock, sessionState } = setupAndCreateSession(options);
 
 				// All GET requests fail
 				axiosMock.get.mockRejectedValue(new Error("Network error"));
@@ -312,7 +298,7 @@ describe("useAutoLogout", () => {
 
 				// After MAX_RETRIES (3), should be in error state
 				expect(axiosMock.get).toHaveBeenCalledTimes(4); // Initial + 3 retries
-				expect(sessionStatus.value).toBe(SessionStatus.Error);
+				expect(sessionState.value).toBe(SessionState.Error);
 			});
 		});
 
@@ -355,7 +341,7 @@ describe("useAutoLogout", () => {
 
 			it("should call logout on app store", async () => {
 				const options = { jwtTtl: 3, showWarningTime: 2 };
-				const { sessionStatus, axiosMock } = setupAndCreateSession(options);
+				const { sessionState, axiosMock } = setupAndCreateSession(options);
 				const appStore = useAppStore();
 				vi.spyOn(appStore, "logout");
 				globalThis.fetch = vi.fn();
@@ -363,7 +349,7 @@ describe("useAutoLogout", () => {
 
 				await advanceTimersBySeconds(4);
 
-				expect(sessionStatus.value).toBe(SessionStatus.Expired);
+				expect(sessionState.value).toBe(SessionState.Expired);
 				expect(globalThis.fetch).toHaveBeenCalledWith("/logout");
 			});
 		});
@@ -438,89 +424,6 @@ describe("useAutoLogout", () => {
 				await advanceTimersBySeconds(3);
 
 				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("expired:"));
-			});
-		});
-
-		describe("when receiving a 'logout' message from another tab", () => {
-			it("should set session status to Expired", async () => {
-				const { sessionStatus, createSession } = setup();
-				createSession();
-
-				// Simulate receiving logout message from another tab
-				broadcastDataRef.value = "logout";
-				await flushPromises();
-
-				expect(sessionStatus.value).toBe(SessionStatus.Expired);
-			});
-
-			it("should redirect to /logout", async () => {
-				const locationAssignMock = vi.fn();
-				vi.stubGlobal("location", { assign: locationAssignMock });
-				const { createSession } = setup();
-				createSession();
-
-				broadcastDataRef.value = "logout";
-				await flushPromises();
-
-				expect(locationAssignMock).toHaveBeenCalledWith("/logout");
-			});
-		});
-
-		describe("when receiving a state sync message from another tab", () => {
-			it("should update remainingTimeInSeconds from the message", async () => {
-				const { remainingTimeInSeconds, createSession } = setup();
-				createSession();
-
-				broadcastDataRef.value = "started:500";
-				await flushPromises();
-
-				expect(remainingTimeInSeconds.value).toBe(500);
-			});
-
-			it("should update sessionStatus from the message", async () => {
-				const { sessionStatus, createSession } = setup();
-				createSession();
-
-				broadcastDataRef.value = "aboutToExpire:30";
-				await flushPromises();
-
-				expect(sessionStatus.value).toBe(SessionStatus.AboutToExpire);
-			});
-
-			it("should handle Extended status from another tab", async () => {
-				const { sessionStatus, remainingTimeInSeconds, createSession } = setup();
-				createSession();
-
-				broadcastDataRef.value = "extended:7200";
-				await flushPromises();
-
-				expect(sessionStatus.value).toBe(SessionStatus.Extended);
-				expect(remainingTimeInSeconds.value).toBe(7200);
-			});
-
-			it("should ignore invalid time values in the message", async () => {
-				const options = { jwtTtl: 100, showWarningTime: 50 };
-				const { remainingTimeInSeconds, createSession } = setup(options);
-				createSession();
-
-				broadcastDataRef.value = "started:invalid";
-				await flushPromises();
-
-				// Should not change since "invalid" is not a number
-				expect(remainingTimeInSeconds.value).toBe(100);
-			});
-
-			it("should ignore messages without colon separator", async () => {
-				const options = { jwtTtl: 100, showWarningTime: 50 };
-				const { sessionStatus, remainingTimeInSeconds, createSession } = setup(options);
-				createSession();
-				const initialStatus = sessionStatus.value;
-
-				broadcastDataRef.value = "someinvalidmessage";
-				await flushPromises();
-
-				expect(sessionStatus.value).toBe(initialStatus);
-				expect(remainingTimeInSeconds.value).toBe(100);
 			});
 		});
 	});

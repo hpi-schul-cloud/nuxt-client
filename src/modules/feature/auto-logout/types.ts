@@ -1,4 +1,4 @@
-export enum SessionStatus {
+export enum SessionState {
 	Extended = "extended",
 	AboutToExpire = "aboutToExpire",
 	Expired = "expired",

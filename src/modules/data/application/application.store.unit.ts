@@ -53,18 +53,19 @@ describe("useApplicationStore", () => {
 
 		mockBroadcastChannel.data.value = null;
 
-		Object.defineProperty(window, "location", {
+		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
 			writable: true,
 		});
 
-		Object.defineProperty(window, "localStorage", {
+		Object.defineProperty(globalThis, "localStorage", {
 			value: { clear: vi.fn() },
 			writable: true,
 		});
 
 		Object.defineProperty(document, "cookie", {
-			set: vi.fn(),
+			value: "",
+			writable: true,
 			configurable: true,
 		});
 	});
@@ -218,21 +219,23 @@ describe("useApplicationStore", () => {
 		});
 
 		it("should redirect to default logout URL", () => {
-			Object.defineProperty(window, "location", {
+			Object.defineProperty(globalThis, "location", {
 				value: { replace: vi.fn() },
+				writable: true,
 			});
 
 			useAppStore().logout();
-			expect(window.location.replace).toHaveBeenCalledWith("/logout");
+			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout");
 		});
 
 		it("should redirect to custom logout URL", () => {
-			Object.defineProperty(window, "location", {
+			Object.defineProperty(globalThis, "location", {
 				value: { replace: vi.fn() },
+				writable: true,
 			});
 
 			useAppStore().logout("/logout-to");
-			expect(window.location.replace).toHaveBeenCalledWith("/logout-to");
+			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout-to");
 		});
 
 		it("should post logout message to broadcast channel", () => {

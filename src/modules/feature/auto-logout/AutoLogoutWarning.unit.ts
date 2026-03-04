@@ -1,6 +1,6 @@
 import { useAutoLogout } from "./autoLogout.composable";
 import AutoLogoutWarning from "./AutoLogoutWarning.vue";
-import { SessionStatus } from "./types";
+import { SessionState } from "./types";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
@@ -55,7 +55,7 @@ describe("AutoLogoutWarning", () => {
 		remainingTimeInMinutes: computed(() => 0),
 		remainingTimeInSeconds: ref(0),
 		showWarningOnRemainingSeconds: 0,
-		sessionStatus: ref<SessionStatus | null>(null),
+		sessionState: ref<SessionState | null>(null),
 		createSession: vi.fn(),
 		extendSession: vi.fn(),
 	};
@@ -160,11 +160,11 @@ describe("AutoLogoutWarning", () => {
 	});
 
 	describe("confirm button", () => {
-		describe("when sessionStatus is 'ended'", () => {
+		describe("when sessionState is 'ended'", () => {
 			it("should set the correct title", () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Expired),
+						sessionState: ref(SessionState.Expired),
 					},
 				});
 
@@ -174,7 +174,7 @@ describe("AutoLogoutWarning", () => {
 			it("should call router.push when clicked", async () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Expired),
+						sessionState: ref(SessionState.Expired),
 					},
 				});
 
@@ -183,11 +183,11 @@ describe("AutoLogoutWarning", () => {
 			});
 		});
 
-		describe("when sessionStatus is 'continued'", () => {
+		describe("when sessionState is 'continued'", () => {
 			it("should set the correct title", () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Extended),
+						sessionState: ref(SessionState.Extended),
 					},
 				});
 
@@ -197,7 +197,7 @@ describe("AutoLogoutWarning", () => {
 			it("should call the extendSession method when clicked", async () => {
 				const { dialog } = setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Extended),
+						sessionState: ref(SessionState.Extended),
 					},
 				});
 				dialog.vm.$emit("confirm");
@@ -240,7 +240,7 @@ describe("AutoLogoutWarning", () => {
 			it("should display the error message", () => {
 				setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Expired),
+						sessionState: ref(SessionState.Expired),
 					},
 				});
 
@@ -253,7 +253,7 @@ describe("AutoLogoutWarning", () => {
 				const remainingTime = 5;
 				setup({
 					autoLogoutVariables: {
-						sessionStatus: ref(SessionStatus.Extended),
+						sessionState: ref(SessionState.Extended),
 						remainingTimeInMinutes: computed(() => remainingTime),
 					},
 				});
