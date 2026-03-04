@@ -15,12 +15,12 @@ describe("useClasses", () => {
 				{
 					id: "some-id-1",
 					gradeLevel: 1,
-					name: "a",
+					displayName: "a",
 				},
 				{
 					id: "some-id-2",
 					gradeLevel: 1,
-					name: "b",
+					displayName: "b",
 				},
 			],
 		},
@@ -39,9 +39,14 @@ describe("useClasses", () => {
 	});
 
 	it("should fetch and update list ", async () => {
-		const { list, fetchClasses } = useClasses();
+		const { classNameList, fetchClasses } = useClasses();
 		await fetchClasses({ $limit: 1000, year: "year-id" });
 
-		expect(list.value).toEqual(mockResponse.data.data);
+		const expectedClassNames = mockResponse.data.data.map((item) => ({
+			label: item.displayName,
+			value: item.displayName,
+		}));
+
+		expect(classNameList.value).toEqual(expectedClassNames);
 	});
 });
