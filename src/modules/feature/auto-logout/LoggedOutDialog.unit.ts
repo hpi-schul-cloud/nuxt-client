@@ -1,3 +1,4 @@
+import LoggedOutDialog from "./LoggedOutDialog.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
@@ -5,7 +6,6 @@ import { useSessionBroadcast } from "@util-broadcast-channel";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import LoggedOutDialog from "./LoggedOutDialog.vue";
 
 const mockPush = vi.fn();
 vi.mock("vue-router", () => ({

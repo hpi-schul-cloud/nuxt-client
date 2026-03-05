@@ -1,3 +1,4 @@
+import { useAppStore, useAppStoreRefs } from "./application.store";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -18,7 +19,6 @@ import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 import { ref } from "vue";
-import { useAppStore, useAppStoreRefs } from "./application.store";
 
 const mockBroadcastData = ref<string | null>(null);
 const mockBroadcastIsClosed = ref(false);
