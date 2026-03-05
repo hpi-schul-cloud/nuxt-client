@@ -39,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import { logger } from "@util-logger";
 import { isRequired, isValidEmail } from "@util-validators";
 import { reactive, unref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -63,8 +64,10 @@ const onSubmit = async () => {
 	if (!userForm.value) return;
 
 	const isValid = (await userForm.value.validate()).valid;
+	logger.log("Form valid:", isValid);
 
 	if (isValid) {
+		logger.log("emitting create-user with data:", unref(userData));
 		emit("create-user", unref(userData));
 	}
 };
