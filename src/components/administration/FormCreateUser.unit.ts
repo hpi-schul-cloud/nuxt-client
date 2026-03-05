@@ -6,16 +6,26 @@ import { setActivePinia } from "pinia";
 import { VForm } from "vuetify/components";
 import { createStore } from "vuex";
 
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn(),
+}));
+
 const validRole = {
 	data: ["student"],
 };
 
-const getMockActions = () => ({
+type MockActions = {
+	findStudents?: () => Promise<void>;
+	find: () => Promise<{ data: string[] }>;
+	create?: () => void;
+};
+
+const getMockActions = (): MockActions => ({
 	findStudents: vi.fn().mockReturnValue(Promise.resolve()),
 	find: vi.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
-const getMockActionsErrorCreate = () => ({
+const getMockActionsErrorCreate = (): MockActions => ({
 	create: () => {
 		throw new Error("Duplicate Mail");
 	},
@@ -23,7 +33,7 @@ const getMockActionsErrorCreate = () => ({
 });
 
 describe("FormCreateUser", () => {
-	const setup = (actions = getMockActions(), options = {}) => {
+	const setup = (actions: MockActions = getMockActions(), options = {}) => {
 		const wrapper = mount(FormCreateUser, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -70,10 +80,14 @@ describe("FormCreateUser", () => {
 			await form.trigger("submit.prevent");
 			await flushPromises();
 
-			const eventUserData = wrapper.emitted("create-user")[0][0];
-			expect(eventUserData.firstName).toBe("Klara");
-			expect(eventUserData.lastName).toBe("Fall");
-			expect(eventUserData.email).toBe("klara.fall@mail.de");
+			const emitted = wrapper.emitted("create-user");
+			expect(emitted).toBeDefined();
+			const eventUserData = emitted?.[0][0];
+			expect(eventUserData).toStrictEqual({
+				firstName: "Klara",
+				lastName: "Fall",
+				email: "klara.fall@mail.de",
+			});
 		});
 
 		it("does not emit create-user event if form is invalid", async () => {
