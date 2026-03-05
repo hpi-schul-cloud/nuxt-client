@@ -231,7 +231,7 @@ describe("ElementTypeSelection Composable", () => {
 			expect(isDialogOpen.value).toBe(true);
 		});
 
-		it.only("should set staticElementTypeOptions with all permissions true", () => {
+		it("should set staticElementTypeOptions with all permissions true", () => {
 			const { askType, staticElementTypeOptions } = setup();
 
 			askType();
