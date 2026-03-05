@@ -95,7 +95,7 @@ export const useAutoLogout = () => {
 		} else if (remainingTimeInSeconds.value <= WARNING_THRESHOLD) {
 			await setStateAndBroadcast(SessionState.AboutToExpire);
 		}
-		logger.log("Remaining time (s):", remainingTimeInSeconds.value, "State:", sessionState.value);
+		logger.log("Remaining time in seconds:", remainingTimeInSeconds.value, "state:", sessionState.value);
 	};
 
 	const countdownTimer = useCountdownTimer(checkEverySecond);
