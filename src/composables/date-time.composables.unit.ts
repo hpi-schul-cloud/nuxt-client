@@ -4,7 +4,6 @@ import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { describe, expect, it } from "vitest";
-import { nextTick } from "vue";
 
 describe("date-time-composable", () => {
 	beforeAll(() => {
@@ -19,9 +18,7 @@ describe("date-time-composable", () => {
 				{ locale: LanguageType.Es, expected: "DD/MM/AAAA" },
 				{ locale: LanguageType.Uk, expected: "ДД.ММ.РРРР" },
 			])("should return '$expected' for locale '$locale'", async ({ locale, expected }) => {
-				const appStore = useAppStore();
-				appStore.$patch({ userLocale: locale });
-				await nextTick();
+				useAppStore().$patch({ userLocale: locale });
 				const { datePlaceHolder } = useLocalizedDateTime();
 
 				expect(datePlaceHolder.value).toEqual(expected);

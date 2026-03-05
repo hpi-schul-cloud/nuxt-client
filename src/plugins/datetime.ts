@@ -181,13 +181,3 @@ export const getTimeFromISOString = (dateIsoString: string | undefined) => {
 		hourCycle: "h23",
 	});
 };
-
-export const isToday = (date: Date) => {
-	const dateObject = typeof date === Date ? date : new Date(date);
-	const today = new Date();
-	return (
-		dateObject.getDate() === today.getDate() &&
-		dateObject.getMonth() === today.getMonth() &&
-		dateObject.getFullYear() === today.getFullYear()
-	);
-};

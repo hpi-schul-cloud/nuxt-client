@@ -1,4 +1,5 @@
 import "@/plugins/polyfills";
+import { createDayJs } from "@/utils/date-time.utils";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
@@ -55,6 +56,9 @@ export const app = createApp(App);
 
 const pinia = createPinia();
 app.use(pinia);
+
+// Initialize date-time core (dayjs locale sync with app store)
+createDayJs();
 
 // app.config.productionTip = false;
 

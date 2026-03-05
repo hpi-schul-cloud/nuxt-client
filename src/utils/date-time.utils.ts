@@ -16,14 +16,14 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
 
-let localeWatchInitialized = false;
+let isDayJsInitialized = false;
 
 /**
  * Initialize dayjs locale sync with the application store's locale.
  */
 export const createDayJs = () => {
-	if (localeWatchInitialized) return;
-	localeWatchInitialized = true;
+	if (isDayJsInitialized) return;
+	isDayJsInitialized = true;
 
 	const { locale } = useAppStoreRefs();
 
@@ -143,3 +143,16 @@ export const isInPast = (dateTime: string | undefined): boolean => {
 export const isToday = (date: Date | string): boolean => dayjs(date).isSame(dayjs(), "day");
 
 export const fromNowUtc = (isoUtcDate: string): string => parseUtc(isoUtcDate).fromNow();
+
+export type LocaleFormatId = "date" | "time" | "dateTime" | "dateTimeYY" | "dateYY";
+
+const getFormat = (formatId: LocaleFormatId): string => getLocaleFormats(dayjs.locale())[formatId];
+
+export const formatUtc = (isoUtc: string | undefined, formatId: LocaleFormatId) => {
+	if (!isoUtc) return undefined;
+
+	const d = dayjs.utc(isoUtc).local();
+	if (!d.isValid()) return undefined;
+
+	return d.format(getFormat(formatId));
+};

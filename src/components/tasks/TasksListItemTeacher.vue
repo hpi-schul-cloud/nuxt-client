@@ -106,7 +106,8 @@
 
 <script>
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime.ts";
+import { printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime.ts";
+import { isToday } from "@/utils/date-time.utils.ts";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -197,6 +198,7 @@ export default {
 		},
 	},
 	methods: {
+		isToday,
 		handleClick() {
 			this.redirectAction(`/homework/${this.task.id}`);
 		},
