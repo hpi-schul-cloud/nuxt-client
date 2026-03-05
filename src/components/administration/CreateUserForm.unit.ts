@@ -1,4 +1,4 @@
-import FormCreateUser from "./FormCreateUser.vue";
+import CreateUserForm from "./CreateUserForm.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -32,9 +32,9 @@ const getMockActionsErrorCreate = (): MockActions => ({
 	find: vi.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
-describe("FormCreateUser", () => {
+describe("CreateUserForm", () => {
 	const setup = (actions: MockActions = getMockActions(), options = {}) => {
-		const wrapper = mount(FormCreateUser, {
+		const wrapper = mount(CreateUserForm, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {

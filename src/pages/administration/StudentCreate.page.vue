@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<FormCreateUser @create-user="createStudent">
+		<CreateUserForm @create-user="createStudent">
 			<template #inputs>
 				<VTextField
 					v-model="date"
@@ -26,12 +26,12 @@
 			<template #errors>
 				<InfoMessage v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
-		</FormCreateUser>
+		</CreateUserForm>
 	</DefaultWireframe>
 </template>
 
 <script>
-import FormCreateUser from "@/components/administration/FormCreateUser.vue";
+import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
@@ -44,7 +44,7 @@ import { mapGetters } from "vuex";
 
 export default defineComponent({
 	components: {
-		FormCreateUser,
+		CreateUserForm,
 		InfoMessage,
 		DefaultWireframe,
 	},
