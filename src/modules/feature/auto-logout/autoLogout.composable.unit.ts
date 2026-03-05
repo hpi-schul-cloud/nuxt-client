@@ -1,14 +1,13 @@
+import { useAutoLogout } from "./autoLogout.composable";
 import { RoleName } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { createTestAppStoreWithRole, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { type Ref, ref } from "vue";
-import { useAutoLogout } from "./autoLogout.composable";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -85,7 +84,7 @@ describe("useAutoLogout", () => {
 
 		const composable = mountComposable(useAutoLogout, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [],
 			},
 		});
 
@@ -127,7 +126,7 @@ describe("useAutoLogout", () => {
 
 			const { createSession, remainingTimeInSeconds } = mountComposable(useAutoLogout, {
 				global: {
-					plugins: [createTestingI18n()],
+					plugins: [],
 				},
 			});
 

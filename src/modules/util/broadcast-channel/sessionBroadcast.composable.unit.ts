@@ -1,7 +1,6 @@
 import { useSessionBroadcast } from "./sessionBroadcast.composable";
 import { SessionState } from "./types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { mountComposable } from "@@/tests/test-utils";
 import { flushPromises } from "@vue/test-utils";
 import { type Ref, ref } from "vue";
 
@@ -32,7 +31,6 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 
 describe("useSessionBroadcast", () => {
 	beforeEach(() => {
-		vi.clearAllMocks();
 		vi.unstubAllGlobals();
 		broadcastDataRef.value = undefined;
 		broadcastIsClosedRef.value = false;
@@ -46,7 +44,7 @@ describe("useSessionBroadcast", () => {
 	});
 
 	describe("minimal usage (no options)", () => {
-		const setup = () => mountComposable(() => useSessionBroadcast());
+		const setup = () => useSessionBroadcast();
 
 		it("should send logout message", () => {
 			const { sendLogout } = setup();
@@ -79,7 +77,7 @@ describe("useSessionBroadcast", () => {
 			const setState = vi.fn();
 			const setTime = vi.fn();
 
-			const composable = mountComposable(() => useSessionBroadcast({ setState, setTime }));
+			const composable = useSessionBroadcast({ setState, setTime });
 
 			return { ...composable, setState, setTime };
 		};
@@ -153,7 +151,7 @@ describe("useSessionBroadcast", () => {
 			const onLogoutReceived = vi.fn();
 			const setState = vi.fn();
 
-			mountComposable(() => useSessionBroadcast({ setState, onLogoutReceived }));
+			useSessionBroadcast({ setState, onLogoutReceived });
 
 			broadcastDataRef.value = "logout";
 			await flushPromises();
@@ -166,7 +164,7 @@ describe("useSessionBroadcast", () => {
 	describe("onLogoutEvent", () => {
 		it("should register and call handler when logout message is received", async () => {
 			const handler = vi.fn();
-			const { onLogoutEvent } = mountComposable(() => useSessionBroadcast());
+			const { onLogoutEvent } = useSessionBroadcast();
 
 			onLogoutEvent(handler);
 			broadcastDataRef.value = "logout";
@@ -178,7 +176,7 @@ describe("useSessionBroadcast", () => {
 		it("should call multiple registered handlers", async () => {
 			const handler1 = vi.fn();
 			const handler2 = vi.fn();
-			const { onLogoutEvent } = mountComposable(() => useSessionBroadcast());
+			const { onLogoutEvent } = useSessionBroadcast();
 
 			onLogoutEvent(handler1);
 			onLogoutEvent(handler2);
@@ -193,7 +191,7 @@ describe("useSessionBroadcast", () => {
 			const eventHandler = vi.fn();
 			const optionHandler = vi.fn();
 
-			const { onLogoutEvent } = mountComposable(() => useSessionBroadcast({ onLogoutReceived: optionHandler }));
+			const { onLogoutEvent } = useSessionBroadcast({ onLogoutReceived: optionHandler });
 
 			onLogoutEvent(eventHandler);
 			broadcastDataRef.value = "logout";
@@ -206,13 +204,13 @@ describe("useSessionBroadcast", () => {
 
 	describe("isJwtExpired", () => {
 		it("should be false initially", () => {
-			const { isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { isJwtExpired } = useSessionBroadcast();
 
 			expect(isJwtExpired.value).toBe(false);
 		});
 
 		it("should be set to true when logout message is received", async () => {
-			const { isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { isJwtExpired } = useSessionBroadcast();
 
 			broadcastDataRef.value = "logout";
 			await flushPromises();
@@ -221,7 +219,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should not change for non-logout messages", async () => {
-			const { isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { isJwtExpired } = useSessionBroadcast();
 
 			broadcastDataRef.value = "started:100";
 			await flushPromises();
@@ -232,7 +230,7 @@ describe("useSessionBroadcast", () => {
 
 	describe("setJwtExpired", () => {
 		it("should set isJwtExpired to true by default", () => {
-			const { isJwtExpired, setJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { isJwtExpired, setJwtExpired } = useSessionBroadcast();
 
 			setJwtExpired();
 
@@ -240,7 +238,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should set isJwtExpired to the provided value", () => {
-			const { isJwtExpired, setJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { isJwtExpired, setJwtExpired } = useSessionBroadcast();
 
 			setJwtExpired(true);
 			expect(isJwtExpired.value).toBe(true);
@@ -257,7 +255,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should not set jwt expired for non-axios errors", async () => {
-			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { handleUnauthorizedError, isJwtExpired } = useSessionBroadcast();
 
 			await handleUnauthorizedError(new Error("regular error"));
 
@@ -265,7 +263,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should not set jwt expired for non-401 axios errors", async () => {
-			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { handleUnauthorizedError, isJwtExpired } = useSessionBroadcast();
 			const { AxiosError } = await import("axios");
 			const axiosError = new AxiosError("error", "500", undefined, undefined, {
 				status: HttpStatusCode.InternalServerError,
@@ -277,7 +275,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should not set jwt expired when ttl is greater than 0", async () => {
-			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { handleUnauthorizedError, isJwtExpired } = useSessionBroadcast();
 			const { AxiosError, default: axios } = await import("axios");
 			const axiosError = new AxiosError("error", "401", undefined, undefined, {
 				status: HttpStatusCode.Unauthorized,
@@ -295,7 +293,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should set jwt expired when ttl is 0", async () => {
-			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { handleUnauthorizedError, isJwtExpired } = useSessionBroadcast();
 			const { AxiosError, default: axios } = await import("axios");
 			const axiosError = new AxiosError("error", "401", undefined, undefined, {
 				status: HttpStatusCode.Unauthorized,
@@ -313,7 +311,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		it("should set jwt expired when jwt timer request fails", async () => {
-			const { handleUnauthorizedError, isJwtExpired } = mountComposable(() => useSessionBroadcast());
+			const { handleUnauthorizedError, isJwtExpired } = useSessionBroadcast();
 			const { AxiosError, default: axios } = await import("axios");
 			const axiosError = new AxiosError("error", "401", undefined, undefined, {
 				status: HttpStatusCode.Unauthorized,

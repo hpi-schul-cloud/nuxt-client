@@ -42,12 +42,11 @@
 import { useCountdownTimer } from "./countdownTimer.composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
-import { AlertPayload, useAppStore, useNotificationStore } from "@data-app";
+import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SessionState, useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { readonly, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 const MAX_RETRIES = 3;
@@ -55,7 +54,6 @@ const DEFAULT_TIMEOUT_SECONDS = 2 * 60 * 60; // 2 hours
 const DEFAULT_WARNING_SECONDS = 1 * 60 * 60; // 1 hour
 
 export const useAutoLogout = () => {
-	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
 
 	const showDialog = ref(false);
@@ -119,7 +117,7 @@ export const useAutoLogout = () => {
 		sessionState.value = SessionState.Extended;
 		showDialog.value = false;
 		startTimer();
-		notify("success", t("feature-autoLogout.message.extending-session-success"));
+		notifySuccess("feature-autoLogout.message.extending-session-success");
 	};
 
 	const setExpiredState = async () => {
@@ -127,7 +125,7 @@ export const useAutoLogout = () => {
 		setTime(0);
 		stopTimer();
 		showDialog.value = true;
-		notify("error", t("feature-autoLogout.message.error.401"), false);
+		notifyError("feature-autoLogout.message.error.401", false);
 		useAppStore().clearUserSession();
 		await logoutUserSilently();
 	};
@@ -135,7 +133,7 @@ export const useAutoLogout = () => {
 	const setErrorState = () => {
 		sessionState.value = SessionState.Error;
 		stopTimer();
-		notify("error", t("feature-autoLogout.message.extending-session-failure"));
+		notifyError("feature-autoLogout.message.extending-session-failure");
 	};
 
 	const stateFunctions: Record<SessionState, () => Promise<void> | void> = {
@@ -199,16 +197,6 @@ export const useAutoLogout = () => {
 	// --- Broadcast Session State Changes ---
 
 	const { sendStateAndTime } = useSessionBroadcast({ setState, setTime });
-
-	// --- Helpers ---
-
-	const notify = (state: AlertPayload["status"], text: string, autoClose = true) => {
-		useNotificationStore().notify({
-			text,
-			status: state,
-			autoClose,
-		});
-	};
 
 	return {
 		remainingTimeInSeconds: readonly(remainingTimeInSeconds),

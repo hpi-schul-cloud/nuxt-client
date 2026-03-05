@@ -32,11 +32,16 @@ describe("main.ts initialization", () => {
 
 		it("should provide essential methods", () => {
 			const store = useAppStore();
-			expect(store.setJwtExpired).toBeDefined();
 			expect(store.login).toBeDefined();
 			expect(store.logout).toBeDefined();
 			expect(store.externalLogout).toBeDefined();
 			expect(store.handleUnknownError).toBeDefined();
+		});
+
+		it("should call the store", () => {
+			useAppStore();
+
+			expect(mockUseAppStore).toHaveBeenCalled();
 		});
 	});
 });

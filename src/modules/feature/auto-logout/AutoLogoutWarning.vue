@@ -22,7 +22,7 @@
 					</span>
 				</i18n-t>
 			</WarningAlert>
-			<img :src="SlothSvg" class="w-75 d-block mx-auto" role="presentation" alt="" />
+			<img :src="SlothSvg" class="w-75 d-block mx-auto" alt="" />
 		</template>
 	</SvsDialog>
 </template>

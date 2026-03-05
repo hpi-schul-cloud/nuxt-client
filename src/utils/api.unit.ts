@@ -52,8 +52,6 @@ describe("AxiosInstance", () => {
 				},
 				get: vi.fn(),
 			} as unknown as typeof axios;
-
-			vi.clearAllMocks();
 		});
 
 		describe("when errorHandler is provided", () => {
