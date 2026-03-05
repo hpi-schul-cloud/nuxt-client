@@ -3,8 +3,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import { RoomColor } from "@/serverApi/v3/api";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { apiResponseErrorFactory, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { apiResponseErrorFactory, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { Mocked } from "vitest";
@@ -13,14 +12,14 @@ vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 describe("useRoomDetailsStore", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let boardApiMock: DeepMocked<serverApi.BoardApiInterface>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let boardApiMock: Mocked<serverApi.BoardApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		boardApiMock = createMock<serverApi.BoardApiInterface>();
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		boardApiMock = mockApi<serverApi.BoardApiInterface>();
 		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);

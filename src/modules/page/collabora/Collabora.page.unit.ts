@@ -5,13 +5,13 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	fileElementResponseFactory,
 	fileRecordFactory,
+	mockApi,
 	mockApiResponse,
 	ObjectIdMock,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { useTitle } from "@vueuse/core";
@@ -47,7 +47,7 @@ describe("Collabora.page", () => {
 
 	describe("when file record exists in store", () => {
 		const setup = (edit?: string) => {
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 			const fileRecord = fileRecordFactory.build({ name: "test-file.xlsx" });
@@ -58,7 +58,7 @@ describe("Collabora.page", () => {
 
 			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Course Board" });
 			const fileElement = fileElementResponseFactory.build();
-			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce(
 				mockApiResponse<ElementWithParentHierarchyResponse>({
 					data: {
@@ -122,7 +122,7 @@ describe("Collabora.page", () => {
 
 	describe("when file record needs to be fetched", () => {
 		const setup = () => {
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 			const fileRecord = fileRecordFactory.build({ name: "fetched-file.xlsx" });
@@ -134,7 +134,7 @@ describe("Collabora.page", () => {
 
 			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Course Board" });
 			const fileElement = fileElementResponseFactory.build();
-			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValueOnce(
 				mockApiResponse<ElementWithParentHierarchyResponse>({
 					data: {
@@ -179,7 +179,7 @@ describe("Collabora.page", () => {
 	describe("when fetchFileById rejects", () => {
 		const setup = () => {
 			const fileRecordId = ObjectIdMock();
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 			fileStorageApiMock.getFileRecordById.mockReturnValue(undefined);
@@ -188,7 +188,7 @@ describe("Collabora.page", () => {
 				"https://collabora.example.com/wopi/files/123"
 			);
 
-			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(new Error("Fetch parent failed"));
 
@@ -223,7 +223,7 @@ describe("Collabora.page", () => {
 
 	describe("when getElementWithParentHierarchy rejects", () => {
 		const setup = () => {
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 			const fileRecord = fileRecordFactory.build({ name: "standalone-file.pdf" });
@@ -232,7 +232,7 @@ describe("Collabora.page", () => {
 				"https://collabora.example.com/wopi/files/123"
 			);
 
-			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValue(new Error("Fetch parent failed"));
 
@@ -268,7 +268,7 @@ describe("Collabora.page", () => {
 
 	describe("when file record has no name", () => {
 		const setup = () => {
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 			const fileRecord = fileRecordFactory.build({ name: undefined });
@@ -280,7 +280,7 @@ describe("Collabora.page", () => {
 
 			const parentNodeInfos = parentNodeInfoFactory.build({ name: "Task Board" });
 			const fileElement = fileElementResponseFactory.build();
-			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 			boardApi.elementControllerGetElementWithParentHierarchy.mockResolvedValue(
 				mockApiResponse<ElementWithParentHierarchyResponse>({
 					data: {
@@ -324,7 +324,7 @@ describe("Collabora.page", () => {
 	describe("when both file name and parent name are missing", () => {
 		const setup = () => {
 			const fileRecordId = ObjectIdMock();
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockApi<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 			fileStorageApiMock.getFileRecordById.mockReturnValue(undefined);
@@ -333,7 +333,7 @@ describe("Collabora.page", () => {
 				"https://collabora.example.com/wopi/files/123"
 			);
 
-			const boardApi = createMock<serverApi.BoardElementApiInterface>();
+			const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 			vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValueOnce(boardApi);
 			boardApi.elementControllerGetElementWithParentHierarchy.mockRejectedValueOnce(new Error("Fetch parent failed"));
 

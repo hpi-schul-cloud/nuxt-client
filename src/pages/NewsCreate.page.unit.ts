@@ -5,13 +5,13 @@ import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStoreWithSchool,
 	expectNotification,
+	mockApi,
 	mockApiResponse,
 	mockAxiosInstance,
 	newsResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsForm } from "@feature-news";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance, HttpStatusCode } from "axios";
@@ -21,13 +21,13 @@ import { LocationQuery } from "vue-router";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("NewsCreatePage", () => {
-	let newsApi: DeepMocked<NewsApiInterface>;
+	let newsApi: Mocked<NewsApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
-		newsApi = createMock<NewsApiInterface>();
+		newsApi = mockApi<NewsApiInterface>();
 		axiosMock = mockAxiosInstance();
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		initializeAxios(axiosMock);

@@ -2,10 +2,15 @@ import NewsEditPage from "./NewsEdit.page.vue";
 import { NewsApiInterface, NewsResponse } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { expectNotification, mockApiResponse, mockAxiosInstance, newsResponseFactory } from "@@/tests/test-utils";
+import {
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	mockAxiosInstance,
+	newsResponseFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsForm } from "@feature-news";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
@@ -15,12 +20,12 @@ import { Mocked } from "vitest";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("NewsEditPage", () => {
-	let newsApi: DeepMocked<NewsApiInterface>;
+	let newsApi: Mocked<NewsApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		newsApi = createMock<NewsApiInterface>();
+		newsApi = mockApi<NewsApiInterface>();
 		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);

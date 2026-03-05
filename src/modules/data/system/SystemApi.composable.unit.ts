@@ -4,15 +4,17 @@ import { mockApiResponse } from "@@/tests/test-utils";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { useErrorHandler } from "@util-error-handling";
+import { Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 
 vi.mock("@util-error-handling/ErrorHandler.composable");
 
 describe("SystemApi.composable", () => {
-	let systemApi: DeepMocked<SystemsApiInterface>;
+	let systemApi: Mocked<SystemsApiInterface>;
 	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
-		systemApi = createMock<SystemsApiInterface>();
+		systemApi = mock<SystemsApiInterface>();
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
 		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);

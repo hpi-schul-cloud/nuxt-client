@@ -143,10 +143,10 @@ describe("Board", () => {
 		const copyResultId = "42";
 		const copyModule = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
-			getCopyResult: createMock<CopyApiResponse>({
+			getCopyResult: {
 				id: copyResultId,
 				type: CopyApiResponseTypeEnum.Board,
-			}),
+			} as CopyApiResponse,
 		});
 
 		const shareModule = createModuleMocks(ShareModule);

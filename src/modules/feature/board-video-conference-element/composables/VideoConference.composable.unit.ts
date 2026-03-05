@@ -7,14 +7,15 @@ import {
 	VideoConferenceStateResponse,
 } from "@/serverApi/v3/api";
 import { VideoConferenceState } from "@/store/types/video-conference";
+import { mockApi } from "@@/tests/test-utils/mockApiFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 
-let videoConferenceApi: DeepMocked<serverApi.VideoConferenceApiInterface>;
+let videoConferenceApi: Mocked<serverApi.VideoConferenceApiInterface>;
 
 describe("VideoConferenceComposable", () => {
 	beforeEach(() => {
-		videoConferenceApi = createMock<serverApi.VideoConferenceApiInterface>();
+		videoConferenceApi = mockApi<serverApi.VideoConferenceApiInterface>();
 
 		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(videoConferenceApi);
 	});

@@ -14,6 +14,7 @@ import {
 	axiosErrorFactory,
 	createTestAppStore,
 	expectNotification,
+	mockApi,
 	mockApiResponse,
 	mockAxiosInstance,
 	mockedPiniaStoreTyping,
@@ -25,7 +26,6 @@ import {
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ExternalMemberCheckStatus, RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
@@ -37,8 +37,8 @@ vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("useRoomMembers", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let schoolApiMock: Mocked<serverApi.SchoolApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
 	const ownSchool = {
@@ -57,8 +57,8 @@ describe("useRoomMembers", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		schoolApiMock = mockApi<serverApi.SchoolApiInterface>();
 		axiosMock = mockAxiosInstance();
 		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 

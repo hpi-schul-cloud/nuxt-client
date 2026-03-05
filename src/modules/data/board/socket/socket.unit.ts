@@ -1,15 +1,20 @@
 import { resetSocketStateForTesting } from "./socket";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
-import { boardResponseFactory, expectNotification, mockApiResponse, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -69,7 +74,7 @@ describe("socket.ts", () => {
 	let namedSocketHandlers: Record<string, Fn>;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
-	let boardErrorReportApi: DeepMocked<ReturnType<typeof BoardErrorReportApiFactory>>;
+	let boardErrorReportApi: Mocked<ReturnType<typeof BoardErrorReportApiFactory>>;
 
 	beforeAll(() => {
 		timeoutResponseMock = { emitWithAck: vi.fn() };
@@ -84,7 +89,7 @@ describe("socket.ts", () => {
 		};
 		mockSocketIOClient.io.mockReturnValue(mockSocket as socketModule.Socket);
 
-		boardErrorReportApi = createMock<serverApi.BoardErrorReportApi>();
+		boardErrorReportApi = mockApi<serverApi.BoardErrorReportApi>();
 		vi.spyOn(serverApi, "BoardErrorReportApiFactory").mockReturnValue(boardErrorReportApi);
 
 		const router = createRouterMock();

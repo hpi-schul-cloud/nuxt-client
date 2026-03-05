@@ -14,6 +14,7 @@ import {
 	authorizedCollaboraDocumentUrlResponseFactory,
 	AxiosResponseFactory,
 	createTestAppStoreWithSchool,
+	mockApi,
 	mockApiResponse,
 } from "@@/tests/test-utils";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
@@ -22,7 +23,6 @@ import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordRespons
 import { fileUrlParamsFactory } from "@@/tests/test-utils/factory/fileUrlParamsFactory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { useNotificationStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
@@ -70,7 +70,7 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 
 				return {
@@ -97,7 +97,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecord,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.getFileRecord.mockResolvedValueOnce(response);
 
@@ -135,7 +135,7 @@ describe("FileStorageApi Composable", () => {
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.getFileRecord.mockRejectedValue(responseError);
 
@@ -212,7 +212,7 @@ describe("FileStorageApi Composable", () => {
 					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockResolvedValueOnce(response);
 
@@ -255,7 +255,7 @@ describe("FileStorageApi Composable", () => {
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockRejectedValue(responseError);
 
@@ -317,7 +317,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockResolvedValueOnce(response);
 
@@ -360,7 +360,7 @@ describe("FileStorageApi Composable", () => {
 
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockRejectedValue(responseError);
 
@@ -397,7 +397,7 @@ describe("FileStorageApi Composable", () => {
 
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.upload.mockRejectedValue(responseError);
 
@@ -441,7 +441,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
 
@@ -525,7 +525,7 @@ describe("FileStorageApi Composable", () => {
 
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockRejectedValueOnce(responseError);
 
@@ -570,7 +570,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
 				fileApi.patchFilename.mockResolvedValueOnce(response);
 
@@ -612,7 +612,7 @@ describe("FileStorageApi Composable", () => {
 
 				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
 				fileApi.patchFilename.mockRejectedValue(responseError);
 
@@ -650,7 +650,7 @@ describe("FileStorageApi Composable", () => {
 					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 
 				fileApi.list.mockResolvedValueOnce(fetchResponse);
@@ -706,7 +706,7 @@ describe("FileStorageApi Composable", () => {
 					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.list.mockResolvedValueOnce(response);
 
@@ -758,7 +758,7 @@ describe("FileStorageApi Composable", () => {
 				const response = authorizedCollaboraDocumentUrlResponseFactory.build();
 				const axiosResponse = AxiosResponseFactory.create<AuthorizedCollaboraDocumentUrlResponse>(response);
 
-				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
+				const wopiApiMock = mockApi<wopiApi.WopiApiInterface>();
 				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
 				wopiApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(axiosResponse);
 
@@ -792,7 +792,7 @@ describe("FileStorageApi Composable", () => {
 				const editorMode = EditorMode.EDIT;
 				const userDisplayName = "Test User";
 
-				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
+				const wopiApiMock = mockApi<wopiApi.WopiApiInterface>();
 				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
 
 				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.Forbidden);
@@ -826,7 +826,7 @@ describe("FileStorageApi Composable", () => {
 				const editorMode = EditorMode.EDIT;
 				const userDisplayName = "Test User";
 
-				const wopiApiMock = createMock<wopiApi.WopiApiInterface>();
+				const wopiApiMock = mockApi<wopiApi.WopiApiInterface>();
 				vi.spyOn(wopiApi, "WopiApiFactory").mockReturnValueOnce(wopiApiMock);
 
 				const { responseError, expectedPayload } = setupErrorResponse(ErrorType.Unauthorized);
@@ -869,7 +869,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
 
@@ -933,7 +933,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
 
@@ -997,7 +997,7 @@ describe("FileStorageApi Composable", () => {
 					data: fileRecordResponse,
 				});
 
-				const fileApi = createMock<serverApi.FileApiInterface>();
+				const fileApi = mockApi<serverApi.FileApiInterface>();
 				vi.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
 				fileApi.uploadFromUrl.mockResolvedValueOnce(response);
 

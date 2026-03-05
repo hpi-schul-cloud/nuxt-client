@@ -1,14 +1,15 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mockApi } from "@@/tests/test-utils/mockApiFactory";
+import { Mocked } from "vitest";
 
-let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
-let submissionItemApi: DeepMocked<serverApi.BoardSubmissionApiInterface>;
+let elementApi: Mocked<serverApi.BoardElementApiInterface>;
+let submissionItemApi: Mocked<serverApi.BoardSubmissionApiInterface>;
 
 describe("SubmissionItemApi.composable", () => {
 	beforeEach(() => {
-		elementApi = createMock<serverApi.BoardElementApiInterface>();
-		submissionItemApi = createMock<serverApi.BoardSubmissionApiInterface>();
+		elementApi = mockApi<serverApi.BoardElementApiInterface>();
+		submissionItemApi = mockApi<serverApi.BoardSubmissionApiInterface>();
 
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
 		vi.spyOn(serverApi, "BoardSubmissionApiFactory").mockReturnValue(submissionItemApi);

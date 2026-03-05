@@ -9,25 +9,25 @@ import {
 	createTestEnvStore,
 	expectNoNotification,
 	expectNotification,
+	mockApi,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
 	registrationFactory,
 	roomFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mock, Mocked, vi } from "vitest";
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("registration.store", () => {
-	let registrationApi: DeepMocked<serverApi.RegistrationApiInterface>;
+	let registrationApi: Mocked<serverApi.RegistrationApiInterface>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		registrationApi = createMock<serverApi.RegistrationApiInterface>();
+		registrationApi = mockApi<serverApi.RegistrationApiInterface>();
 		vi.spyOn(serverApi, "RegistrationApiFactory").mockReturnValue(registrationApi);
 	});
 
