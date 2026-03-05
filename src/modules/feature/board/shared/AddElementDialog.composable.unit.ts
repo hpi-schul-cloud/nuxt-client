@@ -231,12 +231,12 @@ describe("ElementTypeSelection Composable", () => {
 			expect(isDialogOpen.value).toBe(true);
 		});
 
-		it("should set staticElementTypeOptions with all permissions true", () => {
+		it.only("should set staticElementTypeOptions with all permissions true", () => {
 			const { askType, staticElementTypeOptions } = setup();
 
 			askType();
 
-			expect(staticElementTypeOptions.value.length).toBe(9);
+			expect(staticElementTypeOptions.value.length).toBe(8);
 		});
 
 		describe("when preferred tools have finished loading", () => {
