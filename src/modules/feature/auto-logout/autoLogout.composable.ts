@@ -151,8 +151,6 @@ export const useAutoLogout = () => {
 		const stateFunction = stateFunctions[state];
 		if (stateFunction) {
 			await stateFunction();
-		} else {
-			logger.warn("Unknown session state:", state);
 		}
 	};
 
