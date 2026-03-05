@@ -8,14 +8,9 @@ import datetime, {
 	formatDateForAlerts,
 	fromInputDateTime,
 	fromNow,
-	fromNowToFuture,
-	getTimeFromISOString,
 	getUtcOffset,
 	inputDateFromDeUTC,
 	inputRangeDate,
-	isDateTimeInPast,
-	printDateFromStringUTC,
-	printDateTimeFromStringUTC,
 	setDefaultFormats,
 	setDefaultTimezone,
 } from "@/plugins/datetime.ts";
@@ -83,18 +78,6 @@ describe("@/plugins/datetime", () => {
 		expect(result).toBe(new Date().toISOString().slice(0, -5));
 	});
 
-	it("printDateFromStringUTC", () => {
-		const result = printDateFromStringUTC(dateString);
-		expect(result).toBe(dateLocalStringYY);
-		expect(printDateFromStringUTC(null)).toBe("Invalid Date");
-	});
-
-	it("printDateTimeFromStringUTC", () => {
-		const result = printDateTimeFromStringUTC(dateString);
-		expect(result).toBe(dateTimeLocalStringYY);
-		expect(printDateTimeFromStringUTC(null)).toBe("Invalid Date");
-	});
-
 	it("inputDateFromDeUTC", () => {
 		const result = inputDateFromDeUTC(dateUTCString);
 		expect(result).toBe(dateLocal.format("YYYY-MM-DD"));
@@ -125,15 +108,6 @@ describe("@/plugins/datetime", () => {
 		expect(result).toBe(expectedDate);
 	});
 
-	it("fromNowToFuture", () => {
-		const past = dateUTC.toISOString();
-		const future = dateNow.add(230, "minute").toISOString();
-		const result1 = fromNowToFuture(past, "days");
-		const result2 = fromNowToFuture(future, "hours");
-		expect(result1).toBeNull();
-		expect(result2).toBe(3);
-	});
-
 	it("fromInputDateTime", () => {
 		const result1 = fromInputDateTime(dateFormat, timeLocalString);
 		expect(result1.format()).toStrictEqual(dateLocal.format());
@@ -155,20 +129,6 @@ describe("@/plugins/datetime", () => {
 
 		const resultDateTimeString = resultDateTime.toISOString();
 		expect(resultDateTimeString).toStrictEqual(dateString);
-	});
-
-	it("isDateTimeInPast", () => {
-		const date = new Date("1991-12-31");
-		expect(isDateTimeInPast(date)).toStrictEqual(true);
-	});
-
-	it("getTimeFromISOString", () => {
-		const date = new Date();
-		const ISOString = date.toISOString();
-		const hours = date.getHours().toString().padStart(2, "0");
-		const minutes = date.getMinutes().toString().padStart(2, "0");
-
-		expect(getTimeFromISOString(ISOString)).toStrictEqual(`${hours}:${minutes}`);
 	});
 
 	const mockApp = {

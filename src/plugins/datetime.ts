@@ -62,27 +62,10 @@ export const inputDateFormat = (date: string) => {
 };
 
 /**
- * Returns formated date string based on a given dayjs object
- * @param date string based on UTC (unformatted)
- * @return Date string based on current timezone using locale date formating
- */
-export const printDateFromStringUTC = (date: string | undefined) => dayjs(date).tz().format(DATETIME_FORMAT.dateYY);
-
-/**
- * Returns formated date string based on a given dayjs object
- * @param date string based on UTC (unformatted)
- * @return Date string based on current timezone using locale date formating
- */
-export const printDateTimeFromStringUTC = (date: string | undefined) =>
-	dayjs(date).tz().format(DATETIME_FORMAT.dateTimeYY);
-
-/**
  * Returns formated (DD.MM.YYYY) date string based on a given dayjs object
  * @return Date string based on current timezone using locale date formating
  */
 export const printFromStringUtcToFullDate = (date: string) => dayjs(date).tz().format(DATETIME_FORMAT.date);
-
-export const printTimeFromStringUTC = (date: string) => dayjs(date).tz().format(DATETIME_FORMAT.time);
 
 /**
  * Returns formated based on current date and given offset
@@ -150,34 +133,6 @@ export const setDayjsLocale = () => {
 };
 
 /**
- * Returns future date difference to current local time
- * @return Future date difference based on the unit and current timezone
- */
-export const fromNowToFuture = (date: string, unit: string) => {
-	const input = dayjs.tz(date, "UTC");
-	const today = currentDate();
-	if (today.isBefore(input)) {
-		return input.diff(today, unit);
-	}
-};
-
-/**
  * @return Current date based on current timezone
  */
 export const currentDate = () => dayjs.tz();
-
-export const isDateTimeInPast = (dateTime: string | undefined) => {
-	if (!dateTime) return false;
-
-	return new Date(dateTime) < new Date();
-};
-
-export const getTimeFromISOString = (dateIsoString: string | undefined) => {
-	if (!dateIsoString) return "";
-
-	const locale = useAppStore().locale || "de";
-	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
-		timeStyle: "short",
-		hourCycle: "h23",
-	});
-};

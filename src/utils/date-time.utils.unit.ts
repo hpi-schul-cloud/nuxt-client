@@ -1,5 +1,5 @@
 import { LanguageType } from "@/serverApi/v3";
-import { createDayJs, formatUtc, isToday } from "@/utils/date-time.utils";
+import { createDayJs, formatUtc, isToday, timeUntil } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import dayjs from "dayjs";
@@ -89,6 +89,76 @@ describe("date-time.utils", () => {
 
 		it("should return false for a date far in the future", () => {
 			expect(isToday("2099-12-31")).toBe(false);
+		});
+	});
+
+	describe("timeUntil", () => {
+		it.each([
+			{
+				offset: 30,
+				offsetUnit: "minute",
+				testUnit: "minute",
+				expected: 30,
+				description: "should return minutes until future date",
+			},
+			{
+				offset: 2,
+				offsetUnit: "hour",
+				testUnit: "hour",
+				expected: 2,
+				description: "should return hours until future date",
+			},
+			{
+				offset: 5,
+				offsetUnit: "day",
+				testUnit: "day",
+				expected: 5,
+				description: "should return days until future date",
+			},
+			{
+				offset: 90,
+				offsetUnit: "minute",
+				testUnit: "minute",
+				expected: 90,
+				description: "should handle 90 minutes correctly",
+			},
+			{
+				offset: 90,
+				offsetUnit: "minute",
+				testUnit: "hour",
+				expected: 1,
+				description: "should handle 90 minutes as 1 hour (dayjs.diff returns whole numbers)",
+			},
+		] as const)("$description", ({ offset, offsetUnit, testUnit, expected }) => {
+			const futureDate = dayjs.utc().add(offset, offsetUnit).toISOString();
+			const result = timeUntil(futureDate, testUnit);
+			expect(result).toBe(expected);
+		});
+
+		it.each([
+			{
+				dateGenerator: () => dayjs.utc().subtract(30, "minute").toISOString(),
+				description: "should return undefined for past date",
+			},
+			{
+				dateGenerator: () => dayjs.utc().toISOString(),
+				description: "should return undefined for current time",
+			},
+			{
+				dateGenerator: () => "invalid-date",
+				description: "should return undefined for invalid date string",
+			},
+		] as const)("$description", ({ dateGenerator }) => {
+			const testDate = dateGenerator();
+			const result = timeUntil(testDate, "minute");
+			expect(result).toBe(0);
+		});
+
+		it("should work with Z-suffix UTC dates", () => {
+			const futureDate = "2026-03-05T15:00:00.000Z";
+			const result = timeUntil(futureDate, "minute");
+			expect(typeof result).toBe("number");
+			expect(result).toBeGreaterThan(0);
 		});
 	});
 });

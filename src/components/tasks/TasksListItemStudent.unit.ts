@@ -1,10 +1,7 @@
 import TasksListItemStudent from "./TasksListItemStudent.vue";
-import {
-	printDateFromStringUTC as dateFromUTC,
-	printDateTimeFromStringUTC as dateTimeFromUTC,
-} from "@/plugins/datetime";
 import CopyModule from "@/store/copy";
 import TasksModule from "@/store/tasks";
+import { formatUtc } from "@/utils/date-time.utils";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -67,7 +64,7 @@ describe("TasksListItemStudent", () => {
 	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
+		const convertedDueDate = formatUtc(tasks[0].dueDate, "dateYY");
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
@@ -131,7 +128,7 @@ describe("TasksListItemStudent", () => {
 
 		wrapper.vm.$vuetify.display.xs = true;
 
-		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
+		const convertedDueDate = formatUtc(tasks[0].dueDate, "dateYY");
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);

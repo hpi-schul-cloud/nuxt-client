@@ -33,6 +33,7 @@
 				<div class="text-subtitle-2 due-date-label" data-test-id="dueDateLabel">
 					{{ dueDateLabel }}
 				</div>
+
 				<ChipTimeRemaining
 					v-if="taskState === 'warning'"
 					class="ml-2 ml-sm-0 float-sm-right"
@@ -51,11 +52,7 @@
 
 <script>
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import {
-	fromNowToFuture,
-	printDateFromStringUTC as dateFromUTC,
-	printDateTimeFromStringUTC as dateTimeFromUTC,
-} from "@/plugins/datetime.ts";
+import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils.ts";
 import { mdiCheckCircleOutline } from "@icons/material";
 import { ChipTimeRemaining } from "@ui-chip";
 import { vOnClickOutside } from "@vueuse/components";
@@ -88,10 +85,7 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		isCloseToDueDate() {
-			const timeDiff = fromNowToFuture(this.task.dueDate, "hours");
-			if (timeDiff === null) {
-				return false;
-			} else return timeDiff <= 24;
+			return isDueWithin24h(this.task.dueDate);
 		},
 		isOverDue() {
 			const dueDate = this.task.dueDate;
@@ -127,7 +121,9 @@ export default {
 		},
 		dueDateLabel() {
 			const dueDate = this.task.dueDate;
-			const convertedDueDate = this.$vuetify.display.xs ? dateFromUTC(dueDate) : dateTimeFromUTC(dueDate);
+			const convertedDueDate = this.$vuetify.display.xs
+				? formatUtc(dueDate, "dateYY")
+				: formatUtc(dueDate, "dateTimeYY");
 
 			return !dueDate ? undefined : `${this.$t("pages.tasks.labels.due")} ${convertedDueDate}`;
 		},
