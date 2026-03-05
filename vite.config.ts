@@ -55,8 +55,6 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 				"@vueuse/core",
 				"@vueuse/integrations",
 				"@vueuse/components",
-				"@vuelidate/core",
-				"@vuelidate/validators",
 			],
 			exclude: ["vuetify"],
 		},

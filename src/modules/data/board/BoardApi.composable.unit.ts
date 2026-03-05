@@ -211,25 +211,6 @@ describe("BoardApi.composable", () => {
 			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
 		});
 
-		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
-			const { updateElementCall } = useBoardApi();
-			const payload = {
-				id: "file-element-id",
-				type: ContentElementType.SubmissionContainer,
-				content: {
-					dueDate: new Date().toISOString(),
-				},
-				timestamps: timestampsResponseFactory.build(),
-			};
-			const data = {
-				content: payload.content,
-				type: ContentElementType.SubmissionContainer,
-			};
-
-			await updateElementCall(payload);
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
-		});
-
 		it("should call elementControllerUpdateElement api with ExternalToolElement", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: ExternalToolElementResponse = {

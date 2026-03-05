@@ -202,7 +202,6 @@ describe("ElementTypeSelection Composable", () => {
 			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			createTestEnvStore({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_TLDRAW_ENABLED: true,
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
@@ -237,7 +236,7 @@ describe("ElementTypeSelection Composable", () => {
 
 			askType();
 
-			expect(staticElementTypeOptions.value.length).toBe(9);
+			expect(staticElementTypeOptions.value.length).toBe(8);
 		});
 
 		describe("when preferred tools have finished loading", () => {
@@ -336,7 +335,6 @@ describe("ElementTypeSelection Composable", () => {
 
 	describe("staticElementTypeOptions actions", () => {
 		const defaultEnv: Partial<ConfigResponse> = {
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			FEATURE_TLDRAW_ENABLED: true,
 			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
@@ -433,36 +431,6 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file");
-				option?.action();
-
-				expect(closeDialogMock).toHaveBeenCalledTimes(1);
-			});
-		});
-
-		describe("when the SubmissionElement action is called", () => {
-			it("should call add element function with right argument", () => {
-				const { elementTypeOptions, addElementMock, cardId } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-
-				askType();
-
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-submission-container");
-				option?.action();
-
-				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.SubmissionContainer,
-					cardId,
-				});
-			});
-
-			it("should set isDialogOpen to false", () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-
-				askType();
-
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-submission-container");
 				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);

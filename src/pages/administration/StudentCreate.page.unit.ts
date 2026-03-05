@@ -1,11 +1,16 @@
-import NewStudent from "./StudentCreate.page.vue";
+import StudentCreatePage from "./StudentCreate.page.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { VForm } from "vuetify/components";
 import { createStore } from "vuex";
+
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn(),
+}));
 
 const createMockStore = () => {
 	const createStudentStub = vi.fn();
@@ -42,12 +47,11 @@ describe("students/new", () => {
 	const setup = () => {
 		const { mockStore, createStudentStub } = createMockStore();
 
-		const wrapper = mount(NewStudent, {
+		const wrapper = mount(StudentCreatePage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$store: mockStore,
-					$t: (key) => key,
 				},
 			},
 		});
@@ -63,14 +67,13 @@ describe("students/new", () => {
 		const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"]').get("input");
 		const inputEmail = wrapper.find('[data-testid="input_create-user_email"]').get("input");
 
-		inputFirstName.setValue("Klara");
-		inputLastName.setValue("Fall");
-		inputEmail.setValue("klara.fall@mail.de");
-		const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
-		await submitButton.trigger("click");
+		await inputFirstName.setValue("Klara");
+		await inputLastName.setValue("Fall");
+		await inputEmail.setValue("klara.fall@mail.de");
 
-		await nextTick();
-		await nextTick();
+		await wrapper.findComponent(VForm).trigger("submit.prevent");
+		await flushPromises();
+
 		expect(createStudentStub).toHaveBeenCalled();
 	});
 });

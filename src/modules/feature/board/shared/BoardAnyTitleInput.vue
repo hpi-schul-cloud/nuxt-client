@@ -7,17 +7,17 @@
 			:class="{
 				'board-title-input': scope === 'board',
 				'other-title-input': scope !== 'board',
-				'error-message-width': errorMessages.length > 0,
+				'error-message-width': hasErrors,
 			}"
 			hide-details="auto"
 			variant="plain"
 			density="compact"
 			rows="1"
 			auto-grow
+			:rules="[validateOnOpeningTag]"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
-			:error-messages="errorMessages"
 			@keydown.enter="onEnter"
 		/>
 	</template>
@@ -34,29 +34,28 @@
 
 <script setup lang="ts">
 import { useInlineEditInteractionHandler } from "@util-board";
-import { containsOpeningTagFollowedByString } from "@util-validators";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers } from "@vuelidate/validators";
-import { computed, nextTick, onMounted, ref, toRef, unref, watch } from "vue";
+import { logger } from "@util-logger";
+import { useOpeningTagValidator } from "@util-validators";
+import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { VTextarea } from "vuetify/components";
 
-type Props = {
-	isEditMode: boolean;
-	value: string;
-	scope: "card" | "column" | "board";
-	isFocused?: boolean;
-	maxLength?: number | null;
-	emptyValueFallback?: string;
-	hasEditPermission?: boolean;
-};
-
-const props = withDefaults(defineProps<Props>(), {
-	isFocused: false,
-	maxLength: null,
-	emptyValueFallback: "",
-	hasEditPermission: false,
-});
+const props = withDefaults(
+	defineProps<{
+		isEditMode: boolean;
+		value: string;
+		scope: "card" | "column" | "board";
+		isFocused?: boolean;
+		maxLength?: number;
+		emptyValueFallback?: string;
+		hasEditPermission?: boolean;
+	}>(),
+	{
+		isFocused: false,
+		emptyValueFallback: "",
+		hasEditPermission: false,
+		maxLength: undefined,
+	}
+);
 
 const emit = defineEmits<{
 	(e: "update:value", value: string): void;
@@ -64,12 +63,21 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { validateOnOpeningTag } = useOpeningTagValidator();
+
 const modelValue = ref("");
 const externalValue = toRef(props, "value");
-
 const internalIsFocused = ref(false);
+const titleInput = useTemplateRef("titleInput");
+const hasErrors = ref(false);
 
-const titleInput = ref<VTextarea | null>(null);
+watch(
+	() => titleInput.value?.isValid,
+	() => {
+		hasErrors.value = titleInput.value ? !titleInput.value.isValid : false;
+		logger.log("BoardAnyTitleInput - hasErrors:", hasErrors.value);
+	}
+);
 
 useInlineEditInteractionHandler(async () => {
 	await setFocusOnEdit();
@@ -85,9 +93,7 @@ const setFocusOnEdit = async () => {
 };
 
 watch(modelValue, (newValue) => {
-	const inputIsValid = v$.value.modelValue.$errors.length === 0;
-
-	if (newValue !== props.value && inputIsValid) {
+	if (newValue !== props.value && titleInput.value?.isValid) {
 		emit("update:value", newValue);
 	}
 });
@@ -122,19 +128,6 @@ watch(
 		}
 	}
 );
-
-const validationRules = computed(() => ({
-	modelValue: {
-		containsOpeningTag: helpers.withMessage(
-			t("common.validation.containsOpeningTag"),
-			(name: string) => !containsOpeningTagFollowedByString(name)
-		),
-	},
-}));
-
-const v$ = useVuelidate(validationRules, { modelValue }, { $lazy: true, $autoDirty: true });
-
-const errorMessages = computed(() => v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message)));
 
 const headingLevel = computed(() => {
 	switch (props.scope) {

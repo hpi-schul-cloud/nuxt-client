@@ -28,8 +28,6 @@ import {
 	RichTextElementContentBody,
 	RichTextElementResponse,
 	RoomApiFactory,
-	SubmissionContainerElementContentBody,
-	SubmissionContainerElementResponse,
 	VideoConferenceElementContentBody,
 	VideoConferenceElementResponse,
 } from "@/serverApi/v3";
@@ -124,17 +122,6 @@ export const useBoardApi = () => {
 			const body: FileElementContentBody = {
 				content: element.content,
 				type: ContentElementType.FileFolder,
-			};
-			return body;
-		}
-
-		const isSubmissionContainerElement = (element: AnyContentElement): element is SubmissionContainerElementResponse =>
-			element.type === ContentElementType.SubmissionContainer;
-
-		if (isSubmissionContainerElement(element)) {
-			const body: SubmissionContainerElementContentBody = {
-				content: element.content,
-				type: ContentElementType.SubmissionContainer,
 			};
 			return body;
 		}
