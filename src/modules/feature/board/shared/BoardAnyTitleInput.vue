@@ -1,6 +1,6 @@
 <template>
 	<template v-if="isEditMode">
-		<VTextarea
+		<VTextField
 			ref="titleInput"
 			v-model="modelValue"
 			class="title"
@@ -12,8 +12,6 @@
 			hide-details="auto"
 			variant="plain"
 			density="compact"
-			rows="1"
-			auto-grow
 			:rules="[validateOnOpeningTag]"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
@@ -164,7 +162,7 @@ const cursorToEnd = () => {
 	font-family: var(--font-accent);
 	font-weight: normal;
 
-	&.board-title-input :deep(textarea) {
+	&.board-title-input :deep(input) {
 		font-size: var(--heading-1);
 		line-height: var(--line-height-md);
 		padding-top: 16px;
@@ -172,7 +170,7 @@ const cursorToEnd = () => {
 	}
 
 	&.other-title-input {
-		:deep(textarea) {
+		:deep(input) {
 			font-size: var(--heading-3);
 			line-height: var(--line-height-lg);
 			padding: 8px 16px;
