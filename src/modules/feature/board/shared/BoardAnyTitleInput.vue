@@ -17,7 +17,7 @@
 			:rules="[validateOnOpeningTag]"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
-			:maxlength="maxLength"
+			maxlength="100"
 			@keydown.enter="onEnter"
 		/>
 	</template>
@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { useInlineEditInteractionHandler } from "@util-board";
+import { logger } from "@util-logger";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -44,13 +45,11 @@ const props = withDefaults(
 		value: string;
 		scope: "card" | "column" | "board";
 		isFocused?: boolean;
-		maxLength?: number | null;
 		emptyValueFallback?: string;
 		hasEditPermission?: boolean;
 	}>(),
 	{
 		isFocused: false,
-		maxLength: null,
 		emptyValueFallback: "",
 		hasEditPermission: false,
 	}
@@ -74,6 +73,7 @@ watch(
 	() => titleInput.value?.isValid,
 	() => {
 		hasErrors.value = titleInput.value ? !titleInput.value.isValid : false;
+		logger.log("BoardAnyTitleInput - hasErrors:", hasErrors.value);
 	}
 );
 
