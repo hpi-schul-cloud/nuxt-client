@@ -1,4 +1,4 @@
-import NewStudent from "./StudentCreate.page.vue";
+import StudentCreatePage from "./StudentCreate.page.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -7,6 +7,10 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { VForm } from "vuetify/components";
 import { createStore } from "vuex";
+
+vi.mock("vue-router", () => ({
+	useRouter: vi.fn(),
+}));
 
 const createMockStore = () => {
 	const createStudentStub = vi.fn();
@@ -43,12 +47,11 @@ describe("students/new", () => {
 	const setup = () => {
 		const { mockStore, createStudentStub } = createMockStore();
 
-		const wrapper = mount(NewStudent, {
+		const wrapper = mount(StudentCreatePage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$store: mockStore,
-					$t: (key) => key,
 				},
 			},
 		});
