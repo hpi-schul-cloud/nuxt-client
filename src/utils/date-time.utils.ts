@@ -216,8 +216,9 @@ export const toDateFromIso = (dateString: string | undefined) => {
 };
 
 export const toCombinedDateTimeIso = (dateString: string | undefined, timeString: string | undefined) => {
-	if (!dateString || !timeString) return undefined;
-	const parsed = dayjs(`${dateString}T${timeString}`);
+	if (!dateString) return undefined;
+	const time = timeString || "00:00";
+	const parsed = dayjs(`${dateString}T${time}`);
 	return parsed.isValid() ? parsed.toISOString() : undefined;
 };
 
