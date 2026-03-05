@@ -6,6 +6,7 @@ import {
 	createTestAppStoreWithSchool,
 	expectNotification,
 	mockApiResponse,
+	mockAxiosInstance,
 	newsResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -15,22 +16,19 @@ import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance, HttpStatusCode } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { LocationQuery, Router, useRoute, useRouter } from "vue-router";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
+import { Mocked } from "vitest";
+import { LocationQuery } from "vue-router";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("NewsCreatePage", () => {
 	let newsApi: DeepMocked<NewsApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		newsApi = createMock<NewsApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		initializeAxios(axiosMock);
 	});
@@ -40,12 +38,10 @@ describe("NewsCreatePage", () => {
 	});
 
 	const setup = (options?: Partial<{ query: LocationQuery }>) => {
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue({
-			path: "news/new",
-			query: options?.query || {},
-		});
+		const router = createRouterMock();
+		injectRouterMock(router);
+		router.replace({ path: "news/new", query: options?.query || {} });
+		vi.spyOn(router, "go");
 
 		const wrapper = mount(NewsCreatePage, {
 			attachTo: document.body,
@@ -173,7 +169,7 @@ describe("NewsCreatePage", () => {
 				await flushPromises();
 
 				expectNotification("success");
-				expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${createdNewsResponse.id}` });
+				expect(getRouter().push).toHaveBeenCalledWith({ path: `/news/${createdNewsResponse.id}` });
 			});
 
 			it("should not navigate to news details page if update was not successfull", async () => {
@@ -186,7 +182,7 @@ describe("NewsCreatePage", () => {
 				newsForm.vm.$emit("save", createParams);
 				await flushPromises();
 
-				expect(useRouterMock().push).not.toHaveBeenCalled();
+				expect(getRouter().push).not.toHaveBeenCalled();
 				expectNotification("error");
 
 				consoleErrorSpy.mockRestore();
@@ -202,7 +198,7 @@ describe("NewsCreatePage", () => {
 			newsForm.vm.$emit("cancel");
 			await flushPromises();
 
-			expect(useRouterMock().go).toHaveBeenCalled();
+			expect(getRouter().go).toHaveBeenCalled();
 		});
 	});
 });

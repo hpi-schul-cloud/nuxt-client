@@ -2,7 +2,7 @@ import NewsEditPage from "./NewsEdit.page.vue";
 import { NewsApiInterface, NewsResponse } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { expectNotification, mockApiResponse, newsResponseFactory } from "@@/tests/test-utils";
+import { expectNotification, mockApiResponse, mockAxiosInstance, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsForm } from "@feature-news";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -11,21 +11,17 @@ import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRoute, useRouter } from "vue-router";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
+import { Mocked } from "vitest";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("NewsEditPage", () => {
 	let newsApi: DeepMocked<NewsApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		newsApi = createMock<NewsApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		initializeAxios(axiosMock);
@@ -44,11 +40,15 @@ describe("NewsEditPage", () => {
 
 		newsApi.newsControllerFindOne.mockResolvedValue(mockApiResponse<NewsResponse>({ data: currentNews }));
 
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue({
-			params: { id: news.id },
+		const router = createRouterMock({
+			routes: [
+				{ path: "/news", name: "news-list", component: { template: "<div />" } },
+				{ path: "/news/:id", name: "news-detail", component: { template: "<div />" } },
+				{ path: "/news/:id/edit", name: "news-edit", component: { template: "<div />" } },
+			],
 		});
+		injectRouterMock(router);
+		await router.push({ name: "news-edit", params: { id: news.id } });
 
 		const wrapper = mount(NewsEditPage, {
 			attachTo: document.body,
@@ -60,6 +60,9 @@ describe("NewsEditPage", () => {
 			},
 		});
 		await flushPromises();
+
+		router.push.mockClear();
+		vi.spyOn(router, "go");
 
 		return { wrapper, news };
 	};
@@ -153,7 +156,7 @@ describe("NewsEditPage", () => {
 			await flushPromises();
 
 			expectNotification("success");
-			expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${news.id}` });
+			expect(getRouter().push).toHaveBeenCalledWith({ path: `/news/${news.id}` });
 		});
 
 		it("should not navigate to news detail page when update fails and notify error", async () => {
@@ -170,7 +173,7 @@ describe("NewsEditPage", () => {
 			});
 			await flushPromises();
 
-			expect(useRouterMock().push).not.toHaveBeenCalled();
+			expect(getRouter().push).not.toHaveBeenCalled();
 			expectNotification("error");
 
 			consoleErrorSpy.mockRestore();
@@ -195,7 +198,7 @@ describe("NewsEditPage", () => {
 			newsForm.vm.$emit("delete");
 			await flushPromises();
 
-			expect(useRouterMock().push).toHaveBeenCalledWith({ path: "/news" });
+			expect(getRouter().push).toHaveBeenCalledWith({ path: "/news" });
 			expectNotification("success");
 		});
 
@@ -209,7 +212,7 @@ describe("NewsEditPage", () => {
 			newsForm.vm.$emit("delete");
 			await flushPromises();
 
-			expect(useRouterMock().push).not.toHaveBeenCalled();
+			expect(getRouter().push).not.toHaveBeenCalled();
 			expectNotification("error");
 			consoleErrorSpy.mockRestore();
 		});
@@ -223,7 +226,7 @@ describe("NewsEditPage", () => {
 			newsForm.vm.$emit("cancel");
 			await flushPromises();
 
-			expect(useRouterMock().go).toHaveBeenCalled();
+			expect(getRouter().go).toHaveBeenCalled();
 		});
 	});
 });
