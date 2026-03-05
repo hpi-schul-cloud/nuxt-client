@@ -10,7 +10,7 @@ const isH5pEditor = (path) => path.startsWith("/api/v3/h5p-editor");
 /**
  * @param {string} path
  */
-const isArchiveDownload = (path) => path.startsWith("/api/v3/download-archive");
+const isArchiveDownload = (path) => path.startsWith("/api/v1/filestorage/files/archive");
 
 /**
  * @param {string} path
