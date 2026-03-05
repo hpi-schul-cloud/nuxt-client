@@ -82,8 +82,8 @@
 </template>
 
 <script setup lang="ts">
-import { fromNowToFuture, printDateFromStringUTC } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
@@ -143,13 +143,9 @@ const isOverDue = computed(() => {
 	return dueDate && new Date(dueDate) < new Date();
 });
 const isFinished = computed(() => props.task.status.isFinished);
-const isCloseToDueDate = computed(() => {
-	const timeDiff = fromNowToFuture(props.task.dueDate, "hours");
-	if (timeDiff !== undefined) {
-		return timeDiff <= 24;
-	}
-	return false;
-});
+
+const isCloseToDueDate = computed(() => isDueWithin24h(props.task.dueDate));
+
 const isGraded = computed(() => props.task.status.graded);
 const isSubmitted = computed(() => props.task.status.submitted);
 const isSubmittedNotGraded = computed(() => props.task.status.submitted && !props.task.status.graded);
@@ -345,8 +341,8 @@ const cardTitle = (dueDate: string | undefined) => {
 		titleSuffix = t("common.words.draft");
 	} else if (dueDate) {
 		titleSuffix = isPlanned.value
-			? `${t("pages.tasks.labels.planned")} ${printDateFromStringUTC(props.task.availableDate)}`
-			: `${t("pages.room.taskCard.label.due")} ${printDateFromStringUTC(dueDate)}`;
+			? `${t("pages.tasks.labels.planned")} ${formatUtc(props.task.availableDate, "dateYY")}`
+			: `${t("pages.room.taskCard.label.due")} ${formatUtc(dueDate, "dateYY")}`;
 	} else {
 		titleSuffix = t("pages.room.taskCard.label.noDueDate");
 	}

@@ -117,12 +117,10 @@ export const timeUntil = (isoUtcDueDate: string, unit: dayjs.UnitType) => {
 	if (current.isBefore(due)) {
 		return due.diff(current, unit);
 	}
-	return undefined;
+	return 0;
 };
 
 export const isDueWithin24h = isWithinHours(24);
-export const isDueWithin48h = isWithinHours(48);
-export const isDueThisHour = isWithinHours(1);
 
 /**
  * Returns a date offset from today, formatted for use in HTML date inputs (YYYY-MM-DD).
