@@ -17,6 +17,7 @@
 				data-testid="board-title"
 				:is-edit-mode="isEditMode"
 				:is-focused="isFocusedById"
+				:max-length="100"
 				:has-edit-permission="allowedOperations.updateBoardTitle"
 				@update:value="updateBoardTitle"
 				@blur="onBoardTitleBlur"
