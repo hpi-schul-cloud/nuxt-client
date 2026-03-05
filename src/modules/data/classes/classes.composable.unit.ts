@@ -30,7 +30,6 @@ describe("useClasses", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		axiosMock = createMock<AxiosInstance>();
-		axiosMock.get.mockResolvedValueOnce(mockResponse);
 		initializeAxios(axiosMock);
 	});
 
@@ -40,6 +39,8 @@ describe("useClasses", () => {
 
 	it("should fetch and update list ", async () => {
 		const { classNameList, fetchClasses } = useClasses();
+		axiosMock.get.mockResolvedValueOnce(mockResponse);
+
 		await fetchClasses({ $limit: 1000, year: "year-id" });
 
 		const expectedClassNames = mockResponse.data.data.map((item) => ({
@@ -47,6 +48,17 @@ describe("useClasses", () => {
 			value: item.displayName,
 		}));
 
+		expect(axiosMock.get).toHaveBeenCalledWith("/v1/classes", { params: { $limit: 1000, year: "year-id" } });
+
 		expect(classNameList.value).toEqual(expectedClassNames);
+	});
+
+	it("should handle missing data gracefully", async () => {
+		const { classNameList, fetchClasses } = useClasses();
+		// Mock axios to return undefined data
+		axiosMock.get.mockResolvedValueOnce({ data: { data: undefined } });
+		await fetchClasses({ $limit: 1000, year: "year-id" });
+
+		expect(classNameList.value).toEqual([]);
 	});
 });

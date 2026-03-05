@@ -15,7 +15,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useClasses } from "@data-classes";
 import { useUsers } from "@data-users";
-import { mdiCheckAll, mdiClose } from "@icons/material";
+import { mdiCheck, mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
@@ -138,6 +138,7 @@ describe("student overview page", () => {
 		useRouterMock.mockReturnValue({
 			push: vi.fn(),
 		});
+
 		const wrapper = mount(StudentPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n(), store],
@@ -272,6 +273,17 @@ describe("student overview page", () => {
 			await qrCodeBtn.trigger("click");
 
 			expectNotification("info");
+		});
+
+		it("should handle bulk consent ", async () => {
+			const { wrapper } = setup();
+
+			await openContextMenu(wrapper, 0);
+
+			const bulkConsentBtn = wrapper.get(`[data-testid="consent_action"]`);
+			await bulkConsentBtn.trigger("click");
+
+			expect(useRouterMock().push).toHaveBeenCalledWith({ path: "/administration/students/consent" });
 		});
 	});
 
@@ -468,6 +480,24 @@ describe("student overview page", () => {
 		const { wrapper } = setup();
 		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
 		expect(adminTableLegend.props().showIcons).toBe(true);
+	});
+
+	it("should display the consent warning icon if FEATURE_CONSENT_NECESSARY is true", () => {
+		createTestEnvStore({
+			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+			FEATURE_CONSENT_NECESSARY: true,
+		});
+
+		const { wrapper } = setup();
+
+		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
+		const icons = adminTableLegend.props().icons;
+
+		expect(icons).toContainEqual({
+			icon: mdiCheck,
+			color: "warning",
+			label: "utils.adminFilter.consent.label.parentsAgreementMissing",
+		});
 	});
 
 	it("should not display consent warning icon if FEATURE_CONSENT_NECESSARY is false", () => {
