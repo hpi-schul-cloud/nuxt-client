@@ -1,6 +1,6 @@
 <template>
 	<template v-if="isEditMode">
-		<VTextField
+		<VTextarea
 			ref="titleInput"
 			v-model="modelValue"
 			class="title"
@@ -12,10 +12,12 @@
 			hide-details="auto"
 			variant="plain"
 			density="compact"
+			rows="1"
+			auto-grow
 			:rules="[validateOnOpeningTag]"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
-			maxlength="100"
+			:maxlength="maxLength"
 			@keydown.enter="onEnter"
 		/>
 	</template>
@@ -43,6 +45,7 @@ const props = withDefaults(
 		value: string;
 		scope: "card" | "column" | "board";
 		isFocused?: boolean;
+		maxLength?: number;
 		emptyValueFallback?: string;
 		hasEditPermission?: boolean;
 	}>(),
@@ -50,6 +53,7 @@ const props = withDefaults(
 		isFocused: false,
 		emptyValueFallback: "",
 		hasEditPermission: false,
+		maxLength: undefined,
 	}
 );
 
@@ -162,7 +166,7 @@ const cursorToEnd = () => {
 	font-family: var(--font-accent);
 	font-weight: normal;
 
-	&.board-title-input :deep(input) {
+	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-1);
 		line-height: var(--line-height-md);
 		padding-top: 16px;
@@ -170,7 +174,7 @@ const cursorToEnd = () => {
 	}
 
 	&.other-title-input {
-		:deep(input) {
+		:deep(textarea) {
 			font-size: var(--heading-3);
 			line-height: var(--line-height-lg);
 			padding: 8px 16px;
