@@ -40,7 +40,7 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template #datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ convertIsoToDateString(data) }}</span>
+				<span class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -49,10 +49,10 @@
 				</span>
 			</template>
 			<template #datacolumn-lastLoginSystemChange="{ data }">
-				<span v-if="data" class="text-content">{{ convertIsoToDateString(data) }}</span>
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-outdatedSince="{ data }">
-				<span v-if="data" class="text-content">{{ convertIsoToDateString(data) }}</span>
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 
 			<template #datacolumn-_id="{ data, selected, highlighted }">
@@ -89,10 +89,10 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
-import { useDateConversion } from "@/composables/date-time.composables.ts";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
+import { formatUtc } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -134,8 +134,6 @@ export default defineComponent({
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
 
-		const { convertIsoToDateString } = useDateConversion();
-
 		return {
 			getPaginationState,
 			setPaginationState,
@@ -143,7 +141,6 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
-			convertIsoToDateString,
 		};
 	},
 	data() {
@@ -378,6 +375,7 @@ export default defineComponent({
 		document.title = buildPageTitle(this.$t("pages.administration.teachers.index.title"));
 	},
 	methods: {
+		formatUtc,
 		userHasPermission(permission) {
 			if (!permission) {
 				throw new Error("parameter permission is missing");

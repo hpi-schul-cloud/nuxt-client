@@ -73,16 +73,15 @@
 </template>
 
 <script setup lang="ts">
-import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
+import { formatUtc, toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
-import { Dayjs } from "dayjs";
 import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VMessages } from "vuetify/components";
@@ -127,7 +126,8 @@ watch(
 		newsTitle.value = newTitle ?? "";
 		newsContent.value = newContent ?? "";
 		if (newDisplayAt) {
-			[newsDate.value, newsTime.value] = createInputDateTime(newDisplayAt);
+			newsDate.value = formatUtc(newDisplayAt, "date");
+			newsTime.value = formatUtc(newDisplayAt, "time");
 		} else {
 			newsDate.value = "";
 			newsTime.value = "";
@@ -153,15 +153,6 @@ watch(
 	{ deep: true }
 );
 
-const getDisplayAt = () => {
-	if (!newsDate.value || !newsTime.value) {
-		return undefined;
-	}
-	const dateTimeCombined = fromInputDateTime(newsDate.value, newsTime.value);
-	const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
-	return dateTimeCombinedString.toISOString();
-};
-
 const onSave = async () => {
 	shouldNewsContentValidation.value = true;
 	const isValid = await isValidOrFocusFirstInvalidInput(newsForm);
@@ -170,7 +161,11 @@ const onSave = async () => {
 		classicEditor.value?.focus();
 		return;
 	}
-	emit("save", { title: newsTitle.value, content: newsContent.value, displayAt: getDisplayAt() });
+	emit("save", {
+		title: newsTitle.value,
+		content: newsContent.value,
+		displayAt: toCombinedDateTimeIso(newsDate.value, newsTime.value),
+	});
 };
 
 const onDelete = async () => {

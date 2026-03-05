@@ -1,5 +1,5 @@
-import { inputDateFormat } from "@/plugins/datetime.ts";
 import { $axios } from "@/utils/api";
+import { formatToDbGermanDateString } from "@/utils/date-time.utils.ts";
 
 const words = [
 	"auto",
@@ -112,7 +112,7 @@ export const actions = {
 			.map((student) => {
 				student.fullName = student.firstName + " " + student.lastName;
 				student.password = generatePassword();
-				student.birthday = inputDateFormat(student.birthday);
+				student.birthday = formatToDbGermanDateString(student.birthday);
 				return student;
 			});
 		commit("setStudentsData", data);

@@ -177,8 +177,8 @@
 
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { useDateConversion } from "@/composables/date-time.composables";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
+import { toEndOfDayIso } from "@/utils/date-time.utils";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -296,7 +296,7 @@ const onContinue = async () => {
 		title: formData.value.title,
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
-				? useDateConversion().convertDateToEndOfDayIso(formData.value.activeUntil)
+				? toEndOfDayIso(formData.value.activeUntil)
 				: DEFAULT_EXPIRED_DATE.value,
 		isUsableByStudents: formData.value.isUsableByStudents,
 		isUsableByExternalPersons: formData.value.isUsableByExternalPersons,

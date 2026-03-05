@@ -29,7 +29,6 @@ import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { useAppStoreRefs } from "@data-app";
-import dayjs from "dayjs";
 import { computed, defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 

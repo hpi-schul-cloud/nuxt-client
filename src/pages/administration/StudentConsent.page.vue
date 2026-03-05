@@ -40,7 +40,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="inputDateFromDeUTC(slotProps.data)"
+							:date="toIsoFromDbGermanDateString(slotProps.data)"
 							class="ml-2"
 							hide-details
 							hide-icon
@@ -51,7 +51,7 @@
 							@update:date="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
-									birthDate: inputDateFormat($event),
+									birthDate: formatToDbGermanDateString($event),
 								})
 							"
 						/>
@@ -108,7 +108,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<div class="text-content">
-							{{ convertDbGermanDateStringToDateString(slotProps.data) }}
+							{{ formatFromDbGermanDateString(slotProps.data) }}
 						</div>
 					</template>
 				</BackendDataTable>
@@ -160,7 +160,7 @@
 					@update:sort="onUpdateSort"
 				>
 					<template #datacolumn-birthday="slotProps">
-						{{ convertDbGermanDateStringToDateString(slotProps.data) }}
+						{{ formatFromDbGermanDateString(slotProps.data) }}
 					</template>
 				</BackendDataTable>
 				<p>
@@ -238,10 +238,13 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import { useDateConversion } from "@/composables/date-time.composables.ts";
-import { inputDateFormat, inputDateFromDeUTC } from "@/plugins/datetime.ts";
 import { filePathsModule } from "@/store";
-import { dateFromToday } from "@/utils/date-time.utils.ts";
+import {
+	dateFromToday,
+	formatFromDbGermanDateString,
+	formatToDbGermanDateString,
+	toIsoFromDbGermanDateString,
+} from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -265,8 +268,7 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		const { convertDbGermanDateStringToDateString, convertIsoToDateString } = useDateConversion();
-		return { t, convertDbGermanDateStringToDateString, convertIsoToDateString };
+		return { t };
 	},
 	data() {
 		return {
@@ -389,6 +391,8 @@ export default defineComponent({
 		document.title = buildPageTitle(this.title);
 	},
 	methods: {
+		formatToDbGermanDateString,
+		formatFromDbGermanDateString,
 		dateFromToday,
 		async find() {
 			const query = {
@@ -432,7 +436,7 @@ export default defineComponent({
 				const users = this.tableData.map(
 					(student) => ({
 						_id: student._id,
-						birthday: inputDateFromDeUTC(student.birthday),
+						birthday: toIsoFromDbGermanDateString(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -511,8 +515,7 @@ export default defineComponent({
 				}
 			}, 2000);
 		},
-		inputDateFromDeUTC,
-		inputDateFormat,
+		toIsoFromDbGermanDateString,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.

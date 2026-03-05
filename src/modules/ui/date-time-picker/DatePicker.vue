@@ -38,7 +38,8 @@
 </template>
 
 <script setup lang="ts">
-import { useDateConversion, useLocalizedDateTime } from "@/composables/date-time.composables";
+import { useLocalizedDateTime } from "@/composables/date-time.composables";
+import { formatUtc, toDateFromIso, toIsoDate } from "@/utils/date-time.utils";
 import { mdiCalendar } from "@icons/material";
 import { isRequired, isValidDate } from "@util-validators";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
@@ -75,7 +76,6 @@ const emit = defineEmits<{
 }>();
 
 const { dateMask, datePlaceHolder } = useLocalizedDateTime();
-const { convertDateStringToIso, convertDateStringToDate, convertIsoToDateString } = useDateConversion();
 
 const { t } = useI18n();
 
@@ -87,16 +87,16 @@ const uniqueId = useId();
 const datePickerId = computed(() => `menu-activator-${uniqueId}`);
 
 watchEffect(() => {
-	if (dateString.value === undefined && props.date) dateString.value = convertIsoToDateString(props.date);
+	if (dateString.value === undefined && props.date) dateString.value = formatUtc(props.date, "date");
 });
 
 const dateObject = computed({
 	get() {
 		if (!dateString.value) return undefined;
-		return convertDateStringToDate(dateString.value);
+		return toDateFromIso(dateString.value);
 	},
 	set(isoString: string) {
-		dateString.value = convertIsoToDateString(isoString);
+		dateString.value = formatUtc(isoString, "date");
 		showDatePicker.value = false;
 	},
 });
@@ -117,7 +117,7 @@ const validateAndEmitDate = async () => {
 	await dateTextField.value.validate();
 	const isValid = dateTextField.value.isValid;
 	if (isValid) {
-		const isoDate = convertDateStringToIso(dateString.value);
+		const isoDate = toIsoDate(dateString.value);
 		emit("update:date", isoDate);
 	} else {
 		emit("update:date", undefined);
