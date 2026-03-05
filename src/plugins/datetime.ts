@@ -62,12 +62,6 @@ export const inputDateFormat = (date: string) => {
 };
 
 /**
- * Returns formated (DD.MM.YYYY) date string based on a given dayjs object
- * @return Date string based on current timezone using locale date formating
- */
-export const printFromStringUtcToFullDate = (date: string) => dayjs(date).tz().format(DATETIME_FORMAT.date);
-
-/**
  * Returns formated based on current date and given offset
  * @param offset Offset as number
  * @param offsetBase Base of offset, e.g. (y)ear, (d)days, (m)inutes...

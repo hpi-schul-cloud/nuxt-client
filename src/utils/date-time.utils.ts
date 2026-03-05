@@ -146,10 +146,16 @@ export type LocaleFormatId = "date" | "time" | "dateTime" | "dateTimeYY" | "date
 
 const getFormat = (formatId: LocaleFormatId): string => getLocaleFormats(dayjs.locale())[formatId];
 
+/**
+ * Formats an ISO UTC date string into a localized format based on the current locale and specified format ID.
+ *
+ * @param isoUtc - An ISO 8601 UTC date string (e.g., "2024-06-01T12:00:00Z")
+ * @param formatId - The ID of the desired date/time format ("date: DD.MM.YYYY, "time": "HH:mm", "dateTime": "DD.MM.YYYY HH:mm", "dateTimeYY": "DD.MM/YY HH:mm", "dateYY": "DD.MM/YY")
+ */
 export const formatUtc = (isoUtc: string | undefined, formatId: LocaleFormatId) => {
 	if (!isoUtc) return undefined;
 
-	const d = dayjs.utc(isoUtc).local();
+	const d = parseUtc(isoUtc).local();
 	if (!d.isValid()) return undefined;
 
 	return d.format(getFormat(formatId));
