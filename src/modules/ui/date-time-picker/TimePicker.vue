@@ -1,19 +1,16 @@
 <template>
-	<div>
-		<VTextField
-			ref="time-text-field"
-			v-model="timeValue"
-			v-maska="timeMask"
-			data-testid="time-input"
-			:prepend-inner-icon="mdiClockOutline"
-			:label="label"
-			:aria-label="ariaLabel"
-			:placeholder="timePlaceHolder"
-			:rules="validationRules"
-			@update:model-value="validate"
-			@keydown.up.down.stop
-		/>
-	</div>
+	<VTextField
+		ref="time-text-field"
+		v-model="timeValue"
+		v-maska="timeMask"
+		data-testid="time-input"
+		:prepend-inner-icon="mdiClockOutline"
+		:label="label"
+		:placeholder="timePlaceHolder"
+		:rules="validationRules"
+		@update:model-value="validate"
+		@keydown.up.down.stop
+	/>
 </template>
 
 <script setup lang="ts">
@@ -27,13 +24,11 @@ import { useI18n } from "vue-i18n";
 const props = defineProps({
 	time: { type: String, default: "" },
 	label: { type: String, default: "" },
-	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
 });
 
 const emit = defineEmits<{
 	(e: "update:time", value: string | undefined): void;
-	(e: "error"): void;
 }>();
 
 const { t } = useI18n();
@@ -59,8 +54,6 @@ const validate = async () => {
 
 	if (isValid) {
 		emit("update:time", timeValue.value);
-	} else {
-		emit("error");
 	}
 };
 </script>

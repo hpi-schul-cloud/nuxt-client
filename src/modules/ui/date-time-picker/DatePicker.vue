@@ -72,7 +72,6 @@ const props = withDefaults(
 
 const emit = defineEmits<{
 	(e: "update:date", value: string | undefined): void;
-	(e: "error"): void;
 }>();
 
 const { dateMask, datePlaceHolder } = useLocalizedDateTime();
@@ -121,7 +120,6 @@ const validateAndEmitDate = async () => {
 		emit("update:date", isoDate);
 	} else {
 		emit("update:date", undefined);
-		emit("error");
 	}
 };
 

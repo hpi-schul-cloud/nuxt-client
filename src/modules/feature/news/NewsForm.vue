@@ -32,24 +32,22 @@
 			</VMessages>
 		</div>
 
-		<div>
-			<p class="mt-13">
-				{{ t("components.organisms.FormNews.label.planned_publish") }}
-			</p>
+		<p class="mt-13">
+			{{ t("components.organisms.FormNews.label.planned_publish") }}
+		</p>
 
-			<DatePicker
-				:date="newsDate"
-				:label="t('common.labels.date')"
-				data-testid="news_date"
-				@update:date="newsDate = $event"
-			/>
-			<TimePicker
-				:label="t('common.labels.time')"
-				data-testid="news_time"
-				:time="newsTime"
-				@update:time="newsTime = $event"
-			/>
-		</div>
+		<DatePicker
+			:date="newsDate"
+			:label="t('common.labels.date')"
+			data-testid="news_date"
+			@update:date="newsDate = $event"
+		/>
+		<TimePicker
+			:time="newsTime"
+			:label="t('common.labels.time')"
+			data-testid="news_time"
+			@update:time="newsTime = $event"
+		/>
 
 		<div class="d-flex ga-3 mt-2">
 			<VSpacer />
@@ -75,7 +73,7 @@
 <script setup lang="ts">
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
-import { formatUtc, toCombinedDateTimeIso } from "@/utils/date-time.utils";
+import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
 import { WarningAlert } from "@ui-alert";
@@ -126,7 +124,7 @@ watch(
 		newsTitle.value = newTitle ?? "";
 		newsContent.value = newContent ?? "";
 		if (newDisplayAt) {
-			newsDate.value = formatUtc(newDisplayAt, "date");
+			newsDate.value = toIsoDate(formatUtc(newDisplayAt, "date"));
 			newsTime.value = formatUtc(newDisplayAt, "time");
 		} else {
 			newsDate.value = "";
