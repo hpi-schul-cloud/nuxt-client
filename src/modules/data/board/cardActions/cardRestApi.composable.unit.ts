@@ -17,6 +17,7 @@ import {
 	contextExternalToolConfigurationTemplateFactory,
 	expectNotification,
 	externalToolElementResponseFactory,
+	mockApiResponse,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
 	richTextElementResponseFactory,
@@ -33,7 +34,6 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useErrorHandler } from "@util-error-handling";
-import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, ref } from "vue";
@@ -135,7 +135,7 @@ describe("useCardRestApi", () => {
 
 			cardStore.getCard.mockReturnValue(card);
 
-			const newElementResponse = createMock<AxiosResponse<RichTextElementResponse, unknown>>({
+			const newElementResponse = mockApiResponse<RichTextElementResponse>({
 				data: richTextElementResponseFactory.build(),
 			});
 			mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -221,7 +221,7 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
+				const newElementResponse = mockApiResponse<ExternalToolElementResponse>({
 					data: externalToolElementResponseFactory.build(),
 				});
 				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -303,7 +303,7 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
+				const newElementResponse = mockApiResponse<ExternalToolElementResponse>({
 					data: externalToolElementResponseFactory.build(),
 				});
 				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -375,7 +375,7 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
+				const newElementResponse = mockApiResponse<ExternalToolElementResponse>({
 					data: externalToolElementResponseFactory.build(),
 				});
 				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -471,7 +471,7 @@ describe("useCardRestApi", () => {
 					],
 				};
 
-				const preferredToolResponse = createMock<AxiosResponse<PreferredToolListResponse, unknown>>({
+				const preferredToolResponse = mockApiResponse<PreferredToolListResponse>({
 					data: preferredTools,
 				});
 				mockedContextExternalToolApiCalls.fetchPreferredTools.mockResolvedValue(preferredToolResponse);
@@ -630,8 +630,8 @@ describe("useCardRestApi", () => {
 
 			const element = richTextElementResponseFactory.build();
 
-			const updateElementResponse = createMock<AxiosResponse<RichTextElementResponse, unknown>>({
-				data: { id: element.id, content: element.content, type: element.type },
+			const updateElementResponse = mockApiResponse<RichTextElementResponse>({
+				data: { id: element.id, content: element.content, type: element.type } as RichTextElementResponse,
 			});
 			mockedBoardApiCalls.updateElementCall.mockResolvedValue(updateElementResponse);
 

@@ -2,7 +2,12 @@ import NewsCreatePage from "./NewsCreate.page.vue";
 import { CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { createTestAppStoreWithSchool, expectNotification, newsResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithSchool,
+	expectNotification,
+	mockApiResponse,
+	newsResponseFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsForm } from "@feature-news";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -104,9 +109,18 @@ describe("NewsCreatePage", () => {
 				displayAt: new Date().toISOString(),
 			};
 
+			const createdNewsResponse = newsResponseFactory.build();
+
+			beforeEach(() => {
+				newsApi.newsControllerCreate.mockResolvedValue(
+					mockApiResponse<serverApi.NewsResponse>({ data: createdNewsResponse })
+				);
+			});
+
 			it("should create news with context and contextId from query params", () => {
 				const query = { contextId: "123", context: CreateNewsParamsTargetModelEnum.Teams };
 				const { wrapper } = setup({ query });
+
 				const newsForm = wrapper.getComponent(NewsForm);
 
 				newsForm.vm.$emit("save", createParams);
@@ -153,9 +167,6 @@ describe("NewsCreatePage", () => {
 
 			it("should notify success and navigate to news details page after successful creation", async () => {
 				const { wrapper } = setup();
-				const createdNewsResponse = newsResponseFactory.build();
-				newsApi.newsControllerCreate.mockResolvedValue({ data: createdNewsResponse });
-
 				const newsForm = wrapper.getComponent(NewsForm);
 
 				newsForm.vm.$emit("save", createParams);

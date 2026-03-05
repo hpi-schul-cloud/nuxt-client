@@ -14,6 +14,7 @@ import {
 	authorizedCollaboraDocumentUrlResponseFactory,
 	AxiosResponseFactory,
 	createTestAppStoreWithSchool,
+	mockApiResponse,
 } from "@@/tests/test-utils";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
@@ -23,7 +24,6 @@ import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { useNotificationStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 
@@ -93,7 +93,7 @@ describe("FileStorageApi Composable", () => {
 		describe("when file api returns file record successfully", () => {
 			const setup = () => {
 				const fileRecord = fileRecordFactory.build();
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecord,
 				});
 
@@ -208,8 +208,8 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
-					data: { data: [fileRecordResponse] },
+				const response = mockApiResponse<FileRecordListResponse>({
+					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
@@ -313,7 +313,7 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecordResponse,
 				});
 
@@ -437,7 +437,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					name: fileName,
 				});
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecordResponse,
 				});
 
@@ -566,7 +566,7 @@ describe("FileStorageApi Composable", () => {
 					fileName: "new-file-name.txt",
 				};
 
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecordResponse,
 				});
 
@@ -646,8 +646,8 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 				});
 
-				const fetchResponse = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
-					data: { data: [fileRecordResponse] },
+				const fetchResponse = mockApiResponse<FileRecordListResponse>({
+					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
@@ -655,8 +655,8 @@ describe("FileStorageApi Composable", () => {
 
 				fileApi.list.mockResolvedValueOnce(fetchResponse);
 
-				const response = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
-					data: { data: [fileRecordResponse] },
+				const response = mockApiResponse<FileRecordListResponse>({
+					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
 				fileApi.deleteFiles.mockResolvedValue(response);
@@ -702,8 +702,8 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<AxiosResponse<FileRecordListResponse, unknown>>({
-					data: { data: [fileRecordResponse] },
+				const response = mockApiResponse<FileRecordListResponse>({
+					data: { data: [fileRecordResponse] } as FileRecordListResponse,
 				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
@@ -865,7 +865,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					name: fileName + ".docx",
 				});
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecordResponse,
 				});
 
@@ -929,7 +929,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					name: fileName + ".xlsx",
 				});
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecordResponse,
 				});
 
@@ -993,7 +993,7 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					name: fileName + ".pptx",
 				});
-				const response = createMock<AxiosResponse<FileRecord, unknown>>({
+				const response = mockApiResponse<FileRecord>({
 					data: fileRecordResponse,
 				});
 

@@ -1,12 +1,11 @@
 import { ErrorType, useCollaborativeTextEditorApi } from "./CollaborativeTextEditorApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { apiResponseErrorFactory, axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
+import { apiResponseErrorFactory, axiosErrorFactory, expectNotification, mockApiResponse } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { useNotificationStore } from "@data-app";
 import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 
@@ -56,7 +55,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				const parentId = ObjectIdMock();
 				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
 
-				const response = createMock<AxiosResponse<serverApi.CollaborativeTextEditorResponse, unknown>>({
+				const response = mockApiResponse<serverApi.CollaborativeTextEditorResponse>({
 					data: { url: `${parentType}/${parentId}` },
 				});
 

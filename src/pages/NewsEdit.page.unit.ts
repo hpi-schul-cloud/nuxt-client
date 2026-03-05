@@ -2,7 +2,7 @@ import NewsEditPage from "./NewsEdit.page.vue";
 import { NewsApiInterface, NewsResponse } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { expectNotification, newsResponseFactory } from "@@/tests/test-utils";
+import { expectNotification, mockApiResponse, newsResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsForm } from "@feature-news";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
@@ -42,7 +42,7 @@ describe("NewsEditPage", () => {
 			...options,
 		};
 
-		newsApi.newsControllerFindOne.mockResolvedValue({ data: currentNews });
+		newsApi.newsControllerFindOne.mockResolvedValue(mockApiResponse<NewsResponse>({ data: currentNews }));
 
 		const router = createMock<Router>({});
 		useRouterMock.mockReturnValue(router);
@@ -125,6 +125,10 @@ describe("NewsEditPage", () => {
 				displayAt: updatedNews.displayAt,
 			};
 
+			newsApi.newsControllerUpdate.mockResolvedValue(
+				mockApiResponse<NewsResponse>({ data: updateParams as NewsResponse })
+			);
+
 			newsForm.vm.$emit("save", updateParams);
 			await flushPromises();
 
@@ -141,7 +145,9 @@ describe("NewsEditPage", () => {
 				displayAt: news.displayAt,
 			};
 
-			newsApi.newsControllerUpdate.mockResolvedValue({ data: updateParams });
+			newsApi.newsControllerUpdate.mockResolvedValue(
+				mockApiResponse<NewsResponse>({ data: updateParams as NewsResponse })
+			);
 
 			newsForm.vm.$emit("save", updateParams);
 			await flushPromises();
