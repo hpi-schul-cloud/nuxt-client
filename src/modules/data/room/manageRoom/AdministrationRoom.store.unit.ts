@@ -7,6 +7,7 @@ import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
 	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomStatsItemResponseFactory,
 	roomStatsListResponseFactory,
@@ -18,7 +19,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
 import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n");
@@ -26,7 +27,7 @@ vi.mock("vue-i18n");
 
 describe("useAdministrationRoomStore", () => {
 	let roomAdministrationApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -36,7 +37,7 @@ describe("useAdministrationRoomStore", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomAdministrationApiMock = createMock<serverApi.RoomApiInterface>();
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomAdministrationApiMock);
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
 
 		setupStores({

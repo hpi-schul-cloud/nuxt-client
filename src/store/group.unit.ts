@@ -16,23 +16,25 @@ import {
 	businessErrorFactory,
 	classInfoResponseFactory,
 	classInfoSearchListResponseFactory,
+	mockAxiosInstance,
 } from "@@/tests/test-utils";
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
+import { Mocked } from "vitest";
 
 describe("GroupModule", () => {
 	let module: GroupModule;
 
 	let apiMock: DeepMocked<GroupApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		module = new GroupModule({});
 
 		apiMock = createMock<GroupApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 
 		initializeAxios(axiosMock);
 		vi.spyOn(serverApi, "GroupApiFactory").mockReturnValue(apiMock);

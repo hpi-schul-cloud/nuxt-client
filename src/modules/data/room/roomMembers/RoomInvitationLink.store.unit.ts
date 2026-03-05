@@ -7,6 +7,7 @@ import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
 	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
@@ -19,12 +20,13 @@ import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-error-handling";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 describe("useRoomInvitationLinkStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let roomInvitationLinkApiMock: DeepMocked<serverApi.RoomInvitationLinkApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -32,7 +34,7 @@ describe("useRoomInvitationLinkStore", () => {
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		roomInvitationLinkApiMock = createMock<serverApi.RoomInvitationLinkApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(roomInvitationLinkApiMock);

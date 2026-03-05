@@ -15,6 +15,7 @@ import {
 	createTestAppStore,
 	expectNotification,
 	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
@@ -29,7 +30,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock, MockInstance, vi } from "vitest";
+import { Mock, Mocked, MockInstance, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@/plugins/i18n");
@@ -38,7 +39,7 @@ vi.mock("@/plugins/i18n");
 describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
 	const ownSchool = {
 		id: "school-id",
@@ -58,7 +59,7 @@ describe("useRoomMembers", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);

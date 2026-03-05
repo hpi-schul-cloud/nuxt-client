@@ -1,17 +1,18 @@
 import { useCourseApi } from "./courseApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils";
+import { mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { AxiosInstance } from "axios";
+import { Mocked } from "vitest";
 
 describe("courseApi.composable", () => {
 	let courseApi: DeepMocked<serverApi.CoursesApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		courseApi = createMock<serverApi.CoursesApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(courseApi);
 		initializeAxios(axiosMock);
