@@ -812,8 +812,8 @@ export default {
 	"components.organisms.FormNews.error.patch": "Помилка під час оновлення.",
 	"components.organisms.FormNews.error.remove": "Помилка під час видалення.",
 	"components.organisms.FormNews.errors.create": "Помилка під час створення.",
-	"components.organisms.FormNews.errors.missing_content": "Ваша стаття пуста. ;)",
-	"components.organisms.FormNews.errors.missing_title": "Кожна стаття повинна мати заголовок.",
+	"components.organisms.FormNews.errors.missing_content": "Будь ласка, введіть вміст",
+	"components.organisms.FormNews.errors.missing_title": "Будь ласка, введіть заголовок",
 	"components.organisms.FormNews.input.title.label": "Заголовок новин",
 	"components.organisms.FormNews.input.title.placeholder": "Почнемо із заголовка",
 	"components.organisms.FormNews.label.planned_publish":
