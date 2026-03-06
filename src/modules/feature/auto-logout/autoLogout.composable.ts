@@ -45,6 +45,7 @@ import { $axios } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SessionState, useSessionBroadcast } from "@util-broadcast-channel";
+import { logger } from "@util-logger";
 import { readonly, ref } from "vue";
 
 const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
@@ -163,7 +164,9 @@ export const useAutoLogout = () => {
 	// --- api interactions ---
 
 	const logoutUserSilently = async () => {
-		await fetch("/logout");
+		await $axios.get("/logout").catch(() => {
+			logger.log("Silent logout failed, but user session is already cleared. Ignoring error.");
+		});
 	};
 
 	const extendSessionRequest = async () => {

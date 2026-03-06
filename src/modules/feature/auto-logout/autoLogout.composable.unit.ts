@@ -62,7 +62,6 @@ describe("useAutoLogout", () => {
 		vi.clearAllMocks();
 		vi.clearAllTimers();
 		broadcastDataRef.value = undefined;
-		vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
 	});
 
 	afterEach(() => {
@@ -374,7 +373,7 @@ describe("useAutoLogout", () => {
 				await advanceTimersBySeconds(4);
 
 				expect(sessionState.value).toBe(SessionState.Expired);
-				expect(globalThis.fetch).toHaveBeenCalledWith("/logout");
+				expect(axiosMock.get).toHaveBeenCalledWith("/logout");
 			});
 		});
 
