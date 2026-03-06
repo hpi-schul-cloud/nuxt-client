@@ -1,16 +1,14 @@
 import { useAutoLogout } from "./autoLogout.composable";
 import AutoLogoutWarning from "./AutoLogoutWarning.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { WarningAlert } from "@ui-alert";
 import { SvsDialog } from "@ui-dialog";
 import { SessionState } from "@util-broadcast-channel";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -24,16 +22,12 @@ vi.mock("./autoLogout.composable", () => ({
 	useAutoLogout: vi.fn(),
 }));
 
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-
 describe("AutoLogoutWarning", () => {
 	let currentWrapper: ReturnType<typeof mount> | undefined;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		injectRouterMock(createRouterMock());
 	});
 
 	afterEach(() => {
@@ -43,11 +37,6 @@ describe("AutoLogoutWarning", () => {
 	});
 
 	const mockedUseAutoLogout = vi.mocked(useAutoLogout);
-	const router = createMock<Router>({
-		currentRoute: ref({ path: "/" }),
-	});
-	const useRouterMock = <Mock>useRouter;
-	useRouterMock.mockReturnValue(router);
 
 	const defaultVars = {
 		showDialog: ref(true),
@@ -179,7 +168,7 @@ describe("AutoLogoutWarning", () => {
 				});
 
 				dialog.vm.$emit("confirm");
-				expect(router.push).toHaveBeenCalledWith("/login");
+				expect(getRouter().push).toHaveBeenCalledWith("/login");
 			});
 		});
 

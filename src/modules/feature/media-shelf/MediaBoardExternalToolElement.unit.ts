@@ -9,6 +9,7 @@ import {
 	expectNotification,
 	externalToolDisplayDataFactory,
 	mediaExternalToolElementResponseFactory,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import {
@@ -16,20 +17,20 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("@data-external-tool");
 
 describe("MediaBoardExternalToolElement", () => {
-	let useExternalToolDisplayStateMock: DeepMocked<ReturnType<typeof useExternalToolDisplayState>>;
-	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
-	let useContextExternalToolConfigurationStatusMock: DeepMocked<
+	let useExternalToolDisplayStateMock: Mocked<ReturnType<typeof useExternalToolDisplayState>>;
+	let useExternalToolLaunchStateMock: Mocked<ReturnType<typeof useExternalToolLaunchState>>;
+	let useContextExternalToolConfigurationStatusMock: Mocked<
 		ReturnType<typeof useContextExternalToolConfigurationStatus>
 	>;
 
@@ -54,22 +55,23 @@ describe("MediaBoardExternalToolElement", () => {
 	};
 
 	beforeEach(() => {
-		useExternalToolDisplayStateMock = createMock<ReturnType<typeof useExternalToolDisplayState>>({
+		useExternalToolDisplayStateMock = mockComposable(useExternalToolDisplayState, {
 			displayData: ref(),
 			error: ref(),
 		});
 
 		setActivePinia(createTestingPinia());
 
-		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>({
+		useExternalToolLaunchStateMock = mockComposable(useExternalToolLaunchState, {
 			error: ref(),
 		});
-		useContextExternalToolConfigurationStatusMock =
-			createMock<ReturnType<typeof useContextExternalToolConfigurationStatus>>();
+		useContextExternalToolConfigurationStatusMock = mockComposable(useContextExternalToolConfigurationStatus);
 
 		vi.mocked(useExternalToolDisplayState).mockReturnValue(useExternalToolDisplayStateMock);
 		vi.mocked(useExternalToolLaunchState).mockReturnValue(useExternalToolLaunchStateMock);
 		vi.mocked(useContextExternalToolConfigurationStatus).mockReturnValue(useContextExternalToolConfigurationStatusMock);
+
+		useContextExternalToolConfigurationStatusMock.isOperational.mockReturnValue(true);
 
 		vi.useFakeTimers();
 	});
@@ -140,6 +142,7 @@ describe("MediaBoardExternalToolElement", () => {
 				element: mediaExternalToolElementResponseFactory.build(),
 			});
 
+			// Set up the mock to return true so that fetchContextLaunchRequest is called
 			useContextExternalToolConfigurationStatusMock.isOperational.mockReturnValue(true);
 			useExternalToolDisplayStateMock.displayData.value = externalToolDisplayDataFactory.build();
 

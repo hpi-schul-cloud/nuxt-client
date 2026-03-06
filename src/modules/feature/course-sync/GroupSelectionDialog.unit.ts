@@ -1,10 +1,10 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import { RoleName } from "@/serverApi/v3";
-import { groupResponseFactory } from "@@/tests/test-utils";
+import { groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { GroupListFilter, useGroupListState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete } from "vuetify/lib/components/index";
@@ -14,7 +14,7 @@ vi.mock("@data-group", () => ({
 }));
 
 describe("GroupSelectionDialog", () => {
-	let useGroupListStateMock: DeepMocked<ReturnType<typeof useGroupListState>>;
+	let useGroupListStateMock: Mocked<ReturnType<typeof useGroupListState>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof GroupSelectionDialog> = {
@@ -41,7 +41,7 @@ describe("GroupSelectionDialog", () => {
 	};
 
 	beforeEach(() => {
-		useGroupListStateMock = createMock<ReturnType<typeof useGroupListState>>();
+		useGroupListStateMock = mockComposable(useGroupListState);
 
 		vi.mocked(useGroupListState).mockReturnValue(useGroupListStateMock);
 	});

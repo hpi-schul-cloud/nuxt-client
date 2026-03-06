@@ -1,23 +1,22 @@
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
+import { axiosErrorFactory, expectNotification, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSchoolLicenseApi } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, expect } from "vitest";
+import { beforeEach, expect, Mocked } from "vitest";
 
 vi.mock("@data-license");
 
 describe("VidisMediaSyncSection", () => {
-	let useSchoolLicenseApiMock: DeepMocked<ReturnType<typeof useSchoolLicenseApi>>;
+	let useSchoolLicenseApiMock: Mocked<ReturnType<typeof useSchoolLicenseApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		useSchoolLicenseApiMock = createMock<ReturnType<typeof useSchoolLicenseApi>>();
+		useSchoolLicenseApiMock = mockComposable(useSchoolLicenseApi);
 		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
 	});
 

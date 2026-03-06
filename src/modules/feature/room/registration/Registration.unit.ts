@@ -6,13 +6,11 @@ import { LanguageType } from "@/serverApi/v3";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VStepper, VStepperItem } from "vuetify/components";
 
 vi.mock("vue-i18n", async () => {
@@ -25,10 +23,6 @@ vi.mock("vue-i18n", async () => {
 		}),
 	};
 });
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-room/registration/registrationStepper.composable");
 const useRegistrationStepperMock = vi.mocked(useRegistrationStepper);
@@ -67,13 +61,9 @@ describe("Registration.vue", () => {
 		};
 		registrationStore.hasApiErrorOccurred = options?.hasApiErrorOccurred ?? false;
 
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue({
-			query: {
-				"registration-secret": options?.queryParams ?? "secret-value",
-			},
-		});
+		const router = createRouterMock();
+		router.setQuery({ "registration-secret": options?.queryParams ?? "secret-value" });
+		injectRouterMock(router);
 
 		const wrapper = mount(Registration, {
 			attachTo: document.body,

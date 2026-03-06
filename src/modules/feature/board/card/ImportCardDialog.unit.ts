@@ -14,7 +14,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
 import { nextTick } from "vue";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
 
 const mockRooms = [
@@ -26,10 +26,9 @@ const mockRooms = [
 let copyModuleMock: CopyModule;
 
 describe("ImportCardDialog", () => {
-	const router = createRouterMock();
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		injectRouterMock(router);
+		injectRouterMock(createRouterMock());
 	});
 
 	const setup = (rooms = mockRooms) => {
@@ -78,9 +77,9 @@ describe("ImportCardDialog", () => {
 		await flushPromises();
 
 		const dialog = wrapper.findComponent(SvsDialog);
-		await dialog.vm.$emit("confirm");
+		dialog.vm.$emit("confirm");
 		await flushPromises();
 		expect(useNotificationStore().notify).toHaveBeenCalled();
-		expect(router.push).toHaveBeenCalled();
+		expect(getRouter().push).toHaveBeenCalled();
 	});
 });

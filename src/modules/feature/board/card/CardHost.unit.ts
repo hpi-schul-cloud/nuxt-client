@@ -2,13 +2,16 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import { BoardResponseAllowedOperations, CardResponse } from "@/serverApi/v3";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -22,6 +25,7 @@ import {
 } from "@ui-kebab-menu";
 import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 
 vi.mock("vue-router");
@@ -42,10 +46,41 @@ vi.mock("../shared/AddElementDialog.composable");
 vi.mock("@ui-confirmation-dialog");
 const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
 
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue({
+	createElementRequest: vi.fn(),
+	createPreferredElement: vi.fn(),
+	getPreferredTools: vi.fn(),
+	deleteElementRequest: vi.fn(),
+	moveElementRequest: vi.fn(),
+	updateElementRequest: vi.fn(),
+	duplicateCardRequest: vi.fn(),
+	deleteCardRequest: vi.fn(),
+	fetchCardRequest: vi.fn(),
+	updateCardTitleRequest: vi.fn(),
+	updateCardHeightRequest: vi.fn(),
+	disconnectSocketRequest: vi.fn(),
+});
+
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue({
+	dispatch: vi.fn(),
+	disconnectSocketRequest: vi.fn(),
+	createElementRequest: vi.fn(),
+	deleteElementRequest: vi.fn(),
+	moveElementRequest: vi.fn(),
+	updateElementRequest: vi.fn(),
+	deleteCardRequest: vi.fn(),
+	fetchCardRequest: vi.fn(),
+	updateCardTitleRequest: vi.fn(),
+	updateCardHeightRequest: vi.fn(),
+	duplicateCardRequest: vi.fn(),
+});
+
 describe("CardHost", () => {
-	let mockedSharedLastCreatedElementCalls: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
-	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
-	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
+	let mockedSharedLastCreatedElementCalls: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
+	let useShareBoardLinkMock: Mocked<ReturnType<typeof useShareBoardLink>>;
+	let mockedUseSharedFileSelectActions: Mocked<ReturnType<typeof useSharedFileSelect>>;
 
 	beforeEach(() => {
 		mockedUseSharedEditMode.mockReturnValue({
@@ -54,9 +89,7 @@ describe("CardHost", () => {
 			isInEditMode: computed(() => true),
 		});
 
-		useShareBoardLinkMock = createMock<ReturnType<typeof useShareBoardLink>>({
-			getShareLinkId: vi.fn().mockReturnValue("shareLinkId"),
-		});
+		useShareBoardLinkMock = mockComposable(useShareBoardLink);
 		mockedUseShareBoardLink.mockReturnValue(useShareBoardLinkMock);
 
 		mockedBoardFocusHandler.mockReturnValue({
@@ -83,10 +116,10 @@ describe("CardHost", () => {
 			isDeleteDialogOpen: ref(false),
 		});
 
-		mockedSharedLastCreatedElementCalls = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElementCalls = mockComposable(useSharedLastCreatedElement);
 		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementCalls);
 
-		mockedUseSharedFileSelectActions = createMock<ReturnType<typeof useSharedFileSelect>>({
+		mockedUseSharedFileSelectActions = mockComposable(useSharedFileSelect, {
 			isFileSelectOnMountEnabled: ref(true),
 			resetFileSelectOnMountEnabled: vi.fn(),
 			disableFileSelectOnMount: vi.fn(),

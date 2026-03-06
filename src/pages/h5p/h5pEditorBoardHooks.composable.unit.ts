@@ -5,28 +5,28 @@ import {
 	externalToolElementResponseFactory,
 	h5pElementResponseFactory,
 	mockApiResponse,
+	mockComposable,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { useAppStore } from "@data-app";
 import { UpdateElementRequestPayload, useBoardApi, useCardStore } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
+import { beforeEach, Mocked } from "vitest";
 
 vi.mock("@data-board");
 
 describe("useH5pEditorBoardHooks", () => {
-	let useBoardApiMock: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let useCardStoreMock: DeepMocked<ReturnType<typeof useCardStore>>;
+	let useBoardApiMock: Mocked<ReturnType<typeof useBoardApi>>;
+	let useCardStoreMock: Mocked<ReturnType<typeof useCardStore>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
 
 	beforeEach(() => {
-		useBoardApiMock = createMock<ReturnType<typeof useBoardApi>>();
-		useCardStoreMock = createMock<ReturnType<typeof useCardStore>>();
+		useBoardApiMock = mockComposable(useBoardApi);
+		useCardStoreMock = mockComposable(useCardStore);
 
 		vi.mocked(useBoardApi).mockReturnValue(useBoardApiMock);
 		vi.mocked(useCardStore).mockReturnValue(useCardStoreMock);

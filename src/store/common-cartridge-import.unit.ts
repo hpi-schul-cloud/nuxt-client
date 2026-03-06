@@ -1,7 +1,7 @@
 import CommonCartridgeImportModule from "./common-cartridge-import";
 import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { MockedFunction } from "vitest";
+import { mockApi } from "@@/tests/test-utils";
+import { Mocked, MockedFunction } from "vitest";
 
 vi.mock("@/commonCartridgeApi/v3/api", () => ({
 	CommonCartridgeApiFactory: vi.fn(),
@@ -9,11 +9,11 @@ vi.mock("@/commonCartridgeApi/v3/api", () => ({
 
 describe("CommonCartridgeImportModule", () => {
 	let sut: CommonCartridgeImportModule;
-	let commonCartridgeApiMock: DeepMocked<CommonCartridgeApiInterface>;
+	let commonCartridgeApiMock: Mocked<CommonCartridgeApiInterface>;
 
 	beforeAll(() => {
 		sut = new CommonCartridgeImportModule({});
-		commonCartridgeApiMock = createMock<CommonCartridgeApiInterface>();
+		commonCartridgeApiMock = mockApi<CommonCartridgeApiInterface>();
 
 		vi.spyOn(sut, "commonCartridgeApi", "get").mockReturnValue(commonCartridgeApiMock);
 	});
@@ -43,7 +43,7 @@ describe("CommonCartridgeImportModule", () => {
 
 	describe("getters (real, for coverage)", () => {
 		it("should execute the real getter and call CommonCartridgeApiFactory", () => {
-			const realMock = createMock<CommonCartridgeApiInterface>();
+			const realMock = mockApi<CommonCartridgeApiInterface>();
 
 			(CommonCartridgeApiFactory as MockedFunction<typeof CommonCartridgeApiFactory>).mockReturnValue(realMock);
 

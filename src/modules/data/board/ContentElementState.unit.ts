@@ -1,11 +1,10 @@
 import { useContentElementState } from "./ContentElementState.composable";
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 
 vi.mock("@util-board/InlineEditInteractionHandler.composable");
 
@@ -27,13 +26,13 @@ vi.mock("vue-i18n", () => ({
 }));
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouterMock = vi.mocked(useRouter);
 
 describe("useContentElementState composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		const router = createMock<Router>();
+		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
 	});
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) =>

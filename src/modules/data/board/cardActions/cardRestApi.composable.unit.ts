@@ -15,8 +15,11 @@ import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	contextExternalToolConfigurationTemplateFactory,
+	contextExternalToolFactory,
 	expectNotification,
 	externalToolElementResponseFactory,
+	mockApiResponse,
+	mockComposable,
 	mockedPiniaStoreTyping,
 	ObjectIdMock,
 	richTextElementResponseFactory,
@@ -30,14 +33,13 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useErrorHandler } from "@util-error-handling";
-import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 
 vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -58,18 +60,18 @@ vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouterMock = vi.mocked(useRouter);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
 }));
 
 describe("useCardRestApi", () => {
-	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedContextExternalToolApiCalls: DeepMocked<ReturnType<typeof useContextExternalToolApi>>;
-	let mockedSharedCardRequestPoolCalls: DeepMocked<ReturnType<typeof useSharedCardRequestPool>>;
-	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
+	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
+	let mockedBoardApiCalls: Mocked<ReturnType<typeof useBoardApi>>;
+	let mockedContextExternalToolApiCalls: Mocked<ReturnType<typeof useContextExternalToolApi>>;
+	let mockedSharedCardRequestPoolCalls: Mocked<ReturnType<typeof useSharedCardRequestPool>>;
+	let mockedSocketConnectionHandler: Mocked<ReturnType<typeof useSocketConnection>>;
 	let setEditModeId: Mock;
 
 	beforeEach(() => {
@@ -78,19 +80,19 @@ describe("useCardRestApi", () => {
 			schoolExternalToolsModule: SchoolExternalToolsModule,
 		});
 
-		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
-		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		mockedBoardApiCalls = mockComposable(useBoardApi);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
-		mockedContextExternalToolApiCalls = createMock<ReturnType<typeof useContextExternalToolApi>>();
+		mockedContextExternalToolApiCalls = mockComposable(useContextExternalToolApi);
 		mockedUseContextExternalToolApi.mockReturnValue(mockedContextExternalToolApiCalls);
 
-		mockedSharedCardRequestPoolCalls = createMock<ReturnType<typeof useSharedCardRequestPool>>();
+		mockedSharedCardRequestPoolCalls = mockComposable(useSharedCardRequestPool);
 		mockedSharedCardRequestPool.mockReturnValue(mockedSharedCardRequestPoolCalls);
 
 		setEditModeId = vi.fn();
@@ -100,7 +102,7 @@ describe("useCardRestApi", () => {
 			isInEditMode: computed(() => true),
 		});
 
-		const router = createMock<Router>();
+		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
 	});
 
@@ -134,7 +136,7 @@ describe("useCardRestApi", () => {
 
 			cardStore.getCard.mockReturnValue(card);
 
-			const newElementResponse = createMock<AxiosResponse<RichTextElementResponse, unknown>>({
+			const newElementResponse = mockApiResponse<RichTextElementResponse>({
 				data: richTextElementResponseFactory.build(),
 			});
 			mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -220,10 +222,22 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
+				const newElementResponse = mockApiResponse<ExternalToolElementResponse>({
 					data: externalToolElementResponseFactory.build(),
 				});
 				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
+
+				const availableTool: ContextExternalToolConfigurationTemplate =
+					contextExternalToolConfigurationTemplateFactory.build({
+						schoolExternalToolId: preferredTool.schoolExternalToolId,
+						parameters: [],
+					});
+
+				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue([availableTool]);
+
+				mockedContextExternalToolApiCalls.createContextExternalToolCall.mockResolvedValue(
+					contextExternalToolFactory.build()
+				);
 
 				return {
 					createPreferredElement,
@@ -302,7 +316,7 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
+				const newElementResponse = mockApiResponse<ExternalToolElementResponse>({
 					data: externalToolElementResponseFactory.build(),
 				});
 				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -374,7 +388,7 @@ describe("useCardRestApi", () => {
 
 				cardStore.getCard.mockReturnValue(card);
 
-				const newElementResponse = createMock<AxiosResponse<ExternalToolElementResponse, unknown>>({
+				const newElementResponse = mockApiResponse<ExternalToolElementResponse>({
 					data: externalToolElementResponseFactory.build(),
 				});
 				mockedBoardApiCalls.createElementCall.mockResolvedValue(newElementResponse);
@@ -387,6 +401,10 @@ describe("useCardRestApi", () => {
 				};
 
 				mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall.mockResolvedValue([availableTool]);
+
+				mockedContextExternalToolApiCalls.createContextExternalToolCall.mockResolvedValue(
+					contextExternalToolFactory.build()
+				);
 
 				return {
 					createPreferredElement,
@@ -470,7 +488,7 @@ describe("useCardRestApi", () => {
 					],
 				};
 
-				const preferredToolResponse = createMock<AxiosResponse<PreferredToolListResponse, unknown>>({
+				const preferredToolResponse = mockApiResponse<PreferredToolListResponse>({
 					data: preferredTools,
 				});
 				mockedContextExternalToolApiCalls.fetchPreferredTools.mockResolvedValue(preferredToolResponse);
@@ -629,8 +647,8 @@ describe("useCardRestApi", () => {
 
 			const element = richTextElementResponseFactory.build();
 
-			const updateElementResponse = createMock<AxiosResponse<RichTextElementResponse, unknown>>({
-				data: { id: element.id, content: element.content, type: element.type },
+			const updateElementResponse = mockApiResponse<RichTextElementResponse>({
+				data: { id: element.id, content: element.content, type: element.type } as RichTextElementResponse,
 			});
 			mockedBoardApiCalls.updateElementCall.mockResolvedValue(updateElementResponse);
 

@@ -1,22 +1,22 @@
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import { richTextElementResponseFactory } from "@@/tests/test-utils";
+import { mockComposable, richTextElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { ref } from "vue";
 
 vi.mock("@data-board/ContentElementState.composable");
 
 describe("RichTextContentElementEdit", () => {
-	let useContentElementStateMock: DeepMocked<ReturnType<typeof useContentElementState>>;
+	let useContentElementStateMock: Mocked<ReturnType<typeof useContentElementState>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useContentElementStateMock = createMock<ReturnType<typeof useContentElementState>>();
+		useContentElementStateMock = mockComposable(useContentElementState);
 		vi.mocked(useContentElementState).mockReturnValue(useContentElementStateMock);
 	});
 

@@ -15,22 +15,13 @@ import {
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { nextTick } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouteMock = <Mock>useRoute;
-const useRouterMock = <Mock>useRouter;
 
 type Tab = "current" | "next" | "archive";
 
@@ -49,10 +40,8 @@ const createWrapper = ({
 	userPermissions,
 	envs = {},
 }: CreateWrapperOptions) => {
-	const route = { query: { tab: "current" } };
-	useRouteMock.mockReturnValue(route);
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
+	const { router } = injectRouterMock(createRouterMock());
+	const route = router.currentRoute;
 
 	const defaultPermissions = [Permission.ClassEdit, Permission.ClassCreate];
 

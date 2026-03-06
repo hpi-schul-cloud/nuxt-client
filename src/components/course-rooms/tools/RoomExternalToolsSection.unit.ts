@@ -8,19 +8,16 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, MountingOptions } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouterMock = <Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = vi.mocked(useRouter);
 
 describe("RoomExternalToolsSection", () => {
 	beforeEach(() => {
@@ -111,7 +108,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const roomId = "roomId";
 
-			const router = createMock<Router>();
+			const { router } = injectRouterMock(createRouterMock());
 			useRouterMock.mockReturnValue(router);
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId });

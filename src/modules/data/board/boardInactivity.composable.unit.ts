@@ -2,14 +2,14 @@ import { useBoardStore } from "./Board.store";
 import { connectionOptions, useBoardInactivity } from "./boardInactivity.composable";
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
-import { boardResponseFactory, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { boardResponseFactory, createTestEnvStore, mockComposable, mountComposable } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
-import type { Mock } from "vitest";
+import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -21,32 +21,36 @@ vi.mock("./socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
 vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const useRouterMock = vi.mocked(useRouter);
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
+let mockedSocketConnectionHandler: Mocked<ReturnType<typeof useSocketConnection>>;
 
 vi.useFakeTimers();
 
 describe("pageInactivity.composable", () => {
-	setActivePinia(createTestingPinia());
-	createTestEnvStore({
-		BOARD_COLLABORATION_URI: "mockedUri",
-		FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+	beforeEach(() => {
+		vi.clearAllMocks();
+
+		setActivePinia(createTestingPinia());
+		createTestEnvStore({
+			BOARD_COLLABORATION_URI: "mockedUri",
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+		});
+
+		mockUseSharedLastCreatedElement.mockReturnValue({
+			lastCreatedElementId: computed(() => "element-id"),
+			resetLastCreatedElementId: vi.fn(),
+		});
+
+		mockedSocketConnectionHandler = mockComposable(useSocketConnection);
+		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
+
+		const router = createRouterMock();
+		useRouterMock.mockReturnValue(router);
 	});
-
-	mockUseSharedLastCreatedElement.mockReturnValue({
-		lastCreatedElementId: computed(() => "element-id"),
-		resetLastCreatedElementId: vi.fn(),
-	});
-
-	mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
-	mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
-
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
 
 	const setup = (timer = 0) => {
 		const boardStore = useBoardStore();
@@ -60,9 +64,6 @@ describe("pageInactivity.composable", () => {
 	};
 
 	describe("usePageInactivity", () => {
-		beforeEach(() => {
-			vi.clearAllMocks();
-		});
 		it("should call the store functions when isTimeoutReached value true", async () => {
 			const { useBoardInactivityComposable, boardStore, cardStore } = setup();
 			connectionOptions.isTimeoutReached = true;
@@ -93,11 +94,12 @@ describe("pageInactivity.composable", () => {
 	describe("isTimeoutReached value", () => {
 		beforeEach(() => {
 			connectionOptions.isTimeoutReached = false;
-			vi.clearAllMocks();
 		});
+
 		afterEach(() => {
 			vi.clearAllTimers();
 		});
+
 		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);

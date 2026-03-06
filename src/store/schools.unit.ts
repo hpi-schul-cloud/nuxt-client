@@ -1,24 +1,24 @@
 import SchoolsModule from "./schools";
 import * as serverApi from "@/serverApi/v3/api";
 import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@/serverApi/v3/api";
-import { createTestAppStore, createTestAppStoreWithSchool, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestAppStoreWithSchool, createTestEnvStore, mockApi } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosError } from "axios";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 describe("schools module", () => {
-	let schoolApi: DeepMocked<serverApi.SchoolApiInterface>;
-	let systemsApi: DeepMocked<SystemsApiInterface>;
+	let schoolApi: Mocked<serverApi.SchoolApiInterface>;
+	let systemsApi: Mocked<SystemsApiInterface>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		schoolApi = createMock<serverApi.SchoolApiInterface>();
-		systemsApi = createMock<SystemsApiInterface>();
+		schoolApi = mockApi<serverApi.SchoolApiInterface>();
+		systemsApi = mockApi<SystemsApiInterface>();
 
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);

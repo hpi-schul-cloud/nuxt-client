@@ -1,12 +1,12 @@
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { mockComposable, submissionsResponseFactory } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { ref } from "vue";
 
 const mockedSubmissionsResponse = submissionsResponseFactory.build();
@@ -15,11 +15,11 @@ vi.mock("./SubmissionItemApi.composable");
 const mockedUseSubmissionItemApi = vi.mocked(useSubmissionItemApi);
 
 describe("SubmissionContentElementState.composable", () => {
-	let mockedUseSubmissionItemApiCalls: DeepMocked<ReturnType<typeof useSubmissionItemApi>>;
+	let mockedUseSubmissionItemApiCalls: Mocked<ReturnType<typeof useSubmissionItemApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		mockedUseSubmissionItemApiCalls = createMock<ReturnType<typeof useSubmissionItemApi>>();
+		mockedUseSubmissionItemApiCalls = mockComposable(useSubmissionItemApi);
 		mockedUseSubmissionItemApi.mockReturnValue(mockedUseSubmissionItemApiCalls);
 	});
 
