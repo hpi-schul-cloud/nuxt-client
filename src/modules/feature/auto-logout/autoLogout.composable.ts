@@ -164,9 +164,11 @@ export const useAutoLogout = () => {
 	// --- api interactions ---
 
 	const logoutUserSilently = async () => {
-		await $axios.get("/logout").catch(() => {
-			logger.log("Silent logout failed, but user session is already cleared. Ignoring error.");
-		});
+		try {
+			await $axios.get("/logout");
+		} catch (error) {
+			logger.error("Unexpected error during silent logout:", error);
+		}
 	};
 
 	const extendSessionRequest = async () => {
