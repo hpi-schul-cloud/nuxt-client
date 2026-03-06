@@ -902,12 +902,15 @@ export default {
 	"feature-autoLogout.button.confirm": "Sitzung verlängern",
 	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
 	"feature-autoLogout.message.error.401": "Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
+	"feature-autoLogout.message.extending-session-success": "Sitzung erfolgreich verlängert.",
 	"feature-autoLogout.warning.remainingTime": "weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"feature-autoLogout.warning":
 		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
+	"feature-loggedout.title": "Sitzung abgelaufen",
+	"feature-loggedout.message": "Die Sitzung ist aus Sicherheitsgründen abgelaufen.",
+	"feature-loggedout.button": "Erneut anmelden",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
