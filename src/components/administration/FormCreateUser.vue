@@ -2,8 +2,8 @@
 	<form>
 		<v-text-field
 			v-model="userData.firstName"
-			:label="$t('common.labels.firstName')"
-			:hint="$t('common.placeholder.firstName')"
+			:label="t('common.labels.firstName')"
+			:hint="t('common.placeholder.firstName')"
 			required
 			:error-messages="getErrorMessages(v$.firstName)"
 			data-testid="input_create-user_firstname"
@@ -11,8 +11,8 @@
 		/>
 		<v-text-field
 			v-model="userData.lastName"
-			:label="$t('common.labels.lastName')"
-			:hint="$t('common.placeholder.lastName')"
+			:label="t('common.labels.lastName')"
+			:hint="t('common.placeholder.lastName')"
 			required
 			:error-messages="getErrorMessages(v$.lastName)"
 			data-testid="input_create-user_lastname"
@@ -20,8 +20,8 @@
 		/>
 		<v-text-field
 			v-model="userData.email"
-			:label="$t('common.labels.email')"
-			:hint="$t('common.placeholder.email')"
+			:label="t('common.labels.email')"
+			:hint="t('common.placeholder.email')"
 			required
 			:error-messages="getErrorMessages(v$.email)"
 			data-testid="input_create-user_email"
@@ -37,10 +37,10 @@
 			data-testid="button_create-user_submit"
 			@click.prevent="onSubmit"
 		>
-			{{ $t("common.actions.add") }}
+			{{ t("common.actions.add") }}
 		</v-btn>
 		<v-btn class="w-100 mt-6" variant="text" data-testid="button_create-user_abort" @click.prevent="$router.go(-1)">
-			{{ $t("common.actions.back") }}
+			{{ t("common.actions.back") }}
 		</v-btn>
 	</form>
 </template>
