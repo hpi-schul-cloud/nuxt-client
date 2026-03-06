@@ -1,4 +1,5 @@
 import { LanguageType, MeResponse, Permission, RoleName } from "@/serverApi/v3";
+import { createDayJs } from "@/utils/date-time.utils";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";
 import { DeepPartial, Factory } from "fishery";
@@ -37,8 +38,9 @@ export const createTestAppStore = ({
 	const mockedMe = meResponseFactory.build(me);
 	const store = useAppStore(pinia);
 
-	store.$patch({ meResponse: mockedMe });
+	store.$patch({ meResponse: mockedMe, userLocale: mockedMe.language });
 	const appStore = mockedPiniaStoreTyping(useAppStore);
+	createDayJs();
 
 	return { mockedMe, appStore };
 };

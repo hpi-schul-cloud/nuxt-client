@@ -90,10 +90,10 @@ describe("NewsForm", () => {
 
 		const dateInput = wrapper.findComponent(DatePicker);
 
-		expect(dateInput.props("date")).toStrictEqual(formatUtc(testDate, "date"));
+		expect(dateInput.props("date")).toStrictEqual(date);
 
 		const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
-		expect(timeInput.props("modelValue")).toStrictEqual(formatUtc(testDate, "time"));
+		expect(timeInput.props("modelValue")).toStrictEqual(time);
 	});
 
 	it("should set time to 00:00 when date is set but time is empty", async () => {
