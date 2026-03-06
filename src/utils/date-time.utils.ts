@@ -228,7 +228,7 @@ export const toCombinedDateTimeIso = (dateString: string | undefined, timeString
  *
  * @param dbDateString - The date string in DB format (e.g. "01.03.2022")
  */
-export const formatFromDbGermanDateString = (dbDateString: string | undefined) => {
+export const fromGermanDate = (dbDateString: string | undefined) => {
 	if (!dbDateString) return undefined;
 	const d = dayjs(dbDateString, "DD.MM.YYYY");
 	return formatUtc(d.toISOString(), "date");
@@ -240,7 +240,7 @@ export const formatFromDbGermanDateString = (dbDateString: string | undefined) =
  *
  * @param isoDateString - The date string in ISO format (e.g. "2022-03-01")
  */
-export const formatToDbGermanDateString = (isoDateString: string | undefined) => {
+export const toGermanDate = (isoDateString: string | undefined) => {
 	if (!isoDateString) return undefined;
 	const d = dayjs(isoDateString);
 	return d.isValid() ? d.format("DD.MM.YYYY") : undefined;
@@ -253,7 +253,7 @@ export const formatToDbGermanDateString = (isoDateString: string | undefined) =>
  * @param date DE formated date string based on UTC
  * @return Date string based on current timezone for usage in input field (YYYY-MM-DD)
  */
-export const toIsoFromDbGermanDateString = (date: string) => {
+export const germanDateToIso = (date: string) => {
 	if (date) {
 		return dayjs(date, "DD.MM.YYYY").format("YYYY-MM-DD");
 	}

@@ -40,7 +40,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="toIsoFromDbGermanDateString(slotProps.data)"
+							:date="germanDateToIso(slotProps.data)"
 							class="ml-2"
 							hide-details
 							hide-icon
@@ -51,7 +51,7 @@
 							@update:date="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
-									birthDate: formatToDbGermanDateString($event),
+									birthDate: toGermanDate($event),
 								})
 							"
 						/>
@@ -108,7 +108,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<div class="text-content">
-							{{ formatFromDbGermanDateString(slotProps.data) }}
+							{{ fromGermanDate(slotProps.data) }}
 						</div>
 					</template>
 				</BackendDataTable>
@@ -160,7 +160,7 @@
 					@update:sort="onUpdateSort"
 				>
 					<template #datacolumn-birthday="slotProps">
-						{{ formatFromDbGermanDateString(slotProps.data) }}
+						{{ fromGermanDate(slotProps.data) }}
 					</template>
 				</BackendDataTable>
 				<p>
@@ -239,12 +239,7 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { filePathsModule } from "@/store";
-import {
-	dateFromToday,
-	formatFromDbGermanDateString,
-	formatToDbGermanDateString,
-	toIsoFromDbGermanDateString,
-} from "@/utils/date-time.utils.ts";
+import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -391,8 +386,8 @@ export default defineComponent({
 		document.title = buildPageTitle(this.title);
 	},
 	methods: {
-		formatToDbGermanDateString,
-		formatFromDbGermanDateString,
+		toGermanDate,
+		fromGermanDate,
 		dateFromToday,
 		async find() {
 			const query = {
@@ -436,7 +431,7 @@ export default defineComponent({
 				const users = this.tableData.map(
 					(student) => ({
 						_id: student._id,
-						birthday: toIsoFromDbGermanDateString(student.birthday),
+						birthday: germanDateToIso(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -515,7 +510,7 @@ export default defineComponent({
 				}
 			}, 2000);
 		},
-		toIsoFromDbGermanDateString,
+		germanDateToIso,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.

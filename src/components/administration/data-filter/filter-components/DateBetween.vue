@@ -53,10 +53,8 @@ const dateSelection = ref<DateSelection>({
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
 const onUpdateDate = (isoDate: string | undefined, fromUntil: "$gte" | "$lte") => {
-	if (isoDate && fromUntil === "$lte") {
-		isoDate = toEndOfDayIso(isoDate);
-	}
-	dateSelection.value[fromUntil] = isoDate ?? "";
+	const adjustedDate = fromUntil === "$lte" && isoDate ? toEndOfDayIso(isoDate) : isoDate;
+	dateSelection.value[fromUntil] = adjustedDate ?? "";
 };
 
 const onUpdateFilter = () => {

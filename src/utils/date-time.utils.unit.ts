@@ -3,11 +3,11 @@ import {
 	createDayJs,
 	dateFromToday,
 	diff,
-	formatFromDbGermanDateString,
 	formatRecentOrActual,
-	formatToDbGermanDateString,
 	formatUtc,
+	fromGermanDate,
 	fromNowUtc,
+	germanDateToIso,
 	inRange,
 	isDueWithin24h,
 	isInPast,
@@ -16,14 +16,13 @@ import {
 	isToday,
 	isWithinHours,
 	nowUtc,
-	nowUtcIso,
 	parseUtc,
 	timeUntil,
 	toCombinedDateTimeIso,
 	toDateFromIso,
 	toEndOfDayIso,
+	toGermanDate,
 	toIsoDate,
-	toIsoFromDbGermanDateString,
 } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
@@ -455,38 +454,38 @@ describe("date-time.utils", () => {
 		it("should convert DB German date to localized format", async () => {
 			useAppStore().$patch({ userLocale: LanguageType.De });
 			await nextTick();
-			const result = formatFromDbGermanDateString("15.06.2024");
+			const result = fromGermanDate("15.06.2024");
 			expect(result).toBe("15.06.2024");
 		});
 
 		it("should return undefined for undefined input", () => {
-			expect(formatFromDbGermanDateString(undefined)).toBeUndefined();
+			expect(fromGermanDate(undefined)).toBeUndefined();
 		});
 	});
 
 	describe("formatToDbGermanDateString", () => {
 		it("should convert ISO date to German DB format", () => {
-			const result = formatToDbGermanDateString("2024-06-15");
+			const result = toGermanDate("2024-06-15");
 			expect(result).toBe("15.06.2024");
 		});
 
 		it("should return undefined for undefined input", () => {
-			expect(formatToDbGermanDateString(undefined)).toBeUndefined();
+			expect(toGermanDate(undefined)).toBeUndefined();
 		});
 
 		it("should return undefined for invalid date", () => {
-			expect(formatToDbGermanDateString("invalid")).toBeUndefined();
+			expect(toGermanDate("invalid")).toBeUndefined();
 		});
 	});
 
 	describe("toIsoFromDbGermanDateString", () => {
 		it("should convert German DB date to ISO format", () => {
-			const result = toIsoFromDbGermanDateString("15.06.2024");
+			const result = germanDateToIso("15.06.2024");
 			expect(result).toBe("2024-06-15");
 		});
 
 		it("should return undefined for empty string", () => {
-			expect(toIsoFromDbGermanDateString("")).toBeUndefined();
+			expect(germanDateToIso("")).toBeUndefined();
 		});
 	});
 });
