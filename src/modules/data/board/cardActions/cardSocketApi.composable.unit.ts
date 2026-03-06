@@ -15,15 +15,19 @@ import {
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
 import { BoardLayout, ContentElementType } from "@/serverApi/v3";
-import { cardResponseFactory, mockedPiniaStoreTyping, richTextElementContentFactory } from "@@/tests/test-utils";
+import {
+	cardResponseFactory,
+	mockComposable,
+	mockedPiniaStoreTyping,
+	richTextElementContentFactory,
+} from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -45,16 +49,16 @@ const useRouterMock = vi.mocked(useRouter);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 describe("useCardSocketApi", () => {
-	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
-	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	let socketMock: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
 
-		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
+		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
 
-		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
 		vi.useFakeTimers();

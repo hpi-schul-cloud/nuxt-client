@@ -1,9 +1,14 @@
 import { useRoomStore } from "./room.store";
 import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomItemResponse, RoomListResponse } from "@/serverApi/v3";
 import { RoomCreateParams } from "@/types/room/Room";
-import { createTestRoomStore, expectNotification, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
+import {
+	createTestRoomStore,
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	roomItemFactory,
+} from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
@@ -12,7 +17,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@/serverApi/v3");
 
 describe("useRoomStore", () => {
-	const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
+	const roomApiMock = mockApi<ReturnType<typeof RoomApiFactory>>();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));

@@ -8,14 +8,15 @@ import {
 	expectNotification,
 	mediaAvailableLineElementResponseFactory,
 	mediaBoardResponseFactory,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useExternalToolLaunchState } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop } from "@util-board";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
@@ -23,9 +24,9 @@ vi.mock("@data-external-tool");
 vi.mock("./data");
 
 describe("MediaBoardAvailableElement", () => {
-	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
+	let useExternalToolLaunchStateMock: Mocked<ReturnType<typeof useExternalToolLaunchState>>;
 
-	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
+	let useSharedMediaBoardStateMock: Mocked<ReturnType<typeof useSharedMediaBoardState>>;
 
 	const getWrapper = (props: ComponentProps<typeof MediaBoardAvailableElement>) => {
 		const refreshTime = 299000;
@@ -52,11 +53,11 @@ describe("MediaBoardAvailableElement", () => {
 	};
 
 	beforeEach(() => {
-		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>({
+		useExternalToolLaunchStateMock = mockComposable(useExternalToolLaunchState, {
 			error: ref(),
 		});
 
-		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>({
+		useSharedMediaBoardStateMock = mockComposable(useSharedMediaBoardState, {
 			mediaBoard: ref(),
 		});
 

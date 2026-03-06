@@ -4,11 +4,10 @@ import FolderContentElement from "./FolderContentElement.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { ContentElementType } from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
-import { parentStatisticFactory } from "@@/tests/test-utils";
+import { mockComposable, parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
@@ -61,7 +60,7 @@ describe("FolderContentElement", () => {
 			});
 		const getStatisticByParentId = vi.fn(() => statistic);
 		const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-		const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
+		const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi, {
 			getStatisticByParentId,
 			tryGetParentStatisticFromApi,
 		});

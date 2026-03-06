@@ -9,13 +9,13 @@ import {
 	createTestAppStoreWithPermissions,
 	createTestRoomStore,
 	expectNotification,
+	mockApi,
 	roomItemFactory,
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid } from "@feature-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert } from "@ui-alert";
 import { EmptyState } from "@ui-empty-state";
@@ -34,7 +34,7 @@ vi.mock("@/serverApi/v3", async (importOriginal) => {
 
 describe("RoomsPage", () => {
 	let router: RouterMock;
-	const roomApiMock = createMock<ReturnType<typeof serverApi.RoomApiFactory>>();
+	const roomApiMock = mockApi<ReturnType<typeof serverApi.RoomApiFactory>>();
 
 	beforeEach(() => {
 		vi.mocked(serverApi.RoomApiFactory).mockReturnValue(roomApiMock);

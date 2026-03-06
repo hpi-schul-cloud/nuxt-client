@@ -5,14 +5,15 @@ import {
 	courseInfoDataResponseFactory,
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi, useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VDataTableServer } from "vuetify/lib/components/index";
@@ -23,7 +24,7 @@ vi.mock("@data-room", () => ({
 }));
 
 describe("RoomsOverview", () => {
-	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
+	let useCourseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
 
 	const createWrapper = ({
 		tab = "current",
@@ -52,10 +53,8 @@ describe("RoomsOverview", () => {
 			...envs,
 		});
 
-		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> = createMock<
-			ReturnType<typeof useCourseList>
-		>({
-			isLoading: ref(),
+		const useCourseListMock = mockComposable(useCourseList, {
+			isLoading: ref(false),
 			pagination: ref(pagination),
 			page: ref(page),
 			courses: ref(courses),
@@ -93,7 +92,7 @@ describe("RoomsOverview", () => {
 		wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-rooms-table"]');
 
 	beforeEach(() => {
-		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
+		useCourseApiMock = mockComposable(useCourseApi, {
 			startSynchronization: vi.fn(),
 			stopSynchronization: vi.fn(),
 		});

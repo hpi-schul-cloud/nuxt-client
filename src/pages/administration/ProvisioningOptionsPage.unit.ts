@@ -2,14 +2,13 @@ import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import { THEME_KEY } from "@/utils/inject";
-import { createTestEnvStore, provisioningOptionsDataFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisioning-options";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mock } from "vitest";
+import type { Mock, Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { useRouter } from "vue-router";
@@ -27,7 +26,7 @@ describe("ProvisioningOptionsPage", () => {
 		behavior: "smooth",
 	}));
 
-	let useProvisioningOptionsStateMock: DeepMocked<ReturnType<typeof useProvisioningOptionsState>>;
+	let useProvisioningOptionsStateMock: Mocked<ReturnType<typeof useProvisioningOptionsState>>;
 	let router: RouterMock;
 
 	const getWrapper = (
@@ -62,7 +61,7 @@ describe("ProvisioningOptionsPage", () => {
 
 	beforeEach(() => {
 		router = createRouterMock();
-		useProvisioningOptionsStateMock = createMock<ReturnType<typeof useProvisioningOptionsState>>({
+		useProvisioningOptionsStateMock = mockComposable(useProvisioningOptionsState, {
 			isLoading: ref(false),
 			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),
 			error: ref(),

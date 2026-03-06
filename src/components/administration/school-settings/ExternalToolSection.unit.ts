@@ -8,6 +8,7 @@ import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	expectNotification,
+	mockComposable,
 	mockedPiniaStoreTyping,
 	MockedStore,
 } from "@@/tests/test-utils";
@@ -21,12 +22,12 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useNotificationStore } from "@data-app";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { expect } from "vitest";
+import { expect, Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCardText } from "vuetify/components";
@@ -38,7 +39,7 @@ describe("ExternalToolSection", () => {
 	const schoolId = "schoolId";
 	let el: HTMLDivElement;
 
-	let useSchoolExternalToolUsageMock: DeepMocked<ReturnType<typeof useSchoolExternalToolUsage>>;
+	let useSchoolExternalToolUsageMock: Mocked<ReturnType<typeof useSchoolExternalToolUsage>>;
 	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
 
 	beforeEach(() => {
@@ -82,7 +83,7 @@ describe("ExternalToolSection", () => {
 	};
 
 	beforeEach(() => {
-		useSchoolExternalToolUsageMock = createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
+		useSchoolExternalToolUsageMock = mockComposable(useSchoolExternalToolUsage);
 
 		useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadataFactory.build());
 

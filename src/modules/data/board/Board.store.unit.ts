@@ -10,7 +10,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { BoardLayout } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, expectNotification, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { useAppStore } from "@data-app";
@@ -20,7 +20,6 @@ import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { expect, Mocked } from "vitest";
-import { mock } from "vitest-mock-extended";
 import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { createRouterMock, type RouterMock } from "vue-router-mock";
@@ -58,16 +57,6 @@ vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 }));
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function mockReturned<T extends (...args: any[]) => any>(
-	factoryFn: T,
-	ext: Partial<ReturnType<T>> = {}
-): Mocked<ReturnType<T>> {
-	const baseMock = mock<ReturnType<T>>();
-	Object.assign(baseMock, ext);
-	return baseMock;
-}
-
 describe("BoardStore", () => {
 	let mockedBoardSocketApi: Mocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedBoardRestApi: Mocked<ReturnType<typeof useBoardRestApi>>;
@@ -78,45 +67,45 @@ describe("BoardStore", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
-		mockedUseErrorHandler.mockReturnValue(mockReturned(useErrorHandler));
+		mockedUseErrorHandler.mockReturnValue(mockComposable(useErrorHandler));
 
 		mockedUseSocketConnection.mockReturnValue(
-			mockReturned(useSocketConnection, {
+			mockComposable(useSocketConnection, {
 				connected: computed(() => false),
 			})
 		);
 
-		mockedBoardSocketApi = mockReturned(useBoardSocketApi);
+		mockedBoardSocketApi = mockComposable(useBoardSocketApi);
 		mockedUseBoardSocketApi.mockReturnValue(mockedBoardSocketApi);
 
-		mockedBoardRestApi = mockReturned(useBoardRestApi);
+		mockedBoardRestApi = mockComposable(useBoardRestApi);
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApi);
 
 		mockedUseCardSocketApi.mockReturnValue(
-			mockReturned(useCardSocketApi, {
+			mockComposable(useCardSocketApi, {
 				dispatch: vi.fn().mockResolvedValue(undefined),
 			})
 		);
 
-		mockedSharedEditMode = mockReturned(useSharedEditMode, {
+		mockedSharedEditMode = mockComposable(useSharedEditMode, {
 			editModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
 		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 
 		mockUseSharedLastCreatedElement.mockReturnValue(
-			mockReturned(useSharedLastCreatedElement, {
+			mockComposable(useSharedLastCreatedElement, {
 				lastCreatedElementId: computed(() => "element-id"),
 			})
 		);
 
 		mockedUseSharedFileSelect.mockReturnValue(
-			mockReturned(useSharedFileSelect, {
+			mockComposable(useSharedFileSelect, {
 				isFileSelectOnMountEnabled: ref(true),
 			})
 		);
 
-		mockedBoardFocusApi = mockReturned(useBoardFocusHandler, {
+		mockedBoardFocusApi = mockComposable(useBoardFocusHandler, {
 			focusedId: ref<string | undefined>(undefined),
 		});
 		mockedUseBoardFocusHandler.mockReturnValue(mockedBoardFocusApi);

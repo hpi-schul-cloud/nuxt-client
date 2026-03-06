@@ -5,18 +5,23 @@ import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory, mountComposable, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import {
+	axiosErrorFactory,
+	mockComposable,
+	mountComposable,
+	toolLaunchRequestResponseFactory,
+} from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@data-external-tool/ExternalToolApi.composable");
 
 describe("ExternalToolLaunchState.composable", () => {
-	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
+	let useExternalToolApiMock: Mocked<ReturnType<typeof useExternalToolApi>>;
 
 	beforeEach(() => {
-		useExternalToolApiMock = createMock<ReturnType<typeof useExternalToolApi>>();
+		useExternalToolApiMock = mockComposable(useExternalToolApi);
 
 		vi.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
 	});

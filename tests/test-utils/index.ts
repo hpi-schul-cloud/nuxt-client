@@ -4,6 +4,7 @@ export * from "./i18nMock";
 export * from "./mockApiFactory";
 export * from "./mockApiResponse";
 export * from "./mockAxiosInstance";
+export * from "./mockComposable";
 export * from "./mockDataTasks";
 export * from "./mockedPiniaStoreTyping";
 export * from "./mockObjects";

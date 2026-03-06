@@ -2,11 +2,11 @@ import { useBoardStore } from "./Board.store";
 import { connectionOptions, useBoardInactivity } from "./boardInactivity.composable";
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
-import { boardResponseFactory, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { boardResponseFactory, createTestEnvStore, mockComposable, mountComposable } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { createRouterMock } from "vue-router-mock";
@@ -26,7 +26,7 @@ const useRouterMock = vi.mocked(useRouter);
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
+let mockedSocketConnectionHandler: Mocked<ReturnType<typeof useSocketConnection>>;
 
 vi.useFakeTimers();
 
@@ -45,7 +45,7 @@ describe("pageInactivity.composable", () => {
 			resetLastCreatedElementId: vi.fn(),
 		});
 
-		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		const router = createRouterMock();

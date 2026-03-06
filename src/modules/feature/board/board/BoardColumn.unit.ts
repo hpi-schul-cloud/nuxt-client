@@ -1,14 +1,14 @@
 import BoardColumnVue from "./BoardColumn.vue";
 import { BoardResponseAllowedOperations } from "@/serverApi/v3/api";
-import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
 
 const { isDragging, dragStart, dragEnd } = useDragAndDrop();
@@ -27,14 +27,14 @@ mockUseSharedLastCreatedElement.mockReturnValue({
 });
 
 describe("BoardColumn", () => {
-	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
+	let mockedUseForceRenderHandler: Mocked<ReturnType<typeof useForceRender>>;
 
 	beforeEach(() => {
 		setupStores({});
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({ FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false });
 
-		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 

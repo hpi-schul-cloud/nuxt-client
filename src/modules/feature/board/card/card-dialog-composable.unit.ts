@@ -2,21 +2,21 @@ import { useCardDialogData } from "./card-dialog-composable";
 import {
 	boardResponseFactory,
 	columnResponseFactory,
+	mockComposable,
 	mockedPiniaStoreTyping,
 	roomBoardGridItemFactory,
 } from "@@/tests/test-utils";
 import { useBoardApi } from "@data-board";
 import { useRoomDetailsStore, useRoomStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, Mocked, vi } from "vitest";
 import { defineComponent, nextTick, ref } from "vue";
 
 vi.mock("@data-board");
 
 describe("useCardDialogData", () => {
-	let useBoardApiMock: DeepMocked<ReturnType<typeof useBoardApi>>;
+	let useBoardApiMock: Mocked<ReturnType<typeof useBoardApi>>;
 	let result: ReturnType<typeof useCardDialogData>;
 
 	const mockBoards = [roomBoardGridItemFactory.build(), roomBoardGridItemFactory.build()];
@@ -25,7 +25,7 @@ describe("useCardDialogData", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useBoardApiMock = createMock<ReturnType<typeof useBoardApi>>();
+		useBoardApiMock = mockComposable(useBoardApi);
 		vi.mocked(useBoardApi).mockReturnValue(useBoardApiMock);
 	});
 

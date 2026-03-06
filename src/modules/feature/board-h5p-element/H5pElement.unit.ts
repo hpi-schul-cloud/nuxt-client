@@ -2,16 +2,17 @@ import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
-import { h5pElementResponseFactory } from "@@/tests/test-utils";
+import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
 import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VImg } from "vuetify/components";
@@ -20,8 +21,8 @@ vi.mock("@data-board");
 vi.mock("@data-h5p");
 
 describe("H5pElement", () => {
-	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let useH5PEditorMock: DeepMocked<ReturnType<typeof useH5PEditorApi>>;
+	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
+	let useH5PEditorMock: Mocked<ReturnType<typeof useH5PEditorApi>>;
 	let router: RouterMock;
 
 	beforeEach(() => {
@@ -33,7 +34,7 @@ describe("H5pElement", () => {
 		});
 		injectRouterMock(router);
 
-		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useBoardFocusHandlerMock = mockComposable(useBoardFocusHandler);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 	});
 
@@ -47,7 +48,7 @@ describe("H5pElement", () => {
 		contentTitle?: string;
 		isListBoard?: boolean;
 	}) => {
-		useH5PEditorMock = createMock<ReturnType<typeof useH5PEditorApi>>();
+		useH5PEditorMock = mockComposable(useH5PEditorApi);
 		vi.mocked(useH5PEditorApi).mockReturnValue(useH5PEditorMock);
 		useH5PEditorMock.getContentTitle.mockResolvedValueOnce(propsData.contentTitle);
 

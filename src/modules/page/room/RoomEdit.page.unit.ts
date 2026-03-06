@@ -1,12 +1,11 @@
 import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
-import { expectNotification, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import { expectNotification, mockApi, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import { useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { RoomEditPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
@@ -22,7 +21,7 @@ const roomParams: RoomUpdateParams = {
 };
 
 describe("@pages/RoomEdit.page.vue", () => {
-	const roomApiMock = createMock<ReturnType<typeof RoomApiFactory>>();
+	const roomApiMock = mockApi<ReturnType<typeof RoomApiFactory>>();
 	let router: RouterMock;
 
 	beforeEach(() => {
