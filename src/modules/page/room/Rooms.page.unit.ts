@@ -24,21 +24,14 @@ import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VSkeletonLoader } from "vuetify/components";
 
-vi.mock("@/serverApi/v3", async (importOriginal) => {
-	const actual = await importOriginal<typeof serverApi>();
-	return {
-		...actual,
-		RoomApiFactory: vi.fn(),
-	};
-});
-
 describe("RoomsPage", () => {
 	let router: RouterMock;
-	const roomApiMock = mockApi<ReturnType<typeof serverApi.RoomApiFactory>>();
 
 	beforeEach(() => {
-		vi.mocked(serverApi.RoomApiFactory).mockReturnValue(roomApiMock);
+		const roomApiMock = mockApi<ReturnType<typeof serverApi.RoomApiFactory>>();
 		roomApiMock.roomControllerGetRooms.mockResolvedValue({ data: { data: [] } } as never);
+		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+
 		router = createRouterMock();
 		injectRouterMock(router);
 	});

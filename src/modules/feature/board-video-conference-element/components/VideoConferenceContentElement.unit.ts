@@ -102,7 +102,7 @@ describe("VideoConferenceContentElement", () => {
 			computedElement: computed(() => element),
 		});
 
-		const useVideoConferenceMock = {
+		const useVideoConferenceMock = mockComposable(useVideoConference, {
 			videoConferenceInfo: ref({
 				state: VideoConferenceState.NOT_STARTED,
 				options: {
@@ -115,11 +115,8 @@ describe("VideoConferenceContentElement", () => {
 			error: ref(error),
 			isRunning: computed(() => isRunning),
 			isWaitingRoomActive: computed(() => true),
-			fetchVideoConferenceInfo: vi.fn(),
-			startVideoConference: vi.fn(),
 			joinVideoConference: vi.fn().mockResolvedValue("https://example.com"),
-			resetError: vi.fn(),
-		};
+		});
 
 		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
 

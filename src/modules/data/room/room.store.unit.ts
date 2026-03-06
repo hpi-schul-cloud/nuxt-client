@@ -1,5 +1,5 @@
 import { useRoomStore } from "./room.store";
-import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomItemResponse, RoomListResponse } from "@/serverApi/v3";
+import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomListResponse } from "@/serverApi/v3";
 import { RoomCreateParams } from "@/types/room/Room";
 import {
 	createTestRoomStore,
@@ -7,6 +7,7 @@ import {
 	mockApi,
 	mockApiResponse,
 	roomItemFactory,
+	roomItemResponseFactory,
 } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
@@ -26,12 +27,9 @@ describe("useRoomStore", () => {
 
 	describe("fetchRooms & fetchRoomsPlain", () => {
 		it("should load rooms successfully", async () => {
-			const mockRooms = [
-				{ id: "1", name: "Room 1" },
-				{ id: "2", name: "Room 2" },
-			];
+			const mockRooms = roomItemResponseFactory.buildList(2);
 			roomApiMock.roomControllerGetRooms.mockResolvedValue(
-				mockApiResponse<RoomListResponse>({ data: { data: mockRooms as RoomItemResponse[] } })
+				mockApiResponse<RoomListResponse>({ data: { data: mockRooms } })
 			);
 
 			const store = useRoomStore();
