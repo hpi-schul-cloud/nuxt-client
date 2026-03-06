@@ -1,3 +1,4 @@
+import { createTestingPinia } from "@pinia/testing";
 import {
 	hasLowercaseLetter,
 	hasNumber,
@@ -12,9 +13,14 @@ import {
 	isValidTime,
 	isValidUrl,
 } from "@util-validators";
+import { setActivePinia } from "pinia";
 
 describe("util-validators", () => {
 	const ERROR = "my error";
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("isRequired", () => {
 		it("should not accept empty value", () => {
@@ -119,8 +125,10 @@ describe("util-validators", () => {
 		});
 
 		it("should not accept invalid time format", () => {
-			expect(isValidTime("55:5")).toBe(false);
-			expect(isValidTime("55:55")).toBe(false);
+			expect(isValidTime("55:55")).not.toBe(true);
+			expect(typeof isValidTime("55:55")).toBe("string");
+			expect(isValidTime("55:5")).not.toBe(true);
+			expect(typeof isValidTime("55:5")).toBe("string");
 		});
 	});
 
@@ -130,9 +138,14 @@ describe("util-validators", () => {
 		});
 
 		it("should not accept invalid date format", () => {
-			expect(isValidDate("31.31.2023")).toBe(ERROR);
-			expect(isValidDate("1.1.2001")).toBe(ERROR);
-			expect(isValidDate("1.101")).toBe(ERROR);
+			expect(isValidDate("31.31.2023")).not.toBe(true);
+			expect(typeof isValidDate("31.31.2023")).toBe("string");
+
+			expect(isValidDate("1.1.2001")).not.toBe(true);
+			expect(typeof isValidDate("1.1.2001")).toBe("string");
+
+			expect(isValidDate("1.101")).not.toBe(true);
+			expect(typeof isValidDate("1.101")).toBe("string");
 		});
 	});
 

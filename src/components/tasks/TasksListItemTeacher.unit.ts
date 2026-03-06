@@ -3,6 +3,7 @@ import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -40,6 +41,7 @@ const getWrapper = (props: { task: object }) =>
 describe("TasksListItemTeacher", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
+		createTestAppStore();
 	});
 
 	const defineWindowWidth = (width: number) => {

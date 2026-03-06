@@ -52,7 +52,7 @@ export const isValidUrl: FormValidatorFn<string> =
  * Vuelidate Validator
  * Checks if given value has valid time format
  */
-export const isValidTime = (value: string | undefined): string | true => {
+export const isValidTime = (value: string | undefined) => {
 	if (value === "" || !value) {
 		return true;
 	}
@@ -60,7 +60,7 @@ export const isValidTime = (value: string | undefined): string | true => {
 	return !!value.match(timeRegex) || useI18nGlobal().t("components.timePicker.validation.format", { timePlaceHolder });
 };
 
-export const isValidDate = (value: string | undefined): string | true => {
+export const isValidDate = (value: string | undefined) => {
 	if (value === "" || !value) {
 		return true;
 	}

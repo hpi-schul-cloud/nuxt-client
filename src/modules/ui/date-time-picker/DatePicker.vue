@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { useLocalizedDateTime } from "@/composables/date-time.composables";
-import { formatUtc, toDateFromIso, toIsoDate } from "@/utils/date-time.utils";
+import { formatUtc, toDateFromLocalString, toIsoDate } from "@/utils/date-time.utils";
 import { mdiCalendar } from "@icons/material";
 import { isRequired, isValidDate } from "@util-validators";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
@@ -92,7 +92,7 @@ watchEffect(() => {
 const dateObject = computed({
 	get() {
 		if (!dateString.value) return undefined;
-		return toDateFromIso(dateString.value);
+		return toDateFromLocalString(dateString.value);
 	},
 	set(isoString: string) {
 		dateString.value = formatUtc(isoString, "date");

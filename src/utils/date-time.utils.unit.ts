@@ -19,7 +19,7 @@ import {
 	parseUtc,
 	timeUntil,
 	toCombinedDateTimeIso,
-	toDateFromIso,
+	toDateFromLocalString,
 	toEndOfDayIso,
 	toGermanDate,
 	toIsoDate,
@@ -179,7 +179,7 @@ describe("date-time.utils", () => {
 		});
 
 		it("should work with Z-suffix UTC dates", () => {
-			const futureDate = "2026-03-05T15:00:00.000Z";
+			const futureDate = nowUtc().add(1, "day").toISOString();
 			const result = timeUntil(futureDate, "minute");
 			expect(typeof result).toBe("number");
 			expect(result).toBeGreaterThan(0);
@@ -420,7 +420,7 @@ describe("date-time.utils", () => {
 		it("should convert locale date string to Date object", async () => {
 			useAppStore().$patch({ userLocale: LanguageType.De });
 			await nextTick();
-			const result = toDateFromIso("15.06.2024");
+			const result = toDateFromLocalString("15.06.2024");
 			expect(result).toBeInstanceOf(Date);
 			expect(result?.getFullYear()).toBe(2024);
 			expect(result?.getMonth()).toBe(5); // June is month 5 (0-indexed)
@@ -428,7 +428,7 @@ describe("date-time.utils", () => {
 		});
 
 		it("should return undefined for undefined input", () => {
-			expect(toDateFromIso(undefined)).toBeUndefined();
+			expect(toDateFromLocalString(undefined)).toBeUndefined();
 		});
 	});
 

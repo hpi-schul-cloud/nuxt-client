@@ -36,9 +36,6 @@
       "@data-h5p": ["src/modules/data/h5p"],
       "@feature-auto-logout": ["src/modules/feature/auto-logout"],
       "@feature-board-file-element": ["src/modules/feature/board-file-element"],
-      "@feature-board-submission-element": [
-        "src/modules/feature/board-submission-element"
-      ],
       "@feature-board-text-element": ["src/modules/feature/board-text-element"],
       "@feature-board-link-element": ["src/modules/feature/board-link-element"],
       "@feature-board-external-tool-element": [

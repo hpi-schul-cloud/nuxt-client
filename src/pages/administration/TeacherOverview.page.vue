@@ -469,10 +469,10 @@ export default defineComponent({
 					ids: this.tableSelection,
 					userType: "teacher",
 				});
-				notifySuccess(this.t("pages.administration.remove.success"));
+				notifySuccess(this.$t("pages.administration.remove.success"));
 				this.find();
 			} catch {
-				notifyError(this.t("pages.administration.remove.error"));
+				notifyError(this.$t("pages.administration.remove.error"));
 			} finally {
 				this.tableSelection = reactive([]);
 				this.tableSelectionType = "inclusive";

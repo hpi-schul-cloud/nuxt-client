@@ -127,38 +127,34 @@ export const useDataTableFilter = (userType: string) => {
 		);
 	};
 
+	const buildDateRangeChipTitle = (labelKey: string, range: { $gte: string; $lte: string }) =>
+		`${t(labelKey)} ${formatUtc(range.$gte, "date")} ${t("common.words.and")} ${formatUtc(range.$lte, "date")}`;
+
 	const prepareChipTitles = (chipItem: FilterItem) => {
-		if (chipItem[0] === FilterOption.REGISTRATION) {
+		const [filterOption, rangeValue] = chipItem;
+
+		if (filterOption === FilterOption.REGISTRATION) {
 			const statusKeyMap = {
 				[Registration.COMPLETE]: t("pages.administration.students.legend.icon.success"),
 				[Registration.MISSING]: t("utils.adminFilter.consent.label.missing"),
 				[Registration.PARENT_AGREED]: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 			};
-			const status = chipItem[1].map((val) => statusKeyMap[val as Registration]);
+			const status = rangeValue.map((val) => statusKeyMap[val as Registration]);
 
 			return status.join(` ${t("common.words.and")} `);
 		}
 
-		if (chipItem[0] === FilterOption.CLASSES)
-			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
+		if (filterOption === FilterOption.CLASSES)
+			return `${t("utils.adminFilter.class.title")} = ${rangeValue.join(", ")}`;
 
-		if (chipItem[0] === FilterOption.CREATION_DATE)
-			return `${t("utils.adminFilter.date.created")} ${formatUtc(
-				chipItem[1].$gte,
-				"date"
-			)} ${t("common.words.and")} ${formatUtc(chipItem[1].$lte, "date")}`;
+		if (filterOption === FilterOption.CREATION_DATE)
+			return buildDateRangeChipTitle("utils.adminFilter.date.created", rangeValue);
 
-		if (chipItem[0] === FilterOption.LAST_MIGRATION_ON)
-			return `${t("utils.adminFilter.lastMigration.title")} ${formatUtc(
-				chipItem[1].$gte,
-				"date"
-			)} ${t("common.words.and")} ${formatUtc(chipItem[1].$lte, "date")}`;
+		if (filterOption === FilterOption.LAST_MIGRATION_ON)
+			return buildDateRangeChipTitle("utils.adminFilter.lastMigration.title", rangeValue);
 
-		if (chipItem[0] === FilterOption.OBSOLOTE_SINCE)
-			return `${t("utils.adminFilter.outdatedSince.title")} ${formatUtc(
-				chipItem[1].$gte,
-				"date"
-			)} ${t("common.words.and")} ${formatUtc(chipItem[1].$lte, "date")}`;
+		if (filterOption === FilterOption.OBSOLOTE_SINCE)
+			return buildDateRangeChipTitle("utils.adminFilter.outdatedSince.title", rangeValue);
 		return [];
 	};
 

@@ -201,7 +201,7 @@ export const toEndOfDayIso = (isoDateString: string | undefined) => {
 export const toIsoDate = (dateString: string | undefined) => {
 	if (!dateString) return undefined;
 	const parsed = dayjs(dateString, getFormat("date"));
-	return parsed.isValid() ? parsed.format("YYYY-MM-DD") : undefined;
+	return parsed.isValid() ? parsed.format(ISO_DATE_FORMAT) : undefined;
 };
 
 /**
@@ -209,7 +209,7 @@ export const toIsoDate = (dateString: string | undefined) => {
  *
  * @param dateString - The date string in local representation (e.g. "31.12.2024" for German locale)
  */
-export const toDateFromIso = (dateString: string | undefined) => {
+export const toDateFromLocalString = (dateString: string | undefined) => {
 	if (!dateString) return undefined;
 	const parsed = dayjs(dateString, getFormat("date"));
 	return parsed.isValid() ? parsed.toDate() : undefined;
@@ -255,7 +255,7 @@ export const toGermanDate = (isoDateString: string | undefined) => {
  */
 export const germanDateToIso = (date: string) => {
 	if (date) {
-		return dayjs(date, "DD.MM.YYYY").format("YYYY-MM-DD");
+		return dayjs(date, "DD.MM.YYYY").format(ISO_DATE_FORMAT);
 	}
 	return undefined;
 };
