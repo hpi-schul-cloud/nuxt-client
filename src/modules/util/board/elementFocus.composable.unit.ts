@@ -1,6 +1,6 @@
 import { useElementFocus } from "./elementFocus.composable";
-import { createMock } from "@golevelup/ts-vitest";
 import { logger } from "@util-logger";
+import { mock } from "vitest-mock-extended";
 
 describe("elementFocus.composable", () => {
 	beforeEach(() => {
@@ -15,7 +15,7 @@ describe("elementFocus.composable", () => {
 			}),
 		});
 
-		const domElementMock = createMock<HTMLElement>();
+		const domElementMock = mock<HTMLElement>();
 		const querySelectorSpy = vi.spyOn(document, "querySelector");
 		querySelectorSpy.mockReturnValueOnce(domElementMock);
 		const { focusNodeFromHash } = useElementFocus();

@@ -22,12 +22,12 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useNotificationStore } from "@data-app";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { createMock } from "@golevelup/ts-vitest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { expect, Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCardText } from "vuetify/components";
@@ -181,7 +181,7 @@ describe("ExternalToolSection", () => {
 				}
 			);
 
-			const windowMock = createMock<Window>();
+			const windowMock = mock<Window>();
 			vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {

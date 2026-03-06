@@ -3,9 +3,9 @@ import InnerContent from "./InnerContent.vue";
 import { DrawingElementResponse } from "@/serverApi/v3";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { mock } from "vitest-mock-extended";
 
 // Mocks
 vi.mock("@data-board", () => ({
@@ -33,7 +33,7 @@ describe("DrawingContentElement", () => {
 			propsData: props,
 		});
 
-		const windowMock = createMock<Window>();
+		const windowMock = mock<Window>();
 		vi.spyOn(globalThis, "open").mockImplementation(() => windowMock);
 
 		return { wrapper };

@@ -11,11 +11,11 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
@@ -263,7 +263,7 @@ describe("MediaBoard", () => {
 			const sortableEvent: Partial<SortableEvent> = {
 				oldIndex: 0,
 				newIndex: 1,
-				item: createMock<HTMLElement>({
+				item: mock<HTMLElement>({
 					dataset: {
 						lineId,
 					},

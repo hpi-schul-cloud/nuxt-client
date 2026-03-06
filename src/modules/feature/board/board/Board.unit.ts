@@ -40,13 +40,13 @@ import {
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock, Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { computed, nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
@@ -310,7 +310,7 @@ describe("Board", () => {
 					}),
 				});
 
-				const domElementMock = createMock<HTMLElement>();
+				const domElementMock = mock<HTMLElement>();
 				const querySelectorSpy = vi.spyOn(document, "querySelector");
 				querySelectorSpy.mockReturnValueOnce(domElementMock);
 

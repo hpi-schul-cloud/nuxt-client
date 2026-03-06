@@ -4,11 +4,11 @@ import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import { mediaAvailableLineElementResponseFactory, mediaAvailableLineResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { useDragAndDrop } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
@@ -77,18 +77,18 @@ describe("MediaBoardAvailableLine", () => {
 			});
 
 			const toLineId = "toLineId";
-			const fromLine = createMock<HTMLElement>({
+			const fromLine = mock<HTMLElement>({
 				dataset: {
 					lineId: availableMediaLineId,
 				},
 			});
-			const toLine = createMock<HTMLElement>({
+			const toLine = mock<HTMLElement>({
 				dataset: {
 					lineId: toLineId,
 				},
 			});
-			const element = createMock<HTMLElement>({
-				parentNode: createMock(),
+			const element = mock<HTMLElement>({
+				parentNode: mock(),
 			});
 
 			const sortableEvent: Partial<SortableEvent> = {
@@ -144,9 +144,9 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
 
-			const fromLine = createMock<HTMLElement>();
-			const toLine = createMock<HTMLElement>();
-			const element = createMock<HTMLElement>();
+			const fromLine = mock<HTMLElement>();
+			const toLine = mock<HTMLElement>();
+			const element = mock<HTMLElement>();
 			const sortableEvent: Partial<SortableEvent> = {
 				from: fromLine,
 				to: toLine,
@@ -188,9 +188,9 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
 
-			const fromLine = createMock<HTMLElement>();
-			const toLine = createMock<HTMLElement>();
-			const element = createMock<HTMLElement>();
+			const fromLine = mock<HTMLElement>();
+			const toLine = mock<HTMLElement>();
+			const element = mock<HTMLElement>();
 			const sortableEvent: Partial<SortableEvent> = {
 				from: fromLine,
 				to: toLine,

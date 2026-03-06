@@ -1,5 +1,5 @@
-import { createMock } from "@golevelup/ts-vitest";
 import { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { mock } from "vitest-mock-extended";
 
 export class AxiosResponseFactory {
 	static create<T>(data: T): AxiosResponse<T> {
@@ -8,7 +8,7 @@ export class AxiosResponseFactory {
 			status: 200,
 			statusText: "OK",
 			headers: {},
-			config: createMock<InternalAxiosRequestConfig>(),
+			config: mock<InternalAxiosRequestConfig>(),
 		};
 	}
 }

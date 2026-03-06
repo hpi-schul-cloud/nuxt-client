@@ -6,13 +6,13 @@ import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { LineClamp } from "@ui-line-clamp";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
 import { mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VImg } from "vuetify/components";
@@ -284,7 +284,7 @@ describe("H5pElement", () => {
 				});
 				const resolvedUrl = "https://test.com";
 
-				const windowMock = createMock<Window>();
+				const windowMock = mock<Window>();
 				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				return {
@@ -328,7 +328,7 @@ describe("H5pElement", () => {
 					isEditMode: false,
 				});
 
-				const windowMock = createMock<Window>();
+				const windowMock = mock<Window>();
 				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				return {
@@ -370,7 +370,7 @@ describe("H5pElement", () => {
 					isEditMode: true,
 				});
 
-				const windowMock = createMock<Window>();
+				const windowMock = mock<Window>();
 				vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 				return {

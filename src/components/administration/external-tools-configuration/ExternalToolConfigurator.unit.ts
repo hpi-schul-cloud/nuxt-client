@@ -10,8 +10,8 @@ import {
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { mock } from "vitest-mock-extended";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn } from "vuetify/components";
 
@@ -104,7 +104,7 @@ describe("ExternalToolConfigurator", () => {
 				const clipboardText = "https://google.de";
 				const template = schoolExternalToolConfigurationTemplateFactory.build();
 
-				const clipboardMock = createMock<Clipboard>();
+				const clipboardMock = mock<Clipboard>();
 				Object.assign(navigator, { clipboard: clipboardMock });
 
 				const { wrapper } = getWrapper({
