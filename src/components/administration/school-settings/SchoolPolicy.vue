@@ -20,7 +20,7 @@
 					{{
 						privacyPolicy
 							? t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-									date: formatRecentOrActual(privacyPolicy.createdAt),
+									date: formatRecentOrActual(privacyPolicy.publishedAt),
 								})
 							: t("pages.administration.school.index.schoolPolicy.notUploadedYet")
 					}}
