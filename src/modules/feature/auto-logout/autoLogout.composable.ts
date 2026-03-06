@@ -45,7 +45,6 @@ import { $axios } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SessionState, useSessionBroadcast } from "@util-broadcast-channel";
-import { logger } from "@util-logger";
 import { readonly, ref } from "vue";
 
 const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
@@ -93,7 +92,6 @@ export const useAutoLogout = () => {
 		} else if (remainingTimeInSeconds.value <= WARNING_THRESHOLD) {
 			await setStateAndBroadcast(SessionState.AboutToExpire);
 		}
-		logger.log("Remaining time in seconds:", remainingTimeInSeconds.value, "state:", sessionState.value);
 	};
 
 	const countdownTimer = useCountdownTimer(checkEverySecond);

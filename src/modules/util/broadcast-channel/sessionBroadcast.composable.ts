@@ -37,7 +37,6 @@
 
 import { SessionState } from "./types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { logger } from "@util-logger";
 import { tryOnScopeDispose, useBroadcastChannel } from "@vueuse/core";
 import axios, { isAxiosError } from "axios";
 import { readonly, ref, watch } from "vue";
@@ -88,8 +87,6 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 
 	// handle incoming broadcast messages to sync session state across tabs
 	watch(sessionBroadcast.data, (message) => {
-		logger.log("Received broadcast message:", message);
-
 		if (message === BROADCAST_MESSAGE_LOGOUT) {
 			setJwtExpired(true);
 			logoutHandlers.forEach((handler) => handler());

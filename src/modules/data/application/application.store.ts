@@ -66,7 +66,6 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const clearUserSession = () => {
-		logger.log("logoutWithoutRedirect");
 		localStorage.clear();
 		sessionStorage.clear();
 		document.cookie.split(";").forEach(function (c) {
