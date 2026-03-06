@@ -1,9 +1,9 @@
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
 import * as serverApi from "@/serverApi/v3/api";
 import { RoomStatsItemResponse, RoomStatsListResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
+import { formatUtc } from "@/utils/date-time.utils";
 import {
 	expectNotification,
 	mockedPiniaStoreTyping,
@@ -95,7 +95,7 @@ describe("useAdministrationRoomStore", () => {
 
 			const expectedRoomList = mockRoomList.data.map((room) => ({
 				...room,
-				createdAt: printFromStringUtcToFullDate(room.createdAt),
+				createdAt: formatUtc(room.createdAt, "date"),
 			}));
 
 			expect(roomAdminStore.roomList).toEqual(expectedRoomList);
@@ -124,7 +124,7 @@ describe("useAdministrationRoomStore", () => {
 
 				await roomAdminStore.fetchRooms();
 
-				const expectedDate = printFromStringUtcToFullDate(mockRoomList.data[0].createdAt);
+				const expectedDate = formatUtc(mockRoomList.data[0].createdAt, "date");
 
 				expect(roomAdminStore.roomList[0].createdAt).toBe(expectedDate);
 			});
@@ -175,7 +175,7 @@ describe("useAdministrationRoomStore", () => {
 				});
 				const sortedAndFormattedRoomList = sortedList.data.map((room) => ({
 					...room,
-					createdAt: printFromStringUtcToFullDate(room.createdAt),
+					createdAt: formatUtc(room.createdAt, "date"),
 				}));
 
 				expect(roomAdminStore.roomList).toEqual(sortedAndFormattedRoomList);

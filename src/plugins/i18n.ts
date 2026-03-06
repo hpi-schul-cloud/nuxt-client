@@ -20,9 +20,7 @@ const messages: Record<SupportedLanguages, MessageSchema> = {
 	uk: { ...ukUA, $vuetify: ukVuetify },
 };
 
-const fileSizeFormat = {
-	maximumFractionDigits: 2,
-};
+const fileSizeFormat = { maximumFractionDigits: 2 };
 
 const numberFormats = {
 	de: {
@@ -42,6 +40,7 @@ const numberFormats = {
 const localCreateI18n = () => {
 	// If false, the type is a Composer instance for the Composition API, if true, the type is a VueI18n instance for the legacy API
 	// https://vue-i18n.intlify.dev/guide/advanced/typescript#global-resource-schema-type-definition
+
 	const i18n = createI18n<false>({
 		legacy: false,
 		locale: useAppStore().locale,

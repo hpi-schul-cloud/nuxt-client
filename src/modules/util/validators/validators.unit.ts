@@ -1,3 +1,4 @@
+import { createTestingPinia } from "@pinia/testing";
 import {
 	hasLowercaseLetter,
 	hasNumber,
@@ -7,15 +8,19 @@ import {
 	isOfMaxLength,
 	isOfMinLength,
 	isRequired,
-	isValidDateFormat,
+	isValidDate,
 	isValidEmail,
-	isValidTimeFormat,
-	isValidTimeFormatVuetify,
+	isValidTime,
 	isValidUrl,
 } from "@util-validators";
+import { setActivePinia } from "pinia";
 
 describe("util-validators", () => {
 	const ERROR = "my error";
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("isRequired", () => {
 		it("should not accept empty value", () => {
@@ -114,40 +119,33 @@ describe("util-validators", () => {
 		});
 	});
 
-	describe("isValidTimeFormat", () => {
+	describe("isValidTime", () => {
 		it("should accept valid time format", () => {
-			expect(isValidTimeFormat("12:12")).toBe(true);
+			expect(isValidTime("12:12")).toBe(true);
 		});
 
 		it("should not accept invalid time format", () => {
-			expect(isValidTimeFormat("55:5")).toBe(false);
-			expect(isValidTimeFormat("55:55")).toBe(false);
-		});
-	});
-
-	describe("isValidTimeFormatVuetify", () => {
-		const isValid = isValidTimeFormatVuetify(ERROR);
-		it("should accept valid time format", () => {
-			expect(isValid("12:12")).toBe(true);
-		});
-
-		it("should not accept invalid time format", () => {
-			expect(isValid("55:5")).toBe(ERROR);
-			expect(isValid("55:55")).toBe(ERROR);
+			expect(isValidTime("55:55")).not.toBe(true);
+			expect(typeof isValidTime("55:55")).toBe("string");
+			expect(isValidTime("55:5")).not.toBe(true);
+			expect(typeof isValidTime("55:5")).toBe("string");
 		});
 	});
 
 	describe("isValidDateFormat", () => {
-		const isValid = isValidDateFormat(ERROR);
-
 		it("should accept valid date format", () => {
-			expect(isValid("12.12.2023")).toBe(true);
+			expect(isValidDate("12.12.2023")).toBe(true);
 		});
 
 		it("should not accept invalid date format", () => {
-			expect(isValid("31.31.2023")).toBe(ERROR);
-			expect(isValid("1.1.2001")).toBe(ERROR);
-			expect(isValid("1.101")).toBe(ERROR);
+			expect(isValidDate("31.31.2023")).not.toBe(true);
+			expect(typeof isValidDate("31.31.2023")).toBe("string");
+
+			expect(isValidDate("1.1.2001")).not.toBe(true);
+			expect(typeof isValidDate("1.1.2001")).toBe("string");
+
+			expect(isValidDate("1.101")).not.toBe(true);
+			expect(typeof isValidDate("1.101")).toBe("string");
 		});
 	});
 

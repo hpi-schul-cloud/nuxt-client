@@ -122,16 +122,16 @@
 		<p class="mb-0">
 			{{
 				t("components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph", {
-					date: dayjs(userLoginMigration.closedAt).format("DD.MM.YYYY"),
-					time: dayjs(userLoginMigration.closedAt).format("HH:mm"),
+					date: formatUtc(userLoginMigration.closedAt, "date"),
+					time: formatUtc(userLoginMigration.closedAt, "time"),
 				})
 			}}
 		</p>
 		<p>
 			{{
 				t(`${latestMigration}.secondParagraph`, {
-					finishDate: dayjs(userLoginMigration.finishedAt).format("DD.MM.YYYY"),
-					finishTime: dayjs(userLoginMigration.finishedAt).format("HH:mm"),
+					finishDate: formatUtc(userLoginMigration.finishedAt, "date"),
+					finishTime: formatUtc(userLoginMigration.finishedAt, "time"),
 				})
 			}}
 		</p>
@@ -184,6 +184,7 @@ import { useUserLoginMigrationMappings } from "@/composables/user-login-migratio
 import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
+import { formatUtc } from "@/utils/date-time.utils";
 import { injectStrict, SCHOOLS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { sanitizeUrl } from "@braintree/sanitize-url";
@@ -368,6 +369,7 @@ export default defineComponent({
 			contactEmailLink,
 		};
 	},
+	methods: { formatUtc },
 });
 </script>
 

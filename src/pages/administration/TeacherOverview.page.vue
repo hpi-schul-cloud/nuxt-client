@@ -40,7 +40,7 @@
 				{{ (data || []).join(", ") }}
 			</template>
 			<template #datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(data) }}</span>
+				<span class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -49,10 +49,10 @@
 				</span>
 			</template>
 			<template #datacolumn-lastLoginSystemChange="{ data }">
-				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-outdatedSince="{ data }">
-				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 
 			<template #datacolumn-_id="{ data, selected, highlighted }">
@@ -90,9 +90,9 @@ import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
+import { formatUtc } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -112,7 +112,6 @@ import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { defineComponent, reactive } from "vue";
-import { useI18n } from "vue-i18n";
 import { mapGetters } from "vuex";
 
 export default defineComponent({
@@ -135,8 +134,6 @@ export default defineComponent({
 		const { getPaginationState, setPaginationState, getSortingState, setSortingState, getFilterState, setFilterState } =
 			useFilterLocalStorage(RoleName.Teacher);
 
-		const { t } = useI18n();
-
 		return {
 			getPaginationState,
 			setPaginationState,
@@ -144,7 +141,6 @@ export default defineComponent({
 			setSortingState,
 			getFilterState,
 			setFilterState,
-			t,
 		};
 	},
 	data() {
@@ -379,6 +375,7 @@ export default defineComponent({
 		document.title = buildPageTitle(this.$t("pages.administration.teachers.index.title"));
 	},
 	methods: {
+		formatUtc,
 		userHasPermission(permission) {
 			if (!permission) {
 				throw new Error("parameter permission is missing");
@@ -426,7 +423,6 @@ export default defineComponent({
 			});
 			this.find();
 		},
-		printDate,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
@@ -473,10 +469,10 @@ export default defineComponent({
 					ids: this.tableSelection,
 					userType: "teacher",
 				});
-				notifySuccess(this.t("pages.administration.remove.success"));
+				notifySuccess(this.$t("pages.administration.remove.success"));
 				this.find();
 			} catch {
-				notifyError(this.t("pages.administration.remove.error"));
+				notifyError(this.$t("pages.administration.remove.error"));
 			} finally {
 				this.tableSelection = reactive([]);
 				this.tableSelectionType = "inclusive";

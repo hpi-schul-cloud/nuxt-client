@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 import { createVuetify } from "vuetify";
 import { createVueI18nAdapter } from "vuetify/locale/adapters/vue-i18n";
 
-export default (i18n: ReturnType<typeof createI18n>) =>
+export const createVuetifyPlugin = (i18n: ReturnType<typeof createI18n>) =>
 	createVuetify({
 		...theme,
 		locale: {

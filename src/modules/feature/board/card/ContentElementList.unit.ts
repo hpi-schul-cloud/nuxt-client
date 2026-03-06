@@ -11,7 +11,6 @@ import { FileContentElement } from "@feature-board-file-element";
 import { FolderContentElement } from "@feature-board-folder-element";
 import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
-import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createTestingPinia } from "@pinia/testing";
@@ -69,10 +68,6 @@ describe("ContentElementList", () => {
 				{
 					elementType: ContentElementType.Link,
 					component: LinkContentElement,
-				},
-				{
-					elementType: ContentElementType.SubmissionContainer,
-					component: SubmissionContentElement,
 				},
 				{
 					elementType: ContentElementType.ExternalTool,
