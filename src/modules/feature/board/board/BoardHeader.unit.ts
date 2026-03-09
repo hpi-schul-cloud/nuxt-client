@@ -31,6 +31,8 @@ mockedUseSharedEditMode.mockReturnValue({
 	isInEditMode: computed(() => true),
 });
 
+vi.mock("vue-router");
+
 describe("BoardHeader", () => {
 	const setup = (
 		options?: {
