@@ -1,13 +1,17 @@
 import { useAutoLogout } from "./autoLogout.composable";
 import { RoleName } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { createTestAppStoreWithRole, createTestEnvStore, mountComposable, setupBroadcastChannelMock } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithRole,
+	createTestEnvStore,
+	mountComposable,
+	setupBroadcastChannelMock,
+} from "@@/tests/test-utils";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { type Ref, ref } from "vue";
 
 vi.mock("@/utils/api", () => ({
 	$axios: {
@@ -441,12 +445,14 @@ describe("useAutoLogout", () => {
 				expect(sessionState.value).toBe(SessionState.Started);
 
 				// Verify that addEventListener was called to set up the listener
-				expect(mockBroadcastChannel.addEventListener).toHaveBeenCalledWith('message', expect.any(Function));
+				expect(mockBroadcastChannel.addEventListener).toHaveBeenCalledWith("message", expect.any(Function));
 
 				// Simulate receiving a broadcast message with the same state from another tab
-				const messageHandler = mockBroadcastChannel.addEventListener.mock.calls.find(call => call[0] === 'message')?.[1];
+				const messageHandler = mockBroadcastChannel.addEventListener.mock.calls.find(
+					(call) => call[0] === "message"
+				)?.[1];
 				if (messageHandler) {
-					const messageEvent = { data: 'started:100' };
+					const messageEvent = { data: "started:100" };
 					messageHandler(messageEvent);
 					await flushPromises();
 				}
