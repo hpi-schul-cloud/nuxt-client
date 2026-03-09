@@ -11,7 +11,7 @@ import {
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
+import { meResponseFactory, mockApiResponse, setupBroadcastChannelMock } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
@@ -20,30 +20,7 @@ import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 import { ref } from "vue";
 
-const mockBroadcastData = ref<string | null>(null);
-const mockBroadcastIsClosed = ref(false);
-
-const mockBroadcastChannel = {
-	post: vi.fn(),
-	close: vi.fn(),
-	isClosed: mockBroadcastIsClosed,
-	data: mockBroadcastData,
-	channel: {
-		value: {
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
-			postMessage: vi.fn(),
-		},
-	},
-};
-
-vi.mock("@vueuse/core", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@vueuse/core")>();
-	return {
-		...actual,
-		useBroadcastChannel: vi.fn(() => mockBroadcastChannel),
-	};
-});
+const { broadcastPostMock, broadcastCloseMock, mockBroadcastChannel, clearBroadcastChannelMocks } = setupBroadcastChannelMock();
 
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -56,7 +33,7 @@ describe("useApplicationStore", () => {
 		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
 		vi.clearAllMocks();
 
-		mockBroadcastChannel.data.value = null;
+		clearBroadcastChannelMocks();
 
 		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
@@ -246,13 +223,13 @@ describe("useApplicationStore", () => {
 		it("should post logout message to broadcast channel", () => {
 			useAppStore().logout();
 
-			expect(mockBroadcastChannel.post).toHaveBeenCalledWith("logout");
+			expect(broadcastPostMock).toHaveBeenCalledWith("logout");
 		});
 
 		it("should call sendLogout before clearing session and redirecting", () => {
 			const postCallOrder: string[] = [];
-			mockBroadcastChannel.post.mockImplementation(() => postCallOrder.push("post"));
-			mockBroadcastChannel.close.mockImplementation(() => postCallOrder.push("close"));
+			broadcastPostMock.mockImplementation(() => postCallOrder.push("post"));
+			broadcastCloseMock.mockImplementation(() => postCallOrder.push("close"));
 
 			useAppStore().logout();
 
@@ -262,7 +239,7 @@ describe("useApplicationStore", () => {
 		it("should clean up to ensure garbage collection pristine storage", () => {
 			useAppStore().logout();
 
-			expect(mockBroadcastChannel.close).toHaveBeenCalled();
+			expect(broadcastCloseMock).toHaveBeenCalled();
 			expect(localStorage.clear).toHaveBeenCalled();
 		});
 	});

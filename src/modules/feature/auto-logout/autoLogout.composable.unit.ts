@@ -1,7 +1,7 @@
 import { useAutoLogout } from "./autoLogout.composable";
 import { RoleName } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { createTestAppStoreWithRole, createTestEnvStore, mountComposable } from "@@/tests/test-utils";
+import { createTestAppStoreWithRole, createTestEnvStore, mountComposable, setupBroadcastChannelMock } from "@@/tests/test-utils";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
@@ -16,30 +16,7 @@ vi.mock("@/utils/api", () => ({
 	},
 }));
 
-const broadcastDataRef: Ref<string | undefined> = ref(undefined);
-const broadcastPostMock = vi.fn();
-const broadcastChannelMock = ref({
-	addEventListener: vi.fn(),
-	removeEventListener: vi.fn(),
-	postMessage: vi.fn(),
-	close: vi.fn(),
-});
-
-vi.mock("@vueuse/core", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("@vueuse/core")>();
-	return {
-		...actual,
-		useBroadcastChannel: () => ({
-			data: broadcastDataRef,
-			post: broadcastPostMock,
-			error: ref(null),
-			isSupported: ref(true),
-			isClosed: ref(false),
-			close: vi.fn(),
-			channel: broadcastChannelMock,
-		}),
-	};
-});
+const { broadcastPostMock, mockBroadcastChannel, clearBroadcastChannelMocks } = setupBroadcastChannelMock();
 
 vi.useFakeTimers();
 vi.spyOn(globalThis, "setInterval");
@@ -61,7 +38,7 @@ describe("useAutoLogout", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.clearAllTimers();
-		broadcastDataRef.value = undefined;
+		clearBroadcastChannelMocks();
 	});
 
 	afterEach(() => {
@@ -308,20 +285,37 @@ describe("useAutoLogout", () => {
 				// All GET requests fail
 				axiosMock.get.mockRejectedValue(new Error("Network error"));
 
+				// Clear initial calls
+				axiosMock.get.mockClear();
+
 				// Trigger updateRemainingTime by crossing warning threshold (51 -> 50)
 				await advanceTimersBySeconds(2);
 
+				// Wait for initial call
+				await flushPromises();
+				expect(axiosMock.get).toHaveBeenCalledTimes(1);
+
+				// Clear and wait for retries with proper timing
+				axiosMock.get.mockClear();
+
 				// First retry after 1s (2^0 * 1000ms)
 				await advanceTimersBySeconds(1);
+				await flushPromises();
+				expect(axiosMock.get).toHaveBeenCalledTimes(1);
 
 				// Second retry after 2s (2^1 * 1000ms)
+				axiosMock.get.mockClear();
 				await advanceTimersBySeconds(2);
+				await flushPromises();
+				expect(axiosMock.get).toHaveBeenCalledTimes(1);
 
 				// Third retry after 4s (2^2 * 1000ms)
+				axiosMock.get.mockClear();
 				await advanceTimersBySeconds(4);
+				await flushPromises();
+				expect(axiosMock.get).toHaveBeenCalledTimes(1);
 
 				// After MAX_RETRIES (3), should be in error state
-				expect(axiosMock.get).toHaveBeenCalledTimes(4); // Initial + 3 retries
 				expect(sessionState.value).toBe(SessionState.Error);
 			});
 		});
@@ -442,11 +436,20 @@ describe("useAutoLogout", () => {
 			it("should not re-process when receiving the same state", async () => {
 				const { sessionState } = setupAndCreateSession();
 
+				await flushPromises();
+
 				expect(sessionState.value).toBe(SessionState.Started);
 
+				// Verify that addEventListener was called to set up the listener
+				expect(mockBroadcastChannel.addEventListener).toHaveBeenCalledWith('message', expect.any(Function));
+
 				// Simulate receiving a broadcast message with the same state from another tab
-				broadcastDataRef.value = "started:100";
-				await flushPromises();
+				const messageHandler = mockBroadcastChannel.addEventListener.mock.calls.find(call => call[0] === 'message')?.[1];
+				if (messageHandler) {
+					const messageEvent = { data: 'started:100' };
+					messageHandler(messageEvent);
+					await flushPromises();
+				}
 
 				// State should still be Started (no change, early return hit)
 				expect(sessionState.value).toBe(SessionState.Started);
