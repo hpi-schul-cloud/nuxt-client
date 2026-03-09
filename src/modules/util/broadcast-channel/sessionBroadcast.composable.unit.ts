@@ -1,7 +1,7 @@
+import { mockBroadcastChannel } from "@@/tests/test-utils";
 import { useSessionBroadcast } from "./sessionBroadcast.composable";
 import { SessionState } from "./types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { setupBroadcastChannelMock } from "@@/tests/test-utils";
 import { flushPromises } from "@vue/test-utils";
 import { Mocked } from "vitest";
 
@@ -17,13 +17,13 @@ const simulateIncomingMessage = (data: string) => {
 describe("useSessionBroadcast", () => {
 	beforeEach(() => {
 		// Set up BroadcastChannel mock with custom addEventListener implementation
-		broadcastChannelMock = setupBroadcastChannelMock({
+		broadcastChannelMock = mockBroadcastChannel({
 			addEventListener: vi.fn().mockImplementation((type: string, listener: EventListenerOrEventListenerObject) => {
 				if (type === "message" && typeof listener === "function") {
 					messageHandler = listener as (event: MessageEvent) => void;
 				}
-			}),
-		}).broadcastChannelMock;
+			})
+		});
 
 		messageHandler = null;
 		// Reset shared isJwtExpired state
