@@ -22,7 +22,7 @@ vi.mock("@/utils/api", () => ({
 }));
 globalThis.fetch = vi.fn();
 
-const { broadcastPostMock, mockBroadcastChannel, clearBroadcastChannelMocks } = setupBroadcastChannelMock();
+const { mockBroadcastChannel } = setupBroadcastChannelMock();
 
 vi.useFakeTimers();
 vi.spyOn(globalThis, "setInterval");
@@ -44,7 +44,6 @@ describe("useAutoLogout", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.clearAllTimers();
-		clearBroadcastChannelMocks();
 	});
 
 	afterEach(() => {
@@ -273,13 +272,13 @@ describe("useAutoLogout", () => {
 
 				createSession();
 				await flushPromises();
-				const callCountAfterFirst = broadcastPostMock.mock.calls.length;
+				const callCountAfterFirst = mockBroadcastChannel.postMessage.mock.calls.length;
 
 				// Call createSession again - should not broadcast since already in Started state
 				createSession();
 				await flushPromises();
 
-				expect(broadcastPostMock).toHaveBeenCalledTimes(callCountAfterFirst);
+				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledTimes(callCountAfterFirst);
 			});
 		});
 
@@ -413,7 +412,7 @@ describe("useAutoLogout", () => {
 				createSession();
 				await flushPromises();
 
-				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("started:"));
+				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith(expect.stringContaining("started:"));
 			});
 
 			it("should broadcast state when session is extended", async () => {
@@ -426,7 +425,7 @@ describe("useAutoLogout", () => {
 				await extendSession();
 				await flushPromises();
 
-				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("extended:"));
+				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith(expect.stringContaining("extended:"));
 			});
 
 			it("should broadcast state when session expires", async () => {
@@ -435,7 +434,7 @@ describe("useAutoLogout", () => {
 
 				await advanceTimersBySeconds(3);
 
-				expect(broadcastPostMock).toHaveBeenCalledWith(expect.stringContaining("expired:"));
+				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith(expect.stringContaining("expired:"));
 			});
 		});
 
