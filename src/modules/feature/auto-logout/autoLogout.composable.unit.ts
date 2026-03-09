@@ -19,6 +19,7 @@ vi.mock("@/utils/api", () => ({
 		post: vi.fn(),
 	},
 }));
+globalThis.fetch = vi.fn();
 
 const { broadcastPostMock, mockBroadcastChannel, clearBroadcastChannelMocks } = setupBroadcastChannelMock();
 
@@ -371,7 +372,7 @@ describe("useAutoLogout", () => {
 				await advanceTimersBySeconds(4);
 
 				expect(sessionState.value).toBe(SessionState.Expired);
-				expect(axiosMock.get).toHaveBeenCalledWith("/logout");
+				expect(globalThis.fetch).toHaveBeenCalledWith("/logout");
 			});
 		});
 
