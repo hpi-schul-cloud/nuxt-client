@@ -63,8 +63,6 @@ describe("SvsDialog", () => {
 		const card = dialog.findComponent(VCard);
 
 		return { wrapper, title, dialog, card };
-
-		return { wrapper, title, dialog, card };
 	};
 
 	describe("when the dialog is opened", () => {
