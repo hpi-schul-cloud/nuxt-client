@@ -191,10 +191,13 @@ describe("SvsDialog", () => {
 		it("should emit cancel on escape keydown", async () => {
 			const { wrapper, dialog } = setup();
 
-			dialog.vm.$emit("keydown", new KeyboardEvent("keydown", {
-				key: "Escape",
-				keyCode: 27,
-			}));
+			dialog.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "Escape",
+					keyCode: 27,
+				})
+			);
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("cancel")).toBeTruthy();
