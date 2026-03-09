@@ -165,7 +165,7 @@ export const useAutoLogout = () => {
 
 	const logoutUserSilently = async () => {
 		try {
-			await $axios.get("/logout");
+			await fetch("/logout");
 		} catch (error) {
 			logger.error("Unexpected error during silent logout:", error);
 		}
