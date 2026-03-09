@@ -96,16 +96,42 @@ export const getLocaleFormats = (locale: string) => LOCALE_FORMATS[locale as Loc
 
 export const ISO_DATE_FORMAT = "YYYY-MM-DD";
 
+/**
+ * Returns the current date and time in UTC.
+ */
 export const nowUtc = () => dayjs.utc();
 
+/**
+ * Returns the current date and time in UTC as an ISO string.
+ */
 export const nowUtcIso = () => dayjs.utc().toISOString();
 
+/**
+ * Parses an ISO UTC date string into a dayjs object.
+ * @param isoUtcDate - The date string in ISO 8601 format (e.g., "2024-06-01T12:00:00Z") or a Date object
+ */
 export const parseUtc = (isoUtcDate: string | Date) => dayjs.utc(isoUtcDate);
 
+/**
+ * Calculates the difference between two dates in the specified unit.
+ * @param from - The starting date as a dayjs object
+ * @param to - The ending date as a dayjs object
+ * @param unit - The unit of time to measure the difference.
+ */
 export const diff = (from: dayjs.Dayjs, to: dayjs.Dayjs, unit: dayjs.UnitType = "minute") => to.diff(from, unit);
 
+/**
+ * Checks if a value is within a specified range (inclusive).
+ * @param value - The number to check
+ * @param min - The minimum value of the range
+ * @param max - The maximum value of the range
+ */
 export const inRange = (value: number, min: number, max: number) => value >= min && value <= max;
 
+/**
+ * Returns a function that checks if a given ISO UTC date string is within a certain number of hours from the current time.
+ * @param hours - The number of hours to check against
+ */
 export const isWithinHours =
 	(hours: number) =>
 	(isoUtcDate: string): boolean => {
@@ -113,6 +139,11 @@ export const isWithinHours =
 		return inRange(diffMinutes, 0, hours * 60);
 	};
 
+/**
+ * Returns a function that checks if a given ISO UTC date string is older than a certain amount of time from the current time.
+ * @param amount - The amount of time to check against
+ * @param unit - The unit of time for the amount (e.g., "day", "hour")
+ */
 export const isOlderThan =
 	(amount: number, unit: dayjs.UnitType) =>
 	(isoUtcDate: string): boolean => {
@@ -120,6 +151,11 @@ export const isOlderThan =
 		return diffAmount > amount;
 	};
 
+/**
+ * Calculates the time remaining until a given ISO UTC due date in the specified unit.
+ * @param isoUtcDueDate - The due date as an ISO 8601 UTC date string (e.g., "2024-06-01T12:00:00Z")
+ * @param unit - The unit of time to measure the remaining time (e.g., "minute", "hour", "day")
+ */
 export const timeUntil = (isoUtcDueDate: string, unit: dayjs.UnitType) => {
 	const due = parseUtc(isoUtcDueDate);
 	const current = nowUtc();
@@ -129,7 +165,13 @@ export const timeUntil = (isoUtcDueDate: string, unit: dayjs.UnitType) => {
 	return 0;
 };
 
+/**
+ * Checks if a given ISO UTC date string is within the next 24 hours.
+ */
 export const isDueWithin24h = isWithinHours(24);
+/**
+ * Checks if a given ISO UTC date string is older than 7 days.
+ */
 export const isOlderThan7Days = isOlderThan(7, "day");
 
 /**
@@ -143,13 +185,25 @@ export const isOlderThan7Days = isOlderThan(7, "day");
 export const dateFromToday = (offset: number, unit: ManipulateType = "day"): string =>
 	dayjs().add(offset, unit).format(ISO_DATE_FORMAT);
 
+/**
+ * Checks if a given ISO date string is in the past compared to the current date and time.
+ * @param isoString - The date string in ISO 8601 format (e.g., "2024-06-01T12:00:00Z")
+ */
 export const isInPast = (isoString: string | undefined): boolean => {
 	if (!isoString) return false;
 	return dayjs(isoString).isBefore(dayjs());
 };
 
+/**
+ * Checks if a given date (as a Date object or ISO string) is the same day as today.
+ * @param date - The date to check, either as a Date object or an ISO 8601 date string.
+ */
 export const isToday = (date: Date | string): boolean => dayjs(date).isSame(dayjs(), "day");
 
+/**
+ * Formats a given ISO UTC date string into a relative time string (e.g., "3 days ago") based on the current locale.
+ * @param isoUtcDate - The date string in ISO 8601 format (e.g., "2024-06-01T12:00:00Z")
+ */
 export const fromNowUtc = (isoUtcDate: string): string => parseUtc(isoUtcDate).fromNow();
 
 export type LocaleFormatId = "date" | "time" | "dateTime" | "dateTimeYY" | "dateYY";
@@ -215,10 +269,17 @@ export const toDateFromLocalString = (dateString: string | undefined) => {
 	return parsed.isValid() ? parsed.toDate() : undefined;
 };
 
-export const toCombinedDateTimeIso = (dateString: string | undefined, timeString: string | undefined) => {
-	if (!dateString) return undefined;
-	const time = timeString || "00:00";
-	const parsed = dayjs(`${dateString}T${time}`);
+/**
+ * Combines a date string and a time string into a single ISO date-time string.
+ * If the time string is not provided, it defaults to "00:00".
+ *
+ * @param isoDateString - The date string in ISO format (e.g. "2024-12-31")
+ * @param isoTimeString - The time string in ISO format (e.g. "14:30"), optional
+ */
+export const toCombinedDateTimeIso = (isoDateString: string | undefined, isoTimeString: string | undefined) => {
+	if (!isoDateString) return undefined;
+	const time = isoTimeString || "00:00";
+	const parsed = dayjs(`${isoDateString}T${time}`);
 	return parsed.isValid() ? parsed.toISOString() : undefined;
 };
 
