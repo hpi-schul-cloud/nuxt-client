@@ -35,7 +35,6 @@
  *   :remaining-minutes="remainingTimeInMinutes"
  *   @extend="extendSession"
  * />
- * <LoggedOutDialog v-if="sessionState === SessionState.Expired" />
  * ```
  */
 
