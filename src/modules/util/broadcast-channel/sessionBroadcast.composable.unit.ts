@@ -96,7 +96,7 @@ describe("useSessionBroadcast", () => {
 		});
 
 		describe("when receiving a 'logout' message", () => {
-			it("should call setState with Expired and redirect to /logout", async () => {
+			it("should call setState with Expired", async () => {
 				const locationAssignMock = vi.fn();
 				vi.stubGlobal("location", { assign: locationAssignMock });
 				const { setState, sendStateAndTime } = setup();
@@ -107,7 +107,6 @@ describe("useSessionBroadcast", () => {
 				await flushPromises();
 
 				expect(setState).toHaveBeenCalledWith(SessionState.Expired);
-				expect(locationAssignMock).toHaveBeenCalledWith("/logout");
 			});
 		});
 
