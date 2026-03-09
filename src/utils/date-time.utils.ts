@@ -189,7 +189,7 @@ export const dateFromToday = (offset: number, unit: ManipulateType = "day"): str
  * Checks if a given ISO date string is in the past compared to the current date and time.
  * @param isoString - The date string in ISO 8601 format (e.g., "2024-06-01T12:00:00Z")
  */
-export const isInPast = (isoString: string | undefined): boolean => {
+export const isInPast = (isoString?: string): boolean => {
 	if (!isoString) return false;
 	return dayjs(isoString).isBefore(dayjs());
 };
@@ -216,7 +216,7 @@ const getFormat = (formatId: LocaleFormatId): string => getLocaleFormats(dayjs.l
  * If it's within the last 7 days, it returns a relative localized time string (e.g., "3 days ago").
  * @param isoDateString - The isoDateString in ISO 8601 format (e.g., "2024-06-01T12:00:00Z")
  */
-export const formatRecentOrActual = (isoDateString: string | undefined) => {
+export const formatRecentOrActual = (isoDateString?: string) => {
 	if (!isoDateString) return undefined;
 	return isOlderThan7Days(isoDateString) ? formatUtc(isoDateString, "date") : fromNowUtc(isoDateString);
 };
@@ -241,7 +241,7 @@ export const formatUtc = (isoUtc: string | Date | undefined, formatId: LocaleFor
  *
  * @param isoDateString - The date string in iso YYYY-MM-DD format (e.g. "2026-03-04")
  */
-export const toEndOfDayIso = (isoDateString: string | undefined) => {
+export const toEndOfDayIso = (isoDateString?: string) => {
 	if (!isoDateString) return undefined;
 	const parsed = dayjs(isoDateString);
 	return parsed.isValid() ? parsed.endOf("day").toISOString() : undefined;
@@ -252,7 +252,7 @@ export const toEndOfDayIso = (isoDateString: string | undefined) => {
  *
  * @param dateString - The date string in local representation (e.g. "31.12.2024" for German locale)
  */
-export const toIsoDate = (dateString: string | undefined) => {
+export const toIsoDate = (dateString?: string) => {
 	if (!dateString) return undefined;
 	const parsed = dayjs(dateString, getFormat("date"));
 	return parsed.isValid() ? parsed.format(ISO_DATE_FORMAT) : undefined;
@@ -263,7 +263,7 @@ export const toIsoDate = (dateString: string | undefined) => {
  *
  * @param dateString - The date string in local representation (e.g. "31.12.2024" for German locale)
  */
-export const toDateFromLocalString = (dateString: string | undefined) => {
+export const toDateFromLocalString = (dateString?: string) => {
 	if (!dateString) return undefined;
 	const parsed = dayjs(dateString, getFormat("date"));
 	return parsed.isValid() ? parsed.toDate() : undefined;
@@ -274,9 +274,9 @@ export const toDateFromLocalString = (dateString: string | undefined) => {
  * If the time string is not provided, it defaults to "00:00".
  *
  * @param isoDateString - The date string in ISO format (e.g. "2024-12-31")
- * @param isoTimeString - The time string in ISO format (e.g. "14:30"), optional
+ * @param isoTimeString - The time string in ISO format (e.g. "14:30")
  */
-export const toCombinedDateTimeIso = (isoDateString: string | undefined, isoTimeString: string | undefined) => {
+export const toCombinedDateTimeIso = (isoDateString?: string, isoTimeString?: string) => {
 	if (!isoDateString) return undefined;
 	const time = isoTimeString || "00:00";
 	const parsed = dayjs(`${isoDateString}T${time}`);
@@ -289,7 +289,7 @@ export const toCombinedDateTimeIso = (isoDateString: string | undefined, isoTime
  *
  * @param dbDateString - The date string in DB format (e.g. "01.03.2022")
  */
-export const fromGermanDate = (dbDateString: string | undefined) => {
+export const fromGermanDate = (dbDateString?: string) => {
 	if (!dbDateString) return undefined;
 	const d = dayjs(dbDateString, "DD.MM.YYYY");
 	return formatUtc(d.toISOString(), "date");
@@ -301,7 +301,7 @@ export const fromGermanDate = (dbDateString: string | undefined) => {
  *
  * @param isoDateString - The date string in ISO format (e.g. "2022-03-01")
  */
-export const toGermanDate = (isoDateString: string | undefined) => {
+export const toGermanDate = (isoDateString?: string) => {
 	if (!isoDateString) return undefined;
 	const d = dayjs(isoDateString);
 	return d.isValid() ? d.format("DD.MM.YYYY") : undefined;
