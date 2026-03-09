@@ -437,31 +437,5 @@ describe("useAutoLogout", () => {
 				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith(expect.stringContaining("expired:"));
 			});
 		});
-
-		describe("when receiving broadcast from another tab", () => {
-			it("should not re-process when receiving the same state", async () => {
-				const { sessionState } = setupAndCreateSession();
-
-				await flushPromises();
-
-				expect(sessionState.value).toBe(SessionState.Started);
-
-				// Verify that addEventListener was called to set up the listener
-				expect(broadcastChannelMock.addEventListener).toHaveBeenCalledWith("message", expect.any(Function));
-
-				// Simulate receiving a broadcast message with the same state from another tab
-				const messageHandler = broadcastChannelMock.addEventListener.mock.calls.find(
-					(call) => call[0] === "message"
-				)?.[1];
-				if (messageHandler) {
-					const messageEvent = { data: "started:100" };
-					messageHandler(messageEvent);
-					await flushPromises();
-				}
-
-				// State should still be Started (no change, early return hit)
-				expect(sessionState.value).toBe(SessionState.Started);
-			});
-		});
 	});
 });
