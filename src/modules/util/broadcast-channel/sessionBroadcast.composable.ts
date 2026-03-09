@@ -83,7 +83,6 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 						onLogoutReceived();
 					} else if (setState) {
 						setState(SessionState.Expired);
-						globalThis.location.assign("/logout");
 					}
 					return;
 				}
