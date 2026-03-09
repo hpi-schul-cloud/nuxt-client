@@ -3,6 +3,7 @@ import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { useEnvConfig } from "@data-env";
+import { useSessionBroadcast } from "@util-broadcast-channel";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, readonly, ref } from "vue";
@@ -18,6 +19,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export const useAppStore = defineStore("applicationStore", () => {
 	const meApi = MeApiFactory(undefined, "/v3", $axios);
 	const userApi = UserApiFactory(undefined, "/v3", $axios);
+	const { sendLogout, close } = useSessionBroadcast();
 
 	const isLoggedIn = ref(false);
 	const applicationError = ref<{ status: HttpStatusCode; translationKeyOrText: string }>();
@@ -58,9 +60,16 @@ export const useAppStore = defineStore("applicationStore", () => {
 	};
 
 	const logout = (redirectUrl = "/logout") => {
+		sendLogout();
+		clearUserSession();
+		globalThis.location.replace(redirectUrl);
+	};
+
+	const clearUserSession = () => {
 		localStorage.clear();
+		sessionStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
-		window.location.replace(redirectUrl);
+		close();
 	};
 
 	const externalLogout = () => logout("/logout/external");
@@ -77,7 +86,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 			.catch(logger.error);
 
 	const handleApplicationError = (status: HttpStatusCode, translationKeyOrText?: string) => {
-		if (translationKeyOrText !== undefined) {
+		if (translationKeyOrText) {
 			applicationError.value = { status, translationKeyOrText: translationKeyOrText };
 		} else {
 			switch (status) {
@@ -135,6 +144,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		systemId,
 		login,
 		logout,
+		clearUserSession,
 		externalLogout,
 		updateUserLanguage,
 		clearApplicationError,
