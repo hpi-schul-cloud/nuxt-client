@@ -10,6 +10,7 @@ import {
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
+import { logger } from "@util-logger";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
@@ -285,9 +286,10 @@ describe("useAutoLogout", () => {
 			it("should retry up to MAX_RETRIES times with exponential backoff", async () => {
 				const options = { jwtTtl: 51, showWarningTime: 50 };
 				const { axiosMock, sessionState } = setupAndCreateSession(options);
+				vi.spyOn(logger, "error").mockImplementation(vi.fn()); // suppress error logs of mocked network errors
 
 				// All GET requests fail
-				axiosMock.get.mockRejectedValue(new Error("Network error"));
+				axiosMock.get.mockRejectedValue({});
 
 				// Clear initial calls
 				axiosMock.get.mockClear();
