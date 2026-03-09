@@ -22,7 +22,7 @@ vi.mock("@/utils/api", () => ({
 }));
 globalThis.fetch = vi.fn();
 
-const { mockBroadcastChannel } = setupBroadcastChannelMock();
+const { broadcastChannelMock } = setupBroadcastChannelMock();
 
 vi.useFakeTimers();
 vi.spyOn(globalThis, "setInterval");
@@ -272,13 +272,13 @@ describe("useAutoLogout", () => {
 
 				createSession();
 				await flushPromises();
-				const callCountAfterFirst = mockBroadcastChannel.postMessage.mock.calls.length;
+				const callCountAfterFirst = broadcastChannelMock.postMessage.mock.calls.length;
 
 				// Call createSession again - should not broadcast since already in Started state
 				createSession();
 				await flushPromises();
 
-				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledTimes(callCountAfterFirst);
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledTimes(callCountAfterFirst);
 			});
 		});
 
@@ -412,7 +412,7 @@ describe("useAutoLogout", () => {
 				createSession();
 				await flushPromises();
 
-				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith(expect.stringContaining("started:"));
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith(expect.stringContaining("started:"));
 			});
 
 			it("should broadcast state when session is extended", async () => {
@@ -425,7 +425,7 @@ describe("useAutoLogout", () => {
 				await extendSession();
 				await flushPromises();
 
-				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith(expect.stringContaining("extended:"));
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith(expect.stringContaining("extended:"));
 			});
 
 			it("should broadcast state when session expires", async () => {
@@ -434,7 +434,7 @@ describe("useAutoLogout", () => {
 
 				await advanceTimersBySeconds(3);
 
-				expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith(expect.stringContaining("expired:"));
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith(expect.stringContaining("expired:"));
 			});
 		});
 
@@ -447,10 +447,10 @@ describe("useAutoLogout", () => {
 				expect(sessionState.value).toBe(SessionState.Started);
 
 				// Verify that addEventListener was called to set up the listener
-				expect(mockBroadcastChannel.addEventListener).toHaveBeenCalledWith("message", expect.any(Function));
+				expect(broadcastChannelMock.addEventListener).toHaveBeenCalledWith("message", expect.any(Function));
 
 				// Simulate receiving a broadcast message with the same state from another tab
-				const messageHandler = mockBroadcastChannel.addEventListener.mock.calls.find(
+				const messageHandler = broadcastChannelMock.addEventListener.mock.calls.find(
 					(call) => call[0] === "message"
 				)?.[1];
 				if (messageHandler) {

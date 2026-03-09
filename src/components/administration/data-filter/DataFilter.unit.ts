@@ -1,5 +1,6 @@
 import { useDataTableFilter } from "./composables/filter.composable";
 import DataFilter from "./DataFilter.vue";
+import { User } from "./types";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { computed, ref } from "vue";
@@ -32,7 +33,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 				teacher: [],
 			},
 			selectedFilterType: ref("classes"),
-			userType: "",
+			userType: User.STUDENT,
 			removeChipFilter: removeChipFilterMock,
 			removeFilter: removeFilterMock,
 			updateFilter: updateFilterMock,
@@ -54,9 +55,9 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 		});
 
 		it("should render the component", () => {
-			const wrapper = setup({ props: { filterFor: "student" } });
+			const wrapper = setup({ props: { filterFor: User.STUDENT } });
 			expect(wrapper.exists()).toBe(true);
-			expect(mockedUseBoardApi).toHaveBeenCalledWith("student");
+			expect(mockedUseBoardApi).toHaveBeenCalledWith(User.STUDENT);
 		});
 
 		it("should emit 'update:filter' when chip components be closed", async () => {
@@ -70,7 +71,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 		});
 
 		it("should emit 'update:filter' when chip components be closed", async () => {
-			const wrapper = setup({ props: { filterFor: "student" } });
+			const wrapper = setup({ props: { filterFor: User.STUDENT } });
 			const filterChipsComponent = wrapper.getComponent({
 				name: "FilterChips",
 			});
@@ -82,7 +83,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 
 		describe("filter dialog", () => {
 			it("should set the 'dialogOpen' false when 'close' event be emitted", async () => {
-				const wrapper = setup({ props: { filterFor: "student" } });
+				const wrapper = setup({ props: { filterFor: User.STUDENT } });
 
 				const filterDialogComponent = wrapper.getComponent({
 					name: "FilterDialog",
@@ -100,7 +101,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 			});
 
 			it("should call updateFilter method", async () => {
-				const wrapper = setup({ props: { filterFor: "teacher" } });
+				const wrapper = setup({ props: { filterFor: User.TEACHER } });
 				wrapper.vm.dialogOpen = true;
 
 				const filterDialogComponent = wrapper.getComponent({

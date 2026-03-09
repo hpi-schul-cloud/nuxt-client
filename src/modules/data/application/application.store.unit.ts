@@ -19,7 +19,7 @@ import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 
-const { mockBroadcastChannel } = setupBroadcastChannelMock();
+const { broadcastChannelMock } = setupBroadcastChannelMock();
 
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -220,13 +220,13 @@ describe("useApplicationStore", () => {
 		it("should post logout message to broadcast channel", () => {
 			useAppStore().logout();
 
-			expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith("logout");
+			expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith("logout");
 		});
 
 		it("should call sendLogout before clearing session and redirecting", () => {
 			const postCallOrder: string[] = [];
-			mockBroadcastChannel.postMessage.mockImplementation(() => postCallOrder.push("post"));
-			mockBroadcastChannel.close.mockImplementation(() => postCallOrder.push("close"));
+			broadcastChannelMock.postMessage.mockImplementation(() => postCallOrder.push("post"));
+			broadcastChannelMock.close.mockImplementation(() => postCallOrder.push("close"));
 
 			useAppStore().logout();
 
@@ -236,7 +236,7 @@ describe("useApplicationStore", () => {
 		it("should clean up to ensure garbage collection pristine storage", () => {
 			useAppStore().logout();
 
-			expect(mockBroadcastChannel.close).toHaveBeenCalled();
+			expect(broadcastChannelMock.close).toHaveBeenCalled();
 			expect(localStorage.clear).toHaveBeenCalled();
 		});
 	});
