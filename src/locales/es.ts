@@ -905,11 +905,14 @@ export default {
 	"feature-autoLogout.button.confirm": "Ampliar sesión",
 	"feature-autoLogout.button.confirm.returnToLogin": "Volver a la página de inicio de sesión",
 	"feature-autoLogout.message.error.401": "Tu sesión ya ha caducado. Inicia sesión de nuevo.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
+	"feature-autoLogout.message.extending-session-success": "Sesión ampliada correctamente.",
 	"feature-autoLogout.warning.remainingTime": "menos de un minuto | un minuto | {remainingTime} minutos",
 	"feature-autoLogout.warning": "Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
+	"feature-loggedout.title": "Sesión expirada",
+	"feature-loggedout.message": "La sesión ha expirado por razones de seguridad.",
+	"feature-loggedout.button": "Iniciar sesión de nuevo",
 	"feature-board-external-tool-element.alert.error.student":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el maestro o instructor del curso.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -1672,9 +1675,10 @@ export default {
 	"pages.rooms.ccImportCourse.title": "Importar curso",
 	"pages.rooms.ccImportCourse.confirm": "Importar",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
-	"pages.rooms.ccImportCourse.loading": "Importación en curso...",
-	"pages.rooms.ccImportCourse.success": "El curso {name} se ha importado correctamente.",
-	"pages.rooms.ccImportCourse.error": "Se ha producido un error al importar el curso.",
+	"pages.rooms.ccImportCourse.loading": "Subida en progreso...",
+	"pages.rooms.ccImportCourse.success":
+		"Su archivo del curso se ha cargado y ahora se está importando en segundo plano.",
+	"pages.rooms.ccImportCourse.error": "Se produjo un error al cargar el archivo del curso.",
 	"pages.rooms.ccExportCourse.error": "Se produjo un error al exportar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",

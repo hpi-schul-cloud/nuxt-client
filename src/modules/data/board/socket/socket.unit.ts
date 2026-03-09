@@ -425,7 +425,7 @@ describe("socket.ts", () => {
 						message: "Session ID unknown - automatically reset connection.",
 					})
 				);
-				expect(socket.disconnect).toHaveBeenCalled();
+				expect(socket?.disconnect).toHaveBeenCalled();
 			});
 
 			describe("when reporting the board error fails", () => {
