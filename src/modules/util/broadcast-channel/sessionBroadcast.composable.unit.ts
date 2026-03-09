@@ -1,33 +1,12 @@
+import { setupBroadcastChannelMock } from "@@/tests/test-utils";
 import { useSessionBroadcast } from "./sessionBroadcast.composable";
 import { SessionState } from "./types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { flushPromises } from "@vue/test-utils";
+import { Mocked } from "vitest";
 
-const broadcastPostMock = vi.fn();
-const broadcastCloseMock = vi.fn();
 let messageHandler: ((event: MessageEvent) => void) | null = null;
-
-class MockBroadcastChannel {
-	name: string;
-
-	constructor(name: string) {
-		this.name = name;
-	}
-
-	addEventListener(type: string, handler: (event: MessageEvent) => void) {
-		if (type === "message") {
-			messageHandler = handler;
-		}
-	}
-
-	postMessage(data: unknown) {
-		broadcastPostMock(data);
-	}
-
-	close() {
-		broadcastCloseMock();
-	}
-}
+let broadcastChannelMock: Mocked<BroadcastChannel>;
 
 const simulateIncomingMessage = (data: string) => {
 	if (messageHandler) {
@@ -37,7 +16,15 @@ const simulateIncomingMessage = (data: string) => {
 
 describe("useSessionBroadcast", () => {
 	beforeEach(() => {
-		vi.stubGlobal("BroadcastChannel", MockBroadcastChannel);
+		// Set up BroadcastChannel mock with custom addEventListener implementation
+		broadcastChannelMock = setupBroadcastChannelMock({
+			addEventListener: vi.fn().mockImplementation((type: string, listener: EventListenerOrEventListenerObject) => {
+				if (type === "message" && typeof listener === "function") {
+					messageHandler = listener as (event: MessageEvent) => void;
+				}
+			})
+		}).broadcastChannelMock;
+
 		messageHandler = null;
 		// Reset shared isJwtExpired state
 		const { setJwtExpired, close } = useSessionBroadcast();
@@ -58,7 +45,7 @@ describe("useSessionBroadcast", () => {
 
 			sendLogout();
 
-			expect(broadcastPostMock).toHaveBeenCalledWith("logout");
+			expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith("logout");
 		});
 
 		it("should close the broadcast channel", () => {
@@ -68,7 +55,7 @@ describe("useSessionBroadcast", () => {
 
 			close();
 
-			expect(broadcastCloseMock).toHaveBeenCalled();
+			expect(broadcastChannelMock.close).toHaveBeenCalled();
 		});
 
 		it("should not fail close if channel was never created", () => {
@@ -76,7 +63,7 @@ describe("useSessionBroadcast", () => {
 
 			close();
 
-			expect(broadcastCloseMock).not.toHaveBeenCalled();
+			expect(broadcastChannelMock.close).not.toHaveBeenCalled();
 		});
 	});
 
@@ -96,7 +83,7 @@ describe("useSessionBroadcast", () => {
 
 				sendStateAndTime(SessionState.Started, 500);
 
-				expect(broadcastPostMock).toHaveBeenCalledWith("started:500");
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith("started:500");
 			});
 
 			it("should handle null values", () => {
@@ -104,7 +91,7 @@ describe("useSessionBroadcast", () => {
 
 				sendStateAndTime(null, null);
 
-				expect(broadcastPostMock).toHaveBeenCalledWith(":0");
+				expect(broadcastChannelMock.postMessage).toHaveBeenCalledWith(":0");
 			});
 		});
 
