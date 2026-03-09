@@ -198,22 +198,24 @@ describe("teacher overview page", () => {
 			expect(useUserMock.fetchUsers).toHaveBeenCalled();
 		});
 
-		it("should notify error when delete users fails", async () => {
-			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, firstUser, useUserMock } = setup();
-			(useUserMock.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
+		describe("when deletion of users fails", () => {
+			it("should notify error", async () => {
+				askConfirmationMock.mockResolvedValue(true);
+				const { wrapper, firstUser, useUserMock } = setup();
+				(useUserMock.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
 
-			await openContextMenu(wrapper, 0);
+				await openContextMenu(wrapper, 0);
 
-			// click delete menu button
-			const deleteBtn = wrapper.get(`[data-testid="delete_action"]`);
-			await deleteBtn.trigger("click");
+				// click delete menu button
+				const deleteBtn = wrapper.get(`[data-testid="delete_action"]`);
+				await deleteBtn.trigger("click");
 
-			wrapper.findComponent(DeleteUserDialog).vm.$emit("confirm");
-			await flushPromises();
+				wrapper.findComponent(DeleteUserDialog).vm.$emit("confirm");
+				await flushPromises();
 
-			expectNotification("error");
-			expect(useUserMock.deleteUsers).toHaveBeenCalledWith([firstUser._id]);
+				expectNotification("error");
+				expect(useUserMock.deleteUsers).toHaveBeenCalledWith([firstUser._id]);
+			});
 		});
 
 		it("should handle bulk registration emails", async () => {
@@ -290,21 +292,6 @@ describe("teacher overview page", () => {
 		expect(column2.exists()).toBe(false);
 	});
 
-	it("should display the edit button if school is not external", () => {
-		const { wrapper } = setup();
-
-		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
-		expect(editBtn.exists()).toBe(true);
-	});
-
-	it("should not display the edit button if school is external", () => {
-		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
-		const { wrapper } = setup();
-
-		const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
-		expect(editBtn.exists()).toBe(false);
-	});
-
 	it("editBtn's to property should have the expected URL", () => {
 		const { wrapper, firstUser } = setup();
 		const expectedURL = `/administration/teachers/${firstUser._id}/edit?returnUrl=/administration/teachers`;
@@ -328,27 +315,45 @@ describe("teacher overview page", () => {
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	it("should not render the fab component if isExternal is true", () => {
-		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
-		const { wrapper } = setup();
+	describe("when school is not external", () => {
+		it("should not render the adminTableLegend component", () => {
+			const { wrapper } = setup();
 
-		const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
-		expect(fabComponent.exists()).toBe(false);
+			const adminTableLegend = wrapper.findComponent(AdminTableLegend);
+			expect(adminTableLegend.props().showExternalSyncHint).toBe(false);
+		});
+
+		it("should display the edit button", () => {
+			const { wrapper } = setup();
+
+			const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+			expect(editBtn.exists()).toBe(true);
+		});
 	});
 
-	it("should render the adminTableLegend component when school is external", () => {
-		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
-		const { wrapper } = setup();
+	describe("when school is external", () => {
+		it("should render the adminTableLegend component", () => {
+			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			const { wrapper } = setup();
 
-		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
-		expect(adminTableLegend.props().showExternalSyncHint).toBe(true);
-	});
+			const adminTableLegend = wrapper.findComponent(AdminTableLegend);
+			expect(adminTableLegend.props().showExternalSyncHint).toBe(true);
+		});
+		it("should not render the fab component", () => {
+			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			const { wrapper } = setup();
 
-	it("should not render the adminTableLegend component when school is not external", () => {
-		const { wrapper } = setup();
+			const fabComponent = wrapper.find(`[data-testid="fab_button_teachers_table"]`);
+			expect(fabComponent.exists()).toBe(false);
+		});
 
-		const adminTableLegend = wrapper.findComponent(AdminTableLegend);
-		expect(adminTableLegend.props().showExternalSyncHint).toBe(false);
+		it("should not display the edit button", () => {
+			schoolsModule.setSchool({ ...mockSchool, isExternal: true });
+			const { wrapper } = setup();
+
+			const editBtn = wrapper.find(`[data-testid="edit_teacher_button"]`);
+			expect(editBtn.exists()).toBe(false);
+		});
 	});
 
 	describe("filtering", () => {
@@ -406,34 +411,38 @@ describe("teacher overview page", () => {
 		});
 
 		describe("when table pagination options change", () => {
-			it("should fetch filtered teachers when rows per page changes", async () => {
-				const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
+			describe("when rows per page changes", () => {
+				it("should fetch filtered teachers", async () => {
+					const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
 
-				const tableComponent = wrapper.findComponent(BackendDataTable);
-				expect(tableComponent.exists()).toBe(true);
+					const tableComponent = wrapper.findComponent(BackendDataTable);
+					expect(tableComponent.exists()).toBe(true);
 
-				const newLimit = 5;
+					const newLimit = 5;
 
-				tableComponent.vm.$emit("update:rows-per-page", newLimit);
-				await nextTick();
+					tableComponent.vm.$emit("update:rows-per-page", newLimit);
+					await nextTick();
 
-				expect(useFilterLocalStorageMockReturn.limit.value).toBe(newLimit);
-				expect(useFilterLocalStorageMockReturn.page.value).toBe(1);
-				expect(useUserMock.fetchUsers).toHaveBeenCalled();
+					expect(useFilterLocalStorageMockReturn.limit.value).toBe(newLimit);
+					expect(useFilterLocalStorageMockReturn.page.value).toBe(1);
+					expect(useUserMock.fetchUsers).toHaveBeenCalled();
+				});
 			});
 
-			it("should fetch filtered teachers when page changes", async () => {
-				const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
+			describe("when page changes", () => {
+				it("should fetch filtered teachers", async () => {
+					const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
 
-				const tableComponent = wrapper.findComponent(BackendDataTable);
-				expect(tableComponent.exists()).toBe(true);
+					const tableComponent = wrapper.findComponent(BackendDataTable);
+					expect(tableComponent.exists()).toBe(true);
 
-				const newPage = 2;
-				tableComponent.vm.$emit("update:current-page", 2);
-				await nextTick();
+					const newPage = 2;
+					tableComponent.vm.$emit("update:current-page", newPage);
+					await nextTick();
 
-				expect(useFilterLocalStorageMockReturn.page.value).toBe(newPage);
-				expect(useUserMock.fetchUsers).toHaveBeenCalled();
+					expect(useFilterLocalStorageMockReturn.page.value).toBe(newPage);
+					expect(useUserMock.fetchUsers).toHaveBeenCalled();
+				});
 			});
 		});
 	});
