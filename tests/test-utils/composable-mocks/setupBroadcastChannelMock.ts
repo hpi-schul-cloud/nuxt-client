@@ -1,15 +1,12 @@
 import { vi } from "vitest";
 
 export function setupBroadcastChannelMock() {
-	const broadcastPostMock = vi.fn();
-	const broadcastCloseMock = vi.fn();
-
 	// Mock BroadcastChannel
 	const mockBroadcastChannel = {
 		addEventListener: vi.fn(),
 		removeEventListener: vi.fn(),
-		postMessage: broadcastPostMock,
-		close: broadcastCloseMock,
+		postMessage: vi.fn(),
+		close: vi.fn(),
 	};
 
 	// Create mock constructor function
@@ -31,17 +28,7 @@ export function setupBroadcastChannelMock() {
 		configurable: true,
 	});
 
-	const clearBroadcastChannelMocks = () => {
-		broadcastPostMock.mockClear();
-		broadcastCloseMock.mockClear();
-		mockBroadcastChannel.addEventListener.mockClear();
-		mockBroadcastChannel.removeEventListener.mockClear();
-	};
-
 	return {
-		broadcastPostMock,
-		broadcastCloseMock,
 		mockBroadcastChannel,
-		clearBroadcastChannelMocks,
 	};
 }

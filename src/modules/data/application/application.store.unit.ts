@@ -20,7 +20,7 @@ import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 import { ref } from "vue";
 
-const { broadcastPostMock, broadcastCloseMock, mockBroadcastChannel, clearBroadcastChannelMocks } = setupBroadcastChannelMock();
+const { mockBroadcastChannel } = setupBroadcastChannelMock();
 
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -32,8 +32,6 @@ describe("useApplicationStore", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
 		vi.clearAllMocks();
-
-		clearBroadcastChannelMocks();
 
 		Object.defineProperty(globalThis, "location", {
 			value: { replace: vi.fn() },
@@ -223,13 +221,13 @@ describe("useApplicationStore", () => {
 		it("should post logout message to broadcast channel", () => {
 			useAppStore().logout();
 
-			expect(broadcastPostMock).toHaveBeenCalledWith("logout");
+			expect(mockBroadcastChannel.postMessage).toHaveBeenCalledWith("logout");
 		});
 
 		it("should call sendLogout before clearing session and redirecting", () => {
 			const postCallOrder: string[] = [];
-			broadcastPostMock.mockImplementation(() => postCallOrder.push("post"));
-			broadcastCloseMock.mockImplementation(() => postCallOrder.push("close"));
+			mockBroadcastChannel.postMessage.mockImplementation(() => postCallOrder.push("post"));
+			mockBroadcastChannel.close.mockImplementation(() => postCallOrder.push("close"));
 
 			useAppStore().logout();
 
@@ -239,7 +237,7 @@ describe("useApplicationStore", () => {
 		it("should clean up to ensure garbage collection pristine storage", () => {
 			useAppStore().logout();
 
-			expect(broadcastCloseMock).toHaveBeenCalled();
+			expect(mockBroadcastChannel.close).toHaveBeenCalled();
 			expect(localStorage.clear).toHaveBeenCalled();
 		});
 	});
