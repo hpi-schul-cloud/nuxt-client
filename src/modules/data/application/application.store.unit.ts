@@ -18,7 +18,6 @@ import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
-import { ref } from "vue";
 
 const { mockBroadcastChannel } = setupBroadcastChannelMock();
 
