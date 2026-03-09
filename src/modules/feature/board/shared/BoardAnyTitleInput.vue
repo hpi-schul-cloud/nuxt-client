@@ -34,10 +34,10 @@
 
 <script setup lang="ts">
 import { useInlineEditInteractionHandler } from "@util-board";
-import { logger } from "@util-logger";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { VTextarea } from "vuetify/lib/components/index";
 
 const props = withDefaults(
 	defineProps<{
@@ -68,16 +68,9 @@ const { validateOnOpeningTag } = useOpeningTagValidator();
 const modelValue = ref("");
 const externalValue = toRef(props, "value");
 const internalIsFocused = ref(false);
-const titleInput = useTemplateRef("titleInput");
-const hasErrors = ref(false);
+const titleInput = useTemplateRef<VTextarea>("titleInput");
 
-watch(
-	() => titleInput.value?.isValid,
-	() => {
-		hasErrors.value = titleInput.value ? !titleInput.value.isValid : false;
-		logger.log("BoardAnyTitleInput - hasErrors:", hasErrors.value);
-	}
-);
+const hasErrors = computed(() => (titleInput.value ? !titleInput.value.isValid : false));
 
 useInlineEditInteractionHandler(async () => {
 	await setFocusOnEdit();
@@ -92,8 +85,11 @@ const setFocusOnEdit = async () => {
 	}
 };
 
-watch(modelValue, (newValue) => {
-	if (newValue !== props.value && titleInput.value?.isValid) {
+watch(modelValue, async (newValue) => {
+	await titleInput?.value?.validate();
+	const isValid = titleInput?.value?.isValid;
+
+	if (newValue !== props.value && isValid) {
 		emit("update:value", newValue);
 	}
 });
