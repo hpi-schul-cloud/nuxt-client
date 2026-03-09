@@ -31,79 +31,48 @@ import { computed, ref } from "vue";
 vi.mock("vue-router");
 
 vi.mock("@util-board");
-const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
-const mockedUseShareBoardLink = vi.mocked(useShareBoardLink);
-const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
-const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
-
 vi.mock("@data-board/edit-mode.composable");
-const mockedEditMode = vi.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../shared/AddElementDialog.composable");
 vi.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
 
 vi.mock("@data-board/cardActions/cardRestApi.composable");
-vi.mocked(useCardRestApi).mockReturnValue({
-	createElementRequest: vi.fn(),
-	createPreferredElement: vi.fn(),
-	getPreferredTools: vi.fn(),
-	deleteElementRequest: vi.fn(),
-	moveElementRequest: vi.fn(),
-	updateElementRequest: vi.fn(),
-	duplicateCardRequest: vi.fn(),
-	deleteCardRequest: vi.fn(),
-	fetchCardRequest: vi.fn(),
-	updateCardTitleRequest: vi.fn(),
-	updateCardHeightRequest: vi.fn(),
-	disconnectSocketRequest: vi.fn(),
-});
+vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
 
 vi.mock("@data-board/cardActions/cardSocketApi.composable");
-vi.mocked(useCardSocketApi).mockReturnValue({
-	dispatch: vi.fn(),
-	disconnectSocketRequest: vi.fn(),
-	createElementRequest: vi.fn(),
-	deleteElementRequest: vi.fn(),
-	moveElementRequest: vi.fn(),
-	updateElementRequest: vi.fn(),
-	deleteCardRequest: vi.fn(),
-	fetchCardRequest: vi.fn(),
-	updateCardTitleRequest: vi.fn(),
-	updateCardHeightRequest: vi.fn(),
-	duplicateCardRequest: vi.fn(),
-});
+vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
 
 describe("CardHost", () => {
-	let mockedSharedLastCreatedElementCalls: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let useShareBoardLinkMock: Mocked<ReturnType<typeof useShareBoardLink>>;
-	let mockedUseSharedFileSelectActions: Mocked<ReturnType<typeof useSharedFileSelect>>;
+	let useSharedFileSelectMock: Mocked<ReturnType<typeof useSharedFileSelect>>;
 
 	beforeEach(() => {
-		mockedUseSharedEditMode.mockReturnValue({
-			editModeId: ref(undefined),
-			setEditModeId: vi.fn(),
-			isInEditMode: computed(() => true),
-		});
+		vi.mocked(useSharedEditMode).mockReturnValue(
+			mockComposable(useSharedEditMode, {
+				editModeId: ref(undefined),
+				isInEditMode: computed(() => true),
+			})
+		);
 
 		useShareBoardLinkMock = mockComposable(useShareBoardLink);
-		mockedUseShareBoardLink.mockReturnValue(useShareBoardLinkMock);
+		vi.mocked(useShareBoardLink).mockReturnValue(useShareBoardLinkMock);
 
-		mockedBoardFocusHandler.mockReturnValue({
-			isFocusContained: computed(() => true),
-			isFocused: computed(() => true),
-			isFocusWithin: computed(() => true),
-			isFocusedById: computed(() => true),
-		});
+		vi.mocked(useBoardFocusHandler).mockReturnValue(
+			mockComposable(useBoardFocusHandler, {
+				isFocusContained: computed(() => true),
+				isFocused: computed(() => true),
+				isFocusWithin: computed(() => true),
+				isFocusedById: computed(() => true),
+			})
+		);
 
-		mockedEditMode.mockReturnValue({
-			isEditMode: computed(() => true),
-			startEditMode: vi.fn(),
-			stopEditMode: vi.fn(),
-		});
+		vi.mocked(useCourseBoardEditMode).mockReturnValue(
+			mockComposable(useCourseBoardEditMode, {
+				isEditMode: computed(() => true),
+			})
+		);
 
 		setupAddElementDialogMock();
 		const askDeleteConfirmationMock = () => Promise.resolve(true);
@@ -111,20 +80,19 @@ describe("CardHost", () => {
 			askDeleteConfirmationMock,
 		});
 
-		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askDeleteConfirmation: askDeleteConfirmationMock,
-			isDeleteDialogOpen: ref(false),
-		});
+		vi.mocked(useDeleteConfirmationDialog).mockReturnValue(
+			mockComposable(useDeleteConfirmationDialog, {
+				askDeleteConfirmation: askDeleteConfirmationMock,
+				isDeleteDialogOpen: ref(false),
+			})
+		);
 
-		mockedSharedLastCreatedElementCalls = mockComposable(useSharedLastCreatedElement);
-		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementCalls);
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
 
-		mockedUseSharedFileSelectActions = mockComposable(useSharedFileSelect, {
+		useSharedFileSelectMock = mockComposable(useSharedFileSelect, {
 			isFileSelectOnMountEnabled: ref(true),
-			resetFileSelectOnMountEnabled: vi.fn(),
-			disableFileSelectOnMount: vi.fn(),
 		});
-		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
+		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
 	});
 
 	afterEach(() => {
