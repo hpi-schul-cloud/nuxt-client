@@ -1,4 +1,4 @@
-import { useAppStore } from "./application.store";
+import { useAppStore, useAppStoreRefs } from "./application.store";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -18,6 +18,32 @@ import { AxiosInstance, AxiosPromise } from "axios";
 import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
+import { ref } from "vue";
+
+const mockBroadcastData = ref<string | null>(null);
+const mockBroadcastIsClosed = ref(false);
+
+const mockBroadcastChannel = {
+	post: vi.fn(),
+	close: vi.fn(),
+	isClosed: mockBroadcastIsClosed,
+	data: mockBroadcastData,
+	channel: {
+		value: {
+			addEventListener: vi.fn(),
+			removeEventListener: vi.fn(),
+			postMessage: vi.fn(),
+		},
+	},
+};
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("@vueuse/core")>();
+	return {
+		...actual,
+		useBroadcastChannel: vi.fn(() => mockBroadcastChannel),
+	};
+});
 
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
@@ -26,6 +52,29 @@ vi.mock("@/fileStorageApi/v3");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({ createSpy: vi.fn }));
+		vi.clearAllMocks();
+
+		mockBroadcastChannel.data.value = null;
+
+		Object.defineProperty(globalThis, "location", {
+			value: { replace: vi.fn() },
+			writable: true,
+		});
+
+		Object.defineProperty(globalThis, "localStorage", {
+			value: { clear: vi.fn() },
+			writable: true,
+		});
+
+		Object.defineProperty(document, "cookie", {
+			value: "",
+			writable: true,
+			configurable: true,
+		});
+	});
+
 	const doMockMeApiData = (data: MeResponse) => {
 		mockedMeApi.mockReturnValue({
 			meControllerMe(): AxiosPromise<MeResponse> {
@@ -145,20 +194,24 @@ describe("useApplicationStore", () => {
 		});
 
 		it("should not log in on api error", async () => {
+			const store = useAppStore();
+
 			mockedMeApi.mockReturnValue({
 				meControllerMe: vi.fn().mockRejectedValue(new Error("Me data not available.")),
 			});
 
+			expect(store.isLoggedIn).toBe(false);
+
 			try {
-				await useAppStore().login();
+				await store.login();
 			} catch {
-				expect(useAppStore().isLoggedIn).toBe(false);
+				expect(store.isLoggedIn).toBe(false);
 			}
 		});
 	});
 
 	describe("logout action", () => {
-		it("should logout with default redirect URL", () => {
+		beforeEach(() => {
 			initializeAxios({
 				defaults: {
 					headers: {
@@ -168,13 +221,49 @@ describe("useApplicationStore", () => {
 					},
 				},
 			} as AxiosInstance);
+		});
 
-			Object.defineProperty(window, "location", {
+		it("should redirect to default logout URL", () => {
+			Object.defineProperty(globalThis, "location", {
 				value: { replace: vi.fn() },
+				writable: true,
+			});
+
+			useAppStore().logout();
+			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout");
+		});
+
+		it("should redirect to custom logout URL", () => {
+			Object.defineProperty(globalThis, "location", {
+				value: { replace: vi.fn() },
+				writable: true,
 			});
 
 			useAppStore().logout("/logout-to");
-			expect(window.location.replace).toHaveBeenCalledWith("/logout-to");
+			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout-to");
+		});
+
+		it("should post logout message to broadcast channel", () => {
+			useAppStore().logout();
+
+			expect(mockBroadcastChannel.post).toHaveBeenCalledWith("logout");
+		});
+
+		it("should call sendLogout before clearing session and redirecting", () => {
+			const postCallOrder: string[] = [];
+			mockBroadcastChannel.post.mockImplementation(() => postCallOrder.push("post"));
+			mockBroadcastChannel.close.mockImplementation(() => postCallOrder.push("close"));
+
+			useAppStore().logout();
+
+			expect(postCallOrder).toEqual(["post", "close"]);
+		});
+
+		it("should clean up to ensure garbage collection pristine storage", () => {
+			useAppStore().logout();
+
+			expect(mockBroadcastChannel.close).toHaveBeenCalled();
+			expect(localStorage.clear).toHaveBeenCalled();
 		});
 	});
 
@@ -218,6 +307,19 @@ describe("useApplicationStore", () => {
 			expect(store.applicationError?.translationKeyOrText).toBe("error.generic");
 		});
 
+		it.each([
+			[HttpStatusCode.Unauthorized, "error.401"],
+			[HttpStatusCode.Forbidden, "error.403"],
+			[HttpStatusCode.NotFound, "error.404"],
+			[HttpStatusCode.RequestTimeout, "error.408"],
+		])("handles status code %s and returns translation key %s", (statusCode, expectedTranslationKey) => {
+			const store = useAppStore();
+
+			store.handleApplicationError(statusCode);
+
+			expect(store.applicationError?.translationKeyOrText).toBe(expectedTranslationKey);
+		});
+
 		it("puts unknown error codes to generic", () => {
 			useAppStore().handleApplicationError(999 as HttpStatusCode);
 			expect(useAppStore().applicationError).toEqual({ status: 999, translationKeyOrText: "error.generic" });
@@ -253,6 +355,53 @@ describe("useApplicationStore", () => {
 				status: HttpStatusCode.InternalServerError,
 				translationKeyOrText: "error.generic",
 			});
+		});
+	});
+
+	describe("externalLogout action", () => {
+		beforeEach(() => {
+			initializeAxios({
+				defaults: {
+					headers: {
+						common: {
+							Authorization: "",
+						},
+					},
+				},
+			} as AxiosInstance);
+		});
+
+		it("should redirect to external logout URL", () => {
+			Object.defineProperty(globalThis, "location", {
+				value: { replace: vi.fn() },
+				writable: true,
+			});
+
+			useAppStore().externalLogout();
+			expect(globalThis.location.replace).toHaveBeenCalledWith("/logout/external");
+		});
+	});
+
+	describe("clearApplicationError action", () => {
+		it("should clear the application error", () => {
+			const store = useAppStore();
+			store.handleApplicationError(HttpStatusCode.BadRequest);
+
+			expect(store.applicationError).toBeDefined();
+
+			store.clearApplicationError();
+
+			expect(store.applicationError).toBeUndefined();
+		});
+	});
+
+	describe("useAppStoreRefs", () => {
+		it("should return refs to store properties", () => {
+			const refs = useAppStoreRefs();
+
+			expect(refs.isLoggedIn).toBeDefined();
+			expect(refs.locale).toBeDefined();
+			expect(refs.userRoles).toBeDefined();
 		});
 	});
 });
