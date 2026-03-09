@@ -1,7 +1,7 @@
-import { setupBroadcastChannelMock } from "@@/tests/test-utils";
 import { useSessionBroadcast } from "./sessionBroadcast.composable";
 import { SessionState } from "./types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { setupBroadcastChannelMock } from "@@/tests/test-utils";
 import { flushPromises } from "@vue/test-utils";
 import { Mocked } from "vitest";
 
@@ -22,7 +22,7 @@ describe("useSessionBroadcast", () => {
 				if (type === "message" && typeof listener === "function") {
 					messageHandler = listener as (event: MessageEvent) => void;
 				}
-			})
+			}),
 		}).broadcastChannelMock;
 
 		messageHandler = null;
