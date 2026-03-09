@@ -127,7 +127,7 @@ describe("DatePicker", () => {
 
 				const updateDateEvent = wrapper.emitted("update:date");
 				expect(updateDateEvent).toBeDefined();
-				expect(updateDateEvent![updateDateEvent!.length - 1]).toEqual([undefined]);
+				expect(updateDateEvent![0]).toEqual([undefined]);
 			});
 		});
 
@@ -140,7 +140,7 @@ describe("DatePicker", () => {
 
 					const updateDateEvent = wrapper.emitted("update:date");
 					expect(updateDateEvent).toBeDefined();
-					expect(updateDateEvent![updateDateEvent!.length - 1]).toEqual([undefined]);
+					expect(updateDateEvent![0]).toEqual([undefined]);
 				});
 
 				it("should display error message for required date", async () => {
@@ -161,7 +161,7 @@ describe("DatePicker", () => {
 
 					const updateDateEvent = wrapper.emitted("update:date");
 					expect(updateDateEvent).toBeDefined();
-					expect(updateDateEvent![updateDateEvent!.length - 1]).toEqual([undefined]);
+					expect(updateDateEvent![0]).toEqual([undefined]);
 				});
 
 				it("should display error message for invalid date format", async () => {
