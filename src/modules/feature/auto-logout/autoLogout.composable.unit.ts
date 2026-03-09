@@ -4,8 +4,8 @@ import { $axios } from "@/utils/api";
 import {
 	createTestAppStoreWithRole,
 	createTestEnvStore,
+	mockBroadcastChannel,
 	mountComposable,
-	setupBroadcastChannelMock,
 } from "@@/tests/test-utils";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
@@ -22,7 +22,7 @@ vi.mock("@/utils/api", () => ({
 }));
 globalThis.fetch = vi.fn();
 
-const { broadcastChannelMock } = setupBroadcastChannelMock();
+const broadcastChannelMock = mockBroadcastChannel();
 
 vi.useFakeTimers();
 vi.spyOn(globalThis, "setInterval");

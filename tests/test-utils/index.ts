@@ -2,6 +2,7 @@ export * from "./composable-mocks";
 export * from "./factory";
 export * from "./i18nMock";
 export * from "./mockApiResponse";
+export * from "./mockBroadcastChannel";
 export * from "./mockDataTasks";
 export * from "./mockedPiniaStoreTyping";
 export * from "./mockObjects";

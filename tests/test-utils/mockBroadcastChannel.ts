@@ -1,6 +1,6 @@
 import { Mocked, vi } from "vitest";
 
-export function setupBroadcastChannelMock(customImplementations: Partial<BroadcastChannel> = {}) {
+export function mockBroadcastChannel(customImplementations: Partial<BroadcastChannel> = {}) {
 	// Create shared mock that implements full BroadcastChannel interface
 	const sharedMocks: BroadcastChannel = {
 		name: "",
@@ -37,7 +37,5 @@ export function setupBroadcastChannelMock(customImplementations: Partial<Broadca
 		configurable: true,
 	});
 
-	return {
-		broadcastChannelMock: sharedMocks as Mocked<BroadcastChannel>,
-	};
+	return sharedMocks as Mocked<BroadcastChannel>;
 }

@@ -11,7 +11,7 @@ import {
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse, setupBroadcastChannelMock } from "@@/tests/test-utils";
+import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";
@@ -19,7 +19,7 @@ import { DeepPartial } from "fishery";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, vi } from "vitest";
 
-const { broadcastChannelMock } = setupBroadcastChannelMock();
+const broadcastChannelMock = mockBroadcastChannel();
 
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
