@@ -2,7 +2,7 @@ import ClassicEditor from "../editor/ClassicEditor.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { NewsResponse } from "@/serverApi/v3";
 import { Status } from "@/store/types/commons";
-import { formatUtc, toCombinedDateTimeIso } from "@/utils/date-time.utils";
+import { toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { newsResponseFactory } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

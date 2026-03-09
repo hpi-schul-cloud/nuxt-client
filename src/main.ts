@@ -1,5 +1,4 @@
 import "@/plugins/polyfills";
-import { createDayJs } from "@/utils/date-time.utils";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
@@ -41,6 +40,7 @@ import {
 	videoConferenceModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
+import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
 import { htmlConfig } from "@feature-render-html";
