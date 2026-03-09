@@ -37,9 +37,9 @@
 
 import { SessionState } from "./types";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { tryOnScopeDispose, useBroadcastChannel } from "@vueuse/core";
+import { tryOnScopeDispose } from "@vueuse/core";
 import axios, { isAxiosError } from "axios";
-import { readonly, ref, watch } from "vue";
+import { readonly, ref } from "vue";
 
 const JWT_TIMER_ENDPOINT = "/v1/accounts/jwtTimer";
 
@@ -62,17 +62,60 @@ type SessionBroadcastOptions = {
 };
 
 export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
-	const sessionBroadcast = useBroadcastChannel({ name: BROADCAST_CHANNEL_NAME });
 	const { setState, setTime, onLogoutReceived } = options ?? {};
 	const logoutHandlers: LogoutHandler[] = [];
 
+	let broadcastChannel: BroadcastChannel | null = null;
+
+	const getBroadcastChannel = () => {
+		if (!broadcastChannel && typeof BroadcastChannel !== "undefined") {
+			broadcastChannel = new BroadcastChannel(BROADCAST_CHANNEL_NAME);
+
+			// handle incoming broadcast messages to sync session state across tabs
+			broadcastChannel.addEventListener("message", (event) => {
+				const message = event.data;
+
+				if (message === BROADCAST_MESSAGE_LOGOUT) {
+					setJwtExpired(true);
+					logoutHandlers.forEach((handler) => handler());
+
+					if (onLogoutReceived) {
+						onLogoutReceived();
+					} else if (setState) {
+						setState(SessionState.Expired);
+						globalThis.location.assign("/logout");
+					}
+					return;
+				}
+
+				if (typeof message === "string" && message.includes(":")) {
+					const [state, time] = message.split(":");
+					const timeInSeconds = Number.parseInt(time, 10);
+					if (!Number.isNaN(timeInSeconds) && setTime) {
+						setTime(timeInSeconds);
+					}
+					if (setState && Object.values(SessionState).includes(state as SessionState)) {
+						setState(state as SessionState);
+					}
+				}
+			});
+		}
+		return broadcastChannel;
+	};
+
 	// share current state and timing
 	const sendStateAndTime = (state: SessionState | null, time: number | null) => {
-		sessionBroadcast.post(`${state ?? ""}:${time ?? "0"}`);
+		const channel = getBroadcastChannel();
+		if (channel) {
+			channel.postMessage(`${state ?? ""}:${time ?? "0"}`);
+		}
 	};
 
 	const sendLogout = () => {
-		sessionBroadcast.post(BROADCAST_MESSAGE_LOGOUT);
+		const channel = getBroadcastChannel();
+		if (channel) {
+			channel.postMessage(BROADCAST_MESSAGE_LOGOUT);
+		}
 	};
 
 	const onLogoutEvent = (handler: LogoutHandler) => {
@@ -80,37 +123,11 @@ export const useSessionBroadcast = (options?: SessionBroadcastOptions) => {
 	};
 
 	const close = () => {
-		if (sessionBroadcast.isClosed.value === false) {
-			sessionBroadcast.close();
+		if (broadcastChannel) {
+			broadcastChannel.close();
+			broadcastChannel = null;
 		}
 	};
-
-	// handle incoming broadcast messages to sync session state across tabs
-	watch(sessionBroadcast.data, (message) => {
-		if (message === BROADCAST_MESSAGE_LOGOUT) {
-			setJwtExpired(true);
-			logoutHandlers.forEach((handler) => handler());
-
-			if (onLogoutReceived) {
-				onLogoutReceived();
-			} else if (setState) {
-				setState(SessionState.Expired);
-				globalThis.location.assign("/logout");
-			}
-			return;
-		}
-
-		if (typeof message === "string" && message.includes(":")) {
-			const [state, time] = message.split(":");
-			const timeInSeconds = Number.parseInt(time, 10);
-			if (!Number.isNaN(timeInSeconds) && setTime) {
-				setTime(timeInSeconds);
-			}
-			if (setState && Object.values(SessionState).includes(state as SessionState)) {
-				setState(state as SessionState);
-			}
-		}
-	});
 
 	const handleUnauthorizedError = async (error: unknown) => {
 		if (isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized) {
