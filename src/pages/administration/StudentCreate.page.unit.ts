@@ -5,6 +5,7 @@ import { useAppStore } from "@data-app";
 import { useUsers } from "@data-users";
 import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -47,7 +48,7 @@ describe("students/new", () => {
 			useUsersMockHandler.createUser = vi.fn().mockResolvedValue({ error: false, result: {} });
 			const { wrapper } = setup();
 
-			const testDate = new Date("2000-01-01T00:00:00.000Z");
+			const testDate = "2000-01-01";
 
 			const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
 			const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
@@ -56,17 +57,20 @@ describe("students/new", () => {
 			await inputFirstName.setValue("Klara");
 			await inputLastName.setValue("Fall");
 			await inputEmail.setValue("klara.fall@mail.de");
+
+			const datepicker = wrapper.findComponent(DatePicker);
+			datepicker.vm.$emit("update:date", testDate);
+
+			await flushPromises();
+
 			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
 			await submitButton.trigger("click");
-
-			const inputBirthdayValue = wrapper.findComponent('[data-testid="input_create-student_birthdate"]');
-			inputBirthdayValue.setValue(testDate);
 
 			const expectedPayload = {
 				firstName: "Klara",
 				lastName: "Fall",
 				email: "klara.fall@mail.de",
-				birthday: testDate,
+				birthday: new Date(testDate),
 				roles: ["student"],
 				schoolId: useAppStore().school?.id,
 				sendRegistration: false,
