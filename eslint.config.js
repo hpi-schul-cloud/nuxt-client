@@ -43,6 +43,7 @@ export default defineConfigWithVueTs([
 				...globals.node,
 				...globals.browser,
 				NodeJS: true,
+				EventListenerOrEventListenerObject: "readonly",
 			},
 		},
 		plugins: {

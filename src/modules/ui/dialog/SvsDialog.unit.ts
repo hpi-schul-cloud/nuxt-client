@@ -8,6 +8,18 @@ import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VCard, VCardTitle, VDialog } from "vuetify/components";
 
+// Create a stub for VDialog that includes the proper emits
+const VDialogStub = {
+	name: "VDialog",
+	emits: ["update:modelValue", "click:outside", "after-leave", "keydown"],
+	props: VDialog.props,
+	template: `
+		<div v-if="modelValue" class="v-dialog-stub" @keydown.esc="$emit('keydown', $event)">
+			<slot />
+		</div>
+	`,
+};
+
 describe("SvsDialog", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -41,10 +53,13 @@ describe("SvsDialog", () => {
 			},
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: { UseFocusTrap: true },
+				stubs: {
+					UseFocusTrap: true,
+					VDialog: VDialogStub,
+				},
 			},
 		});
-		const dialog = wrapper.findComponent(VDialog);
+		const dialog = wrapper.findComponent(VDialogStub);
 		const card = dialog.findComponent(VCard);
 
 		return { wrapper, title, dialog, card };
@@ -172,13 +187,13 @@ describe("SvsDialog", () => {
 		});
 
 		it("should emit cancel on escape keydown", async () => {
-			const { wrapper } = setup();
+			const { wrapper, dialog } = setup();
 
-			document.dispatchEvent(
+			dialog.vm.$emit(
+				"keydown",
 				new KeyboardEvent("keydown", {
 					key: "Escape",
 					keyCode: 27,
-					bubbles: true,
 				})
 			);
 			await wrapper.vm.$nextTick();
