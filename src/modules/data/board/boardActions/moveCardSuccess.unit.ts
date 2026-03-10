@@ -93,7 +93,7 @@ describe("BoardStore - moveCardSuccess", () => {
 
 		const router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue(router.currentRoute as unknown as ReturnType<typeof useRoute>);
+		useRouteMock.mockReturnValue(router.currentRoute.value);
 	});
 
 	afterEach(() => {

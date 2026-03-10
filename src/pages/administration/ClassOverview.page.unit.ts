@@ -41,7 +41,7 @@ const createWrapper = ({
 	envs = {},
 }: CreateWrapperOptions) => {
 	const { router } = injectRouterMock(createRouterMock());
-	const route = router.currentRoute;
+	const route = router.currentRoute.value;
 
 	const defaultPermissions = [Permission.ClassEdit, Permission.ClassCreate];
 

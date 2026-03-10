@@ -112,7 +112,7 @@ describe("BoardStore", () => {
 
 		router = createRouterMock();
 		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue(router.currentRoute as never);
+		useRouteMock.mockReturnValue(router.currentRoute.value);
 	});
 
 	const setup = (options?: { createBoard?: boolean; socketFlag?: boolean }) => {

@@ -44,7 +44,7 @@ describe("RoomsOverview", () => {
 		envs?: Partial<ConfigResponse>;
 	} = {}) => {
 		const { router } = injectRouterMock(createRouterMock());
-		const route = router.currentRoute;
+		const route = router.currentRoute.value;
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
 
