@@ -13,14 +13,11 @@
 		<KeepAlive>
 			<AutoLogoutWarning />
 		</KeepAlive>
-		<KeepAlive>
-			<LoggedOutDialog />
-		</KeepAlive>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { AutoLogoutWarning, LoggedOutDialog } from "@feature-auto-logout";
+import { AutoLogoutWarning } from "@feature-auto-logout";
 import { AlertContainer, ApplicationError, Sidebar, Topbar } from "@ui-layout";
 import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { SkipLink } from "@ui-skip-link";

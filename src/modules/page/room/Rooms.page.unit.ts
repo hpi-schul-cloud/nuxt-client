@@ -45,6 +45,7 @@ describe("RoomsPage", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		const { roomStore } = createTestRoomStore(roomItems);
 		roomStore.isLoading = isLoading;
+		roomStore.fetchRooms.mockResolvedValue();
 
 		createTestAppStoreWithPermissions([Permission.SchoolCreateRoom]);
 

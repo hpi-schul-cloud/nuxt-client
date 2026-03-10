@@ -17,9 +17,7 @@
 			<p>
 				<strong>Allgemeine Anfragen und Support:</strong><br />
 				<v-icon size="20" class="mr-1">{{ mdiPhone }}</v-icon>
-				03378 209 184 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
-				<v-icon size="20" class="mr-1">{{ mdiPhone }}</v-icon>
-				03378 209 185 (Mo. 13–15 Uhr; Di./Mi. 15–16 Uhr; Fr. 12–13 Uhr)<br />
+				03378 209 185 (Mo. 13–15 Uhr; Di./Mi./Do. 14–15 Uhr; Fr. 12–13 Uhr)<br />
 				<v-icon size="20" class="mr-1">{{ mdiEmailOutline }}</v-icon>
 				<a
 					href="mailto:support.scbb@meinlibra.de"

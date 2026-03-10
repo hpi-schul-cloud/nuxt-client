@@ -24,6 +24,13 @@ vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));
 
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref([]),
+	fetchStatusAlerts: vi.fn(),
+});
+
 const setup = () => {
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
