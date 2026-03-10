@@ -6,7 +6,7 @@ import { mock } from "vitest-mock-extended";
  * Creates an API mock where all methods automatically return a successful mockApiResponse
  * You can still override individual methods with custom responses using .mockResolvedValue()
  */
-export function mockApi<T>(): Mocked<T> {
+export const mockApi = <T>(): Mocked<T> => {
 	const apiMock = mock<T>();
 
 	// Create a proxy that auto-mocks any method call with mockApiResponse
@@ -26,4 +26,4 @@ export function mockApi<T>(): Mocked<T> {
 			return originalProperty;
 		},
 	}) as Mocked<T>;
-}
+};
