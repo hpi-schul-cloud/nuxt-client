@@ -37,7 +37,7 @@ import { useInlineEditInteractionHandler } from "@util-board";
 import { useOpeningTagValidator } from "@util-validators";
 import { computed, nextTick, onMounted, ref, toRef, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { VTextarea } from "vuetify/lib/components/index";
+import { VTextarea } from "vuetify/components";
 
 const props = withDefaults(
 	defineProps<{

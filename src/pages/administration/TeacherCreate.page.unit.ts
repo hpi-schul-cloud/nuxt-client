@@ -1,4 +1,5 @@
 import TeacherCreate from "./TeacherCreate.page.vue";
+import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useUsers } from "@data-users";
@@ -8,6 +9,7 @@ import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
+import { VForm } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -54,7 +56,7 @@ describe("teachers/new", () => {
 			await inputFirstName.setValue("Klara");
 			await inputLastName.setValue("Fall");
 			await inputEmail.setValue("klara.fall@mail.de");
-			await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
+			await wrapper.findComponent(VForm).trigger("submit.prevent");
 
 			const expectedPayload = {
 				firstName: "Klara",
@@ -86,11 +88,11 @@ describe("teachers/new", () => {
 		await inputFirstName.setValue("Klara");
 		await inputLastName.setValue("Fall");
 		await inputEmail.setValue("klara.fall@mail.de");
-		await wrapper.find('[data-testid="button_create-user_submit"]').trigger("click");
+		await wrapper.findComponent(VForm).trigger("submit.prevent");
 
 		await flushPromises();
 
-		const infoMessageAfter = wrapper.findComponent({ name: "InfoMessage" });
+		const infoMessageAfter = wrapper.findComponent(InfoMessage);
 		expect(infoMessageAfter.exists()).toBe(true);
 		expect(useUsersMockHandler.createUser).toHaveBeenCalled();
 		expect(router.push).not.toHaveBeenCalled();

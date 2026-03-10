@@ -9,6 +9,7 @@ import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { Router, useRouter } from "vue-router";
+import { VForm } from "vuetify/components";
 
 vi.mock("vue-router");
 const useRouterMock = <Mock>useRouter;
@@ -56,11 +57,11 @@ describe("students/new", () => {
 			await inputFirstName.setValue("Klara");
 			await inputLastName.setValue("Fall");
 			await inputEmail.setValue("klara.fall@mail.de");
-			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
-			await submitButton.trigger("click");
 
 			const inputBirthdayValue = wrapper.findComponent('[data-testid="input_create-student_birthdate"]');
 			inputBirthdayValue.setValue(testDate);
+
+			await wrapper.findComponent(VForm).trigger("submit.prevent");
 
 			const expectedPayload = {
 				firstName: "Klara",
@@ -95,8 +96,8 @@ describe("students/new", () => {
 			await inputEmail.setValue("klara.fall@mail.de");
 			await inputBirthday.setValue("01.01.2000");
 			await inputBirthday.trigger("input");
-			const submitButton = wrapper.find('button[data-testid="button_create-user_submit"]');
-			await submitButton.trigger("click");
+
+			await wrapper.findComponent(VForm).trigger("submit.prevent");
 
 			await flushPromises();
 
