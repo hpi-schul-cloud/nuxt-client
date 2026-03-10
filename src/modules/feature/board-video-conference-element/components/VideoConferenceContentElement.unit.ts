@@ -96,7 +96,7 @@ describe("VideoConferenceContentElement", () => {
 			elementIndex = 2,
 			isRunning = false,
 			error = null,
-			hasManageVideoConferencePermission,
+			hasManageVideoConferencePermission = false,
 		} = options;
 
 		setActivePinia(createTestingPinia());
