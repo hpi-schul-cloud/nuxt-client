@@ -8,94 +8,71 @@
 			@update:model-value="buttonHandler"
 		>
 			<template #icon>
-				<VIcon size="60">{{ activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline }}</VIcon>
+				<VIcon size="60" :icon="activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline" />
 			</template>
 		</InfoModalFullWidth>
 	</section>
 </template>
 
-<script>
+<script setup lang="ts">
 import InfoModalFullWidth from "@/components/legacy/InfoModalFullWidth.vue";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
-import { logger } from "@util-logger";
-import { defineComponent } from "vue";
+import { useTitle } from "@vueuse/core";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 
-export default defineComponent({
-	components: {
-		InfoModalFullWidth,
-	},
-	setup() {
-		const { t } = useI18n();
-		return { t };
-	},
-	data() {
-		return {
-			activated: false,
-			keyword: null,
-			showModal: false,
-			mdiEmailCheckOutline,
-			mdiEmailRemoveOutline,
-		};
-	},
-	computed: {
-		...mapGetters("activation", {
-			data: "getList",
-		}),
-		getTitle() {
-			let title = "";
-			if (this.activated) {
-				switch (this.keyword) {
-					case "eMailAddress":
-						title = this.t("pages.activation._activationCode.index.success.email");
-						break;
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const { execute } = useSafeAxiosTask();
 
-					default:
-						break;
-				}
-			} else {
-				switch (this.keyword) {
-					default:
-						title = this.t("pages.activation._activationCode.index.error.title");
-						break;
-				}
-			}
-			return title;
-		},
-		getDescription() {
-			let description = "";
-			if (!this.activated) {
-				description = this.t("pages.activation._activationCode.index.error.description");
-			}
-			return description;
-		},
-	},
-	created() {
-		this.submitHandler();
-		document.title = buildPageTitle(this.getTitle);
-	},
-	methods: {
-		buttonHandler() {
-			this.showModal = false;
-			this.$router.push({
-				path: `/`,
-			});
-		},
-		async submitHandler() {
-			const { activationCode } = this.$route.params;
-			try {
-				await this.$store.dispatch("activation/update", [activationCode]);
-				this.keyword = this.data[0].keyword;
-				this.activated = this.data[0].success;
-			} catch (e) {
-				logger.error(e);
-			}
-			this.showModal = true;
-		},
-	},
+const activated = ref(false);
+const keyword = ref<string | undefined>(undefined);
+const showModal = ref(false);
+
+const getTitle = computed(() => {
+	if (activated.value) {
+		if (keyword.value === "eMailAddress") {
+			return t("pages.activation._activationCode.index.success.email");
+		}
+		return "";
+	}
+	return t("pages.activation._activationCode.index.error.title");
 });
+
+const pageTitle = computed(() => buildPageTitle(getTitle.value));
+useTitle(pageTitle);
+
+const getDescription = computed(() => {
+	let description = "";
+	if (!activated.value) {
+		description = t("pages.activation._activationCode.index.error.description");
+	}
+	return description;
+});
+
+onMounted(() => {
+	submitHandler();
+});
+
+const buttonHandler = () => {
+	showModal.value = false;
+	router.push({ path: `/` });
+};
+
+const submitHandler = async () => {
+	const activationCode = route.params.activationCode;
+	const { result, success } = await execute(() => $axios.put(`/v1/activation/${activationCode}`));
+	if (success) {
+		keyword.value = result.data.keyword;
+		activated.value = result.data.success;
+	}
+	showModal.value = true;
+};
 </script>
 
 <style scoped>

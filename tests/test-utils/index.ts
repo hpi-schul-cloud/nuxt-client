@@ -8,5 +8,4 @@ export * from "./mockObjects";
 export * from "./mockStatusAlerts";
 export * from "./mountComposable";
 export * from "./ObjectIdMock";
-export * from "./pageStubs";
 export * from "./setupStores";
