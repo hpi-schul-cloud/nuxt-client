@@ -21,6 +21,7 @@ import {
 	mockApiResponse,
 	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 	ObjectIdMock,
 	richTextElementResponseFactory,
 	toolParameterFactory,
@@ -38,8 +39,7 @@ import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mock, Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -58,9 +58,6 @@ const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
-
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
@@ -102,8 +99,8 @@ describe("useCardRestApi", () => {
 			isInEditMode: computed(() => true),
 		});
 
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(useCardRestApi);
 	});
 
 	const setup = () => {

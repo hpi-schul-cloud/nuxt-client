@@ -7,6 +7,7 @@ import {
 	mockApi,
 	mockApiResponse,
 	mockedPiniaStoreTyping,
+	mountComposable,
 } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
@@ -17,8 +18,7 @@ import * as socketModule from "socket.io-client";
 import { Mock, Mocked } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 vi.mock("axios");
 
 vi.mock("vue-i18n");
@@ -39,9 +39,6 @@ vi.mock("@vueuse/shared", () => ({
 		};
 	}),
 }));
-
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
 
 const startMock = vi.fn();
 const stopMock = vi.fn();
@@ -92,12 +89,15 @@ describe("socket.ts", () => {
 		boardErrorReportApi = mockApi<serverApi.BoardErrorReportApi>();
 		vi.spyOn(serverApi, "BoardErrorReportApiFactory").mockReturnValue(boardErrorReportApi);
 
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
 	});
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		mountComposable(() => {
+			useBoardStore();
+			useCardStore();
+		});
 		mockSocket.connected = true;
 		vi.spyOn(logger, "log").mockImplementation(vi.fn());
 	});

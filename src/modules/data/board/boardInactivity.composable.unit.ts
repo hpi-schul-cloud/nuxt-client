@@ -8,8 +8,7 @@ import { useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
-import { useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -19,9 +18,6 @@ vi.mock("vue-i18n", () => ({
 
 vi.mock("./socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
-
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -48,8 +44,11 @@ describe("pageInactivity.composable", () => {
 		mockedSocketConnectionHandler = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(() => {
+			useBoardStore();
+			useCardStore();
+		});
 	});
 
 	const setup = (timer = 0) => {

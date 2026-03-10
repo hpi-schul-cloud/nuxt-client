@@ -27,8 +27,7 @@ import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } f
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-
-vi.mock("vue-router");
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@util-board");
 
@@ -93,6 +92,8 @@ describe("CardHost", () => {
 			isFileSelectOnMountEnabled: ref(true),
 		});
 		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
+
+		injectRouterMock(createRouterMock());
 	});
 
 	afterEach(() => {

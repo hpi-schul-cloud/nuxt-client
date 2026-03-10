@@ -8,17 +8,13 @@ import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisio
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mock, Mocked } from "vitest";
+import type { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { useRouter } from "vue-router";
-import { createRouterMock, RouterMock } from "vue-router-mock";
+import { createRouterMock, getRouter, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VCheckboxBtn } from "vuetify/components";
 
 vi.mock("@data-provisioning-options");
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 describe("ProvisioningOptionsPage", () => {
 	vi.spyOn(window, "scrollTo").mockImplementation(() => ({
@@ -37,10 +33,9 @@ describe("ProvisioningOptionsPage", () => {
 			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
 		}
 	) => {
-		useRouterMock.mockReturnValue(router);
-
 		setActivePinia(createTestingPinia());
 		createTestEnvStore(envConfig);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
@@ -208,7 +203,7 @@ describe("ProvisioningOptionsPage", () => {
 
 				await cancelButton.trigger("click");
 
-				expect(router.push).toHaveBeenCalledWith(redirect);
+				expect(getRouter().push).toHaveBeenCalledWith(redirect);
 			});
 		});
 
@@ -253,7 +248,7 @@ describe("ProvisioningOptionsPage", () => {
 					await saveButton.trigger("click");
 					await flushPromises();
 
-					expect(router.push).toHaveBeenCalledWith(redirect);
+					expect(getRouter().push).toHaveBeenCalledWith(redirect);
 				});
 			});
 

@@ -19,6 +19,7 @@ import {
 	cardResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
@@ -30,8 +31,7 @@ import { setActivePinia } from "pinia";
 import { Mock, Mocked } from "vitest";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -43,8 +43,6 @@ vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@util-board/LastCreatedElement.composable");
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
 
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
@@ -68,8 +66,8 @@ describe("useCardSocketApi", () => {
 			resetLastCreatedElementId: vi.fn(),
 		});
 
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(useCardSocketApi);
 	});
 
 	afterEach(() => {
