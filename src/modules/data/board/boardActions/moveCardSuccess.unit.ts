@@ -3,7 +3,7 @@ import { useBoardRestApi } from "../boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "../boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { useCardSocketApi } from "../cardActions/cardSocketApi.composable";
-import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockComposable, mockedPiniaStoreTyping, mountComposable } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
@@ -11,8 +11,7 @@ import { useErrorHandler } from "@util-error-handling";
 import { createPinia, setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("../boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
@@ -38,10 +37,6 @@ const mockedUseCardSocketApi = vi.mocked(useCardSocketApi);
 
 vi.mock("../BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
-
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
-const useRouteMock = vi.mocked(useRoute);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
@@ -91,9 +86,8 @@ describe("BoardStore - moveCardSuccess", () => {
 		mockedBoardFocusCalls = mockComposable(useBoardFocusHandler);
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue(router.currentRoute.value);
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardStore);
 	});
 
 	afterEach(() => {
