@@ -891,12 +891,15 @@ export default {
 	"feature-autoLogout.button.confirm": "Подовжити сеанс",
 	"feature-autoLogout.button.confirm.returnToLogin": "Повернутися на сторінку входу",
 	"feature-autoLogout.message.error.401": "Термін дії сеансу минув. Увійдіть ще раз.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
+	"feature-autoLogout.message.extending-session-success": "Сеанс успішно продовжено.",
 	"feature-autoLogout.warning.remainingTime": "менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"feature-autoLogout.warning":
 		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
+	"feature-loggedout.title": "Термін сеансу минув",
+	"feature-loggedout.message": "Термін дії сеансу минув з міркувань безпеки.",
+	"feature-loggedout.button": "Увійти знову",
 	"feature-board-external-tool-element.alert.error.student":
 		"Інструмент зараз неможливо запустити. Будь ласка, оновіть дошку або зверніться до вчителя чи інструктора курсу.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -1643,9 +1646,9 @@ export default {
 	"pages.rooms.ccImportCourse.title": "Імпортний курс",
 	"pages.rooms.ccImportCourse.confirm": "Імпорт",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
-	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
-	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
-	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
+	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
+	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
+	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
 	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",

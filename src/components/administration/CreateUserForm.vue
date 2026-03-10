@@ -39,13 +39,14 @@
 </template>
 
 <script setup lang="ts">
+import { UserCreatingData } from "@data-users";
 import { isRequired, isValidEmail } from "@util-validators";
 import { reactive, unref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const emit = defineEmits<{
-	(e: "create-user", payload: typeof userData): void;
+	(e: "create-user", payload: UserCreatingData): void;
 }>();
 
 const { t } = useI18n();
@@ -65,7 +66,7 @@ const onSubmit = async () => {
 	const isValid = (await userForm.value.validate()).valid;
 
 	if (isValid) {
-		emit("create-user", unref(userData));
+		emit("create-user", unref(userData as UserCreatingData));
 	}
 };
 </script>

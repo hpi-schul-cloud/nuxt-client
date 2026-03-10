@@ -875,12 +875,15 @@ export default {
 	"feature-autoLogout.button.confirm": "Extend session",
 	"feature-autoLogout.button.confirm.returnToLogin": "Return to login page",
 	"feature-autoLogout.message.error.401": "Your session has already expired. Please log in again.",
-	"feature-autoLogout.message.error":
+	"feature-autoLogout.message.extending-session-failure":
 		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"feature-autoLogout.message.success": "Session successfully extended.",
+	"feature-autoLogout.message.extending-session-success": "Session successfully extended.",
 	"feature-autoLogout.warning.remainingTime": "less than one minute | one minute | {remainingTime} minutes",
 	"feature-autoLogout.warning":
 		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
+	"feature-loggedout.title": "Session expired",
+	"feature-loggedout.message": "The session has expired for security reasons.",
+	"feature-loggedout.button": "Log in again",
 	"feature-board-external-tool-element.alert.error.student":
 		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -1630,9 +1633,10 @@ export default {
 	"pages.rooms.ccImportCourse.title": "Import course",
 	"pages.rooms.ccImportCourse.confirm": "Import",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
-	"pages.rooms.ccImportCourse.loading": "Import is running...",
-	"pages.rooms.ccImportCourse.success": "Course {name} was successfully imported.",
-	"pages.rooms.ccImportCourse.error": "An error occurred while importing the course.",
+	"pages.rooms.ccImportCourse.loading": "Upload in progress...",
+	"pages.rooms.ccImportCourse.success":
+		"Your course file has been uploaded and is now being imported in the background.",
+	"pages.rooms.ccImportCourse.error": "An error occurred while uploading the course.",
 	"pages.rooms.ccExportCourse.error": "An error occurred while exporting the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
