@@ -1,5 +1,5 @@
-import { useAutoLogout } from "./autoLogout.composable";
+export { useAutoLogout } from "./autoLogout.composable";
 import AutoLogoutWarning from "./AutoLogoutWarning.vue";
-import { SessionStatus } from "./types";
+import LoggedOutDialog from "./LoggedOutDialog.vue";
 
-export { AutoLogoutWarning, SessionStatus, useAutoLogout };
+export { AutoLogoutWarning, LoggedOutDialog };

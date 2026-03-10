@@ -51,7 +51,7 @@ import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	filterFor: {
-		type: String,
+		type: String as PropType<User>,
 		default: () => User.STUDENT,
 	},
 	classNames: {
