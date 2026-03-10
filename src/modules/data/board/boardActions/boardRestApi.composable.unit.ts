@@ -11,6 +11,7 @@ import {
 	columnResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -21,8 +22,7 @@ import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
@@ -35,9 +35,6 @@ const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
-
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
@@ -67,8 +64,8 @@ describe("boardRestApi", () => {
 		});
 		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardRestApi);
 	});
 
 	const setup = (createBoard = true) => {

@@ -15,6 +15,7 @@ import {
 	columnResponseFactory,
 	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 } from "@@/tests/test-utils";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useForceRender, useSocketConnection } from "@data-board";
@@ -23,8 +24,7 @@ import { useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
-import { useRouter } from "vue-router";
-import { createRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -41,9 +41,6 @@ const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-vi.mock("vue-router");
-const useRouterMock = vi.mocked(useRouter);
-
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
 }));
@@ -57,9 +54,6 @@ describe("useBoardSocketApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-
-		const router = createRouterMock();
-		useRouterMock.mockReturnValue(router);
 
 		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
@@ -75,6 +69,9 @@ describe("useBoardSocketApi", () => {
 
 		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
+
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardSocketApi);
 	});
 
 	it("should be defined", () => {
