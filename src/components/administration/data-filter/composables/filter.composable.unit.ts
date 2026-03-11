@@ -1,8 +1,10 @@
 import { FilterOption, Registration, UpdateFilterParamType, User } from "../types";
 import { useDataTableFilter } from "./filter.composable";
 import SchoolsModule from "@/store/schools";
-import { mountComposable } from "@@/tests/test-utils";
+import { createTestAppStore, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@vueuse/core", async (importOriginal) => {
 	const defaultState = {
@@ -56,6 +58,11 @@ const removeAllFilters = () => {
 };
 
 describe("filter composable", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
+	});
+
 	it("should return filterQuery", () => {
 		const { filterQuery } = setup(User.STUDENT);
 

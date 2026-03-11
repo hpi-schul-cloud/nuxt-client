@@ -95,7 +95,6 @@ export const mediaFormattingToolbar: ToolbarItem[] = [
 	"numberedList",
 	"removeFormat",
 	"|",
-	"insertImage",
 ];
 
 export const compactHeadings: { options: HeadingOption[] } = {
