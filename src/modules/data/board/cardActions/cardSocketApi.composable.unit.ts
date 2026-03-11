@@ -31,7 +31,7 @@ import { setActivePinia } from "pinia";
 import { Mock, Mocked } from "vitest";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { createRouterMock, injectRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
