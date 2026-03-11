@@ -26,14 +26,16 @@ import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
-import { UserCreatingData, useUsers } from "@data-users";
+import { UserCreatingData, useUsersStore } from "@data-users";
 import { DefaultWireframe } from "@ui-layout";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-const { createUser } = useUsers(RoleName.Teacher);
+const usersStore = useUsersStore();
+usersStore.init(RoleName.Teacher);
+const { createUser } = usersStore;
 
 const businessError = ref(false);
 const router = useRouter();

@@ -237,6 +237,7 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
+import { useBulkConsent } from "@/composables/bulkConsent.composable";
 import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
 import { inputRangeDate } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
@@ -263,7 +264,15 @@ export default defineComponent({
 	},
 	setup() {
 		const { t } = useI18n();
-		return { t };
+		const { selectedStudentsData, findConsentUsers, updateStudent, register: registerStudents } = useBulkConsent();
+
+		return {
+			t,
+			selectedStudentsData,
+			findConsentUsers,
+			updateStudent,
+			registerStudents,
+		};
 	},
 	data() {
 		return {
@@ -392,9 +401,9 @@ export default defineComponent({
 					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
 				},
 			};
-			await this.$store.dispatch("bulkConsent/findConsentUsers", query);
+			await this.findConsentUsers(query);
 
-			this.tableData = this.$store.getters["bulkConsent/getSelectedStudentsData"];
+			this.tableData = this.selectedStudentsData;
 		},
 		onUpdateSort(sortBy, sortOrder) {
 			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
@@ -402,10 +411,10 @@ export default defineComponent({
 			this.find();
 		},
 		inputDate(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
+			this.updateStudent(student);
 		},
 		inputPass(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
+			this.updateStudent(student);
 		},
 		next() {
 			if (this.currentStep === 0) {
@@ -447,7 +456,7 @@ export default defineComponent({
 					}),
 					this
 				);
-				this.$store.dispatch("bulkConsent/register", users);
+				this.registerStudents(users);
 
 				notifySuccess(this.t("pages.administration.students.consent.steps.register.success"));
 				this.next();
@@ -488,9 +497,7 @@ export default defineComponent({
 			});
 		},
 		cancel() {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
-				students: [],
-			});
+			this.selectedIds.value = [];
 			this.$router.push({
 				path: `/administration/students`,
 			});

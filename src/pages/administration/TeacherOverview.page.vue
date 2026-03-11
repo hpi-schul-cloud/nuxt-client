@@ -98,7 +98,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
-import { useUsers } from "@data-users";
+import { useUsersStore } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiCheck,
@@ -114,22 +114,17 @@ import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { useDebounceFn, useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.TEACHER);
 const { fetchClasses, classNameList } = useClasses();
 
-const {
-	fetchUsers,
-	userList,
-	deleteUsers,
-	sendRegistrationLink,
-	getQrRegistrationLinks,
-	pagination,
-	qrLinks,
-	deletingProgress,
-} = useUsers(RoleName.Teacher);
+const usersStore = useUsersStore();
+usersStore.init(RoleName.Teacher);
+const { deletingProgress, userList, qrLinks, pagination } = storeToRefs(usersStore);
+const { deleteUsers, fetchUsers, sendRegistrationLink, getQrRegistrationLinks } = usersStore;
 
 const { t } = useI18n();
 

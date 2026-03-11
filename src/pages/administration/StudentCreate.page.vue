@@ -37,14 +37,16 @@ import { inputRangeDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
-import { UserCreatingData, useUsers } from "@data-users";
+import { UserCreatingData, useUsersStore } from "@data-users";
 import { DefaultWireframe } from "@ui-layout";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-const { createUser } = useUsers(RoleName.Student);
+const usersStore = useUsersStore();
+usersStore.init(RoleName.Student);
+const { createUser } = usersStore;
 const router = useRouter();
 
 const date = ref<string | undefined>(undefined);

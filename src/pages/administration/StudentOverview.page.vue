@@ -106,7 +106,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
-import { useUsers } from "@data-users";
+import { useUsersStore } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiCheck,
@@ -123,27 +123,21 @@ import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { useDebounceFn, useTitle } from "@vueuse/core";
-import { computed, onMounted, reactive, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 
 const { t } = useI18n();
 const router = useRouter();
-const store = useStore();
 
 const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.STUDENT);
 const { fetchClasses, classNameList } = useClasses();
-const {
-	deletingProgress,
-	deleteUsers,
-	fetchUsers,
-	userList,
-	sendRegistrationLink,
-	getQrRegistrationLinks,
-	qrLinks,
-	pagination,
-} = useUsers(RoleName.Student);
+
+const usersStore = useUsersStore();
+usersStore.init(RoleName.Student);
+const { deletingProgress, userList, qrLinks, pagination, selectedIds } = storeToRefs(usersStore);
+const { deleteUsers, fetchUsers, sendRegistrationLink, getQrRegistrationLinks } = usersStore;
 
 const tableColumns = [
 	{
@@ -306,10 +300,16 @@ const fab = computed(() => {
 	];
 });
 
-const selectedStudents = computed(() => {
-	const selectedStudents = userList?.value.filter((student) => tableSelection.value.includes(student._id));
-	return selectedStudents || [];
-});
+const selectedStudents = computed(
+	() => userList?.value.filter((student) => tableSelection.value.includes(student._id)) || []
+);
+
+watch(
+	() => tableSelection.value,
+	(newSelection) => {
+		selectedIds.value = newSelection;
+	}
+);
 
 useTitle(buildPageTitle(t("pages.administration.students.index.title")));
 
@@ -356,12 +356,7 @@ const onUpdateRowsPerPage = (newLimit: number) => {
 	onUpdateCurrentPage(1);
 };
 
-const handleBulkConsent = (rowIds: string[], selectionType: string) => {
-	store.commit("bulkConsent/setSelectedStudents", {
-		students: tableSelection,
-		selectionType: selectionType,
-	});
-
+const handleBulkConsent = (_rowIds: string[], _selectionType: string) => {
 	router.push({
 		path: "/administration/students/consent",
 	});
