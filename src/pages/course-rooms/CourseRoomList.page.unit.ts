@@ -1,9 +1,8 @@
 import CourseRoomList from "./CourseRoomList.page.vue";
 import { CourseMetadataResponse } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";
-import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
+import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -12,6 +11,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 vi.mock("vue-router");
+vi.mock("@data-common-cartridge/commonCartridgeImport.composable");
 
 const getWrapper = () =>
 	mount(CourseRoomList, {
@@ -19,7 +19,6 @@ const getWrapper = () =>
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: createModuleMocks(CourseRoomListModule),
-				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 			},
 		},
 	});

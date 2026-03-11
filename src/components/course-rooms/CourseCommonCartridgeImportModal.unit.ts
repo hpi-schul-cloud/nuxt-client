@@ -1,32 +1,58 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";
-import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
+import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { ref } from "vue";
+
+vi.mock("@data-common-cartridge");
+const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
 describe("CourseCommonCartridgeImportModal", () => {
+	let useCommonCartridgeImportMockReturn: ReturnType<typeof createMock<ReturnType<typeof useCommonCartridgeImport>>>;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		useCommonCartridgeImportMockReturn = createMock<ReturnType<typeof useCommonCartridgeImport>>({
+			isOpen: ref(false),
+			isSuccess: ref(false),
+			file: ref(undefined),
+			setIsOpen: vi.fn(),
+			setIsSuccess: vi.fn(),
+			setFile: vi.fn(),
+			importCommonCartridgeFile: vi.fn(),
+		});
+
+		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
 
-	const setupWrapper = (getters: Partial<CommonCartridgeImportModule>) => {
+	const setupWrapper = (overrides: Partial<ReturnType<typeof useCommonCartridgeImport>> = {}) => {
+		const mappedOverrides = {
+			isOpen: overrides.isOpen !== undefined ? ref(overrides.isOpen) : useCommonCartridgeImportMockReturn.isOpen,
+			isSuccess:
+				overrides.isSuccess !== undefined ? ref(overrides.isSuccess) : useCommonCartridgeImportMockReturn.isSuccess,
+			file: overrides.file !== undefined ? ref(overrides.file) : useCommonCartridgeImportMockReturn.file,
+			...overrides,
+		};
+
+		Object.assign(useCommonCartridgeImportMockReturn, mappedOverrides);
+
 		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
 			getAllElements: [],
 		});
-		const commonCartridgeImportModule = createModuleMocks(CommonCartridgeImportModule, getters);
 
 		const wrapper = mount(CourseCommonCartridgeImportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: commonCartridgeImportModule,
 				},
 			},
 		});
@@ -34,12 +60,12 @@ describe("CourseCommonCartridgeImportModal", () => {
 		return {
 			wrapper,
 			roomsModuleMock,
-			commonCartridgeImportModule,
+			useCommonCartridgeImportMockReturn,
 		};
 	};
 
 	describe("when dialog is open", () => {
-		const setup = () => setupWrapper({ isOpen: true });
+		const setup = () => setupWrapper({ isOpen: ref(true) });
 
 		it("should contain disabled confirm button", () => {
 			const { wrapper } = setup();
@@ -71,8 +97,8 @@ describe("CourseCommonCartridgeImportModal", () => {
 	describe("when a file is selected", () => {
 		const setup = () =>
 			setupWrapper({
-				isOpen: true,
-				file: new File([], "file"),
+				isOpen: ref(true),
+				file: ref(new File([], "file")),
 			});
 
 		it("should enable confirm button", () => {
@@ -87,9 +113,9 @@ describe("CourseCommonCartridgeImportModal", () => {
 	describe("when file upload is successful", () => {
 		const setup = () =>
 			setupWrapper({
-				file: new File([], "file"),
-				isOpen: true,
-				isSuccess: true,
+				file: ref(new File([], "file")),
+				isOpen: ref(true),
+				isSuccess: ref(true),
 			});
 
 		it("should show success message", async () => {
@@ -107,9 +133,9 @@ describe("CourseCommonCartridgeImportModal", () => {
 	describe("when file upload is unsuccessful", () => {
 		const setup = () =>
 			setupWrapper({
-				file: new File([], "file"),
-				isOpen: true,
-				isSuccess: false,
+				file: ref(new File([], "file")),
+				isOpen: ref(true),
+				isSuccess: ref(false),
 			});
 
 		it("should show error message", async () => {
@@ -125,15 +151,15 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when dialog is closed", () => {
-		const setup = () => setupWrapper({ isOpen: true });
+		const setup = () => setupWrapper({ isOpen: ref(true) });
 
 		it("should reset the state", () => {
-			const { wrapper, commonCartridgeImportModule } = setup();
+			const { wrapper, useCommonCartridgeImportMockReturn } = setup();
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
 
 			cancelBtn.trigger("click");
 
-			expect(commonCartridgeImportModule.setIsOpen).toHaveBeenCalledWith(false);
+			expect(useCommonCartridgeImportMockReturn.setIsOpen).toHaveBeenCalledWith(false);
 		});
 	});
 });

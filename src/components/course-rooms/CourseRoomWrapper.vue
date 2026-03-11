@@ -26,8 +26,9 @@
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import { Permission } from "@/serverApi/v3";
-import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import { courseRoomListModule } from "@/store";
 import { useAppStore } from "@data-app";
+import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
@@ -53,6 +54,7 @@ const props = defineProps({
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
 const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
+const commonCartridgeImport = useCommonCartridgeImport();
 
 const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	if (!canCreateCourse.value) return;
@@ -80,7 +82,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 			icon: mdiImport,
 			label: t("pages.rooms.fab.import.course"),
 			dataTestId: "fab_button_import_course",
-			clickHandler: () => commonCartridgeImportModule.setIsOpen(true),
+			clickHandler: () => commonCartridgeImport.setIsOpen(true),
 		});
 	}
 

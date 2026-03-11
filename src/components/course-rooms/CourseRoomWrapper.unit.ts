@@ -1,17 +1,22 @@
 import CourseRoomWrapper from "./CourseRoomWrapper.vue";
 import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
-import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { ref } from "vue";
 import { VBtn, VFab } from "vuetify/components";
+
+vi.mock("@data-common-cartridge");
+const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof CourseRoomWrapper> = {
@@ -69,6 +74,8 @@ const mockData: CourseMetadataResponse[] = [
 ];
 
 describe("CourseRoomWrapper.vue", () => {
+	let useCommonCartridgeImportMockReturn: ReturnType<typeof createMock<ReturnType<typeof useCommonCartridgeImport>>>;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestEnvStore({
@@ -79,9 +86,20 @@ describe("CourseRoomWrapper.vue", () => {
 
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
-			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
 		courseRoomListModule.setAllElements(mockData);
+
+		useCommonCartridgeImportMockReturn = createMock<ReturnType<typeof useCommonCartridgeImport>>({
+			isOpen: ref(false),
+			isSuccess: ref(false),
+			file: ref(undefined),
+			setIsOpen: vi.fn(),
+			setIsSuccess: vi.fn(),
+			setFile: vi.fn(),
+			importCommonCartridgeFile: vi.fn(),
+		});
+
+		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
 
 	describe("when data is not loaded yet", () => {
@@ -193,7 +211,7 @@ describe("CourseRoomWrapper.vue", () => {
 			const openImportBtn = wrapper.findAllComponents(SpeedDialMenuAction)[2];
 			await openImportBtn.getComponent(VBtn).trigger("click");
 
-			expect(commonCartridgeImportModule.isOpen).toEqual(true);
+			expect(useCommonCartridgeImportMockReturn.setIsOpen).toHaveBeenCalledWith(true);
 		});
 	});
 });
