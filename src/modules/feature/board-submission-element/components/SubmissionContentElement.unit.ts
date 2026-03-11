@@ -3,10 +3,10 @@ import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
+import { mockComposable } from "@@/tests/test-utils";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useContentElementState } from "@data-board";
-import { createMock } from "@golevelup/ts-vitest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref, unref } from "vue";
@@ -15,14 +15,14 @@ vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@feature-board");
 
 vi.mock("@ui-confirmation-dialog");
-const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
+const mockedUse = mockComposable(useDeleteConfirmationDialog);
 mockedUse.askDeleteConfirmation.mockResolvedValue(true);
 const useDeleteConfirmationDialogMock = vi.mocked(useDeleteConfirmationDialog);
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
 vi.mock("@data-board/ContentElementState.composable");
 const mockedUseContentElementState = vi.mocked(useContentElementState);
-const mockedUseContentElementStateResponse = createMock<ReturnType<typeof useContentElementState>>();
+const mockedUseContentElementStateResponse = mockComposable(useContentElementState);
 
 mockedUseContentElementState.mockReturnValue(mockedUseContentElementStateResponse);
 

@@ -2,14 +2,11 @@ import RoomBoardCard from "./RoomBoardCard.vue";
 import { BoardLayout, ConfigResponse, ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeAll, Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { beforeAll } from "vitest";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 type BoardData = {
 	id: string;
@@ -68,8 +65,7 @@ const mockCourseData = {
 
 describe("RoomBoardCard", () => {
 	const setup = (props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum }, options?: object) => {
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
 		// Note: router has to be mocked before mounting the component
 
 		const wrapper = mount(RoomBoardCard, {

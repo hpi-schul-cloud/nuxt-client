@@ -5,12 +5,11 @@ import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions, privacyPolicyFactory } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions, mockComposable, privacyPolicyFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
@@ -25,7 +24,7 @@ const useSchoolPrivacyMock = vi.mocked(useSchoolPrivacyPolicy);
 
 describe("SchoolPolicy", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
-	let useSchoolPrivacyPolicyMockReturn: DeepMocked<ReturnType<typeof useSchoolPrivacyPolicy>>;
+	let useSchoolPrivacyPolicyMockReturn: Mocked<ReturnType<typeof useSchoolPrivacyPolicy>>;
 
 	const setup = (
 		options?: Partial<{ status: Status; permissions: Permission[]; privacyPolicy: ConsentVersion | null }>
@@ -45,7 +44,7 @@ describe("SchoolPolicy", () => {
 			getSchool: mockSchool,
 		});
 
-		useSchoolPrivacyPolicyMockReturn = createMock<ReturnType<typeof useSchoolPrivacyPolicy>>();
+		useSchoolPrivacyPolicyMockReturn = mockComposable(useSchoolPrivacyPolicy);
 		useSchoolPrivacyMock.mockReturnValue(useSchoolPrivacyPolicyMockReturn);
 
 		useSchoolPrivacyPolicyMockReturn.privacyPolicy = ref(privacyPolicy);

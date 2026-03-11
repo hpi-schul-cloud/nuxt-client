@@ -1,19 +1,19 @@
 import { Group, useGroupApi, useGroupState } from "./index";
-import { expectNotification, mountComposable } from "@@/tests/test-utils";
+import { expectNotification, mockComposable, mountComposable } from "@@/tests/test-utils";
 import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@data-group/GroupApi.composable");
 
 describe("GroupState.composable", () => {
-	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
+	let useGroupApiMock: Mocked<ReturnType<typeof useGroupApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useGroupApiMock = createMock<ReturnType<typeof useGroupApi>>();
+		useGroupApiMock = mockComposable(useGroupApi);
 
 		vi.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
 	});

@@ -12,15 +12,16 @@ import {
 	contextExternalToolConfigurationTemplateResponseFactory,
 	contextExternalToolFactory,
 	contextExternalToolResponseFactory,
+	mockApi,
 	mockApiResponse,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 
 describe("contextExternalToolApi.composable", () => {
-	let toolApi: DeepMocked<serverApi.ToolApiInterface>;
+	let toolApi: Mocked<serverApi.ToolApiInterface>;
 
 	beforeEach(() => {
-		toolApi = createMock<serverApi.ToolApiInterface>();
+		toolApi = mockApi<serverApi.ToolApiInterface>();
 
 		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});

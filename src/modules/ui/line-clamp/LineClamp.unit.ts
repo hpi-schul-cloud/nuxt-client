@@ -1,18 +1,19 @@
 import LineClamp from "./LineClamp.vue";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { useMutationObserver } from "@vueuse/core";
+import { Mocked } from "vitest";
 
 vi.mock("@vueuse/core");
 const mockedMutationObserver = vi.mocked(useMutationObserver);
 
 describe("LineClamp", () => {
-	let mockedMutationObserverActions: DeepMocked<ReturnType<typeof useMutationObserver>>;
+	let mockedMutationObserverActions: Mocked<ReturnType<typeof useMutationObserver>>;
 	const mockStop = vi.fn();
 
 	beforeEach(() => {
-		mockedMutationObserverActions = createMock<ReturnType<typeof useMutationObserver>>({
+		mockedMutationObserverActions = mockComposable(useMutationObserver, {
 			stop: mockStop,
 		});
 

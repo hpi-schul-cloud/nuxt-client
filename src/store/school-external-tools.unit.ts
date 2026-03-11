@@ -13,6 +13,7 @@ import {
 	axiosErrorFactory,
 	contextExternalToolConfigurationTemplateFactory,
 	customParameterResponseFactory,
+	mockApi,
 	mockApiResponse,
 	schoolExternalToolConfigurationStatusResponseFactory,
 	schoolExternalToolConfigurationTemplateResponseFactory,
@@ -22,17 +23,17 @@ import {
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 
 describe("SchoolExternalToolsModule", () => {
 	let module: SchoolExternalToolsModule;
 
-	let apiMock: DeepMocked<ToolApiInterface>;
+	let apiMock: Mocked<ToolApiInterface>;
 
 	beforeEach(() => {
 		module = new SchoolExternalToolsModule({});
 
-		apiMock = createMock<ToolApiInterface>();
+		apiMock = mockApi<ToolApiInterface>();
 
 		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(apiMock);
 	});

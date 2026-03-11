@@ -1,14 +1,14 @@
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { MediaSchoolLicenseListResponse } from "@/serverApi/v3/api";
-import { mediaSchoolLicenseResponseFactory, mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mediaSchoolLicenseResponseFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
+import { Mocked } from "vitest";
 
 describe("useSchoolLicenseApi", () => {
-	let schoolLicenseApi: DeepMocked<serverApi.SchoolLicenseApiInterface>;
+	let schoolLicenseApi: Mocked<serverApi.SchoolLicenseApiInterface>;
 
 	beforeEach(() => {
-		schoolLicenseApi = createMock<serverApi.SchoolLicenseApiInterface>();
+		schoolLicenseApi = mockApi<serverApi.SchoolLicenseApiInterface>();
 
 		vi.spyOn(serverApi, "SchoolLicenseApiFactory").mockReturnValue(schoolLicenseApi);
 	});

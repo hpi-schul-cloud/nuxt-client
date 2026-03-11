@@ -11,10 +11,10 @@ import {
 	courseFactory,
 } from "@@/tests/test-utils/factory";
 import { useAppStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosError, AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
+import { mock } from "vitest-mock-extended";
 
 type ReceivedRequests = [
 	{
@@ -418,10 +418,10 @@ describe("course-room module", () => {
 
 		describe("downloadCommonCartridgeCourse", () => {
 			const setup = () => {
-				const inputMockTopicIds = createMock<HTMLInputElement>();
-				const inputMockTaskIds = createMock<HTMLInputElement>();
-				const inputMockColumnBoardIds = createMock<HTMLInputElement>();
-				const formMock = createMock<HTMLFormElement>();
+				const inputMockTopicIds = mock<HTMLInputElement>();
+				const inputMockTaskIds = mock<HTMLInputElement>();
+				const inputMockColumnBoardIds = mock<HTMLInputElement>();
+				const formMock = mock<HTMLFormElement>();
 
 				vi.spyOn(document, "createElement").mockReturnValueOnce(formMock);
 				vi.spyOn(document, "createElement").mockReturnValueOnce(inputMockTopicIds);

@@ -6,12 +6,12 @@ import {
 	axiosErrorFactory,
 	createTestAppStoreWithUser,
 	expectNotification,
+	mockComposable,
 	ObjectIdMock,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -29,7 +29,7 @@ describe("CollaboraEditor", () => {
 
 			const { mockedMe } = createTestAppStoreWithUser("user-id");
 
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 				authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
@@ -95,7 +95,7 @@ describe("CollaboraEditor", () => {
 
 			const { mockedMe } = createTestAppStoreWithUser("user-id");
 
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 				authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
@@ -139,7 +139,7 @@ describe("CollaboraEditor", () => {
 
 			createTestAppStoreWithUser("user-id");
 
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 				authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
@@ -240,7 +240,7 @@ describe("CollaboraEditor", () => {
 			const appStore = useAppStore();
 			const handleApplicationErrorSpy = vi.spyOn(appStore, "handleApplicationError");
 
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(axiosError);
 
@@ -278,7 +278,7 @@ describe("CollaboraEditor", () => {
 			const appStore = useAppStore();
 			const handleApplicationErrorSpy = vi.spyOn(appStore, "handleApplicationError");
 
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockRejectedValueOnce(axiosError);
 
@@ -314,7 +314,7 @@ describe("CollaboraEditor", () => {
 
 			createTestAppStoreWithUser("user-id");
 
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 			fileStorageApiMock.getAuthorizedCollaboraDocumentUrl.mockResolvedValueOnce(
 				authorizedCollaboraDocumentUrlResponse.authorizedCollaboraDocumentUrl
