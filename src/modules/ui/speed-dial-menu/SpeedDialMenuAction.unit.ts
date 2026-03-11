@@ -5,9 +5,8 @@ import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBtn, VIcon } from "vuetify/components";
 
 describe("@speed-dial-menu/SpeedDialMenuAction", () => {
-	const router = createRouterMock();
 	const setup = () => {
-		injectRouterMock(router);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(SpeedDialMenuAction, {
 			global: {

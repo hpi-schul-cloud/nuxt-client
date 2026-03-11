@@ -1,11 +1,11 @@
 import { useShareBoardLink } from "./shareBoardLink.composable";
 import { expectNotification, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
+import { mock } from "vitest-mock-extended";
 
 describe("useShareBoardLink", () => {
 	beforeEach(() => {
@@ -45,7 +45,7 @@ describe("useShareBoardLink", () => {
 
 			const pathname = "/board/111";
 			const origin = "https://example.com";
-			const clipboardMock = createMock<Clipboard>();
+			const clipboardMock = mock<Clipboard>();
 
 			Object.assign(navigator, { clipboard: clipboardMock });
 			Object.defineProperty(window, "location", {

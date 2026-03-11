@@ -1,28 +1,25 @@
 import ActivationCodePage from "./ActivationCode.page.vue";
 import InfoModalFullWidth from "@/components/legacy/InfoModalFullWidth.vue";
 import { initializeAxios } from "@/utils/api";
+import { mockAxiosInstance } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRoute, useRouter } from "vue-router";
+import { Mocked } from "vitest";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VIcon } from "vuetify/components";
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-
 describe("ActivationCode.page.vue", () => {
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
+		axiosMock.put.mockResolvedValueOnce({ data: {} });
 	});
 
 	afterEach(() => {
@@ -31,11 +28,9 @@ describe("ActivationCode.page.vue", () => {
 
 	const setup = () => {
 		const activationCode = "activation-code";
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue({
-			params: { activationCode },
-		});
+		const router = createRouterMock();
+		router.setParams({ activationCode });
+		injectRouterMock(router);
 
 		const wrapper = mount(ActivationCodePage, {
 			attachTo: document.body,
@@ -60,7 +55,8 @@ describe("ActivationCode.page.vue", () => {
 	});
 
 	it("should render success modal on successful activation", async () => {
-		axiosMock.put.mockResolvedValueOnce({
+		axiosMock.put.mockReset();
+		axiosMock.put.mockResolvedValue({
 			data: {
 				keyword: "eMailAddress",
 				success: true,
@@ -78,7 +74,8 @@ describe("ActivationCode.page.vue", () => {
 	});
 
 	it("should render error modal on failed activation", async () => {
-		axiosMock.put.mockResolvedValueOnce({
+		axiosMock.put.mockReset();
+		axiosMock.put.mockResolvedValue({
 			data: {
 				keyword: undefined,
 				success: false,
@@ -102,11 +99,12 @@ describe("ActivationCode.page.vue", () => {
 		const infoModal = wrapper.getComponent(InfoModalFullWidth);
 		infoModal.vm.$emit("update:model-value");
 
-		expect(useRouter().push).toHaveBeenCalledWith({ path: "/" });
+		expect(getRouter().push).toHaveBeenCalledWith({ path: "/" });
 	});
 
 	it("should have an empty description if keyword is not email address in response", async () => {
-		axiosMock.put.mockResolvedValueOnce({
+		axiosMock.put.mockReset();
+		axiosMock.put.mockResolvedValue({
 			data: {
 				keyword: undefined,
 				success: true,

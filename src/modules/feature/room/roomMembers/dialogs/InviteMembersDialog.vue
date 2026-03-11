@@ -102,7 +102,7 @@
 								/>
 								<DatePicker
 									ref="datePicker"
-									aria-label="pages.rooms.members.tableHeader.expirationDate)"
+									aria-label="pages.rooms.members.tableHeader.expirationDate"
 									:disabled="isDatePickerDisabled"
 									:required="!isDatePickerDisabled"
 									:min-date="new Date().toString()"
@@ -178,6 +178,7 @@
 <script setup lang="ts">
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
+import { toEndOfDayIso } from "@/utils/date-time.utils";
 import { notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -258,7 +259,7 @@ const subTitle = computed(() => {
 	return subTitleMap[invitationStep.value];
 });
 
-const onUpdateDate = (isoDate: string | null) => {
+const onUpdateDate = (isoDate: string | undefined) => {
 	formData.value.activeUntil = isoDate ?? undefined;
 	unpause();
 };
@@ -295,7 +296,7 @@ const onContinue = async () => {
 		title: formData.value.title,
 		activeUntil:
 			formData.value.activeUntilChecked && !!formData.value.activeUntil
-				? formData.value.activeUntil.toString()
+				? toEndOfDayIso(formData.value.activeUntil)
 				: DEFAULT_EXPIRED_DATE.value,
 		isUsableByStudents: formData.value.isUsableByStudents,
 		isUsableByExternalPersons: formData.value.isUsableByExternalPersons,

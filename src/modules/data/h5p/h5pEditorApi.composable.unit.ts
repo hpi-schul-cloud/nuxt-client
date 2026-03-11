@@ -1,19 +1,26 @@
 import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
 import * as h5pApi from "@/h5pEditorApi/v3/api/h5p-editor-api";
-import { axiosErrorFactory, expectNotification, i18nMock, mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import {
+	axiosErrorFactory,
+	expectNotification,
+	i18nMock,
+	mockApi,
+	mockApiResponse,
+	mountComposable,
+} from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useH5PEditorApi } from "@data-h5p";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { HttpStatusCode } from "axios";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 describe("h5pEditorApi.composable", () => {
-	let h5pEditorApi: DeepMocked<H5pEditorApiInterface>;
+	let h5pEditorApi: Mocked<H5pEditorApiInterface>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		h5pEditorApi = createMock<H5pEditorApiInterface>();
+		h5pEditorApi = mockApi<H5pEditorApiInterface>();
 
 		vi.spyOn(h5pApi, "H5pEditorApiFactory").mockReturnValue(h5pEditorApi);
 	});

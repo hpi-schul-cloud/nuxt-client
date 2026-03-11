@@ -8,6 +8,7 @@ import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	expectNotification,
+	mockComposable,
 	mockedPiniaStoreTyping,
 	MockedStore,
 } from "@@/tests/test-utils";
@@ -21,27 +22,24 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useNotificationStore } from "@data-app";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { expect, Mock } from "vitest";
+import { expect, Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCardText } from "vuetify/components";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-
 describe("ExternalToolSection", () => {
 	const schoolId = "schoolId";
 	let el: HTMLDivElement;
 
-	let useSchoolExternalToolUsageMock: DeepMocked<ReturnType<typeof useSchoolExternalToolUsage>>;
+	let useSchoolExternalToolUsageMock: Mocked<ReturnType<typeof useSchoolExternalToolUsage>>;
 	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
 
 	beforeEach(() => {
@@ -64,8 +62,7 @@ describe("ExternalToolSection", () => {
 		createTestAppStoreWithSchool(schoolId);
 		createTestEnvStore(envs);
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(ExternalToolSection, {
 			global: {
@@ -86,7 +83,7 @@ describe("ExternalToolSection", () => {
 	};
 
 	beforeEach(() => {
-		useSchoolExternalToolUsageMock = createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
+		useSchoolExternalToolUsageMock = mockComposable(useSchoolExternalToolUsage);
 
 		useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadataFactory.build());
 
@@ -184,7 +181,7 @@ describe("ExternalToolSection", () => {
 				}
 			);
 
-			const windowMock = createMock<Window>();
+			const windowMock = mock<Window>();
 			vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {

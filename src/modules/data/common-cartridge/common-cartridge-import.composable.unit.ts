@@ -1,6 +1,5 @@
-// import { useCommonCartridgeImport } from "./common-cartridge-import.composable";
 import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
-import { FileApiFactory, FileApiInterface } from "@/fileStorageApi/v3/api";
+import { FileApiFactory, FileApiInterface } from "@/fileStorageApi/v3/api/file-api";
 import { initializeAxios } from "@/utils/api";
 import { useAppStoreRefs } from "@data-app";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
@@ -13,7 +12,7 @@ import { ref } from "vue";
 
 vi.mock("@/utils/api");
 
-vi.mock("@/fileStorageApi/v3/api", () => ({
+vi.mock("@/fileStorageApi/v3/api/file-api", () => ({
 	FileApiFactory: vi.fn(),
 }));
 

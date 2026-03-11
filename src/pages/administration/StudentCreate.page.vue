@@ -6,14 +6,13 @@
 	>
 		<FormCreateUser @create-user="createStudentHandler">
 			<template #inputs>
-				<VTextField
-					v-model="date"
+				<DatePicker
 					:label="t('common.labels.birthdate')"
-					:min="minDate"
-					:max="maxDate"
 					data-testid="input_create-student_birthdate"
-					:class="{ hideCurrentDate: !date }"
-					type="date"
+					:min-date="minDate"
+					:max-date="maxDate"
+					:date="date"
+					@update:date="date = $event"
 				/>
 				<VCheckbox
 					v-model="sendRegistration"
@@ -33,11 +32,12 @@
 <script setup lang="ts">
 import FormCreateUser from "@/components/administration/FormCreateUser.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { inputRangeDate } from "@/plugins/datetime";
 import { RoleName } from "@/serverApi/v3";
+import { dateFromToday } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";
 import { UserCreatingData, useUsers } from "@data-users";
+import { DatePicker } from "@ui-date-time-picker";
 import { DefaultWireframe } from "@ui-layout";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -48,8 +48,8 @@ const { createUser } = useUsers(RoleName.Student);
 const router = useRouter();
 
 const date = ref<string | undefined>(undefined);
-const minDate = inputRangeDate(-100, "y");
-const maxDate = inputRangeDate(-4, "y");
+const minDate = dateFromToday(-100, "year");
+const maxDate = dateFromToday(-4, "year");
 const sendRegistration = ref(false);
 const businessError = ref(false);
 const breadcrumbs = [

@@ -1,12 +1,12 @@
 import MediaShelfPage from "./MediaShelf.page.vue";
 import { BoardLayout } from "@/serverApi/v3";
-import { mediaAvailableLineResponseFactory, mediaBoardResponseFactory } from "@@/tests/test-utils";
+import { mediaAvailableLineResponseFactory, mediaBoardResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { ref } from "vue";
 
 vi.mock("@feature-media-shelf", async (importOriginal) => {
@@ -18,7 +18,7 @@ vi.mock("@feature-media-shelf", async (importOriginal) => {
 });
 
 describe("MediaShelfPage", () => {
-	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
+	let useSharedMediaBoardStateMock: Mocked<ReturnType<typeof useSharedMediaBoardState>>;
 
 	const getWrapper = () => {
 		const wrapper = mount(MediaShelfPage, {
@@ -41,7 +41,7 @@ describe("MediaShelfPage", () => {
 	});
 
 	beforeEach(() => {
-		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>({
+		useSharedMediaBoardStateMock = mockComposable(useSharedMediaBoardState, {
 			isLoading: ref(false),
 			isBoardOperationLoading: ref(false),
 			mediaBoard: ref(mediaBoardResponseFactory.build()),

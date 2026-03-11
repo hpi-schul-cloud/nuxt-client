@@ -32,8 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { currentDate } from "@/plugins/datetime";
 import { School } from "@/store/types/schools";
+import { nowUtcIso } from "@/utils/date-time.utils";
 import { toBase64 } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
@@ -89,7 +89,7 @@ const submit = async () => {
 			title: t("pages.administration.school.index.termsOfUse.fileName"),
 			consentText: "",
 			consentTypes: ["termsOfUse"],
-			publishedAt: currentDate().toString(),
+			publishedAt: nowUtcIso(),
 			consentData: (await toBase64(file.value)) as string,
 		};
 

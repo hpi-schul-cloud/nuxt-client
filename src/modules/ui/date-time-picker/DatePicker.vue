@@ -4,11 +4,11 @@
 		ref="date-text-field"
 		v-bind.attr="$attrs"
 		v-model="dateString"
-		v-date-input-mask
+		v-maska="dateMask"
 		:prepend-inner-icon="!hideIcon ? mdiCalendar : undefined"
 		:label="label"
 		:aria-label="ariaLabelWithFormat"
-		:placeholder="t('common.placeholder.dateformat')"
+		:placeholder="datePlaceHolder"
 		:disabled="disabled"
 		:rules="validationRules"
 		@keydown.space="showDatePicker = true"
@@ -38,12 +38,12 @@
 </template>
 
 <script setup lang="ts">
-import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { useLocalizedDateTime } from "@/composables/date-time.composables";
+import { formatUtc, toDateFromLocalString, toIsoDate } from "@/utils/date-time.utils";
 import { mdiCalendar } from "@icons/material";
-import { dateInputMask as vDateInputMask } from "@util-input-masks";
-import { isRequired, isValidDateFormat } from "@util-validators";
+import { isRequired, isValidDate } from "@util-validators";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
-import dayjs from "dayjs";
+import { vMaska } from "maska/vue";
 import { computed, ref, useId, useTemplateRef, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -71,9 +71,10 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-	(e: "update:date", value: string | null): void;
-	(e: "error"): void;
+	(e: "update:date", value: string | undefined): void;
 }>();
+
+const { dateMask, datePlaceHolder } = useLocalizedDateTime();
 
 const { t } = useI18n();
 
@@ -85,30 +86,28 @@ const uniqueId = useId();
 const datePickerId = computed(() => `menu-activator-${uniqueId}`);
 
 watchEffect(() => {
-	if (dateString.value === undefined && props.date) dateString.value = dayjs(props.date).format(DATETIME_FORMAT.date);
+	if (dateString.value === undefined && props.date) dateString.value = formatUtc(props.date, "date");
 });
 
 const dateObject = computed({
 	get() {
 		if (!dateString.value) return undefined;
-		const parsed = dayjs(dateString.value, DATETIME_FORMAT.date, true);
-
-		return parsed.isValid() ? parsed.toDate() : undefined;
+		return toDateFromLocalString(dateString.value);
 	},
-	set(date: Date) {
-		dateString.value = dayjs(date).format(DATETIME_FORMAT.date);
+	set(isoString: string) {
+		dateString.value = formatUtc(isoString, "date");
 		showDatePicker.value = false;
 	},
 });
 
 const validationRules = computed(() => [
 	props.required ? isRequired(t("components.datePicker.validation.required")) : true,
-	isValidDateFormat(),
+	isValidDate,
 ]);
 
 const ariaLabelWithFormat = computed(() => {
-	const prefix = props.ariaLabel || props.label || "common.labels.date";
-	return `${t(prefix)} (${t("common.placeholder.dateformat")})`;
+	const prefix = props.ariaLabel || props.label || t("common.labels.date");
+	return `${prefix} (${datePlaceHolder.value})`;
 });
 
 const validateAndEmitDate = async () => {
@@ -117,12 +116,10 @@ const validateAndEmitDate = async () => {
 	await dateTextField.value.validate();
 	const isValid = dateTextField.value.isValid;
 	if (isValid) {
-		const isoDate = dateString.value ? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString() : null;
-
+		const isoDate = toIsoDate(dateString.value);
 		emit("update:date", isoDate);
 	} else {
-		emit("update:date", null);
-		emit("error");
+		emit("update:date", undefined);
 	}
 };
 

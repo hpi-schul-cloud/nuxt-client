@@ -1,5 +1,6 @@
 import DateBetween from "./DateBetween.vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
+import { toEndOfDayIso } from "@/utils/date-time.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { DatePicker } from "@ui-date-time-picker";
 import { ComponentMountingOptions, shallowMount } from "@vue/test-utils";
@@ -129,12 +130,11 @@ describe("DateBetween.vue", () => {
 
 				selectedDate.setDate(selectedDate.getDate() + 1);
 				selectedDate.setTime(selectedDate.getTime() - 1000);
-				const lteISOString = selectedDate.toISOString();
 
 				expect(emittedEvents).toBeDefined();
 				expect(eventPayload).toEqual({
 					$gte: "1900-01-01T23:00:00.000Z",
-					$lte: lteISOString,
+					$lte: toEndOfDayIso(selectedDate.toISOString()),
 				});
 			});
 		});

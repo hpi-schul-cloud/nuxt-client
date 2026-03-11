@@ -1,6 +1,5 @@
 import CourseRoomAvatar from "./CourseRoomAvatar.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/components";
@@ -127,11 +126,12 @@ describe("RoomAvatar", () => {
 	});
 
 	it("should not redirect to room page if condenseLayout props is true", async () => {
+		const locationSpy = vi.fn();
+
 		Object.defineProperty(window, "location", {
-			set: vi.fn(),
-			get: () => createMock<Location>(),
+			set: locationSpy,
+			get: () => ({}),
 		});
-		const locationSpy = vi.spyOn(window, "location", "set");
 		const { wrapper } = setup({ condenseLayout: true });
 
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });

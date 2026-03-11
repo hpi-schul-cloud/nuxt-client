@@ -2,23 +2,19 @@ import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import { THEME_KEY } from "@/utils/inject";
-import { createTestEnvStore, provisioningOptionsDataFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisioning-options";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import type { Mock } from "vitest";
+import type { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, getRouter, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VCheckboxBtn } from "vuetify/components";
 
 vi.mock("@data-provisioning-options");
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 describe("ProvisioningOptionsPage", () => {
 	vi.spyOn(window, "scrollTo").mockImplementation(() => ({
@@ -26,8 +22,8 @@ describe("ProvisioningOptionsPage", () => {
 		behavior: "smooth",
 	}));
 
-	let useProvisioningOptionsStateMock: DeepMocked<ReturnType<typeof useProvisioningOptionsState>>;
-	const router = createMock<Router>();
+	let useProvisioningOptionsStateMock: Mocked<ReturnType<typeof useProvisioningOptionsState>>;
+	let router: RouterMock;
 
 	const getWrapper = (
 		props: ComponentProps<typeof ProvisioningOptionsPage> = {
@@ -37,10 +33,9 @@ describe("ProvisioningOptionsPage", () => {
 			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
 		}
 	) => {
-		useRouterMock.mockReturnValue(router);
-
 		setActivePinia(createTestingPinia());
 		createTestEnvStore(envConfig);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
@@ -60,7 +55,8 @@ describe("ProvisioningOptionsPage", () => {
 	};
 
 	beforeEach(() => {
-		useProvisioningOptionsStateMock = createMock<ReturnType<typeof useProvisioningOptionsState>>({
+		router = createRouterMock();
+		useProvisioningOptionsStateMock = mockComposable(useProvisioningOptionsState, {
 			isLoading: ref(false),
 			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),
 			error: ref(),
@@ -207,7 +203,7 @@ describe("ProvisioningOptionsPage", () => {
 
 				await cancelButton.trigger("click");
 
-				expect(router.push).toHaveBeenCalledWith(redirect);
+				expect(getRouter().push).toHaveBeenCalledWith(redirect);
 			});
 		});
 
@@ -252,7 +248,7 @@ describe("ProvisioningOptionsPage", () => {
 					await saveButton.trigger("click");
 					await flushPromises();
 
-					expect(router.push).toHaveBeenCalledWith(redirect);
+					expect(getRouter().push).toHaveBeenCalledWith(redirect);
 				});
 			});
 

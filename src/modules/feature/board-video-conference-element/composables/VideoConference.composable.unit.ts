@@ -7,14 +7,15 @@ import {
 	VideoConferenceStateResponse,
 } from "@/serverApi/v3/api";
 import { VideoConferenceState } from "@/store/types/video-conference";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosPromise } from "axios";
+import { mockApi } from "@@/tests/test-utils/mockApiFactory";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { Mocked } from "vitest";
 
-let videoConferenceApi: DeepMocked<serverApi.VideoConferenceApiInterface>;
+let videoConferenceApi: Mocked<serverApi.VideoConferenceApiInterface>;
 
 describe("VideoConferenceComposable", () => {
 	beforeEach(() => {
-		videoConferenceApi = createMock<serverApi.VideoConferenceApiInterface>();
+		videoConferenceApi = mockApi<serverApi.VideoConferenceApiInterface>();
 
 		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(videoConferenceApi);
 	});
@@ -28,7 +29,7 @@ describe("VideoConferenceComposable", () => {
 			const scope = VideoConferenceScope.Room;
 			const scopeId = "123124";
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
 				status: 200,
 				data: {
 					state: VideoConferenceStateResponse.Running,
@@ -38,7 +39,7 @@ describe("VideoConferenceComposable", () => {
 						moderatorMustApproveJoinRequests: true,
 					},
 				},
-			};
+			});
 
 			const { fetchVideoConferenceInfo, error, videoConferenceInfo } = useVideoConference(scope, scopeId);
 
@@ -62,9 +63,7 @@ describe("VideoConferenceComposable", () => {
 
 		it("should update videoConferenceInfo state with the response data", async () => {
 			const { fetchVideoConferenceInfo, videoConferenceInfo, FAKE_RESPONSE } = setup();
-			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<VideoConferenceInfoResponse>
-			);
+			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			await fetchVideoConferenceInfo();
 
@@ -74,20 +73,18 @@ describe("VideoConferenceComposable", () => {
 
 		it("should set state to unknown if the response state is not recognized", async () => {
 			const { fetchVideoConferenceInfo, videoConferenceInfo } = setup();
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
 				status: 200,
 				data: {
-					state: "bla-bla",
+					state: "bla-bla" as VideoConferenceStateResponse,
 					options: {
 						everyAttendeeJoinsMuted: true,
 						everybodyJoinsAsModerator: false,
 						moderatorMustApproveJoinRequests: true,
 					},
 				},
-			};
-			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<VideoConferenceInfoResponse>
-			);
+			});
+			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			await fetchVideoConferenceInfo();
 
@@ -123,13 +120,6 @@ describe("VideoConferenceComposable", () => {
 				moderatorMustApproveJoinRequests: true,
 			};
 
-			const FAKE_RESPONSE = {
-				status: 200,
-				data: {
-					url,
-				},
-			};
-			videoConferenceApi.videoConferenceControllerStart.mockResolvedValueOnce(FAKE_RESPONSE as unknown as AxiosPromise);
 			return {
 				scope,
 				scopeId,
@@ -207,15 +197,14 @@ describe("VideoConferenceComposable", () => {
 			const scopeId = "123124";
 			const url = "https://example.com";
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceJoinResponse>({
 				status: 200,
 				data: {
 					url,
 				},
-			};
-			videoConferenceApi.videoConferenceControllerJoin.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<VideoConferenceJoinResponse>
-			);
+			});
+
+			videoConferenceApi.videoConferenceControllerJoin.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			const { joinVideoConference, error } = useVideoConference(scope, scopeId);
 
