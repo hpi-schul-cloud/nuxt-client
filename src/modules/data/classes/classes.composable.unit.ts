@@ -1,9 +1,10 @@
 import { useClasses } from "./classes.composable";
 import { initializeAxios } from "@/utils/api";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mockAxiosInstance } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 describe("useClasses", () => {
 	const mockResponse = {
@@ -25,11 +26,11 @@ describe("useClasses", () => {
 			],
 		},
 	};
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
 	});
 

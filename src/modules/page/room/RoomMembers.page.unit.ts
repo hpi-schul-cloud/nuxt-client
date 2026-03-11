@@ -24,7 +24,6 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -36,12 +35,8 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VCard, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
@@ -51,8 +46,7 @@ vi.mock("@vueuse/integrations/useFocusTrap", () => ({
 }));
 
 describe("RoomMembersPage", () => {
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
+	let router: RouterMock;
 	let askConfirmationMock: Mock;
 
 	let pauseMock: Mock;
@@ -78,17 +72,9 @@ describe("RoomMembersPage", () => {
 			})
 		);
 
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-		useRouteMock.mockReturnValue({
-			params: { id: routeRoomId },
-		});
-
-		router = createMock<Router>({
-			currentRoute: ref({ query: { tab: "" } }),
-			replace: vi.fn(),
-		});
-		useRouterMock.mockReturnValue(router);
+		router = createRouterMock();
+		router.setParams({ id: routeRoomId });
+		injectRouterMock(router);
 
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({

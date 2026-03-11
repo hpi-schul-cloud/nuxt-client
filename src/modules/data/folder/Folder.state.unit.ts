@@ -3,9 +3,13 @@ import * as serverApi from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { axiosErrorFactory, fileFolderElementResponseFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
+import {
+	axiosErrorFactory,
+	fileFolderElementResponseFactory,
+	mockApi,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
 import { useAppStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosPromise } from "axios";
 import { setActivePinia } from "pinia";
@@ -21,7 +25,7 @@ describe("useFolderState", () => {
 	});
 
 	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
-		const boardApi = createMock<serverApi.BoardElementApiInterface>();
+		const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
 		const parentNodeInfos = parentNodeInfoFactory.build();
 
@@ -69,7 +73,7 @@ describe("useFolderState", () => {
 
 			describe("when element is not a file folder element", () => {
 				const setupWithError = (statusCode: HttpStatusCode) => {
-					const boardApi = createMock<serverApi.BoardElementApiInterface>();
+					const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 
 					const axiosError = axiosErrorFactory.withStatusCode(statusCode).build();
 

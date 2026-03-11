@@ -7,13 +7,13 @@ import {
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
 } from "@/serverApi/v3/api";
+import { mockApi } from "@@/tests/test-utils";
 import {
 	videoConferenceInfoFactory,
 	videoConferenceInfoResponseFactory,
 	videoConferenceJoinResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { createMock } from "@golevelup/ts-vitest";
 import { AxiosError } from "axios";
 
 describe("VideoConferenceModule", () => {
@@ -27,8 +27,8 @@ describe("VideoConferenceModule", () => {
 		vi.restoreAllMocks();
 	});
 
-	const mockApi = () => {
-		const videoconferenceApi = createMock<VideoConferenceApiInterface>();
+	const mockVideoConferenceApi = () => {
+		const videoconferenceApi = mockApi<VideoConferenceApiInterface>();
 		videoconferenceApi.videoConferenceControllerInfo.mockResolvedValue(
 			mockApiResponse({
 				data: videoConferenceInfoResponseFactory.build(),
@@ -132,7 +132,7 @@ describe("VideoConferenceModule", () => {
 	describe("fetchVideoConferenceInfo", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const { videoconferenceApi } = mockApi();
+				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const response = videoConferenceInfoResponseFactory.build({
 					state: VideoConferenceStateResponse.Running,
@@ -184,7 +184,7 @@ describe("VideoConferenceModule", () => {
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const { videoconferenceApi } = mockApi();
+				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const error = new AxiosError();
 
@@ -233,7 +233,7 @@ describe("VideoConferenceModule", () => {
 	describe("joinVideoConference", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const { videoconferenceApi } = mockApi();
+				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const mockResponse: VideoConferenceJoinResponse = videoConferenceJoinResponseFactory.build({
 					url: "VideoConferenceUrl",
@@ -282,7 +282,7 @@ describe("VideoConferenceModule", () => {
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const { videoconferenceApi } = mockApi();
+				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const error = new AxiosError();
 
@@ -331,15 +331,13 @@ describe("VideoConferenceModule", () => {
 	describe("startVideoConference", () => {
 		describe("when the api is called", () => {
 			const setup = () => {
-				const { videoconferenceApi } = mockApi();
+				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const videoConferenceOptions: VideoConferenceOptions = {
 					everyAttendeeJoinsMuted: false,
 					moderatorMustApproveJoinRequests: true,
 					everybodyJoinsAsModerator: false,
 				};
-
-				videoconferenceApi.videoConferenceControllerStart.mockImplementation();
 
 				return {
 					videoconferenceApi,
@@ -410,7 +408,7 @@ describe("VideoConferenceModule", () => {
 
 		describe("when the api returns an error", () => {
 			const setup = () => {
-				const { videoconferenceApi } = mockApi();
+				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const error = new AxiosError();
 

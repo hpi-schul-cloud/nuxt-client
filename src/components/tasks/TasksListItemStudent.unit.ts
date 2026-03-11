@@ -7,7 +7,6 @@ import { createTestAppStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -50,11 +49,11 @@ describe("TasksListItemStudent", () => {
 	});
 
 	it("Should direct user to legacy task details page", async () => {
+		const locationSpy = vi.fn();
 		Object.defineProperty(window, "location", {
-			set: vi.fn(),
-			get: () => createMock<Location>(),
+			set: locationSpy,
+			get: () => ({}),
 		});
-		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasks[0] });
 		const taskCard = wrapper.findComponent({ name: "v-list-item" });

@@ -1,29 +1,24 @@
 import StudentCreate from "./StudentCreate.page.vue";
-import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import { useUsers } from "@data-users";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+import { Mocked } from "vitest";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-users");
 const useUsersMock = vi.mocked(useUsers);
 
 describe("students/new", () => {
-	let useUsersMockHandler: DeepMocked<ReturnType<typeof useUsers>>;
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
+	let useUsersMockHandler: Mocked<ReturnType<typeof useUsers>>;
+	injectRouterMock(createRouterMock());
 
 	beforeEach(() => {
-		useUsersMockHandler = createMock<ReturnType<typeof useUsers>>();
+		useUsersMockHandler = mockComposable(useUsers);
 		useUsersMock.mockReturnValue(useUsersMockHandler);
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
@@ -79,7 +74,7 @@ describe("students/new", () => {
 			await flushPromises();
 
 			expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
-			expect(router.push).toHaveBeenCalledWith("/administration/students");
+			expect(getRouter().push).toHaveBeenCalledWith("/administration/students");
 		});
 
 		it("should set businessError to true if there is an error", async () => {
@@ -107,7 +102,7 @@ describe("students/new", () => {
 			const infoMessageAfter = wrapper.findComponent({ name: "InfoMessage" });
 			expect(infoMessageAfter.exists()).toBe(true);
 			expect(useUsersMockHandler.createUser).toHaveBeenCalled();
-			expect(router.push).not.toHaveBeenCalled();
+			expect(getRouter().push).not.toHaveBeenCalled();
 		});
 	});
 });

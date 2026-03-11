@@ -6,6 +6,9 @@ import { initializeAxios } from "@/utils/api";
 import { formatUtc } from "@/utils/date-time.utils";
 import {
 	expectNotification,
+	mockApi,
+	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomStatsItemResponseFactory,
 	roomStatsListResponseFactory,
@@ -13,19 +16,18 @@ import {
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { AxiosInstance, AxiosPromise } from "axios";
+import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
 import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("useAdministrationRoomStore", () => {
-	let roomAdministrationApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let roomAdministrationApiMock: Mocked<serverApi.RoomApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -33,9 +35,9 @@ describe("useAdministrationRoomStore", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		roomAdministrationApiMock = createMock<serverApi.RoomApiInterface>();
+		roomAdministrationApiMock = mockApi<serverApi.RoomApiInterface>();
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomAdministrationApiMock);
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
 
 		setupStores({
@@ -60,9 +62,11 @@ describe("useAdministrationRoomStore", () => {
 			const mockRoomList = roomStatsListResponseFactory.build();
 			const { roomAdminStore } = setup();
 
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: mockRoomList,
-			} as unknown as AxiosPromise<RoomStatsListResponse>);
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue(
+				mockApiResponse<RoomStatsListResponse>({
+					data: mockRoomList,
+				})
+			);
 
 			await roomAdminStore.fetchRooms();
 
@@ -74,9 +78,16 @@ describe("useAdministrationRoomStore", () => {
 		it("should return empty list if no rooms are found", async () => {
 			const { roomAdminStore } = setup();
 
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: { data: [] },
-			} as unknown as AxiosPromise<RoomStatsListResponse>);
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue(
+				mockApiResponse<RoomStatsListResponse>({
+					data: {
+						data: [],
+						total: 0,
+						skip: 0,
+						limit: 0,
+					},
+				})
+			);
 
 			await roomAdminStore.fetchRooms();
 
@@ -87,9 +98,11 @@ describe("useAdministrationRoomStore", () => {
 			const mockRoomList = roomStatsListResponseFactory.build();
 			const { roomAdminStore } = setup();
 
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: mockRoomList,
-			} as unknown as AxiosPromise<RoomStatsListResponse>);
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue(
+				mockApiResponse<RoomStatsListResponse>({
+					data: mockRoomList,
+				})
+			);
 
 			await roomAdminStore.fetchRooms();
 
@@ -118,9 +131,11 @@ describe("useAdministrationRoomStore", () => {
 				const mockRoomList = roomStatsListResponseFactory.build();
 				const { roomAdminStore } = setup();
 
-				roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-					data: mockRoomList,
-				} as unknown as AxiosPromise<RoomStatsListResponse>);
+				roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue(
+					mockApiResponse<RoomStatsListResponse>({
+						data: mockRoomList,
+					})
+				);
 
 				await roomAdminStore.fetchRooms();
 
@@ -154,9 +169,11 @@ describe("useAdministrationRoomStore", () => {
 					],
 				});
 
-				roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-					data: roomList,
-				} as unknown as AxiosPromise<RoomStatsListResponse>);
+				roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue(
+					mockApiResponse<RoomStatsListResponse>({
+						data: roomList,
+					})
+				);
 				await roomAdminStore.fetchRooms();
 
 				// Sorting order:
@@ -188,9 +205,11 @@ describe("useAdministrationRoomStore", () => {
 			const mockRooms = roomStatsListResponseFactory.build();
 			const { roomAdminStore } = setup(mockRooms.data);
 
-			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue({
-				data: mockRooms,
-			} as unknown as AxiosPromise<RoomStatsListResponse>);
+			roomAdministrationApiMock.roomControllerGetRoomStats.mockResolvedValue(
+				mockApiResponse<RoomStatsListResponse>({
+					data: mockRooms,
+				})
+			);
 
 			const roomIdToDelete = mockRooms.data[0].roomId;
 			await roomAdminStore.deleteRoom(roomIdToDelete);

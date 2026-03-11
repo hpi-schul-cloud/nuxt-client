@@ -17,24 +17,25 @@ import {
 	createTestAppStore,
 	createTestAppStoreWithSchool,
 	createTestAppStoreWithUser,
+	mockApi,
 	mockApiResponse,
 	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
 
-	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
+	let apiMock: Mocked<UserLoginMigrationApiInterface>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		module = new UserLoginMigrationModule({});
 
-		apiMock = createMock<UserLoginMigrationApiInterface>();
+		apiMock = mockApi<UserLoginMigrationApiInterface>();
 
 		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(apiMock);
 	});

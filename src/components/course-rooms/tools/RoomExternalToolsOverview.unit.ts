@@ -10,19 +10,20 @@ import {
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { ref } from "vue";
 
 vi.mock("@data-external-tool");
 
 describe("RoomExternalToolOverview", () => {
-	let useExternalToolDisplayListStateMock: DeepMocked<ReturnType<typeof useExternalToolDisplayListState>>;
+	let useExternalToolDisplayListStateMock: Mocked<ReturnType<typeof useExternalToolDisplayListState>>;
 
 	const getWrapper = () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
@@ -55,9 +56,9 @@ describe("RoomExternalToolOverview", () => {
 	};
 
 	beforeEach(() => {
-		useExternalToolDisplayListStateMock = createMock<ReturnType<typeof useExternalToolDisplayListState>>({
+		useExternalToolDisplayListStateMock = mockComposable(useExternalToolDisplayListState, {
 			error: ref(),
-			isLoading: ref(),
+			isLoading: ref(false),
 			displayData: ref([]),
 		});
 

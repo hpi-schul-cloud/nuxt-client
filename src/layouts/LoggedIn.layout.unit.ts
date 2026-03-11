@@ -12,6 +12,13 @@ import { mount } from "@vue/test-utils";
 import { h, nextTick, ref } from "vue";
 import { VApp } from "vuetify/components";
 
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref([]),
+	fetchStatusAlerts: vi.fn(),
+});
+
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 	useRouter: vi.fn(),

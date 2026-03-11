@@ -1,12 +1,12 @@
 import { useSchoolTermsOfUse } from "./schoolTermsOfUse.composable";
 import { ConsentVersion, CreateConsentVersionPayload } from "./types";
 import { initializeAxios } from "@/utils/api";
-import { privacyPolicyFactory, termsOfUseFactory } from "@@/tests/test-utils";
+import { mockAxiosInstance, privacyPolicyFactory, termsOfUseFactory } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
@@ -19,11 +19,11 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 
 describe("schoolTermsOfUse composable", () => {
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		axiosMock = createMock<AxiosInstance>();
+		axiosMock = mockAxiosInstance();
 		initializeAxios(axiosMock);
 	});
 

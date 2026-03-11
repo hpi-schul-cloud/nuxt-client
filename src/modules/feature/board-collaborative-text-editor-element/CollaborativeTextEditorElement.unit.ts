@@ -4,10 +4,10 @@ import { CollaborativeTextEditorParentType } from "@/serverApi/v3";
 import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
-import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { VCard } from "vuetify/lib/components/index";
 
@@ -69,7 +69,7 @@ describe("CollaborativeTextEditorElement", () => {
 			},
 		});
 
-		const windowMock = createMock<Window>();
+		const windowMock = mock<Window>();
 		vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 		return {

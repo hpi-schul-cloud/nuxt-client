@@ -18,6 +18,7 @@ import {
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -60,6 +61,7 @@ describe("BoardHeader", () => {
 
 		setActivePinia(createTestingPinia());
 		createTestEnvStore(options?.envs);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = shallowMount(BoardHeader, {
 			global: {

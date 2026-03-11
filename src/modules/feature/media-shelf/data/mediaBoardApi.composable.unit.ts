@@ -16,19 +16,20 @@ import {
 	mediaBoardResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
+	mockApi,
 	mockApiResponse,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 
 describe("mediaBoardApi.composable", () => {
-	let mediaBoardApi: DeepMocked<serverApi.MediaBoardApiInterface>;
-	let mediaLineApi: DeepMocked<serverApi.MediaLineApiInterface>;
-	let mediaElementApi: DeepMocked<serverApi.MediaElementApiInterface>;
+	let mediaBoardApi: Mocked<serverApi.MediaBoardApiInterface>;
+	let mediaLineApi: Mocked<serverApi.MediaLineApiInterface>;
+	let mediaElementApi: Mocked<serverApi.MediaElementApiInterface>;
 
 	beforeEach(() => {
-		mediaBoardApi = createMock<serverApi.MediaBoardApiInterface>();
-		mediaLineApi = createMock<serverApi.MediaLineApiInterface>();
-		mediaElementApi = createMock<serverApi.MediaElementApiInterface>();
+		mediaBoardApi = mockApi<serverApi.MediaBoardApiInterface>();
+		mediaLineApi = mockApi<serverApi.MediaLineApiInterface>();
+		mediaElementApi = mockApi<serverApi.MediaElementApiInterface>();
 
 		vi.spyOn(serverApi, "MediaBoardApiFactory").mockReturnValue(mediaBoardApi);
 		vi.spyOn(serverApi, "MediaLineApiFactory").mockReturnValue(mediaLineApi);
