@@ -1,3 +1,4 @@
+import { useLocalizedDateTime } from "@/composables/date-time.composables";
 import { useI18nGlobal } from "@/plugins/i18n";
 
 export type FormValidatorFn<T> = (errMsg?: string) => (value: T) => string | true;
@@ -51,48 +52,24 @@ export const isValidUrl: FormValidatorFn<string> =
  * Vuelidate Validator
  * Checks if given value has valid time format
  */
-export const isValidTimeFormat = (value: string | null) => {
-	if (value === "" || value === null || value === undefined) {
+export const isValidTime = (value: string | undefined) => {
+	if (value === "" || !value) {
 		return true;
 	}
-
-	const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
-
-	return !!value.match(timeRegex);
+	const { timeRegex, timePlaceHolder } = useLocalizedDateTime();
+	return !!value.match(timeRegex) || useI18nGlobal().t("components.timePicker.validation.format", { timePlaceHolder });
 };
 
-/**
- * Vuetify Rules Validator
- * Checks if given value has valid time format
- * Change name to isValidTimeFormat when vuelidate is removed
- */
-export const isValidTimeFormatVuetify: FormValidatorFn<string | null> =
-	(errMsg = useI18nGlobal().t("components.timePicker.validation.format")) =>
-	(value) => {
-		if (value === "" || value === null || value === undefined) {
-			return true;
-		}
-
-		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
-
-		return !!value.match(timeRegex) || errMsg;
-	};
-
-/**
- * Vuetify Rules Validator
- * Checks if given value has valid date format
- */
-export const isValidDateFormat: FormValidatorFn<string | null> =
-	(errorMessage = useI18nGlobal().t("components.datePicker.validation.format")) =>
-	(value) => {
-		if (value === "" || value === null || value === undefined) {
-			return true;
-		}
-
-		const dateRegex = /^(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/g;
-
-		return !!value.match(dateRegex) || errorMessage;
-	};
+export const isValidDate = (value: string | undefined) => {
+	if (value === "" || !value) {
+		return true;
+	}
+	const { dateRegex, datePlaceHolder } = useLocalizedDateTime();
+	return (
+		!!value.match(dateRegex.value) ||
+		useI18nGlobal().t("components.datePicker.validation.format", { datePlaceHolder: datePlaceHolder.value })
+	);
+};
 
 /**
  * Checks if given value is of given max length

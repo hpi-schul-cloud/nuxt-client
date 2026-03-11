@@ -40,18 +40,18 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="inputDateFromDeUTC(slotProps.data)"
+							:date="germanDateToIso(slotProps.data)"
 							class="ml-2"
 							hide-details
 							hide-icon
 							density="compact"
-							:min-date="inputRangeDate(-100, 'y')"
-							:max-date="inputRangeDate(-4, 'y')"
+							:min-date="dateFromToday(-100, 'year')"
+							:max-date="dateFromToday(-4, 'year')"
 							data-testid="birthday-input"
 							@update:date="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
-									birthDate: inputDateFormat($event),
+									birthDate: toGermanDate($event),
 								})
 							"
 						/>
@@ -95,6 +95,7 @@
 				<p v-if="isConsentNecessary">
 					{{ t("pages.administration.students.consent.steps.register.info") }}
 				</p>
+
 				<BackendDataTable
 					v-model:sort-by="sortBy"
 					v-model:sort-order="sortOrder"
@@ -107,7 +108,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<div class="text-content">
-							{{ printDateFromDeUTC(slotProps.data) }}
+							{{ fromGermanDate(slotProps.data) }}
 						</div>
 					</template>
 				</BackendDataTable>
@@ -159,7 +160,7 @@
 					@update:sort="onUpdateSort"
 				>
 					<template #datacolumn-birthday="slotProps">
-						{{ printDateFromDeUTC(slotProps.data) }}
+						{{ fromGermanDate(slotProps.data) }}
 					</template>
 				</BackendDataTable>
 				<p>
@@ -238,9 +239,8 @@ import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { useBulkConsent } from "@/composables/bulkConsent.composable";
-import { inputDateFormat, inputDateFromDeUTC, printDateFromDeUTC } from "@/plugins/datetime";
-import { inputRangeDate } from "@/plugins/datetime";
 import { filePathsModule } from "@/store";
+import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -395,6 +395,9 @@ export default defineComponent({
 		document.title = buildPageTitle(this.title);
 	},
 	methods: {
+		toGermanDate,
+		fromGermanDate,
+		dateFromToday,
 		async find() {
 			const query = {
 				$sort: {
@@ -437,7 +440,7 @@ export default defineComponent({
 				const users = this.tableData.map(
 					(student) => ({
 						_id: student._id,
-						birthday: inputDateFromDeUTC(student.birthday),
+						birthday: germanDateToIso(student.birthday),
 						password: student.password,
 						consent: {
 							userConsent: {
@@ -514,10 +517,7 @@ export default defineComponent({
 				}
 			}, 2000);
 		},
-		inputDateFromDeUTC,
-		inputDateFormat,
-		printDateFromDeUTC,
-		inputRangeDate,
+		germanDateToIso,
 		warningEventHandler() {
 			if (this.currentStep === 2) {
 				// Cancel the event as stated by the standard.

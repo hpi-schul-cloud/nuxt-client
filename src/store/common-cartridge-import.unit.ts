@@ -1,31 +1,29 @@
 import CommonCartridgeImportModule from "./common-cartridge-import";
 import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3";
-import { FileApiFactory, FileApiInterface, FileRecordParentType, StorageLocation } from "@/fileStorageApi/v3";
-import { createTestAppStore } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { FileRecordParentType, StorageLocation } from "@/fileStorageApi/v3";
+import { FileApiFactory, FileApiInterface } from "@/fileStorageApi/v3/api/file-api";
+import { createTestAppStore, mockApi } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { MockedFunction } from "vitest";
+import { Mocked, MockedFunction } from "vitest";
 
-vi.mock("@/commonCartridgeApi/v3/api", () => ({
-	CommonCartridgeApiFactory: vi.fn(),
-}));
+vi.mock("@/commonCartridgeApi/v3/api");
 
-vi.mock("@/fileStorageApi/v3/api", () => ({
+vi.mock("@/fileStorageApi/v3/api/file-api", () => ({
 	FileApiFactory: vi.fn(),
 }));
 
 describe("CommonCartridgeImportModule", () => {
 	let sut: CommonCartridgeImportModule;
-	let commonCartridgeApiMock: DeepMocked<CommonCartridgeApiInterface>;
-	let fileStorageApiMock: DeepMocked<FileApiInterface>;
+	let commonCartridgeApiMock: Mocked<CommonCartridgeApiInterface>;
+	let fileStorageApiMock: Mocked<FileApiInterface>;
 
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 
 		sut = new CommonCartridgeImportModule({});
-		commonCartridgeApiMock = createMock<CommonCartridgeApiInterface>();
-		fileStorageApiMock = createMock<FileApiInterface>();
+		commonCartridgeApiMock = mockApi<CommonCartridgeApiInterface>();
+		fileStorageApiMock = mockApi<FileApiInterface>();
 
 		vi.spyOn(sut, "commonCartridgeApi", "get").mockReturnValue(commonCartridgeApiMock);
 		vi.spyOn(sut, "fileStorageApi", "get").mockReturnValue(fileStorageApiMock);
@@ -74,7 +72,7 @@ describe("CommonCartridgeImportModule", () => {
 
 	describe("getters (real, for coverage)", () => {
 		it("should execute the real getter and call CommonCartridgeApiFactory", () => {
-			const realMock = createMock<CommonCartridgeApiInterface>();
+			const realMock = mockApi<CommonCartridgeApiInterface>();
 
 			(CommonCartridgeApiFactory as MockedFunction<typeof CommonCartridgeApiFactory>).mockReturnValue(realMock);
 
@@ -86,9 +84,9 @@ describe("CommonCartridgeImportModule", () => {
 		});
 
 		it("should execute the real getter and call FileApiFactory", () => {
-			const realMock = createMock<FileApiInterface>();
+			const realMock = mockApi<FileApiInterface>();
 
-			(FileApiFactory as MockedFunction<typeof FileApiFactory>).mockReturnValue(realMock);
+			vi.mocked(FileApiFactory).mockReturnValue(realMock);
 
 			const localSut = new CommonCartridgeImportModule({});
 			const result = localSut.fileStorageApi;

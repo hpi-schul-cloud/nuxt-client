@@ -37,7 +37,6 @@ import { FileContentElement } from "@feature-board-file-element";
 import { FolderContentElement } from "@feature-board-folder-element";
 import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
-import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { PropType } from "vue";
@@ -128,11 +127,6 @@ const mapToComponent = (type: ContentElementType) => {
 			break;
 		case ContentElementType.RichText:
 			return RichTextContentElement;
-		case ContentElementType.SubmissionContainer:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-				return SubmissionContentElement;
-			}
-			break;
 		case ContentElementType.VideoConference:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
 				return VideoConferenceContentElement;

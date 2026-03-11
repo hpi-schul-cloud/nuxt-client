@@ -1,8 +1,8 @@
 import ClassicEditor from "../editor/ClassicEditor.vue";
-import { DATETIME_FORMAT, fromInputDateTime } from "@/plugins/datetime";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { NewsResponse } from "@/serverApi/v3";
 import { Status } from "@/store/types/commons";
+import { toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { newsResponseFactory } from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -10,7 +10,6 @@ import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
-import { Dayjs } from "dayjs";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick } from "vue";
@@ -18,7 +17,7 @@ import { VBtn, VForm, VMessages, VTextField } from "vuetify/components";
 
 const date = "2022-07-05";
 const time = "11:00";
-const testDate = fromInputDateTime(date, time) as unknown as Dayjs;
+const testDate = toCombinedDateTimeIso(date, time);
 
 const classicEditorMock = {
 	template: "<div></div>",
@@ -46,7 +45,7 @@ describe("NewsForm", () => {
 	});
 
 	const setup = (options?: Partial<{ status: Status; news: NewsResponse | undefined; showDeleteButton: boolean }>) => {
-		const currentNews = newsResponseFactory.build({ displayAt: testDate.toISOString() });
+		const currentNews = newsResponseFactory.build({ displayAt: testDate });
 		const { news, status, showDeleteButton } = {
 			news: currentNews,
 			status: "completed" as Status,
@@ -91,10 +90,10 @@ describe("NewsForm", () => {
 
 		const dateInput = wrapper.findComponent(DatePicker);
 
-		expect(dateInput.props("date")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputDate));
+		expect(dateInput.props("date")).toStrictEqual(date);
 
 		const timeInput = wrapper.find("[data-testid='news_time']").findComponent(VTextField);
-		expect(timeInput.props("modelValue")).toStrictEqual(testDate.format(DATETIME_FORMAT.inputTime));
+		expect(timeInput.props("modelValue")).toStrictEqual(time);
 	});
 
 	it("should set time to 00:00 when date is set but time is empty", async () => {

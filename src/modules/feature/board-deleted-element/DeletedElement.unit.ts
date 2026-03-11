@@ -1,21 +1,21 @@
 import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
-import { deletedElementResponseFactory } from "@@/tests/test-utils";
+import { deletedElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { computed, nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("@data-board");
 
 describe("DeletedElement", () => {
-	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
+	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 
 	beforeEach(() => {
-		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useBoardFocusHandlerMock = mockComposable(useBoardFocusHandler);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 	});
 

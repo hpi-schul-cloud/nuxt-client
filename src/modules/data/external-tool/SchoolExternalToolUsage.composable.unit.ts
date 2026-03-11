@@ -3,16 +3,16 @@ import { useSchoolExternalToolUsage } from "./SchoolExternalToolUsage.composable
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory, schoolExternalToolMetadataFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { axiosErrorFactory, mockComposable, schoolExternalToolMetadataFactory } from "@@/tests/test-utils";
+import { Mocked } from "vitest";
 
 vi.mock("@data-external-tool/SchoolExternalToolApi.composable");
 
 describe("SchoolExternalToolUsage.composable", () => {
-	let useSchoolExternalToolApiMock: DeepMocked<ReturnType<typeof useSchoolExternalToolApi>>;
+	let useSchoolExternalToolApiMock: Mocked<ReturnType<typeof useSchoolExternalToolApi>>;
 
 	beforeEach(() => {
-		useSchoolExternalToolApiMock = createMock<ReturnType<typeof useSchoolExternalToolApi>>();
+		useSchoolExternalToolApiMock = mockComposable(useSchoolExternalToolApi);
 
 		vi.mocked(useSchoolExternalToolApi).mockReturnValue(useSchoolExternalToolApiMock);
 	});

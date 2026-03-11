@@ -1,15 +1,15 @@
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { MetaDataEntityType, MetaTagExtractorResponse } from "@/serverApi/v3/api";
-import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { Mocked } from "vitest";
 
 describe("useMetaTagExtractorApi", () => {
-	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
+	let api: Mocked<serverApi.MetaTagExtractorApi>;
 
 	beforeEach(() => {
-		api = createMock<serverApi.MetaTagExtractorApi>();
+		api = mockApi<serverApi.MetaTagExtractorApi>();
 
 		vi.spyOn(serverApi, "MetaTagExtractorApiFactory").mockReturnValue(api);
 	});

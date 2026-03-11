@@ -14,19 +14,12 @@ import {
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { Component, nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
-
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn(),
-}));
-
-const useRouterMock = <Mock>useRouter;
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("SchoolExternalToolConfigurator", () => {
 	beforeEach(() => {
@@ -43,8 +36,7 @@ describe("SchoolExternalToolConfigurator", () => {
 		const schoolId = "schoolId";
 		createTestAppStoreWithSchool(schoolId);
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
 
 		const wrapper = mount(SchoolExternalToolConfigurator, {
 			global: {

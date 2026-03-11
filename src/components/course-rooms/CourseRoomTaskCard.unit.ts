@@ -1,7 +1,7 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { Task } from "@/store/types/room";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -219,6 +219,7 @@ const getWrapper = (
 describe("CourseRoomTaskCard", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		createTestAppStore();
 		createTestEnvStore();
 		window.location.pathname = "";
 	});

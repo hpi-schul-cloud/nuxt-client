@@ -2,7 +2,7 @@ import "@/plugins/polyfills";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
-import createVuetify from "./plugins/vuetify";
+import { createVuetifyPlugin } from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
 import {
@@ -40,6 +40,7 @@ import {
 	videoConferenceModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
+import { createDayJs } from "@/utils/date-time.utils";
 import { useAppStore } from "@data-app";
 import { useEnvStore } from "@data-env";
 import { htmlConfig } from "@feature-render-html";
@@ -54,6 +55,9 @@ export const app = createApp(App);
 
 const pinia = createPinia();
 app.use(pinia);
+
+// Initialize date-time core (dayjs locale sync with app store)
+createDayJs();
 
 // app.config.productionTip = false;
 
@@ -90,7 +94,7 @@ app.use(VueDOMPurifyHTML, {
 
 	// creation of i18n relies on App.store
 	const i18n = createI18n();
-	const vuetify = createVuetify(i18n);
+	const vuetify = createVuetifyPlugin(i18n);
 
 	app.use(router).use(store).use(vuetify).use(i18n);
 

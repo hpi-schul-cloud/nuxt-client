@@ -1,6 +1,7 @@
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { SchulcloudTheme } from "@/serverApi/v3/api";
+import { toEndOfDayIso, toIsoDate } from "@/utils/date-time.utils";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -537,7 +538,7 @@ describe("InviteMembersDialog", () => {
 				await linkExpiresCheckbox.setValue(true);
 
 				const datePicker = wrapper.getComponent(DatePicker);
-				const selectedDateISO = new Date(2024, 0, 1).toISOString();
+				const selectedDateISO = toIsoDate("01.01.2024");
 				datePicker.vm.$emit("update:date", selectedDateISO);
 				await nextTick();
 
@@ -547,7 +548,7 @@ describe("InviteMembersDialog", () => {
 
 				expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
 					expect.objectContaining({
-						activeUntil: selectedDateISO,
+						activeUntil: toEndOfDayIso(selectedDateISO),
 					})
 				);
 			});

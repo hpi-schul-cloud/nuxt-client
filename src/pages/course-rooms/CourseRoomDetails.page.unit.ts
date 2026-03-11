@@ -23,12 +23,12 @@ import {
 import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { VBtn } from "vuetify/components";
 
@@ -140,7 +140,7 @@ describe("CourseRoomDetails.page.vue", () => {
 		// we need this because in order for useMediaQuery (vueuse) to work
 		// window.matchMedia has to return a reasonable result.
 		// https://github.com/vueuse/vueuse/blob/main/packages/core/useMediaQuery/index.ts#L44
-		vi.spyOn(window, "matchMedia").mockReturnValue(createMock<MediaQueryList>());
+		vi.spyOn(window, "matchMedia").mockReturnValue(mock<MediaQueryList>());
 
 		const $route = {
 			params: {
