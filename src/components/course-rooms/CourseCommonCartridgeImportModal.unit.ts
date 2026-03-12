@@ -5,7 +5,6 @@ import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -16,11 +15,11 @@ vi.mock("@data-common-cartridge");
 const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
 describe("CourseCommonCartridgeImportModal", () => {
-	let useCommonCartridgeImportMockReturn: ReturnType<typeof createMock<ReturnType<typeof useCommonCartridgeImport>>>;
+	let useCommonCartridgeImportMockReturn: ReturnType<typeof useCommonCartridgeImport>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useCommonCartridgeImportMockReturn = createMock<ReturnType<typeof useCommonCartridgeImport>>({
+		useCommonCartridgeImportMockReturn = {
 			isOpen: ref(false),
 			isSuccess: ref(false),
 			file: ref(undefined),
@@ -28,7 +27,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 			setIsSuccess: vi.fn(),
 			setFile: vi.fn(),
 			importCommonCartridgeFile: vi.fn(),
-		});
+		};
 
 		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});

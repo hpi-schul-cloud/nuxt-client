@@ -6,7 +6,6 @@ import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
@@ -74,7 +73,7 @@ const mockData: CourseMetadataResponse[] = [
 ];
 
 describe("CourseRoomWrapper.vue", () => {
-	let useCommonCartridgeImportMockReturn: ReturnType<typeof createMock<ReturnType<typeof useCommonCartridgeImport>>>;
+	let useCommonCartridgeImportMockReturn: ReturnType<typeof useCommonCartridgeImport>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -89,7 +88,7 @@ describe("CourseRoomWrapper.vue", () => {
 		});
 		courseRoomListModule.setAllElements(mockData);
 
-		useCommonCartridgeImportMockReturn = createMock<ReturnType<typeof useCommonCartridgeImport>>({
+		useCommonCartridgeImportMockReturn = {
 			isOpen: ref(false),
 			isSuccess: ref(false),
 			file: ref(undefined),
@@ -97,7 +96,7 @@ describe("CourseRoomWrapper.vue", () => {
 			setIsSuccess: vi.fn(),
 			setFile: vi.fn(),
 			importCommonCartridgeFile: vi.fn(),
-		});
+		};
 
 		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
