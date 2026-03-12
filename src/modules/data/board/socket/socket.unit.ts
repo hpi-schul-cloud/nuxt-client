@@ -1,6 +1,6 @@
 import { resetSocketStateForTesting } from "./socket";
-import { BoardErrorReportApiFactory } from "@/generated/serverApi/v3";
-import * as serverApi from "@/generated/serverApi/v3";
+import { BoardErrorReportApiFactory } from "@api-server";
+import * as serverApi from "@api-server";
 import {
 	boardResponseFactory,
 	expectNotification,
@@ -29,7 +29,7 @@ const mockSocketIOClient = vi.mocked(socketModule);
 
 vi.mock("../boardActions/boardSocketApi.composable");
 vi.mock("../boardActions/boardRestApi.composable");
-vi.mock("@/generated/serverApi/v3/api");
+vi.mock("@api-server/api");
 
 vi.mock("@vueuse/shared", () => ({
 	useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {

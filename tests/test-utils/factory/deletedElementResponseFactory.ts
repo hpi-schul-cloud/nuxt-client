@@ -1,4 +1,4 @@
-import { ContentElementType, DeletedElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, DeletedElementResponse } from "@api-server";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { deletedElementContentFactory } from "./deletedElementContentFactory";

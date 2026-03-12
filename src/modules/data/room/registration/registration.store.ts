@@ -5,7 +5,7 @@ import {
 	RegistrationApiFactory,
 	RegistrationItemResponse,
 	RegistrationListResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";

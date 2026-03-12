@@ -1,6 +1,6 @@
-import { FileConfigApiFactory } from "@/generated/fileStorageApi/v3/api";
-import { FilesStorageConfigResponse } from "@/generated/fileStorageApi/v3/models";
-import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@/generated/serverApi/v3";
+import { FileConfigApiFactory } from "@api-file-storage/api";
+import { FilesStorageConfigResponse } from "@api-file-storage/models";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { useAppStore } from "@data-app";

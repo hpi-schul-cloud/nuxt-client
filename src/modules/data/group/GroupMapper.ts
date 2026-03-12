@@ -1,5 +1,5 @@
 import { Group, GroupType, GroupUser, GroupUserRole } from "./types";
-import { GroupResponse, GroupResponseType, GroupUserResponse, RoleName } from "@/generated/serverApi/v3";
+import { GroupResponse, GroupResponseType, GroupUserResponse, RoleName } from "@api-server";
 
 export const GroupTypeMapping: Record<GroupResponseType, GroupType> = {
 	[GroupResponseType.CLASS]: GroupType.Class,

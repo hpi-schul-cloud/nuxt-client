@@ -1,6 +1,6 @@
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
-import { BoardErrorReportApiFactory } from "@/generated/serverApi/v3";
+import { BoardErrorReportApiFactory } from "@api-server";
 import { Action } from "@/types/board/ActionFactory";
 import { $axios } from "@/utils/api";
 import { notifyError, notifySuccess } from "@data-app";

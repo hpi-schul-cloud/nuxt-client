@@ -1,6 +1,4 @@
 import NewsEditPage from "./NewsEdit.page.vue";
-import { NewsApiInterface, NewsResponse } from "@/generated/serverApi/v3";
-import * as serverApi from "@/generated/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
@@ -14,6 +12,8 @@ import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
+import { NewsApiInterface, NewsResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

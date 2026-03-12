@@ -1,6 +1,6 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { ConfigResponse } from "@/generated/serverApi/v3";
+import { ConfigResponse } from "@api-server";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

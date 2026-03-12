@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { ContentElementType, LinkElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, LinkElementResponse } from "@api-server";
 import { linkElementContentFactory } from "./linkElementContentFactory";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 

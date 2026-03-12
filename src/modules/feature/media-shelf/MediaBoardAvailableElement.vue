@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
-import { MediaAvailableLineElementResponse, ToolContextType } from "@/generated/serverApi/v3";
+import { MediaAvailableLineElementResponse, ToolContextType } from "@api-server";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useExternalToolLaunchState } from "@data-external-tool";

@@ -7,7 +7,7 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { BoardLayout, MoveCardResponse } from "@/generated/serverApi/v3";
+import { BoardLayout, MoveCardResponse } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	boardResponseFactory,

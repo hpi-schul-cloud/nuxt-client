@@ -1,5 +1,5 @@
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolMediumResponse, ToolContextType } from "@/generated/serverApi/v3";
+import { SchoolExternalToolMediumResponse, ToolContextType } from "@api-server";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { DataTableHeader } from "vuetify";

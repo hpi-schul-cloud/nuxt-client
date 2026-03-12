@@ -3,7 +3,7 @@ import type {
 	BoardElementResponse as BoardElement,
 	BoardLessonResponse as BoardLesson,
 	BoardTaskResponse as BoardTask,
-} from "@/generated/serverApi/v3";
-import { BoardElementResponseType as BoardElementType } from "@/generated/serverApi/v3";
+} from "@api-server";
+import { BoardElementResponseType as BoardElementType } from "@api-server";
 
 export { BoardColumnBoard, BoardElement, BoardElementType, BoardLesson, BoardTask };

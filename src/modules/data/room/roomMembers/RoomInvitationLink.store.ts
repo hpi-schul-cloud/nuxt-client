@@ -7,7 +7,7 @@ import {
 	UseLinkResult,
 } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/generated/serverApi/v3";
+import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@api-server";
 import { $axios } from "@/utils/api";
 import { formatUtc } from "@/utils/date-time.utils";
 import { notifyError } from "@data-app";

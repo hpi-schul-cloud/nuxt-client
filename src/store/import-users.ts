@@ -1,3 +1,5 @@
+import { ApiResponseError, ApiValidationError, BusinessError } from "@/store/types/commons";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	ImportUserListResponse,
 	ImportUserResponse,
@@ -5,9 +7,7 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 	UserMatchListResponse,
-} from "@/generated/serverApi/v3";
-import { ApiResponseError, ApiValidationError, BusinessError } from "@/store/types/commons";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+} from "@api-server";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export enum MatchedBy {

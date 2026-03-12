@@ -14,7 +14,7 @@ import {
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { BoardLayout, ContentElementType } from "@/generated/serverApi/v3";
+import { BoardLayout, ContentElementType } from "@api-server";
 import {
 	cardResponseFactory,
 	mockComposable,

@@ -1,4 +1,4 @@
-import { CardResponse, ContentElementType } from "@/generated/serverApi/v3";
+import { CardResponse, ContentElementType } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 
 export type FetchCardRequestPayload = {

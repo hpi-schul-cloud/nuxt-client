@@ -1,4 +1,4 @@
-import { ToolReferenceResponse } from "@/generated/serverApi/v3";
+import { ToolReferenceResponse } from "@api-server";
 import { Factory } from "fishery";
 import { contextExternalToolConfigurationStatusFactory } from "./contextExternalToolConfigurationStatusFactory";
 

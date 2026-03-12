@@ -6,7 +6,7 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 	ToolContextType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";

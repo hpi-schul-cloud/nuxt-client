@@ -1,5 +1,5 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
-import { RoomStatsItemResponse } from "@/generated/serverApi/v3";
+import { RoomStatsItemResponse } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";

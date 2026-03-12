@@ -1,5 +1,5 @@
 import { useRegistrationStore } from "./registration.store";
-import { LanguageType } from "@/generated/serverApi/v3";
+import { LanguageType } from "@api-server";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";

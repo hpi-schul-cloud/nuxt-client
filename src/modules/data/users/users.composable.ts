@@ -1,5 +1,5 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { RoleName, UserListResponse, UserResponse } from "@/generated/serverApi/v3";
+import { RoleName, UserListResponse, UserResponse } from "@api-server";
 import { $axios } from "@/utils/api";
 import { notifySuccess } from "@data-app";
 import { Ref, ref } from "vue";

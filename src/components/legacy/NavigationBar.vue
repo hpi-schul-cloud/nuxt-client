@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiLogin } from "@icons/material";
 import { computed, ref } from "vue";

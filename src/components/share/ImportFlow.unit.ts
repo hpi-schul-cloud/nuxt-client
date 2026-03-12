@@ -10,7 +10,7 @@ import {
 	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
 	ShareTokenInfoResponseParentType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";

@@ -1,5 +1,5 @@
 import SelectBoardLayoutDialog from "./SelectBoardLayoutDialog.vue";
-import { BoardLayout } from "@/generated/serverApi/v3";
+import { BoardLayout } from "@api-server";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

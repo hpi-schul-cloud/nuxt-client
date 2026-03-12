@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
-import { RoomFeatures } from "@/generated/serverApi/v3";
+import { RoomFeatures } from "@api-server";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { isNonEmptyString, isOfMaxLength, useOpeningTagValidator } from "@util-validators";

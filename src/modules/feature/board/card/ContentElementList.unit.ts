@@ -1,5 +1,5 @@
 import ContentElementList from "./ContentElementList.vue";
-import { ContentElementType } from "@/generated/serverApi/v3";
+import { ContentElementType } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

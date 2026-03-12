@@ -1,4 +1,4 @@
-import { ContentElementType, DeletedElementContent } from "@/generated/serverApi/v3";
+import { ContentElementType, DeletedElementContent } from "@api-server";
 import { Factory } from "fishery";
 
 export const deletedElementContentFactory =

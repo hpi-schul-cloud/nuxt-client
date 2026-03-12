@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
-import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@/generated/serverApi/v3";
+import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@api-server";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";

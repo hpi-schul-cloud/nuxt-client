@@ -45,7 +45,7 @@ import { usePreviewGenerator } from "../composables/PreviewGenerator.composable"
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import { LinkElementResponse } from "@/generated/serverApi/v3";
+import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";

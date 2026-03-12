@@ -1,7 +1,7 @@
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
-import { ExternalToolMediumStatus } from "@/generated/serverApi/v3";
+import { ExternalToolMediumStatus } from "@api-server";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";

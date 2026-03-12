@@ -1,7 +1,7 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { RoleName, VideoConferenceElementContent } from "@/generated/serverApi/v3";
+import { RoleName, VideoConferenceElementContent } from "@api-server";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";

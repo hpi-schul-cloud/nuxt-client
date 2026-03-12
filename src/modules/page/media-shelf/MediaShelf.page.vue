@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { BoardLayout } from "@/generated/serverApi/v3";
+import { BoardLayout } from "@api-server";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { mdiViewGridOutline } from "@icons/material";

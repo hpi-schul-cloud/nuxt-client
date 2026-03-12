@@ -151,8 +151,8 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@/generated/serverApi/v3";
-import { RequestArgs } from "@/generated/serverApi/v3/base";
+import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@api-server";
+import { RequestArgs } from "@api-server/base";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";

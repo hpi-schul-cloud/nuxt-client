@@ -2,14 +2,6 @@ import GroupModule from "./group";
 import { ClassInfo, ClassRootType } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
-import {
-	ClassInfoResponse,
-	ClassInfoSearchListResponse,
-	ClassSortQueryType,
-	GroupApiInterface,
-	SchoolYearQueryType,
-} from "@/generated/serverApi/v3";
-import * as serverApi from "@/generated/serverApi/v3";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
@@ -21,6 +13,14 @@ import {
 } from "@@/tests/test-utils";
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import {
+	ClassInfoResponse,
+	ClassInfoSearchListResponse,
+	ClassSortQueryType,
+	GroupApiInterface,
+	SchoolYearQueryType,
+} from "@api-server";
+import * as serverApi from "@api-server";
 import { AxiosInstance } from "axios";
 import { Mocked } from "vitest";
 

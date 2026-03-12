@@ -1,7 +1,7 @@
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
-import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
-import { H5pElementResponse } from "@/generated/serverApi/v3";
+import { H5PContentParentType } from "@api-h5p/models";
+import { H5pElementResponse } from "@api-server";
 import { h5pElementResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";

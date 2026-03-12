@@ -1,4 +1,4 @@
-import { ExternalToolMediumResponse } from "@/generated/serverApi/v3";
+import { ExternalToolMediumResponse } from "@api-server";
 import { ToolParameter } from "@/store/external-tool";
 
 export interface ExternalToolConfigurationTemplate {

@@ -1,4 +1,4 @@
-import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@/generated/serverApi/v3";
+import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { expectNotification, mockApi, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
@@ -12,7 +12,7 @@ import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 
-vi.mock("@/generated/serverApi/v3");
+vi.mock("@api-server");
 
 const roomParams: RoomUpdateParams = {
 	name: "test",

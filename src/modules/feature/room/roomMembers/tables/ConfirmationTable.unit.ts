@@ -1,5 +1,5 @@
 import ConfirmationTable from "./ConfirmationTable.vue";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";

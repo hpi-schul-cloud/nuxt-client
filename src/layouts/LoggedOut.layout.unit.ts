@@ -1,5 +1,4 @@
 import LoggedOutLayout from "./LoggedOut.layout.vue";
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
@@ -7,6 +6,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { SchulcloudTheme } from "@api-server";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";

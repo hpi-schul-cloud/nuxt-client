@@ -1,6 +1,8 @@
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { useAppStore } from "@data-app";
 import {
 	BoardApiFactory,
 	CourseRoomsApiFactory,
@@ -14,9 +16,7 @@ import {
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
-} from "@/generated/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { useAppStore } from "@data-app";
+} from "@api-server";
 import { isAxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

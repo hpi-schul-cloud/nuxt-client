@@ -1,4 +1,4 @@
-import { MetaDataEntityType, MetaTagExtractorApiFactory, MetaTagExtractorResponse } from "@/generated/serverApi/v3";
+import { MetaDataEntityType, MetaTagExtractorApiFactory, MetaTagExtractorResponse } from "@api-server";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";

@@ -1,11 +1,11 @@
 import { useI18nGlobal } from "@/plugins/i18n";
-import * as serverApi from "@/generated/serverApi/v3";
+import * as serverApi from "@api-server";
 import {
 	ChangeRoomRoleBodyParamsRoleName,
 	RoleName,
 	RoomMemberListResponse,
 	SchoolUserListResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";

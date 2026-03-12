@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { RichTextElementContent } from "@/generated/serverApi/v3";
+import { RichTextElementContent } from "@api-server";
 
 export const richTextElementContentFactory =
 	Factory.define<RichTextElementContent>(({ sequence }) => ({

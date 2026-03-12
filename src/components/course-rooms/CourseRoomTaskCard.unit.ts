@@ -1,5 +1,5 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import { ImportUserResponseRoleNames as Roles } from "@/generated/serverApi/v3";
+import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { Task } from "@/store/types/room";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

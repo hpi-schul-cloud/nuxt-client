@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { CreateNewsParams, CreateNewsParamsTargetModel, NewsApiFactory } from "@/generated/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -29,6 +28,7 @@ import { notifySuccess, useAppStore } from "@data-app";
 import { NewsForm } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { CreateNewsParams, CreateNewsParamsTargetModel, NewsApiFactory } from "@api-server";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { type LocationQueryValue, useRoute, useRouter } from "vue-router";

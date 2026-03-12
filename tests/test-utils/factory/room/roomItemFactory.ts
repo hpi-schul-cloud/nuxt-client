@@ -1,4 +1,4 @@
-import { RoomItemResponseAllowedOperations } from "@/generated/serverApi/v3";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { RoomColor, RoomItem } from "@/types/room/Room";
 import { Factory } from "fishery";
 

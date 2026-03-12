@@ -57,7 +57,7 @@ import { lineLimit, LineMove, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-import { MediaAvailableLineResponse, MediaBoardResponse } from "@/generated/serverApi/v3";
+import { MediaAvailableLineResponse, MediaBoardResponse } from "@api-server";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useSharedEditMode } from "@data-board";
 import { extractDataAttribute } from "@util-board";

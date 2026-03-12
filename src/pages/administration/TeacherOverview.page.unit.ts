@@ -4,7 +4,7 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
-import { Permission, RoleName } from "@/generated/serverApi/v3";
+import { Permission, RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {

@@ -2,13 +2,13 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { FileRecordResponse } from "@/generated/fileStorageApi/v3/models";
+import { FileRecordResponse } from "@api-file-storage/models";
 import {
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	PreferredToolResponse,
 	ToolContextType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import {
 	collaborativeTextEditorElementResponseFactory,

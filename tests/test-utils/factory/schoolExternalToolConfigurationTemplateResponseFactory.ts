@@ -1,4 +1,4 @@
-import { SchoolExternalToolConfigurationTemplateResponse } from "@/generated/serverApi/v3";
+import { SchoolExternalToolConfigurationTemplateResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const schoolExternalToolConfigurationTemplateResponseFactory =

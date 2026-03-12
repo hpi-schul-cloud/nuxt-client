@@ -1,8 +1,6 @@
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
-import * as serverApi from "@/generated/serverApi/v3";
-import { BoardParentType } from "@/generated/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
@@ -12,6 +10,8 @@ import {
 } from "@@/tests/test-utils/factory";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import * as serverApi from "@api-server";
+import { BoardParentType } from "@api-server";
 import { AxiosError, AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { mock } from "vitest-mock-extended";

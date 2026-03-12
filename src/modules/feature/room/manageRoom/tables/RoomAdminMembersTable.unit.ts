@@ -1,6 +1,6 @@
 import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {

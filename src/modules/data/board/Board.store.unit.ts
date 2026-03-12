@@ -7,7 +7,7 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { BoardLayout } from "@/generated/serverApi/v3";
+import { BoardLayout } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { createTestEnvStore, expectNotification, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";

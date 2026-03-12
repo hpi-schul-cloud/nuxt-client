@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
-import { Permission, SchulcloudTheme } from "@/generated/serverApi/v3";
+import { Permission, SchulcloudTheme } from "@api-server";
 import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";

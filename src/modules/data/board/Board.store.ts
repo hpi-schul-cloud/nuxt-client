@@ -32,7 +32,7 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardActions/cardActionPayload.types";
 import { useSharedEditMode } from "./edit-mode.composable";
-import { ColumnResponse } from "@/generated/serverApi/v3";
+import { ColumnResponse } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import { useAppStore, useNotificationStore } from "@data-app";

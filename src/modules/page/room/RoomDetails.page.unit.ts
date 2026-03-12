@@ -1,4 +1,4 @@
-import * as serverApi from "@/generated/serverApi/v3";
+import * as serverApi from "@api-server";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";

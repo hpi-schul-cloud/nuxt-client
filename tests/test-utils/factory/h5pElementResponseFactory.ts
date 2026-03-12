@@ -1,4 +1,4 @@
-import { ContentElementType, H5pElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, H5pElementResponse } from "@api-server";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 

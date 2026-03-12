@@ -1,5 +1,5 @@
 import ImportUsers from "./ImportUsers.vue";
-import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@/generated/serverApi/v3";
+import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import SchoolsModule from "@/store/schools";

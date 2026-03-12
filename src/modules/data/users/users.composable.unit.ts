@@ -1,5 +1,5 @@
 import { useUsers } from "./users.composable";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,

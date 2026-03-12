@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";

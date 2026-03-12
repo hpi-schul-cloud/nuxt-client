@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { ContentElementType, RichTextElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { richTextElementContentFactory } from "./richTextElementContentFactory";
 

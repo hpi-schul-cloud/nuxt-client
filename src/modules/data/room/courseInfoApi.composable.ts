@@ -1,4 +1,4 @@
-import { CourseInfoApiFactory, CourseSortProps, CourseStatus } from "@/generated/serverApi/v3";
+import { CourseInfoApiFactory, CourseSortProps, CourseStatus } from "@api-server";
 import { $axios } from "@/utils/api";
 
 export const useCourseInfoApi = () => {

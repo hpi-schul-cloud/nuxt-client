@@ -1,5 +1,5 @@
 import { ObjectIdMock } from "../../ObjectIdMock";
-import { RoomColor, RoomItemResponse } from "@/generated/serverApi/v3";
+import { RoomColor, RoomItemResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const roomItemResponseFactory = Factory.define<RoomItemResponse>(({ sequence }) => ({

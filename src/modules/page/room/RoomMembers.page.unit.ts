@@ -1,5 +1,5 @@
 import RoomMembersPage from "./RoomMembers.page.vue";
-import { ConfigResponse, RoleName, RoomDetailsResponse } from "@/generated/serverApi/v3";
+import { ConfigResponse, RoleName, RoomDetailsResponse } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";

@@ -1,4 +1,4 @@
-import { LanguageType, MeApiFactory, MeResponse, Permission, RoleName, UserApiFactory } from "@/generated/serverApi/v3";
+import { LanguageType, MeApiFactory, MeResponse, Permission, RoleName, UserApiFactory } from "@api-server";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";

@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import { Permission } from "@/generated/serverApi/v3";
+import { Permission } from "@api-server";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";

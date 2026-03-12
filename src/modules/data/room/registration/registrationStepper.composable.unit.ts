@@ -1,6 +1,6 @@
 import { useRegistrationStore } from "./registration.store";
 import { useRegistrationStepper } from "./registrationStepper.composable";
-import { LanguageType } from "@/generated/serverApi/v3";
+import { LanguageType } from "@api-server";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";

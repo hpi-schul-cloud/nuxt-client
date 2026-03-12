@@ -1,4 +1,4 @@
-import { BoardElementApiFactory } from "@/generated/serverApi/v3";
+import { BoardElementApiFactory } from "@api-server";
 import {
 	AnyContentElement,
 	ContentElementType,

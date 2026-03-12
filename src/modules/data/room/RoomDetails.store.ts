@@ -1,6 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@/generated/serverApi/v3";
+import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@api-server";
 import { RoomBoardItem, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useAppStore } from "@data-app";

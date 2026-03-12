@@ -84,7 +84,7 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@/generated/serverApi/v3";
+import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import {
 	useBoardAllowedOperations,

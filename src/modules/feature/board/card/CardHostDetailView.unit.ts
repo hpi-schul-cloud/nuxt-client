@@ -1,6 +1,6 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardTitle from "./CardTitle.vue";
-import { CardResponse } from "@/generated/serverApi/v3";
+import { CardResponse } from "@api-server";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

@@ -34,13 +34,13 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { NewsForm } from "@feature-news";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
+import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@api-server";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";

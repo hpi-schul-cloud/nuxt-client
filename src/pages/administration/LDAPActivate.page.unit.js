@@ -1,5 +1,5 @@
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import SchoolsModule from "@/store/schools";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

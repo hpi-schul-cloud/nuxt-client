@@ -1,6 +1,6 @@
 import SchoolTerms from "./SchoolTerms.vue";
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import { Permission } from "@/generated/serverApi/v3";
+import { Permission } from "@api-server";
 import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";

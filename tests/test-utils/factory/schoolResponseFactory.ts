@@ -1,4 +1,4 @@
-import { SchoolResponse } from "@/generated/serverApi/v3";
+import { SchoolResponse } from "@api-server";
 import { Factory } from "fishery";
 import { federalStateResponseFactory } from "./federalStateResponseFactory";
 import { yearsResponseFactory } from "./yearsResponseFactory";

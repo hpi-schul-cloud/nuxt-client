@@ -1,6 +1,4 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
-import { CreateNewsParamsTargetModel, NewsApiInterface } from "@/generated/serverApi/v3";
-import * as serverApi from "@/generated/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStoreWithSchool,
@@ -14,6 +12,8 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { CreateNewsParamsTargetModel, NewsApiInterface } from "@api-server";
+import * as serverApi from "@api-server";
 import { AxiosInstance, HttpStatusCode } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

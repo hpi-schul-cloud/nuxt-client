@@ -1,6 +1,6 @@
 import CollaboraPage from "./Collabora.page.vue";
-import { ElementWithParentHierarchyResponse } from "@/generated/serverApi/v3";
-import * as serverApi from "@/generated/serverApi/v3";
+import { ElementWithParentHierarchyResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	fileElementResponseFactory,

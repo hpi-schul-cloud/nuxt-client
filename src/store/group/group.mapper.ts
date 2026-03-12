@@ -1,5 +1,5 @@
 import { ClassInfo, ClassRootType, CourseInfo } from "../types/class-info";
-import { ClassInfoResponse, ClassInfoResponseType, CourseInfoResponse } from "@/generated/serverApi/v3";
+import { ClassInfoResponse, ClassInfoResponseType, CourseInfoResponse } from "@api-server";
 
 export const ClassRootTypeMapping: Record<ClassInfoResponseType, ClassRootType> = {
 	[ClassInfoResponseType.CLASS]: ClassRootType.CLASS,

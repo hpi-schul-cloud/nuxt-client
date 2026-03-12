@@ -1,5 +1,5 @@
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
-import { ElementWithParentHierarchyResponse } from "@/generated/serverApi/v3";
+import { ElementWithParentHierarchyResponse } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	externalToolElementResponseFactory,

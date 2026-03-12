@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { VideoConferenceElementContent } from "@/generated/serverApi/v3";
+import { VideoConferenceElementContent } from "@api-server";
 
 export const videoConferenceElementContentFactory =
 	Factory.define<VideoConferenceElementContent>(({ sequence }) => ({

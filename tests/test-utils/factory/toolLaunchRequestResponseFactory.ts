@@ -2,7 +2,7 @@ import {
 	LaunchRequestMethod,
 	LaunchType,
 	ToolLaunchRequestResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { Factory } from "fishery";
 
 export const toolLaunchRequestResponseFactory =

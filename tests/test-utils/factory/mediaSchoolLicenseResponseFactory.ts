@@ -1,4 +1,4 @@
-import { MediaSchoolLicenseResponse } from "@/generated/serverApi/v3";
+import { MediaSchoolLicenseResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const mediaSchoolLicenseResponseFactory =

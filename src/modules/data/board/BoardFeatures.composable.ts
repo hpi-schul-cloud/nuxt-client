@@ -1,5 +1,5 @@
 import { useBoardStore } from "./Board.store";
-import { BoardFeature } from "@/generated/serverApi/v3";
+import { BoardFeature } from "@api-server";
 
 export const useBoardFeatures = () => {
 	const { getFeatures } = useBoardStore();

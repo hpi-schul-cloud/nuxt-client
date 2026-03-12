@@ -1,4 +1,4 @@
-import { DashboardGridElementResponse } from "@/generated/serverApi/v3";
+import { DashboardGridElementResponse } from "@api-server";
 
 export type RoomsData = {
 	id: string;

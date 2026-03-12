@@ -1,5 +1,5 @@
 import { ErrorType, useCollaborativeTextEditorApi } from "./CollaborativeTextEditorApi.composable";
-import * as serverApi from "@/generated/serverApi/v3";
+import * as serverApi from "@api-server";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	apiResponseErrorFactory,

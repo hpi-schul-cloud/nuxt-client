@@ -138,7 +138,7 @@ import {
 	ColumnResponse,
 	ShareTokenBodyParamsParentType,
 	ToolContextType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";

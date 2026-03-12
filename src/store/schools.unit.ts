@@ -1,12 +1,12 @@
 import SchoolsModule from "./schools";
-import * as serverApi from "@/generated/serverApi/v3";
-import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@/generated/serverApi/v3";
 import { createTestAppStore, createTestAppStoreWithSchool, createTestEnvStore, mockApi } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingPinia } from "@pinia/testing";
+import * as serverApi from "@api-server";
+import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@api-server";
 import { AxiosError } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

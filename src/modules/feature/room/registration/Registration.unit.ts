@@ -2,7 +2,7 @@ import Registration from "./Registration.vue";
 import Consent from "./steps/Consent.vue";
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
-import { LanguageType } from "@/generated/serverApi/v3";
+import { LanguageType } from "@api-server";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";

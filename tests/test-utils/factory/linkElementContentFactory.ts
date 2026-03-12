@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { LinkElementContent } from "@/generated/serverApi/v3";
+import { LinkElementContent } from "@api-server";
 
 export const linkElementContentFactory = Factory.define<LinkElementContent>(
 	({ sequence }) => ({

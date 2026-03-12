@@ -1,5 +1,5 @@
 import RoomMenu from "./RoomMenu.vue";
-import { ConfigResponse, RoomItemResponseAllowedOperations } from "@/generated/serverApi/v3";
+import { ConfigResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

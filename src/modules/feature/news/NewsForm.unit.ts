@@ -1,6 +1,6 @@
 import ClassicEditor from "../editor/ClassicEditor.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { NewsResponse } from "@/generated/serverApi/v3";
+import { NewsResponse } from "@api-server";
 import { Status } from "@/store/types/commons";
 import { toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { newsResponseFactory } from "@@/tests/test-utils";

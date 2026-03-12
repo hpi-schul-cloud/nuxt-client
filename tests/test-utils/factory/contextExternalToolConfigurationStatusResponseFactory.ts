@@ -1,4 +1,4 @@
-import { ContextExternalToolConfigurationStatusResponse } from "@/generated/serverApi/v3";
+import { ContextExternalToolConfigurationStatusResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const contextExternalToolConfigurationStatusResponseFactory =

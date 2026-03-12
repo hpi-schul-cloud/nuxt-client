@@ -1,4 +1,4 @@
-import { ContextExternalToolConfigurationTemplateResponse } from "@/generated/serverApi/v3";
+import { ContextExternalToolConfigurationTemplateResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const contextExternalToolConfigurationTemplateResponseFactory =

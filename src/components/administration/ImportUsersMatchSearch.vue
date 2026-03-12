@@ -161,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { ImportUserResponse, UserMatchResponse } from "@/generated/serverApi/v3";
+import { ImportUserResponse, UserMatchResponse } from "@api-server";
 import { importUsersModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { mdiAccountSearch, mdiClose, mdiContentSave, mdiDelete, mdiFlag, mdiFlagOutline } from "@icons/material";

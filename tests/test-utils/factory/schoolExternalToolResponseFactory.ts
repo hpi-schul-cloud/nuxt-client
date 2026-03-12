@@ -1,4 +1,4 @@
-import { SchoolExternalToolResponse } from "@/generated/serverApi/v3";
+import { SchoolExternalToolResponse } from "@api-server";
 import { Factory } from "fishery";
 import { schoolExternalToolConfigurationStatusResponseFactory } from "./schoolExternalToolConfigurationStatusResponseFactory";
 

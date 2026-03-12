@@ -1,6 +1,6 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
-import { BoardLayout, MediaBoardColors } from "@/generated/serverApi/v3";
+import { BoardLayout, MediaBoardColors } from "@api-server";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,

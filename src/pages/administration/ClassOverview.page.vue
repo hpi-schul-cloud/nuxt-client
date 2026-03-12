@@ -191,7 +191,7 @@
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@/generated/serverApi/v3";
+import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";

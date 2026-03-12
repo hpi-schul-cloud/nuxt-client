@@ -1,4 +1,4 @@
-import { SchoolYearResponse } from "@/generated/serverApi/v3";
+import { SchoolYearResponse } from "@api-server";
 import { Factory } from "fishery";
 
 type SchoolYearResponseTransientParams = {

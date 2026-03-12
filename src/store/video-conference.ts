@@ -1,4 +1,5 @@
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
+import { $axios } from "@/utils/api";
 import {
 	VideoConferenceApiFactory,
 	VideoConferenceApiInterface,
@@ -6,8 +7,7 @@ import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/generated/serverApi/v3";
-import { $axios } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

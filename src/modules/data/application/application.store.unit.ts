@@ -7,7 +7,7 @@ import {
 	RoleName,
 	SuccessfulResponse,
 	UserApiFactory,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { ApplicationError } from "@/store/types/application-error";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { initializeAxios } from "@/utils/api";
@@ -21,10 +21,10 @@ import { beforeEach, describe, expect, vi } from "vitest";
 
 const broadcastChannelMock = mockBroadcastChannel();
 
-vi.mock("@/generated/serverApi/v3");
+vi.mock("@api-server");
 const mockedMeApi = vi.mocked(MeApiFactory);
 
-vi.mock("@/generated/fileStorageApi/v3");
+vi.mock("@api-file-storage");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {

@@ -1,6 +1,6 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardFeatures } from "./BoardFeatures.composable";
-import { BoardFeature } from "@/generated/serverApi/v3";
+import { BoardFeature } from "@api-server";
 import { mockComposable, mountComposable } from "@@/tests/test-utils";
 
 vi.mock("./Board.store");

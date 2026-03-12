@@ -9,7 +9,7 @@ import {
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolContextType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 

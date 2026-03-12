@@ -4,7 +4,7 @@ import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-import { PreviewStatus } from "@/generated/fileStorageApi/v3/models";
+import { PreviewStatus } from "@api-file-storage/models";
 import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

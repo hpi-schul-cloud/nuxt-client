@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { LtiDeepLinkResponse } from "@/generated/serverApi/v3";
+import { LtiDeepLinkResponse } from "@api-server";
 
 export const ltiDeepLinkResponseFactory = Factory.define<LtiDeepLinkResponse>(
 	() => ({

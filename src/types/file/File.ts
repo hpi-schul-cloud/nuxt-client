@@ -13,7 +13,7 @@ import {
 	PreviewWidth as FilePreviewWidth,
 	type RenameFileParams,
 	StorageLocation,
-} from "@/generated/fileStorageApi/v3/models";
+} from "@api-file-storage/models";
 
 export type FileRecord = FileRecordResponse;
 export type ParentStatistic = ParentStatisticResponse;

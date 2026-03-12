@@ -1,5 +1,5 @@
 import CourseRoomWrapper from "./CourseRoomWrapper.vue";
-import { CourseMetadataResponse, Permission } from "@/generated/serverApi/v3";
+import { CourseMetadataResponse, Permission } from "@api-server";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";

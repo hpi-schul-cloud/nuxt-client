@@ -1,11 +1,11 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import * as serverApi from "@/generated/serverApi/v3";
+import * as serverApi from "@api-server";
 import {
 	ContextExternalToolBodyParams,
 	LaunchType,
 	ToolContextType,
 	ToolLaunchRequestResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { mockApi, mockApiResponse, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
 import { Mocked } from "vitest";

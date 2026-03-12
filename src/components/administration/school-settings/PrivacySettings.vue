@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiCheck } from "@icons/material";
 import { computed } from "vue";

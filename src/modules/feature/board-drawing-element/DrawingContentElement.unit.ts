@@ -1,6 +1,6 @@
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
-import { DrawingElementResponse } from "@/generated/serverApi/v3";
+import { DrawingElementResponse } from "@api-server";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardMenu } from "@ui-board";

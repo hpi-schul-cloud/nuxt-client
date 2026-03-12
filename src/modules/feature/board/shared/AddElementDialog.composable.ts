@@ -1,5 +1,5 @@
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/generated/serverApi/v3";
+import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { notifyInfo } from "@data-app";
 import {

@@ -1,5 +1,5 @@
 import BoardColumnVue from "./BoardColumn.vue";
-import { BoardResponseAllowedOperations } from "@/generated/serverApi/v3";
+import { BoardResponseAllowedOperations } from "@api-server";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

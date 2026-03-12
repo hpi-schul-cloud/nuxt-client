@@ -1,5 +1,5 @@
 import ExternalToolMediumDetails from "./ExternalToolMediumDetails.vue";
-import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@/generated/serverApi/v3";
+import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@api-server";
 import { expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

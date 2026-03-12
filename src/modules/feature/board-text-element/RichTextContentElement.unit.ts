@@ -1,7 +1,7 @@
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
-import { ContentElementType, RichTextElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";

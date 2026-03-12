@@ -1,5 +1,5 @@
 import { useSidebarItems } from "./SidebarItems.composable";
-import { ConfigResponse, SchulcloudTheme } from "@/generated/serverApi/v3";
+import { ConfigResponse, SchulcloudTheme } from "@api-server";
 import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";

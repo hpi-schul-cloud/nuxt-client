@@ -1,4 +1,4 @@
-import { RichText } from "@/generated/serverApi/v3";
+import { RichText } from "@api-server";
 
 export type TaskStatus = {
 	submitted: number;

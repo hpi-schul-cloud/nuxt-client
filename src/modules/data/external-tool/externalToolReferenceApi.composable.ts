@@ -1,5 +1,5 @@
 import { ExternalToolDisplayData } from "./types";
-import { ToolApiFactory, ToolApiInterface, ToolContextType, ToolReferenceListResponse } from "@/generated/serverApi/v3";
+import { ToolApiFactory, ToolApiInterface, ToolContextType, ToolReferenceListResponse } from "@api-server";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 

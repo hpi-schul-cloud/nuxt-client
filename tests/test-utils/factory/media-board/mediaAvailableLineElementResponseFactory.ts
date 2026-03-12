@@ -1,4 +1,4 @@
-import { MediaAvailableLineElementResponse } from "@/generated/serverApi/v3";
+import { MediaAvailableLineElementResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const mediaAvailableLineElementResponseFactory =

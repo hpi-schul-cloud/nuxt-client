@@ -6,7 +6,7 @@ import {
 	ContextExternalToolResponse,
 	ContextExternalToolResponseContextType,
 	ToolContextType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
 import { ExternalToolMapper } from "@/store/external-tool/mapper";
 

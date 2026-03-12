@@ -115,7 +115,7 @@
 
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { ChangeRoomRoleBodyParamsRoleName as RoleEnum, RoleName } from "@/generated/serverApi/v3";
+import { ChangeRoomRoleBodyParamsRoleName as RoleEnum, RoleName } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";

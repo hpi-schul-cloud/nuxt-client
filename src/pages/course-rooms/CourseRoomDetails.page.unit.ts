@@ -9,7 +9,7 @@ import {
 	ImportUserResponseRoleNames,
 	Permission,
 	ShareTokenBodyParamsParentType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";

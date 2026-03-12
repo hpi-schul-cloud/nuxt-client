@@ -1,12 +1,8 @@
 import { BusinessError } from "./types/commons";
-import * as serverApi from "@/generated/serverApi/v3";
-import {
-	ImportUserResponseRoleNames,
-	UserMatchResponseMatchedBy,
-	UserMatchResponseRoleNames,
-} from "@/generated/serverApi/v3";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import { apiResponseErrorFactory, axiosErrorFactory, businessErrorFactory } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { ImportUserResponseRoleNames, UserMatchResponseMatchedBy, UserMatchResponseRoleNames } from "@api-server";
 
 const mockResponse = {
 	data: {

@@ -1,6 +1,6 @@
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
-import * as serverApi from "@/generated/serverApi/v3";
-import { MediaSchoolLicenseListResponse } from "@/generated/serverApi/v3";
+import * as serverApi from "@api-server";
+import { MediaSchoolLicenseListResponse } from "@api-server";
 import { mediaSchoolLicenseResponseFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { Mocked } from "vitest";
 

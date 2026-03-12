@@ -12,7 +12,7 @@ import {
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 	VideoConferenceElementResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 
 export type FileFolderElement = FileFolderElementResponse;
 

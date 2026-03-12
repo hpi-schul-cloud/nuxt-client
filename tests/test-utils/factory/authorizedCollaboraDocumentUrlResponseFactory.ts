@@ -1,4 +1,4 @@
-import { AuthorizedCollaboraDocumentUrlResponse } from "@/generated/fileStorageApi/v3/models";
+import { AuthorizedCollaboraDocumentUrlResponse } from "@api-file-storage/models";
 import { Factory } from "fishery";
 
 export const authorizedCollaboraDocumentUrlResponseFactory =

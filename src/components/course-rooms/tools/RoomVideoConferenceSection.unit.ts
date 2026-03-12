@@ -1,6 +1,6 @@
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { Permission, RoleName, VideoConferenceScope } from "@/generated/serverApi/v3";
+import { Permission, RoleName, VideoConferenceScope } from "@api-server";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";

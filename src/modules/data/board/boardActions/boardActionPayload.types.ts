@@ -5,7 +5,7 @@ import {
 	CardSkeletonResponse,
 	ColumnResponse,
 	CreateCardBodyParamsRequiredEmptyElements,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 
 export type CreateCardRequestPayload = {

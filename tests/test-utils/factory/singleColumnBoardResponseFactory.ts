@@ -1,4 +1,4 @@
-import { SingleColumnBoardResponse } from "@/generated/serverApi/v3";
+import { SingleColumnBoardResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const singleColumnBoardResponseFactory =

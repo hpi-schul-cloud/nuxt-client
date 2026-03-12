@@ -1,4 +1,4 @@
-import { FileRecordParentType } from "@/generated/fileStorageApi/v3/models";
+import { FileRecordParentType } from "@api-file-storage/models";
 import { convertDownloadToPreviewUrl, isPreviewPossible } from "@/utils/fileHelper";
 import { useFileStorageApi } from "@data-file";
 import { computed } from "vue";

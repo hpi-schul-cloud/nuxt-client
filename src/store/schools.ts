@@ -1,5 +1,10 @@
 import { ApplicationError } from "./types/application-error";
 import { School } from "./types/schools";
+import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import {
 	FederalStateResponse,
 	SchoolApiFactory,
@@ -14,12 +19,7 @@ import {
 	SystemsApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
-} from "@/generated/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
-import { useAppStore } from "@data-app";
-import { useEnvConfig } from "@data-env";
+} from "@api-server";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

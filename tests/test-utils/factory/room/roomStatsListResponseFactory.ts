@@ -1,4 +1,4 @@
-import { RoomStatsListResponse } from "@/generated/serverApi/v3";
+import { RoomStatsListResponse } from "@api-server";
 import { Factory } from "fishery";
 import { roomStatsItemResponseFactory } from "./roomStatsItemResponseFactory";
 

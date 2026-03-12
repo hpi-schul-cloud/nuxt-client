@@ -1,5 +1,3 @@
-import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
-import { Permission, ToolContextType } from "@/generated/serverApi/v3";
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
@@ -8,6 +6,8 @@ import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ACTIVATION_CODE, REGEX
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
+import { H5PContentParentType } from "@api-h5p/models";
+import { Permission, ToolContextType } from "@api-server";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 export const routes: Readonly<RouteRecordRaw>[] = [

@@ -183,7 +183,7 @@ import {
 	BoardLayout,
 	ImportUserResponseRoleNames,
 	ShareTokenBodyParamsParentType,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";

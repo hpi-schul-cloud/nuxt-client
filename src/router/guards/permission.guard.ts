@@ -1,4 +1,4 @@
-import { Permission } from "@/generated/serverApi/v3";
+import { Permission } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
 import { NavigationGuard } from "vue-router";

@@ -1,4 +1,4 @@
-import { BoardLayout } from "@/generated/serverApi/v3";
+import { BoardLayout } from "@api-server";
 import { Lesson } from "@/store/types/room";
 
 export type MenuItem = {

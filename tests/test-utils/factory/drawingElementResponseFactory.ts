@@ -1,4 +1,4 @@
-import { ContentElementType, DrawingElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, DrawingElementResponse } from "@api-server";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { drawingElementContentFactory } from "./drawingElementContentFactory";

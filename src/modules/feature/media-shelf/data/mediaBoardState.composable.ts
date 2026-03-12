@@ -8,7 +8,7 @@ import {
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { Ref, ref } from "vue";

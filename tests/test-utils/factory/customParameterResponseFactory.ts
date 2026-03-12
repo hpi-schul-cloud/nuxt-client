@@ -3,7 +3,7 @@ import {
 	CustomParameterResponse,
 	CustomParameterScopeTypeParams,
 	CustomParameterTypeParams,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { Factory } from "fishery";
 
 export const customParameterResponseFactory =

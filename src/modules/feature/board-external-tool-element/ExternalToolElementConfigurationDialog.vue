@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { ToolContextType } from "@/generated/serverApi/v3";
+import { ToolContextType } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { ContextExternalTool } from "@data-external-tool";
 import { nextTick, onMounted, PropType, Ref, ref, watch } from "vue";

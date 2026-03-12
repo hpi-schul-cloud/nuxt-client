@@ -1,4 +1,4 @@
-import { MediaAvailableLineResponse, MediaBoardColors } from "@/generated/serverApi/v3";
+import { MediaAvailableLineResponse, MediaBoardColors } from "@api-server";
 import { Factory } from "fishery";
 import { mediaAvailableLineElementResponseFactory } from "./mediaAvailableLineElementResponseFactory";
 

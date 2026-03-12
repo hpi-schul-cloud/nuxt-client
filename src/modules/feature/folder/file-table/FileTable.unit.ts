@@ -2,7 +2,7 @@ import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import { createTestAppStoreWithRole, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

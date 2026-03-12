@@ -1,7 +1,7 @@
 import {
 	ContentElementType,
 	SubmissionContainerElementResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { submissionContainerElementContent } from "./submissionContainerElementContentFactory";

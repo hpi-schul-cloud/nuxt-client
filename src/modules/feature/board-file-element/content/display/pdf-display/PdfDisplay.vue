@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { FileElementResponse } from "@/generated/serverApi/v3";
+import { FileElementResponse } from "@api-server";
 import { ContentElementBar } from "@ui-board";
 import { PreviewImage } from "@ui-preview-image";
 

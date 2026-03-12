@@ -15,7 +15,7 @@ import {
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedEditMode } from "./edit-mode.composable";
-import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/generated/serverApi/v3";
+import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@api-server";
 import { FileRecordParent } from "@/types/file/File";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";

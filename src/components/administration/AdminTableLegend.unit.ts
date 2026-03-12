@@ -1,5 +1,5 @@
 import AdminTableLegend from "./AdminTableLegend.vue";
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

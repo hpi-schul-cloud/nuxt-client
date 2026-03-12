@@ -1,4 +1,4 @@
-import { OAuthApiFactory, OAuthSessionTokenExpirationResponse } from "@/generated/serverApi/v3";
+import { OAuthApiFactory, OAuthSessionTokenExpirationResponse } from "@api-server";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 

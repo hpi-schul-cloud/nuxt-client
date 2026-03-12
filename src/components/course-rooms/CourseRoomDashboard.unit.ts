@@ -1,5 +1,5 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
-import { ShareTokenBodyParamsParentType } from "@/generated/serverApi/v3";
+import { ShareTokenBodyParamsParentType } from "@api-server";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";

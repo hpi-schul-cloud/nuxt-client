@@ -1,4 +1,4 @@
-import { BoardCardApiFactory, CardResponse } from "@/generated/serverApi/v3";
+import { BoardCardApiFactory, CardResponse } from "@api-server";
 import { $axios } from "@/utils/api";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { useDebounceFn } from "@vueuse/core";

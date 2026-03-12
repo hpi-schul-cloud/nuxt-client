@@ -1,7 +1,7 @@
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseList } from "./courseList.composable";
-import { CourseInfoDataResponse, CourseInfoListResponse, CourseSortProps, CourseStatus } from "@/generated/serverApi/v3";
+import { CourseInfoDataResponse, CourseInfoListResponse, CourseSortProps, CourseStatus } from "@api-server";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {

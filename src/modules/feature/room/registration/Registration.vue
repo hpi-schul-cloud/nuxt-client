@@ -66,7 +66,7 @@ import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
 import Success from "./steps/Success.vue";
 import Welcome from "./steps/Welcome.vue";
-import { LanguageType } from "@/generated/serverApi/v3";
+import { LanguageType } from "@api-server";
 import { isNotNullish } from "@/utils/typeScript";
 import { useEnvConfig } from "@data-env";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";

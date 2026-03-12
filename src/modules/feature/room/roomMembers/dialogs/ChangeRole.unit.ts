@@ -1,5 +1,5 @@
 import ChangeRole from "./ChangeRole.vue";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStoreWithUser, mockedPiniaStoreTyping, roomFactory, schoolFactory } from "@@/tests/test-utils";

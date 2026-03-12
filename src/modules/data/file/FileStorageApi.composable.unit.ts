@@ -1,6 +1,6 @@
 import { CollaboraFileType, ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
-import * as serverApi from "@/generated/fileStorageApi/v3/api/file-api";
-import * as wopiApi from "@/generated/fileStorageApi/v3/api/wopi-api";
+import * as serverApi from "@api-file-storage/api/file-api";
+import * as wopiApi from "@api-file-storage/api/wopi-api";
 import {
 	AuthorizedCollaboraDocumentUrlResponse,
 	EditorMode,

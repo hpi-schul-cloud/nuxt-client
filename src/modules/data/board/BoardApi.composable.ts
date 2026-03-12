@@ -32,7 +32,7 @@ import {
 	SubmissionContainerElementResponse,
 	VideoConferenceElementContentBody,
 	VideoConferenceElementResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";

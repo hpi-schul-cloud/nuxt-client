@@ -1,6 +1,6 @@
 import MigrationWizard from "./Migration.page.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { SchulcloudTheme } from "@/generated/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";

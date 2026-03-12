@@ -1,4 +1,4 @@
-import { RoleName, SchoolForExternalInviteResponse, SchoolListResponse } from "@/generated/serverApi/v3";
+import { RoleName, SchoolForExternalInviteResponse, SchoolListResponse } from "@api-server";
 import { RoomMember } from "@data-room";
 import { Factory } from "fishery";
 

@@ -1,4 +1,4 @@
-import { RoomColor } from "@/generated/serverApi/v3";
+import { RoomColor } from "@api-server";
 import { RoomCreateParams } from "@/types/room/Room";
 import { createTestRoomStore, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

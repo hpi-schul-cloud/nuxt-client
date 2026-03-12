@@ -1,6 +1,6 @@
 import { useGroupApi } from "./GroupApi.composable";
 import { GroupListFilter } from "./types";
-import { GroupListResponse, GroupResponse } from "@/generated/serverApi/v3";
+import { GroupListResponse, GroupResponse } from "@api-server";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError } from "@data-app";

@@ -1,5 +1,4 @@
 import { useCopy } from "./copy";
-import { CopyApiResponseStatus } from "@/generated/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
@@ -8,6 +7,7 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { CopyApiResponseStatus } from "@api-server";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 

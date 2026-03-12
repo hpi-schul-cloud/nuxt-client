@@ -1,7 +1,7 @@
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import { Permission } from "@/generated/serverApi/v3";
+import { Permission } from "@api-server";
 import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";

@@ -1,5 +1,5 @@
 import { useAutoLogout } from "./autoLogout.composable";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { $axios } from "@/utils/api";
 import {
 	createTestAppStoreWithRole,

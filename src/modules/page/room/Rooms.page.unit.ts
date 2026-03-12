@@ -1,7 +1,7 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import * as serverApi from "@/generated/serverApi/v3";
-import { Permission, ShareTokenBodyParamsParentType } from "@/generated/serverApi/v3";
+import * as serverApi from "@api-server";
+import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
 import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY } from "@/utils/inject";

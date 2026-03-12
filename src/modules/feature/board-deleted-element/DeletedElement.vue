@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import DeletedElementMenu from "./DeletedElementMenu.vue";
-import { ContentElementType, DeletedElementResponse } from "@/generated/serverApi/v3";
+import { ContentElementType, DeletedElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { mdiPuzzleOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";

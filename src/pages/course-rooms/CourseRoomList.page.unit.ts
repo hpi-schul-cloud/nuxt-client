@@ -1,5 +1,5 @@
 import CourseRoomList from "./CourseRoomList.page.vue";
-import { CourseMetadataResponse } from "@/generated/serverApi/v3";
+import { CourseMetadataResponse } from "@api-server";
 import { courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CourseRoomListModule from "@/store/course-room-list";

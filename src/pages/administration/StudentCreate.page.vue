@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import FormCreateUser from "@/components/administration/FormCreateUser.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { dateFromToday } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStore } from "@data-app";

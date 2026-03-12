@@ -1,14 +1,14 @@
 import { BusinessError } from "./types/commons";
 import { UserLoginMigration, UserLoginMigrationMapper } from "./user-login-migration";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useAppStore } from "@data-app";
 import {
 	UserLoginMigrationApiFactory,
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-} from "@/generated/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { useAppStore } from "@data-app";
+} from "@api-server";
 import { AxiosResponse, HttpStatusCode } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

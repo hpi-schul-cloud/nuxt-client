@@ -120,7 +120,7 @@
 
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { useRoomAllowedOperations, useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { InfoAlert, WarningAlert } from "@ui-alert";

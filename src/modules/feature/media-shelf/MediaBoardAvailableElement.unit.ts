@@ -1,7 +1,7 @@
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
-import { ToolContextType } from "@/generated/serverApi/v3";
+import { ToolContextType } from "@api-server";
 import {
 	businessErrorFactory,
 	createTestEnvStore,

@@ -1,12 +1,5 @@
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
-import * as serverApi from "@/generated/serverApi/v3";
-import {
-	VideoConferenceApiInterface,
-	VideoConferenceJoinResponse,
-	VideoConferenceScope,
-	VideoConferenceStateResponse,
-} from "@/generated/serverApi/v3";
 import { mockApi } from "@@/tests/test-utils";
 import {
 	videoConferenceInfoFactory,
@@ -14,6 +7,13 @@ import {
 	videoConferenceJoinResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import * as serverApi from "@api-server";
+import {
+	VideoConferenceApiInterface,
+	VideoConferenceJoinResponse,
+	VideoConferenceScope,
+	VideoConferenceStateResponse,
+} from "@api-server";
 import { AxiosError } from "axios";
 
 describe("VideoConferenceModule", () => {

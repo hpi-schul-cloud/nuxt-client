@@ -1,7 +1,7 @@
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
-} from "@/generated/serverApi/v3";
+} from "@api-server";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 

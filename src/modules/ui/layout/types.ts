@@ -1,4 +1,4 @@
-import { ConfigResponse, Permission, SchulcloudTheme } from "@/generated/serverApi/v3";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 
 export type ExternalLink = {
 	href: string;

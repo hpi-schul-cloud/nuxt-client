@@ -2,14 +2,14 @@ import { GroupMapper } from "./group/group.mapper";
 import { ClassInfo } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	ClassInfoSearchListResponse,
 	ClassSortQueryType,
 	GroupApiFactory,
 	GroupApiInterface,
 	SchoolYearQueryType,
-} from "@/generated/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

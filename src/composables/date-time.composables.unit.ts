@@ -1,7 +1,7 @@
 import { useLocalizedDateTime } from "@/composables/date-time.composables";
-import { LanguageType } from "@/generated/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
+import { LanguageType } from "@api-server";
 import { setActivePinia } from "pinia";
 import { describe, expect, it } from "vitest";
 

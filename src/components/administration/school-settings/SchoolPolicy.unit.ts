@@ -1,6 +1,6 @@
 import SchoolPolicy from "./SchoolPolicy.vue";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import { Permission } from "@/generated/serverApi/v3";
+import { Permission } from "@api-server";
 import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";

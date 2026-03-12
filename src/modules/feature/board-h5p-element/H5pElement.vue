@@ -48,8 +48,8 @@
 <script setup lang="ts">
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
-import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
-import { H5pElementResponse } from "@/generated/serverApi/v3";
+import { H5PContentParentType } from "@api-h5p/models";
+import { H5pElementResponse } from "@api-server";
 import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { useBoardFocusHandler } from "@data-board";

@@ -1,5 +1,5 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import { RoleName } from "@/generated/serverApi/v3";
+import { RoleName } from "@api-server";
 import { groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { GroupListFilter, useGroupListState } from "@data-group";

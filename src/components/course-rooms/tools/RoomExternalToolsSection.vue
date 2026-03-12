@@ -53,7 +53,7 @@
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { Permission, ToolContextType } from "@/generated/serverApi/v3";
+import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { computed, PropType, ref } from "vue";
