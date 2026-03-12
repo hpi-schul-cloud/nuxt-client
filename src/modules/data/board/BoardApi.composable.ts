@@ -1,3 +1,7 @@
+import { BoardContextType } from "@/types/board/BoardContext";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	BoardApiFactory,
 	BoardCardApiFactory,
@@ -28,15 +32,9 @@ import {
 	RichTextElementContentBody,
 	RichTextElementResponse,
 	RoomApiFactory,
-	SubmissionContainerElementContentBody,
-	SubmissionContainerElementResponse,
 	VideoConferenceElementContentBody,
 	VideoConferenceElementResponse,
 } from "@api-server";
-import { BoardContextType } from "@/types/board/BoardContext";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { AxiosPromise, AxiosResponse } from "axios";
 
 export const useBoardApi = () => {
@@ -124,17 +122,6 @@ export const useBoardApi = () => {
 			const body: FileElementContentBody = {
 				content: element.content,
 				type: ContentElementType.FILE_FOLDER,
-			};
-			return body;
-		}
-
-		const isSubmissionContainerElement = (element: AnyContentElement): element is SubmissionContainerElementResponse =>
-			element.type === ContentElementType.SUBMISSION_CONTAINER;
-
-		if (isSubmissionContainerElement(element)) {
-			const body: SubmissionContainerElementContentBody = {
-				content: element.content,
-				type: ContentElementType.SUBMISSION_CONTAINER,
 			};
 			return body;
 		}

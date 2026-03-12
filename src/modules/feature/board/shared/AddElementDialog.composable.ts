@@ -1,6 +1,6 @@
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
 import { notifyInfo } from "@data-app";
 import {
 	type CreateElementRequestPayload,
@@ -14,7 +14,6 @@ import {
 	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
 	mdiFormatText,
-	mdiLightbulbOnOutline,
 	mdiLink,
 	mdiPresentation,
 	mdiPuzzleOutline,
@@ -93,15 +92,6 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		];
 
 		const envConfig = useEnvConfig();
-
-		if (envConfig.value.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-			options.push({
-				icon: mdiLightbulbOnOutline,
-				label: t("components.elementTypeSelection.elements.submissionElement.subtitle"),
-				action: () => onElementClick(ContentElementType.SUBMISSION_CONTAINER),
-				testId: "create-element-submission-container",
-			});
-		}
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 			options.push({

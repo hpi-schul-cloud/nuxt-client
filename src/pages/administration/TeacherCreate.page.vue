@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<FormCreateUser role-name="teacher" @create-user="createTeacherHandler">
+		<CreateUserForm role-name="teacher" @create-user="createTeacherHandler">
 			<template #inputs>
 				<VCheckbox
 					v-model="sendRegistration"
@@ -16,12 +16,12 @@
 			<template #errors>
 				<InfoMessage v-if="businessError" :message="t('pages.administration.teachers.new.error')" type="bc-error" />
 			</template>
-		</FormCreateUser>
+		</CreateUserForm>
 	</default-wireframe>
 </template>
 
 <script setup lang="ts">
-import FormCreateUser from "@/components/administration/FormCreateUser.vue";
+import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { RoleName } from "@api-server";
 import { buildPageTitle } from "@/utils/pageTitle";

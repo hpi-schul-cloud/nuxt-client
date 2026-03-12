@@ -4,7 +4,7 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<FormCreateUser @create-user="createStudentHandler">
+		<CreateUserForm @create-user="createStudentHandler">
 			<template #inputs>
 				<DatePicker
 					:label="t('common.labels.birthdate')"
@@ -25,12 +25,12 @@
 			<template #errors>
 				<InfoMessage v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
-		</FormCreateUser>
+		</CreateUserForm>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import FormCreateUser from "@/components/administration/FormCreateUser.vue";
+import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
 import { RoleName } from "@api-server";
 import { dateFromToday } from "@/utils/date-time.utils";

@@ -1,4 +1,8 @@
 import { useBoardApi } from "./BoardApi.composable";
+import { ApplicationError } from "@/store/types/application-error";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { mockApi, mockApiResponse } from "@@/tests/test-utils";
+import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import {
 	BoardLayout,
 	ContentElementType,
@@ -8,10 +12,6 @@ import {
 } from "@api-server";
 import * as serverApi from "@api-server";
 import { CardResponse, DrawingElementResponse } from "@api-server";
-import { ApplicationError } from "@/store/types/application-error";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { mockApi, mockApiResponse } from "@@/tests/test-utils";
-import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import { Mocked } from "vitest";
 
 let boardApi: Mocked<serverApi.BoardApiInterface>;
@@ -205,25 +205,6 @@ describe("BoardApi.composable", () => {
 			const data = {
 				content: payload.content,
 				type: ContentElementType.FILE_FOLDER,
-			};
-
-			await updateElementCall(payload);
-			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(payload.id, { data });
-		});
-
-		it("should call elementControllerUpdateElement api with SubmissionContainerElement", async () => {
-			const { updateElementCall } = useBoardApi();
-			const payload = {
-				id: "file-element-id",
-				type: ContentElementType.SUBMISSION_CONTAINER,
-				content: {
-					dueDate: new Date().toISOString(),
-				},
-				timestamps: timestampsResponseFactory.build(),
-			};
-			const data = {
-				content: payload.content,
-				type: ContentElementType.SUBMISSION_CONTAINER,
 			};
 
 			await updateElementCall(payload);
