@@ -13,102 +13,17 @@
  */
 
 
-import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
-
-/**
- * 
- * @export
- * @interface ApiValidationError
- */
-export interface ApiValidationError {
-    /**
-     * The response status code.
-     * @type {number}
-     * @memberof ApiValidationError
-     */
-    code: number;
-    /**
-     * The error type.
-     * @type {string}
-     * @memberof ApiValidationError
-     */
-    type: string;
-    /**
-     * The error title.
-     * @type {string}
-     * @memberof ApiValidationError
-     */
-    title: string;
-    /**
-     * The error message.
-     * @type {string}
-     * @memberof ApiValidationError
-     */
-    message: string;
-    /**
-     * The error details.
-     * @type {object}
-     * @memberof ApiValidationError
-     */
-    details?: object;
-}
-/**
- * 
- * @export
- * @interface FwuItemResponse
- */
-export interface FwuItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof FwuItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FwuItemResponse
-     */
-    title: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FwuItemResponse
-     */
-    targetUrl: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FwuItemResponse
-     */
-    thumbnailUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FwuItemResponse
-     */
-    description?: string;
-}
-/**
- * 
- * @export
- * @interface FwuListResponse
- */
-export interface FwuListResponse {
-    /**
-     * 
-     * @type {Array<FwuItemResponse>}
-     * @memberof FwuListResponse
-     */
-    data: Array<FwuItemResponse>;
-}
-
+import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+// @ts-ignore
+import { ApiValidationError } from '../models';
+// @ts-ignore
+import { FwuListResponse } from '../models';
 /**
  * FwuApi - axios parameter creator
  * @export
@@ -307,5 +222,3 @@ export class FwuApi extends BaseAPI implements FwuApiInterface {
         return FwuApiFp(this.configuration).fwuLearningContentsControllerGetList(options).then((request) => request(this.axios, this.basePath));
     }
 }
-
-

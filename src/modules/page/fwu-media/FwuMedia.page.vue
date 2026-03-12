@@ -34,7 +34,8 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { FwuApiFactory, FwuItemResponse } from "@/generated/fwu-api/v3";
+import { FwuApiFactory } from "@/generated/fwuApi/v3/api";
+import { FwuItemResponse } from "@/generated/fwuApi/v3/models";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SvsSearchField } from "@ui-controls";

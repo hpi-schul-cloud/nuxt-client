@@ -1,5 +1,5 @@
 import FwuMediaPage from "./FwuMedia.page.vue";
-import { FwuItemResponse } from "@/generated/fwu-api/v3";
+import { FwuItemResponse } from "@/generated/fwuApi/v3/models";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
@@ -30,7 +30,7 @@ const mockFwuData: FwuItemResponse[] = [
 	},
 ];
 
-vi.mock("@/generated/fwu-api/v3", () => ({
+vi.mock("@/generated/fwuApi/v3/api", () => ({
 	FwuApiFactory: () => ({
 		fwuLearningContentsControllerGetList: vi.fn().mockResolvedValue({
 			data: { data: mockFwuData },

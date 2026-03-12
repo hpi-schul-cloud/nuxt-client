@@ -13,6 +13,20 @@
  */
 
 
-export * from "./api";
-export * from "./configuration";
+import { FwuItemResponse } from './fwu-item-response';
+
+/**
+ * 
+ * @export
+ * @interface FwuListResponse
+ */
+export interface FwuListResponse {
+    /**
+     * 
+     * @type {Array<FwuItemResponse>}
+     * @memberof FwuListResponse
+     */
+    data: Array<FwuItemResponse>;
+}
+
 
