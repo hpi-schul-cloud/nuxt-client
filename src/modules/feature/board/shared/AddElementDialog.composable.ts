@@ -14,7 +14,6 @@ import {
 	mdiFileDocumentOutline,
 	mdiFolderOpenOutline,
 	mdiFormatText,
-	mdiLightbulbOnOutline,
 	mdiLink,
 	mdiPresentation,
 	mdiPuzzleOutline,
@@ -93,15 +92,6 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		];
 
 		const envConfig = useEnvConfig();
-
-		if (envConfig.value.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-			options.push({
-				icon: mdiLightbulbOnOutline,
-				label: t("components.elementTypeSelection.elements.submissionElement.subtitle"),
-				action: () => onElementClick(ContentElementType.SubmissionContainer),
-				testId: "create-element-submission-container",
-			});
-		}
 
 		if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 			options.push({

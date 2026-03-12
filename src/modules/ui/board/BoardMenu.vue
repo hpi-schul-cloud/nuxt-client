@@ -68,7 +68,6 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.FILE_ELEMENT]: "components.board.menu.fileElement",
 	[BoardMenuScope.FOLDER_ELEMENT]: "components.board.menu.folderElement",
 	[BoardMenuScope.LINK_ELEMENT]: "components.board.menu.linkElement",
-	[BoardMenuScope.SUBMISSION_ELEMENT]: "components.board.menu.submissionElement",
 	[BoardMenuScope.DELETED_ELEMENT]: "components.board.menu.deletedElement",
 	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]: "components.board.menu.mediaExternalToolElement",
 	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]: "components.board.menu.videoConferenceElement",
