@@ -60,8 +60,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
-const { isOpen, isSuccess, file, setIsOpen, setIsSuccess, setFile, importCommonCartridgeFile } =
-	useCommonCartridgeImport();
+const { isOpen, isSuccess, file, importCommonCartridgeFile } = useCommonCartridgeImport();
 const { setLoadingState } = useLoadingStore();
 
 const props = withDefaults(
@@ -76,12 +75,12 @@ const props = withDefaults(
 const importButtonDisabled = computed(() => !file.value);
 
 function onCancel(): void {
-	setFile(undefined);
-	setIsOpen(false);
+	file.value = undefined;
+	isOpen.value = false;
 }
 
 async function onConfirm(): Promise<void> {
-	setIsOpen(false);
+	isOpen.value = false;
 	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
 
 	if (file.value) {
@@ -98,7 +97,7 @@ async function onConfirm(): Promise<void> {
 		notifyError(t("pages.rooms.ccImportCourse.error"));
 	}
 
-	setFile(undefined);
+	file.value = undefined;
 }
 </script>
 

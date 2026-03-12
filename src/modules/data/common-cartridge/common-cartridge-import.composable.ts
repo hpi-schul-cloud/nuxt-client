@@ -2,16 +2,12 @@ import { CommonCartridgeApiFactory } from "@/commonCartridgeApi/v3";
 import { FileApiFactory, FileRecordParentType, StorageLocation } from "@/fileStorageApi/v3";
 import { $axios } from "@/utils/api";
 import { useAppStoreRefs } from "@data-app";
-import { readonly, ref } from "vue";
+import { ref } from "vue";
 
 export const useCommonCartridgeImport = () => {
 	const isOpen = ref(false);
 	const isSuccess = ref(false);
 	const file = ref<File | undefined>(undefined);
-
-	const setIsOpen = (value: boolean) => (isOpen.value = value);
-	const setFile = (value: File | undefined) => (file.value = value);
-	const setIsSuccess = (value: boolean) => (isSuccess.value = value);
 
 	const commonCartridgeApi = CommonCartridgeApiFactory(undefined, "/v3", $axios);
 	const fileStorageApi = FileApiFactory(undefined, "/v3", $axios);
@@ -48,12 +44,9 @@ export const useCommonCartridgeImport = () => {
 		}
 	};
 	return {
-		isOpen: readonly(isOpen),
-		setIsOpen,
-		isSuccess: readonly(isSuccess),
-		setIsSuccess,
-		file: readonly(file),
-		setFile,
+		isOpen,
+		isSuccess,
+		file,
 		importCommonCartridgeFile,
 	};
 };

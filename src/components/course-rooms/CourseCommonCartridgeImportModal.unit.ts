@@ -1,47 +1,37 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import CourseRoomListModule from "@/store/course-room-list";
 import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { expectNotification } from "@@/tests/test-utils";
+import { expectNotification, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
+import { beforeEach, Mocked } from "vitest";
 import { ref } from "vue";
 
 vi.mock("@data-common-cartridge");
 const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
 
 describe("CourseCommonCartridgeImportModal", () => {
-	let useCommonCartridgeImportMockReturn: ReturnType<typeof useCommonCartridgeImport>;
+	let useCommonCartridgeImportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeImport>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useCommonCartridgeImportMockReturn = {
-			isOpen: ref(false),
-			isSuccess: ref(false),
-			file: ref(undefined),
-			setIsOpen: vi.fn(),
-			setIsSuccess: vi.fn(),
-			setFile: vi.fn(),
-			importCommonCartridgeFile: vi.fn(),
-		};
 
+		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport);
 		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
 
-	const setupWrapper = (overrides: Partial<ReturnType<typeof useCommonCartridgeImport>> = {}) => {
-		const mappedOverrides = {
-			isOpen: overrides.isOpen !== undefined ? ref(overrides.isOpen) : useCommonCartridgeImportMockReturn.isOpen,
-			isSuccess:
-				overrides.isSuccess !== undefined ? ref(overrides.isSuccess) : useCommonCartridgeImportMockReturn.isSuccess,
-			file: overrides.file !== undefined ? ref(overrides.file) : useCommonCartridgeImportMockReturn.file,
-			...overrides,
-		};
-
-		Object.assign(useCommonCartridgeImportMockReturn, mappedOverrides);
+	const setup = (overrides: Partial<ReturnType<typeof useCommonCartridgeImport>> = {}) => {
+		if (overrides) {
+			Object.entries(overrides).forEach(([key, value]) => {
+				if (value !== undefined) {
+					(useCommonCartridgeImportMockReturn as Record<string, unknown>)[key] = value;
+				}
+			});
+		}
 
 		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
 			getAllElements: [],
@@ -64,19 +54,17 @@ describe("CourseCommonCartridgeImportModal", () => {
 	};
 
 	describe("when dialog is open", () => {
-		const setup = () => setupWrapper({ isOpen: ref(true) });
-
 		it("should contain disabled confirm button", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ isOpen: ref(true) });
 
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 
 			expect(confirmBtn.exists()).toBe(true);
 			expect(confirmBtn.classes()).toContain("v-btn--disabled");
 		});
 
 		it("should contain enabled cancel button", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ isOpen: ref(true) });
 
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
 
@@ -85,7 +73,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("should contain file input", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ isOpen: ref(true) });
 
 			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
 
@@ -94,14 +82,11 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when a file is selected", () => {
-		const setup = () =>
-			setupWrapper({
+		it("should enable confirm button", () => {
+			const { wrapper } = setup({
 				isOpen: ref(true),
 				file: ref(new File([], "file")),
 			});
-
-		it("should enable confirm button", () => {
-			const { wrapper } = setup();
 
 			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
 
@@ -110,15 +95,13 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when file upload is successful", () => {
-		const setup = () =>
-			setupWrapper({
+		it("should show success message", async () => {
+			const { wrapper, roomsModuleMock } = setup({
 				file: ref(new File([], "file")),
 				isOpen: ref(true),
 				isSuccess: ref(true),
 			});
 
-		it("should show success message", async () => {
-			const { wrapper, roomsModuleMock } = setup();
 			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
 
 			await confirmBtn.trigger("click");
@@ -130,15 +113,13 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when file upload is unsuccessful", () => {
-		const setup = () =>
-			setupWrapper({
+		it("should show error message", async () => {
+			const { wrapper, roomsModuleMock } = setup({
 				file: ref(new File([], "file")),
 				isOpen: ref(true),
 				isSuccess: ref(false),
 			});
 
-		it("should show error message", async () => {
-			const { wrapper, roomsModuleMock } = setup();
 			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
 
 			await confirmBtn.trigger("click");
@@ -150,15 +131,16 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when dialog is closed", () => {
-		const setup = () => setupWrapper({ isOpen: ref(true) });
-
 		it("should reset the state", () => {
-			const { wrapper, useCommonCartridgeImportMockReturn } = setup();
+			const { wrapper, useCommonCartridgeImportMockReturn } = setup({
+				isOpen: ref(true),
+			});
+
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
 
 			cancelBtn.trigger("click");
 
-			expect(useCommonCartridgeImportMockReturn.setIsOpen).toHaveBeenCalledWith(false);
+			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
 		});
 	});
 });

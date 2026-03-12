@@ -2,7 +2,7 @@ import CourseRoomWrapper from "./CourseRoomWrapper.vue";
 import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
-import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
@@ -11,7 +11,7 @@ import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { ref } from "vue";
+import { Mocked } from "vitest";
 import { VBtn, VFab } from "vuetify/components";
 
 vi.mock("@data-common-cartridge");
@@ -73,7 +73,7 @@ const mockData: CourseMetadataResponse[] = [
 ];
 
 describe("CourseRoomWrapper.vue", () => {
-	let useCommonCartridgeImportMockReturn: ReturnType<typeof useCommonCartridgeImport>;
+	let useCommonCartridgeImportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeImport>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
@@ -88,16 +88,7 @@ describe("CourseRoomWrapper.vue", () => {
 		});
 		courseRoomListModule.setAllElements(mockData);
 
-		useCommonCartridgeImportMockReturn = {
-			isOpen: ref(false),
-			isSuccess: ref(false),
-			file: ref(undefined),
-			setIsOpen: vi.fn(),
-			setIsSuccess: vi.fn(),
-			setFile: vi.fn(),
-			importCommonCartridgeFile: vi.fn(),
-		};
-
+		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport);
 		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
 
@@ -210,7 +201,7 @@ describe("CourseRoomWrapper.vue", () => {
 			const openImportBtn = wrapper.findAllComponents(SpeedDialMenuAction)[2];
 			await openImportBtn.getComponent(VBtn).trigger("click");
 
-			expect(useCommonCartridgeImportMockReturn.setIsOpen).toHaveBeenCalledWith(true);
+			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(true);
 		});
 	});
 });

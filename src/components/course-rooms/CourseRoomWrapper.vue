@@ -82,7 +82,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 			icon: mdiImport,
 			label: t("pages.rooms.fab.import.course"),
 			dataTestId: "fab_button_import_course",
-			clickHandler: () => commonCartridgeImport.setIsOpen(true),
+			clickHandler: () => (commonCartridgeImport.isOpen.value = true),
 		});
 	}
 
