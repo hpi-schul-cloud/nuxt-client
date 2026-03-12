@@ -42,8 +42,15 @@ export type ConsentStudent = UserResponse & {
 	password: string;
 };
 
-const generatePassword = (): string =>
-	words[Math.floor(Math.random() * words.length)] + Math.floor(Math.random() * 9998 + 1).toString();
+const generatePassword = (): string => {
+	const randomValues = new Uint32Array(2);
+	crypto.getRandomValues(randomValues);
+
+	const wordIndex = randomValues[0] % words.length;
+	const number = (randomValues[1] % 9998) + 1;
+
+	return words[wordIndex] + number.toString();
+};
 
 export const useBulkConsent = () => {
 	const usersStore = useUsersStore();
