@@ -1,8 +1,8 @@
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { VTextarea } from "vuetify/lib/components/index";
+import { VTextarea } from "vuetify/components";
 
 vi.mock("@util-board");
 
@@ -177,6 +177,7 @@ describe("BoardAnyTitleInput", () => {
 
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
+				await flushPromises();
 
 				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
@@ -200,6 +201,7 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
+				await flushPromises();
 				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
@@ -222,6 +224,7 @@ describe("BoardAnyTitleInput", () => {
 				const textAreaComponent = wrapper.findComponent(VTextarea);
 				await textAreaComponent.setValue("<abc123");
 
+				await flushPromises();
 				expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
