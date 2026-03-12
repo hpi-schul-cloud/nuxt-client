@@ -34,7 +34,7 @@
       "common-cartridge-api": {
         "generatorName": "typescript-axios",
         "inputSpec": "http://localhost:3350/api/v3/docs-json/",
-        "output": "./src/commonCartridgeApi/v3",
+        "output": "./src/generated/commonCartridgeApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
         "additionalProperties": {

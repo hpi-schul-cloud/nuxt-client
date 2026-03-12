@@ -33,7 +33,7 @@ export default defineConfigWithVueTs([
 			"src/serverApi/**",
 			"src/fileStorageApi/**",
 			"src/h5pEditorApi/**",
-			"src/commonCartridgeApi/**",
+			"src/generated/**",
 		],
 	},
 	{
