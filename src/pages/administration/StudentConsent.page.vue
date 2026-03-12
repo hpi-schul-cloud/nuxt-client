@@ -40,7 +40,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="germanDateToIso(slotProps.data)"
+							:date="slotProps.data"
 							class="ml-2"
 							hide-details
 							hide-icon
@@ -500,7 +500,7 @@ export default defineComponent({
 			});
 		},
 		cancel() {
-			this.selectedIds.value = [];
+			// this.selectedIds.value = [];
 			this.$router.push({
 				path: `/administration/students`,
 			});
