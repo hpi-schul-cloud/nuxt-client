@@ -1,7 +1,7 @@
-import { useSafeAxiosTask } from "./async-tasks.composable";
-import { inputDateFormat } from "@/plugins/datetime";
+import { useSafeAxiosTask } from "../../../composables/async-tasks.composable";
 import { UserListResponse, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
+import { toIsoDate } from "@/utils/date-time.utils";
 import { useUsersStore } from "@data-users";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -95,9 +95,9 @@ export const useBulkConsent = () => {
 			.map(
 				(student: UserResponse): ConsentStudent => ({
 					...student,
-					fullName: `${student.firstName} ${student.lastName}`,
+					fullName: student.firstName + " " + student.lastName,
 					password: generatePassword(),
-					birthday: inputDateFormat(student.birthday),
+					birthday: toIsoDate(student.birthday) ?? "",
 				})
 			);
 	};
@@ -106,7 +106,7 @@ export const useBulkConsent = () => {
 		const student = selectedStudentsData.value.find((st) => st._id === id);
 		if (!student) return;
 
-		if (birthDate) student.birthday = birthDate;
+		if (birthDate) student.birthday = toIsoDate(birthDate) ?? "";
 		if (pass) student.password = pass;
 	};
 

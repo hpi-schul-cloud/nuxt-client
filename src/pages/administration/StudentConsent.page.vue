@@ -238,12 +238,12 @@
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
-import { useBulkConsent } from "@/composables/bulkConsent.composable";
 import { filePathsModule } from "@/store";
 import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/utils/date-time.utils.ts";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useBulkConsent } from "@data-users";
 import { mdiAlert } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";

@@ -358,7 +358,7 @@ const onUpdateRowsPerPage = (newLimit: number) => {
 	onUpdateCurrentPage(1);
 };
 
-const handleBulkConsent = (_rowIds: string[], _selectionType: string) => {
+const handleBulkConsent = () => {
 	router.push({
 		path: "/administration/students/consent",
 	});
