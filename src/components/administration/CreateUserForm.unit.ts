@@ -3,12 +3,9 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
 import { createStore } from "vuex";
-
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn(),
-}));
 
 const validRole = {
 	data: ["student"],
@@ -58,6 +55,7 @@ describe("CreateUserForm", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		injectRouterMock(createRouterMock());
 	});
 
 	describe("create", () => {
