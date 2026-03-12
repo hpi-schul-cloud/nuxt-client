@@ -23,7 +23,6 @@ describe("ContentElementList", () => {
 		beforeEach(() => {
 			setActivePinia(createTestingPinia());
 			createTestEnvStore({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
@@ -132,7 +131,6 @@ describe("ContentElementList", () => {
 		beforeEach(() => {
 			setActivePinia(createTestingPinia());
 			createTestEnvStore({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
