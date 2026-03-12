@@ -22,7 +22,7 @@
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import { H5pEditorHooks } from "./types/h5pEditorHooks";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { H5PContentParentType, H5PSaveResponse } from "@api-h5p/models";
+import { H5PContentParentType, H5PSaveResponse } from "@api-h5p";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { onMounted, Ref, ref } from "vue";

@@ -23,9 +23,9 @@ import {
 	toGermanDate,
 	toIsoDate,
 } from "@/utils/date-time.utils";
+import { LanguageType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
-import { LanguageType } from "@api-server";
 import dayjs from "dayjs";
 import { setActivePinia } from "pinia";
 import { beforeAll, describe, expect, it } from "vitest";

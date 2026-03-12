@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
-import { H5PContentParentType } from "@api-h5p/models";
+import { H5PContentParentType } from "@api-h5p";
 import { H5pElementResponse } from "@api-server";
 import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";

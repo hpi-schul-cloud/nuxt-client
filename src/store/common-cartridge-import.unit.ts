@@ -1,17 +1,13 @@
 import CommonCartridgeImportModule from "./common-cartridge-import";
 import { createTestAppStore, mockApi } from "@@/tests/test-utils";
+import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@api-common-cartridge";
+import { FileApiFactory, FileApiInterface, FileRecordParentType, StorageLocation } from "@api-file-storage";
 import { createTestingPinia } from "@pinia/testing";
-import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@api-common-cartridge/api";
-import { FileApiFactory, FileApiInterface } from "@api-file-storage/api";
-import { FileRecordParentType, StorageLocation } from "@api-file-storage/models";
 import { setActivePinia } from "pinia";
-import { Mocked, MockedFunction } from "vitest";
+import { Mocked } from "vitest";
 
-vi.mock("@api-common-cartridge/api");
-
-vi.mock("@api-file-storage/api", () => ({
-	FileApiFactory: vi.fn(),
-}));
+vi.mock("@api-common-cartridge");
+vi.mock("@api-file-storage");
 
 describe("CommonCartridgeImportModule", () => {
 	let sut: CommonCartridgeImportModule;

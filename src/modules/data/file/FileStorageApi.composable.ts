@@ -1,6 +1,5 @@
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
-import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@api-file-storage/api";
 import {
 	EditorMode,
 	FileRecord,
@@ -11,6 +10,7 @@ import {
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@api-file-storage";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";

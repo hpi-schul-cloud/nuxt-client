@@ -5,9 +5,9 @@ import { expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils"
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { CopyApiResponseStatus } from "@api-server";
 import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
-import { CopyApiResponseStatus } from "@api-server";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 

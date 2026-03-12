@@ -15,7 +15,6 @@ import {
 	schoolExternalToolSaveFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
-import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolPostParams,
@@ -23,6 +22,7 @@ import {
 	ToolApiInterface,
 } from "@api-server";
 import * as serverApi from "@api-server";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { Mocked } from "vitest";
 
 describe("SchoolExternalToolsModule", () => {

@@ -3,11 +3,11 @@ import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryP
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ACTIVATION_CODE, REGEX_ID } from "@/utils/validation";
+import { H5PContentParentType } from "@api-h5p";
+import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { isDefined } from "@vueuse/core";
-import { H5PContentParentType } from "@api-h5p/models";
-import { Permission, ToolContextType } from "@api-server";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 export const routes: Readonly<RouteRecordRaw>[] = [

@@ -8,12 +8,12 @@ import {
 	newsResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { NewsApiInterface, NewsResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { flushPromises } from "@vue/test-utils";
-import { NewsApiInterface, NewsResponse } from "@api-server";
-import * as serverApi from "@api-server";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

@@ -1,5 +1,5 @@
 import FileStatus from "./FileStatus.vue";
-import { FileRecordScanStatus, PreviewStatus } from "@api-file-storage/models";
+import { FileRecordScanStatus, PreviewStatus } from "@api-file-storage";
 import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

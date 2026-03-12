@@ -3,12 +3,12 @@ import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
 import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
-import { SchulcloudTheme } from "@api-server";
 import { h, nextTick, ref } from "vue";
 import { VApp } from "vuetify/components";
 

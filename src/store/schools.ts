@@ -3,8 +3,6 @@ import { School } from "./types/schools";
 import { $axios } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
-import { useAppStore } from "@data-app";
-import { useEnvConfig } from "@data-env";
 import {
 	FederalStateResponse,
 	SchoolApiFactory,
@@ -20,6 +18,8 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@api-server";
+import { useAppStore } from "@data-app";
+import { useEnvConfig } from "@data-env";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

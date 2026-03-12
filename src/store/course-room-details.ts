@@ -2,7 +2,6 @@ import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { useAppStore } from "@data-app";
 import {
 	BoardApiFactory,
 	CourseRoomsApiFactory,
@@ -17,6 +16,7 @@ import {
 	TaskApiFactory,
 	TaskApiInterface,
 } from "@api-server";
+import { useAppStore } from "@data-app";
 import { isAxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

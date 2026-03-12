@@ -5,14 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import { H5pEditorApiFactory } from "@api-h5p/api";
-import {
-	H5PContentParentType,
-	H5PSaveResponse,
-	LanguageType,
-	PostH5PContentCreateParams,
-} from "@api-h5p/models";
 import { $axios } from "@/utils/api";
+import { H5pEditorApiFactory } from "@api-h5p";
+import { H5PContentParentType, H5PSaveResponse, LanguageType, PostH5PContentCreateParams } from "@api-h5p";
 import { defineElements, H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

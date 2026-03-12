@@ -1,5 +1,5 @@
-import { ParentStatisticResponse } from "@api-file-storage/models";
 import { ParentStatistic } from "@/types/file/File";
+import { ParentStatisticResponse } from "@api-file-storage";
 import { defineStore } from "pinia";
 
 interface ParentStatisticsState {

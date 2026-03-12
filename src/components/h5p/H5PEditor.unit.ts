@@ -1,6 +1,6 @@
 import H5PEditor from "./H5PEditor.vue";
-import { H5PContentParentType } from "@api-h5p/models";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { H5PContentParentType } from "@api-h5p";
 import { H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";

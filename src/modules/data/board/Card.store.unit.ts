@@ -2,13 +2,6 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { FileRecordResponse } from "@api-file-storage/models";
-import {
-	CollaborativeTextEditorElementResponse,
-	ContentElementType,
-	PreferredToolResponse,
-	ToolContextType,
-} from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import {
 	collaborativeTextEditorElementResponseFactory,
@@ -23,6 +16,13 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
+import { FileRecordResponse } from "@api-file-storage";
+import {
+	CollaborativeTextEditorElementResponse,
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { CreateElementRequestPayload, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";

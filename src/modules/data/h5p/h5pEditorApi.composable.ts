@@ -1,5 +1,5 @@
-import { H5pEditorApiFactory } from "@api-h5p/api";
 import { $axios } from "@/utils/api";
+import { H5pEditorApiFactory } from "@api-h5p";
 import { notifyError } from "@data-app";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";

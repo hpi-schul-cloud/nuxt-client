@@ -1,6 +1,4 @@
 import { CollaboraFileType, ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
-import * as serverApi from "@api-file-storage/api/file-api";
-import * as wopiApi from "@api-file-storage/api/wopi-api";
 import {
 	AuthorizedCollaboraDocumentUrlResponse,
 	EditorMode,
@@ -22,6 +20,8 @@ import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { fileUrlParamsFactory } from "@@/tests/test-utils/factory/fileUrlParamsFactory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
+import * as serverApi from "@api-file-storage";
+import * as wopiApi from "@api-file-storage";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

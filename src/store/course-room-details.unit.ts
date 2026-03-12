@@ -8,10 +8,10 @@ import {
 	businessErrorFactory,
 	courseFactory,
 } from "@@/tests/test-utils/factory";
-import { useAppStore } from "@data-app";
-import { createTestingPinia } from "@pinia/testing";
 import * as serverApi from "@api-server";
 import { BoardParentType } from "@api-server";
+import { useAppStore } from "@data-app";
+import { createTestingPinia } from "@pinia/testing";
 import { AxiosError, AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { mock } from "vitest-mock-extended";

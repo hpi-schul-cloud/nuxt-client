@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { PreviewWidth } from "@api-file-storage/models";
+import { PreviewWidth } from "@api-file-storage";
 import { FileRecord } from "@/types/file/File";
 import { convertDownloadToPreviewUrl, isAudioMimeType, isPreviewPossible, isVideoMimeType } from "@/utils/fileHelper";
 import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";

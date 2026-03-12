@@ -1,7 +1,7 @@
 import { BusinessError } from "./types/commons";
 import { GlobalFiles, SpecificFiles } from "./types/filePaths";
-import { useEnvConfig } from "@data-env";
 import { SchulcloudTheme } from "@api-server";
+import { useEnvConfig } from "@data-env";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 const specificFiles: SpecificFiles = {

@@ -4,9 +4,9 @@ import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolRespons
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import { createTestingPinia } from "@pinia/testing";
 import * as serverApi from "@api-server";
 import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
 import { AxiosError } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

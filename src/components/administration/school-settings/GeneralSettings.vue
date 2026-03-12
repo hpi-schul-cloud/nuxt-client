@@ -129,11 +129,11 @@
 
 <script setup lang="ts">
 import PrivacySettings from "./PrivacySettings.vue";
-import { LanguageType, Permission, SchoolFeature, SchoolUpdateBodyParams } from "@api-server";
 import { schoolsModule } from "@/store";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
+import { LanguageType, Permission, SchoolFeature, SchoolUpdateBodyParams } from "@api-server";
 import { notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useOpeningTagValidator } from "@util-validators";
@@ -153,7 +153,7 @@ const isSyncedSchool = computed(() => schoolsModule.schoolIsSynced);
 const school = computed(() => schoolsModule.getSchool);
 const loading = computed(() => schoolsModule.getLoading);
 const languages = computed(() =>
-	availableLanguages.value.map((lang) => {
+	availableLanguages.value.map((lang: string) => {
 		const name = t(`common.words.languages.${lang}`);
 		const flagIcon = "$langIcon" + lang.charAt(0).toUpperCase() + lang.slice(1);
 		return { name, abbreviation: lang, flagIcon };

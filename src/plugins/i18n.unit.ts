@@ -1,8 +1,8 @@
 import { createI18n } from "./i18n";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { LanguageType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
-import { LanguageType } from "@api-server";
 import { setActivePinia } from "pinia";
 import { unref } from "vue";
 

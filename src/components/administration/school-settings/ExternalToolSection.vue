@@ -151,10 +151,9 @@ import { useExternalToolsSectionUtils } from "./external-tool-section-utils.comp
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@api-server";
-import { RequestArgs } from "@api-server/base";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
+import { MediaSourceLicenseType, ToolApiAxiosParamCreator } from "@api-server";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
@@ -198,7 +197,7 @@ const editTool = (item: SchoolExternalToolItem) => {
 };
 
 const showDatasheet = async (item: SchoolExternalToolItem) => {
-	const requestArgs: RequestArgs = await ToolApiAxiosParamCreator().toolControllerGetDatasheet(item.externalToolId);
+	const requestArgs = await ToolApiAxiosParamCreator().toolControllerGetDatasheet(item.externalToolId);
 
 	window.open("/api/v3" + requestArgs.url);
 };

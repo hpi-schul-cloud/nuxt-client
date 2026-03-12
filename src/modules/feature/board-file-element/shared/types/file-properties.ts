@@ -1,4 +1,4 @@
-import { PreviewStatus } from "@api-file-storage/models";
+import { PreviewStatus } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
 
 export interface FileProperties {
