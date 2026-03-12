@@ -1,5 +1,5 @@
 import { FileAlert } from "../../shared/types/FileAlert.enum";
-import { FileRecordResponse, PreviewStatus } from "@/fileStorageApi/v3";
+import { FileRecordResponse, PreviewStatus } from "@/generated/fileStorageApi/v3/models";
 import { computed, Ref, ref } from "vue";
 
 export const useFileAlerts = (fileRecord: Ref<FileRecordResponse | undefined>) => {

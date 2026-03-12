@@ -3,8 +3,9 @@ import TasksListItemTeacher from "./TasksListItemTeacher.vue";
 import { RoleName } from "@/serverApi/v3";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
+import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, FINISHED_TASKS_MODULE_KEY, SHARE_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -19,6 +20,7 @@ describe("TasksList", () => {
 	let tasksModuleMock: TasksModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
+	let shareModuleMock: ShareModule;
 
 	const mountComponent = (options = {}) => {
 		const wrapper = mount(TasksList, {
@@ -26,8 +28,9 @@ describe("TasksList", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-					tasksModule: tasksModuleMock,
-					finishedTasksModule: finishedTasksModuleMock,
+					[TASKS_MODULE_KEY.valueOf()]: tasksModuleMock,
+					[FINISHED_TASKS_MODULE_KEY.valueOf()]: finishedTasksModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				},
 			},
 			...options,
@@ -48,6 +51,7 @@ describe("TasksList", () => {
 
 	beforeEach(() => {
 		copyModuleMock = createModuleMocks(CopyModule);
+		shareModuleMock = createModuleMocks(ShareModule);
 		tasksModuleMock = createModuleMocks(TasksModule, tasksModuleGetters);
 		finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 			getTasks: [],

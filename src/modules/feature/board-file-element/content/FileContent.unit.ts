@@ -4,7 +4,7 @@ import FileDisplay from "./display/FileDisplay.vue";
 import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
+import { PreviewStatus } from "@/generated/fileStorageApi/v3/models";
 import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

@@ -1,5 +1,5 @@
 import { usePreviewGenerator } from "./PreviewGenerator.composable";
-import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewStatus } from "@/generated/fileStorageApi/v3/models";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileRecordFactory, mockComposable } from "@@/tests/test-utils";
 import * as FileStorageApi from "@data-file";

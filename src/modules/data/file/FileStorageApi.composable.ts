@@ -1,6 +1,6 @@
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
-import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/fileStorageApi/v3";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/generated/fileStorageApi/v3/api";
 import {
 	EditorMode,
 	FileRecord,

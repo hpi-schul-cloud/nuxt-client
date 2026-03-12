@@ -24,7 +24,7 @@ const broadcastChannelMock = mockBroadcastChannel();
 vi.mock("@/serverApi/v3");
 const mockedMeApi = vi.mocked(MeApiFactory);
 
-vi.mock("@/fileStorageApi/v3");
+vi.mock("@/generated/fileStorageApi/v3");
 const mockedUserApi = vi.mocked(UserApiFactory);
 
 describe("useApplicationStore", () => {

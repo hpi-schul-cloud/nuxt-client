@@ -1,7 +1,7 @@
 import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
+import { PreviewStatus } from "@/generated/fileStorageApi/v3/models";
 import { ContentElementType } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";

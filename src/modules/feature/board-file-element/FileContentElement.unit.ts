@@ -5,7 +5,7 @@ import FileContentElement from "./FileContentElement.vue";
 import { FileProperties } from "./shared/types/file-properties";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
-import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@/fileStorageApi/v3";
+import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@/generated/fileStorageApi/v3/models";
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";

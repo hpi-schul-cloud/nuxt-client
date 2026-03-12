@@ -1,4 +1,4 @@
-import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
+import { FilesStorageConfigResponse } from "@/generated/fileStorageApi/v3/models";
 import { ConfigResponse } from "@/serverApi/v3";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { defaultConfigEnvs, useEnvStore } from "@data-env";

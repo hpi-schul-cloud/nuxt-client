@@ -2,7 +2,7 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { FileRecordResponse } from "@/fileStorageApi/v3/models/file-record-response";
+import { FileRecordResponse } from "@/generated/fileStorageApi/v3/models";
 import {
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,

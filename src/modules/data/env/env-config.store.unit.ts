@@ -1,5 +1,6 @@
 import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
-import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
+import { FileConfigApiFactory } from "@/generated/fileStorageApi/v3/api";
+import { FilesStorageConfigResponse } from "@/generated/fileStorageApi/v3/models";
 import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@/serverApi/v3";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
@@ -10,7 +11,7 @@ import { beforeAll, beforeEach, expect } from "vitest";
 vi.mock("@/serverApi/v3");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
 
-vi.mock("@/fileStorageApi/v3");
+vi.mock("@/generated/fileStorageApi/v3/api");
 const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
 
 describe("useEnvStore", () => {

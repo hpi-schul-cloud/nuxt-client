@@ -1,4 +1,4 @@
-import { ParentStatisticResponse } from "@/fileStorageApi/v3";
+import { ParentStatisticResponse } from "@/generated/fileStorageApi/v3/models";
 import { ParentStatistic } from "@/types/file/File";
 import { defineStore } from "pinia";
 

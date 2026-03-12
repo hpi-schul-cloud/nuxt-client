@@ -60,7 +60,7 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
-import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewWidth } from "@/generated/fileStorageApi/v3/models";
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
 import { useBoardAllowedOperations, useBoardFocusHandler, useContentElementState } from "@data-board";

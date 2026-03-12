@@ -144,7 +144,7 @@ const isOverDue = computed(() => {
 });
 const isFinished = computed(() => props.task.status.isFinished);
 
-const isCloseToDueDate = computed(() => isDueWithin24h(props.task.dueDate));
+const isCloseToDueDate = computed(() => props.task.dueDate && isDueWithin24h(props.task.dueDate));
 
 const isGraded = computed(() => props.task.status.graded);
 const isSubmitted = computed(() => props.task.status.submitted);
