@@ -9,18 +9,18 @@ export type UserCreatingData = {
 	firstName: string;
 	lastName: string;
 	email: string;
-	roles: [RoleName.Teacher] | [RoleName.Student];
+	roles: [RoleName.TEACHER] | [RoleName.STUDENT];
 	schoolId: string;
 	sendRegistration: boolean;
 	generateRegistrationLink?: boolean;
 	birthday?: Date;
 };
 
-export const useUsers = (userType: RoleName.Student | RoleName.Teacher) => {
+export const useUsers = (userType: RoleName.STUDENT | RoleName.TEACHER) => {
 	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
 
-	const userTypePath = userType === RoleName.Student ? "students" : "teachers";
+	const userTypePath = userType === RoleName.STUDENT ? "students" : "teachers";
 	const usersApi = `/v3/users/admin/${userTypePath}`;
 	const usersApiV1 = `/v1/users/admin/${userTypePath}`;
 
@@ -75,11 +75,11 @@ export const useUsers = (userType: RoleName.Student | RoleName.Teacher) => {
 
 	const createUser = async (userData: UserCreatingData): Promise<{ result: UserResponse | null; error: unknown }> => {
 		const createUserErrorMessage =
-			userType === RoleName.Student
+			userType === RoleName.STUDENT
 				? t("pages.administration.students.new.error")
 				: t("pages.administration.teachers.new.error");
 		const createUserSuccessMessage =
-			userType === RoleName.Student
+			userType === RoleName.STUDENT
 				? t("pages.administration.students.new.success")
 				: t("pages.administration.teachers.new.success");
 

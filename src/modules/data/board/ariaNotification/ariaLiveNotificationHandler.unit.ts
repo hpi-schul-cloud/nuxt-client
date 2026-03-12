@@ -275,7 +275,7 @@ describe("useBoardAriaNotification", () => {
 			const element = document.getElementById("notify-screen-reader-polite");
 			notifyUpdateBoardLayoutSuccess({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				isOwnAction: false,
 			});
 
@@ -288,7 +288,7 @@ describe("useBoardAriaNotification", () => {
 			const element = document.getElementById("notify-screen-reader-polite");
 			notifyUpdateBoardLayoutSuccess({
 				boardId: "boardId",
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 				isOwnAction: false,
 			});
 
@@ -301,7 +301,7 @@ describe("useBoardAriaNotification", () => {
 			const element = document.getElementById("notify-screen-reader-polite");
 			notifyUpdateBoardLayoutSuccess({
 				boardId: "boardId",
-				layout: BoardLayout.Grid,
+				layout: BoardLayout.GRID,
 				isOwnAction: false,
 			});
 

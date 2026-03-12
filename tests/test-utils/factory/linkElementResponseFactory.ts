@@ -6,7 +6,7 @@ import { timestampsResponseFactory } from "./timestampsResponseFactory";
 export const linkElementResponseFactory = Factory.define<LinkElementResponse>(
 	({ sequence }) => ({
 		id: `fileElementResponse${sequence}`,
-		type: ContentElementType.Link,
+		type: ContentElementType.LINK,
 		content: linkElementContentFactory.build(),
 		timestamps: timestampsResponseFactory.build(),
 	})

@@ -729,7 +729,7 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(boardStore.updateBoardLayoutSuccess).not.toHaveBeenCalled();
@@ -741,12 +741,12 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(boardStore.updateBoardLayoutSuccess).toHaveBeenCalledWith({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				isOwnAction: true,
 			});
 		});
@@ -759,7 +759,7 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();

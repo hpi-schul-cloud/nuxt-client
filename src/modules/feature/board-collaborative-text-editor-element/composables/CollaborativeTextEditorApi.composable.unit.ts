@@ -58,7 +58,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.CONTENT_ELEMENT;
 
 				const response = mockApiResponse<serverApi.CollaborativeTextEditorResponse>({
 					data: { url: `${parentType}/${parentId}` },
@@ -105,7 +105,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
-				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.CONTENT_ELEMENT;
 
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);

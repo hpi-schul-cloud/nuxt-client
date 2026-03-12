@@ -44,7 +44,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-const { createUser } = useUsers(RoleName.Student);
+const { createUser } = useUsers(RoleName.STUDENT);
 const router = useRouter();
 
 const date = ref<string | undefined>(undefined);
@@ -70,7 +70,7 @@ const createStudentHandler = async (userData: UserCreatingData) => {
 		lastName: userData.lastName,
 		email: userData.email,
 		birthday: date.value ? new Date(date.value) : undefined,
-		roles: [RoleName.Student],
+		roles: [RoleName.STUDENT],
 		schoolId: useAppStore().school?.id ?? "",
 		sendRegistration: sendRegistration.value,
 	});

@@ -6,7 +6,7 @@ import { drawingElementContentFactory } from "./drawingElementContentFactory";
 export const drawingElementResponseFactory =
 	Factory.define<DrawingElementResponse>(({ sequence }) => ({
 		id: `drawingElementResponse${sequence}`,
-		type: ContentElementType.Drawing,
+		type: ContentElementType.DRAWING,
 		content: drawingElementContentFactory.build(),
 		timestamps: timestampsResponseFactory.build(),
 	}));

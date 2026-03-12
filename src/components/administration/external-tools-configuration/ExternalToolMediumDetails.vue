@@ -47,7 +47,7 @@ const { t } = useI18n();
 const medium: Ref<ExternalToolMediumResponse> = toRef(props, "selectedTemplateMedium");
 
 const isMediumTemplate: ComputedRef<boolean> = computed(
-	() => medium.value.status === ExternalToolMediumStatus.Template
+	() => medium.value.status === ExternalToolMediumStatus.TEMPLATE
 );
 
 const copyDetailToClipboard = (text: string | undefined) => {

@@ -30,7 +30,7 @@ export default class GroupModule extends VuexModule {
 		total: 0,
 	};
 
-	private sortBy?: ClassSortQueryType = ClassSortQueryType.Name;
+	private sortBy?: ClassSortQueryType = ClassSortQueryType.NAME;
 	private sortOrder: SortOrder = SortOrder.ASC;
 	private page = 1;
 

@@ -37,7 +37,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	const envConfig = useEnvConfig();
 	const theme = computed(() => envConfig.value.SC_THEME);
 	const isInviteExternalPersonsFeatureEnabled = computed(
-		() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
+		() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.THR
 	);
 
 	const fetchLinks = async () => {

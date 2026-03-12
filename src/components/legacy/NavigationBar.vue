@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const activeLink = ref(window.location.pathname);
 
-const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Default);
+const isDefaultTheme = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.DEFAULT);
 
 const hasButtons = computed(() => !props.hideButtons && isDefaultTheme.value);
 

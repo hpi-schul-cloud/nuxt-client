@@ -96,7 +96,7 @@ const isUserInGroup = computed(() => {
 
 	const isPartOfGroup: boolean = selectedGroup.value.users.some((user: GroupUserResponse) => user.id === me.user.id);
 
-	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.Administrator);
+	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.ADMINISTRATOR);
 
 	if (isAdmin && !isPartOfGroup) {
 		const allCourseTeacherPartOfGroup = props.courseTeachers?.every((teacher) =>

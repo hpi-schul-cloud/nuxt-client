@@ -43,7 +43,7 @@ describe("NavigationBar", () => {
 	};
 
 	it("renders logo, links and buttons for default theme", () => {
-		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 		const { wrapper, img } = getWrapper();
 
 		const wrapperVm = wrapper.vm as unknown as typeof NavigationBar;
@@ -58,7 +58,7 @@ describe("NavigationBar", () => {
 		expect(wrapperVm.hasButtons).toBe(true);
 	});
 
-	it.each([SchulcloudTheme.N21, SchulcloudTheme.Brb])(
+	it.each([SchulcloudTheme.N21, SchulcloudTheme.BRB])(
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
 			createTestEnvStore({ SC_THEME: theme });

@@ -133,7 +133,7 @@ describe("ExternalToolSection", () => {
 					mediumId: "tool1",
 					mediaSourceId: "licensedSource",
 					mediaSourceName: "Medium Source Name",
-					mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+					mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 				},
 			});
 
@@ -155,11 +155,11 @@ describe("ExternalToolSection", () => {
 							}),
 							isDeactivated: false,
 							medium: {
-								status: ExternalToolMediumStatus.Active,
+								status: ExternalToolMediumStatus.ACTIVE,
 								mediumId: "tool2",
 								mediaSourceId: "notLicensedSource",
 								mediaSourceName: undefined,
-								mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+								mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 							},
 						},
 						{

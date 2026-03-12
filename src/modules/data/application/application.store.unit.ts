@@ -80,7 +80,7 @@ describe("useApplicationStore", () => {
 
 	describe("state", () => {
 		it("should return default locale when no user locale is set", () => {
-			expect(useAppStore().locale).toBe(LanguageType.De);
+			expect(useAppStore().locale).toBe(LanguageType.DE);
 		});
 
 		it("should return false for role checks initially", () => {
@@ -94,23 +94,23 @@ describe("useApplicationStore", () => {
 				user: { id: "test-user-id", firstName: "Test" },
 				school: { id: "school-123", name: "Test School" },
 				roles: [
-					{ id: "1", name: RoleName.Teacher },
-					{ id: "2", name: RoleName.Superhero },
+					{ id: "1", name: RoleName.TEACHER },
+					{ id: "2", name: RoleName.SUPERHERO },
 				],
-				permissions: [Permission.CourseCreate, Permission.HomeworkCreate],
+				permissions: [Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE],
 				systemId: "system-super-hero",
 			});
 
 			expect(useAppStore().user).toStrictEqual(meResponse.user);
 			expect(useAppStore().school).toEqual(meResponse.school);
-			expect(useAppStore().userRoles).toEqual([RoleName.Teacher, RoleName.Superhero]);
-			expect(useAppStore().userPermissions).toEqual([Permission.CourseCreate, Permission.HomeworkCreate]);
+			expect(useAppStore().userRoles).toEqual([RoleName.TEACHER, RoleName.SUPERHERO]);
+			expect(useAppStore().userPermissions).toEqual([Permission.COURSE_CREATE, Permission.HOMEWORK_CREATE]);
 			expect(useAppStore().systemId).toEqual("system-super-hero");
 		});
 
 		describe("role checks", () => {
 			it("should correctly identify teacher role", async () => {
-				await setup({ roles: [{ id: "any", name: RoleName.Teacher }] });
+				await setup({ roles: [{ id: "any", name: RoleName.TEACHER }] });
 
 				expect(useAppStore().isTeacher).toBe(true);
 				expect(useAppStore().isStudent).toBe(false);
@@ -118,7 +118,7 @@ describe("useApplicationStore", () => {
 			});
 
 			it("should correctly identify student role", async () => {
-				await setup({ roles: [{ id: "any", name: RoleName.Student }] });
+				await setup({ roles: [{ id: "any", name: RoleName.STUDENT }] });
 
 				expect(useAppStore().isTeacher).toBe(false);
 				expect(useAppStore().isStudent).toBe(true);
@@ -128,8 +128,8 @@ describe("useApplicationStore", () => {
 			it("should correctly identify external person role", async () => {
 				await setup({
 					roles: [
-						{ id: "any", name: RoleName.ExternalPerson },
-						{ id: "any", name: RoleName.Teacher },
+						{ id: "any", name: RoleName.EXTERNAL_PERSON },
+						{ id: "any", name: RoleName.TEACHER },
 					],
 				});
 
@@ -142,15 +142,15 @@ describe("useApplicationStore", () => {
 
 	describe("hasPermission helper", () => {
 		it("should return computed that checks if user has specific permission", () => {
-			const hasSchoolEdit = useAppStore().hasPermission(Permission.SchoolEdit);
-			const hasUserUpdate = useAppStore().hasPermission(Permission.UserUpdate);
+			const hasSchoolEdit = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
+			const hasUserUpdate = useAppStore().hasPermission(Permission.USER_UPDATE);
 
 			expect(hasSchoolEdit.value).toBe(false);
 			expect(hasUserUpdate.value).toBe(false);
 
 			useAppStore().$patch({
 				meResponse: {
-					permissions: [Permission.SchoolEdit, Permission.UserCreate],
+					permissions: [Permission.SCHOOL_EDIT, Permission.USER_CREATE],
 				},
 			});
 
@@ -161,10 +161,10 @@ describe("useApplicationStore", () => {
 
 	describe("login action", () => {
 		it("should successfully login and update store state", async () => {
-			await setup({ language: LanguageType.Es });
+			await setup({ language: LanguageType.ES });
 
 			expect(useAppStore().isLoggedIn).toBe(true);
-			expect(useAppStore().locale).toBe(LanguageType.Es);
+			expect(useAppStore().locale).toBe(LanguageType.ES);
 		});
 
 		it("should not log in on api error", async () => {
@@ -244,15 +244,15 @@ describe("useApplicationStore", () => {
 	describe("updateUserLanguage action", () => {
 		it("should successfully update user language", async () => {
 			const { mockChangeLanguage } = doMockUserApiData({ successful: true });
-			await useAppStore().updateUserLanguage(LanguageType.Es);
+			await useAppStore().updateUserLanguage(LanguageType.ES);
 			expect(mockChangeLanguage).toHaveBeenCalled();
-			expect(useAppStore().locale).toBe(LanguageType.Es);
+			expect(useAppStore().locale).toBe(LanguageType.ES);
 		});
 
 		it("should not update locale when API returns unsuccessful", async () => {
 			doMockUserApiData({ successful: false });
-			await useAppStore().updateUserLanguage(LanguageType.Es);
-			expect(useAppStore().locale).toEqual(LanguageType.De);
+			await useAppStore().updateUserLanguage(LanguageType.ES);
+			expect(useAppStore().locale).toEqual(LanguageType.DE);
 		});
 
 		it("should handle API error and log it", async () => {
@@ -263,10 +263,10 @@ describe("useApplicationStore", () => {
 
 			logger.error = vi.fn();
 
-			await useAppStore().updateUserLanguage(LanguageType.Es);
+			await useAppStore().updateUserLanguage(LanguageType.ES);
 
 			expect(logger.error).toHaveBeenCalledWith(error);
-			expect(useAppStore().locale).toEqual(LanguageType.De);
+			expect(useAppStore().locale).toEqual(LanguageType.DE);
 		});
 	});
 

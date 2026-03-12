@@ -23,7 +23,7 @@
 						{{ cardTitle }}
 					</span>
 				</div>
-				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
+				<div v-if="userRole === Roles.TEACHER" class="dot-menu-section">
 					<RoomDotMenu
 						:menu-items="actionsMenuItems"
 						:data-testid="`board-card-menu-${boardCardIndex}`"
@@ -35,7 +35,7 @@
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
-		<VCardActions v-if="isDraft && userRole === Roles.Teacher" data-testid="board-card-actions">
+		<VCardActions v-if="isDraft && userRole === Roles.TEACHER" data-testid="board-card-actions">
 			<VBtn
 				v-for="(action, index) in cardActions"
 				:key="index"
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import RoomDotMenu from "./RoomDotMenu.vue";
-import { BoardLayout, ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { BoardLayout, ImportUserResponseRoleNames as Roles } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,
@@ -109,7 +109,7 @@ const cardTitle = computed(() => {
 
 const isDraft = computed(() => !props.columnBoardItem.published);
 
-const isListBoard = computed(() => props.columnBoardItem.layout === BoardLayout.List);
+const isListBoard = computed(() => props.columnBoardItem.layout === BoardLayout.LIST);
 
 const titleIcon = computed(() => {
 	const icon = isListBoard.value ? mdiViewAgendaOutline : mdiViewDashboardOutline;

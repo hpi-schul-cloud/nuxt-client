@@ -18,7 +18,7 @@ vi.mock("vue-router");
 describe("FileTable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		createTestAppStoreWithRole(RoleName.Teacher);
+		createTestAppStoreWithRole(RoleName.TEACHER);
 	});
 
 	const setupWrapper = (props: {

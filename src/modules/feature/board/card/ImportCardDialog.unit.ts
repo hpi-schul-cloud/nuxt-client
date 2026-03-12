@@ -1,5 +1,5 @@
 import ImportCardDialog from "./ImportCardDialog.vue";
-import { ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3";
+import { ShareTokenInfoResponseParentType } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { mockApiResponse, mockedPiniaStoreTyping, roomItemFactory } from "@@/tests/test-utils";
@@ -41,7 +41,7 @@ describe("ImportCardDialog", () => {
 			Promise.resolve({
 				token,
 				parentName: "parentName",
-				parentType: ShareTokenInfoResponseParentTypeEnum.Card,
+				parentType: ShareTokenInfoResponseParentType.CARD,
 			});
 
 		const wrapper = mount(ImportCardDialog, {

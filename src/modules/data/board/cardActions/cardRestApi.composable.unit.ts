@@ -120,7 +120,7 @@ describe("useCardRestApi", () => {
 
 			await createElementRequest({
 				cardId: "cardId",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 				toPosition: 0,
 			});
 
@@ -140,7 +140,7 @@ describe("useCardRestApi", () => {
 
 			const payload = {
 				cardId: card.id,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 				toPosition: 0,
 			};
 
@@ -162,7 +162,7 @@ describe("useCardRestApi", () => {
 
 			await createElementRequest({
 				cardId: card.id,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
@@ -196,7 +196,7 @@ describe("useCardRestApi", () => {
 				await createPreferredElement(
 					{
 						cardId: "cardId",
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 						toPosition: 0,
 					},
 					preferredTool
@@ -251,7 +251,7 @@ describe("useCardRestApi", () => {
 				await createPreferredElement(
 					{
 						cardId: "cardId",
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 						toPosition: 0,
 					},
 					preferredTool
@@ -269,7 +269,7 @@ describe("useCardRestApi", () => {
 
 				const payload = {
 					cardId: card.id,
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					toPosition: 0,
 				};
 
@@ -307,7 +307,7 @@ describe("useCardRestApi", () => {
 
 				const payload = {
 					cardId: card.id,
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					toPosition: 0,
 				};
 
@@ -379,7 +379,7 @@ describe("useCardRestApi", () => {
 
 				const payload = {
 					cardId: card.id,
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					toPosition: 0,
 				};
 
@@ -460,7 +460,7 @@ describe("useCardRestApi", () => {
 				await createPreferredElement(
 					{
 						cardId: card.id,
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 					},
 					preferredTool
 				);

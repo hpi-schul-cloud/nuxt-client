@@ -220,7 +220,7 @@ describe("TasksList", () => {
 			const wrapper = mountComponent({
 				propsData: {
 					tasks,
-					userRole: RoleName.Student,
+					userRole: RoleName.STUDENT,
 				},
 			});
 
@@ -232,7 +232,7 @@ describe("TasksList", () => {
 		const wrapper = mountComponent({
 			propsData: {
 				tasks,
-				userRole: RoleName.Teacher,
+				userRole: RoleName.TEACHER,
 			},
 		});
 

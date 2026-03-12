@@ -321,8 +321,8 @@ describe("course-room module", () => {
 				const params = {
 					title: "title",
 					parentId: "parentId",
-					parentType: BoardParentType.Course,
-					layout: serverApi.BoardLayout.Columns,
+					parentType: BoardParentType.COURSE,
+					layout: serverApi.BoardLayout.COLUMNS,
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
@@ -344,8 +344,8 @@ describe("course-room module", () => {
 				const params = {
 					title: "title",
 					parentId: "parentId",
-					parentType: BoardParentType.Course,
-					layout: serverApi.BoardLayout.List,
+					parentType: BoardParentType.COURSE,
+					layout: serverApi.BoardLayout.LIST,
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
@@ -368,8 +368,8 @@ describe("course-room module", () => {
 				const params = {
 					title: "title",
 					parentId: "parentId",
-					parentType: BoardParentType.Course,
-					layout: serverApi.BoardLayout.Columns,
+					parentType: BoardParentType.COURSE,
+					layout: serverApi.BoardLayout.COLUMNS,
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
@@ -660,7 +660,7 @@ describe("course-room module", () => {
 					isSynchronized: false,
 					elements: [
 						{
-							type: serverApi.BoardElementResponseTypeEnum.Task,
+							type: serverApi.BoardElementResponseType.TASK,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -792,7 +792,7 @@ describe("course-room module", () => {
 					displayColor: "black",
 					elements: [
 						{
-							type: serverApi.BoardElementResponseTypeEnum.Task,
+							type: serverApi.BoardElementResponseType.TASK,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -852,7 +852,7 @@ describe("course-room module", () => {
 					displayColor: "black",
 					elements: [
 						{
-							type: serverApi.BoardElementResponseTypeEnum.Task,
+							type: serverApi.BoardElementResponseType.TASK,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",

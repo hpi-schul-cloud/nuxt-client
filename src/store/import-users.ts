@@ -1,7 +1,7 @@
 import {
 	ImportUserListResponse,
 	ImportUserResponse,
-	ImportUserResponseRoleNamesEnum,
+	ImportUserResponseRoleNames,
 	UserImportApiFactory,
 	UserImportApiInterface,
 	UserMatchListResponse,
@@ -33,7 +33,7 @@ export default class ImportUsersModule extends VuexModule {
 	private firstName = "";
 	private lastName = "";
 	private loginName = "";
-	private role: ImportUserResponseRoleNamesEnum | "" = "";
+	private role: ImportUserResponseRoleNames | "" = "";
 	private classes = "";
 	private match: Array<MatchedBy> = [MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None];
 	private flagged = false;
@@ -73,7 +73,7 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Mutation
-	setRole(role: ImportUserResponseRoleNamesEnum): void {
+	setRole(role: ImportUserResponseRoleNames): void {
 		this.role = role;
 	}
 

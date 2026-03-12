@@ -103,43 +103,43 @@ const mapToComponent = (type: ContentElementType) => {
 	const envConfig = useEnvConfig();
 
 	switch (type) {
-		case ContentElementType.CollaborativeTextEditor:
+		case ContentElementType.COLLABORATIVE_TEXT_EDITOR:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
 				return CollaborativeTextEditorElement;
 			}
 			break;
-		case ContentElementType.Drawing:
+		case ContentElementType.DRAWING:
 			if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
 				return DrawingContentElement;
 			}
 			break;
-		case ContentElementType.ExternalTool:
+		case ContentElementType.EXTERNAL_TOOL:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 				return ExternalToolElement;
 			}
 			break;
-		case ContentElementType.File:
+		case ContentElementType.FILE:
 			return FileContentElement;
-		case ContentElementType.Link:
+		case ContentElementType.LINK:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 				return LinkContentElement;
 			}
 			break;
-		case ContentElementType.RichText:
+		case ContentElementType.RICH_TEXT:
 			return RichTextContentElement;
-		case ContentElementType.VideoConference:
+		case ContentElementType.VIDEO_CONFERENCE:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
 				return VideoConferenceContentElement;
 			}
 			break;
-		case ContentElementType.Deleted:
+		case ContentElementType.DELETED:
 			return DeletedElement;
-		case ContentElementType.FileFolder:
+		case ContentElementType.FILE_FOLDER:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 				return FolderContentElement;
 			}
 			break;
-		case ContentElementType.H5p:
+		case ContentElementType.H5P:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
 				return H5pElement;
 			}
@@ -150,12 +150,12 @@ const mapToComponent = (type: ContentElementType) => {
 };
 
 const elementTypesWithTabindexZero = [
-	ContentElementType.CollaborativeTextEditor,
-	ContentElementType.Drawing,
-	ContentElementType.ExternalTool,
-	ContentElementType.File,
-	ContentElementType.Link,
-	ContentElementType.H5p,
+	ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+	ContentElementType.DRAWING,
+	ContentElementType.EXTERNAL_TOOL,
+	ContentElementType.FILE,
+	ContentElementType.LINK,
+	ContentElementType.H5P,
 ];
 
 const getTabIndex = (element: AnyContentElement) => {

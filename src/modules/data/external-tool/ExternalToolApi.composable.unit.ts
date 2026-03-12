@@ -56,7 +56,7 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				launchType: LaunchType.Basic,
+				launchType: LaunchType.BASIC,
 			});
 		});
 	});
@@ -101,7 +101,7 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				launchType: LaunchType.Basic,
+				launchType: LaunchType.BASIC,
 			});
 		});
 	});

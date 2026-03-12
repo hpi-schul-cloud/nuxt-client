@@ -21,7 +21,7 @@ describe("loggedOutLayout", () => {
 		createTestEnvStore({
 			GHOST_BASE_URL: "https://works-like-charm.com",
 			// SC_THEME must be set here because of dependency to NavigationBar
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 		});
 
 		const wrapper = mount(LoggedOutLayout, {

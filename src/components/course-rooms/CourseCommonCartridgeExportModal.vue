@@ -220,7 +220,7 @@ watch(
 				});
 			}
 
-			if (element.type === BoardElementType.Task) {
+			if (element.type === BoardElementType.TASK) {
 				allTasks.value.push({
 					isSelected: true,
 					title: (element.content as BoardTask).name,

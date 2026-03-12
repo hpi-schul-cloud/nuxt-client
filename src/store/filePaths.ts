@@ -91,7 +91,7 @@ export default class FilePathsModule extends VuexModule {
 	init() {
 		try {
 			const theme = useEnvConfig().value.SC_THEME;
-			if (theme === SchulcloudTheme.Thr) {
+			if (theme === SchulcloudTheme.THR) {
 				specificFiles.termsOfUse = termsOfUseThr;
 				specificFiles.privacy = privacyThr;
 			}

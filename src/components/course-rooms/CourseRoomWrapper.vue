@@ -52,7 +52,7 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
-const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
+const canCreateCourse = useAppStore().hasPermission(Permission.COURSE_CREATE);
 
 const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	if (!canCreateCourse.value) return;

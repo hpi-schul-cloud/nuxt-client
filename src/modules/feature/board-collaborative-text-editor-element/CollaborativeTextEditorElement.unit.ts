@@ -41,7 +41,7 @@ describe("CollaborativeTextEditorElement", () => {
 
 		const resolvedValue = getUrlHasError
 			? undefined
-			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
+			: `${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`;
 
 		mockedUseCollaborativeTextEditorApi.mockReturnValue({
 			getUrl: vi.fn().mockResolvedValueOnce(resolvedValue),
@@ -144,7 +144,7 @@ describe("CollaborativeTextEditorElement", () => {
 				await elementCard.trigger(`keydown.${key}`);
 
 				expect(window.open).toHaveBeenCalledTimes(1);
-				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 			});
 
 			it.each(["enter", "space"])(
@@ -162,7 +162,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await elementCard.trigger(`keydown.${key}`);
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 				}
 			);
 
@@ -197,7 +197,7 @@ describe("CollaborativeTextEditorElement", () => {
 					expect(useCollaborativeTextEditorApi().getUrl).toHaveBeenCalledTimes(1);
 					expect(useCollaborativeTextEditorApi().getUrl).toHaveBeenCalledWith(
 						element.id,
-						CollaborativeTextEditorParentType.ContentElement
+						CollaborativeTextEditorParentType.CONTENT_ELEMENT
 					);
 				});
 
@@ -213,7 +213,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+					expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 				});
 			});
 
@@ -231,7 +231,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 				});
 			});
 		});
@@ -278,7 +278,7 @@ describe("CollaborativeTextEditorElement", () => {
 				await elementCard.trigger(`keydown.${key}`);
 
 				expect(window.open).toHaveBeenCalledTimes(1);
-				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 			});
 		});
 

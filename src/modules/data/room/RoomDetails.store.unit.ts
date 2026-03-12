@@ -139,7 +139,7 @@ describe("useRoomDetailsStore", () => {
 			const { store } = setup();
 			const boardId = "board-id";
 			const roomId = "room-id";
-			const layout = serverApi.BoardLayout.Columns;
+			const layout = serverApi.BoardLayout.COLUMNS;
 			const title = "title";
 
 			boardApiMock.boardControllerCreateBoard.mockResolvedValue(
@@ -154,7 +154,7 @@ describe("useRoomDetailsStore", () => {
 			expect(boardApiMock.boardControllerCreateBoard).toHaveBeenCalledWith({
 				title,
 				parentId: roomId,
-				parentType: serverApi.BoardParentType.Room,
+				parentType: serverApi.BoardParentType.ROOM,
 				layout,
 			});
 		});
@@ -166,7 +166,7 @@ describe("useRoomDetailsStore", () => {
 			expect(store.isLoading).toBe(true);
 			const params: RoomUpdateParams = {
 				name: "room-name",
-				color: RoomColor.BlueGrey,
+				color: RoomColor.BLUE_GREY,
 				features: [],
 			};
 
@@ -182,7 +182,7 @@ describe("useRoomDetailsStore", () => {
 		const { store } = setup();
 		const params: RoomUpdateParams = {
 			name: "room-name",
-			color: RoomColor.BlueGrey,
+			color: RoomColor.BLUE_GREY,
 			features: [],
 		};
 		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });

@@ -11,20 +11,20 @@ describe("i18n plugin", () => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
 		createTestEnvStore({
-			I18N__FALLBACK_LANGUAGE: LanguageType.Uk,
+			I18N__FALLBACK_LANGUAGE: LanguageType.UK,
 		});
 	});
 
 	it("sets locale to the locale computed in the application store module", () => {
-		useAppStore().$patch({ userLocale: LanguageType.Es });
+		useAppStore().$patch({ userLocale: LanguageType.ES });
 		const i18n = createI18n();
 
-		expect(unref(i18n.global.locale)).toBe(LanguageType.Es);
-		expect(unref(i18n.global.fallbackLocale)).toBe(LanguageType.Uk);
+		expect(unref(i18n.global.locale)).toBe(LanguageType.ES);
+		expect(unref(i18n.global.fallbackLocale)).toBe(LanguageType.UK);
 	});
 
 	it("sets the number formats for all supported languages correctly", () => {
-		useAppStore().$patch({ userLocale: LanguageType.Es });
+		useAppStore().$patch({ userLocale: LanguageType.ES });
 		const i18n = createI18n();
 
 		// eslint-disable-next-line

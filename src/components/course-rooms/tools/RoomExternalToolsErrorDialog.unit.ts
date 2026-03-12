@@ -16,8 +16,8 @@ describe("RoomExternalToolsErrorDialog", () => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
-				permissions: [Permission.ContextToolAdmin],
-				roles: [{ name: RoleName.Teacher, id: "teacher1" }],
+				permissions: [Permission.CONTEXT_TOOL_ADMIN],
+				roles: [{ name: RoleName.TEACHER, id: "teacher1" }],
 			},
 		});
 

@@ -45,10 +45,10 @@ describe("ExternalToolElementAlert", () => {
 
 		setActivePinia(createTestingPinia());
 		const hasContextToolAdminPermission = allowedOperations.createExternalToolElement ?? false;
-		const permissions = hasContextToolAdminPermission ? [Permission.ContextToolAdmin] : [];
+		const permissions = hasContextToolAdminPermission ? [Permission.CONTEXT_TOOL_ADMIN] : [];
 		vi.mocked(useAppStore).mockReturnValue({
 			hasPermission: (permission: Permission) => permissions.includes(permission),
-			userRoles: [isTeacher ? RoleName.Teacher : RoleName.Student],
+			userRoles: [isTeacher ? RoleName.TEACHER : RoleName.STUDENT],
 		} as unknown as ReturnType<typeof useAppStore>);
 
 		const wrapper = mount(ExternalToolElementAlert, {

@@ -12,8 +12,8 @@ import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 const videoConferenceStateMapping: Partial<Record<VideoConferenceStateResponse, VideoConferenceState>> = {
-	[VideoConferenceStateResponse.Running]: VideoConferenceState.RUNNING,
-	[VideoConferenceStateResponse.NotStarted]: VideoConferenceState.NOT_STARTED,
+	[VideoConferenceStateResponse.RUNNING]: VideoConferenceState.RUNNING,
+	[VideoConferenceStateResponse.NOT_STARTED]: VideoConferenceState.NOT_STARTED,
 };
 
 @Module({

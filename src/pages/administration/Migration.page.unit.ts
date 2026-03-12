@@ -75,7 +75,7 @@ describe("User Migration / Index", () => {
 		injectRouterMock(createRouterMock());
 		createTestEnvStore({
 			SC_TITLE: "dBildungscloud",
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 		});

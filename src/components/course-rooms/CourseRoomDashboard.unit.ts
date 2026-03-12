@@ -1,5 +1,5 @@
 import CourseRoomDashboard from "./CourseRoomDashboard.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { ShareTokenBodyParamsParentType } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -338,7 +338,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 			expect(shareModuleMock.startShareFlow).toBeCalledWith({
 				id: "12345",
-				type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+				type: ShareTokenBodyParamsParentType.LESSONS,
 			});
 		});
 	});
@@ -355,7 +355,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 			expect(shareModuleMock.startShareFlow).toBeCalledWith({
 				id: "1234",
-				type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+				type: ShareTokenBodyParamsParentType.TASKS,
 			});
 		});
 	});

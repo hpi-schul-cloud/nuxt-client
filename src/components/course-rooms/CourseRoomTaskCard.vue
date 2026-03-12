@@ -57,7 +57,7 @@
 						{{ chip.name }}
 					</v-chip>
 					<ChipTimeRemaining
-						v-if="roles.Student === userRole && isCloseToDueDate && !isSubmitted"
+						v-if="roles.STUDENT === userRole && isCloseToDueDate && !isSubmitted"
 						type="warning"
 						:due-date="task.dueDate"
 						:shorten-unit="$vuetify.display.xs"
@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { ImportUserResponseRoleNames as Roles } from "@/serverApi/v3";
 import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
@@ -157,20 +157,20 @@ const isPlanned = computed(() => {
 
 const cardActions = computed(() => {
 	const roleBasedActions: Record<string, Array<{ action: () => void; name: string; testid: string }>> = {
-		[Roles.Teacher]: [],
-		[Roles.Student]: [],
+		[Roles.TEACHER]: [],
+		[Roles.STUDENT]: [],
 	};
 
-	if (props.userRole === Roles.Teacher) {
+	if (props.userRole === Roles.TEACHER) {
 		if (isPlanned.value || (isDraft.value && !isFinished.value)) {
-			roleBasedActions[Roles.Teacher].push({
+			roleBasedActions[Roles.TEACHER].push({
 				action: () => publishCard(),
 				name: t("common.action.publish"),
 				testid: `task-card-action-publish-${props.taskCardIndex}`,
 			});
 		}
 		if (!isPlanned.value && !isDraft.value && !isFinished.value) {
-			roleBasedActions[Roles.Teacher].push({
+			roleBasedActions[Roles.TEACHER].push({
 				action: () => finishCard(),
 				name: t("pages.room.taskCard.label.done"),
 				testid: `task-card-action-done-${props.taskCardIndex}`,
@@ -178,9 +178,9 @@ const cardActions = computed(() => {
 		}
 	}
 
-	if (props.userRole === Roles.Student) {
+	if (props.userRole === Roles.STUDENT) {
 		if (!isFinished.value) {
-			roleBasedActions[Roles.Student].push({
+			roleBasedActions[Roles.STUDENT].push({
 				action: () => finishCard(),
 				name: t("pages.room.taskCard.label.done"),
 				testid: `task-card-action-done-${props.taskCardIndex}`,
@@ -193,23 +193,23 @@ const cardActions = computed(() => {
 
 const chipItems = computed(() => {
 	const roleBasedChips: Record<string, Array<{ name: string; class?: string; icon?: string; testid?: string }>> = {
-		[Roles.Teacher]: [],
-		[Roles.Student]: [],
+		[Roles.TEACHER]: [],
+		[Roles.STUDENT]: [],
 	};
 
-	if (props.userRole === Roles.Teacher) {
-		roleBasedChips[Roles.Teacher].push({
+	if (props.userRole === Roles.TEACHER) {
+		roleBasedChips[Roles.TEACHER].push({
 			name: `${props.task.status.submitted}/${props.task.status.maxSubmissions} ${t("pages.room.taskCard.teacher.label.submitted")}`,
 			testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
 		});
 
-		roleBasedChips[Roles.Teacher].push({
+		roleBasedChips[Roles.TEACHER].push({
 			name: `${props.task.status.graded}/${props.task.status.maxSubmissions} ${t("pages.room.taskCard.label.graded")}`,
 			testid: `room-task-card-chip-graded-${props.taskCardIndex}`,
 		});
 
 		if (isOverDue.value) {
-			roleBasedChips[Roles.Teacher].push({
+			roleBasedChips[Roles.TEACHER].push({
 				icon: "$taskMissed",
 				name: t(`pages.room.taskCard.teacher.label.overdue`),
 				class: "overdue",
@@ -218,9 +218,9 @@ const chipItems = computed(() => {
 		}
 	}
 
-	if (props.userRole === Roles.Student) {
+	if (props.userRole === Roles.STUDENT) {
 		if (isSubmittedNotGraded.value) {
-			roleBasedChips[Roles.Student].push({
+			roleBasedChips[Roles.STUDENT].push({
 				icon: mdiCheckCircleOutline,
 				name: t(`pages.room.taskCard.student.label.submitted`),
 				class: "submitted",
@@ -229,13 +229,13 @@ const chipItems = computed(() => {
 		}
 
 		if (isGraded.value) {
-			roleBasedChips[Roles.Student].push({
+			roleBasedChips[Roles.STUDENT].push({
 				icon: mdiCheckCircleOutline,
 				name: t(`pages.room.taskCard.student.label.submitted`),
 				class: "submitted",
 				testid: `room-task-card-chip-submitted-${props.taskCardIndex}`,
 			});
-			roleBasedChips[Roles.Student].push({
+			roleBasedChips[Roles.STUDENT].push({
 				icon: mdiTextBoxCheckOutline,
 				name: t(`pages.room.taskCard.label.graded`),
 				class: "graded",
@@ -244,7 +244,7 @@ const chipItems = computed(() => {
 		}
 
 		if (isOverDue.value && !isSubmitted.value) {
-			roleBasedChips[Roles.Student].push({
+			roleBasedChips[Roles.STUDENT].push({
 				icon: "$taskMissed",
 				name: t(`pages.room.taskCard.student.label.overdue`),
 				class: "overdue",
@@ -265,12 +265,12 @@ const moreActionsMenuItems = computed(() => {
 			dataTestId: string;
 		}>
 	> = {
-		[Roles.Teacher]: [],
-		[Roles.Student]: [],
+		[Roles.TEACHER]: [],
+		[Roles.STUDENT]: [],
 	};
 
-	if (props.userRole === Roles.Teacher) {
-		roleBasedMoreActions[Roles.Teacher].push({
+	if (props.userRole === Roles.TEACHER) {
+		roleBasedMoreActions[Roles.TEACHER].push({
 			icon: mdiPencilOutline,
 			action: () => redirectAction(`/homework/${props.task.id}/edit?returnUrl=rooms/${props.room.roomId}`),
 			name: t("pages.room.taskCard.label.edit"),
@@ -278,7 +278,7 @@ const moreActionsMenuItems = computed(() => {
 		});
 
 		if (useEnvConfig().value.FEATURE_COPY_SERVICE_ENABLED) {
-			roleBasedMoreActions[Roles.Teacher].push({
+			roleBasedMoreActions[Roles.TEACHER].push({
 				icon: mdiContentCopy,
 				action: () => copyCard(),
 				name: t("common.actions.duplicate"),
@@ -287,7 +287,7 @@ const moreActionsMenuItems = computed(() => {
 		}
 
 		if (useEnvConfig().value.FEATURE_TASK_SHARE) {
-			roleBasedMoreActions[Roles.Teacher].push({
+			roleBasedMoreActions[Roles.TEACHER].push({
 				icon: mdiShareVariantOutline,
 				action: () => emit("share-task", props.task.id),
 				name: t("common.actions.shareCopy"),
@@ -296,7 +296,7 @@ const moreActionsMenuItems = computed(() => {
 		}
 
 		if (!isDraft.value && !isFinished.value) {
-			roleBasedMoreActions[Roles.Teacher].push({
+			roleBasedMoreActions[Roles.TEACHER].push({
 				icon: mdiUndoVariant,
 				action: () => unPublishCard(),
 				name: t("pages.room.cards.label.revert"),
@@ -304,7 +304,7 @@ const moreActionsMenuItems = computed(() => {
 			});
 		}
 
-		roleBasedMoreActions[Roles.Teacher].push({
+		roleBasedMoreActions[Roles.TEACHER].push({
 			icon: mdiTrashCanOutline,
 			action: () => emit("delete-task"),
 			name: t("common.actions.delete"),
@@ -313,13 +313,13 @@ const moreActionsMenuItems = computed(() => {
 	}
 
 	if (isFinished.value) {
-		roleBasedMoreActions[Roles.Teacher].splice(-1, 0, {
+		roleBasedMoreActions[Roles.TEACHER].splice(-1, 0, {
 			icon: mdiUndoVariant,
 			action: () => restoreCard(),
 			name: t("common.labels.restore"),
 			dataTestId: `room-task-card-menu-restore-${props.taskCardIndex}`,
 		});
-		roleBasedMoreActions[Roles.Student].push({
+		roleBasedMoreActions[Roles.STUDENT].push({
 			icon: mdiUndoVariant,
 			action: () => restoreCard(),
 			name: t("common.labels.restore"),

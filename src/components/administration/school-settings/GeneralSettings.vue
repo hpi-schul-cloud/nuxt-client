@@ -160,7 +160,7 @@ const languages = computed(() =>
 	})
 );
 
-const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
 
 const convertDataUrlToFile = (dataURL: string, fileName: string) => {
 	const dataUrlParts = dataURL.split(",");
@@ -188,7 +188,7 @@ const copyToLocalSchool = async () => {
 	localSchool.value = schoolCopy;
 
 	if (localSchool.value && !localSchool.value.language) {
-		localSchool.value.language = LanguageType.De;
+		localSchool.value.language = LanguageType.DE;
 	}
 };
 

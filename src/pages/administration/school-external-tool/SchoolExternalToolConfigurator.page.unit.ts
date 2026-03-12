@@ -323,7 +323,7 @@ describe("SchoolExternalToolConfigurator", () => {
 					baseUrl: "https://test.com",
 					parameters: [],
 					medium: {
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediaSourceId: "media-source-id",
 						mediumId: "medium-id",
 					},

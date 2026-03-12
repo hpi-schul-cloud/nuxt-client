@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { CopyApiResponseType } from "@/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed } from "vue";
@@ -45,7 +45,7 @@ const { t } = useI18n();
 
 type CopyResultItem = {
 	elements: Array<{
-		type: CopyApiResponseTypeEnum;
+		type: CopyApiResponseType;
 	}>;
 };
 
@@ -65,7 +65,7 @@ const emit = defineEmits<{
 	(e: "copy-dialog-closed"): void;
 }>();
 
-const hasElementOfType = (items: CopyResultItem[], types: CopyApiResponseTypeEnum) => {
+const hasElementOfType = (items: CopyResultItem[], types: CopyApiResponseType) => {
 	let found = false;
 	items.forEach((item) => {
 		if (found) return;
@@ -112,19 +112,19 @@ const copyResultWarnings = computed(() => [
 	},
 ]);
 
-const hasGeogebraElement = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentGeogebra));
+const hasGeogebraElement = computed(() => hasElementOfType(items.value, CopyApiResponseType.LESSON_CONTENT_GEOGEBRA));
 
 const hasEtherpadElement = computed(
 	() =>
-		hasElementOfType(items.value, CopyApiResponseTypeEnum.CollaborativeTextEditorElement) ||
-		hasElementOfType(items.value, CopyApiResponseTypeEnum.LessonContentEtherpad)
+		hasElementOfType(items.value, CopyApiResponseType.COLLABORATIVE_TEXT_EDITOR_ELEMENT) ||
+		hasElementOfType(items.value, CopyApiResponseType.LESSON_CONTENT_ETHERPAD)
 );
 
-const hasDrawingElement = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.DrawingElement));
+const hasDrawingElement = computed(() => hasElementOfType(items.value, CopyApiResponseType.DRAWING_ELEMENT));
 
-const hasCourseGroup = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.CoursegroupGroup));
+const hasCourseGroup = computed(() => hasElementOfType(items.value, CopyApiResponseType.COURSEGROUP_GROUP));
 
-const isCourse = computed(() => props.copyResultRootItemType === CopyApiResponseTypeEnum.Course);
+const isCourse = computed(() => props.copyResultRootItemType === CopyApiResponseType.COURSE);
 
 const externalToolsInfoText = computed(() =>
 	useEnvConfig().value.FEATURE_CTL_TOOLS_COPY_ENABLED
@@ -132,11 +132,9 @@ const externalToolsInfoText = computed(() =>
 		: t("components.molecules.copyResult.ctlTools.info")
 );
 
-const hasExternalTool = computed(() => hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalTool));
+const hasExternalTool = computed(() => hasElementOfType(items.value, CopyApiResponseType.EXTERNAL_TOOL));
 
-const hasExternalToolElement = computed(() =>
-	hasElementOfType(items.value, CopyApiResponseTypeEnum.ExternalToolElement)
-);
+const hasExternalToolElement = computed(() => hasElementOfType(items.value, CopyApiResponseType.EXTERNAL_TOOL_ELEMENT));
 </script>
 
 <style scoped lang="scss">

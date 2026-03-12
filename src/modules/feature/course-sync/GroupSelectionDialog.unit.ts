@@ -105,7 +105,7 @@ describe("GroupSelectionDialog", () => {
 						id: "teacher1",
 						firstName: "Teacher",
 						lastName: "1",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -154,7 +154,7 @@ describe("GroupSelectionDialog", () => {
 						id: "student1",
 						firstName: "Student",
 						lastName: "1",
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 					},
 				],
 			});

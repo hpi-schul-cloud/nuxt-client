@@ -266,7 +266,7 @@ describe("InviteMembersDialog", () => {
 					const { wrapper } = await setup();
 					createTestEnvStore({
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						SC_THEME: SchulcloudTheme.Thr,
+						SC_THEME: SchulcloudTheme.THR,
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);
@@ -308,7 +308,7 @@ describe("InviteMembersDialog", () => {
 					const { wrapper } = await setup();
 					createTestEnvStore({
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						SC_THEME: SchulcloudTheme.Thr,
+						SC_THEME: SchulcloudTheme.THR,
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);

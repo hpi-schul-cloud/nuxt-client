@@ -35,7 +35,7 @@ describe("ExternalToolMediumDetails", () => {
 		describe("when the medium is a template", () => {
 			it("should show the template title", () => {
 				const { wrapper } = getWrapper({
-					status: ExternalToolMediumStatus.Template,
+					status: ExternalToolMediumStatus.TEMPLATE,
 					mediaSourceId: "media-source-id",
 				});
 
@@ -48,7 +48,7 @@ describe("ExternalToolMediumDetails", () => {
 		describe("when the medium is not a template", () => {
 			it("should show the medium title", () => {
 				const { wrapper } = getWrapper({
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "medium-id",
 					mediaSourceId: "media-source-id",
 				});
@@ -64,7 +64,7 @@ describe("ExternalToolMediumDetails", () => {
 		describe("when the medium is a template", () => {
 			it("should not show the medium id text", () => {
 				const { wrapper } = getWrapper({
-					status: ExternalToolMediumStatus.Template,
+					status: ExternalToolMediumStatus.TEMPLATE,
 					mediaSourceId: "media-source-id",
 				});
 
@@ -77,7 +77,7 @@ describe("ExternalToolMediumDetails", () => {
 		describe("when the medium is not a template", () => {
 			it("should show the medium id", () => {
 				const { wrapper } = getWrapper({
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "medium-id",
 					mediaSourceId: "media-source-id",
 				});
@@ -95,7 +95,7 @@ describe("ExternalToolMediumDetails", () => {
 					const mediumId = "medium-id";
 
 					const { wrapper } = getWrapper({
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediaSourceId: "media-source-id",
 						mediumId,
 					});
@@ -136,7 +136,7 @@ describe("ExternalToolMediumDetails", () => {
 			describe("when the medium id fails to copy", () => {
 				const setup = () => {
 					const { wrapper } = getWrapper({
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediumId: "medium-id",
 						mediaSourceId: "media-source-id",
 					});
@@ -171,7 +171,7 @@ describe("ExternalToolMediumDetails", () => {
 		describe("when the medium is a template", () => {
 			it("should show the media source id", () => {
 				const { wrapper } = getWrapper({
-					status: ExternalToolMediumStatus.Template,
+					status: ExternalToolMediumStatus.TEMPLATE,
 					mediaSourceId: "media-source-id-1",
 				});
 
@@ -185,7 +185,7 @@ describe("ExternalToolMediumDetails", () => {
 		describe("when the medium is not a template", () => {
 			it("should show the media source id", () => {
 				const { wrapper } = getWrapper({
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "medium-id",
 					mediaSourceId: "media-source-id-2",
 				});
@@ -203,7 +203,7 @@ describe("ExternalToolMediumDetails", () => {
 					const mediaSourceId = "media-source-id";
 
 					const { wrapper } = getWrapper({
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediumId: "medium-id",
 						mediaSourceId,
 					});
@@ -248,7 +248,7 @@ describe("ExternalToolMediumDetails", () => {
 			describe("when the media source id fails to copy", () => {
 				const setup = () => {
 					const { wrapper } = getWrapper({
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediumId: "medium-id",
 						mediaSourceId: "media-source-id",
 					});

@@ -352,19 +352,19 @@ describe("CardStore", () => {
 				{
 					description: "collaborative text editor (Etherpad)",
 					element: collaborativeTextEditorElementResponseFactory.build({
-						type: ContentElementType.CollaborativeTextEditor,
+						type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 					}),
 				},
 				{
 					description: "drawing element (Whiteboard)",
 					element: drawingElementResponseFactory.build({
-						type: ContentElementType.Drawing,
+						type: ContentElementType.DRAWING,
 					}),
 				},
 				{
 					description: "external tool",
 					element: externalToolElementResponseFactory.build({
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 					}),
 				},
 			];
@@ -380,7 +380,7 @@ describe("CardStore", () => {
 				setupDuplicate([
 					fileElementResponseFactory.build(),
 					richTextElementResponseFactory.build({
-						type: ContentElementType.RichText,
+						type: ContentElementType.RICH_TEXT,
 					}),
 				]);
 
@@ -391,7 +391,7 @@ describe("CardStore", () => {
 				setupDuplicate(
 					[
 						collaborativeTextEditorElementResponseFactory.build({
-							type: ContentElementType.CollaborativeTextEditor,
+							type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 						}),
 					],
 					false
@@ -523,7 +523,7 @@ describe("CardStore", () => {
 			const { cardStore, cardId } = setup(true);
 
 			const payload = {
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 				cardId,
 			};
 
@@ -536,7 +536,7 @@ describe("CardStore", () => {
 			const { cardStore, cardId } = setup();
 
 			const payload = {
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 				cardId,
 			};
 
@@ -554,7 +554,7 @@ describe("CardStore", () => {
 				const toPosition = 1;
 
 				cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					toPosition,
@@ -570,7 +570,7 @@ describe("CardStore", () => {
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(5);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					isOwnAction: true,
@@ -588,7 +588,7 @@ describe("CardStore", () => {
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId: "invalidId",
 					newElement,
 					isOwnAction: true,
@@ -605,7 +605,7 @@ describe("CardStore", () => {
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					toPosition: 100,
@@ -843,7 +843,7 @@ describe("CardStore", () => {
 			await cardStore.updateElementSuccess({
 				elementId: "non existing id",
 				data: {
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					content: richTextElementContentFactory.build(),
 				},
 				isOwnAction: true,
@@ -921,7 +921,7 @@ describe("CardStore", () => {
 
 			const payload: CreateElementRequestPayload = {
 				cardId: "cardId",
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 			};
 
 			const preferredTool: PreferredToolResponse = {
@@ -978,7 +978,7 @@ describe("CardStore", () => {
 				? undefined
 				: ({
 						id: "elementId",
-						type: ContentElementType.File,
+						type: ContentElementType.FILE,
 						content: {},
 					} as CollaborativeTextEditorElementResponse);
 			mockedCardRestApiActions.createElementRequest.mockResolvedValue(createElementRequestReturnValue);

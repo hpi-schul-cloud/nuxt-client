@@ -1,5 +1,5 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
-import { CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
+import { CreateNewsParamsTargetModel, NewsApiInterface } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -74,11 +74,11 @@ describe("NewsCreatePage", () => {
 		},
 		{
 			condition: "context is valid but contextId is missing",
-			query: { context: CreateNewsParamsTargetModelEnum.Teams },
+			query: { context: CreateNewsParamsTargetModel.TEAMS },
 		},
 		{
 			condition: "targetmodel is valid but target is missing",
-			query: { targetmodel: CreateNewsParamsTargetModelEnum.Courses },
+			query: { targetmodel: CreateNewsParamsTargetModel.COURSES },
 		},
 	] as { condition: string; query: LocationQuery }[])(
 		"should handle application error when $condition",
@@ -114,7 +114,7 @@ describe("NewsCreatePage", () => {
 			});
 
 			it("should create news with context and contextId from query params", () => {
-				const query = { contextId: "123", context: CreateNewsParamsTargetModelEnum.Teams };
+				const query = { contextId: "123", context: CreateNewsParamsTargetModel.TEAMS };
 				const { wrapper } = setup({ query });
 
 				const newsForm = wrapper.getComponent(NewsForm);
@@ -131,7 +131,7 @@ describe("NewsCreatePage", () => {
 			});
 
 			it("should create news with target and targetmodel from query params", () => {
-				const query = { target: "456", targetmodel: CreateNewsParamsTargetModelEnum.Courses };
+				const query = { target: "456", targetmodel: CreateNewsParamsTargetModel.COURSES };
 				const { wrapper } = setup({ query });
 				const newsForm = wrapper.getComponent(NewsForm);
 
@@ -157,7 +157,7 @@ describe("NewsCreatePage", () => {
 					content: createParams.content,
 					displayAt: createParams.displayAt,
 					targetId: schoolId,
-					targetModel: CreateNewsParamsTargetModelEnum.Schools,
+					targetModel: CreateNewsParamsTargetModel.SCHOOLS,
 				});
 			});
 

@@ -28,7 +28,7 @@ const router = useRouter();
 
 const roomData = ref<RoomCreateParams>({
 	name: "",
-	color: RoomColor.BlueGrey,
+	color: RoomColor.BLUE_GREY,
 	features: [],
 });
 

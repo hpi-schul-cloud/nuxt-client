@@ -80,7 +80,7 @@ const { getUrl } = useCollaborativeTextEditorApi();
 const redirectToEditorUrl = async () => {
 	const windowReference = window.open();
 
-	getUrl(element.value.id, CollaborativeTextEditorParentType.ContentElement).then((url) => {
+	getUrl(element.value.id, CollaborativeTextEditorParentType.CONTENT_ELEMENT).then((url) => {
 		if (url && windowReference) {
 			windowReference.location = url;
 		}

@@ -109,7 +109,7 @@ const { dragStart, dragEnd } = useDragAndDrop();
 
 const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(() => props.line.elements ?? []);
 
-const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.List);
+const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.LIST);
 
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")

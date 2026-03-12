@@ -44,7 +44,7 @@ const createFolderStateMock = () =>
 		fileFolderElement: ref(),
 		folderName: computed(() => ""),
 		pageTitle: computed(() => ""),
-		parent: computed(() => ({ id: "parent-id", type: ParentNodeType.Board, name: "parent-name" })),
+		parent: computed(() => ({ id: "parent-id", type: ParentNodeType.BOARD, name: "parent-name" })),
 	});
 
 const createBoardPageInfoMock = () =>
@@ -127,14 +127,14 @@ describe("Folder.vue", () => {
 			allowedOperations?: Partial<BoardResponseAllowedOperations>;
 		} = {}
 	) => {
-		const { breadcrumbs = [], parentType = ParentNodeType.Board } = options;
+		const { breadcrumbs = [], parentType = ParentNodeType.BOARD } = options;
 		const folderStateMock = createFolderStateMock();
 		vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
 		const parent = parentNodeInfoFactory.build({ type: parentType });
 		folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
-		if (parentType === ParentNodeType.Board) {
+		if (parentType === ParentNodeType.BOARD) {
 			folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(() => "boards");
 		} else {
 			folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(() => "courses");
@@ -207,7 +207,7 @@ describe("Folder.vue", () => {
 					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
 					const parent = parentNodeInfoFactory.build({
-						type: ParentNodeType.Board,
+						type: ParentNodeType.BOARD,
 					});
 					folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
 
@@ -329,7 +329,7 @@ describe("Folder.vue", () => {
 			describe("when parent is not a board", () => {
 				const setup = async () => {
 					const { fileStorageApiMock, boardState } = setupMocks({
-						parentType: ParentNodeType.Course,
+						parentType: ParentNodeType.COURSE,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -357,7 +357,7 @@ describe("Folder.vue", () => {
 			describe("when component is loading", () => {
 				const setup = async () => {
 					const { folderStateMock, fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -404,7 +404,7 @@ describe("Folder.vue", () => {
 			describe("when delete folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -453,7 +453,7 @@ describe("Folder.vue", () => {
 			describe("when delete folder button is clicked, dialog confirmed and parent not a board", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Course,
+						parentType: ParentNodeType.COURSE,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -495,7 +495,7 @@ describe("Folder.vue", () => {
 			describe("when delete folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -543,7 +543,7 @@ describe("Folder.vue", () => {
 			describe("when rename folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -609,7 +609,7 @@ describe("Folder.vue", () => {
 			describe("when rename folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -660,7 +660,7 @@ describe("Folder.vue", () => {
 			describe("when file is checked, deleted by actions menu and confirmed", () => {
 				const setup = async () => {
 					const { fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					const fileRecord = fileRecordFactory.build();
@@ -702,7 +702,7 @@ describe("Folder.vue", () => {
 			describe("when file is checked, deleted by actions menu and not confirmed", () => {
 				const setup = async () => {
 					const { fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					const fileRecord = fileRecordFactory.build();
@@ -1471,7 +1471,7 @@ describe("Folder.vue", () => {
 			describe("when user clicks download button in action menu", () => {
 				const setup = async () => {
 					HTMLFormElement.prototype.submit = vi.fn();
-					const { folderName, fileStorageApiMock } = setupMocks({ parentType: ParentNodeType.Board });
+					const { folderName, fileStorageApiMock } = setupMocks({ parentType: ParentNodeType.BOARD });
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord]);
@@ -1517,7 +1517,7 @@ describe("Folder.vue", () => {
 					HTMLAnchorElement.prototype.click = vi.fn();
 
 					const { fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 						allowedOperations: { createFileElement: false },
 					});
 

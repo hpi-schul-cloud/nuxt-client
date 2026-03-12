@@ -61,7 +61,7 @@ describe("useAutoLogout", () => {
 			JWT_SHOW_TIMEOUT_WARNING_SECONDS: showWarningTime,
 			JWT_TIMEOUT_SECONDS: jwtTtl,
 		});
-		createTestAppStoreWithRole(RoleName.Teacher);
+		createTestAppStoreWithRole(RoleName.TEACHER);
 
 		const composable = mountComposable(useAutoLogout, {
 			global: {
@@ -103,7 +103,7 @@ describe("useAutoLogout", () => {
 				JWT_SHOW_TIMEOUT_WARNING_SECONDS: 0,
 				JWT_TIMEOUT_SECONDS: 0,
 			});
-			createTestAppStoreWithRole(RoleName.Teacher);
+			createTestAppStoreWithRole(RoleName.TEACHER);
 
 			const { createSession, remainingTimeInSeconds } = mountComposable(useAutoLogout, {
 				global: {

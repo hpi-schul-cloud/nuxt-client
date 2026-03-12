@@ -111,7 +111,7 @@ describe("RoomMembersPage", () => {
 
 		const room = createRoom ? roomFactory.build({ allowedOperations }) : undefined;
 
-		const members = roomMemberFactory.buildList(3, { roomRoleName: RoleName.Roomeditor }).map((member) => ({
+		const members = roomMemberFactory.buildList(3, { roomRoleName: RoleName.ROOMEDITOR }).map((member) => ({
 			...member,
 			displayRoomRole: "",
 			displaySchoolRole: "",

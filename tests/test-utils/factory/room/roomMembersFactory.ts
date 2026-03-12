@@ -7,8 +7,8 @@ export const roomMemberFactory = Factory.define<RoomMember>(({ sequence }) => ({
 	firstName: `firstName${sequence}`,
 	lastName: `lastName${sequence}`,
 	fullName: `firstName${sequence} lastName${sequence}`,
-	roomRoleName: RoleName.Roomadmin,
-	schoolRoleNames: [RoleName.Teacher],
+	roomRoleName: RoleName.ROOMADMIN,
+	schoolRoleNames: [RoleName.TEACHER],
 	schoolName: "Paul-Gerhardt-Gymnasium",
 	displayRoomRole: `displayRoomRole${sequence}`,
 	displaySchoolRole: `displaySchoolRole${sequence}`,
@@ -38,21 +38,21 @@ export const roomMemberSchoolListResponseFactory = Factory.define<SchoolListResp
 });
 
 export const roomOwnerFactory = roomMemberFactory.params({
-	roomRoleName: RoleName.Roomowner,
+	roomRoleName: RoleName.ROOMOWNER,
 });
 
 export const roomAdminFactory = roomMemberFactory.params({
-	roomRoleName: RoleName.Roomadmin,
+	roomRoleName: RoleName.ROOMADMIN,
 });
 
 export const roomEditorFactory = roomMemberFactory.params({
-	roomRoleName: RoleName.Roomeditor,
+	roomRoleName: RoleName.ROOMEDITOR,
 });
 
 export const roomViewerFactory = roomMemberFactory.params({
-	roomRoleName: RoleName.Roomviewer,
+	roomRoleName: RoleName.ROOMVIEWER,
 });
 
 export const roomApplicantFactory = roomMemberFactory.params({
-	roomRoleName: RoleName.Roomapplicant,
+	roomRoleName: RoleName.ROOMAPPLICANT,
 });

@@ -43,7 +43,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 
 		const roomParams: RoomCreateParams = {
 			name: "test",
-			color: RoomColor.Blue,
+			color: RoomColor.BLUE,
 			features: [],
 		};
 

@@ -36,15 +36,15 @@ describe("@ui-layout/Topbar", () => {
 				},
 				roles: [
 					{
-						id: RoleName.Administrator,
-						name: RoleName.Administrator,
+						id: RoleName.ADMINISTRATOR,
+						name: RoleName.ADMINISTRATOR,
 					},
 				],
 			},
 		});
 
 		createTestEnvStore({
-			SC_THEME: SchulcloudTheme.Brb,
+			SC_THEME: SchulcloudTheme.BRB,
 		});
 
 		Object.defineProperty(window, "innerWidth", {

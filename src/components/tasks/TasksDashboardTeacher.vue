@@ -61,7 +61,7 @@
 				</VContainer>
 			</v-window-item>
 		</v-window>
-		<share-modal :type="ShareTokenBodyParamsParentTypeEnum.Tasks" />
+		<share-modal :type="ShareTokenBodyParamsParentType.TASKS" />
 	</section>
 </template>
 
@@ -70,7 +70,7 @@ import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { ShareTokenBodyParamsParentType } from "@/serverApi/v3";
 import { CopyParams } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";
@@ -127,7 +127,7 @@ const onShareTask = (taskId: string) => {
 	if (useEnvConfig().value.FEATURE_TASK_SHARE) {
 		shareModule.startShareFlow({
 			id: taskId,
-			type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+			type: ShareTokenBodyParamsParentType.TASKS,
 		});
 	}
 };

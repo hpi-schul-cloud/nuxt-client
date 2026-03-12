@@ -135,12 +135,12 @@ describe("useFolderState", () => {
 							{
 								id: "course-id",
 								name: "Course",
-								type: ParentNodeType.Course,
+								type: ParentNodeType.COURSE,
 							},
 							{
 								id: "column-board-id",
 								name: "Column Board",
-								type: ParentNodeType.Board,
+								type: ParentNodeType.BOARD,
 							},
 						],
 					});
@@ -177,7 +177,7 @@ describe("useFolderState", () => {
 							{
 								id: "room-id",
 								name: "Room",
-								type: ParentNodeType.Room,
+								type: ParentNodeType.ROOM,
 							},
 						],
 					});
@@ -210,7 +210,7 @@ describe("useFolderState", () => {
 							{
 								id: "user-id",
 								name: "User",
-								type: ParentNodeType.User,
+								type: ParentNodeType.USER,
 							},
 						],
 					});
@@ -230,8 +230,8 @@ describe("useFolderState", () => {
 		it("should return the last parent node when parentNodeInfos is populated", async () => {
 			const { testId } = setup({
 				parentNodeInfos: [
-					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.Room },
-					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.Course },
+					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.ROOM },
+					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.COURSE },
 				],
 			});
 
@@ -242,7 +242,7 @@ describe("useFolderState", () => {
 			expect(parent.value).toEqual({
 				id: "parent-2",
 				name: "Parent 2",
-				type: ParentNodeType.Course,
+				type: ParentNodeType.COURSE,
 			});
 		});
 
@@ -260,17 +260,17 @@ describe("useFolderState", () => {
 	describe("mapNodeTypeToPathType", () => {
 		it('should return "courses" for ParentNodeType.Course', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Course)).toBe("courses");
+			expect(mapNodeTypeToPathType(ParentNodeType.COURSE)).toBe("courses");
 		});
 
 		it('should return "rooms" for ParentNodeType.Room', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Room)).toBe("rooms");
+			expect(mapNodeTypeToPathType(ParentNodeType.ROOM)).toBe("rooms");
 		});
 
 		it('should return "boards" for ParentNodeType.Board', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Board)).toBe("boards");
+			expect(mapNodeTypeToPathType(ParentNodeType.BOARD)).toBe("boards");
 		});
 
 		it("should throw an error for an unknown node type", () => {

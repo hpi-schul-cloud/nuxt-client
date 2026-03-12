@@ -1,4 +1,4 @@
-import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { CopyApiResponseStatus, CopyApiResponseType } from "@/serverApi/v3";
 import {
 	createTestRoomStore,
 	expectNotification,
@@ -27,8 +27,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 			result: mockApiResponse({
 				data: {
 					id: "copyId",
-					type: CopyApiResponseTypeEnum.Room,
-					status: CopyApiResponseStatusEnum.Success,
+					type: CopyApiResponseType.ROOM,
+					status: CopyApiResponseStatus.SUCCESS,
 				},
 			}),
 			success: true,
@@ -171,8 +171,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 				result: mockApiResponse({
 					data: {
 						id: "copyId",
-						type: CopyApiResponseTypeEnum.Room,
-						status: CopyApiResponseStatusEnum.Failure,
+						type: CopyApiResponseType.ROOM,
+						status: CopyApiResponseStatus.FAILURE,
 					},
 				}),
 				success: true,
@@ -216,8 +216,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 				result: mockApiResponse({
 					data: {
 						id: undefined,
-						type: CopyApiResponseTypeEnum.Room,
-						status: CopyApiResponseStatusEnum.Success,
+						type: CopyApiResponseType.ROOM,
+						status: CopyApiResponseStatus.SUCCESS,
 					},
 				}),
 				success: true,

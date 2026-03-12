@@ -90,7 +90,7 @@ describe("BoardHeader", () => {
 				isDraft: props?.isDraft ?? false,
 				isEditableChipVisible: true,
 				hasReadersEditPermission: props?.hasReadersEditPermission || false,
-				boardContextType: BoardExternalReferenceType.Room,
+				boardContextType: BoardExternalReferenceType.ROOM,
 				...props,
 			},
 		});
@@ -402,7 +402,7 @@ describe("BoardHeader", () => {
 
 	describe("when board belongs to a course", () => {
 		it("should not display the editable settings button", () => {
-			const { wrapper } = setup({}, { boardContextType: BoardExternalReferenceType.Course });
+			const { wrapper } = setup({}, { boardContextType: BoardExternalReferenceType.COURSE });
 
 			expect(wrapper.findComponent(KebabMenuActionEditingSettings).exists()).toBe(false);
 		});

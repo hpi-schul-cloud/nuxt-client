@@ -2,7 +2,7 @@ import * as serverApi from "../serverApi/v3/api";
 import {
 	BoardExternalReferenceType,
 	ShareTokenApiInterface,
-	ShareTokenBodyParamsParentTypeEnum,
+	ShareTokenBodyParamsParentType,
 } from "../serverApi/v3/api";
 import ShareModule, { ShareOptions } from "./share";
 import courseRoomDetailsModule from "@/store/course-room-details";
@@ -46,7 +46,7 @@ describe("share module", () => {
 				it("should call the backend with the correct payload", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
-					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+					shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 
 					await shareModule.createShareUrl(shareOptions);
 
@@ -57,7 +57,7 @@ describe("share module", () => {
 				it("should call setShareUrl mutation", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
-					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+					shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 					const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
 
 					await shareModule.createShareUrl(shareOptions);
@@ -107,8 +107,8 @@ describe("share module", () => {
 				const setDestinationTypeMock = vi.spyOn(shareModule, "setDestinationType");
 				const setShareModalOpenMock = vi.spyOn(shareModule, "setShareModalOpen");
 				const testId = "test-id";
-				const type = ShareTokenBodyParamsParentTypeEnum.Courses;
-				const destinationType = BoardExternalReferenceType.Room;
+				const type = ShareTokenBodyParamsParentType.COURSES;
+				const destinationType = BoardExternalReferenceType.ROOM;
 				shareModule.startShareFlow({
 					id: testId,
 					type,
@@ -155,9 +155,9 @@ describe("share module", () => {
 
 		it("setParentType should set 'shareUrl' state", async () => {
 			const shareModule = new ShareModule({});
-			shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+			shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 
-			expect(shareModule.getParentType).toStrictEqual(ShareTokenBodyParamsParentTypeEnum.Courses);
+			expect(shareModule.getParentType).toStrictEqual(ShareTokenBodyParamsParentType.COURSES);
 		});
 	});
 });

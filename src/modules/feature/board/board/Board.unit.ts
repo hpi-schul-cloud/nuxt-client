@@ -10,8 +10,8 @@ import {
 	BoardResponseAllowedOperations,
 	ConfigResponse,
 	CopyApiResponse,
-	CopyApiResponseTypeEnum,
-	ShareTokenBodyParamsParentTypeEnum,
+	CopyApiResponseType,
+	ShareTokenBodyParamsParentType,
 } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -145,7 +145,7 @@ describe("Board", () => {
 			getIsResultModalOpen: false,
 			getCopyResult: {
 				id: copyResultId,
-				type: CopyApiResponseTypeEnum.Board,
+				type: CopyApiResponseType.BOARD,
 			} as CopyApiResponse,
 		});
 
@@ -986,7 +986,7 @@ describe("Board", () => {
 
 					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
 						id: board.id,
-						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+						type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 					});
 				});
 			});
@@ -1016,8 +1016,8 @@ describe("Board", () => {
 
 				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
 					id: "card-id",
-					type: ShareTokenBodyParamsParentTypeEnum.Card,
-					destinationType: BoardExternalReferenceType.Room,
+					type: ShareTokenBodyParamsParentType.CARD,
+					destinationType: BoardExternalReferenceType.ROOM,
 				});
 			});
 		});
@@ -1113,7 +1113,7 @@ describe("Board", () => {
 					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					await boardLayoutDialog.setValue(true, "modelValue");
 
-					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 					await nextTick();
 
 					expect(boardLayoutDialog.props("modelValue")).toEqual(false);
@@ -1124,12 +1124,12 @@ describe("Board", () => {
 
 					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 
-					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 					await nextTick();
 
 					expect(boardStore.updateBoardLayoutRequest).toHaveBeenCalledWith({
 						boardId: board.id,
-						layout: BoardLayout.List,
+						layout: BoardLayout.LIST,
 					});
 				});
 			});
@@ -1141,7 +1141,7 @@ describe("Board", () => {
 					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					await boardLayoutDialog.setValue(true, "modelValue");
 
-					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 					await nextTick();
 
 					expect(boardLayoutDialog.props("modelValue")).toEqual(false);

@@ -86,7 +86,7 @@ describe("useBoardSocketApi", () => {
 				title: "sometitle",
 				columns: [],
 				isVisible: true,
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				timestamps: {
 					createdAt: new Date().toISOString(),
 					lastUpdatedAt: new Date().toISOString(),
@@ -286,7 +286,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload: UpdateBoardLayoutSuccessPayload = {
 				boardId: "cardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateBoardLayoutSuccess(payload));
@@ -413,7 +413,7 @@ describe("useBoardSocketApi", () => {
 				dispatch(
 					BoardActions.updateBoardLayoutFailure({
 						boardId: "test",
-						layout: BoardLayout.Columns,
+						layout: BoardLayout.COLUMNS,
 					})
 				);
 
@@ -648,14 +648,14 @@ describe("useBoardSocketApi", () => {
 
 			updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith<[string, UpdateBoardLayoutFailurePayload]>(
 				"update-board-layout-request",
 				{
 					boardId: "boardId",
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 				}
 			);
 		});

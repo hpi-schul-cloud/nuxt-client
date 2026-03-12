@@ -148,13 +148,13 @@ const tableHeader = computed(() => [
 ]);
 
 const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
-	if (schoolRoleNames.includes(RoleName.Teacher)) {
+	if (schoolRoleNames.includes(RoleName.TEACHER)) {
 		return mdiAccountSchoolOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.Student)) {
+	if (schoolRoleNames.includes(RoleName.STUDENT)) {
 		return mdiAccountOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.ExternalPerson)) {
+	if (schoolRoleNames.includes(RoleName.EXTERNAL_PERSON)) {
 		return mdiAccountClockOutline;
 	}
 	return undefined;

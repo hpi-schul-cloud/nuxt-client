@@ -33,7 +33,7 @@ const setup = (
 	setActivePinia(createTestingPinia());
 	createTestAppStoreWithPermissions(permissions ?? []);
 	createTestEnvStore({
-		SC_THEME: SchulcloudTheme.Brb,
+		SC_THEME: SchulcloudTheme.BRB,
 		FEATURE_TEAMS_ENABLED: isTeamsEnabled,
 	});
 
@@ -53,7 +53,7 @@ const setup = (
 			provide: {
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
-					name: SchulcloudTheme.Default,
+					name: SchulcloudTheme.DEFAULT,
 				},
 			},
 		},
@@ -133,7 +133,7 @@ describe("@ui-layout/Sidebar", () => {
 		describe("when user does have one of the needed permissions", () => {
 			it("should display items correctly ", async () => {
 				const { wrapper } = setup({
-					permissions: [Permission.TaskDashboardViewV3],
+					permissions: [Permission.TASK_DASHBOARD_VIEW_V3],
 				});
 
 				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(true);

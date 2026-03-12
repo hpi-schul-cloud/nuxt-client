@@ -1,4 +1,4 @@
-import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
+import { CopyApiResponseStatus } from "@/serverApi/v3";
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { injectStrict } from "@/utils/inject";
 import { COPY_MODULE_KEY } from "@/utils/inject/injection-keys";
@@ -38,9 +38,9 @@ export function useCopy() {
 		setLoadingState(true, t("components.molecules.copyResult.title.loading"));
 		try {
 			const copyResult = await copyModule?.copy(copyParams);
-			if (copyParams.type !== CopyParamsTypeEnum.Course && copyResult?.status === CopyApiResponseStatusEnum.Success) {
+			if (copyParams.type !== CopyParamsTypeEnum.Course && copyResult?.status === CopyApiResponseStatus.SUCCESS) {
 				notifySuccess(getNotifierMessage(copyParams.type));
-			} else if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
+			} else if (copyResult?.status === CopyApiResponseStatus.FAILURE) {
 				notifyError(t("components.molecules.copyResult.failedCopy"), false);
 			} else {
 				openResultModal();

@@ -75,7 +75,7 @@ describe("CourseRoomWrapper.vue", () => {
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
 		});
-		createTestAppStoreWithPermissions([Permission.CourseCreate]);
+		createTestAppStoreWithPermissions([Permission.COURSE_CREATE]);
 
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,

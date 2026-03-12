@@ -20,7 +20,7 @@
 				</div>
 				<div class="d-flex mt-1">
 					<VCheckbox
-						:model-value="roomData.features.includes(RoomFeatures.EditorManageVideoconference)"
+						:model-value="roomData.features.includes(RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE)"
 						class="align-start video-conference-checkbox"
 						data-testid="room-video-conference-checkbox"
 						@update:model-value="onToggleVideoConferenceFeature"
@@ -81,9 +81,9 @@ const validationRules = [isNonEmptyString(), isOfMaxLength(100)(), validateOnOpe
 const onToggleVideoConferenceFeature = (isChecked: boolean | null) => {
 	const features = roomData.value.features;
 
-	const index = features.indexOf(RoomFeatures.EditorManageVideoconference);
+	const index = features.indexOf(RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE);
 	if (isChecked && index === -1) {
-		features.push(RoomFeatures.EditorManageVideoconference);
+		features.push(RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE);
 	}
 	if (!isChecked && index > -1) {
 		features.splice(index, 1);

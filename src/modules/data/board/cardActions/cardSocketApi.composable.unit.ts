@@ -91,7 +91,7 @@ describe("useCardSocketApi", () => {
 
 				const payload: CreateElementSuccessPayload = {
 					cardId: "cardId",
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					toPosition: 0,
 					newElement: richTextElementResponseFactory.build(),
 					isOwnAction: true,
@@ -137,7 +137,7 @@ describe("useCardSocketApi", () => {
 				const payload = {
 					elementId: "elementId",
 					data: {
-						type: ContentElementType.RichText,
+						type: ContentElementType.RICH_TEXT,
 						content: richTextElementContentFactory.build(),
 					},
 					isOwnAction: true,
@@ -224,7 +224,7 @@ describe("useCardSocketApi", () => {
 					title: "sometitle",
 					columns: [],
 					isVisible: true,
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 					timestamps: {
 						createdAt: new Date().toISOString(),
 						lastUpdatedAt: new Date().toISOString(),
@@ -242,7 +242,7 @@ describe("useCardSocketApi", () => {
 
 				const payload: CreateElementFailurePayload = {
 					cardId: "cardId",
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 				};
 				dispatch(CardActions.createElementFailure(payload));
 
@@ -360,7 +360,7 @@ describe("useCardSocketApi", () => {
 
 			const payload = {
 				cardId: "cardId",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			};
 
 			createElementRequest(payload);

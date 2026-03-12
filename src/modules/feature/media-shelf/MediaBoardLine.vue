@@ -140,7 +140,7 @@ const titlePlaceholder: ComputedRef<string> = computed(
 	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`
 );
 
-const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.List);
+const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.LIST);
 
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
@@ -195,6 +195,6 @@ const isDeletedElement = (
 	if (!("type" in element)) {
 		return false;
 	}
-	return element.type === ContentElementType.Deleted;
+	return element.type === ContentElementType.DELETED;
 };
 </script>

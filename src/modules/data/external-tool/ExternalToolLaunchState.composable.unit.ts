@@ -67,7 +67,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
-					launchType: LaunchType.Basic,
+					launchType: LaunchType.BASIC,
 				});
 			});
 
@@ -428,7 +428,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const launchRequest = toolLaunchRequestFactory.build({
 					method: ToolLaunchRequestMethodEnum.Post,
 					openNewTab: true,
-					launchType: LaunchType.Lti11ContentItemSelection,
+					launchType: LaunchType.LTI11_CONTENT_ITEM_SELECTION,
 				});
 
 				const { launchTool, toolLaunchRequest } = mountComposable(() => useExternalToolLaunchState(refreshCallback));

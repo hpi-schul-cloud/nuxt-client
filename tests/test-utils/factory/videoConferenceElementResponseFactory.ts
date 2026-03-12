@@ -9,7 +9,7 @@ import { videoConferenceElementContentFactory } from "./videoConferenceElementCo
 export const videoConferenceElementResponseFactory =
 	Factory.define<VideoConferenceElementResponse>(({ sequence }) => ({
 		id: `videoConferenceElementResponse${sequence}`,
-		type: ContentElementType.VideoConference,
+		type: ContentElementType.VIDEO_CONFERENCE,
 		content: videoConferenceElementContentFactory.build(),
 		timestamps: timestampsResponseFactory.build(),
 	}));

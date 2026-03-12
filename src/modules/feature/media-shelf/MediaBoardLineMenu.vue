@@ -81,7 +81,7 @@ const collapsed: ModelRef<boolean> = defineModel("collapsed", {
 
 const color: ModelRef<MediaBoardColors> = defineModel("color", {
 	type: String as PropType<MediaBoardColors>,
-	default: MediaBoardColors.Transparent,
+	default: MediaBoardColors.TRANSPARENT,
 });
 
 const swatchShade: ColorShade = "lighten4";
@@ -89,7 +89,7 @@ const swatchShade: ColorShade = "lighten4";
 const colorValue: ComputedRef<string> = computed(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
 
 const onUpdateColor = (value: string) => {
-	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.Transparent;
+	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
 };
 
 const swatchColors = Object.values(MediaBoardColors).map((colorName: MediaBoardColors) =>

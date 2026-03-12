@@ -77,7 +77,7 @@ const rules = reactive({
 
 const infoText = computed(() =>
 	t(
-		props.destinationType === BoardExternalReferenceType.Room
+		props.destinationType === BoardExternalReferenceType.ROOM
 			? `components.molecules.import.${props.parentType}.options.selectRoom.infoText`
 			: `components.molecules.import.${props.parentType}.options.selectCourse.infoText`
 	)
@@ -85,14 +85,14 @@ const infoText = computed(() =>
 
 const selectionPlaceholder = computed(() =>
 	t(
-		props.destinationType === BoardExternalReferenceType.Room
+		props.destinationType === BoardExternalReferenceType.ROOM
 			? `components.molecules.import.${props.parentType}.options.selectRoom`
 			: `components.molecules.import.${props.parentType}.options.selectCourse`
 	)
 );
 
 const selectionHint = computed(() =>
-	t(props.destinationType === BoardExternalReferenceType.Room ? "common.labels.room" : "common.labels.course")
+	t(props.destinationType === BoardExternalReferenceType.ROOM ? "common.labels.room" : "common.labels.course")
 );
 
 const onNext = () => {

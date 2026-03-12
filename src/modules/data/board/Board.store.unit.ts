@@ -688,7 +688,7 @@ describe("BoardStore", () => {
 
 				boardStore.updateBoardLayoutSuccess({
 					boardId: "boardId",
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 					isOwnAction: true,
 				});
 
@@ -702,11 +702,11 @@ describe("BoardStore", () => {
 
 				boardStore.updateBoardLayoutSuccess({
 					boardId: "boardId",
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 					isOwnAction: true,
 				});
 
-				expect(boardStore.board?.layout).toStrictEqual(BoardLayout.List);
+				expect(boardStore.board?.layout).toStrictEqual(BoardLayout.LIST);
 			});
 		});
 	});
@@ -1116,7 +1116,7 @@ describe("BoardStore", () => {
 		describe("@updateBoardLayoutRequest", () => {
 			const payload: UpdateBoardLayoutRequestPayload = {
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			};
 
 			it("should call socketApi.updateBoardLayoutRequest when feature flag is set true", async () => {

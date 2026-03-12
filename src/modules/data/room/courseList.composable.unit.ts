@@ -54,9 +54,9 @@ describe("courseList.composable", () => {
 		it("should set value", () => {
 			const { composable } = setup();
 
-			composable.setSortBy(CourseSortProps.Name);
+			composable.setSortBy(CourseSortProps.NAME);
 
-			expect(composable.key.value).toEqual<CourseSortProps>(CourseSortProps.Name);
+			expect(composable.key.value).toEqual<CourseSortProps>(CourseSortProps.NAME);
 		});
 	});
 
@@ -197,7 +197,7 @@ describe("courseList.composable", () => {
 			it("should call the api to get courses", async () => {
 				const { composable } = setup();
 
-				await composable.fetchCourses(CourseStatus.Current);
+				await composable.fetchCourses(CourseStatus.CURRENT);
 
 				expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
 					"current",
@@ -212,7 +212,7 @@ describe("courseList.composable", () => {
 			it("should set the pagination", async () => {
 				const { composable } = setup();
 
-				await composable.fetchCourses(CourseStatus.Current);
+				await composable.fetchCourses(CourseStatus.CURRENT);
 
 				expect(composable.pagination.value).toEqual<Pagination>({
 					limit: 10,
@@ -234,7 +234,7 @@ describe("courseList.composable", () => {
 					syncedGroup: course.syncedGroup,
 				});
 
-				await composable.fetchCourses(CourseStatus.Current);
+				await composable.fetchCourses(CourseStatus.CURRENT);
 
 				expect(composable.courses.value).toEqual<CourseInfoDataResponse[]>([courseInfo]);
 			});
@@ -243,7 +243,7 @@ describe("courseList.composable", () => {
 				it("should call the api with withoutTeacher set to true", async () => {
 					const { composable } = setup();
 					composable.withoutTeacher.value = true;
-					await composable.fetchCourses(CourseStatus.Current);
+					await composable.fetchCourses(CourseStatus.CURRENT);
 
 					expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
 						"current",
@@ -279,7 +279,7 @@ describe("courseList.composable", () => {
 			it("should set loading to false", async () => {
 				const { composable } = setup();
 
-				await composable.fetchCourses(CourseStatus.Current);
+				await composable.fetchCourses(CourseStatus.CURRENT);
 
 				expect(composable.isLoading.value).toEqual(false);
 			});
@@ -287,7 +287,7 @@ describe("courseList.composable", () => {
 			it("should set the error", async () => {
 				const { composable, apiError } = setup();
 
-				await composable.fetchCourses(CourseStatus.Current);
+				await composable.fetchCourses(CourseStatus.CURRENT);
 
 				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,
@@ -299,7 +299,7 @@ describe("courseList.composable", () => {
 			it("should show notification", async () => {
 				const { composable } = setup();
 
-				await composable.fetchCourses(CourseStatus.Current);
+				await composable.fetchCourses(CourseStatus.CURRENT);
 
 				expectNotification("error");
 			});

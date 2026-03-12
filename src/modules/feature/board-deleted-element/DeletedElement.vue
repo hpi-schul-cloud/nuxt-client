@@ -22,7 +22,7 @@
 				/>
 			</template>
 		</ContentElementBar>
-		<WarningAlert v-if="element.content.deletedElementType === ContentElementType.ExternalTool">
+		<WarningAlert v-if="element.content.deletedElementType === ContentElementType.EXTERNAL_TOOL">
 			{{
 				t("components.cardElement.deletedElement.warning.externalToolElement", {
 					toolName: element.content.title,

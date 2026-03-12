@@ -8,7 +8,7 @@ import { timestampsResponseFactory } from "./timestampsResponseFactory";
 export const externalToolElementResponseFactory =
 	Factory.define<ExternalToolElementResponse>(({ sequence }) => ({
 		id: `external-tool-element-response-${sequence}`,
-		type: ContentElementType.ExternalTool,
+		type: ContentElementType.EXTERNAL_TOOL,
 		content: {
 			contextExternalToolId: null,
 		},

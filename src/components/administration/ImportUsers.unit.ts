@@ -1,5 +1,5 @@
 import ImportUsers from "./ImportUsers.vue";
-import { ImportUserListResponse, ImportUserResponseRoleNamesEnum, SchulcloudTheme } from "@/serverApi/v3";
+import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
@@ -33,7 +33,7 @@ const mockImportUsers: ImportUserListResponse = {
 			loginName: "aaronb1",
 			firstName: "Aaron",
 			lastName: "Bruns",
-			roleNames: [ImportUserResponseRoleNamesEnum.Student],
+			roleNames: [ImportUserResponseRoleNames.STUDENT],
 			classNames: ["6a"],
 		},
 		{
@@ -42,7 +42,7 @@ const mockImportUsers: ImportUserListResponse = {
 			loginName: "armin.cordes",
 			firstName: "Armin",
 			lastName: "Cordes",
-			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			roleNames: [ImportUserResponseRoleNames.TEACHER],
 			classNames: [],
 		},
 		{
@@ -51,7 +51,7 @@ const mockImportUsers: ImportUserListResponse = {
 			loginName: "bettina.melzer",
 			firstName: "Bettina",
 			lastName: "Melzer",
-			roleNames: [ImportUserResponseRoleNamesEnum.Admin, ImportUserResponseRoleNamesEnum.Teacher],
+			roleNames: [ImportUserResponseRoleNames.ADMIN, ImportUserResponseRoleNames.TEACHER],
 			classNames: ["1c"],
 		},
 	],
@@ -79,9 +79,9 @@ const mockData: ImportUsersInstance["$data"] = {
 	mdiFlagOutline,
 	mdiPencilOutline,
 	roles: [
-		{ text: "Schüler/-in", value: ImportUserResponseRoleNamesEnum.Student },
-		{ text: "Lehrer/-in", value: ImportUserResponseRoleNamesEnum.Teacher },
-		{ text: "Administrator", value: ImportUserResponseRoleNamesEnum.Admin },
+		{ text: "Schüler/-in", value: ImportUserResponseRoleNames.STUDENT },
+		{ text: "Lehrer/-in", value: ImportUserResponseRoleNames.TEACHER },
+		{ text: "Administrator", value: ImportUserResponseRoleNames.ADMIN },
 	],
 	searchClasses: "",
 	searchFirstName: "",
@@ -121,7 +121,7 @@ const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 describe("ImportUsers", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 	});
 
 	beforeEach(() => {

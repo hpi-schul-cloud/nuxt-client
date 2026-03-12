@@ -12,7 +12,7 @@ describe("@ui-layout/LanguageMenu", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 	});
 

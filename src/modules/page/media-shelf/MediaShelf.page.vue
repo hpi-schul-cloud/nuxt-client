@@ -18,7 +18,7 @@
 					icon="$gridRowOutline"
 					size="x-small"
 					width="48px"
-					:value="BoardLayout.List"
+					:value="BoardLayout.LIST"
 					:aria-label="$t('feature.media-shelf.layout.list')"
 					data-testid="media-board-layout-list"
 				/>
@@ -26,7 +26,7 @@
 					:icon="mdiViewGridOutline"
 					size="x-small"
 					width="48px"
-					:value="BoardLayout.Grid"
+					:value="BoardLayout.GRID"
 					:aria-label="$t('feature.media-shelf.layout.grid')"
 					data-testid="media-board-layout-grid"
 				/>

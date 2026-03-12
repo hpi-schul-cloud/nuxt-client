@@ -17,8 +17,8 @@ const useBoardPageInformation = () => {
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
 
-	const isCourse = computed(() => contextType.value === BoardContextType.Course);
-	const isRoom = computed(() => contextType.value === BoardContextType.Room);
+	const isCourse = computed(() => contextType.value === BoardContextType.COURSE);
+	const isRoom = computed(() => contextType.value === BoardContextType.ROOM);
 
 	const roomName = computed(() => {
 		const roomNameFallback = isCourse.value ? t("common.labels.course") : t("common.labels.room");

@@ -32,7 +32,7 @@ describe("SelectBoardLayoutDialog", () => {
 			const multiColumnButton = wrapper.findComponent("[data-testid=dialog-add-multi-column-board]");
 			await multiColumnButton.trigger("click");
 
-			expect(wrapper.emitted("select")).toEqual([[BoardLayout.Columns]]);
+			expect(wrapper.emitted("select")).toEqual([[BoardLayout.COLUMNS]]);
 		});
 	});
 
@@ -43,13 +43,13 @@ describe("SelectBoardLayoutDialog", () => {
 			const multiColumnButton = wrapper.findComponent("[data-testid=dialog-add-single-column-board]");
 			await multiColumnButton.trigger("click");
 
-			expect(wrapper.emitted("select")).toEqual([[BoardLayout.List]]);
+			expect(wrapper.emitted("select")).toEqual([[BoardLayout.LIST]]);
 		});
 	});
 
 	describe("when a board layout is changed", () => {
 		it("should highlight the currently selected option", async () => {
-			const { wrapper } = setup(BoardLayout.Columns);
+			const { wrapper } = setup(BoardLayout.COLUMNS);
 
 			const multiColumnButton = wrapper.findComponent("[data-testid=dialog-add-multi-column-board]");
 

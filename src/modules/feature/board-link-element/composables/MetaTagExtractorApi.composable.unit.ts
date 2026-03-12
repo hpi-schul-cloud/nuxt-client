@@ -28,9 +28,9 @@ describe("useMetaTagExtractorApi", () => {
 						description: "",
 						imageUrl: "",
 						originalImageUrl: "",
-						type: MetaDataEntityType.Unknown,
+						type: MetaDataEntityType.UNKNOWN,
 						parentTitle: "",
-						parentType: MetaDataEntityType.Unknown,
+						parentType: MetaDataEntityType.UNKNOWN,
 					};
 
 					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
@@ -70,9 +70,9 @@ describe("useMetaTagExtractorApi", () => {
 							description: "",
 							imageUrl: "",
 							originalImageUrl: "",
-							type: MetaDataEntityType.Board,
+							type: MetaDataEntityType.BOARD,
 							parentTitle: "English",
-							parentType: MetaDataEntityType.Course,
+							parentType: MetaDataEntityType.COURSE,
 						};
 
 						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
@@ -111,9 +111,9 @@ describe("useMetaTagExtractorApi", () => {
 							description: "",
 							imageUrl: "",
 							originalImageUrl: "",
-							type: MetaDataEntityType.Board,
+							type: MetaDataEntityType.BOARD,
 							parentTitle: "English",
-							parentType: MetaDataEntityType.Course,
+							parentType: MetaDataEntityType.COURSE,
 						};
 
 						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(mockApiResponse({ data: mockedResponse }));
@@ -148,9 +148,9 @@ describe("useMetaTagExtractorApi", () => {
 					description: "",
 					imageUrl: "",
 					originalImageUrl: "",
-					type: MetaDataEntityType.Unknown,
+					type: MetaDataEntityType.UNKNOWN,
 					parentTitle: "",
-					parentType: MetaDataEntityType.Unknown,
+					parentType: MetaDataEntityType.UNKNOWN,
 				};
 
 				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);

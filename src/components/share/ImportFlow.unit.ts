@@ -6,10 +6,10 @@ import SelectDestinationModal from "@/components/share/SelectDestinationModal.vu
 import {
 	BoardExternalReferenceType,
 	CopyApiResponse,
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-	ShareTokenBodyParamsParentTypeEnum,
-	ShareTokenInfoResponseParentTypeEnum,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
+	ShareTokenBodyParamsParentType,
+	ShareTokenInfoResponseParentType,
 } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
@@ -54,7 +54,7 @@ describe("@components/share/ImportFlow", () => {
 				token,
 				isActive: true,
 				destinations: [{ id: course.id, name: course.title }],
-				destinationType: BoardExternalReferenceType.Course,
+				destinationType: BoardExternalReferenceType.COURSE,
 				...props,
 			},
 		});
@@ -137,7 +137,7 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.validateShareToken = () =>
 						Promise.resolve({
 							token,
-							parentType: ShareTokenInfoResponseParentTypeEnum.Room,
+							parentType: ShareTokenInfoResponseParentType.ROOM,
 							parentName: originalName,
 						});
 					const copyResults: CopyResultItem[] = [
@@ -147,18 +147,18 @@ describe("@components/share/ImportFlow", () => {
 							elements: [
 								{
 									title: "Lesson with GeoGebra",
-									type: CopyApiResponseTypeEnum.Lesson,
+									type: CopyApiResponseType.LESSON,
 								},
 							],
-							type: CopyApiResponseTypeEnum.Room,
+							type: CopyApiResponseType.ROOM,
 							url: "http://abc.de",
 						},
 					];
 					copyModuleMock.copyByShareToken = vi.fn().mockResolvedValue(copyResults);
 
 					copyResultResponse = {
-						type: CopyApiResponseTypeEnum.Room,
-						status: CopyApiResponseStatusEnum.Partial,
+						type: CopyApiResponseType.ROOM,
+						status: CopyApiResponseStatus.PARTIAL,
 					};
 				});
 
@@ -185,7 +185,7 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.validateShareToken = () =>
 						Promise.resolve({
 							token,
-							parentType: ShareTokenInfoResponseParentTypeEnum.Lessons,
+							parentType: ShareTokenInfoResponseParentType.LESSONS,
 							parentName: originalName,
 						});
 
@@ -234,7 +234,7 @@ describe("@components/share/ImportFlow", () => {
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationId: course.id,
 						token,
-						type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+						type: ShareTokenBodyParamsParentType.LESSONS,
 						newName: originalName,
 					});
 				});
@@ -245,7 +245,7 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.validateShareToken = () =>
 						Promise.resolve({
 							token,
-							parentType: ShareTokenInfoResponseParentTypeEnum.Tasks,
+							parentType: ShareTokenInfoResponseParentType.TASKS,
 							parentName: originalName,
 						});
 					await flushPromises();
@@ -292,7 +292,7 @@ describe("@components/share/ImportFlow", () => {
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationId: course.id,
 						token,
-						type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+						type: ShareTokenBodyParamsParentType.TASKS,
 						newName: originalName,
 					});
 				});
@@ -303,7 +303,7 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.validateShareToken = () =>
 						Promise.resolve({
 							token,
-							parentType: ShareTokenInfoResponseParentTypeEnum.Courses,
+							parentType: ShareTokenInfoResponseParentType.COURSES,
 							parentName: originalName,
 						});
 					await flushPromises();
@@ -333,7 +333,7 @@ describe("@components/share/ImportFlow", () => {
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						token,
-						type: ShareTokenBodyParamsParentTypeEnum.Courses,
+						type: ShareTokenBodyParamsParentType.COURSES,
 						newName: originalName,
 					});
 				});
@@ -353,12 +353,12 @@ describe("@components/share/ImportFlow", () => {
 						const failedItems: CopyResultItem[] = [
 							{
 								title: "Thema",
-								type: CopyApiResponseTypeEnum.Lesson,
+								type: CopyApiResponseType.LESSON,
 								elementId: "63edd9c310b658af36648a55",
 								url: "abc.de",
 								elements: [
 									{
-										type: CopyApiResponseTypeEnum.LessonContentGroup,
+										type: CopyApiResponseType.LESSON_CONTENT_GROUP,
 										title: "Etherpad",
 									},
 								],
@@ -372,7 +372,7 @@ describe("@components/share/ImportFlow", () => {
 						copyModuleMock.validateShareToken = () =>
 							Promise.resolve({
 								token,
-								parentType: ShareTokenInfoResponseParentTypeEnum.Courses,
+								parentType: ShareTokenInfoResponseParentType.COURSES,
 								parentName: originalName,
 							});
 						const copyResults: CopyResultItem[] = [
@@ -382,18 +382,18 @@ describe("@components/share/ImportFlow", () => {
 								elements: [
 									{
 										title: "Lesson with GeoGebra",
-										type: CopyApiResponseTypeEnum.Lesson,
+										type: CopyApiResponseType.LESSON,
 									},
 								],
-								type: CopyApiResponseTypeEnum.Course,
+								type: CopyApiResponseType.COURSE,
 								url: "http://abc.de",
 							},
 						];
 						copyModuleMock.copyByShareToken = vi.fn().mockResolvedValue(copyResults);
 
 						copyResultResponse = {
-							type: CopyApiResponseTypeEnum.Course,
-							status: CopyApiResponseStatusEnum.Partial,
+							type: CopyApiResponseType.COURSE,
+							status: CopyApiResponseStatus.PARTIAL,
 						};
 					});
 
@@ -433,7 +433,7 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.validateShareToken = () =>
 						Promise.resolve({
 							token,
-							parentType: ShareTokenInfoResponseParentTypeEnum.ColumnBoard,
+							parentType: ShareTokenInfoResponseParentType.COLUMN_BOARD,
 							parentName: originalName,
 						});
 					await flushPromises();
@@ -481,7 +481,7 @@ describe("@components/share/ImportFlow", () => {
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationId: course.id,
 						token,
-						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+						type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 						newName: originalName,
 					});
 				});
@@ -492,7 +492,7 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.validateShareToken = () =>
 						Promise.resolve({
 							token,
-							parentType: ShareTokenInfoResponseParentTypeEnum.Room,
+							parentType: ShareTokenInfoResponseParentType.ROOM,
 							parentName: originalName,
 						});
 
@@ -523,7 +523,7 @@ describe("@components/share/ImportFlow", () => {
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						token,
-						type: ShareTokenBodyParamsParentTypeEnum.Room,
+						type: ShareTokenBodyParamsParentType.ROOM,
 						newName: originalName,
 					});
 				});
@@ -543,12 +543,12 @@ describe("@components/share/ImportFlow", () => {
 						const failedItems: CopyResultItem[] = [
 							{
 								title: "Thema",
-								type: CopyApiResponseTypeEnum.Lesson,
+								type: CopyApiResponseType.LESSON,
 								elementId: "63edd9c310b658af36648a55",
 								url: "abc.de",
 								elements: [
 									{
-										type: CopyApiResponseTypeEnum.LessonContentGroup,
+										type: CopyApiResponseType.LESSON_CONTENT_GROUP,
 										title: "Etherpad",
 									},
 								],
@@ -562,7 +562,7 @@ describe("@components/share/ImportFlow", () => {
 						copyModuleMock.validateShareToken = () =>
 							Promise.resolve({
 								token,
-								parentType: ShareTokenInfoResponseParentTypeEnum.Room,
+								parentType: ShareTokenInfoResponseParentType.ROOM,
 								parentName: originalName,
 							});
 						const copyResults: CopyResultItem[] = [
@@ -572,18 +572,18 @@ describe("@components/share/ImportFlow", () => {
 								elements: [
 									{
 										title: "Lesson with GeoGebra",
-										type: CopyApiResponseTypeEnum.Lesson,
+										type: CopyApiResponseType.LESSON,
 									},
 								],
-								type: CopyApiResponseTypeEnum.Room,
+								type: CopyApiResponseType.ROOM,
 								url: "http://abc.de",
 							},
 						];
 						copyModuleMock.copyByShareToken = vi.fn().mockResolvedValue(copyResults);
 
 						copyResultResponse = {
-							type: CopyApiResponseTypeEnum.Room,
-							status: CopyApiResponseStatusEnum.Partial,
+							type: CopyApiResponseType.ROOM,
+							status: CopyApiResponseStatus.PARTIAL,
 						};
 					});
 

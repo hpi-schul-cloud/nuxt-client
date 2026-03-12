@@ -9,7 +9,7 @@ vi.mock("@util-board/InlineEditInteractionHandler.composable");
 
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.RichText,
+	type: ContentElementType.RICH_TEXT,
 	content: {
 		text: "TestContent",
 		inputFormat: "richTextCk5",

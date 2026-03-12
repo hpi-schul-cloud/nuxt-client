@@ -136,7 +136,7 @@ describe("MediaShelfPage", () => {
 		describe("when changing to the grid layout", () => {
 			const setup = () => {
 				useSharedMediaBoardStateMock.mediaBoard.value = mediaBoardResponseFactory.build({
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 				});
 
 				const { wrapper } = getWrapper();
@@ -152,14 +152,14 @@ describe("MediaShelfPage", () => {
 				const gridBtn = wrapper.find("[data-testid=media-board-layout-grid]");
 				await gridBtn.trigger("click");
 
-				expect(useSharedMediaBoardStateMock.updateMediaBoardLayout).toHaveBeenCalledWith(BoardLayout.Grid);
+				expect(useSharedMediaBoardStateMock.updateMediaBoardLayout).toHaveBeenCalledWith(BoardLayout.GRID);
 			});
 		});
 
 		describe("when changing to the list layout", () => {
 			const setup = () => {
 				useSharedMediaBoardStateMock.mediaBoard.value = mediaBoardResponseFactory.build({
-					layout: BoardLayout.Grid,
+					layout: BoardLayout.GRID,
 				});
 
 				const { wrapper } = getWrapper();
@@ -175,7 +175,7 @@ describe("MediaShelfPage", () => {
 				const listBtn = wrapper.find("[data-testid=media-board-layout-list]");
 				await listBtn.trigger("click");
 
-				expect(useSharedMediaBoardStateMock.updateMediaBoardLayout).toHaveBeenCalledWith(BoardLayout.List);
+				expect(useSharedMediaBoardStateMock.updateMediaBoardLayout).toHaveBeenCalledWith(BoardLayout.LIST);
 			});
 		});
 	});

@@ -491,7 +491,7 @@ const totalUnmatched = computed(() => importUsersModule.getTotalUnmatched);
 
 const totalImportUsers = computed(() => importUsersModule.getTotal);
 
-const isBrb = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb);
+const isBrb = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.BRB);
 
 const isNbc = computed(() => useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21);
 

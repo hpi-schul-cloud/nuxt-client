@@ -98,7 +98,7 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
 
 const downloadTerms = () => {
 	if (termsOfUse.value) {

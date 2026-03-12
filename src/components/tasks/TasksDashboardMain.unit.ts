@@ -184,7 +184,7 @@ describe("TasksDashboardMain", () => {
 			setupStores({
 				copyModule: CopyModule,
 			});
-			createTestAppStoreWithPermissions([Permission.HomeworkCreate]);
+			createTestAppStoreWithPermissions([Permission.HOMEWORK_CREATE]);
 
 			wrapper = mountComponent({
 				props: {

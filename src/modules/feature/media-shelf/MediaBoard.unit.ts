@@ -90,11 +90,11 @@ describe("MediaBoard", () => {
 
 			const availableLine = wrapper.findComponent(MediaBoardAvailableLine);
 
-			availableLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
+			availableLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
 			await nextTick();
 
 			expect(useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor).toHaveBeenCalledWith(
-				MediaBoardColors.Red
+				MediaBoardColors.RED
 			);
 		});
 	});
@@ -160,12 +160,12 @@ describe("MediaBoard", () => {
 
 			const mediaLine = wrapper.findComponent(MediaBoardLine);
 
-			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
+			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
 			await nextTick();
 
 			expect(useSharedMediaBoardStateMock.updateLineBackgroundColor).toHaveBeenCalledWith(
 				expect.any(String),
-				MediaBoardColors.Red
+				MediaBoardColors.RED
 			);
 		});
 	});

@@ -81,7 +81,7 @@
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { ShareTokenBodyParamsParentType } from "@/serverApi/v3/api";
 import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { notifySuccess } from "@data-app";
@@ -93,7 +93,7 @@ type VDialogButtonActions = "back" | "edit" | "cancel" | "confirm" | "close" | "
 
 const props = defineProps({
 	type: {
-		type: String as PropType<ShareTokenBodyParamsParentTypeEnum>,
+		type: String as PropType<ShareTokenBodyParamsParentType>,
 		required: true,
 	},
 });
@@ -148,22 +148,22 @@ const onCopy = () => {
 
 const showAlertInfo = computed(
 	() =>
-		props.type === ShareTokenBodyParamsParentTypeEnum.Courses ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.Room ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.Card
+		props.type === ShareTokenBodyParamsParentType.COURSES ||
+		props.type === ShareTokenBodyParamsParentType.COLUMN_BOARD ||
+		props.type === ShareTokenBodyParamsParentType.LESSONS ||
+		props.type === ShareTokenBodyParamsParentType.ROOM ||
+		props.type === ShareTokenBodyParamsParentType.CARD
 );
 
-const showCourseInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Courses);
+const showCourseInfo = computed(() => props.type === ShareTokenBodyParamsParentType.COURSES);
 
 const showBoardInfo = computed(
 	() =>
-		props.type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
-		props.type === ShareTokenBodyParamsParentTypeEnum.Card
+		props.type === ShareTokenBodyParamsParentType.COLUMN_BOARD ||
+		props.type === ShareTokenBodyParamsParentType.CARD
 );
 
-const showLessonInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Lessons);
+const showLessonInfo = computed(() => props.type === ShareTokenBodyParamsParentType.LESSONS);
 
-const showRoomInfo = computed(() => props.type === ShareTokenBodyParamsParentTypeEnum.Room);
+const showRoomInfo = computed(() => props.type === ShareTokenBodyParamsParentType.ROOM);
 </script>

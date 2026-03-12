@@ -57,15 +57,15 @@ describe("AdminTableLegend", () => {
 	});
 
 	it("renders THR-specific text if isThr is true", () => {
-		createTestEnvStore({ SC_THEME: SchulcloudTheme.Thr });
+		createTestEnvStore({ SC_THEME: SchulcloudTheme.THR });
 		const { wrapper } = setup();
 
 		expect(wrapper.text()).toContain("components.molecules.admintablelegend.thr");
 	});
 
 	it.each([
-		[SchulcloudTheme.Default, "Dataport"],
-		[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+		[SchulcloudTheme.DEFAULT, "Dataport"],
+		[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 		[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 	])("uses %s-instance specific text placeholders", async (theme, expected) => {
 		createTestEnvStore({ SC_THEME: theme });

@@ -106,7 +106,7 @@ describe("MembersTable", () => {
 		const members =
 			options?.members ??
 			roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomadmin,
+				roomRoleName: RoleName.ROOMADMIN,
 				allowedOperations: {
 					passOwnershipTo: false,
 					removeMember: false,
@@ -226,22 +226,22 @@ describe("MembersTable", () => {
 		it.each([
 			{
 				description: "teacher icon for teacher",
-				schoolRoleNames: [RoleName.Teacher],
+				schoolRoleNames: [RoleName.TEACHER],
 				expectedIcon: mdiAccountSchoolOutline,
 			},
 			{
 				description: "student icon for students",
-				schoolRoleNames: [RoleName.Student],
+				schoolRoleNames: [RoleName.STUDENT],
 				expectedIcon: mdiAccountOutline,
 			},
 			{
 				description: "expert icon for external persons",
-				schoolRoleNames: [RoleName.ExternalPerson],
+				schoolRoleNames: [RoleName.EXTERNAL_PERSON],
 				expectedIcon: mdiAccountClockOutline,
 			},
 			{
 				description: "teacher icon if teacher and admin roles are present",
-				schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
+				schoolRoleNames: [RoleName.ADMINISTRATOR, RoleName.TEACHER],
 				expectedIcon: mdiAccountSchoolOutline,
 			},
 		])("should render $description", ({ schoolRoleNames, expectedIcon }) => {
@@ -322,12 +322,12 @@ describe("MembersTable", () => {
 
 	it("should not show room applicants", () => {
 		const roomAdmins = roomMemberFactory.buildList(3, {
-			roomRoleName: RoleName.Roomadmin,
-			displayRoomRole: RoleName.Roomadmin,
+			roomRoleName: RoleName.ROOMADMIN,
+			displayRoomRole: RoleName.ROOMADMIN,
 		});
 		const roomApplicant = roomMemberFactory.build({
-			roomRoleName: RoleName.Roomapplicant,
-			displayRoomRole: RoleName.Roomapplicant,
+			roomRoleName: RoleName.ROOMAPPLICANT,
+			displayRoomRole: RoleName.ROOMAPPLICANT,
 		});
 		const members = [...roomAdmins, roomApplicant];
 
@@ -516,7 +516,7 @@ describe("MembersTable", () => {
 
 		it("should not be rendered when user is current user", () => {
 			const roomOwner = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomowner,
+				roomRoleName: RoleName.ROOMOWNER,
 				firstName: "TheOwner",
 			});
 			const { wrapper } = setup({

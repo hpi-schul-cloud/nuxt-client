@@ -8,9 +8,9 @@ import { Factory } from "fishery";
 
 export const customParameterResponseFactory =
 	Factory.define<CustomParameterResponse>(({ sequence }) => ({
-		scope: CustomParameterScopeTypeParams.Context,
-		type: CustomParameterTypeParams.String,
-		location: CustomParameterLocationParams.Body,
+		scope: CustomParameterScopeTypeParams.CONTEXT,
+		type: CustomParameterTypeParams.STRING,
+		location: CustomParameterLocationParams.BODY,
 		name: `CustomParameter${sequence}`,
 		isOptional: false,
 		isProtected: false,

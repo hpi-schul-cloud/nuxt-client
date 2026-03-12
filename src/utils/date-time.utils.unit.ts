@@ -42,30 +42,30 @@ describe("date-time.utils", () => {
 
 		it.each([
 			// date format
-			{ locale: LanguageType.De, formatId: "date", expected: "31.12.2024" },
-			{ locale: LanguageType.En, formatId: "date", expected: "31/12/2024" },
-			{ locale: LanguageType.Es, formatId: "date", expected: "31/12/2024" },
-			{ locale: LanguageType.Uk, formatId: "date", expected: "31.12.2024" },
+			{ locale: LanguageType.DE, formatId: "date", expected: "31.12.2024" },
+			{ locale: LanguageType.EN, formatId: "date", expected: "31/12/2024" },
+			{ locale: LanguageType.ES, formatId: "date", expected: "31/12/2024" },
+			{ locale: LanguageType.UK, formatId: "date", expected: "31.12.2024" },
 			// dateYY format
-			{ locale: LanguageType.De, formatId: "dateYY", expected: "31.12.24" },
-			{ locale: LanguageType.En, formatId: "dateYY", expected: "31/12/24" },
-			{ locale: LanguageType.Es, formatId: "dateYY", expected: "31/12/24" },
-			{ locale: LanguageType.Uk, formatId: "dateYY", expected: "31.12.24" },
+			{ locale: LanguageType.DE, formatId: "dateYY", expected: "31.12.24" },
+			{ locale: LanguageType.EN, formatId: "dateYY", expected: "31/12/24" },
+			{ locale: LanguageType.ES, formatId: "dateYY", expected: "31/12/24" },
+			{ locale: LanguageType.UK, formatId: "dateYY", expected: "31.12.24" },
 			// time format
-			{ locale: LanguageType.De, formatId: "time", expected: "12:00" },
-			{ locale: LanguageType.En, formatId: "time", expected: "12:00" },
-			{ locale: LanguageType.Es, formatId: "time", expected: "12:00" },
-			{ locale: LanguageType.Uk, formatId: "time", expected: "12:00" },
+			{ locale: LanguageType.DE, formatId: "time", expected: "12:00" },
+			{ locale: LanguageType.EN, formatId: "time", expected: "12:00" },
+			{ locale: LanguageType.ES, formatId: "time", expected: "12:00" },
+			{ locale: LanguageType.UK, formatId: "time", expected: "12:00" },
 			// dateTime format
-			{ locale: LanguageType.De, formatId: "dateTime", expected: "31.12.2024 12:00" },
-			{ locale: LanguageType.En, formatId: "dateTime", expected: "31/12/2024 12:00" },
-			{ locale: LanguageType.Es, formatId: "dateTime", expected: "31/12/2024 12:00" },
-			{ locale: LanguageType.Uk, formatId: "dateTime", expected: "31.12.2024 12:00" },
+			{ locale: LanguageType.DE, formatId: "dateTime", expected: "31.12.2024 12:00" },
+			{ locale: LanguageType.EN, formatId: "dateTime", expected: "31/12/2024 12:00" },
+			{ locale: LanguageType.ES, formatId: "dateTime", expected: "31/12/2024 12:00" },
+			{ locale: LanguageType.UK, formatId: "dateTime", expected: "31.12.2024 12:00" },
 			// dateTimeYY
-			{ locale: LanguageType.De, formatId: "dateTimeYY", expected: "31.12.24 12:00" },
-			{ locale: LanguageType.En, formatId: "dateTimeYY", expected: "31/12/24 12:00" },
-			{ locale: LanguageType.Es, formatId: "dateTimeYY", expected: "31/12/24 12:00" },
-			{ locale: LanguageType.Uk, formatId: "dateTimeYY", expected: "31.12.24 12:00" },
+			{ locale: LanguageType.DE, formatId: "dateTimeYY", expected: "31.12.24 12:00" },
+			{ locale: LanguageType.EN, formatId: "dateTimeYY", expected: "31/12/24 12:00" },
+			{ locale: LanguageType.ES, formatId: "dateTimeYY", expected: "31/12/24 12:00" },
+			{ locale: LanguageType.UK, formatId: "dateTimeYY", expected: "31.12.24 12:00" },
 		] as const)("should format '$formatId' for locale '$locale'", async ({ locale, formatId, expected }) => {
 			useAppStore().$patch({ userLocale: locale });
 			await nextTick();
@@ -80,7 +80,7 @@ describe("date-time.utils", () => {
 			{ input: "not-a-date", description: "invalid date string" },
 			{ input: "", description: "empty string" },
 		])("should return undefined for $description", async ({ input }) => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			expect(formatUtc(input, "date")).toBeUndefined();
 		});
@@ -363,7 +363,7 @@ describe("date-time.utils", () => {
 		});
 
 		it("should return relative time for recent date (within 7 days)", async () => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			const recentDate = dayjs.utc().subtract(3, "day").toISOString();
 			const result = formatRecentOrActual(recentDate);
@@ -371,7 +371,7 @@ describe("date-time.utils", () => {
 		});
 
 		it("should return formatted date for old date (older than 7 days)", async () => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			const oldDate = "2024-01-15T10:00:00.000Z";
 			const result = formatRecentOrActual(oldDate);
@@ -399,7 +399,7 @@ describe("date-time.utils", () => {
 
 	describe("toIsoDate", () => {
 		it("should convert German locale date to ISO format", async () => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			const result = toIsoDate("15.06.2024");
 			expect(result).toBe("2024-06-15");
@@ -410,7 +410,7 @@ describe("date-time.utils", () => {
 		});
 
 		it("should return undefined for invalid date", async () => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			expect(toIsoDate("invalid")).toBeUndefined();
 		});
@@ -418,7 +418,7 @@ describe("date-time.utils", () => {
 
 	describe("toDateFromIso", () => {
 		it("should convert locale date string to Date object", async () => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			const result = toDateFromLocalString("15.06.2024");
 			expect(result).toBeInstanceOf(Date);
@@ -452,7 +452,7 @@ describe("date-time.utils", () => {
 
 	describe("formatFromDbGermanDateString", () => {
 		it("should convert DB German date to localized format", async () => {
-			useAppStore().$patch({ userLocale: LanguageType.De });
+			useAppStore().$patch({ userLocale: LanguageType.DE });
 			await nextTick();
 			const result = fromGermanDate("15.06.2024");
 			expect(result).toBe("15.06.2024");

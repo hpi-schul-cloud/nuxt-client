@@ -30,9 +30,9 @@ const onUpdateLanguage = (value: LanguageType) => {
 };
 
 const languages = [
-	{ value: LanguageType.De, title: t("global.topbar.language.longName.de") },
-	{ value: LanguageType.En, title: t("global.topbar.language.longName.en") },
-	{ value: LanguageType.Es, title: t("global.topbar.language.longName.es") },
-	{ value: LanguageType.Uk, title: t("global.topbar.language.longName.uk") },
+	{ value: LanguageType.DE, title: t("global.topbar.language.longName.de") },
+	{ value: LanguageType.EN, title: t("global.topbar.language.longName.en") },
+	{ value: LanguageType.ES, title: t("global.topbar.language.longName.es") },
+	{ value: LanguageType.UK, title: t("global.topbar.language.longName.uk") },
 ];
 </script>

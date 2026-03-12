@@ -82,7 +82,7 @@ describe("useEnvStore", () => {
 	describe("instituteTitle", () => {
 		it("should render default title when the theme is default", async () => {
 			await setup(true, {
-				SC_THEME: SchulcloudTheme.Default,
+				SC_THEME: SchulcloudTheme.DEFAULT,
 			});
 
 			expect(useEnvStore().instituteTitle).toBe("Dataport");
@@ -90,7 +90,7 @@ describe("useEnvStore", () => {
 
 		it("should render brb title when the theme is brb", async () => {
 			await setup(true, {
-				SC_THEME: SchulcloudTheme.Brb,
+				SC_THEME: SchulcloudTheme.BRB,
 			});
 
 			expect(useEnvStore().instituteTitle).toBe("Ministerium für Bildung, Jugend und Sport des Landes Brandenburg");
@@ -98,7 +98,7 @@ describe("useEnvStore", () => {
 
 		it("should render thr title when the theme is thr", async () => {
 			await setup(true, {
-				SC_THEME: SchulcloudTheme.Thr,
+				SC_THEME: SchulcloudTheme.THR,
 			});
 
 			expect(useEnvStore().instituteTitle).toBe(
@@ -121,7 +121,7 @@ describe("useEnvStore", () => {
 		it("should request, process and provide env data.", async () => {
 			const mockData: ConfigResponse = {
 				...defaultConfigEnvs,
-				SC_THEME: SchulcloudTheme.Default,
+				SC_THEME: SchulcloudTheme.DEFAULT,
 				ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 				SC_TITLE: "SomeThing",
 			};

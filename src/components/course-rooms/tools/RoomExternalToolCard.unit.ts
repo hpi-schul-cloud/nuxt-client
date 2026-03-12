@@ -26,7 +26,7 @@ describe("RoomExternalToolCard", () => {
 
 	beforeEach(() => {
 		vi.mocked(useAppStore).mockReturnValue({
-			hasPermission: (permission: Permission) => permission === Permission.ContextToolAdmin,
+			hasPermission: (permission: Permission) => permission === Permission.CONTEXT_TOOL_ADMIN,
 			userRoles: [],
 		} as unknown as ReturnType<typeof useAppStore>);
 

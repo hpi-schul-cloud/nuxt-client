@@ -10,7 +10,7 @@ import { computed, reactive } from "vue";
 
 export const defaultConfigEnvs: ConfigResponse = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "",
-	SC_THEME: SchulcloudTheme.Default,
+	SC_THEME: SchulcloudTheme.DEFAULT,
 	JWT_TIMEOUT_SECONDS: -1,
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: -1,
 	MIGRATION_END_GRACE_PERIOD_MS: -1,
@@ -21,9 +21,9 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 	GHOST_BASE_URL: "",
 	I18N__AVAILABLE_LANGUAGES: [],
-	I18N__FALLBACK_LANGUAGE: LanguageType.De,
-	I18N__DEFAULT_LANGUAGE: LanguageType.De,
-	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
+	I18N__FALLBACK_LANGUAGE: LanguageType.DE,
+	I18N__DEFAULT_LANGUAGE: LanguageType.DE,
+	I18N__DEFAULT_TIMEZONE: Timezone.EUROPE_BERLIN,
 	SC_TITLE: "",
 	TRAINING_URL: "https://lernen.dbildungscloud.de",
 	FEATURE_SHOW_OUTDATED_USERS: false,
@@ -111,9 +111,9 @@ export const useEnvStore = defineStore("envConfigStore", () => {
 		switch (env.SC_THEME) {
 			case SchulcloudTheme.N21:
 				return "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)";
-			case SchulcloudTheme.Thr:
+			case SchulcloudTheme.THR:
 				return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-			case SchulcloudTheme.Brb:
+			case SchulcloudTheme.BRB:
 				return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 			default:
 				return "Dataport";

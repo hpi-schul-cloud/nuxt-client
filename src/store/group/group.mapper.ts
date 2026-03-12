@@ -1,9 +1,9 @@
 import { ClassInfo, ClassRootType, CourseInfo } from "../types/class-info";
-import { ClassInfoResponse, ClassInfoResponseTypeEnum, CourseInfoResponse } from "@/serverApi/v3";
+import { ClassInfoResponse, ClassInfoResponseType, CourseInfoResponse } from "@/serverApi/v3";
 
-export const ClassRootTypeMapping: Record<ClassInfoResponseTypeEnum, ClassRootType> = {
-	[ClassInfoResponseTypeEnum.Class]: ClassRootType.Class,
-	[ClassInfoResponseTypeEnum.Group]: ClassRootType.Group,
+export const ClassRootTypeMapping: Record<ClassInfoResponseType, ClassRootType> = {
+	[ClassInfoResponseType.CLASS]: ClassRootType.CLASS,
+	[ClassInfoResponseType.GROUP]: ClassRootType.GROUP,
 };
 
 export class GroupMapper {

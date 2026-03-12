@@ -92,9 +92,9 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import {
 	BoardParentType,
-	ImportUserResponseRoleNamesEnum as Roles,
+	ImportUserResponseRoleNames as Roles,
 	Permission,
-	ShareTokenBodyParamsParentTypeEnum,
+	ShareTokenBodyParamsParentType,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
@@ -258,7 +258,7 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 
-			if (useAppStore().userPermissions.includes(Permission.HomeworkCreate)) {
+			if (useAppStore().userPermissions.includes(Permission.HOMEWORK_CREATE)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.task"),
 					icon: mdiFormatListChecks,
@@ -267,7 +267,7 @@ export default defineComponent({
 				});
 			}
 
-			if (useAppStore().userPermissions.includes(Permission.TopicCreate)) {
+			if (useAppStore().userPermissions.includes(Permission.TOPIC_CREATE)) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 					icon: mdiViewListOutline,
@@ -276,7 +276,7 @@ export default defineComponent({
 				});
 			}
 
-			if (useAppStore().userPermissions.includes(Permission.CourseEdit) && useAppStore().isTeacher) {
+			if (useAppStore().userPermissions.includes(Permission.COURSE_EDIT) && useAppStore().isTeacher) {
 				actions.push({
 					label: this.$t("pages.courseRoomDetails.fab.add.board"),
 					icon: mdiViewGridPlusOutline,
@@ -307,12 +307,12 @@ export default defineComponent({
 			return this.courseRoomDetailsModule.getPermissionData || [];
 		},
 		dashBoardRole() {
-			if (useAppStore().isTeacher) return Roles.Teacher;
-			if (useAppStore().isStudent) return Roles.Student;
+			if (useAppStore().isTeacher) return Roles.TEACHER;
+			if (useAppStore().isStudent) return Roles.STUDENT;
 			return undefined;
 		},
 		canEditTools() {
-			return !!useAppStore().userPermissions?.includes(Permission.ContextToolAdmin);
+			return !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN);
 		},
 		headlineMenuItems() {
 			if (!this.scopedPermissions.includes("COURSE_EDIT")) return [];
@@ -455,7 +455,7 @@ export default defineComponent({
 			if (useEnvConfig().value.FEATURE_COURSE_SHARE) {
 				this.shareModule.startShareFlow({
 					id: this.courseId,
-					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+					type: ShareTokenBodyParamsParentType.COURSES,
 				});
 			}
 		},
@@ -494,7 +494,7 @@ export default defineComponent({
 		async onCreateBoard(courseId, layout) {
 			const params = {
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
-				parentType: BoardParentType.Course,
+				parentType: BoardParentType.COURSE,
 				parentId: courseId,
 				layout,
 			};

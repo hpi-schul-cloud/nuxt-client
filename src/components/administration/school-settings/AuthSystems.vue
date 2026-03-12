@@ -156,8 +156,8 @@ export default {
 			return this.systems.length > 0;
 		},
 		customLoginLinkEnabled: () => useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
-		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SystemCreate),
-		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SystemEdit),
+		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SYSTEM_CREATE),
+		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SYSTEM_EDIT),
 	},
 	methods: {
 		ariaLabels(system) {

@@ -43,14 +43,14 @@ const createWrapper = ({
 	const { router } = injectRouterMock(createRouterMock());
 	const route = router.currentRoute.value;
 
-	const defaultPermissions = [Permission.ClassEdit, Permission.ClassCreate];
+	const defaultPermissions = [Permission.CLASS_EDIT, Permission.CLASS_CREATE];
 
 	const groupModule = createModuleMocks(GroupModule, {
 		getClasses: [
 			classInfoFactory.build(),
 			classInfoFactory.build({
 				externalSourceName: undefined,
-				type: ClassRootType.Class,
+				type: ClassRootType.CLASS,
 				teacherNames: ["Test Teacher"],
 				isUpgradable: true,
 			}),
@@ -150,7 +150,7 @@ describe("ClassOverview", () => {
 					classInfoFactory.build(),
 					classInfoFactory.build({
 						externalSourceName: undefined,
-						type: ClassRootType.Class,
+						type: ClassRootType.CLASS,
 						isUpgradable: true,
 					}),
 				];
@@ -474,7 +474,7 @@ describe("ClassOverview", () => {
 						getClasses: [
 							classInfoFactory.build({
 								externalSourceName: undefined,
-								type: ClassRootType.Class,
+								type: ClassRootType.CLASS,
 								isUpgradable: false,
 							}),
 						],
@@ -688,7 +688,7 @@ describe("ClassOverview", () => {
 					props: {
 						tab: "current",
 					},
-					userPermissions: [Permission.ClassCreate],
+					userPermissions: [Permission.CLASS_CREATE],
 				});
 
 				return {
@@ -788,8 +788,8 @@ describe("ClassOverview", () => {
 		};
 
 		it.each([
-			[SchulcloudTheme.Default, "Dataport"],
-			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.DEFAULT, "Dataport"],
+			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
 			const { wrapper } = setup({ SC_THEME: theme });

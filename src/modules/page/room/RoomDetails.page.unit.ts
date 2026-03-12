@@ -63,7 +63,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: false,
-			getParentType: serverApi.ShareTokenBodyParamsParentTypeEnum.Room,
+			getParentType: serverApi.ShareTokenBodyParamsParentType.ROOM,
 		});
 
 		const room = roomFactory.build({ allowedOperations: options?.allowedOperations });
@@ -248,7 +248,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
 						id: room.id,
-						type: ShareTokenParentType.Room,
+						type: ShareTokenParentType.ROOM,
 					});
 				});
 			});
@@ -373,11 +373,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				await openDialog(wrapper);
 
 				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
-				await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
+				await selectLayoutDialog.vm.$emit("select", BoardLayout.COLUMNS);
 
 				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
 					room.id,
-					serverApi.BoardLayout.Columns,
+					serverApi.BoardLayout.COLUMNS,
 					"pages.roomDetails.board.defaultName"
 				);
 				expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);
@@ -393,11 +393,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				roomDetailsStore.createBoard.mockResolvedValue(createdBoardId);
 				await openDialog(wrapper);
 				const selectLayoutDialog = wrapper.getComponent(SelectBoardLayoutDialog);
-				await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
+				await selectLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 
 				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
 					room.id,
-					serverApi.BoardLayout.List,
+					serverApi.BoardLayout.LIST,
 					"pages.roomDetails.board.defaultName"
 				);
 				expect(router.push).toHaveBeenCalledWith(`/boards/${createdBoardId}`);

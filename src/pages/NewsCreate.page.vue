@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { CreateNewsParams, CreateNewsParamsTargetModelEnum, NewsApiFactory } from "@/serverApi/v3";
+import { CreateNewsParams, CreateNewsParamsTargetModel, NewsApiFactory } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -50,7 +50,7 @@ onMounted(() => {
 	const areQueryParamsValid =
 		targetId &&
 		typeof targetId === "string" &&
-		Object.values(CreateNewsParamsTargetModelEnum).includes(targetModel as CreateNewsParamsTargetModelEnum);
+		Object.values(CreateNewsParamsTargetModel).includes(targetModel as CreateNewsParamsTargetModel);
 
 	if (!areQueryParamsValid) useAppStore().handleApplicationError(HttpStatusCode.BadRequest);
 });
@@ -66,7 +66,7 @@ const parseNewsTarget = (
 	targetModel: LocationQueryValue | LocationQueryValue[]
 ): Pick<CreateNewsParams, "targetId" | "targetModel"> | undefined => {
 	if (targetModel && typeof targetModel === "string") {
-		return { targetId: targetId as string, targetModel: targetModel as CreateNewsParamsTargetModelEnum };
+		return { targetId: targetId as string, targetModel: targetModel as CreateNewsParamsTargetModel };
 	} else {
 		return undefined;
 	}
@@ -75,7 +75,7 @@ const parseNewsTarget = (
 const onCreate = async (news: Pick<CreateNewsParams, "title" | "content" | "displayAt">) => {
 	const newsTarget = newsTargetFromQueryParams.value ?? {
 		targetId: useAppStore()?.school?.id ?? "",
-		targetModel: CreateNewsParamsTargetModelEnum.Schools,
+		targetModel: CreateNewsParamsTargetModel.SCHOOLS,
 	};
 
 	const { result, success } = await execute(

@@ -103,7 +103,7 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
 
 const downloadPolicy = () => {
 	if (privacyPolicy.value) {

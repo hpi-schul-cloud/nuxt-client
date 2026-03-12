@@ -24,13 +24,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/administration/ldap/activate",
 		component: () => import("@/pages/administration/LDAPActivate.page.vue"),
 		name: "administration-ldap-activate",
-		beforeEnter: createPermissionGuard([Permission.AdminView, Permission.SchoolEdit]),
+		beforeEnter: createPermissionGuard([Permission.ADMIN_VIEW, Permission.SCHOOL_EDIT]),
 	},
 	{
 		path: "/administration/ldap/config",
 		component: () => import("@/pages/administration/LDAPConfig.page.vue"),
 		name: "administration-ldap-config",
-		beforeEnter: createPermissionGuard([Permission.AdminView, Permission.SchoolEdit]),
+		beforeEnter: createPermissionGuard([Permission.ADMIN_VIEW, Permission.SCHOOL_EDIT]),
 	},
 	{
 		path: "/administration/migration",
@@ -41,13 +41,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/administration/school-settings",
 		component: () => import("@/pages/administration/SchoolSettings.page.vue"),
 		name: "administration-school-settings",
-		beforeEnter: createPermissionGuard([Permission.SchoolEdit]),
+		beforeEnter: createPermissionGuard([Permission.SCHOOL_EDIT]),
 	},
 	{
 		path: "/administration/school-settings/tool-configuration",
 		component: () => import("@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"),
 		name: "administration-tool-config-overview",
-		beforeEnter: createPermissionGuard([Permission.SchoolToolAdmin]),
+		beforeEnter: createPermissionGuard([Permission.SCHOOL_TOOL_ADMIN]),
 		children: [
 			{
 				path: ":configId",
@@ -63,7 +63,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/administration/school-settings/provisioning-options",
 		component: () => import("@/pages/administration/ProvisioningOptionsPage.vue"),
 		name: "provivisioning-options-page",
-		beforeEnter: createPermissionGuard([Permission.SchoolSystemView, Permission.SchoolSystemEdit]),
+		beforeEnter: createPermissionGuard([Permission.SCHOOL_SYSTEM_VIEW, Permission.SCHOOL_SYSTEM_EDIT]),
 		props: (to: RouteLocationNormalized) => ({
 			systemId: to.query.systemId,
 		}),
@@ -72,49 +72,49 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/administration/students",
 		component: () => import("@/pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
-		beforeEnter: createPermissionGuard([Permission.StudentList]),
+		beforeEnter: createPermissionGuard([Permission.STUDENT_LIST]),
 	},
 	{
 		path: "/administration/students/consent",
 		component: () => import("@/pages/administration/StudentConsent.page.vue"),
 		name: "administration-students-consent",
-		beforeEnter: createPermissionGuard([Permission.StudentEdit, Permission.StudentList]),
+		beforeEnter: createPermissionGuard([Permission.STUDENT_EDIT, Permission.STUDENT_LIST]),
 	},
 	{
 		path: "/administration/students/new",
 		component: () => import("@/pages/administration/StudentCreate.page.vue"),
 		name: "administration-students-new",
-		beforeEnter: createPermissionGuard([Permission.StudentCreate]),
+		beforeEnter: createPermissionGuard([Permission.STUDENT_CREATE]),
 	},
 	{
 		path: "/administration/teachers",
 		component: () => import("@/pages/administration/TeacherOverview.page.vue"),
 		name: "administration-teachers",
-		beforeEnter: createPermissionGuard([Permission.TeacherList]),
+		beforeEnter: createPermissionGuard([Permission.TEACHER_LIST]),
 	},
 	{
 		path: "/administration/teachers/new",
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
-		beforeEnter: createPermissionGuard([Permission.TeacherCreate]),
+		beforeEnter: createPermissionGuard([Permission.TEACHER_CREATE]),
 	},
 	{
 		path: `/administration/rooms/manage`,
 		component: async () => (await import("@page-room")).AdministrationRoomsPage,
 		name: "administration-rooms-manage",
-		beforeEnter: createPermissionGuard([Permission.SchoolAdministrateRooms]),
+		beforeEnter: createPermissionGuard([Permission.SCHOOL_ADMINISTRATE_ROOMS]),
 	},
 	{
 		path: `/administration/rooms/manage/:roomId(${REGEX_ID})`,
 		component: async () => (await import("@page-room")).AdministrationRoomMembersPage,
 		name: "administration-rooms-manage-members",
-		beforeEnter: createPermissionGuard([Permission.SchoolAdministrateRooms]),
+		beforeEnter: createPermissionGuard([Permission.SCHOOL_ADMINISTRATE_ROOMS]),
 	},
 	{
 		path: "/administration/rooms/new",
 		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
 		name: "administration-rooms-new",
-		beforeEnter: createPermissionGuard([Permission.CourseAdministration]),
+		beforeEnter: createPermissionGuard([Permission.COURSE_ADMINISTRATION]),
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,
 		}),
@@ -123,7 +123,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/administration/groups/classes",
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
-		beforeEnter: createPermissionGuard([Permission.ClassList, Permission.GroupList]),
+		beforeEnter: createPermissionGuard([Permission.CLASS_LIST, Permission.GROUP_LIST]),
 		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,
 		}),
@@ -132,7 +132,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
 		name: "administration-groups-classes-members",
 		component: async () => (await import("@page-class-members")).ClassMembersPage,
-		beforeEnter: createPermissionGuard([Permission.GroupView]),
+		beforeEnter: createPermissionGuard([Permission.GROUP_VIEW]),
 		props: (to: RouteLocationNormalized) => ({
 			groupId: to.params.groupId,
 		}),
@@ -283,13 +283,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/news/new",
 		component: () => import("@/pages/NewsCreate.page.vue"),
 		name: "news-new",
-		beforeEnter: createPermissionGuard([Permission.NewsCreate]),
+		beforeEnter: createPermissionGuard([Permission.NEWS_CREATE]),
 	},
 	{
 		path: `/news/:id(${REGEX_ID})/edit`,
 		component: () => import("@/pages/NewsEdit.page.vue"),
 		name: "news-id-edit",
-		beforeEnter: createPermissionGuard([Permission.NewsEdit]),
+		beforeEnter: createPermissionGuard([Permission.NEWS_EDIT]),
 	},
 	{
 		path: "/registration-external-members",
@@ -309,7 +309,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/new`,
 		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: [createPermissionGuard([Permission.SchoolCreateRoom])],
+		beforeEnter: [createPermissionGuard([Permission.SCHOOL_CREATE_ROOM])],
 		name: "rooms-new",
 	},
 	{
@@ -375,7 +375,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"),
 		name: "context-external-tool-configuration",
 		beforeEnter: [
-			createPermissionGuard([Permission.ContextToolAdmin]),
+			createPermissionGuard([Permission.CONTEXT_TOOL_ADMIN]),
 			validateQueryParameters({
 				contextId: isMongoId,
 				contextType: isEnum(ToolContextType),

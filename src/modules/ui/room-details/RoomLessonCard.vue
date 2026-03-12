@@ -22,7 +22,7 @@
 				</div>
 				<div class="dot-menu-section">
 					<RoomDotMenu
-						v-if="userRole === Roles.Teacher"
+						v-if="userRole === Roles.TEACHER"
 						:menu-items="moreActionsMenuItems"
 						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
 						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
@@ -39,7 +39,7 @@
 			</div>
 		</v-card-text>
 		<v-card-actions
-			v-if="userRole === Roles.Teacher && cardActions.length > 0"
+			v-if="userRole === Roles.TEACHER && cardActions.length > 0"
 			class="pt-1"
 			:data-testid="`lesson-card-actions-${lessonCardIndex}`"
 		>
@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { LessonData } from "./types";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { ImportUserResponseRoleNames as Roles } from "@/serverApi/v3";
 import { RoomData } from "@/store/types/room";
 import { useEnvConfig } from "@data-env";
 import {

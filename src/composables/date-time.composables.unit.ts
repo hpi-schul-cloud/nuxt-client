@@ -13,10 +13,10 @@ describe("date-time-composable", () => {
 	describe("useLocalizedDateTime", () => {
 		describe("datePlaceHolder", () => {
 			it.each([
-				{ locale: LanguageType.De, expected: "TT.MM.JJJJ" },
-				{ locale: LanguageType.En, expected: "DD/MM/YYYY" },
-				{ locale: LanguageType.Es, expected: "DD/MM/AAAA" },
-				{ locale: LanguageType.Uk, expected: "ДД.ММ.РРРР" },
+				{ locale: LanguageType.DE, expected: "TT.MM.JJJJ" },
+				{ locale: LanguageType.EN, expected: "DD/MM/YYYY" },
+				{ locale: LanguageType.ES, expected: "DD/MM/AAAA" },
+				{ locale: LanguageType.UK, expected: "ДД.ММ.РРРР" },
 			])("should return '$expected' for locale '$locale'", async ({ locale, expected }) => {
 				useAppStore().$patch({ userLocale: locale });
 				const { datePlaceHolder } = useLocalizedDateTime();
@@ -27,10 +27,10 @@ describe("date-time-composable", () => {
 
 		describe("dateMask", () => {
 			it.each([
-				{ locale: LanguageType.De, expected: "##.##.####" },
-				{ locale: LanguageType.En, expected: "##/##/####" },
-				{ locale: LanguageType.Es, expected: "##/##/####" },
-				{ locale: LanguageType.Uk, expected: "##.##.####" },
+				{ locale: LanguageType.DE, expected: "##.##.####" },
+				{ locale: LanguageType.EN, expected: "##/##/####" },
+				{ locale: LanguageType.ES, expected: "##/##/####" },
+				{ locale: LanguageType.UK, expected: "##.##.####" },
 			])("should return '$expected' for locale '$locale'", ({ locale, expected }) => {
 				useAppStore().$patch({ userLocale: locale });
 				const { dateMask } = useLocalizedDateTime();
@@ -42,22 +42,22 @@ describe("date-time-composable", () => {
 		describe("dateRegex", () => {
 			it.each([
 				{
-					locale: LanguageType.De,
+					locale: LanguageType.DE,
 					validDates: ["31.12.2024", "01.01.2000", "15.06.1999"],
 					invalidDates: ["32.12.2024", "00.01.2000", "15.13.1999", "2024-12-31"],
 				},
 				{
-					locale: LanguageType.En,
+					locale: LanguageType.EN,
 					validDates: ["31/12/2024", "01/01/2000", "15/06/1999"],
 					invalidDates: ["32/12/2024", "00/01/2000", "15/13/1999", "2024-12-31"],
 				},
 				{
-					locale: LanguageType.Es,
+					locale: LanguageType.ES,
 					validDates: ["31/12/2024", "01/01/2000", "15/06/1999"],
 					invalidDates: ["32/12/2024", "00/01/2000", "15/13/1999", "2024-12-31"],
 				},
 				{
-					locale: LanguageType.Uk,
+					locale: LanguageType.UK,
 					validDates: ["31.12.2024", "01.01.2000", "15.06.1999"],
 					invalidDates: ["32.12.2024", "00.01.2000", "15.13.1999", "2024-12-31"],
 				},

@@ -8,7 +8,7 @@ export const boardResponseFactory = Factory.define<BoardResponse>(({ sequence, p
 	columns: [],
 	timestamps: timestampsResponseFactory.build(),
 	isVisible: false,
-	layout: BoardLayout.Columns,
+	layout: BoardLayout.COLUMNS,
 	features: [],
 	permissions: [],
 	allowedOperations: getAllowedOperations(params?.allowedOperations || {}),

@@ -32,7 +32,7 @@ describe("SchoolTerms", () => {
 		const existitngTermsOfUse = termsOfUseFactory.build({ schoolId: mockSchool.id });
 		const { termsOfUse, permissions, status } = {
 			termsOfUse: existitngTermsOfUse,
-			permissions: [Permission.SchoolEdit],
+			permissions: [Permission.SCHOOL_EDIT],
 			status: "completed" as Status,
 			...options,
 		};
@@ -119,13 +119,13 @@ describe("SchoolTerms", () => {
 
 	describe("when user has school edit permission", () => {
 		it("should render edit button", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_EDIT] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(true);
 		});
 
 		it("should render dialog component", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_EDIT] });
 
 			expect(wrapper.findComponent(SchoolTermsFormDialog).exists()).toBe(true);
 		});
@@ -133,13 +133,13 @@ describe("SchoolTerms", () => {
 
 	describe("when user does not have school edit permission", () => {
 		it("should not render edit button", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_VIEW] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(false);
 		});
 
 		it("should not render dialog component", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_VIEW] });
 
 			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(false);
 		});

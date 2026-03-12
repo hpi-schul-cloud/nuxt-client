@@ -261,13 +261,13 @@ useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	switch (props.tab) {
 		case "next":
-			return SchoolYearQueryType.NextYear;
+			return SchoolYearQueryType.NEXT_YEAR;
 		case "current":
-			return SchoolYearQueryType.CurrentYear;
+			return SchoolYearQueryType.CURRENT_YEAR;
 		case "archive":
-			return SchoolYearQueryType.PreviousYears;
+			return SchoolYearQueryType.PREVIOUS_YEARS;
 		default:
-			return SchoolYearQueryType.CurrentYear;
+			return SchoolYearQueryType.CURRENT_YEAR;
 	}
 });
 
@@ -281,11 +281,11 @@ const showSourceHeader = computed(() => classes.value.some((classItem) => classI
 
 const isLoading = computed(() => groupModule.getLoading);
 
-const hasEditPermission = hasPermission(Permission.ClassEdit);
-const hasCreatePermission = hasPermission(Permission.ClassCreate);
+const hasEditPermission = hasPermission(Permission.CLASS_EDIT);
+const hasCreatePermission = hasPermission(Permission.CLASS_CREATE);
 
 const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
-	!(useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr) && hasCreatePermission.value
+	!(useEnvConfig().value.SC_THEME === SchulcloudTheme.THR) && hasCreatePermission.value
 		? [
 				{
 					icon: mdiPlus,
@@ -297,9 +297,9 @@ const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
 		: undefined
 );
 
-const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Class;
+const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.CLASS;
 
-const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Group;
+const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.GROUP;
 
 const isDeleteDialogOpen = ref(false);
 

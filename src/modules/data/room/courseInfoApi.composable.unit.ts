@@ -45,7 +45,7 @@ describe("courseInfoApi.composable", () => {
 		it("should call the api to find courses by school", async () => {
 			setup();
 
-			await useCourseInfoApi().loadCoursesForSchool(CourseStatus.Current, true, 10, 0, CourseSortProps.Name, "asc");
+			await useCourseInfoApi().loadCoursesForSchool(CourseStatus.CURRENT, true, 10, 0, CourseSortProps.NAME, "asc");
 
 			expect(courseInfoApi.courseInfoControllerGetCourseInfo).toHaveBeenCalledWith(
 				0,

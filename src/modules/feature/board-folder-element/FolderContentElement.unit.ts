@@ -32,7 +32,7 @@ vi.mock("@data-board", () => ({
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
 		id: "123",
-		type: ContentElementType.FileFolder,
+		type: ContentElementType.FILE_FOLDER,
 		content: {
 			title: "Test Folder",
 		},

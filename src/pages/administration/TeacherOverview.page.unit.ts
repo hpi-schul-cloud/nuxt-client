@@ -73,8 +73,8 @@ describe("teacher overview page", () => {
 		createTestAppStore({
 			me: {
 				school: mockSchool,
-				roles: [{ id: RoleName.Administrator, name: RoleName.Administrator }],
-				permissions: [Permission.TeacherCreate, Permission.TeacherDelete],
+				roles: [{ id: RoleName.ADMINISTRATOR, name: RoleName.ADMINISTRATOR }],
+				permissions: [Permission.TEACHER_CREATE, Permission.TEACHER_DELETE],
 			},
 		});
 

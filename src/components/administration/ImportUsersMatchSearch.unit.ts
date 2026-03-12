@@ -1,10 +1,10 @@
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
 import {
 	ImportUserResponse,
-	ImportUserResponseRoleNamesEnum,
+	ImportUserResponseRoleNames,
 	UserMatchResponse,
-	UserMatchResponseMatchedByEnum,
-	UserMatchResponseRoleNamesEnum,
+	UserMatchResponseMatchedBy,
+	UserMatchResponseRoleNames,
 } from "@/serverApi/v3";
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
@@ -24,7 +24,7 @@ const testProps = {
 		loginName: "max_mus",
 		firstName: "Max",
 		lastName: "Mustermann",
-		roleNames: [ImportUserResponseRoleNamesEnum.Student],
+		roleNames: [ImportUserResponseRoleNames.STUDENT],
 		classNames: ["6a"],
 		externalRoleNames: [],
 	},
@@ -88,7 +88,7 @@ describe("ImportUsersMatchSearch", () => {
 			loginName: "lehrer@schul-cloud.org",
 			firstName: "Cord",
 			lastName: "Carl",
-			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			roleNames: [ImportUserResponseRoleNames.TEACHER],
 			text: "Cord Carl",
 		};
 		const wrapper = getWrapper(testProps);
@@ -109,7 +109,7 @@ describe("ImportUsersMatchSearch", () => {
 			loginName: "lehrer@schul-cloud.org",
 			firstName: "Cord",
 			lastName: "Carl",
-			roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
+			roleNames: [UserMatchResponseRoleNames.TEACHER],
 		};
 
 		const saveMatchMock = vi.spyOn(importUsersModule, "saveMatch");
@@ -141,7 +141,7 @@ describe("ImportUsersMatchSearch", () => {
 			loginName: "max_mus",
 			firstName: "Max",
 			lastName: "Mustermann",
-			roleNames: [ImportUserResponseRoleNamesEnum.Student],
+			roleNames: [ImportUserResponseRoleNames.STUDENT],
 			classNames: ["6a"],
 		};
 		const match: UserMatchResponse = {
@@ -149,8 +149,8 @@ describe("ImportUsersMatchSearch", () => {
 			loginName: "admin@schul-cloud.org",
 			firstName: "Thorsten",
 			lastName: "Test",
-			roleNames: [UserMatchResponseRoleNamesEnum.Admin],
-			matchedBy: UserMatchResponseMatchedByEnum.Admin,
+			roleNames: [UserMatchResponseRoleNames.ADMIN],
+			matchedBy: UserMatchResponseMatchedBy.ADMIN,
 		};
 		const wrapper = getWrapper({
 			editedItem: { ...importUser, match },
@@ -204,7 +204,7 @@ describe("ImportUsersMatchSearch", () => {
 					loginName: "max_mus",
 					firstName: "Max",
 					lastName: "Mustermann",
-					roleNames: [ImportUserResponseRoleNamesEnum.Student],
+					roleNames: [ImportUserResponseRoleNames.STUDENT],
 					classNames: ["6a"],
 					externalRoleNames: ["student-external"],
 				},
@@ -237,7 +237,7 @@ describe("ImportUsersMatchSearch", () => {
 						loginName: "max_mus",
 						firstName: "Max",
 						lastName: "Mustermann",
-						roleNames: [ImportUserResponseRoleNamesEnum.Student],
+						roleNames: [ImportUserResponseRoleNames.STUDENT],
 						classNames: ["6a"],
 						externalRoleNames: ["Lern"],
 					},
@@ -275,7 +275,7 @@ describe("ImportUsersMatchSearch", () => {
 						loginName: "max_mus",
 						firstName: "Max",
 						lastName: "Mustermann",
-						roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+						roleNames: [ImportUserResponseRoleNames.TEACHER],
 						classNames: ["6a"],
 						externalRoleNames: ["Lehr"],
 					},
@@ -313,7 +313,7 @@ describe("ImportUsersMatchSearch", () => {
 						loginName: "max_mus",
 						firstName: "Max",
 						lastName: "Mustermann",
-						roleNames: [ImportUserResponseRoleNamesEnum.Admin],
+						roleNames: [ImportUserResponseRoleNames.ADMIN],
 						classNames: ["6a"],
 						externalRoleNames: ["Leit"],
 					},
@@ -351,7 +351,7 @@ describe("ImportUsersMatchSearch", () => {
 						loginName: "max_mus",
 						firstName: "Max",
 						lastName: "Mustermann",
-						roleNames: [ImportUserResponseRoleNamesEnum.Admin],
+						roleNames: [ImportUserResponseRoleNames.ADMIN],
 						classNames: ["6a"],
 						externalRoleNames: ["OrgAdmin"],
 					},
@@ -389,7 +389,7 @@ describe("ImportUsersMatchSearch", () => {
 						loginName: "max_mus",
 						firstName: "Max",
 						lastName: "Mustermann",
-						roleNames: [ImportUserResponseRoleNamesEnum.Student],
+						roleNames: [ImportUserResponseRoleNames.STUDENT],
 						classNames: ["6a"],
 						externalRoleNames: [],
 					},

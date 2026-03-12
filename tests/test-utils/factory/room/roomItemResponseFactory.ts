@@ -6,7 +6,7 @@ export const roomItemResponseFactory = Factory.define<RoomItemResponse>(({ seque
 	id: ObjectIdMock(),
 	roomId: ObjectIdMock(),
 	name: `Room #${sequence}`,
-	color: RoomColor.Blue,
+	color: RoomColor.BLUE,
 	schoolId: ObjectIdMock(),
 	createdAt: new Date().toISOString(),
 	updatedAt: new Date().toISOString(),

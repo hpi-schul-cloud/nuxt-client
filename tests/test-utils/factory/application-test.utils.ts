@@ -22,7 +22,7 @@ export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 	},
 	roles: [],
 	permissions: [],
-	language: LanguageType.De,
+	language: LanguageType.DE,
 	account: {
 		id: `account-${sequence}`,
 	},

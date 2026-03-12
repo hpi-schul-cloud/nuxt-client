@@ -116,7 +116,7 @@ const boardTitleFallback = computed(() => {
 	return upperCaseFirstChar(translatedTitle);
 });
 
-const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.Room);
+const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.ROOM);
 
 const onStartEditMode = () => {
 	startEditMode();

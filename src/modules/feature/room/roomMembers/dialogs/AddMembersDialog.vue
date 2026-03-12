@@ -177,13 +177,13 @@ const { allowedOperations } = useRoomAllowedOperations();
 const selectedSchool = ref(schools.value[0].id);
 
 const schoolRoleStudent: SchoolRoleItem = {
-	id: RoleName.Student,
+	id: RoleName.STUDENT,
 	name: t("common.labels.student.neutral"),
 	icon: mdiAccountOutline,
 };
 
 const schoolRoleTeacher: SchoolRoleItem = {
-	id: RoleName.Teacher,
+	id: RoleName.TEACHER,
 	name: t("common.labels.teacher.neutral"),
 	icon: mdiAccountSchoolOutline,
 };
@@ -208,16 +208,16 @@ const isSchoolSelectionDisabled = computed(() => {
 
 const isStudentSelectionDisabled = computed(() => {
 	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
-	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.Student;
+	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.STUDENT;
 	return isExternalSchoolSelected && isStudentRoleSelected;
 });
 
 const isRestrictedStudentVisibilityCase = computed(
-	() => selectedSchoolRole.value === RoleName.Student && !allowedOperations.value.addAllStudents
+	() => selectedSchoolRole.value === RoleName.STUDENT && !allowedOperations.value.addAllStudents
 );
 
 const determineStudentAlertType = computed<StudentAlertTypeEnum | null>(() => {
-	if (selectedSchoolRole.value === RoleName.Student && isCurrentUserStudent.value) {
+	if (selectedSchoolRole.value === RoleName.STUDENT && isCurrentUserStudent.value) {
 		return StudentAlertTypeEnum.StudentAdmin;
 	}
 

@@ -22,7 +22,7 @@ describe("Consent.vue", () => {
 
 	const setup = (theme?: SchulcloudTheme) => {
 		useRegistrationStepperMock.mockReturnValue({
-			selectedLanguage: ref(LanguageType.De),
+			selectedLanguage: ref(LanguageType.DE),
 			password: ref(""),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
@@ -39,7 +39,7 @@ describe("Consent.vue", () => {
 			email: "",
 		};
 		createTestEnvStore({
-			SC_THEME: theme ?? SchulcloudTheme.Default,
+			SC_THEME: theme ?? SchulcloudTheme.DEFAULT,
 		});
 		const wrapper = mount(Consent, {
 			global: {
@@ -67,7 +67,7 @@ describe("Consent.vue", () => {
 		describe("translation keys", () => {
 			it.each([
 				{
-					theme: SchulcloudTheme.Default,
+					theme: SchulcloudTheme.DEFAULT,
 					translationKeys: [
 						"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph",
 						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.default",
@@ -77,7 +77,7 @@ describe("Consent.vue", () => {
 					description: "should contain all necessary translation keys",
 				},
 				{
-					theme: SchulcloudTheme.Brb,
+					theme: SchulcloudTheme.BRB,
 					translationKeys: [
 						"pages.registrationExternalMembers.steps.declarationOfConsent.firstParagraph",
 						"pages.registrationExternalMembers.steps.declarationOfConsent.checkbox.consent.text.brb",

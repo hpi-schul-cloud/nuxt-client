@@ -96,7 +96,7 @@ const onConfirm = async () => {
 const { groups, total, skip, limit, isLoading, fetchGroups } = useGroupListState();
 
 const hasTeacher = (group: GroupResponse): boolean =>
-	group.users.some((user: GroupUserResponse) => user.role === RoleName.Teacher);
+	group.users.some((user: GroupUserResponse) => user.role === RoleName.TEACHER);
 
 const onGroupListIntersect = async (isIntersecting: boolean) => {
 	if (isIntersecting && total.value > groups.value.length) {

@@ -19,7 +19,7 @@ describe("ContentElementFooter", () => {
 				isCollaboraEditable: false,
 				element: {
 					id: "1",
-					type: ContentElementType.File,
+					type: ContentElementType.FILE,
 					content: {
 						caption: "File caption",
 						alternativeText: "File alternative text",

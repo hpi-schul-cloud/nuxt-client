@@ -129,10 +129,10 @@ const {
 	startVideoConference,
 	joinVideoConference,
 	resetError,
-} = useVideoConference(VideoConferenceScope.VideoConferenceElement, element.value.id);
+} = useVideoConference(VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT, element.value.id);
 
 const { isFeatureEnabled } = useBoardFeatures();
-const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.Videoconference));
+const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.VIDEOCONFERENCE));
 
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 

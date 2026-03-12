@@ -7,8 +7,8 @@ import { Factory } from "fishery";
 
 export const toolLaunchRequestResponseFactory =
 	Factory.define<ToolLaunchRequestResponse>(() => ({
-		method: LaunchRequestMethod.Get,
+		method: LaunchRequestMethod.GET,
 		payload: '{ "key": "value" }',
 		url: "https://example.com/tool-launch",
-		launchType: LaunchType.Basic,
+		launchType: LaunchType.BASIC,
 	}));

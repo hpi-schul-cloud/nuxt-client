@@ -118,7 +118,7 @@ const studentVisibilityTextKey = computed(() => {
 	switch (theme.value) {
 		case SchulcloudTheme.N21:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
-		case SchulcloudTheme.Brb:
+		case SchulcloudTheme.BRB:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
 		default:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibility";

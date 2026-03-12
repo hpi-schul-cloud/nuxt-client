@@ -107,7 +107,7 @@ describe("MediaBoardLineMenu", () => {
 			colorPicker.vm.$emit("update:model-value", colors.red.lighten4);
 			await nextTick();
 
-			expect(wrapper.emitted("update:color")).toEqual([[MediaBoardColors.Red]]);
+			expect(wrapper.emitted("update:color")).toEqual([[MediaBoardColors.RED]]);
 		});
 	});
 

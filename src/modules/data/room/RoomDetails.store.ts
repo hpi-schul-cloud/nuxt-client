@@ -60,7 +60,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		const params: CreateBoardBodyParams = {
 			title: title,
 			parentId: roomId,
-			parentType: BoardParentType.Room,
+			parentType: BoardParentType.ROOM,
 			layout,
 		};
 		const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;

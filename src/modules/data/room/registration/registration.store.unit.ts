@@ -173,10 +173,10 @@ describe("registration.store", () => {
 					mockApiResponse({ data: undefined })
 				);
 
-				const result = await registrationStore.completeRegistration(serverApi.LanguageType.En, "SuperSecret123");
+				const result = await registrationStore.completeRegistration(serverApi.LanguageType.EN, "SuperSecret123");
 
 				expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith(mockedSecret, {
-					language: serverApi.LanguageType.En,
+					language: serverApi.LanguageType.EN,
 					password: "SuperSecret123",
 				});
 				expect(result).toBe(true);
@@ -189,7 +189,7 @@ describe("registration.store", () => {
 
 				registrationApi.registrationControllerCompleteRegistration.mockRejectedValueOnce(new Error("Error"));
 
-				const result = await registrationStore.completeRegistration(serverApi.LanguageType.De, "badpassword");
+				const result = await registrationStore.completeRegistration(serverApi.LanguageType.DE, "badpassword");
 				expect(result).toBe(false);
 				expectNotification("error");
 			});

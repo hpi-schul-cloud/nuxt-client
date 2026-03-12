@@ -50,7 +50,7 @@ defineProps<Props>();
 
 const { instituteTitle } = storeToRefs(useEnvStore());
 
-const isThr = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr);
+const isThr = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.THR);
 </script>
 
 <style lang="scss" scoped>

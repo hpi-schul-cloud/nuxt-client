@@ -107,11 +107,11 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when mediaSourceName a is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 					mediaSourceName: "b",
 				};
@@ -137,12 +137,12 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when mediaSourceName b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 					mediaSourceName: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 				};
 
@@ -167,7 +167,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when a is undefined", () => {
 			const setup2 = () => {
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 				};
 
@@ -191,7 +191,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 				};
 
@@ -215,12 +215,12 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when a is before b", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 					mediaSourceName: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 					mediaSourceName: "b",
 				};

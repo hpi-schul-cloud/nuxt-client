@@ -264,15 +264,15 @@ const footerProps = {
 const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	switch (props.tab) {
 		case "current":
-			return CourseStatus.Current;
+			return CourseStatus.CURRENT;
 		case "archive":
-			return CourseStatus.Archive;
+			return CourseStatus.ARCHIVE;
 		default:
-			return CourseStatus.Current;
+			return CourseStatus.CURRENT;
 	}
 });
 
-const hasPermission = useAppStore().hasPermission(Permission.CourseAdministration);
+const hasPermission = useAppStore().hasPermission(Permission.COURSE_ADMINISTRATION);
 
 const showRoomAction = (item: CourseInfoDataResponse) => hasPermission.value && item.id;
 

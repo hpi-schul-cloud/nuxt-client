@@ -34,7 +34,7 @@
 					<VProgressCircular v-if="isLicensesLoading" />
 					<VIcon
 						v-else-if="
-							item.medium.mediaSourceLicenseType !== MediaSourceLicenseType.SchoolLicense ||
+							item.medium.mediaSourceLicenseType !== MediaSourceLicenseType.SCHOOL_LICENSE ||
 							isLicensedToSchool(item.medium.mediumId, item.medium.mediaSourceId)
 						"
 						start

@@ -84,9 +84,9 @@ export const useCardStore = defineStore("cardStore", () => {
 	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
 		card.elements.some((element) =>
 			[
-				ContentElementType.CollaborativeTextEditor,
-				ContentElementType.Drawing,
-				ContentElementType.ExternalTool,
+				ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+				ContentElementType.DRAWING,
+				ContentElementType.EXTERNAL_TOOL,
 			].includes(element.type)
 		);
 
@@ -121,7 +121,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 		disableFileSelectOnMount();
 		const element = await createElementRequest({
-			type: ContentElementType.File,
+			type: ContentElementType.FILE,
 			cardId: editModeId.value,
 		});
 		if (!element) {
@@ -164,7 +164,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		return await createElementRequest({
-			type: ContentElementType.RichText,
+			type: ContentElementType.RICH_TEXT,
 			cardId: card.id,
 			toPosition: 0,
 		});
@@ -242,7 +242,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 		const previousElement = elements[elementIndex - 1];
 
-		if (previousElement.type === ContentElementType.RichText) {
+		if (previousElement.type === ContentElementType.RICH_TEXT) {
 			return getPreviousElementId(previousElement.id, cardId);
 		}
 

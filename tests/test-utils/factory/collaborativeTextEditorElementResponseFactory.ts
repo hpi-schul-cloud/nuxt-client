@@ -7,7 +7,7 @@ import { Factory } from "fishery";
 export const collaborativeTextEditorElementResponseFactory =
 	Factory.define<CollaborativeTextEditorElementResponse>(({ sequence }) => ({
 		id: `id-${sequence}`,
-		type: ContentElementType.CollaborativeTextEditor,
+		type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 		content: {
 			editorId: `editor-id${sequence}`,
 		},

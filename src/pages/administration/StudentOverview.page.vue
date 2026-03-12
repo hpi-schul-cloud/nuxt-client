@@ -145,7 +145,7 @@ const {
 	getQrRegistrationLinks,
 	qrLinks,
 	pagination,
-} = useUsers(RoleName.Student);
+} = useUsers(RoleName.STUDENT);
 
 const tableColumns = [
 	{
@@ -283,7 +283,7 @@ const icons = computed(() => {
 });
 
 const fab = computed(() => {
-	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.StudentCreate)) {
+	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.STUDENT_CREATE)) {
 		return;
 	}
 
@@ -435,7 +435,7 @@ const tableActions = computed(() => [
 		label: t("pages.administration.students.index.tableActions.delete"),
 		icon: mdiDeleteOutline,
 		action: openDeleteDialog,
-		permission: Permission.StudentDelete,
+		permission: Permission.STUDENT_DELETE,
 		dataTestId: "delete_action",
 	},
 ]);

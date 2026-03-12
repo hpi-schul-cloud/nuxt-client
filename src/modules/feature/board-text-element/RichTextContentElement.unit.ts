@@ -8,7 +8,7 @@ import { nextTick } from "vue";
 
 const mockElement: RichTextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.RichText,
+	type: ContentElementType.RICH_TEXT,
 	content: {
 		text: "TestContent",
 		inputFormat: "richTextCk5",

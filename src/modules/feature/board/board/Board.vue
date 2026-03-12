@@ -136,7 +136,7 @@ import {
 	BoardExternalReferenceType,
 	BoardLayout,
 	ColumnResponse,
-	ShareTokenBodyParamsParentTypeEnum,
+	ShareTokenBodyParamsParentType,
 	ToolContextType,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
@@ -230,12 +230,12 @@ const onMoveCard = (cardId: string) => {
 };
 
 const onShareCard = async (cardId: string) => {
-	shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.Card;
+	shareModalContextType.value = ShareTokenBodyParamsParentType.CARD;
 
 	shareModule.startShareFlow({
 		id: cardId,
-		type: ShareTokenBodyParamsParentTypeEnum.Card,
-		destinationType: BoardExternalReferenceType.Room,
+		type: ShareTokenBodyParamsParentType.CARD,
+		destinationType: BoardExternalReferenceType.ROOM,
 	});
 };
 
@@ -365,7 +365,7 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
-const isListBoard = computed(() => board.value?.layout === BoardLayout.List);
+const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
@@ -419,11 +419,11 @@ const onShareBoard = () => {
 	if (!allowedOperations.value.shareBoard) return;
 
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-		shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
+		shareModalContextType.value = ShareTokenBodyParamsParentType.COLUMN_BOARD;
 
 		shareModule.startShareFlow({
 			id: props.boardId,
-			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 			destinationType: contextType.value,
 		});
 	}

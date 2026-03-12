@@ -52,7 +52,7 @@ describe("useRoomStore", () => {
 	});
 
 	describe("createRoom", () => {
-		const createParams: RoomCreateParams = { name: "New Room", color: RoomColor.Blue, features: [] };
+		const createParams: RoomCreateParams = { name: "New Room", color: RoomColor.BLUE, features: [] };
 
 		it("should create room successfully", async () => {
 			roomApiMock.roomControllerCreateRoom.mockResolvedValue(mockApiResponse<RoomCreatedResponse>({ data: undefined }));

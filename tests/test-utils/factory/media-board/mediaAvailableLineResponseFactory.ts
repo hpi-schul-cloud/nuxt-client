@@ -5,6 +5,6 @@ import { mediaAvailableLineElementResponseFactory } from "./mediaAvailableLineEl
 export const mediaAvailableLineResponseFactory =
 	Factory.define<MediaAvailableLineResponse>(() => ({
 		elements: mediaAvailableLineElementResponseFactory.buildList(1),
-		backgroundColor: MediaBoardColors.Transparent,
+		backgroundColor: MediaBoardColors.TRANSPARENT,
 		collapsed: false,
 	}));

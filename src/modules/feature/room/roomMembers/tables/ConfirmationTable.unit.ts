@@ -50,12 +50,12 @@ describe("ConfirmationTable", () => {
 		const roomMembersWithoutApplicants =
 			options?.members ??
 			roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomadmin,
+				roomRoleName: RoleName.ROOMADMIN,
 			});
 		const roomApplicants =
 			options?.members ??
 			roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomapplicant,
+				roomRoleName: RoleName.ROOMAPPLICANT,
 			});
 
 		const wrapper = mount(ConfirmationTable, {

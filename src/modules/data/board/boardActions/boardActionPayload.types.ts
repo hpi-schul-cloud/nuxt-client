@@ -4,13 +4,13 @@ import {
 	CardResponse,
 	CardSkeletonResponse,
 	ColumnResponse,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
+	CreateCardBodyParamsRequiredEmptyElements,
 } from "@/serverApi/v3";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 
 export type CreateCardRequestPayload = {
 	columnId: string;
-	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElementsEnum[];
+	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElements[];
 };
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;

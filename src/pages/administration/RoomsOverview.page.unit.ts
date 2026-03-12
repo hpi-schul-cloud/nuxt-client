@@ -46,7 +46,7 @@ describe("RoomsOverview", () => {
 		const { router } = injectRouterMock(createRouterMock());
 		const route = router.currentRoute.value;
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
+		createTestAppStoreWithPermissions([Permission.COURSE_ADMINISTRATION]);
 
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
@@ -796,8 +796,8 @@ describe("RoomsOverview", () => {
 		};
 
 		it.each([
-			[SchulcloudTheme.Default, "Dataport"],
-			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.DEFAULT, "Dataport"],
+			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
 			const { wrapper } = setup({

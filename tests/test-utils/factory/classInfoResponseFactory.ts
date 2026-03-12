@@ -1,4 +1,4 @@
-import { ClassInfoResponse, ClassInfoResponseTypeEnum } from "@/serverApi/v3";
+import { ClassInfoResponse, ClassInfoResponseType } from "@/serverApi/v3";
 import { Factory } from "fishery";
 
 export const classInfoResponseFactory = Factory.define<ClassInfoResponse>(
@@ -7,7 +7,7 @@ export const classInfoResponseFactory = Factory.define<ClassInfoResponse>(
 		name: `className${sequence}`,
 		externalSourceName: "Source",
 		teacherNames: ["TestTeacher"],
-		type: ClassInfoResponseTypeEnum.Class,
+		type: ClassInfoResponseType.CLASS,
 		studentCount: 2,
 	})
 );

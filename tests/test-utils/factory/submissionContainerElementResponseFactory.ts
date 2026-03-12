@@ -9,7 +9,7 @@ import { submissionContainerElementContent } from "./submissionContainerElementC
 export const submissionContainerElementResponseFactory =
 	Factory.define<SubmissionContainerElementResponse>(({ sequence }) => ({
 		id: `submissionContainerElementResponse${sequence}`,
-		type: ContentElementType.SubmissionContainer,
+		type: ContentElementType.SUBMISSION_CONTAINER,
 		content: submissionContainerElementContent.build(),
 		timestamps: timestampsResponseFactory.build(),
 	}));

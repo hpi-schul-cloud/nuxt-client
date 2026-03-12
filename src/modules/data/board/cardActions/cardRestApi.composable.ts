@@ -118,7 +118,7 @@ export const useCardRestApi = () => {
 					const contextExternalTool: ContextExternalTool = await createContextExternalToolCall(contextExternalToolSave);
 
 					const isExternalToolElement = (element: AnyContentElement): element is ExternalToolElementResponse =>
-						element.type === ContentElementType.ExternalTool;
+						element.type === ContentElementType.EXTERNAL_TOOL;
 
 					if (isExternalToolElement(newElement.data)) {
 						newElement.data.content.contextExternalToolId = contextExternalTool.id;

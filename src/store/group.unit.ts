@@ -98,7 +98,7 @@ describe("GroupModule", () => {
 					name: "3a",
 					externalSourceName: "Klasse",
 					teacherNames: ["Carlie"],
-					type: ClassRootType.Class,
+					type: ClassRootType.CLASS,
 					id: "id",
 					studentCount: 0,
 				});
@@ -141,7 +141,7 @@ describe("GroupModule", () => {
 			});
 
 			it("should return the changed state", () => {
-				const sortBy = ClassSortQueryType.ExternalSourceName;
+				const sortBy = ClassSortQueryType.EXTERNAL_SOURCE_NAME;
 
 				module.setSortBy(sortBy);
 
@@ -288,7 +288,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(axiosMock.delete).toHaveBeenCalled();
@@ -299,7 +299,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(apiMock.groupControllerFindClasses).toHaveBeenCalled();
@@ -328,7 +328,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(module.getBusinessError).toEqual<BusinessError>({
@@ -343,7 +343,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(module.getClasses).toEqual([class1, class2]);

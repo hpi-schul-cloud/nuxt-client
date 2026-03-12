@@ -148,7 +148,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -175,7 +175,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -199,7 +199,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 			const editSystemButton = wrapper.findComponent(searchStrings.editSystemButton);
@@ -209,7 +209,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const systemEditButtons = wrapper.findAllComponents(searchStrings.editSystemButton);
@@ -232,7 +232,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the dialog", async () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
@@ -249,7 +249,7 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem").mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -265,7 +265,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should call the method when delete dialog confirmed", async () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 			const removeSystem = vi.spyOn(AuthSystems.methods, "removeSystem").mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -278,7 +278,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit, Permission.SystemView]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT, Permission.SYSTEM_VIEW]);
 			const wrapper = createWrapper({ props: generateProps() });
 			const deleteButton = wrapper.find(searchStrings.deleteSystemButton);
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);

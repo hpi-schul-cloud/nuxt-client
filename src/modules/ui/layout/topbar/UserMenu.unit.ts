@@ -26,7 +26,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		createTestEnvStore({
 			FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 
 		useSystemApiMock = mockComposable(useSystemApi);

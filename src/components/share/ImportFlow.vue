@@ -29,7 +29,7 @@
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectDestinationModal from "./SelectDestinationModal.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
-import { BoardExternalReferenceType, ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3/api";
+import { BoardExternalReferenceType, ShareTokenInfoResponseParentType } from "@/serverApi/v3/api";
 import { ImportDestinationItem } from "@/store/types/rooms";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -65,7 +65,7 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 const { setLoadingState } = useLoadingStore();
 
 const parentName = ref("");
-const parentType = ref<ShareTokenInfoResponseParentTypeEnum>(ShareTokenInfoResponseParentTypeEnum.Lessons);
+const parentType = ref<ShareTokenInfoResponseParentType>(ShareTokenInfoResponseParentType.LESSONS);
 const newName = ref("");
 
 const destinationId = ref<string>();
@@ -127,8 +127,8 @@ async function validateShareToken() {
 		parentName.value = validateResult.parentName;
 		parentType.value = validateResult.parentType;
 		openModal(
-			parentType.value === ShareTokenInfoResponseParentTypeEnum.Courses ||
-				parentType.value === ShareTokenInfoResponseParentTypeEnum.Room
+			parentType.value === ShareTokenInfoResponseParentType.COURSES ||
+				parentType.value === ShareTokenInfoResponseParentType.ROOM
 				? "import"
 				: "selectCourse"
 		);

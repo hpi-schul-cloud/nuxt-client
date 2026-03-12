@@ -16,7 +16,7 @@ describe("@components/share/SelectDestinationModal", () => {
 		parentType: "lesson",
 		courses: [course],
 		destinations: [],
-		destinationType: BoardExternalReferenceType.Course,
+		destinationType: BoardExternalReferenceType.COURSE,
 	};
 
 	const setup = () => {

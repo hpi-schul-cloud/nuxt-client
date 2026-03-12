@@ -16,7 +16,7 @@ vi.mock("@/serverApi/v3");
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
-	color: RoomColor.Blue,
+	color: RoomColor.BLUE,
 	features: [],
 };
 

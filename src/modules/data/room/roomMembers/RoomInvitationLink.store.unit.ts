@@ -300,7 +300,7 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should return the validation error message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const message = serverApi.RoomInvitationLinkValidationError.RestrictedToCreatorSchool;
+				const message = serverApi.RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL;
 				const schoolName = "My example School";
 				const axiosError = createAxiosError({
 					message,

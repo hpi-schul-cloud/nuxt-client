@@ -119,7 +119,7 @@ export const useExternalToolLaunchState = (refreshCallback?: () => Promise<void>
 
 		form.submit();
 
-		if (toolLaunch.launchType === LaunchType.Lti11ContentItemSelection) {
+		if (toolLaunch.launchType === LaunchType.LTI11_CONTENT_ITEM_SELECTION) {
 			windowIntervalHandle.value = setInterval(async () => {
 				if (windowRef.value?.closed) {
 					await refreshCallback?.();

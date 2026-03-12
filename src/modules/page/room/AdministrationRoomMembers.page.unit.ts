@@ -39,7 +39,7 @@ describe("AdministrationRoomMembers.page", () => {
 			schoolsModule: SchoolsModule,
 		});
 
-		createTestAppStoreWithRole(RoleName.Administrator);
+		createTestAppStoreWithRole(RoleName.ADMINISTRATOR);
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});

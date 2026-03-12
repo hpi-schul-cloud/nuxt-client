@@ -1,18 +1,18 @@
-import { GroupResponse, GroupResponseTypeEnum, RoleName } from "@/serverApi/v3";
+import { GroupResponse, GroupResponseType, RoleName } from "@/serverApi/v3";
 import { Factory } from "fishery";
 
 export const groupResponseFactory = Factory.define<GroupResponse>(
 	({ sequence }) => ({
 		id: `group-${sequence}`,
 		name: `Group ${sequence}`,
-		type: GroupResponseTypeEnum.Class,
+		type: GroupResponseType.CLASS,
 		organizationId: `organization-${sequence}`,
 		users: [
 			{
 				id: `user-${sequence}`,
 				firstName: `Users firstname ${sequence}`,
 				lastName: `Users lastname ${sequence}`,
-				role: RoleName.Student,
+				role: RoleName.STUDENT,
 			},
 		],
 		externalSource: {

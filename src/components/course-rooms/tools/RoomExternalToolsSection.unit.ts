@@ -24,8 +24,8 @@ describe("RoomExternalToolsSection", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore({
 			me: {
-				roles: [{ id: "teacher-id", name: RoleName.Teacher }],
-				permissions: [Permission.ContextToolAdmin],
+				roles: [{ id: "teacher-id", name: RoleName.TEACHER }],
+				permissions: [Permission.CONTEXT_TOOL_ADMIN],
 			},
 		});
 	});

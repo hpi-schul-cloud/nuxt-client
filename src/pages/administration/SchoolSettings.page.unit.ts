@@ -63,7 +63,7 @@ describe("SchoolSettingsPage", () => {
 			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
 			FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
 			FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: true,
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 		},
 		schoolGetters: Partial<SchoolsModule> = {}
 	) => {

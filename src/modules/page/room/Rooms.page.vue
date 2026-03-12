@@ -18,7 +18,7 @@
 			:is-active="showGenericImportDialog"
 			:token="importToken"
 			:destinations="importFlowDestinations"
-			:destination-type="BoardExternalReferenceType.Room"
+			:destination-type="BoardExternalReferenceType.ROOM"
 			@success="onImportSuccess"
 		/>
 	</DefaultWireframe>
@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import { BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
 import { useRoomStore } from "@data-room";
@@ -52,7 +52,7 @@ const pageTitle = computed(() => buildPageTitle(t("pages.rooms.title")));
 useTitle(pageTitle);
 
 const fabAction = computed(() => {
-	const canCreateRoom = toValue(useAppStore().hasPermission(Permission.SchoolCreateRoom));
+	const canCreateRoom = toValue(useAppStore().hasPermission(Permission.SCHOOL_CREATE_ROOM));
 	if (!canCreateRoom) return;
 
 	return [
@@ -82,10 +82,10 @@ watch(
 );
 
 const showImportCardDialog = computed(
-	() => importToken.value && importedType.value === ShareTokenBodyParamsParentTypeEnum.Card
+	() => importToken.value && importedType.value === ShareTokenBodyParamsParentType.CARD
 );
 const showGenericImportDialog = computed(
-	() => !!importToken.value && importedType.value !== ShareTokenBodyParamsParentTypeEnum.Card
+	() => !!importToken.value && importedType.value !== ShareTokenBodyParamsParentType.CARD
 );
 
 onMounted(() => {

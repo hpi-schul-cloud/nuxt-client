@@ -285,10 +285,10 @@ export const useBoardAriaNotification = () => {
 
 		let layoutName: string;
 		switch (layout) {
-			case BoardLayout.Columns:
+			case BoardLayout.COLUMNS:
 				layoutName = t("pages.room.dialog.boardLayout.multiColumn");
 				break;
-			case BoardLayout.List:
+			case BoardLayout.LIST:
 				layoutName = t("pages.room.dialog.boardLayout.singleColumn");
 				break;
 			default:

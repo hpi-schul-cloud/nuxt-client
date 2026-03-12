@@ -84,7 +84,7 @@ const isErrorDialogOpen = ref(false);
 const selectedItem = ref<ExternalToolDisplayData | undefined>();
 
 const selectedItemName = computed(() => selectedItem.value?.name || "???");
-const canEdit = useAppStore().hasPermission(Permission.ContextToolAdmin);
+const canEdit = useAppStore().hasPermission(Permission.CONTEXT_TOOL_ADMIN);
 
 const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 	selectedItem.value = tool;

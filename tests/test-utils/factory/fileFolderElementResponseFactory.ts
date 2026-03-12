@@ -6,7 +6,7 @@ import { timestampsResponseFactory } from "./timestampsResponseFactory";
 export const fileFolderElementResponseFactory =
 	Factory.define<FileFolderElement>(({ sequence }) => ({
 		id: `id${sequence}`,
-		type: ContentElementType.FileFolder,
+		type: ContentElementType.FILE_FOLDER,
 		timestamps: timestampsResponseFactory.build(),
 		content: {
 			title: `title ${sequence}`,

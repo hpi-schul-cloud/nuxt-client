@@ -78,7 +78,7 @@ describe("VideoConferenceContentElement", () => {
 			isEditMode = true,
 			isNotFirstElement,
 			isNotLastElement,
-			role = RoleName.Teacher,
+			role = RoleName.TEACHER,
 			columnIndex = 0,
 			rowIndex = 1,
 			elementIndex = 2,
@@ -226,7 +226,7 @@ describe("VideoConferenceContentElement", () => {
 					setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 						hasManageVideoConferencePermission: true,
 						...options,
 					});
@@ -261,7 +261,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 						hasManageVideoConferencePermission: false,
 					});
 
@@ -275,7 +275,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 						hasManageVideoConferencePermission: false,
 					});
 
@@ -288,7 +288,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 						isRunning: false,
 						hasManageVideoConferencePermission: false,
 					});
@@ -301,7 +301,7 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 						isRunning: true,
 						hasManageVideoConferencePermission: false,
 					});

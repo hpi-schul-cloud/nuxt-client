@@ -47,7 +47,7 @@ describe("App.vue", () => {
 				provide: {
 					[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 					[THEME_KEY.valueOf()]: {
-						name: SchulcloudTheme.Default,
+						name: SchulcloudTheme.DEFAULT,
 					},
 				},
 				stubs: {

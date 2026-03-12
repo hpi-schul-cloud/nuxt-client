@@ -35,12 +35,12 @@ describe("TaskOverview", () => {
 	});
 
 	it("should create component", () => {
-		const wrapper = getWrapper(RoleName.Teacher);
+		const wrapper = getWrapper(RoleName.TEACHER);
 		expect(wrapper).toBeTruthy();
 	});
 
 	it("should set title to tasks", () => {
-		getWrapper(RoleName.Superhero);
+		getWrapper(RoleName.SUPERHERO);
 		expect(document.title).toBe(`common.words.tasks - dBildungscloud`);
 	});
 
@@ -49,14 +49,14 @@ describe("TaskOverview", () => {
 		expect(fetchAllTasksSpy).toHaveBeenCalledTimes(1);
 	});
 
-	it.each([RoleName.Teacher, RoleName.Student])("should render child component for %p", (userRole) => {
+	it.each([RoleName.TEACHER, RoleName.STUDENT])("should render child component for %p", (userRole) => {
 		const wrapper = getWrapper(userRole);
 		const childComponent = wrapper.findComponent(TasksDashboardMain);
 		expect(childComponent.exists()).toBeTruthy();
 	});
 
 	it("should not render child component for arbitrary roles", () => {
-		const wrapper = getWrapper(RoleName.Superhero);
+		const wrapper = getWrapper(RoleName.SUPERHERO);
 		const childComponent = wrapper.findComponent(TasksDashboardMain);
 		expect(childComponent.exists()).toBeFalsy();
 	});

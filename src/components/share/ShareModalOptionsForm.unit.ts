@@ -1,5 +1,5 @@
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { ShareTokenBodyParamsParentType } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 
@@ -10,7 +10,7 @@ describe("@/components/share/ShareModalOptionsForm", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				type: ShareTokenBodyParamsParentTypeEnum.Courses,
+				type: ShareTokenBodyParamsParentType.COURSES,
 			},
 		});
 		return { wrapper };

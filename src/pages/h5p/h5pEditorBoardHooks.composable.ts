@@ -11,7 +11,7 @@ export const useH5pEditorBoardHooks = (elementId: string) => {
 	const element: Ref<H5pElementResponse | undefined> = ref();
 
 	const isH5pElement = (element: AnyContentElement): element is H5pElementResponse =>
-		element.type === ContentElementType.H5p;
+		element.type === ContentElementType.H5P;
 
 	const onCreate = async (): Promise<void> => {
 		const response = await boardApi.getElementWithParentHierarchyCall(elementId);

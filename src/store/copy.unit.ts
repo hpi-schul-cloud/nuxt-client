@@ -1,46 +1,46 @@
 import * as serverApi from "../serverApi/v3/api";
-import { CopyApiResponse, CopyApiResponseStatusEnum, CopyApiResponseTypeEnum } from "../serverApi/v3/api";
+import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "../serverApi/v3/api";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "./copy";
 
 const serverDataPartial: CopyApiResponse = {
 	title: "Aufgabe",
-	type: CopyApiResponseTypeEnum.Task,
-	status: CopyApiResponseStatusEnum.Partial,
+	type: CopyApiResponseType.TASK,
+	status: CopyApiResponseStatus.PARTIAL,
 	id: "123",
 	elements: [
 		{
-			type: CopyApiResponseTypeEnum.SubmissionGroup,
-			status: CopyApiResponseStatusEnum.NotDoing,
+			type: CopyApiResponseType.SUBMISSION_GROUP,
+			status: CopyApiResponseStatus.NOT_DOING,
 		},
 		{
-			type: CopyApiResponseTypeEnum.File,
-			status: CopyApiResponseStatusEnum.NotImplemented,
+			type: CopyApiResponseType.FILE,
+			status: CopyApiResponseStatus.NOT_IMPLEMENTED,
 		},
 		{
-			type: CopyApiResponseTypeEnum.LessonContentEtherpad,
-			status: CopyApiResponseStatusEnum.Failure,
+			type: CopyApiResponseType.LESSON_CONTENT_ETHERPAD,
+			status: CopyApiResponseStatus.FAILURE,
 		},
 	],
 };
 
 const serverDataSuccess: CopyApiResponse = {
 	title: "Thema X",
-	type: CopyApiResponseTypeEnum.Lesson,
+	type: CopyApiResponseType.LESSON,
 	destinationId: "aCourseId",
-	status: CopyApiResponseStatusEnum.Success,
+	status: CopyApiResponseStatus.SUCCESS,
 	id: "123",
 	elements: [
 		{
-			type: CopyApiResponseTypeEnum.SubmissionGroup,
-			status: CopyApiResponseStatusEnum.NotDoing,
+			type: CopyApiResponseType.SUBMISSION_GROUP,
+			status: CopyApiResponseStatus.NOT_DOING,
 		},
 		{
-			type: CopyApiResponseTypeEnum.File,
-			status: CopyApiResponseStatusEnum.NotImplemented,
+			type: CopyApiResponseType.FILE,
+			status: CopyApiResponseStatus.NOT_IMPLEMENTED,
 		},
 		{
-			type: CopyApiResponseTypeEnum.LessonContentEtherpad,
-			status: CopyApiResponseStatusEnum.Success,
+			type: CopyApiResponseType.LESSON_CONTENT_ETHERPAD,
+			status: CopyApiResponseStatus.SUCCESS,
 		},
 	],
 };
@@ -215,7 +215,7 @@ describe("copy module", () => {
 				const newName = "My Course";
 				const payload = {
 					token,
-					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Courses,
+					type: serverApi.ShareTokenInfoResponseParentType.COURSES,
 					newName,
 				};
 
@@ -235,7 +235,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload = {
 					token: "abc123a",
-					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Courses,
+					type: serverApi.ShareTokenInfoResponseParentType.COURSES,
 					newName: "My Course",
 				};
 
@@ -261,7 +261,7 @@ describe("copy module", () => {
 				const newName = "My Lesson";
 				const payload = {
 					token,
-					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Lessons,
+					type: serverApi.ShareTokenInfoResponseParentType.LESSONS,
 					newName,
 				};
 
@@ -281,7 +281,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload = {
 					token: "abc123a",
-					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Lessons,
+					type: serverApi.ShareTokenInfoResponseParentType.LESSONS,
 					newName: "My Lesson",
 				};
 
@@ -314,26 +314,26 @@ describe("copy module", () => {
 			it("should set filteredResult for failed task copy", () => {
 				const serverData = {
 					title: "Aufgabe",
-					type: CopyApiResponseTypeEnum.Task,
+					type: CopyApiResponseType.TASK,
 					destinationId: "testCourseId",
-					status: CopyApiResponseStatusEnum.Failure,
+					status: CopyApiResponseStatus.FAILURE,
 					id: "123",
 					elements: [
 						{
-							type: CopyApiResponseTypeEnum.File,
-							status: CopyApiResponseStatusEnum.Failure,
+							type: CopyApiResponseType.FILE,
+							status: CopyApiResponseStatus.FAILURE,
 						},
 					],
 				};
 				const expectedData = [
 					{
 						title: "Aufgabe",
-						type: CopyApiResponseTypeEnum.Task,
+						type: CopyApiResponseType.TASK,
 						elementId: "123",
 						url: "/homework/123/edit?returnUrl=rooms/testCourseId",
 						elements: [
 							{
-								type: CopyApiResponseTypeEnum.File,
+								type: CopyApiResponseType.FILE,
 								title: "",
 							},
 						],
@@ -351,26 +351,26 @@ describe("copy module", () => {
 				it("should set filteredResult for failed columnBoard copy", () => {
 					const serverData = {
 						title: "ColumnBoard",
-						type: CopyApiResponseTypeEnum.Columnboard,
+						type: CopyApiResponseType.COLUMNBOARD,
 						destinationId: "testCourseId",
-						status: CopyApiResponseStatusEnum.Failure,
+						status: CopyApiResponseStatus.FAILURE,
 						id: "123",
 						elements: [
 							{
-								type: CopyApiResponseTypeEnum.DrawingElement,
-								status: CopyApiResponseStatusEnum.Failure,
+								type: CopyApiResponseType.DRAWING_ELEMENT,
+								status: CopyApiResponseStatus.FAILURE,
 							},
 						],
 					};
 					const expectedData = [
 						{
 							title: "ColumnBoard",
-							type: CopyApiResponseTypeEnum.Columnboard,
+							type: CopyApiResponseType.COLUMNBOARD,
 							elementId: "123",
 							url: "/boards/123",
 							elements: [
 								{
-									type: CopyApiResponseTypeEnum.DrawingElement,
+									type: CopyApiResponseType.DRAWING_ELEMENT,
 									title: "",
 								},
 							],
@@ -388,27 +388,27 @@ describe("copy module", () => {
 			it("should set filteredResult for failed lesson copy", () => {
 				const serverData = {
 					title: "Thema",
-					type: CopyApiResponseTypeEnum.Lesson,
+					type: CopyApiResponseType.LESSON,
 					destinationId: "testCourseIdX",
-					status: CopyApiResponseStatusEnum.Failure,
+					status: CopyApiResponseStatus.FAILURE,
 					id: "456",
 					elements: [
 						{
-							type: CopyApiResponseTypeEnum.LessonContentText,
-							status: CopyApiResponseStatusEnum.Failure,
+							type: CopyApiResponseType.LESSON_CONTENT_TEXT,
+							status: CopyApiResponseStatus.FAILURE,
 						},
 					],
 				};
 				const expectedData = [
 					{
 						title: "Thema",
-						type: CopyApiResponseTypeEnum.Lesson,
+						type: CopyApiResponseType.LESSON,
 						elementId: "456",
 						url: "/courses/testCourseIdX/topics/456/edit?returnUrl=rooms/testCourseIdX",
 						elements: [
 							{
 								title: "",
-								type: CopyApiResponseTypeEnum.LessonContentText,
+								type: CopyApiResponseType.LESSON_CONTENT_TEXT,
 							},
 						],
 					},
@@ -433,25 +433,25 @@ describe("copy module", () => {
 				const payload = {
 					payload: {
 						title: "test course",
-						type: CopyApiResponseTypeEnum.Course,
-						status: CopyApiResponseStatusEnum.Partial,
+						type: CopyApiResponseType.COURSE,
+						status: CopyApiResponseStatus.PARTIAL,
 						id: "12345",
 						elements: [
 							{
-								type: CopyApiResponseTypeEnum.Metadata,
-								status: CopyApiResponseStatusEnum.Success,
+								type: CopyApiResponseType.METADATA,
+								status: CopyApiResponseStatus.SUCCESS,
 							},
 							{
-								type: CopyApiResponseTypeEnum.UserGroup,
-								status: CopyApiResponseStatusEnum.NotDoing,
+								type: CopyApiResponseType.USER_GROUP,
+								status: CopyApiResponseStatus.NOT_DOING,
 							},
 							{
-								type: CopyApiResponseTypeEnum.LessonContentGeogebra,
-								status: CopyApiResponseStatusEnum.Partial,
+								type: CopyApiResponseType.LESSON_CONTENT_GEOGEBRA,
+								status: CopyApiResponseStatus.PARTIAL,
 							},
 							{
-								type: CopyApiResponseTypeEnum.FileGroup,
-								status: CopyApiResponseStatusEnum.NotImplemented,
+								type: CopyApiResponseType.FILE_GROUP,
+								status: CopyApiResponseStatus.NOT_IMPLEMENTED,
 							},
 						],
 					},
@@ -459,12 +459,12 @@ describe("copy module", () => {
 				const expectedData = [
 					{
 						title: "test course",
-						type: CopyApiResponseTypeEnum.Course,
+						type: CopyApiResponseType.COURSE,
 						elementId: "12345",
 						elements: [
 							{
 								title: "",
-								type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+								type: CopyApiResponseType.LESSON_CONTENT_GEOGEBRA,
 							},
 						],
 						url: "/courses/12345/edit",
@@ -480,33 +480,33 @@ describe("copy module", () => {
 				const payload = {
 					payload: {
 						title: "test course",
-						type: CopyApiResponseTypeEnum.Course,
-						status: CopyApiResponseStatusEnum.Partial,
+						type: CopyApiResponseType.COURSE,
+						status: CopyApiResponseStatus.PARTIAL,
 						id: "12345",
 						elements: [
 							{
-								type: CopyApiResponseTypeEnum.Metadata,
-								status: CopyApiResponseStatusEnum.Success,
+								type: CopyApiResponseType.METADATA,
+								status: CopyApiResponseStatus.SUCCESS,
 							},
 							{
-								type: CopyApiResponseTypeEnum.Board,
-								status: CopyApiResponseStatusEnum.Partial,
+								type: CopyApiResponseType.BOARD,
+								status: CopyApiResponseStatus.PARTIAL,
 								id: "345",
 								elements: [
 									{
 										title: "Task 1",
-										type: CopyApiResponseTypeEnum.Task,
+										type: CopyApiResponseType.TASK,
 										destinationCourseId: "aCourseId",
-										status: CopyApiResponseStatusEnum.Partial,
+										status: CopyApiResponseStatus.PARTIAL,
 										id: "567",
 										elements: [
 											{
-												type: CopyApiResponseTypeEnum.Metadata,
-												status: CopyApiResponseStatusEnum.Success,
+												type: CopyApiResponseType.METADATA,
+												status: CopyApiResponseStatus.SUCCESS,
 											},
 											{
-												type: CopyApiResponseTypeEnum.SubmissionGroup,
-												status: CopyApiResponseStatusEnum.NotDoing,
+												type: CopyApiResponseType.SUBMISSION_GROUP,
+												status: CopyApiResponseStatus.NOT_DOING,
 											},
 										],
 									},
@@ -518,7 +518,7 @@ describe("copy module", () => {
 				const expectedData = [
 					{
 						title: "test course",
-						type: CopyApiResponseTypeEnum.Course,
+						type: CopyApiResponseType.COURSE,
 						elementId: "12345",
 						elements: [],
 						url: "/courses/12345/edit",
@@ -527,7 +527,7 @@ describe("copy module", () => {
 						elementId: "567",
 						elements: [],
 						title: "Task 1",
-						type: CopyApiResponseTypeEnum.Task,
+						type: CopyApiResponseType.TASK,
 						url: "/homework/567/edit?returnUrl=rooms/aCourseId",
 					},
 				];

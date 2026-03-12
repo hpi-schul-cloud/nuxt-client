@@ -26,7 +26,7 @@ describe("GeneralSettings", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En, LanguageType.Es, LanguageType.Uk],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN, LanguageType.ES, LanguageType.UK],
 		});
 		setupStores({
 			schoolsModule: SchoolsModule,
