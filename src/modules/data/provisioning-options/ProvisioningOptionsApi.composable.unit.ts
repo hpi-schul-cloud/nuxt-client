@@ -1,7 +1,7 @@
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
-import * as serverApi from "@/serverApi/v3/api";
-import { SchoolApiInterface, SchulConneXProvisioningOptionsResponse } from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { SchoolApiInterface, SchulConneXProvisioningOptionsResponse } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";

@@ -1,4 +1,4 @@
-import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3/api";
+import { TaskApiFactory, TaskApiInterface } from "../serverApi/v3";
 import { $axios } from "../utils/api";
 import { TaskFilter } from "./task.filter";
 import { BusinessError, Status } from "./types/commons";

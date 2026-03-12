@@ -1,5 +1,5 @@
-import * as serverApi from "@/serverApi/v3/api";
-import { RoomStatsItemResponse, RoomStatsListResponse } from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { RoomStatsItemResponse, RoomStatsListResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";

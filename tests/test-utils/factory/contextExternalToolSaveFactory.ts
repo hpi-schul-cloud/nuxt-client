@@ -5,7 +5,7 @@ import { Factory } from "fishery";
 export const contextExternalToolSaveFactory =
 	Factory.define<ContextExternalToolSave>(({ sequence }) => ({
 		contextId: `context-${sequence}`,
-		contextType: ToolContextType.Course,
+		contextType: ToolContextType.COURSE,
 		schoolToolId: `school-external-tool-${sequence}`,
 		displayName: `Tool ${sequence}`,
 		parameters: [],

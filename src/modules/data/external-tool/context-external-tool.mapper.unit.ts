@@ -9,7 +9,7 @@ describe("ContextExternalToolMapper", () => {
 			const setup = () => {
 				const template = contextExternalToolConfigurationTemplateFactory.build();
 				const contextId = "contextId";
-				const contextType = ToolContextType.Course;
+				const contextType = ToolContextType.COURSE;
 				const displayName = "Test Name";
 
 				return {
@@ -45,7 +45,7 @@ describe("ContextExternalToolMapper", () => {
 					name: "toolName",
 				});
 				const contextId = "contextId";
-				const contextType = ToolContextType.Course;
+				const contextType = ToolContextType.COURSE;
 
 				return {
 					template,

@@ -1,6 +1,6 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { BoardLayout } from "@/serverApi/v3/api";
+import { BoardLayout } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";

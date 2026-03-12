@@ -1,5 +1,5 @@
-import * as serverApi from "@/serverApi/v3/api";
-import { GroupListResponse, GroupResponse } from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { GroupListResponse, GroupResponse } from "@/serverApi/v3";
 import { groupResponseFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { Group, GroupType, GroupUserRole, useGroupApi } from "@data-group";
 import { Mocked } from "vitest";

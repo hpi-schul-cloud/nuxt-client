@@ -53,7 +53,7 @@ describe("externalToolDisplayListState.composable", () => {
 			it("should reset the error", async () => {
 				const { composable } = setup();
 
-				await composable.fetchDisplayData("contextId", ToolContextType.Course);
+				await composable.fetchDisplayData("contextId", ToolContextType.COURSE);
 
 				expect(composable.error.value).toBeUndefined();
 			});
@@ -61,18 +61,18 @@ describe("externalToolDisplayListState.composable", () => {
 			it("should call the api for display", async () => {
 				const { composable } = setup();
 
-				await composable.fetchDisplayData("contextId", ToolContextType.Course);
+				await composable.fetchDisplayData("contextId", ToolContextType.COURSE);
 
 				expect(useExternalToolReferenceApiMock.fetchDisplayDataForContext).toHaveBeenCalledWith(
 					"contextId",
-					ToolContextType.Course
+					ToolContextType.COURSE
 				);
 			});
 
 			it("should set the display data in the state", async () => {
 				const { composable, displayDataMock } = setup();
 
-				await composable.fetchDisplayData("contextId", ToolContextType.Course);
+				await composable.fetchDisplayData("contextId", ToolContextType.COURSE);
 
 				expect(composable.displayData.value).toEqual([displayDataMock]);
 			});
@@ -97,7 +97,7 @@ describe("externalToolDisplayListState.composable", () => {
 			it("should set the error", async () => {
 				const { composable, apiError } = setup();
 
-				await composable.fetchDisplayData("contextId", ToolContextType.Course);
+				await composable.fetchDisplayData("contextId", ToolContextType.COURSE);
 
 				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,

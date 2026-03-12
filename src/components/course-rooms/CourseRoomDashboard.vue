@@ -17,7 +17,7 @@
 				<template #item="{ element: item, index }">
 					<div>
 						<RoomBoardCard
-							v-if="item.type === cardTypes.ColumnBoard"
+							v-if="item.type === cardTypes.COLUMN_BOARD"
 							:ref="`item_${index}`"
 							:board-card-index="index"
 							:user-role="role"
@@ -64,7 +64,7 @@
 							@share-task="getSharedTask(item.content.id)"
 						/>
 						<RoomLessonCard
-							v-if="item.type === cardTypes.Lesson"
+							v-if="item.type === cardTypes.LESSON"
 							:ref="`item_${index}`"
 							:lesson-card-index="index"
 							:user-role="role"
@@ -131,7 +131,7 @@
 					@restore-task="restoreTask(item.content.id)"
 				/>
 				<RoomLessonCard
-					v-if="item.type === cardTypes.Lesson"
+					v-if="item.type === cardTypes.LESSON"
 					:ref="`item_${index}`"
 					:lesson-card-index="index"
 					:user-role="role"
@@ -329,9 +329,9 @@ export default {
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.TASK) {
 				await courseRoomDetailsModule.deleteTask(this.itemDelete.itemData.id);
-			} else if (this.itemDelete.itemType === this.cardTypes.Lesson) {
+			} else if (this.itemDelete.itemType === this.cardTypes.LESSON) {
 				await courseRoomDetailsModule.deleteLesson(this.itemDelete.itemData.id);
-			} else if (this.itemDelete.itemType === this.cardTypes.ColumnBoard) {
+			} else if (this.itemDelete.itemType === this.cardTypes.COLUMN_BOARD) {
 				await courseRoomDetailsModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
 			} else {
 				return;
@@ -366,7 +366,7 @@ export default {
 			});
 		},
 		boardCardIsVisibleToStudent(card) {
-			const isBoardCard = card.type === this.cardTypes.ColumnBoard;
+			const isBoardCard = card.type === this.cardTypes.COLUMN_BOARD;
 			const isVisibleToStudent = card.content.published;
 			return isBoardCard && isVisibleToStudent;
 		},
@@ -377,10 +377,10 @@ export default {
 				case this.cardTypes.TASK:
 					translatedItemType = this.$t("common.words.task");
 					break;
-				case this.cardTypes.Lesson:
+				case this.cardTypes.LESSON:
 					translatedItemType = this.$t("common.words.topic");
 					break;
-				case this.cardTypes.ColumnBoard:
+				case this.cardTypes.COLUMN_BOARD:
 					translatedItemType = this.$t("common.words.board");
 					break;
 			}

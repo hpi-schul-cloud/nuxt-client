@@ -11,9 +11,9 @@ import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
 import { ExternalToolMapper } from "@/store/external-tool/mapper";
 
 export const ToolContextMapping: Record<ContextExternalToolResponseContextType, ToolContextType> = {
-	[ContextExternalToolResponseContextType.COURSE]: ToolContextType.Course,
-	[ContextExternalToolResponseContextType.BORD_ELEMENT]: ToolContextType.BoardElement,
-	[ContextExternalToolResponseContextType.MEDIA_BOARD]: ToolContextType.MediaBoard,
+	[ContextExternalToolResponseContextType.COURSE]: ToolContextType.COURSE,
+	[ContextExternalToolResponseContextType.BOARD_ELEMENT]: ToolContextType.BOARD_ELEMENT,
+	[ContextExternalToolResponseContextType.MEDIA_BOARD]: ToolContextType.MEDIA_BOARD,
 };
 
 export class ContextExternalToolMapper {

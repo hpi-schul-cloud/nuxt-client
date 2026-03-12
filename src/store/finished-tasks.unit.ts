@@ -1,4 +1,4 @@
-import * as serverApi from "../serverApi/v3/api";
+import * as serverApi from "../serverApi/v3";
 import FinishedTasksModule from "./finished-tasks";
 import { taskFactory } from "./task.filter.unit";
 import { initializeAxios } from "@/utils/api";

@@ -1,11 +1,11 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
 import {
 	ContextExternalToolBodyParams,
 	LaunchType,
 	ToolContextType,
 	ToolLaunchRequestResponse,
-} from "@/serverApi/v3/api";
+} from "@/serverApi/v3";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { mockApi, mockApiResponse, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
 import { Mocked } from "vitest";
@@ -67,7 +67,7 @@ describe("ExternalToolApi.composable", () => {
 
 			const bodyParams: ContextExternalToolBodyParams = {
 				contextId: "contextId",
-				contextType: ToolContextType.MediaBoard,
+				contextType: ToolContextType.MEDIA_BOARD,
 			};
 
 			toolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest.mockResolvedValue(

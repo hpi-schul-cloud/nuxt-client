@@ -40,7 +40,7 @@ const props = defineProps({
 	},
 	contextType: {
 		type: String as PropType<ToolContextType>,
-		default: ToolContextType.BoardElement,
+		default: ToolContextType.BOARD_ELEMENT,
 	},
 	configId: {
 		type: [String, null],

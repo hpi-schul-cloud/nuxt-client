@@ -9,7 +9,7 @@ import {
 	GroupApiInterface,
 	SchoolYearQueryType,
 } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,

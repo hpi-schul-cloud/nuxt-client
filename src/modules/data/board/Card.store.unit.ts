@@ -892,15 +892,15 @@ describe("CardStore", () => {
 			it("should call getPreferredTools", async () => {
 				const { cardStore } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
-				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(ToolContextType.BoardElement);
+				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(ToolContextType.BOARD_ELEMENT);
 			});
 
 			it("should set the preferredTools ref", async () => {
 				const { cardStore, preferredTools } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(cardStore.preferredTools).toEqual(expect.arrayContaining(preferredTools));
 			});
@@ -908,7 +908,7 @@ describe("CardStore", () => {
 			it("should set the isPreferredToolsLoading at the end to false", async () => {
 				const { cardStore } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(cardStore.isPreferredToolsLoading).toBe(false);
 			});

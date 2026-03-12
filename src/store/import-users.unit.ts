@@ -1,10 +1,6 @@
 import { BusinessError } from "./types/commons";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	ImportUserResponseRoleNames,
-	UserMatchResponseMatchedBy,
-	UserMatchResponseRoleNames,
-} from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { ImportUserResponseRoleNames, UserMatchResponseMatchedBy, UserMatchResponseRoleNames } from "@/serverApi/v3";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import { apiResponseErrorFactory, axiosErrorFactory, businessErrorFactory } from "@@/tests/test-utils";
 

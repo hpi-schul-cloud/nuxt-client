@@ -1,6 +1,6 @@
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { SchulcloudTheme } from "@/serverApi/v3/api";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { toEndOfDayIso, toIsoDate } from "@/utils/date-time.utils";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";

@@ -8,7 +8,7 @@ export const newsResponseFactory = Factory.define<NewsResponse>(({ sequence }) =
 	content: `News Content #${sequence}`,
 	displayAt: new Date().toISOString(),
 	targetId: `targetId #${sequence}`,
-	targetModel: NewsTargetModel.Schools,
+	targetModel: NewsTargetModel.SCHOOLS,
 	target: { id: `targetId #${sequence}`, name: `targetName #${sequence}` },
 	school: schoolResponseFactory.build(),
 	creator: { id: `creatorId #${sequence}` },

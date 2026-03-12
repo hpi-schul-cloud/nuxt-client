@@ -1,8 +1,8 @@
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
-import * as serverApi from "@/serverApi/v3/api";
-import { BoardParentType } from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { BoardParentType } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	apiResponseErrorFactory,

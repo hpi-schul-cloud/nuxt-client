@@ -276,7 +276,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when translating tool context type", () => {
 			const setupTool = () => {
 				const tool = schoolExternalToolFactory.build({
-					restrictToContexts: [ToolContextType.MediaBoard, ToolContextType.BoardElement, ToolContextType.Course],
+					restrictToContexts: [ToolContextType.MEDIA_BOARD, ToolContextType.BOARD_ELEMENT, ToolContextType.COURSE],
 				});
 
 				return { tool };

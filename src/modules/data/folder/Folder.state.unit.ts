@@ -1,5 +1,5 @@
 import { useFolderState } from "./Folder.state";
-import * as serverApi from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";

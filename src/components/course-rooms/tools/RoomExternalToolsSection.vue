@@ -114,7 +114,7 @@ const onEditTool = (tool: ExternalToolDisplayData) => {
 		params: { configId: tool.contextExternalToolId },
 		query: {
 			contextId: props.roomId,
-			contextType: ToolContextType.Course,
+			contextType: ToolContextType.COURSE,
 		},
 	});
 };

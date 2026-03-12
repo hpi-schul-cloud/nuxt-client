@@ -28,7 +28,7 @@
 			:room-id="roomId"
 			data-testid="room-external-tool-section"
 			@delete="onDeleteTool"
-			@refresh="() => fetchDisplayData(props.roomId, ToolContextType.Course)"
+			@refresh="() => fetchDisplayData(props.roomId, ToolContextType.COURSE)"
 		/>
 	</div>
 </template>
@@ -72,7 +72,7 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(
 );
 
 onMounted(async () => {
-	await fetchDisplayData(props.roomId, ToolContextType.Course);
+	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
 
 	course.value = await courseRoomDetailsModule.fetchCourse(props.roomId);
 });
@@ -80,7 +80,7 @@ onMounted(async () => {
 const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
-	await fetchDisplayData(props.roomId, ToolContextType.Course);
+	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
 }, refreshTimeInMs);
 
 onUnmounted(() => {

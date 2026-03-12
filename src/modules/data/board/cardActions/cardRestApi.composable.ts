@@ -100,7 +100,7 @@ export const useCardRestApi = () => {
 			if (tool.schoolExternalToolId) {
 				const availableTools: ContextExternalToolConfigurationTemplate[] = await fetchAvailableToolsForContextCall(
 					newElement.data.id,
-					ToolContextType.BoardElement
+					ToolContextType.BOARD_ELEMENT
 				);
 
 				const preferredTool: ContextExternalToolConfigurationTemplate | undefined = availableTools.find(
@@ -111,7 +111,7 @@ export const useCardRestApi = () => {
 					const contextExternalToolSave: ContextExternalToolSave = {
 						schoolToolId: tool.schoolExternalToolId,
 						contextId: newElement.data.id,
-						contextType: ToolContextType.BoardElement,
+						contextType: ToolContextType.BOARD_ELEMENT,
 						parameters: [],
 					};
 

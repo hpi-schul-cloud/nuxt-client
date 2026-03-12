@@ -62,11 +62,11 @@ export function useExternalToolsSectionUtils(t: (key: string) => string = () => 
 				contextRestrictionTranslations = tool.restrictToContexts
 					.map((context) => {
 						switch (context) {
-							case ToolContextType.Course:
+							case ToolContextType.COURSE:
 								return t("common.tool.context.type.courses");
-							case ToolContextType.MediaBoard:
+							case ToolContextType.MEDIA_BOARD:
 								return t("common.tool.context.type.mediaShelves");
-							case ToolContextType.BoardElement:
+							case ToolContextType.BOARD_ELEMENT:
 								return t("common.tool.context.type.boardElements");
 						}
 					})

@@ -1,8 +1,8 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { type RegistrationList, useRegistrationStore } from "./registration.store";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RegistrationListResponse } from "@/serverApi/v3/api";
-import * as serverApi from "@/serverApi/v3/api";
+import { RegistrationListResponse } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	axiosErrorFactory,

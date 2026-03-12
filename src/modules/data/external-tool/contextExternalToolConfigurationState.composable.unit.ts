@@ -58,7 +58,7 @@ describe("contextExternalToolConfigurationState.composable", () => {
 			it("should reset the error", async () => {
 				const { composable } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(composable.error.value).toBeUndefined();
 			});
@@ -66,18 +66,18 @@ describe("contextExternalToolConfigurationState.composable", () => {
 			it("should call the api for available tools", async () => {
 				const { composable } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(useContextExternalToolApiMock.fetchAvailableToolsForContextCall).toHaveBeenCalledWith(
 					"contextId",
-					ToolContextType.Course
+					ToolContextType.COURSE
 				);
 			});
 
 			it("should set the available tools in the state", async () => {
 				const { composable, toolConfigurationTemplate } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(composable.availableTools.value).toEqual([toolConfigurationTemplate]);
 			});
@@ -102,7 +102,7 @@ describe("contextExternalToolConfigurationState.composable", () => {
 			it("should set the error", async () => {
 				const { composable, apiError } = setup();
 
-				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.Course);
+				await composable.fetchAvailableToolConfigurationsForContext("contextId", ToolContextType.COURSE);
 
 				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,

@@ -1,6 +1,6 @@
 import { RoomVariant, useRoomDetailsStore } from "./RoomDetails.store";
-import * as serverApi from "@/serverApi/v3/api";
-import { RoomColor } from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { RoomColor } from "@/serverApi/v3";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { apiResponseErrorFactory, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";

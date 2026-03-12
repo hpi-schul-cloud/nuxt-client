@@ -117,7 +117,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				const bodyParams: ContextExternalToolBodyParams = {
 					contextId: "contextId",
-					contextType: ToolContextType.MediaBoard,
+					contextType: ToolContextType.MEDIA_BOARD,
 				};
 
 				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockResolvedValue(response);
@@ -177,7 +177,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				const bodyParams: ContextExternalToolBodyParams = {
 					contextId: "contextId",
-					contextType: ToolContextType.MediaBoard,
+					contextType: ToolContextType.MEDIA_BOARD,
 				};
 
 				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockRejectedValue(axiosError);

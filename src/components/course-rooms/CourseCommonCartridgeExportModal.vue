@@ -212,7 +212,7 @@ watch(
 		allColumnBoards.value = [];
 
 		newValue.forEach((element: BoardElement) => {
-			if (element.type === BoardElementType.Lesson) {
+			if (element.type === BoardElementType.LESSON) {
 				allTopics.value.push({
 					isSelected: true,
 					title: (element.content as BoardLesson).name,
@@ -228,7 +228,7 @@ watch(
 				});
 			}
 
-			if (element.type === BoardElementType.ColumnBoard) {
+			if (element.type === BoardElementType.COLUMN_BOARD) {
 				allColumnBoards.value.push({
 					isSelected: true,
 					title: (element.content as BoardColumnBoard).title,

@@ -1,6 +1,6 @@
 import { resetSocketStateForTesting } from "./socket";
 import { BoardErrorReportApiFactory } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
 import {
 	boardResponseFactory,
 	expectNotification,

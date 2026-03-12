@@ -1,6 +1,6 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { SchoolExternalToolMetadataResponse } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { mockApi, mockApiResponse, schoolExternalToolMetadataResponseFactory } from "@@/tests/test-utils";
 import { Mocked } from "vitest";

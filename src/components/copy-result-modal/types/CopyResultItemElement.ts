@@ -1,4 +1,4 @@
-import { CopyApiResponseType } from "@/serverApi/v3/api";
+import { CopyApiResponseType } from "@/serverApi/v3";
 
 export interface CopyResultItemElement {
 	type: CopyApiResponseType;

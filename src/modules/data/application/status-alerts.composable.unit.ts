@@ -1,5 +1,5 @@
 import { useStatusAlerts } from "./status-alerts.composable";
-import * as serverApi from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
 import { mockApi } from "@@/tests/test-utils";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { createTestingPinia } from "@pinia/testing";

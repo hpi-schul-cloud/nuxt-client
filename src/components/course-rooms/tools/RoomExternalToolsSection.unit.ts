@@ -135,7 +135,7 @@ describe("RoomExternalToolsSection", () => {
 				params: { configId: tool.contextExternalToolId },
 				query: {
 					contextId: roomId,
-					contextType: ToolContextType.Course,
+					contextType: ToolContextType.COURSE,
 				},
 			});
 		});

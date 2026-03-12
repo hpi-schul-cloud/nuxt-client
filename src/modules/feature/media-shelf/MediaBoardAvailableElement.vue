@@ -41,7 +41,7 @@ const loadAvailableLineElementData = async (element: MediaAvailableLineElementRe
 	if (contextId) {
 		await fetchSchoolLaunchRequest(element.schoolExternalToolId, {
 			contextId,
-			contextType: ToolContextType.MediaBoard,
+			contextType: ToolContextType.MEDIA_BOARD,
 		});
 	}
 };

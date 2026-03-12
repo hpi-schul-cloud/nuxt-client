@@ -259,7 +259,7 @@ describe("useCardRestApi", () => {
 
 				expect(mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall).toHaveBeenCalledWith(
 					newElementResponse.data.id,
-					ToolContextType.BoardElement
+					ToolContextType.BOARD_ELEMENT
 				);
 			});
 
@@ -393,7 +393,7 @@ describe("useCardRestApi", () => {
 				const contextExternalToolSave: ContextExternalToolSave = {
 					schoolToolId: preferredTool.schoolExternalToolId,
 					contextId: newElementResponse.data.id,
-					contextType: ToolContextType.BoardElement,
+					contextType: ToolContextType.BOARD_ELEMENT,
 					parameters: [],
 				};
 
@@ -499,15 +499,15 @@ describe("useCardRestApi", () => {
 			it("should fetch preferred tools", async () => {
 				const { getPreferredTools } = setupPreferredTool();
 
-				await getPreferredTools(ToolContextType.BoardElement);
+				await getPreferredTools(ToolContextType.BOARD_ELEMENT);
 
-				expect(mockedContextExternalToolApiCalls.fetchPreferredTools).toBeCalledWith(ToolContextType.BoardElement);
+				expect(mockedContextExternalToolApiCalls.fetchPreferredTools).toBeCalledWith(ToolContextType.BOARD_ELEMENT);
 			});
 
 			it("should return preferred tools", async () => {
 				const { getPreferredTools, preferredTools } = setupPreferredTool();
 
-				const result = await getPreferredTools(ToolContextType.BoardElement);
+				const result = await getPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(result).toEqual(preferredTools.data);
 			});
@@ -527,7 +527,7 @@ describe("useCardRestApi", () => {
 			it("should show a failure notification", async () => {
 				const { getPreferredTools } = setupPreferredTool();
 
-				await getPreferredTools(ToolContextType.BoardElement);
+				await getPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expectNotification("error");
 			});

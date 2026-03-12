@@ -1,6 +1,6 @@
 import { useCourseInfoApi } from "./courseInfoApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
-import { CourseInfoListResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3/api";
+import * as serverApi from "@/serverApi/v3";
+import { CourseInfoListResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import { mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";

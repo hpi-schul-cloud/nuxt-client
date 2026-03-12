@@ -101,7 +101,7 @@ describe("MediaBoardAvailableElement", () => {
 					availableLineElement.schoolExternalToolId,
 					{
 						contextId: mediaBoard.id,
-						contextType: ToolContextType.MediaBoard,
+						contextType: ToolContextType.MEDIA_BOARD,
 					}
 				);
 			});
@@ -177,7 +177,7 @@ describe("MediaBoardAvailableElement", () => {
 					availableLineElement.schoolExternalToolId,
 					{
 						contextId: expect.any(String),
-						contextType: ToolContextType.MediaBoard,
+						contextType: ToolContextType.MEDIA_BOARD,
 					}
 				);
 			});
