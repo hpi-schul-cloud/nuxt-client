@@ -1,4 +1,4 @@
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";

@@ -1,5 +1,5 @@
-import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
-import * as h5pApi from "@/h5pEditorApi/v3/api/h5p-editor-api";
+import { H5pEditorApiInterface } from "@/generated/h5pEditorApi/v3/api";
+import * as h5pApi from "@/generated/h5pEditorApi/v3/api/h5p-editor-api";
 import {
 	axiosErrorFactory,
 	expectNotification,

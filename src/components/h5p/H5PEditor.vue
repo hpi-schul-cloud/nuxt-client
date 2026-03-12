@@ -5,13 +5,13 @@
 </template>
 
 <script setup lang="ts">
+import { H5pEditorApiFactory } from "@/generated/h5pEditorApi/v3/api";
 import {
 	H5PContentParentType,
-	H5pEditorApiFactory,
 	H5PSaveResponse,
 	LanguageType,
 	PostH5PContentCreateParams,
-} from "@/h5pEditorApi/v3";
+} from "@/generated/h5pEditorApi/v3/models";
 import { $axios } from "@/utils/api";
 import { defineElements, H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { ref, watch } from "vue";

@@ -1,4 +1,4 @@
-import { H5pEditorApiFactory } from "@/h5pEditorApi/v3";
+import { H5pEditorApiFactory } from "@/generated/h5pEditorApi/v3/api";
 import { $axios } from "@/utils/api";
 import { notifyError } from "@data-app";
 import { AxiosResponse } from "axios";

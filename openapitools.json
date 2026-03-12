@@ -50,7 +50,7 @@
       "h5p-editor-api": {
         "generatorName": "typescript-axios",
         "inputSpec": "http://localhost:4448/api/v3/docs-json/",
-        "output": "./src/h5pEditorApi/v3",
+        "output": "./src/generated/h5pEditorApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
         "additionalProperties": {

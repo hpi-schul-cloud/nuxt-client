@@ -1,5 +1,5 @@
 import H5PEditor from "./H5PEditor.vue";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { H5PEditorComponent } from "@lumieducation/h5p-webcomponents";
 import { mount } from "@vue/test-utils";
