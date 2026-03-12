@@ -1,11 +1,11 @@
 import Sidebar from "./Sidebar.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
-import { Permission, SchulcloudTheme } from "@api-server";
 import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

@@ -1,5 +1,4 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@api-server";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -8,6 +7,7 @@ import { createTestEnvStore, maintenanceStatusFactory, mockComposable } from "@@
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@api-server";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";

@@ -1,7 +1,7 @@
 import { useSchoolLicenseStore } from "./SchoolLicense.store";
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
-import { MediaSchoolLicenseListResponse } from "@api-server";
 import { mediaSchoolLicenseResponseFactory, mockComposable } from "@@/tests/test-utils";
+import { MediaSchoolLicenseListResponse } from "@api-server";
 import { createPinia, setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 

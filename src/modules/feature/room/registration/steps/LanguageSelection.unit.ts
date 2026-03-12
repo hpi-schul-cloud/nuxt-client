@@ -1,6 +1,6 @@
 import LanguageSelection from "./LanguageSelection.vue";
-import { LanguageType } from "@api-server";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 
 describe("LanguageSelection.vue", () => {
 	const setup = () => {

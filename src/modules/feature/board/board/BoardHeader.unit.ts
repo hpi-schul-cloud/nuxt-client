@@ -1,9 +1,9 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-import { BoardExternalReferenceType, BoardResponseAllowedOperations, ConfigResponse } from "@api-server";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardExternalReferenceType, BoardResponseAllowedOperations, ConfigResponse } from "@api-server";
 import { useBoardFocusHandler, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import {

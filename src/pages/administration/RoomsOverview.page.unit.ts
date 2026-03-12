@@ -1,5 +1,4 @@
 import RoomsOverview from "./RoomsOverview.page.vue";
-import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@api-server";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	courseInfoDataResponseFactory,
@@ -8,6 +7,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@api-server";
 import { useCourseApi, useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { createTestingPinia } from "@pinia/testing";

@@ -1,5 +1,5 @@
-import { MediaSchoolLicenseListResponse, SchoolLicenseApiFactory } from "@api-server";
 import { $axios } from "@/utils/api";
+import { MediaSchoolLicenseListResponse, SchoolLicenseApiFactory } from "@api-server";
 
 export const useSchoolLicenseApi = () => {
 	const schoolLicenseApi = SchoolLicenseApiFactory(undefined, "/v3", $axios);

@@ -1,10 +1,10 @@
 import ConfirmationTable from "./ConfirmationTable.vue";
-import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { useI18n } from "vue-i18n";

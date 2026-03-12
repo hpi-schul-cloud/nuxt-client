@@ -132,6 +132,10 @@ import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { ColumnMove } from "@/types/board/DragAndDrop";
+import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardExternalReferenceType,
 	BoardLayout,
@@ -139,10 +143,6 @@ import {
 	ShareTokenBodyParamsParentType,
 	ToolContextType,
 } from "@api-server";
-import { CopyParamsTypeEnum } from "@/store/copy";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { ColumnMove } from "@/types/board/DragAndDrop";
-import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardAllowedOperations,

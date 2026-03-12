@@ -4,7 +4,7 @@ import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@api-com
 import { FileApiFactory, FileApiInterface, FileRecordParentType, StorageLocation } from "@api-file-storage";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { Mocked } from "vitest";
+import { Mocked, MockedFunction } from "vitest";
 
 vi.mock("@api-common-cartridge");
 vi.mock("@api-file-storage");

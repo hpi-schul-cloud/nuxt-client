@@ -1,10 +1,10 @@
 import { useExternalToolDisplayListState } from "./externalToolDisplayListState.composable";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
-import { ToolContextType } from "@api-server";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { axiosErrorFactory, externalToolDisplayDataFactory, mockComposable } from "@@/tests/test-utils";
+import { ToolContextType } from "@api-server";
 import { Mocked } from "vitest";
 
 vi.mock("@data-external-tool/externalToolReferenceApi.composable");

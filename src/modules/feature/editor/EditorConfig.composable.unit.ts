@@ -1,7 +1,7 @@
 import { useEditorConfig } from "./EditorConfig.composable";
-import { LanguageType } from "@api-server";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

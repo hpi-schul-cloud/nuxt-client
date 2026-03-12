@@ -1,7 +1,7 @@
 import ExternalToolMediumDetails from "./ExternalToolMediumDetails.vue";
-import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@api-server";
 import { expectNotification } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

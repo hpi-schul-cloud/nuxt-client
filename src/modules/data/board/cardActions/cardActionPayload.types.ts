@@ -1,5 +1,5 @@
-import { CardResponse, ContentElementType } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { CardResponse, ContentElementType } from "@api-server";
 
 export type FetchCardRequestPayload = {
 	cardIds: string[];

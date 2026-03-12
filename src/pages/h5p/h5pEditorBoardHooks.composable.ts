@@ -1,6 +1,6 @@
-import { ContentElementType, H5pElementResponse } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { ContentElementType, H5pElementResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardApi, useCardStore } from "@data-board";
 import { onUnmounted, Ref, ref } from "vue";

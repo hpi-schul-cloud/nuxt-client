@@ -1,13 +1,6 @@
 import { ContextExternalToolMapper, ToolContextMapping } from "./context-external-tool.mapper";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
-import * as serverApi from "@api-server";
-import {
-	ContextExternalToolConfigurationTemplateResponse,
-	ContextExternalToolPostParams,
-	ContextExternalToolResponse,
-	ToolContextType,
-} from "@api-server";
 import {
 	contextExternalToolConfigurationTemplateResponseFactory,
 	contextExternalToolFactory,
@@ -15,6 +8,13 @@ import {
 	mockApi,
 	mockApiResponse,
 } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import {
+	ContextExternalToolConfigurationTemplateResponse,
+	ContextExternalToolPostParams,
+	ContextExternalToolResponse,
+	ToolContextType,
+} from "@api-server";
 import { Mocked } from "vitest";
 
 describe("contextExternalToolApi.composable", () => {

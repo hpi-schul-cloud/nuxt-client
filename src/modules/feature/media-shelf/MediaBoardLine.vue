@@ -76,6 +76,7 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import {
 	BoardLayout,
 	ContentElementType,
@@ -84,7 +85,6 @@ import {
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@api-server";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaBoardEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";

@@ -1,10 +1,10 @@
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
-import { RoleName } from "@api-server";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStoreWithRole,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { RoleName } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 

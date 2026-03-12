@@ -1,7 +1,7 @@
-import { RoomColor } from "@api-server";
 import { RoomCreateParams } from "@/types/room/Room";
 import { createTestRoomStore, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomColor } from "@api-server";
 import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";

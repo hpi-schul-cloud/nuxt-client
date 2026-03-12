@@ -1,4 +1,9 @@
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
+import { importUsersModule } from "@/store";
+import ImportUsersModule from "@/store/import-users";
+import { THEME_KEY } from "@/utils/inject";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	ImportUserResponse,
 	ImportUserResponseRoleNames,
@@ -6,11 +11,6 @@ import {
 	UserMatchResponseMatchedBy,
 	UserMatchResponseRoleNames,
 } from "@api-server";
-import { importUsersModule } from "@/store";
-import ImportUsersModule from "@/store/import-users";
-import { THEME_KEY } from "@/utils/inject";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { mdiFlag, mdiFlagOutline } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";

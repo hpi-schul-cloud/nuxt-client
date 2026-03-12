@@ -1,11 +1,11 @@
 import ImportUsers from "./ImportUsers.vue";
-import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { ImportUserListResponse, ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,

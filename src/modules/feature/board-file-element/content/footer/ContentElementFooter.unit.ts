@@ -1,9 +1,9 @@
 import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
+import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { PreviewStatus } from "@api-file-storage";
 import { ContentElementType } from "@api-server";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 
 describe("ContentElementFooter", () => {

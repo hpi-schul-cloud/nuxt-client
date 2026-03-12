@@ -1,9 +1,9 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { ConfigResponse } from "@api-server";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse } from "@api-server";
 import { ProvisioningOptions, useProvisioningOptionsState } from "@data-provisioning-options";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";

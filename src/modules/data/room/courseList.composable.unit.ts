@@ -1,7 +1,6 @@
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseList } from "./courseList.composable";
-import { CourseInfoDataResponse, CourseInfoListResponse, CourseSortProps, CourseStatus } from "@api-server";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
@@ -14,6 +13,7 @@ import {
 } from "@@/tests/test-utils";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { CourseInfoDataResponse, CourseInfoListResponse, CourseSortProps, CourseStatus } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

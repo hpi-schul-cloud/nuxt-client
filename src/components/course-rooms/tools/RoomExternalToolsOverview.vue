@@ -36,10 +36,10 @@
 <script setup lang="ts">
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { ToolContextType } from "@api-server";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { Course, CourseFeatures } from "@/store/types/room";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ToolContextType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";
 import { mdiAlertCircle } from "@icons/material";

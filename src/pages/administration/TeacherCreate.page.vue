@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { RoleName } from "@api-server";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { UserCreatingData, useUsers } from "@data-users";
 import { DefaultWireframe } from "@ui-layout";

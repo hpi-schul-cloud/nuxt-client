@@ -1,9 +1,9 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardTitle from "./CardTitle.vue";
-import { CardResponse } from "@api-server";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CardResponse } from "@api-server";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount, type VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";

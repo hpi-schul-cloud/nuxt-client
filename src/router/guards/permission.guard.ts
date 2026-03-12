@@ -1,5 +1,5 @@
-import { Permission } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { NavigationGuard } from "vue-router";
 

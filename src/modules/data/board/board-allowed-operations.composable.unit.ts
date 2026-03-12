@@ -1,9 +1,9 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardAllowedOperations } from "./board-allowed-operations.composable";
-import type { BoardResponseAllowedOperations } from "@api-server";
 import { Board } from "@/types/board/Board";
 import { boardResponseFactory } from "@@/tests/test-utils/factory";
 import { mockComposable } from "@@/tests/test-utils/mockComposable";
+import type { BoardResponseAllowedOperations } from "@api-server";
 import { ref } from "vue";
 
 vi.mock("./Board.store");

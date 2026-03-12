@@ -1,13 +1,13 @@
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
-import * as serverApi from "@api-server";
-import { ToolContextType, ToolReferenceResponse } from "@api-server";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	mockApi,
 	mockApiResponse,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { ToolContextType, ToolReferenceResponse } from "@api-server";
 import { Mocked } from "vitest";
 
 describe("externalToolReferenceApi.composable", () => {

@@ -1,6 +1,6 @@
 import FwuMediaPage from "./FwuMedia.page.vue";
-import { FwuItemResponse } from "@api-fwu";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { FwuItemResponse } from "@api-fwu";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

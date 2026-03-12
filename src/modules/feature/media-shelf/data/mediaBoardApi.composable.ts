@@ -1,3 +1,4 @@
+import { $axios } from "@/utils/api";
 import {
 	BoardLayout,
 	MediaAvailableLineResponse,
@@ -12,7 +13,6 @@ import {
 	MediaLineApiInterface,
 	MediaLineResponse,
 } from "@api-server";
-import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 
 export const useMediaBoardApi = () => {

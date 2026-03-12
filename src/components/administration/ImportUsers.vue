@@ -235,9 +235,9 @@
 
 <script>
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
-import { ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
+import { ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,

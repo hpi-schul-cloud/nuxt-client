@@ -1,3 +1,5 @@
+import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
+import { $axios } from "@/utils/api";
 import {
 	VideoConferenceApiFactory,
 	VideoConferenceInfoResponse,
@@ -5,8 +7,6 @@ import {
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
 } from "@api-server";
-import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
-import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { computed, ref } from "vue";
 

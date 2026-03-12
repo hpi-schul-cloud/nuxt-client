@@ -1,6 +1,5 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
-import { ContextExternalToolBodyParams, LaunchType, ToolContextType } from "@api-server";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -12,6 +11,7 @@ import {
 	toolLaunchRequestResponseFactory,
 } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
+import { ContextExternalToolBodyParams, LaunchType, ToolContextType } from "@api-server";
 import { Mocked } from "vitest";
 import { nextTick } from "vue";
 

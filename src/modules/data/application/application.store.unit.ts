@@ -1,4 +1,8 @@
 import { useAppStore, useAppStoreRefs } from "./application.store";
+import { ApplicationError } from "@/store/types/application-error";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { initializeAxios } from "@/utils/api";
+import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
 import {
 	LanguageType,
 	MeApiFactory,
@@ -8,10 +12,6 @@ import {
 	SuccessfulResponse,
 	UserApiFactory,
 } from "@api-server";
-import { ApplicationError } from "@/store/types/application-error";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse, mockBroadcastChannel } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance, AxiosPromise } from "axios";

@@ -1,6 +1,8 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { ExternalMemberCheckStatus, RoomMember } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
+import { schoolsModule } from "@/store";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	ChangeRoomRoleBodyParamsRoleName,
 	CreateOrUpdateRegistrationBodyParams,
@@ -11,8 +13,6 @@ import {
 	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
 } from "@api-server";
-import { schoolsModule } from "@/store";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { logger } from "@util-logger";
 import { defineStore, storeToRefs } from "pinia";

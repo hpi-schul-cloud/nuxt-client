@@ -1,6 +1,6 @@
 import { System } from "./types";
-import { PublicSystemResponse, SystemsApiFactory } from "@api-server";
 import { $axios } from "@/utils/api";
+import { PublicSystemResponse, SystemsApiFactory } from "@api-server";
 import { useErrorHandler } from "@util-error-handling";
 import { AxiosResponse } from "axios";
 

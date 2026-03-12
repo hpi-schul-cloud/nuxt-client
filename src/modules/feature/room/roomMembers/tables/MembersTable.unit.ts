@@ -1,7 +1,6 @@
 import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -13,6 +12,7 @@ import {
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import {

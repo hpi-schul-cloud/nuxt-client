@@ -1,6 +1,6 @@
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { MediaBoardColors } from "@api-server";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { MediaBoardColors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";

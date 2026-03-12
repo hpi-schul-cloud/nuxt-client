@@ -1,5 +1,5 @@
-import { ExternalToolMediumResponse } from "@api-server";
 import { ToolParameter } from "@/store/external-tool";
+import { ExternalToolMediumResponse } from "@api-server";
 
 export interface ExternalToolConfigurationTemplate {
 	externalToolId: string;

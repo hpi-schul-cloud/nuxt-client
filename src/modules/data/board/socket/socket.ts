@@ -1,8 +1,8 @@
 import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
-import { BoardErrorReportApiFactory } from "@api-server";
 import { Action } from "@/types/board/ActionFactory";
 import { $axios } from "@/utils/api";
+import { BoardErrorReportApiFactory } from "@api-server";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useSessionBroadcast } from "@util-broadcast-channel";

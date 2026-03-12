@@ -44,8 +44,8 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { BoardExternalReferenceType } from "@api-server";
 import { ImportDestinationItem } from "@/store/types/rooms";
+import { BoardExternalReferenceType } from "@api-server";
 import { mdiInformation } from "@icons/material";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";

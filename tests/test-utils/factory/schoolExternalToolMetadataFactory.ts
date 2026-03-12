@@ -1,5 +1,5 @@
-import { Factory } from "fishery";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { Factory } from "fishery";
 
 export const schoolExternalToolMetadataFactory: Factory<SchoolExternalToolMetadata> =
 	Factory.define<SchoolExternalToolMetadata>(() => ({

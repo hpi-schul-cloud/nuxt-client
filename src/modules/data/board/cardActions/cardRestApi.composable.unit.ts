@@ -2,14 +2,6 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { UpdateCardHeightRequestPayload, UpdateCardTitleRequestPayload } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
-import {
-	ContentElementType,
-	ExternalToolElementResponse,
-	PreferredToolListResponse,
-	PreferredToolResponse,
-	RichTextElementResponse,
-	ToolContextType,
-} from "@api-server";
 import { schoolExternalToolsModule } from "@/store";
 import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -28,6 +20,14 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import {
+	ContentElementType,
+	ExternalToolElementResponse,
+	PreferredToolListResponse,
+	PreferredToolResponse,
+	RichTextElementResponse,
+	ToolContextType,
+} from "@api-server";
 import { useBoardStore, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import {
 	ContextExternalToolConfigurationTemplate,

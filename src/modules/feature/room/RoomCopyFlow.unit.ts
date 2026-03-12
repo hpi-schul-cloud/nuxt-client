@@ -1,4 +1,3 @@
-import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import {
 	createTestRoomStore,
 	expectNotification,
@@ -7,6 +6,7 @@ import {
 	roomFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { useLoadingStore } from "@data-app";
 import { RoomCopyFlow } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";

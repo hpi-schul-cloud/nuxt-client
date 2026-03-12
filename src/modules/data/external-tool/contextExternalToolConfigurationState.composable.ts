@@ -1,8 +1,8 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { ContextExternalToolConfigurationTemplate } from "./types";
-import { ToolContextType } from "@api-server";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { ToolContextType } from "@api-server";
 import { Ref, ref } from "vue";
 
 export const useContextExternalToolConfigurationState = () => {

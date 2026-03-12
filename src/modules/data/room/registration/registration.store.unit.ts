@@ -1,8 +1,6 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { type RegistrationList, useRegistrationStore } from "./registration.store";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RegistrationListResponse } from "@api-server";
-import * as serverApi from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	axiosErrorFactory,
@@ -15,6 +13,8 @@ import {
 	registrationFactory,
 	roomFactory,
 } from "@@/tests/test-utils";
+import { RegistrationListResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mock, Mocked, vi } from "vitest";

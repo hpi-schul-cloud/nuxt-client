@@ -4,7 +4,6 @@ import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import { useFilterLocalStorage } from "@/components/administration/data-filter/composables/filterLocalStorage.composable";
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
-import { Permission, RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -18,6 +17,7 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Permission, RoleName } from "@api-server";
 import { useClasses } from "@data-classes";
 import { useUsers } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";

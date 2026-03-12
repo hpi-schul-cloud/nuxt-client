@@ -1,7 +1,7 @@
 import UserMenu from "./UserMenu.vue";
-import { LanguageType } from "@api-server";
 import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
 import { createTestingPinia } from "@pinia/testing";

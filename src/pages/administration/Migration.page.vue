@@ -434,11 +434,11 @@
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { SchulcloudTheme } from "@api-server";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { mdiClose } from "@icons/material";
 import { DefaultWireframe } from "@ui-layout";

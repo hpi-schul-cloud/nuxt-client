@@ -1,6 +1,6 @@
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { Permission, SchulcloudTheme } from "@api-server";
 import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { Permission, SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountGroupOutline,

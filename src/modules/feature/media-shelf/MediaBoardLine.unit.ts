@@ -4,13 +4,13 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { BoardLayout } from "@api-server";
 import {
 	deletedElementResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
 import { useMediaBoardEditMode } from "@data-board";
 import { useDragAndDrop } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";

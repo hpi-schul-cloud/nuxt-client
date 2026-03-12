@@ -5,7 +5,6 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import store from "@/plugins/store";
-import { Permission, RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStore, createTestEnvStore, expectNotification, userResponseFactory } from "@@/tests/test-utils";
@@ -13,6 +12,7 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Permission, RoleName } from "@api-server";
 import { useClasses } from "@data-classes";
 import { useUsers } from "@data-users";
 import { mdiCheck, mdiCheckAll, mdiClose } from "@icons/material";

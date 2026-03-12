@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { ContentElementType } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { ContentElementType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";

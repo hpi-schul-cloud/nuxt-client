@@ -1,11 +1,4 @@
 import { useI18nGlobal } from "@/plugins/i18n";
-import * as serverApi from "@api-server";
-import {
-	ChangeRoomRoleBodyParamsRoleName,
-	RoleName,
-	RoomMemberListResponse,
-	SchoolUserListResponse,
-} from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -25,6 +18,13 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@api-server";
+import {
+	ChangeRoomRoleBodyParamsRoleName,
+	RoleName,
+	RoomMemberListResponse,
+	SchoolUserListResponse,
+} from "@api-server";
 import { ExternalMemberCheckStatus, RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";

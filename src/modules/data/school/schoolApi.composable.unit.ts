@@ -1,6 +1,6 @@
 import { useSchoolApi } from "./schoolApi.composable";
-import * as serverApi from "@api-server";
 import { mockApi } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
 import { Mocked } from "vitest";
 
 describe("SchoolApi.composable", () => {

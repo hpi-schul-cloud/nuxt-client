@@ -1,6 +1,4 @@
 import { InvitationStep, RoomInvitationLink } from "./types";
-import * as serverApi from "@api-server";
-import { RoomIdResponse } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
@@ -15,6 +13,8 @@ import {
 } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@api-server";
+import { RoomIdResponse } from "@api-server";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-error-handling";

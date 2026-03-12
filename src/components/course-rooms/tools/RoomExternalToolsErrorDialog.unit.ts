@@ -1,11 +1,11 @@
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
-import { Permission, RoleName } from "@api-server";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName } from "@api-server";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

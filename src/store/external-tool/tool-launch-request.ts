@@ -1,5 +1,5 @@
-import { LaunchRequestMethod, LaunchType } from "@api-server";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool/tool-launch-request-method.enum";
+import { LaunchRequestMethod, LaunchType } from "@api-server";
 
 export type ToolLaunchRequest = {
 	method: ToolLaunchRequestMethodEnum | LaunchRequestMethod;

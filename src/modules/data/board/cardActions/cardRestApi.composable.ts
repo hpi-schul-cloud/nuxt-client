@@ -14,6 +14,9 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
+import { schoolExternalToolsModule } from "@/store";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { delay } from "@/utils/helpers";
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
@@ -21,9 +24,6 @@ import {
 	PreferredToolResponse,
 	ToolContextType,
 } from "@api-server";
-import { schoolExternalToolsModule } from "@/store";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { delay } from "@/utils/helpers";
 import { notifyError } from "@data-app";
 import {
 	ContextExternalTool,

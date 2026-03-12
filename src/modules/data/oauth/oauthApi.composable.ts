@@ -1,5 +1,5 @@
-import { OAuthApiFactory, OAuthSessionTokenExpirationResponse } from "@api-server";
 import { $axios } from "@/utils/api";
+import { OAuthApiFactory, OAuthSessionTokenExpirationResponse } from "@api-server";
 import { AxiosResponse } from "axios";
 
 export const useOAuthApi = () => {

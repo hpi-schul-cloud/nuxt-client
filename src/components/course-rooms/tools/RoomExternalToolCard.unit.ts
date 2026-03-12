@@ -1,8 +1,8 @@
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { Permission } from "@api-server";
 import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import {
 	ExternalToolDisplayData,

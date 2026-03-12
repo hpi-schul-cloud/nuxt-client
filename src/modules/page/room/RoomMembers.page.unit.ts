@@ -1,5 +1,4 @@
 import RoomMembersPage from "./RoomMembers.page.vue";
-import { ConfigResponse, RoleName, RoomDetailsResponse } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
@@ -9,6 +8,7 @@ import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { ConfigResponse, RoleName, RoomDetailsResponse } from "@api-server";
 import {
 	InvitationStep,
 	useRegistrationStore,

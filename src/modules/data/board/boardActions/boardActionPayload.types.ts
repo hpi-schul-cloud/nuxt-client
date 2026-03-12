@@ -1,3 +1,4 @@
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardLayout,
 	BoardResponse,
@@ -6,7 +7,6 @@ import {
 	ColumnResponse,
 	CreateCardBodyParamsRequiredEmptyElements,
 } from "@api-server";
-import { ColumnMove } from "@/types/board/DragAndDrop";
 
 export type CreateCardRequestPayload = {
 	columnId: string;

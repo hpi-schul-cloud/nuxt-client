@@ -1,6 +1,6 @@
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
-import { BoardExternalReferenceType } from "@api-server";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardExternalReferenceType } from "@api-server";
 import { mount } from "@vue/test-utils";
 
 describe("@components/share/SelectDestinationModal", () => {

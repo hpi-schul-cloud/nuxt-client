@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { ShareTokenBodyParamsParentType } from "@api-server";
 import { ShareOptions } from "@/store/share";
+import { ShareTokenBodyParamsParentType } from "@api-server";
 import { PropType, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -29,8 +29,7 @@ defineProps({
 	type: {
 		type: String as PropType<ShareTokenBodyParamsParentType>,
 		required: true,
-		validator: (type) =>
-			Object.values(ShareTokenBodyParamsParentType).includes(type as ShareTokenBodyParamsParentType),
+		validator: (type) => Object.values(ShareTokenBodyParamsParentType).includes(type as ShareTokenBodyParamsParentType),
 	},
 });
 

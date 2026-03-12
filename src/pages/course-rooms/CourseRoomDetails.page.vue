@@ -90,12 +90,6 @@ import CourseRoomDashboard from "@/components/course-rooms/CourseRoomDashboard.v
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import {
-	BoardParentType,
-	ImportUserResponseRoleNames as Roles,
-	Permission,
-	ShareTokenBodyParamsParentType,
-} from "@api-server";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
@@ -104,6 +98,12 @@ import {
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	BoardParentType,
+	ImportUserResponseRoleNames as Roles,
+	Permission,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";

@@ -3,7 +3,6 @@ import MediaBoard from "./MediaBoard.vue";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-import { MediaBoardColors } from "@api-server";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
@@ -11,6 +10,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { MediaBoardColors } from "@api-server";
 import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

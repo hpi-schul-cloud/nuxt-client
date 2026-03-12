@@ -1,5 +1,4 @@
 import { ErrorType, useCollaborativeTextEditorApi } from "./CollaborativeTextEditorApi.composable";
-import * as serverApi from "@api-server";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
@@ -9,6 +8,7 @@ import {
 	mockApiResponse,
 } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
+import * as serverApi from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

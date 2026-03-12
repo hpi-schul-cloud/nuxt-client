@@ -1,5 +1,5 @@
-import { SchoolApiFactory, SchoolApiInterface } from "@api-server";
 import { $axios } from "@/utils/api";
+import { SchoolApiFactory, SchoolApiInterface } from "@api-server";
 
 export const useSchoolApi = () => {
 	const schoolApi: SchoolApiInterface = SchoolApiFactory(undefined, "/v3", $axios);

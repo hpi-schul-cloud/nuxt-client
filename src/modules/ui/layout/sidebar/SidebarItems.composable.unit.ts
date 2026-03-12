@@ -1,10 +1,10 @@
 import { useSidebarItems } from "./SidebarItems.composable";
-import { ConfigResponse, SchulcloudTheme } from "@api-server";
 import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore, mountComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { ConfigResponse, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 

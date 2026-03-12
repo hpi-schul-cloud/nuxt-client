@@ -1,5 +1,4 @@
 import { useRoomStore } from "./room.store";
-import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomListResponse } from "@api-server";
 import { RoomCreateParams } from "@/types/room/Room";
 import {
 	createTestRoomStore,
@@ -9,6 +8,7 @@ import {
 	roomItemFactory,
 	roomItemResponseFactory,
 } from "@@/tests/test-utils";
+import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomListResponse } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";

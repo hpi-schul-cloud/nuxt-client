@@ -81,9 +81,9 @@
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { ShareTokenBodyParamsParentType } from "@api-server";
 import { ShareOptions } from "@/store/share";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import { ShareTokenBodyParamsParentType } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, PropType, ref } from "vue";
@@ -158,9 +158,7 @@ const showAlertInfo = computed(
 const showCourseInfo = computed(() => props.type === ShareTokenBodyParamsParentType.COURSES);
 
 const showBoardInfo = computed(
-	() =>
-		props.type === ShareTokenBodyParamsParentType.COLUMN_BOARD ||
-		props.type === ShareTokenBodyParamsParentType.CARD
+	() => props.type === ShareTokenBodyParamsParentType.COLUMN_BOARD || props.type === ShareTokenBodyParamsParentType.CARD
 );
 
 const showLessonInfo = computed(() => props.type === ShareTokenBodyParamsParentType.LESSONS);

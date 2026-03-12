@@ -193,9 +193,9 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@api-server";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { useCourseList } from "@data-room";

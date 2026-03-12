@@ -1,11 +1,8 @@
-import {
-	CollaborativeTextEditorElementResponse,
-	ContentElementType,
-} from "@api-server";
+import { CollaborativeTextEditorElementResponse, ContentElementType } from "@api-server";
 import { Factory } from "fishery";
 
-export const collaborativeTextEditorElementResponseFactory =
-	Factory.define<CollaborativeTextEditorElementResponse>(({ sequence }) => ({
+export const collaborativeTextEditorElementResponseFactory = Factory.define<CollaborativeTextEditorElementResponse>(
+	({ sequence }) => ({
 		id: `id-${sequence}`,
 		type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 		content: {
@@ -15,4 +12,5 @@ export const collaborativeTextEditorElementResponseFactory =
 			createdAt: new Date().toISOString(),
 			lastUpdatedAt: new Date().toISOString(),
 		},
-	}));
+	})
+);

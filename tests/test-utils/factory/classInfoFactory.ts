@@ -1,13 +1,14 @@
 import { ClassInfo, ClassRootType } from "@/store/types/class-info";
 import { Factory } from "fishery";
 
-export const classInfoFactory = Factory.define<ClassInfo>(({ sequence }) => {
-	return new ClassInfo({
-		name: `className${sequence}`,
-		externalSourceName: "Source",
-		teacherNames: ["TestTeacher"],
-		type: ClassRootType.GROUP,
-		id: `id-${sequence}`,
-		studentCount: 2,
-	});
-});
+export const classInfoFactory = Factory.define<ClassInfo>(
+	({ sequence }) =>
+		new ClassInfo({
+			name: `className${sequence}`,
+			externalSourceName: "Source",
+			teacherNames: ["TestTeacher"],
+			type: ClassRootType.GROUP,
+			id: `id-${sequence}`,
+			studentCount: 2,
+		})
+);

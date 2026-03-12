@@ -1,7 +1,7 @@
 import { useRegistrationStore } from "./registration.store";
 import { useRegistrationStepper } from "./registrationStepper.composable";
-import { LanguageType } from "@api-server";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { LanguageType } from "@api-server";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";

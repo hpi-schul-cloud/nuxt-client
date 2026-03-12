@@ -1,6 +1,5 @@
 import AdministrationRoomMembersPage from "./AdministrationRoomMembers.page.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -11,6 +10,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

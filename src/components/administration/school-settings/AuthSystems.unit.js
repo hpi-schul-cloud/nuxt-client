@@ -1,5 +1,4 @@
 import AuthSystems from "./AuthSystems.vue";
-import { Permission } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
@@ -7,6 +6,7 @@ import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolS
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Permission } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

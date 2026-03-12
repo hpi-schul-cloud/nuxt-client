@@ -122,8 +122,8 @@
 
 <script>
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { Permission } from "@api-server";
 import { schoolsModule } from "@/store";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";

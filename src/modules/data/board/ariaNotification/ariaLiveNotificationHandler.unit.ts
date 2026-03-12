@@ -1,8 +1,8 @@
 import { CreateCardSuccessPayload, CreateColumnSuccessPayload } from "../boardActions/boardActionPayload.types";
 import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
-import { BoardLayout, ContentElementType } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { cardResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
+import { BoardLayout, ContentElementType } from "@api-server";
 
 vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),

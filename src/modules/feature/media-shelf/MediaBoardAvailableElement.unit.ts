@@ -1,7 +1,6 @@
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
-import { ToolContextType } from "@api-server";
 import {
 	businessErrorFactory,
 	createTestEnvStore,
@@ -11,6 +10,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { ToolContextType } from "@api-server";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop } from "@util-board";

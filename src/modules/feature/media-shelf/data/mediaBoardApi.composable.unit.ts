@@ -1,4 +1,12 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
+import {
+	mediaAvailableLineResponseFactory,
+	mediaBoardResponseFactory,
+	mediaExternalToolElementResponseFactory,
+	mediaLineResponseFactory,
+	mockApi,
+	mockApiResponse,
+} from "@@/tests/test-utils";
 import * as serverApi from "@api-server";
 import {
 	BoardLayout,
@@ -11,14 +19,6 @@ import {
 	MoveElementBodyParams,
 	RenameBodyParams,
 } from "@api-server";
-import {
-	mediaAvailableLineResponseFactory,
-	mediaBoardResponseFactory,
-	mediaExternalToolElementResponseFactory,
-	mediaLineResponseFactory,
-	mockApi,
-	mockApiResponse,
-} from "@@/tests/test-utils";
 import { Mocked } from "vitest";
 
 describe("mediaBoardApi.composable", () => {

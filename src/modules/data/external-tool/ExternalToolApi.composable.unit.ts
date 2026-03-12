@@ -1,13 +1,8 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import * as serverApi from "@api-server";
-import {
-	ContextExternalToolBodyParams,
-	LaunchType,
-	ToolContextType,
-	ToolLaunchRequestResponse,
-} from "@api-server";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { mockApi, mockApiResponse, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { ContextExternalToolBodyParams, LaunchType, ToolContextType, ToolLaunchRequestResponse } from "@api-server";
 import { Mocked } from "vitest";
 
 describe("ExternalToolApi.composable", () => {

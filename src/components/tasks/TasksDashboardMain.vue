@@ -81,8 +81,8 @@
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { Permission, RoleName } from "@api-server";
 import { COPY_MODULE_KEY } from "@/utils/inject";
+import { Permission, RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import {
 	mdiArchiveOutline,

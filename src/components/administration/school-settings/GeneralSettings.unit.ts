@@ -1,5 +1,4 @@
 import GeneralSettings from "./GeneralSettings.vue";
-import { CountyResponse, FederalStateResponse, LanguageType, SchoolSystemResponse } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { toBase64 } from "@/utils/fileHelper";
@@ -7,6 +6,7 @@ import { createTestEnvStore, expectNotification, schoolFactory } from "@@/tests/
 import { schoolYearResponseFactory } from "@@/tests/test-utils/factory/schoolYearResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { CountyResponse, FederalStateResponse, LanguageType, SchoolSystemResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

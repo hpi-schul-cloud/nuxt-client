@@ -1,7 +1,6 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolConfigurationState } from "./contextExternalToolConfigurationState.composable";
 import { ContextExternalToolConfigurationTemplate } from "./types";
-import { ToolContextType } from "@api-server";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
@@ -9,6 +8,7 @@ import {
 	contextExternalToolConfigurationTemplateFactory,
 	mockComposable,
 } from "@@/tests/test-utils";
+import { ToolContextType } from "@api-server";
 import { Mocked } from "vitest";
 
 vi.mock("@data-external-tool/contextExternalToolApi.composable");

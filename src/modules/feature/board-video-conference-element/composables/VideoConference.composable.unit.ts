@@ -1,4 +1,7 @@
 import { useVideoConference } from "./VideoConference.composable";
+import { VideoConferenceState } from "@/store/types/video-conference";
+import { mockApi } from "@@/tests/test-utils/mockApiFactory";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import * as serverApi from "@api-server";
 import {
 	VideoConferenceInfoResponse,
@@ -6,9 +9,6 @@ import {
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
 } from "@api-server";
-import { VideoConferenceState } from "@/store/types/video-conference";
-import { mockApi } from "@@/tests/test-utils/mockApiFactory";
-import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { Mocked } from "vitest";
 
 let videoConferenceApi: Mocked<serverApi.VideoConferenceApiInterface>;

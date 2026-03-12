@@ -1,4 +1,6 @@
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
+import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
+import { ExternalToolMapper } from "@/store/external-tool/mapper";
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,
@@ -7,8 +9,6 @@ import {
 	ContextExternalToolResponseContextType,
 	ToolContextType,
 } from "@api-server";
-import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
-import { ExternalToolMapper } from "@/store/external-tool/mapper";
 
 export const ToolContextMapping: Record<ContextExternalToolResponseContextType, ToolContextType> = {
 	[ContextExternalToolResponseContextType.COURSE]: ToolContextType.COURSE,

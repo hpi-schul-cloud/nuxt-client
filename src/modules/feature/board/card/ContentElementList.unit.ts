@@ -1,8 +1,8 @@
 import ContentElementList from "./ContentElementList.vue";
-import { ContentElementType } from "@api-server";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ContentElementType } from "@api-server";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";

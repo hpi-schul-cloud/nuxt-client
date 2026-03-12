@@ -70,11 +70,11 @@
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import { Permission } from "@api-server";
 import { School } from "@/store/types/schools";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";

@@ -1,4 +1,3 @@
-import * as serverApi from "@api-server";
 import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
@@ -9,6 +8,7 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import * as serverApi from "@api-server";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";

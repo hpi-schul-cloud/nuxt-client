@@ -1,6 +1,5 @@
 import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -13,6 +12,7 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";

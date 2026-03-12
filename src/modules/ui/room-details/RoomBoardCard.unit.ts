@@ -1,7 +1,7 @@
 import RoomBoardCard from "./RoomBoardCard.vue";
-import { BoardLayout, ConfigResponse, ImportUserResponseRoleNames } from "@api-server";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout, ConfigResponse, ImportUserResponseRoleNames } from "@api-server";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeAll } from "vitest";

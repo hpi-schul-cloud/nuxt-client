@@ -1,7 +1,7 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import { RoleName } from "@api-server";
 import { groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName } from "@api-server";
 import { GroupListFilter, useGroupListState } from "@data-group";
 import { mount } from "@vue/test-utils";
 import { Mocked } from "vitest";

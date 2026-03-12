@@ -1,6 +1,6 @@
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
-import { ShareTokenBodyParamsParentType } from "@api-server";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ShareTokenBodyParamsParentType } from "@api-server";
 import { mount } from "@vue/test-utils";
 
 describe("@/components/share/ShareModalOptionsForm", () => {

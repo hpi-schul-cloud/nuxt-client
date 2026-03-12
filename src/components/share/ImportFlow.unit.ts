@@ -3,14 +3,6 @@ import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
-import {
-	BoardExternalReferenceType,
-	CopyApiResponse,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
-	ShareTokenBodyParamsParentType,
-	ShareTokenInfoResponseParentType,
-} from "@api-server";
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
@@ -24,6 +16,14 @@ import {
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import {
+	BoardExternalReferenceType,
+	CopyApiResponse,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
+	ShareTokenBodyParamsParentType,
+	ShareTokenInfoResponseParentType,
+} from "@api-server";
 import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";

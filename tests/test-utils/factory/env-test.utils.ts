@@ -1,6 +1,6 @@
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { FilesStorageConfigResponse } from "@api-file-storage";
 import { ConfigResponse } from "@api-server";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { Factory } from "fishery";
 import { Pinia } from "pinia";

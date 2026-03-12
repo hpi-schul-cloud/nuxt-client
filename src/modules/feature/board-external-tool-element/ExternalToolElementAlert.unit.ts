@@ -1,8 +1,8 @@
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import { Permission, RoleName } from "@api-server";
 import { BusinessError } from "@/store/types/commons";
 import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardAllowedOperations } from "@data-board";
 import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";

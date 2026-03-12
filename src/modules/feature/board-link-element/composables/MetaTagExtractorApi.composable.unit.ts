@@ -1,8 +1,8 @@
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
-import * as serverApi from "@api-server";
-import { MetaDataEntityType, MetaTagExtractorResponse } from "@api-server";
 import { mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import * as serverApi from "@api-server";
+import { MetaDataEntityType, MetaTagExtractorResponse } from "@api-server";
 import { Mocked } from "vitest";
 
 describe("useMetaTagExtractorApi", () => {

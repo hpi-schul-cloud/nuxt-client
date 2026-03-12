@@ -1,7 +1,7 @@
 import MediaShelfPage from "./MediaShelf.page.vue";
-import { BoardLayout } from "@api-server";
 import { mediaAvailableLineResponseFactory, mediaBoardResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";

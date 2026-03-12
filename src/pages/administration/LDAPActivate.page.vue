@@ -149,11 +149,11 @@
 
 <script>
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { SchulcloudTheme } from "@api-server";
 import { schoolsModule } from "@/store";
 import { unchangedPassword } from "@/utils/ldapConstants";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountEye,

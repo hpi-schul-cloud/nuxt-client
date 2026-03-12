@@ -1,5 +1,4 @@
 import ChangeRole from "./ChangeRole.vue";
-import { RoleName } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStoreWithUser, mockedPiniaStoreTyping, roomFactory, schoolFactory } from "@@/tests/test-utils";
@@ -12,6 +11,7 @@ import {
 } from "@@/tests/test-utils/factory/room/roomMembersFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

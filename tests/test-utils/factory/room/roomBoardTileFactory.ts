@@ -1,5 +1,5 @@
-import { BoardLayout } from "@api-server";
 import { RoomBoardItem } from "@/types/room/Room";
+import { BoardLayout } from "@api-server";
 import { Factory } from "fishery";
 
 export const roomBoardGridItemFactory = Factory.define<RoomBoardItem>(({ sequence }) => ({

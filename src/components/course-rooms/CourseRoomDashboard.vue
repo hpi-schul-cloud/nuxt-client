@@ -178,15 +178,15 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import { courseRoomDetailsModule } from "@/store";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardElementResponseType,
 	BoardLayout,
 	ImportUserResponseRoleNames,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
-import { courseRoomDetailsModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
-import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";

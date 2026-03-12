@@ -61,13 +61,13 @@ import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import {
 	BoardLayout,
 	MediaAvailableLineElementResponse,
 	MediaAvailableLineResponse,
 	MediaBoardColors,
 } from "@api-server";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash-es";

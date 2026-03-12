@@ -1,5 +1,4 @@
 import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
-import { RoomItemResponseAllowedOperations } from "@api-server";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -11,6 +10,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { useRoomMembersStore } from "@data-room";
 import { Members, MembersTable } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";

@@ -1,8 +1,8 @@
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
-import { CourseInfoDataResponse, CourseSortProps, CourseStatus } from "@api-server";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus } from "@api-server";
 import { notifyError } from "@data-app";
 import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";

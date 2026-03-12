@@ -1,7 +1,7 @@
 import Consent from "./Consent.vue";
-import { LanguageType, SchulcloudTheme } from "@api-server";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType, SchulcloudTheme } from "@api-server";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { VueWrapper } from "@vue/test-utils";

@@ -1,5 +1,9 @@
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { SchoolExternalTool } from "@/store/external-tool";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	ExternalToolMediumStatus,
 	SchoolExternalToolMediumResponse,
@@ -7,10 +11,6 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolContextType,
 } from "@api-server";
-import { SchoolExternalTool } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {

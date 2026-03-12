@@ -66,9 +66,9 @@
 <script setup lang="ts">
 import { useCardDialogData } from "./card-dialog-composable";
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { ShareTokenInfoResponse } from "@api-server";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ShareTokenInfoResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { InfoAlert, WarningAlert } from "@ui-alert";

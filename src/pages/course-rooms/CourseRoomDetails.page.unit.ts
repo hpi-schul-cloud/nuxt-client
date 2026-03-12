@@ -1,15 +1,6 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
-import {
-	BoardElementResponse,
-	BoardElementResponseType as BoardTypes,
-	CopyApiResponseStatus,
-	CopyApiResponseType,
-	ImportUserResponseRoleNames,
-	Permission,
-	ShareTokenBodyParamsParentType,
-} from "@api-server";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -23,6 +14,15 @@ import {
 import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	BoardElementResponse,
+	BoardElementResponseType as BoardTypes,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
+	ImportUserResponseRoleNames,
+	Permission,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";

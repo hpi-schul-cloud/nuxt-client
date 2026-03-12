@@ -1,5 +1,5 @@
-import { SchoolFeature } from "@api-server";
 import { School } from "@/store/types/schools";
+import { SchoolFeature } from "@api-server";
 
 export const mockSchool: School = {
 	id: "mockSchoolId",

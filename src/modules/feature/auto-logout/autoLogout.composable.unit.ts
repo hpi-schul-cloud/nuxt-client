@@ -1,5 +1,4 @@
 import { useAutoLogout } from "./autoLogout.composable";
-import { RoleName } from "@api-server";
 import { $axios } from "@/utils/api";
 import {
 	createTestAppStoreWithRole,
@@ -7,6 +6,7 @@ import {
 	mockBroadcastChannel,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { RoleName } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";

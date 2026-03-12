@@ -7,7 +7,6 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { BoardLayout, MoveCardResponse } from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	boardResponseFactory,
@@ -17,6 +16,7 @@ import {
 	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { BoardLayout, MoveCardResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useForceRender, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";

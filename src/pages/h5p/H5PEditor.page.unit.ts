@@ -1,7 +1,6 @@
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { H5PContentParentType, H5PSaveResponse } from "@api-h5p";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	apiValidationResponseErrorFactory,
@@ -10,6 +9,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { H5PContentParentType, H5PSaveResponse } from "@api-h5p";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";

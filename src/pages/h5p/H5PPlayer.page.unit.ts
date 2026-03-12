@@ -1,9 +1,9 @@
 import H5pPlayerPage from "./H5PPlayer.page.vue";
 import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
-import { H5PContentParentType } from "@api-h5p";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { H5PContentParentType } from "@api-h5p";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

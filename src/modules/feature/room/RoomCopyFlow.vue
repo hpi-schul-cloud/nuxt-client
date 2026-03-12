@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
-import { CopyApiResponseStatus } from "@api-server";
 import { RoomDetails } from "@/types/room/Room";
+import { CopyApiResponseStatus } from "@api-server";
 import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { nextTick, onMounted, PropType, ref } from "vue";

@@ -1,8 +1,8 @@
 import Topbar from "./Topbar.vue";
-import { RoleName, SchulcloudTheme } from "@api-server";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName, SchulcloudTheme } from "@api-server";
 import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

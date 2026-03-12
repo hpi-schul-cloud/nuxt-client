@@ -4,15 +4,6 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
-import {
-	BoardExternalReferenceType,
-	BoardLayout,
-	BoardResponseAllowedOperations,
-	ConfigResponse,
-	CopyApiResponse,
-	CopyApiResponseType,
-	ShareTokenBodyParamsParentType,
-} from "@api-server";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -29,6 +20,15 @@ import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/t
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	BoardExternalReferenceType,
+	BoardLayout,
+	BoardResponseAllowedOperations,
+	ConfigResponse,
+	CopyApiResponse,
+	CopyApiResponseType,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardInactivity,

@@ -7,7 +7,6 @@ import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
-import { BoardResponseAllowedOperations } from "@api-server";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
@@ -20,6 +19,7 @@ import {
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardResponseAllowedOperations } from "@api-server";
 import * as BoardApi from "@data-board";
 import { useBoardAllowedOperations, useBoardStore } from "@data-board";
 import * as FileStorageApi from "@data-file";

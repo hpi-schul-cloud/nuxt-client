@@ -25,8 +25,8 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import { Permission } from "@api-server";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";

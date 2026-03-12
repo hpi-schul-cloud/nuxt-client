@@ -1,8 +1,8 @@
 import RoomLessonCard from "./RoomLessonCard.vue";
 import { LessonData } from "./types";
-import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeAll } from "vitest";

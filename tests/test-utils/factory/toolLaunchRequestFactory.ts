@@ -1,15 +1,10 @@
+import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { LaunchType } from "@api-server";
-import {
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
 import { Factory } from "fishery";
 
-export const toolLaunchRequestFactory = Factory.define<ToolLaunchRequest>(
-	() => ({
-		method: ToolLaunchRequestMethodEnum.Get,
-		payload: '{ "key": "value" }',
-		url: "https://example.com/tool-launch",
-		launchType: LaunchType.BASIC,
-	})
-);
+export const toolLaunchRequestFactory = Factory.define<ToolLaunchRequest>(() => ({
+	method: ToolLaunchRequestMethodEnum.Get,
+	payload: '{ "key": "value" }',
+	url: "https://example.com/tool-launch",
+	launchType: LaunchType.BASIC,
+}));

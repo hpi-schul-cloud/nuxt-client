@@ -1,5 +1,4 @@
 import { useUsers } from "./users.composable";
-import { RoleName } from "@api-server";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
@@ -7,6 +6,7 @@ import {
 	userCreationDataFactory,
 	userResponseFactory,
 } from "@@/tests/test-utils";
+import { RoleName } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";

@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { RichTextElementResponse } from "@api-server";
 import { injectStrict } from "@/utils/inject";
+import { RichTextElementResponse } from "@api-server";
 import { useContentElementState } from "@data-board";
 import { InlineEditor } from "@feature-editor";
 import { useViewportOffsetTop } from "@ui-layout";

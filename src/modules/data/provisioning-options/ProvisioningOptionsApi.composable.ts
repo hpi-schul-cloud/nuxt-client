@@ -1,7 +1,7 @@
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
-import { SchoolApiFactory, SchulConneXProvisioningOptionsResponse } from "@api-server";
 import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { SchoolApiFactory, SchulConneXProvisioningOptionsResponse } from "@api-server";
 import { AxiosResponse } from "axios";
 
 export const useProvisioningOptionsApi = () => {

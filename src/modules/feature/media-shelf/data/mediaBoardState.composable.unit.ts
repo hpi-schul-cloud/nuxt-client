@@ -1,6 +1,5 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
-import { BoardLayout, MediaBoardColors } from "@api-server";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
@@ -8,6 +7,7 @@ import {
 	mediaLineResponseFactory,
 	mockComposable,
 } from "@@/tests/test-utils";
+import { BoardLayout, MediaBoardColors } from "@api-server";
 import { ApiErrorHandler, useErrorHandler } from "@util-error-handling";
 import { Mocked } from "vitest";
 

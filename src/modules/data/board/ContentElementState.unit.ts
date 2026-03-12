@@ -1,6 +1,6 @@
 import { useContentElementState } from "./ContentElementState.composable";
-import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";

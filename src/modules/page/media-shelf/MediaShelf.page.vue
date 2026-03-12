@@ -61,8 +61,8 @@
 </template>
 
 <script setup lang="ts">
-import { BoardLayout } from "@api-server";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { BoardLayout } from "@api-server";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { mdiViewGridOutline } from "@icons/material";
 import { EmptyState, MediaShelfEmptyStateSvg } from "@ui-empty-state";

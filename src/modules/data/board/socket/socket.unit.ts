@@ -1,6 +1,4 @@
 import { resetSocketStateForTesting } from "./socket";
-import { BoardErrorReportApiFactory } from "@api-server";
-import * as serverApi from "@api-server";
 import {
 	boardResponseFactory,
 	expectNotification,
@@ -9,6 +7,8 @@ import {
 	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { BoardErrorReportApiFactory } from "@api-server";
+import * as serverApi from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";

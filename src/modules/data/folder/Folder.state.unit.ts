@@ -1,5 +1,4 @@
 import { useFolderState } from "./Folder.state";
-import * as serverApi from "@api-server";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -9,6 +8,7 @@ import {
 	mockApi,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosPromise } from "axios";
