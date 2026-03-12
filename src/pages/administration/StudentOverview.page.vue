@@ -40,7 +40,9 @@
 			@update:rows-per-page="onUpdateRowsPerPage"
 		>
 			<template #datacolumn-birthday="{ data }">
-				<span class="text-content">{{ printDate(data) }}</span>
+				<span class="text-content">
+					{{ formatUtc(data, "date") }}
+				</span>
 			</template>
 			<template #datacolumn-classes="{ data }">
 				{{ (data || []).join(", ") }}
@@ -48,13 +50,13 @@
 			<template #headcolumn-consent />
 			<template #columnlabel-consent />
 			<template #datacolumn-createdAt="{ data }">
-				<span class="text-content">{{ printDate(data) }}</span>
+				<span class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-lastLoginSystemChange="{ data }">
-				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-outdatedSince="{ data }">
-				<span v-if="data" class="text-content">{{ printDate(data) }}</span>
+				<span v-if="data" class="text-content">{{ formatUtc(data, "date") }}</span>
 			</template>
 			<template #datacolumn-consentStatus="{ data: status }">
 				<span class="text-content">
@@ -99,9 +101,9 @@ import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import { FilterQuery, User } from "@/components/administration/data-filter/types";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
-import { printDate } from "@/plugins/datetime";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
+import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";

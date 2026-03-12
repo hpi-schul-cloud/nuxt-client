@@ -1,6 +1,11 @@
 import { useI18nGlobal } from "@/plugins/i18n";
 import * as serverApi from "@/serverApi/v3/api";
-import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName, SchoolUserListResponse } from "@/serverApi/v3/api";
+import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
+	RoleName,
+	RoomMemberListResponse,
+	SchoolUserListResponse,
+} from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -9,7 +14,9 @@ import {
 	axiosErrorFactory,
 	createTestAppStore,
 	expectNotification,
+	mockApi,
 	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
@@ -19,21 +26,20 @@ import {
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ExternalMemberCheckStatus, RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock, MockInstance, vi } from "vitest";
+import { Mock, Mocked, MockInstance, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("useRoomMembers", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let schoolApiMock: Mocked<serverApi.SchoolApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 	let consoleErrorSpy: MockInstance;
 	const ownSchool = {
 		id: "school-id",
@@ -51,9 +57,9 @@ describe("useRoomMembers", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		schoolApiMock = mockApi<serverApi.SchoolApiInterface>();
+		axiosMock = mockAxiosInstance();
 		consoleErrorSpy = vi.spyOn(logger, "error").mockImplementation(vi.fn());
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
@@ -489,13 +495,12 @@ describe("useRoomMembers", () => {
 					mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
 				);
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
-					mockApiResponse({
+					mockApiResponse<RoomMemberListResponse>({
 						data: {
 							data: [
 								{
 									...firstPotentialMember,
-									displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-									displaySchoolRole: "common.labels.teacher.neutral",
+									roomRoleName: RoleName.Roomadmin,
 								},
 							],
 						},
@@ -531,13 +536,12 @@ describe("useRoomMembers", () => {
 				});
 				const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
-					mockApiResponse({
+					mockApiResponse<serverApi.RoomMemberListResponse>({
 						data: {
 							data: [
 								{
 									...firstPotentialMember,
-									displayRoomRole: "pages.rooms.members.roomPermissions.admin",
-									displaySchoolRole: "common.labels.teacher.neutral",
+									roomRoleName: RoleName.Roomviewer,
 								},
 							],
 						},

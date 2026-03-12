@@ -4,24 +4,31 @@ import { useCourseList } from "./courseList.composable";
 import { CourseInfoDataResponse, CourseInfoListResponse, CourseSortProps, CourseStatus } from "@/serverApi/v3";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory, expectNotification, i18nMock, mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import {
+	axiosErrorFactory,
+	expectNotification,
+	i18nMock,
+	mockApiResponse,
+	mockComposable,
+	mountComposable,
+} from "@@/tests/test-utils";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("./courseApi.composable");
 vi.mock("./courseInfoApi.composable");
 
 describe("courseList.composable", () => {
-	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
-	let useCourseInfoApiMock: DeepMocked<ReturnType<typeof useCourseInfoApi>>;
+	let useCourseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
+	let useCourseInfoApiMock: Mocked<ReturnType<typeof useCourseInfoApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>();
-		useCourseInfoApiMock = createMock<ReturnType<typeof useCourseInfoApi>>();
+		useCourseApiMock = mockComposable(useCourseApi);
+		useCourseInfoApiMock = mockComposable(useCourseInfoApi);
 
 		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
 		vi.mocked(useCourseInfoApi).mockReturnValue(useCourseInfoApiMock);

@@ -25,7 +25,7 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -40,15 +40,15 @@ import {
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -66,25 +66,19 @@ const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformat
 vi.mock("@/composables/copy");
 const mockUseCopy = vi.mocked(useCopy);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 describe("Board", () => {
-	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
-	let router: DeepMocked<Router>;
-	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof useBoardInactivity>>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	const hash = "";
+	let mockedCopyCalls: Mocked<ReturnType<typeof useCopy>>;
+	let router: RouterMock;
+	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
 
-		mockedCopyCalls = createMock<ReturnType<typeof useCopy>>();
+		mockedCopyCalls = mockComposable(useCopy);
 		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
@@ -114,15 +108,10 @@ describe("Board", () => {
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
-		route = createMock<ReturnType<typeof useRoute>>({
-			hash,
-		});
-		useRouteMock.mockReturnValue(route);
+		router = createRouterMock();
+		injectRouterMock(router);
 
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
-		mockedUsePageInactivity = createMock<ReturnType<typeof useBoardInactivity>>();
+		mockedUsePageInactivity = mockComposable(useBoardInactivity);
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
@@ -154,10 +143,10 @@ describe("Board", () => {
 		const copyResultId = "42";
 		const copyModule = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
-			getCopyResult: createMock<CopyApiResponse>({
+			getCopyResult: {
 				id: copyResultId,
 				type: CopyApiResponseTypeEnum.Board,
-			}),
+			} as CopyApiResponse,
 		});
 
 		const shareModule = createModuleMocks(ShareModule);
@@ -315,13 +304,12 @@ describe("Board", () => {
 		describe("when the url has a hash", () => {
 			const setup2 = () => {
 				Object.defineProperty(globalThis, "location", {
-					get: () =>
-						createMock<Location>({
-							hash: "#card-12345",
-						}),
+					get: () => ({
+						hash: "#card-12345",
+					}),
 				});
 
-				const domElementMock = createMock<HTMLElement>();
+				const domElementMock = mock<HTMLElement>();
 				const querySelectorSpy = vi.spyOn(document, "querySelector");
 				querySelectorSpy.mockReturnValueOnce(domElementMock);
 

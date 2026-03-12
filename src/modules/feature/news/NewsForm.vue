@@ -32,25 +32,22 @@
 			</VMessages>
 		</div>
 
-		<div>
-			<p class="mt-13">
-				{{ t("components.organisms.FormNews.label.planned_publish") }}
-			</p>
-			<DatePicker
-				:date="newsDate"
-				:label="t('common.labels.date')"
-				data-testid="news_date"
-				@update:date="onUpdateDate"
-			/>
-			<VTextField
-				v-model="newsTime"
-				v-time-input-mask
-				:prepend-inner-icon="mdiClockOutline"
-				:label="t('common.labels.time')"
-				:rules="[isValidTimeFormat()]"
-				data-testid="news_time"
-			/>
-		</div>
+		<p class="mt-13">
+			{{ t("components.organisms.FormNews.label.planned_publish") }}
+		</p>
+
+		<DatePicker
+			:date="newsDate"
+			:label="t('common.labels.date')"
+			data-testid="news_date"
+			@update:date="newsDate = $event"
+		/>
+		<TimePicker
+			:time="newsTime"
+			:label="t('common.labels.time')"
+			data-testid="news_time"
+			@update:time="newsTime = $event"
+		/>
 
 		<div class="d-flex ga-3 mt-2">
 			<VSpacer />
@@ -74,18 +71,15 @@
 </template>
 
 <script setup lang="ts">
-import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
+import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
-import { mdiClockOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
-import { DatePicker } from "@ui-date-time-picker";
-import { timeInputMask as vTimeInputMask } from "@util-input-masks";
-import { isRequired, isValidTimeFormat, useOpeningTagValidator } from "@util-validators";
-import dayjs, { Dayjs } from "dayjs";
+import { DatePicker, TimePicker } from "@ui-date-time-picker";
+import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { VMessages } from "vuetify/components";
@@ -118,8 +112,8 @@ const { t } = useI18n();
 const showDialogWarning = ref(false);
 const newsTitle = ref("");
 const newsContent = ref("");
-const newsDate = ref("");
-const newsTime = ref("");
+const newsDate = ref<string | undefined>("");
+const newsTime = ref<string | undefined>("");
 const newsForm = useTemplateRef("newsForm");
 const classicEditor = useTemplateRef("classicEditor");
 const shouldNewsContentValidation = ref(false);
@@ -130,7 +124,8 @@ watch(
 		newsTitle.value = newTitle ?? "";
 		newsContent.value = newContent ?? "";
 		if (newDisplayAt) {
-			[newsDate.value, newsTime.value] = createInputDateTime(newDisplayAt);
+			newsDate.value = toIsoDate(formatUtc(newDisplayAt, "date"));
+			newsTime.value = formatUtc(newDisplayAt, "time");
 		} else {
 			newsDate.value = "";
 			newsTime.value = "";
@@ -156,15 +151,6 @@ watch(
 	{ deep: true }
 );
 
-const getDisplayAt = () => {
-	if (!newsDate.value || !newsTime.value) {
-		return undefined;
-	}
-	const dateTimeCombined = fromInputDateTime(newsDate.value, newsTime.value);
-	const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
-	return dateTimeCombinedString.toISOString();
-};
-
 const onSave = async () => {
 	shouldNewsContentValidation.value = true;
 	const isValid = await isValidOrFocusFirstInvalidInput(newsForm);
@@ -173,11 +159,11 @@ const onSave = async () => {
 		classicEditor.value?.focus();
 		return;
 	}
-	emit("save", { title: newsTitle.value, content: newsContent.value, displayAt: getDisplayAt() });
-};
-
-const onUpdateDate = (newDate: string | null) => {
-	newsDate.value = newDate ? dayjs(newDate).format("YYYY-MM-DD") : "";
+	emit("save", {
+		title: newsTitle.value,
+		content: newsContent.value,
+		displayAt: toCombinedDateTimeIso(newsDate.value, newsTime.value),
+	});
 };
 
 const onDelete = async () => {

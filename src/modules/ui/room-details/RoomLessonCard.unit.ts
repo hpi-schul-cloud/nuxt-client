@@ -3,7 +3,6 @@ import { LessonData } from "./types";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeAll } from "vitest";
@@ -106,12 +105,11 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				dragInProgress: true,
 			});
 
+			const locationSpy = vi.fn();
 			Object.defineProperty(window, "location", {
 				set: vi.fn(),
-				get: () => createMock<Location>(),
+				get: () => ({}),
 			});
-
-			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const lessonCard = wrapper.find(".lesson-card");
 			await lessonCard.trigger("click");

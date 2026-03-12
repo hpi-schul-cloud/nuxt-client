@@ -3,31 +3,25 @@ import VideoConferenceContentElementCreate from "./VideoConferenceContentElement
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { RoleName, VideoConferenceElementContent } from "@/serverApi/v3/api";
 import { VideoConferenceState } from "@/store/types/video-conference";
-import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFeatures, useBoardFocusHandler, useContentElementState } from "@data-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@data-board/ContentElementState.composable");
 vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("../composables/VideoConference.composable");
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 vi.mock("@data-board/BoardFeatures.composable");
 vi.mocked(useBoardFeatures).mockImplementation(() => ({
@@ -41,19 +35,13 @@ let defaultElement = videoConferenceElementResponseFactory.build();
 describe("VideoConferenceContentElement", () => {
 	window.open = vi.fn();
 
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let useBoardFocusHandlerMock: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
+	let useBoardFocusHandlerMock: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 
 	beforeEach(() => {
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-		useRouteMock.mockReturnValue({ params: { id: "room-id" } });
+		const { router } = injectRouterMock(createRouterMock());
+		router.setParams({ id: "room-id" });
 
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
-		useBoardFocusHandlerMock = createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useBoardFocusHandlerMock = mockComposable(useBoardFocusHandler);
 		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 
 		defaultElement = videoConferenceElementResponseFactory.build();
@@ -114,23 +102,23 @@ describe("VideoConferenceContentElement", () => {
 			computedElement: computed(() => element),
 		});
 
-		const useVideoConferenceMock: DeepMocked<ReturnType<typeof useVideoConference>> =
-			createMock<ReturnType<typeof useVideoConference>>();
+		const useVideoConferenceMock = mockComposable(useVideoConference, {
+			videoConferenceInfo: ref({
+				state: VideoConferenceState.NOT_STARTED,
+				options: {
+					everyAttendeeJoinsMuted: false,
+					everybodyJoinsAsModerator: false,
+					moderatorMustApproveJoinRequests: true,
+				},
+			}),
+			loading: ref(false),
+			error: ref(error),
+			isRunning: computed(() => isRunning),
+			isWaitingRoomActive: computed(() => true),
+			joinVideoConference: vi.fn().mockResolvedValue("https://example.com"),
+		});
 
 		vi.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
-
-		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(vi.fn());
-		useVideoConferenceMock.joinVideoConference.mockImplementation(() => Promise.resolve("https://example.com"));
-		useVideoConferenceMock.videoConferenceInfo = ref({
-			state: VideoConferenceState.NOT_STARTED,
-			options: {
-				everyAttendeeJoinsMuted: false,
-				everybodyJoinsAsModerator: false,
-				moderatorMustApproveJoinRequests: true,
-			},
-		});
-		useVideoConferenceMock.isRunning = computed(() => isRunning);
-		useVideoConferenceMock.error = ref(error);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {

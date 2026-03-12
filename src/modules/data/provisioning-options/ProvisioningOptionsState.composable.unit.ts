@@ -8,24 +8,24 @@ import {
 	axiosErrorFactory,
 	expectNotification,
 	i18nMock,
+	mockComposable,
 	mountComposable,
 	provisioningOptionsDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useNotificationStore } from "@data-app";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { expect } from "vitest";
+import { expect, Mocked } from "vitest";
 
 vi.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
 describe("ProvisioningOptionsState.composable", () => {
-	let useProvisioningOptionsApiMock: DeepMocked<ReturnType<typeof useProvisioningOptionsApi>>;
+	let useProvisioningOptionsApiMock: Mocked<ReturnType<typeof useProvisioningOptionsApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useProvisioningOptionsApiMock = createMock<ReturnType<typeof useProvisioningOptionsApi>>();
+		useProvisioningOptionsApiMock = mockComposable(useProvisioningOptionsApi);
 
 		vi.mocked(useProvisioningOptionsApi).mockReturnValue(useProvisioningOptionsApiMock);
 	});

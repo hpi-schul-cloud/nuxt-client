@@ -3,18 +3,13 @@ import FileInteractionHandler from "./FileInteractionHandler.vue";
 import { FilePreviewStatus } from "@/types/file/File";
 import { createTestEnvStore, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useLightBox } from "@ui-light-box";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
-vi.mock("vue-router");
 vi.mock("@ui-light-box");
-
-const useRouterMock = <Mock>useRouter;
 
 describe("FileInteractionHandler", () => {
 	const setupMocks = () => {
@@ -26,8 +21,11 @@ describe("FileInteractionHandler", () => {
 			lightBoxOptions: ref(),
 		});
 
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(
+			createRouterMock({
+				routes: [{ path: "/collabora/:id", name: "collabora", component: { template: "<div />" } }],
+			})
+		);
 
 		return { useLightBoxMock };
 	};

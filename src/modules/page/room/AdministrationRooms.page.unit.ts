@@ -5,18 +5,10 @@ import { createTestEnvStore, mockedPiniaStoreTyping, schoolFactory } from "@@/te
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useAdministrationRoomStore } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouterMock = <Mock>useRouter;
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("AdministrationRooms.page", () => {
 	const ownSchool = {
@@ -41,8 +33,7 @@ describe("AdministrationRooms.page", () => {
 			FEATURE_ADMINISTRATE_ROOMS_ENABLED: options?.featureFlag ?? true,
 		});
 		const isEmptyList = options?.isEmptyList ?? false;
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
 
 		const wrapper = mount(AdministrationRoomsPage, {
 			global: {

@@ -10,23 +10,23 @@ import * as serverApi from "@/serverApi/v3/api";
 import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosPromise } from "axios";
+import { Mocked } from "vitest";
 
-let boardApi: DeepMocked<serverApi.BoardApiInterface>;
-let columnApi: DeepMocked<serverApi.BoardColumnApiInterface>;
-let cardApi: DeepMocked<serverApi.BoardCardApiInterface>;
-let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
-let roomsApi: DeepMocked<serverApi.CourseRoomsApiInterface>;
+let boardApi: Mocked<serverApi.BoardApiInterface>;
+let columnApi: Mocked<serverApi.BoardColumnApiInterface>;
+let cardApi: Mocked<serverApi.BoardCardApiInterface>;
+let elementApi: Mocked<serverApi.BoardElementApiInterface>;
+let roomsApi: Mocked<serverApi.CourseRoomsApiInterface>;
 
 describe("BoardApi.composable", () => {
 	beforeEach(() => {
-		boardApi = createMock<serverApi.BoardApiInterface>();
-		columnApi = createMock<serverApi.BoardColumnApiInterface>();
-		cardApi = createMock<serverApi.BoardCardApiInterface>();
-		elementApi = createMock<serverApi.BoardElementApiInterface>();
-		roomsApi = createMock<serverApi.CourseRoomsApiInterface>();
+		boardApi = mockApi<serverApi.BoardApiInterface>();
+		columnApi = mockApi<serverApi.BoardColumnApiInterface>();
+		cardApi = mockApi<serverApi.BoardCardApiInterface>();
+		elementApi = mockApi<serverApi.BoardElementApiInterface>();
+		roomsApi = mockApi<serverApi.CourseRoomsApiInterface>();
 
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		vi.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
@@ -349,16 +349,14 @@ describe("BoardApi.composable", () => {
 		it("should call columnControllerCreateCard api", async () => {
 			const { createCardCall } = useBoardApi();
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<CardResponse>({
 				status: 200,
 				data: {
 					id: "my-little-fake-id",
-				},
-			};
+				} as CardResponse,
+			});
 
-			columnApi.columnControllerCreateCard.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<CardResponse>
-			);
+			columnApi.columnControllerCreateCard.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			const payload = "column-id";
 			const INITIAL_ELEMENTS = {

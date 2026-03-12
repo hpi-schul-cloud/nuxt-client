@@ -6,9 +6,10 @@ import {
 	mediaBoardResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
+	mockComposable,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { ApiErrorHandler, useErrorHandler } from "@util-error-handling";
+import { Mocked } from "vitest";
 
 vi.mock("./mediaBoardApi.composable");
 vi.mock("@util-error-handling/ErrorHandler.composable");
@@ -22,12 +23,12 @@ vi.mock(
 );
 
 describe("mediaBoardState.composable", () => {
-	let mediaBoardApiMock: DeepMocked<ReturnType<typeof useMediaBoardApi>>;
-	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	let mediaBoardApiMock: Mocked<ReturnType<typeof useMediaBoardApi>>;
+	let useErrorHandlerMock: Mocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
-		mediaBoardApiMock = createMock<ReturnType<typeof useMediaBoardApi>>();
-		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>({
+		mediaBoardApiMock = mockComposable(useMediaBoardApi);
+		useErrorHandlerMock = mockComposable(useErrorHandler, {
 			notifyWithTemplate: vi.fn().mockReturnValue(() => {
 				Promise.resolve();
 			}),

@@ -5,12 +5,11 @@ import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions, termsOfUseFactory } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions, mockComposable, termsOfUseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
@@ -25,7 +24,7 @@ const useSchoolTermsOfUseMock = vi.mocked(useSchoolTermsOfUse);
 
 describe("SchoolTerms", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
-	let useSchoolTermsOfUseMockReturn: DeepMocked<ReturnType<typeof useSchoolTermsOfUse>>;
+	let useSchoolTermsOfUseMockReturn: Mocked<ReturnType<typeof useSchoolTermsOfUse>>;
 
 	const setup = (
 		options?: Partial<{ status: Status; permissions: Permission[]; termsOfUse: ConsentVersion | null }>
@@ -45,7 +44,7 @@ describe("SchoolTerms", () => {
 			getSchool: mockSchool,
 		});
 
-		useSchoolTermsOfUseMockReturn = createMock<ReturnType<typeof useSchoolTermsOfUse>>();
+		useSchoolTermsOfUseMockReturn = mockComposable(useSchoolTermsOfUse);
 		useSchoolTermsOfUseMock.mockReturnValue(useSchoolTermsOfUseMockReturn);
 
 		useSchoolTermsOfUseMockReturn.termsOfUse = ref(termsOfUse);

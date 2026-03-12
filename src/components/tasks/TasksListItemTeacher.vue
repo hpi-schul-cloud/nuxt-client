@@ -106,7 +106,7 @@
 
 <script>
 import TasksListItemMenu from "./TasksListItemMenu.vue";
-import { isToday, printDateFromStringUTC as dateFromUTC, printTimeFromStringUTC } from "@/plugins/datetime.js";
+import { formatUtc, isToday } from "@/utils/date-time.utils.ts";
 import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
@@ -158,21 +158,21 @@ export default {
 			if (this.isDraft) {
 				if (isToday(createdAt)) {
 					return labelText.concat(
-						` - ${this.$t("components.molecules.TaskItemMenu.labels.createdAt")} ${printTimeFromStringUTC(createdAt)}`
+						` - ${this.$t("components.molecules.TaskItemMenu.labels.createdAt")} ${formatUtc(createdAt, "time")}`
 					);
 				}
 
 				return labelText.concat(
-					` - ${this.$t("components.molecules.TaskItemMenu.labels.createdAt")} ${dateFromUTC(createdAt)}`
+					` - ${this.$t("components.molecules.TaskItemMenu.labels.createdAt")} ${formatUtc(createdAt, "dateYY")}`
 				);
 			}
 
 			if (this.isPlanned) {
-				return labelText.concat(` - ${this.$t("pages.tasks.labels.planned")} ${dateFromUTC(availableDate)}`);
+				return labelText.concat(` - ${this.$t("pages.tasks.labels.planned")} ${formatUtc(availableDate, "dateYY")}`);
 			}
 
 			if (dueDate) {
-				return labelText.concat(` - ${this.$t("pages.tasks.labels.due")} ${dateFromUTC(dueDate)}`);
+				return labelText.concat(` - ${this.$t("pages.tasks.labels.due")} ${formatUtc(dueDate, "dateYY")}`);
 			}
 
 			return labelText;

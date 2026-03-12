@@ -3,24 +3,24 @@ import * as serverApi from "@/serverApi/v3/api";
 import { RoomColor } from "@/serverApi/v3/api";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { apiResponseErrorFactory, mockApiResponse } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { apiResponseErrorFactory, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = vi.mocked(mapAxiosErrorToResponseError);
 
 describe("useRoomDetailsStore", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let boardApiMock: DeepMocked<serverApi.BoardApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let boardApiMock: Mocked<serverApi.BoardApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		boardApiMock = createMock<serverApi.BoardApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		boardApiMock = mockApi<serverApi.BoardApiInterface>();
+		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
@@ -62,7 +62,7 @@ describe("useRoomDetailsStore", () => {
 			it("should throw an error", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("test error"));
 
 				await expect(store.fetchRoom("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);
@@ -86,7 +86,7 @@ describe("useRoomDetailsStore", () => {
 			it("should set roomVariant to COURSE_ROOM", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("not found"));
 				mockErrorResponse({ code: 404 });
 
 				await store.fetchRoomAndBoards("room-id");
@@ -100,7 +100,7 @@ describe("useRoomDetailsStore", () => {
 			it("should set lockedRoomName to the error message", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("forbidden"));
 				mockErrorResponse({
 					code: 403,
 					type: "LOCKED_ROOM",
@@ -117,7 +117,7 @@ describe("useRoomDetailsStore", () => {
 			it("should throw an error", async () => {
 				const { store } = setup();
 				expect(store.isLoading).toBe(true);
-				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue();
+				roomApiMock.roomControllerGetRoomDetails.mockRejectedValue(new Error("test error"));
 
 				await expect(store.fetchRoomAndBoards("room-id")).rejects.toThrow();
 				expect(store.isLoading).toBe(false);

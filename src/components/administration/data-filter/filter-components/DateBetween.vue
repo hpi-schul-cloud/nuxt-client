@@ -7,7 +7,6 @@
 		data-testid="date-picker-from"
 		@update:date="onUpdateDate($event, '$gte')"
 	/>
-
 	<DatePicker
 		class="mr-2"
 		:date="dateSelection.$lte"
@@ -27,6 +26,7 @@
 <script setup lang="ts">
 import { DateSelection } from "../types";
 import FilterActionButtons from "./FilterActionButtons.vue";
+import { toEndOfDayIso } from "@/utils/date-time.utils";
 import { DatePicker } from "@ui-date-time-picker";
 import { onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -52,15 +52,9 @@ const dateSelection = ref<DateSelection>({
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const onUpdateDate = (date: string | null, fromUntil: "$gte" | "$lte") => {
-	if (date && fromUntil === "$lte") {
-		const lte = new Date(date);
-		// add one day to make the until date inclusive until 23:59:59
-		lte.setDate(lte.getDate() + 1);
-		lte.setTime(lte.getTime() - 1000);
-		date = lte.toISOString();
-	}
-	dateSelection.value[fromUntil] = date ?? "";
+const onUpdateDate = (isoDate: string | undefined, fromUntil: "$gte" | "$lte") => {
+	const adjustedDate = fromUntil === "$lte" && isoDate ? toEndOfDayIso(isoDate) : isoDate;
+	dateSelection.value[fromUntil] = adjustedDate ?? "";
 };
 
 const onUpdateFilter = () => {

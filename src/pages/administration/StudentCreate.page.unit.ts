@@ -1,29 +1,25 @@
 import StudentCreate from "./StudentCreate.page.vue";
-import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
 import { useUsers } from "@data-users";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
+import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { Mocked } from "vitest";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 vi.mock("@data-users");
 const useUsersMock = vi.mocked(useUsers);
 
 describe("students/new", () => {
-	let useUsersMockHandler: DeepMocked<ReturnType<typeof useUsers>>;
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
+	let useUsersMockHandler: Mocked<ReturnType<typeof useUsers>>;
+	injectRouterMock(createRouterMock());
 
 	beforeEach(() => {
-		useUsersMockHandler = createMock<ReturnType<typeof useUsers>>();
+		useUsersMockHandler = mockComposable(useUsers);
 		useUsersMock.mockReturnValue(useUsersMockHandler);
 		setActivePinia(createTestingPinia());
 		createTestAppStore();
@@ -48,7 +44,7 @@ describe("students/new", () => {
 			useUsersMockHandler.createUser = vi.fn().mockResolvedValue({ error: false, result: {} });
 			const { wrapper } = setup();
 
-			const testDate = new Date("2000-01-01T00:00:00.000Z");
+			const testDate = "2000-01-01";
 
 			const inputFirstName = wrapper.find('[data-testid="input_create-user_firstname"] input');
 			const inputLastName = wrapper.find('[data-testid="input_create-user_lastname"] input');
@@ -58,8 +54,8 @@ describe("students/new", () => {
 			await inputLastName.setValue("Fall");
 			await inputEmail.setValue("klara.fall@mail.de");
 
-			const inputBirthdayValue = wrapper.findComponent('[data-testid="input_create-student_birthdate"]');
-			inputBirthdayValue.setValue(testDate);
+			const datepicker = wrapper.findComponent(DatePicker);
+			datepicker.vm.$emit("update:date", testDate);
 
 			await wrapper.findComponent(VForm).trigger("submit.prevent");
 
@@ -67,7 +63,7 @@ describe("students/new", () => {
 				firstName: "Klara",
 				lastName: "Fall",
 				email: "klara.fall@mail.de",
-				birthday: testDate,
+				birthday: new Date(testDate),
 				roles: ["student"],
 				schoolId: useAppStore().school?.id,
 				sendRegistration: false,
@@ -76,7 +72,7 @@ describe("students/new", () => {
 			await flushPromises();
 
 			expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
-			expect(router.push).toHaveBeenCalledWith("/administration/students");
+			expect(getRouter().push).toHaveBeenCalledWith("/administration/students");
 		});
 
 		it("should set businessError to true if there is an error", async () => {
@@ -104,7 +100,7 @@ describe("students/new", () => {
 			const infoMessageAfter = wrapper.findComponent({ name: "InfoMessage" });
 			expect(infoMessageAfter.exists()).toBe(true);
 			expect(useUsersMockHandler.createUser).toHaveBeenCalled();
-			expect(router.push).not.toHaveBeenCalled();
+			expect(getRouter().push).not.toHaveBeenCalled();
 		});
 	});
 });

@@ -1,29 +1,24 @@
 import TeacherCreate from "./TeacherCreate.page.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { createTestAppStore } from "@@/tests/test-utils";
+import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useUsers } from "@data-users";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { Mocked } from "vitest";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 vi.mock("@data-users");
 const useUsersMock = vi.mocked(useUsers);
 
 describe("teachers/new", () => {
-	let useUsersMockHandler: DeepMocked<ReturnType<typeof useUsers>>;
-	const router = createMock<Router>();
-	useRouterMock.mockReturnValue(router);
+	let useUsersMockHandler: Mocked<ReturnType<typeof useUsers>>;
+	injectRouterMock(createRouterMock());
 
 	beforeEach(() => {
-		useUsersMockHandler = createMock<ReturnType<typeof useUsers>>();
+		useUsersMockHandler = mockComposable(useUsers);
 		useUsersMock.mockReturnValue(useUsersMockHandler);
 		setActivePinia(createTestingPinia());
 
@@ -70,7 +65,7 @@ describe("teachers/new", () => {
 
 			await flushPromises();
 			expect(useUsersMockHandler.createUser).toHaveBeenCalledWith(expectedPayload);
-			expect(router.push).toHaveBeenCalledWith("/administration/teachers");
+			expect(getRouter().push).toHaveBeenCalledWith("/administration/teachers");
 		});
 	});
 
@@ -95,6 +90,6 @@ describe("teachers/new", () => {
 		const infoMessageAfter = wrapper.findComponent(InfoMessage);
 		expect(infoMessageAfter.exists()).toBe(true);
 		expect(useUsersMockHandler.createUser).toHaveBeenCalled();
-		expect(router.push).not.toHaveBeenCalled();
+		expect(getRouter().push).not.toHaveBeenCalled();
 	});
 });

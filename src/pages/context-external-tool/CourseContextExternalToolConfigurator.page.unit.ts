@@ -6,27 +6,21 @@ import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { Router, useRouter } from "vue-router";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-
-const useRouterMock = <Mock>useRouter;
-const router = createMock<Router>();
-useRouterMock.mockReturnValue(router);
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 describe("CourseContextExternalToolConfigurator", () => {
+	let router: RouterMock;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		router = createRouterMock();
+		injectRouterMock(router);
 	});
 	afterEach(() => {
 		vi.clearAllMocks();

@@ -13,17 +13,18 @@ import {
 	boardResponseFactory,
 	cardResponseFactory,
 	columnResponseFactory,
+	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 } from "@@/tests/test-utils";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useForceRender, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { Mocked } from "vitest";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -40,39 +41,37 @@ const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
 }));
 
 describe("useBoardSocketApi", () => {
-	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
-	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
-	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSharedLastCreatedElementActions: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
+	let socketMock: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedBoardRestApiHandler: Mocked<ReturnType<typeof useBoardRestApi>>;
+	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
+	let mockedSharedLastCreatedElementActions: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
-		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
+		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
 
-		mockedBoardRestApiHandler = createMock<ReturnType<typeof useBoardRestApi>>();
+		mockedBoardRestApiHandler = mockComposable(useBoardRestApi);
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
 
-		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedSharedLastCreatedElementActions = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElementActions = mockComposable(useSharedLastCreatedElement);
 		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementActions);
-		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
+
+		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
+
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardSocketApi);
 	});
 
 	it("should be defined", () => {

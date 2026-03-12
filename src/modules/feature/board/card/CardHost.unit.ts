@@ -2,13 +2,16 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import ContentElementList from "./ContentElementList.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
 import { BoardResponseAllowedOperations, CardResponse } from "@/serverApi/v3";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -22,55 +25,53 @@ import {
 } from "@ui-kebab-menu";
 import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-
-vi.mock("vue-router");
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("@util-board");
-const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
-const mockedUseShareBoardLink = vi.mocked(useShareBoardLink);
-const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
 vi.mock("@data-board/BoardFocusHandler.composable");
-const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
-
 vi.mock("@data-board/edit-mode.composable");
-const mockedEditMode = vi.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../shared/AddElementDialog.composable");
 vi.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
+
+vi.mock("@data-board/cardActions/cardRestApi.composable");
+vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
+
+vi.mock("@data-board/cardActions/cardSocketApi.composable");
+vi.mocked(useCardSocketApi).mockReturnValue(mockComposable(useCardSocketApi));
 
 describe("CardHost", () => {
-	let mockedSharedLastCreatedElementCalls: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
-	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
-	let mockedUseSharedFileSelectActions: DeepMocked<ReturnType<typeof useSharedFileSelect>>;
+	let useShareBoardLinkMock: Mocked<ReturnType<typeof useShareBoardLink>>;
+	let useSharedFileSelectMock: Mocked<ReturnType<typeof useSharedFileSelect>>;
 
 	beforeEach(() => {
-		mockedUseSharedEditMode.mockReturnValue({
-			editModeId: ref(undefined),
-			setEditModeId: vi.fn(),
-			isInEditMode: computed(() => true),
-		});
+		vi.mocked(useSharedEditMode).mockReturnValue(
+			mockComposable(useSharedEditMode, {
+				editModeId: ref(undefined),
+				isInEditMode: computed(() => true),
+			})
+		);
 
-		useShareBoardLinkMock = createMock<ReturnType<typeof useShareBoardLink>>({
-			getShareLinkId: vi.fn().mockReturnValue("shareLinkId"),
-		});
-		mockedUseShareBoardLink.mockReturnValue(useShareBoardLinkMock);
+		useShareBoardLinkMock = mockComposable(useShareBoardLink);
+		vi.mocked(useShareBoardLink).mockReturnValue(useShareBoardLinkMock);
 
-		mockedBoardFocusHandler.mockReturnValue({
-			isFocusContained: computed(() => true),
-			isFocused: computed(() => true),
-			isFocusWithin: computed(() => true),
-			isFocusedById: computed(() => true),
-		});
+		vi.mocked(useBoardFocusHandler).mockReturnValue(
+			mockComposable(useBoardFocusHandler, {
+				isFocusContained: computed(() => true),
+				isFocused: computed(() => true),
+				isFocusWithin: computed(() => true),
+				isFocusedById: computed(() => true),
+			})
+		);
 
-		mockedEditMode.mockReturnValue({
-			isEditMode: computed(() => true),
-			startEditMode: vi.fn(),
-			stopEditMode: vi.fn(),
-		});
+		vi.mocked(useCourseBoardEditMode).mockReturnValue(
+			mockComposable(useCourseBoardEditMode, {
+				isEditMode: computed(() => true),
+			})
+		);
 
 		setupAddElementDialogMock();
 		const askDeleteConfirmationMock = () => Promise.resolve(true);
@@ -78,20 +79,21 @@ describe("CardHost", () => {
 			askDeleteConfirmationMock,
 		});
 
-		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askDeleteConfirmation: askDeleteConfirmationMock,
-			isDeleteDialogOpen: ref(false),
-		});
+		vi.mocked(useDeleteConfirmationDialog).mockReturnValue(
+			mockComposable(useDeleteConfirmationDialog, {
+				askDeleteConfirmation: askDeleteConfirmationMock,
+				isDeleteDialogOpen: ref(false),
+			})
+		);
 
-		mockedSharedLastCreatedElementCalls = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
-		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementCalls);
+		vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
 
-		mockedUseSharedFileSelectActions = createMock<ReturnType<typeof useSharedFileSelect>>({
+		useSharedFileSelectMock = mockComposable(useSharedFileSelect, {
 			isFileSelectOnMountEnabled: ref(true),
-			resetFileSelectOnMountEnabled: vi.fn(),
-			disableFileSelectOnMount: vi.fn(),
 		});
-		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
+		vi.mocked(useSharedFileSelect).mockReturnValue(useSharedFileSelectMock);
+
+		injectRouterMock(createRouterMock());
 	});
 
 	afterEach(() => {

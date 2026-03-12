@@ -8,19 +8,21 @@ import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
 	mediaLineResponseFactory,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
+import { Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("./data/mediaBoardState.composable");
 
 describe("MediaBoard", () => {
-	let useSharedMediaBoardStateMock: DeepMocked<ReturnType<typeof useSharedMediaBoardState>>;
+	let useSharedMediaBoardStateMock: Mocked<ReturnType<typeof useSharedMediaBoardState>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoard> = {
@@ -44,7 +46,7 @@ describe("MediaBoard", () => {
 	};
 
 	beforeEach(() => {
-		useSharedMediaBoardStateMock = createMock<ReturnType<typeof useSharedMediaBoardState>>();
+		useSharedMediaBoardStateMock = mockComposable(useSharedMediaBoardState);
 
 		vi.mocked(useSharedMediaBoardState).mockReturnValue(useSharedMediaBoardStateMock);
 	});
@@ -261,7 +263,7 @@ describe("MediaBoard", () => {
 			const sortableEvent: Partial<SortableEvent> = {
 				oldIndex: 0,
 				newIndex: 1,
-				item: createMock<HTMLElement>({
+				item: mock<HTMLElement>({
 					dataset: {
 						lineId,
 					},

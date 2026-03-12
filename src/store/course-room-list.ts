@@ -9,7 +9,7 @@ import {
 import { $axios, mapAxiosErrorToResponseError } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { AllItems, DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
-import { currentDate, fromUTC } from "@/plugins/datetime";
+import { isInPast } from "@/utils/date-time.utils";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
@@ -63,7 +63,7 @@ export default class CourseRoomListModule extends VuexModule {
 			if (item.id) {
 				to = `/rooms/${item.id}`;
 			}
-			const isArchived = item.untilDate && fromUTC(item.untilDate || "") < currentDate();
+			const isArchived = item.untilDate && isInPast(item.untilDate);
 			if (!isArchived) {
 				return { ...item, searchText: item.title, isArchived, to };
 			}

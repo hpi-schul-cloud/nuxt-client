@@ -2,20 +2,20 @@ import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { MeResponse, RoleName } from "@/serverApi/v3";
-import { createTestAppStore, expectNotification, groupResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStore, expectNotification, groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("@data-room");
 
 describe("StartExistingCourseSyncDialog", () => {
-	let courseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
+	let courseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof StartExistingCourseSyncDialog> = {
@@ -47,7 +47,7 @@ describe("StartExistingCourseSyncDialog", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		courseApiMock = createMock<ReturnType<typeof useCourseApi>>();
+		courseApiMock = mockComposable(useCourseApi);
 
 		vi.mocked(useCourseApi).mockReturnValue(courseApiMock);
 	});
