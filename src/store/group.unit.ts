@@ -8,8 +8,8 @@ import {
 	ClassSortQueryType,
 	GroupApiInterface,
 	SchoolYearQueryType,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,

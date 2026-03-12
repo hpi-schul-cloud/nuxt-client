@@ -1,5 +1,5 @@
 import { SidebarSingleItem } from "../types";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { BoardExternalReferenceType } from "@/generated/serverApi/v3";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";

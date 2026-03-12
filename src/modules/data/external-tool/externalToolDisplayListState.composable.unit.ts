@@ -1,7 +1,7 @@
 import { useExternalToolDisplayListState } from "./externalToolDisplayListState.composable";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
-import { ToolContextType } from "@/serverApi/v3";
+import { ToolContextType } from "@/generated/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { axiosErrorFactory, externalToolDisplayDataFactory, mockComposable } from "@@/tests/test-utils";

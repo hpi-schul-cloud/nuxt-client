@@ -1,4 +1,4 @@
-import { CopyApiResponseStatus } from "@/serverApi/v3";
+import { CopyApiResponseStatus } from "@/generated/serverApi/v3";
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { injectStrict } from "@/utils/inject";
 import { COPY_MODULE_KEY } from "@/utils/inject/injection-keys";

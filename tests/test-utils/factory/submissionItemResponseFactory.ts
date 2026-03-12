@@ -1,4 +1,4 @@
-import { SubmissionItemResponse } from "@/serverApi/v3";
+import { SubmissionItemResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 

@@ -12,7 +12,7 @@ import {
 	ShareTokenInfoResponseParentType,
 	TaskApiFactory,
 	TaskApiInterface,
-} from "../serverApi/v3";
+} from "../generated/serverApi/v3";
 import { $axios } from "../utils/api";
 import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
 import { AxiosStatic } from "axios";

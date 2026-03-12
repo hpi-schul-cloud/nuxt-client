@@ -1,6 +1,6 @@
 import TasksList from "./TasksList.vue";
 import TasksListItemTeacher from "./TasksListItemTeacher.vue";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/generated/serverApi/v3";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";

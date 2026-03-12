@@ -5,9 +5,9 @@ import {
 	ExternalToolElementResponse,
 	H5pElementResponse,
 	LayoutBodyParams,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
-import { CardResponse, DrawingElementResponse } from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
+import { CardResponse, DrawingElementResponse } from "@/generated/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { mockApi, mockApiResponse } from "@@/tests/test-utils";

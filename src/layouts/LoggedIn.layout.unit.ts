@@ -1,5 +1,5 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/generated/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";

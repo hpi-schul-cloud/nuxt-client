@@ -1,5 +1,5 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
+import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/generated/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
 import { createApplicationError } from "@/utils/create-application-error.factory";

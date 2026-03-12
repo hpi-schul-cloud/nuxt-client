@@ -1,5 +1,5 @@
 import Topbar from "./Topbar.vue";
-import { RoleName, SchulcloudTheme } from "@/serverApi/v3";
+import { RoleName, SchulcloudTheme } from "@/generated/serverApi/v3";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

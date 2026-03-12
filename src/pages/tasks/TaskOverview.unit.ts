@@ -1,6 +1,6 @@
 import TaskOverview from "./TaskOverview.page.vue";
 import TasksDashboardMain from "@/components/tasks/TasksDashboardMain.vue";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/generated/serverApi/v3";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

@@ -2,7 +2,7 @@ import App from "./App.vue";
 import LoggedInLayout from "./layouts/LoggedIn.layout.vue";
 import LoggedOutLayout from "./layouts/LoggedOut.layout.vue";
 import { Layouts } from "./layouts/types";
-import { SchulcloudTheme } from "./serverApi/v3";
+import { SchulcloudTheme } from "./generated/serverApi/v3";
 import FilePathsModule from "./store/filePaths";
 import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "./utils/inject";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";

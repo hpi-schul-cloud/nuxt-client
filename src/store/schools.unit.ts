@@ -1,6 +1,6 @@
 import SchoolsModule from "./schools";
-import * as serverApi from "@/serverApi/v3";
-import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
+import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@/generated/serverApi/v3";
 import { createTestAppStore, createTestAppStoreWithSchool, createTestEnvStore, mockApi } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";

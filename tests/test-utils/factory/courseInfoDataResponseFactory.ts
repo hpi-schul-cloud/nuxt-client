@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { CourseInfoDataResponse } from "@/serverApi/v3";
+import { CourseInfoDataResponse } from "@/generated/serverApi/v3";
 
 export const courseInfoDataResponseFactory =
 	Factory.define<CourseInfoDataResponse>(({ sequence }) => ({

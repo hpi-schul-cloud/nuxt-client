@@ -2,7 +2,7 @@ import FileStatistic from "./FileStatistic.vue";
 import { FolderAlert } from "./FolderAlert.enum";
 import FolderContentElement from "./FolderContentElement.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType } from "@/generated/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { mockComposable, parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

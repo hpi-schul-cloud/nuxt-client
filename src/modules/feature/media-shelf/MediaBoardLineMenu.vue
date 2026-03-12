@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { ColorShade, MediaBoardColorMapper } from "./utils";
-import { MediaBoardColors } from "@/serverApi/v3";
+import { MediaBoardColors } from "@/generated/serverApi/v3";
 import { mdiChevronDown, mdiChevronUp, mdiPalette, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
 import { KebabMenu } from "@ui-kebab-menu";
 import { computed, ComputedRef, ModelRef, PropType } from "vue";

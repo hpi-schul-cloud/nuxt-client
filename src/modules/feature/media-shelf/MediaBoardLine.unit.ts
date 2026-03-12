@@ -4,7 +4,7 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/generated/serverApi/v3";
 import {
 	deletedElementResponseFactory,
 	mediaExternalToolElementResponseFactory,

@@ -1,4 +1,4 @@
-import { SchoolSystemResponse } from "@/serverApi/v3";
+import { SchoolSystemResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const schoolSystemResponseFactory = Factory.define<SchoolSystemResponse>(

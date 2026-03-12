@@ -1,5 +1,5 @@
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { Permission, SchulcloudTheme } from "@/serverApi/v3";
+import { Permission, SchulcloudTheme } from "@/generated/serverApi/v3";
 import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import {

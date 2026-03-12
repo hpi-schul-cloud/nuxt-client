@@ -14,7 +14,7 @@ import {
 	SystemsApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";

@@ -1,6 +1,6 @@
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
-import * as serverApi from "@/serverApi/v3";
-import { MetaDataEntityType, MetaTagExtractorResponse } from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
+import { MetaDataEntityType, MetaTagExtractorResponse } from "@/generated/serverApi/v3";
 import { mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Mocked } from "vitest";

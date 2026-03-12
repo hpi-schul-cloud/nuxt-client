@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-import { ImportUserResponseRoleNames as Roles } from "@/serverApi/v3";
+import { ImportUserResponseRoleNames as Roles } from "@/generated/serverApi/v3";
 import { formatUtc, isDueWithin24h } from "@/utils/date-time.utils";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";

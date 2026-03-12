@@ -1,5 +1,5 @@
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
-import { GroupListResponse } from "@/serverApi/v3";
+import { GroupListResponse } from "@/generated/serverApi/v3";
 import { expectNotification, groupResponseFactory, mockComposable, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

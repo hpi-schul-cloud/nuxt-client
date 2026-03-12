@@ -2,7 +2,7 @@ import { MetaTagResult, useMetaTagExtractorApi } from "../composables/MetaTagExt
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import { LinkElementContent, LinkElementResponse } from "@/serverApi/v3";
+import { LinkElementContent, LinkElementResponse } from "@/generated/serverApi/v3";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

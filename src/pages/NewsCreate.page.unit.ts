@@ -1,6 +1,6 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
-import { CreateNewsParamsTargetModel, NewsApiInterface } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
+import { CreateNewsParamsTargetModel, NewsApiInterface } from "@/generated/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	createTestAppStoreWithSchool,

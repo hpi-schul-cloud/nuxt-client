@@ -4,7 +4,7 @@ import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";

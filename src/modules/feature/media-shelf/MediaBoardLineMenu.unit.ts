@@ -1,5 +1,5 @@
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { MediaBoardColors } from "@/serverApi/v3";
+import { MediaBoardColors } from "@/generated/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";

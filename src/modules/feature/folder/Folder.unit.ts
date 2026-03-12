@@ -7,7 +7,7 @@ import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
-import { BoardResponseAllowedOperations } from "@/serverApi/v3";
+import { BoardResponseAllowedOperations } from "@/generated/serverApi/v3";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";

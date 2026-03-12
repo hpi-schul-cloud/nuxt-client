@@ -1,4 +1,4 @@
-import * as serverApi from "../serverApi/v3";
+import * as serverApi from "../generated/serverApi/v3";
 import SystemsModule from "./systems";
 import { System } from "./types/system";
 

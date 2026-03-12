@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { TaskResponse } from "@/serverApi/v3";
+import { TaskResponse } from "@/generated/serverApi/v3";
 
 export const taskResponseFactory = Factory.define<TaskResponse>(
 	({ sequence }) => ({

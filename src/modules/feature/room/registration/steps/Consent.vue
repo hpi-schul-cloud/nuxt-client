@@ -70,7 +70,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/generated/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { isRequired } from "@util-validators";

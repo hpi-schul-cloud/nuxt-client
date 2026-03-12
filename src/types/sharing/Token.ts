@@ -1,3 +1,3 @@
-import { ShareTokenBodyParamsParentType as ShareTokenParentType } from "@/serverApi/v3";
+import { ShareTokenBodyParamsParentType as ShareTokenParentType } from "@/generated/serverApi/v3";
 
 export { ShareTokenParentType };

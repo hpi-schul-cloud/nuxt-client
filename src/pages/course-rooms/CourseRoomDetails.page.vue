@@ -95,7 +95,7 @@ import {
 	ImportUserResponseRoleNames as Roles,
 	Permission,
 	ShareTokenBodyParamsParentType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,

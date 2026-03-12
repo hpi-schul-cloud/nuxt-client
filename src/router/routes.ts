@@ -1,8 +1,8 @@
 import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
+import { Permission, ToolContextType } from "@/generated/serverApi/v3";
 import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { Permission, ToolContextType } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ACTIVATION_CODE, REGEX_ID } from "@/utils/validation";
 import { useAppStore } from "@data-app";

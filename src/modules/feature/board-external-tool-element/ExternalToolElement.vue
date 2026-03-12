@@ -64,7 +64,7 @@
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { ExternalToolElementResponse } from "@/serverApi/v3";
+import { ExternalToolElementResponse } from "@/generated/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import {

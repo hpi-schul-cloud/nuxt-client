@@ -1,5 +1,5 @@
 import AuthSystems from "./AuthSystems.vue";
-import { Permission } from "@/serverApi/v3";
+import { Permission } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";

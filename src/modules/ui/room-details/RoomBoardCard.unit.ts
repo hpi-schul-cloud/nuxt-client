@@ -1,5 +1,5 @@
 import RoomBoardCard from "./RoomBoardCard.vue";
-import { BoardLayout, ConfigResponse, ImportUserResponseRoleNames } from "@/serverApi/v3";
+import { BoardLayout, ConfigResponse, ImportUserResponseRoleNames } from "@/generated/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount, VueWrapper } from "@vue/test-utils";

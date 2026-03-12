@@ -1,7 +1,7 @@
 import {
 	ContextExternalToolResponse,
 	ContextExternalToolResponseContextType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const contextExternalToolResponseFactory =

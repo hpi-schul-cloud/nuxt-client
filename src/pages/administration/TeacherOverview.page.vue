@@ -91,7 +91,7 @@ import { FilterQuery, User } from "@/components/administration/data-filter/types
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";

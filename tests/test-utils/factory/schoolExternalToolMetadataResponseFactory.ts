@@ -1,4 +1,4 @@
-import { SchoolExternalToolMetadataResponse } from "@/serverApi/v3";
+import { SchoolExternalToolMetadataResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const schoolExternalToolMetadataResponseFactory: Factory<SchoolExternalToolMetadataResponse> =

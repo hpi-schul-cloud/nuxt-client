@@ -1,5 +1,5 @@
 import UserMenu from "./UserMenu.vue";
-import { LanguageType } from "@/serverApi/v3";
+import { LanguageType } from "@/generated/serverApi/v3";
 import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useOAuthApi } from "@data-oauth";

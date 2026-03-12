@@ -5,7 +5,7 @@ import {
 	DashboardApiFactory,
 	DashboardApiInterface,
 	DashboardGridElementResponse,
-} from "../serverApi/v3";
+} from "../generated/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "../utils/api";
 import { BusinessError } from "./types/commons";
 import { AllItems, DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";

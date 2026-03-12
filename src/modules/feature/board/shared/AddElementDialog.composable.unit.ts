@@ -1,8 +1,8 @@
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
-import { ContentElementType } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3";
+import { ContentElementType } from "@/generated/serverApi/v3";
+import { ConfigResponse } from "@/generated/serverApi/v3";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import { useNotificationStore } from "@data-app";

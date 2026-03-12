@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { FileElementResponse } from "@/serverApi/v3";
+import { FileElementResponse } from "@/generated/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { ContentElementBar } from "@ui-board";
 import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";

@@ -1,4 +1,4 @@
-import { YearsResponse } from "@/serverApi/v3";
+import { YearsResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 import { schoolYearResponseFactory } from "./schoolYearResponseFactory";
 

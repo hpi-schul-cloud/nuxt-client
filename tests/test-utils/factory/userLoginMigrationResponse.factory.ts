@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { UserLoginMigrationResponse } from "@/serverApi/v3";
+import { UserLoginMigrationResponse } from "@/generated/serverApi/v3";
 
 export const userLoginMigrationResponseFactory =
 	Factory.define<UserLoginMigrationResponse>(() => ({

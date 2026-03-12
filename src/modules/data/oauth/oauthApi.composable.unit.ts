@@ -1,6 +1,6 @@
 import { useOAuthApi } from "./oauthApi.composable";
-import * as serverApi from "@/serverApi/v3";
-import { OAuthApiInterface, OAuthSessionTokenExpirationResponse } from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
+import { OAuthApiInterface, OAuthSessionTokenExpirationResponse } from "@/generated/serverApi/v3";
 import { axiosErrorFactory, mockApi, mockApiResponse } from "@@/tests/test-utils";
 import { HttpStatusCode } from "axios";
 import { Mocked } from "vitest";

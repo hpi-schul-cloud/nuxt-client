@@ -1,6 +1,6 @@
 import { ToolParameter } from "../tool-parameter";
 import { ToolParamLocationMapping, ToolParamScopeMapping, ToolParamTypeMapping } from "./common-tool.mapper";
-import { CustomParameterResponse } from "@/serverApi/v3";
+import { CustomParameterResponse } from "@/generated/serverApi/v3";
 
 export class ExternalToolMapper {
 	static mapToToolParameter(response: CustomParameterResponse): ToolParameter {

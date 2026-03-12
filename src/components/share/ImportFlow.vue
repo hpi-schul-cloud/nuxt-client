@@ -29,7 +29,7 @@
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectDestinationModal from "./SelectDestinationModal.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
-import { BoardExternalReferenceType, ShareTokenInfoResponseParentType } from "@/serverApi/v3";
+import { BoardExternalReferenceType, ShareTokenInfoResponseParentType } from "@/generated/serverApi/v3";
 import { ImportDestinationItem } from "@/store/types/rooms";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";

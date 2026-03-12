@@ -3,7 +3,7 @@ import MediaBoard from "./MediaBoard.vue";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-import { MediaBoardColors } from "@/serverApi/v3";
+import { MediaBoardColors } from "@/generated/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,

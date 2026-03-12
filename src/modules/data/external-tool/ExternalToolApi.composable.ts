@@ -1,4 +1,4 @@
-import { ContextExternalToolBodyParams, ToolApiFactory, ToolApiInterface } from "@/serverApi/v3";
+import { ContextExternalToolBodyParams, ToolApiFactory, ToolApiInterface } from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 export const useExternalToolApi = () => {

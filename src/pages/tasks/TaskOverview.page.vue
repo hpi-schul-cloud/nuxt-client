@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import TasksDashboardMain from "@/components/tasks/TasksDashboardMain.vue";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/generated/serverApi/v3";
 import TasksModule from "@/store/tasks";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";

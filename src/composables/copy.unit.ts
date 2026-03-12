@@ -1,5 +1,5 @@
 import { useCopy } from "./copy";
-import { CopyApiResponseStatus } from "@/serverApi/v3";
+import { CopyApiResponseStatus } from "@/generated/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";

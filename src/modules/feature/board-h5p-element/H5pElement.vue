@@ -49,7 +49,7 @@
 import H5pElementMenu from "./H5pElementMenu.vue";
 import H5PImage from "@/assets/img/h5p/default_h5p_display.svg";
 import { H5PContentParentType } from "@/generated/h5pEditorApi/v3/models";
-import { H5pElementResponse } from "@/serverApi/v3";
+import { H5pElementResponse } from "@/generated/serverApi/v3";
 import { injectStrict } from "@/utils/inject";
 import { decodeHtmlEntities } from "@/utils/textFormatting";
 import { useBoardFocusHandler } from "@data-board";

@@ -1,5 +1,5 @@
 import { createI18n } from "./i18n";
-import { LanguageType } from "@/serverApi/v3";
+import { LanguageType } from "@/generated/serverApi/v3";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";

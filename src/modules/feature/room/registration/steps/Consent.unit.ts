@@ -1,5 +1,5 @@
 import Consent from "./Consent.vue";
-import { LanguageType, SchulcloudTheme } from "@/serverApi/v3";
+import { LanguageType, SchulcloudTheme } from "@/generated/serverApi/v3";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";

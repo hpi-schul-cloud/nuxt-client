@@ -1,7 +1,7 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolConfigurationState } from "./contextExternalToolConfigurationState.composable";
 import { ContextExternalToolConfigurationTemplate } from "./types";
-import { ToolContextType } from "@/serverApi/v3";
+import { ToolContextType } from "@/generated/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {

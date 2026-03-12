@@ -1,5 +1,5 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import { ContextExternalToolBodyParams, LaunchType } from "@/serverApi/v3";
+import { ContextExternalToolBodyParams, LaunchType } from "@/generated/serverApi/v3";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";

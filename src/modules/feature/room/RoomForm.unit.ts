@@ -1,5 +1,5 @@
 import RoomForm from "./RoomForm.vue";
-import { RoomFeatures } from "@/serverApi/v3";
+import { RoomFeatures } from "@/generated/serverApi/v3";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";

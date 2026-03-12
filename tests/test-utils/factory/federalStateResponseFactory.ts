@@ -1,4 +1,4 @@
-import { FederalStateResponse } from "@/serverApi/v3";
+import { FederalStateResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const federalStateResponseFactory = Factory.define<FederalStateResponse>(

@@ -1,4 +1,4 @@
-import { LaunchType } from "@/serverApi/v3";
+import { LaunchType } from "@/generated/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,

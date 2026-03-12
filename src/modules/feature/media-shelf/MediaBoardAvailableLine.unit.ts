@@ -1,7 +1,7 @@
 import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/generated/serverApi/v3";
 import { mediaAvailableLineElementResponseFactory, mediaAvailableLineResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useDragAndDrop } from "@util-board";

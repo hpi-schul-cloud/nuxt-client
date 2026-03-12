@@ -10,7 +10,7 @@ import {
 	RoomMemberResponse,
 	SchoolApiFactory,
 	SchoolForExternalInviteResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";

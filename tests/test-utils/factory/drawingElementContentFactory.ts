@@ -1,4 +1,4 @@
-import { DrawingElementContent } from "@/serverApi/v3";
+import { DrawingElementContent } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const drawingElementContentFactory =

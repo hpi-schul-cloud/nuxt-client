@@ -1,6 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { MoveItemBodyParams, RoomApiFactory } from "@/serverApi/v3";
+import { MoveItemBodyParams, RoomApiFactory } from "@/generated/serverApi/v3";
 import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios } from "@/utils/api";
 import { defineStore } from "pinia";

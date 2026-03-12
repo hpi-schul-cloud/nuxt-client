@@ -1,5 +1,5 @@
 import { FilesStorageConfigResponse } from "@/generated/fileStorageApi/v3/models";
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse } from "@/generated/serverApi/v3";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { defaultConfigEnvs, useEnvStore } from "@data-env";
 import { Factory } from "fishery";

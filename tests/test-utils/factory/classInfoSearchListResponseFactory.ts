@@ -1,4 +1,4 @@
-import { ClassInfoSearchListResponse } from "@/serverApi/v3";
+import { ClassInfoSearchListResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 import { classInfoResponseFactory } from "./classInfoResponseFactory";
 

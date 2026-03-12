@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import RoomDotMenu from "./RoomDotMenu.vue";
-import { BoardLayout, ImportUserResponseRoleNames as Roles } from "@/serverApi/v3";
+import { BoardLayout, ImportUserResponseRoleNames as Roles } from "@/generated/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiContentCopy,

@@ -1,4 +1,4 @@
-import { SchoolFeature } from "@/serverApi/v3";
+import { SchoolFeature } from "@/generated/serverApi/v3";
 
 const SCHOOL_FEATURES = Object.values(SchoolFeature);
 

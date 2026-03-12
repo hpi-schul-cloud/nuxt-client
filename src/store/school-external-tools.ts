@@ -7,7 +7,7 @@ import {
 	SchoolExternalToolResponse,
 	ToolApiFactory,
 	ToolApiInterface,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { ContextExternalToolConfigurationTemplate, SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { AxiosResponse } from "axios";

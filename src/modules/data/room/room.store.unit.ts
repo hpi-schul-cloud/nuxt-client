@@ -1,5 +1,5 @@
 import { useRoomStore } from "./room.store";
-import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomListResponse } from "@/serverApi/v3";
+import { RoomApiFactory, RoomColor, RoomCreatedResponse, RoomListResponse } from "@/generated/serverApi/v3";
 import { RoomCreateParams } from "@/types/room/Room";
 import {
 	createTestRoomStore,
@@ -15,7 +15,7 @@ import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/serverApi/v3");
+vi.mock("@/generated/serverApi/v3");
 
 describe("useRoomStore", () => {
 	const roomApiMock = mockApi<ReturnType<typeof RoomApiFactory>>();

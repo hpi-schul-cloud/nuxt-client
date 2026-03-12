@@ -1,5 +1,5 @@
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { BoardExternalReferenceType } from "@/generated/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 

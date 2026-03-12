@@ -1,5 +1,5 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import * as serverApi from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import {
 	BoardLayout,
 	CollapsableBodyParams,
@@ -10,7 +10,7 @@ import {
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
 	RenameBodyParams,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,

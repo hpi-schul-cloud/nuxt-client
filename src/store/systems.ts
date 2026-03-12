@@ -1,5 +1,10 @@
 import { System } from "./types/system";
-import { PublicSystemListResponse, PublicSystemResponse, SystemsApiFactory, SystemsApiInterface } from "@/serverApi/v3";
+import {
+	PublicSystemListResponse,
+	PublicSystemResponse,
+	SystemsApiFactory,
+	SystemsApiInterface,
+} from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";

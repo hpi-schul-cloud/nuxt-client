@@ -1,6 +1,6 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardAllowedOperations } from "./board-allowed-operations.composable";
-import type { BoardResponseAllowedOperations } from "@/serverApi/v3";
+import type { BoardResponseAllowedOperations } from "@/generated/serverApi/v3";
 import { Board } from "@/types/board/Board";
 import { boardResponseFactory } from "@@/tests/test-utils/factory";
 import { mockComposable } from "@@/tests/test-utils/mockComposable";

@@ -5,7 +5,7 @@ import {
 	CustomParameterLocationParams,
 	CustomParameterScopeTypeParams,
 	CustomParameterTypeParams,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 
 export const ToolParamLocationMapping: Record<CustomParameterLocationParams, ToolParameterLocation> = {
 	[CustomParameterLocationParams.PATH]: ToolParameterLocation.PATH,

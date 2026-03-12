@@ -70,7 +70,7 @@
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import { Permission } from "@/serverApi/v3";
+import { Permission } from "@/generated/serverApi/v3";
 import { School } from "@/store/types/schools";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";

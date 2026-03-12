@@ -1,5 +1,5 @@
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
-import { ColumnResponse } from "@/serverApi/v3";
+import { ColumnResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const columnResponseFactory = Factory.define<ColumnResponse>(({ sequence }) => ({

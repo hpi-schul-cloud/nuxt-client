@@ -1,7 +1,7 @@
 import ActionMenu from "./ActionMenu.vue";
 import MembersTable from "./MembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@/serverApi/v3";
+import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {

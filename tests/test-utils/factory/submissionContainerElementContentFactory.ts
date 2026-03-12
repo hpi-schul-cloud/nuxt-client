@@ -1,4 +1,4 @@
-import { SubmissionContainerElementContent } from "@/serverApi/v3";
+import { SubmissionContainerElementContent } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 const oneDayinMilliseconds = 24 * 60 * 60 * 1000;

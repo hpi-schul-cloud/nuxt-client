@@ -1,6 +1,6 @@
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import { ToolContextType } from "@/serverApi/v3";
+import { ToolContextType } from "@/generated/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils/factory";

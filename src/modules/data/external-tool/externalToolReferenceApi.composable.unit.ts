@@ -1,7 +1,7 @@
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
-import * as serverApi from "@/serverApi/v3";
-import { ToolContextType, ToolReferenceResponse } from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
+import { ToolContextType, ToolReferenceResponse } from "@/generated/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	mockApi,

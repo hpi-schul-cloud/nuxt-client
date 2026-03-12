@@ -44,7 +44,7 @@
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import image from "@/assets/img/collaborativeEditor.svg";
-import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@/serverApi/v3";
+import { CollaborativeTextEditorElementResponse, CollaborativeTextEditorParentType } from "@/generated/serverApi/v3";
 import { injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import { mdiTextBoxEditOutline } from "@icons/material";

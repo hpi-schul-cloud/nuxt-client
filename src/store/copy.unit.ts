@@ -1,5 +1,5 @@
-import * as serverApi from "../serverApi/v3";
-import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "../serverApi/v3";
+import * as serverApi from "../generated/serverApi/v3";
+import { CopyApiResponse, CopyApiResponseStatus, CopyApiResponseType } from "../generated/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "./copy";
 
 const serverDataPartial: CopyApiResponse = {

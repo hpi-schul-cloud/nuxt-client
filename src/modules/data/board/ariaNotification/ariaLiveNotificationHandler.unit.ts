@@ -1,6 +1,6 @@
 import { CreateCardSuccessPayload, CreateColumnSuccessPayload } from "../boardActions/boardActionPayload.types";
 import { SR_I18N_KEYS_MAP, useBoardAriaNotification } from "./ariaLiveNotificationHandler";
-import { BoardLayout, ContentElementType } from "@/serverApi/v3";
+import { BoardLayout, ContentElementType } from "@/generated/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { cardResponseFactory, columnResponseFactory } from "@@/tests/test-utils";
 

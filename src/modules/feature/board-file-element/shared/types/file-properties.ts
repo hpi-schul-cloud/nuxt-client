@@ -1,5 +1,5 @@
 import { PreviewStatus } from "@/generated/fileStorageApi/v3/models";
-import { FileElementResponse } from "@/serverApi/v3";
+import { FileElementResponse } from "@/generated/serverApi/v3";
 
 export interface FileProperties {
 	name: string;

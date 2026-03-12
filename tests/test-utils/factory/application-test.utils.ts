@@ -1,4 +1,4 @@
-import { LanguageType, MeResponse, Permission, RoleName } from "@/serverApi/v3";
+import { LanguageType, MeResponse, Permission, RoleName } from "@/generated/serverApi/v3";
 import { createDayJs } from "@/utils/date-time.utils";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { AlertStatus, useAppStore, useNotificationStore } from "@data-app";

@@ -1,6 +1,6 @@
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
-import { ToolContextType } from "@/serverApi/v3";
+import { ToolContextType } from "@/generated/serverApi/v3";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { businessErrorFactory, contextExternalToolFactory, mockComposable } from "@@/tests/test-utils";

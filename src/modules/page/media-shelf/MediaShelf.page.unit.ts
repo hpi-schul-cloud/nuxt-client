@@ -1,5 +1,5 @@
 import MediaShelfPage from "./MediaShelf.page.vue";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/generated/serverApi/v3";
 import { mediaAvailableLineResponseFactory, mediaBoardResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";

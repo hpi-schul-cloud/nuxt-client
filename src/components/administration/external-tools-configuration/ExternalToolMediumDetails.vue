@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@/serverApi/v3";
+import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@/generated/serverApi/v3";
 import { notifyError, notifySuccess } from "@data-app";
 import { mdiContentCopy } from "@icons/material";
 import { computed, ComputedRef, Ref, toRef } from "vue";

@@ -5,7 +5,7 @@ import { ExternalToolMapper } from "./external-tool.mapper";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 
 export class SchoolExternalToolMapper {
 	static mapToSchoolExternalToolConfigurationTemplate(response: SchoolExternalToolConfigurationTemplateResponse) {

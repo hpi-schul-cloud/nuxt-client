@@ -1,6 +1,6 @@
 import { InvitationStep, RoomInvitationLink } from "./types";
-import * as serverApi from "@/serverApi/v3";
-import { RoomIdResponse } from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
+import { RoomIdResponse } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";

@@ -1,4 +1,4 @@
-import { ContentElementType, H5pElementResponse } from "@/serverApi/v3";
+import { ContentElementType, H5pElementResponse } from "@/generated/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { useAppStore } from "@data-app";

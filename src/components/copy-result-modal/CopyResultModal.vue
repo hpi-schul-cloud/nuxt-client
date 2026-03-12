@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { CopyApiResponseType } from "@/serverApi/v3";
+import { CopyApiResponseType } from "@/generated/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed } from "vue";

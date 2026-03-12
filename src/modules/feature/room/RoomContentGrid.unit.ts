@@ -1,6 +1,6 @@
 import RoomContentGrid from "./RoomContentGrid.vue";
 import RoomContentGridItem from "./RoomContentGridItem.vue";
-import { RoomItemResponseAllowedOperations } from "@/serverApi/v3";
+import { RoomItemResponseAllowedOperations } from "@/generated/serverApi/v3";
 import { roomBoardGridItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useRoomDetailsStore } from "@data-room";

@@ -1,5 +1,5 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@/generated/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";

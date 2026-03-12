@@ -1,4 +1,4 @@
-import { CopyApiResponseStatus, CopyApiResponseType } from "@/serverApi/v3";
+import { CopyApiResponseStatus, CopyApiResponseType } from "@/generated/serverApi/v3";
 import {
 	createTestRoomStore,
 	expectNotification,

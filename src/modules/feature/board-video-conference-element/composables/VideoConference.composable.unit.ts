@@ -1,11 +1,11 @@
 import { useVideoConference } from "./VideoConference.composable";
-import * as serverApi from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import {
 	VideoConferenceInfoResponse,
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import { mockApi } from "@@/tests/test-utils/mockApiFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";

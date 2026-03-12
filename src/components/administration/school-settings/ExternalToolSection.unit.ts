@@ -1,6 +1,6 @@
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@/serverApi/v3";
+import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@/generated/serverApi/v3";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";

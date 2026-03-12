@@ -83,7 +83,7 @@ import {
 	MediaBoardColors,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaBoardEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";

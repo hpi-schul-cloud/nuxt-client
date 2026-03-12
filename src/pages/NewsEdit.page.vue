@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@/serverApi/v3";
+import { NewsApiFactory, NewsResponse, type UpdateNewsParams } from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";

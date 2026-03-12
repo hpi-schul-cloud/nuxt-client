@@ -70,7 +70,7 @@ import TasksDashBoardPanels from "./TasksDashBoardPanels.vue";
 import TasksList from "./TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import { ShareTokenBodyParamsParentType } from "@/serverApi/v3";
+import { ShareTokenBodyParamsParentType } from "@/generated/serverApi/v3";
 import { CopyParams } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import ShareModule from "@/store/share";

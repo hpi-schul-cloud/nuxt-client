@@ -1,6 +1,6 @@
 import { SchoolExternalToolConfigurationStatus } from "./school-external-tool-configuration-status";
 import { ToolParameterEntry } from "./tool-parameter-entry";
-import { SchoolExternalToolMediumResponse, ToolContextType } from "@/serverApi/v3";
+import { SchoolExternalToolMediumResponse, ToolContextType } from "@/generated/serverApi/v3";
 
 export interface SchoolExternalToolSave {
 	toolId: string;

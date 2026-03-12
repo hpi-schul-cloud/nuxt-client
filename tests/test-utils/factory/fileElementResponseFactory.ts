@@ -1,4 +1,4 @@
-import { ContentElementType, FileElementResponse } from "@/serverApi/v3";
+import { ContentElementType, FileElementResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 import { fileElementContent } from "./fileElementContentFactory";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";

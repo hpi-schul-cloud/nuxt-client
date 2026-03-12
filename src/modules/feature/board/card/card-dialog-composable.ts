@@ -1,5 +1,5 @@
 import { useI18nGlobal } from "@/plugins/i18n";
-import { ColumnResponse, RoomBoardItemResponse } from "@/serverApi/v3";
+import { ColumnResponse, RoomBoardItemResponse } from "@/generated/serverApi/v3";
 import { useBoardApi } from "@data-board";
 import { useRoomDetailsStore } from "@data-room";
 import { computed, Ref, ref, watchEffect } from "vue";

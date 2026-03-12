@@ -1,4 +1,4 @@
-import { ToolApiFactory, ToolApiInterface } from "@/serverApi/v3";
+import { ToolApiFactory, ToolApiInterface } from "@/generated/serverApi/v3";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { $axios } from "@/utils/api";
 

@@ -1,4 +1,4 @@
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/generated/serverApi/v3";
 import { UserCreatingData } from "@data-users";
 import { Factory } from "fishery";
 

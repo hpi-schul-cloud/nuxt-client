@@ -1,5 +1,5 @@
 import MemberInvitationsTable from "../tables/MemberInvitationsTable.vue";
-import { RoomItemResponseAllowedOperations } from "@/serverApi/v3";
+import { RoomItemResponseAllowedOperations } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {

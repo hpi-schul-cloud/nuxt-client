@@ -1,5 +1,5 @@
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
-import { SchoolApiFactory, SchulConneXProvisioningOptionsResponse } from "@/serverApi/v3";
+import { SchoolApiFactory, SchulConneXProvisioningOptionsResponse } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";

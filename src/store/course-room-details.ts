@@ -14,7 +14,7 @@ import {
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useAppStore } from "@data-app";
 import { isAxiosError } from "axios";

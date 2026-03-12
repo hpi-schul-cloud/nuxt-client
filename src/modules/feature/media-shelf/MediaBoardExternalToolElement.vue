@@ -23,7 +23,7 @@
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
-import { MediaExternalToolElementResponse } from "@/serverApi/v3";
+import { MediaExternalToolElementResponse } from "@/generated/serverApi/v3";
 import { notifyError, notifyWarning } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {

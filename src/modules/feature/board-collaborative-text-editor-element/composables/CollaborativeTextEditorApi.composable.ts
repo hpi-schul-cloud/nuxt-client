@@ -2,7 +2,7 @@ import {
 	CollaborativeTextEditorApiFactory,
 	CollaborativeTextEditorApiInterface,
 	CollaborativeTextEditorParentType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
 import { notifyError } from "@data-app";

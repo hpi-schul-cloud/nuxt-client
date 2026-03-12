@@ -1,4 +1,4 @@
-import { SchoolExternalToolMediumResponse } from "@/serverApi/v3";
+import { SchoolExternalToolMediumResponse } from "@/generated/serverApi/v3";
 
 export class SchoolExternalToolItem {
 	id: string;

@@ -1,5 +1,6 @@
 .gitignore
 .npmignore
+.openapi-generator-ignore
 api.ts
 api/account-api.ts
 api/admin-students-api.ts

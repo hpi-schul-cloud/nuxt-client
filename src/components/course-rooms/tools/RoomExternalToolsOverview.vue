@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { ToolContextType } from "@/serverApi/v3";
+import { ToolContextType } from "@/generated/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { Course, CourseFeatures } from "@/store/types/room";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";

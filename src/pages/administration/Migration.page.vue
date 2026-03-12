@@ -434,7 +434,7 @@
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/generated/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";

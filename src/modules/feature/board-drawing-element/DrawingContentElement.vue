@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import InnerContent from "./InnerContent.vue";
-import { DrawingElementResponse } from "@/serverApi/v3";
+import { DrawingElementResponse } from "@/generated/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";

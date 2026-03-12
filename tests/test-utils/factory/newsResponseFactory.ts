@@ -1,5 +1,5 @@
 import { schoolResponseFactory } from "./schoolResponseFactory";
-import { NewsResponse, NewsTargetModel } from "@/serverApi/v3";
+import { NewsResponse, NewsTargetModel } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const newsResponseFactory = Factory.define<NewsResponse>(({ sequence }) => ({

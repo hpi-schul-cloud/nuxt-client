@@ -1,5 +1,5 @@
 import { CopyResultItemElement } from "@/components/copy-result-modal/types/CopyResultItemElement";
-import { CopyApiResponseType } from "@/serverApi/v3";
+import { CopyApiResponseType } from "@/generated/serverApi/v3";
 
 export interface CopyResultItem {
 	elementId: string; // the element id this item refers to -> we need this to create the edit URL

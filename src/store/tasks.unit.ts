@@ -1,4 +1,4 @@
-import * as serverApi from "../serverApi/v3";
+import * as serverApi from "../generated/serverApi/v3";
 import FinishedTasksModule from "./finished-tasks";
 import { TaskFilter } from "./task.filter";
 import { taskFactory } from "./task.filter.unit";

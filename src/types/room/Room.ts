@@ -5,7 +5,7 @@ import {
 	RoomDetailsResponse,
 	RoomItemResponse,
 	UpdateRoomBodyParams,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 
 export type RoomItem = RoomItemResponse;
 export type RoomDetails = RoomDetailsResponse;

@@ -1,4 +1,4 @@
-import { LanguageType } from "@/serverApi/v3";
+import { LanguageType } from "@/generated/serverApi/v3";
 import {
 	createDayJs,
 	dateFromToday,

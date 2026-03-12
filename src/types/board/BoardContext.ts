@@ -1,3 +1,3 @@
-import { BoardExternalReferenceType as BoardContextType } from "@/serverApi/v3";
+import { BoardExternalReferenceType as BoardContextType } from "@/generated/serverApi/v3";
 
 export { BoardContextType };

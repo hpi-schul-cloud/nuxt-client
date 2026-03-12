@@ -20,7 +20,7 @@ import {
 	PreferredToolListResponse,
 	PreferredToolResponse,
 	ToolContextType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";

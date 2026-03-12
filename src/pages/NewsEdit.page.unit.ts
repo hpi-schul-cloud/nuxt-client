@@ -1,6 +1,6 @@
 import NewsEditPage from "./NewsEdit.page.vue";
-import { NewsApiInterface, NewsResponse } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
+import { NewsApiInterface, NewsResponse } from "@/generated/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,

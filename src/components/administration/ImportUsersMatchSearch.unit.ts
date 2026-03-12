@@ -5,7 +5,7 @@ import {
 	UserMatchResponse,
 	UserMatchResponseMatchedBy,
 	UserMatchResponseRoleNames,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import { THEME_KEY } from "@/utils/inject";

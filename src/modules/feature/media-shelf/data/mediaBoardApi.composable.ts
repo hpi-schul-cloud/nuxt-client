@@ -11,7 +11,7 @@ import {
 	MediaLineApiFactory,
 	MediaLineApiInterface,
 	MediaLineResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 

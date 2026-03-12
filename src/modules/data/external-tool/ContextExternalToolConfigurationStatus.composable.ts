@@ -1,5 +1,5 @@
 import { ContextExternalToolConfigurationStatus } from "./types";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/generated/serverApi/v3";
 import { useAppStore } from "@data-app";
 import { useI18n } from "vue-i18n";
 

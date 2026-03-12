@@ -1,6 +1,6 @@
 import CopyResultModal from "./CopyResultModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { CopyApiResponseType } from "@/serverApi/v3";
+import { CopyApiResponseType } from "@/generated/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";

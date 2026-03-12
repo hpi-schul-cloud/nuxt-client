@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { PickerOption } from "./types";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/generated/serverApi/v3";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { SvsDialog } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";

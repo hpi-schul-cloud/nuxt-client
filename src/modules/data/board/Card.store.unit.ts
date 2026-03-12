@@ -8,7 +8,7 @@ import {
 	ContentElementType,
 	PreferredToolResponse,
 	ToolContextType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import {
 	collaborativeTextEditorElementResponseFactory,

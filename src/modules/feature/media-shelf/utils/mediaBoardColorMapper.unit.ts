@@ -1,5 +1,5 @@
 import { isMediaBoardColor, MediaBoardColorMapper } from "./mediaBoardColorMapper";
-import { MediaBoardColors } from "@/serverApi/v3";
+import { MediaBoardColors } from "@/generated/serverApi/v3";
 import colors from "vuetify/lib/util/colors";
 
 describe(MediaBoardColorMapper.name, () => {

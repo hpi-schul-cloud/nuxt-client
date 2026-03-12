@@ -2,7 +2,7 @@ import { Factory } from "fishery";
 import {
 	ContentElementType,
 	VideoConferenceElementResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { videoConferenceElementContentFactory } from "./videoConferenceElementContentFactory";
 

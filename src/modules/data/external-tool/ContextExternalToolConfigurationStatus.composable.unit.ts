@@ -1,5 +1,5 @@
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/generated/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStoreWithRole,

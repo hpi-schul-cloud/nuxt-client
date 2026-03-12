@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
+import { GroupResponse, GroupUserResponse, RoleName } from "@/generated/serverApi/v3";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";

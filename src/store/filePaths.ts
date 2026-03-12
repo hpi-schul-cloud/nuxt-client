@@ -1,6 +1,6 @@
 import { BusinessError } from "./types/commons";
 import { GlobalFiles, SpecificFiles } from "./types/filePaths";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/generated/serverApi/v3";
 import { useEnvConfig } from "@data-env";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

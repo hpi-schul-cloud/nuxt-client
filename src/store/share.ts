@@ -5,7 +5,7 @@ import {
 	ShareTokenBodyParams,
 	ShareTokenBodyParamsParentType,
 	ShareTokenResponse,
-} from "../serverApi/v3";
+} from "../generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

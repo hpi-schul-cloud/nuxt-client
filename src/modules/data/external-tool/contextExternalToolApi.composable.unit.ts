@@ -1,13 +1,13 @@
 import { ContextExternalToolMapper, ToolContextMapping } from "./context-external-tool.mapper";
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
-import * as serverApi from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import {
 	ContextExternalToolConfigurationTemplateResponse,
 	ContextExternalToolPostParams,
 	ContextExternalToolResponse,
 	ToolContextType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import {
 	contextExternalToolConfigurationTemplateResponseFactory,
 	contextExternalToolFactory,

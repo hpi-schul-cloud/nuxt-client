@@ -23,7 +23,7 @@ import {
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload.types";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@/generated/serverApi/v3";
 import { useI18n } from "vue-i18n";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();

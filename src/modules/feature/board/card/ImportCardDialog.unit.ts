@@ -1,5 +1,5 @@
 import ImportCardDialog from "./ImportCardDialog.vue";
-import { ShareTokenInfoResponseParentType } from "@/serverApi/v3";
+import { ShareTokenInfoResponseParentType } from "@/generated/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { mockApiResponse, mockedPiniaStoreTyping, roomItemFactory } from "@@/tests/test-utils";

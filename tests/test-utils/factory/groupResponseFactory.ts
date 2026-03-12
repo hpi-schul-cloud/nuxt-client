@@ -1,4 +1,4 @@
-import { GroupResponse, GroupResponseType, RoleName } from "@/serverApi/v3";
+import { GroupResponse, GroupResponseType, RoleName } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const groupResponseFactory = Factory.define<GroupResponse>(

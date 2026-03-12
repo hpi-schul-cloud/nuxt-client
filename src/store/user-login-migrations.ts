@@ -5,7 +5,7 @@ import {
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { useAppStore } from "@data-app";

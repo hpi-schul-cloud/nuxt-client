@@ -1,4 +1,4 @@
-import { SchoolFeature } from "@/serverApi/v3";
+import { SchoolFeature } from "@/generated/serverApi/v3";
 import { School } from "@/store/types/schools";
 
 export const mockSchool: School = {

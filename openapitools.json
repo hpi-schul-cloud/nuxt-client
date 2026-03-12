@@ -7,7 +7,7 @@
       "server-api": {
         "generatorName": "typescript-axios",
         "inputSpec": "http://localhost:3030/api/v3/docs-json/",
-        "output": "./src/serverApi/v3",
+        "output": "./src/generated/serverApi/v3",
         "skipValidateSpec": true,
         "enablePostProcessFile": true,
         "additionalProperties": {

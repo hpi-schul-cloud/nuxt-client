@@ -1,4 +1,4 @@
-import { ClassInfoResponse, ClassInfoResponseType } from "@/serverApi/v3";
+import { ClassInfoResponse, ClassInfoResponseType } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const classInfoResponseFactory = Factory.define<ClassInfoResponse>(

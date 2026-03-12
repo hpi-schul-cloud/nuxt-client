@@ -1,5 +1,5 @@
 import { useContentElementState } from "./ContentElementState.composable";
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { ContentElementType, RichTextElementResponse } from "@/generated/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

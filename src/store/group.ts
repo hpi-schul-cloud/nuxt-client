@@ -8,7 +8,7 @@ import {
 	GroupApiFactory,
 	GroupApiInterface,
 	SchoolYearQueryType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";

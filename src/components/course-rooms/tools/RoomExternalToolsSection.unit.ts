@@ -1,6 +1,6 @@
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { Permission, RoleName, ToolContextType } from "@/serverApi/v3";
+import { Permission, RoleName, ToolContextType } from "@/generated/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStore,

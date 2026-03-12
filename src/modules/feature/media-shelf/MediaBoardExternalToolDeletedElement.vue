@@ -17,7 +17,7 @@
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
-import { DeletedElementResponse } from "@/serverApi/v3";
+import { DeletedElementResponse } from "@/generated/serverApi/v3";
 import { WarningChip } from "@ui-chip";
 import { computed, PropType, Ref } from "vue";
 

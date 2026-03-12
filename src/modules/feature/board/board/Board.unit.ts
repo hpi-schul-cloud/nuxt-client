@@ -12,7 +12,7 @@ import {
 	CopyApiResponse,
 	CopyApiResponseType,
 	ShareTokenBodyParamsParentType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";

@@ -1,5 +1,5 @@
 import GeneralSettings from "./GeneralSettings.vue";
-import { CountyResponse, FederalStateResponse, LanguageType, SchoolSystemResponse } from "@/serverApi/v3";
+import { CountyResponse, FederalStateResponse, LanguageType, SchoolSystemResponse } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { toBase64 } from "@/utils/fileHelper";

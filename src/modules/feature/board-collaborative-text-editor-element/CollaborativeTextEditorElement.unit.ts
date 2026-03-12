@@ -1,6 +1,6 @@
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
-import { CollaborativeTextEditorParentType } from "@/serverApi/v3";
+import { CollaborativeTextEditorParentType } from "@/generated/serverApi/v3";
 import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";

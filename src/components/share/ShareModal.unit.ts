@@ -2,7 +2,7 @@ import ShareModal from "./ShareModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { ShareTokenBodyParamsParentType } from "@/serverApi/v3";
+import { ShareTokenBodyParamsParentType } from "@/generated/serverApi/v3";
 import ShareModule from "@/store/share";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { expectNotification } from "@@/tests/test-utils";

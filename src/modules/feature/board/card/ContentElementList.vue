@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType } from "@/generated/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { useEnvConfig } from "@data-env";

@@ -1,5 +1,5 @@
 import { useSchoolApi } from "./schoolApi.composable";
-import * as serverApi from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import { mockApi } from "@@/tests/test-utils";
 import { Mocked } from "vitest";
 

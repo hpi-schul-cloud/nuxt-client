@@ -1,7 +1,7 @@
 import SchoolAdminMigrationSection from "./SchoolAdminMigrationSection.vue";
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse } from "@/generated/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { SCHOOLS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";

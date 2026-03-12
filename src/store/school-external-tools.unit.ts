@@ -6,8 +6,8 @@ import {
 	SchoolExternalToolPostParams,
 	SchoolExternalToolSearchListResponse,
 	ToolApiInterface,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,

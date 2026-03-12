@@ -5,7 +5,7 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 	UserMatchListResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { ApiResponseError, ApiValidationError, BusinessError } from "@/store/types/commons";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";

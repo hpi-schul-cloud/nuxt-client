@@ -1,4 +1,4 @@
-import { MediaBoardColors, MediaLineResponse } from "@/serverApi/v3";
+import { MediaBoardColors, MediaLineResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "../timestampsResponseFactory";
 import { mediaExternalToolElementResponseFactory } from "./mediaExternalToolElementResponseFactory";

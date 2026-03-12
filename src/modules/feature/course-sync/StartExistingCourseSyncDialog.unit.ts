@@ -1,7 +1,7 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { MeResponse, RoleName } from "@/serverApi/v3";
+import { MeResponse, RoleName } from "@/generated/serverApi/v3";
 import { createTestAppStore, expectNotification, groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseApi } from "@data-room";

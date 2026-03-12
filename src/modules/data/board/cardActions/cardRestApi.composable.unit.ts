@@ -9,7 +9,7 @@ import {
 	PreferredToolResponse,
 	RichTextElementResponse,
 	ToolContextType,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { schoolExternalToolsModule } from "@/store";
 import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";

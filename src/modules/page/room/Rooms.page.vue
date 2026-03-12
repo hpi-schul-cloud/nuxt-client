@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import { BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentType } from "@/serverApi/v3";
+import { BoardExternalReferenceType, Permission, ShareTokenBodyParamsParentType } from "@/generated/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess, useAppStore } from "@data-app";
 import { useRoomStore } from "@data-room";

@@ -1,5 +1,5 @@
 import LanguageMenu from "./LanguageMenu.vue";
-import { LanguageType } from "@/serverApi/v3";
+import { LanguageType } from "@/generated/serverApi/v3";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";

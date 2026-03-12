@@ -2,12 +2,12 @@ import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { UserLoginMigration } from "./user-login-migration";
 import UserLoginMigrationModule from "./user-login-migrations";
-import * as serverApi from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import {
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {

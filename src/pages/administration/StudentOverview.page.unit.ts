@@ -5,7 +5,7 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import store from "@/plugins/store";
-import { Permission, RoleName } from "@/serverApi/v3";
+import { Permission, RoleName } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { createTestAppStore, createTestEnvStore, expectNotification, userResponseFactory } from "@@/tests/test-utils";

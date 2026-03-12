@@ -129,7 +129,7 @@
 
 <script setup lang="ts">
 import PrivacySettings from "./PrivacySettings.vue";
-import { LanguageType, Permission, SchoolFeature, SchoolUpdateBodyParams } from "@/serverApi/v3";
+import { LanguageType, Permission, SchoolFeature, SchoolUpdateBodyParams } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { School } from "@/store/types/schools";
 import { toBase64 } from "@/utils/fileHelper";

@@ -1,5 +1,9 @@
-import * as serverApi from "../serverApi/v3";
-import { BoardExternalReferenceType, ShareTokenApiInterface, ShareTokenBodyParamsParentType } from "../serverApi/v3";
+import * as serverApi from "../generated/serverApi/v3";
+import {
+	BoardExternalReferenceType,
+	ShareTokenApiInterface,
+	ShareTokenBodyParamsParentType,
+} from "../generated/serverApi/v3";
 import ShareModule, { ShareOptions } from "./share";
 import courseRoomDetailsModule from "@/store/course-room-details";
 import setupStores from "@@/tests/test-utils/setupStores";

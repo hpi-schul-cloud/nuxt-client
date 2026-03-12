@@ -1,4 +1,4 @@
-import { VideoConferenceJoinResponse } from "@/serverApi/v3";
+import { VideoConferenceJoinResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const videoConferenceJoinResponseFactory =

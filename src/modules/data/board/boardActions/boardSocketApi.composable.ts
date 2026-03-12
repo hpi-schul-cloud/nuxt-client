@@ -20,7 +20,7 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { CreateCardBodyParamsRequiredEmptyElements } from "@/serverApi/v3";
+import { CreateCardBodyParamsRequiredEmptyElements } from "@/generated/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
 import { useAppStore } from "@data-app";

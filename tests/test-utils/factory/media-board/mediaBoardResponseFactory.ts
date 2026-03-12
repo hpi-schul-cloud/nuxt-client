@@ -1,4 +1,4 @@
-import { BoardLayout, MediaBoardResponse } from "@/serverApi/v3";
+import { BoardLayout, MediaBoardResponse } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "../timestampsResponseFactory";
 import { mediaLineResponseFactory } from "./mediaLineResponseFactory";

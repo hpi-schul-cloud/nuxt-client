@@ -1,5 +1,5 @@
 import RoomsOverview from "./RoomsOverview.page.vue";
-import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
+import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@/generated/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	courseInfoDataResponseFactory,

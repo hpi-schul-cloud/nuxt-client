@@ -122,7 +122,7 @@
 
 <script>
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { Permission } from "@/serverApi/v3";
+import { Permission } from "@/generated/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";

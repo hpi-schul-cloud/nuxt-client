@@ -1,4 +1,4 @@
-import { CoursesApiFactory } from "@/serverApi/v3";
+import { CoursesApiFactory } from "@/generated/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 export const useCourseApi = () => {

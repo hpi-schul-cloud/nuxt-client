@@ -66,7 +66,7 @@ import {
 	MediaAvailableLineElementResponse,
 	MediaAvailableLineResponse,
 	MediaBoardColors,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";

@@ -6,7 +6,7 @@ import ContentElementList from "./ContentElementList.vue";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
-import { BoardResponseAllowedOperations, CardResponse } from "@/serverApi/v3";
+import { BoardResponseAllowedOperations, CardResponse } from "@/generated/serverApi/v3";
 import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";

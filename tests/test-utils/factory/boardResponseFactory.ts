@@ -1,5 +1,5 @@
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
-import { BoardLayout, BoardResponse, BoardResponseAllowedOperations } from "@/serverApi/v3";
+import { BoardLayout, BoardResponse, BoardResponseAllowedOperations } from "@/generated/serverApi/v3";
 import { Factory } from "fishery";
 
 export const boardResponseFactory = Factory.define<BoardResponse>(({ sequence, params }) => ({

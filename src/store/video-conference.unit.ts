@@ -1,12 +1,12 @@
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
-import * as serverApi from "@/serverApi/v3";
+import * as serverApi from "@/generated/serverApi/v3";
 import {
 	VideoConferenceApiInterface,
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3";
+} from "@/generated/serverApi/v3";
 import { mockApi } from "@@/tests/test-utils";
 import {
 	videoConferenceInfoFactory,
