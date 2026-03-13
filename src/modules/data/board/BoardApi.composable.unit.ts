@@ -1,17 +1,17 @@
 import { useBoardApi } from "./BoardApi.composable";
+import { ApplicationError } from "@/store/types/application-error";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { mockApi, mockApiResponse } from "@@/tests/test-utils";
+import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
 import {
 	BoardLayout,
 	ContentElementType,
 	ExternalToolElementResponse,
 	H5pElementResponse,
 	LayoutBodyParams,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
-import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
-import { ApplicationError } from "@/store/types/application-error";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { mockApi, mockApiResponse } from "@@/tests/test-utils";
-import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+} from "@api-server";
+import * as serverApi from "@api-server";
+import { CardResponse, DrawingElementResponse } from "@api-server";
 import { Mocked } from "vitest";
 
 let boardApi: Mocked<serverApi.BoardApiInterface>;
@@ -155,7 +155,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
 				id: "richt-text-element-id",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 				content: {
 					text: "content-text",
 					inputFormat: "input-format",
@@ -165,7 +165,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			};
 
 			await updateElementCall(payload);
@@ -176,7 +176,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
 				id: "file-element-id",
-				type: ContentElementType.File,
+				type: ContentElementType.FILE,
 				content: {
 					caption: "caption",
 					alternativeText: "alternative text",
@@ -185,7 +185,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.File,
+				type: ContentElementType.FILE,
 			};
 
 			await updateElementCall(payload);
@@ -196,7 +196,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
 				id: "file-folder-element-id",
-				type: ContentElementType.FileFolder,
+				type: ContentElementType.FILE_FOLDER,
 				content: {
 					title: "New Folder",
 				},
@@ -204,7 +204,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.FileFolder,
+				type: ContentElementType.FILE_FOLDER,
 			};
 
 			await updateElementCall(payload);
@@ -215,7 +215,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: ExternalToolElementResponse = {
 				id: "external-tool-element-id",
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 				content: {
 					contextExternalToolId: "context-external-tool-id",
 				},
@@ -223,7 +223,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 			};
 
 			await updateElementCall(payload);
@@ -235,7 +235,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: DrawingElementResponse = {
 				id: "drawing-tool-element-id",
-				type: ContentElementType.Drawing,
+				type: ContentElementType.DRAWING,
 				content: {
 					description: "Some description",
 				},
@@ -243,7 +243,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.Drawing,
+				type: ContentElementType.DRAWING,
 			};
 
 			await updateElementCall(payload);
@@ -255,7 +255,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: serverApi.VideoConferenceElementResponse = {
 				id: "video-conference-element-id",
-				type: ContentElementType.VideoConference,
+				type: ContentElementType.VIDEO_CONFERENCE,
 				content: {
 					title: "Some title",
 				},
@@ -263,7 +263,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.VideoConference,
+				type: ContentElementType.VIDEO_CONFERENCE,
 			};
 
 			await updateElementCall(payload);
@@ -275,7 +275,7 @@ describe("BoardApi.composable", () => {
 			const { updateElementCall } = useBoardApi();
 			const payload: H5pElementResponse = {
 				id: "external-tool-element-id",
-				type: ContentElementType.H5p,
+				type: ContentElementType.H5P,
 				content: {
 					contentId: "context-external-tool-id",
 				},
@@ -283,7 +283,7 @@ describe("BoardApi.composable", () => {
 			};
 			const data = {
 				content: payload.content,
-				type: ContentElementType.H5p,
+				type: ContentElementType.H5P,
 			};
 
 			await updateElementCall(payload);
@@ -309,9 +309,9 @@ describe("BoardApi.composable", () => {
 			const payload = "card-id";
 
 			await createElementCall(payload, {
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			});
-			expect(cardApi.cardControllerCreateElement).toHaveBeenCalledWith(payload, { type: ContentElementType.RichText });
+			expect(cardApi.cardControllerCreateElement).toHaveBeenCalledWith(payload, { type: ContentElementType.RICH_TEXT });
 		});
 	});
 
@@ -360,7 +360,7 @@ describe("BoardApi.composable", () => {
 
 			const payload = "column-id";
 			const INITIAL_ELEMENTS = {
-				requiredEmptyElements: [serverApi.CreateCardBodyParamsRequiredEmptyElementsEnum.RichText],
+				requiredEmptyElements: [serverApi.CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 			};
 
 			const result = await createCardCall(payload);
@@ -519,10 +519,10 @@ describe("BoardApi.composable", () => {
 		it("should call boardControllerUpdateLayout api", async () => {
 			const { updateBoardLayoutCall } = useBoardApi();
 
-			await updateBoardLayoutCall("board-id", BoardLayout.List);
+			await updateBoardLayoutCall("board-id", BoardLayout.LIST);
 
 			expect(boardApi.boardControllerUpdateLayout).toHaveBeenCalledWith<[string, LayoutBodyParams]>("board-id", {
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 			});
 		});
 	});

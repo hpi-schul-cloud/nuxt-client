@@ -91,10 +91,10 @@ import { FilterQuery, User } from "@/components/administration/data-filter/types
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { Permission, RoleName } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
@@ -129,7 +129,7 @@ const {
 	pagination,
 	qrLinks,
 	deletingProgress,
-} = useUsers(RoleName.Teacher);
+} = useUsers(RoleName.TEACHER);
 
 const { t } = useI18n();
 
@@ -178,7 +178,7 @@ const tableActions = [
 		label: t("pages.administration.teachers.index.tableActions.delete"),
 		icon: mdiDeleteOutline,
 		action: openDeleteDialog,
-		permission: Permission.TeacherDelete,
+		permission: Permission.TEACHER_DELETE,
 		dataTestId: "delete_action",
 	},
 ];
@@ -262,7 +262,7 @@ const filteredActions = computed(() => {
 	editedActions = tableActions.filter((action) => (action.permission ? userHasPermission(action.permission) : true));
 
 	// filters out the QR bulk action is user is not an admin
-	if (!useAppStore().userRoles.some((name) => name === RoleName.Administrator)) {
+	if (!useAppStore().userRoles.some((name) => name === RoleName.ADMINISTRATOR)) {
 		editedActions = editedActions.filter(
 			(action) => action.label !== t("pages.administration.teachers.index.tableActions.qr")
 		);
@@ -281,7 +281,7 @@ const filteredActions = computed(() => {
 const filteredColumns = computed(() => {
 	let editedColumns = tableColumns;
 	// filters out edit column if school is external or if user is not an admin
-	if (schoolIsExternallyManaged.value || !useAppStore().userRoles.some((name) => name === RoleName.Administrator)) {
+	if (schoolIsExternallyManaged.value || !useAppStore().userRoles.some((name) => name === RoleName.ADMINISTRATOR)) {
 		editedColumns = tableColumns.filter(
 			// _id field sets the edit column
 			(col) => col.field !== "_id"
@@ -303,7 +303,7 @@ const filteredColumns = computed(() => {
 });
 
 const fab = computed(() => {
-	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.TeacherCreate)) {
+	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.TEACHER_CREATE)) {
 		return;
 	}
 

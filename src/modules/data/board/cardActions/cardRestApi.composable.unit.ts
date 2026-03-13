@@ -2,14 +2,6 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import { UpdateCardHeightRequestPayload, UpdateCardTitleRequestPayload } from "./cardActionPayload.types";
 import { useCardRestApi } from "./cardRestApi.composable";
-import {
-	ContentElementType,
-	ExternalToolElementResponse,
-	PreferredToolListResponse,
-	PreferredToolResponse,
-	RichTextElementResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
 import { schoolExternalToolsModule } from "@/store";
 import { ToolParameterScope } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -28,6 +20,14 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import {
+	ContentElementType,
+	ExternalToolElementResponse,
+	PreferredToolListResponse,
+	PreferredToolResponse,
+	RichTextElementResponse,
+	ToolContextType,
+} from "@api-server";
 import { useBoardStore, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import {
 	ContextExternalToolConfigurationTemplate,
@@ -120,7 +120,7 @@ describe("useCardRestApi", () => {
 
 			await createElementRequest({
 				cardId: "cardId",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 				toPosition: 0,
 			});
 
@@ -140,7 +140,7 @@ describe("useCardRestApi", () => {
 
 			const payload = {
 				cardId: card.id,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 				toPosition: 0,
 			};
 
@@ -162,7 +162,7 @@ describe("useCardRestApi", () => {
 
 			await createElementRequest({
 				cardId: card.id,
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
@@ -196,7 +196,7 @@ describe("useCardRestApi", () => {
 				await createPreferredElement(
 					{
 						cardId: "cardId",
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 						toPosition: 0,
 					},
 					preferredTool
@@ -251,7 +251,7 @@ describe("useCardRestApi", () => {
 				await createPreferredElement(
 					{
 						cardId: "cardId",
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 						toPosition: 0,
 					},
 					preferredTool
@@ -259,7 +259,7 @@ describe("useCardRestApi", () => {
 
 				expect(mockedContextExternalToolApiCalls.fetchAvailableToolsForContextCall).toHaveBeenCalledWith(
 					newElementResponse.data.id,
-					ToolContextType.BoardElement
+					ToolContextType.BOARD_ELEMENT
 				);
 			});
 
@@ -269,7 +269,7 @@ describe("useCardRestApi", () => {
 
 				const payload = {
 					cardId: card.id,
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					toPosition: 0,
 				};
 
@@ -307,7 +307,7 @@ describe("useCardRestApi", () => {
 
 				const payload = {
 					cardId: card.id,
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					toPosition: 0,
 				};
 
@@ -379,7 +379,7 @@ describe("useCardRestApi", () => {
 
 				const payload = {
 					cardId: card.id,
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					toPosition: 0,
 				};
 
@@ -393,7 +393,7 @@ describe("useCardRestApi", () => {
 				const contextExternalToolSave: ContextExternalToolSave = {
 					schoolToolId: preferredTool.schoolExternalToolId,
 					contextId: newElementResponse.data.id,
-					contextType: ToolContextType.BoardElement,
+					contextType: ToolContextType.BOARD_ELEMENT,
 					parameters: [],
 				};
 
@@ -460,7 +460,7 @@ describe("useCardRestApi", () => {
 				await createPreferredElement(
 					{
 						cardId: card.id,
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 					},
 					preferredTool
 				);
@@ -499,15 +499,15 @@ describe("useCardRestApi", () => {
 			it("should fetch preferred tools", async () => {
 				const { getPreferredTools } = setupPreferredTool();
 
-				await getPreferredTools(ToolContextType.BoardElement);
+				await getPreferredTools(ToolContextType.BOARD_ELEMENT);
 
-				expect(mockedContextExternalToolApiCalls.fetchPreferredTools).toBeCalledWith(ToolContextType.BoardElement);
+				expect(mockedContextExternalToolApiCalls.fetchPreferredTools).toBeCalledWith(ToolContextType.BOARD_ELEMENT);
 			});
 
 			it("should return preferred tools", async () => {
 				const { getPreferredTools, preferredTools } = setupPreferredTool();
 
-				const result = await getPreferredTools(ToolContextType.BoardElement);
+				const result = await getPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(result).toEqual(preferredTools.data);
 			});
@@ -527,7 +527,7 @@ describe("useCardRestApi", () => {
 			it("should show a failure notification", async () => {
 				const { getPreferredTools } = setupPreferredTool();
 
-				await getPreferredTools(ToolContextType.BoardElement);
+				await getPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expectNotification("error");
 			});

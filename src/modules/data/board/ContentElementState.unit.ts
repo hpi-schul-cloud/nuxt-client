@@ -1,6 +1,6 @@
 import { useContentElementState } from "./ContentElementState.composable";
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -9,7 +9,7 @@ vi.mock("@util-board/InlineEditInteractionHandler.composable");
 
 const TEST_ELEMENT: RichTextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.RichText,
+	type: ContentElementType.RICH_TEXT,
 	content: {
 		text: "TestContent",
 		inputFormat: "richTextCk5",

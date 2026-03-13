@@ -1,5 +1,5 @@
-import { MetaDataEntityType, MetaTagExtractorApiFactory, MetaTagExtractorResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { MetaDataEntityType, MetaTagExtractorApiFactory, MetaTagExtractorResponse } from "@api-server";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 
@@ -31,11 +31,11 @@ export const useMetaTagExtractorApi = () => {
 
 	const getPrefix = (type: MetaDataEntityType): string => {
 		const typeToLanguageKeyMap: Partial<Record<MetaDataEntityType, string>> = {
-			[MetaDataEntityType.Course]: "common.labels.course",
-			[MetaDataEntityType.Lesson]: "common.words.topic",
-			[MetaDataEntityType.Task]: "common.words.task",
-			[MetaDataEntityType.Board]: "common.words.board",
-			[MetaDataEntityType.BoardCard]: "components.boardCard",
+			[MetaDataEntityType.COURSE]: "common.labels.course",
+			[MetaDataEntityType.LESSON]: "common.words.topic",
+			[MetaDataEntityType.TASK]: "common.words.task",
+			[MetaDataEntityType.BOARD]: "common.words.board",
+			[MetaDataEntityType.BOARD_CARD]: "components.boardCard",
 		};
 
 		const prefixKey: string | undefined = typeToLanguageKeyMap[type];
@@ -44,7 +44,7 @@ export const useMetaTagExtractorApi = () => {
 	};
 
 	const getTitle = (type: MetaDataEntityType, title: string): string => {
-		if (type === MetaDataEntityType.Board && !title) {
+		if (type === MetaDataEntityType.BOARD && !title) {
 			return t("pages.room.boardCard.label.courseBoard");
 		}
 
@@ -52,7 +52,7 @@ export const useMetaTagExtractorApi = () => {
 	};
 
 	const getSuffix = (type: MetaDataEntityType, parentTitle: string | undefined): string => {
-		if (type === MetaDataEntityType.Board && parentTitle) {
+		if (type === MetaDataEntityType.BOARD && parentTitle) {
 			return `(${parentTitle})`;
 		}
 

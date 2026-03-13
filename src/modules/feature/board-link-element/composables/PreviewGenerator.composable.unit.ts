@@ -1,7 +1,7 @@
 import { usePreviewGenerator } from "./PreviewGenerator.composable";
-import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { fileRecordFactory, mockComposable } from "@@/tests/test-utils";
+import { FileRecordParentType, PreviewStatus } from "@api-file-storage";
 import * as FileStorageApi from "@data-file";
 import { mount } from "@vue/test-utils";
 import { defineComponent } from "vue";

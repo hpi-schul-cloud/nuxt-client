@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
@@ -50,7 +50,7 @@ defineProps<Props>();
 
 const { instituteTitle } = storeToRefs(useEnvStore());
 
-const isThr = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr);
+const isThr = computed(() => useEnvConfig().value.SC_THEME === SchulcloudTheme.THR);
 </script>
 
 <style lang="scss" scoped>

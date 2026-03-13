@@ -75,22 +75,22 @@ onMounted(() => {
 
 const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 	switch (validationMessage) {
-		case RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool:
+		case RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool", { schoolName });
 			break;
-		case RoomInvitationLinkValidationError.Expired:
+		case RoomInvitationLinkValidationError.EXPIRED:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
 			break;
-		case RoomInvitationLinkValidationError.NotUsableForCurrentRole:
+		case RoomInvitationLinkValidationError.NOT_USABLE_FOR_CURRENT_ROLE:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.notUsableForCurrentRole");
 			break;
-		case RoomInvitationLinkValidationError.RestrictedToCreatorSchool:
+		case RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.restrictedToCreatorSchool", { schoolName });
 			break;
-		case RoomInvitationLinkValidationError.InvalidLink:
+		case RoomInvitationLinkValidationError.INVALID_LINK:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");
 			break;
-		case RoomInvitationLinkValidationError.RoomApplicantWaiting:
+		case RoomInvitationLinkValidationError.ROOM_APPLICANT_WAITING:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.confirmationPending");
 			break;
 		default:

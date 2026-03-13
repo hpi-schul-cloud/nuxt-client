@@ -1,8 +1,8 @@
 import RoomForm from "./RoomForm.vue";
-import { RoomFeatures } from "@/serverApi/v3";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomFeatures } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -15,7 +15,7 @@ describe("@feature-room/RoomForm", () => {
 	const setup = (roomOverrides: Partial<RoomCreateParams> = {}) => {
 		const defaultRoom: RoomCreateParams = {
 			name: "A11Y for Beginners",
-			color: RoomColor.Magenta,
+			color: RoomColor.MAGENTA,
 			startDate: "",
 			endDate: "",
 			features: [],
@@ -179,7 +179,7 @@ describe("@feature-room/RoomForm", () => {
 
 		it("should check the video conference checkbox if the feature is enabled", () => {
 			const { wrapper } = setup({
-				features: [RoomFeatures.EditorManageVideoconference],
+				features: [RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE],
 			});
 
 			const checkbox = wrapper.get('[data-testid="room-video-conference-checkbox"]');
@@ -192,12 +192,12 @@ describe("@feature-room/RoomForm", () => {
 			const checkbox = wrapper.getComponent('[data-testid="room-video-conference-checkbox"]');
 			await checkbox.setValue(true);
 
-			expect(room.features).toEqual([RoomFeatures.EditorManageVideoconference]);
+			expect(room.features).toEqual([RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE]);
 		});
 
 		it("should remove video conference feature", async () => {
 			const { room, wrapper } = setup({
-				features: [RoomFeatures.EditorManageVideoconference],
+				features: [RoomFeatures.EDITOR_MANAGE_VIDEOCONFERENCE],
 			});
 
 			const checkbox = wrapper.getComponent('[data-testid="room-video-conference-checkbox"]');

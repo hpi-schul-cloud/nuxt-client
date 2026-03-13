@@ -1,6 +1,6 @@
+import { apiResponseErrorFactory } from "./apiResponseErrorFactory";
 import { AxiosError, AxiosHeaders } from "axios";
 import { DeepPartial, Factory } from "fishery";
-import { apiResponseErrorFactory } from "./apiResponseErrorFactory";
 
 class AxiosErrorFactory extends Factory<AxiosError> {
 	withStatusCode(statusCode: number): this {

@@ -1,5 +1,5 @@
-import { CoursesApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { CoursesApiFactory } from "@api-server";
 
 export const useCourseApi = () => {
 	const courseApi = CoursesApiFactory(undefined, "/v3", $axios);

@@ -1,7 +1,7 @@
 import UserMenu from "./UserMenu.vue";
-import { LanguageType } from "@/serverApi/v3";
 import { createTestAppStore, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { useOAuthApi } from "@data-oauth";
 import { System, useSystemApi } from "@data-system";
 import { createTestingPinia } from "@pinia/testing";
@@ -26,7 +26,7 @@ describe("@ui-layout/UserMenu", () => {
 
 		createTestEnvStore({
 			FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 
 		useSystemApiMock = mockComposable(useSystemApi);

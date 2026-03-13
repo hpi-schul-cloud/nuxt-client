@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { LanguageType } from "@/serverApi/v3";
+import { LanguageType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { computed } from "vue";

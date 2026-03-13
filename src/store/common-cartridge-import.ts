@@ -1,6 +1,7 @@
-import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
-import { FileApiFactory, FileApiInterface, FileRecordParentType, StorageLocation } from "@/fileStorageApi/v3";
 import { $axios } from "@/utils/api";
+import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@api-common-cartridge";
+import { FileApiFactory, FileApiInterface } from "@api-file-storage";
+import { FileRecordParentType, StorageLocation } from "@api-file-storage";
 import { useAppStoreRefs } from "@data-app";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 

@@ -1,8 +1,8 @@
 import RoomContentGrid from "./RoomContentGrid.vue";
 import RoomContentGridItem from "./RoomContentGridItem.vue";
-import { RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { roomBoardGridItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { useRoomDetailsStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

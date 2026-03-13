@@ -1,5 +1,6 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { ElementCreate, ElementMove, LineMove } from "./types";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import {
 	BoardLayout,
 	DeletedElementResponse,
@@ -8,8 +9,7 @@ import {
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
-} from "@/serverApi/v3";
-import { createTestableSharedComposable } from "@/utils/create-shared-composable";
+} from "@api-server";
 import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { Ref, ref } from "vue";
 

@@ -1,5 +1,8 @@
 import { ApplicationError } from "./types/application-error";
 import { School } from "./types/schools";
+import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import {
 	FederalStateResponse,
 	SchoolApiFactory,
@@ -14,10 +17,7 @@ import {
 	SystemsApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
+} from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { AxiosError } from "axios";
@@ -60,15 +60,15 @@ export default class SchoolsModule extends VuexModule {
 		purpose: undefined,
 		features: [],
 		featureObject: {
-			[SchoolFeature.RocketChat]: false,
-			[SchoolFeature.Videoconference]: false,
-			[SchoolFeature.StudentVisibility]: false,
-			[SchoolFeature.LdapUniventionMigrationSchool]: false,
-			[SchoolFeature.ShowOutdatedUsers]: false,
-			[SchoolFeature.EnableLdapSyncDuringMigration]: false,
-			[SchoolFeature.OauthProvisioningEnabled]: false,
-			[SchoolFeature.Nextcloud]: false,
-			[SchoolFeature.AiTutor]: false,
+			[SchoolFeature.ROCKET_CHAT]: false,
+			[SchoolFeature.VIDEOCONFERENCE]: false,
+			[SchoolFeature.STUDENT_VISIBILITY]: false,
+			[SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL]: false,
+			[SchoolFeature.SHOW_OUTDATED_USERS]: false,
+			[SchoolFeature.ENABLE_LDAP_SYNC_DURING_MIGRATION]: false,
+			[SchoolFeature.OAUTH_PROVISIONING_ENABLED]: false,
+			[SchoolFeature.NEXTCLOUD]: false,
+			[SchoolFeature.AI_TUTOR]: false,
 		},
 		instanceFeatures: [],
 		permissions: {},
@@ -159,7 +159,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get schoolIsExternallyManaged(): boolean {
-		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.Thr;
+		const isThr = useEnvConfig().value.SC_THEME === SchulcloudTheme.THR;
 		const result = this.school.isExternal || isThr;
 
 		return result;

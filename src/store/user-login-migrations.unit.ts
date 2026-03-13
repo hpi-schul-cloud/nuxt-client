@@ -2,12 +2,6 @@ import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { UserLoginMigration } from "./user-login-migration";
 import UserLoginMigrationModule from "./user-login-migrations";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	UserLoginMigrationApiInterface,
-	UserLoginMigrationResponse,
-	UserLoginMigrationSearchListResponse,
-} from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
@@ -22,6 +16,12 @@ import {
 	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import {
+	UserLoginMigrationApiInterface,
+	UserLoginMigrationResponse,
+	UserLoginMigrationSearchListResponse,
+} from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";

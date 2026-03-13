@@ -2,14 +2,14 @@ import { GroupMapper } from "./group/group.mapper";
 import { ClassInfo } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	ClassInfoSearchListResponse,
 	ClassSortQueryType,
 	GroupApiFactory,
 	GroupApiInterface,
 	SchoolYearQueryType,
-} from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -30,7 +30,7 @@ export default class GroupModule extends VuexModule {
 		total: 0,
 	};
 
-	private sortBy?: ClassSortQueryType = ClassSortQueryType.Name;
+	private sortBy?: ClassSortQueryType = ClassSortQueryType.NAME;
 	private sortOrder: SortOrder = SortOrder.ASC;
 	private page = 1;
 

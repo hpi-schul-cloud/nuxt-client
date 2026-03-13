@@ -1,6 +1,5 @@
 import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -13,6 +12,7 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
@@ -72,20 +72,20 @@ describe("RoomAdminMembersTable", () => {
 
 		const members = options?.members ?? [
 			...roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomadmin,
+				roomRoleName: RoleName.ROOMADMIN,
 			}),
 			...roomMemberFactory.buildList(2, {
 				schoolId: "different-school-id",
 				schoolName: "Different School",
 				firstName: "---",
 				lastName: "---",
-				roomRoleName: RoleName.Roomviewer,
-				schoolRoleNames: [RoleName.Student],
+				roomRoleName: RoleName.ROOMVIEWER,
+				schoolRoleNames: [RoleName.STUDENT],
 			}),
 			...roomMemberFactory.buildList(1, {
 				schoolId: "different-school-id",
 				schoolName: "Different School",
-				roomRoleName: RoleName.Roomowner,
+				roomRoleName: RoleName.ROOMOWNER,
 				userId: currentUser.userId,
 			}),
 		];
@@ -148,22 +148,22 @@ describe("RoomAdminMembersTable", () => {
 			it.each([
 				{
 					description: "teacher icon for teacher",
-					schoolRoleNames: [RoleName.Teacher],
+					schoolRoleNames: [RoleName.TEACHER],
 					expectedIcon: mdiAccountSchoolOutline,
 				},
 				{
 					description: "student icon for students",
-					schoolRoleNames: [RoleName.Student],
+					schoolRoleNames: [RoleName.STUDENT],
 					expectedIcon: mdiAccountOutline,
 				},
 				{
 					description: "expert icon for external persons",
-					schoolRoleNames: [RoleName.ExternalPerson],
+					schoolRoleNames: [RoleName.EXTERNAL_PERSON],
 					expectedIcon: mdiAccountClockOutline,
 				},
 				{
 					description: "teacher icon if teacher and admin roles are present",
-					schoolRoleNames: [RoleName.Administrator, RoleName.Teacher],
+					schoolRoleNames: [RoleName.ADMINISTRATOR, RoleName.TEACHER],
 					expectedIcon: mdiAccountSchoolOutline,
 				},
 			])("should render $description", ({ schoolRoleNames, expectedIcon }) => {
@@ -245,7 +245,7 @@ describe("RoomAdminMembersTable", () => {
 					`[data-testid="kebab-menu-${member.userId}-change-permission"]`
 				);
 
-				const userIsRoomOwner = member.roomRoleName === RoleName.Roomowner;
+				const userIsRoomOwner = member.roomRoleName === RoleName.ROOMOWNER;
 
 				if (userIsRoomOwner) {
 					expect(removeMemberAction.exists()).toBe(false);

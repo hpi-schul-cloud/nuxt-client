@@ -2,10 +2,10 @@ import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
-import { RoleName } from "@/serverApi/v3";
 import { FileRecord, FileRecordVirusScanStatus } from "@/types/file/File";
 import { createTestAppStoreWithRole, fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
@@ -18,7 +18,7 @@ vi.mock("vue-router");
 describe("FileTable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		createTestAppStoreWithRole(RoleName.Teacher);
+		createTestAppStoreWithRole(RoleName.TEACHER);
 	});
 
 	const setupWrapper = (props: {

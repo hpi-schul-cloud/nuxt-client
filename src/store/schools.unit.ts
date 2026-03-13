@@ -1,11 +1,11 @@
 import SchoolsModule from "./schools";
-import * as serverApi from "@/serverApi/v3/api";
-import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@/serverApi/v3/api";
 import { createTestAppStore, createTestAppStoreWithSchool, createTestEnvStore, mockApi } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import * as serverApi from "@api-server";
+import { SchoolFeature, SchulcloudTheme, SystemsApiInterface } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosError } from "axios";
 import { setActivePinia } from "pinia";
@@ -51,7 +51,7 @@ describe("schools module", () => {
 			it("should set school state correctly", async () => {
 				createTestAppStore();
 				const mockSchoolResponse = schoolResponseFactory.build({
-					features: [serverApi.SchoolFeature.RocketChat, serverApi.SchoolFeature.Videoconference],
+					features: [serverApi.SchoolFeature.ROCKET_CHAT, serverApi.SchoolFeature.VIDEOCONFERENCE],
 				});
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(mockApiResponse({ data: mockSchoolResponse }));
 				const schoolsModule = new SchoolsModule({});
@@ -141,7 +141,7 @@ describe("schools module", () => {
 			it("should call backend and set state correctly", async () => {
 				const uploadData = {
 					name: "Paul Newname Gymnasium",
-					features: [serverApi.SchoolFeature.RocketChat],
+					features: [serverApi.SchoolFeature.ROCKET_CHAT],
 				};
 
 				const mockSchoolResponse = schoolResponseFactory.build();
@@ -168,7 +168,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				const uploadData = {
 					data: "some data to be updated",
-					features: [serverApi.SchoolFeature.RocketChat],
+					features: [serverApi.SchoolFeature.ROCKET_CHAT],
 				};
 				const schoolsModule = new SchoolsModule({});
 				schoolApi.schoolControllerUpdateSchool.mockRejectedValueOnce(new AxiosError());
@@ -574,7 +574,7 @@ describe("schools module", () => {
 
 		describe("school is externally managed", () => {
 			it("should return true when theme is thr", () => {
-				createTestEnvStore({ SC_THEME: SchulcloudTheme.Thr });
+				createTestEnvStore({ SC_THEME: SchulcloudTheme.THR });
 				const schoolsModule = new SchoolsModule({});
 				const result = schoolsModule.schoolIsExternallyManaged;
 				expect(result).toBe(true);
@@ -582,7 +582,7 @@ describe("schools module", () => {
 
 			describe("when theme is not thr", () => {
 				const setupTheme = () => {
-					createTestEnvStore({ SC_THEME: SchulcloudTheme.Default });
+					createTestEnvStore({ SC_THEME: SchulcloudTheme.DEFAULT });
 				};
 
 				describe("when school is external", () => {

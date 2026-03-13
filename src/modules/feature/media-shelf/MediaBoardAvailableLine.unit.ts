@@ -1,9 +1,9 @@
 import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { BoardLayout } from "@/serverApi/v3";
 import { mediaAvailableLineElementResponseFactory, mediaAvailableLineResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
 import { useDragAndDrop } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { SortableEvent } from "sortablejs";
@@ -16,7 +16,7 @@ describe("MediaBoardAvailableLine", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoardAvailableLine> = {
 			line: mediaAvailableLineResponseFactory.build(),
-			layout: BoardLayout.List,
+			layout: BoardLayout.LIST,
 		}
 	) => {
 		const wrapper = mount(MediaBoardAvailableLine, {
@@ -73,7 +73,7 @@ describe("MediaBoardAvailableLine", () => {
 
 			const { wrapper } = getWrapper({
 				line: availableMedia,
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 			});
 
 			const toLineId = "toLineId";
@@ -219,7 +219,7 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaAvailableLineResponseFactory.build(),
-				layout: BoardLayout.Grid,
+				layout: BoardLayout.GRID,
 			});
 
 			return {
@@ -240,7 +240,7 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaAvailableLineResponseFactory.build(),
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 			});
 
 			return {

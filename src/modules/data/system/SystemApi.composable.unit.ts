@@ -1,6 +1,6 @@
-import * as serverApi from "@/serverApi/v3/api";
-import { PublicSystemResponse, SystemsApiInterface } from "@/serverApi/v3/api";
 import { mockApiResponse, mockComposable } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { PublicSystemResponse, SystemsApiInterface } from "@api-server";
 import { useSystemApi } from "@data-system";
 import { useErrorHandler } from "@util-error-handling";
 import { Mocked } from "vitest";

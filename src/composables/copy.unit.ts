@@ -1,11 +1,11 @@
 import { useCopy } from "./copy";
-import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { CopyApiResponseStatus } from "@api-server";
 import { useLoadingStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -47,7 +47,7 @@ describe("copy composable", () => {
 
 	it("should call copyModule.copy()", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatus.SUCCESS });
 
 		await copy(payload);
 
@@ -57,7 +57,7 @@ describe("copy composable", () => {
 
 	it("should open and close loading dialog", async () => {
 		const { copy, copyModuleMock, payload, loadingStore } = setup();
-		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatus.SUCCESS });
 
 		await copy(payload);
 
@@ -77,7 +77,7 @@ describe("copy composable", () => {
 				id: "testId",
 				type: copyParamsType,
 			};
-			copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+			copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatus.SUCCESS });
 
 			await copy(payload);
 
@@ -92,7 +92,7 @@ describe("copy composable", () => {
 			type: CopyParamsTypeEnum.Course,
 		};
 
-		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Success });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatus.SUCCESS });
 
 		await copy(payload);
 
@@ -101,7 +101,7 @@ describe("copy composable", () => {
 
 	it("should open failure alert notification on failed copy", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Failure });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatus.FAILURE });
 
 		await copy(payload);
 
@@ -110,7 +110,7 @@ describe("copy composable", () => {
 
 	it("should open copyResultModal notification on partially failed copy", async () => {
 		const { copy, copyModuleMock, payload } = setup();
-		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatusEnum.Partial });
+		copyModuleMock.copy = vi.fn().mockResolvedValue({ status: CopyApiResponseStatus.PARTIAL });
 
 		await copy(payload);
 

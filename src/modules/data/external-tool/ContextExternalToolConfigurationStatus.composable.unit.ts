@@ -1,10 +1,10 @@
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
-import { RoleName } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStoreWithRole,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { RoleName } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 
@@ -13,7 +13,7 @@ vi.mock("vue-i18n", () => ({
 }));
 
 describe("ToolConfigurationStatus.composable", () => {
-	const getComposable = (userRole = RoleName.Teacher) => {
+	const getComposable = (userRole = RoleName.TEACHER) => {
 		setActivePinia(createTestingPinia());
 		createTestAppStoreWithRole(userRole);
 
@@ -36,7 +36,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isOutdatedOnScopeContext: true,
 				});
 
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				return {
 					toolConfigurationStatus,
@@ -59,7 +59,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isOutdatedOnScopeSchool: true,
 				});
 
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				return {
 					toolConfigurationStatus,
@@ -82,7 +82,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isOutdatedOnScopeContext: true,
 				});
 
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				return {
 					toolConfigurationStatus,
@@ -105,7 +105,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isIncompleteOnScopeContext: true,
 				});
 
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				return {
 					toolConfigurationStatus,
@@ -128,7 +128,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isIncompleteOperationalOnScopeContext: true,
 				});
 
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				return {
 					toolConfigurationStatus,
@@ -149,7 +149,7 @@ describe("ToolConfigurationStatus.composable", () => {
 			const setup = () => {
 				const toolConfigurationStatus = contextExternalToolConfigurationStatusFactory.build();
 
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				return {
 					toolConfigurationStatus,
@@ -173,7 +173,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isOutdatedOnScopeContext: true,
 				});
 
-				const { composable } = getComposable(RoleName.Student);
+				const { composable } = getComposable(RoleName.STUDENT);
 
 				return {
 					toolConfigurationStatus,
@@ -199,7 +199,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isDeactivated: true,
 					});
 
-					const { composable } = getComposable(RoleName.Administrator);
+					const { composable } = getComposable(RoleName.ADMINISTRATOR);
 
 					return {
 						composable,
@@ -222,7 +222,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isNotLicensed: true,
 					});
 
-					const { composable } = getComposable(RoleName.Administrator);
+					const { composable } = getComposable(RoleName.ADMINISTRATOR);
 
 					return {
 						composable,
@@ -245,7 +245,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isIncompleteOnScopeContext: true,
 					});
 
-					const { composable } = getComposable(RoleName.Administrator);
+					const { composable } = getComposable(RoleName.ADMINISTRATOR);
 
 					return {
 						composable,
@@ -270,7 +270,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isDeactivated: true,
 					});
 
-					const { composable } = getComposable(RoleName.Teacher);
+					const { composable } = getComposable(RoleName.TEACHER);
 
 					return {
 						composable,
@@ -293,7 +293,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isNotLicensed: true,
 					});
 
-					const { composable } = getComposable(RoleName.Teacher);
+					const { composable } = getComposable(RoleName.TEACHER);
 
 					return {
 						composable,
@@ -316,7 +316,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isOutdatedOnScopeContext: true,
 					});
 
-					const { composable } = getComposable(RoleName.Teacher);
+					const { composable } = getComposable(RoleName.TEACHER);
 
 					return {
 						composable,
@@ -341,7 +341,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isDeactivated: true,
 					});
 
-					const { composable } = getComposable(RoleName.Student);
+					const { composable } = getComposable(RoleName.STUDENT);
 
 					return {
 						composable,
@@ -364,7 +364,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isNotLicensed: true,
 					});
 
-					const { composable } = getComposable(RoleName.Student);
+					const { composable } = getComposable(RoleName.STUDENT);
 
 					return {
 						composable,
@@ -387,7 +387,7 @@ describe("ToolConfigurationStatus.composable", () => {
 						isOutdatedOnScopeSchool: true,
 					});
 
-					const { composable } = getComposable(RoleName.Student);
+					const { composable } = getComposable(RoleName.STUDENT);
 
 					return {
 						composable,
@@ -409,7 +409,7 @@ describe("ToolConfigurationStatus.composable", () => {
 	describe("determineDeactivatedTranslationKey", () => {
 		describe("when user is student and tool is deactivated", () => {
 			it("should return translation key for deactivated tool ", () => {
-				const { composable } = getComposable(RoleName.Student);
+				const { composable } = getComposable(RoleName.STUDENT);
 
 				const result = composable.determineDeactivatedTranslationKey();
 
@@ -419,7 +419,7 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is teacher and tool is deactivated", () => {
 			it("should return translation key for deactivated tool ", () => {
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				const result = composable.determineDeactivatedTranslationKey();
 
@@ -431,7 +431,7 @@ describe("ToolConfigurationStatus.composable", () => {
 	describe("determineNotLicensedTranslationKey", () => {
 		describe("when user is student and tool is not licensed", () => {
 			it("should return translation key for not licensed tool ", () => {
-				const { composable } = getComposable(RoleName.Student);
+				const { composable } = getComposable(RoleName.STUDENT);
 
 				const result = composable.determineNotLicensedTranslationKey();
 
@@ -441,7 +441,7 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is teacher and tool is not licensed", () => {
 			it("should return translation key for not licensed tool ", () => {
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				const result = composable.determineNotLicensedTranslationKey();
 
@@ -455,7 +455,7 @@ describe("ToolConfigurationStatus.composable", () => {
 			const setup = () => {
 				const toolConfigurationStatus = contextExternalToolConfigurationStatusFactory.build();
 
-				const { composable } = getComposable(RoleName.Student);
+				const { composable } = getComposable(RoleName.STUDENT);
 
 				return {
 					composable,
@@ -478,7 +478,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					isOutdatedOnScopeContext: true,
 				});
 
-				const { composable } = getComposable(RoleName.Student);
+				const { composable } = getComposable(RoleName.STUDENT);
 
 				return {
 					composable,
@@ -499,7 +499,7 @@ describe("ToolConfigurationStatus.composable", () => {
 	describe("isTeacher", () => {
 		describe("when user is teacher", () => {
 			it("should return true ", () => {
-				const { composable } = getComposable(RoleName.Teacher);
+				const { composable } = getComposable(RoleName.TEACHER);
 
 				const result = composable.isTeacher();
 
@@ -509,7 +509,7 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is not teacher", () => {
 			it("should return true ", () => {
-				const { composable } = getComposable(RoleName.Student);
+				const { composable } = getComposable(RoleName.STUDENT);
 
 				const result = composable.isTeacher();
 

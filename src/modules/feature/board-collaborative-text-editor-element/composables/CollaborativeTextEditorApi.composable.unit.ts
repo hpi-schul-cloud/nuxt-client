@@ -1,5 +1,4 @@
 import { ErrorType, useCollaborativeTextEditorApi } from "./CollaborativeTextEditorApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
@@ -9,6 +8,7 @@ import {
 	mockApiResponse,
 } from "@@/tests/test-utils";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
+import * as serverApi from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
@@ -58,7 +58,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
-				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.CONTENT_ELEMENT;
 
 				const response = mockApiResponse<serverApi.CollaborativeTextEditorResponse>({
 					data: { url: `${parentType}/${parentId}` },
@@ -105,7 +105,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
-				const parentType = serverApi.CollaborativeTextEditorParentType.ContentElement;
+				const parentType = serverApi.CollaborativeTextEditorParentType.CONTENT_ELEMENT;
 
 				const { responseError, expectedPayload } = setupErrorResponse(message);
 				mockedMapAxiosErrorToResponseError.mockReturnValueOnce(expectedPayload);

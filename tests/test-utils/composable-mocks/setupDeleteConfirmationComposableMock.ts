@@ -1,13 +1,11 @@
-import { ref } from "vue";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { ref } from "vue";
 
 interface Props {
 	askDeleteConfirmationMock?: () => Promise<boolean>;
 }
 
-export default function setupDeleteConfirmationComposableMock(
-	props: Props = {}
-) {
+export default function setupDeleteConfirmationComposableMock(props: Props = {}) {
 	const { askDeleteConfirmationMock } = props;
 	const deleteConfirmationMock = vi.mocked(useDeleteConfirmationDialog);
 

@@ -27,21 +27,11 @@ beforeAll(() => {
 			matches: false,
 			media: query,
 			onchange: null,
-			addListener: () => {
-				return;
-			}, // deprecated
-			removeListener: () => {
-				return;
-			}, // deprecated
-			addEventListener: () => {
-				return;
-			},
-			removeEventListener: () => {
-				return;
-			},
-			dispatchEvent: () => {
-				return;
-			},
+			addListener: () => undefined, // deprecated
+			removeListener: () => undefined, // deprecated
+			addEventListener: () => undefined,
+			removeEventListener: () => undefined,
+			dispatchEvent: () => undefined,
 		}),
 	});
 
@@ -54,12 +44,8 @@ beforeAll(() => {
 			offsetTop: 0,
 			pageLeft: 0,
 			pageTop: 0,
-			addEventListener: () => {
-				return;
-			},
-			removeEventListener: () => {
-				return;
-			},
+			addEventListener: () => undefined,
+			removeEventListener: () => undefined,
 		},
 		writable: true,
 	});

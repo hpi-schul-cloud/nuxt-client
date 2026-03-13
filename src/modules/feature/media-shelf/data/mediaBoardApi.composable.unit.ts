@@ -1,5 +1,13 @@
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
+import {
+	mediaAvailableLineResponseFactory,
+	mediaBoardResponseFactory,
+	mediaExternalToolElementResponseFactory,
+	mediaLineResponseFactory,
+	mockApi,
+	mockApiResponse,
+} from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
 import {
 	BoardLayout,
 	CollapsableBodyParams,
@@ -10,15 +18,7 @@ import {
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
 	RenameBodyParams,
-} from "@/serverApi/v3/api";
-import {
-	mediaAvailableLineResponseFactory,
-	mediaBoardResponseFactory,
-	mediaExternalToolElementResponseFactory,
-	mediaLineResponseFactory,
-	mockApi,
-	mockApiResponse,
-} from "@@/tests/test-utils";
+} from "@api-server";
 import { Mocked } from "vitest";
 
 describe("mediaBoardApi.composable", () => {
@@ -70,12 +70,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateBoardLayout", () => {
 		it("should call the api to update the media board layout", async () => {
-			await useMediaBoardApi().updateBoardLayout("boardId", BoardLayout.List);
+			await useMediaBoardApi().updateBoardLayout("boardId", BoardLayout.LIST);
 
 			expect(mediaBoardApi.mediaBoardControllerSetMediaBoardLayout).toHaveBeenCalledWith<[string, LayoutBodyParams]>(
 				"boardId",
 				{
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 				}
 			);
 		});
@@ -190,12 +190,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.Red);
+			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.RED);
 
 			expect(mediaLineApi.mediaLineControllerUpdateBackgroundColor).toHaveBeenCalledWith<[string, ColorBodyParams]>(
 				"lineId",
 				{
-					backgroundColor: MediaBoardColors.Red,
+					backgroundColor: MediaBoardColors.RED,
 				}
 			);
 		});
@@ -203,12 +203,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateAvailableLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateAvailableLineColor("boardId", MediaBoardColors.Red);
+			await useMediaBoardApi().updateAvailableLineColor("boardId", MediaBoardColors.RED);
 
 			expect(mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor).toHaveBeenCalledWith<
 				[string, ColorBodyParams]
 			>("boardId", {
-				backgroundColor: MediaBoardColors.Red,
+				backgroundColor: MediaBoardColors.RED,
 			});
 		});
 	});

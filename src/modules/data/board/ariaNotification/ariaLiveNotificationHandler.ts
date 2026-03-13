@@ -23,7 +23,7 @@ import {
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload.types";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@api-server";
 import { useI18n } from "vue-i18n";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
@@ -285,10 +285,10 @@ export const useBoardAriaNotification = () => {
 
 		let layoutName: string;
 		switch (layout) {
-			case BoardLayout.Columns:
+			case BoardLayout.COLUMNS:
 				layoutName = t("pages.room.dialog.boardLayout.multiColumn");
 				break;
-			case BoardLayout.List:
+			case BoardLayout.LIST:
 				layoutName = t("pages.room.dialog.boardLayout.singleColumn");
 				break;
 			default:

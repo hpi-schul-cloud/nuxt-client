@@ -1,5 +1,5 @@
 import { UserLoginMigration } from "./user-login-migration";
-import { UserLoginMigrationResponse } from "@/serverApi/v3";
+import { UserLoginMigrationResponse } from "@api-server";
 
 export class UserLoginMigrationMapper {
 	static mapToDate(apiDateString: string | undefined): Date | undefined {

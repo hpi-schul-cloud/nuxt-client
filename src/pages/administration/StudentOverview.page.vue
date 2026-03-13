@@ -101,10 +101,10 @@ import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import { FilterQuery, User } from "@/components/administration/data-filter/types";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import ProgressModal from "@/components/administration/ProgressModal.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { formatUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { Permission, RoleName } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
@@ -145,7 +145,7 @@ const {
 	getQrRegistrationLinks,
 	qrLinks,
 	pagination,
-} = useUsers(RoleName.Student);
+} = useUsers(RoleName.STUDENT);
 
 const tableColumns = [
 	{
@@ -283,7 +283,7 @@ const icons = computed(() => {
 });
 
 const fab = computed(() => {
-	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.StudentCreate)) {
+	if (schoolIsExternallyManaged.value || !userHasPermission(Permission.STUDENT_CREATE)) {
 		return;
 	}
 
@@ -435,7 +435,7 @@ const tableActions = computed(() => [
 		label: t("pages.administration.students.index.tableActions.delete"),
 		icon: mdiDeleteOutline,
 		action: openDeleteDialog,
-		permission: Permission.StudentDelete,
+		permission: Permission.STUDENT_DELETE,
 		dataTestId: "delete_action",
 	},
 ]);

@@ -1,9 +1,9 @@
 import BoardColumnVue from "./BoardColumn.vue";
-import { BoardResponseAllowedOperations } from "@/serverApi/v3/api";
 import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { BoardResponseAllowedOperations } from "@api-server";
 import { useBoardStore, useForceRender, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useDragAndDrop, useSharedLastCreatedElement } from "@util-board";

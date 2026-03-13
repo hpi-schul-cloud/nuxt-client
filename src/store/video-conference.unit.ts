@@ -1,12 +1,5 @@
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
 import VideoConferenceModule from "./video-conference";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	VideoConferenceApiInterface,
-	VideoConferenceJoinResponse,
-	VideoConferenceScope,
-	VideoConferenceStateResponse,
-} from "@/serverApi/v3/api";
 import { mockApi } from "@@/tests/test-utils";
 import {
 	videoConferenceInfoFactory,
@@ -14,6 +7,13 @@ import {
 	videoConferenceJoinResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import * as serverApi from "@api-server";
+import {
+	VideoConferenceApiInterface,
+	VideoConferenceJoinResponse,
+	VideoConferenceScope,
+	VideoConferenceStateResponse,
+} from "@api-server";
 import { AxiosError } from "axios";
 
 describe("VideoConferenceModule", () => {
@@ -135,7 +135,7 @@ describe("VideoConferenceModule", () => {
 				const { videoconferenceApi } = mockVideoConferenceApi();
 
 				const response = videoConferenceInfoResponseFactory.build({
-					state: VideoConferenceStateResponse.Running,
+					state: VideoConferenceStateResponse.RUNNING,
 				});
 				const state = videoConferenceInfoFactory.build({
 					state: VideoConferenceState.RUNNING,
@@ -153,7 +153,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Course,
+					scope: VideoConferenceScope.COURSE,
 				});
 
 				expect(module.getVideoConferenceInfo).toEqual(state);
@@ -164,7 +164,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Room,
+					scope: VideoConferenceScope.ROOM,
 				});
 
 				expect(module.getVideoConferenceInfo).toEqual(state);
@@ -175,7 +175,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.VideoConferenceElement,
+					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 				});
 
 				expect(module.getVideoConferenceInfo).toEqual(state);
@@ -200,7 +200,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Course,
+					scope: VideoConferenceScope.COURSE,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -211,7 +211,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Room,
+					scope: VideoConferenceScope.ROOM,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -222,7 +222,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.VideoConferenceElement,
+					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -251,7 +251,7 @@ describe("VideoConferenceModule", () => {
 
 				const response: VideoConferenceJoinResponse | undefined = await module.joinVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Course,
+					scope: VideoConferenceScope.COURSE,
 				});
 
 				expect(response).toEqual(mockResponse);
@@ -262,7 +262,7 @@ describe("VideoConferenceModule", () => {
 
 				const response: VideoConferenceJoinResponse | undefined = await module.joinVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Room,
+					scope: VideoConferenceScope.ROOM,
 				});
 
 				expect(response).toEqual(mockResponse);
@@ -273,7 +273,7 @@ describe("VideoConferenceModule", () => {
 
 				const response: VideoConferenceJoinResponse | undefined = await module.joinVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.VideoConferenceElement,
+					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 				});
 
 				expect(response).toEqual(mockResponse);
@@ -298,7 +298,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.joinVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Course,
+					scope: VideoConferenceScope.COURSE,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -309,7 +309,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.joinVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Room,
+					scope: VideoConferenceScope.ROOM,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -320,7 +320,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.joinVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.VideoConferenceElement,
+					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -350,13 +350,13 @@ describe("VideoConferenceModule", () => {
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Course,
+					scope: VideoConferenceScope.COURSE,
 					videoConferenceOptions,
 					logoutUrl: "mockUrl",
 				});
 
 				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
-					VideoConferenceScope.Course,
+					VideoConferenceScope.COURSE,
 					"scopeId",
 					{
 						...videoConferenceOptions,
@@ -370,13 +370,13 @@ describe("VideoConferenceModule", () => {
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Room,
+					scope: VideoConferenceScope.ROOM,
 					videoConferenceOptions,
 					logoutUrl: "mockUrl",
 				});
 
 				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
-					VideoConferenceScope.Room,
+					VideoConferenceScope.ROOM,
 					"scopeId",
 					{
 						...videoConferenceOptions,
@@ -390,13 +390,13 @@ describe("VideoConferenceModule", () => {
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.VideoConferenceElement,
+					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 					videoConferenceOptions,
 					logoutUrl: "mockUrl",
 				});
 
 				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
-					VideoConferenceScope.VideoConferenceElement,
+					VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 					"scopeId",
 					{
 						...videoConferenceOptions,
@@ -431,7 +431,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Course,
+					scope: VideoConferenceScope.COURSE,
 					videoConferenceOptions,
 				});
 
@@ -443,7 +443,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.Room,
+					scope: VideoConferenceScope.ROOM,
 					videoConferenceOptions,
 				});
 
@@ -455,7 +455,7 @@ describe("VideoConferenceModule", () => {
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
-					scope: VideoConferenceScope.VideoConferenceElement,
+					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 					videoConferenceOptions,
 				});
 
