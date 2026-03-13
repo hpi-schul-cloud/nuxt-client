@@ -2,13 +2,14 @@ import AuthSystems from "./AuthSystems.vue";
 import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
-import { RouterLinkStub } from "@vue/test-utils";
+import { flushPromises, RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 
 const generateProps = () => ({
@@ -43,7 +44,6 @@ const searchStrings = {
 	tableSystem: ".table-system",
 	editSystemButton: ".edit-system-btn",
 	deleteSystemButton: ".delete-system-btn",
-	customDialog: ".custom-dialog",
 	schoolLoginLink: ".school-login-link",
 	emailLink: "#school-login-link-0",
 	oauthAndLdapLink: "#school-login-link-2",
@@ -222,33 +222,11 @@ describe("AuthSystems", () => {
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
 			expect(systemEditButtons[0].props("to")).toEqual("/administration/ldap/config?id=3");
 		});
-
-		it("should NOT display the dialog", () => {
-			const wrapper = createWrapper({ props: generateProps() });
-
-			const customDialog = wrapper.findAll(searchStrings.customDialog);
-
-			expect(customDialog).toHaveLength(0);
-		});
-
-		it("should display the dialog", async () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
-			const wrapper = createWrapper({ props: generateProps() });
-
-			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
-			await deleteBtn.trigger("click");
-
-			const customDialog = wrapper.findAllComponents({
-				name: "CustomDialog",
-			});
-
-			expect(customDialog).toHaveLength(1);
-			expect(customDialog[0].vm.isOpen).toStrictEqual(true);
-		});
 	});
 
 	describe("events", () => {
-		it("should call the action when 'dialog-confirmed' triggered", async () => {
+		it("should call deleteSystem when deletion is confirmed", async () => {
+			const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 			createTestAppStoreWithPermissions([Permission.SystemCreate]);
 			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem").mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
@@ -257,34 +235,26 @@ describe("AuthSystems", () => {
 
 			const deleteBtn = wrapper.findComponent(searchStrings.deleteSystemButton);
 			await deleteBtn.trigger("click");
+			await flushPromises();
 
-			const customDialog = wrapper.findComponent({ name: "CustomDialog" });
-
-			customDialog.vm.$emit("dialog-confirmed", 123);
-			expect(deleteSpy).toHaveBeenCalled();
+			expect(askDeletionSpy).toHaveBeenCalledWith(
+				"pages.administration.school.index.authSystems.deleteAuthSystem",
+				"pages.administration.school.index.authSystems.confirmDeleteText"
+			);
+			expect(deleteSpy).toHaveBeenCalledWith("3");
 		});
 
-		it("should call the method when delete dialog confirmed", async () => {
+		it("should not call deleteSystem when deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 			createTestAppStoreWithPermissions([Permission.SystemCreate]);
-			const removeSystem = vi.spyOn(AuthSystems.methods, "removeSystem").mockImplementation(vi.fn());
+			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem").mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
 			await deleteBtn.trigger("click");
-			const customDialog = wrapper.findComponent({ name: "CustomDialog" });
+			await flushPromises();
 
-			customDialog.vm.$emit("dialog-confirmed");
-			expect(removeSystem).toHaveBeenCalled();
-		});
-
-		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit, Permission.SystemView]);
-			const wrapper = createWrapper({ props: generateProps() });
-			const deleteButton = wrapper.find(searchStrings.deleteSystemButton);
-			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);
-			deleteButton.trigger("click");
-			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(true);
-			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("3");
+			expect(deleteSpy).not.toHaveBeenCalled();
 		});
 	});
 	describe("display system buttons", () => {
