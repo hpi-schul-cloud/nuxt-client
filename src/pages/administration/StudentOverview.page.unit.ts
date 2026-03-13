@@ -8,18 +8,24 @@ import store from "@/plugins/store";
 import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import { createTestAppStore, createTestEnvStore, expectNotification, userResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStore,
+	createTestEnvStore,
+	expectNotification,
+	mockedPiniaStoreTyping,
+	userResponseFactory,
+} from "@@/tests/test-utils";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useClasses } from "@data-classes";
-import { useUsers } from "@data-users";
+import { useUsersStore } from "@data-users";
 import { mdiCheck, mdiCheckAll, mdiClose } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
-import { flushPromises, RouterLinkStub, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, RouterLinkStub, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
@@ -31,9 +37,6 @@ const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-
-vi.mock("@data-users/users.composable");
-const mockedUseUsers = vi.mocked(useUsers);
 
 vi.mock("@data-classes/classes.composable");
 const mockedUseClasses = vi.mocked(useClasses);
@@ -52,6 +55,14 @@ function writableComputed<T>(initial: T) {
 		},
 	});
 }
+
+vi.mock("vue-i18n", async (importOriginal) => {
+	const actual = await importOriginal<typeof import("vue-i18n")>();
+	return {
+		...actual,
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
+	};
+});
 
 describe("student overview page", () => {
 	let askConfirmationMock: Mock;
@@ -113,27 +124,10 @@ describe("student overview page", () => {
 			classNameList: ref([]),
 		};
 		mockedUseClasses.mockReturnValue(useClassesMockReturn);
+		const usersStore = mockedPiniaStoreTyping(useUsersStore);
 
 		const userResponseList = userResponseFactory.buildList(10);
-		const useUserMock: ReturnType<typeof useUsers> = {
-			fetchUsers: vi.fn(),
-			createUser: vi.fn(),
-			deleteUsers: vi.fn(),
-			getQrRegistrationLinks: vi.fn(),
-			sendRegistrationLink: vi.fn(),
-			userList: ref(userResponseList),
-			deletingProgress: ref({
-				active: false,
-				percent: 0,
-			}),
-			pagination: ref({
-				limit: 0,
-				skip: 0,
-				total: 0,
-			}),
-			qrLinks: ref([]),
-		};
-		mockedUseUsers.mockReturnValue(useUserMock);
+		usersStore.userList = userResponseList;
 
 		useRouterMock.mockReturnValue({
 			push: vi.fn(),
@@ -141,14 +135,14 @@ describe("student overview page", () => {
 
 		const wrapper = mount(StudentPage, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), store],
+				plugins: [createTestingI18n(), createTestingVuetify(), store],
 				stubs: { RouterLink: RouterLinkStub },
 			},
 		});
 
 		return {
 			wrapper,
-			useUserMock,
+			usersStore,
 			useFilterLocalStorageMockReturn,
 			useClassesMockReturn,
 			firstUser: userResponseList[0],
@@ -163,10 +157,10 @@ describe("student overview page", () => {
 
 	describe("on mounted", () => {
 		it("should fetch user", () => {
-			const { useUserMock, useFilterLocalStorageMockReturn } = setup();
+			const { usersStore, useFilterLocalStorageMockReturn } = setup();
 
-			expect(useUserMock.fetchUsers).toHaveBeenCalled();
-			expect(useUserMock.fetchUsers).toHaveBeenCalledWith({
+			expect(usersStore.fetchUsers).toHaveBeenCalled();
+			expect(usersStore.fetchUsers).toHaveBeenCalledWith({
 				$limit: useFilterLocalStorageMockReturn.limit.value,
 				$skip: 0,
 				$sort: { firstName: 1 },
@@ -196,7 +190,7 @@ describe("student overview page", () => {
 
 		it("should call delete users, notify success and refresh the user list", async () => {
 			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, useUserMock, firstUser } = setup({ permissions: [Permission.StudentDelete] });
+			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.StudentDelete] });
 
 			await openContextMenu(wrapper, 0);
 
@@ -207,16 +201,16 @@ describe("student overview page", () => {
 			wrapper.findComponent(DeleteUserDialog).vm.$emit("confirm");
 			await flushPromises();
 
-			expect(useUserMock.deleteUsers).toHaveBeenCalled();
-			expect(useUserMock.deleteUsers).toHaveBeenCalledWith([firstUser._id]);
+			expect(usersStore.deleteUsers).toHaveBeenCalled();
+			expect(usersStore.deleteUsers).toHaveBeenCalledWith([firstUser._id]);
 			expectNotification("success");
-			expect(useUserMock.fetchUsers).toHaveBeenCalled();
+			expect(usersStore.fetchUsers).toHaveBeenCalled();
 		});
 
 		it("should notify error when delete users fails", async () => {
 			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, useUserMock, firstUser } = setup({ permissions: [Permission.StudentDelete] });
-			(useUserMock.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
+			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.StudentDelete] });
+			(usersStore.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
 
 			await openContextMenu(wrapper, 0);
 
@@ -228,26 +222,26 @@ describe("student overview page", () => {
 			await flushPromises();
 
 			expectNotification("error");
-			expect(useUserMock.deleteUsers).toHaveBeenCalledWith([firstUser._id]);
+			expect(usersStore.deleteUsers).toHaveBeenCalledWith([firstUser._id]);
 		});
 
 		it("should handle bulk registration emails", async () => {
-			const { wrapper, useUserMock, firstUser } = setup();
+			const { wrapper, usersStore, firstUser } = setup();
 
 			await openContextMenu(wrapper, 0);
 
 			const bulkEmailBtn = wrapper.get(`[data-testid="registration_link"]`);
 			await bulkEmailBtn.trigger("click");
 
-			expect(useUserMock.sendRegistrationLink).toHaveBeenCalledWith({
+			expect(usersStore.sendRegistrationLink).toHaveBeenCalledWith({
 				userIds: [firstUser._id],
 				selectionType: "inclusive",
 			});
 		});
 
 		it("should handle bulk qr code generation", async () => {
-			const { wrapper, useUserMock, firstUser } = setup();
-			useUserMock.qrLinks.value = [
+			const { wrapper, usersStore, firstUser } = setup();
+			usersStore.qrLinks = [
 				{ title: "qrLink1", qrContent: "content1" },
 				{ title: "qrLink2", qrContent: "content2" },
 			];
@@ -257,15 +251,15 @@ describe("student overview page", () => {
 			const qrCodeBtn = wrapper.get(`[data-testid="qr_code"]`);
 			await qrCodeBtn.trigger("click");
 
-			expect(useUserMock.getQrRegistrationLinks).toHaveBeenCalledWith({
+			expect(usersStore.getQrRegistrationLinks).toHaveBeenCalledWith({
 				userIds: [firstUser._id],
 				selectionType: "inclusive",
 			});
 		});
 
 		it("should notify when no qr links are available", async () => {
-			const { wrapper, useUserMock } = setup();
-			useUserMock.qrLinks.value = [];
+			const { wrapper, usersStore } = setup();
+			usersStore.qrLinks = [];
 
 			await openContextMenu(wrapper, 0);
 
@@ -288,10 +282,10 @@ describe("student overview page", () => {
 	});
 
 	it("should display the same number of elements as in the mockData object", () => {
-		const { wrapper, useUserMock } = setup();
+		const { wrapper, usersStore } = setup();
 
 		const table = wrapper.find(`[data-testid="students_table"]`).findComponent(BackendDataTable);
-		expect(table.props("data")).toHaveLength(useUserMock.userList.value.length);
+		expect(table.props("data")).toHaveLength(usersStore.userList.length);
 	});
 
 	it("should display the columns behind the migration feature flag", () => {
@@ -385,7 +379,7 @@ describe("student overview page", () => {
 	describe("filtering", () => {
 		describe("when searchbar component's value change", () => {
 			it("should set search query and fetch filtered users", async () => {
-				const { wrapper, useFilterLocalStorageMockReturn, useUserMock } = setup();
+				const { wrapper, useFilterLocalStorageMockReturn, usersStore } = setup();
 
 				const searchBarInput = wrapper.findComponent(SvsSearchField);
 				await searchBarInput.setValue("abc");
@@ -393,13 +387,13 @@ describe("student overview page", () => {
 
 				expect(useFilterLocalStorageMockReturn.searchQuery.value).toBe("abc");
 				expect(useFilterLocalStorageMockReturn.page.value).toBe(1);
-				expect(useUserMock.fetchUsers).toHaveBeenCalled();
+				expect(usersStore.fetchUsers).toHaveBeenCalled();
 			});
 		});
 
 		describe("when table filter options change", () => {
 			it("should set filter query and fetch filtered users", async () => {
-				const { wrapper, useFilterLocalStorageMockReturn, useUserMock } = setup();
+				const { wrapper, useFilterLocalStorageMockReturn, usersStore } = setup();
 
 				const filterComponent = wrapper.findComponent(DataFilter);
 				expect(filterComponent.exists()).toBe(true);
@@ -412,13 +406,13 @@ describe("student overview page", () => {
 				await nextTick();
 
 				expect(useFilterLocalStorageMockReturn.currentFilterQuery.value).toEqual(emitValue);
-				expect(useUserMock.fetchUsers).toHaveBeenCalled();
+				expect(usersStore.fetchUsers).toHaveBeenCalled();
 			});
 		});
 
 		describe("when table sorting options change", () => {
 			it("should fetch filtered users", async () => {
-				const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
+				const { wrapper, usersStore, useFilterLocalStorageMockReturn } = setup();
 
 				const tableComponent = wrapper.findComponent(BackendDataTable);
 				expect(tableComponent.exists()).toBe(true);
@@ -431,14 +425,14 @@ describe("student overview page", () => {
 
 				expect(useFilterLocalStorageMockReturn.sortBy.value).toBe(newSortBy);
 				expect(useFilterLocalStorageMockReturn.sortOrder.value).toBe(newSortOrder);
-				expect(useUserMock.fetchUsers).toHaveBeenCalled();
+				expect(usersStore.fetchUsers).toHaveBeenCalled();
 			});
 		});
 
 		describe("when table pagination options change", () => {
 			describe("when rows per page changes", () => {
 				it("should fetch filtered users", async () => {
-					const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
+					const { wrapper, usersStore, useFilterLocalStorageMockReturn } = setup();
 
 					const tableComponent = wrapper.findComponent(BackendDataTable);
 					expect(tableComponent.exists()).toBe(true);
@@ -450,13 +444,13 @@ describe("student overview page", () => {
 
 					expect(useFilterLocalStorageMockReturn.limit.value).toBe(newLimit);
 					expect(useFilterLocalStorageMockReturn.page.value).toBe(1);
-					expect(useUserMock.fetchUsers).toHaveBeenCalled();
+					expect(usersStore.fetchUsers).toHaveBeenCalled();
 				});
 			});
 
 			describe("when page changes", () => {
 				it("should fetch filtered users", async () => {
-					const { wrapper, useUserMock, useFilterLocalStorageMockReturn } = setup();
+					const { wrapper, usersStore, useFilterLocalStorageMockReturn } = setup();
 
 					const tableComponent = wrapper.findComponent(BackendDataTable);
 					expect(tableComponent.exists()).toBe(true);
@@ -466,7 +460,7 @@ describe("student overview page", () => {
 					await nextTick();
 
 					expect(useFilterLocalStorageMockReturn.page.value).toBe(newPage);
-					expect(useUserMock.fetchUsers).toHaveBeenCalled();
+					expect(usersStore.fetchUsers).toHaveBeenCalled();
 				});
 			});
 		});
