@@ -66,9 +66,9 @@
 </template>
 
 <script setup lang="ts">
-import { askCancel, askConfirmation } from "@/utils/confirm-dialog.utils";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
+import { askCancel, askConfirmation } from "@/utils/confirm-dialog.utils";
 import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
