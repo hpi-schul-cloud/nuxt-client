@@ -26,15 +26,7 @@ export default defineConfigWithVueTs([
 	vueTsConfigs.recommended,
 	eslintPluginPrettierRecommended,
 	{
-		ignores: [
-			".vscode/**",
-			"node_modules/**",
-			"**/dist/**",
-			"src/serverApi/**",
-			"src/fileStorageApi/**",
-			"src/h5pEditorApi/**",
-			"src/generated/**",
-		],
+		ignores: [".vscode/**", "node_modules/**", "**/dist/**", "src/generated/**"],
 	},
 	{
 		languageOptions: {
