@@ -4,6 +4,7 @@ import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -11,7 +12,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
@@ -361,103 +362,72 @@ describe("CourseRoomDashboard.vue", () => {
 	});
 
 	describe("Deleting Items", () => {
-		const findCustomDialog = (wrapper: VueWrapper, dataTestid: string) => {
-			const dialog = wrapper
-				.findAllComponents({ name: "CustomDialog" })
-				.find((dialog) => dialog.vm.$attrs["data-testid"] === dataTestid);
-
-			if (!dialog) {
-				throw new Error(`Cannot find CustomDialog with data-testid="${dataTestid}"`);
-			}
-
-			return dialog;
-		};
-
-		it("should call the openItemDeleteDialog method when lesson should be deleted", () => {
-			const openDeleteDialogMock = vi.fn();
+		it("should call deleteLesson when lesson deletion is confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+			const deleteLessonMock = vi.fn();
+			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
+			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
+			courseRoomDetailsModule.fetchContent = fetchContentMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
-			expect(openDeleteDialogMock).toHaveBeenCalled();
-			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("3456");
-			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("lesson");
+			await flushPromises();
+
+			expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
+				itemName: "Test Name",
+				itemType: "common.words.topic",
+				titleKey: "pages.room.itemDelete.text",
+			});
+			expect(deleteLessonMock).toHaveBeenCalledWith("3456");
+			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
-		it("should call the openItemDeleteDialog method when task should be deleted", () => {
-			const openDeleteDialogMock = vi.fn();
+		it("should call deleteTask when task deletion is confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+			const deleteTaskMock = vi.fn();
+			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
+			courseRoomDetailsModule.deleteTask = deleteTaskMock;
+			courseRoomDetailsModule.fetchContent = fetchContentMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("delete-task");
-			expect(openDeleteDialogMock).toHaveBeenCalled();
-			expect(openDeleteDialogMock.mock.calls[0][0].id).toStrictEqual("1234");
-			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
+			await flushPromises();
+
+			expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
+				itemName: "Private Aufgabe von Marla - mit Kurs, offen",
+				itemType: "common.words.task",
+				titleKey: "pages.room.itemDelete.text",
+			});
+			expect(deleteTaskMock).toHaveBeenCalledWith("1234");
+			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
-		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
-			const deleteItemMock = vi.fn();
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			wrapper.vm.deleteItem = deleteItemMock;
-			wrapper.vm.itemDelete.isOpen = true;
-			await nextTick();
-			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
-
-			deleteModal.vm.$emit("dialog-confirmed");
-			expect(deleteItemMock).toHaveBeenCalled();
-		});
-
-		it("should call store methods after modal emits 'dialog-confirmed' when deleting task", async () => {
+		it("should not call deleteTask when task deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
 			const deleteTaskMock = vi.fn();
-			const fetchContentMock = vi.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			courseRoomDetailsModule.deleteTask = deleteTaskMock;
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
+
+			taskCard.vm.$emit("delete-task");
+			await flushPromises();
+
+			expect(deleteTaskMock).not.toHaveBeenCalled();
+		});
+
+		it("should not call deleteLesson when lesson deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
 			const deleteLessonMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailsModule.deleteTask = deleteTaskMock;
-			courseRoomDetailsModule.fetchContent = fetchContentMock;
-			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
-			const taskCard = wrapper.findComponent<VCard>(".task-card");
-
-			taskCard.vm.$emit("delete-task");
-			await nextTick();
-			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
-
-			deleteModal.vm.$emit("dialog-confirmed");
-			await nextTick();
-			expect(deleteTaskMock).toHaveBeenCalled();
-			expect(fetchContentMock).toHaveBeenCalled();
-			expect(deleteLessonMock).not.toHaveBeenCalled();
-		});
-
-		it("should call store methods after modal emits 'dialog-confirmed' when deleting lesson", async () => {
-			const deleteTaskMock = vi.fn();
-			const fetchContentMock = vi.fn();
-			const deleteLessonMock = vi.fn().mockResolvedValue(true);
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailsModule.deleteTask = deleteTaskMock;
-			courseRoomDetailsModule.fetchContent = fetchContentMock;
 			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
-			await nextTick();
-			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
+			await flushPromises();
 
-			deleteModal.vm.$emit("dialog-confirmed");
-			await nextTick();
-			expect(deleteTaskMock).not.toHaveBeenCalled();
-			expect(deleteLessonMock).toHaveBeenCalled();
-			expect(fetchContentMock).toHaveBeenCalled();
-		});
-
-		it("should close the modal view after clicking the 'cancel' button", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			wrapper.vm.itemDelete.isOpen = true;
-			await nextTick();
-			const cancelButton = wrapper.findComponent(`[data-testid="dialog-cancel"]`);
-			cancelButton.trigger("click");
-			expect(wrapper.vm.itemDelete.isOpen).toBe(false);
+			expect(deleteLessonMock).not.toHaveBeenCalled();
 		});
 	});
 

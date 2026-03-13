@@ -1,5 +1,5 @@
 import { ConfirmationOptions, useInternalConfirmationDialog } from "@/composables/confirm-dialog.composable";
-import { useI18nGlobal } from "@/plugins/i18n";
+import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 
 /**
  * Raises a confirmation dialog with the given options and returns a promise that resolves to true if the user confirms, or false if they cancel.
@@ -12,26 +12,30 @@ export const askConfirmation = (options: ConfirmationOptions): Promise<boolean> 
 /**
  * Raises a confirmation dialog for deletion actions, with a message that includes the type and name of the instance to be deleted.
  */
-export const askDeletionSpecific = (options: { instanceName: string; typeKey: string }): Promise<boolean> => {
+export const askDeletionItem = (options: {
+	itemName: string;
+	itemType: string;
+	titleKey?: string;
+	message?: string;
+	messageType?: "info" | "warning";
+}) => {
 	const { t } = useI18nGlobal();
 
-	const titleString = options.instanceName ? ` "${options.instanceName}"` : "";
-	const typeString = t(options.typeKey);
-
-	const title = t("ui-confirmation-dialog.ask-delete", {
-		title: titleString,
-		type: typeString,
+	const title = t(options.titleKey ?? "ui-confirmation-dialog.ask-delete", {
+		title: options.itemName ? ` "${options.itemName}"` : "",
+		type: i18nKeyExists(options.itemType) ? t(options.itemType) : options.itemType,
 	});
 
 	return askConfirmation({
 		title,
 		confirmBtnKey: "common.actions.delete",
-		messageType: "warning",
+		message: options.message,
+		messageType: options.messageType ?? "warning",
 	});
 };
 
 /**
- * Raises a confirmation dialog for deletion actions, with a message that includes the type and name of the instance to be deleted.
+ * Raises a confirmation dialog for deletion actions.
  */
 export const askDeletion = (title: string, message: string, messageType: "info" | "warning") =>
 	askConfirmation({
