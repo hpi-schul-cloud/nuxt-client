@@ -33,13 +33,12 @@
 			</template>
 		</DataTable>
 	</div>
-	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import { KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "../menus";
+import { askConfirmation } from "@/utils/confirm-dialog.utils";
 import { type Registration, useRegistrationStore } from "@data-room";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
@@ -52,30 +51,24 @@ const registrationStore = useRegistrationStore();
 const { registrations, selectedIds } = storeToRefs(registrationStore);
 
 const { removeInvitations, resendInvitations } = registrationStore;
-const { askConfirmation } = useConfirmationDialog();
 
 const registrationTableData = computed(() => registrations.value as unknown as Record<string, unknown>[]);
 
-const onRemoveInvitation = async (registrationIds: string[]) => {
-	const shouldRemove = await confirmRemoval(registrationIds);
-	if (shouldRemove) await removeInvitations(registrationIds);
+const onRemoveInvitation = async (invitationIds: string[]) => {
+	let title = t("pages.rooms.members.registrations.multipleRemove.confirmation");
+	if (invitationIds.length === 1) {
+		const invitedEmail = registrationStore.getEmailOfRegistration(invitationIds[0]);
+		title = t("pages.rooms.members.registrations.remove.confirmation", { invitedEmail });
+	}
+	const shouldRemove = await askConfirmation({
+		title,
+		confirmBtnKey: "common.actions.delete",
+	});
+	if (shouldRemove) await removeInvitations(invitationIds);
 };
 
 const onResendInvitation = async (registrationIds: string[]) => {
 	await resendInvitations(registrationIds);
-};
-
-const confirmRemoval = async (invitationIds: string[]) => {
-	let message = t("pages.rooms.members.registrations.multipleRemove.confirmation");
-	if (invitationIds.length === 1) {
-		const invitedEmail = registrationStore.getEmailOfRegistration(invitationIds[0]);
-		message = t("pages.rooms.members.registrations.remove.confirmation", { invitedEmail });
-	}
-	const shouldRemove = await askConfirmation({
-		message,
-		confirmActionLangKey: "common.actions.delete",
-	});
-	return shouldRemove;
 };
 
 const onUpdateSelectedIds = (ids: string[]) => {
