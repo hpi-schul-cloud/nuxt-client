@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { askCancel, askConfirmation } from "@/composables/confirm-dialog.composable";
+import { askCancel, askConfirmation } from "@/utils/confirm-dialog.utils";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
 import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
