@@ -3,6 +3,7 @@ import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import { Permission } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, mockComposable, privacyPolicyFactory } from "@@/tests/test-utils";
@@ -11,8 +12,7 @@ import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
 import { createTestingPinia } from "@pinia/testing";
-import { SvsDialog } from "@ui-dialog";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
@@ -190,26 +190,26 @@ describe("SchoolPolicy", () => {
 	});
 
 	describe("when user clicks delete button", () => {
-		it("should open delete dialog", async () => {
+		it("should call deletePrivacyPolicy when deletion is confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 			const { wrapper } = setup();
-
-			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]').findComponent(SvsDialog);
-			expect(deleteDialog.props().modelValue).toBe(false);
 
 			const deleteBtn = wrapper.find('[data-testid="delete-button"]');
 			await deleteBtn.trigger("click");
-
-			expect(deleteDialog.props().modelValue).toBe(true);
-		});
-
-		it("should call delete privacy policy method when deletion is confirmed", async () => {
-			const { wrapper } = setup();
-
-			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]').findComponent(SvsDialog);
-			deleteDialog.vm.$emit("confirm");
-			await nextTick();
+			await flushPromises();
 
 			expect(useSchoolPrivacyPolicyMockReturn.deletePrivacyPolicy).toHaveBeenCalled();
+		});
+
+		it("should not call deletePrivacyPolicy when deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
+			const { wrapper } = setup();
+
+			const deleteBtn = wrapper.find('[data-testid="delete-button"]');
+			await deleteBtn.trigger("click");
+			await flushPromises();
+
+			expect(useSchoolPrivacyPolicyMockReturn.deletePrivacyPolicy).not.toHaveBeenCalled();
 		});
 	});
 

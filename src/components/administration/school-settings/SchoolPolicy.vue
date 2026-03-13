@@ -37,11 +37,7 @@
 							:aria-label="t('pages.administration.school.index.schoolPolicy.edit')"
 						/>
 					</VListItemAction>
-					<VListItemAction
-						v-if="privacyPolicy"
-						data-testid="delete-button"
-						@click.stop="isDeletePolicyDialogOpen = true"
-					>
+					<VListItemAction v-if="privacyPolicy" data-testid="delete-button" @click.stop="onDelete">
 						<VBtn
 							:icon="mdiTrashCanOutline"
 							variant="text"
@@ -57,19 +53,6 @@
 				@confirm="onCreate"
 				@close="closeDialog"
 			/>
-			<SvsDialog
-				v-model="isDeletePolicyDialogOpen"
-				data-testid="delete-dialog"
-				:confirm-btn-lang-key="'common.actions.delete'"
-				:title="t('pages.administration.school.index.schoolPolicy.delete.title')"
-				@confirm="deleteFile"
-			>
-				<template #content>
-					<InfoAlert>
-						{{ t("pages.administration.school.index.schoolPolicy.delete.text") }}
-					</InfoAlert>
-				</template>
-			</SvsDialog>
 		</template>
 	</div>
 </template>
@@ -77,21 +60,20 @@
 <script setup lang="ts">
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import { Permission } from "@/serverApi/v3";
+import { askDeletion } from "@/utils/confirm-dialog.utils";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { useAppStore } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
-import { ErrorAlert, InfoAlert } from "@ui-alert";
-import { SvsDialog } from "@ui-dialog";
+import { ErrorAlert } from "@ui-alert";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const isSchoolPolicyFormDialogOpen = ref(false);
-const isDeletePolicyDialogOpen = ref(false);
 const { status, fetchPrivacyPolicy, privacyPolicy, createPrivacyPolicy, deletePrivacyPolicy } =
 	useSchoolPrivacyPolicy();
 const school = computed(() => schoolsModule.getSchool);
@@ -111,8 +93,15 @@ const downloadPolicy = () => {
 	}
 };
 
-const deleteFile = async () => {
-	await deletePrivacyPolicy();
+const onDelete = async () => {
+	const confirmed = await askDeletion(
+		"pages.administration.school.index.schoolPolicy.delete.title",
+		"pages.administration.school.index.schoolPolicy.delete.text",
+		"info"
+	);
+	if (confirmed) {
+		await deletePrivacyPolicy();
+	}
 };
 
 const closeDialog = () => {

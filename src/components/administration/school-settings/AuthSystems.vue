@@ -81,7 +81,7 @@
 								variant="text"
 								data-testid="system-table-button-delete"
 								:aria-label="ariaLabels(system).delete"
-								@click.stop="askForDeletion(system.id)"
+								@click.stop="onDelete(system.id)"
 							>
 								<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 							</v-btn>
@@ -157,13 +157,13 @@ export default {
 			}
 			return `/administration/ldap/config?id=${system.id}`;
 		},
-		async askForDeletion(systemId) {
-			const doDelete = await askDeletion(
+		async onDelete(systemId) {
+			const confirmed = await askDeletion(
 				"pages.administration.school.index.authSystems.deleteAuthSystem",
 				"pages.administration.school.index.authSystems.confirmDeleteText"
 			);
 
-			if (doDelete) {
+			if (confirmed) {
 				this.removeSystem(systemId);
 			}
 		},

@@ -33,11 +33,11 @@ export const askDeletionSpecific = (options: { instanceName: string; typeKey: st
 /**
  * Raises a confirmation dialog for deletion actions, with a message that includes the type and name of the instance to be deleted.
  */
-export const askDeletion = (title: string, message: string) =>
+export const askDeletion = (title: string, message: string, messageType: "info" | "warning") =>
 	askConfirmation({
 		title,
 		message,
-		messageType: "warning",
+		messageType: messageType ?? "warning",
 		confirmBtnKey: "common.actions.delete",
 	});
 
