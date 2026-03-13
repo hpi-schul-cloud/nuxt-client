@@ -796,10 +796,6 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "Sortierung ändern",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "aufsteigend sortiert",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "absteigend sortiert",
-	"components.organisms.FormNews.cancel.confirm.title": "Änderungen verwerfen?",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Änderungen verwerfen",
-	"components.organisms.FormNews.cancel.confirm.message":
-		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",
 	"components.organisms.FormNews.editor.placeholder": "Es war einmal …",
 	"components.organisms.FormNews.error.patch": "Fehler beim Aktualisieren.",
 	"components.organisms.FormNews.error.remove": "Fehler beim Löschen.",
@@ -1967,6 +1963,8 @@ export default {
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
+	"ui-confirmation-dialog.ask-cancel-warning-message":
+		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",
 	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
 	"ui.actionMenu.selectedRows": "Aktionsmenü für {count} ausgewählte Zeilen",
 	"ui.actionMenu.actions": "Aktionen",

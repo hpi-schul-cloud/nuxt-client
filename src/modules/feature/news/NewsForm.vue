@@ -63,21 +63,15 @@
 			/>
 		</div>
 	</VForm>
-	<ConfirmationDialog>
-		<template v-if="showDialogWarning" #alert>
-			<WarningAlert> {{ t("components.organisms.FormNews.cancel.confirm.message") }}</WarningAlert>
-		</template>
-	</ConfirmationDialog>
 </template>
 
 <script setup lang="ts">
+import { askCancel, askConfirmation } from "@/composables/confirm-dialog.composable";
 import { Status } from "@/store/types/commons";
 import { FormNews } from "@/store/types/news";
 import { formatUtc, toCombinedDateTimeIso, toIsoDate } from "@/utils/date-time.utils";
 import { isValidOrFocusFirstInvalidInput } from "@/utils/validation";
 import { ClassicEditor } from "@feature-editor";
-import { WarningAlert } from "@ui-alert";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DatePicker, TimePicker } from "@ui-date-time-picker";
 import { isRequired, useOpeningTagValidator } from "@util-validators";
 import { ref, useTemplateRef, watch } from "vue";
@@ -106,10 +100,8 @@ const emit = defineEmits<{
 }>();
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
-const { askConfirmation } = useConfirmationDialog();
 const { t } = useI18n();
 
-const showDialogWarning = ref(false);
 const newsTitle = ref("");
 const newsContent = ref("");
 const newsDate = ref<string | undefined>("");
@@ -167,26 +159,14 @@ const onSave = async () => {
 };
 
 const onDelete = async () => {
-	showDialogWarning.value = false;
-
-	const shouldCancel = await askConfirmation({
-		message: t("components.organisms.FormNews.remove.confirm.message"),
-		confirmActionLangKey: "components.organisms.FormNews.remove.confirm.confirm",
+	const isConfirmed = await askConfirmation({
+		title: "components.organisms.FormNews.remove.confirm.message",
+		confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
 	});
-
-	if (shouldCancel) emit("delete");
+	if (isConfirmed) emit("delete");
 };
 
-const onCancel = async () => {
-	showDialogWarning.value = true;
-
-	const shouldCancel = await askConfirmation({
-		message: t("components.organisms.FormNews.cancel.confirm.title"),
-		confirmActionLangKey: "components.organisms.FormNews.cancel.confirm.confirm",
-	});
-
-	if (shouldCancel) emit("cancel");
-};
+const onCancel = async () => (await askCancel()) && emit("cancel");
 </script>
 <style lang="scss" scoped>
 .news-content-error {

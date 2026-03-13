@@ -797,10 +797,6 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "cambiar clasificación",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "ordenados en orden ascendente",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "ordenados en orden descendente",
-	"components.organisms.FormNews.cancel.confirm.title": "¿Descartar cambios?",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Descartar los cambios",
-	"components.organisms.FormNews.cancel.confirm.message":
-		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"components.organisms.FormNews.editor.placeholder": "Érase una vez...",
 	"components.organisms.FormNews.error.patch": "Error al actualizar.",
 	"components.organisms.FormNews.error.remove": "Error durante la eliminación.",
@@ -1986,6 +1982,8 @@ export default {
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
+	"ui-confirmation-dialog.ask-cancel-warning-message":
+		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"ui.actionMenu.selectedRows": "Menú de acciones para {count} líneas seleccionadas",
 	"ui.actionMenu.actions": "Acciones",

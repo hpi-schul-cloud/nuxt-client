@@ -794,10 +794,6 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "Змінити сортування",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "відсортовані в порядку зростання",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "відсортовані в порядку спадання",
-	"components.organisms.FormNews.cancel.confirm.title": "Скасувати зміни?",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Скасувати зміни",
-	"components.organisms.FormNews.cancel.confirm.message":
-		"Якщо ви скасуєте редагування, усі незбережені зміни буде втрачено.",
 	"components.organisms.FormNews.editor.placeholder": "Одного разу...",
 	"components.organisms.FormNews.error.patch": "Помилка під час оновлення.",
 	"components.organisms.FormNews.error.remove": "Помилка під час видалення.",
@@ -1953,6 +1949,8 @@ export default {
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
+	"ui-confirmation-dialog.ask-cancel-warning-message":
+		"Якщо ви скасуєте редагування, усі незбережені зміни буде втрачено.",
 	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
 	"ui.actionMenu.selectedRows": "Меню дій для {count} виділених рядків",
 	"ui.actionMenu.actions": "Дії",
