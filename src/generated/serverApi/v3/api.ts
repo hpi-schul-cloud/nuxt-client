@@ -25,7 +25,6 @@ export * from './api/board-card-api';
 export * from './api/board-column-api';
 export * from './api/board-element-api';
 export * from './api/board-error-report-api';
-export * from './api/board-submission-api';
 export * from './api/collaborative-storage-api';
 export * from './api/collaborative-text-editor-api';
 export * from './api/course-info-api';
