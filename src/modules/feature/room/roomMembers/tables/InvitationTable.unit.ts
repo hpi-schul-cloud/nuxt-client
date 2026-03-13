@@ -1,15 +1,13 @@
 import InvitationTable from "./InvitationTable.vue";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog, useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 
 vi.mock("vue-i18n", async (importOriginal) => {
@@ -23,27 +21,9 @@ vi.mock("vue-i18n", async (importOriginal) => {
 });
 const mockI18n = vi.mocked(useI18n());
 
-vi.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-vi.mocked(useDeleteConfirmationDialog);
-
 describe("InvitationTable", () => {
-	let askConfirmationMock: Mock;
-	let askDeleteConfirmationMock: Mock;
 	beforeEach(() => {
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
-		mockedUseRemoveConfirmationDialog.mockReturnValue({
-			askConfirmation: askConfirmationMock,
-			isDialogOpen: ref(false),
-		});
-
-		askDeleteConfirmationMock = vi.fn();
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
-		});
+		setActivePinia(createTestingPinia());
 	});
 
 	afterEach(() => {
@@ -129,33 +109,32 @@ describe("InvitationTable", () => {
 			{
 				description: "single link",
 				selectedLinks: [roomInvitationLinks[0].id],
-				expectedMessage: "pages.rooms.members.invitationTable.delete.confirmation",
+				expectedTitle: "pages.rooms.members.invitationTable.delete.confirmation",
 			},
 			{
 				description: "multiple links",
 				selectedLinks: [roomInvitationLinks[0].id, roomInvitationLinks[1].id],
-				expectedMessage: "pages.rooms.members.invitationTable.multipleDelete.confirmation",
+				expectedTitle: "pages.rooms.members.invitationTable.multipleDelete.confirmation",
 			},
 		])(
-			"should render confirmation dialog with text for $description when delete action is clicked",
-			async ({ selectedLinks, expectedMessage }) => {
+			"should call deleteLinks for $description when delete action is confirmed",
+			async ({ selectedLinks, expectedTitle }) => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper, roomInvitationLinkStore } = setup();
 				roomInvitationLinkStore.selectedIds = selectedLinks;
 				await nextTick();
-
-				askConfirmationMock.mockResolvedValue(true);
 
 				const actionButton = wrapper.find('[data-testid="action-menu-button"]');
 				await actionButton.trigger("click");
 
 				const deleteButton = wrapper.findComponent(".v-list-item");
 				await deleteButton.trigger("click");
+				await flushPromises();
 
-				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith(selectedLinks);
-				expect(askConfirmationMock).toHaveBeenCalledWith({
-					confirmActionLangKey: "common.actions.delete",
-					message: expectedMessage,
+				expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
+					title: expectedTitle,
 				});
+				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith(selectedLinks);
 			}
 		);
 
@@ -180,9 +159,7 @@ describe("InvitationTable", () => {
 
 		describe("when edit button clicked", () => {
 			it("should set invitation step to 'edit'", async () => {
-				askDeleteConfirmationMock.mockResolvedValue(true);
 				const { wrapper, roomInvitationLinkStore } = setup();
-				await nextTick();
 				await nextTick();
 
 				expect(roomInvitationLinkStore.isInvitationDialogOpen).toBe(false);
@@ -224,7 +201,7 @@ describe("InvitationTable", () => {
 
 		describe("when menu delete button clicked", () => {
 			it("should call deleteLinks with the correct id", async () => {
-				askConfirmationMock.mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper, roomInvitationLinkStore } = setup();
 				await nextTick();
 
@@ -238,8 +215,7 @@ describe("InvitationTable", () => {
 				const deleteButton = wrapper.findComponent(`[data-testid="menu-delete-button-${roomInvitationLinks[0].id}"]`);
 
 				await deleteButton.trigger("click");
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith([roomInvitationLinks[0].id]);
 			});
