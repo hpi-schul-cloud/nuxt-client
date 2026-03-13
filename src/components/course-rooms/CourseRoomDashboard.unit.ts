@@ -363,7 +363,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 	describe("Deleting Items", () => {
 		it("should call deleteLesson when lesson deletion is confirmed", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 			const deleteLessonMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -374,17 +374,16 @@ describe("CourseRoomDashboard.vue", () => {
 			lessonCard.vm.$emit("delete-lesson");
 			await flushPromises();
 
-			expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
-				itemName: "Test Name",
-				itemType: "common.words.topic",
-				titleKey: "pages.room.itemDelete.text",
+			expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
+				title: expect.any(String),
+				confirmBtnKey: "common.actions.delete",
 			});
 			expect(deleteLessonMock).toHaveBeenCalledWith("3456");
 			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
 		it("should call deleteTask when task deletion is confirmed", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 			const deleteTaskMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -395,17 +394,16 @@ describe("CourseRoomDashboard.vue", () => {
 			taskCard.vm.$emit("delete-task");
 			await flushPromises();
 
-			expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
-				itemName: "Private Aufgabe von Marla - mit Kurs, offen",
-				itemType: "common.words.task",
-				titleKey: "pages.room.itemDelete.text",
+			expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
+				title: expect.any(String),
+				confirmBtnKey: "common.actions.delete",
 			});
 			expect(deleteTaskMock).toHaveBeenCalledWith("1234");
 			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
 		it("should not call deleteTask when task deletion is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 			const deleteTaskMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteTask = deleteTaskMock;
@@ -418,7 +416,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should not call deleteLesson when lesson deletion is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 			const deleteLessonMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteLesson = deleteLessonMock;

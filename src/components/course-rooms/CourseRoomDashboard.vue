@@ -171,7 +171,7 @@ import {
 } from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { askDeletionItem } from "@/utils/confirm-dialog.utils";
+import { askConfirmation } from "@/utils/confirm-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
@@ -321,11 +321,12 @@ export default {
 					return;
 			}
 
-			const confirmed = await askDeletionItem({
-				itemName: itemContent.name || itemContent.title,
-				itemType: typeKey,
-				titleKey: "pages.room.itemDelete.text",
+			const title = this.$t("pages.room.itemDelete.text", {
+				itemType: this.$t(typeKey),
+				itemTitle: itemContent.name || itemContent.title,
 			});
+
+			const confirmed = await askConfirmation({ title });
 
 			if (!confirmed) return;
 

@@ -1,6 +1,7 @@
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import { Permission, RoleName, ToolContextType } from "@/serverApi/v3";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStore,
@@ -9,7 +10,7 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
-import { mount, MountingOptions } from "@vue/test-utils";
+import { flushPromises, mount, MountingOptions } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
 import { nextTick } from "vue";
@@ -87,7 +88,8 @@ describe("RoomExternalToolsSection", () => {
 			};
 		};
 
-		it("should open the delete dialog", async () => {
+		it("should emit delete event when deletion is confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
 			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
@@ -95,10 +97,29 @@ describe("RoomExternalToolsSection", () => {
 			});
 
 			await card.vm.$emit("delete", tool);
+			await flushPromises();
 
-			const deleteDialog = wrapper.getComponent({ name: "v-dialog" });
+			expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
+				title: "pages.rooms.tools.deleteDialog.title",
+				itemName: tool.name,
+				message: "pages.rooms.tools.deleteDialog.content",
+				confirmBtnKey: "common.actions.remove",
+			});
+			expect(wrapper.emitted("delete")).toEqual([[tool]]);
+		});
 
-			expect(deleteDialog.element.childNodes.length).toBeGreaterThanOrEqual(1);
+		it("should not emit delete event when deletion is cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+			const { wrapper, tool } = setup();
+
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+
+			await card.vm.$emit("delete", tool);
+			await flushPromises();
+
+			expect(wrapper.emitted("delete")).toBeUndefined();
 		});
 	});
 
@@ -138,68 +159,6 @@ describe("RoomExternalToolsSection", () => {
 					contextType: ToolContextType.Course,
 				},
 			});
-		});
-	});
-
-	describe("when clicking on confirm button of delete dialog", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
-
-			const { wrapper } = getWrapper({
-				tools: [tool],
-				roomId: "roomId",
-			});
-
-			return {
-				tool,
-				wrapper,
-			};
-		};
-
-		it("should call delete function of store", async () => {
-			const { wrapper, tool } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-
-			await card.vm.$emit("delete", tool);
-
-			const confirmBtn = wrapper.findComponent('[data-testId="dialog-confirm"]');
-
-			await confirmBtn.trigger("click");
-
-			expect(wrapper.emitted("delete")).toEqual([[tool]]);
-		});
-	});
-
-	describe("when clicking on cancel button of delete dialog", () => {
-		const setup = () => {
-			const tool: ExternalToolDisplayData = externalToolDisplayDataFactory.build();
-
-			const { wrapper } = getWrapper({
-				tools: [tool],
-				roomId: "roomId",
-			});
-
-			return {
-				tool,
-				wrapper,
-			};
-		};
-
-		it("should close dialog", async () => {
-			const { wrapper, tool } = setup();
-
-			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
-			});
-			await card.vm.$emit("delete", tool);
-
-			const cancelBtn = wrapper.findComponent('[data-testId="dialog-cancel"]');
-			await cancelBtn.trigger("click");
-
-			expect(wrapper.emitted("delete")).toBeUndefined();
 		});
 	});
 

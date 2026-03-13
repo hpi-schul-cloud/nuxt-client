@@ -10,26 +10,22 @@ export const askConfirmation = (options: ConfirmationOptions): Promise<boolean> 
 };
 
 /**
- * Raises a confirmation dialog for deletion actions, with a message that includes the type and name of the instance to be deleted.
+ * Raises a confirmation dialog for deletion actions.
+ * Message is interpolated with itemName only.
  */
 export const askDeletionItem = (options: {
+	title: string;
 	itemName: string;
-	itemType: string;
-	titleKey?: string;
-	message?: string;
+	message: string;
+	confirmBtnKey?: string;
 	messageType?: "info" | "warning";
 }) => {
 	const { t } = useI18nGlobal();
 
-	const title = t(options.titleKey ?? "ui-confirmation-dialog.ask-delete", {
-		title: options.itemName ? ` "${options.itemName}"` : "",
-		type: i18nKeyExists(options.itemType) ? t(options.itemType) : options.itemType,
-	});
-
 	return askConfirmation({
-		title,
-		confirmBtnKey: "common.actions.delete",
-		message: options.message,
+		title: options.title,
+		message: i18nKeyExists(options.message) ? t(options.message, { itemName: options.itemName }) : options.message,
+		confirmBtnKey: options.confirmBtnKey ?? "common.actions.delete",
 		messageType: options.messageType ?? "warning",
 	});
 };
