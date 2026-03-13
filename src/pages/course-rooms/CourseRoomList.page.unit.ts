@@ -11,7 +11,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 vi.mock("vue-router");
-vi.mock("@data-common-cartridge/commonCartridgeImport.composable");
+vi.mock("@data-common-cartridge");
 
 const getWrapper = () =>
 	mount(CourseRoomList, {

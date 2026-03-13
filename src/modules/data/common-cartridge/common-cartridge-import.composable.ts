@@ -33,7 +33,7 @@ export const useCommonCartridgeImport = () => {
 
 			const fileRecords = uploadResult.data;
 
-			commonCartridgeApi.commonCartridgeControllerImportCourse({
+			await commonCartridgeApi.commonCartridgeControllerImportCourse({
 				fileRecordId: fileRecords.id,
 				fileName: fileRecords.name,
 				fileUrl: fileRecords.url,

@@ -88,7 +88,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 				file: ref(new File([], "file")),
 			});
 
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 
 			expect(confirmBtn.classes()).not.toContain("v-btn--disabled");
 		});
@@ -102,7 +102,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 				isSuccess: ref(true),
 			});
 
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 
 			await confirmBtn.trigger("click");
 
@@ -120,7 +120,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 				isSuccess: ref(false),
 			});
 
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 
 			await confirmBtn.trigger("click");
 
