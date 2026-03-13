@@ -33,7 +33,7 @@ export const askDeletionItem = (options: {
 /**
  * Raises a confirmation dialog for deletion actions.
  */
-export const askDeletion = (title: string, message: string, messageType: "info" | "warning") =>
+export const askDeletion = (title: string, message: string, messageType?: "info" | "warning") =>
 	askConfirmation({
 		title,
 		message,

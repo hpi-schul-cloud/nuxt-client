@@ -1,6 +1,7 @@
 import RoomForm from "./RoomForm.vue";
 import { RoomFeatures } from "@/serverApi/v3";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
@@ -143,19 +144,33 @@ describe("@feature-room/RoomForm", () => {
 		});
 
 		describe("when room values were changed", () => {
-			it("should not directly emit cancel", async () => {
+			it("should emit cancel when askCancel is confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(true);
 				const { wrapper } = setup();
 
 				const textField = wrapper.getComponent(VTextField);
-				const input = textField.find("input");
-
-				await input.setValue("New Name");
-
-				expect(textField.props().modelValue).toEqual("New Name");
+				await textField.setValue("New Name");
 
 				const cancelButton = wrapper.get('[data-testid="room-form-cancel-btn"]');
 				await cancelButton.trigger("click");
+				await flushPromises();
 
+				expect(confirmDialogUtils.askCancel).toHaveBeenCalled();
+				expect(wrapper.emitted("cancel")).toHaveLength(1);
+			});
+
+			it("should not emit cancel when askCancel is declined", async () => {
+				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(false);
+				const { wrapper } = setup();
+
+				const textField = wrapper.getComponent(VTextField);
+				await textField.setValue("New Name");
+
+				const cancelButton = wrapper.get('[data-testid="room-form-cancel-btn"]');
+				await cancelButton.trigger("click");
+				await flushPromises();
+
+				expect(confirmDialogUtils.askCancel).toHaveBeenCalled();
 				expect(wrapper.emitted("cancel")).toBeUndefined();
 			});
 		});

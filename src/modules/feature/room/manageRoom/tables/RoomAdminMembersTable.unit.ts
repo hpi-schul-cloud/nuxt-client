@@ -3,13 +3,13 @@ import { useI18nGlobal } from "@/plugins/i18n";
 import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import {
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n } from "@@/tests/test-utils/setup/createTestingI18n";
 import { createTestingVuetify } from "@@/tests/test-utils/setup/createTestingVuetify";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -17,33 +17,18 @@ import { RoomMember, useRoomMembersStore } from "@data-room";
 import { ChangeRole } from "@feature-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { DOMWrapper, flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock, vi } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { VDataTable, VIcon } from "vuetify/components";
 
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
-vi.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-
 describe("RoomAdminMembersTable", () => {
-	let askConfirmationMock: Mock;
-
 	beforeEach(() => {
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
-		mockedUseRemoveConfirmationDialog.mockReturnValue({
-			askConfirmation: askConfirmationMock,
-			isDialogOpen: ref(false),
-		});
-
 		setActivePinia(createTestingPinia());
 
 		setupStores({
@@ -322,6 +307,7 @@ describe("RoomAdminMembersTable", () => {
 		describe("when remove-member action is clicked", () => {
 			describe("when the user confirms the action", () => {
 				it("should remove member", async () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 					const member = roomMemberFactory.build({ allowedOperations: { removeMember: true } });
 					const { wrapper, roomMembersWithoutApplicants, roomMembersStore } = setup({ members: [member] });
 
@@ -330,7 +316,6 @@ describe("RoomAdminMembersTable", () => {
 					await menuButton.trigger("click");
 					await nextTick();
 
-					askConfirmationMock.mockResolvedValue(true);
 					const removeMemberAction = wrapper.findComponent(
 						`[data-testid="kebab-menu-${targetMember.userId}-remove-member"]`
 					);
@@ -344,6 +329,7 @@ describe("RoomAdminMembersTable", () => {
 
 			describe("when the user cancels the confirmation", () => {
 				it("should not remove member", async () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 					const member = roomMemberFactory.build({ allowedOperations: { removeMember: true } });
 					const { wrapper, roomMembersWithoutApplicants, roomMembersStore } = setup({ members: [member] });
 
@@ -352,7 +338,6 @@ describe("RoomAdminMembersTable", () => {
 					await menuButton.trigger("click");
 					await nextTick();
 
-					askConfirmationMock.mockResolvedValue(false);
 					const removeMemberAction = wrapper.findComponent(
 						`[data-testid="kebab-menu-${targetMember.userId}-remove-member"]`
 					);
