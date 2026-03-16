@@ -19,15 +19,20 @@
 			<slot name="page-content" />
 		</template>
 		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
-		<CourseCommonCartridgeImportModal :max-width="480" class="upload-modal" />
+		<CourseCommonCartridgeImportModal
+			v-model:is-open="commonCartridgeImport.isOpen.value"
+			:max-width="480"
+			class="upload-modal"
+			@import="handleImport"
+		/>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import { Permission } from "@/serverApi/v3";
-import { courseRoomListModule } from "@/store";
-import { useAppStore } from "@data-app";
+import { COURSE_ROOM_LIST_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifyError, notifySuccess, useAppStore, useLoadingStore } from "@data-app";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
@@ -38,7 +43,14 @@ import { FabAction } from "@ui-speed-dial-menu";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+// state zwischen hier und CourseCommonCartridgeImportModal ist nicht shared
+// lieber hier alles an state haben und via emits arbeiten?
+// besser als ein extra pinia nur dafür...
+
 const { t } = useI18n();
+
+const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
+const { setLoadingState } = useLoadingStore();
 
 const props = defineProps({
 	hasRooms: {
@@ -108,6 +120,23 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 });
 
 const isLoading = computed(() => courseRoomListModule.getLoading);
+
+async function handleImport(file: File): Promise<void> {
+	commonCartridgeImport.isOpen.value = false;
+	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
+
+	await commonCartridgeImport.importCommonCartridgeFile(file);
+
+	setLoadingState(false);
+
+	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
+
+	if (commonCartridgeImport.isSuccess.value) {
+		notifySuccess(t("pages.rooms.ccImportCourse.success"));
+	} else {
+		notifyError(t("pages.rooms.ccImportCourse.error"));
+	}
+}
 
 const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken);
 </script>

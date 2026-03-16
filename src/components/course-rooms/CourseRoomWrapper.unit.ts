@@ -1,17 +1,21 @@
+import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import CourseRoomWrapper from "./CourseRoomWrapper.vue";
 import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
+import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { ComponentMountingOptions, flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
+import { ref } from "vue";
 import { VBtn, VFab } from "vuetify/components";
 
 vi.mock("@data-common-cartridge");
@@ -21,17 +25,24 @@ const getWrapper = (
 	options: ComponentMountingOptions<typeof CourseRoomWrapper> = {
 		props: { hasRooms: true },
 	}
-) =>
-	mount(CourseRoomWrapper, {
+) => {
+	const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
+		getAllElements: mockData,
+	});
+
+	return mount(CourseRoomWrapper, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
+			},
 			stubs: {
-				// StartNewCourseSyncDialog: true,
 				CourseCommonCartridgeImportModal: true,
 			},
 		},
 		...options,
 	});
+};
 
 const mockData: CourseMetadataResponse[] = [
 	{
@@ -88,15 +99,33 @@ describe("CourseRoomWrapper.vue", () => {
 		});
 		courseRoomListModule.setAllElements(mockData);
 
-		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport);
+		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport, {
+			isOpen: ref(false),
+			isSuccess: ref(false),
+			file: ref(undefined),
+			importCommonCartridgeFile: vi.fn(),
+		});
 		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
 
 	describe("when data is not loaded yet", () => {
 		it("should display skeleton loader", () => {
-			courseRoomListModule.setLoading(true);
+			const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
+				getAllElements: [],
+				getLoading: true,
+			});
 
-			const wrapper = getWrapper({
+			const wrapper = mount(CourseRoomWrapper, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					provide: {
+						[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
+					},
+					stubs: {
+						CourseCommonCartridgeImportModal: true,
+						StartNewCourseSyncDialog: true,
+					},
+				},
 				props: { hasRooms: false },
 			});
 
@@ -202,6 +231,72 @@ describe("CourseRoomWrapper.vue", () => {
 			await openImportBtn.getComponent(VBtn).trigger("click");
 
 			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(true);
+		});
+	});
+
+	describe("when handling common cartridge import", () => {
+		it("should call import composable on successful import", async () => {
+			useCommonCartridgeImportMockReturn.isSuccess = ref(true);
+			useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockResolvedValue();
+
+			const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
+				getAllElements: mockData,
+			});
+
+			const wrapper = mount(CourseRoomWrapper, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					provide: {
+						[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
+					},
+					stubs: {
+						CourseCommonCartridgeImportModal: false,
+						StartNewCourseSyncDialog: true,
+					},
+				},
+				props: { hasRooms: true },
+			});
+
+			const testFile = new File([], "test.imscc");
+
+			const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+			modal.vm.$emit("import", testFile);
+			await flushPromises();
+
+			expect(useCommonCartridgeImportMockReturn.importCommonCartridgeFile).toHaveBeenCalledWith(testFile);
+			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
+		});
+
+		it("should call import composable on failed import", async () => {
+			useCommonCartridgeImportMockReturn.isSuccess = ref(false);
+			useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockResolvedValue();
+
+			const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
+				getAllElements: mockData,
+			});
+
+			const wrapper = mount(CourseRoomWrapper, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					provide: {
+						[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
+					},
+					stubs: {
+						CourseCommonCartridgeImportModal: false,
+						StartNewCourseSyncDialog: true,
+					},
+				},
+				props: { hasRooms: true },
+			});
+
+			const testFile = new File([], "test.imscc");
+
+			const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+			modal.vm.$emit("import", testFile);
+			await flushPromises();
+
+			expect(useCommonCartridgeImportMockReturn.importCommonCartridgeFile).toHaveBeenCalledWith(testFile);
+			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
 		});
 	});
 });

@@ -1,61 +1,33 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import CourseRoomListModule from "@/store/course-room-list";
-import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { expectNotification, mockComposable } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useCommonCartridgeImport } from "@data-common-cartridge";
-import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
-import { setActivePinia } from "pinia";
-import { beforeEach, Mocked } from "vitest";
-import { ref } from "vue";
-
-vi.mock("@data-common-cartridge");
-const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
+import { ComponentMountingOptions } from "@vue/test-utils";
 
 describe("CourseCommonCartridgeImportModal", () => {
-	let useCommonCartridgeImportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeImport>>;
-
-	beforeEach(() => {
-		setActivePinia(createTestingPinia());
-
-		useCommonCartridgeImportMockReturn = mockComposable(useCommonCartridgeImport);
-		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
-	});
-
-	const setup = (overrides: Partial<ReturnType<typeof useCommonCartridgeImport>> = {}) => {
-		if (overrides) {
-			Object.entries(overrides).forEach(([key, value]) => {
-				if (value !== undefined) {
-					(useCommonCartridgeImportMockReturn as Record<string, unknown>)[key] = value;
-				}
-			});
-		}
-
-		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-			getAllElements: [],
-		});
-
-		const wrapper = mount(CourseCommonCartridgeImportModal, {
+	const getWrapper = (options: ComponentMountingOptions<typeof CourseCommonCartridgeImportModal> = {}) =>
+		mount(CourseCommonCartridgeImportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-				},
 			},
+			props: {
+				isOpen: false,
+				...options.props,
+			},
+			...options,
 		});
 
-		return {
-			wrapper,
-			roomsModuleMock,
-			useCommonCartridgeImportMockReturn,
-		};
-	};
+	describe("when dialog is closed", () => {
+		it("should not render the dialog", () => {
+			const wrapper = getWrapper({ props: { isOpen: false } });
+
+			const dialog = wrapper.findComponent("[data-testid='common-cartridge-import-modal']");
+			expect(dialog.exists()).toBe(false);
+		});
+	});
 
 	describe("when dialog is open", () => {
-		it("should contain disabled confirm button", () => {
-			const { wrapper } = setup({ isOpen: ref(true) });
+		it("should contain disabled confirm button when no file is selected", () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
 			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 
@@ -64,7 +36,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("should contain enabled cancel button", () => {
-			const { wrapper } = setup({ isOpen: ref(true) });
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
 
@@ -73,7 +45,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("should contain file input", () => {
-			const { wrapper } = setup({ isOpen: ref(true) });
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
 			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
 
@@ -82,65 +54,87 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when a file is selected", () => {
-		it("should enable confirm button", () => {
-			const { wrapper } = setup({
-				isOpen: ref(true),
-				file: ref(new File([], "file")),
-			});
+		it("should enable confirm button", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+
+			await fileInput.setValue([new File([], "test.imscc")]);
 
 			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
-
 			expect(confirmBtn.classes()).not.toContain("v-btn--disabled");
 		});
 	});
 
-	describe("when file upload is successful", () => {
-		it("should show success message", async () => {
-			const { wrapper, roomsModuleMock } = setup({
-				file: ref(new File([], "file")),
-				isOpen: ref(true),
-				isSuccess: ref(true),
-			});
+	describe("when confirm is clicked", () => {
+		it("should emit import event with file", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+			const testFile = new File([], "test.imscc");
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue([testFile]);
 
 			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
-
 			await confirmBtn.trigger("click");
 
-			expect(roomsModuleMock.fetch).toHaveBeenCalledTimes(1);
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalledTimes(1);
-			expectNotification("success");
+			expect(wrapper.emitted("import")).toBeTruthy();
+			const emittedEvents = wrapper.emitted("import");
+			expect(emittedEvents?.[0]?.[0]).toBe(testFile);
+		});
+
+		it("should not emit import event when no file is selected", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			await confirmBtn.trigger("click");
+
+			expect(wrapper.emitted("import")).toBeFalsy();
 		});
 	});
 
-	describe("when file upload is unsuccessful", () => {
-		it("should show error message", async () => {
-			const { wrapper, roomsModuleMock } = setup({
-				file: ref(new File([], "file")),
-				isOpen: ref(true),
-				isSuccess: ref(false),
-			});
-
-			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
-
-			await confirmBtn.trigger("click");
-
-			expect(roomsModuleMock.fetch).toHaveBeenCalled();
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalled();
-			expectNotification("error");
-		});
-	});
-
-	describe("when dialog is closed", () => {
-		it("should reset the state", () => {
-			const { wrapper, useCommonCartridgeImportMockReturn } = setup({
-				isOpen: ref(true),
-			});
+	describe("when cancel is clicked", () => {
+		it("should emit update:isOpen with false", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+			await cancelBtn.trigger("click");
 
-			cancelBtn.trigger("click");
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
 
-			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
+		it("should clear the selected file", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue([new File([], "test.imscc")]);
+
+			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+			await cancelBtn.trigger("click");
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
+		});
+	});
+
+	describe("when dialog is closed via ESC or click outside", () => {
+		it("should call onCancel on ESC which emits update:isOpen with false", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+			await cancelBtn.trigger("click");
+
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
+
+		it("should call onCancel on click outside which emits update:isOpen with false", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+			await cancelBtn.trigger("click");
+
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
 		});
 	});
 });

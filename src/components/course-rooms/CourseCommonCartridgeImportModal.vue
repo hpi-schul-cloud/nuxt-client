@@ -1,9 +1,10 @@
 <template>
 	<v-dialog
 		ref="commonCartridgeImportModal"
-		v-model="isOpen"
+		:model-value="isOpen"
 		:max-width="props.maxWidth"
 		data-testid="common-cartridge-import-modal"
+		@update:model-value="$emit('update:isOpen', $event)"
 		@click:outside="onCancel()"
 		@keydown.esc="onCancel()"
 	>
@@ -51,20 +52,15 @@
 </template>
 
 <script setup lang="ts">
-import { COURSE_ROOM_LIST_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
-import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { mdiTrayArrowUp } from "@icons/material";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
-const { isOpen, isSuccess, file, importCommonCartridgeFile } = useCommonCartridgeImport();
-const { setLoadingState } = useLoadingStore();
 
 const props = withDefaults(
 	defineProps<{
+		isOpen: boolean;
 		maxWidth?: number;
 	}>(),
 	{
@@ -72,32 +68,25 @@ const props = withDefaults(
 	}
 );
 
-const importButtonDisabled = computed(() => !file.value);
+const emit = defineEmits<{
+	"update:isOpen": [value: boolean];
+	import: [file: File];
+}>();
+
+const file = ref<File[] | undefined>(undefined);
+
+const importButtonDisabled = computed(() => !file.value || file.value.length === 0);
 
 function onCancel(): void {
 	file.value = undefined;
-	isOpen.value = false;
+	emit("update:isOpen", false);
 }
 
-async function onConfirm(): Promise<void> {
-	isOpen.value = false;
-	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
-
-	if (file.value) {
-		await importCommonCartridgeFile(file.value);
+function onConfirm(): void {
+	if (file.value && file.value.length > 0) {
+		emit("import", file.value[0]);
+		file.value = undefined;
 	}
-
-	setLoadingState(false);
-
-	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
-
-	if (isSuccess.value) {
-		notifySuccess(t("pages.rooms.ccImportCourse.success"));
-	} else {
-		notifyError(t("pages.rooms.ccImportCourse.error"));
-	}
-
-	file.value = undefined;
 }
 </script>
 
