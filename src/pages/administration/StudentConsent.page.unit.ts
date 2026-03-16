@@ -15,6 +15,14 @@ import { nextTick, Ref, ref } from "vue";
 vi.mock("@data-users/bulk-consent.composable");
 const mockedUseBulkConsent = vi.mocked(useBulkConsent);
 
+const mockRouter = {
+	push: vi.fn(),
+};
+
+vi.mock("vue-router", () => ({
+	useRouter: () => mockRouter,
+}));
+
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
@@ -120,7 +128,7 @@ describe("students/consent", () => {
 
 		const table = wrapper.findComponent(BackendDataTable);
 		await nextTick();
-		await nextTick();
+
 		expect(table.props().data).toHaveLength(mockData.length);
 	});
 
@@ -129,14 +137,13 @@ describe("students/consent", () => {
 
 		const table = wrapper.findComponent(BackendDataTable);
 		await nextTick();
-		await nextTick();
+
 		expect(table.props().data).toStrictEqual(mockData);
 	});
 
 	it("should call updateStudent method when password input element's value change", async () => {
 		const { wrapper, bulkConsentMock } = setup();
 
-		await nextTick();
 		await nextTick();
 		const input = wrapper.find(`[data-testid="password-input"]`).get("input");
 		input.setValue("abc");
@@ -149,10 +156,8 @@ describe("students/consent", () => {
 		const { wrapper, bulkConsentMock } = setup();
 
 		await nextTick();
-		await nextTick();
 		const datePicker = wrapper.findComponent(DatePicker);
 		datePicker.vm.$emit("update:date", "2017-10-10");
-		await nextTick();
 
 		expect(bulkConsentMock.updateStudent).toHaveBeenCalled();
 	});
@@ -161,9 +166,6 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		await nextTick();
-		await nextTick();
-		wrapper.setData({ birthdayWarning: true });
-
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
 
 		await nextButton.trigger("click");
@@ -188,10 +190,7 @@ describe("students/consent", () => {
 		mockData[0].birthday = "10.10.2010";
 		const { wrapper } = setup();
 
-		await nextTick();
-		await nextTick();
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
-
 		await nextButton.trigger("click");
 
 		const table = wrapper.find(`[data-testid="consent_table_2"]`);
@@ -202,11 +201,8 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		await nextTick();
-		await nextTick();
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
-
-		nextButton.trigger("click");
-		await nextTick();
+		await nextButton.trigger("click");
 
 		const table = wrapper.find(`[data-testid="consent_table_2"]`);
 		expect(table.exists()).toBe(false);
@@ -218,7 +214,6 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
-
 		await nextButton.trigger("click");
 
 		const confirmForm = wrapper.find(`[data-testid="check-confirm"]`);
@@ -231,7 +226,6 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
-
 		await nextButton.trigger("click");
 
 		const confirmForm = wrapper.find(`[data-testid="check-confirm"]`);
@@ -245,11 +239,9 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
-
 		await nextButton.trigger("click");
 
 		const nextButton2 = wrapper.find(`[data-testid="button-next-2"]`);
-
 		await nextButton2.trigger("click");
 
 		const confirmError = wrapper.find(`[data-testid="confirm-error"]`);
@@ -263,11 +255,8 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
-
 		await nextButton.trigger("click");
-
 		const nextButton2 = wrapper.find(`[data-testid="button-next-2"]`);
-
 		await nextButton2.trigger("click");
 
 		expectNotification("success");
