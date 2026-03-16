@@ -4,6 +4,7 @@ import { UserListResponse, UserResponse } from "@api-server";
 import { useUsersStore } from "@data-users";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const words = [
 	"auto",
@@ -57,24 +58,24 @@ export const useBulkConsent = () => {
 	const { selectedIds } = storeToRefs(usersStore);
 	const registeredStudents = ref<string[]>([]);
 	const selectedStudentsData = ref<ConsentStudent[]>([]);
+	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
 
 	const register = async (payload: ConsentStudent[]) => {
 		const registered: string[] = [];
 
 		if (Array.isArray(payload)) {
-			const errors: Array<{ updateError: unknown }> = [];
-
 			for (const user of payload) {
 				registered.push(user._id);
-				try {
-					await $axios.patch("/v1/users/admin/students/" + user._id, {
-						...user,
-						createAccount: true,
-					});
-				} catch (error) {
-					errors.push({ updateError: error });
-				}
+
+				await execute(
+					() =>
+						$axios.patch("/v1/users/admin/students/" + user._id, {
+							...user,
+							createAccount: true,
+						}),
+					t("components.board.notifications.errors.notUpdated")
+				);
 			}
 
 			registeredStudents.value = registered;
