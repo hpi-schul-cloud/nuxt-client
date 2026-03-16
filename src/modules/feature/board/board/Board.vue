@@ -86,7 +86,6 @@
 						/>
 					</div>
 				</div>
-				<ConfirmationDialog />
 				<AddElementDialog />
 				<AddCollaboraFileDialog @create-collabora-file="onCreateCollaboraFile" />
 				<LightBox />
@@ -155,7 +154,6 @@ import {
 import { useEnvConfig } from "@data-env";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
