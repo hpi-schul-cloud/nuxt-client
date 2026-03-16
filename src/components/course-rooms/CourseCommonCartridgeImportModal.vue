@@ -1,5 +1,5 @@
 <template>
-	<v-dialog
+	<VDialog
 		ref="commonCartridgeImportModal"
 		:model-value="isOpen"
 		:max-width="props.maxWidth"
@@ -8,14 +8,14 @@
 		@click:outside="onCancel()"
 		@keydown.esc="onCancel()"
 	>
-		<v-card :ripple="false">
+		<VCard :ripple="false">
 			<template #title>
 				<h2 class="mt-2">
 					{{ t("pages.rooms.ccImportCourse.title") }}
 				</h2>
 			</template>
 			<template #text>
-				<v-file-input
+				<VFileInput
 					v-model="file"
 					class="truncate-file-input"
 					:label="t('pages.rooms.ccImportCourse.fileInputLabel')"
@@ -27,14 +27,14 @@
 				/>
 			</template>
 			<template #actions>
-				<v-spacer />
+				<VSpacer />
 				<div class="mb-2">
-					<v-btn data-testid="dialog-cancel-btn" variant="outlined" class="ml-2 mr-2" @click="onCancel">
+					<VBtn data-testid="dialog-cancel-btn" variant="outlined" class="ml-2 mr-2" @click="onCancel">
 						{{ t("common.labels.close") }}
-					</v-btn>
+					</VBtn>
 				</div>
 				<div class="mb-2">
-					<v-btn
+					<VBtn
 						type="submit"
 						variant="flat"
 						color="primary"
@@ -44,17 +44,18 @@
 						@click="onConfirm"
 					>
 						{{ t("pages.rooms.ccImportCourse.confirm") }}
-					</v-btn>
+					</VBtn>
 				</div>
 			</template>
-		</v-card>
-	</v-dialog>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
 import { mdiTrayArrowUp } from "@icons/material";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { VBtn, VCard, VDialog, VFileInput } from "vuetify/components";
 
 const { t } = useI18n();
 
