@@ -84,7 +84,7 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@/serverApi/v3";
+import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import {
 	useBoardAllowedOperations,
@@ -129,10 +129,10 @@ const {
 	startVideoConference,
 	joinVideoConference,
 	resetError,
-} = useVideoConference(VideoConferenceScope.VideoConferenceElement, element.value.id);
+} = useVideoConference(VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT, element.value.id);
 
 const { isFeatureEnabled } = useBoardFeatures();
-const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.Videoconference));
+const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.VIDEOCONFERENCE));
 
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 

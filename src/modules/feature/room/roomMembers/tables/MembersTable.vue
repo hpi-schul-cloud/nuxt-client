@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
 import ChangeRole from "../dialogs/ChangeRole.vue";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomAllowedOperations, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -148,13 +148,13 @@ const tableHeader = computed(() => [
 ]);
 
 const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
-	if (schoolRoleNames.includes(RoleName.Teacher)) {
+	if (schoolRoleNames.includes(RoleName.TEACHER)) {
 		return mdiAccountSchoolOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.Student)) {
+	if (schoolRoleNames.includes(RoleName.STUDENT)) {
 		return mdiAccountOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.ExternalPerson)) {
+	if (schoolRoleNames.includes(RoleName.EXTERNAL_PERSON)) {
 		return mdiAccountClockOutline;
 	}
 	return undefined;

@@ -1,5 +1,5 @@
 import { useBoardStore } from "./Board.store";
-import { BoardResponseAllowedOperations } from "@/serverApi/v3";
+import { BoardResponseAllowedOperations } from "@api-server";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef } from "vue";
 

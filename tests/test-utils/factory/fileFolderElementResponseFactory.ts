@@ -1,14 +1,13 @@
-import { ContentElementType } from "@/serverApi/v3";
-import { FileFolderElement } from "@/types/board/ContentElement";
-import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
+import { FileFolderElement } from "@/types/board/ContentElement";
+import { ContentElementType } from "@api-server";
+import { Factory } from "fishery";
 
-export const fileFolderElementResponseFactory =
-	Factory.define<FileFolderElement>(({ sequence }) => ({
-		id: `id${sequence}`,
-		type: ContentElementType.FileFolder,
-		timestamps: timestampsResponseFactory.build(),
-		content: {
-			title: `title ${sequence}`,
-		},
-	}));
+export const fileFolderElementResponseFactory = Factory.define<FileFolderElement>(({ sequence }) => ({
+	id: `id${sequence}`,
+	type: ContentElementType.FILE_FOLDER,
+	timestamps: timestampsResponseFactory.build(),
+	content: {
+		title: `title ${sequence}`,
+	},
+}));

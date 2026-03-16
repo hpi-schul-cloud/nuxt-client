@@ -1,5 +1,5 @@
 import { SidebarSingleItem } from "../types";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { BoardExternalReferenceType } from "@api-server";
 import { useSharedBoardPageInformation } from "@data-board";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -40,8 +40,8 @@ export const useSidebarSelection = (
 		// Board
 		if (route.name === "boards-id") {
 			return (
-				(item.to === "/rooms/courses-overview" && contextType.value === BoardExternalReferenceType.Course) ||
-				(item.to === "/rooms" && contextType.value === BoardExternalReferenceType.Room)
+				(item.to === "/rooms/courses-overview" && contextType.value === BoardExternalReferenceType.COURSE) ||
+				(item.to === "/rooms" && contextType.value === BoardExternalReferenceType.ROOM)
 			);
 		}
 
@@ -50,8 +50,8 @@ export const useSidebarSelection = (
 			const itemLinksToCourseOverview = item.to === "/rooms/courses-overview";
 			const itemLinksToRoomsOverview = item.to === "/rooms";
 
-			const contextOfFolderIsCourse = contextType.value === BoardExternalReferenceType.Course;
-			const contextOfFolderIsRoom = contextType.value === BoardExternalReferenceType.Room;
+			const contextOfFolderIsCourse = contextType.value === BoardExternalReferenceType.COURSE;
+			const contextOfFolderIsRoom = contextType.value === BoardExternalReferenceType.ROOM;
 
 			return (
 				(itemLinksToCourseOverview && contextOfFolderIsCourse) || (itemLinksToRoomsOverview && contextOfFolderIsRoom)

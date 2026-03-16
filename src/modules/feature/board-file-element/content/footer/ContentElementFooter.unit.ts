@@ -1,9 +1,9 @@
 import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
 import FileDownload from "./download/FileDownload.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
-import { ContentElementType } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { PreviewStatus } from "@api-file-storage";
+import { ContentElementType } from "@api-server";
 import { shallowMount } from "@vue/test-utils";
 
 describe("ContentElementFooter", () => {
@@ -19,7 +19,7 @@ describe("ContentElementFooter", () => {
 				isCollaboraEditable: false,
 				element: {
 					id: "1",
-					type: ContentElementType.File,
+					type: ContentElementType.FILE,
 					content: {
 						caption: "File caption",
 						alternativeText: "File alternative text",

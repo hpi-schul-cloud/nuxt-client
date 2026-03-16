@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
+import { GroupResponse, GroupUserResponse, RoleName } from "@api-server";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
@@ -96,7 +96,7 @@ const isUserInGroup = computed(() => {
 
 	const isPartOfGroup: boolean = selectedGroup.value.users.some((user: GroupUserResponse) => user.id === me.user.id);
 
-	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.Administrator);
+	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.ADMINISTRATOR);
 
 	if (isAdmin && !isPartOfGroup) {
 		const allCourseTeacherPartOfGroup = props.courseTeachers?.every((teacher) =>

@@ -1,8 +1,8 @@
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
-import { DrawingElementResponse } from "@/serverApi/v3";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { DrawingElementResponse } from "@api-server";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { mock } from "vitest-mock-extended";

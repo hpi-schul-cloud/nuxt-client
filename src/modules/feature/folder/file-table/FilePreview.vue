@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { PreviewWidth } from "@/fileStorageApi/v3";
 import { FileRecord } from "@/types/file/File";
 import { convertDownloadToPreviewUrl, isAudioMimeType, isPreviewPossible, isVideoMimeType } from "@/utils/fileHelper";
+import { PreviewWidth } from "@api-file-storage";
 import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";
 import { computed, PropType, ref, watch } from "vue";
 import { useDisplay } from "vuetify";

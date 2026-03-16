@@ -1,7 +1,7 @@
 import { useCourseApi } from "./courseApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import { mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
 import { AxiosInstance } from "axios";
 import { Mocked } from "vitest";
 

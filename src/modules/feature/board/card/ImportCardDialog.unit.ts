@@ -1,10 +1,10 @@
 import ImportCardDialog from "./ImportCardDialog.vue";
-import { ShareTokenInfoResponseParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { mockApiResponse, mockedPiniaStoreTyping, roomItemFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ShareTokenInfoResponseParentType } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -41,7 +41,7 @@ describe("ImportCardDialog", () => {
 			Promise.resolve({
 				token,
 				parentName: "parentName",
-				parentType: ShareTokenInfoResponseParentTypeEnum.Card,
+				parentType: ShareTokenInfoResponseParentType.CARD,
 			});
 
 		const wrapper = mount(ImportCardDialog, {

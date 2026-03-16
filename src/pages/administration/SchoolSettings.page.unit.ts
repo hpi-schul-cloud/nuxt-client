@@ -1,5 +1,4 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -8,6 +7,7 @@ import { createTestEnvStore, maintenanceStatusFactory, mockComposable } from "@@
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@api-server";
 import { useSharedSchoolYearChange } from "@data-school";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
@@ -63,7 +63,7 @@ describe("SchoolSettingsPage", () => {
 			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
 			FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
 			FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: true,
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 		},
 		schoolGetters: Partial<SchoolsModule> = {}
 	) => {

@@ -110,6 +110,11 @@
       "@page-room": ["src/modules/page/room"],
       "@page-folder": ["src/modules/page/folder"],
       "@page-collabora": ["src/modules/page/collabora"],
+      "@api-server": ["src/generated/serverApi/v3"],
+      "@api-file-storage": ["src/generated/fileStorageApi/v3"],
+      "@api-fwu": ["src/generated/fwuApi/v3"],
+      "@api-h5p": ["src/generated/h5pEditorApi/v3"],
+      "@api-common-cartridge": ["src/generated/commonCartridgeApi/v3"],
       "@/*": ["src/*"],
       "@@/*": ["*"]
     },

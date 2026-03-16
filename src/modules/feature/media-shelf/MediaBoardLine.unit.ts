@@ -4,13 +4,13 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { BoardLayout } from "@/serverApi/v3";
 import {
 	deletedElementResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
 import { useMediaBoardEditMode } from "@data-board";
 import { useDragAndDrop } from "@util-board";
 import { mount, VueWrapper } from "@vue/test-utils";
@@ -24,7 +24,7 @@ describe("MediaBoardLine", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoardLine> = {
 			line: mediaLineResponseFactory.build(),
-			layout: BoardLayout.List,
+			layout: BoardLayout.LIST,
 			index: 0,
 		}
 	) => {
@@ -90,7 +90,7 @@ describe("MediaBoardLine", () => {
 
 			const { wrapper } = getWrapper({
 				line,
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 				index: 0,
 			});
 
@@ -302,7 +302,7 @@ describe("MediaBoardLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaLineResponseFactory.build(),
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 				index: 0,
 			});
 
@@ -443,7 +443,7 @@ describe("MediaBoardLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaLineResponseFactory.build(),
-				layout: BoardLayout.Grid,
+				layout: BoardLayout.GRID,
 				index: 0,
 			});
 
@@ -465,7 +465,7 @@ describe("MediaBoardLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaLineResponseFactory.build(),
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 				index: 0,
 			});
 
@@ -487,7 +487,7 @@ describe("MediaBoardLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaLineResponseFactory.build(),
-				layout: BoardLayout.List,
+				layout: BoardLayout.LIST,
 				index: 0,
 			});
 
@@ -514,7 +514,7 @@ describe("MediaBoardLine", () => {
 					line: mediaLineResponseFactory.build({
 						elements: deletedElementResponseFactory.buildList(1),
 					}),
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 					index: 0,
 				});
 
@@ -538,7 +538,7 @@ describe("MediaBoardLine", () => {
 					line: mediaLineResponseFactory.build({
 						elements: mediaExternalToolElementResponseFactory.buildList(1),
 					}),
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 					index: 0,
 				});
 

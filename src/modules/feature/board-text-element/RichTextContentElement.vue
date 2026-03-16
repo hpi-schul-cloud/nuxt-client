@@ -23,7 +23,7 @@
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
-import { RichTextElementResponse } from "@/serverApi/v3";
+import { RichTextElementResponse } from "@api-server";
 import { useBoardFocusHandler } from "@data-board";
 import { computed, PropType, ref, toRef } from "vue";
 

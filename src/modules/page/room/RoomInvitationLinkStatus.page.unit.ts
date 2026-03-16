@@ -142,23 +142,23 @@ describe("RoomInvitationLinkStatusPage", () => {
 	describe("when link store returns a message", () => {
 		const testCases = [
 			{
-				message: RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool,
+				message: RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL,
 				expectedMessage: "pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
 			},
 			{
-				message: RoomInvitationLinkValidationError.Expired,
+				message: RoomInvitationLinkValidationError.EXPIRED,
 				expectedMessage: "pages.rooms.invitationLinkStatus.expired",
 			},
 			{
-				message: RoomInvitationLinkValidationError.NotUsableForCurrentRole,
+				message: RoomInvitationLinkValidationError.NOT_USABLE_FOR_CURRENT_ROLE,
 				expectedMessage: "pages.rooms.invitationLinkStatus.notUsableForCurrentRole",
 			},
 			{
-				message: RoomInvitationLinkValidationError.RestrictedToCreatorSchool,
+				message: RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL,
 				expectedMessage: "pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
 			},
 			{
-				message: RoomInvitationLinkValidationError.InvalidLink,
+				message: RoomInvitationLinkValidationError.INVALID_LINK,
 				expectedMessage: "pages.rooms.invitationLinkStatus.invalidLink",
 			},
 		];
@@ -179,7 +179,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		it("should show bird image", async () => {
 			const { wrapper } = await setup({
 				roomId: "",
-				validationMessage: RoomInvitationLinkValidationError.Expired,
+				validationMessage: RoomInvitationLinkValidationError.EXPIRED,
 				schoolName: "Beispielschule",
 			});
 

@@ -14,7 +14,6 @@ import {
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { BoardLayout, ContentElementType } from "@/serverApi/v3";
 import {
 	cardResponseFactory,
 	mockComposable,
@@ -23,6 +22,7 @@ import {
 	richTextElementContentFactory,
 } from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
+import { BoardLayout, ContentElementType } from "@api-server";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -91,7 +91,7 @@ describe("useCardSocketApi", () => {
 
 				const payload: CreateElementSuccessPayload = {
 					cardId: "cardId",
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					toPosition: 0,
 					newElement: richTextElementResponseFactory.build(),
 					isOwnAction: true,
@@ -137,7 +137,7 @@ describe("useCardSocketApi", () => {
 				const payload = {
 					elementId: "elementId",
 					data: {
-						type: ContentElementType.RichText,
+						type: ContentElementType.RICH_TEXT,
 						content: richTextElementContentFactory.build(),
 					},
 					isOwnAction: true,
@@ -224,7 +224,7 @@ describe("useCardSocketApi", () => {
 					title: "sometitle",
 					columns: [],
 					isVisible: true,
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 					timestamps: {
 						createdAt: new Date().toISOString(),
 						lastUpdatedAt: new Date().toISOString(),
@@ -242,7 +242,7 @@ describe("useCardSocketApi", () => {
 
 				const payload: CreateElementFailurePayload = {
 					cardId: "cardId",
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 				};
 				dispatch(CardActions.createElementFailure(payload));
 
@@ -360,7 +360,7 @@ describe("useCardSocketApi", () => {
 
 			const payload = {
 				cardId: "cardId",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			};
 
 			createElementRequest(payload);

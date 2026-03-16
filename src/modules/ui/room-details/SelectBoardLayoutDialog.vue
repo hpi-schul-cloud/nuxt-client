@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { PickerOption } from "./types";
-import { BoardLayout } from "@/serverApi/v3";
+import { BoardLayout } from "@api-server";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { SvsDialog } from "@ui-dialog";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
@@ -47,14 +47,14 @@ const boardLayouts: PickerOption[] = [
 	{
 		label: t("pages.room.dialog.boardLayout.multiColumn"),
 		icon: mdiViewDashboardOutline,
-		type: BoardLayout.Columns,
+		type: BoardLayout.COLUMNS,
 		dataTestId: "dialog-add-multi-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.multiColumn"),
 	},
 	{
 		label: t("pages.room.dialog.boardLayout.singleColumn"),
 		icon: mdiViewAgendaOutline,
-		type: BoardLayout.List,
+		type: BoardLayout.LIST,
 		dataTestId: "dialog-add-single-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.singleColumn"),
 	},

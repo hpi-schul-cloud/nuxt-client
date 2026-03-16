@@ -22,7 +22,7 @@
 				/>
 			</template>
 		</ContentElementBar>
-		<WarningAlert v-if="element.content.deletedElementType === ContentElementType.ExternalTool">
+		<WarningAlert v-if="element.content.deletedElementType === ContentElementType.EXTERNAL_TOOL">
 			{{
 				t("components.cardElement.deletedElement.warning.externalToolElement", {
 					toolName: element.content.title,
@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import DeletedElementMenu from "./DeletedElementMenu.vue";
-import { ContentElementType, DeletedElementResponse } from "@/serverApi/v3";
+import { ContentElementType, DeletedElementResponse } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { mdiPuzzleOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";

@@ -56,34 +56,34 @@ describe("@feature-room/RoomColorPicker", () => {
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
 
-			expect(radioGroup.props().modelValue).toBe(RoomColor.BlueGrey);
+			expect(radioGroup.props().modelValue).toBe(RoomColor.BLUE_GREY);
 		});
 	});
 
 	describe("when a color is given", () => {
 		it("should render given color as selected", () => {
-			const { wrapper } = setup({ color: RoomColor.Red });
+			const { wrapper } = setup({ color: RoomColor.RED });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
 
-			expect(radioGroup.props().modelValue).toBe(RoomColor.Red);
+			expect(radioGroup.props().modelValue).toBe(RoomColor.RED);
 		});
 
 		it("should render true-icon when color is selected", () => {
-			const { wrapper } = setup({ color: RoomColor.Red });
+			const { wrapper } = setup({ color: RoomColor.RED });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
-			const redRadioButton = radioGroup.getComponent(`[data-testid=color-swatch-${RoomColor.Red}]`);
+			const redRadioButton = radioGroup.getComponent(`[data-testid=color-swatch-${RoomColor.RED}]`);
 			const trueIcon = redRadioButton.getComponent(VIcon);
 
 			expect(trueIcon.props("icon")).toEqual(mdiCheckCircleOutline);
 		});
 
 		it("should not render true-icon when color is not selected", () => {
-			const { wrapper } = setup({ color: RoomColor.Orange });
+			const { wrapper } = setup({ color: RoomColor.ORANGE });
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
-			const redRadioButton = radioGroup.getComponent(`[data-testid=color-swatch-${RoomColor.Red}]`);
+			const redRadioButton = radioGroup.getComponent(`[data-testid=color-swatch-${RoomColor.RED}]`);
 			const trueIcon = redRadioButton.findComponent(VIcon);
 
 			expect(trueIcon.exists()).toBe(false);
@@ -95,9 +95,9 @@ describe("@feature-room/RoomColorPicker", () => {
 			const { wrapper } = setup();
 
 			const radioGroup = wrapper.getComponent(VRadioGroup);
-			await radioGroup.setValue(RoomColor.Orange);
+			await radioGroup.setValue(RoomColor.ORANGE);
 
-			expect(radioGroup.props().modelValue).toBe(RoomColor.Orange);
+			expect(radioGroup.props().modelValue).toBe(RoomColor.ORANGE);
 		});
 	});
 });

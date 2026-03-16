@@ -1,9 +1,9 @@
 import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
-import { ToolContextType } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { ToolContextType } from "@api-server";
 import { Ref, ref } from "vue";
 
 export const useExternalToolDisplayListState = () => {

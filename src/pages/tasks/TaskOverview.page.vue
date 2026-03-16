@@ -4,9 +4,9 @@
 
 <script setup lang="ts">
 import TasksDashboardMain from "@/components/tasks/TasksDashboardMain.vue";
-import { RoleName } from "@/serverApi/v3";
 import TasksModule from "@/store/tasks";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoleName } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useTitle } from "@vueuse/core";
 import { computed, inject, onMounted } from "vue";
@@ -25,8 +25,8 @@ useTitle(buildPageTitle(t("common.words.tasks")));
 onMounted(() => tasksModule.fetchAllTasks());
 
 const dashboardRole = computed(() => {
-	if (isTeacher.value) return RoleName.Teacher;
-	if (isStudent.value) return RoleName.Student;
+	if (isTeacher.value) return RoleName.TEACHER;
+	if (isStudent.value) return RoleName.STUDENT;
 	return undefined;
 });
 </script>

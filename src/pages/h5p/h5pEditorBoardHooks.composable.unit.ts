@@ -1,5 +1,4 @@
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
-import { ElementWithParentHierarchyResponse } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	externalToolElementResponseFactory,
@@ -8,6 +7,7 @@ import {
 	mockComposable,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { ElementWithParentHierarchyResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { UpdateElementRequestPayload, useBoardApi, useCardStore } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";

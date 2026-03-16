@@ -1,4 +1,4 @@
-import { UserResponse } from "@/serverApi/v3";
+import { UserResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const userResponseFactory = Factory.define<UserResponse>(({ sequence }) => ({

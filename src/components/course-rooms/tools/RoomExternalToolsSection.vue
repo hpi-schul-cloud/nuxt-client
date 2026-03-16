@@ -53,7 +53,7 @@
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { Permission, ToolContextType } from "@/serverApi/v3";
+import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { computed, PropType, ref } from "vue";
@@ -84,7 +84,7 @@ const isErrorDialogOpen = ref(false);
 const selectedItem = ref<ExternalToolDisplayData | undefined>();
 
 const selectedItemName = computed(() => selectedItem.value?.name || "???");
-const canEdit = useAppStore().hasPermission(Permission.ContextToolAdmin);
+const canEdit = useAppStore().hasPermission(Permission.CONTEXT_TOOL_ADMIN);
 
 const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
 	selectedItem.value = tool;
@@ -114,7 +114,7 @@ const onEditTool = (tool: ExternalToolDisplayData) => {
 		params: { configId: tool.contextExternalToolId },
 		query: {
 			contextId: props.roomId,
-			contextType: ToolContextType.Course,
+			contextType: ToolContextType.COURSE,
 		},
 	});
 };

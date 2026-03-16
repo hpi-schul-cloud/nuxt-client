@@ -1,5 +1,3 @@
-import * as serverApi from "@/serverApi/v3/api";
-import { RoomStatsItemResponse, RoomStatsListResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
@@ -15,6 +13,8 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@api-server";
+import { RoomStatsItemResponse, RoomStatsListResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";

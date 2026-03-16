@@ -7,7 +7,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import { VBadge } from "vuetify/lib/components/index";
 
 describe("@feature-room/RoomGridItem", () => {
-	const mockRoom = roomItemFactory.build({ color: RoomColor.Magenta, isLocked: false, name: "Mathe" });
+	const mockRoom = roomItemFactory.build({ color: RoomColor.MAGENTA, isLocked: false, name: "Mathe" });
 
 	const setup = (props?: ComponentProps<typeof RoomGridItem>) => {
 		const wrapper = mount(RoomGridItem, {

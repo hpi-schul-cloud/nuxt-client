@@ -1,4 +1,4 @@
-import * as serverApi from "../serverApi/v3/api";
+import * as serverApi from "../generated/serverApi/v3";
 import CourseRoomListModule from "./course-room-list";
 import { DroppedObject, RoomsData, SharingCourseObject } from "./types/rooms";
 import { apiResponseErrorFactory, axiosErrorFactory, businessErrorFactory } from "@@/tests/test-utils";

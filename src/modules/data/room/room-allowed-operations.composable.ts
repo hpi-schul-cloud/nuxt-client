@@ -1,5 +1,5 @@
 import { useRoomDetailsStore } from "./RoomDetails.store";
-import { RoomItemResponseAllowedOperations } from "@/serverApi/v3";
+import { RoomItemResponseAllowedOperations } from "@api-server";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef } from "vue";
 

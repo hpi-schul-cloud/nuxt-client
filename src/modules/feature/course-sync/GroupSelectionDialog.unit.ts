@@ -1,7 +1,7 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import { RoleName } from "@/serverApi/v3";
 import { groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoleName } from "@api-server";
 import { GroupListFilter, useGroupListState } from "@data-group";
 import { mount } from "@vue/test-utils";
 import { Mocked } from "vitest";
@@ -105,7 +105,7 @@ describe("GroupSelectionDialog", () => {
 						id: "teacher1",
 						firstName: "Teacher",
 						lastName: "1",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -154,7 +154,7 @@ describe("GroupSelectionDialog", () => {
 						id: "student1",
 						firstName: "Student",
 						lastName: "1",
-						role: RoleName.Student,
+						role: RoleName.STUDENT,
 					},
 				],
 			});

@@ -1,10 +1,10 @@
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createTestableGlobaleState } from "@/utils/create-global-state";
 import {
 	CollaborativeTextEditorApiFactory,
 	CollaborativeTextEditorApiInterface,
 	CollaborativeTextEditorParentType,
-} from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createTestableGlobaleState } from "@/utils/create-global-state";
+} from "@api-server";
 import { notifyError } from "@data-app";
 import { useI18n } from "vue-i18n";
 

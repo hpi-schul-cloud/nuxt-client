@@ -1,8 +1,8 @@
-import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { RoomColor, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { expectNotification, mockApi, mockApiResponse, mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomApiFactory, RoomDetailsResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useRoomDetailsStore } from "@data-room";
 import { RoomForm } from "@feature-room";
@@ -12,11 +12,11 @@ import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, type RouterMock } from "vue-router-mock";
 
-vi.mock("@/serverApi/v3");
+vi.mock("@api-server");
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
-	color: RoomColor.Blue,
+	color: RoomColor.BLUE,
 	features: [],
 };
 

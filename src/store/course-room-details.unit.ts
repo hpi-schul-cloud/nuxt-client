@@ -1,8 +1,6 @@
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
-import * as serverApi from "@/serverApi/v3/api";
-import { BoardParentType } from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
@@ -10,6 +8,8 @@ import {
 	businessErrorFactory,
 	courseFactory,
 } from "@@/tests/test-utils/factory";
+import * as serverApi from "@api-server";
+import { BoardParentType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosError, AxiosInstance } from "axios";
@@ -321,8 +321,8 @@ describe("course-room module", () => {
 				const params = {
 					title: "title",
 					parentId: "parentId",
-					parentType: BoardParentType.Course,
-					layout: serverApi.BoardLayout.Columns,
+					parentType: BoardParentType.COURSE,
+					layout: serverApi.BoardLayout.COLUMNS,
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
@@ -344,8 +344,8 @@ describe("course-room module", () => {
 				const params = {
 					title: "title",
 					parentId: "parentId",
-					parentType: BoardParentType.Course,
-					layout: serverApi.BoardLayout.List,
+					parentType: BoardParentType.COURSE,
+					layout: serverApi.BoardLayout.LIST,
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
@@ -368,8 +368,8 @@ describe("course-room module", () => {
 				const params = {
 					title: "title",
 					parentId: "parentId",
-					parentType: BoardParentType.Course,
-					layout: serverApi.BoardLayout.Columns,
+					parentType: BoardParentType.COURSE,
+					layout: serverApi.BoardLayout.COLUMNS,
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
@@ -660,7 +660,7 @@ describe("course-room module", () => {
 					isSynchronized: false,
 					elements: [
 						{
-							type: serverApi.BoardElementResponseTypeEnum.Task,
+							type: serverApi.BoardElementResponseType.TASK,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -792,7 +792,7 @@ describe("course-room module", () => {
 					displayColor: "black",
 					elements: [
 						{
-							type: serverApi.BoardElementResponseTypeEnum.Task,
+							type: serverApi.BoardElementResponseType.TASK,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -852,7 +852,7 @@ describe("course-room module", () => {
 					displayColor: "black",
 					elements: [
 						{
-							type: serverApi.BoardElementResponseTypeEnum.Task,
+							type: serverApi.BoardElementResponseType.TASK,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
