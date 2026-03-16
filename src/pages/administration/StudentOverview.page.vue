@@ -137,7 +137,7 @@ const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useF
 const { fetchClasses, classNameList } = useClasses();
 
 const usersStore = useUsersStore();
-usersStore.init(RoleName.Student);
+usersStore.init(RoleName.STUDENT);
 const { deletingProgress, userList, qrLinks, pagination, selectedIds } = storeToRefs(usersStore);
 const { deleteUsers, fetchUsers, sendRegistrationLink, getQrRegistrationLinks } = usersStore;
 

@@ -45,7 +45,7 @@ import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 const usersStore = useUsersStore();
-usersStore.init(RoleName.Student);
+usersStore.init(RoleName.STUDENT);
 const { createUser } = usersStore;
 const router = useRouter();
 

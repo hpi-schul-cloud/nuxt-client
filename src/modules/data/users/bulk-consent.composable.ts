@@ -1,6 +1,6 @@
 import { useSafeAxiosTask } from "../../../composables/async-tasks.composable";
-import { UserListResponse, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
+import { UserListResponse, UserResponse } from "@api-server";
 import { useUsersStore } from "@data-users";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -109,7 +109,7 @@ export const useBulkConsent = () => {
 	};
 
 	const updateStudent = ({ id, birthDate, pass }: { id: string; birthDate?: string; pass?: string }) => {
-		const student = selectedStudentsData.value.find((st) => st._id === id);
+		const student = selectedStudentsData.value.find((st: ConsentStudent) => st._id === id);
 		if (!student) return;
 
 		if (birthDate) student.birthday = birthDate ?? "";

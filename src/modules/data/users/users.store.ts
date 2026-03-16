@@ -1,6 +1,6 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { RoleName, UserListResponse, UserResponse } from "@/serverApi/v3/api";
 import { $axios } from "@/utils/api";
+import { RoleName, UserListResponse, UserResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -10,7 +10,7 @@ export type UserCreatingData = {
 	firstName: string;
 	lastName: string;
 	email: string;
-	roles: [RoleName.Teacher] | [RoleName.Student];
+	roles: [RoleName.TEACHER] | [RoleName.STUDENT];
 	schoolId: string;
 	sendRegistration: boolean;
 	generateRegistrationLink?: boolean;
@@ -21,7 +21,7 @@ export const useUsersStore = defineStore("usersStore", () => {
 	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
 
-	const userType = ref<RoleName.Student | RoleName.Teacher>(RoleName.Student);
+	const userType = ref<RoleName.STUDENT | RoleName.TEACHER>(RoleName.STUDENT);
 	const userList = ref<UserResponse[]>([]);
 	const deletingProgress = ref<{ active: boolean; percent: number }>({
 		active: false,
@@ -37,11 +37,11 @@ export const useUsersStore = defineStore("usersStore", () => {
 
 	const isDeleting = computed(() => deletingProgress.value.active);
 	const deletedPercent = computed(() => deletingProgress.value.percent);
-	const userTypePath = computed(() => (userType.value === RoleName.Student ? "students" : "teachers"));
+	const userTypePath = computed(() => (userType.value === RoleName.STUDENT ? "students" : "teachers"));
 	const usersApi = computed(() => `/v3/users/admin/${userTypePath.value}`);
 	const usersApiV1 = computed(() => `/v1/users/admin/${userTypePath.value}`);
 
-	const init = (type: RoleName.Student | RoleName.Teacher) => {
+	const init = (type: RoleName.STUDENT | RoleName.TEACHER) => {
 		userType.value = type;
 	};
 
@@ -83,11 +83,11 @@ export const useUsersStore = defineStore("usersStore", () => {
 
 	const createUser = async (userData: UserCreatingData): Promise<{ result: UserResponse | null; error: unknown }> => {
 		const errorMessage =
-			userType.value === RoleName.Student
+			userType.value === RoleName.STUDENT
 				? t("pages.administration.students.new.error")
 				: t("pages.administration.teachers.new.error");
 		const successMessage =
-			userType.value === RoleName.Student
+			userType.value === RoleName.STUDENT
 				? t("pages.administration.students.new.success")
 				: t("pages.administration.teachers.new.success");
 
