@@ -14,7 +14,14 @@ import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 vi.mock("vue-router");
-vi.mock("@data-common-cartridge");
+vi.mock("@data-common-cartridge", () => ({
+	useCommonCartridgeImport: () => ({
+		isOpen: { value: false },
+		isSuccess: { value: false },
+		file: { value: undefined },
+		importCommonCartridgeFile: vi.fn(),
+	}),
+}));
 
 const mockRoomStoreData = [
 	{
