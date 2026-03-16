@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
+import { GroupResponse, GroupUserResponse, RoleName } from "@api-server";
 import { useGroupListState } from "@data-group";
 import { WarningAlert } from "@ui-alert";
 import { useDebounceFn } from "@vueuse/core";
@@ -96,7 +96,7 @@ const onConfirm = async () => {
 const { groups, total, skip, limit, isLoading, fetchGroups } = useGroupListState();
 
 const hasTeacher = (group: GroupResponse): boolean =>
-	group.users.some((user: GroupUserResponse) => user.role === RoleName.Teacher);
+	group.users.some((user: GroupUserResponse) => user.role === RoleName.TEACHER);
 
 const onGroupListIntersect = async (isIntersecting: boolean) => {
 	if (isIntersecting && total.value > groups.value.length) {

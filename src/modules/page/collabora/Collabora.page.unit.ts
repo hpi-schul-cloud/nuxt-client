@@ -1,6 +1,4 @@
 import CollaboraPage from "./Collabora.page.vue";
-import { ElementWithParentHierarchyResponse } from "@/serverApi/v3/api";
-import * as serverApi from "@/serverApi/v3/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	fileElementResponseFactory,
@@ -11,6 +9,8 @@ import {
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ElementWithParentHierarchyResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import * as FileStorageApi from "@data-file";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, shallowMount } from "@vue/test-utils";

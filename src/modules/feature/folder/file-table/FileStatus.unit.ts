@@ -1,8 +1,8 @@
 import FileStatus from "./FileStatus.vue";
-import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
 import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { FileRecordScanStatus, PreviewStatus } from "@api-file-storage";
 
 describe("FileStatus", () => {
 	const setupWrapper = (fileRecord: FileRecord) => {

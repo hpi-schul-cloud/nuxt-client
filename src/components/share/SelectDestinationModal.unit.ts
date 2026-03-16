@@ -1,6 +1,6 @@
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardExternalReferenceType } from "@api-server";
 import { mount } from "@vue/test-utils";
 
 describe("@components/share/SelectDestinationModal", () => {
@@ -16,7 +16,7 @@ describe("@components/share/SelectDestinationModal", () => {
 		parentType: "lesson",
 		courses: [course],
 		destinations: [],
-		destinationType: BoardExternalReferenceType.Course,
+		destinationType: BoardExternalReferenceType.COURSE,
 	};
 
 	const setup = () => {

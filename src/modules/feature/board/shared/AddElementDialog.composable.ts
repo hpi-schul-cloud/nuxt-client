@@ -1,6 +1,6 @@
 import { ElementTypeSelectionOptions, useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { BoardFeature, ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { BoardFeature, ContentElementType, PreferredToolResponse } from "@api-server";
 import { notifyInfo } from "@data-app";
 import {
 	type CreateElementRequestPayload,
@@ -28,7 +28,7 @@ type CreateElementRequestFn = (payload: CreateElementRequestPayload) => Promise<
 
 export const useAddElementDialog = (createElementRequestFn: CreateElementRequestFn, cardId: string) => {
 	const { isFeatureEnabled } = useBoardFeatures();
-	const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.Videoconference));
+	const isVideoConferenceEnabled = computed(() => isFeatureEnabled(BoardFeature.VIDEOCONFERENCE));
 	const { allowedOperations } = useBoardAllowedOperations();
 	const cardStore = useCardStore();
 
@@ -64,10 +64,10 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 		const translationKeyDrawing = "components.cardElement.notification.visibleAndEditable";
 		let translationKey = "";
 
-		if (elementType === ContentElementType.CollaborativeTextEditor) {
+		if (elementType === ContentElementType.COLLABORATIVE_TEXT_EDITOR) {
 			translationKey = translationKeyCollaborativeTextEditor;
 		}
-		if (elementType === ContentElementType.Drawing) {
+		if (elementType === ContentElementType.DRAWING) {
 			translationKey = translationKeyDrawing;
 		}
 		if (translationKey !== "") {
@@ -80,13 +80,13 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			{
 				icon: mdiFormatText,
 				label: t("components.elementTypeSelection.elements.textElement.subtitle"),
-				action: () => onElementClick(ContentElementType.RichText),
+				action: () => onElementClick(ContentElementType.RICH_TEXT),
 				testId: "create-element-text",
 			},
 			{
 				icon: mdiTrayArrowUp,
 				label: t("components.elementTypeSelection.elements.fileElement.subtitle"),
-				action: () => onElementClick(ContentElementType.File),
+				action: () => onElementClick(ContentElementType.FILE),
 				testId: "create-element-file",
 			},
 		];
@@ -97,7 +97,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiPuzzleOutline,
 				label: t("components.elementTypeSelection.elements.externalToolElement.subtitle"),
-				action: () => onElementClick(ContentElementType.ExternalTool),
+				action: () => onElementClick(ContentElementType.EXTERNAL_TOOL),
 				testId: "create-element-external-tool-container",
 			});
 		}
@@ -106,7 +106,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiLink,
 				label: t("components.elementTypeSelection.elements.linkElement.subtitle"),
-				action: () => onElementClick(ContentElementType.Link),
+				action: () => onElementClick(ContentElementType.LINK),
 				testId: "create-element-link",
 			});
 		}
@@ -115,7 +115,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiPresentation,
 				label: t("components.cardElement.drawingElement"),
-				action: () => onElementClick(ContentElementType.Drawing),
+				action: () => onElementClick(ContentElementType.DRAWING),
 				testId: "create-element-drawing-element",
 			});
 		}
@@ -124,7 +124,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiTextBoxEditOutline,
 				label: t("components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"),
-				action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
+				action: () => onElementClick(ContentElementType.COLLABORATIVE_TEXT_EDITOR),
 				testId: "create-element-collaborative-text-editor",
 			});
 		}
@@ -137,7 +137,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiVideoOutline,
 				label: t("components.elementTypeSelection.elements.videoConferenceElement.subtitle"),
-				action: () => onElementClick(ContentElementType.VideoConference),
+				action: () => onElementClick(ContentElementType.VIDEO_CONFERENCE),
 				testId: "create-element-video-conference",
 			});
 		}
@@ -146,7 +146,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: mdiFolderOpenOutline,
 				label: t("components.elementTypeSelection.elements.folderElement.subtitle"),
-				action: () => onElementClick(ContentElementType.FileFolder),
+				action: () => onElementClick(ContentElementType.FILE_FOLDER),
 				testId: "create-element-file-folder",
 			});
 		}
@@ -155,7 +155,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 			options.push({
 				icon: "$h5pOutline",
 				label: t("components.elementTypeSelection.elements.h5pElement.subtitle"),
-				action: () => onElementClick(ContentElementType.H5p),
+				action: () => onElementClick(ContentElementType.H5P),
 				testId: "create-element-h5p",
 			});
 		}
@@ -186,7 +186,7 @@ export const useAddElementDialog = (createElementRequestFn: CreateElementRequest
 				options.push({
 					icon: "$" + tool.iconName,
 					label: tool.name,
-					action: () => onPreferredElementClick(ContentElementType.ExternalTool, tool),
+					action: () => onPreferredElementClick(ContentElementType.EXTERNAL_TOOL, tool),
 					testId: `create-element-preferred-element-${tool.name}`,
 				});
 			});

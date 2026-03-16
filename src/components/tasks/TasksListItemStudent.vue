@@ -85,7 +85,7 @@ export default {
 			return this.task.displayColor || defaultColor;
 		},
 		isCloseToDueDate() {
-			return isDueWithin24h(this.task.dueDate);
+			return this.task.dueDate && isDueWithin24h(this.task.dueDate);
 		},
 		isOverDue() {
 			const dueDate = this.task.dueDate;

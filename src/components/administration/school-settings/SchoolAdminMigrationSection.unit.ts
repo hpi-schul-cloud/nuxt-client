@@ -1,7 +1,6 @@
 import SchoolAdminMigrationSection from "./SchoolAdminMigrationSection.vue";
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
-import { ConfigResponse } from "@/serverApi/v3/api";
 import SchoolsModule from "@/store/schools";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { SCHOOLS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
@@ -9,6 +8,7 @@ import { businessErrorFactory, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";

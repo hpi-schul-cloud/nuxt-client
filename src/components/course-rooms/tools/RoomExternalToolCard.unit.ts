@@ -1,8 +1,8 @@
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { Permission } from "@/serverApi/v3";
 import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import {
 	ExternalToolDisplayData,
@@ -26,7 +26,7 @@ describe("RoomExternalToolCard", () => {
 
 	beforeEach(() => {
 		vi.mocked(useAppStore).mockReturnValue({
-			hasPermission: (permission: Permission) => permission === Permission.ContextToolAdmin,
+			hasPermission: (permission: Permission) => permission === Permission.CONTEXT_TOOL_ADMIN,
 			userRoles: [],
 		} as unknown as ReturnType<typeof useAppStore>);
 

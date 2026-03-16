@@ -1,9 +1,9 @@
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import StartExistingCourseSyncDialog from "./StartExistingCourseSyncDialog.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { MeResponse, RoleName } from "@/serverApi/v3";
 import { createTestAppStore, expectNotification, groupResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { MeResponse, RoleName } from "@api-server";
 import { useCourseApi } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -233,7 +233,7 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: me.user?.id,
 						firstName: me.user.firstName,
 						lastName: me.user.lastName,
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -266,7 +266,7 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "firstname",
 						lastName: "lastname",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -301,7 +301,7 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseTeachers: ["firstname lastname"],
 				},
 				{
-					roles: [{ id: "0", name: RoleName.Administrator }],
+					roles: [{ id: "0", name: RoleName.ADMINISTRATOR }],
 				}
 			);
 
@@ -311,19 +311,19 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "firstname",
 						lastName: "lastname",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 					{
 						id: "otherUserId1",
 						firstName: "firstname1",
 						lastName: "lastname1",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 					{
 						id: "otherUserId2",
 						firstName: "firstname2",
 						lastName: "lastname2",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});
@@ -356,7 +356,7 @@ describe("StartExistingCourseSyncDialog", () => {
 					courseTeachers: ["Firstname Lastname", "another teacher"],
 				},
 				{
-					roles: [{ id: "0", name: RoleName.Administrator }],
+					roles: [{ id: "0", name: RoleName.ADMINISTRATOR }],
 				}
 			);
 
@@ -366,7 +366,7 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "Firstname",
 						lastName: "Lastname",
-						role: RoleName.Teacher,
+						role: RoleName.TEACHER,
 					},
 				],
 			});

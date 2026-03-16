@@ -160,7 +160,7 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 		return;
 	}
 
-	const parentIsBoard = parent.value.type === ParentNodeType.Board;
+	const parentIsBoard = parent.value.type === ParentNodeType.BOARD;
 
 	if (parentIsBoard) {
 		deleteAndNavigateToBoard(folderId.value);
@@ -319,9 +319,9 @@ const uploadFiles = async (files: File[]) => {
 watch(
 	parent,
 	(newParent) => {
-		if (newParent && newParent.type === ParentNodeType.Board) {
+		if (newParent && newParent.type === ParentNodeType.BOARD) {
 			createPageInformation(parent.value.id);
-		} else if (newParent && newParent.type !== ParentNodeType.Board) {
+		} else if (newParent && newParent.type !== ParentNodeType.BOARD) {
 			throw new Error("Unsupported parent type");
 		}
 	},

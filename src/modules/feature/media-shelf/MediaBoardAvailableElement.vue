@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
-import { MediaAvailableLineElementResponse, ToolContextType } from "@/serverApi/v3";
+import { MediaAvailableLineElementResponse, ToolContextType } from "@api-server";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useExternalToolLaunchState } from "@data-external-tool";
@@ -41,7 +41,7 @@ const loadAvailableLineElementData = async (element: MediaAvailableLineElementRe
 	if (contextId) {
 		await fetchSchoolLaunchRequest(element.schoolExternalToolId, {
 			contextId,
-			contextType: ToolContextType.MediaBoard,
+			contextType: ToolContextType.MEDIA_BOARD,
 		});
 	}
 };

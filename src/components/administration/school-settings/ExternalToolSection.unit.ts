@@ -1,6 +1,5 @@
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@/serverApi/v3";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
@@ -19,6 +18,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
@@ -133,7 +133,7 @@ describe("ExternalToolSection", () => {
 					mediumId: "tool1",
 					mediaSourceId: "licensedSource",
 					mediaSourceName: "Medium Source Name",
-					mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+					mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 				},
 			});
 
@@ -155,11 +155,11 @@ describe("ExternalToolSection", () => {
 							}),
 							isDeactivated: false,
 							medium: {
-								status: ExternalToolMediumStatus.Active,
+								status: ExternalToolMediumStatus.ACTIVE,
 								mediumId: "tool2",
 								mediaSourceId: "notLicensedSource",
 								mediaSourceName: undefined,
-								mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+								mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 							},
 						},
 						{

@@ -1,4 +1,4 @@
-import { MediaBoardColors } from "@/serverApi/v3";
+import { MediaBoardColors } from "@api-server";
 import colors from "vuetify/lib/util/colors";
 
 export const isMediaBoardColor = (colorName: string): colorName is MediaBoardColors =>
@@ -21,7 +21,7 @@ const getHexToColorMap = (): Record<string, MediaBoardColors> => {
 
 	const looseColorMap: Record<string, MediaBoardColors>[] = colorNames.map(
 		(colorName: string): Record<string, MediaBoardColors> => {
-			if (isMediaBoardColor(colorName) && colorName !== MediaBoardColors.Transparent) {
+			if (isMediaBoardColor(colorName) && colorName !== MediaBoardColors.TRANSPARENT) {
 				const hexValues: string[] = Object.values(colors[colorName]);
 
 				return hexValues.reduce(
@@ -46,7 +46,7 @@ const hexToColorMap: Record<string, MediaBoardColors> = getHexToColorMap();
 
 export class MediaBoardColorMapper {
 	static mapColorToHex(colorName: MediaBoardColors, shade: ColorShade): string {
-		if (colorName === MediaBoardColors.Transparent) {
+		if (colorName === MediaBoardColors.TRANSPARENT) {
 			return colors.shades.white;
 		}
 
@@ -57,7 +57,7 @@ export class MediaBoardColorMapper {
 
 	static mapHexToColor(hex: string): MediaBoardColors | undefined {
 		if (hex.toLowerCase() === colors.shades.white) {
-			return MediaBoardColors.Transparent;
+			return MediaBoardColors.TRANSPARENT;
 		}
 
 		return hexToColorMap[hex.toLowerCase()];

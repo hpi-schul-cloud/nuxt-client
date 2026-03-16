@@ -6,10 +6,7 @@ declare module "katex/dist/contrib/auto-render.js" {
 		errorCallback?: (msg: string, err: Error) => void;
 	}
 
-	function renderMathInElement(
-		element: HTMLElement,
-		options?: RenderMathInElementOptions
-	): void;
+	function renderMathInElement(element: HTMLElement, options?: RenderMathInElementOptions): void;
 
 	export default renderMathInElement;
 }

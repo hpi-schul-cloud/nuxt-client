@@ -1,4 +1,4 @@
-import { FileUrlParams } from "@/fileStorageApi/v3";
+import { FileUrlParams } from "@api-file-storage";
 import { Factory } from "fishery";
 
 export const fileUrlParamsFactory = Factory.define<FileUrlParams>(({ sequence }) => ({

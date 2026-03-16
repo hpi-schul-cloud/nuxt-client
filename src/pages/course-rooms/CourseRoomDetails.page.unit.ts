@@ -1,15 +1,6 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
-import {
-	BoardElementResponse,
-	BoardElementResponseTypeEnum as BoardTypes,
-	CopyApiResponseStatusEnum,
-	CopyApiResponseTypeEnum,
-	ImportUserResponseRoleNamesEnum,
-	Permission,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3/api";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -23,6 +14,15 @@ import {
 import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	BoardElementResponse,
+	BoardElementResponseType as BoardTypes,
+	CopyApiResponseStatus,
+	CopyApiResponseType,
+	ImportUserResponseRoleNames,
+	Permission,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
@@ -34,7 +34,7 @@ import { VBtn } from "vuetify/components";
 
 const boardElements: Array<BoardElementResponse> = [
 	{
-		type: BoardTypes.Task,
+		type: BoardTypes.TASK,
 		content: {
 			courseName: "Mathe",
 			id: "59cce1d381297026d02cdc4b",
@@ -56,7 +56,7 @@ const boardElements: Array<BoardElementResponse> = [
 		},
 	},
 	{
-		type: BoardTypes.Task,
+		type: BoardTypes.TASK,
 		content: {
 			courseName: "Mathe",
 			id: "59cce4c3c6abf042248e888e",
@@ -79,9 +79,9 @@ const boardElements: Array<BoardElementResponse> = [
 	},
 ];
 
-const mockPermissionsCourseTeacher = [Permission.CourseCreate, Permission.CourseEdit];
-const mockPermissionsCourseSubstitutionTeacher = [Permission.HomeworkCreate, Permission.HomeworkEdit];
-const mockPermissionsStudent = [Permission.BaseView];
+const mockPermissionsCourseTeacher = [Permission.COURSE_CREATE, Permission.COURSE_EDIT];
+const mockPermissionsCourseSubstitutionTeacher = [Permission.HOMEWORK_CREATE, Permission.HOMEWORK_EDIT];
+const mockPermissionsStudent = [Permission.BASE_VIEW];
 
 describe("CourseRoomDetails.page.vue", () => {
 	let copyModule: CopyModule;
@@ -100,13 +100,13 @@ describe("CourseRoomDetails.page.vue", () => {
 	const setup = (
 		options?: Partial<{
 			permissionData: Permission[];
-			roleName: ImportUserResponseRoleNamesEnum;
+			roleName: ImportUserResponseRoleNames;
 			isLocked: boolean;
 		}>
 	) => {
 		const { permissionData, roleName, isLocked } = {
 			permissionData: mockPermissionsCourseTeacher,
-			roleName: ImportUserResponseRoleNamesEnum.Teacher,
+			roleName: ImportUserResponseRoleNames.TEACHER,
 			isLocked: false,
 			...options,
 		};
@@ -116,16 +116,16 @@ describe("CourseRoomDetails.page.vue", () => {
 			getIsResultModalOpen: false,
 			getCopyResult: {
 				id: "copiedid",
-				type: CopyApiResponseTypeEnum.Course,
+				type: CopyApiResponseType.COURSE,
 				title: "Sample Course",
 				elements: [],
-				status: CopyApiResponseStatusEnum.Success,
+				status: CopyApiResponseStatus.SUCCESS,
 			},
 		});
 		downloadModule = createModuleMocks(CommonCartridgeExportModule);
 		shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
-			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+			getParentType: ShareTokenBodyParamsParentType.COURSES,
 		});
 		courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomData: singleColumnBoard,
@@ -214,7 +214,7 @@ describe("CourseRoomDetails.page.vue", () => {
 	describe("menu", () => {
 		it("should show FAB if user has permission to create homework", () => {
 			const { wrapper } = setup({
-				permissionData: [Permission.HomeworkCreate],
+				permissionData: [Permission.HOMEWORK_CREATE],
 			});
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -225,7 +225,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			describe("when user doesn't have course edit permission", () => {
 				it("should not render any board creation button", async () => {
 					const { wrapper } = setup({
-						permissionData: [Permission.HomeworkCreate, Permission.TopicCreate],
+						permissionData: [Permission.HOMEWORK_CREATE, Permission.TOPIC_CREATE],
 					});
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 					const btnDataTestIds = fabComponent.vm.actions.map((action) => action.dataTestId);
@@ -238,7 +238,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			describe("when feature is enabled", () => {
 				it("should render the button to open dialog", async () => {
 					const { wrapper } = setup({
-						permissionData: [Permission.CourseEdit],
+						permissionData: [Permission.COURSE_EDIT],
 					});
 					const fabComponent = wrapper.findComponent(SpeedDialMenu);
 					const btnDataTestIds = fabComponent.vm.actions.map((action) => action.dataTestId);
@@ -248,7 +248,7 @@ describe("CourseRoomDetails.page.vue", () => {
 
 				it("should open layout dialog when button is clicked", async () => {
 					const { wrapper } = setup({
-						permissionData: [Permission.CourseEdit],
+						permissionData: [Permission.COURSE_EDIT],
 					});
 
 					const openLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
@@ -432,7 +432,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				expect(shareModule.startShareFlow).toHaveBeenCalled();
 				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
 					id: singleColumnBoard.roomId,
-					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+					type: ShareTokenBodyParamsParentType.COURSES,
 				});
 			});
 		});

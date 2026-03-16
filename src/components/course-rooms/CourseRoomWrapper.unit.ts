@@ -1,6 +1,5 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import CourseRoomWrapper from "./CourseRoomWrapper.vue";
-import { CourseMetadataResponse, Permission } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
@@ -8,6 +7,7 @@ import { createTestAppStoreWithPermissions, createTestEnvStore, mockComposable }
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { CourseMetadataResponse, Permission } from "@api-server";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
@@ -92,7 +92,7 @@ describe("CourseRoomWrapper.vue", () => {
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 			FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
 		});
-		createTestAppStoreWithPermissions([Permission.CourseCreate]);
+		createTestAppStoreWithPermissions([Permission.COURSE_CREATE]);
 
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,

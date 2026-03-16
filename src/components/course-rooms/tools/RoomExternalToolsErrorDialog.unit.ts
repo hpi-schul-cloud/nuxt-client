@@ -1,11 +1,11 @@
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName } from "@api-server";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -16,8 +16,8 @@ describe("RoomExternalToolsErrorDialog", () => {
 		setActivePinia(createTestingPinia());
 		createTestAppStore({
 			me: {
-				permissions: [Permission.ContextToolAdmin],
-				roles: [{ name: RoleName.Teacher, id: "teacher1" }],
+				permissions: [Permission.CONTEXT_TOOL_ADMIN],
+				roles: [{ name: RoleName.TEACHER, id: "teacher1" }],
 			},
 		});
 

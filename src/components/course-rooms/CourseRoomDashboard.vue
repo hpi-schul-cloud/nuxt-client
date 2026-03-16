@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="role === Roles.Teacher">
+		<div v-if="role === Roles.TEACHER">
 			<draggable
 				v-model="roomData.elements"
 				item-key="id"
@@ -17,7 +17,7 @@
 				<template #item="{ element: item, index }">
 					<div>
 						<RoomBoardCard
-							v-if="item.type === cardTypes.ColumnBoard"
+							v-if="item.type === cardTypes.COLUMN_BOARD"
 							:ref="`item_${index}`"
 							:board-card-index="index"
 							:user-role="role"
@@ -38,7 +38,7 @@
 							@share-board="getSharedBoard(item.content.columnBoardId)"
 						/>
 						<CourseRoomTaskCard
-							v-if="item.type === cardTypes.Task"
+							v-if="item.type === cardTypes.TASK"
 							:ref="`item_${index}`"
 							:task-card-index="index"
 							:user-role="role"
@@ -64,7 +64,7 @@
 							@share-task="getSharedTask(item.content.id)"
 						/>
 						<RoomLessonCard
-							v-if="item.type === cardTypes.Lesson"
+							v-if="item.type === cardTypes.LESSON"
 							:ref="`item_${index}`"
 							:lesson-card-index="index"
 							:user-role="role"
@@ -91,7 +91,7 @@
 				</template>
 			</draggable>
 		</div>
-		<div v-if="role === Roles.Student">
+		<div v-if="role === Roles.STUDENT">
 			<div v-for="(item, index) of roomData.elements" :key="index">
 				<RoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
@@ -113,7 +113,7 @@
 					"
 				/>
 				<CourseRoomTaskCard
-					v-if="item.type === cardTypes.Task"
+					v-if="item.type === cardTypes.TASK"
 					:ref="`item_${index}`"
 					:task-card-index="index"
 					:user-role="role"
@@ -131,7 +131,7 @@
 					@restore-task="restoreTask(item.content.id)"
 				/>
 				<RoomLessonCard
-					v-if="item.type === cardTypes.Lesson"
+					v-if="item.type === cardTypes.LESSON"
 					:ref="`item_${index}`"
 					:lesson-card-index="index"
 					:user-role="role"
@@ -178,15 +178,15 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import {
-	BoardElementResponseTypeEnum,
-	BoardLayout,
-	ImportUserResponseRoleNamesEnum,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
 import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
+import {
+	BoardElementResponseType,
+	BoardLayout,
+	ImportUserResponseRoleNames,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
@@ -216,9 +216,9 @@ export default {
 	emits: ["copy-board-element"],
 	data() {
 		return {
-			cardTypes: BoardElementResponseTypeEnum,
+			cardTypes: BoardElementResponseType,
 			isDragging: false,
-			Roles: ImportUserResponseRoleNamesEnum,
+			Roles: ImportUserResponseRoleNames,
 			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
@@ -240,7 +240,7 @@ export default {
 			return window.ontouchstart !== undefined;
 		},
 		sortable() {
-			return this.role === this.Roles.Teacher || false;
+			return this.role === this.Roles.TEACHER || false;
 		},
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
@@ -266,7 +266,7 @@ export default {
 			await courseRoomDetailsModule.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
-			if (this.role === this.Roles.Student) return;
+			if (this.role === this.Roles.STUDENT) return;
 			const items = this.roomData.elements.map((item) => item.content.id);
 			const itemIndex = items.findIndex((item) => item === e.id);
 			const position = itemIndex + e.moveIndex;
@@ -286,7 +286,7 @@ export default {
 			const listBoardInfo = {
 				itemType: this.$t("pages.room.boardCard.label.listBoard"),
 			};
-			if (itemLayout === BoardLayout.List) {
+			if (itemLayout === BoardLayout.LIST) {
 				return listBoardInfo;
 			} else {
 				return columnBoardInfo;
@@ -296,7 +296,7 @@ export default {
 			if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
 				this.shareModule.startShareFlow({
 					id: boardId,
-					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+					type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 				});
 			}
 		},
@@ -304,7 +304,7 @@ export default {
 			if (useEnvConfig().value.FEATURE_LESSON_SHARE) {
 				this.shareModule.startShareFlow({
 					id: lessonId,
-					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+					type: ShareTokenBodyParamsParentType.LESSONS,
 				});
 			}
 		},
@@ -312,7 +312,7 @@ export default {
 			if (useEnvConfig().value.FEATURE_TASK_SHARE) {
 				this.shareModule.startShareFlow({
 					id: taskId,
-					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+					type: ShareTokenBodyParamsParentType.TASKS,
 				});
 			}
 		},
@@ -327,11 +327,11 @@ export default {
 			this.itemDelete.itemType = itemType;
 		},
 		async deleteItem() {
-			if (this.itemDelete.itemType === this.cardTypes.Task) {
+			if (this.itemDelete.itemType === this.cardTypes.TASK) {
 				await courseRoomDetailsModule.deleteTask(this.itemDelete.itemData.id);
-			} else if (this.itemDelete.itemType === this.cardTypes.Lesson) {
+			} else if (this.itemDelete.itemType === this.cardTypes.LESSON) {
 				await courseRoomDetailsModule.deleteLesson(this.itemDelete.itemData.id);
-			} else if (this.itemDelete.itemType === this.cardTypes.ColumnBoard) {
+			} else if (this.itemDelete.itemType === this.cardTypes.COLUMN_BOARD) {
 				await courseRoomDetailsModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
 			} else {
 				return;
@@ -366,7 +366,7 @@ export default {
 			});
 		},
 		boardCardIsVisibleToStudent(card) {
-			const isBoardCard = card.type === this.cardTypes.ColumnBoard;
+			const isBoardCard = card.type === this.cardTypes.COLUMN_BOARD;
 			const isVisibleToStudent = card.content.published;
 			return isBoardCard && isVisibleToStudent;
 		},
@@ -374,13 +374,13 @@ export default {
 			let translatedItemType = "";
 
 			switch (itemType) {
-				case this.cardTypes.Task:
+				case this.cardTypes.TASK:
 					translatedItemType = this.$t("common.words.task");
 					break;
-				case this.cardTypes.Lesson:
+				case this.cardTypes.LESSON:
 					translatedItemType = this.$t("common.words.topic");
 					break;
-				case this.cardTypes.ColumnBoard:
+				case this.cardTypes.COLUMN_BOARD:
 					translatedItemType = this.$t("common.words.board");
 					break;
 			}

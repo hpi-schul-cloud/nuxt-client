@@ -1,11 +1,11 @@
 import CourseRoomList from "./CourseRoomList.page.vue";
-import { CourseMetadataResponse } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { CourseMetadataResponse } from "@api-server";
 import { mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { nextTick } from "vue";

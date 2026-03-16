@@ -7,9 +7,9 @@ import {
 	UseLinkResult,
 } from "./types";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { formatUtc } from "@/utils/date-time.utils";
+import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@api-server";
 import { notifyError } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { isAxiosError } from "axios";
@@ -37,7 +37,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 	const envConfig = useEnvConfig();
 	const theme = computed(() => envConfig.value.SC_THEME);
 	const isInviteExternalPersonsFeatureEnabled = computed(
-		() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.Thr
+		() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.THR
 	);
 
 	const fetchLinks = async () => {

@@ -30,8 +30,8 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import { Permission } from "@/serverApi/v3";
 import { COURSE_ROOM_LIST_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { Permission } from "@api-server";
 import { notifyError, notifySuccess, useAppStore, useLoadingStore } from "@data-app";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { useEnvConfig } from "@data-env";
@@ -42,10 +42,6 @@ import { DefaultWireframe } from "@ui-layout";
 import { FabAction } from "@ui-speed-dial-menu";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-// state zwischen hier und CourseCommonCartridgeImportModal ist nicht shared
-// lieber hier alles an state haben und via emits arbeiten?
-// besser als ein extra pinia nur dafür...
 
 const { t } = useI18n();
 
@@ -65,7 +61,7 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
-const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
+const canCreateCourse = useAppStore().hasPermission(Permission.COURSE_CREATE);
 const commonCartridgeImport = useCommonCartridgeImport();
 
 const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {

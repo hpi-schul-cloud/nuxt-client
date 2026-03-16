@@ -2,7 +2,7 @@ import TasksListItemStudent from "./TasksListItemStudent.vue";
 import CopyModule from "@/store/copy";
 import TasksModule from "@/store/tasks";
 import { formatUtc } from "@/utils/date-time.utils";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -27,7 +27,7 @@ const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				tasksModule: tasksModuleMock,
+				[TASKS_MODULE_KEY.valueOf()]: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
 		},

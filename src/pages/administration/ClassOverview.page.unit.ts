@@ -1,5 +1,4 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
@@ -15,6 +14,7 @@ import {
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { mount, VueWrapper } from "@vue/test-utils";
@@ -43,14 +43,14 @@ const createWrapper = ({
 	const { router } = injectRouterMock(createRouterMock());
 	const route = router.currentRoute.value;
 
-	const defaultPermissions = [Permission.ClassEdit, Permission.ClassCreate];
+	const defaultPermissions = [Permission.CLASS_EDIT, Permission.CLASS_CREATE];
 
 	const groupModule = createModuleMocks(GroupModule, {
 		getClasses: [
 			classInfoFactory.build(),
 			classInfoFactory.build({
 				externalSourceName: undefined,
-				type: ClassRootType.Class,
+				type: ClassRootType.CLASS,
 				teacherNames: ["Test Teacher"],
 				isUpgradable: true,
 			}),
@@ -150,7 +150,7 @@ describe("ClassOverview", () => {
 					classInfoFactory.build(),
 					classInfoFactory.build({
 						externalSourceName: undefined,
-						type: ClassRootType.Class,
+						type: ClassRootType.CLASS,
 						isUpgradable: true,
 					}),
 				];
@@ -474,7 +474,7 @@ describe("ClassOverview", () => {
 						getClasses: [
 							classInfoFactory.build({
 								externalSourceName: undefined,
-								type: ClassRootType.Class,
+								type: ClassRootType.CLASS,
 								isUpgradable: false,
 							}),
 						],
@@ -688,7 +688,7 @@ describe("ClassOverview", () => {
 					props: {
 						tab: "current",
 					},
-					userPermissions: [Permission.ClassCreate],
+					userPermissions: [Permission.CLASS_CREATE],
 				});
 
 				return {
@@ -788,8 +788,8 @@ describe("ClassOverview", () => {
 		};
 
 		it.each([
-			[SchulcloudTheme.Default, "Dataport"],
-			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.DEFAULT, "Dataport"],
+			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
 			const { wrapper } = setup({ SC_THEME: theme });

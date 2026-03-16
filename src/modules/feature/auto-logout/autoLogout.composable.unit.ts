@@ -1,5 +1,4 @@
 import { useAutoLogout } from "./autoLogout.composable";
-import { RoleName } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import {
 	createTestAppStoreWithRole,
@@ -7,6 +6,7 @@ import {
 	mockBroadcastChannel,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { RoleName } from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { SessionState } from "@util-broadcast-channel";
@@ -61,7 +61,7 @@ describe("useAutoLogout", () => {
 			JWT_SHOW_TIMEOUT_WARNING_SECONDS: showWarningTime,
 			JWT_TIMEOUT_SECONDS: jwtTtl,
 		});
-		createTestAppStoreWithRole(RoleName.Teacher);
+		createTestAppStoreWithRole(RoleName.TEACHER);
 
 		const composable = mountComposable(useAutoLogout, {
 			global: {
@@ -103,7 +103,7 @@ describe("useAutoLogout", () => {
 				JWT_SHOW_TIMEOUT_WARNING_SECONDS: 0,
 				JWT_TIMEOUT_SECONDS: 0,
 			});
-			createTestAppStoreWithRole(RoleName.Teacher);
+			createTestAppStoreWithRole(RoleName.TEACHER);
 
 			const { createSession, remainingTimeInSeconds } = mountComposable(useAutoLogout, {
 				global: {

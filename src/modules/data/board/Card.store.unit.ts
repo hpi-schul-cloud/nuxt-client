@@ -2,13 +2,6 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { FileRecordResponse } from "@/fileStorageApi/v3/models/file-record-response";
-import {
-	CollaborativeTextEditorElementResponse,
-	ContentElementType,
-	PreferredToolResponse,
-	ToolContextType,
-} from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import {
 	collaborativeTextEditorElementResponseFactory,
@@ -23,6 +16,13 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
+import { FileRecordResponse } from "@api-file-storage";
+import {
+	CollaborativeTextEditorElementResponse,
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { CreateElementRequestPayload, useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { CollaboraFileType, useFileStorageApi } from "@data-file";
@@ -352,19 +352,19 @@ describe("CardStore", () => {
 				{
 					description: "collaborative text editor (Etherpad)",
 					element: collaborativeTextEditorElementResponseFactory.build({
-						type: ContentElementType.CollaborativeTextEditor,
+						type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 					}),
 				},
 				{
 					description: "drawing element (Whiteboard)",
 					element: drawingElementResponseFactory.build({
-						type: ContentElementType.Drawing,
+						type: ContentElementType.DRAWING,
 					}),
 				},
 				{
 					description: "external tool",
 					element: externalToolElementResponseFactory.build({
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 					}),
 				},
 			];
@@ -380,7 +380,7 @@ describe("CardStore", () => {
 				setupDuplicate([
 					fileElementResponseFactory.build(),
 					richTextElementResponseFactory.build({
-						type: ContentElementType.RichText,
+						type: ContentElementType.RICH_TEXT,
 					}),
 				]);
 
@@ -391,7 +391,7 @@ describe("CardStore", () => {
 				setupDuplicate(
 					[
 						collaborativeTextEditorElementResponseFactory.build({
-							type: ContentElementType.CollaborativeTextEditor,
+							type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 						}),
 					],
 					false
@@ -523,7 +523,7 @@ describe("CardStore", () => {
 			const { cardStore, cardId } = setup(true);
 
 			const payload = {
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 				cardId,
 			};
 
@@ -536,7 +536,7 @@ describe("CardStore", () => {
 			const { cardStore, cardId } = setup();
 
 			const payload = {
-				type: ContentElementType.Link,
+				type: ContentElementType.LINK,
 				cardId,
 			};
 
@@ -554,7 +554,7 @@ describe("CardStore", () => {
 				const toPosition = 1;
 
 				cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					toPosition,
@@ -570,7 +570,7 @@ describe("CardStore", () => {
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(5);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					isOwnAction: true,
@@ -588,7 +588,7 @@ describe("CardStore", () => {
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId: "invalidId",
 					newElement,
 					isOwnAction: true,
@@ -605,7 +605,7 @@ describe("CardStore", () => {
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 					newElement,
 					toPosition: 100,
@@ -843,7 +843,7 @@ describe("CardStore", () => {
 			await cardStore.updateElementSuccess({
 				elementId: "non existing id",
 				data: {
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					content: richTextElementContentFactory.build(),
 				},
 				isOwnAction: true,
@@ -892,15 +892,15 @@ describe("CardStore", () => {
 			it("should call getPreferredTools", async () => {
 				const { cardStore } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
-				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(ToolContextType.BoardElement);
+				expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(ToolContextType.BOARD_ELEMENT);
 			});
 
 			it("should set the preferredTools ref", async () => {
 				const { cardStore, preferredTools } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(cardStore.preferredTools).toEqual(expect.arrayContaining(preferredTools));
 			});
@@ -908,7 +908,7 @@ describe("CardStore", () => {
 			it("should set the isPreferredToolsLoading at the end to false", async () => {
 				const { cardStore } = successSetup();
 
-				await cardStore.loadPreferredTools(ToolContextType.BoardElement);
+				await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 
 				expect(cardStore.isPreferredToolsLoading).toBe(false);
 			});
@@ -921,7 +921,7 @@ describe("CardStore", () => {
 
 			const payload: CreateElementRequestPayload = {
 				cardId: "cardId",
-				type: ContentElementType.ExternalTool,
+				type: ContentElementType.EXTERNAL_TOOL,
 			};
 
 			const preferredTool: PreferredToolResponse = {
@@ -978,7 +978,7 @@ describe("CardStore", () => {
 				? undefined
 				: ({
 						id: "elementId",
-						type: ContentElementType.File,
+						type: ContentElementType.FILE,
 						content: {},
 					} as CollaborativeTextEditorElementResponse);
 			mockedCardRestApiActions.createElementRequest.mockResolvedValue(createElementRequestReturnValue);

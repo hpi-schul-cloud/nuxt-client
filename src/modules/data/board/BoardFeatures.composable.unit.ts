@@ -1,7 +1,7 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardFeatures } from "./BoardFeatures.composable";
-import { BoardFeature } from "@/serverApi/v3";
 import { mockComposable, mountComposable } from "@@/tests/test-utils";
+import { BoardFeature } from "@api-server";
 
 vi.mock("./Board.store");
 const mockedUseBoardStore = vi.mocked(useBoardStore);
@@ -17,9 +17,9 @@ describe("useBoardFeatures", () => {
 
 	describe("when feature is enabled", () => {
 		it("should return true", () => {
-			const { isFeatureEnabled } = setup([BoardFeature.Videoconference]);
+			const { isFeatureEnabled } = setup([BoardFeature.VIDEOCONFERENCE]);
 
-			const result = isFeatureEnabled(BoardFeature.Videoconference);
+			const result = isFeatureEnabled(BoardFeature.VIDEOCONFERENCE);
 			expect(result).toBe(true);
 		});
 	});
@@ -28,7 +28,7 @@ describe("useBoardFeatures", () => {
 		it("should return false", () => {
 			const { isFeatureEnabled } = setup([]);
 
-			const result = isFeatureEnabled(BoardFeature.Videoconference);
+			const result = isFeatureEnabled(BoardFeature.VIDEOCONFERENCE);
 			expect(result).toBe(false);
 		});
 	});

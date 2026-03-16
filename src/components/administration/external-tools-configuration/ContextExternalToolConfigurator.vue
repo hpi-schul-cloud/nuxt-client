@@ -26,11 +26,11 @@
 
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
-import { ToolContextType } from "@/serverApi/v3";
 import { ToolParameterEntry } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
+import { ToolContextType } from "@api-server";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,

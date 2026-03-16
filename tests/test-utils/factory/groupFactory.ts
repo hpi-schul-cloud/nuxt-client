@@ -1,5 +1,5 @@
-import { Factory } from "fishery";
 import { Group, GroupType, GroupUserRole } from "@data-group";
+import { Factory } from "fishery";
 
 export const groupFactory = Factory.define<Group>(({ sequence }) => ({
 	id: `group-${sequence}`,

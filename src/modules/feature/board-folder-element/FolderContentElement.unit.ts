@@ -2,10 +2,10 @@ import FileStatistic from "./FileStatistic.vue";
 import { FolderAlert } from "./FolderAlert.enum";
 import FolderContentElement from "./FolderContentElement.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
-import { ContentElementType } from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { mockComposable, parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ContentElementType } from "@api-server";
 import { useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { mdiFolderOpenOutline } from "@icons/material";
@@ -32,7 +32,7 @@ vi.mock("@data-board", () => ({
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
 		id: "123",
-		type: ContentElementType.FileFolder,
+		type: ContentElementType.FILE_FOLDER,
 		content: {
 			title: "Test Folder",
 		},

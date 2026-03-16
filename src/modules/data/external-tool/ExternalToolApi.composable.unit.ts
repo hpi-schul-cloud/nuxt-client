@@ -1,13 +1,8 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	ContextExternalToolBodyParams,
-	LaunchType,
-	ToolContextType,
-	ToolLaunchRequestResponse,
-} from "@/serverApi/v3/api";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { mockApi, mockApiResponse, toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { ContextExternalToolBodyParams, LaunchType, ToolContextType, ToolLaunchRequestResponse } from "@api-server";
 import { Mocked } from "vitest";
 
 describe("ExternalToolApi.composable", () => {
@@ -56,7 +51,7 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				launchType: LaunchType.Basic,
+				launchType: LaunchType.BASIC,
 			});
 		});
 	});
@@ -67,7 +62,7 @@ describe("ExternalToolApi.composable", () => {
 
 			const bodyParams: ContextExternalToolBodyParams = {
 				contextId: "contextId",
-				contextType: ToolContextType.MediaBoard,
+				contextType: ToolContextType.MEDIA_BOARD,
 			};
 
 			toolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest.mockResolvedValue(
@@ -101,7 +96,7 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				launchType: LaunchType.Basic,
+				launchType: LaunchType.BASIC,
 			});
 		});
 	});

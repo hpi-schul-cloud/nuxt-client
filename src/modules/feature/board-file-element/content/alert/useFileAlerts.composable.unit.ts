@@ -1,7 +1,7 @@
 import { FileAlert } from "../../shared/types/FileAlert.enum";
 import { useFileAlerts } from "./useFileAlerts.composable";
-import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileRecordFactory, mountComposable } from "@@/tests/test-utils";
+import { PreviewStatus } from "@api-file-storage";
 import { ref } from "vue";
 
 describe("useFileAlerts", () => {

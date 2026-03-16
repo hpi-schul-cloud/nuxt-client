@@ -1,5 +1,4 @@
 import { useUsers } from "./users.composable";
-import { RoleName } from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
@@ -7,6 +6,7 @@ import {
 	userCreationDataFactory,
 	userResponseFactory,
 } from "@@/tests/test-utils";
+import { RoleName } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
@@ -49,7 +49,7 @@ describe("useUsers", () => {
 		});
 
 		it("should fetch and update the user list and paginations for students", async () => {
-			const { fetchUsers, userList, pagination } = useUsers(RoleName.Student);
+			const { fetchUsers, userList, pagination } = useUsers(RoleName.STUDENT);
 			await fetchUsers({ $limit: 10, $skip: 0, $sort: {} });
 
 			expect(axiosMock.get).toHaveBeenCalledWith("/v3/users/admin/students", {
@@ -60,7 +60,7 @@ describe("useUsers", () => {
 		});
 
 		it("should fetch and update the user list and paginations for teachers", async () => {
-			const { fetchUsers, userList, pagination } = useUsers(RoleName.Teacher);
+			const { fetchUsers, userList, pagination } = useUsers(RoleName.TEACHER);
 			await fetchUsers({ $limit: 10, $skip: 0, $sort: {} });
 			expect(axiosMock.get).toHaveBeenCalledWith("/v3/users/admin/teachers", {
 				params: { $limit: 10, $skip: 0, $sort: {} },
@@ -72,7 +72,7 @@ describe("useUsers", () => {
 
 	describe("deleteUsers", () => {
 		it("should delete users in chunks and update progress", async () => {
-			const { deletingProgress, deleteUsers } = useUsers(RoleName.Student);
+			const { deletingProgress, deleteUsers } = useUsers(RoleName.STUDENT);
 			const userIds = ["user1", "user2", "user3", "user4", "user5", "user6"];
 
 			axiosMock.delete.mockResolvedValue({});
@@ -91,7 +91,7 @@ describe("useUsers", () => {
 
 	describe("createUser", () => {
 		it("should create a student and update the student list", async () => {
-			const { createUser } = useUsers(RoleName.Student);
+			const { createUser } = useUsers(RoleName.STUDENT);
 			const newUser = userCreationDataFactory.build();
 
 			axiosMock.post.mockResolvedValueOnce({ data: { data: newUser } });
@@ -103,7 +103,7 @@ describe("useUsers", () => {
 		});
 
 		it("should create a teacher and update the teacher list", async () => {
-			const { createUser } = useUsers(RoleName.Teacher);
+			const { createUser } = useUsers(RoleName.TEACHER);
 			const newUser = userCreationDataFactory.build();
 
 			axiosMock.post.mockResolvedValueOnce({ data: { data: newUser } });
@@ -116,7 +116,7 @@ describe("useUsers", () => {
 
 		it("should not notify success if there is an error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
-			const { createUser } = useUsers(RoleName.Teacher);
+			const { createUser } = useUsers(RoleName.TEACHER);
 			const newUser = userCreationDataFactory.build();
 
 			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
@@ -130,7 +130,7 @@ describe("useUsers", () => {
 
 	describe("sendRegistrationLink", () => {
 		it("should send a registration link to the specified email and notify success", async () => {
-			const { sendRegistrationLink } = useUsers(RoleName.Student);
+			const { sendRegistrationLink } = useUsers(RoleName.STUDENT);
 			const responseData = [{ id: "some-id-1" }, { id: "some-id-2" }];
 			axiosMock.post.mockResolvedValueOnce({ data: responseData });
 
@@ -145,7 +145,7 @@ describe("useUsers", () => {
 		it("should not notify success if there is an error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 
-			const { sendRegistrationLink } = useUsers(RoleName.Student);
+			const { sendRegistrationLink } = useUsers(RoleName.STUDENT);
 			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
 
 			await sendRegistrationLink({ userIds: ["user1"], selectionType: "inclusive" });
@@ -157,7 +157,7 @@ describe("useUsers", () => {
 
 	describe("getQrRegistrationLinks", () => {
 		it("should generate a qr registration link and update the qr registrationLinks list", async () => {
-			const { getQrRegistrationLinks, qrLinks } = useUsers(RoleName.Student);
+			const { getQrRegistrationLinks, qrLinks } = useUsers(RoleName.STUDENT);
 			const responseData = [
 				{ title: "title-1", qrContent: "some-qr-content" },
 				{ title: "title-2", qrContent: "some-qr-content-2" },
@@ -177,7 +177,7 @@ describe("useUsers", () => {
 		it("should not update qr registrationLinks list if there is an error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 
-			const { getQrRegistrationLinks, qrLinks } = useUsers(RoleName.Student);
+			const { getQrRegistrationLinks, qrLinks } = useUsers(RoleName.STUDENT);
 			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
 
 			await getQrRegistrationLinks({ userIds: ["user1"], selectionType: "inclusive" });

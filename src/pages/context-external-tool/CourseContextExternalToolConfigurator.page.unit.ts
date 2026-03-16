@@ -1,11 +1,11 @@
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { contextExternalToolFactory, expectNotification } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ToolContextType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -72,7 +72,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		it("should render static breadcrumbs", () => {
 			const { wrapper, roomTitle } = getWrapper({
 				contextId: "contextId",
-				contextType: ToolContextType.Course,
+				contextType: ToolContextType.COURSE,
 			});
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
@@ -86,7 +86,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		it("should render title", () => {
 			const { wrapper } = getWrapper({
 				contextId: "contextId",
-				contextType: ToolContextType.Course,
+				contextType: ToolContextType.COURSE,
 			});
 
 			expect(wrapper.find("h1").exists()).toBeTruthy();
@@ -98,7 +98,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			const { wrapper } = getWrapper({
 				configId: "configId",
 				contextId: "contextId",
-				contextType: ToolContextType.Course,
+				contextType: ToolContextType.COURSE,
 			});
 
 			await nextTick();
@@ -121,7 +121,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		it("should change page when cancel button was clicked", async () => {
 			const { wrapper } = getWrapper({
 				contextId: "contextId",
-				contextType: ToolContextType.Course,
+				contextType: ToolContextType.COURSE,
 			});
 
 			wrapper.findComponent(ContextExternalToolConfigurator).vm.$emit("cancel");
@@ -137,7 +137,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 	describe("onSuccess", () => {
 		const setup = () => {
 			const contextId = "contextId";
-			const contextType: ToolContextType = ToolContextType.Course;
+			const contextType: ToolContextType = ToolContextType.COURSE;
 
 			const { wrapper } = getWrapper({
 				contextId,

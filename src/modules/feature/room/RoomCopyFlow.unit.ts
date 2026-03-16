@@ -1,4 +1,3 @@
-import { CopyApiResponseStatusEnum, CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import {
 	createTestRoomStore,
 	expectNotification,
@@ -7,6 +6,7 @@ import {
 	roomFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CopyApiResponseStatus, CopyApiResponseType } from "@api-server";
 import { useLoadingStore } from "@data-app";
 import { RoomCopyFlow } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -27,8 +27,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 			result: mockApiResponse({
 				data: {
 					id: "copyId",
-					type: CopyApiResponseTypeEnum.Room,
-					status: CopyApiResponseStatusEnum.Success,
+					type: CopyApiResponseType.ROOM,
+					status: CopyApiResponseStatus.SUCCESS,
 				},
 			}),
 			success: true,
@@ -171,8 +171,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 				result: mockApiResponse({
 					data: {
 						id: "copyId",
-						type: CopyApiResponseTypeEnum.Room,
-						status: CopyApiResponseStatusEnum.Failure,
+						type: CopyApiResponseType.ROOM,
+						status: CopyApiResponseStatus.FAILURE,
 					},
 				}),
 				success: true,
@@ -216,8 +216,8 @@ describe("@feature-room/RoomCopyFlow", () => {
 				result: mockApiResponse({
 					data: {
 						id: undefined,
-						type: CopyApiResponseTypeEnum.Room,
-						status: CopyApiResponseStatusEnum.Success,
+						type: CopyApiResponseType.ROOM,
+						status: CopyApiResponseStatus.SUCCESS,
 					},
 				}),
 				success: true,

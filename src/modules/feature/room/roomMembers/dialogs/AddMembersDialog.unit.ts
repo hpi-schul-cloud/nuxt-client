@@ -1,5 +1,4 @@
 import AddMembersDialog from "./AddMembersDialog.vue";
-import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -11,6 +10,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { useRoomMembersStore } from "@data-room";
 import { mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
@@ -50,20 +50,20 @@ describe("AddMembersDialog", () => {
 	});
 
 	const setup = (options?: {
-		schoolRole?: RoleName.Teacher | RoleName.Student | RoleName.Administrator;
+		schoolRole?: RoleName.TEACHER | RoleName.STUDENT | RoleName.ADMINISTRATOR;
 		isOpen?: boolean;
 		isAdminMode?: boolean;
 	}) => {
 		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 		const roomMembers = roomMemberFactory.buildList(2, {
-			roomRoleName: RoleName.Roomadmin,
+			roomRoleName: RoleName.ROOMADMIN,
 		});
 
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		const { mockedMe } = createTestAppStoreWithRole(options?.schoolRole ?? RoleName.Teacher);
+		const { mockedMe } = createTestAppStoreWithRole(options?.schoolRole ?? RoleName.TEACHER);
 
-		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.Teacher];
+		roomMembers[0].schoolRoleNames = [options?.schoolRole ?? RoleName.TEACHER];
 		roomMembers[0].userId = mockedMe.user.id;
 		roomMembersSchools[0].id = mockedMe.school.id;
 
@@ -150,12 +150,12 @@ describe("AddMembersDialog", () => {
 
 				const roles = [
 					{
-						id: RoleName.Student,
+						id: RoleName.STUDENT,
 						name: "common.labels.student.neutral",
 						icon: mdiAccountOutline,
 					},
 					{
-						id: RoleName.Teacher,
+						id: RoleName.TEACHER,
 						name: "common.labels.teacher.neutral",
 						icon: mdiAccountSchoolOutline,
 					},
@@ -348,7 +348,7 @@ describe("AddMembersDialog", () => {
 			});
 
 			await schoolComponent.setValue("external-school-id");
-			await roleComponent.setValue(RoleName.Student);
+			await roleComponent.setValue(RoleName.STUDENT);
 
 			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
@@ -367,7 +367,7 @@ describe("AddMembersDialog", () => {
 			});
 
 			await schoolComponent.setValue("external-school-id");
-			await roleComponent.setValue(RoleName.Student);
+			await roleComponent.setValue(RoleName.STUDENT);
 
 			expect(wrapper.getComponent(WarningAlert).text()).toBe("pages.rooms.members.add.warningText");
 		});
@@ -382,7 +382,7 @@ describe("AddMembersDialog", () => {
 					ref: "selectRole",
 				});
 
-				await roleComponent.setValue(RoleName.Student);
+				await roleComponent.setValue(RoleName.STUDENT);
 
 				const infoAlert = wrapper.getComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.text()).toBe("pages.rooms.members.add.students.forbidden");
@@ -397,7 +397,7 @@ describe("AddMembersDialog", () => {
 					ref: "selectRole",
 				});
 
-				await roleComponent.setValue(RoleName.Teacher);
+				await roleComponent.setValue(RoleName.TEACHER);
 
 				const infoAlert = wrapper.findComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.exists()).toEqual(false);
@@ -416,7 +416,7 @@ describe("AddMembersDialog", () => {
 				});
 
 				await schoolComponent.setValue("external-school-id");
-				await roleComponent.setValue(RoleName.Student);
+				await roleComponent.setValue(RoleName.STUDENT);
 
 				const infoAlert = wrapper.findComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.exists()).toEqual(false);
@@ -426,14 +426,14 @@ describe("AddMembersDialog", () => {
 		describe("and the current user is a student and student role is set", () => {
 			it("should not show info message", async () => {
 				const { wrapper } = setup({
-					schoolRole: RoleName.Student,
+					schoolRole: RoleName.STUDENT,
 				});
 
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
 				});
 
-				await roleComponent.setValue(RoleName.Student);
+				await roleComponent.setValue(RoleName.STUDENT);
 
 				const infoAlert = wrapper.findComponent('[data-testid="student-visibility-info-alert"]');
 				expect(infoAlert.exists()).toEqual(false);
@@ -441,14 +441,14 @@ describe("AddMembersDialog", () => {
 
 			it("should show specific student admin info message", async () => {
 				const { wrapper } = setup({
-					schoolRole: RoleName.Student,
+					schoolRole: RoleName.STUDENT,
 				});
 
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
 				});
 
-				await roleComponent.setValue(RoleName.Student);
+				await roleComponent.setValue(RoleName.STUDENT);
 
 				const infoAlert = wrapper.findComponent('[data-testid="student-admin-info-alert"]');
 				expect(infoAlert.text()).toBe("pages.rooms.members.add.students.studentAdmins");
@@ -458,7 +458,7 @@ describe("AddMembersDialog", () => {
 
 	describe("when it is used by an administrator in the room administration", () => {
 		it("should not allow the school role to be changed", () => {
-			const { wrapper } = setup({ schoolRole: RoleName.Administrator, isOpen: true, isAdminMode: true });
+			const { wrapper } = setup({ schoolRole: RoleName.ADMINISTRATOR, isOpen: true, isAdminMode: true });
 			const roleSelect = wrapper.getComponent({
 				ref: "selectRole",
 			});
@@ -468,18 +468,18 @@ describe("AddMembersDialog", () => {
 		});
 
 		it("the school role should be set to teacher", () => {
-			const { wrapper } = setup({ schoolRole: RoleName.Administrator, isOpen: true, isAdminMode: true });
+			const { wrapper } = setup({ schoolRole: RoleName.ADMINISTRATOR, isOpen: true, isAdminMode: true });
 			const roleSelect = wrapper.getComponent({
 				ref: "selectRole",
 			});
 
-			expect(roleSelect.props("modelValue")).toBe(RoleName.Teacher);
+			expect(roleSelect.props("modelValue")).toBe(RoleName.TEACHER);
 		});
 	});
 
 	describe("when it is used by a teacher in the room management", () => {
 		it("should allow the school role to be changed", () => {
-			const { wrapper } = setup({ schoolRole: RoleName.Teacher, isOpen: true, isAdminMode: false });
+			const { wrapper } = setup({ schoolRole: RoleName.TEACHER, isOpen: true, isAdminMode: false });
 			const roleSelect = wrapper.getComponent({
 				ref: "selectRole",
 			});
@@ -537,7 +537,7 @@ describe("AddMembersDialog", () => {
 		describe("when userRole is changed", () => {
 			it("should call resetPotentialMembers", async () => {
 				const { wrapper, roomMembersStore } = setup();
-				const selectedRole = RoleName.Student;
+				const selectedRole = RoleName.STUDENT;
 				const roleComponent = wrapper.getComponent({
 					ref: "selectRole",
 				});
@@ -557,7 +557,7 @@ describe("AddMembersDialog", () => {
 					ref: "autoCompleteUsers",
 				});
 
-				await roleComponent.setValue(RoleName.Roomeditor);
+				await roleComponent.setValue(RoleName.ROOMEDITOR);
 
 				expect(userComponent.props("modelValue")).toEqual([]);
 			});
@@ -565,7 +565,7 @@ describe("AddMembersDialog", () => {
 			describe("and the role is set to student", () => {
 				it("should call getPotentialMembers for student role", async () => {
 					const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-					const selectedRole = RoleName.Student;
+					const selectedRole = RoleName.STUDENT;
 					const roleComponent = wrapper.getComponent({
 						ref: "selectRole",
 					});
@@ -582,7 +582,7 @@ describe("AddMembersDialog", () => {
 					const roleComponent = wrapper.getComponent({
 						ref: "selectRole",
 					});
-					await roleComponent.setValue(RoleName.Student);
+					await roleComponent.setValue(RoleName.STUDENT);
 
 					const roleIcon = roleComponent.findComponent(VIcon);
 
@@ -594,7 +594,7 @@ describe("AddMembersDialog", () => {
 			describe("and the role is set to teacher", () => {
 				it("should call getPotentialMembers for teacher role", async () => {
 					const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-					const selectedRole = RoleName.Teacher;
+					const selectedRole = RoleName.TEACHER;
 					const roleComponent = wrapper.getComponent({
 						ref: "selectRole",
 					});
@@ -612,7 +612,7 @@ describe("AddMembersDialog", () => {
 						ref: "selectRole",
 					});
 
-					await roleComponent.setValue(RoleName.Teacher);
+					await roleComponent.setValue(RoleName.TEACHER);
 					const roleIcon = roleComponent.findComponent(VIcon);
 
 					expect(roleIcon.props("icon")).toBe(mdiAccountSchoolOutline);
@@ -624,7 +624,7 @@ describe("AddMembersDialog", () => {
 
 	describe("when current user is a student admin", () => {
 		it("should disable the school selection with current users school selected", () => {
-			const { mockedMe, wrapper } = setup({ schoolRole: RoleName.Student });
+			const { mockedMe, wrapper } = setup({ schoolRole: RoleName.STUDENT });
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
 			});
@@ -635,14 +635,14 @@ describe("AddMembersDialog", () => {
 
 		it("should show specific student admin info message", async () => {
 			const { wrapper } = setup({
-				schoolRole: RoleName.Student,
+				schoolRole: RoleName.STUDENT,
 			});
 
 			const roleComponent = wrapper.getComponent({
 				ref: "selectRole",
 			});
 
-			await roleComponent.setValue(RoleName.Student);
+			await roleComponent.setValue(RoleName.STUDENT);
 
 			const infoAlert = wrapper.findComponent('[data-testid="student-admin-info-alert"]');
 			expect(infoAlert.text()).toBe("pages.rooms.members.add.students.studentAdmins");

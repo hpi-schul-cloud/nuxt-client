@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { RoleName } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { UserCreatingData, useUsers } from "@data-users";
 import { DefaultWireframe } from "@ui-layout";
@@ -33,7 +33,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-const { createUser } = useUsers(RoleName.Teacher);
+const { createUser } = useUsers(RoleName.TEACHER);
 
 const businessError = ref(false);
 const router = useRouter();
@@ -55,7 +55,7 @@ const createTeacherHandler = async (teacherData: UserCreatingData) => {
 		firstName: teacherData.firstName,
 		lastName: teacherData.lastName,
 		email: teacherData.email,
-		roles: [RoleName.Teacher],
+		roles: [RoleName.TEACHER],
 		schoolId: useAppStore().school?.id ?? "",
 		sendRegistration: sendRegistration.value,
 		generateRegistrationLink: true,

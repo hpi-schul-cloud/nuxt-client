@@ -33,7 +33,7 @@
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<RoomCopyFlow v-if="hasRoomCopyStarted" :room="room" @copy:success="onCopySuccess" @copy:ended="onCopyEnded" />
-		<ShareModal :type="ShareTokenParentType.Room" />
+		<ShareModal :type="ShareTokenParentType.ROOM" />
 	</DefaultWireframe>
 </template>
 
@@ -160,7 +160,7 @@ const onShare = () => {
 	if (allowedOperations.value.shareRoom) {
 		shareModule.startShareFlow({
 			id: room.value.id,
-			type: ShareTokenParentType.Room,
+			type: ShareTokenParentType.ROOM,
 		});
 	}
 };

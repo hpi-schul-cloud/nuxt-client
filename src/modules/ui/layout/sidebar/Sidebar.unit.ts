@@ -1,11 +1,11 @@
 import Sidebar from "./Sidebar.vue";
 import { useSidebarSelection } from "./SidebarSelection.composable";
-import { Permission, SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
 import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -33,7 +33,7 @@ const setup = (
 	setActivePinia(createTestingPinia());
 	createTestAppStoreWithPermissions(permissions ?? []);
 	createTestEnvStore({
-		SC_THEME: SchulcloudTheme.Brb,
+		SC_THEME: SchulcloudTheme.BRB,
 		FEATURE_TEAMS_ENABLED: isTeamsEnabled,
 	});
 
@@ -53,7 +53,7 @@ const setup = (
 			provide: {
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
-					name: SchulcloudTheme.Default,
+					name: SchulcloudTheme.DEFAULT,
 				},
 			},
 		},
@@ -133,7 +133,7 @@ describe("@ui-layout/Sidebar", () => {
 		describe("when user does have one of the needed permissions", () => {
 			it("should display items correctly ", async () => {
 				const { wrapper } = setup({
-					permissions: [Permission.TaskDashboardViewV3],
+					permissions: [Permission.TASK_DASHBOARD_VIEW_V3],
 				});
 
 				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(true);

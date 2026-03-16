@@ -1,6 +1,4 @@
 import { InvitationStep, RoomInvitationLink } from "./types";
-import * as serverApi from "@/serverApi/v3/api";
-import { RoomIdResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
@@ -15,6 +13,8 @@ import {
 } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@api-server";
+import { RoomIdResponse } from "@api-server";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-error-handling";
@@ -300,7 +300,7 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should return the validation error message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const message = serverApi.RoomInvitationLinkValidationError.RestrictedToCreatorSchool;
+				const message = serverApi.RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL;
 				const schoolName = "My example School";
 				const axiosError = createAxiosError({
 					message,
