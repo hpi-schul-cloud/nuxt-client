@@ -1,6 +1,4 @@
 import { resetSocketStateForTesting } from "./socket";
-import { BoardErrorReportApiFactory } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
 import {
 	boardResponseFactory,
 	expectNotification,
@@ -9,6 +7,8 @@ import {
 	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
+import { BoardErrorReportApiFactory } from "@api-server";
+import * as serverApi from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
@@ -29,7 +29,7 @@ const mockSocketIOClient = vi.mocked(socketModule);
 
 vi.mock("../boardActions/boardSocketApi.composable");
 vi.mock("../boardActions/boardRestApi.composable");
-vi.mock("@/serverApi/v3/api");
+vi.mock("@api-server/api");
 
 vi.mock("@vueuse/shared", () => ({
 	useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {

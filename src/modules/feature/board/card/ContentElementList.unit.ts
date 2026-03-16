@@ -1,8 +1,8 @@
 import ContentElementList from "./ContentElementList.vue";
-import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ContentElementType } from "@api-server";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -57,43 +57,43 @@ describe("ContentElementList", () => {
 
 			const elementComponents = [
 				{
-					elementType: ContentElementType.RichText,
+					elementType: ContentElementType.RICH_TEXT,
 					component: RichTextContentElement,
 				},
 				{
-					elementType: ContentElementType.File,
+					elementType: ContentElementType.FILE,
 					component: FileContentElement,
 				},
 				{
-					elementType: ContentElementType.Link,
+					elementType: ContentElementType.LINK,
 					component: LinkContentElement,
 				},
 				{
-					elementType: ContentElementType.ExternalTool,
+					elementType: ContentElementType.EXTERNAL_TOOL,
 					component: ExternalToolElement,
 				},
 				{
-					elementType: ContentElementType.Drawing,
+					elementType: ContentElementType.DRAWING,
 					component: DrawingContentElement,
 				},
 				{
-					elementType: ContentElementType.CollaborativeTextEditor,
+					elementType: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 					component: CollaborativeTextEditorElement,
 				},
 				{
-					elementType: ContentElementType.Deleted,
+					elementType: ContentElementType.DELETED,
 					component: DeletedElement,
 				},
 				{
-					elementType: ContentElementType.VideoConference,
+					elementType: ContentElementType.VIDEO_CONFERENCE,
 					component: VideoConferenceContentElement,
 				},
 				{
-					elementType: ContentElementType.FileFolder,
+					elementType: ContentElementType.FILE_FOLDER,
 					component: FolderContentElement,
 				},
 				{
-					elementType: ContentElementType.H5p,
+					elementType: ContentElementType.H5P,
 					component: H5pElement,
 				},
 			];
@@ -151,7 +151,7 @@ describe("ContentElementList", () => {
 
 		it("should not render FolderContentElement", () => {
 			const { wrapper } = setup({
-				elements: [{ type: ContentElementType.FileFolder } as AnyContentElement],
+				elements: [{ type: ContentElementType.FILE_FOLDER } as AnyContentElement],
 				isEditMode: false,
 				isDetailView: false,
 			});

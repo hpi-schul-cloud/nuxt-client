@@ -132,17 +132,17 @@ import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
-import {
-	BoardExternalReferenceType,
-	BoardLayout,
-	ColumnResponse,
-	ShareTokenBodyParamsParentTypeEnum,
-	ToolContextType,
-} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { COPY_MODULE_KEY, injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
+import {
+	BoardExternalReferenceType,
+	BoardLayout,
+	ColumnResponse,
+	ShareTokenBodyParamsParentType,
+	ToolContextType,
+} from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardAllowedOperations,
@@ -230,12 +230,12 @@ const onMoveCard = (cardId: string) => {
 };
 
 const onShareCard = async (cardId: string) => {
-	shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.Card;
+	shareModalContextType.value = ShareTokenBodyParamsParentType.CARD;
 
 	shareModule.startShareFlow({
 		id: cardId,
-		type: ShareTokenBodyParamsParentTypeEnum.Card,
-		destinationType: BoardExternalReferenceType.Room,
+		type: ShareTokenBodyParamsParentType.CARD,
+		destinationType: BoardExternalReferenceType.ROOM,
 	});
 };
 
@@ -323,7 +323,7 @@ onMounted(async () => {
 	resetPageInformation();
 	useBoardInactivity();
 
-	cardStore.loadPreferredTools(ToolContextType.BoardElement);
+	cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
 	await boardStore.fetchBoardRequest({ boardId: props.boardId });
 
 	focusNodeFromHash();
@@ -365,7 +365,7 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
-const isListBoard = computed(() => board.value?.layout === BoardLayout.List);
+const isListBoard = computed(() => board.value?.layout === BoardLayout.LIST);
 
 provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
@@ -419,11 +419,11 @@ const onShareBoard = () => {
 	if (!allowedOperations.value.shareBoard) return;
 
 	if (useEnvConfig().value.FEATURE_COLUMN_BOARD_SHARE) {
-		shareModalContextType.value = ShareTokenBodyParamsParentTypeEnum.ColumnBoard;
+		shareModalContextType.value = ShareTokenBodyParamsParentType.COLUMN_BOARD;
 
 		shareModule.startShareFlow({
 			id: props.boardId,
-			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+			type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 			destinationType: contextType.value,
 		});
 	}

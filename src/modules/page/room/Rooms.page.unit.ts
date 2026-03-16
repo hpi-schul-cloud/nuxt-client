@@ -1,7 +1,5 @@
 import RoomsPage from "./Rooms.page.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import * as serverApi from "@/serverApi/v3";
-import { Permission, ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { RoomItem } from "@/types/room/Room";
 import { COPY_MODULE_KEY } from "@/utils/inject";
@@ -14,6 +12,8 @@ import {
 } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import * as serverApi from "@api-server";
+import { Permission, ShareTokenBodyParamsParentType } from "@api-server";
 import { ImportCardDialog } from "@feature-board";
 import { RoomGrid } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
@@ -47,7 +47,7 @@ describe("RoomsPage", () => {
 		roomStore.isLoading = isLoading;
 		roomStore.fetchRooms.mockResolvedValue();
 
-		createTestAppStoreWithPermissions([Permission.SchoolCreateRoom]);
+		createTestAppStoreWithPermissions([Permission.SCHOOL_CREATE_ROOM]);
 
 		const wrapper = mount(RoomsPage, {
 			global: {
@@ -111,7 +111,7 @@ describe("RoomsPage", () => {
 		};
 
 		it("should render import card dialog with card type", () => {
-			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentTypeEnum.Card });
+			router.setQuery({ import: token, importedType: ShareTokenBodyParamsParentType.CARD });
 			const { wrapper } = setup();
 
 			const importFLow = wrapper.findComponent(ImportCardDialog);
@@ -121,7 +121,7 @@ describe("RoomsPage", () => {
 		});
 
 		it("should not render import card dialog with room type", () => {
-			router.setQuery({ import: token, type: ShareTokenBodyParamsParentTypeEnum.Room });
+			router.setQuery({ import: token, type: ShareTokenBodyParamsParentType.ROOM });
 			const { wrapper } = setup();
 			const importFLow = wrapper.findComponent(ImportCardDialog);
 			expect(importFLow.exists()).toBe(false);

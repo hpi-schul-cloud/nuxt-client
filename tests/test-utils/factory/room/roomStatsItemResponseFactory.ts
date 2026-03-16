@@ -1,4 +1,4 @@
-import { RoomStatsItemResponse } from "@/serverApi/v3";
+import { RoomStatsItemResponse } from "@api-server";
 import { Factory } from "fishery";
 
 export const roomStatsItemResponseFactory = Factory.define<RoomStatsItemResponse>(({ sequence }) => {

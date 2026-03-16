@@ -7,12 +7,12 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { BoardLayout } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { createTestEnvStore, expectNotification, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
+import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
@@ -688,7 +688,7 @@ describe("BoardStore", () => {
 
 				boardStore.updateBoardLayoutSuccess({
 					boardId: "boardId",
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 					isOwnAction: true,
 				});
 
@@ -702,11 +702,11 @@ describe("BoardStore", () => {
 
 				boardStore.updateBoardLayoutSuccess({
 					boardId: "boardId",
-					layout: BoardLayout.List,
+					layout: BoardLayout.LIST,
 					isOwnAction: true,
 				});
 
-				expect(boardStore.board?.layout).toStrictEqual(BoardLayout.List);
+				expect(boardStore.board?.layout).toStrictEqual(BoardLayout.LIST);
 			});
 		});
 	});
@@ -1116,7 +1116,7 @@ describe("BoardStore", () => {
 		describe("@updateBoardLayoutRequest", () => {
 			const payload: UpdateBoardLayoutRequestPayload = {
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			};
 
 			it("should call socketApi.updateBoardLayoutRequest when feature flag is set true", async () => {

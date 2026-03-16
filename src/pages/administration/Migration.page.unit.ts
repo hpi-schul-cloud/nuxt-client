@@ -1,6 +1,5 @@
 import MigrationWizard from "./Migration.page.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
@@ -8,6 +7,7 @@ import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -75,7 +75,7 @@ describe("User Migration / Index", () => {
 		injectRouterMock(createRouterMock());
 		createTestEnvStore({
 			SC_TITLE: "dBildungscloud",
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 		});

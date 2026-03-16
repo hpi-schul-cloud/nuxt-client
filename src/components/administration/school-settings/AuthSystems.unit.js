@@ -1,5 +1,4 @@
 import AuthSystems from "./AuthSystems.vue";
-import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
@@ -8,6 +7,7 @@ import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolS
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Permission } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, RouterLinkStub } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -148,7 +148,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -175,7 +175,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -199,7 +199,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 
 			const wrapper = createWrapper({ props: generateProps() });
 			const editSystemButton = wrapper.findComponent(searchStrings.editSystemButton);
@@ -209,7 +209,7 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			createTestAppStoreWithPermissions([Permission.SystemCreate, Permission.SystemEdit]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE, Permission.SYSTEM_EDIT]);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const systemEditButtons = wrapper.findAllComponents(searchStrings.editSystemButton);
@@ -227,7 +227,7 @@ describe("AuthSystems", () => {
 	describe("events", () => {
 		it("should call deleteSystem when deletion is confirmed", async () => {
 			const askDeletionSpy = vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
-			createTestAppStoreWithPermissions([Permission.SystemCreate]);
+			createTestAppStoreWithPermissions([Permission.SYSTEM_CREATE]);
 			const deleteSpy = vi.spyOn(schoolsModule, "deleteSystem").mockImplementation(vi.fn());
 			const wrapper = createWrapper({ props: generateProps() });
 

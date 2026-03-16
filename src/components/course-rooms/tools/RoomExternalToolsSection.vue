@@ -26,8 +26,8 @@
 <script setup lang="ts">
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
-import { Permission, ToolContextType } from "@/serverApi/v3";
 import { askDeletionItem } from "@/utils/confirm-dialog.utils";
+import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { PropType, ref } from "vue";
@@ -56,7 +56,7 @@ const router = useRouter();
 const isErrorDialogOpen = ref(false);
 const selectedItem = ref<ExternalToolDisplayData | undefined>();
 
-const canEdit = useAppStore().hasPermission(Permission.ContextToolAdmin);
+const canEdit = useAppStore().hasPermission(Permission.CONTEXT_TOOL_ADMIN);
 
 const onDelete = async (tool: ExternalToolDisplayData) => {
 	const confirmed = await askDeletionItem({
@@ -81,7 +81,7 @@ const onEditTool = (tool: ExternalToolDisplayData) => {
 		params: { configId: tool.contextExternalToolId },
 		query: {
 			contextId: props.roomId,
-			contextType: ToolContextType.Course,
+			contextType: ToolContextType.COURSE,
 		},
 	});
 };

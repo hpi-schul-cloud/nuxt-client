@@ -50,8 +50,8 @@
 
 <script setup lang="ts">
 import ChangeRole from "../../roomMembers/dialogs/ChangeRole.vue";
-import { RoleName } from "@/serverApi/v3";
 import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
 import { DataTable } from "@ui-data-table";
@@ -103,13 +103,13 @@ const tableHeaders = computed(() => [
 ]);
 
 const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
-	if (schoolRoleNames.includes(RoleName.Teacher)) {
+	if (schoolRoleNames.includes(RoleName.TEACHER)) {
 		return mdiAccountSchoolOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.Student)) {
+	if (schoolRoleNames.includes(RoleName.STUDENT)) {
 		return mdiAccountOutline;
 	}
-	if (schoolRoleNames.includes(RoleName.ExternalPerson)) {
+	if (schoolRoleNames.includes(RoleName.EXTERNAL_PERSON)) {
 		return mdiAccountClockOutline;
 	}
 	return undefined;

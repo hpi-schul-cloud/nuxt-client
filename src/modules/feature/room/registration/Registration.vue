@@ -66,8 +66,8 @@ import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
 import Success from "./steps/Success.vue";
 import Welcome from "./steps/Welcome.vue";
-import { LanguageType } from "@/serverApi/v3";
 import { isNotNullish } from "@/utils/typeScript";
+import { LanguageType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";
 import { storeToRefs } from "pinia";
@@ -104,7 +104,7 @@ const {
 const registrationStore = useRegistrationStore();
 const { hasApiErrorOccurred, registrationSecret, userData } = storeToRefs(registrationStore);
 const { completeRegistration, fetchUserData } = registrationStore;
-const lang = computed(() => selectedLanguage.value || LanguageType.De);
+const lang = computed(() => selectedLanguage.value || LanguageType.DE);
 const stepForms = useTemplateRef("stepForms");
 
 const onUpdateSelectedLanguage = (value: string) => {

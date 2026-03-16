@@ -1,6 +1,6 @@
 import { BusinessError } from "./types/commons";
 import { GlobalFiles, SpecificFiles } from "./types/filePaths";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
@@ -91,7 +91,7 @@ export default class FilePathsModule extends VuexModule {
 	init() {
 		try {
 			const theme = useEnvConfig().value.SC_THEME;
-			if (theme === SchulcloudTheme.Thr) {
+			if (theme === SchulcloudTheme.THR) {
 				specificFiles.termsOfUse = termsOfUseThr;
 				specificFiles.privacy = privacyThr;
 			}

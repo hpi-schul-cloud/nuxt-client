@@ -103,9 +103,9 @@
 </template>
 
 <script>
-import { Permission } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import { askDeletion } from "@/utils/confirm-dialog.utils.ts";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
@@ -131,8 +131,8 @@ export default {
 			return this.systems.length > 0;
 		},
 		customLoginLinkEnabled: () => useEnvConfig().value.FEATURE_LOGIN_LINK_ENABLED,
-		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SystemCreate),
-		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SystemEdit),
+		hasSystemCreatePermission: () => useAppStore().hasPermission(Permission.SYSTEM_CREATE),
+		hasSystemEditPermission: () => useAppStore().hasPermission(Permission.SYSTEM_EDIT),
 	},
 	methods: {
 		ariaLabels(system) {

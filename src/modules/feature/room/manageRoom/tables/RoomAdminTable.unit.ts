@@ -1,11 +1,11 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
-import { RoomStatsItemResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";

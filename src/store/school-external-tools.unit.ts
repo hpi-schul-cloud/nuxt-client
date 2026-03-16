@@ -1,13 +1,6 @@
 import { SchoolExternalTool, ToolParameterLocation, ToolParameterScope, ToolParameterType } from "./external-tool";
 import SchoolExternalToolsModule from "./school-external-tools";
 import { BusinessError } from "./types/commons";
-import {
-	SchoolExternalToolConfigurationTemplateListResponse,
-	SchoolExternalToolPostParams,
-	SchoolExternalToolSearchListResponse,
-	ToolApiInterface,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
@@ -22,6 +15,13 @@ import {
 	schoolExternalToolSaveFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
+import {
+	SchoolExternalToolConfigurationTemplateListResponse,
+	SchoolExternalToolPostParams,
+	SchoolExternalToolSearchListResponse,
+	ToolApiInterface,
+} from "@api-server";
+import * as serverApi from "@api-server";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { Mocked } from "vitest";
 

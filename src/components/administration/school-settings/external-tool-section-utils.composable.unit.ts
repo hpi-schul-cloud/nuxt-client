@@ -1,16 +1,16 @@
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { SchoolExternalTool } from "@/store/external-tool";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	ExternalToolMediumStatus,
 	SchoolExternalToolMediumResponse,
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 	ToolContextType,
-} from "@/serverApi/v3";
-import { SchoolExternalTool } from "@/store/external-tool";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { schoolExternalToolFactory, schoolExternalToolResponseFactory } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+} from "@api-server";
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {
@@ -107,11 +107,11 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when mediaSourceName a is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 					mediaSourceName: "b",
 				};
@@ -137,12 +137,12 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when mediaSourceName b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 					mediaSourceName: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 				};
 
@@ -167,7 +167,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when a is undefined", () => {
 			const setup2 = () => {
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 				};
 
@@ -191,7 +191,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 				};
 
@@ -215,12 +215,12 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when a is before b", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "a",
 					mediaSourceName: "a",
 				};
 				const b: SchoolExternalToolMediumResponse = {
-					status: ExternalToolMediumStatus.Active,
+					status: ExternalToolMediumStatus.ACTIVE,
 					mediumId: "b",
 					mediaSourceName: "b",
 				};
@@ -276,7 +276,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when translating tool context type", () => {
 			const setupTool = () => {
 				const tool = schoolExternalToolFactory.build({
-					restrictToContexts: [ToolContextType.MediaBoard, ToolContextType.BoardElement, ToolContextType.Course],
+					restrictToContexts: [ToolContextType.MEDIA_BOARD, ToolContextType.BOARD_ELEMENT, ToolContextType.COURSE],
 				});
 
 				return { tool };

@@ -2,12 +2,12 @@ import ShareModal from "./ShareModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import ShareModule from "@/store/share";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ShareTokenBodyParamsParentType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
@@ -31,7 +31,7 @@ describe("@/components/share/ShareModal", () => {
 					},
 				},
 				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+					type: ShareTokenBodyParamsParentType.COURSES,
 				},
 			});
 
@@ -43,7 +43,7 @@ describe("@/components/share/ShareModal", () => {
 		beforeEach(() => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+				getParentType: ShareTokenBodyParamsParentType.COURSES,
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
@@ -85,7 +85,7 @@ describe("@/components/share/ShareModal", () => {
 		it("should call 'resetShareFlow' store method when sub component emits 'done'", () => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+				getParentType: ShareTokenBodyParamsParentType.COURSES,
 				getShareUrl: "http://example.com",
 			});
 			const { wrapper } = setup();
@@ -109,7 +109,7 @@ describe("@/components/share/ShareModal", () => {
 		it("should call 'onCopy' method when sub component emits 'copied'", () => {
 			shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+				getParentType: ShareTokenBodyParamsParentType.COURSES,
 				getShareUrl: "http://example.com",
 			});
 			const { wrapper } = setup();
@@ -145,7 +145,7 @@ describe("@/components/share/ShareModal", () => {
 		const setup = () => {
 			const shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Room,
+				getParentType: ShareTokenBodyParamsParentType.ROOM,
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
@@ -158,7 +158,7 @@ describe("@/components/share/ShareModal", () => {
 					},
 				},
 				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Room,
+					type: ShareTokenBodyParamsParentType.ROOM,
 				},
 			});
 
@@ -186,7 +186,7 @@ describe("@/components/share/ShareModal", () => {
 		const setup = () => {
 			const shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+				getParentType: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
@@ -199,7 +199,7 @@ describe("@/components/share/ShareModal", () => {
 					},
 				},
 				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+					type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 				},
 			});
 
@@ -227,7 +227,7 @@ describe("@/components/share/ShareModal", () => {
 		const setup = () => {
 			const shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Card,
+				getParentType: ShareTokenBodyParamsParentType.CARD,
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
@@ -240,7 +240,7 @@ describe("@/components/share/ShareModal", () => {
 					},
 				},
 				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Card,
+					type: ShareTokenBodyParamsParentType.CARD,
 				},
 			});
 
@@ -268,7 +268,7 @@ describe("@/components/share/ShareModal", () => {
 		const setup = () => {
 			const shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
+				getParentType: ShareTokenBodyParamsParentType.LESSONS,
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
@@ -281,7 +281,7 @@ describe("@/components/share/ShareModal", () => {
 					},
 				},
 				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Lessons,
+					type: ShareTokenBodyParamsParentType.LESSONS,
 				},
 			});
 
@@ -309,7 +309,7 @@ describe("@/components/share/ShareModal", () => {
 		const setup = () => {
 			const shareModuleMock = createModuleMocks(ShareModule, {
 				getIsShareModalOpen: true,
-				getParentType: ShareTokenBodyParamsParentTypeEnum.Tasks,
+				getParentType: ShareTokenBodyParamsParentType.TASKS,
 				createShareUrl: vi.fn(),
 				resetShareFlow: vi.fn(),
 			});
@@ -322,7 +322,7 @@ describe("@/components/share/ShareModal", () => {
 					},
 				},
 				props: {
-					type: ShareTokenBodyParamsParentTypeEnum.Tasks,
+					type: ShareTokenBodyParamsParentType.TASKS,
 				},
 			});
 

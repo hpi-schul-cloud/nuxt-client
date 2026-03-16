@@ -1,8 +1,8 @@
 import RoomMenu from "./RoomMenu.vue";
-import { ConfigResponse, RoomItemResponseAllowedOperations } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {

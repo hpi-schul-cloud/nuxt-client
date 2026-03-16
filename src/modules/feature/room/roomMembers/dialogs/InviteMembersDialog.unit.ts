@@ -1,10 +1,10 @@
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import { SchulcloudTheme } from "@/serverApi/v3/api";
 import { toEndOfDayIso, toIsoDate } from "@/utils/date-time.utils";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
 import { InvitationStep, RoomInvitationLink, useRoomInvitationLinkStore } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
@@ -266,7 +266,7 @@ describe("InviteMembersDialog", () => {
 					const { wrapper } = await setup();
 					createTestEnvStore({
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						SC_THEME: SchulcloudTheme.Thr,
+						SC_THEME: SchulcloudTheme.THR,
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);
@@ -308,7 +308,7 @@ describe("InviteMembersDialog", () => {
 					const { wrapper } = await setup();
 					createTestEnvStore({
 						FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED: true,
-						SC_THEME: SchulcloudTheme.Thr,
+						SC_THEME: SchulcloudTheme.THR,
 					});
 
 					const radioGroup = wrapper.getComponent(VRadioGroup);

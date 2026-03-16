@@ -1,6 +1,5 @@
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { Permission, RoleName, ToolContextType } from "@/serverApi/v3";
 import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import {
 	contextExternalToolConfigurationStatusFactory,
@@ -8,6 +7,7 @@ import {
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName, ToolContextType } from "@api-server";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount, MountingOptions } from "@vue/test-utils";
@@ -25,8 +25,8 @@ describe("RoomExternalToolsSection", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore({
 			me: {
-				roles: [{ id: "teacher-id", name: RoleName.Teacher }],
-				permissions: [Permission.ContextToolAdmin],
+				roles: [{ id: "teacher-id", name: RoleName.TEACHER }],
+				permissions: [Permission.CONTEXT_TOOL_ADMIN],
 			},
 		});
 	});
@@ -156,7 +156,7 @@ describe("RoomExternalToolsSection", () => {
 				params: { configId: tool.contextExternalToolId },
 				query: {
 					contextId: roomId,
-					contextType: ToolContextType.Course,
+					contextType: ToolContextType.COURSE,
 				},
 			});
 		});

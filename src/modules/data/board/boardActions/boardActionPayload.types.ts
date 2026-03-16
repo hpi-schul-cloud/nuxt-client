@@ -1,16 +1,16 @@
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardLayout,
 	BoardResponse,
 	CardResponse,
 	CardSkeletonResponse,
 	ColumnResponse,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
-} from "@/serverApi/v3";
-import { ColumnMove } from "@/types/board/DragAndDrop";
+	CreateCardBodyParamsRequiredEmptyElements,
+} from "@api-server";
 
 export type CreateCardRequestPayload = {
 	columnId: string;
-	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElementsEnum[];
+	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElements[];
 };
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;

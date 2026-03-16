@@ -1,5 +1,5 @@
-import { BoardLayout } from "@/serverApi/v3";
 import { Lesson } from "@/store/types/room";
+import { BoardLayout } from "@api-server";
 
 export type MenuItem = {
 	icon: string;

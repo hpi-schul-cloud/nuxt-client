@@ -1,6 +1,6 @@
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { FILE_PATHS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { Permission, SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountGroupOutline,
@@ -53,7 +53,7 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.tasks",
 			to: "/tasks",
 			icon: mdiFormatListChecks,
-			permissions: [Permission.TaskDashboardViewV3, Permission.TaskDashboardTeacherViewV3],
+			permissions: [Permission.TASK_DASHBOARD_VIEW_V3, Permission.TASK_DASHBOARD_TEACHER_VIEW_V3],
 			testId: "sidebar-tasks",
 		},
 		{
@@ -119,7 +119,7 @@ export const useSidebarItems = () => {
 			rel: "noopener",
 			feature: "ACCESSIBILITY_REPORT_EMAIL",
 			featureValue: `${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}`,
-			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
+			theme: [SchulcloudTheme.BRB, SchulcloudTheme.N21, SchulcloudTheme.THR],
 		},
 		{
 			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
@@ -127,7 +127,7 @@ export const useSidebarItems = () => {
 			testId: "sidebar-system-accessibilitystatement",
 			target: "_blank",
 			rel: "noopener",
-			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
+			theme: [SchulcloudTheme.BRB, SchulcloudTheme.N21, SchulcloudTheme.THR],
 		},
 		{
 			to: "/imprint",
@@ -178,13 +178,13 @@ export const useSidebarItems = () => {
 			href: "https://github.com/hpi-schul-cloud",
 			testId: "sidebar-system-github",
 			target: "_blank",
-			theme: [SchulcloudTheme.Brb, SchulcloudTheme.Default, SchulcloudTheme.Thr],
+			theme: [SchulcloudTheme.BRB, SchulcloudTheme.DEFAULT, SchulcloudTheme.THR],
 		},
 		{
 			href: "/security",
 			title: "components.legacy.footer.security",
 			testId: "sidebar-system-security",
-			theme: [SchulcloudTheme.Default],
+			theme: [SchulcloudTheme.DEFAULT],
 		},
 	];
 
@@ -192,13 +192,13 @@ export const useSidebarItems = () => {
 		{
 			title: "global.sidebar.item.management",
 			icon: mdiCogOutline,
-			permissions: [Permission.TeacherList, Permission.AdminView],
+			permissions: [Permission.TEACHER_LIST, Permission.ADMIN_VIEW],
 			testId: "sidebar-management",
 			children: [
 				{
 					title: "global.sidebar.item.student",
 					to: "/administration/students",
-					permissions: [Permission.StudentList],
+					permissions: [Permission.STUDENT_LIST],
 					testId: "sidebar-management-students",
 				},
 				{
@@ -211,7 +211,7 @@ export const useSidebarItems = () => {
 					to: "/administration/rooms/manage",
 					feature: "FEATURE_ADMINISTRATE_ROOMS_ENABLED",
 					permissions: useEnvConfig().value.FEATURE_ADMINISTRATE_ROOMS_ENABLED
-						? [Permission.SchoolAdministrateRooms]
+						? [Permission.SCHOOL_ADMINISTRATE_ROOMS]
 						: undefined,
 					testId: "sidebar-room-management",
 				},
@@ -219,25 +219,25 @@ export const useSidebarItems = () => {
 					title: "global.sidebar.item.courses",
 					to: "/administration/rooms/new",
 					testId: "sidebar-management-courses",
-					permissions: [Permission.AdminView],
+					permissions: [Permission.ADMIN_VIEW],
 				},
 				{
 					title: "global.sidebar.item.classes",
 					to: "/administration/groups/classes",
 					testId: "sidebar-management-classes",
-					permissions: [Permission.AdminView, Permission.TeacherList],
+					permissions: [Permission.ADMIN_VIEW, Permission.TEACHER_LIST],
 				},
 				{
 					title: "global.sidebar.item.teams",
 					href: "/administration/teams",
-					permissions: [Permission.AdminView],
+					permissions: [Permission.ADMIN_VIEW],
 					testId: "sidebar-management-teams",
 				},
 				{
 					title: "global.sidebar.item.school",
 					to: "/administration/school-settings",
 					testId: "sidebar-management-school",
-					permissions: [Permission.AdminView],
+					permissions: [Permission.ADMIN_VIEW],
 				},
 			],
 		},

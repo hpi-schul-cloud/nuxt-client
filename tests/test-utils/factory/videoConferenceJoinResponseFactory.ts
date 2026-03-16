@@ -1,7 +1,6 @@
-import { VideoConferenceJoinResponse } from "@/serverApi/v3";
+import { VideoConferenceJoinResponse } from "@api-server";
 import { Factory } from "fishery";
 
-export const videoConferenceJoinResponseFactory =
-	Factory.define<VideoConferenceJoinResponse>(() => ({
-		url: "VideoConferenceUrl",
-	}));
+export const videoConferenceJoinResponseFactory = Factory.define<VideoConferenceJoinResponse>(() => ({
+	url: "VideoConferenceUrl",
+}));

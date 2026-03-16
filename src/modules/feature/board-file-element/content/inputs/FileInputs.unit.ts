@@ -2,9 +2,9 @@ import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
 import FileName from "./file-name/FileName.vue";
 import FileInputs from "./FileInputs.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { PreviewStatus } from "@api-file-storage";
 import { shallowMount } from "@vue/test-utils";
 
 describe("FileInputs", () => {

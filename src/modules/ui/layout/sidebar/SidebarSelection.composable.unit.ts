@@ -188,7 +188,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupIsRoom = async () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.Room),
+							contextType: computed(() => BoardContextType.ROOM),
 						})
 					);
 
@@ -234,7 +234,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupIsRoom = async () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.Room),
+							contextType: computed(() => BoardContextType.ROOM),
 						})
 					);
 
@@ -253,7 +253,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupIsOther = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.Course),
+							contextType: computed(() => BoardContextType.COURSE),
 						})
 					);
 
@@ -352,7 +352,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupCourseContext = async () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.Course),
+							contextType: computed(() => BoardContextType.COURSE),
 						})
 					);
 
@@ -374,7 +374,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupUserContext = async () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.User),
+							contextType: computed(() => BoardContextType.USER),
 						})
 					);
 
@@ -404,7 +404,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupCourseContext = async () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.Course),
+							contextType: computed(() => BoardContextType.COURSE),
 						})
 					);
 
@@ -423,7 +423,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupIsOther = async () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue(
 						createSharedPageInformationMock({
-							contextType: computed(() => BoardContextType.User),
+							contextType: computed(() => BoardContextType.USER),
 						})
 					);
 

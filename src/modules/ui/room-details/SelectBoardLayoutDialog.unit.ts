@@ -1,6 +1,6 @@
 import SelectBoardLayoutDialog from "./SelectBoardLayoutDialog.vue";
-import { BoardLayout } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardLayout } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -32,7 +32,7 @@ describe("SelectBoardLayoutDialog", () => {
 			const multiColumnButton = wrapper.findComponent("[data-testid=dialog-add-multi-column-board]");
 			await multiColumnButton.trigger("click");
 
-			expect(wrapper.emitted("select")).toEqual([[BoardLayout.Columns]]);
+			expect(wrapper.emitted("select")).toEqual([[BoardLayout.COLUMNS]]);
 		});
 	});
 
@@ -43,13 +43,13 @@ describe("SelectBoardLayoutDialog", () => {
 			const multiColumnButton = wrapper.findComponent("[data-testid=dialog-add-single-column-board]");
 			await multiColumnButton.trigger("click");
 
-			expect(wrapper.emitted("select")).toEqual([[BoardLayout.List]]);
+			expect(wrapper.emitted("select")).toEqual([[BoardLayout.LIST]]);
 		});
 	});
 
 	describe("when a board layout is changed", () => {
 		it("should highlight the currently selected option", async () => {
-			const { wrapper } = setup(BoardLayout.Columns);
+			const { wrapper } = setup(BoardLayout.COLUMNS);
 
 			const multiColumnButton = wrapper.findComponent("[data-testid=dialog-add-multi-column-board]");
 

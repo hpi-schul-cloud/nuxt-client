@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { BoardExternalReferenceType } from "../../../../serverApi/v3";
+import { BoardExternalReferenceType } from "../../../../generated/serverApi/v3";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
@@ -116,7 +116,7 @@ const boardTitleFallback = computed(() => {
 	return upperCaseFirstChar(translatedTitle);
 });
 
-const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.Room);
+const isRoomBoard = computed(() => props.boardContextType === BoardExternalReferenceType.ROOM);
 
 const onStartEditMode = () => {
 	startEditMode();

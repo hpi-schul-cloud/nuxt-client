@@ -1,6 +1,5 @@
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
-import { ContextExternalToolBodyParams, LaunchType, ToolContextType } from "@/serverApi/v3";
 import { ToolLaunchRequest, ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -12,6 +11,7 @@ import {
 	toolLaunchRequestResponseFactory,
 } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
+import { ContextExternalToolBodyParams, LaunchType, ToolContextType } from "@api-server";
 import { Mocked } from "vitest";
 import { nextTick } from "vue";
 
@@ -67,7 +67,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
-					launchType: LaunchType.Basic,
+					launchType: LaunchType.BASIC,
 				});
 			});
 
@@ -117,7 +117,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				const bodyParams: ContextExternalToolBodyParams = {
 					contextId: "contextId",
-					contextType: ToolContextType.MediaBoard,
+					contextType: ToolContextType.MEDIA_BOARD,
 				};
 
 				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockResolvedValue(response);
@@ -177,7 +177,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				const bodyParams: ContextExternalToolBodyParams = {
 					contextId: "contextId",
-					contextType: ToolContextType.MediaBoard,
+					contextType: ToolContextType.MEDIA_BOARD,
 				};
 
 				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockRejectedValue(axiosError);
@@ -428,7 +428,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const launchRequest = toolLaunchRequestFactory.build({
 					method: ToolLaunchRequestMethodEnum.Post,
 					openNewTab: true,
-					launchType: LaunchType.Lti11ContentItemSelection,
+					launchType: LaunchType.LTI11_CONTENT_ITEM_SELECTION,
 				});
 
 				const { launchTool, toolLaunchRequest } = mountComposable(() => useExternalToolLaunchState(refreshCallback));
