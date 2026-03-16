@@ -1,14 +1,14 @@
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ContentElementType, RichTextElementResponse } from "@api-server";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 const mockElement: RichTextElementResponse = {
 	id: "test-id",
-	type: ContentElementType.RichText,
+	type: ContentElementType.RICH_TEXT,
 	content: {
 		text: "TestContent",
 		inputFormat: "richTextCk5",

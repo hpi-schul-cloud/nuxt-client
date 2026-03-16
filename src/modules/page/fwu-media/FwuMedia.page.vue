@@ -34,9 +34,10 @@
 
 <script setup lang="ts">
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
-import { FwuApiFactory, FwuItemResponse } from "@/generated/fwu-api/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { FwuApiFactory } from "@api-fwu";
+import { FwuItemResponse } from "@api-fwu";
 import { SvsSearchField } from "@ui-controls";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { refDebounced, useTitle, useUrlSearchParams } from "@vueuse/core";

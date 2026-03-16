@@ -11,7 +11,7 @@ import {
 	ParentNodeType,
 	RichTextElementResponse,
 	VideoConferenceElementResponse,
-} from "@/serverApi/v3";
+} from "@api-server";
 
 export type FileFolderElement = FileFolderElementResponse;
 

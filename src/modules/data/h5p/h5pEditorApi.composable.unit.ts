@@ -1,5 +1,3 @@
-import { H5pEditorApiInterface } from "@/h5pEditorApi/v3";
-import * as h5pApi from "@/h5pEditorApi/v3/api/h5p-editor-api";
 import {
 	axiosErrorFactory,
 	expectNotification,
@@ -9,6 +7,8 @@ import {
 	mountComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { H5pEditorApiInterface } from "@api-h5p";
+import * as h5pApi from "@api-h5p";
 import { useH5PEditorApi } from "@data-h5p";
 import { createTestingPinia } from "@pinia/testing";
 import { HttpStatusCode } from "axios";

@@ -1,4 +1,4 @@
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@api-server";
 import { UserCreatingData } from "@data-users";
 import { Factory } from "fishery";
 
@@ -6,7 +6,7 @@ export const userCreationDataFactory = Factory.define<UserCreatingData>(({ seque
 	firstName: `firstName${sequence}`,
 	lastName: `lastName${sequence}`,
 	email: `email${sequence}@example.com`,
-	roles: [RoleName.Student],
+	roles: [RoleName.STUDENT],
 	schoolId: `school-${sequence}`,
 	sendRegistration: false,
 	birthday: new Date(1990, 0, 1),

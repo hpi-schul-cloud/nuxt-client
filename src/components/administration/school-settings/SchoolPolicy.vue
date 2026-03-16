@@ -76,10 +76,10 @@
 
 <script setup lang="ts">
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import { Permission } from "@/serverApi/v3";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
@@ -103,7 +103,7 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
 
 const downloadPolicy = () => {
 	if (privacyPolicy.value) {

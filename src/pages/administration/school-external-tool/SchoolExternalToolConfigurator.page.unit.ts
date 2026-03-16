@@ -1,7 +1,6 @@
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
 import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
-import { ExternalToolMediumStatus } from "@/serverApi/v3";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
@@ -13,6 +12,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ExternalToolMediumStatus } from "@api-server";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -323,7 +323,7 @@ describe("SchoolExternalToolConfigurator", () => {
 					baseUrl: "https://test.com",
 					parameters: [],
 					medium: {
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediaSourceId: "media-source-id",
 						mediumId: "medium-id",
 					},

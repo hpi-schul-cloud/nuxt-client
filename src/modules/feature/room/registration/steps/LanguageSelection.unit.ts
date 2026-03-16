@@ -1,6 +1,6 @@
 import LanguageSelection from "./LanguageSelection.vue";
-import { LanguageType } from "@/serverApi/v3";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 
 describe("LanguageSelection.vue", () => {
 	const setup = () => {
@@ -9,7 +9,7 @@ describe("LanguageSelection.vue", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				selectedLanguage: LanguageType.De,
+				selectedLanguage: LanguageType.DE,
 			},
 		});
 
@@ -25,13 +25,13 @@ describe("LanguageSelection.vue", () => {
 		const { wrapper } = setup();
 		const selectComponent = wrapper.findComponent({ name: "VSelect" });
 		expect(selectComponent.exists()).toBe(true);
-		expect(selectComponent.props("modelValue")).toBe(LanguageType.De);
+		expect(selectComponent.props("modelValue")).toBe(LanguageType.DE);
 		expect(selectComponent.props("label")).toBe("pages.administration.school.index.generalSettings.labels.language");
 		expect(selectComponent.props("items")).toEqual([
-			{ value: LanguageType.De, title: "global.topbar.language.longName.de" },
-			{ value: LanguageType.En, title: "global.topbar.language.longName.en" },
-			{ value: LanguageType.Es, title: "global.topbar.language.longName.es" },
-			{ value: LanguageType.Uk, title: "global.topbar.language.longName.uk" },
+			{ value: LanguageType.DE, title: "global.topbar.language.longName.de" },
+			{ value: LanguageType.EN, title: "global.topbar.language.longName.en" },
+			{ value: LanguageType.ES, title: "global.topbar.language.longName.es" },
+			{ value: LanguageType.UK, title: "global.topbar.language.longName.uk" },
 		]);
 	});
 
@@ -39,9 +39,9 @@ describe("LanguageSelection.vue", () => {
 		const { wrapper } = setup();
 		const selectComponent = wrapper.findComponent({ name: "VSelect" });
 
-		await selectComponent.vm.$emit("update:modelValue", LanguageType.En);
+		await selectComponent.vm.$emit("update:modelValue", LanguageType.EN);
 		const emitted = selectComponent.emitted("update:modelValue");
 		expect(emitted).toBeTruthy();
-		expect(emitted?.[0]).toEqual([LanguageType.En]);
+		expect(emitted?.[0]).toEqual([LanguageType.EN]);
 	});
 });

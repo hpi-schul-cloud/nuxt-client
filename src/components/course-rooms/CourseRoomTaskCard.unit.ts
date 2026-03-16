@@ -1,8 +1,8 @@
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { Task } from "@/store/types/room";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ImportUserResponseRoleNames as Roles } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -225,7 +225,7 @@ describe("CourseRoomTaskCard", () => {
 	});
 
 	describe("common behaviors and actions", () => {
-		const userRole = Roles.Teacher;
+		const userRole = Roles.TEACHER;
 		it("should have correct props", () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
 
@@ -324,7 +324,7 @@ describe("CourseRoomTaskCard", () => {
 
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
-			const userRole = Roles.Teacher;
+			const userRole = Roles.TEACHER;
 
 			it("should not have submitted and graded section if task is a draft or finished or planned", () => {
 				const draftWrapper = getWrapper({
@@ -584,7 +584,7 @@ describe("CourseRoomTaskCard", () => {
 		});
 
 		describe("students", () => {
-			const userRole = Roles.Student;
+			const userRole = Roles.STUDENT;
 			it("should have no button if task is finished", async () => {
 				const wrapper = getWrapper({
 					task: studentFinishedTestTask,
@@ -754,7 +754,7 @@ describe("CourseRoomTaskCard", () => {
 	});
 
 	describe("keypress events", () => {
-		const userRole = Roles.Teacher;
+		const userRole = Roles.TEACHER;
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
 			const wrapper = getWrapper({ task: testTask, userRole });
 

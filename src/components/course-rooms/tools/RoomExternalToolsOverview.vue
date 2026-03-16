@@ -28,7 +28,7 @@
 			:room-id="roomId"
 			data-testid="room-external-tool-section"
 			@delete="onDeleteTool"
-			@refresh="() => fetchDisplayData(props.roomId, ToolContextType.Course)"
+			@refresh="() => fetchDisplayData(props.roomId, ToolContextType.COURSE)"
 		/>
 	</div>
 </template>
@@ -36,10 +36,10 @@
 <script setup lang="ts">
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { Course, CourseFeatures } from "@/store/types/room";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ToolContextType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { ExternalToolDisplayData, useExternalToolDisplayListState } from "@data-external-tool";
 import { mdiAlertCircle } from "@icons/material";
@@ -72,7 +72,7 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(
 );
 
 onMounted(async () => {
-	await fetchDisplayData(props.roomId, ToolContextType.Course);
+	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
 
 	course.value = await courseRoomDetailsModule.fetchCourse(props.roomId);
 });
@@ -80,7 +80,7 @@ onMounted(async () => {
 const refreshTimeInMs = useEnvConfig().value.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
-	await fetchDisplayData(props.roomId, ToolContextType.Course);
+	await fetchDisplayData(props.roomId, ToolContextType.COURSE);
 }, refreshTimeInMs);
 
 onUnmounted(() => {

@@ -1,8 +1,8 @@
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardAllowedOperations } from "@data-board";
 import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";
@@ -45,10 +45,10 @@ describe("ExternalToolElementAlert", () => {
 
 		setActivePinia(createTestingPinia());
 		const hasContextToolAdminPermission = allowedOperations.createExternalToolElement ?? false;
-		const permissions = hasContextToolAdminPermission ? [Permission.ContextToolAdmin] : [];
+		const permissions = hasContextToolAdminPermission ? [Permission.CONTEXT_TOOL_ADMIN] : [];
 		vi.mocked(useAppStore).mockReturnValue({
 			hasPermission: (permission: Permission) => permissions.includes(permission),
-			userRoles: [isTeacher ? RoleName.Teacher : RoleName.Student],
+			userRoles: [isTeacher ? RoleName.TEACHER : RoleName.STUDENT],
 		} as unknown as ReturnType<typeof useAppStore>);
 
 		const wrapper = mount(ExternalToolElementAlert, {

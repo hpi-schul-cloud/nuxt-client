@@ -1,5 +1,5 @@
 import type { Mocked } from "vitest";
-import { GetterTree, ActionTree, Module as Mod, MutationTree } from "vuex";
+import { ActionTree, GetterTree, Module as Mod, MutationTree } from "vuex";
 import { VuexModule } from "vuex-module-decorators";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

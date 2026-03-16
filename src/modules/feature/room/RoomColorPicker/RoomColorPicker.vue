@@ -28,7 +28,7 @@ const roomColorLabelId = "room-color-label";
 
 const currentColor = defineModel("color", {
 	type: String as PropType<RoomColor>,
-	default: RoomColor.BlueGrey,
+	default: RoomColor.BLUE_GREY,
 });
 
 const { t } = useI18n();

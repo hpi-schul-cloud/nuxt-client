@@ -1,8 +1,6 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { type RegistrationList, useRegistrationStore } from "./registration.store";
 import { useI18nGlobal } from "@/plugins/i18n";
-import { RegistrationListResponse } from "@/serverApi/v3/api";
-import * as serverApi from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	axiosErrorFactory,
@@ -15,6 +13,8 @@ import {
 	registrationFactory,
 	roomFactory,
 } from "@@/tests/test-utils";
+import { RegistrationListResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mock, Mocked, vi } from "vitest";
@@ -173,10 +173,10 @@ describe("registration.store", () => {
 					mockApiResponse({ data: undefined })
 				);
 
-				const result = await registrationStore.completeRegistration(serverApi.LanguageType.En, "SuperSecret123");
+				const result = await registrationStore.completeRegistration(serverApi.LanguageType.EN, "SuperSecret123");
 
 				expect(registrationApi.registrationControllerCompleteRegistration).toHaveBeenCalledWith(mockedSecret, {
-					language: serverApi.LanguageType.En,
+					language: serverApi.LanguageType.EN,
 					password: "SuperSecret123",
 				});
 				expect(result).toBe(true);
@@ -189,7 +189,7 @@ describe("registration.store", () => {
 
 				registrationApi.registrationControllerCompleteRegistration.mockRejectedValueOnce(new Error("Error"));
 
-				const result = await registrationStore.completeRegistration(serverApi.LanguageType.De, "badpassword");
+				const result = await registrationStore.completeRegistration(serverApi.LanguageType.DE, "badpassword");
 				expect(result).toBe(false);
 				expectNotification("error");
 			});

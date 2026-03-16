@@ -1,5 +1,6 @@
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
+import { $axios } from "@/utils/api";
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,
@@ -9,8 +10,7 @@ import {
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolContextType,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 
 export const useContextExternalToolApi = () => {

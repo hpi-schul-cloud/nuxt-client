@@ -1,4 +1,5 @@
 import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "./types/video-conference";
+import { $axios } from "@/utils/api";
 import {
 	VideoConferenceApiFactory,
 	VideoConferenceApiInterface,
@@ -6,14 +7,13 @@ import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 const videoConferenceStateMapping: Partial<Record<VideoConferenceStateResponse, VideoConferenceState>> = {
-	[VideoConferenceStateResponse.Running]: VideoConferenceState.RUNNING,
-	[VideoConferenceStateResponse.NotStarted]: VideoConferenceState.NOT_STARTED,
+	[VideoConferenceStateResponse.RUNNING]: VideoConferenceState.RUNNING,
+	[VideoConferenceStateResponse.NOT_STARTED]: VideoConferenceState.NOT_STARTED,
 };
 
 @Module({

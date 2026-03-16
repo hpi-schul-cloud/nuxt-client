@@ -1,7 +1,7 @@
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalToolMediumResponse, ToolContextType } from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { SchoolExternalToolMediumResponse, ToolContextType } from "@api-server";
 import { DataTableHeader } from "vuetify";
 
 export function useExternalToolsSectionUtils(t: (key: string) => string = () => "", mediaLicenseEnabled = false) {
@@ -62,11 +62,11 @@ export function useExternalToolsSectionUtils(t: (key: string) => string = () => 
 				contextRestrictionTranslations = tool.restrictToContexts
 					.map((context) => {
 						switch (context) {
-							case ToolContextType.Course:
+							case ToolContextType.COURSE:
 								return t("common.tool.context.type.courses");
-							case ToolContextType.MediaBoard:
+							case ToolContextType.MEDIA_BOARD:
 								return t("common.tool.context.type.mediaShelves");
-							case ToolContextType.BoardElement:
+							case ToolContextType.BOARD_ELEMENT:
 								return t("common.tool.context.type.boardElements");
 						}
 					})

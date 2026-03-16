@@ -50,7 +50,7 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const isListBoard = computed(() => props.board.layout === BoardLayout.List);
+const isListBoard = computed(() => props.board.layout === BoardLayout.LIST);
 
 const isDraft = computed(() => props.board.isVisible === false);
 

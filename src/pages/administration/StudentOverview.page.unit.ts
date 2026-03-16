@@ -5,7 +5,6 @@ import { useFilterLocalStorage } from "@/components/administration/data-filter/c
 import DataFilter from "@/components/administration/data-filter/DataFilter.vue";
 import DeleteUserDialog from "@/components/administration/DeleteUserDialog.vue";
 import store from "@/plugins/store";
-import { Permission, RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -19,6 +18,7 @@ import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mock
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { Permission, RoleName } from "@api-server";
 import { useClasses } from "@data-classes";
 import { useUsersStore } from "@data-users";
 import { mdiCheck, mdiCheckAll, mdiClose } from "@icons/material";
@@ -97,7 +97,7 @@ describe("student overview page", () => {
 	const setup = (options?: Partial<{ permissions: Permission[]; roleName: RoleName }>) => {
 		const { permissions, roleName } = {
 			permissions: options?.permissions ?? [],
-			roleName: options?.roleName ?? RoleName.Administrator,
+			roleName: options?.roleName ?? RoleName.ADMINISTRATOR,
 			...options,
 		};
 
@@ -190,7 +190,7 @@ describe("student overview page", () => {
 
 		it("should call delete users, notify success and refresh the user list", async () => {
 			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.StudentDelete] });
+			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.STUDENT_DELETE] });
 
 			await openContextMenu(wrapper, 0);
 
@@ -209,7 +209,7 @@ describe("student overview page", () => {
 
 		it("should notify error when delete users fails", async () => {
 			askConfirmationMock.mockResolvedValue(true);
-			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.StudentDelete] });
+			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.STUDENT_DELETE] });
 			(usersStore.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
 
 			await openContextMenu(wrapper, 0);
@@ -320,14 +320,14 @@ describe("student overview page", () => {
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
-		const { wrapper } = setup({ permissions: [Permission.StudentCreate] });
+		const { wrapper } = setup({ permissions: [Permission.STUDENT_CREATE] });
 
 		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(true);
 	});
 
 	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
-		const { wrapper } = setup({ permissions: [Permission.StudentDelete], roleName: RoleName.Administrator });
+		const { wrapper } = setup({ permissions: [Permission.STUDENT_DELETE], roleName: RoleName.ADMINISTRATOR });
 
 		const fabComponent = wrapper.find(`[data-testid="fab_button_students_table"]`);
 		expect(fabComponent.exists()).toBe(false);

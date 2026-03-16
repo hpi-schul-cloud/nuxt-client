@@ -1,5 +1,4 @@
 import RoomsOverview from "./RoomsOverview.page.vue";
-import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	courseInfoDataResponseFactory,
@@ -8,6 +7,7 @@ import {
 	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@api-server";
 import { useCourseApi, useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { createTestingPinia } from "@pinia/testing";
@@ -46,7 +46,7 @@ describe("RoomsOverview", () => {
 		const { router } = injectRouterMock(createRouterMock());
 		const route = router.currentRoute.value;
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
+		createTestAppStoreWithPermissions([Permission.COURSE_ADMINISTRATION]);
 
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
@@ -796,8 +796,8 @@ describe("RoomsOverview", () => {
 		};
 
 		it.each([
-			[SchulcloudTheme.Default, "Dataport"],
-			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.DEFAULT, "Dataport"],
+			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
 			const { wrapper } = setup({

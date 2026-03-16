@@ -1,6 +1,4 @@
 import NewsEditPage from "./NewsEdit.page.vue";
-import { NewsApiInterface, NewsResponse } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
@@ -10,6 +8,8 @@ import {
 	newsResponseFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { NewsApiInterface, NewsResponse } from "@api-server";
+import * as serverApi from "@api-server";
 import { NewsForm } from "@feature-news";
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";

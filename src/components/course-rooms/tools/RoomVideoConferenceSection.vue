@@ -43,10 +43,10 @@
 
 <script setup lang="ts">
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
-import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@/serverApi/v3";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import { injectStrict, VIDEO_CONFERENCE_MODULE_KEY } from "@/utils/inject";
+import { Permission, VideoConferenceJoinResponse, VideoConferenceScope } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
@@ -73,8 +73,8 @@ const isRunning = computed(() => videoConferenceInfo.value.state === VideoConfer
 
 const isRefreshing = computed(() => videoConferenceModule.getLoading);
 
-const canJoinMeeting = hasAuthPermission(Permission.JoinMeeting);
-const canStart = hasAuthPermission(Permission.StartMeeting);
+const canJoinMeeting = hasAuthPermission(Permission.JOIN_MEETING);
+const canStart = hasAuthPermission(Permission.START_MEETING);
 const canJoin = computed(
 	() => canJoinMeeting.value && (!isExternalPerson.value || userRoles.value.length > 1 || isWaitingRoomActive.value)
 );
@@ -87,7 +87,7 @@ const videoConferenceOptions = computed(() => videoConferenceModule.getVideoConf
 
 onMounted(async () => {
 	await videoConferenceModule.fetchVideoConferenceInfo({
-		scope: VideoConferenceScope.Course,
+		scope: VideoConferenceScope.COURSE,
 		scopeId: props.roomId,
 	});
 });
@@ -98,7 +98,7 @@ const onRefresh = async () => {
 	}
 
 	await videoConferenceModule.fetchVideoConferenceInfo({
-		scope: VideoConferenceScope.Course,
+		scope: VideoConferenceScope.COURSE,
 		scopeId: props.roomId,
 	});
 };
@@ -128,7 +128,7 @@ const startVideoConference = async () => {
 	logoutUrl.searchParams.append("tab", "tools");
 
 	await videoConferenceModule.startVideoConference({
-		scope: VideoConferenceScope.Course,
+		scope: VideoConferenceScope.COURSE,
 		scopeId: props.roomId,
 		videoConferenceOptions: videoConferenceOptions.value,
 		logoutUrl: logoutUrl.toString(),
@@ -139,7 +139,7 @@ const startVideoConference = async () => {
 
 const joinVideoConference = async () => {
 	const videoConferenceUrl: VideoConferenceJoinResponse | undefined = await videoConferenceModule.joinVideoConference({
-		scope: VideoConferenceScope.Course,
+		scope: VideoConferenceScope.COURSE,
 		scopeId: props.roomId,
 	});
 

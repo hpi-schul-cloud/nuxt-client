@@ -32,9 +32,9 @@
 <script setup lang="ts">
 import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { RoleName } from "@/serverApi/v3";
 import { dateFromToday } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { UserCreatingData, useUsersStore } from "@data-users";
 import { DatePicker } from "@ui-date-time-picker";
@@ -72,7 +72,7 @@ const createStudentHandler = async (userData: UserCreatingData) => {
 		lastName: userData.lastName,
 		email: userData.email,
 		birthday: date.value ? new Date(date.value) : undefined,
-		roles: [RoleName.Student],
+		roles: [RoleName.STUDENT],
 		schoolId: useAppStore().school?.id ?? "",
 		sendRegistration: sendRegistration.value,
 	});

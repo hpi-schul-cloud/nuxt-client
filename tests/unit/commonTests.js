@@ -7,11 +7,7 @@ export function isValidComponent(component) {
 	];
 }
 
-export function rendersSlotContent(
-	component,
-	slotNames = ["default"],
-	mountOptions
-) {
+export function rendersSlotContent(component, slotNames = ["default"], mountOptions) {
 	return [
 		"renders his slot(s) content(s)",
 		() => {

@@ -1,19 +1,19 @@
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
+import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
+import { ExternalToolMapper } from "@/store/external-tool/mapper";
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,
 	ContextExternalToolPostParams,
 	ContextExternalToolResponse,
-	ContextExternalToolResponseContextTypeEnum,
+	ContextExternalToolResponseContextType,
 	ToolContextType,
-} from "@/serverApi/v3";
-import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
-import { ExternalToolMapper } from "@/store/external-tool/mapper";
+} from "@api-server";
 
-export const ToolContextMapping: Record<ContextExternalToolResponseContextTypeEnum, ToolContextType> = {
-	[ContextExternalToolResponseContextTypeEnum.Course]: ToolContextType.Course,
-	[ContextExternalToolResponseContextTypeEnum.BoardElement]: ToolContextType.BoardElement,
-	[ContextExternalToolResponseContextTypeEnum.MediaBoard]: ToolContextType.MediaBoard,
+export const ToolContextMapping: Record<ContextExternalToolResponseContextType, ToolContextType> = {
+	[ContextExternalToolResponseContextType.COURSE]: ToolContextType.COURSE,
+	[ContextExternalToolResponseContextType.BOARD_ELEMENT]: ToolContextType.BOARD_ELEMENT,
+	[ContextExternalToolResponseContextType.MEDIA_BOARD]: ToolContextType.MEDIA_BOARD,
 };
 
 export class ContextExternalToolMapper {

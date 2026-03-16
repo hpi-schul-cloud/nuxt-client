@@ -1,6 +1,6 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { Permission } from "@/serverApi/v3";
 import { createTestAppStoreWithPermissions } from "@@/tests/test-utils";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";

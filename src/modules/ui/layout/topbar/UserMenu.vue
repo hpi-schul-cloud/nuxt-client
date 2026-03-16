@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import LanguageMenu from "./LanguageMenu.vue";
-import { MeUserResponse } from "@/serverApi/v3";
+import { MeUserResponse } from "@api-server";
 import { useAppStore, useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { useOAuthApi } from "@data-oauth";

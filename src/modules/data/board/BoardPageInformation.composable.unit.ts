@@ -47,7 +47,7 @@ describe("BoardPageInformation.composable", () => {
 			const setup = () => {
 				mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 					id: "courseId",
-					type: BoardContextType.Course,
+					type: BoardContextType.COURSE,
 					name: "Course #1",
 				});
 
@@ -101,7 +101,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(contextType.value).toEqual(BoardContextType.Course);
+				expect(contextType.value).toEqual(BoardContextType.COURSE);
 			});
 		});
 
@@ -109,7 +109,7 @@ describe("BoardPageInformation.composable", () => {
 			const setup = () => {
 				mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 					id: "roomId",
-					type: BoardContextType.Room,
+					type: BoardContextType.ROOM,
 					name: "Room #1",
 				});
 
@@ -163,7 +163,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(contextType.value).toEqual(BoardContextType.Room);
+				expect(contextType.value).toEqual(BoardContextType.ROOM);
 			});
 		});
 	});

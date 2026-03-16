@@ -1,6 +1,5 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { BoardLayout } from "@/serverApi/v3/api";
 import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -15,6 +14,7 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
@@ -729,7 +729,7 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(boardStore.updateBoardLayoutSuccess).not.toHaveBeenCalled();
@@ -741,12 +741,12 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(boardStore.updateBoardLayoutSuccess).toHaveBeenCalledWith({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				isOwnAction: true,
 			});
 		});
@@ -759,7 +759,7 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();

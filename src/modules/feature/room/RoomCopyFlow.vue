@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
-import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { RoomDetails } from "@/types/room/Room";
+import { CopyApiResponseStatus } from "@api-server";
 import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
 import { useRoomStore } from "@data-room";
 import { nextTick, onMounted, PropType, ref } from "vue";
@@ -49,7 +49,7 @@ const onConfirmCopy = async () => {
 
 	if (result) {
 		const copyResult = result.data;
-		if (copyResult.status === CopyApiResponseStatusEnum.Failure || copyResult.id === undefined) {
+		if (copyResult.status === CopyApiResponseStatus.FAILURE || copyResult.id === undefined) {
 			notifyError(t("data-room.copy.alert.error"), false);
 			emit("copy:error", copyResult.id);
 		} else {
