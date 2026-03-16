@@ -165,7 +165,7 @@ import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { askDeletionByTitle } from "@/utils/confirm-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardElementResponseType,
@@ -321,12 +321,7 @@ export default {
 					return;
 			}
 
-			const title = this.$t("pages.room.itemDelete.text", {
-				itemType: this.$t(typeKey),
-				itemTitle: itemContent.name || itemContent.title,
-			});
-
-			const confirmed = await askConfirmation({ title });
+			const confirmed = await askDeletionByTitle(itemContent.name || itemContent.title, typeKey);
 
 			if (!confirmed) return;
 

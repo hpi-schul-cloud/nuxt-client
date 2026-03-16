@@ -1568,8 +1568,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
 	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
-	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
-	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
 	"pages.room.locked":
@@ -1980,7 +1978,7 @@ export default {
 	"error.4401": "Lamentablemente, falta la autorización para ver este contenido.",
 	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
-	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
+	"ui-confirmation-dialog.ask-delete": '¿Eliminar {itemType} "{itemTitle}"?',
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
 	"ui-confirmation-dialog.ask-cancel-warning-message":
 		"Si cancelas la edición, se perderán todos los cambios no guardados.",

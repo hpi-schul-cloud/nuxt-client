@@ -1560,8 +1560,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
 	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
 	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
-	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
-	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
 	"pages.room.locked":
@@ -1961,7 +1959,7 @@ export default {
 	"error.4401": "Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
-	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
+	"ui-confirmation-dialog.ask-delete": '{itemType} "{itemTitle}" wirklich löschen?',
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
 	"ui-confirmation-dialog.ask-cancel-warning-message":
 		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",

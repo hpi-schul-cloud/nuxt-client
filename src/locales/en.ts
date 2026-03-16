@@ -1538,8 +1538,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Select view",
 	"pages.room.dialog.boardLayout.singleColumn": "single-column",
 	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
-	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
-	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
 	"pages.room.locked":
@@ -1931,7 +1929,7 @@ export default {
 	"error.4401": "Unfortunately, you do not have permission to view this content.",
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
-	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
+	"ui-confirmation-dialog.ask-delete": 'Delete {itemType} "{itemTitle}"?',
 	"ui-confirmation-dialog.ask-cancel-form": "Discard changes?",
 	"ui-confirmation-dialog.ask-cancel-warning-message": "If you cancel editing, all unsaved changes will be lost.",
 	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",

@@ -77,7 +77,7 @@ const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
 const onDeleteRoom = async (item: RoomStatsItemResponse) => {
 	const shouldDelete = await askDeletion(
-		t("pages.room.itemDelete.text", {
+		t("ui-confirmation-dialog.ask-delete", {
 			itemType: t("common.labels.room"),
 			itemTitle: item.name,
 		}),

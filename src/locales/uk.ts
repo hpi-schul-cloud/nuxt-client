@@ -1549,8 +1549,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
-	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
-	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.locked":
@@ -1947,7 +1945,7 @@ export default {
 	"error.4401": "На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"tldraw.error.ws.4400": "Назва кімнати відсутня в параметрах URL-адреси",
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
-	"ui-confirmation-dialog.ask-delete": "{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
+	"ui-confirmation-dialog.ask-delete": '{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
 	"ui-confirmation-dialog.ask-cancel-warning-message":
 		"Якщо ви скасуєте редагування, усі незбережені зміни буде втрачено.",

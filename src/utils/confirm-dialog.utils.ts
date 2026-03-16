@@ -33,13 +33,24 @@ export const askDeletionItem = (options: {
 /**
  * Raises a confirmation dialog for deletion actions.
  */
-export const askDeletion = (title: string, message: string, messageType?: "info" | "warning") =>
+export const askDeletion = (title: string, message?: string, messageType?: "info" | "warning") =>
 	askConfirmation({
 		title,
 		message,
 		messageType: messageType ?? "warning",
 		confirmBtnKey: "common.actions.delete",
 	});
+
+export const askDeletionByTitle = async (itemName: string, itemType: string) => {
+	const { t } = useI18nGlobal();
+
+	return await askDeletion(
+		t("ui-confirmation-dialog.ask-delete", {
+			itemTitle: itemName,
+			itemType: i18nKeyExists(itemType) ? t(itemType) : itemType,
+		})
+	);
+};
 
 export const askCancel = (title?: string, message?: string) =>
 	askConfirmation({

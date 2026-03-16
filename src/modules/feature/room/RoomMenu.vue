@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import { askDeletionByTitle } from "@/utils/confirm-dialog.utils";
 import { useEnvConfig } from "@data-env";
 import { useRoomAllowedOperations } from "@data-room";
 import {
@@ -39,7 +40,7 @@ import {
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-defineProps({
+const props = defineProps({
 	roomName: { type: String, required: false, default: undefined },
 });
 
@@ -56,8 +57,9 @@ const membersInfoText = computed(() =>
 	allowedOperations.value.addMembers ? t("pages.rooms.members.manage") : t("pages.rooms.members.view")
 );
 
-const onDeleteRoom = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDeleteRoom = async () => {
+	const shouldDelete = await askDeletionByTitle(props.roomName!, "common.labels.room");
+
 	if (shouldDelete) {
 		emit("room:delete");
 	}
