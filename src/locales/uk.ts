@@ -1946,6 +1946,7 @@ export default {
 	"tldraw.error.ws.4400": "Назва кімнати відсутня в параметрах URL-адреси",
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete": '{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
+	"ui-confirmation-dialog.ask-delete-type": "{itemType} буде видалена. Ви впевнені, що хочете видалити?",
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
 	"ui-confirmation-dialog.ask-cancel-warning-message":
 		"Якщо ви скасуєте редагування, усі незбережені зміни буде втрачено.",

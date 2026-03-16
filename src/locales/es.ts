@@ -1979,6 +1979,7 @@ export default {
 	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": '¿Eliminar {itemType} "{itemTitle}"?',
+	"ui-confirmation-dialog.ask-delete-type": "¿Eliminar {itemType}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
 	"ui-confirmation-dialog.ask-cancel-warning-message":
 		"Si cancelas la edición, se perderán todos los cambios no guardados.",

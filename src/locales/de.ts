@@ -1960,6 +1960,7 @@ export default {
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": '{itemType} "{itemTitle}" wirklich löschen?',
+	"ui-confirmation-dialog.ask-delete-type": "{itemType} wirklich löschen?",
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
 	"ui-confirmation-dialog.ask-cancel-warning-message":
 		"Wenn du die Bearbeitung abbrichst, gehen alle ungesicherten Änderungen verloren.",

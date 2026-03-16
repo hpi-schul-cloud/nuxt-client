@@ -1,12 +1,11 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardTitle from "./CardTitle.vue";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CardResponse } from "@api-server";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { shallowMount, type VueWrapper } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
+import { flushPromises, shallowMount, type VueWrapper } from "@vue/test-utils";
+import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
@@ -14,8 +13,6 @@ const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 });
 
 vi.mock("@data-board/BoardPermissions.composable");
-vi.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = vi.mocked(useDeleteConfirmationDialog);
 
 interface CardHostDetailViewExposed {
 	isEditMode: { value: boolean };
@@ -27,8 +24,6 @@ interface CardHostDetailViewExposed {
 const getVm = (wrapper: VueWrapper): CardHostDetailViewExposed => wrapper.vm as unknown as CardHostDetailViewExposed;
 
 describe("CardHostDetailView", () => {
-	let askDeleteConfirmationMock: () => Promise<boolean>;
-
 	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
@@ -41,18 +36,6 @@ describe("CardHostDetailView", () => {
 			wrapper,
 		};
 	};
-
-	beforeEach(() => {
-		askDeleteConfirmationMock = vi.fn().mockResolvedValue(true);
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
-		});
-
-		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askDeleteConfirmation: askDeleteConfirmationMock,
-			isDeleteDialogOpen: ref(false),
-		});
-	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
@@ -134,11 +117,7 @@ describe("CardHostDetailView", () => {
 
 	describe("delete card", () => {
 		it("should emit delete:card when confirmation is accepted", async () => {
-			askDeleteConfirmationMock = vi.fn().mockResolvedValue(true);
-			mockedUseDeleteConfirmationDialog.mockReturnValue({
-				askDeleteConfirmation: askDeleteConfirmationMock,
-				isDeleteDialogOpen: ref(false),
-			});
+			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(true);
 
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
@@ -148,18 +127,17 @@ describe("CardHostDetailView", () => {
 			});
 
 			await getVm(wrapper).onDeleteCard();
-			await nextTick();
+			await flushPromises();
 
-			expect(askDeleteConfirmationMock).toHaveBeenCalledWith(CARD_WITH_ELEMENTS.title, "components.boardCard");
+			expect(confirmDialogUtils.askDeletionByTitle).toHaveBeenCalledWith(
+				CARD_WITH_ELEMENTS.title,
+				"components.boardCard"
+			);
 			expect(wrapper.emitted("delete:card")).toBeTruthy();
 		});
 
 		it("should not emit delete:card when confirmation is cancelled", async () => {
-			askDeleteConfirmationMock = vi.fn().mockResolvedValue(false);
-			mockedUseDeleteConfirmationDialog.mockReturnValue({
-				askDeleteConfirmation: askDeleteConfirmationMock,
-				isDeleteDialogOpen: ref(false),
-			});
+			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(false);
 
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
@@ -169,7 +147,7 @@ describe("CardHostDetailView", () => {
 			});
 
 			await getVm(wrapper).onDeleteCard();
-			await nextTick();
+			await flushPromises();
 
 			expect(wrapper.emitted("delete:card")).toBeFalsy();
 		});

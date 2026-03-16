@@ -1,11 +1,11 @@
 import ClassOverview from "./ClassOverview.page.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { GROUP_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	classInfoFactory,
