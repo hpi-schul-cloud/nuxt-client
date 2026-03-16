@@ -107,6 +107,7 @@ const prepareRemovalMessage = (linkIds: string[]) =>
 const onDeleteLinks = async (linkIds: string[]) => {
 	const shouldDelete = await askConfirmation({
 		title: prepareRemovalMessage(linkIds),
+		confirmBtnKey: "common.actions.delete",
 	});
 	if (shouldDelete) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
