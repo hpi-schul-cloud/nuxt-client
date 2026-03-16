@@ -323,7 +323,10 @@ onMounted(async () => {
 	resetPageInformation();
 	useBoardInactivity();
 
-	cardStore.loadPreferredTools(ToolContextType.BoardElement);
+	if (allowedOperations.value.createExternalToolElement) {
+		await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
+	}
+
 	await boardStore.fetchBoardRequest({ boardId: props.boardId });
 
 	focusNodeFromHash();
