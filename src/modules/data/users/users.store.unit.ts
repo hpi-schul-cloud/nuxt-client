@@ -47,7 +47,6 @@ describe("useUsersStore", () => {
 	};
 
 	describe("fetchUsers", () => {
-		// const userResponseList = userResponseFactory.buildList(2);
 		beforeEach(() => {
 			axiosMock.get.mockResolvedValueOnce({
 				data: {
