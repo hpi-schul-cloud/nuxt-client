@@ -4,8 +4,6 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
-vi.mock("@ui-confirmation-dialog");
-
 describe("KebabMenuActionMoveDown Component", () => {
 	const setup = () =>
 		mount(KebabMenuActionDelete, {

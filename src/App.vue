@@ -3,26 +3,26 @@
 		<component :is="layout">
 			<router-view />
 		</component>
-	</v-app>
 
-	<SvsDialog
-		v-model="isDialogOpen"
-		data-testid="confirmation-dialog"
-		:confirm-btn-lang-key="dialogOptions?.confirmBtnKey"
-		:title="confirmTitle"
-		@confirm="confirm"
-		@cancel="cancel"
-		@after-leave="resetDialogOptions"
-	>
-		<template v-if="confirmMessage" #content>
-			<WarningAlert v-if="dialogOptions?.messageType === 'warning'">
-				{{ confirmMessage }}
-			</WarningAlert>
-			<InfoAlert v-if="dialogOptions?.messageType === 'info'">
-				{{ confirmMessage }}
-			</InfoAlert>
-		</template>
-	</SvsDialog>
+		<SvsDialog
+			v-model="isDialogOpen"
+			data-testid="confirmation-dialog"
+			:confirm-btn-lang-key="dialogOptions?.confirmBtnKey"
+			:title="confirmTitle"
+			@confirm="confirm"
+			@cancel="cancel"
+			@after-leave="resetDialogOptions"
+		>
+			<template v-if="confirmMessage" #content>
+				<WarningAlert v-if="dialogOptions?.messageType === 'warning'">
+					{{ confirmMessage }}
+				</WarningAlert>
+				<InfoAlert v-if="dialogOptions?.messageType === 'info'">
+					{{ confirmMessage }}
+				</InfoAlert>
+			</template>
+		</SvsDialog>
+	</v-app>
 </template>
 
 <script setup lang="ts">
