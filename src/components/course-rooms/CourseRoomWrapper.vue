@@ -117,12 +117,11 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 
 const isLoading = computed(() => courseRoomListModule.getLoading);
 
-async function handleImport(file: File): Promise<void> {
+const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
 
 	await commonCartridgeImport.importCommonCartridgeFile(file);
-
 	setLoadingState(false);
 
 	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
@@ -132,7 +131,7 @@ async function handleImport(file: File): Promise<void> {
 	} else {
 		notifyError(t("pages.rooms.ccImportCourse.error"));
 	}
-}
+};
 
 const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken);
 </script>

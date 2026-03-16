@@ -78,17 +78,17 @@ const file = ref<File[] | undefined>(undefined);
 
 const importButtonDisabled = computed(() => !file.value || file.value.length === 0);
 
-function onCancel(): void {
+const onCancel = () => {
 	file.value = undefined;
 	emit("update:isOpen", false);
-}
+};
 
-function onConfirm(): void {
+const onConfirm = () => {
 	if (file.value && file.value.length > 0) {
 		emit("import", file.value[0]);
 		file.value = undefined;
 	}
-}
+};
 </script>
 
 <style lang="scss" scoped>
