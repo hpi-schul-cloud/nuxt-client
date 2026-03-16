@@ -37,13 +37,13 @@ describe("useUsersStore", () => {
 	});
 	const userResponseList = userResponseFactory.buildList(2);
 	const setupStore = (type: string) => {
-		const store = useUsersStore();
-		store.init(type as RoleName.STUDENT | RoleName.TEACHER);
+		const userStore = useUsersStore();
+		userStore.init(type as RoleName.STUDENT | RoleName.TEACHER);
 
-		store.userList = userResponseList;
-		store.pagination = { limit: 10, skip: 0, total: 2 };
+		userStore.userList = userResponseList;
+		userStore.pagination = { limit: 10, skip: 0, total: 2 };
 
-		return store;
+		return { userStore };
 	};
 
 	describe("fetchUsers", () => {
@@ -60,30 +60,33 @@ describe("useUsersStore", () => {
 		});
 
 		it("should fetch and update the user list and paginations for students", async () => {
-			const { fetchUsers, userList, pagination } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { fetchUsers } = userStore;
 			await fetchUsers({ $limit: 10, $skip: 0, $sort: {} });
 
 			expect(axiosMock.get).toHaveBeenCalledWith("/v3/users/admin/students", {
 				params: { $limit: 10, $skip: 0, $sort: {} },
 			});
-			expect(userList).toEqual(userResponseList);
-			expect(pagination).toEqual({ limit: 10, skip: 0, total: 2 });
+			expect(userStore.userList).toEqual(userResponseList);
+			expect(userStore.pagination).toEqual({ limit: 10, skip: 0, total: 2 });
 		});
 
 		it("should fetch and update the user list and paginations for teachers", async () => {
-			const { fetchUsers, userList, pagination } = setupStore(RoleName.TEACHER);
+			const { userStore } = setupStore(RoleName.TEACHER);
+			const { fetchUsers } = userStore;
 			await fetchUsers({ $limit: 10, $skip: 0, $sort: {} });
 			expect(axiosMock.get).toHaveBeenCalledWith("/v3/users/admin/teachers", {
 				params: { $limit: 10, $skip: 0, $sort: {} },
 			});
-			expect(userList).toEqual(userResponseList);
-			expect(pagination).toEqual({ limit: 10, skip: 0, total: 2 });
+			expect(userStore.userList).toEqual(userResponseList);
+			expect(userStore.pagination).toEqual({ limit: 10, skip: 0, total: 2 });
 		});
 	});
 
 	describe("deleteUsers", () => {
 		it("should delete users in chunks and update progress", async () => {
-			const { deletingProgress, deleteUsers } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { deletingProgress, deleteUsers } = userStore;
 			const userIds = ["user1", "user2", "user3", "user4", "user5", "user6"];
 
 			axiosMock.delete.mockResolvedValue({});
@@ -102,7 +105,8 @@ describe("useUsersStore", () => {
 
 	describe("createUser", () => {
 		it("should create a student and update the student list", async () => {
-			const { createUser } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { createUser } = userStore;
 			const newUser = userCreationDataFactory.build();
 
 			axiosMock.post.mockResolvedValueOnce({ data: { data: newUser } });
@@ -114,7 +118,8 @@ describe("useUsersStore", () => {
 		});
 
 		it("should create a teacher and update the teacher list", async () => {
-			const { createUser } = setupStore(RoleName.TEACHER);
+			const { userStore } = setupStore(RoleName.TEACHER);
+			const { createUser } = userStore;
 			const newUser = userCreationDataFactory.build();
 
 			axiosMock.post.mockResolvedValueOnce({ data: { data: newUser } });
@@ -127,7 +132,8 @@ describe("useUsersStore", () => {
 
 		it("should not notify success if there is an error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
-			const { createUser } = setupStore(RoleName.TEACHER);
+			const { userStore } = setupStore(RoleName.TEACHER);
+			const { createUser } = userStore;
 			const newUser = userCreationDataFactory.build();
 
 			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
@@ -141,7 +147,8 @@ describe("useUsersStore", () => {
 
 	describe("sendRegistrationLink", () => {
 		it("should send a registration link to the specified email and notify success", async () => {
-			const { sendRegistrationLink } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { sendRegistrationLink } = userStore;
 			const responseData = [{ id: "some-id-1" }, { id: "some-id-2" }];
 			axiosMock.post.mockResolvedValueOnce({ data: responseData });
 
@@ -156,7 +163,8 @@ describe("useUsersStore", () => {
 		it("should not notify success if there is an error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 
-			const { sendRegistrationLink } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { sendRegistrationLink } = userStore;
 			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
 
 			await sendRegistrationLink({ userIds: ["user1"], selectionType: "inclusive" });
@@ -167,14 +175,9 @@ describe("useUsersStore", () => {
 	});
 
 	describe("getQrRegistrationLinks", () => {
-		// let store: ReturnType<typeof setupStore>;
-		// beforeEach(() => {
-		// 	// store = setupStore(RoleName.STUDENT);
-		// 	// store.qrLinks = [];
-		// });
-
 		it("should generate a qr registration link and update the qr registrationLinks list", async () => {
-			const { getQrRegistrationLinks, qrLinks } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { getQrRegistrationLinks, qrLinks } = userStore;
 			const responseData = [
 				{ title: "title-1", qrContent: "some-qr-content" },
 				{ title: "title-2", qrContent: "some-qr-content-2" },
@@ -188,13 +191,15 @@ describe("useUsersStore", () => {
 				selectionType: "inclusive",
 				userIds: ["user1"],
 			});
+			await flushPromises();
 			// expect(qrLinks).toEqual(responseData);
 		});
 
 		it("should not update qr registrationLinks list if there is an error", async () => {
 			const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(vi.fn());
 
-			const { getQrRegistrationLinks, qrLinks } = setupStore(RoleName.STUDENT);
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { getQrRegistrationLinks, qrLinks } = userStore;
 			axiosMock.post.mockRejectedValueOnce(new Error("Network error"));
 
 			await getQrRegistrationLinks({ userIds: ["user1"], selectionType: "inclusive" });
@@ -202,6 +207,21 @@ describe("useUsersStore", () => {
 			expect(qrLinks).toEqual([]);
 
 			consoleErrorSpy.mockRestore();
+		});
+	});
+
+	describe("resetState", () => {
+		it("should reset the user list, deleting progress, qr links and pagination", async () => {
+			const { userStore } = setupStore(RoleName.STUDENT);
+			const { resetState } = userStore;
+
+			resetState();
+			await flushPromises();
+
+			expect(userStore.userList).toEqual([]);
+			expect(userStore.deletingProgress).toEqual({ active: false, percent: 0 });
+			expect(userStore.qrLinks).toEqual([]);
+			expect(userStore.pagination).toEqual({ limit: 0, skip: 0, total: 0 });
 		});
 	});
 });
