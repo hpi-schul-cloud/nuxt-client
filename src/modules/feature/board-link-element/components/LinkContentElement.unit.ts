@@ -11,9 +11,9 @@ import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 
 vi.mock("@data-board/ContentElementState.composable");
 
@@ -341,7 +341,6 @@ describe("LinkContentElement", () => {
 
 					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
-					await flushPromises();
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
@@ -526,7 +525,6 @@ describe("LinkContentElement", () => {
 
 					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
-					await flushPromises();
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
@@ -581,10 +579,7 @@ describe("LinkContentElement", () => {
 						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
 
 						const component = wrapper.getComponent(LinkContentElementCreate);
-						component.vm.$emit("create:url", url);
-						await nextTick();
-						await nextTick();
-						await nextTick();
+						await component.vm.$emit("create:url", url);
 
 						expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
 					});

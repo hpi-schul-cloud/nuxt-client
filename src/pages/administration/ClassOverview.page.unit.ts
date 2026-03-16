@@ -18,11 +18,11 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VBtn, VDataTableServer } from "vuetify/lib/components/index";
+import { VBtn, VDataTableServer } from "vuetify/components";
 
 type Tab = "current" | "next" | "archive";
 
@@ -511,7 +511,6 @@ describe("ClassOverview", () => {
 				const { wrapper, groupModule } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
-				await flushPromises();
 
 				expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
 					title: "pages.administration.classes.deleteDialog.title",
@@ -526,7 +525,6 @@ describe("ClassOverview", () => {
 				const { wrapper, groupModule } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
-				await flushPromises();
 
 				expect(groupModule.deleteClass).not.toHaveBeenCalled();
 			});

@@ -11,7 +11,6 @@ import { mdiAlert } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
-import { flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VIcon } from "vuetify/components";
 
@@ -164,7 +163,6 @@ describe("RoomAdminTable", () => {
 
 						const deleteAction = wrapper.findComponent(`[data-testid="menu-delete-room-${roomList[0].roomId}"]`);
 						await deleteAction.trigger("click");
-						await flushPromises();
 
 						expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
 							expect.any(String),
@@ -182,7 +180,6 @@ describe("RoomAdminTable", () => {
 
 						const deleteAction = wrapper.findComponent(`[data-testid="menu-delete-room-${roomList[0].roomId}"]`);
 						await deleteAction.trigger("click");
-						await flushPromises();
 
 						expect(adminRoomStore.deleteRoom).not.toHaveBeenCalled();
 					});

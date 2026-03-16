@@ -8,7 +8,7 @@ import { type Registration, useRegistrationStore } from "@data-room";
 import { mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsSearchField } from "@ui-controls";
-import { DOMWrapper, flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
 import { nextTick } from "vue";
@@ -197,7 +197,6 @@ describe("MemberInvitationsTable", () => {
 			const { wrapper, registrationStore, registrationItems } = setup();
 
 			await triggerInvitationRemoval(wrapper, 0);
-			await flushPromises();
 
 			expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
 				title: "pages.rooms.members.registrations.remove.confirmation",
@@ -211,7 +210,6 @@ describe("MemberInvitationsTable", () => {
 			const { wrapper, registrationStore } = setup();
 
 			await triggerInvitationRemoval(wrapper, 0);
-			await flushPromises();
 
 			expect(registrationStore.removeInvitations).not.toHaveBeenCalled();
 		});

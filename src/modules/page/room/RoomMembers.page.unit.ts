@@ -30,7 +30,6 @@ import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { flushPromises } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
@@ -250,7 +249,6 @@ describe("RoomMembersPage", () => {
 
 				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
-				await flushPromises();
 
 				expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
 					title: "pages.rooms.leaveRoom.confirmation",
@@ -268,7 +266,6 @@ describe("RoomMembersPage", () => {
 
 				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
-				await flushPromises();
 
 				expect(roomMembersStore.leaveRoom).not.toHaveBeenCalled();
 			});

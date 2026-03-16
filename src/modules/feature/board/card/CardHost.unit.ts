@@ -23,7 +23,7 @@ import {
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink, useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -289,8 +289,7 @@ describe("CardHost", () => {
 				const { wrapper } = setup({ allowedOperations: { deleteCard: true } });
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
-				await deleteButton.vm.$emit("click", true);
-				await flushPromises();
+				await deleteButton.trigger("click");
 
 				expect(confirmDialogUtils.askDeletionByType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);

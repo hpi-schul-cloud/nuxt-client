@@ -127,7 +127,6 @@ describe("CardHostDetailView", () => {
 			});
 
 			await getVm(wrapper).onDeleteCard();
-			await flushPromises();
 
 			expect(confirmDialogUtils.askDeletionByTitle).toHaveBeenCalledWith(
 				CARD_WITH_ELEMENTS.title,
@@ -147,7 +146,6 @@ describe("CardHostDetailView", () => {
 			});
 
 			await getVm(wrapper).onDeleteCard();
-			await flushPromises();
 
 			expect(wrapper.emitted("delete:card")).toBeFalsy();
 		});

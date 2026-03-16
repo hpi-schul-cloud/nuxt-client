@@ -16,7 +16,7 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -306,8 +306,6 @@ describe("BoardHeader", () => {
 			const shareButton = wrapper.findComponent(KebabMenuActionShare);
 			await shareButton.trigger("click");
 
-			await flushPromises();
-
 			expect(wrapper.emitted("share:board")).toHaveLength(1);
 		});
 	});
@@ -334,7 +332,6 @@ describe("BoardHeader", () => {
 
 			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 			await deleteButton.trigger("click");
-			await flushPromises();
 
 			expect(wrapper.emitted("delete:board")).toHaveLength(1);
 		});
@@ -346,8 +343,6 @@ describe("BoardHeader", () => {
 
 			const changeLayoutButton = wrapper.findComponent(KebabMenuActionChangeLayout);
 			await changeLayoutButton.trigger("click");
-
-			await flushPromises();
 
 			expect(wrapper.emitted("change-layout")).toHaveLength(1);
 		});
@@ -362,8 +357,6 @@ describe("BoardHeader", () => {
 
 			const editableSwitch = wrapper.findComponent(KebabMenuActionEditingSettings);
 			await editableSwitch.trigger("click");
-
-			await flushPromises();
 
 			expect(wrapper.emitted("edit:settings")).toHaveLength(1);
 		});

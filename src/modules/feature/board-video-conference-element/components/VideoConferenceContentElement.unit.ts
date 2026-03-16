@@ -236,7 +236,6 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = localSetup({ hasManageVideoConferencePermission: true });
 
 					const videoConferenceElement = wrapper.getComponent(VideoConferenceContentElementDisplay);
-					await flushPromises();
 
 					expect(videoConferenceElement.props("hasParticipationPermission")).toEqual(true);
 				});
@@ -281,7 +280,6 @@ describe("VideoConferenceContentElement", () => {
 					});
 
 					const videoConferenceElement = wrapper.getComponent(VideoConferenceContentElementDisplay);
-					await flushPromises();
 					expect(videoConferenceElement.props("canStart")).toEqual(false);
 				});
 
@@ -415,7 +413,6 @@ describe("VideoConferenceContentElement", () => {
 
 						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 						await menuItem.trigger("click");
-						await flushPromises();
 
 						expect(wrapper.emitted()).toHaveProperty("delete:element");
 					});
@@ -449,8 +446,7 @@ describe("VideoConferenceContentElement", () => {
 						});
 
 						const videoConferenceElementDisplay = wrapper.getComponent(VideoConferenceContentElementDisplay);
-						videoConferenceElementDisplay.vm.$emit("click");
-						await flushPromises();
+						await videoConferenceElementDisplay.trigger("click");
 
 						const configurationDialog = wrapper.findComponent({
 							name: "VideoConferenceConfigurationDialog",
@@ -469,8 +465,7 @@ describe("VideoConferenceContentElement", () => {
 						});
 
 						const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
-						videoConferenceElementDisplay.vm.$emit("click");
-						await flushPromises();
+						await videoConferenceElementDisplay.trigger("click");
 
 						expect(useVideoConferenceMock.joinVideoConference).toHaveBeenCalledTimes(1);
 					});
@@ -619,7 +614,6 @@ describe("VideoConferenceContentElement", () => {
 
 						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 						await menuItem.trigger("click");
-						await flushPromises();
 
 						expect(wrapper.emitted()).toHaveProperty("delete:element");
 					});
@@ -656,11 +650,11 @@ describe("VideoConferenceContentElement", () => {
 				await videoConferenceElement.trigger("click");
 
 				useVideoConferenceMock.error.value = new Error("error");
-				await flushPromises();
 
 				const dialog = wrapper.findComponent({
 					ref: "errorDialog",
 				});
+				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(true);
 			});

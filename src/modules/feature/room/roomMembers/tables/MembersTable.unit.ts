@@ -25,7 +25,7 @@ import {
 import { createTestingPinia } from "@pinia/testing";
 import { SvsSearchField } from "@ui-controls";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
-import { DOMWrapper, flushPromises, VueWrapper } from "@vue/test-utils";
+import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
 import { nextTick } from "vue";
@@ -395,7 +395,6 @@ describe("MembersTable", () => {
 				});
 
 				await triggerMemberRemoval(2, wrapper);
-				await flushPromises();
 
 				expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
 					title: "pages.rooms.members.remove.confirmation",
@@ -412,7 +411,6 @@ describe("MembersTable", () => {
 				});
 
 				await triggerMemberRemoval(2, wrapper);
-				await flushPromises();
 
 				expect(roomMembersStore.removeMembers).not.toHaveBeenCalled();
 			});

@@ -12,7 +12,7 @@ import {
 	KebabMenuActionMoveUp,
 	KebabMenuActionRename,
 } from "@ui-kebab-menu";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { flatten } from "lodash";
 import { computed } from "vue";
 
@@ -351,7 +351,6 @@ describe("BoardColumnHeader", () => {
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
 				await deleteAction.trigger("click");
-				await flushPromises();
 
 				const emitted = wrapper.emitted();
 				expect(emitted["delete:column"]).toBeDefined();
@@ -368,7 +367,6 @@ describe("BoardColumnHeader", () => {
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
 				await deleteAction.trigger("click");
-				await flushPromises();
 
 				const emitted = wrapper.emitted();
 				expect(emitted["delete:column"]).not.toBeDefined();

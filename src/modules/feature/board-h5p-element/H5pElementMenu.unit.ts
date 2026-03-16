@@ -2,8 +2,7 @@ import H5pElementMenu from "./H5pElementMenu.vue";
 import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { flushPromises, shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 
 describe("H5pElementMenu", () => {
@@ -119,7 +118,6 @@ describe("H5pElementMenu", () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuAction);
-
 			await menuItem.trigger("click");
 
 			expect(wrapper.emitted("edit:element")).toBeDefined();
@@ -153,9 +151,7 @@ describe("H5pElementMenu", () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuAction);
-
-			menuItem.vm.$emit("click");
-			await nextTick();
+			await menuItem.trigger("click");
 
 			expect(wrapper.emitted("edit:element")).toBeDefined();
 		});
@@ -189,9 +185,7 @@ describe("H5pElementMenu", () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-
 			await menuItem.trigger("click");
-			await flushPromises();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});
