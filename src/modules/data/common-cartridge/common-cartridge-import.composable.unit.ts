@@ -1,7 +1,7 @@
-import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
-import { FileApiFactory, FileApiInterface } from "@/fileStorageApi/v3/api/file-api";
 import { initializeAxios } from "@/utils/api";
 import { AxiosResponseFactory, fileRecordFactory, mockAxiosInstance } from "@@/tests/test-utils";
+import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@api-common-cartridge";
+import { FileApiFactory, FileApiInterface } from "@api-file-storage";
 import { useAppStoreRefs } from "@data-app";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
@@ -11,11 +11,15 @@ import { ref } from "vue";
 
 vi.mock("@/utils/api");
 
-vi.mock("@/fileStorageApi/v3/api/file-api", () => ({
-	FileApiFactory: vi.fn(),
-}));
+vi.mock("@api-file-storage", async () => {
+	const actual = await vi.importActual("@api-file-storage");
+	return {
+		...actual,
+		FileApiFactory: vi.fn(),
+	};
+});
 
-vi.mock("@/commonCartridgeApi/v3/api", () => ({
+vi.mock("@api-common-cartridge", () => ({
 	CommonCartridgeApiFactory: vi.fn(),
 }));
 
@@ -30,14 +34,13 @@ describe("useCommonCartridgeImport composable", () => {
 		initializeAxios(mockAxiosInstance());
 
 		fileStorageApiMock = {
-			upload: vi.fn(() =>
-				Promise.resolve(
-					AxiosResponseFactory.create(
-						fileRecordFactory.build({
-							id: "fileId",
-							name: "fileName",
-						})
-					)
+			upload: vi.fn().mockResolvedValue(
+				AxiosResponseFactory.create(
+					fileRecordFactory.build({
+						id: "fileId",
+						name: "fileName",
+						url: "fileUrl",
+					})
 				)
 			),
 		};
@@ -76,17 +79,14 @@ describe("useCommonCartridgeImport composable", () => {
 
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
-				(fileStorageApiMock.upload as Mock).mockImplementation(() =>
-					Promise.resolve({ data: { id: "fileId", name: "fileName", url: "fileUrl" } })
-				);
-				(commonCartridgeApiMock.commonCartridgeControllerImportCourse as Mock).mockImplementation(() =>
-					Promise.resolve({})
-				);
-
 				await importCommonCartridgeFile(file);
 
-				expect(fileStorageApiMock.upload).toHaveBeenCalled();
-				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).toHaveBeenCalledTimes(1);
+				expect(fileStorageApiMock.upload).toHaveBeenCalledWith("schoolId", "school", "userId", "users", file);
+				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).toHaveBeenCalledWith({
+					fileRecordId: "fileId",
+					fileName: "fileName",
+					fileUrl: "fileUrl",
+				});
 				expect(isSuccess.value).toBe(true);
 			});
 
@@ -95,11 +95,10 @@ describe("useCommonCartridgeImport composable", () => {
 
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
-				(fileStorageApiMock.upload as Mock).mockImplementation(() => Promise.reject(new Error("Upload failed")));
-
+				(fileStorageApiMock.upload as Mock).mockRejectedValueOnce(new Error("Upload failed"));
 				await importCommonCartridgeFile(file);
 
-				expect(fileStorageApiMock.upload).toHaveBeenCalled();
+				expect(fileStorageApiMock.upload).toHaveBeenCalledWith("schoolId", "school", "userId", "users", file);
 				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).not.toHaveBeenCalled();
 				expect(isSuccess.value).toBe(false);
 			});

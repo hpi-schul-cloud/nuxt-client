@@ -1,5 +1,3 @@
-// import { CommonCartridgeApiFactory } from "@/commonCartridgeApi/v3";
-// import { FileApiFactory, FileRecordParentType, StorageLocation } from "@/fileStorageApi/v3";
 import { $axios } from "@/utils/api";
 import { CommonCartridgeApiFactory } from "@api-common-cartridge";
 import { FileApiFactory, FileRecordParentType, StorageLocation } from "@api-file-storage";
