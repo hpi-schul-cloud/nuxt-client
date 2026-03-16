@@ -46,15 +46,14 @@
 		</DataTable>
 	</div>
 	<ChangeRole v-model="isChangeRoleDialogOpen" :members="membersToChangeRole" @close="onDialogClose" />
-	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import ChangeRole from "../dialogs/ChangeRole.vue";
+import { askConfirmation } from "@/utils/confirm-dialog.utils";
 import { RoleName } from "@api-server";
 import { RoomMember, useRoomAllowedOperations, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
@@ -79,7 +78,6 @@ const roomMembersStore = useRoomMembersStore();
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 
 const { fetchMembers, removeMembers } = roomMembersStore;
-const { askConfirmation } = useConfirmationDialog();
 
 const tableData = computed(() => roomMembersWithoutApplicants.value as unknown as Record<string, unknown>[]);
 const isChangeRoleDialogOpen = ref(false);
@@ -98,21 +96,13 @@ const onDialogClose = () => {
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
-	const shouldRemove = await confirmRemoval(userIds);
-	if (shouldRemove) await removeMembers(userIds);
-};
-
-const confirmRemoval = async (userIds: string[]) => {
-	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	let title = t("pages.rooms.members.multipleRemove.confirmation");
 	if (userIds.length === 1) {
 		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
-		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
+		title = t("pages.rooms.members.remove.confirmation", { memberFullName });
 	}
-	const shouldRemove = await askConfirmation({
-		message,
-		confirmActionLangKey: "common.actions.remove",
-	});
-	return shouldRemove;
+	const shouldRemove = await askConfirmation({ title, confirmBtnKey: "common.actions.remove" });
+	if (shouldRemove) await removeMembers(userIds);
 };
 
 const onChangePermission = (userIds: string[]) => {
