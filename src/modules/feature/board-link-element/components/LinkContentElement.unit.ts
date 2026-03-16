@@ -2,6 +2,7 @@ import { MetaTagResult, useMetaTagExtractorApi } from "../composables/MetaTagExt
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -10,7 +11,7 @@ import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
 import { computed, nextTick, ref } from "vue";
 
@@ -331,6 +332,7 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
@@ -339,6 +341,7 @@ describe("LinkContentElement", () => {
 
 					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
+					await flushPromises();
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
@@ -516,12 +519,14 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
 					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
 					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
+					await flushPromises();
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});

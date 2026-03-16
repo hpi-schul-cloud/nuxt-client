@@ -1,17 +1,18 @@
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { DrawingElementResponse } from "@api-server";
 import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 import { mock } from "vitest-mock-extended";
 
 // Mocks
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: vi.fn(),
 }));
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
@@ -219,6 +220,7 @@ describe("DrawingContentElement", () => {
 			});
 
 			it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,
@@ -229,6 +231,7 @@ describe("DrawingContentElement", () => {
 
 				const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 				await menuItem.trigger("click");
+				await flushPromises();
 
 				expect(wrapper.emitted()).toHaveProperty("delete:element");
 			});

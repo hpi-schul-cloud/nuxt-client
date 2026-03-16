@@ -2,6 +2,7 @@ import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { VideoConferenceState } from "@/store/types/video-conference";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
@@ -402,6 +403,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and delete menu item is clicked", () => {
 					it("should emit 'delete:element' event", async () => {
+						vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
 						const videoConferenceElementContent = videoConferenceElementContentFactory.build();
 						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContent,
@@ -412,7 +414,7 @@ describe("VideoConferenceContentElement", () => {
 						await menuBtn.trigger("click");
 
 						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-						menuItem.vm.$emit("click", Promise.resolve(true));
+						await menuItem.trigger("click");
 						await flushPromises();
 
 						expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -607,6 +609,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and delete menu item is clicked", () => {
 					it("should emit 'delete:element' event", async () => {
+						vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
 						const { wrapper } = setupWrapper({
 							isEditMode: true,
 						});
@@ -615,7 +618,7 @@ describe("VideoConferenceContentElement", () => {
 						await menuBtn.trigger("click");
 
 						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-						menuItem.vm.$emit("click", Promise.resolve(true));
+						await menuItem.trigger("click");
 						await flushPromises();
 
 						expect(wrapper.emitted()).toHaveProperty("delete:element");
