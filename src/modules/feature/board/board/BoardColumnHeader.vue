@@ -35,7 +35,7 @@
 						<KebabMenuActionMoveLeft v-if="isNotFirstColumn" @click="onMoveColumnLeft" />
 						<KebabMenuActionMoveRight v-if="isNotLastColumn" @click="onMoveColumnRight" />
 					</template>
-					<KebabMenuActionDelete :name="title" scope-language-key="components.boardColumn" @click="onDelete" />
+					<KebabMenuActionDelete :name="title" @click="onDelete" />
 				</BoardMenu>
 			</div>
 		</div>
@@ -46,6 +46,7 @@
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import { askDeletionByType } from "@/utils/confirm-dialog.utils";
 import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
@@ -103,8 +104,8 @@ const onEndEditMode = () => {
 	stopEditMode();
 };
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionByType("components.boardColumn");
 	if (shouldDelete) {
 		emit("delete:column", props.columnId);
 	}

@@ -14,12 +14,7 @@
 			v-if="isRoomShareFeatureEnabled && allowedOperations.shareRoom"
 			@click="() => $emit('room:share')"
 		/>
-		<KebabMenuActionDelete
-			v-if="allowedOperations.deleteRoom"
-			scope-language-key="common.labels.room"
-			:name="roomName"
-			@click="onDeleteRoom"
-		/>
+		<KebabMenuActionDelete v-if="allowedOperations.deleteRoom" :name="roomName" @click="onDeleteRoom" />
 		<KebabMenuActionLeaveRoom @click="() => $emit('room:leave')" />
 	</KebabMenu>
 </template>

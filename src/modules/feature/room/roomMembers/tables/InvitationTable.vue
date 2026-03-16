@@ -42,7 +42,6 @@
 						@click="onOpenShareModal(item.id)"
 					/>
 					<KebabMenuActionDelete
-						scope-language-key="pages.rooms.invitationLinkStatus.title"
 						:name="item.title"
 						:data-testid="`menu-delete-button-${item.id}`"
 						@click="onDeleteLinks([item.id])"

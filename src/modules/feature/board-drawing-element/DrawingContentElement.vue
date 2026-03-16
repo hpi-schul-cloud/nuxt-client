@@ -22,10 +22,7 @@
 					>
 						<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveDrawingElementEditUp" />
 						<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDrawingElementEditDown" />
-						<KebabMenuActionDelete
-							scope-language-key="components.cardElement.drawingElement"
-							@click="onDeleteElement"
-						/>
+						<KebabMenuActionDelete @click="onDeleteElement" />
 					</BoardMenu>
 				</template>
 			</InnerContent>
@@ -35,6 +32,7 @@
 
 <script setup lang="ts">
 import InnerContent from "./InnerContent.vue";
+import { askDeletionByType } from "@/utils/confirm-dialog.utils";
 import { DrawingElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
@@ -77,8 +75,8 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 const onMoveDrawingElementEditDown = () => emit("move-down:edit");
 const onMoveDrawingElementEditUp = () => emit("move-up:edit");
-const onDeleteElement = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDeleteElement = async () => {
+	const shouldDelete = await askDeletionByType("components.cardElement.drawingElement");
 	if (shouldDelete) {
 		emit("delete:element", props.element.id);
 	}

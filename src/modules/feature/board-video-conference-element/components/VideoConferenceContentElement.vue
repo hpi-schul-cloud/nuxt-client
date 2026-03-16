@@ -33,7 +33,7 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.videoConferenceElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementDisplay>
 		<VideoConferenceContentElementCreate v-if="isCreating" @create:title="onCreateTitle">
@@ -44,7 +44,7 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.videoConferenceElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
 		<VDialog
@@ -84,6 +84,7 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
+import { askDeletionByType } from "@/utils/confirm-dialog.utils";
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import {
@@ -198,8 +199,9 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 const onMoveDown = () => emit("move-down:edit");
 const onMoveUp = () => emit("move-up:edit");
-const onDelete = async (confirmation: Promise<boolean>) => {
-	if (await confirmation) emit("delete:element", computedElement.value.id);
+const onDelete = async () => {
+	if (await askDeletionByType("components.cardElement.videoConferenceElement"))
+		emit("delete:element", computedElement.value.id);
 };
 const onStartVideoConference = async () => {
 	const logoutUrl: URL = new URL(`/boards/${boardId}`, window.location.origin);
