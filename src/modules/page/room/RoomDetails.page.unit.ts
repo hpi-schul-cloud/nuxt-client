@@ -2,9 +2,9 @@ import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestRoomStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -13,13 +13,11 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
-import { VueWrapper } from "@vue/test-utils";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { useRouter } from "vue-router";
 import { VBreadcrumbsItem, VBtn, VCard, VFab } from "vuetify/components";
 
@@ -31,19 +29,9 @@ vi.mock("vue-router", () => ({
 
 vi.mock("@data-room/Rooms.state");
 
-vi.mock("@ui-confirmation-dialog");
-vi.mocked(useConfirmationDialog);
-
 describe("@pages/RoomsDetails.page.vue", () => {
-	let askConfirmationMock: Mock;
-
 	beforeEach(() => {
 		vi.useFakeTimers();
-
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
 	});
 
 	afterEach(() => {
@@ -200,23 +188,25 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("when a user clicks on leave room", () => {
 			describe("and user has permission to leave room", () => {
 				it("should call leaveRoom when dialog confirmed", async () => {
-					askConfirmationMock.mockResolvedValue(true);
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 					const { wrapper, roomStore } = setup({
 						allowedOperations: { accessRoom: true, leaveRoom: true, viewContent: true },
 					});
 
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:leave");
+					await flushPromises();
 
 					expect(roomStore.leaveRoom).toHaveBeenCalled();
 				});
 
-				it("should not call leaveRoom when dialog canceled", () => {
-					askConfirmationMock.mockResolvedValue(false);
+				it("should not call leaveRoom when dialog canceled", async () => {
+					vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 					const { wrapper, roomStore } = setup({ allowedOperations: { accessRoom: true, leaveRoom: true } });
 
 					const menu = wrapper.getComponent(RoomMenu);
-					menu.vm.$emit("room:leave");
+					await menu.vm.$emit("room:leave");
+					await flushPromises();
 
 					expect(roomStore.leaveRoom).not.toHaveBeenCalled();
 				});

@@ -25,7 +25,6 @@
 			</template>
 		</EmptyState>
 		<RoomContentGrid :room-id="room.id" :boards="visibleBoards" />
-		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
 			v-if="allowedOperations.editContent"
 			v-model="boardLayoutDialogIsOpen"
@@ -42,13 +41,13 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
+import { askConfirmation } from "@/utils/confirm-dialog.utils";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import { useRoomAllowedOperations, useRoomDetailsStore, useRoomStore } from "@data-room";
 import { RoomContentGrid, RoomCopyFlow, RoomMenu } from "@feature-room";
 import { mdiPlus } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { EmptyState, LearningContentEmptyStateSvg } from "@ui-empty-state";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog, SelectBoardLayoutDialog } from "@ui-room-details";
@@ -65,8 +64,6 @@ const room = toRef(props, "room");
 const router = useRouter();
 const { t } = useI18n();
 const shareModule = injectStrict(SHARE_MODULE_KEY);
-
-const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { leaveRoom, deleteRoom } = useRoomStore();
@@ -185,15 +182,13 @@ const onLeaveRoom = async () => {
 	const roomId = room.value.id;
 
 	const shouldLeave = await askConfirmation({
-		message: t("pages.rooms.leaveRoom.confirmation", {
+		title: t("pages.rooms.leaveRoom.confirmation", {
 			roomName: room.value.name,
 		}),
-		confirmActionLangKey: "common.actions.leave",
+		confirmBtnKey: "common.actions.leave",
 	});
 
-	if (!shouldLeave) {
-		return;
-	}
+	if (!shouldLeave) return;
 	await leaveRoom(roomId);
 	router.push("/rooms");
 };
