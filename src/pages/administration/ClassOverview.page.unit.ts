@@ -1,4 +1,5 @@
 import ClassOverview from "./ClassOverview.page.vue";
+import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
@@ -17,7 +18,7 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -497,26 +498,6 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the delete class button", () => {
 			const setup = () => {
-				const { wrapper } = createWrapper({});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should open the delete dialog", async () => {
-				const { wrapper } = setup();
-
-				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
-				await nextTick();
-
-				const dialog = wrapper.findComponent({ name: "CustomDialog" });
-				expect(dialog.vm.isOpen).toBe(true);
-			});
-		});
-
-		describe("when delete dialog is open", () => {
-			const setup = () => {
 				const { wrapper, groupModule } = createWrapper({});
 
 				return {
@@ -525,32 +506,29 @@ describe("ClassOverview", () => {
 				};
 			};
 
-			describe("when clicking on cancel button", () => {
-				it("should not delete class", async () => {
-					const { wrapper, groupModule } = setup();
+			it("should call deleteClass when confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+				const { wrapper, groupModule } = setup();
 
-					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
+				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
+				await flushPromises();
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
-
-					expect(groupModule.deleteClass).not.toHaveBeenCalled();
+				expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
+					title: "pages.administration.classes.deleteDialog.title",
+					message: "pages.administration.classes.deleteDialog.content",
+					itemName: expect.any(String),
 				});
+				expect(groupModule.deleteClass).toHaveBeenCalled();
 			});
 
-			describe("when clicking on confirm button", () => {
-				it("should delete class", async () => {
-					const { wrapper, groupModule } = setup();
+			it("should not call deleteClass when cancelled", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+				const { wrapper, groupModule } = setup();
 
-					await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
+				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
+				await flushPromises();
 
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
-
-					expect(groupModule.deleteClass).toHaveBeenCalled();
-				});
+				expect(groupModule.deleteClass).not.toHaveBeenCalled();
 			});
 		});
 	});
