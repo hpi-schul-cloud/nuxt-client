@@ -39,7 +39,7 @@ describe("useInternalConfirmationDialog", () => {
 	});
 
 	describe("cancel", () => {
-		it("should resolve the promise with trueshould close the dialog", async () => {
+		it("should resolve the promise with false and close the dialog", async () => {
 			const { askInternal, cancel, isDialogOpen } = useInternalConfirmationDialog();
 
 			const askPromise = askInternal({ title: "Test" });
