@@ -1,31 +1,34 @@
 import NewsCreatePage from "./NewsCreate.page.vue";
-import { CreateNewsParamsTargetModelEnum, NewsApiInterface } from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3";
 import { initializeAxios } from "@/utils/api";
-import { createTestAppStoreWithSchool, expectNotification, newsResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithSchool,
+	expectNotification,
+	mockApi,
+	mockApiResponse,
+	mockAxiosInstance,
+	newsResponseFactory,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CreateNewsParamsTargetModel, NewsApiInterface } from "@api-server";
+import * as serverApi from "@api-server";
 import { NewsForm } from "@feature-news";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance, HttpStatusCode } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { LocationQuery, Router, useRoute, useRouter } from "vue-router";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
+import { Mocked } from "vitest";
+import { LocationQuery } from "vue-router";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("NewsCreatePage", () => {
-	let newsApi: DeepMocked<NewsApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let newsApi: Mocked<NewsApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
-		newsApi = createMock<NewsApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		newsApi = mockApi<NewsApiInterface>();
+		axiosMock = mockAxiosInstance();
 		vi.spyOn(serverApi, "NewsApiFactory").mockReturnValue(newsApi);
 		initializeAxios(axiosMock);
 	});
@@ -35,12 +38,10 @@ describe("NewsCreatePage", () => {
 	});
 
 	const setup = (options?: Partial<{ query: LocationQuery }>) => {
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue({
-			path: "news/new",
-			query: options?.query || {},
-		});
+		const router = createRouterMock();
+		injectRouterMock(router);
+		router.replace({ path: "news/new", query: options?.query || {} });
+		vi.spyOn(router, "go");
 
 		const wrapper = mount(NewsCreatePage, {
 			attachTo: document.body,
@@ -73,11 +74,11 @@ describe("NewsCreatePage", () => {
 		},
 		{
 			condition: "context is valid but contextId is missing",
-			query: { context: CreateNewsParamsTargetModelEnum.Teams },
+			query: { context: CreateNewsParamsTargetModel.TEAMS },
 		},
 		{
 			condition: "targetmodel is valid but target is missing",
-			query: { targetmodel: CreateNewsParamsTargetModelEnum.Courses },
+			query: { targetmodel: CreateNewsParamsTargetModel.COURSES },
 		},
 	] as { condition: string; query: LocationQuery }[])(
 		"should handle application error when $condition",
@@ -104,9 +105,18 @@ describe("NewsCreatePage", () => {
 				displayAt: new Date().toISOString(),
 			};
 
+			const createdNewsResponse = newsResponseFactory.build();
+
+			beforeEach(() => {
+				newsApi.newsControllerCreate.mockResolvedValue(
+					mockApiResponse<serverApi.NewsResponse>({ data: createdNewsResponse })
+				);
+			});
+
 			it("should create news with context and contextId from query params", () => {
-				const query = { contextId: "123", context: CreateNewsParamsTargetModelEnum.Teams };
+				const query = { contextId: "123", context: CreateNewsParamsTargetModel.TEAMS };
 				const { wrapper } = setup({ query });
+
 				const newsForm = wrapper.getComponent(NewsForm);
 
 				newsForm.vm.$emit("save", createParams);
@@ -121,7 +131,7 @@ describe("NewsCreatePage", () => {
 			});
 
 			it("should create news with target and targetmodel from query params", () => {
-				const query = { target: "456", targetmodel: CreateNewsParamsTargetModelEnum.Courses };
+				const query = { target: "456", targetmodel: CreateNewsParamsTargetModel.COURSES };
 				const { wrapper } = setup({ query });
 				const newsForm = wrapper.getComponent(NewsForm);
 
@@ -147,22 +157,19 @@ describe("NewsCreatePage", () => {
 					content: createParams.content,
 					displayAt: createParams.displayAt,
 					targetId: schoolId,
-					targetModel: CreateNewsParamsTargetModelEnum.Schools,
+					targetModel: CreateNewsParamsTargetModel.SCHOOLS,
 				});
 			});
 
 			it("should notify success and navigate to news details page after successful creation", async () => {
 				const { wrapper } = setup();
-				const createdNewsResponse = newsResponseFactory.build();
-				newsApi.newsControllerCreate.mockResolvedValue({ data: createdNewsResponse });
-
 				const newsForm = wrapper.getComponent(NewsForm);
 
 				newsForm.vm.$emit("save", createParams);
 				await flushPromises();
 
 				expectNotification("success");
-				expect(useRouterMock().push).toHaveBeenCalledWith({ path: `/news/${createdNewsResponse.id}` });
+				expect(getRouter().push).toHaveBeenCalledWith({ path: `/news/${createdNewsResponse.id}` });
 			});
 
 			it("should not navigate to news details page if update was not successfull", async () => {
@@ -175,7 +182,7 @@ describe("NewsCreatePage", () => {
 				newsForm.vm.$emit("save", createParams);
 				await flushPromises();
 
-				expect(useRouterMock().push).not.toHaveBeenCalled();
+				expect(getRouter().push).not.toHaveBeenCalled();
 				expectNotification("error");
 
 				consoleErrorSpy.mockRestore();
@@ -191,7 +198,7 @@ describe("NewsCreatePage", () => {
 			newsForm.vm.$emit("cancel");
 			await flushPromises();
 
-			expect(useRouterMock().go).toHaveBeenCalled();
+			expect(getRouter().go).toHaveBeenCalled();
 		});
 	});
 });

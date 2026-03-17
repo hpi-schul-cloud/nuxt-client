@@ -1,38 +1,30 @@
 import RoomsOverview from "./RoomsOverview.page.vue";
-import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	courseInfoDataResponseFactory,
 	createTestAppStoreWithPermissions,
 	createTestEnvStore,
+	mockComposable,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@api-server";
 import { useCourseApi, useCourseList } from "@data-room";
 import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VDataTableServer } from "vuetify/lib/components/index";
-
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
 
 vi.mock("@data-room", () => ({
 	useCourseList: vi.fn(),
 	useCourseApi: vi.fn(),
 }));
 
-const useRouteMock = <Mock>useRoute;
-const useRouterMock = <Mock>useRouter;
-
 describe("RoomsOverview", () => {
-	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
+	let useCourseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
 
 	const createWrapper = ({
 		tab = "current",
@@ -51,23 +43,18 @@ describe("RoomsOverview", () => {
 		pagination?: { limit: number; skip: number; total: number };
 		envs?: Partial<ConfigResponse>;
 	} = {}) => {
-		const route = { query: { tab } };
-		useRouteMock.mockReturnValue(route);
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
+		const { router } = injectRouterMock(createRouterMock());
+		const route = router.currentRoute.value;
 		setActivePinia(createTestingPinia({ stubActions: false }));
-		createTestAppStoreWithPermissions([Permission.CourseAdministration]);
+		createTestAppStoreWithPermissions([Permission.COURSE_ADMINISTRATION]);
 
 		createTestEnvStore({
 			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 			...envs,
 		});
 
-		const useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>> = createMock<
-			ReturnType<typeof useCourseList>
-		>({
-			isLoading: ref(),
+		const useCourseListMock = mockComposable(useCourseList, {
+			isLoading: ref(false),
 			pagination: ref(pagination),
 			page: ref(page),
 			courses: ref(courses),
@@ -105,7 +92,7 @@ describe("RoomsOverview", () => {
 		wrapper.findComponent<typeof VDataTableServer>('[data-testid="admin-rooms-table"]');
 
 	beforeEach(() => {
-		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
+		useCourseApiMock = mockComposable(useCourseApi, {
 			startSynchronization: vi.fn(),
 			stopSynchronization: vi.fn(),
 		});
@@ -809,8 +796,8 @@ describe("RoomsOverview", () => {
 		};
 
 		it.each([
-			[SchulcloudTheme.Default, "Dataport"],
-			[SchulcloudTheme.Brb, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
+			[SchulcloudTheme.DEFAULT, "Dataport"],
+			[SchulcloudTheme.BRB, "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"],
 			[SchulcloudTheme.N21, "Niedersächsisches Landesinstitut für schulische Qualitätsentwicklung (NLQ)"],
 		])("uses %s-instance specific text placeholders", async (theme, expected) => {
 			const { wrapper } = setup({

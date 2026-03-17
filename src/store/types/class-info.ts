@@ -44,6 +44,6 @@ export interface CourseInfo {
 }
 
 export enum ClassRootType {
-	Class = "class",
-	Group = "group",
+	CLASS = "class",
+	GROUP = "group",
 }

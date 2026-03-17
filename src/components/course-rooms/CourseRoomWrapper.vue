@@ -25,8 +25,8 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import { Permission } from "@/serverApi/v3";
 import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
@@ -52,7 +52,7 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
-const canCreateCourse = useAppStore().hasPermission(Permission.CourseCreate);
+const canCreateCourse = useAppStore().hasPermission(Permission.COURSE_CREATE);
 
 const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	if (!canCreateCourse.value) return;

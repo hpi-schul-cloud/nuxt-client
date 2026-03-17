@@ -19,7 +19,7 @@
 				{{
 					termsOfUse
 						? t("pages.administration.school.index.termsOfUse.uploadedOn", {
-								date: formatDate(termsOfUse.publishedAt),
+								date: formatRecentOrActual(termsOfUse.publishedAt),
 							})
 						: t("pages.administration.school.index.termsOfUse.notUploadedYet")
 				}}
@@ -70,11 +70,11 @@
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import { formatDateForAlerts } from "@/plugins/datetime";
-import { Permission } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
+import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
@@ -98,9 +98,7 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
-
-const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
 
 const downloadTerms = () => {
 	if (termsOfUse.value) {

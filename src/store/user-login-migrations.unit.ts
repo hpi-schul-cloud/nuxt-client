@@ -2,12 +2,6 @@ import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { UserLoginMigration } from "./user-login-migration";
 import UserLoginMigrationModule from "./user-login-migrations";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	UserLoginMigrationApiInterface,
-	UserLoginMigrationResponse,
-	UserLoginMigrationSearchListResponse,
-} from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
@@ -17,24 +11,31 @@ import {
 	createTestAppStore,
 	createTestAppStoreWithSchool,
 	createTestAppStoreWithUser,
+	mockApi,
 	mockApiResponse,
 	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import * as serverApi from "@api-server";
+import {
+	UserLoginMigrationApiInterface,
+	UserLoginMigrationResponse,
+	UserLoginMigrationSearchListResponse,
+} from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
 
-	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
+	let apiMock: Mocked<UserLoginMigrationApiInterface>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		module = new UserLoginMigrationModule({});
 
-		apiMock = createMock<UserLoginMigrationApiInterface>();
+		apiMock = mockApi<UserLoginMigrationApiInterface>();
 
 		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(apiMock);
 	});

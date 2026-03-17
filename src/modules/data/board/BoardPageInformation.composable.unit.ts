@@ -2,11 +2,11 @@ import { useBoardStore } from "./Board.store";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
-import { boardResponseFactory } from "@@/tests/test-utils";
+import { boardResponseFactory, mockComposable } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("./BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
@@ -27,14 +27,14 @@ vi.mock("vue-i18n", () => ({
 }));
 
 describe("BoardPageInformation.composable", () => {
-	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
+	let mockedBoardApiCalls: Mocked<ReturnType<typeof useBoardApi>>;
 
 	beforeEach(() => {
 		mockedUseBoardStore.mockReturnValue({ board: boardResponseFactory.build() } as ReturnType<typeof useBoardStore>);
 
 		setActivePinia(createTestingPinia());
 
-		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		mockedBoardApiCalls = mockComposable(useBoardApi);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});
 
@@ -47,7 +47,7 @@ describe("BoardPageInformation.composable", () => {
 			const setup = () => {
 				mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 					id: "courseId",
-					type: BoardContextType.Course,
+					type: BoardContextType.COURSE,
 					name: "Course #1",
 				});
 
@@ -101,7 +101,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(contextType.value).toEqual(BoardContextType.Course);
+				expect(contextType.value).toEqual(BoardContextType.COURSE);
 			});
 		});
 
@@ -109,7 +109,7 @@ describe("BoardPageInformation.composable", () => {
 			const setup = () => {
 				mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 					id: "roomId",
-					type: BoardContextType.Room,
+					type: BoardContextType.ROOM,
 					name: "Room #1",
 				});
 
@@ -163,7 +163,7 @@ describe("BoardPageInformation.composable", () => {
 
 				await createPageInformation(fakeId);
 
-				expect(contextType.value).toEqual(BoardContextType.Room);
+				expect(contextType.value).toEqual(BoardContextType.ROOM);
 			});
 		});
 	});

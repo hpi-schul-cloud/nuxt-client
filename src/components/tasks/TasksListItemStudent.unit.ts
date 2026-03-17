@@ -1,16 +1,16 @@
 import TasksListItemStudent from "./TasksListItemStudent.vue";
-import {
-	printDateFromStringUTC as dateFromUTC,
-	printDateTimeFromStringUTC as dateTimeFromUTC,
-} from "@/plugins/datetime";
 import CopyModule from "@/store/copy";
 import TasksModule from "@/store/tasks";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { formatUtc } from "@/utils/date-time.utils";
+import { COPY_MODULE_KEY, TASKS_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { beforeAll } from "vitest";
 import { ComponentProps } from "vue-component-type-helpers";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } = mocks;
@@ -27,7 +27,7 @@ const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				tasksModule: tasksModuleMock,
+				[TASKS_MODULE_KEY.valueOf()]: tasksModuleMock,
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 			},
 		},
@@ -38,17 +38,22 @@ const getWrapper = (props: ComponentProps<typeof TasksListItemStudent>) =>
 	});
 
 describe("TasksListItemStudent", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
+	});
+
 	beforeEach(() => {
 		tasksModuleMock = createModuleMocks(TasksModule);
 		copyModuleMock = createModuleMocks(CopyModule);
 	});
 
 	it("Should direct user to legacy task details page", async () => {
+		const locationSpy = vi.fn();
 		Object.defineProperty(window, "location", {
-			set: vi.fn(),
-			get: () => createMock<Location>(),
+			set: locationSpy,
+			get: () => ({}),
 		});
-		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasks[0] });
 		const taskCard = wrapper.findComponent({ name: "v-list-item" });
@@ -67,7 +72,7 @@ describe("TasksListItemStudent", () => {
 	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
+		const convertedDueDate = formatUtc(tasks[0].dueDate, "dateTimeYY");
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
@@ -131,7 +136,7 @@ describe("TasksListItemStudent", () => {
 
 		wrapper.vm.$vuetify.display.xs = true;
 
-		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
+		const convertedDueDate = formatUtc(tasks[0].dueDate, "dateYY");
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);

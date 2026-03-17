@@ -1,11 +1,15 @@
 import { useFolderState } from "./Folder.state";
-import * as serverApi from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { axiosErrorFactory, fileFolderElementResponseFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
+import {
+	axiosErrorFactory,
+	fileFolderElementResponseFactory,
+	mockApi,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
 import { useAppStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosPromise } from "axios";
 import { setActivePinia } from "pinia";
@@ -21,7 +25,7 @@ describe("useFolderState", () => {
 	});
 
 	const setup = (props?: { element?: unknown; parentNodeInfos?: ParentNodeInfo[] }) => {
-		const boardApi = createMock<serverApi.BoardElementApiInterface>();
+		const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 		const folderElement = fileFolderElementResponseFactory.build();
 		const parentNodeInfos = parentNodeInfoFactory.build();
 
@@ -69,7 +73,7 @@ describe("useFolderState", () => {
 
 			describe("when element is not a file folder element", () => {
 				const setupWithError = (statusCode: HttpStatusCode) => {
-					const boardApi = createMock<serverApi.BoardElementApiInterface>();
+					const boardApi = mockApi<serverApi.BoardElementApiInterface>();
 
 					const axiosError = axiosErrorFactory.withStatusCode(statusCode).build();
 
@@ -131,12 +135,12 @@ describe("useFolderState", () => {
 							{
 								id: "course-id",
 								name: "Course",
-								type: ParentNodeType.Course,
+								type: ParentNodeType.COURSE,
 							},
 							{
 								id: "column-board-id",
 								name: "Column Board",
-								type: ParentNodeType.Board,
+								type: ParentNodeType.BOARD,
 							},
 						],
 					});
@@ -173,7 +177,7 @@ describe("useFolderState", () => {
 							{
 								id: "room-id",
 								name: "Room",
-								type: ParentNodeType.Room,
+								type: ParentNodeType.ROOM,
 							},
 						],
 					});
@@ -206,7 +210,7 @@ describe("useFolderState", () => {
 							{
 								id: "user-id",
 								name: "User",
-								type: ParentNodeType.User,
+								type: ParentNodeType.USER,
 							},
 						],
 					});
@@ -226,8 +230,8 @@ describe("useFolderState", () => {
 		it("should return the last parent node when parentNodeInfos is populated", async () => {
 			const { testId } = setup({
 				parentNodeInfos: [
-					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.Room },
-					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.Course },
+					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.ROOM },
+					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.COURSE },
 				],
 			});
 
@@ -238,7 +242,7 @@ describe("useFolderState", () => {
 			expect(parent.value).toEqual({
 				id: "parent-2",
 				name: "Parent 2",
-				type: ParentNodeType.Course,
+				type: ParentNodeType.COURSE,
 			});
 		});
 
@@ -256,17 +260,17 @@ describe("useFolderState", () => {
 	describe("mapNodeTypeToPathType", () => {
 		it('should return "courses" for ParentNodeType.Course', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Course)).toBe("courses");
+			expect(mapNodeTypeToPathType(ParentNodeType.COURSE)).toBe("courses");
 		});
 
 		it('should return "rooms" for ParentNodeType.Room', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Room)).toBe("rooms");
+			expect(mapNodeTypeToPathType(ParentNodeType.ROOM)).toBe("rooms");
 		});
 
 		it('should return "boards" for ParentNodeType.Board', () => {
 			const { mapNodeTypeToPathType } = useFolderState();
-			expect(mapNodeTypeToPathType(ParentNodeType.Board)).toBe("boards");
+			expect(mapNodeTypeToPathType(ParentNodeType.BOARD)).toBe("boards");
 		});
 
 		it("should throw an error for an unknown node type", () => {

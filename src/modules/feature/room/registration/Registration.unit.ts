@@ -2,17 +2,15 @@ import Registration from "./Registration.vue";
 import Consent from "./steps/Consent.vue";
 import LanguageSelection from "./steps/LanguageSelection.vue";
 import Password from "./steps/Password.vue";
-import { LanguageType } from "@/serverApi/v3";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { useRegistrationStepper, useRegistrationStore } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VStepper, VStepperItem } from "vuetify/components";
 
 vi.mock("vue-i18n", async () => {
@@ -25,10 +23,6 @@ vi.mock("vue-i18n", async () => {
 		}),
 	};
 });
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
 
 vi.mock("@data-room/registration/registrationStepper.composable");
 const useRegistrationStepperMock = vi.mocked(useRegistrationStepper);
@@ -49,7 +43,7 @@ describe("Registration.vue", () => {
 		}>
 	) => {
 		useRegistrationStepperMock.mockReturnValue({
-			selectedLanguage: ref(LanguageType.De),
+			selectedLanguage: ref(LanguageType.DE),
 			password: ref(options?.password ?? ""),
 			isPrivacyPolicyAccepted: ref(false),
 			isTermsOfUseAccepted: ref(false),
@@ -67,13 +61,9 @@ describe("Registration.vue", () => {
 		};
 		registrationStore.hasApiErrorOccurred = options?.hasApiErrorOccurred ?? false;
 
-		const router = createMock<Router>({});
-		useRouterMock.mockReturnValue(router);
-		useRouteMock.mockReturnValue({
-			query: {
-				"registration-secret": options?.queryParams ?? "secret-value",
-			},
-		});
+		const router = createRouterMock();
+		router.setQuery({ "registration-secret": options?.queryParams ?? "secret-value" });
+		injectRouterMock(router);
 
 		const wrapper = mount(Registration, {
 			attachTo: document.body,
@@ -90,7 +80,7 @@ describe("Registration.vue", () => {
 		const { wrapper, useRegistrationStepper } = setup();
 		expect(wrapper).toBeDefined();
 		expect(useRegistrationStepper.initializeLanguage).toHaveBeenCalled();
-		expect(useRegistrationStepper.selectedLanguage.value).toStrictEqual(LanguageType.De);
+		expect(useRegistrationStepper.selectedLanguage.value).toStrictEqual(LanguageType.DE);
 	});
 
 	describe("Stepper Component", () => {
@@ -206,10 +196,10 @@ describe("Registration.vue", () => {
 				const { wrapper, useRegistrationStepper } = setup();
 				const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
 
-				languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.En);
+				languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.EN);
 				await nextTick();
 
-				expect(useRegistrationStepper.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.En);
+				expect(useRegistrationStepper.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.EN);
 			});
 
 			it("should have default language as German even if the selectedLanguage's value is undefined", () => {
@@ -217,7 +207,7 @@ describe("Registration.vue", () => {
 				useRegistrationStepper.selectedLanguage.value = undefined;
 				const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
 
-				expect(languageSelectionComponent.props("selectedLanguage")).toBe(LanguageType.De);
+				expect(languageSelectionComponent.props("selectedLanguage")).toBe(LanguageType.DE);
 			});
 		});
 

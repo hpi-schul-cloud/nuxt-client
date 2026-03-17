@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@/serverApi/v3";
+import { ExternalToolMediumResponse, ExternalToolMediumStatus } from "@api-server";
 import { notifyError, notifySuccess } from "@data-app";
 import { mdiContentCopy } from "@icons/material";
 import { computed, ComputedRef, Ref, toRef } from "vue";
@@ -47,7 +47,7 @@ const { t } = useI18n();
 const medium: Ref<ExternalToolMediumResponse> = toRef(props, "selectedTemplateMedium");
 
 const isMediumTemplate: ComputedRef<boolean> = computed(
-	() => medium.value.status === ExternalToolMediumStatus.Template
+	() => medium.value.status === ExternalToolMediumStatus.TEMPLATE
 );
 
 const copyDetailToClipboard = (text: string | undefined) => {

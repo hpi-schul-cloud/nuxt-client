@@ -66,7 +66,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				it("should show 'not enabled for teacher' alert", () => {
 					const wrapper = setupWrapper({
 						propsData: {
-							boardParentType: BoardContextType.Course,
+							boardParentType: BoardContextType.COURSE,
 							isRunning: false,
 							isVideoConferenceEnabled: false,
 							hasParticipationPermission: true,
@@ -85,7 +85,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				it("should show 'not enabled for teacher' alert", () => {
 					const wrapper = setupWrapper({
 						propsData: {
-							boardParentType: BoardContextType.Room,
+							boardParentType: BoardContextType.ROOM,
 							isRunning: false,
 							isVideoConferenceEnabled: false,
 							hasParticipationPermission: true,

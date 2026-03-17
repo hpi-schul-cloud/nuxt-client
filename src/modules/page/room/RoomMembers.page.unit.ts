@@ -1,5 +1,4 @@
 import RoomMembersPage from "./RoomMembers.page.vue";
-import { ConfigResponse, RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
@@ -9,6 +8,7 @@ import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { ConfigResponse, RoleName, RoomDetailsResponse } from "@api-server";
 import {
 	InvitationStep,
 	useRegistrationStore,
@@ -24,7 +24,6 @@ import {
 	InviteMembersDialog,
 	Members,
 } from "@feature-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -36,12 +35,8 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VCard, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
 
 vi.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
@@ -51,8 +46,7 @@ vi.mock("@vueuse/integrations/useFocusTrap", () => ({
 }));
 
 describe("RoomMembersPage", () => {
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
+	let router: RouterMock;
 	let askConfirmationMock: Mock;
 
 	let pauseMock: Mock;
@@ -78,17 +72,9 @@ describe("RoomMembersPage", () => {
 			})
 		);
 
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-		useRouteMock.mockReturnValue({
-			params: { id: routeRoomId },
-		});
-
-		router = createMock<Router>({
-			currentRoute: ref({ query: { tab: "" } }),
-			replace: vi.fn(),
-		});
-		useRouterMock.mockReturnValue(router);
+		router = createRouterMock();
+		router.setParams({ id: routeRoomId });
+		injectRouterMock(router);
 
 		askConfirmationMock = vi.fn();
 		setupConfirmationComposableMock({
@@ -125,7 +111,7 @@ describe("RoomMembersPage", () => {
 
 		const room = createRoom ? roomFactory.build({ allowedOperations }) : undefined;
 
-		const members = roomMemberFactory.buildList(3, { roomRoleName: RoleName.Roomeditor }).map((member) => ({
+		const members = roomMemberFactory.buildList(3, { roomRoleName: RoleName.ROOMEDITOR }).map((member) => ({
 			...member,
 			displayRoomRole: "",
 			displaySchoolRole: "",

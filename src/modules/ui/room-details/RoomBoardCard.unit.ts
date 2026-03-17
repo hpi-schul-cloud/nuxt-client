@@ -1,15 +1,12 @@
 import RoomBoardCard from "./RoomBoardCard.vue";
-import { BoardLayout, ConfigResponse, ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
+import { BoardLayout, ConfigResponse, ImportUserResponseRoleNames } from "@api-server";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
-import { beforeAll, Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { beforeAll } from "vitest";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VListItem, VMenu } from "vuetify/lib/components/index";
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 type BoardData = {
 	id: string;
@@ -28,7 +25,7 @@ const mockDraftBoardData = {
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
 	columnBoardId: "column-board-id",
-	layout: BoardLayout.Columns,
+	layout: BoardLayout.COLUMNS,
 };
 
 const mockPublishedBoardData = {
@@ -38,7 +35,7 @@ const mockPublishedBoardData = {
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
 	columnBoardId: "column-board-id-2",
-	layout: BoardLayout.Columns,
+	layout: BoardLayout.COLUMNS,
 };
 
 const mockDraftListBoardData = {
@@ -48,7 +45,7 @@ const mockDraftListBoardData = {
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
 	columnBoardId: "list-board-id",
-	layout: BoardLayout.List,
+	layout: BoardLayout.LIST,
 };
 
 const mockPublishedListBoardData = {
@@ -58,7 +55,7 @@ const mockPublishedListBoardData = {
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
 	columnBoardId: "list-board-id-2",
-	layout: BoardLayout.List,
+	layout: BoardLayout.LIST,
 };
 
 const mockCourseData = {
@@ -67,9 +64,8 @@ const mockCourseData = {
 };
 
 describe("RoomBoardCard", () => {
-	const setup = (props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum }, options?: object) => {
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+	const setup = (props: { boardData: BoardData; userRole: ImportUserResponseRoleNames }, options?: object) => {
+		const { router } = injectRouterMock(createRouterMock());
 		// Note: router has to be mocked before mounting the component
 
 		const wrapper = mount(RoomBoardCard, {
@@ -101,7 +97,7 @@ describe("RoomBoardCard", () => {
 	});
 
 	describe("when a board card is rendered", () => {
-		const userRole = ImportUserResponseRoleNamesEnum.Teacher;
+		const userRole = ImportUserResponseRoleNames.TEACHER;
 
 		it("should be found in dom", () => {
 			const { wrapper } = setup({ boardData: mockDraftBoardData, userRole });
@@ -365,7 +361,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		describe("when user is a student", () => {
-			const userRole = ImportUserResponseRoleNamesEnum.Student;
+			const userRole = ImportUserResponseRoleNames.STUDENT;
 
 			it("should not show three dot menu", () => {
 				const { wrapper: wrapperPublishedStudent } = setup({
@@ -404,7 +400,7 @@ describe("RoomBoardCard", () => {
 	});
 
 	describe("when interacting with a board card", () => {
-		const userRole = ImportUserResponseRoleNamesEnum.Teacher;
+		const userRole = ImportUserResponseRoleNames.TEACHER;
 
 		it("should redirect to column board when clicking on the card", () => {
 			const { wrapper, router } = setup({

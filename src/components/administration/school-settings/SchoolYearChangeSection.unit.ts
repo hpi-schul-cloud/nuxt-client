@@ -1,12 +1,16 @@
 import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
-import { createTestAppStoreWithSchool, createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithSchool,
+	createTestEnvStore,
+	maintenanceStatusFactory,
+	mockComposable,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSharedSchoolYearChange } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
+import { beforeEach, Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { VBtn, VCheckbox } from "vuetify/components";
 
@@ -14,7 +18,7 @@ vi.mock("@data-school");
 
 describe("SchoolYearChangeSection", () => {
 	const schoolId = "schoolId";
-	let useSharedSchoolYearChangeApiMock: DeepMocked<ReturnType<typeof useSharedSchoolYearChange>>;
+	let useSharedSchoolYearChangeApiMock: Mocked<ReturnType<typeof useSharedSchoolYearChange>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -35,7 +39,7 @@ describe("SchoolYearChangeSection", () => {
 	};
 
 	beforeEach(() => {
-		useSharedSchoolYearChangeApiMock = createMock<ReturnType<typeof useSharedSchoolYearChange>>({
+		useSharedSchoolYearChangeApiMock = mockComposable(useSharedSchoolYearChange, {
 			maintenanceStatus: ref(),
 		});
 

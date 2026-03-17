@@ -7,7 +7,6 @@ import Folder from "./Folder.vue";
 import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
-import { BoardResponseAllowedOperations } from "@/serverApi/v3";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import * as FileHelper from "@/utils/fileHelper";
@@ -15,17 +14,18 @@ import {
 	boardResponseFactory,
 	createTestEnvStore,
 	fileRecordFactory,
+	mockComposable,
 	mockedPiniaStoreTyping,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardResponseAllowedOperations } from "@api-server";
 import * as BoardApi from "@data-board";
 import { useBoardAllowedOperations, useBoardStore } from "@data-board";
 import * as FileStorageApi from "@data-file";
 import { CollaboraFileType } from "@data-file";
 import * as FolderState from "@data-folder";
 import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
@@ -33,13 +33,44 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
 import dayjs from "dayjs";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mocked } from "vitest";
 import { computed, ComputedRef, nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VBtn, VSkeletonLoader } from "vuetify/lib/components/index";
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
+const createFolderStateMock = () =>
+	mockComposable(FolderState.useFolderState, {
+		breadcrumbs: computed(() => []),
+		fileFolderElement: ref(),
+		folderName: computed(() => ""),
+		pageTitle: computed(() => ""),
+		parent: computed(() => ({ id: "parent-id", type: ParentNodeType.BOARD, name: "parent-name" })),
+	});
+
+const createBoardPageInfoMock = () =>
+	mockComposable(BoardApi.useSharedBoardPageInformation, {
+		breadcrumbs: computed(() => []),
+		contextType: computed(() => undefined),
+		pageTitle: computed(() => ""),
+		roomId: computed(() => undefined),
+	});
+
+const createFileStorageApiMock = () =>
+	mockComposable(FileStorageApi.useFileStorageApi, {
+		uploadCollaboraFile: vi.fn().mockResolvedValue({ id: "mock-file-id" }),
+	});
+
+const createAddCollaboraFileMock = (overrides: Partial<Mocked<ReturnType<typeof useAddCollaboraFile>>> = {}) =>
+	mockComposable(useAddCollaboraFile, {
+		isCollaboraFileDialogOpen: ref(false),
+		...overrides,
+	});
+
+const createConfirmationDialogMock = () =>
+	mockComposable(ConfirmationDialog.useDeleteConfirmationDialog, {
+		askDeleteConfirmation: vi.fn().mockResolvedValue(false),
+		isDeleteDialogOpen: ref(false),
+	});
 
 vi.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(BoardApi.useBoardApi);
@@ -67,16 +98,20 @@ describe("Folder.vue", () => {
 	) => {
 		const { folderStateMock, folderName, parent } = setupFolderStateMock(options);
 
-		const boardState = createMock<ReturnType<typeof BoardApi.useSharedBoardPageInformation>>({});
+		const boardState = createBoardPageInfoMock();
 		vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(boardState);
 
-		const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+		const fileStorageApiMock = createFileStorageApiMock();
 		vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
-		const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+		const boardApiMock = mockComposable(BoardApi.useBoardApi);
 		mockedUseBoardApi.mockReturnValue(boardApiMock);
 
-		const useBoardStoreMock = createMock<ReturnType<typeof BoardApi.useBoardStore>>();
+		const useBoardStoreMock = mockComposable(BoardApi.useBoardStore, {
+			board: undefined,
+			isLoading: false,
+			fetchBoardRequest: vi.fn().mockResolvedValue(undefined),
+		});
 		vi.spyOn(BoardApi, "useBoardStore").mockReturnValueOnce(useBoardStoreMock);
 
 		setupBoardAllowedOperationsMock(options.allowedOperations);
@@ -92,14 +127,14 @@ describe("Folder.vue", () => {
 			allowedOperations?: Partial<BoardResponseAllowedOperations>;
 		} = {}
 	) => {
-		const { breadcrumbs = [], parentType = ParentNodeType.Board } = options;
-		const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
+		const { breadcrumbs = [], parentType = ParentNodeType.BOARD } = options;
+		const folderStateMock = createFolderStateMock();
 		vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
 		const parent = parentNodeInfoFactory.build({ type: parentType });
 		folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
-		if (parentType === ParentNodeType.Board) {
+		if (parentType === ParentNodeType.BOARD) {
 			folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(() => "boards");
 		} else {
 			folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(() => "courses");
@@ -128,8 +163,15 @@ describe("Folder.vue", () => {
 	const buildUploadStatsTranslation = (uploaded: string, total: string) =>
 		`${uploaded} von ${total} Dateien hochgeladen`;
 	const setupWrapper = () => {
-		const router: DeepMocked<Router> = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(
+			createRouterMock({
+				routes: [
+					{ path: "/", name: "home", component: { template: "<div />" } },
+					{ path: "/boards/:id", name: "board", component: { template: "<div />" } },
+					{ path: "/collabora/:id", name: "collabora", component: { template: "<div />" } },
+				],
+			})
+		);
 
 		vi.spyOn(FileHelper, "downloadFilesAsArchive");
 		vi.spyOn(FileHelper, "downloadFile");
@@ -161,11 +203,11 @@ describe("Folder.vue", () => {
 		describe("when folder contains no files", () => {
 			describe("when component is loaded", () => {
 				const setup = async (boardInStoreUndefined = false, boardInStoreIsParent = true) => {
-					const folderStateMock = createMock<ReturnType<typeof FolderState.useFolderState>>();
+					const folderStateMock = createFolderStateMock();
 					vi.spyOn(FolderState, "useFolderState").mockReturnValueOnce(folderStateMock);
 
 					const parent = parentNodeInfoFactory.build({
-						type: ParentNodeType.Board,
+						type: ParentNodeType.BOARD,
 					});
 					folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
 
@@ -173,13 +215,13 @@ describe("Folder.vue", () => {
 					folderStateMock.folderName = folderName;
 					folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
-					const boardState = createMock<ReturnType<typeof BoardApi.useSharedBoardPageInformation>>({});
+					const boardState = createBoardPageInfoMock();
 					vi.spyOn(BoardApi, "useSharedBoardPageInformation").mockReturnValueOnce(boardState);
 
-					const boardApiMock = createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+					const boardApiMock = mockComposable(BoardApi.useBoardApi);
 					mockedUseBoardApi.mockReturnValue(boardApiMock);
 
-					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					const fileStorageApiMock = createFileStorageApiMock();
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -188,9 +230,7 @@ describe("Folder.vue", () => {
 						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
 					} as ReturnType<typeof useBoardAllowedOperations>);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
-						isCollaboraFileDialogOpen: ref(false),
-					});
+					const addCollaboraFileMock = createAddCollaboraFileMock();
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
@@ -202,9 +242,7 @@ describe("Folder.vue", () => {
 					const windowOpenMock = vi.fn();
 					vi.spyOn(globalThis, "open").mockImplementation(windowOpenMock);
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					return {
 						folderStateMock,
@@ -291,21 +329,19 @@ describe("Folder.vue", () => {
 			describe("when parent is not a board", () => {
 				const setup = async () => {
 					const { fileStorageApiMock, boardState } = setupMocks({
-						parentType: ParentNodeType.Course,
+						parentType: ParentNodeType.COURSE,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					return {
 						boardState,
@@ -321,7 +357,7 @@ describe("Folder.vue", () => {
 			describe("when component is loading", () => {
 				const setup = async () => {
 					const { folderStateMock, fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
@@ -334,16 +370,14 @@ describe("Folder.vue", () => {
 					const mockFilePromise = new Promise<void>(() => {});
 					fileStorageApiMock.fetchFiles.mockReturnValueOnce(mockFilePromise);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 					const { wrapper } = setupWrapper();
 
-					await nextTick();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 
 					return {
 						folderStateMock,
@@ -370,17 +404,16 @@ describe("Folder.vue", () => {
 			describe("when delete folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const confirmationDialogMock =
-						createMock<ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>>();
+					const confirmationDialogMock = createConfirmationDialogMock();
 					vi.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog").mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -420,17 +453,16 @@ describe("Folder.vue", () => {
 			describe("when delete folder button is clicked, dialog confirmed and parent not a board", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Course,
+						parentType: ParentNodeType.COURSE,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const confirmationDialogMock =
-						createMock<ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>>();
+					const confirmationDialogMock = createConfirmationDialogMock();
 					vi.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog").mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -463,17 +495,16 @@ describe("Folder.vue", () => {
 			describe("when delete folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const confirmationDialogMock =
-						createMock<ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>>();
+					const confirmationDialogMock = createConfirmationDialogMock();
 					vi.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog").mockReturnValueOnce(confirmationDialogMock);
 					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(false);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -512,12 +543,12 @@ describe("Folder.vue", () => {
 			describe("when rename folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -578,12 +609,12 @@ describe("Folder.vue", () => {
 			describe("when rename folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -629,13 +660,13 @@ describe("Folder.vue", () => {
 			describe("when file is checked, deleted by actions menu and confirmed", () => {
 				const setup = async () => {
 					const { fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -671,13 +702,13 @@ describe("Folder.vue", () => {
 			describe("when file is checked, deleted by actions menu and not confirmed", () => {
 				const setup = async () => {
 					const { fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 					});
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -725,16 +756,14 @@ describe("Folder.vue", () => {
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 				}
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
 
-				await nextTick();
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				return {
 					folderStateMock,
@@ -776,7 +805,7 @@ describe("Folder.vue", () => {
 					const fileRecord2 = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -823,7 +852,7 @@ describe("Folder.vue", () => {
 					const fileRecord2 = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -878,16 +907,14 @@ describe("Folder.vue", () => {
 				const fileRecord1 = fileRecordFactory.build({ isUploading: true });
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1]);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper } = setupWrapper();
 
-				await nextTick();
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				return {
 					folderStateMock,
@@ -925,7 +952,7 @@ describe("Folder.vue", () => {
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -1059,19 +1086,17 @@ describe("Folder.vue", () => {
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
+				const { wrapper } = setupWrapper();
+
 				const windowOpenMock = vi.fn();
 				const windowOpenSpy = vi.spyOn(globalThis, "open").mockImplementation(windowOpenMock);
 
-				const { wrapper } = setupWrapper();
-
-				await nextTick();
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				return {
 					wrapper,
@@ -1108,7 +1133,7 @@ describe("Folder.vue", () => {
 				it("should not open new tab", async () => {
 					const { wrapper, windowOpenSpy, fileStorageApiMock } = await setup();
 
-					fileStorageApiMock.uploadCollaboraFile.mockReturnValueOnce(undefined);
+					fileStorageApiMock.uploadCollaboraFile.mockResolvedValueOnce(undefined);
 
 					const collaboraFileDialog = wrapper.findComponent(AddCollaboraFileDialog);
 					await collaboraFileDialog.vm.$emit("create-collabora-file", {
@@ -1143,16 +1168,14 @@ describe("Folder.vue", () => {
 				});
 				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise2);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper, parentId } = setupWrapper();
 
-				await nextTick();
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				const fabButton = wrapper.find("[data-testid='fab-add-files']");
 				await fabButton.trigger("click");
@@ -1201,13 +1224,11 @@ describe("Folder.vue", () => {
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("0", "2"));
 
 					resolveUploadPromise1();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("1", "2"));
 
 					resolveUploadPromise2();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("2", "2"));
 				});
 
@@ -1219,13 +1240,11 @@ describe("Folder.vue", () => {
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("0", "2"));
 
 					resolveUploadPromise1();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("1", "2"));
 
 					resolveUploadPromise2();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("2", "2"));
 				});
 			});
@@ -1253,16 +1272,14 @@ describe("Folder.vue", () => {
 				});
 				fileStorageApiMock.upload.mockReturnValueOnce(mockUploadPromise2);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
 
 				const { wrapper, parentId } = setupWrapper();
 
-				await nextTick();
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				const fabButton = wrapper.find("[data-testid='fab-add-files']");
 				await fabButton.trigger("click");
@@ -1310,13 +1327,11 @@ describe("Folder.vue", () => {
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("0", "2"));
 
 					resolveUploadPromise1();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("1", "2"));
 
 					resolveUploadPromise2();
-					await nextTick();
-					await nextTick();
+					await flushPromises();
 					expect(progressBar.text()).toContain(buildUploadStatsTranslation("1", "2"));
 				});
 			});
@@ -1332,7 +1347,7 @@ describe("Folder.vue", () => {
 				const fileRecord2 = fileRecordFactory.build();
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -1369,7 +1384,7 @@ describe("Folder.vue", () => {
 				const fileRecord2 = fileRecordFactory.build();
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -1417,7 +1432,7 @@ describe("Folder.vue", () => {
 				const fileRecord2 = fileRecordFactory.build();
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
-				const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+				const addCollaboraFileMock = createAddCollaboraFileMock({
 					isCollaboraFileDialogOpen: ref(false),
 				});
 				mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -1456,12 +1471,12 @@ describe("Folder.vue", () => {
 			describe("when user clicks download button in action menu", () => {
 				const setup = async () => {
 					HTMLFormElement.prototype.submit = vi.fn();
-					const { folderName, fileStorageApiMock } = setupMocks({ parentType: ParentNodeType.Board });
+					const { folderName, fileStorageApiMock } = setupMocks({ parentType: ParentNodeType.BOARD });
 
 					const fileRecord = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);
@@ -1502,7 +1517,7 @@ describe("Folder.vue", () => {
 					HTMLAnchorElement.prototype.click = vi.fn();
 
 					const { fileStorageApiMock } = setupMocks({
-						parentType: ParentNodeType.Board,
+						parentType: ParentNodeType.BOARD,
 						allowedOperations: { createFileElement: false },
 					});
 
@@ -1510,7 +1525,7 @@ describe("Folder.vue", () => {
 					const fileRecord2 = fileRecordFactory.build();
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecord1, fileRecord2]);
 
-					const addCollaboraFileMock = createMock<ReturnType<typeof useAddCollaboraFile>>({
+					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
 					});
 					mockedUseAddCollaboraFile.mockReturnValue(addCollaboraFileMock);

@@ -7,18 +7,13 @@ const customMatchers = {};
 customMatchers.toBeAComponent = function (options) {
 	if (isAComponent()) {
 		return {
-			message: () =>
-				`expected ${this.utils.printReceived(
-					options
-				)} not to be a Vue component`,
+			message: () => `expected ${this.utils.printReceived(options)} not to be a Vue component`,
 			pass: true,
 		};
 	} else {
 		return {
 			message: () =>
-				`expected ${this.utils.printReceived(
-					options
-				)} to be a valid Vue component, exported from a .vue file`,
+				`expected ${this.utils.printReceived(options)} to be a valid Vue component, exported from a .vue file`,
 			pass: false,
 		};
 	}
@@ -53,18 +48,13 @@ customMatchers.toBeAViewComponent = function (options, mockInstance) {
 
 	function definesAPageTitleAndDescription() {
 		if (!options.page) return false;
-		const pageObject =
-			typeof options.page === "function"
-				? options.page.apply(mockInstance || {})
-				: options.page;
+		const pageObject = typeof options.page === "function" ? options.page.apply(mockInstance || {}) : options.page;
 		// if (!pageObject.hasOwnProperty("title")) return false;
-		if (!Object.prototype.hasOwnProperty.call(pageObject, "title"))
-			return false;
+		if (!Object.prototype.hasOwnProperty.call(pageObject, "title")) return false;
 		if (!pageObject.meta) return false;
 		const hasMetaDescription = pageObject.meta.some(
 			(metaProperty) =>
-				metaProperty.name === "description" &&
-				Object.prototype.hasOwnProperty.call(metaProperty, "content")
+				metaProperty.name === "description" && Object.prototype.hasOwnProperty.call(metaProperty, "content")
 		);
 		if (!hasMetaDescription) return false;
 		return true;
@@ -78,8 +68,7 @@ customMatchers.toBeAViewComponentUsing = function (options, mockInstance) {
 customMatchers.toBeAVuexModule = function (options) {
 	if (isAVuexModule()) {
 		return {
-			message: () =>
-				`expected ${this.utils.printReceived(options)} not to be a Vuex module`,
+			message: () => `expected ${this.utils.printReceived(options)} not to be a Vuex module`,
 			pass: true,
 		};
 	} else {

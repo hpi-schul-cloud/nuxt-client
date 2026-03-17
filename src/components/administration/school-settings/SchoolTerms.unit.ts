@@ -1,16 +1,15 @@
 import SchoolTerms from "./SchoolTerms.vue";
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import { Permission } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
 import { downloadFile } from "@/utils/fileHelper";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions, termsOfUseFactory } from "@@/tests/test-utils";
+import { createTestAppStoreWithPermissions, mockComposable, termsOfUseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission } from "@api-server";
 import { ConsentVersion, CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
@@ -25,7 +24,7 @@ const useSchoolTermsOfUseMock = vi.mocked(useSchoolTermsOfUse);
 
 describe("SchoolTerms", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
-	let useSchoolTermsOfUseMockReturn: DeepMocked<ReturnType<typeof useSchoolTermsOfUse>>;
+	let useSchoolTermsOfUseMockReturn: Mocked<ReturnType<typeof useSchoolTermsOfUse>>;
 
 	const setup = (
 		options?: Partial<{ status: Status; permissions: Permission[]; termsOfUse: ConsentVersion | null }>
@@ -33,7 +32,7 @@ describe("SchoolTerms", () => {
 		const existitngTermsOfUse = termsOfUseFactory.build({ schoolId: mockSchool.id });
 		const { termsOfUse, permissions, status } = {
 			termsOfUse: existitngTermsOfUse,
-			permissions: [Permission.SchoolEdit],
+			permissions: [Permission.SCHOOL_EDIT],
 			status: "completed" as Status,
 			...options,
 		};
@@ -45,7 +44,7 @@ describe("SchoolTerms", () => {
 			getSchool: mockSchool,
 		});
 
-		useSchoolTermsOfUseMockReturn = createMock<ReturnType<typeof useSchoolTermsOfUse>>();
+		useSchoolTermsOfUseMockReturn = mockComposable(useSchoolTermsOfUse);
 		useSchoolTermsOfUseMock.mockReturnValue(useSchoolTermsOfUseMockReturn);
 
 		useSchoolTermsOfUseMockReturn.termsOfUse = ref(termsOfUse);
@@ -120,13 +119,13 @@ describe("SchoolTerms", () => {
 
 	describe("when user has school edit permission", () => {
 		it("should render edit button", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_EDIT] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(true);
 		});
 
 		it("should render dialog component", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolEdit] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_EDIT] });
 
 			expect(wrapper.findComponent(SchoolTermsFormDialog).exists()).toBe(true);
 		});
@@ -134,13 +133,13 @@ describe("SchoolTerms", () => {
 
 	describe("when user does not have school edit permission", () => {
 		it("should not render edit button", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_VIEW] });
 
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(false);
 		});
 
 		it("should not render dialog component", () => {
-			const { wrapper } = setup({ permissions: [Permission.SchoolView] });
+			const { wrapper } = setup({ permissions: [Permission.SCHOOL_VIEW] });
 
 			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(false);
 		});

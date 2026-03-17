@@ -1,11 +1,13 @@
 import { useStatusAlerts } from "./status-alerts.composable";
-import * as serverApi from "@/serverApi/v3/api";
+import { mockApi } from "@@/tests/test-utils";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-import { DeepMocked } from "@golevelup/ts-vitest";
+import * as serverApi from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
+import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
-let alertApi: DeepMocked<serverApi.AlertApiInterface>;
+let alertApi: Mocked<serverApi.AlertApiInterface>;
 
 describe("status alerts composable", () => {
 	const logger = { error: vi.fn(), log: vi.fn() };
@@ -14,13 +16,7 @@ describe("status alerts composable", () => {
 	vi.spyOn(console, "error").mockImplementation(vi.fn());
 
 	beforeEach(() => {
-		alertApi = {
-			alertControllerFind: vi.fn(() => ({
-				data: {
-					data: mockStatusAlerts,
-				},
-			})),
-		} as unknown as DeepMocked<serverApi.AlertApiInterface>;
+		alertApi = mockApi<serverApi.AlertApiInterface>();
 		vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(alertApi);
 		setActivePinia(createTestingPinia());
 	});
@@ -31,6 +27,12 @@ describe("status alerts composable", () => {
 
 	describe("fetchStatusAlerts", () => {
 		it("should call api and set the alerts corectly", async () => {
+			alertApi.alertControllerFind.mockResolvedValue({
+				data: {
+					data: mockStatusAlerts,
+				},
+			} as AxiosResponse<serverApi.AlertResponse>);
+
 			const { fetchStatusAlerts, statusAlerts, status } = useStatusAlerts();
 			await fetchStatusAlerts();
 

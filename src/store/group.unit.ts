@@ -2,37 +2,39 @@ import GroupModule from "./group";
 import { ClassInfo, ClassRootType } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
-import {
-	ClassInfoResponse,
-	ClassInfoSearchListResponse,
-	ClassSortQueryType,
-	GroupApiInterface,
-	SchoolYearQueryType,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
 import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
 	businessErrorFactory,
 	classInfoResponseFactory,
 	classInfoSearchListResponseFactory,
+	mockApi,
+	mockAxiosInstance,
 } from "@@/tests/test-utils";
 import { classInfoFactory } from "@@/tests/test-utils/factory/classInfoFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import {
+	ClassInfoResponse,
+	ClassInfoSearchListResponse,
+	ClassSortQueryType,
+	GroupApiInterface,
+	SchoolYearQueryType,
+} from "@api-server";
+import * as serverApi from "@api-server";
 import { AxiosInstance } from "axios";
+import { Mocked } from "vitest";
 
 describe("GroupModule", () => {
 	let module: GroupModule;
 
-	let apiMock: DeepMocked<GroupApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let apiMock: Mocked<GroupApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		module = new GroupModule({});
 
-		apiMock = createMock<GroupApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		apiMock = mockApi<GroupApiInterface>();
+		axiosMock = mockAxiosInstance();
 
 		initializeAxios(axiosMock);
 		vi.spyOn(serverApi, "GroupApiFactory").mockReturnValue(apiMock);
@@ -96,7 +98,7 @@ describe("GroupModule", () => {
 					name: "3a",
 					externalSourceName: "Klasse",
 					teacherNames: ["Carlie"],
-					type: ClassRootType.Class,
+					type: ClassRootType.CLASS,
 					id: "id",
 					studentCount: 0,
 				});
@@ -139,7 +141,7 @@ describe("GroupModule", () => {
 			});
 
 			it("should return the changed state", () => {
-				const sortBy = ClassSortQueryType.ExternalSourceName;
+				const sortBy = ClassSortQueryType.EXTERNAL_SOURCE_NAME;
 
 				module.setSortBy(sortBy);
 
@@ -286,7 +288,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(axiosMock.delete).toHaveBeenCalled();
@@ -297,7 +299,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(apiMock.groupControllerFindClasses).toHaveBeenCalled();
@@ -326,7 +328,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(module.getBusinessError).toEqual<BusinessError>({
@@ -341,7 +343,7 @@ describe("GroupModule", () => {
 
 				await module.deleteClass({
 					classId: class1.id,
-					query: SchoolYearQueryType.CurrentYear,
+					query: SchoolYearQueryType.CURRENT_YEAR,
 				});
 
 				expect(module.getClasses).toEqual([class1, class2]);

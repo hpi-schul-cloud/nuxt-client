@@ -1,6 +1,5 @@
 import ExternalToolSection from "./ExternalToolSection.vue";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
-import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@/serverApi/v3";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
@@ -8,6 +7,7 @@ import {
 	createTestAppStoreWithSchool,
 	createTestEnvStore,
 	expectNotification,
+	mockComposable,
 	mockedPiniaStoreTyping,
 	MockedStore,
 } from "@@/tests/test-utils";
@@ -18,30 +18,28 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, ExternalToolMediumStatus, MediaSourceLicenseType } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { useSchoolLicenseStore } from "@data-license";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { expect, Mock } from "vitest";
+import { expect, Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCardText } from "vuetify/components";
 
 vi.mock("@data-external-tool/SchoolExternalToolUsage.composable.ts");
 const mockedSchoolExternalToolUsage = vi.mocked(useSchoolExternalToolUsage);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-
 describe("ExternalToolSection", () => {
 	const schoolId = "schoolId";
 	let el: HTMLDivElement;
 
-	let useSchoolExternalToolUsageMock: DeepMocked<ReturnType<typeof useSchoolExternalToolUsage>>;
+	let useSchoolExternalToolUsageMock: Mocked<ReturnType<typeof useSchoolExternalToolUsage>>;
 	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
 
 	beforeEach(() => {
@@ -64,8 +62,7 @@ describe("ExternalToolSection", () => {
 		createTestAppStoreWithSchool(schoolId);
 		createTestEnvStore(envs);
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(ExternalToolSection, {
 			global: {
@@ -86,7 +83,7 @@ describe("ExternalToolSection", () => {
 	};
 
 	beforeEach(() => {
-		useSchoolExternalToolUsageMock = createMock<ReturnType<typeof useSchoolExternalToolUsage>>();
+		useSchoolExternalToolUsageMock = mockComposable(useSchoolExternalToolUsage);
 
 		useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadataFactory.build());
 
@@ -136,7 +133,7 @@ describe("ExternalToolSection", () => {
 					mediumId: "tool1",
 					mediaSourceId: "licensedSource",
 					mediaSourceName: "Medium Source Name",
-					mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+					mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 				},
 			});
 
@@ -158,11 +155,11 @@ describe("ExternalToolSection", () => {
 							}),
 							isDeactivated: false,
 							medium: {
-								status: ExternalToolMediumStatus.Active,
+								status: ExternalToolMediumStatus.ACTIVE,
 								mediumId: "tool2",
 								mediaSourceId: "notLicensedSource",
 								mediaSourceName: undefined,
-								mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+								mediaSourceLicenseType: MediaSourceLicenseType.SCHOOL_LICENSE,
 							},
 						},
 						{
@@ -184,7 +181,7 @@ describe("ExternalToolSection", () => {
 				}
 			);
 
-			const windowMock = createMock<Window>();
+			const windowMock = mock<Window>();
 			vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {

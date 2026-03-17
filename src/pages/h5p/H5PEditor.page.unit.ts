@@ -1,26 +1,31 @@
 import H5pEditorPage from "./H5PEditor.page.vue";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { apiValidationResponseErrorFactory, axiosErrorFactory, expectNotification } from "@@/tests/test-utils";
+import {
+	apiValidationResponseErrorFactory,
+	axiosErrorFactory,
+	expectNotification,
+	mockComposable,
+} from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { H5PContentParentType, H5PSaveResponse } from "@api-h5p";
 import { useAppStore } from "@data-app";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 
 vi.mock("./h5pEditorBoardHooks.composable");
 
 describe("H5PEditorPage", () => {
-	let useH5pEditorBoardHooksMock: DeepMocked<ReturnType<typeof useH5pEditorBoardHooks>>;
+	let useH5pEditorBoardHooksMock: Mocked<ReturnType<typeof useH5pEditorBoardHooks>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useH5pEditorBoardHooksMock = createMock();
+		useH5pEditorBoardHooksMock = mockComposable(useH5pEditorBoardHooks);
 
 		vi.mocked(useH5pEditorBoardHooks).mockReturnValue(useH5pEditorBoardHooksMock);
 	});

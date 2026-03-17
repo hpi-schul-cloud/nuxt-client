@@ -76,6 +76,7 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import {
 	BoardLayout,
 	ContentElementType,
@@ -83,8 +84,7 @@ import {
 	MediaBoardColors,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
-} from "@/serverApi/v3";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+} from "@api-server";
 import { useMediaBoardEditMode } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
@@ -140,7 +140,7 @@ const titlePlaceholder: ComputedRef<string> = computed(
 	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`
 );
 
-const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.List);
+const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.LIST);
 
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
@@ -195,6 +195,6 @@ const isDeletedElement = (
 	if (!("type" in element)) {
 		return false;
 	}
-	return element.type === ContentElementType.Deleted;
+	return element.type === ContentElementType.DELETED;
 };
 </script>

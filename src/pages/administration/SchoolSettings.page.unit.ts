@@ -1,15 +1,14 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
-import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { createTestEnvStore, maintenanceStatusFactory } from "@@/tests/test-utils";
+import { createTestEnvStore, maintenanceStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ConfigResponse, SchoolSystemResponse, SchulcloudTheme } from "@api-server";
 import { useSharedSchoolYearChange } from "@data-school";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -24,11 +23,11 @@ const useRouteMock = <Mock>useRoute;
 vi.mock("@data-school/schoolYearChange.composable");
 
 describe("SchoolSettingsPage", () => {
-	let useSharedSchoolYearChangeApiMock: DeepMocked<ReturnType<typeof useSharedSchoolYearChange>>;
+	let useSharedSchoolYearChangeApiMock: Mocked<ReturnType<typeof useSharedSchoolYearChange>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useSharedSchoolYearChangeApiMock = createMock<ReturnType<typeof useSharedSchoolYearChange>>();
+		useSharedSchoolYearChangeApiMock = mockComposable(useSharedSchoolYearChange);
 
 		vi.mocked(useSharedSchoolYearChange).mockReturnValue(useSharedSchoolYearChangeApiMock);
 	});
@@ -64,7 +63,7 @@ describe("SchoolSettingsPage", () => {
 			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
 			FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
 			FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: true,
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 		},
 		schoolGetters: Partial<SchoolsModule> = {}
 	) => {

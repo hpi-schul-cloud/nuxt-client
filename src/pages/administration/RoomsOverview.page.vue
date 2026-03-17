@@ -193,9 +193,9 @@
 
 <script setup lang="ts">
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@/serverApi/v3";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { useCourseList } from "@data-room";
@@ -264,15 +264,15 @@ const footerProps = {
 const courseStatus: ComputedRef<CourseStatus> = computed(() => {
 	switch (props.tab) {
 		case "current":
-			return CourseStatus.Current;
+			return CourseStatus.CURRENT;
 		case "archive":
-			return CourseStatus.Archive;
+			return CourseStatus.ARCHIVE;
 		default:
-			return CourseStatus.Current;
+			return CourseStatus.CURRENT;
 	}
 });
 
-const hasPermission = useAppStore().hasPermission(Permission.CourseAdministration);
+const hasPermission = useAppStore().hasPermission(Permission.COURSE_ADMINISTRATION);
 
 const showRoomAction = (item: CourseInfoDataResponse) => hasPermission.value && item.id;
 

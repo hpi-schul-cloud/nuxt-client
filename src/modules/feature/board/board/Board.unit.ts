@@ -4,15 +4,6 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
-import {
-	BoardExternalReferenceType,
-	BoardLayout,
-	BoardResponseAllowedOperations,
-	ConfigResponse,
-	CopyApiResponse,
-	CopyApiResponseTypeEnum,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -25,10 +16,19 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	BoardExternalReferenceType,
+	BoardLayout,
+	BoardResponseAllowedOperations,
+	ConfigResponse,
+	CopyApiResponse,
+	CopyApiResponseType,
+	ShareTokenBodyParamsParentType,
+} from "@api-server";
 import { useAppStore, useNotificationStore } from "@data-app";
 import {
 	useBoardInactivity,
@@ -40,15 +40,15 @@ import {
 } from "@data-board";
 import { CollaboraFileType } from "@data-file";
 import { AddCollaboraFileDialog } from "@feature-collabora";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { extractDataAttribute, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
+import { mock } from "vitest-mock-extended";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
@@ -66,25 +66,19 @@ const mockedUseSharedBoardPageInformation = vi.mocked(useSharedBoardPageInformat
 vi.mock("@/composables/copy");
 const mockUseCopy = vi.mocked(useCopy);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-
 vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <Mock>useBoardInactivity;
 
 describe("Board", () => {
-	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
-	let router: DeepMocked<Router>;
-	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof useBoardInactivity>>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	const hash = "";
+	let mockedCopyCalls: Mocked<ReturnType<typeof useCopy>>;
+	let router: RouterMock;
+	let mockedUsePageInactivity: Mocked<ReturnType<typeof useBoardInactivity>>;
 
 	beforeEach(() => {
 		vi.useFakeTimers();
 		vi.clearAllMocks();
 
-		mockedCopyCalls = createMock<ReturnType<typeof useCopy>>();
+		mockedCopyCalls = mockComposable(useCopy);
 		mockUseCopy.mockReturnValue(mockedCopyCalls);
 
 		mockedUseSharedEditMode.mockReturnValue({
@@ -114,15 +108,10 @@ describe("Board", () => {
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
-		route = createMock<ReturnType<typeof useRoute>>({
-			hash,
-		});
-		useRouteMock.mockReturnValue(route);
+		router = createRouterMock();
+		injectRouterMock(router);
 
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
-		mockedUsePageInactivity = createMock<ReturnType<typeof useBoardInactivity>>();
+		mockedUsePageInactivity = mockComposable(useBoardInactivity);
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
@@ -154,10 +143,10 @@ describe("Board", () => {
 		const copyResultId = "42";
 		const copyModule = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
-			getCopyResult: createMock<CopyApiResponse>({
+			getCopyResult: {
 				id: copyResultId,
-				type: CopyApiResponseTypeEnum.Board,
-			}),
+				type: CopyApiResponseType.BOARD,
+			} as CopyApiResponse,
 		});
 
 		const shareModule = createModuleMocks(ShareModule);
@@ -187,7 +176,6 @@ describe("Board", () => {
 		setActivePinia(createTestingPinia());
 
 		createTestEnvStore({
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_SHARE: true,
@@ -316,13 +304,12 @@ describe("Board", () => {
 		describe("when the url has a hash", () => {
 			const setup2 = () => {
 				Object.defineProperty(globalThis, "location", {
-					get: () =>
-						createMock<Location>({
-							hash: "#card-12345",
-						}),
+					get: () => ({
+						hash: "#card-12345",
+					}),
 				});
 
-				const domElementMock = createMock<HTMLElement>();
+				const domElementMock = mock<HTMLElement>();
 				const querySelectorSpy = vi.spyOn(document, "querySelector");
 				querySelectorSpy.mockReturnValueOnce(domElementMock);
 
@@ -998,7 +985,7 @@ describe("Board", () => {
 
 					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
 						id: board.id,
-						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+						type: ShareTokenBodyParamsParentType.COLUMN_BOARD,
 					});
 				});
 			});
@@ -1028,8 +1015,8 @@ describe("Board", () => {
 
 				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
 					id: "card-id",
-					type: ShareTokenBodyParamsParentTypeEnum.Card,
-					destinationType: BoardExternalReferenceType.Room,
+					type: ShareTokenBodyParamsParentType.CARD,
+					destinationType: BoardExternalReferenceType.ROOM,
 				});
 			});
 		});
@@ -1125,7 +1112,7 @@ describe("Board", () => {
 					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					await boardLayoutDialog.setValue(true, "modelValue");
 
-					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 					await nextTick();
 
 					expect(boardLayoutDialog.props("modelValue")).toEqual(false);
@@ -1136,12 +1123,12 @@ describe("Board", () => {
 
 					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 
-					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 					await nextTick();
 
 					expect(boardStore.updateBoardLayoutRequest).toHaveBeenCalledWith({
 						boardId: board.id,
-						layout: BoardLayout.List,
+						layout: BoardLayout.LIST,
 					});
 				});
 			});
@@ -1153,7 +1140,7 @@ describe("Board", () => {
 					const boardLayoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					await boardLayoutDialog.setValue(true, "modelValue");
 
-					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.LIST);
 					await nextTick();
 
 					expect(boardLayoutDialog.props("modelValue")).toEqual(false);

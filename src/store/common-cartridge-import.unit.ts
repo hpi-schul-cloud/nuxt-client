@@ -1,31 +1,56 @@
 import CommonCartridgeImportModule from "./common-cartridge-import";
-import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { MockedFunction } from "vitest";
+import { createTestAppStore, mockApi } from "@@/tests/test-utils";
+import { CommonCartridgeApiFactory, CommonCartridgeApiInterface } from "@api-common-cartridge";
+import { FileApiFactory, FileApiInterface, FileRecordParentType, StorageLocation } from "@api-file-storage";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { Mocked, MockedFunction } from "vitest";
 
-vi.mock("@/commonCartridgeApi/v3/api", () => ({
-	CommonCartridgeApiFactory: vi.fn(),
-}));
+vi.mock("@api-common-cartridge");
+vi.mock("@api-file-storage");
 
 describe("CommonCartridgeImportModule", () => {
 	let sut: CommonCartridgeImportModule;
-	let commonCartridgeApiMock: DeepMocked<CommonCartridgeApiInterface>;
+	let commonCartridgeApiMock: Mocked<CommonCartridgeApiInterface>;
+	let fileStorageApiMock: Mocked<FileApiInterface>;
 
 	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+
 		sut = new CommonCartridgeImportModule({});
-		commonCartridgeApiMock = createMock<CommonCartridgeApiInterface>();
+		commonCartridgeApiMock = mockApi<CommonCartridgeApiInterface>();
+		fileStorageApiMock = mockApi<FileApiInterface>();
 
 		vi.spyOn(sut, "commonCartridgeApi", "get").mockReturnValue(commonCartridgeApiMock);
+		vi.spyOn(sut, "fileStorageApi", "get").mockReturnValue(fileStorageApiMock);
 	});
 
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
+	const setup = (userId: string | undefined, schoolId: string | undefined) => {
+		createTestAppStore({
+			me: {
+				user: {
+					id: userId,
+				},
+				school: {
+					id: schoolId,
+				},
+			},
+		});
+	};
+
 	describe("getters", () => {
 		it("should return the mocked commonCartridgeApi instance", () => {
 			const result = sut.commonCartridgeApi;
 			expect(result).toBe(commonCartridgeApiMock);
+		});
+
+		it("should return the mocked fileStorageApi instance", () => {
+			const result = sut.fileStorageApi;
+			expect(result).toBe(fileStorageApiMock);
 		});
 
 		it("file", () => {
@@ -43,7 +68,7 @@ describe("CommonCartridgeImportModule", () => {
 
 	describe("getters (real, for coverage)", () => {
 		it("should execute the real getter and call CommonCartridgeApiFactory", () => {
-			const realMock = createMock<CommonCartridgeApiInterface>();
+			const realMock = mockApi<CommonCartridgeApiInterface>();
 
 			(CommonCartridgeApiFactory as MockedFunction<typeof CommonCartridgeApiFactory>).mockReturnValue(realMock);
 
@@ -52,6 +77,18 @@ describe("CommonCartridgeImportModule", () => {
 
 			expect(result).toBe(realMock);
 			expect(CommonCartridgeApiFactory).toHaveBeenCalledWith(undefined, "/v3", undefined);
+		});
+
+		it("should execute the real getter and call FileApiFactory", () => {
+			const realMock = mockApi<FileApiInterface>();
+
+			vi.mocked(FileApiFactory).mockReturnValue(realMock);
+
+			const localSut = new CommonCartridgeImportModule({});
+			const result = localSut.fileStorageApi;
+
+			expect(result).toBe(realMock);
+			expect(FileApiFactory).toHaveBeenCalledWith(undefined, "/v3", undefined);
 		});
 	});
 
@@ -79,33 +116,61 @@ describe("CommonCartridgeImportModule", () => {
 
 	describe("actions", () => {
 		describe("importCommonCartridgeFile", () => {
-			it("should call commonCartridgeControllerImportCourse with the given file", async () => {
+			it("should call fileStorageApi.upload with the given file and set success to true", async () => {
+				setup("userId", "schoolId");
+
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
 				await sut.importCommonCartridgeFile(file);
 
-				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).toHaveBeenCalledWith(file);
+				expect(fileStorageApiMock.upload).toHaveBeenCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					"userId",
+					FileRecordParentType.USERS,
+					file
+				);
+				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).toHaveBeenCalledTimes(1);
+
+				expect(sut.isSuccess).toBe(true);
 			});
 
 			it("should set isSuccess to false if the file is undefined", async () => {
+				setup("userId", "schoolId");
+
 				await sut.importCommonCartridgeFile(undefined);
 
 				expect(sut.isSuccess).toBe(false);
 				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).not.toHaveBeenCalled();
 			});
 
-			it("should set isSuccess to true if the request is successful", async () => {
+			it("should set isSuccess to false if the userId is undefined", async () => {
+				setup(undefined, "schoolId");
+
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
 				await sut.importCommonCartridgeFile(file);
 
-				expect(sut.isSuccess).toBe(true);
+				expect(sut.isSuccess).toBe(false);
+				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).not.toHaveBeenCalled();
+			});
+
+			it("should set isSuccess to false if the schoolId is undefined", async () => {
+				setup("userId", undefined);
+
+				const file = new File([""], "file.txt", { type: "text/plain" });
+
+				await sut.importCommonCartridgeFile(file);
+
+				expect(sut.isSuccess).toBe(false);
+				expect(commonCartridgeApiMock.commonCartridgeControllerImportCourse).not.toHaveBeenCalled();
 			});
 
 			it("should set isSuccess to false if the request fails", async () => {
+				setup("userId", "schoolId");
 				const file = new File([""], "file.txt", { type: "text/plain" });
 
-				commonCartridgeApiMock.commonCartridgeControllerImportCourse.mockRejectedValue(new Error());
+				fileStorageApiMock.upload.mockRejectedValue(new Error());
 
 				await sut.importCommonCartridgeFile(file);
 

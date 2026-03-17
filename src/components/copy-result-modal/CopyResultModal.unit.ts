@@ -1,8 +1,8 @@
 import CopyResultModal from "./CopyResultModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CopyApiResponseType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -10,24 +10,24 @@ import { beforeEach } from "vitest";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
-	type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+	type: CopyApiResponseType.LESSON_CONTENT_GEOGEBRA,
 };
 const mockEtherpadItem = {
 	title: "Etherpad Element Title",
-	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
+	type: CopyApiResponseType.LESSON_CONTENT_ETHERPAD,
 };
 const mockCourseGroupItem = {
 	title: "CourseGroup Group Example",
-	type: CopyApiResponseTypeEnum.CoursegroupGroup,
+	type: CopyApiResponseType.COURSEGROUP_GROUP,
 };
 const mockFileItem = {
 	title: "File Error Example",
-	type: CopyApiResponseTypeEnum.File,
+	type: CopyApiResponseType.FILE,
 };
 
 const mockLessonResultItems = (elements = [mockGeoGebraItem, mockEtherpadItem, mockCourseGroupItem, mockFileItem]) => [
 	{
-		type: CopyApiResponseTypeEnum.Lesson,
+		type: CopyApiResponseType.LESSON,
 		title: "Lesson Title",
 		elementId: "mockId",
 		elements,
@@ -119,7 +119,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const wrapper = createWrapper({
 				isOpen: true,
 				copyResultItems,
-				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+				copyResultRootItemType: CopyApiResponseType.COURSE,
 			});
 
 			const dialog = wrapper.findComponent(CustomDialog);
@@ -136,14 +136,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					const copyResultItems = mockLessonResultItems([]);
 					copyResultItems[0].elements.push({
 						title: "Course External Tool",
-						type: CopyApiResponseTypeEnum.ExternalTool,
+						type: CopyApiResponseType.EXTERNAL_TOOL,
 					});
-					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
+					copyResultItems[0].type = CopyApiResponseType.COURSE;
 
 					const wrapper = createWrapper({
 						isOpen: true,
 						copyResultItems,
-						copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+						copyResultRootItemType: CopyApiResponseType.COURSE,
 					});
 
 					return { wrapper };
@@ -166,14 +166,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					const copyResultItems = mockLessonResultItems([]);
 					copyResultItems[0].elements.push({
 						title: "Board External Tool Element",
-						type: CopyApiResponseTypeEnum.ExternalToolElement,
+						type: CopyApiResponseType.EXTERNAL_TOOL_ELEMENT,
 					});
-					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
+					copyResultItems[0].type = CopyApiResponseType.COURSE;
 
 					const wrapper = createWrapper({
 						isOpen: true,
 						copyResultItems,
-						copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+						copyResultRootItemType: CopyApiResponseType.COURSE,
 					});
 
 					return { wrapper };
@@ -201,14 +201,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					isOpen: true,
 					copyResultItems: [
 						{
-							type: CopyApiResponseTypeEnum.Course,
+							type: CopyApiResponseType.COURSE,
 							title: "Lesson Title",
 							elementId: "mockId",
 							elements: [mockGeoGebraItem, mockEtherpadItem, mockCourseGroupItem, mockFileItem],
 							url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 						},
 					],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+					copyResultRootItemType: CopyApiResponseType.COURSE,
 				},
 			});
 
@@ -234,7 +234,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Columnboard,
+					copyResultRootItemType: CopyApiResponseType.COLUMNBOARD,
 				},
 			});
 
@@ -260,7 +260,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Room,
+					copyResultRootItemType: CopyApiResponseType.ROOM,
 				},
 			});
 
@@ -286,7 +286,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Task,
+					copyResultRootItemType: CopyApiResponseType.TASK,
 				},
 			});
 
@@ -312,7 +312,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Lesson,
+					copyResultRootItemType: CopyApiResponseType.LESSON,
 				},
 			});
 

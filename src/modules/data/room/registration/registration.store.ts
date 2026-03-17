@@ -1,13 +1,8 @@
 import { useRoomDetailsStore } from "../RoomDetails.store";
 import { useI18nGlobal } from "@/plugins/i18n";
-import {
-	LanguageType,
-	RegistrationApiFactory,
-	RegistrationItemResponse,
-	RegistrationListResponse,
-} from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { LanguageType, RegistrationApiFactory, RegistrationItemResponse, RegistrationListResponse } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { defineStore, storeToRefs } from "pinia";

@@ -1,5 +1,4 @@
 import { printQrCodes } from "./qr-code.utils";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { logger } from "@util-logger";
 import { setActivePinia } from "pinia";
@@ -10,17 +9,15 @@ describe("printQrCodes", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		mockWindow = createMock<Window>({
+		mockWindow = {
 			document: {
 				documentElement: { innerHTML: "" },
 				body: { appendChild: vi.fn() },
-				createElement: vi.fn(() => ({
-					appendChild: vi.fn(),
-				})),
 			},
 			print: vi.fn(),
 			close: vi.fn(),
-		});
+		} as unknown as Window;
+
 		vi.spyOn(window, "open").mockReturnValue(mockWindow);
 	});
 

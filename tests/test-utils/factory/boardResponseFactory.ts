@@ -1,5 +1,5 @@
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
-import { BoardLayout, BoardResponse, BoardResponseAllowedOperations } from "@/serverApi/v3";
+import { BoardLayout, BoardResponse, BoardResponseAllowedOperations } from "@api-server";
 import { Factory } from "fishery";
 
 export const boardResponseFactory = Factory.define<BoardResponse>(({ sequence, params }) => ({
@@ -8,7 +8,7 @@ export const boardResponseFactory = Factory.define<BoardResponse>(({ sequence, p
 	columns: [],
 	timestamps: timestampsResponseFactory.build(),
 	isVisible: false,
-	layout: BoardLayout.Columns,
+	layout: BoardLayout.COLUMNS,
 	features: [],
 	permissions: [],
 	allowedOperations: getAllowedOperations(params?.allowedOperations || {}),
@@ -48,9 +48,6 @@ const getAllowedOperations = (
 		viewElement: false,
 		createExternalToolElement: false,
 		createFileElement: false,
-		createSubmissionItemContent: false,
-		deleteSubmissionItem: false,
-		updateSubmissionItem: false,
 		manageVideoConference: false,
 		collapseMediaBoard: false,
 		updateBoardVisibility: false,

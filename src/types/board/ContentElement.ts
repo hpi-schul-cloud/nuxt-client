@@ -10,9 +10,8 @@ import {
 	ParentNodeInfoResponse,
 	ParentNodeType,
 	RichTextElementResponse,
-	SubmissionContainerElementResponse,
 	VideoConferenceElementResponse,
-} from "@/serverApi/v3";
+} from "@api-server";
 
 export type FileFolderElement = FileFolderElementResponse;
 
@@ -21,7 +20,6 @@ export type AnyContentElement =
 	| RichTextElementResponse
 	| FileElementResponse
 	| FileFolderElementResponse
-	| SubmissionContainerElementResponse
 	| ExternalToolElementResponse
 	| DrawingElementResponse
 	| CollaborativeTextEditorElementResponse

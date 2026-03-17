@@ -11,15 +11,14 @@ import {
 	UserBasedRegistrationOptions,
 } from "../types";
 import { useFilterLocalStorage } from "./filterLocalStorage.composable";
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
-import { RoleName } from "@/serverApi/v3";
 import { schoolsModule } from "@/store";
+import { formatUtc } from "@/utils/date-time.utils";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useDataTableFilter = (userType: string) => {
+export const useDataTableFilter = (userType: User) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterState } = useFilterLocalStorage(userType as RoleName.Student | RoleName.Teacher);
+	const { currentFilterQuery } = useFilterLocalStorage(userType);
 	const yearName = schoolsModule.getCurrentYear?.name;
 
 	const filterQuery = ref<FilterQuery>({});
@@ -102,7 +101,7 @@ export const useDataTableFilter = (userType: string) => {
 
 		setFilterChipTitles();
 
-		setFilterState(filterQuery.value);
+		currentFilterQuery.value = filterQuery.value;
 		setFilterMenuItems();
 	};
 
@@ -110,14 +109,14 @@ export const useDataTableFilter = (userType: string) => {
 		if (selectedFilterType.value) delete filterQuery.value[selectedFilterType.value];
 
 		setFilterChipTitles();
-		setFilterState(filterQuery.value);
+		currentFilterQuery.value = filterQuery.value;
 		setFilterMenuItems();
 	};
 
 	const removeChipFilter = (val: FilterOption) => {
 		delete filterQuery.value[val];
 
-		setFilterState(filterQuery.value);
+		currentFilterQuery.value = filterQuery.value;
 		setFilterMenuItems();
 	};
 
@@ -127,35 +126,34 @@ export const useDataTableFilter = (userType: string) => {
 		);
 	};
 
+	const buildDateRangeChipTitle = (labelKey: string, range: { $gte: string; $lte: string }) =>
+		`${t(labelKey)} ${formatUtc(range.$gte, "date")} ${t("common.words.and")} ${formatUtc(range.$lte, "date")}`;
+
 	const prepareChipTitles = (chipItem: FilterItem) => {
-		if (chipItem[0] === FilterOption.REGISTRATION) {
+		const [filterOption, rangeValue] = chipItem;
+
+		if (filterOption === FilterOption.REGISTRATION) {
 			const statusKeyMap = {
 				[Registration.COMPLETE]: t("pages.administration.students.legend.icon.success"),
 				[Registration.MISSING]: t("utils.adminFilter.consent.label.missing"),
 				[Registration.PARENT_AGREED]: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 			};
-			const status = chipItem[1].map((val) => statusKeyMap[val as Registration]);
+			const status = rangeValue.map((val) => statusKeyMap[val as Registration]);
 
 			return status.join(` ${t("common.words.and")} `);
 		}
 
-		if (chipItem[0] === FilterOption.CLASSES)
-			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(", ")}`;
+		if (filterOption === FilterOption.CLASSES)
+			return `${t("utils.adminFilter.class.title")} = ${rangeValue.join(", ")}`;
 
-		if (chipItem[0] === FilterOption.CREATION_DATE)
-			return `${t("utils.adminFilter.date.created")} ${printFromStringUtcToFullDate(
-				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
+		if (filterOption === FilterOption.CREATION_DATE)
+			return buildDateRangeChipTitle("utils.adminFilter.date.created", rangeValue);
 
-		if (chipItem[0] === FilterOption.LAST_MIGRATION_ON)
-			return `${t("utils.adminFilter.lastMigration.title")} ${printFromStringUtcToFullDate(
-				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
+		if (filterOption === FilterOption.LAST_MIGRATION_ON)
+			return buildDateRangeChipTitle("utils.adminFilter.lastMigration.title", rangeValue);
 
-		if (chipItem[0] === FilterOption.OBSOLOTE_SINCE)
-			return `${t("utils.adminFilter.outdatedSince.title")} ${printFromStringUtcToFullDate(
-				chipItem[1].$gte
-			)} ${t("common.words.and")} ${printFromStringUtcToFullDate(chipItem[1].$lte)}`;
+		if (filterOption === FilterOption.OBSOLOTE_SINCE)
+			return buildDateRangeChipTitle("utils.adminFilter.outdatedSince.title", rangeValue);
 		return [];
 	};
 
@@ -172,7 +170,7 @@ export const useDataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
-		filterQuery.value = getFilterState() ?? {};
+		filterQuery.value = currentFilterQuery.value;
 		if (filterQuery.value) setFilterChipTitles();
 		setFilterMenuItems();
 	});

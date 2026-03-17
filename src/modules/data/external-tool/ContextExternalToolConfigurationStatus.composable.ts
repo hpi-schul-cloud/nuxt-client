@@ -1,5 +1,5 @@
 import { ContextExternalToolConfigurationStatus } from "./types";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useI18n } from "vue-i18n";
 
@@ -9,7 +9,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineToolStatusTranslationKey = (toolConfigStatus: ContextExternalToolConfigurationStatus): string => {
 		const userRoles = useAppStore().userRoles;
 
-		if (userRoles.includes(RoleName.Teacher)) {
+		if (userRoles.includes(RoleName.TEACHER)) {
 			if (toolConfigStatus.isOutdatedOnScopeSchool && toolConfigStatus.isOutdatedOnScopeContext) {
 				return "common.tool.information.incomplete.outdated.schoolAndContext.teacher";
 			} else if (toolConfigStatus.isOutdatedOnScopeSchool) {
@@ -42,9 +42,9 @@ export const useContextExternalToolConfigurationStatus = () => {
 			statusString = t("common.medium.alert.incomplete") + " ";
 		}
 
-		if (userRoles.includes(RoleName.Administrator)) {
+		if (userRoles.includes(RoleName.ADMINISTRATOR)) {
 			return statusString + t("common.medium.information.admin");
-		} else if (userRoles.includes(RoleName.Teacher)) {
+		} else if (userRoles.includes(RoleName.TEACHER)) {
 			return statusString + t("common.medium.information.teacher");
 		} else {
 			return statusString + t("common.medium.information.student");
@@ -54,7 +54,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineDeactivatedTranslationKey = (): string => {
 		const userRoles = useAppStore().userRoles;
 
-		if (userRoles.includes(RoleName.Student)) {
+		if (userRoles.includes(RoleName.STUDENT)) {
 			return "common.tool.information.deactivated.student";
 		} else {
 			return "common.tool.information.deactivated.teacher";
@@ -64,7 +64,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineNotLicensedTranslationKey = (): string => {
 		const userRoles = useAppStore().userRoles;
 
-		if (userRoles.includes(RoleName.Student)) {
+		if (userRoles.includes(RoleName.STUDENT)) {
 			return "common.tool.information.notLicensed.student";
 		} else {
 			return "common.tool.information.notLicensed.teacher";
@@ -84,7 +84,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 		return true;
 	};
 
-	const isTeacher = () => useAppStore().userRoles.includes(RoleName.Teacher);
+	const isTeacher = () => useAppStore().userRoles.includes(RoleName.TEACHER);
 
 	return {
 		determineToolStatusTranslationKey,

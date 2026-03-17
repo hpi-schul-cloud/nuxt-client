@@ -22,5 +22,5 @@ import { computed } from "vue";
 
 const { confirm, cancel, dialogOptions, isDialogOpen } = useInternalConfirmationDialog();
 
-const title = computed(() => (dialogOptions.value ? dialogOptions.value.message : ""));
+const title = computed(() => (dialogOptions.value ? (dialogOptions.value.message ?? "") : ""));
 </script>

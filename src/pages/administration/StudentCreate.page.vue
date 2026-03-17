@@ -4,16 +4,15 @@
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<FormCreateUser @create-user="createStudent">
+		<CreateUserForm @create-user="createStudentHandler">
 			<template #inputs>
-				<VTextField
-					v-model="date"
+				<DatePicker
 					:label="t('common.labels.birthdate')"
-					:min="minDate"
-					:max="maxDate"
 					data-testid="input_create-student_birthdate"
-					:class="{ hideCurrentDate: !date }"
-					type="date"
+					:min-date="minDate"
+					:max-date="maxDate"
+					:date="date"
+					@update:date="date = $event"
 				/>
 				<VCheckbox
 					v-model="sendRegistration"
@@ -26,83 +25,61 @@
 			<template #errors>
 				<InfoMessage v-if="businessError" :message="t('pages.administration.students.new.error')" type="bc-error" />
 			</template>
-		</FormCreateUser>
+		</CreateUserForm>
 	</DefaultWireframe>
 </template>
 
-<script>
-import FormCreateUser from "@/components/administration/FormCreateUser.vue";
+<script setup lang="ts">
+import CreateUserForm from "@/components/administration/CreateUserForm.vue";
 import InfoMessage from "@/components/administration/InfoMessage.vue";
-import { inputRangeDate } from "@/plugins/datetime";
-import { RoleName } from "@/serverApi/v3";
+import { dateFromToday } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { notifySuccess, useAppStore } from "@data-app";
+import { RoleName } from "@api-server";
+import { useAppStore } from "@data-app";
+import { UserCreatingData, useUsers } from "@data-users";
+import { DatePicker } from "@ui-date-time-picker";
 import { DefaultWireframe } from "@ui-layout";
-import { defineComponent } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { mapGetters } from "vuex";
+import { useRouter } from "vue-router";
 
-export default defineComponent({
-	components: {
-		FormCreateUser,
-		InfoMessage,
-		DefaultWireframe,
+const { t } = useI18n();
+const { createUser } = useUsers(RoleName.STUDENT);
+const router = useRouter();
+
+const date = ref<string | undefined>(undefined);
+const minDate = dateFromToday(-100, "year");
+const maxDate = dateFromToday(-4, "year");
+const sendRegistration = ref(false);
+const businessError = ref(false);
+const breadcrumbs = [
+	{
+		title: t("pages.administration.students.index.title"),
+		to: "/administration/students",
 	},
-	setup() {
-		const { t } = useI18n();
-		return { t };
+	{
+		title: t("pages.administration.students.new.title"),
+		disabled: true,
 	},
-	data() {
-		return {
-			birthday: null,
-			date: null,
-			menu: false,
-			minDate: inputRangeDate(-100, "y"),
-			maxDate: inputRangeDate(-4, "y"),
-			sendRegistration: false,
-			breadcrumbs: [
-				{
-					title: this.t("pages.administration.students.index.title"),
-					to: "/administration/students",
-				},
-				{
-					title: this.t("pages.administration.students.new.title"),
-					disabled: true,
-				},
-			],
-		};
-	},
-	computed: {
-		...mapGetters("users", {
-			businessError: "getBusinessError",
-		}),
-	},
-	created() {
-		this.$store.commit("users/resetBusinessError");
-	},
-	mounted() {
-		document.title = buildPageTitle(this.t("pages.administration.students.new.title"));
-	},
-	methods: {
-		async createStudent(userData) {
-			await this.$store.dispatch("users/createStudent", {
-				firstName: userData.firstName,
-				lastName: userData.lastName,
-				email: userData.email,
-				birthday: this.date,
-				roles: [RoleName.Student],
-				schoolId: useAppStore().school?.id,
-				sendRegistration: this.sendRegistration,
-			});
-			if (!this.businessError) {
-				notifySuccess(this.t("pages.administration.students.new.success"));
-				this.$router.push({
-					path: `/administration/students`,
-				});
-			}
-		},
-	},
-});
+];
+document.title = buildPageTitle(t("pages.administration.students.new.title"));
+
+const createStudentHandler = async (userData: UserCreatingData) => {
+	const { error } = await createUser({
+		firstName: userData.firstName,
+		lastName: userData.lastName,
+		email: userData.email,
+		birthday: date.value ? new Date(date.value) : undefined,
+		roles: [RoleName.STUDENT],
+		schoolId: useAppStore().school?.id ?? "",
+		sendRegistration: sendRegistration.value,
+	});
+	if (error) {
+		businessError.value = true;
+		return;
+	}
+	router.push("/administration/students");
+};
 </script>
 
 <style lang="scss" scoped>

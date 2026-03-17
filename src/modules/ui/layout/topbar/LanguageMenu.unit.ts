@@ -1,7 +1,7 @@
 import LanguageMenu from "./LanguageMenu.vue";
-import { LanguageType } from "@/serverApi/v3";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -12,7 +12,7 @@ describe("@ui-layout/LanguageMenu", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 	});
 

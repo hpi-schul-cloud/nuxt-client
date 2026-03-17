@@ -1,10 +1,10 @@
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 import { ElementTypeSelectionOptions } from "./SharedElementTypeSelection.composable";
-import { ContentElementType } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
 import { injectStrict } from "@/utils/inject";
 import { createTestEnvStore, expectNotification, mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
+import { ContentElementType } from "@api-server";
+import { ConfigResponse } from "@api-server";
 import { useNotificationStore } from "@data-app";
 import { useBoardAllowedOperations, useBoardFeatures, useCardStore } from "@data-board";
 import { useAddCollaboraFile } from "@feature-collabora";
@@ -68,7 +68,7 @@ describe("ElementTypeSelection Composable", () => {
 				setupSharedElementTypeSelectionMock();
 
 				const addElementMock = vi.fn();
-				const elementType = ContentElementType.RichText;
+				const elementType = ContentElementType.RICH_TEXT;
 
 				return {
 					addElementMock,
@@ -109,7 +109,7 @@ describe("ElementTypeSelection Composable", () => {
 					const cardId = "cardId";
 
 					const addElementMock = vi.fn();
-					const elementType = ContentElementType.CollaborativeTextEditor;
+					const elementType = ContentElementType.COLLABORATIVE_TEXT_EDITOR;
 
 					return {
 						addElementMock,
@@ -135,7 +135,7 @@ describe("ElementTypeSelection Composable", () => {
 					const cardId = "cardId";
 
 					const addElementMock = vi.fn();
-					const elementType = ContentElementType.RichText;
+					const elementType = ContentElementType.RICH_TEXT;
 
 					return {
 						addElementMock,
@@ -157,7 +157,7 @@ describe("ElementTypeSelection Composable", () => {
 			describe("when element type is Whiteboard", () => {
 				it("should show Notification", async () => {
 					const addElementMock = vi.fn();
-					const elementType = ContentElementType.Drawing;
+					const elementType = ContentElementType.DRAWING;
 					const { cardId } = setup();
 
 					const { onElementClick } = useAddElementDialog(addElementMock, cardId);
@@ -174,7 +174,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				setupSharedElementTypeSelectionMock();
 
-				const elementType = ContentElementType.RichText;
+				const elementType = ContentElementType.RICH_TEXT;
 
 				return { addElementMock, error, elementType };
 			};
@@ -202,7 +202,6 @@ describe("ElementTypeSelection Composable", () => {
 			} as ReturnType<typeof useBoardAllowedOperations>);
 
 			createTestEnvStore({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_TLDRAW_ENABLED: true,
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
@@ -237,7 +236,7 @@ describe("ElementTypeSelection Composable", () => {
 
 			askType();
 
-			expect(staticElementTypeOptions.value.length).toBe(9);
+			expect(staticElementTypeOptions.value.length).toBe(8);
 		});
 
 		describe("when preferred tools have finished loading", () => {
@@ -336,7 +335,6 @@ describe("ElementTypeSelection Composable", () => {
 
 	describe("staticElementTypeOptions actions", () => {
 		const defaultEnv: Partial<ConfigResponse> = {
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 			FEATURE_TLDRAW_ENABLED: true,
 			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
@@ -391,7 +389,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					cardId,
 				});
 			});
@@ -421,7 +419,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.File,
+					type: ContentElementType.FILE,
 					cardId,
 				});
 			});
@@ -433,36 +431,6 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-file");
-				option?.action();
-
-				expect(closeDialogMock).toHaveBeenCalledTimes(1);
-			});
-		});
-
-		describe("when the SubmissionElement action is called", () => {
-			it("should call add element function with right argument", () => {
-				const { elementTypeOptions, addElementMock, cardId } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-
-				askType();
-
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-submission-container");
-				option?.action();
-
-				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.SubmissionContainer,
-					cardId,
-				});
-			});
-
-			it("should set isDialogOpen to false", () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-
-				askType();
-
-				const option = elementTypeOptions.value.find((opt) => opt.testId === "create-element-submission-container");
 				option?.action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
@@ -481,7 +449,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.ExternalTool,
+					type: ContentElementType.EXTERNAL_TOOL,
 					cardId,
 				});
 			});
@@ -511,7 +479,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.Drawing,
+					type: ContentElementType.DRAWING,
 					cardId,
 				});
 			});
@@ -543,7 +511,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.CollaborativeTextEditor,
+					type: ContentElementType.COLLABORATIVE_TEXT_EDITOR,
 					cardId,
 				});
 			});
@@ -579,7 +547,7 @@ describe("ElementTypeSelection Composable", () => {
 
 					expect(addElementMock).toHaveBeenCalledTimes(1);
 					expect(addElementMock).toHaveBeenCalledWith({
-						type: ContentElementType.VideoConference,
+						type: ContentElementType.VIDEO_CONFERENCE,
 						cardId,
 					});
 				});
@@ -624,7 +592,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.FileFolder,
+					type: ContentElementType.FILE_FOLDER,
 					cardId,
 				});
 			});
@@ -654,7 +622,7 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
 				expect(addElementMock).toHaveBeenCalledWith({
-					type: ContentElementType.H5p,
+					type: ContentElementType.H5P,
 					cardId,
 				});
 			});
@@ -770,7 +738,7 @@ describe("ElementTypeSelection Composable", () => {
 				expect(cardStore.createPreferredElement).toHaveBeenCalledWith(
 					{
 						cardId,
-						type: ContentElementType.ExternalTool,
+						type: ContentElementType.EXTERNAL_TOOL,
 					},
 					preferredTool
 				);

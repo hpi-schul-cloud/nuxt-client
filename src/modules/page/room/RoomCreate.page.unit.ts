@@ -1,18 +1,17 @@
-import { RoomColor } from "@/serverApi/v3";
 import { RoomCreateParams } from "@/types/room/Room";
 import { createTestRoomStore, mockApiResponse, roomItemFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { RoomColor } from "@api-server";
 import { RoomForm } from "@feature-room";
 import { RoomCreatePage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { createRouterMock, injectRouterMock } from "vue-router-mock";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("@pages/RoomCreate.page.vue", () => {
-	const router = createRouterMock();
-
 	const setup = () => {
-		injectRouterMock(router);
+		injectRouterMock(createRouterMock());
 
 		const wrapper = mount(RoomCreatePage, {
 			global: {
@@ -44,7 +43,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 
 		const roomParams: RoomCreateParams = {
 			name: "test",
-			color: RoomColor.Blue,
+			color: RoomColor.BLUE,
 			features: [],
 		};
 
@@ -52,9 +51,11 @@ describe("@pages/RoomCreate.page.vue", () => {
 			result: mockApiResponse({ data: roomItemFactory.build({ id: "123" }) }),
 			success: true,
 		});
-		await roomFormComponent.vm.$emit("save", { room: roomParams });
+		roomFormComponent.vm.$emit("save", { room: roomParams });
+		await flushPromises();
+
 		expect(roomStore.createRoom).toHaveBeenCalledWith(roomParams);
-		expect(router.push).toHaveBeenCalledWith({
+		expect(getRouter().push).toHaveBeenCalledWith({
 			name: "room-details",
 			params: { id: "123" },
 		});
@@ -63,6 +64,6 @@ describe("@pages/RoomCreate.page.vue", () => {
 	it("should navigate to 'rooms' on cancel", () => {
 		const { roomFormComponent } = setup();
 		roomFormComponent.vm.$emit("cancel");
-		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
+		expect(getRouter().push).toHaveBeenCalledWith({ name: "rooms" });
 	});
 });

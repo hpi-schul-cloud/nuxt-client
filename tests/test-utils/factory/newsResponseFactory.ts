@@ -1,5 +1,5 @@
 import { schoolResponseFactory } from "./schoolResponseFactory";
-import { NewsResponse, NewsTargetModel } from "@/serverApi/v3";
+import { NewsResponse, NewsTargetModel } from "@api-server";
 import { Factory } from "fishery";
 
 export const newsResponseFactory = Factory.define<NewsResponse>(({ sequence }) => ({
@@ -8,7 +8,7 @@ export const newsResponseFactory = Factory.define<NewsResponse>(({ sequence }) =
 	content: `News Content #${sequence}`,
 	displayAt: new Date().toISOString(),
 	targetId: `targetId #${sequence}`,
-	targetModel: NewsTargetModel.Schools,
+	targetModel: NewsTargetModel.SCHOOLS,
 	target: { id: `targetId #${sequence}`, name: `targetName #${sequence}` },
 	school: schoolResponseFactory.build(),
 	creator: { id: `creatorId #${sequence}` },

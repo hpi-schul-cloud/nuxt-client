@@ -1,8 +1,10 @@
-import { FilterOption, Registration, UpdateFilterParamType } from "../types";
+import { FilterOption, Registration, UpdateFilterParamType, User } from "../types";
 import { useDataTableFilter } from "./filter.composable";
 import SchoolsModule from "@/store/schools";
-import { mountComposable } from "@@/tests/test-utils";
+import { createTestAppStore, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 
 vi.mock("@vueuse/core", async (importOriginal) => {
 	const defaultState = {
@@ -30,7 +32,7 @@ vi.mock("vue-i18n", () => ({
 	useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 }));
 
-const setup = (userType: string) =>
+const setup = (userType: User) =>
 	mountComposable(() => {
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -41,7 +43,7 @@ const setup = (userType: string) =>
 	});
 
 const removeAllFilters = () => {
-	const { removeFilter, selectedFilterType, filterQuery } = setup("student");
+	const { removeFilter, selectedFilterType, filterQuery } = setup(User.STUDENT);
 	selectedFilterType.value = FilterOption.LAST_MIGRATION_ON;
 	removeFilter();
 	selectedFilterType.value = FilterOption.REGISTRATION;
@@ -56,14 +58,19 @@ const removeAllFilters = () => {
 };
 
 describe("filter composable", () => {
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+		createTestAppStore();
+	});
+
 	it("should return filterQuery", () => {
-		const { filterQuery } = setup("student");
+		const { filterQuery } = setup(User.STUDENT);
 
 		expect(filterQuery.value).toEqual({});
 	});
 
 	it("should return defaultFilterMenuItems", () => {
-		const { defaultFilterMenuItems } = setup("student");
+		const { defaultFilterMenuItems } = setup(User.STUDENT);
 
 		expect(defaultFilterMenuItems.length).toEqual(5);
 		expect(defaultFilterMenuItems[0].value).toEqual(FilterOption.REGISTRATION);
@@ -74,7 +81,7 @@ describe("filter composable", () => {
 	});
 
 	it("should return user based registrationOptions", () => {
-		const { registrationOptions } = setup("student");
+		const { registrationOptions } = setup(User.STUDENT);
 		const { student, teacher } = registrationOptions;
 
 		expect(student.length).toEqual(3);
@@ -90,13 +97,13 @@ describe("filter composable", () => {
 
 	describe("selectedFilterType", () => {
 		it("should return correct selectedFilterType", () => {
-			const { selectedFilterType } = setup("student");
+			const { selectedFilterType } = setup(User.STUDENT);
 
 			expect(selectedFilterType.value).toEqual(undefined);
 		});
 
 		it("should return 'isDateFiltering' value to be true", () => {
-			const { selectedFilterType, isDateFiltering, isSelectFiltering } = setup("student");
+			const { selectedFilterType, isDateFiltering, isSelectFiltering } = setup(User.STUDENT);
 			selectedFilterType.value = FilterOption.CREATION_DATE;
 
 			expect(isDateFiltering.value).toBe(true);
@@ -104,7 +111,7 @@ describe("filter composable", () => {
 		});
 
 		it("should return 'isSelectFiltering' value to be true", () => {
-			const { selectedFilterType, isDateFiltering, isSelectFiltering } = setup("student");
+			const { selectedFilterType, isDateFiltering, isSelectFiltering } = setup(User.STUDENT);
 			selectedFilterType.value = FilterOption.CLASSES;
 
 			expect(isSelectFiltering.value).toBe(true);
@@ -114,7 +121,7 @@ describe("filter composable", () => {
 
 	describe("filterMenuItems", () => {
 		it("should return default filterMenuItems", () => {
-			const { filterMenuItems } = setup("teacher");
+			const { filterMenuItems } = setup(User.TEACHER);
 
 			expect(filterMenuItems.value.length).toEqual(5);
 			expect(filterMenuItems.value[0].value).toEqual(FilterOption.REGISTRATION);
@@ -125,7 +132,7 @@ describe("filter composable", () => {
 		});
 
 		it("should should return the filtered menu items after selection", () => {
-			const { filterMenuItems, selectedFilterType, updateFilter } = setup("student");
+			const { filterMenuItems, selectedFilterType, updateFilter } = setup(User.STUDENT);
 			selectedFilterType.value = FilterOption.CLASSES;
 			updateFilter(["1A"] as UpdateFilterParamType);
 
@@ -141,7 +148,7 @@ describe("filter composable", () => {
 			removeAllFilters();
 		});
 		it("should remove filter from filterQuery", () => {
-			const { filterQuery, removeFilter, selectedFilterType } = setup("student");
+			const { filterQuery, removeFilter, selectedFilterType } = setup(User.STUDENT);
 
 			const filters = {
 				[FilterOption.CREATION_DATE]: {
@@ -162,7 +169,7 @@ describe("filter composable", () => {
 
 	describe("setFilterChipTitles", () => {
 		it("should set filter chip titles", () => {
-			const { filterChipTitles, filterQuery, updateFilter, selectedFilterType } = setup("teacher");
+			const { filterChipTitles, filterQuery, updateFilter, selectedFilterType } = setup(User.TEACHER);
 
 			const filters = {
 				[FilterOption.CREATION_DATE]: {
@@ -222,7 +229,7 @@ describe("filter composable", () => {
 
 		it("should return an empty array when no filter is set ", () => {
 			removeAllFilters();
-			const { filterChipTitles } = setup("student");
+			const { filterChipTitles } = setup(User.STUDENT);
 
 			expect(filterChipTitles.value.length).toEqual(0);
 		});
@@ -230,7 +237,7 @@ describe("filter composable", () => {
 
 	describe("removeChipFilter", () => {
 		it("should remove chip filter", () => {
-			const { filterQuery, removeChipFilter } = setup("student");
+			const { filterQuery, removeChipFilter } = setup(User.STUDENT);
 
 			const filters = {
 				[FilterOption.CREATION_DATE]: {

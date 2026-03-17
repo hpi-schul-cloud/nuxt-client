@@ -1,9 +1,9 @@
 import { useBoardStore } from "./Board.store";
 import { useBoardAllowedOperations } from "./board-allowed-operations.composable";
-import type { BoardResponseAllowedOperations } from "@/serverApi/v3";
 import { Board } from "@/types/board/Board";
 import { boardResponseFactory } from "@@/tests/test-utils/factory";
-import { createMock } from "@golevelup/ts-vitest";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
+import type { BoardResponseAllowedOperations } from "@api-server";
 import { ref } from "vue";
 
 vi.mock("./Board.store");
@@ -21,7 +21,7 @@ vi.mock("pinia", async () => {
 
 describe("board-allowed-operations.composable", () => {
 	const setup = (board?: Board) => {
-		const mockedBoardStore = createMock<ReturnType<typeof useBoardStore>>({
+		const mockedBoardStore = mockComposable(useBoardStore, {
 			board,
 		});
 

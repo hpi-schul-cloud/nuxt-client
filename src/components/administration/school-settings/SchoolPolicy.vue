@@ -20,7 +20,7 @@
 					{{
 						privacyPolicy
 							? t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-									date: formatDate(privacyPolicy.publishedAt),
+									date: formatRecentOrActual(privacyPolicy.publishedAt),
 								})
 							: t("pages.administration.school.index.schoolPolicy.notUploadedYet")
 					}}
@@ -76,10 +76,10 @@
 
 <script setup lang="ts">
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
-import { formatDateForAlerts } from "@/plugins/datetime";
-import { Permission } from "@/serverApi/v3";
+import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolPrivacyPolicy } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
@@ -94,7 +94,6 @@ const isSchoolPolicyFormDialogOpen = ref(false);
 const isDeletePolicyDialogOpen = ref(false);
 const { status, fetchPrivacyPolicy, privacyPolicy, createPrivacyPolicy, deletePrivacyPolicy } =
 	useSchoolPrivacyPolicy();
-
 const school = computed(() => schoolsModule.getSchool);
 watch(
 	school,
@@ -104,9 +103,7 @@ watch(
 	{ immediate: true }
 );
 
-const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SchoolEdit);
-
-const formatDate = (dateTime: string) => formatDateForAlerts(dateTime, true);
+const hasSchoolEditPermission = useAppStore().hasPermission(Permission.SCHOOL_EDIT);
 
 const downloadPolicy = () => {
 	if (privacyPolicy.value) {

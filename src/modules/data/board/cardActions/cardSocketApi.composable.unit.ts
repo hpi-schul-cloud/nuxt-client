@@ -14,19 +14,24 @@ import {
 } from "./cardActionPayload.types";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { BoardLayout, ContentElementType } from "@/serverApi/v3";
-import { cardResponseFactory, mockedPiniaStoreTyping, richTextElementContentFactory } from "@@/tests/test-utils";
+import {
+	cardResponseFactory,
+	mockComposable,
+	mockedPiniaStoreTyping,
+	mountComposable,
+	richTextElementContentFactory,
+} from "@@/tests/test-utils";
 import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
+import { BoardLayout, ContentElementType } from "@api-server";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, Mocked } from "vitest";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("vue-i18n");
 (useI18n as Mock).mockReturnValue({ t: (key: string) => key });
@@ -38,22 +43,20 @@ vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@util-board/LastCreatedElement.composable");
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 describe("useCardSocketApi", () => {
-	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
-	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	let socketMock: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({}));
 
-		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
+		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
 
-		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
 		vi.useFakeTimers();
@@ -63,8 +66,8 @@ describe("useCardSocketApi", () => {
 			resetLastCreatedElementId: vi.fn(),
 		});
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(useCardSocketApi);
 	});
 
 	afterEach(() => {
@@ -88,7 +91,7 @@ describe("useCardSocketApi", () => {
 
 				const payload: CreateElementSuccessPayload = {
 					cardId: "cardId",
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 					toPosition: 0,
 					newElement: richTextElementResponseFactory.build(),
 					isOwnAction: true,
@@ -134,7 +137,7 @@ describe("useCardSocketApi", () => {
 				const payload = {
 					elementId: "elementId",
 					data: {
-						type: ContentElementType.RichText,
+						type: ContentElementType.RICH_TEXT,
 						content: richTextElementContentFactory.build(),
 					},
 					isOwnAction: true,
@@ -221,7 +224,7 @@ describe("useCardSocketApi", () => {
 					title: "sometitle",
 					columns: [],
 					isVisible: true,
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 					timestamps: {
 						createdAt: new Date().toISOString(),
 						lastUpdatedAt: new Date().toISOString(),
@@ -239,7 +242,7 @@ describe("useCardSocketApi", () => {
 
 				const payload: CreateElementFailurePayload = {
 					cardId: "cardId",
-					type: ContentElementType.RichText,
+					type: ContentElementType.RICH_TEXT,
 				};
 				dispatch(CardActions.createElementFailure(payload));
 
@@ -357,7 +360,7 @@ describe("useCardSocketApi", () => {
 
 			const payload = {
 				cardId: "cardId",
-				type: ContentElementType.RichText,
+				type: ContentElementType.RICH_TEXT,
 			};
 
 			createElementRequest(payload);

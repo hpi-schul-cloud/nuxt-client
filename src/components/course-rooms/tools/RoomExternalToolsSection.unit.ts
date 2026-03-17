@@ -1,34 +1,31 @@
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { Permission, RoleName, ToolContextType } from "@/serverApi/v3";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	createTestAppStore,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName, ToolContextType } from "@api-server";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, MountingOptions } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
-vi.mock("vue-router", () => ({
-	useRoute: vi.fn(),
-	useRouter: vi.fn(),
-}));
-const useRouterMock = <Mock>useRouter;
+vi.mock("vue-router");
+const useRouterMock = vi.mocked(useRouter);
 
 describe("RoomExternalToolsSection", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore({
 			me: {
-				roles: [{ id: "teacher-id", name: RoleName.Teacher }],
-				permissions: [Permission.ContextToolAdmin],
+				roles: [{ id: "teacher-id", name: RoleName.TEACHER }],
+				permissions: [Permission.CONTEXT_TOOL_ADMIN],
 			},
 		});
 	});
@@ -111,7 +108,7 @@ describe("RoomExternalToolsSection", () => {
 
 			const roomId = "roomId";
 
-			const router = createMock<Router>();
+			const { router } = injectRouterMock(createRouterMock());
 			useRouterMock.mockReturnValue(router);
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId });
@@ -138,7 +135,7 @@ describe("RoomExternalToolsSection", () => {
 				params: { configId: tool.contextExternalToolId },
 				query: {
 					contextId: roomId,
-					contextType: ToolContextType.Course,
+					contextType: ToolContextType.COURSE,
 				},
 			});
 		});

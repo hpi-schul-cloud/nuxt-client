@@ -235,9 +235,9 @@
 
 <script>
 import ImportUsersMatchSearch from "./ImportUsersMatchSearch.vue";
-import { ImportUserResponseRoleNamesEnum, SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
+import { ImportUserResponseRoleNames, SchulcloudTheme } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiAccountPlus,
@@ -267,15 +267,15 @@ export default {
 			roles: [
 				{
 					text: this.$t("common.roleName.student"),
-					value: ImportUserResponseRoleNamesEnum.Student,
+					value: ImportUserResponseRoleNames.STUDENT,
 				},
 				{
 					text: this.$t("common.roleName.teacher"),
-					value: ImportUserResponseRoleNamesEnum.Teacher,
+					value: ImportUserResponseRoleNames.TEACHER,
 				},
 				{
 					text: this.$t("common.roleName.administrator"),
-					value: ImportUserResponseRoleNamesEnum.Admin,
+					value: ImportUserResponseRoleNames.ADMIN,
 				},
 			],
 			searchFirstName: "",
@@ -361,7 +361,7 @@ export default {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
 		sourceSystemName() {
-			if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.Brb) {
+			if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.BRB) {
 				return this.$t("pages.administration.migration.brbSchulportal");
 			} else if (useEnvConfig().value.SC_THEME.toLowerCase() === SchulcloudTheme.N21) {
 				return "moin.schule";

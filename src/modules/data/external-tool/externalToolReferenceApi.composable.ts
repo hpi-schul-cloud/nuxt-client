@@ -1,6 +1,6 @@
 import { ExternalToolDisplayData } from "./types";
-import { ToolApiFactory, ToolApiInterface, ToolContextType, ToolReferenceListResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { ToolApiFactory, ToolApiInterface, ToolContextType, ToolReferenceListResponse } from "@api-server";
 import { AxiosResponse } from "axios";
 
 export const useExternalToolReferenceApi = () => {

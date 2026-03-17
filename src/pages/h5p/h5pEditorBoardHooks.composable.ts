@@ -1,6 +1,6 @@
-import { ContentElementType, H5pElementResponse } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { ContentElementType, H5pElementResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardApi, useCardStore } from "@data-board";
 import { onUnmounted, Ref, ref } from "vue";
@@ -11,7 +11,7 @@ export const useH5pEditorBoardHooks = (elementId: string) => {
 	const element: Ref<H5pElementResponse | undefined> = ref();
 
 	const isH5pElement = (element: AnyContentElement): element is H5pElementResponse =>
-		element.type === ContentElementType.H5p;
+		element.type === ContentElementType.H5P;
 
 	const onCreate = async (): Promise<void> => {
 		const response = await boardApi.getElementWithParentHierarchyCall(elementId);

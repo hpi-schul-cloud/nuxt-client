@@ -8,20 +8,13 @@ import { Mock } from "vitest";
 import { UnwrapRef } from "vue";
 
 export type MockedStore<TStoreDef extends () => unknown> =
-	TStoreDef extends StoreDefinition<
-		infer Id,
-		infer State,
-		infer Getters,
-		infer Actions
-	>
+	TStoreDef extends StoreDefinition<infer Id, infer State, infer Getters, infer Actions>
 		? Store<
 				Id,
 				State,
 				Record<string, never>,
 				{
-					[K in keyof Actions]: Actions[K] extends (
-						...args: infer Args
-					) => infer ReturnT
+					[K in keyof Actions]: Actions[K] extends (...args: infer Args) => infer ReturnT
 						? Mock<(...args: Args) => ReturnT>
 						: Actions[K];
 				}
@@ -30,8 +23,6 @@ export type MockedStore<TStoreDef extends () => unknown> =
 			}
 		: ReturnType<TStoreDef>;
 
-export function mockedPiniaStoreTyping<TStoreDef extends () => unknown>(
-	useStore: TStoreDef
-): MockedStore<TStoreDef> {
+export function mockedPiniaStoreTyping<TStoreDef extends () => unknown>(useStore: TStoreDef): MockedStore<TStoreDef> {
 	return useStore() as MockedStore<TStoreDef>;
 }

@@ -1,23 +1,23 @@
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import { Permission, RoleName } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
-import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission, RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardAllowedOperations } from "@data-board";
 import { ContextExternalToolConfigurationStatus, useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 import { computed } from "vue";
 
 vi.mock("@data-board");
 vi.mock("@data-app");
 
 describe("ExternalToolElementAlert", () => {
-	let useToolConfigurationStatusMock: DeepMocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
+	let useToolConfigurationStatusMock: Mocked<ReturnType<typeof useContextExternalToolConfigurationStatus>>;
 
 	type ExternalToolElementAlertSetupOptions = {
 		allowedOperations?: Record<string, boolean>;
@@ -40,15 +40,15 @@ describe("ExternalToolElementAlert", () => {
 			allowedOperations: computed(() => allowedOperations as unknown),
 		} as ReturnType<typeof useBoardAllowedOperations>);
 
-		useToolConfigurationStatusMock = createMock<ReturnType<typeof useContextExternalToolConfigurationStatus>>();
+		useToolConfigurationStatusMock = mockComposable(useContextExternalToolConfigurationStatus);
 		useToolConfigurationStatusMock.determineToolStatusTranslationKey.mockReturnValue("translated");
 
 		setActivePinia(createTestingPinia());
 		const hasContextToolAdminPermission = allowedOperations.createExternalToolElement ?? false;
-		const permissions = hasContextToolAdminPermission ? [Permission.ContextToolAdmin] : [];
+		const permissions = hasContextToolAdminPermission ? [Permission.CONTEXT_TOOL_ADMIN] : [];
 		vi.mocked(useAppStore).mockReturnValue({
 			hasPermission: (permission: Permission) => permissions.includes(permission),
-			userRoles: [isTeacher ? RoleName.Teacher : RoleName.Student],
+			userRoles: [isTeacher ? RoleName.TEACHER : RoleName.STUDENT],
 		} as unknown as ReturnType<typeof useAppStore>);
 
 		const wrapper = mount(ExternalToolElementAlert, {

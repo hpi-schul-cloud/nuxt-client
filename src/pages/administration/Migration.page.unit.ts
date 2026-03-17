@@ -1,6 +1,5 @@
 import MigrationWizard from "./Migration.page.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
@@ -8,20 +7,14 @@ import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock } from "@golevelup/ts-vitest";
+import { SchulcloudTheme } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, flushPromises, mount, shallowMount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { ComponentPublicInstance, nextTick } from "vue";
 import { NamedValue } from "vue-i18n";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VBtn, VCardText, VProgressCircular } from "vuetify/components";
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-
-const router = createMock<Router>();
 
 const $theme = {
 	name: "instance name",
@@ -46,10 +39,8 @@ type MigrationPageWrapperType = Partial<{
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
-): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> => {
-	useRouterMock.mockReturnValue(router);
-
-	return mount(MigrationWizard, {
+): VueWrapper<ComponentPublicInstance & MigrationPageWrapperType> =>
+	mount(MigrationWizard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -62,7 +53,6 @@ const getWrapper = (
 		},
 		...options,
 	});
-};
 
 const getWrapperShallow = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
@@ -82,9 +72,10 @@ describe("User Migration / Index", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		injectRouterMock(createRouterMock());
 		createTestEnvStore({
 			SC_TITLE: "dBildungscloud",
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 			FEATURE_USER_MIGRATION_ENABLED: true,
 			MIGRATION_WIZARD_DOCUMENTATION_LINK: "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true",
 		});
@@ -452,9 +443,9 @@ describe("User Migration / Index", () => {
 				});
 
 				dialog.vm.$emit("dialog-confirmed");
-				await nextTick();
+				await flushPromises();
 
-				expect(router.push).toHaveBeenCalledWith({
+				expect(getRouter().push).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
 					query: { openPanels: "migration" },
 				});

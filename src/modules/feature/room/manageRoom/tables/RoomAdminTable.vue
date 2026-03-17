@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { RoomStatsItemResponse } from "@/serverApi/v3";
+import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";

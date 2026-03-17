@@ -1,4 +1,4 @@
-import { FileElementContent } from "@/serverApi/v3";
+import { FileElementContent } from "@api-server";
 import { Factory } from "fishery";
 
 export const fileElementContent = Factory.define<FileElementContent>(() => ({

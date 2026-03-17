@@ -2,13 +2,12 @@ import FileStatistic from "./FileStatistic.vue";
 import { FolderAlert } from "./FolderAlert.enum";
 import FolderContentElement from "./FolderContentElement.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
-import { ContentElementType } from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
-import { parentStatisticFactory } from "@@/tests/test-utils";
+import { mockComposable, parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ContentElementType } from "@api-server";
 import { useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
@@ -17,7 +16,8 @@ import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed } from "vue";
-import { Router, RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VAlert } from "vuetify/components";
 
 vi.mock("./useFolderAlerts.composable");
@@ -29,22 +29,10 @@ vi.mock("@data-board", () => ({
 	})),
 }));
 
-vi.mock("vue-router", async (importOriginal) => {
-	const actual = await importOriginal<typeof import("vue-router")>();
-	return {
-		...actual,
-		useRoute: vi.fn(),
-		useRouter: vi.fn(() => ({
-			push: vi.fn(),
-		})),
-	};
-});
-const useRouterMock = <Mock>useRouter;
-
 describe("FolderContentElement", () => {
 	const mockElement: FileFolderElement = {
 		id: "123",
-		type: ContentElementType.FileFolder,
+		type: ContentElementType.FILE_FOLDER,
 		content: {
 			title: "Test Folder",
 		},
@@ -62,8 +50,8 @@ describe("FolderContentElement", () => {
 		alerts?: FolderAlert[];
 		fileStatistics?: ReturnType<typeof parentStatisticFactory.build>;
 	}) => {
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
+
 		const statistic =
 			options.fileStatistics ||
 			parentStatisticFactory.build({
@@ -72,7 +60,7 @@ describe("FolderContentElement", () => {
 			});
 		const getStatisticByParentId = vi.fn(() => statistic);
 		const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-		const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
+		const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi, {
 			getStatisticByParentId,
 			tryGetParentStatisticFromApi,
 		});

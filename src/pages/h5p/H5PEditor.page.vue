@@ -22,8 +22,8 @@
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import { H5pEditorHooks } from "./types/h5pEditorHooks";
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
-import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { H5PContentParentType, H5PSaveResponse } from "@api-h5p";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";

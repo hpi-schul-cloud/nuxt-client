@@ -1,39 +1,38 @@
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { Permission } from "@/serverApi/v3";
-import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { contextExternalToolConfigurationStatusFactory, mockComposable } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import {
 	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { RoomDotMenu } from "@ui-room-details";
 import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@data-external-tool");
 vi.mock("@data-app");
 
 describe("RoomExternalToolCard", () => {
-	let useExternalToolLaunchStateMock: DeepMocked<ReturnType<typeof useExternalToolLaunchState>>;
+	let useExternalToolLaunchStateMock: Mocked<ReturnType<typeof useExternalToolLaunchState>>;
 
-	let useContextExternalToolConfigurationStatusMock: DeepMocked<
+	let useContextExternalToolConfigurationStatusMock: Mocked<
 		ReturnType<typeof useContextExternalToolConfigurationStatus>
 	>;
 
 	beforeEach(() => {
 		vi.mocked(useAppStore).mockReturnValue({
-			hasPermission: (permission: Permission) => permission === Permission.ContextToolAdmin,
+			hasPermission: (permission: Permission) => permission === Permission.CONTEXT_TOOL_ADMIN,
 			userRoles: [],
 		} as unknown as ReturnType<typeof useAppStore>);
 
-		useExternalToolLaunchStateMock = createMock<ReturnType<typeof useExternalToolLaunchState>>();
+		useExternalToolLaunchStateMock = mockComposable(useExternalToolLaunchState);
 
-		useContextExternalToolConfigurationStatusMock =
-			createMock<ReturnType<typeof useContextExternalToolConfigurationStatus>>();
+		useContextExternalToolConfigurationStatusMock = mockComposable(useContextExternalToolConfigurationStatus);
 
 		vi.mocked(useExternalToolLaunchState).mockReturnValue(useExternalToolLaunchStateMock);
 

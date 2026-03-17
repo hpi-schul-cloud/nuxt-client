@@ -30,9 +30,9 @@
 
 <script setup lang="ts">
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ToolContextType } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
