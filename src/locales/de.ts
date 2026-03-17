@@ -126,6 +126,8 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.labels.welcome": "Willkommen",
 	"common.labels.fileName": "Dateiname",
+	"common.labels.tasks.assigned": "Gestellte Aufgaben",
+	"common.labels.tasks.more": "Weitere Aufgaben...",
 	"common.loading.text": "Daten werden geladen...",
 	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
 	"common.medium.alert.notLicensed": "Medium ist nicht freigegeben.",

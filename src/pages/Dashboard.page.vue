@@ -55,6 +55,7 @@
 
 			<!-- Teacher tasks  -->
 			<template v-if="isTeacher">
+				<!-- homework feedback required -->
 				<DashboardTaskSection
 					v-if="dashboardData?.homeworksFeedbackRequired && dashboardData?.homeworksFeedbackRequired?.length > 0"
 					data-testid="tasks-with-required-feedback"
@@ -62,12 +63,16 @@
 					:tasks="dashboardData.homeworksFeedbackRequired"
 					href="/tasks"
 				/>
-			</template>
 
-			<!--      {{#if isTeacher}}-->
-			<!--      {{#if homeworksFeedbackRequired}}-->
-			<!--      {{> 'dashboard/components/homework_tiles' section-id="tasks-with-required-feedback" title=($t "dashboard.headline.withRequiredFeedback") content=homeworksFeedbackRequired href="/tasks" redirectToTab="submissions"}}-->
-			<!--      {{/if}}-->
+				<!-- assigned homework -->
+				<DashboardTaskSection
+					v-if="dashboardData?.assignedHomeworks && dashboardData?.assignedHomeworks?.length > 0"
+					data-testid="tasks-with-required-feedback"
+					:title="t('common.labels.tasks.assigned')"
+					:tasks="dashboardData.assignedHomeworks"
+					href="/tasks"
+				/>
+			</template>
 
 			<!--      {{#if assignedHomeworks}}-->
 			<!--      {{> 'dashboard/components/homework_tiles' section-id="published-tasks" title=($t "global.headline.assignedTasks") content=assignedHomeworks href="/tasks"}}-->

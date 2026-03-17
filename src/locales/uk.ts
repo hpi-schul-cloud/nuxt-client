@@ -126,6 +126,8 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.labels.welcome": "Ласкаво просимо",
 	"common.labels.fileName": "Ім'я файлу",
+	"common.labels.tasks.assigned": "Призначені завдання",
+	"common.labels.tasks.more": "Інші завдання...",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
 	"common.medium.alert.notLicensed": "Середній не уповноважений.",
