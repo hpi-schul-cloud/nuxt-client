@@ -5,7 +5,7 @@ import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
-const TEST_PASSWORD = "test-fixture-password";
+const TEST_PASSWORD = "test-password";
 
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();

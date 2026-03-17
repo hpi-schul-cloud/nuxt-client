@@ -39,6 +39,8 @@ export const useBulkConsent = () => {
 	};
 
 	const findConsentUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
+		if (selectedIds.value.length === 0) return;
+
 		const queryWithUsers = {
 			...query,
 			users: selectedIds.value,

@@ -22,7 +22,7 @@
 		<BackendDataTable
 			v-model:current-page="page"
 			v-model:rows-per-page="limit"
-			v-model:selected-row-ids="tableSelection"
+			v-model:selected-row-ids="selectedIds"
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
@@ -126,7 +126,7 @@ import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { useDebounceFn, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -197,7 +197,6 @@ const tableColumns = [
 	},
 ];
 
-const tableSelection = ref<string[]>([]);
 const tableSelectionType = ref("inclusive");
 const isConfirmDialogOpen = ref(false);
 
@@ -303,14 +302,7 @@ const fab = computed(() => {
 });
 
 const selectedStudents = computed(
-	() => userList?.value.filter((student) => tableSelection.value.includes(student._id)) || []
-);
-
-watch(
-	() => tableSelection.value,
-	(newSelection) => {
-		selectedIds.value = newSelection;
-	}
+	() => userList?.value.filter((student) => selectedIds.value.includes(student._id)) || []
 );
 
 useTitle(buildPageTitle(t("pages.administration.students.index.title")));
@@ -392,13 +384,13 @@ const openDeleteDialog = () => {
 
 const onConfirmDelete = async () => {
 	try {
-		await deleteUsers(tableSelection.value);
+		await deleteUsers(selectedIds.value);
 		notifySuccess(t("pages.administration.remove.success"));
 		fetchFilteredStudents();
 	} catch {
 		notifyError(t("pages.administration.remove.error"));
 	} finally {
-		tableSelection.value = reactive([]);
+		selectedIds.value = reactive([]);
 		tableSelectionType.value = "inclusive";
 	}
 };

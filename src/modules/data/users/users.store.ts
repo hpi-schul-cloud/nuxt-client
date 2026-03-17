@@ -43,6 +43,7 @@ export const useUsersStore = defineStore("usersStore", () => {
 
 	const init = (type: RoleName.STUDENT | RoleName.TEACHER) => {
 		userType.value = type;
+		selectedIds.value = [];
 	};
 
 	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {

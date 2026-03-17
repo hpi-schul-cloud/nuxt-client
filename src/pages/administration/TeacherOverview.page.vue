@@ -20,7 +20,7 @@
 		<BackendDataTable
 			v-model:current-page="page"
 			v-model:rows-per-page="limit"
-			v-model:selected-row-ids="tableSelection"
+			v-model:selected-row-ids="selectedIds"
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
@@ -123,7 +123,7 @@ const { fetchClasses, classNameList } = useClasses();
 
 const usersStore = useUsersStore();
 usersStore.init(RoleName.TEACHER);
-const { deletingProgress, userList, qrLinks, pagination } = storeToRefs(usersStore);
+const { deletingProgress, userList, qrLinks, pagination, selectedIds } = storeToRefs(usersStore);
 const { deleteUsers, fetchUsers, sendRegistrationLink, getQrRegistrationLinks } = usersStore;
 
 const { t } = useI18n();
@@ -178,7 +178,6 @@ const tableActions = [
 	},
 ];
 
-const tableSelection = ref<string[]>([]);
 const tableSelectionType = ref("inclusive");
 const tableColumns = [
 	{
@@ -323,7 +322,7 @@ const fab = computed(() => {
 	];
 });
 
-const selectedTeachers = computed(() => userList.value.filter((teacher) => tableSelection.value.includes(teacher._id)));
+const selectedTeachers = computed(() => userList.value.filter((teacher) => selectedIds.value.includes(teacher._id)));
 
 useTitle(buildPageTitle(t("pages.administration.teachers.index.title")));
 
@@ -373,13 +372,13 @@ const onUpdateRowsPerPage = (newLimit: number) => {
 
 const onConfirmDelete = async () => {
 	try {
-		await deleteUsers(tableSelection.value);
+		await deleteUsers(selectedIds.value);
 		notifySuccess(t("pages.administration.remove.success"));
 		fetchFilteredTeachers();
 	} catch {
 		notifyError(t("pages.administration.remove.error"));
 	} finally {
-		tableSelection.value = [];
+		selectedIds.value = [];
 		tableSelectionType.value = "inclusive";
 	}
 };
