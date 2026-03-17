@@ -6,7 +6,7 @@
 
 		<SvsDialog
 			v-model="isDialogOpen"
-			data-testid="confirmation-dialog"
+			data-testid="confirm-dialog"
 			:confirm-btn-lang-key="dialogOptions?.confirmBtnKey"
 			:title="confirmTitle"
 			@confirm="confirm"
@@ -14,10 +14,10 @@
 			@after-leave="resetDialogOptions"
 		>
 			<template v-if="confirmMessage" #content>
-				<WarningAlert v-if="dialogOptions?.messageType === 'warning'">
+				<WarningAlert v-if="dialogOptions?.messageType === 'warning'" data-testid="confirm-dialog-alert">
 					{{ confirmMessage }}
 				</WarningAlert>
-				<InfoAlert v-if="dialogOptions?.messageType === 'info'">
+				<InfoAlert v-if="dialogOptions?.messageType === 'info'" data-testid="confirm-dialog-alert">
 					{{ confirmMessage }}
 				</InfoAlert>
 			</template>

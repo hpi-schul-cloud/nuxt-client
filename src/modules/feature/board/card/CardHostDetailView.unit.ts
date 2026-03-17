@@ -4,7 +4,7 @@ import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CardResponse } from "@api-server";
-import { flushPromises, shallowMount, type VueWrapper } from "@vue/test-utils";
+import { shallowMount, type VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
 
