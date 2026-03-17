@@ -11,7 +11,7 @@
 			</div>
 		</template>
 
-		<template #default>
+		<template v-if="status === 'completed'" #default>
 			<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 			<!-- Dashboard news -->
@@ -65,96 +65,60 @@
 				/>
 
 				<!-- assigned homework -->
+				<template v-if="!dashboardData?.assignedHomeworks || dashboardData?.assignedHomeworks?.length === 0">
+					<h2>{{ t("common.words.tasks") }}</h2>
+					<EmptyState data-testid="empty-state-tasks" :title="t('pages.dashboard.no.tasks')">
+						<template #media>
+							<VImg height="160" src="@/assets/img/tasks-empty.svg" />
+						</template>
+					</EmptyState>
+				</template>
 				<DashboardTaskSection
-					v-if="dashboardData?.assignedHomeworks && dashboardData?.assignedHomeworks?.length > 0"
+					v-else
 					data-testid="tasks-with-required-feedback"
 					:title="t('common.labels.tasks.assigned')"
 					:tasks="dashboardData.assignedHomeworks"
 					href="/tasks"
 				/>
+
+				<!-- private home works -->
+				<DashboardTaskSection
+					v-if="dashboardData?.privateHomeworks && dashboardData.privateHomeworks.length > 1"
+					data-testid="tasks-private"
+					:title="t('common.words.drafts')"
+					:tasks="dashboardData?.privateHomeworks"
+					href="/tasks"
+				/>
 			</template>
 
-			<!--      {{#if assignedHomeworks}}-->
-			<!--      {{> 'dashboard/components/homework_tiles' section-id="published-tasks" title=($t "global.headline.assignedTasks") content=assignedHomeworks href="/tasks"}}-->
-			<!--      {{else}}-->
-			<!--      <section class="section mb-2">-->
-			<!--        <div class="row">-->
-			<!--          <div class="col-sm-12">-->
-			<!--            <h2 class="h5 mb-1 mt-2"><a class="dashboard-title" href="/tasks">{{$t "global.headline.tasks"}}</a></h2>-->
-			<!--          </div>-->
-			<!--        </div>-->
-			<!--        <div class="row d-block text-center">-->
-			<!--          <div class="empty-state">-->
-			<!--            <div class="col-sm-12">-->
-			<!--              <div class="image center">-->
-			<!--                {{> 'courses/components/svg_tasks' }}-->
-			<!--              </div>-->
-			<!--              <p class="text-muted dashboard-empty-info">-->
-			<!--                {{$t "dashboard.text.emptyHomeworksInfo"}}-->
-			<!--              </p>-->
-			<!--            </div>-->
-			<!--          </div>-->
-			<!--        </div>-->
-			<!--      </section>-->
-			<!--      {{/if}}-->
+			<!-- Student tasks  -->
+			<template v-else-if="isStudent">
+				<!-- assigned homework -->
+				<template v-if="!dashboardData?.assignedHomeworks || dashboardData?.assignedHomeworks?.length === 0">
+					<h2>{{ t("common.words.tasks") }}</h2>
+					<EmptyState data-testid="empty-state-tasks" :title="t('pages.dashboard.no.tasks')">
+						<template #media>
+							<VImg height="160" src="@/assets/img/tasks-empty.svg" />
+						</template>
+					</EmptyState>
+				</template>
+				<DashboardTaskSection
+					v-else
+					data-testid="tasks-with-required-feedback"
+					:title="t('common.labels.tasks.assigned')"
+					:tasks="dashboardData.assignedHomeworks"
+					href="/tasks"
+				/>
 
-			<!--      {{#if privateHomeworks}}-->
-			<!--      {{> 'dashboard/components/homework_tiles' section-id="private-tasks" title=($t "global.headline.draftTasks") content=privateHomeworks href="/tasks"}}-->
-			<!--      {{/if}}-->
-
-			<!--      {{else if isStudent}}-->
-			<!--      {{#if assignedHomeworks}}-->
-			<!--      {{> 'dashboard/components/homework_tiles' section-id="published-tasks" title=($t "global.headline.assignedTasks") content=assignedHomeworks href="/tasks"}}-->
-			<!--      {{else}}-->
-			<!--      <section class="section mb-2">-->
-			<!--        <div class="row">-->
-			<!--          <div class="col-sm-12">-->
-			<!--            <h2 class="h5 mb-1 mt-2"><a class="dashboard-title" href="/tasks">{{$t "global.headline.tasks"}}</a></h2>-->
-			<!--          </div>-->
-			<!--        </div>-->
-			<!--        <div class="row d-block text-center">-->
-			<!--          <div class="col-sm-12">-->
-			<!--            <div class="empty-state">-->
-			<!--              <div class="image center">-->
-			<!--                {{> 'courses/components/svg_tasks' }}-->
-			<!--              </div>-->
-			<!--              <p class="text-muted dashboard-empty-info">-->
-			<!--                {{$t "dashboard.text.emptyHomeworksInfo"}}-->
-			<!--              </p>-->
-			<!--            </div>-->
-			<!--          </div>-->
-			<!--        </div>-->
-			<!--      </section>-->
-			<!--      {{/if}}-->
-
-			<!--      {{#if homeworksWithFeedback}}-->
-			<!--      {{> 'dashboard/components/homework_tiles' section-id="tasks-with-feedback" title=($t "dashboard.headline.withFeedback") content=homeworksWithFeedback href="/tasks" redirectToTab="feedback"}}-->
-			<!--      {{/if}}-->
-			<!--      {{/if}}-->
-
-			<!--      {{#unless (getConfig "FEATURE_DASHBOARD_NEWS_ON_TOP_ENABLED")}}-->
-			<!--      {{#if news}}-->
-			<!--      {{>  'dashboard/components/card_section' section-id="news" title=($t "global.headline.news") content=news link-text=($t "dashboard.link.continueReading") href="/news/"}}-->
-			<!--      {{else}}-->
-			<!--      <section data-testid="news-section" class="section section-news mb-2">-->
-			<!--        <div class="row">-->
-			<!--          <div class="col-sm-12">-->
-			<!--            <h2 class="h5 mb-1 mt-2"><a class="dashboard-title" href="/news/">{{$t "global.headline.news"}}</a></h2>-->
-			<!--          </div>-->
-			<!--        </div>-->
-			<!--        <div class="row d-block text-center">-->
-			<!--          <div class="empty-state">-->
-			<!--            <div class="image center">-->
-			<!--              <img src="{{getAssetPath '/images/dashboard/news-empty.svg'}}" alt="" role="presentation" class="image" />-->
-			<!--            </div>-->
-			<!--            <p class="text-muted dashboard-empty-info">-->
-			<!--              {{$t "dashboard.text.emptyNewsInfo"}}-->
-			<!--            </p>-->
-			<!--          </div>-->
-			<!--        </div>-->
-			<!--      </section>-->
-			<!--      {{/if}}-->
-			<!--      {{/unless}}-->
+				<!-- homeworks with feedback -->
+				<DashboardTaskSection
+					v-if="dashboardData?.homeworksWithFeedback && dashboardData?.homeworksWithFeedback.length > 0"
+					data-testid="tasks-with-feedback"
+					:title="t('pages.dashboard.schedule.with.feedback')"
+					:tasks="dashboardData.homeworksWithFeedback"
+					href="/tasks"
+				/>
+			</template>
 
 			<!--      {{#if this.currentSchoolData.pilot}}-->
 			<!--      {{#ifneq this.currentRole "Schüler"}}-->
@@ -167,32 +131,34 @@
 			<!--      {{/if}}-->
 
 			<!-- Dashboard new release announcement      -->
-			<template v-if="dashboardData?.showNewReleaseModal">
-				<SvsDialog :model-value="true" title="pages.dashboard.new.features.available">
-					<template #content>
-						<VImg
-							class="w-75 d-block mx-auto"
-							src="@/assets/img/surprise.gif"
-							alt=""
-							role="presentation"
-							max-width="360"
-						/>
-						<div class="text-md text-center">
-							<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>
-							<div>{{ t("pages.dashboard.new.features.forward") }}</div>
-						</div>
-					</template>
-					<template #actions>
-						<VBtn
-							class="w-100"
-							color="primary"
-							variant="flat"
-							:text="t('common.actions.click.here')"
-							to="/system/releases"
-						/>
-					</template>
-				</SvsDialog>
-			</template>
+			<SvsDialog
+				v-if="dashboardData?.showNewReleaseModal"
+				:model-value="true"
+				title="pages.dashboard.new.features.available"
+			>
+				<template #content>
+					<VImg
+						class="w-75 d-block mx-auto"
+						src="@/assets/img/surprise.gif"
+						alt=""
+						role="presentation"
+						max-width="360"
+					/>
+					<div class="text-md text-center">
+						<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>
+						<div>{{ t("pages.dashboard.new.features.forward") }}</div>
+					</div>
+				</template>
+				<template #actions>
+					<VBtn
+						class="w-100"
+						color="primary"
+						variant="flat"
+						:text="t('common.actions.click.here')"
+						to="/system/releases"
+					/>
+				</template>
+			</SvsDialog>
 		</template>
 	</DefaultWireframe>
 </template>
@@ -220,7 +186,7 @@ const latestNews = ref<NewsResponse[]>([]);
 const dashboardData = ref<DashBoardResponse>();
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
-const { execute } = useSafeAxiosTask();
+const { execute, status } = useSafeAxiosTask();
 
 onMounted(async () => {
 	const { result, success } = await execute(

@@ -989,6 +989,7 @@ export default {
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}",
 	"pages.dashboard.new.features.available": "Neue Features sind verfügbar",
 	"pages.dashboard.new.features.forward": "Für weitere Informationen klicken Sie doch bitte diesen Button",
+	"pages.dashboard.no.tasks": "Keine gestellten Aufgaben. Du findest alle Aufgaben im Aufgaben-Bereich.",
 	"pages.dashboard.welcome": "Hallo",
 	"pages.dashboard.schedule": "Stundenplan",
 	"pages.dashboard.schedule.with.feedback": "Aufgaben mit Lehrkräfte-Kommentar",
