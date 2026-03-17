@@ -129,10 +129,10 @@ describe("InvitationTable", () => {
 
 				const deleteButton = wrapper.findComponent(".v-list-item");
 				await deleteButton.trigger("click");
-				await flushPromises();
 
 				expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
 					title: expectedTitle,
+					confirmBtnKey: "common.actions.delete",
 				});
 				expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledWith(selectedLinks);
 			}
