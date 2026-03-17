@@ -20,7 +20,6 @@
     "types": ["node", "vitest/globals"],
     "typeRoots": ["./node_modules/@types", "./types", "./node_modules"],
     "paths": {
-      "@data-activation": ["src/modules/data/activation"],
       "@data-app": ["src/modules/data/application"],
       "@data-board": ["src/modules/data/board"],
       "@data-classes": ["src/modules/data/classes"],
@@ -37,7 +36,7 @@
       "@data-room": ["src/modules/data/room"],
       "@data-school": ["src/modules/data/school"],
       "@data-system": ["src/modules/data/system"],
-			"@data-users": ["src/modules/data/users"],
+      "@data-users": ["src/modules/data/users"],
       "@feature-auto-logout": ["src/modules/feature/auto-logout"],
       "@feature-board-file-element": ["src/modules/feature/board-file-element"],
       "@feature-board-text-element": ["src/modules/feature/board-text-element"],
