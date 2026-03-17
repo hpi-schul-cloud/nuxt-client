@@ -446,12 +446,18 @@ const download = () => {
 	const winPrint = window.open("", "", "left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0");
 
 	winPrint?.document.write(`<!DOCTYPE html>
-		<html>
+		<html lang="de">
 		<head>
+			<title>${t("pages.administration.students.consent.print.title")}</title>
 			${stylesHtml}
 		</head>
 		<body>
-			${prtHtml}
+			<h1 class="centered">
+				&nbsp;
+			</h1>
+			<main>
+				${prtHtml}
+			</main>
 		</body>
 		</html>`);
 
