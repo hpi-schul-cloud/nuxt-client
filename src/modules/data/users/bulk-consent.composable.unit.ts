@@ -54,9 +54,7 @@ describe("useBulkConsent", () => {
 			const { findConsentUsers, selectedStudentsData } = useBulkConsent();
 
 			axiosMock.get.mockResolvedValueOnce({
-				data: {
-					data: [],
-				},
+				data: undefined,
 			});
 
 			await findConsentUsers({ $limit: 10, $skip: 0, $sort: {} });

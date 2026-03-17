@@ -66,9 +66,11 @@ describe("pass-generation.utils", () => {
 		it("should return a password in format word + number", () => {
 			const password = generatePassword();
 
-			const wordPattern = words.join("|");
-			const regex = new RegExp(`^(${wordPattern})\\d+$`);
-			expect(password).toMatch(regex);
+			const matchingWord = words.find((word) => password.startsWith(word));
+			expect(matchingWord).toBeDefined();
+
+			const remainder = password.slice(matchingWord!.length);
+			expect(remainder).toMatch(/^\d+$/);
 		});
 
 		it("should generate different passwords on multiple calls", () => {
