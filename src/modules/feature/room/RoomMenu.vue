@@ -36,7 +36,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
-	roomName: { type: String, required: false, default: undefined },
+	roomName: { type: String, required: true },
 });
 
 const emit = defineEmits(["room:edit", "room:manage-members", "room:delete", "room:copy", "room:share", "room:leave"]);
@@ -53,7 +53,7 @@ const membersInfoText = computed(() =>
 );
 
 const onDeleteRoom = async () => {
-	const shouldDelete = await askDeletionByTitle(props.roomName!, "common.labels.room");
+	const shouldDelete = await askDeletionByTitle(props.roomName, "common.labels.room");
 
 	if (shouldDelete) {
 		emit("room:delete");

@@ -18,7 +18,7 @@ export interface ConfirmationOptions {
  *
  * This composable is only meant to be used in App.vue where the dialog is rendered.
  */
-export const useInternalConfirmationDialog = createSharedComposable(() => {
+export const useInternalConfirmDialog = createSharedComposable(() => {
 	let resolvePromise: ((value: boolean) => void) | undefined = undefined;
 
 	const dialogOptions = ref<ConfirmationOptions | undefined>();

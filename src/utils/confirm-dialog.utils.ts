@@ -1,11 +1,11 @@
-import { ConfirmationOptions, useInternalConfirmationDialog } from "@/composables/confirm-dialog.composable";
+import { ConfirmationOptions, useInternalConfirmDialog } from "@/composables/confirm-dialog.composable";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 
 /**
  * Raises a confirmation dialog with the given options and returns a promise that resolves to true if the user confirms, or false if they cancel.
  */
 export const askConfirmation = (options: ConfirmationOptions): Promise<boolean> => {
-	const { askInternal } = useInternalConfirmationDialog();
+	const { askInternal } = useInternalConfirmDialog();
 	return askInternal(options);
 };
 

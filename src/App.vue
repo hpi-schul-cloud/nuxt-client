@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { useInternalConfirmationDialog } from "./composables/confirm-dialog.composable";
+import { useInternalConfirmDialog } from "./composables/confirm-dialog.composable";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
 import { Layouts } from "@/layouts/types";
@@ -41,7 +41,7 @@ const route = useRoute();
 setComputedScrollbarWidthAsCssVar();
 
 const { dialogOptions, isDialogOpen, confirm, cancel, confirmTitle, confirmMessage, resetDialogOptions } =
-	useInternalConfirmationDialog();
+	useInternalConfirmDialog();
 
 const layout = computed(() => {
 	const isLoggedIn = useAppStore().isLoggedIn;
