@@ -30,7 +30,7 @@ import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
-import { VCheckbox } from "vuetify/components";
+import { VCheckbox, VIcon } from "vuetify/components";
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
@@ -94,10 +94,17 @@ describe("student overview page", () => {
 		vi.resetModules();
 	});
 
-	const setup = (options?: Partial<{ permissions: Permission[]; roleName: RoleName }>) => {
-		const { permissions, roleName } = {
+	const setup = (
+		options?: Partial<{
+			permissions: Permission[];
+			roleName: RoleName;
+			userList: ReturnType<typeof userResponseFactory.buildList>;
+		}>
+	) => {
+		const { permissions, roleName, userList } = {
 			permissions: options?.permissions ?? [],
 			roleName: options?.roleName ?? RoleName.ADMINISTRATOR,
+			userList: options?.userList,
 			...options,
 		};
 
@@ -126,7 +133,7 @@ describe("student overview page", () => {
 		mockedUseClasses.mockReturnValue(useClassesMockReturn);
 		const usersStore = mockedPiniaStoreTyping(useUsersStore);
 
-		const userResponseList = userResponseFactory.buildList(10);
+		const userResponseList = userList ?? userResponseFactory.buildList(10);
 		usersStore.userList = userResponseList;
 
 		useRouterMock.mockReturnValue({
@@ -194,7 +201,6 @@ describe("student overview page", () => {
 
 			await openContextMenu(wrapper, 0);
 
-			// click delete menu button
 			const deleteBtn = wrapper.get(`[data-testid="delete_action"]`);
 			await deleteBtn.trigger("click");
 
@@ -214,7 +220,6 @@ describe("student overview page", () => {
 
 			await openContextMenu(wrapper, 0);
 
-			// click delete menu button
 			const deleteBtn = wrapper.get(`[data-testid="delete_action"]`);
 			await deleteBtn.trigger("click");
 
@@ -524,5 +529,59 @@ describe("student overview page", () => {
 				label: "utils.adminFilter.consent.label.missing",
 			},
 		]);
+	});
+
+	describe("consent status icons", () => {
+		it("should display check-all icon for consent status 'ok'", () => {
+			createTestEnvStore({ ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
+			const userWithOkStatus = userResponseFactory.build({ consentStatus: "ok" });
+			const { wrapper } = setup({ userList: [userWithOkStatus] });
+
+			const table = wrapper.getComponent(BackendDataTable);
+			const icons = table.findAllComponents(VIcon);
+			const iconProps = icons.map((icon) => icon.props("icon"));
+
+			expect(iconProps).toContain(mdiCheckAll);
+		});
+
+		it("should display check icon for consent status 'parentsAgreed'", () => {
+			createTestEnvStore({ ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
+			const userWithParentsAgreed = userResponseFactory.build({ consentStatus: "parentsAgreed" });
+			const { wrapper } = setup({ userList: [userWithParentsAgreed] });
+
+			const table = wrapper.getComponent(BackendDataTable);
+			const icons = table.findAllComponents(VIcon);
+			const iconProps = icons.map((icon) => icon.props("icon"));
+
+			expect(iconProps).toContain(mdiCheck);
+		});
+
+		it("should display close icon for consent status 'missing'", () => {
+			createTestEnvStore({ ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true });
+			const userWithMissingStatus = userResponseFactory.build({ consentStatus: "missing" });
+			const { wrapper } = setup({ userList: [userWithMissingStatus] });
+
+			const table = wrapper.getComponent(BackendDataTable);
+			const icons = table.findAllComponents(VIcon);
+			const iconProps = icons.map((icon) => icon.props("icon"));
+
+			expect(iconProps).toContain(mdiClose);
+		});
+	});
+
+	describe("search debounce", () => {
+		it("should not fetch users when search query changes only by whitespace", async () => {
+			const { wrapper, usersStore, useFilterLocalStorageMockReturn } = setup();
+
+			useFilterLocalStorageMockReturn.searchQuery.value = "test";
+
+			vi.clearAllMocks();
+
+			const searchBarInput = wrapper.findComponent(SvsSearchField);
+			await searchBarInput.setValue("test ");
+			await flushPromises();
+
+			expect(usersStore.fetchUsers).not.toHaveBeenCalled();
+		});
 	});
 });

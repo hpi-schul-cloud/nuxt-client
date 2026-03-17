@@ -176,7 +176,7 @@ describe("useUsersStore", () => {
 	describe("getQrRegistrationLinks", () => {
 		it("should generate a qr registration link and update the qr registrationLinks list", async () => {
 			const { userStore } = setupStore(RoleName.STUDENT);
-			const { getQrRegistrationLinks, qrLinks } = userStore;
+			const { getQrRegistrationLinks } = userStore;
 			const responseData = [
 				{ title: "title-1", qrContent: "some-qr-content" },
 				{ title: "title-2", qrContent: "some-qr-content-2" },
@@ -190,8 +190,6 @@ describe("useUsersStore", () => {
 				selectionType: "inclusive",
 				userIds: ["user1"],
 			});
-			await flushPromises();
-			// expect(qrLinks).toEqual(responseData);
 		});
 
 		it("should not update qr registrationLinks list if there is an error", async () => {

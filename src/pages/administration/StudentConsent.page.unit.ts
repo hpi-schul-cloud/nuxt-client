@@ -263,4 +263,347 @@ describe("students/consent", () => {
 
 		expectNotification("success");
 	});
+
+	it("should call register with consent checkbox checked when consent is required", async () => {
+		createTestEnvStore({ FEATURE_CONSENT_NECESSARY: true });
+		mockData[0].birthday = "10.10.2010";
+
+		const { wrapper, bulkConsentMock } = setup();
+
+		const nextButton = wrapper.find(`[data-testid="button-next"]`);
+		await nextButton.trigger("click");
+
+		const checkbox = wrapper.find(`[data-testid="check-confirm"] input`);
+		await checkbox.setValue(true);
+
+		const nextButton2 = wrapper.find(`[data-testid="button-next-2"]`);
+		await nextButton2.trigger("click");
+
+		expect(bulkConsentMock.register).toHaveBeenCalled();
+		expectNotification("success");
+	});
+
+	describe("sorting", () => {
+		it("should call onUpdateSort when table emits sort event", async () => {
+			const { wrapper, bulkConsentMock } = setup();
+
+			const table = wrapper.findComponent(BackendDataTable);
+			await table.vm.$emit("update:sort", "email", "desc");
+
+			expect(bulkConsentMock.findConsentUsers).toHaveBeenCalled();
+		});
+
+		it("should convert fullName to firstName when sorting", async () => {
+			const { wrapper, bulkConsentMock } = setup();
+
+			const table = wrapper.findComponent(BackendDataTable);
+			await table.vm.$emit("update:sort", "fullName", "asc");
+
+			expect(bulkConsentMock.findConsentUsers).toHaveBeenCalledWith(
+				expect.objectContaining({
+					$sort: { firstName: 1 },
+				})
+			);
+		});
+	});
+
+	describe("download step", () => {
+		it("should display download step (step 3) after registration", async () => {
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const { wrapper } = setup();
+
+			const nextButton = wrapper.find(`[data-testid="button-next"]`);
+			await nextButton.trigger("click");
+
+			const nextButton2 = wrapper.find(`[data-testid="button-next-2"]`);
+			await nextButton2.trigger("click");
+
+			const table = wrapper.find(`[data-testid="consent_table_3"]`);
+			expect(table.exists()).toBe(true);
+		});
+	});
+
+	describe("cancel modal", () => {
+		it("should show cancel warning modal when cancel button is clicked", async () => {
+			const { wrapper } = setup();
+
+			const buttons = wrapper.findAll("button");
+			const cancelButton = buttons.find((btn) => btn.text().includes("cancel"));
+			expect(cancelButton).toBeDefined();
+			if (cancelButton) {
+				await cancelButton.trigger("click");
+			}
+
+			const dialog = wrapper.findComponent({ name: "SvsDialog" });
+			expect(dialog.props().modelValue).toBe(true);
+		});
+
+		it("should navigate to students page when cancel is confirmed", async () => {
+			const { wrapper } = setup();
+
+			const buttons = wrapper.findAll("button");
+			const cancelButton = buttons.find((btn) => btn.text().includes("cancel"));
+			if (cancelButton) {
+				await cancelButton.trigger("click");
+			}
+
+			const confirmBtn = wrapper.findComponent({ name: "SvsDialogBtnConfirm" });
+			await confirmBtn.vm.$emit("click");
+
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				path: "/administration/students",
+			});
+		});
+	});
+
+	describe("success step", () => {
+		it("should display success step after download", async () => {
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const { wrapper } = setup();
+
+			const mockWinPrint = {
+				document: {
+					write: vi.fn(),
+					close: vi.fn(),
+				},
+				focus: vi.fn(),
+				print: vi.fn(),
+				close: vi.fn(),
+			};
+			vi.spyOn(window, "open").mockReturnValue(mockWinPrint as unknown as Window);
+
+			await wrapper.find(`[data-testid="button-next"]`).trigger("click");
+			await wrapper.find(`[data-testid="button-next-2"]`).trigger("click");
+
+			const buttons = wrapper.findAll("button");
+			const downloadBtn = buttons.find((btn) => btn.text().includes("download"));
+			if (downloadBtn) {
+				await downloadBtn.trigger("click");
+				await nextTick();
+			}
+
+			const successImage = wrapper.find(".success-image");
+			expect(successImage.exists()).toBe(true);
+		});
+
+		it("should navigate back to students page when success back button is clicked", async () => {
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const { wrapper } = setup();
+
+			const mockWinPrint = {
+				document: {
+					write: vi.fn(),
+					close: vi.fn(),
+				},
+				focus: vi.fn(),
+				print: vi.fn(),
+				close: vi.fn(),
+			};
+			vi.spyOn(window, "open").mockReturnValue(mockWinPrint as unknown as Window);
+
+			await wrapper.find(`[data-testid="button-next"]`).trigger("click");
+			await wrapper.find(`[data-testid="button-next-2"]`).trigger("click");
+
+			const downloadButton = wrapper.findAll("button").find((b) => b.text().includes("download"));
+			if (downloadButton) {
+				await downloadButton.trigger("click");
+			}
+			await nextTick();
+
+			const backButton = wrapper.findAll("button").find((b) => b.text().includes("back"));
+			if (backButton) {
+				await backButton.trigger("click");
+			}
+
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				path: "/administration/students",
+			});
+		});
+	});
+
+	describe("empty table data", () => {
+		it("should show error notification and redirect when table is empty", async () => {
+			vi.useFakeTimers();
+
+			selectedStudentsData = ref([]);
+			const selectedIds = ref<string[]>([]);
+			const registeredStudents = ref<string[]>([]);
+
+			bulkConsentMock = {
+				selectedStudentsData,
+				selectedIds,
+				registeredStudents,
+				findConsentUsers: vi.fn(),
+				register: vi.fn(),
+				updateStudent: vi.fn(),
+			};
+			mockedUseBulkConsent.mockReturnValue(bulkConsentMock);
+
+			mount(ConsentPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					stubs: {
+						DatePicker: true,
+					},
+				},
+			});
+
+			vi.advanceTimersByTime(2100);
+			await nextTick();
+
+			expectNotification("error");
+			expect(mockRouter.push).toHaveBeenCalledWith({
+				path: "/administration/students",
+			});
+
+			vi.useRealTimers();
+		});
+	});
+
+	describe("download function", () => {
+		it("should open print window with correct HTML", async () => {
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const { wrapper } = setup();
+
+			const mockWinPrint = {
+				document: {
+					write: vi.fn(),
+					close: vi.fn(),
+				},
+				focus: vi.fn(),
+				print: vi.fn(),
+				close: vi.fn(),
+			};
+			const windowOpenSpy = vi.spyOn(window, "open").mockReturnValue(mockWinPrint as unknown as Window);
+
+			await wrapper.find(`[data-testid="button-next"]`).trigger("click");
+			await wrapper.find(`[data-testid="button-next-2"]`).trigger("click");
+
+			const downloadButton = wrapper.findAll("button").find((b) => b.text().includes("download"));
+			if (downloadButton) {
+				await downloadButton.trigger("click");
+			}
+
+			expect(windowOpenSpy).toHaveBeenCalled();
+			expect(mockWinPrint.document.write).toHaveBeenCalled();
+			expect(mockWinPrint.document.close).toHaveBeenCalled();
+			expect(mockWinPrint.focus).toHaveBeenCalled();
+
+			windowOpenSpy.mockRestore();
+		});
+
+		it("should call print and close on print window after timeout", async () => {
+			vi.useFakeTimers();
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const { wrapper } = setup();
+
+			const mockWinPrint = {
+				document: {
+					write: vi.fn(),
+					close: vi.fn(),
+				},
+				focus: vi.fn(),
+				print: vi.fn(),
+				close: vi.fn(),
+			};
+			const windowOpenSpy = vi.spyOn(window, "open").mockReturnValue(mockWinPrint as unknown as Window);
+
+			await wrapper.find(`[data-testid="button-next"]`).trigger("click");
+			await wrapper.find(`[data-testid="button-next-2"]`).trigger("click");
+
+			const downloadButton = wrapper.findAll("button").find((b) => b.text().includes("download"));
+			if (downloadButton) {
+				await downloadButton.trigger("click");
+			}
+
+			vi.advanceTimersByTime(600);
+
+			expect(mockWinPrint.print).toHaveBeenCalled();
+			expect(mockWinPrint.close).toHaveBeenCalled();
+
+			windowOpenSpy.mockRestore();
+			vi.useRealTimers();
+		});
+	});
+
+	describe("beforeunload handler", () => {
+		it("should show cancel warning when at download step and page is about to unload", async () => {
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const { wrapper } = setup();
+
+			await wrapper.find(`[data-testid="button-next"]`).trigger("click");
+			await wrapper.find(`[data-testid="button-next-2"]`).trigger("click");
+
+			const event = new Event("beforeunload") as BeforeUnloadEvent;
+			Object.defineProperty(event, "preventDefault", { value: vi.fn() });
+			Object.defineProperty(event, "returnValue", { value: "", writable: true });
+
+			window.dispatchEvent(event);
+
+			await nextTick();
+
+			const dialog = wrapper.findComponent({ name: "SvsDialog" });
+			expect(dialog.props().modelValue).toBe(true);
+		});
+	});
+
+	describe("component unmount", () => {
+		it("should clean up event listeners and timeouts on unmount", async () => {
+			const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+
+			const { wrapper } = setup();
+			wrapper.unmount();
+
+			expect(removeEventListenerSpy).toHaveBeenCalledWith("beforeunload", expect.any(Function));
+			removeEventListenerSpy.mockRestore();
+		});
+
+		it("should clear timeouts when component unmounts after download", async () => {
+			vi.useFakeTimers();
+			createTestEnvStore({ FEATURE_CONSENT_NECESSARY: false });
+			mockData[0].birthday = "10.10.2010";
+
+			const clearTimeoutSpy = vi.spyOn(global, "clearTimeout");
+
+			const mockWinPrint = {
+				document: {
+					write: vi.fn(),
+					close: vi.fn(),
+				},
+				focus: vi.fn(),
+				print: vi.fn(),
+				close: vi.fn(),
+			};
+			vi.spyOn(window, "open").mockReturnValue(mockWinPrint as unknown as Window);
+
+			const { wrapper } = setup();
+
+			await wrapper.find(`[data-testid="button-next"]`).trigger("click");
+			await wrapper.find(`[data-testid="button-next-2"]`).trigger("click");
+
+			const downloadButton = wrapper.findAll("button").find((b) => b.text().includes("download"));
+			if (downloadButton) {
+				await downloadButton.trigger("click");
+			}
+
+			wrapper.unmount();
+
+			expect(clearTimeoutSpy).toHaveBeenCalled();
+
+			clearTimeoutSpy.mockRestore();
+			vi.useRealTimers();
+		});
+	});
 });

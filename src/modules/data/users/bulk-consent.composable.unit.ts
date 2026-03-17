@@ -97,5 +97,41 @@ describe("useBulkConsent", () => {
 			expect(updatedStudent?.birthday).toBe(new Date(1995, 0, 1).toISOString());
 			expect(updatedStudent?.password).toBe("updatedPass");
 		});
+
+		it("should do nothing when student id is not found", () => {
+			const { updateStudent, selectedStudentsData } = useBulkConsent();
+			const student = userResponseFactory.build({ birthday: new Date(1990, 0, 1).toISOString() });
+			selectedStudentsData.value = [{ ...student, fullName: "John Doe", password: TEST_PASSWORD }];
+
+			updateStudent({ id: "non-existent-id", birthDate: new Date(1995, 0, 1).toISOString(), pass: "updatedPass" });
+
+			const originalStudent = selectedStudentsData.value.find((st) => st._id === student._id);
+			expect(originalStudent?.birthday).toBe(new Date(1990, 0, 1).toISOString());
+			expect(originalStudent?.password).toBe(TEST_PASSWORD);
+		});
+
+		it("should update only the birthday when pass is not provided", () => {
+			const { updateStudent, selectedStudentsData } = useBulkConsent();
+			const student = userResponseFactory.build({ birthday: new Date(1990, 0, 1).toISOString() });
+			selectedStudentsData.value = [{ ...student, fullName: "John Doe", password: TEST_PASSWORD }];
+
+			updateStudent({ id: student._id, birthDate: new Date(1995, 0, 1).toISOString() });
+
+			const updatedStudent = selectedStudentsData.value.find((st) => st._id === student._id);
+			expect(updatedStudent?.birthday).toBe(new Date(1995, 0, 1).toISOString());
+			expect(updatedStudent?.password).toBe(TEST_PASSWORD);
+		});
+
+		it("should update only the password when birthDate is not provided", () => {
+			const { updateStudent, selectedStudentsData } = useBulkConsent();
+			const student = userResponseFactory.build({ birthday: new Date(1990, 0, 1).toISOString() });
+			selectedStudentsData.value = [{ ...student, fullName: "John Doe", password: TEST_PASSWORD }];
+
+			updateStudent({ id: student._id, pass: "newPassword" });
+
+			const updatedStudent = selectedStudentsData.value.find((st) => st._id === student._id);
+			expect(updatedStudent?.birthday).toBe(new Date(1990, 0, 1).toISOString());
+			expect(updatedStudent?.password).toBe("newPassword");
+		});
 	});
 });

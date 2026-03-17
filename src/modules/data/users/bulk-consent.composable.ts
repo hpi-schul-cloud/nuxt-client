@@ -69,7 +69,7 @@ export const useBulkConsent = () => {
 		const student = selectedStudentsData.value.find((st: ConsentStudent) => st._id === id);
 		if (!student) return;
 
-		if (birthDate) student.birthday = birthDate ?? "";
+		if (birthDate) student.birthday = birthDate;
 		if (pass) student.password = pass;
 	};
 
