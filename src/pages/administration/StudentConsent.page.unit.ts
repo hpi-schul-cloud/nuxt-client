@@ -23,6 +23,8 @@ vi.mock("vue-router", () => ({
 	useRouter: () => mockRouter,
 }));
 
+const TEST_PASSWORD = "test-fixture-password";
+
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
@@ -46,7 +48,7 @@ const createMockData = () =>
 			consentStatus: "missing",
 			classes: [],
 			fullName: "Alwin Jandourek",
-			password: "qwerty",
+			password: TEST_PASSWORD,
 		},
 		{
 			_id: "60c220f4d03a60006502f500",
@@ -61,7 +63,7 @@ const createMockData = () =>
 			consentStatus: "missing",
 			classes: [],
 			fullName: "Alysa Garrold",
-			password: "qwerty",
+			password: TEST_PASSWORD,
 		},
 	] as unknown as ConsentStudent[];
 

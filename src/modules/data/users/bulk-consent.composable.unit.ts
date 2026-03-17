@@ -5,6 +5,8 @@ import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
+const TEST_PASSWORD = "test-fixture-password";
+
 vi.mock("vue-i18n", async (importOriginal) => {
 	const actual = await importOriginal<typeof import("vue-i18n")>();
 	return {
@@ -73,7 +75,7 @@ describe("useBulkConsent", () => {
 
 			axiosMock.patch.mockResolvedValueOnce({ status: 200 });
 
-			await register([{ ...studentToBeRegistered, fullName: "John Doe", password: "password123" }]);
+			await register([{ ...studentToBeRegistered, fullName: "John Doe", password: TEST_PASSWORD }]);
 
 			expect(axiosMock.patch).toHaveBeenCalledWith(
 				`/v1/users/admin/students/${studentToBeRegistered._id}`,
@@ -87,13 +89,13 @@ describe("useBulkConsent", () => {
 		it("should update the birthday and password of the selected student", () => {
 			const { updateStudent, selectedStudentsData } = useBulkConsent();
 			const student = userResponseFactory.build({ birthday: new Date(1990, 0, 1).toISOString() });
-			selectedStudentsData.value = [{ ...student, fullName: "John Doe", password: "password123" }];
+			selectedStudentsData.value = [{ ...student, fullName: "John Doe", password: TEST_PASSWORD }];
 
-			updateStudent({ id: student._id, birthDate: new Date(1995, 0, 1).toISOString(), pass: "newPassword123" });
+			updateStudent({ id: student._id, birthDate: new Date(1995, 0, 1).toISOString(), pass: "updatedPass" });
 
 			const updatedStudent = selectedStudentsData.value.find((st) => st._id === student._id);
 			expect(updatedStudent?.birthday).toBe(new Date(1995, 0, 1).toISOString());
-			expect(updatedStudent?.password).toBe("newPassword123");
+			expect(updatedStudent?.password).toBe("updatedPass");
 		});
 	});
 });
