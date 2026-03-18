@@ -31,7 +31,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		const wrapper = mount(RoomMenu, {
 			props: {
-				roomName: options.roomName,
+				roomName: options.roomName ?? "My Room",
 			},
 			global: {
 				plugins: [
@@ -246,8 +246,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when roomName is provided", () => {
 		it("should pass roomName to delete action", async () => {
-			const roomName = "My Room";
-			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true }, roomName });
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true }, roomName: "My Room" });
 			await menuBtn.trigger("click");
 
 			const { kebabActionDelete } = findKebabActions(wrapper);
