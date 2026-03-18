@@ -158,12 +158,7 @@ onMounted(async () => {
 	if (!success) return;
 	latestNews.value = result.data.data;
 
-	const { result: resultDb, success: successDb } = await execute(
-		async () =>
-			await $axios.get("/dashboard/myFriend", {
-				baseURL: "/",
-			})
-	);
+	const { result: resultDb, success: successDb } = await execute(async () => await $axios.get("/dashboard"));
 
 	if (!successDb) return;
 	dashboardData.value = resultDb.data as unknown as DashBoardResponse;

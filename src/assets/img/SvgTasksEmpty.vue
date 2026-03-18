@@ -42,7 +42,6 @@ withDefaults(
 	}>(),
 	{
 		height: 160,
-		width: "auto",
 	}
 );
 </script>
