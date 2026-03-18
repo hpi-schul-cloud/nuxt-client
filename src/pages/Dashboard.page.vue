@@ -61,6 +61,11 @@
 					:title="t('common.words.drafts')"
 					:tasks="dashboardData.privateHomeworks"
 				/>
+				<div class="d-flex mt-2">
+					<VBtn variant="text" to="/tasks">
+						{{ t("common.labels.tasks.more") }}
+					</VBtn>
+				</div>
 			</template>
 
 			<!-- Student tasks -->
@@ -74,6 +79,11 @@
 					:title="t('pages.dashboard.schedule.with.feedback')"
 					:tasks="dashboardData.homeworksWithFeedback"
 				/>
+				<div class="d-flex mt-2">
+					<VBtn variant="text" to="/tasks">
+						{{ t("common.labels.tasks.more") }}
+					</VBtn>
+				</div>
 			</template>
 
 			<!-- Dashboard new release announcement      -->

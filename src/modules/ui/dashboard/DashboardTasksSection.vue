@@ -27,12 +27,6 @@
 					</div>
 				</VCardText>
 			</VCard>
-
-			<div class="d-flex mt-2">
-				<VBtn variant="text" to="/tasks">
-					{{ t("common.labels.tasks.more") }}
-				</VBtn>
-			</div>
 		</div>
 	</VSheet>
 </template>
