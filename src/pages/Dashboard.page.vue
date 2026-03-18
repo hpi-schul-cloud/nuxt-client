@@ -39,7 +39,7 @@
 					</VCard>
 				</div>
 
-				<VBtn to="/news" variant="flat" :text="t('common.actions.show.all')" />
+				<VBtn to="/news" variant="text" :text="t('common.actions.show.all')" />
 			</template>
 
 			<!-- Teacher tasks -->
@@ -165,12 +165,15 @@ onMounted(async () => {
 	gap: 1.5rem;
 }
 
+.v-card-title {
+	color: rgba(var(--v-theme-on-surface)) !important;
+}
+
 .news-header-truncate {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	max-height: 4rem;
 }
 
 .news-content-truncate {
@@ -178,6 +181,5 @@ onMounted(async () => {
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	max-height: 4.5rem;
 }
 </style>
