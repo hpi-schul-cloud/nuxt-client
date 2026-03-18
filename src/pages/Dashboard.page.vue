@@ -156,7 +156,7 @@ onMounted(async () => {
 		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, 3)
 	);
 	if (!success) return;
-	latestNews.value = result.data.data;
+	latestNews.value = result.data.data ?? [];
 
 	const { result: resultDb, success: successDb } = await execute(async () => await $axios.get("/dashboard"));
 
