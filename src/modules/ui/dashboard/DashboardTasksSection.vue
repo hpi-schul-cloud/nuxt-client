@@ -3,7 +3,7 @@
 		<h2 data-testid="dashboard-tasks-title">{{ title }}</h2>
 
 		<div class="d-flex flex-column" data-testid="task-courses">
-			<VCard v-for="item in tasks" :key="item._id" class="mb-4" :href="item.url">
+			<VCard v-for="item in tasks" :key="item._id" class="mb-4" :href="item.url" @dragstart.prevent>
 				<VCardText>
 					<div class="d-flex justify-space-between text-medium-emphasis">
 						<span v-if="item.courseId" data-testid="task-course-name">

@@ -24,6 +24,7 @@
 						class="d-flex flex-column"
 						:to="`/news/${news.id}`"
 						data-testid="container_of_element"
+						@dragstart.prevent
 					>
 						<VCardTitle class="bg-primary-lighten text-wrap" data-testid="news-header">
 							<div class="d-flex align-center">
@@ -32,16 +33,9 @@
 							</div>
 							<h3 class="text-h4 my-1 news-header-truncate" data-testid="title_of_an_element">{{ news.title }}</h3>
 						</VCardTitle>
-
 						<VCardText class="flex-grow-1 pt-3 text-md" data-testid="news-content">
 							<div class="news-content-truncate"><RenderHTML :html="news.content" /></div>
 						</VCardText>
-
-						<VCardActions class="justify-end pr-4 mt-2">
-							<VBtn class="text-primary" variant="text" :to="`/news/${news.id}`" rel="canonical">
-								{{ t("common.labels.readmore") }}
-							</VBtn>
-						</VCardActions>
 					</VCard>
 				</div>
 
@@ -119,7 +113,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse, SchulcloudTheme } from "@api-server";
+import { NewsApiFactory, NewsResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
@@ -129,15 +123,13 @@ import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const { user, isTeacher, isStudent } = useAppStoreRefs();
+const { isTeacher, isStudent } = useAppStoreRefs();
 const envConfig = useEnvConfig();
-
-const isDefaultTheme = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
 
 const latestNews = ref<NewsResponse[]>([]);
 const dashboardData = ref<DashBoardResponse>();
@@ -173,19 +165,19 @@ onMounted(async () => {
 	gap: 1.5rem;
 }
 
-.news-content-truncate {
-	display: -webkit-box;
-	-webkit-line-clamp: 3;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	max-height: 5rem;
-}
-
 .news-header-truncate {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	max-height: 4rem;
+}
+
+.news-content-truncate {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	max-height: 4.5rem;
 }
 </style>
