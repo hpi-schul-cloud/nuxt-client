@@ -8,17 +8,17 @@
 			v-model="isDialogOpen"
 			data-testid="confirm-dialog"
 			:confirm-btn-lang-key="dialogOptions?.confirmBtnKey"
-			:title="confirmTitle"
+			:title="confirmationTitle"
 			@confirm="confirm"
 			@cancel="cancel"
 			@after-leave="resetDialogOptions"
 		>
-			<template v-if="confirmMessage" #content>
+			<template v-if="confirmationMessage" #content>
 				<WarningAlert v-if="dialogOptions?.messageType === 'warning'" data-testid="confirm-dialog-alert">
-					{{ confirmMessage }}
+					{{ confirmationMessage }}
 				</WarningAlert>
 				<InfoAlert v-if="dialogOptions?.messageType === 'info'" data-testid="confirm-dialog-alert">
-					{{ confirmMessage }}
+					{{ confirmationMessage }}
 				</InfoAlert>
 			</template>
 		</SvsDialog>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { useInternalConfirmDialog } from "./composables/confirm-dialog.composable";
+import { useInternalConfirmationDialog } from "./composables/confirm-dialog.composable";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
 import { Layouts } from "@/layouts/types";
@@ -40,8 +40,8 @@ const route = useRoute();
 
 setComputedScrollbarWidthAsCssVar();
 
-const { dialogOptions, isDialogOpen, confirm, cancel, confirmTitle, confirmMessage, resetDialogOptions } =
-	useInternalConfirmDialog();
+const { dialogOptions, isDialogOpen, confirm, cancel, confirmationTitle, confirmationMessage, resetDialogOptions } =
+	useInternalConfirmationDialog();
 
 const layout = computed(() => {
 	const isLoggedIn = useAppStore().isLoggedIn;

@@ -22,10 +22,6 @@ vi.mock("vue-i18n", async (importOriginal) => {
 const mockI18n = vi.mocked(useI18n());
 
 describe("InvitationTable", () => {
-	beforeEach(() => {
-		setActivePinia(createTestingPinia());
-	});
-
 	afterEach(() => {
 		vi.clearAllMocks();
 	});

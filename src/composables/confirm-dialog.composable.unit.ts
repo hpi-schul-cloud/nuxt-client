@@ -1,4 +1,4 @@
-import { useInternalConfirmDialog } from "./confirm-dialog.composable";
+import { useInternalConfirmationDialog } from "./confirm-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
 
 vi.mock("@/plugins/i18n");
@@ -23,7 +23,7 @@ describe("useInternalConfirmationDialog", () => {
 
 	describe("askInternal", () => {
 		it("should open the dialog and set options", () => {
-			const { askInternal, isDialogOpen, dialogOptions } = useInternalConfirmDialog();
+			const { askInternal, isDialogOpen, dialogOptions } = useInternalConfirmationDialog();
 
 			askInternal({ title: "Test Title", message: "Test Message" });
 
@@ -37,7 +37,7 @@ describe("useInternalConfirmationDialog", () => {
 
 	describe("confirm", () => {
 		it("should resolve the promise with true and close the dialog", async () => {
-			const { askInternal, confirm, isDialogOpen } = useInternalConfirmDialog();
+			const { askInternal, confirm, isDialogOpen } = useInternalConfirmationDialog();
 
 			const askPromise = askInternal({ title: "Test" });
 			expect(isDialogOpen.value).toBe(true);
@@ -52,7 +52,7 @@ describe("useInternalConfirmationDialog", () => {
 
 	describe("cancel", () => {
 		it("should resolve the promise with false and close the dialog", async () => {
-			const { askInternal, cancel, isDialogOpen } = useInternalConfirmDialog();
+			const { askInternal, cancel, isDialogOpen } = useInternalConfirmationDialog();
 
 			const askPromise = askInternal({ title: "Test" });
 			expect(isDialogOpen.value).toBe(true);
@@ -67,7 +67,7 @@ describe("useInternalConfirmationDialog", () => {
 
 	describe("resetDialogOptions", () => {
 		it("should clear the dialog options", () => {
-			const { askInternal, resetDialogOptions, dialogOptions } = useInternalConfirmDialog();
+			const { askInternal, resetDialogOptions, dialogOptions } = useInternalConfirmationDialog();
 
 			askInternal({ title: "Test", message: "Message" });
 			expect(dialogOptions.value).toBeDefined();
@@ -82,25 +82,25 @@ describe("useInternalConfirmationDialog", () => {
 		it("should return translated title when i18n key exists", () => {
 			setup({ i18nKeyExists: true, translation: "Translated Title" });
 
-			const { askInternal, confirmTitle } = useInternalConfirmDialog();
+			const { askInternal, confirmationTitle } = useInternalConfirmationDialog();
 			askInternal({ title: "common.title.key" });
 
-			expect(confirmTitle.value).toBe("Translated Title");
+			expect(confirmationTitle.value).toBe("Translated Title");
 		});
 
 		it("should return raw title when i18n key does not exist", () => {
 			setup({ i18nKeyExists: false });
-			const { askInternal, confirmTitle } = useInternalConfirmDialog();
+			const { askInternal, confirmationTitle } = useInternalConfirmationDialog();
 			askInternal({ title: "Raw Title" });
 
-			expect(confirmTitle.value).toBe("Raw Title");
+			expect(confirmationTitle.value).toBe("Raw Title");
 		});
 
 		it("should return empty string when no dialog options are set", () => {
-			const { confirmTitle, resetDialogOptions } = useInternalConfirmDialog();
+			const { confirmationTitle, resetDialogOptions } = useInternalConfirmationDialog();
 			resetDialogOptions();
 
-			expect(confirmTitle.value).toBe("");
+			expect(confirmationTitle.value).toBe("");
 		});
 	});
 
@@ -108,25 +108,25 @@ describe("useInternalConfirmationDialog", () => {
 		it("should return translated message when i18n key exists", () => {
 			setup({ i18nKeyExists: true, translation: "Translated Message" });
 
-			const { askInternal, confirmMessage } = useInternalConfirmDialog();
+			const { askInternal, confirmationMessage } = useInternalConfirmationDialog();
 			askInternal({ title: "Title", message: "common.message.key" });
 
-			expect(confirmMessage.value).toBe("Translated Message");
+			expect(confirmationMessage.value).toBe("Translated Message");
 		});
 
 		it("should return raw message when i18n key does not exist", () => {
 			setup({ i18nKeyExists: false });
-			const { askInternal, confirmMessage } = useInternalConfirmDialog();
+			const { askInternal, confirmationMessage } = useInternalConfirmationDialog();
 			askInternal({ title: "Title", message: "Raw Message" });
 
-			expect(confirmMessage.value).toBe("Raw Message");
+			expect(confirmationMessage.value).toBe("Raw Message");
 		});
 
 		it("should return undefined when no message is provided", () => {
-			const { askInternal, confirmMessage } = useInternalConfirmDialog();
+			const { askInternal, confirmationMessage } = useInternalConfirmationDialog();
 			askInternal({ title: "Title" });
 
-			expect(confirmMessage.value).toBeUndefined();
+			expect(confirmationMessage.value).toBeUndefined();
 		});
 	});
 });

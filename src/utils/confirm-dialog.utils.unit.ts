@@ -1,5 +1,5 @@
 import { askCancel, askConfirmation, askDeletion, askDeletionByTitle, askDeletionByType } from "./confirm-dialog.utils";
-import { useInternalConfirmDialog } from "@/composables/confirm-dialog.composable";
+import { useInternalConfirmationDialog } from "@/composables/confirm-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
 import { mockComposable } from "@@/tests/test-utils";
 import { beforeEach, describe, expect, it, type Mocked, vi } from "vitest";
@@ -8,15 +8,15 @@ vi.mock("@/composables/confirm-dialog.composable");
 vi.mock("@/plugins/i18n");
 
 describe("confirm-dialog.utils", () => {
-	let useInternalConfirmationDialogMock: Mocked<ReturnType<typeof useInternalConfirmDialog>>;
+	let useInternalConfirmationDialogMock: Mocked<ReturnType<typeof useInternalConfirmationDialog>>;
 
 	beforeEach(() => {
 		vi.clearAllMocks();
 
-		useInternalConfirmationDialogMock = mockComposable(useInternalConfirmDialog, {
+		useInternalConfirmationDialogMock = mockComposable(useInternalConfirmationDialog, {
 			askInternal: vi.fn().mockResolvedValue(true),
 		});
-		vi.mocked(useInternalConfirmDialog).mockReturnValue(useInternalConfirmationDialogMock);
+		vi.mocked(useInternalConfirmationDialog).mockReturnValue(useInternalConfirmationDialogMock);
 
 		vi.mocked(i18nModule.useI18nGlobal).mockReturnValue({
 			t: vi.fn((key: string) => key),

@@ -18,7 +18,7 @@ export interface ConfirmationOptions {
  *
  * This composable is only meant to be used in App.vue where the dialog is rendered.
  */
-export const useInternalConfirmDialog = createSharedComposable(() => {
+export const useInternalConfirmationDialog = createSharedComposable(() => {
 	let resolvePromise: ((value: boolean) => void) | undefined = undefined;
 
 	const dialogOptions = ref<ConfirmationOptions | undefined>();
@@ -48,14 +48,14 @@ export const useInternalConfirmDialog = createSharedComposable(() => {
 		});
 	};
 
-	const confirmTitle = computed(() => {
+	const confirmationTitle = computed(() => {
 		if (dialogOptions.value && i18nKeyExists(dialogOptions.value?.title)) {
 			return useI18nGlobal().t(dialogOptions.value.title);
 		}
 		return dialogOptions.value?.title ?? "";
 	});
 
-	const confirmMessage = computed(() => {
+	const confirmationMessage = computed(() => {
 		if (dialogOptions.value?.message && i18nKeyExists(dialogOptions.value?.message)) {
 			return useI18nGlobal().t(dialogOptions.value.message);
 		}
@@ -64,8 +64,8 @@ export const useInternalConfirmDialog = createSharedComposable(() => {
 
 	return {
 		askInternal,
-		confirmTitle,
-		confirmMessage,
+		confirmationTitle,
+		confirmationMessage,
 		dialogOptions,
 		isDialogOpen,
 		confirm,
