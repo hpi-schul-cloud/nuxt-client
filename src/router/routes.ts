@@ -2,7 +2,7 @@ import { Layouts } from "@/layouts/types";
 import { checkFolderFeature, checkRegisterExternalPersonsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ACTIVATION_CODE, REGEX_ID } from "@/utils/validation";
+import { isEnum, isMongoId, isOfficialSchoolNumber, REGEX_ID } from "@/utils/validation";
 import { H5PContentParentType } from "@api-h5p";
 import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -11,15 +11,6 @@ import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 export const routes: Readonly<RouteRecordRaw>[] = [
-	{
-		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
-		component: () => import("@/pages/ActivationCode.page.vue"),
-		name: "activation-activationCode",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
-	},
 	{
 		path: "/administration/ldap/activate",
 		component: () => import("@/pages/administration/LDAPActivate.page.vue"),
