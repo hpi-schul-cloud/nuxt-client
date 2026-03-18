@@ -159,9 +159,14 @@ onMounted(async () => {
 		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
 	);
 	if (!success) return;
-	latestNews.value = result.data.data;
+	latestNews.value = result.data.data ?? [];
 
-	const { result: resultDb, success: successDb } = await execute(async () => await $axios.get("/dashboard"));
+	const { result: resultDb, success: successDb } = await execute(
+		async () =>
+			await $axios.get("/bff/dashboard", {
+				baseURL: "/",
+			})
+	);
 
 	if (!successDb) return;
 	dashboardData.value = resultDb.data as unknown as DashBoardResponse;
