@@ -37,7 +37,7 @@
 			</VCard>
 
 			<div class="d-flex justify-end mt-2">
-				<VBtn variant="text" :href="href" size="small">
+				<VBtn variant="text" to="/tasks" size="small">
 					{{ t("common.labels.tasks.more") }}
 				</VBtn>
 			</div>
@@ -50,7 +50,6 @@ import { useI18n } from "vue-i18n";
 
 defineProps<{
 	title: string;
-	href: string;
 	tasks?: DashBoardTask[];
 }>();
 

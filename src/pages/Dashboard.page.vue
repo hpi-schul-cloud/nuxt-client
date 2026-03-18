@@ -1,17 +1,18 @@
 <template>
-	<DefaultWireframe max-width="full" :headline="t('pages.dashboard.title')" main-with-bottom-padding>
+	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
+			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
+
 			<section data-testid="welcome-section" class="py-4 text-center">
 				<h1 class="text-h5 my-2">{{ t("pages.dashboard.welcome") }} {{ user?.firstName }} {{ user?.lastName }}!</h1>
 			</section>
 
-			<!--			<div v-if="config.FEATURE_DASHBOARD_DEFAULT_PICTURE_ENABLED" class="d-flex justify-center">-->
-			<div class="d-flex mb-8 justify-center">
+			<div v-if="isDefaultTheme" class="d-flex mb-8 justify-center">
 				<VImg src="@/assets/img/welcome.svg" alt="" role="presentation" max-width="600" />
 			</div>
 		</template>
 
-		<template v-if="status === 'completed'" #default>
+		<template v-if="dashboardData && status === 'completed'" #default>
 			<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 			<!-- Dashboard news -->
@@ -53,82 +54,39 @@
 				<VBtn to="/news" variant="flat" :text="t('common.actions.show.all')" />
 			</template>
 
-			<!-- Teacher tasks  -->
+			<!-- Teacher tasks -->
 			<template v-if="isTeacher">
-				<!-- homework feedback required -->
-				<DashboardTaskSection
-					v-if="dashboardData?.homeworksFeedbackRequired && dashboardData?.homeworksFeedbackRequired?.length > 0"
+				<!-- Tasks Feedback required -->
+				<DashboardTasksSection
+					v-if="dashboardData?.homeworksFeedbackRequired?.length > 0"
 					data-testid="tasks-with-required-feedback"
 					:title="t('pages.dashboard.schedule.with.feedback')"
 					:tasks="dashboardData.homeworksFeedbackRequired"
-					href="/tasks"
 				/>
 
-				<!-- assigned homework -->
-				<template v-if="!dashboardData?.assignedHomeworks || dashboardData?.assignedHomeworks?.length === 0">
-					<h2>{{ t("common.words.tasks") }}</h2>
-					<EmptyState data-testid="empty-state-tasks" :title="t('pages.dashboard.no.tasks')">
-						<template #media>
-							<VImg height="160" src="@/assets/img/tasks-empty.svg" />
-						</template>
-					</EmptyState>
-				</template>
-				<DashboardTaskSection
-					v-else
-					data-testid="tasks-with-required-feedback"
-					:title="t('common.labels.tasks.assigned')"
-					:tasks="dashboardData.assignedHomeworks"
-					href="/tasks"
-				/>
+				<DashboardAssignedTasks :assigned-tasks="dashboardData?.assignedHomeworks" />
 
-				<!-- private home works -->
-				<DashboardTaskSection
-					v-if="dashboardData?.privateHomeworks && dashboardData.privateHomeworks.length > 1"
+				<!-- Tasks Private -->
+				<DashboardTasksSection
+					v-if="dashboardData?.privateHomeworks?.length > 0"
 					data-testid="tasks-private"
 					:title="t('common.words.drafts')"
-					:tasks="dashboardData?.privateHomeworks"
-					href="/tasks"
+					:tasks="dashboardData.privateHomeworks"
 				/>
 			</template>
 
-			<!-- Student tasks  -->
+			<!-- Student tasks -->
 			<template v-else-if="isStudent">
-				<!-- assigned homework -->
-				<template v-if="!dashboardData?.assignedHomeworks || dashboardData?.assignedHomeworks?.length === 0">
-					<h2>{{ t("common.words.tasks") }}</h2>
-					<EmptyState data-testid="empty-state-tasks" :title="t('pages.dashboard.no.tasks')">
-						<template #media>
-							<VImg height="160" src="@/assets/img/tasks-empty.svg" />
-						</template>
-					</EmptyState>
-				</template>
-				<DashboardTaskSection
-					v-else
-					data-testid="tasks-with-required-feedback"
-					:title="t('common.labels.tasks.assigned')"
-					:tasks="dashboardData.assignedHomeworks"
-					href="/tasks"
-				/>
+				<DashboardAssignedTasks :assigned-tasks="dashboardData?.assignedHomeworks" />
 
-				<!-- homeworks with feedback -->
-				<DashboardTaskSection
-					v-if="dashboardData?.homeworksWithFeedback && dashboardData?.homeworksWithFeedback.length > 0"
+				<!-- Tasks with feedback -->
+				<DashboardTasksSection
+					v-if="dashboardData?.homeworksWithFeedback?.length > 0"
 					data-testid="tasks-with-feedback"
 					:title="t('pages.dashboard.schedule.with.feedback')"
 					:tasks="dashboardData.homeworksWithFeedback"
-					href="/tasks"
 				/>
 			</template>
-
-			<!--      {{#if this.currentSchoolData.pilot}}-->
-			<!--      {{#ifneq this.currentRole "Schüler"}}-->
-			<!--      {{#embed "lib/components/modal" class="poll-modal"}}-->
-			<!--      {{#content "body"}}-->
-			<!--      {{> "lib/forms/form-poll"}}-->
-			<!--      {{/content}}-->
-			<!--      {{/embed}}-->
-			<!--      {{/ifneq}}-->
-			<!--      {{/if}}-->
 
 			<!-- Dashboard new release announcement      -->
 			<SvsDialog
@@ -166,21 +124,23 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
-import { NewsApiFactory, NewsResponse } from "@api-server";
+import { NewsApiFactory, NewsResponse, SchulcloudTheme } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
-import { DashBoardResponse, DashboardTaskSection } from "@ui-dashboard";
+import { DashboardAssignedTasks, DashBoardResponse, DashboardTasksSection } from "@ui-dashboard";
 import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
 const { user, isTeacher, isStudent } = useAppStoreRefs();
 const envConfig = useEnvConfig();
+
+const isDefaultTheme = computed(() => envConfig.value.SC_THEME === SchulcloudTheme.DEFAULT);
 
 const latestNews = ref<NewsResponse[]>([]);
 const dashboardData = ref<DashBoardResponse>();
