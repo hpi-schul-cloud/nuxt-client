@@ -2,17 +2,15 @@
 	<DefaultWireframe max-width="full" main-with-bottom-padding>
 		<template #header>
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
-
+		</template>
+		<!-- v-if="dashboardData && status === 'completed'" -->
+		<template #default>
 			<section data-testid="welcome-section" class="py-4 text-center">
-				<h1 class="text-h5 my-2">{{ t("pages.dashboard.welcome") }} {{ user?.firstName }} {{ user?.lastName }}!</h1>
+				<p class="text-h5 my-2">{{ t("pages.dashboard.welcome") }} {{ user?.firstName }} {{ user?.lastName }}!</p>
 			</section>
-
 			<div v-if="isDefaultTheme" class="d-flex mb-8 justify-center">
 				<VImg src="@/assets/img/welcome.svg" alt="" role="presentation" max-width="600" />
 			</div>
-		</template>
-
-		<template v-if="dashboardData && status === 'completed'" #default>
 			<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 			<!-- Dashboard news -->
@@ -34,17 +32,20 @@
 						:to="`/news/${news.id}`"
 						data-testid="container_of_element"
 					>
-						<VCardTitle class="d-flex flex-column" data-testid="news-header">
-							<span class="text-lg" data-testid="title_of_an_element">{{ news.title }}</span>
-							<span class="text-md">{{ fromNowUtc(news.displayAt) }}</span>
+						<VCardTitle class="bg-surface-light text-wrap" data-testid="news-header">
+							<div class="d-flex align-center">
+								<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
+								<span class="text-sm font-weight-regular">{{ fromNowUtc(news.displayAt) }}</span>
+							</div>
+							<h3 class="text-h4 my-1 news-header-truncate" data-testid="title_of_an_element">{{ news.title }}</h3>
 						</VCardTitle>
 
-						<VCardText class="flex-grow-1" data-testid="news-content">
-							<RenderHTML class="ck-content mb-1" :html="news.content" />
+						<VCardText class="flex-grow-1 pt-3 text-md" data-testid="news-content">
+							<div class="news-content-truncate"><RenderHTML :html="news.content" /></div>
 						</VCardText>
 
-						<VCardActions class="justify-end pr-4">
-							<VBtn variant="text" :to="`/news/${news.id}`" rel="canonical">
+						<VCardActions class="justify-end pr-4 mt-2">
+							<VBtn class="text-primary" variant="text" :to="`/news/${news.id}`" rel="canonical">
 								{{ t("common.labels.readmore") }}
 							</VBtn>
 						</VCardActions>
@@ -129,6 +130,7 @@ import { NewsApiFactory, NewsResponse, SchulcloudTheme } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
+import { mdiNewspaperVariantOutline } from "@icons/material";
 import { DashboardAssignedTasks, DashBoardResponse, DashboardTasksSection } from "@ui-dashboard";
 import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
@@ -146,6 +148,7 @@ const isDefaultTheme = computed(() => envConfig.value.SC_THEME === SchulcloudThe
 
 const latestNews = ref<NewsResponse[]>([]);
 const dashboardData = ref<DashBoardResponse>();
+const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 const { execute, status } = useSafeAxiosTask();
@@ -153,7 +156,7 @@ const { execute, status } = useSafeAxiosTask();
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 onMounted(async () => {
 	const { result, success } = await execute(
-		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, 3)
+		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
 	);
 	if (!success) return;
 	latestNews.value = result.data.data;
@@ -172,7 +175,19 @@ onMounted(async () => {
 	gap: 1.5rem;
 }
 
-.ck-content {
-	overflow: hidden; // prevent margin collapse
+.news-content-truncate {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	max-height: 5rem;
+}
+
+.news-header-truncate {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	max-height: 4rem;
 }
 </style>
