@@ -313,12 +313,6 @@ export interface ConfigResponse {
     GHOST_BASE_URL: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    ROCKETCHAT_SERVICE_ENABLED: boolean;
-    /**
-     * 
      * @type {Array<LanguageType>}
      * @memberof ConfigResponse
      */
