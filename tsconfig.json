@@ -35,6 +35,7 @@
       "@data-room": ["src/modules/data/room"],
       "@data-school": ["src/modules/data/school"],
       "@data-system": ["src/modules/data/system"],
+      "@data-user-login-migration": ["src/modules/data/user-login-migration"],
       "@data-users": ["src/modules/data/users"],
       "@feature-auto-logout": ["src/modules/feature/auto-logout"],
       "@feature-board-file-element": ["src/modules/feature/board-file-element"],

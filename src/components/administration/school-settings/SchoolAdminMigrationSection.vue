@@ -183,12 +183,12 @@ import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
-import { UserLoginMigration } from "@/store/user-login-migration";
 import { formatUtc } from "@/utils/date-time.utils";
-import { injectStrict, SCHOOLS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
+import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig } from "@data-env";
+import { useUserLoginMigration } from "@data-user-login-migration";
 import { mdiAlertCircle, mdiCheck } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
 import dayjs from "dayjs";
@@ -204,15 +204,19 @@ export default defineComponent({
 	setup() {
 		const { t } = useI18n();
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const userLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
+		const {
+			userLoginMigration,
+			businessError,
+			fetchLatestUserLoginMigrationForSchool,
+			startUserLoginMigration,
+			restartUserLoginMigration,
+			setUserLoginMigrationMandatory,
+			closeUserLoginMigration,
+		} = useUserLoginMigration();
 
 		onMounted(async () => {
-			await userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool();
+			await fetchLatestUserLoginMigrationForSchool();
 		});
-
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> = computed(
-			() => userLoginMigrationModule.getUserLoginMigration
-		);
 
 		const isMigrationActive: ComputedRef<boolean> = computed(
 			() => !!userLoginMigration.value?.startedAt && !userLoginMigration.value.closedAt
@@ -221,25 +225,25 @@ export default defineComponent({
 		const isMigrationMandatory: ComputedRef<boolean> = computed(() => !!userLoginMigration.value?.mandatorySince);
 
 		const error: ComputedRef<BusinessError | undefined> = computed(() =>
-			userLoginMigrationModule.getBusinessError.message ? userLoginMigrationModule.getBusinessError : undefined
+			businessError.value.message ? businessError.value : undefined
 		);
 
 		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 		const onStartMigration = () => {
 			if (userLoginMigration.value) {
-				userLoginMigrationModule.restartUserLoginMigration();
+				restartUserLoginMigration();
 			} else {
-				userLoginMigrationModule.startUserLoginMigration();
+				startUserLoginMigration();
 			}
 		};
 
 		const setMigrationMandatory = (mandatory: boolean) => {
-			userLoginMigrationModule.setUserLoginMigrationMandatory(mandatory);
+			setUserLoginMigrationMandatory(mandatory);
 		};
 
 		const onCloseMigration = () => {
-			userLoginMigrationModule.closeUserLoginMigration();
+			closeUserLoginMigration();
 		};
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
