@@ -4,7 +4,6 @@
 
 const mongoId = "[a-z0-9]{24}";
 const h5pId = "[a-z0-9]+";
-const activationCode = "[a-z0-9]+";
 
 const vueRoutes = [
 	`^/favicon.png$`,
@@ -13,7 +12,6 @@ const vueRoutes = [
 	`^/collabora/spreadsheet.xlsx$`,
 	`^/_nuxt/*`,
 	`^/runtime.config.json`,
-	`^/activation/${activationCode}/?$`,
 	`^/administration/?$`,
 	`^/administration/students/?$`,
 	`^/administration/students/new/?$`,
