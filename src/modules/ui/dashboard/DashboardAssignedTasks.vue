@@ -3,9 +3,7 @@
 	<template v-if="!assignedTasks || assignedTasks.length === 0">
 		<h2>{{ t("common.words.tasks") }}</h2>
 		<EmptyState data-testid="empty-state-tasks" :title="t('pages.dashboard.no.tasks')">
-			<template #media>
-				<VImg height="160" src="@/assets/img/tasks-empty.svg" />
-			</template>
+			<template #media> <SvgTasksEmpty /></template>
 		</EmptyState>
 	</template>
 	<DashboardTasksSection
@@ -18,6 +16,7 @@
 <script setup lang="ts">
 import { DashBoardTask } from "./dashboard.types";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
+import SvgTasksEmpty from "@/assets/img/SvgTasksEmpty.vue";
 import { EmptyState } from "@ui-empty-state";
 import { useI18n } from "vue-i18n";
 

@@ -124,6 +124,7 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsResponse, SchulcloudTheme } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
@@ -132,6 +133,7 @@ import { DashboardAssignedTasks, DashBoardResponse, DashboardTasksSection } from
 import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
+import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -148,6 +150,7 @@ const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 const { execute, status } = useSafeAxiosTask();
 
+useTitle(buildPageTitle(t("pages.dashboard.title")));
 onMounted(async () => {
 	const { result, success } = await execute(
 		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, 3)
