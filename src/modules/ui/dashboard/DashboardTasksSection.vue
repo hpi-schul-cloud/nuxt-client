@@ -9,7 +9,7 @@
 					<span v-if="item.courseId" data-testid="task-course-name"> {{ item.courseId.name }} | </span>
 					<span>{{ item.secondaryTitle }}</span>
 
-					<div class="d-flex flex-wrap ga-4 mt-2">
+					<div class="d-flex flex-wrap ga-4">
 						<h3 class="text-h4 my-1" data-testid="task-name">
 							{{ item.name }}
 						</h3>
