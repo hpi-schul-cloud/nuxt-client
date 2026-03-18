@@ -41,6 +41,7 @@ withDefaults(
 		height?: number | string;
 	}>(),
 	{
+		width: undefined,
 		height: 160,
 	}
 );
