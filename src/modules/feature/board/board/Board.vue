@@ -324,7 +324,7 @@ onMounted(async () => {
 	useBoardInactivity();
 
 	if (allowedOperations.value.createExternalToolElement) {
-		await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
+		await cardStore.loadPreferredTools(ToolContextType.BoardElement);
 	}
 
 	await boardStore.fetchBoardRequest({ boardId: props.boardId });
