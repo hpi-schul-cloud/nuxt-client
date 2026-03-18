@@ -81,6 +81,17 @@ describe("confirm-dialog.utils", () => {
 				confirmBtnKey: "common.actions.delete",
 			});
 		});
+
+		it("should use provided confirmBtnKey", async () => {
+			await askDeletion("Delete Title", "Message", "info", "common.actions.remove");
+
+			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
+				title: "Delete Title",
+				message: "Message",
+				messageType: "info",
+				confirmBtnKey: "common.actions.remove",
+			});
+		});
 	});
 
 	describe("askDeletionByTitle", () => {

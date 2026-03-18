@@ -46,10 +46,13 @@ export const askDeletionByType = async (itemType: string) => {
 	);
 };
 
-export const askCancel = (title?: string, message?: string) =>
+export const askCancel = (
+	title = "ui-confirmation-dialog.ask-cancel-form",
+	message = "ui-confirmation-dialog.ask-cancel-warning-message"
+) =>
 	askConfirmation({
-		title: title ?? "ui-confirmation-dialog.ask-cancel-form",
-		message: message ?? "ui-confirmation-dialog.ask-cancel-warning-message",
+		title,
+		message,
 		messageType: "warning",
 		confirmBtnKey: "common.actions.discard",
 	});
