@@ -171,15 +171,17 @@ onMounted(async () => {
 
 .news-header-truncate {
 	display: -webkit-box;
-	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
 	overflow: hidden;
 }
 
 .news-content-truncate {
 	display: -webkit-box;
-	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
 	overflow: hidden;
 }
 </style>
