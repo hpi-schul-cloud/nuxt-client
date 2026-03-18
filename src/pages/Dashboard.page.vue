@@ -3,14 +3,7 @@
 		<template #header>
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
-		<!-- v-if="dashboardData && status === 'completed'" -->
-		<template #default>
-			<section data-testid="welcome-section" class="py-4 text-center">
-				<p class="text-h5 my-2">{{ t("pages.dashboard.welcome") }} {{ user?.firstName }} {{ user?.lastName }}!</p>
-			</section>
-			<div v-if="isDefaultTheme" class="d-flex mb-8 justify-center">
-				<VImg src="@/assets/img/welcome.svg" alt="" role="presentation" max-width="600" />
-			</div>
+		<template v-if="dashboardData && status === 'completed'" #default>
 			<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 			<!-- Dashboard news -->
@@ -32,7 +25,7 @@
 						:to="`/news/${news.id}`"
 						data-testid="container_of_element"
 					>
-						<VCardTitle class="bg-surface-light text-wrap" data-testid="news-header">
+						<VCardTitle class="bg-primary-lighten text-wrap" data-testid="news-header">
 							<div class="d-flex align-center">
 								<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
 								<span class="text-sm font-weight-regular">{{ fromNowUtc(news.displayAt) }}</span>
