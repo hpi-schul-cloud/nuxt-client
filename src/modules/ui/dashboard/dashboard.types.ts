@@ -1,6 +1,6 @@
 export interface DashBoardTask {
 	availableDate: string; // ISO Date string
-	background: string; // Hex-Farbe, z.B. "#54616e"
+	background: string; // Hex-color, e.g. "#54616e"
 	content: string;
 	courseId: {
 		_id: string;
@@ -16,7 +16,7 @@ export interface DashBoardTask {
 	};
 	name: string;
 	private: boolean;
-	secondaryTitle: string; // z.B. "in 5 Stunden"
+	secondaryTitle: string; // e.g. "in 5 Stunden"
 	stats: {
 		userCount: number;
 		submissionCount: number;
@@ -30,13 +30,8 @@ export interface DashBoardTask {
 
 export interface DashBoardResponse {
 	assignedHomeworks: DashBoardTask[];
-	currentTime: string; // "07:30"
-	currentTimePercentage: number; // 5
-	// events: any[]; // Array mit Events, falls Struktur bekannt, hier definieren
-	// eventsDate: string; // "Dienstag, 17. März 2026"
 	homeworksFeedbackRequired: DashBoardTask[];
 	homeworksWithFeedback: DashBoardTask[];
-	hours: number[]; // [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 	privateHomeworks: DashBoardTask[];
 	showNewReleaseModal: boolean;
 }
