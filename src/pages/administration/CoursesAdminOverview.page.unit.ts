@@ -98,7 +98,7 @@ describe("CoursesAdminOverviewPage", () => {
 		});
 
 		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
-		vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+		vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 	});
 
 	afterEach(() => {
@@ -496,17 +496,15 @@ describe("CoursesAdminOverviewPage", () => {
 				};
 			};
 
-			it("should call askDeletionItem with correct parameters", async () => {
-				const { wrapper, courses } = setup();
+			it("should call askDeletion with correct parameters", async () => {
+				const { wrapper } = setup();
 
 				await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
-				await nextTick();
 
-				expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
-					title: "pages.administration.courses.delete",
-					itemName: courses[0].name,
-					message: "pages.administration.courses.deleteDialog.content",
-				});
+				expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
+					"pages.administration.courses.delete",
+					"pages.administration.courses.deleteDialog.content"
+				);
 			});
 		});
 
@@ -605,7 +603,7 @@ describe("CoursesAdminOverviewPage", () => {
 
 			describe("when user cancels deletion", () => {
 				it("should not delete course", async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+					vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 					const { wrapper, useCourseListMock } = setup();
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
@@ -617,7 +615,7 @@ describe("CoursesAdminOverviewPage", () => {
 
 			describe("when user confirms deletion", () => {
 				it("should delete course", async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+					vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 
 					const { wrapper, useCourseListMock } = setup();
 
@@ -628,7 +626,7 @@ describe("CoursesAdminOverviewPage", () => {
 				});
 
 				it("should reload course list after deletion", async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+					vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 
 					const { wrapper, useCourseListMock } = setup();
 

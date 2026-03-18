@@ -89,7 +89,7 @@ describe("RoomExternalToolsSection", () => {
 		};
 
 		it("should emit delete event when deletion is confirmed", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
@@ -99,17 +99,17 @@ describe("RoomExternalToolsSection", () => {
 			await card.vm.$emit("delete", tool);
 			await flushPromises();
 
-			expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
-				title: "pages.rooms.tools.deleteDialog.title",
-				itemName: tool.name,
-				message: "pages.rooms.tools.deleteDialog.content",
-				confirmBtnKey: "common.actions.remove",
-			});
+			expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
+				"pages.rooms.tools.deleteDialog.title",
+				"pages.rooms.tools.deleteDialog.content",
+				"warning",
+				"common.actions.remove"
+			);
 			expect(wrapper.emitted("delete")).toEqual([[tool]]);
 		});
 
 		it("should not emit delete event when deletion is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+			vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({

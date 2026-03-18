@@ -169,7 +169,7 @@
 
 <script setup lang="ts">
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { askDeletionItem } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirm-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -281,11 +281,12 @@ const onClickEndSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 };
 
 const onDelete = async (selectedCourse: CourseInfoDataResponse) => {
-	const shouldDelete = await askDeletionItem({
-		title: "pages.administration.courses.delete",
-		itemName: selectedCourse.name,
-		message: "pages.administration.courses.deleteDialog.content",
-	});
+	const shouldDelete = await askDeletion(
+		t("pages.administration.courses.delete"),
+		t("pages.administration.courses.deleteDialog.content", {
+			itemName: selectedCourse.name,
+		})
+	);
 
 	if (shouldDelete) {
 		await deleteCourse(selectedCourse.id);

@@ -11,34 +11,18 @@ export const askConfirmation = (options: ConfirmationOptions): Promise<boolean> 
 
 /**
  * Raises a confirmation dialog for deletion actions.
- * Message is interpolated with itemName only.
  */
-export const askDeletionItem = (options: {
-	title: string;
-	itemName: string;
-	message: string;
-	confirmBtnKey?: string;
-	messageType?: "info" | "warning";
-}) => {
-	const { t } = useI18nGlobal();
-
-	return askConfirmation({
-		title: options.title,
-		message: i18nKeyExists(options.message) ? t(options.message, { itemName: options.itemName }) : options.message,
-		confirmBtnKey: options.confirmBtnKey ?? "common.actions.delete",
-		messageType: options.messageType ?? "warning",
-	});
-};
-
-/**
- * Raises a confirmation dialog for deletion actions.
- */
-export const askDeletion = (title: string, message?: string, messageType?: "info" | "warning") =>
+export const askDeletion = (
+	title: string,
+	message?: string,
+	messageType: "info" | "warning" = "warning",
+	confirmBtnKey = "common.actions.delete"
+) =>
 	askConfirmation({
 		title,
 		message,
-		messageType: messageType ?? "warning",
-		confirmBtnKey: "common.actions.delete",
+		messageType: messageType,
+		confirmBtnKey: confirmBtnKey,
 	});
 
 export const askDeletionByTitle = async (itemName: string, itemType: string) => {

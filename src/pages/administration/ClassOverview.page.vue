@@ -170,7 +170,7 @@ import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { askDeletionItem } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirm-dialog.utils";
 import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
@@ -300,11 +300,10 @@ const onClickEndSyncIcon = (selectedClass: ClassInfo) => {
 };
 
 const onDelete = async (selectedClass: ClassInfo) => {
-	const shouldDelete = await askDeletionItem({
-		title: "pages.administration.classes.deleteDialog.title",
-		message: "pages.administration.classes.deleteDialog.content",
-		itemName: selectedClass.name,
-	});
+	const shouldDelete = await askDeletion(
+		"pages.administration.classes.deleteDialog.title",
+		t("pages.administration.classes.deleteDialog.content", { itemName: selectedClass.name })
+	);
 	if (!shouldDelete) return;
 
 	await groupModule.deleteClass({

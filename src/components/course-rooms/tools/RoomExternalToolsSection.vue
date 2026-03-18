@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
-import { askDeletionItem } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirm-dialog.utils";
 import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";
@@ -59,12 +59,12 @@ const selectedItem = ref<ExternalToolDisplayData | undefined>();
 const canEdit = useAppStore().hasPermission(Permission.CONTEXT_TOOL_ADMIN);
 
 const onDelete = async (tool: ExternalToolDisplayData) => {
-	const confirmed = await askDeletionItem({
-		title: t("pages.rooms.tools.deleteDialog.title"),
-		itemName: tool.name,
-		message: "pages.rooms.tools.deleteDialog.content",
-		confirmBtnKey: "common.actions.remove",
-	});
+	const confirmed = await askDeletion(
+		t("pages.rooms.tools.deleteDialog.title"),
+		t("pages.rooms.tools.deleteDialog.content", { itemName: tool.name }),
+		"warning",
+		"common.actions.remove"
+	);
 
 	if (confirmed) {
 		emit("delete", tool);

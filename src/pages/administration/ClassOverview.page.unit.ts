@@ -507,21 +507,20 @@ describe("ClassOverview", () => {
 			};
 
 			it("should call deleteClass when confirmed", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 				const { wrapper, groupModule } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");
 
-				expect(confirmDialogUtils.askDeletionItem).toHaveBeenCalledWith({
-					title: "pages.administration.classes.deleteDialog.title",
-					message: "pages.administration.classes.deleteDialog.content",
-					itemName: expect.any(String),
-				});
+				expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
+					"pages.administration.classes.deleteDialog.title",
+					"pages.administration.classes.deleteDialog.content"
+				);
 				expect(groupModule.deleteClass).toHaveBeenCalled();
 			});
 
 			it("should not call deleteClass when cancelled", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionItem").mockResolvedValue(false);
+				vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 				const { wrapper, groupModule } = setup();
 
 				await wrapper.find('[data-testid="class-table-delete-btn"]').trigger("click");

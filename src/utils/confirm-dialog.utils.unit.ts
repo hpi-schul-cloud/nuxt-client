@@ -1,11 +1,4 @@
-import {
-	askCancel,
-	askConfirmation,
-	askDeletion,
-	askDeletionByTitle,
-	askDeletionByType,
-	askDeletionItem,
-} from "./confirm-dialog.utils";
+import { askCancel, askConfirmation, askDeletion, askDeletionByTitle, askDeletionByType } from "./confirm-dialog.utils";
 import { useInternalConfirmDialog } from "@/composables/confirm-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
 import { mockComposable } from "@@/tests/test-utils";
@@ -52,77 +45,6 @@ describe("confirm-dialog.utils", () => {
 			const result = await askConfirmation({ title: "Test" });
 
 			expect(result).toBe(false);
-		});
-	});
-
-	describe("askDeletionItem", () => {
-		it("should call askConfirmation with translated message when key exists", async () => {
-			vi.mocked(i18nModule.i18nKeyExists).mockReturnValue(true);
-			vi.mocked(i18nModule.useI18nGlobal).mockReturnValue({
-				t: vi.fn().mockReturnValue("Translated message for itemName"),
-			} as unknown as ReturnType<typeof i18nModule.useI18nGlobal>);
-
-			const result = await askDeletionItem({
-				title: "Delete Title",
-				itemName: "My Item",
-				message: "delete.message.key",
-			});
-
-			expect(i18nModule.i18nKeyExists).toHaveBeenCalledWith("delete.message.key");
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
-				title: "Delete Title",
-				message: "Translated message for itemName",
-				confirmBtnKey: "common.actions.delete",
-				messageType: "warning",
-			});
-			expect(result).toBe(true);
-		});
-
-		it("should use raw message when key does not exist", async () => {
-			vi.mocked(i18nModule.i18nKeyExists).mockReturnValue(false);
-
-			await askDeletionItem({
-				title: "Delete Title",
-				itemName: "My Item",
-				message: "Raw message without translation",
-			});
-
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith({
-				title: "Delete Title",
-				message: "Raw message without translation",
-				confirmBtnKey: "common.actions.delete",
-				messageType: "warning",
-			});
-		});
-
-		it("should use custom confirmBtnKey when provided", async () => {
-			await askDeletionItem({
-				title: "Delete Title",
-				itemName: "My Item",
-				message: "Message",
-				confirmBtnKey: "custom.confirm.button",
-			});
-
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith(
-				expect.objectContaining({
-					confirmBtnKey: "custom.confirm.button",
-				})
-			);
-		});
-
-		it("should use custom messageType when provided", async () => {
-			await askDeletionItem({
-				title: "Delete Title",
-				itemName: "My Item",
-				message: "Message",
-				messageType: "info",
-			});
-
-			expect(useInternalConfirmationDialogMock.askInternal).toHaveBeenCalledWith(
-				expect.objectContaining({
-					messageType: "info",
-				})
-			);
 		});
 	});
 
