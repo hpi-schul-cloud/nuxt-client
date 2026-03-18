@@ -39,7 +39,7 @@
 					</VCard>
 				</div>
 
-				<VBtn to="/news" variant="text" :text="t('common.actions.show.all')" />
+				<VBtn to="/news" variant="outlined" :text="t('common.actions.show.all')" />
 			</template>
 
 			<!-- Teacher tasks -->
@@ -62,8 +62,8 @@
 					:tasks="dashboardData.privateHomeworks"
 				/>
 				<div class="d-flex mt-2">
-					<VBtn variant="text" to="/tasks">
-						{{ t("common.labels.tasks.more") }}
+					<VBtn variant="outlined" to="/tasks">
+						{{ t("common.actions.show.all") }}
 					</VBtn>
 				</div>
 			</template>
@@ -80,8 +80,8 @@
 					:tasks="dashboardData.homeworksWithFeedback"
 				/>
 				<div class="d-flex mt-2">
-					<VBtn variant="text" to="/tasks">
-						{{ t("common.labels.tasks.more") }}
+					<VBtn variant="outlined" to="/tasks">
+						{{ t("common.actions.show.all") }}
 					</VBtn>
 				</div>
 			</template>
