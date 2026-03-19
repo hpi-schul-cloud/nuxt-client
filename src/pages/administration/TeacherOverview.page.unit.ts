@@ -13,7 +13,6 @@ import {
 	expectNotification,
 	userResponseFactory,
 } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -21,7 +20,6 @@ import { Permission, RoleName } from "@api-server";
 import { useClasses } from "@data-classes";
 import { useUsers } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { flushPromises, RouterLinkStub, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -31,9 +29,6 @@ import { VCheckbox } from "vuetify/components";
 
 vi.mock("@/components/administration/data-filter/composables/filterLocalStorage.composable");
 const mockedUseFilterLocalStorage = vi.mocked(useFilterLocalStorage);
-
-vi.mock("@ui-confirmation-dialog");
-vi.mocked(useConfirmationDialog);
 
 vi.mock("@data-users/users.composable");
 const mockedUseUsers = vi.mocked(useUsers);
@@ -54,16 +49,9 @@ function writableComputed<T>(initial: T) {
 }
 
 describe("teacher overview page", () => {
-	let askConfirmationMock: Mock;
-
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore();
-
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
 
 		setupStores({
 			schoolsModule: SchoolsModule,
@@ -180,7 +168,6 @@ describe("teacher overview page", () => {
 		};
 
 		it("should call delete users, notify success and refresh the user list", async () => {
-			askConfirmationMock.mockResolvedValue(true);
 			const { wrapper, useUserMock, firstUser } = setup();
 
 			await openContextMenu(wrapper, 0);
@@ -200,7 +187,6 @@ describe("teacher overview page", () => {
 
 		describe("when deletion of users fails", () => {
 			it("should notify error", async () => {
-				askConfirmationMock.mockResolvedValue(true);
 				const { wrapper, firstUser, useUserMock } = setup();
 				(useUserMock.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
 

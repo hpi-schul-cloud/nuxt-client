@@ -1,4 +1,3 @@
-export * from "./composable-mocks";
 export * from "./factory";
 export * from "./i18nMock";
 export * from "./mockApiFactory";
