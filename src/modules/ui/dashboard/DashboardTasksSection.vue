@@ -7,21 +7,32 @@
 				<VCardText>
 					<VIcon size="14" class="mr-1" :icon="mdiFormatListChecks" />
 					<span v-if="task.courseId" data-testid="task-course-name"> {{ task.courseName }} | </span>
-					<span>{{ task.dueDate ? fromNowUtc(task.dueDate) : t("pages.dashboard.no.due.date") }}</span>
+					<span>{{
+						task.dueDate && !isTaskOverdue(task) ? fromNowUtc(task.dueDate) : t("pages.dashboard.no.due.date")
+					}}</span>
 
 					<div class="d-flex flex-wrap ga-4">
 						<h3 class="text-h4 my-1" data-testid="task-name" :style="`background: ${task.displayColor}`">
 							{{ task.name }}
 						</h3>
-						<div v-if="task.status?.maxSubmissions" class="d-flex ga-2 mt-2">
-							<VChip size="small" variant="tonal" data-testid="task-submitted">
+						<div class="d-flex ga-2 mt-2">
+							<VChip v-if="task.status?.maxSubmissions" size="small" variant="tonal" data-testid="task-submitted">
 								{{ t("pages.room.taskCard.teacher.label.submitted") }} {{ task.status.submitted }}/{{
 									task.status?.maxSubmissions
 								}}
 							</VChip>
-							<VChip size="small" variant="tonal" data-testid="task-graded">
+							<VChip v-if="task.status?.maxSubmissions" size="small" variant="tonal" data-testid="task-graded">
 								{{ t("pages.room.taskCard.label.graded") }}
 								{{ task.status.graded }}/{{ task.status.submitted }}
+							</VChip>
+							<VChip
+								v-if="isTaskOverdue(task)"
+								prepend-icon="$taskMissed"
+								size="small"
+								variant="tonal"
+								data-testid="task-overdue"
+							>
+								{{ t("pages.room.taskCard.teacher.label.overdue") }}
 							</VChip>
 						</div>
 					</div>
@@ -33,6 +44,7 @@
 <script setup lang="ts">
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
+import { isTaskOverdue } from "@data-tasks";
 import { mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
 

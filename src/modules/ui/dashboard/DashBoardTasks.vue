@@ -1,9 +1,5 @@
 <template>
-	<!-- Teacher tasks -->
-	<div v-if="isRunning" class="d-flex mt-10 justify-center align-center">
-		<VProgressCircular indeterminate size="115" />
-	</div>
-	<template v-else>
+	<SvsLoadingSpinner :loading="isRunning">
 		<template v-if="isTeacher">
 			<!-- Tasks Feedback required -->
 			<DashboardTasksSection
@@ -28,8 +24,6 @@
 				</VBtn>
 			</div>
 		</template>
-
-		<!-- Student tasks -->
 		<template v-else-if="isStudent">
 			<DashboardTasksAssigned :tasks="take10(assignedToStudent)" />
 
@@ -46,7 +40,7 @@
 				</VBtn>
 			</div>
 		</template>
-	</template>
+	</SvsLoadingSpinner>
 </template>
 
 <script setup lang="ts">
@@ -55,19 +49,16 @@ import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { take10 } from "@/utils/array.utils";
 import { useAppStoreRefs } from "@data-app";
 import { TASKS_ONE_YEAR_RANGE, toSortedByCreatedDate, useTasks } from "@data-tasks";
-import { refDebounced } from "@vueuse/core";
+import { SvsLoadingSpinner } from "@ui-containers";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();
-const { assignedToStudent, assignedToTeacher, draft, feedbackRequired, withFeedback, status, isRunning } = useTasks({
+const { assignedToStudent, assignedToTeacher, draft, feedbackRequired, withFeedback, isRunning } = useTasks({
 	range: TASKS_ONE_YEAR_RANGE,
 });
-
-const isLoadingTasks = computed(() => status.value !== "completed");
 const draftByCreated = computed(() => take10(toSortedByCreatedDate(draft.value)));
-const debouncedIsLoading = refDebounced(isLoadingTasks, 200);
 </script>
 
 <style scoped lang="scss"></style>

@@ -1,6 +1,5 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 api.ts
 api/account-api.ts
 api/admin-students-api.ts
@@ -43,6 +42,7 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
+api/server-releases-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts
@@ -239,6 +239,7 @@ models/maintenance-response.ts
 models/maintenance-status-response.ts
 models/material-response.ts
 models/me-account-response.ts
+models/me-preferences-response.ts
 models/me-response.ts
 models/me-role-response.ts
 models/me-school-logo-response.ts
@@ -407,6 +408,7 @@ models/update-element-content-body-params.ts
 models/update-flag-params.ts
 models/update-match-params.ts
 models/update-news-params.ts
+models/update-preferences-body-params.ts
 models/update-room-body-params.ts
 models/update-room-invitation-link-body-params.ts
 models/update-runtime-config-value-body-params.ts

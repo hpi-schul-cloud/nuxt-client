@@ -15,7 +15,7 @@ const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] 
 	return skip + limit < data.data.total ? fetchAllTasks(skip + limit, limit, all) : all;
 };
 
-const isOverdue = (t: TaskResponse) => !!t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
+export const isTaskOverdue = (t: TaskResponse) => !!t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
 
 type DateRange = {
 	from: { amount: number; unit: ManipulateType };
@@ -24,7 +24,7 @@ type DateRange = {
 
 export const TASKS_ONE_YEAR_RANGE: DateRange = {
 	from: { amount: 1, unit: "year" },
-	to: { amount: 7, unit: "day" },
+	to: { amount: 14, unit: "day" },
 };
 
 export const toSortedByDueDate = (tasks: TaskResponse[]) =>
@@ -59,16 +59,18 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 	const assignedToTeacher = computed(() => notDraft.value.filter((t) => t.status.submitted < t.status.maxSubmissions));
 
 	const assignedToStudent = computed(() =>
-		notDraft.value.filter((t) => t.status.submitted === 0 && t.status.graded === 0 && !t.lessonHidden && !isOverdue(t))
+		notDraft.value.filter(
+			(t) => t.status.submitted === 0 && t.status.graded === 0 && !t.lessonHidden && !isTaskOverdue(t)
+		)
 	);
 
-	const overdue = computed(() => notDraft.value.filter(isOverdue));
+	const overdue = computed(() => notDraft.value.filter(isTaskOverdue));
 
 	const feedbackRequired = computed(() =>
 		notDraft.value.filter(
 			(t) =>
 				t.status.maxSubmissions > t.status.graded &&
-				((isOverdue(t) && t.status.submitted > t.status.graded) || (!t.dueDate && t.status.submitted > 0))
+				((isTaskOverdue(t) && t.status.submitted > t.status.graded) || (!t.dueDate && t.status.submitted > 0))
 		)
 	);
 

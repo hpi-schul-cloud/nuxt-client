@@ -45,35 +45,32 @@
 			</template>
 
 			<DashBoardTasks v-if="isTeacher || isStudent" />
+
 			<!-- Dashboard new release announcement      -->
-			<!--			<SvsDialog-->
-			<!--				v-if="dashboardData?.showNewReleaseModal"-->
-			<!--				:model-value="true"-->
-			<!--				title="pages.dashboard.new.features.available"-->
-			<!--			>-->
-			<!--				<template #content>-->
-			<!--					<VImg-->
-			<!--						class="w-75 d-block mx-auto"-->
-			<!--						src="@/assets/img/surprise.gif"-->
-			<!--						alt=""-->
-			<!--						role="presentation"-->
-			<!--						max-width="360"-->
-			<!--					/>-->
-			<!--					<div class="text-md text-center">-->
-			<!--						<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>-->
-			<!--						<div>{{ t("pages.dashboard.new.features.forward") }}</div>-->
-			<!--					</div>-->
-			<!--				</template>-->
-			<!--				<template #actions>-->
-			<!--					<VBtn-->
-			<!--						class="w-100"-->
-			<!--						color="primary"-->
-			<!--						variant="flat"-->
-			<!--						:text="t('common.actions.click.here')"-->
-			<!--						to="/system/releases"-->
-			<!--					/>-->
-			<!--				</template>-->
-			<!--			</SvsDialog>-->
+			<SvsDialog v-if="hasNewReleaseNotes" :model-value="true" title="pages.dashboard.new.features.available">
+				<template #content>
+					<VImg
+						class="w-75 d-block mx-auto"
+						src="@/assets/img/surprise.gif"
+						alt=""
+						role="presentation"
+						max-width="360"
+					/>
+					<div class="text-md text-center">
+						<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>
+						<div>{{ t("pages.dashboard.new.features.forward") }}</div>
+					</div>
+				</template>
+				<template #actions>
+					<VBtn
+						class="w-100"
+						color="primary"
+						variant="flat"
+						:text="t('common.actions.click.here')"
+						to="/system/releases"
+					/>
+				</template>
+			</SvsDialog>
 		</template>
 	</DefaultWireframe>
 </template>
@@ -82,26 +79,27 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse } from "@api-server";
+import { NewsApiFactory, NewsResponse, ServerReleasesApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
 import { DashBoardTasks } from "@ui-dashboard";
+import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
 const { t } = useI18n();
 
-const { isTeacher, isStudent } = useAppStoreRefs();
+const { isTeacher, isStudent, userPreferences } = useAppStoreRefs();
 const envConfig = useEnvConfig();
 
 const latestNews = ref<NewsResponse[]>([]);
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
+const releasesApi = ServerReleasesApiFactory(undefined, "/v3", $axios);
 
 const { execute, status: statusNews } = useSafeAxiosTask();
 
@@ -113,7 +111,11 @@ onMounted(async () => {
 	);
 	if (!success) return;
 	latestNews.value = result.data.data ?? [];
+
+	// releasesApi.serverReleasesControllerGetReleases()
 });
+
+const hasNewReleaseNotes = computed(() => userPreferences.value?.releaseDate);
 </script>
 
 <style lang="scss" scoped>
