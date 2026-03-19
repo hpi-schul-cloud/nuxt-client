@@ -34,7 +34,7 @@
 							</VChip>
 							<VChip
 								v-if="isTaskOverdue(task)"
-								prepend-icon="$taskMissed"
+								:prepend-icon="mdiClockAlertOutline"
 								size="small"
 								variant="tonal"
 								data-testid="task-overdue"
@@ -52,7 +52,7 @@
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { isTaskOverdue } from "@data-tasks";
-import { mdiFormatListChecks } from "@icons/material";
+import { mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
 defineProps<{
