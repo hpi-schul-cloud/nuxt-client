@@ -3,89 +3,48 @@
 		<template #header>
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
-		<template v-if="statusTasks === 'completed'" #default>
-			<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
+		<template #default>
+			<template v-if="statusNews === 'completed'">
+				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
-			<!-- Dashboard news -->
-			<EmptyState
-				v-if="latestNews.length === 0"
-				data-testid="empty-state-news"
-				:title="t('pages.dashboard.empty.news')"
-			>
-				<template #media>
-					<VImg height="160" src="@/assets/img/news-empty.svg" />
+				<!-- Dashboard news -->
+				<EmptyState
+					v-if="latestNews.length === 0"
+					data-testid="empty-state-news"
+					:title="t('pages.dashboard.empty.news')"
+				>
+					<template #media>
+						<VImg height="160" src="@/assets/img/news-empty.svg" />
+					</template>
+				</EmptyState>
+				<template v-else>
+					<div class="grid-container mb-4">
+						<VCard
+							v-for="news in latestNews"
+							:key="news.id"
+							class="d-flex flex-column"
+							:href="`/news/${news.id}`"
+							data-testid="container_of_element"
+							@dragstart.prevent
+						>
+							<VCardTitle class="bg-primary-lighten text-wrap" data-testid="news-header">
+								<div class="d-flex align-center">
+									<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
+									<span class="text-sm font-weight-regular">{{ fromNowUtc(news.displayAt) }}</span>
+								</div>
+								<h3 class="text-h4 my-1 news-header-truncate" data-testid="title_of_an_element">{{ news.title }}</h3>
+							</VCardTitle>
+							<VCardText class="flex-grow-1 pt-3 text-md" data-testid="news-content">
+								<div class="news-content-truncate"><RenderHTML :html="news.content" /></div>
+							</VCardText>
+						</VCard>
+					</div>
+
+					<VBtn href="/news" variant="outlined" :text="t('common.actions.show.all')" />
 				</template>
-			</EmptyState>
-			<template v-else>
-				<div class="grid-container mb-4">
-					<VCard
-						v-for="news in latestNews"
-						:key="news.id"
-						class="d-flex flex-column"
-						:href="`/news/${news.id}`"
-						data-testid="container_of_element"
-						@dragstart.prevent
-					>
-						<VCardTitle class="bg-primary-lighten text-wrap" data-testid="news-header">
-							<div class="d-flex align-center">
-								<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
-								<span class="text-sm font-weight-regular">{{ fromNowUtc(news.displayAt) }}</span>
-							</div>
-							<h3 class="text-h4 my-1 news-header-truncate" data-testid="title_of_an_element">{{ news.title }}</h3>
-						</VCardTitle>
-						<VCardText class="flex-grow-1 pt-3 text-md" data-testid="news-content">
-							<div class="news-content-truncate"><RenderHTML :html="news.content" /></div>
-						</VCardText>
-					</VCard>
-				</div>
-
-				<VBtn href="/news" variant="outlined" :text="t('common.actions.show.all')" />
 			</template>
 
-			<!-- Teacher tasks -->
-			<template v-if="isTeacher">
-				<!-- Tasks Feedback required -->
-				<DashboardTasksSection
-					v-if="feedbackRequired.length > 0"
-					data-testid="tasks-with-required-feedback"
-					:title="t('pages.dashboard.schedule.with.feedback')"
-					:tasks="take10(feedbackRequired)"
-				/>
-
-				<DashboardAssignedTasks :tasks="take10(assignedToTeacher)" />
-
-				<!-- Tasks Private -->
-				<DashboardTasksSection
-					v-if="draftByCreated.length > 0"
-					data-testid="tasks-private"
-					:title="t('common.words.drafts')"
-					:tasks="take10(draftByCreated)"
-				/>
-				<div class="d-flex mt-2">
-					<VBtn variant="outlined" to="/tasks">
-						{{ t("common.actions.show.all") }}
-					</VBtn>
-				</div>
-			</template>
-
-			<!-- Student tasks -->
-			<template v-else-if="isStudent">
-				<DashboardAssignedTasks :tasks="take10(assignedToStudent)" />
-
-				<!-- Tasks with feedback -->
-				<DashboardTasksSection
-					v-if="withFeedback.length > 0"
-					data-testid="tasks-with-feedback"
-					:title="t('pages.dashboard.schedule.with.feedback')"
-					:tasks="take10(withFeedback)"
-				/>
-				<div class="d-flex mt-2">
-					<VBtn variant="outlined" to="/tasks">
-						{{ t("common.actions.show.all") }}
-					</VBtn>
-				</div>
-			</template>
-
+			<DashBoardTasks v-if="isTeacher || isStudent" />
 			<!-- Dashboard new release announcement      -->
 			<!--			<SvsDialog-->
 			<!--				v-if="dashboardData?.showNewReleaseModal"-->
@@ -121,20 +80,18 @@
 <script lang="ts" setup>
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
-import { take10 } from "@/utils/array.utils";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { NewsApiFactory, NewsResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { TASKS_ONE_YEAR_RANGE, toSortedByCreatedDate, useTasks } from "@data-tasks";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
-import { DashboardAssignedTasks, DashboardTasksSection } from "@ui-dashboard";
+import { DashBoardTasks } from "@ui-dashboard";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -146,22 +103,9 @@ const latestNews = ref<NewsResponse[]>([]);
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
-const { execute, status } = useSafeAxiosTask();
+const { execute, status: statusNews } = useSafeAxiosTask();
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
-
-const {
-	assignedToStudent,
-	assignedToTeacher,
-	draft,
-	feedbackRequired,
-	withFeedback,
-	status: statusTasks,
-} = useTasks({
-	range: TASKS_ONE_YEAR_RANGE,
-});
-
-const draftByCreated = computed(() => take10(toSortedByCreatedDate(draft.value)));
 
 onMounted(async () => {
 	const { result, success } = await execute(

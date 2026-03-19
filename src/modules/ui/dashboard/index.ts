@@ -1,4 +1,5 @@
-import DashboardAssignedTasks from "./DashboardAssignedTasks.vue";
+import DashBoardTasks from "./DashBoardTasks.vue";
+import DashboardTasksAssigned from "./DashboardTasksAssigned.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 
-export { DashboardAssignedTasks, DashboardTasksSection };
+export { DashBoardTasks, DashboardTasksAssigned, DashboardTasksSection };
