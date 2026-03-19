@@ -39,7 +39,7 @@
 					</VCard>
 				</div>
 
-				<VBtn to="/news" variant="outlined" :text="t('common.actions.show.all')" />
+				<VBtn href="/news" variant="outlined" :text="t('common.actions.show.all')" />
 			</template>
 
 			<!-- Teacher tasks -->
