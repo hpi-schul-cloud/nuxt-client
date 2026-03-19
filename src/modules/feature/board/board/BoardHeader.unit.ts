@@ -1,7 +1,7 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardExternalReferenceType, BoardResponseAllowedOperations, ConfigResponse } from "@api-server";
@@ -327,7 +327,7 @@ describe("BoardHeader", () => {
 
 	describe("when the 'delete' menu button is clicked", () => {
 		it("should emit 'delete:board'", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true, deleteBoard: true } });
 
 			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);

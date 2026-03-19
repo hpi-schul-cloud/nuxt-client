@@ -1,6 +1,6 @@
 import RoomForm from "./RoomForm.vue";
 import { RoomColor, RoomCreateParams } from "@/types/room/Room";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { roomFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { RoomFeatures } from "@api-server";

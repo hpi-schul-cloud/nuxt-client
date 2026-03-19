@@ -9,7 +9,7 @@ import RenameFolderDialog from "./RenameFolderDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as FileHelper from "@/utils/fileHelper";
 import {
 	boardResponseFactory,
@@ -397,7 +397,7 @@ describe("Folder.vue", () => {
 
 			describe("when delete folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 
 					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
@@ -445,7 +445,7 @@ describe("Folder.vue", () => {
 
 			describe("when delete folder button is clicked, dialog confirmed and parent not a board", () => {
 				const setup = async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
 						parentType: ParentNodeType.COURSE,
@@ -486,7 +486,7 @@ describe("Folder.vue", () => {
 
 			describe("when delete folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
-					vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(false);
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
 
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,

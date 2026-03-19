@@ -45,7 +45,7 @@ import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardAllowedOperations, useBoardApi, useBoardStore, useSharedBoardPageInformation } from "@data-board";
@@ -153,7 +153,7 @@ const uploadFile = () => {
 };
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionByType("components.cardElement.folderElement");
+	const shouldDelete = await askDeletionForType("components.cardElement.folderElement");
 
 	if (!shouldDelete) {
 		return;

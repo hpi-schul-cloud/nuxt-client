@@ -1,7 +1,7 @@
 import { KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "../menus";
 import MemberInvitationsTable from "./MemberInvitationsTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestAppStoreWithUser, mockedPiniaStoreTyping, registrationFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { type Registration, useRegistrationStore } from "@data-room";

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 }>();
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionByType("components.cardElement.collaborativeTextEditorElement");
+	const shouldDelete = await askDeletionForType("components.cardElement.collaborativeTextEditorElement");
 	if (shouldDelete) {
 		emit("delete:element");
 	}

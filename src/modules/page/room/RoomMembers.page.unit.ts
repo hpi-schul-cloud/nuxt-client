@@ -2,7 +2,7 @@ import RoomMembersPage from "./RoomMembers.page.vue";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";

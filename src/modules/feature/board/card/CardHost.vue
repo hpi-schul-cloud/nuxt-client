@@ -105,7 +105,7 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -189,7 +189,7 @@ const onUpdateCardTitle = (newTitle: string) => _debouncedUpdateCardTitle(newTit
 
 const onDeleteCard = async () => {
 	stopEditMode();
-	const shouldDelete = await askDeletionByType("components.boardCard");
+	const shouldDelete = await askDeletionForType("components.boardCard");
 	if (shouldDelete && card.value?.id) {
 		emit("delete:card", card.value.id);
 	}

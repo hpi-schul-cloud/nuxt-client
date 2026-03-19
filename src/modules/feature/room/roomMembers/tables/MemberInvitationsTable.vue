@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "../menus";
-import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { type Registration, useRegistrationStore } from "@data-room";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";

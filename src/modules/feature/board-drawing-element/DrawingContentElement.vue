@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import InnerContent from "./InnerContent.vue";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { DrawingElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
@@ -76,7 +76,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 const onMoveDrawingElementEditDown = () => emit("move-down:edit");
 const onMoveDrawingElementEditUp = () => emit("move-up:edit");
 const onDeleteElement = async () => {
-	const shouldDelete = await askDeletionByType("components.cardElement.drawingElement");
+	const shouldDelete = await askDeletionForType("components.cardElement.drawingElement");
 	if (shouldDelete) {
 		emit("delete:element", props.element.id);
 	}

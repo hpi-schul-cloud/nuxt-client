@@ -1,5 +1,5 @@
 import CollaborativeTextEditorElementMenu from "./CollaborativeTextEditorElementMenu.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { flushPromises, shallowMount } from "@vue/test-utils";
@@ -94,7 +94,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);

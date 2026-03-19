@@ -104,7 +104,7 @@
 
 <script>
 import { schoolsModule } from "@/store";
-import { askDeletion } from "@/utils/confirm-dialog.utils.ts";
+import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";

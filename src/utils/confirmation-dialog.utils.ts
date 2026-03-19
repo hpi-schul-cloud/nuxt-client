@@ -1,17 +1,11 @@
-import { ConfirmationOptions, useInternalConfirmationDialog } from "@/composables/confirm-dialog.composable";
+import { ConfirmationOptions, useInternalConfirmationDialog } from "@/composables/confirmation-dialog.composable";
 import { i18nKeyExists, useI18nGlobal } from "@/plugins/i18n";
 
-/**
- * Raises a confirmation dialog with the given options and returns a promise that resolves to true if the user confirms, or false if they cancel.
- */
 export const askConfirmation = (options: ConfirmationOptions): Promise<boolean> => {
 	const { askInternal } = useInternalConfirmationDialog();
 	return askInternal(options);
 };
 
-/**
- * Raises a confirmation dialog for deletion actions.
- */
 export const askDeletion = (
 	title: string,
 	message?: string,
@@ -25,7 +19,7 @@ export const askDeletion = (
 		confirmBtnKey: confirmBtnKey,
 	});
 
-export const askDeletionByTitle = async (itemName: string, itemType: string) => {
+export const askDeletionForItem = async (itemName: string, itemType: string) => {
 	const { t } = useI18nGlobal();
 
 	return await askDeletion(
@@ -36,7 +30,7 @@ export const askDeletionByTitle = async (itemName: string, itemType: string) => 
 	);
 };
 
-export const askDeletionByType = async (itemType: string) => {
+export const askDeletionForType = async (itemType: string) => {
 	const { t } = useI18nGlobal();
 
 	return await askDeletion(

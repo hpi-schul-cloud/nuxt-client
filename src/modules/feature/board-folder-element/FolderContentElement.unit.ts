@@ -3,7 +3,7 @@ import { FolderAlert } from "./FolderAlert.enum";
 import FolderContentElement from "./FolderContentElement.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { FileFolderElement } from "@/types/board/ContentElement";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { mockComposable, parentStatisticFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ContentElementType } from "@api-server";
@@ -236,7 +236,7 @@ describe("FolderContentElement", () => {
 			});
 
 			it("should emit 'delete:element' event when delete menu item is clicked", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setupWrapper({
 					isEditMode: true,
 				});

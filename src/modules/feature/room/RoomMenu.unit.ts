@@ -1,5 +1,5 @@
 import RoomMenu from "./RoomMenu.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, RoomItemResponseAllowedOperations } from "@api-server";
@@ -312,7 +312,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and clicking on delete menu item", () => {
 			it("should emit 'room:delete' event if confirmed", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
 				const { wrapper, menuBtn } = setup(
 					{},
 					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
@@ -327,7 +327,7 @@ describe("@feature-room/RoomMenu", () => {
 			});
 
 			it("should not emit 'room:delete' if not confirmed ", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(false);
+				vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 				const { wrapper, menuBtn } = setup(
 					{},
 					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }

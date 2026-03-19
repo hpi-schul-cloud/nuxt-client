@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { useInternalConfirmationDialog } from "./composables/confirm-dialog.composable";
+import { useInternalConfirmationDialog } from "./composables/confirmation-dialog.composable";
 import { availableLayouts, isLayout } from "./layouts";
 import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
 import { Layouts } from "@/layouts/types";

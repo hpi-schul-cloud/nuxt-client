@@ -2,7 +2,7 @@ import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { VideoConferenceState } from "@/store/types/video-conference";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
@@ -401,7 +401,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and delete menu item is clicked", () => {
 					it("should emit 'delete:element' event", async () => {
-						vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+						vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 						const videoConferenceElementContent = videoConferenceElementContentFactory.build();
 						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContent,
@@ -604,7 +604,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and delete menu item is clicked", () => {
 					it("should emit 'delete:element' event", async () => {
-						vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+						vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 						const { wrapper } = setupWrapper({
 							isEditMode: true,
 						});

@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
@@ -105,7 +105,7 @@ const onEndEditMode = () => {
 };
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionByType("components.boardColumn");
+	const shouldDelete = await askDeletionForType("components.boardColumn");
 	if (shouldDelete) {
 		emit("delete:column", props.columnId);
 	}

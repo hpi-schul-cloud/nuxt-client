@@ -1,4 +1,4 @@
-import { useInternalConfirmationDialog } from "./confirm-dialog.composable";
+import { useInternalConfirmationDialog } from "./confirmation-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
 
 vi.mock("@/plugins/i18n");

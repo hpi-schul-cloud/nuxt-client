@@ -2,7 +2,7 @@ import ShareModule from "@/store/share";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomBoardItem } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestRoomStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomBoardGridItemFactory, roomFactory } from "@@/tests/test-utils/factory/room";

@@ -41,7 +41,7 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import { BoardLayout } from "@/types/board/Board";
 import { RoomDetails } from "@/types/room/Room";
 import { ShareTokenParentType } from "@/types/sharing/Token";
-import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { injectStrict, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";

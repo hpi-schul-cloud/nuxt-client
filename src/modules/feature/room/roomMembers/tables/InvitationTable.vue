@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { isNotNullish } from "@/utils/typeScript";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { mdiShareVariantOutline } from "@icons/material";

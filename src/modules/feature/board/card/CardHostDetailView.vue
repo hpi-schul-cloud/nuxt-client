@@ -62,7 +62,7 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
-import { askDeletionByTitle } from "@/utils/confirm-dialog.utils";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import type { CardResponse } from "@api-server";
 import { mdiClose } from "@icons/material";
 import { ref } from "vue";
@@ -121,7 +121,7 @@ const onDeleteElement = (elementId: string) => {
 };
 
 const onDeleteCard = async () => {
-	const shouldDelete = await askDeletionByTitle(props.card.title!, "components.boardCard");
+	const shouldDelete = await askDeletionForItem(props.card.title!, "components.boardCard");
 
 	if (shouldDelete) {
 		emit("delete:card");

@@ -1,6 +1,6 @@
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { drawingElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { DrawingElementResponse } from "@api-server";
@@ -220,7 +220,7 @@ describe("DrawingContentElement", () => {
 			});
 
 			it("should emit 'delete:element' event when delete menu item is clicked", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,

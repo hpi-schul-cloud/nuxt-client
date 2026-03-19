@@ -45,7 +45,7 @@ import { usePreviewGenerator } from "../composables/PreviewGenerator.composable"
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { LinkElementResponse } from "@api-server";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
@@ -149,7 +149,7 @@ const onMoveDown = () => emit("move-down:edit");
 const onMoveUp = () => emit("move-up:edit");
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionByType("components.cardElement.LinkElement");
+	const shouldDelete = await askDeletionForType("components.cardElement.LinkElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}

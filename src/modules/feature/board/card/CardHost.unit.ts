@@ -6,7 +6,7 @@ import ContentElementList from "./ContentElementList.vue";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -285,13 +285,13 @@ describe("CardHost", () => {
 
 		describe("when users click delete menu", () => {
 			it("should emit 'delete:card' when confirmed", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setup({ allowedOperations: { deleteCard: true } });
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 				await deleteButton.trigger("click");
 
-				expect(confirmDialogUtils.askDeletionByType).toHaveBeenCalledWith("components.boardCard");
+				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
 			});
 		});

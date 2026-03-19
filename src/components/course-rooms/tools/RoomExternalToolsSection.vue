@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
-import { askDeletion } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { Permission, ToolContextType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { ExternalToolDisplayData } from "@data-external-tool";

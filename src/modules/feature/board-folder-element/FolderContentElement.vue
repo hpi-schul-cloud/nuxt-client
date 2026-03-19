@@ -66,7 +66,7 @@ import FolderTitleInput from "./FolderTitleInput.vue";
 import { useFolderAlerts } from "./useFolderAlerts.composable";
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { downloadFilesAsArchive } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useFileStorageApi } from "@data-file";
@@ -138,7 +138,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 };
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionByType("components.cardElement.folderElement");
+	const shouldDelete = await askDeletionForType("components.cardElement.folderElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}

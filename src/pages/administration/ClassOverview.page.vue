@@ -170,7 +170,7 @@ import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { askDeletion } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";

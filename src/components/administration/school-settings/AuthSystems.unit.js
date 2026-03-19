@@ -1,7 +1,7 @@
 import AuthSystems from "./AuthSystems.vue";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils.ts";
 import { createTestAppStoreWithPermissions, createTestEnvStore } from "@@/tests/test-utils";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";

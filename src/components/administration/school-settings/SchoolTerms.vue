@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
 import { School } from "@/store/types/schools";
-import { askDeletion } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";

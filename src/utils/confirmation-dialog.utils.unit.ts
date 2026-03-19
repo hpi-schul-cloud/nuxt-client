@@ -1,5 +1,5 @@
-import { askCancel, askConfirmation, askDeletion, askDeletionByTitle, askDeletionByType } from "./confirm-dialog.utils";
-import { useInternalConfirmationDialog } from "@/composables/confirm-dialog.composable";
+import { askCancel, askConfirmation, askDeletion, askDeletionForItem, askDeletionForType } from "./confirmation-dialog.utils";
+import { useInternalConfirmationDialog } from "@/composables/confirmation-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
 import { mockComposable } from "@@/tests/test-utils";
 import { beforeEach, describe, expect, it, type Mocked, vi } from "vitest";
@@ -110,7 +110,7 @@ describe("confirm-dialog.utils", () => {
 			} as unknown as ReturnType<typeof i18nModule.useI18nGlobal>);
 			vi.mocked(i18nModule.i18nKeyExists).mockReturnValue(true);
 
-			await askDeletionByTitle("My Document", "common.types.document");
+			await askDeletionForItem("My Document", "common.types.document");
 
 			expect(i18nModule.i18nKeyExists).toHaveBeenCalledWith("common.types.document");
 			expect(mockT).toHaveBeenCalledWith("common.types.document");
@@ -132,7 +132,7 @@ describe("confirm-dialog.utils", () => {
 			} as unknown as ReturnType<typeof i18nModule.useI18nGlobal>);
 			vi.mocked(i18nModule.i18nKeyExists).mockReturnValue(false);
 
-			await askDeletionByTitle("My Document", "Document");
+			await askDeletionForItem("My Document", "Document");
 
 			expect(mockT).toHaveBeenCalledWith("ui-confirmation-dialog.ask-delete", {
 				itemTitle: "My Document",
@@ -157,7 +157,7 @@ describe("confirm-dialog.utils", () => {
 			} as unknown as ReturnType<typeof i18nModule.useI18nGlobal>);
 			vi.mocked(i18nModule.i18nKeyExists).mockReturnValue(true);
 
-			await askDeletionByType("common.types.document");
+			await askDeletionForType("common.types.document");
 
 			expect(i18nModule.i18nKeyExists).toHaveBeenCalledWith("common.types.document");
 			expect(mockT).toHaveBeenCalledWith("common.types.document");
@@ -173,7 +173,7 @@ describe("confirm-dialog.utils", () => {
 			} as unknown as ReturnType<typeof i18nModule.useI18nGlobal>);
 			vi.mocked(i18nModule.i18nKeyExists).mockReturnValue(false);
 
-			await askDeletionByType("Raw Type");
+			await askDeletionForType("Raw Type");
 
 			expect(mockT).toHaveBeenCalledWith("ui-confirmation-dialog.ask-delete-type", {
 				itemType: "Raw Type",

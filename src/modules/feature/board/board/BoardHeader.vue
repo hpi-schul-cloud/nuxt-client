@@ -60,7 +60,7 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 import BoardEditableChip from "./BoardEditableChip.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { upperCaseFirstChar } from "@/utils/textFormatting";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { useEnvConfig } from "@data-env";
@@ -165,7 +165,7 @@ const updateBoardTitle = async (value: string) => {
 };
 
 const onDeleteBoard = async () => {
-	const shouldDelete = await askDeletionByType("common.words.board");
+	const shouldDelete = await askDeletionForType("common.words.board");
 	if (shouldDelete) {
 		emit("delete:board", props.boardId);
 	}

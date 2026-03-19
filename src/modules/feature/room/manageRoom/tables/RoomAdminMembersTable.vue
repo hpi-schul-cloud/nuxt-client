@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import ChangeRole from "../../roomMembers/dialogs/ChangeRole.vue";
-import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";

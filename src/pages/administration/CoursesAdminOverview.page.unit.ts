@@ -1,6 +1,6 @@
 import CoursesAdminOverviewPage from "./CoursesAdminOverview.page.vue";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	courseInfoDataResponseFactory,
 	createTestAppStoreWithPermissions,

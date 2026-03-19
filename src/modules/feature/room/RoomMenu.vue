@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletionByTitle } from "@/utils/confirm-dialog.utils";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import { useEnvConfig } from "@data-env";
 import { useRoomAllowedOperations } from "@data-room";
 import {
@@ -53,7 +53,7 @@ const membersInfoText = computed(() =>
 );
 
 const onDeleteRoom = async () => {
-	const shouldDelete = await askDeletionByTitle(props.roomName, "common.labels.room");
+	const shouldDelete = await askDeletionForItem(props.roomName, "common.labels.room");
 
 	if (shouldDelete) {
 		emit("room:delete");

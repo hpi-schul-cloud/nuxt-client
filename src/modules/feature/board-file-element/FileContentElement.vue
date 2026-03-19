@@ -56,7 +56,7 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
 import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
@@ -194,7 +194,7 @@ const onAddAlert = (alert: FileAlert) => {
 };
 
 const onDelete = async () => {
-	const shouldDelete = await askDeletionByType("components.cardElement.fileElement");
+	const shouldDelete = await askDeletionForType("components.cardElement.fileElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}

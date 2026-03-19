@@ -3,7 +3,7 @@ import { courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -363,7 +363,7 @@ describe("CourseRoomDashboard.vue", () => {
 
 	describe("Deleting Items", () => {
 		it("should call deleteLesson when lesson deletion is confirmed", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
 			const deleteLessonMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -374,13 +374,13 @@ describe("CourseRoomDashboard.vue", () => {
 			lessonCard.vm.$emit("delete-lesson");
 			await flushPromises();
 
-			expect(confirmDialogUtils.askDeletionByTitle).toHaveBeenCalledWith("Test Name", "common.words.topic");
+			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith("Test Name", "common.words.topic");
 			expect(deleteLessonMock).toHaveBeenCalledWith("3456");
 			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
 		it("should call deleteTask when task deletion is confirmed", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
 			const deleteTaskMock = vi.fn();
 			const fetchContentMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -391,13 +391,13 @@ describe("CourseRoomDashboard.vue", () => {
 			taskCard.vm.$emit("delete-task");
 			await flushPromises();
 
-			expect(confirmDialogUtils.askDeletionByTitle).toHaveBeenCalledWith("Test Name", "common.words.topic");
+			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith("Test Name", "common.words.topic");
 			expect(deleteTaskMock).toHaveBeenCalledWith("1234");
 			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
 		it("should not call deleteTask when task deletion is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(false);
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteTaskMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteTask = deleteTaskMock;
@@ -410,7 +410,7 @@ describe("CourseRoomDashboard.vue", () => {
 		});
 
 		it("should not call deleteLesson when lesson deletion is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(false);
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 			const deleteLessonMock = vi.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			courseRoomDetailsModule.deleteLesson = deleteLessonMock;

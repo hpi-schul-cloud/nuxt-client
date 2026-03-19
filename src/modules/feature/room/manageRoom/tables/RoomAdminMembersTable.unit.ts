@@ -2,7 +2,7 @@ import RoomAdminMembersTable from "./RoomAdminMembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,

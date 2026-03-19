@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { askDeletion } from "@/utils/confirm-dialog.utils";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";

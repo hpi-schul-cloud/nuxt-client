@@ -2,7 +2,7 @@ import SchoolPolicy from "./SchoolPolicy.vue";
 import SchoolPolicyFormDialog from "./SchoolPolicyFormDialog.vue";
 import SchoolsModule from "@/store/schools";
 import { Status } from "@/store/types/commons";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStoreWithPermissions, mockComposable, privacyPolicyFactory } from "@@/tests/test-utils";

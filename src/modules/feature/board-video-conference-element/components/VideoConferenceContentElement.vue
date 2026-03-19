@@ -84,7 +84,7 @@
 import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import { askDeletionByType } from "@/utils/confirm-dialog.utils";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardFeature, VideoConferenceElementResponse, VideoConferenceScope } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import {
@@ -200,7 +200,7 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 const onMoveDown = () => emit("move-down:edit");
 const onMoveUp = () => emit("move-up:edit");
 const onDelete = async () => {
-	if (await askDeletionByType("components.cardElement.videoConferenceElement"))
+	if (await askDeletionForType("components.cardElement.videoConferenceElement"))
 		emit("delete:element", computedElement.value.id);
 };
 const onStartVideoConference = async () => {

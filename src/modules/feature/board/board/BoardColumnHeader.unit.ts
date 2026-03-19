@@ -1,6 +1,6 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
@@ -343,7 +343,7 @@ describe("BoardColumnHeader", () => {
 	describe("when delete button is clicked", () => {
 		describe("when delete is confirmed", () => {
 			it("should emit delete:column", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const wrapper = setup({
 					isEditMode: false,
 					canDeleteColumn: true,
@@ -359,7 +359,7 @@ describe("BoardColumnHeader", () => {
 
 		describe("when delete is refused", () => {
 			it("should not emit delete:column", async () => {
-				vi.spyOn(confirmDialogUtils, "askDeletionByType").mockResolvedValue(false);
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
 				const wrapper = setup({
 					isEditMode: false,
 					canDeleteColumn: true,

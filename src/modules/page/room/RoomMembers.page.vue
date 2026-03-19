@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import { Tab } from "@/types/room/RoomMembers";
-import { askConfirmation } from "@/utils/confirm-dialog.utils";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import {

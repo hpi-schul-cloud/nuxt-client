@@ -1,6 +1,6 @@
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardTitle from "./CardTitle.vue";
-import * as confirmDialogUtils from "@/utils/confirm-dialog.utils";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { CardResponse } from "@api-server";
@@ -117,7 +117,7 @@ describe("CardHostDetailView", () => {
 
 	describe("delete card", () => {
 		it("should emit delete:card when confirmation is accepted", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(true);
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
 
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
@@ -128,7 +128,7 @@ describe("CardHostDetailView", () => {
 
 			await getVm(wrapper).onDeleteCard();
 
-			expect(confirmDialogUtils.askDeletionByTitle).toHaveBeenCalledWith(
+			expect(confirmDialogUtils.askDeletionForItem).toHaveBeenCalledWith(
 				CARD_WITH_ELEMENTS.title,
 				"components.boardCard"
 			);
@@ -136,7 +136,7 @@ describe("CardHostDetailView", () => {
 		});
 
 		it("should not emit delete:card when confirmation is cancelled", async () => {
-			vi.spyOn(confirmDialogUtils, "askDeletionByTitle").mockResolvedValue(false);
+			vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 
 			const { wrapper } = setup({
 				card: CARD_WITH_ELEMENTS,
