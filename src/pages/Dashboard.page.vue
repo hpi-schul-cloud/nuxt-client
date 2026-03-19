@@ -123,9 +123,10 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse } from "@api-server";
+import { NewsApiFactory, NewsResponse, TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { TASKS_ONE_YEAR_RANGE, useTasks } from "@data-tasks";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
 import { DashboardAssignedTasks, DashBoardResponse, DashboardTasksSection } from "@ui-dashboard";
@@ -166,6 +167,14 @@ onMounted(async () => {
 	if (!successDb) return;
 	dashboardData.value = resultDb.data as unknown as DashBoardResponse;
 });
+
+const sliceTo10 = (tasks: TaskResponse[]) => tasks.slice(0, 10);
+
+const { assignedToStudent, assignedToTeacher, draft, feedbackRequired, withFeedback } = useTasks({
+	range: TASKS_ONE_YEAR_RANGE,
+});
+
+console.log(assignedToTeacher);
 </script>
 
 <style lang="scss" scoped>
