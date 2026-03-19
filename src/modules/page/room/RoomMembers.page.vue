@@ -61,13 +61,13 @@
 	</DefaultWireframe>
 	<AddMembersDialog v-model="isMembersDialogOpen" @close="onDialogClose" />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-	<ConfirmationDialog />
 	<InviteMembersDialog v-model="isInvitationDialogOpen" :school-name="currentUserSchoolName" @close="onDialogClose" />
 	<AddExternalPersonDialog v-model="isExternalPersonDialogOpen" />
 </template>
 
 <script setup lang="ts">
 import { Tab } from "@/types/room/RoomMembers";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useAppStoreRefs } from "@data-app";
 import {
@@ -94,7 +94,6 @@ import {
 	mdiListBoxOutline,
 	mdiPlus,
 } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
@@ -138,7 +137,6 @@ const { fetchRegistrationsForCurrentRoom, resetStore: resetRegistrationStore } =
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
-const { askConfirmation } = useConfirmationDialog();
 const { allowedOperations } = useRoomAllowedOperations();
 
 const { isInvitationDialogOpen, invitationStep, isInviteExternalPersonsFeatureEnabled } =
@@ -255,10 +253,10 @@ const onLeaveRoom = async () => {
 		return;
 	}
 	const shouldLeave = await askConfirmation({
-		message: t("pages.rooms.leaveRoom.confirmation", {
+		title: t("pages.rooms.leaveRoom.confirmation", {
 			roomName: room.value?.name,
 		}),
-		confirmActionLangKey: "common.actions.leave",
+		confirmBtnKey: "common.actions.leave",
 	});
 
 	if (!shouldLeave) return;

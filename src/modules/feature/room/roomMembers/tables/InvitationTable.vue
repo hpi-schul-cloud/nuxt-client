@@ -42,7 +42,6 @@
 						@click="onOpenShareModal(item.id)"
 					/>
 					<KebabMenuActionDelete
-						scope-language-key="pages.rooms.invitationLinkStatus.title"
 						:name="item.title"
 						:data-testid="`menu-delete-button-${item.id}`"
 						@click="onDeleteLinks([item.id])"
@@ -54,10 +53,10 @@
 </template>
 
 <script setup lang="ts">
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { isNotNullish } from "@/utils/typeScript";
 import { InvitationStep, useRoomInvitationLinkStore } from "@data-room";
 import { mdiShareVariantOutline } from "@icons/material";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import {
 	KebabMenu,
@@ -93,7 +92,6 @@ const {
 	selectedIds,
 	isInviteExternalPersonsFeatureEnabled,
 } = storeToRefs(roomInvitationLinkStore);
-const { askConfirmation } = useConfirmationDialog();
 
 const onUpdateSelectedIds = (ids: string[]) => {
 	selectedIds.value = ids;
@@ -106,17 +104,11 @@ const prepareRemovalMessage = (linkIds: string[]) =>
 				invitation: invitationTableData.value.find((link) => link.id === linkIds[0])?.title,
 			});
 
-const confirmDeletion = async (linkIds: string[]) => {
-	const shouldDelete = await askConfirmation({
-		message: prepareRemovalMessage(linkIds),
-		confirmActionLangKey: "common.actions.delete",
-	});
-
-	return shouldDelete;
-};
-
 const onDeleteLinks = async (linkIds: string[]) => {
-	const shouldDelete = await confirmDeletion(linkIds);
+	const shouldDelete = await askConfirmation({
+		title: prepareRemovalMessage(linkIds),
+		confirmBtnKey: "common.actions.delete",
+	});
 	if (shouldDelete) {
 		await roomInvitationLinkStore.deleteLinks(linkIds);
 	}

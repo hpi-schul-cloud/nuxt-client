@@ -1,22 +1,18 @@
 import { KebabMenuActionRemoveInvitation, KebabMenuActionResendInvitation } from "../menus";
 import MemberInvitationsTable from "./MemberInvitationsTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestAppStoreWithUser, mockedPiniaStoreTyping, registrationFactory } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { type Registration, useRegistrationStore } from "@data-room";
 import { mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { VDataTable, VTextField } from "vuetify/components";
-
-vi.mock("@ui-confirmation-dialog");
-const mockedUseConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => ({
 	useFocusTrap: vi.fn(),
@@ -26,25 +22,12 @@ vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("MemberInvitationsTable", () => {
-	let askConfirmationMock: Mock;
-
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
 	let activateMock: Mock;
 
 	beforeEach(() => {
-		askConfirmationMock = vi.fn();
-
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
-
-		mockedUseConfirmationDialog.mockReturnValue({
-			askConfirmation: askConfirmationMock,
-			isDialogOpen: ref(false),
-		});
-
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
@@ -209,30 +192,22 @@ describe("MemberInvitationsTable", () => {
 			await removeBtn.trigger("click");
 		};
 
-		it("should open confirmation dialog for single invitation", async () => {
-			const { wrapper } = setup();
-			askConfirmationMock.mockResolvedValue(true);
-
-			await triggerInvitationRemoval(wrapper, 0);
-
-			expect(askConfirmationMock).toHaveBeenCalledWith({
-				message: "pages.rooms.members.registrations.remove.confirmation",
-				confirmActionLangKey: "common.actions.delete",
-			});
-		});
-
 		it("should call removeInvitations when confirmed", async () => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 			const { wrapper, registrationStore, registrationItems } = setup();
-			askConfirmationMock.mockResolvedValue(true);
 
 			await triggerInvitationRemoval(wrapper, 0);
 
+			expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
+				title: "pages.rooms.members.registrations.remove.confirmation",
+				confirmBtnKey: "common.actions.delete",
+			});
 			expect(registrationStore.removeInvitations).toHaveBeenCalledWith([registrationItems[0].id]);
 		});
 
 		it("should not call removeInvitations when cancelled", async () => {
+			vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 			const { wrapper, registrationStore } = setup();
-			askConfirmationMock.mockResolvedValue(false);
 
 			await triggerInvitationRemoval(wrapper, 0);
 

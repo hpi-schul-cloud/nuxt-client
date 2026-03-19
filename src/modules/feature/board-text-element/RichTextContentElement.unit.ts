@@ -21,11 +21,6 @@ const mockElement: RichTextElementResponse = {
 
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
-	useDeleteConfirmationDialog: vi.fn(),
-}));
-
-vi.mock("@ui-confirmation-dialog", () => ({
-	useDeleteConfirmationDialog: vi.fn(),
 }));
 
 vi.mock("@util-board", () => ({

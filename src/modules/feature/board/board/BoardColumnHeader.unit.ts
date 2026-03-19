@@ -1,5 +1,6 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useCourseBoardEditMode } from "@data-board";
 import { BoardColumnInteractionHandler } from "@feature-board";
@@ -13,7 +14,7 @@ import {
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { flatten } from "lodash";
-import { computed, nextTick } from "vue";
+import { computed } from "vue";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
 const mockUseBoardFocusHandler = vi.mocked(useBoardFocusHandler);
@@ -342,14 +343,14 @@ describe("BoardColumnHeader", () => {
 	describe("when delete button is clicked", () => {
 		describe("when delete is confirmed", () => {
 			it("should emit delete:column", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const wrapper = setup({
 					isEditMode: false,
 					canDeleteColumn: true,
 				});
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
-				deleteAction.vm.$emit("click", true);
-				await nextTick();
+				await deleteAction.trigger("click");
 
 				const emitted = wrapper.emitted();
 				expect(emitted["delete:column"]).toBeDefined();
@@ -357,15 +358,15 @@ describe("BoardColumnHeader", () => {
 		});
 
 		describe("when delete is refused", () => {
-			it("should emit delete:column", async () => {
+			it("should not emit delete:column", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
 				const wrapper = setup({
 					isEditMode: false,
 					canDeleteColumn: true,
 				});
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
-				deleteAction.vm.$emit("click", false);
-				await nextTick();
+				await deleteAction.trigger("click");
 
 				const emitted = wrapper.emitted();
 				expect(emitted["delete:column"]).not.toBeDefined();
