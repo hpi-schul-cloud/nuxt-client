@@ -112,10 +112,15 @@ onMounted(async () => {
 	if (!success) return;
 	latestNews.value = result.data.data ?? [];
 
-	// releasesApi.serverReleasesControllerGetReleases()
+	const { result: resultRelease, success: successRelease } = await execute(
+		async () => await releasesApi.serverReleasesControllerGetReleases()
+	);
+	if (!successRelease) return;
+  console.log(resultRelease); // use the publishedAt and compare it to userPreferences.releaseDate
 });
 
 const hasNewReleaseNotes = computed(() => userPreferences.value?.releaseDate);
+console.log(userPreferences);
 </script>
 
 <style lang="scss" scoped>
