@@ -39,21 +39,13 @@
 			</KebabMenu>
 		</template>
 	</DataTable>
-	<ConfirmationDialog>
-		<template #alert>
-			<WarningAlert data-testid="warning-alert">
-				{{ t("pages.rooms.administration.table.delete.infoMessage") }}
-			</WarningAlert>
-		</template>
-	</ConfirmationDialog>
 </template>
 
 <script setup lang="ts">
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert, mdiTrashCanOutline } from "@icons/material";
-import { WarningAlert } from "@ui-alert";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuAction, KebabMenuActionRoomMembers } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
@@ -78,26 +70,19 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { askConfirmation } = useConfirmationDialog();
 
 const administrationRoomStore = useAdministrationRoomStore();
 const { deleteRoom } = administrationRoomStore;
 const { roomList, userSchoolId } = storeToRefs(administrationRoomStore);
 
-const confirmDeletion = async (roomName: string) => {
-	const shouldDelete = await askConfirmation({
-		message: t("pages.room.itemDelete.text", {
-			itemType: t("common.labels.room"),
-			itemTitle: roomName,
-		}),
-		confirmActionLangKey: "common.actions.delete",
-	});
-
-	return shouldDelete;
-};
-
 const onDeleteRoom = async (item: RoomStatsItemResponse) => {
-	const shouldDelete = await confirmDeletion(item.name);
+	const shouldDelete = await askDeletion(
+		t("ui-confirmation-dialog.ask-delete", {
+			itemType: t("common.labels.room"),
+			itemTitle: item.name,
+		}),
+		"pages.rooms.administration.table.delete.infoMessage"
+	);
 	if (shouldDelete) {
 		await deleteRoom(item.roomId);
 	}
