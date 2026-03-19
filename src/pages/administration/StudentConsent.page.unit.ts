@@ -8,7 +8,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { ConsentStudent, useBulkConsent } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -129,7 +129,7 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		const table = wrapper.findComponent(BackendDataTable);
-		await nextTick();
+		await flushPromises();
 
 		expect(table.props().data).toHaveLength(mockData.length);
 	});
@@ -138,7 +138,7 @@ describe("students/consent", () => {
 		const { wrapper } = setup();
 
 		const table = wrapper.findComponent(BackendDataTable);
-		await nextTick();
+		await flushPromises();
 
 		expect(table.props().data).toStrictEqual(mockData);
 	});
@@ -146,7 +146,7 @@ describe("students/consent", () => {
 	it("should call updateStudent method when password input element's value change", async () => {
 		const { wrapper, bulkConsentMock } = setup();
 
-		await nextTick();
+		await flushPromises();
 		const input = wrapper.find(`[data-testid="password-input"]`).get("input");
 		input.setValue("abc");
 		await input.trigger("change");
@@ -157,7 +157,7 @@ describe("students/consent", () => {
 	it("should call updateStudent method when birthday input element's value change", async () => {
 		const { wrapper, bulkConsentMock } = setup();
 
-		await nextTick();
+		await flushPromises();
 		const datePicker = wrapper.findComponent(DatePicker);
 		datePicker.vm.$emit("update:date", "2017-10-10");
 
@@ -167,7 +167,7 @@ describe("students/consent", () => {
 	it("should appear the validation error if birthdayWarning is set to true", async () => {
 		const { wrapper } = setup();
 
-		await nextTick();
+		await flushPromises();
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
 
 		await nextButton.trigger("click");
@@ -202,7 +202,7 @@ describe("students/consent", () => {
 	it("second-step-table shouldn't appear if data is not completed", async () => {
 		const { wrapper } = setup();
 
-		await nextTick();
+		await flushPromises();
 		const nextButton = wrapper.find(`[data-testid="button-next"]`);
 		await nextButton.trigger("click");
 
