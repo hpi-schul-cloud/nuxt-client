@@ -352,7 +352,6 @@ describe("VideoConferenceModule", () => {
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.COURSE,
 					videoConferenceOptions,
-					logoutUrl: "mockUrl",
 				});
 
 				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
@@ -360,7 +359,6 @@ describe("VideoConferenceModule", () => {
 					"scopeId",
 					{
 						...videoConferenceOptions,
-						logoutUrl: "mockUrl",
 					}
 				);
 			});
@@ -372,7 +370,6 @@ describe("VideoConferenceModule", () => {
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.ROOM,
 					videoConferenceOptions,
-					logoutUrl: "mockUrl",
 				});
 
 				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
@@ -380,7 +377,6 @@ describe("VideoConferenceModule", () => {
 					"scopeId",
 					{
 						...videoConferenceOptions,
-						logoutUrl: "mockUrl",
 					}
 				);
 			});
@@ -392,7 +388,6 @@ describe("VideoConferenceModule", () => {
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.VIDEO_CONFERENCE_ELEMENT,
 					videoConferenceOptions,
-					logoutUrl: "mockUrl",
 				});
 
 				expect(videoconferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(
@@ -400,7 +395,6 @@ describe("VideoConferenceModule", () => {
 					"scopeId",
 					{
 						...videoConferenceOptions,
-						logoutUrl: "mockUrl",
 					}
 				);
 			});
