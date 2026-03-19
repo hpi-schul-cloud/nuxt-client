@@ -1,36 +1,4 @@
-import { generatePassword } from "./pass-generation.utils";
-
-const words = [
-	"auto",
-	"baum",
-	"bein",
-	"blumen",
-	"flocke",
-	"frosch",
-	"halsband",
-	"hand",
-	"haus",
-	"herr",
-	"horn",
-	"kind",
-	"kleid",
-	"kobra",
-	"komet",
-	"konzert",
-	"kopf",
-	"kugel",
-	"puppe",
-	"rauch",
-	"raupe",
-	"regenbogen",
-	"schuh",
-	"seele",
-	"spatz",
-	"taktisch",
-	"traum",
-	"trommel",
-	"wolke",
-];
+import { generatePassword, words } from "./pass-generation.utils";
 
 describe("pass-generation.utils", () => {
 	describe("generatePassword", () => {

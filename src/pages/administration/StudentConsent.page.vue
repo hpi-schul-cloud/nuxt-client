@@ -507,10 +507,10 @@ const warningEventHandler = (event: BeforeUnloadEvent) => {
 	}
 };
 
-find();
 window.addEventListener("beforeunload", warningEventHandler);
 
 onMounted(() => {
+	find();
 	checkTableData();
 	document.title = buildPageTitle(title.value);
 });

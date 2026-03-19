@@ -1,4 +1,4 @@
-const words = [
+export const words: readonly string[] = [
 	"auto",
 	"baum",
 	"bein",
