@@ -93,7 +93,7 @@
 						size="small"
 						class="mx-1 px-1"
 						min-width="0"
-						@click="onClickDeleteIcon(item)"
+						@click="onDelete(item)"
 					>
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
@@ -130,30 +130,6 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<CustomDialog
-			:is-open="isDeleteDialogOpen"
-			max-width="360"
-			data-testid="delete-dialog"
-			has-buttons
-			:buttons="['cancel', 'confirm']"
-			@dialog-closed="onCancelCourseDeletion"
-			@dialog-confirmed="onConfirmCourseDeletion"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ t("pages.administration.courses.delete") }}
-				</h2>
-			</template>
-			<template #content>
-				<p>
-					{{
-						t("pages.administration.courses.deleteDialog.content", {
-							itemName: selectedItemName,
-						})
-					}}
-				</p>
-			</template>
-		</CustomDialog>
 		<StartExistingCourseSyncDialog
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
@@ -192,8 +168,8 @@
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseInfoDataResponse, CourseSortProps, CourseStatus, Permission } from "@api-server";
 import { useAppStore } from "@data-app";
@@ -280,8 +256,6 @@ const showSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && 
 
 const showEndSyncAction = (item: CourseInfoDataResponse) => hasPermission.value && item.syncedGroup;
 
-const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
 const isStartSyncDialogOpen: Ref<boolean> = ref(false);
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
@@ -289,8 +263,6 @@ const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 const isEndSyncDialogOpen: Ref<boolean> = ref(false);
 
 const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
-
-const selectedItemName: ComputedRef<string> = computed(() => selectedItem.value?.name || "???");
 
 const joinNamesList = (names: string[]) => {
 	if (names.length === 0) return;
@@ -308,14 +280,18 @@ const onClickEndSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 	isEndSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedCourse: CourseInfoDataResponse) => {
-	selectedItem.value = selectedCourse;
-	isDeleteDialogOpen.value = true;
-};
+const onDelete = async (selectedCourse: CourseInfoDataResponse) => {
+	const shouldDelete = await askDeletion(
+		t("pages.administration.courses.delete"),
+		t("pages.administration.courses.deleteDialog.content", {
+			itemName: selectedCourse.name,
+		})
+	);
 
-const onCancelCourseDeletion = () => {
-	selectedItem.value = undefined;
-	isDeleteDialogOpen.value = false;
+	if (shouldDelete) {
+		await deleteCourse(selectedCourse.id);
+	}
+	await loadCourseList();
 };
 
 const courseSyncEnabled = computed(() => useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED);
@@ -361,13 +337,6 @@ const headers = computed(() => {
 });
 
 const onConfirmSynchronizeCourse = async () => {
-	await loadCourseList();
-};
-
-const onConfirmCourseDeletion = async () => {
-	if (selectedItem.value) {
-		await deleteCourse(selectedItem.value.id);
-	}
 	await loadCourseList();
 };
 

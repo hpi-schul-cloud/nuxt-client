@@ -1,6 +1,7 @@
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 import KebabMenuActionEditingSettings from "./KebabMenuActionEditingSettings.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardExternalReferenceType, BoardResponseAllowedOperations, ConfigResponse } from "@api-server";
@@ -15,7 +16,7 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
@@ -305,8 +306,6 @@ describe("BoardHeader", () => {
 			const shareButton = wrapper.findComponent(KebabMenuActionShare);
 			await shareButton.trigger("click");
 
-			await flushPromises();
-
 			expect(wrapper.emitted("share:board")).toHaveLength(1);
 		});
 	});
@@ -328,6 +327,7 @@ describe("BoardHeader", () => {
 
 	describe("when the 'delete' menu button is clicked", () => {
 		it("should emit 'delete:board'", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup({ allowedOperations: { updateBoardTitle: true, deleteBoard: true } });
 
 			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
@@ -344,8 +344,6 @@ describe("BoardHeader", () => {
 			const changeLayoutButton = wrapper.findComponent(KebabMenuActionChangeLayout);
 			await changeLayoutButton.trigger("click");
 
-			await flushPromises();
-
 			expect(wrapper.emitted("change-layout")).toHaveLength(1);
 		});
 	});
@@ -359,8 +357,6 @@ describe("BoardHeader", () => {
 
 			const editableSwitch = wrapper.findComponent(KebabMenuActionEditingSettings);
 			await editableSwitch.trigger("click");
-
-			await flushPromises();
 
 			expect(wrapper.emitted("edit:settings")).toHaveLength(1);
 		});

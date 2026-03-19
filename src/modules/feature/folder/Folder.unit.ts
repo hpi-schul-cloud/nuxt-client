@@ -9,6 +9,7 @@ import RenameFolderDialog from "./RenameFolderDialog.vue";
 import BrokenPencilSvg from "@/assets/img/BrokenPencilSvg.vue";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import * as FileHelper from "@/utils/fileHelper";
 import {
 	boardResponseFactory,
@@ -27,7 +28,6 @@ import { CollaboraFileType } from "@data-file";
 import * as FolderState from "@data-folder";
 import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { createTestingPinia } from "@pinia/testing";
-import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete, KebabMenuActionRename } from "@ui-kebab-menu";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { enableAutoUnmount, flushPromises } from "@vue/test-utils";
@@ -64,12 +64,6 @@ const createAddCollaboraFileMock = (overrides: Partial<Mocked<ReturnType<typeof 
 	mockComposable(useAddCollaboraFile, {
 		isCollaboraFileDialogOpen: ref(false),
 		...overrides,
-	});
-
-const createConfirmationDialogMock = () =>
-	mockComposable(ConfirmationDialog.useDeleteConfirmationDialog, {
-		askDeleteConfirmation: vi.fn().mockResolvedValue(false),
-		isDeleteDialogOpen: ref(false),
 	});
 
 vi.mock("@data-board/BoardApi.composable");
@@ -403,15 +397,13 @@ describe("Folder.vue", () => {
 
 			describe("when delete folder button is clicked and dialog confirmed", () => {
 				const setup = async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
+
 					const { folderStateMock, folderName, parent, fileStorageApiMock, boardApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
-
-					const confirmationDialogMock = createConfirmationDialogMock();
-					vi.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog").mockReturnValueOnce(confirmationDialogMock);
-					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
 					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
@@ -425,6 +417,7 @@ describe("Folder.vue", () => {
 
 					const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 					await deleteButton.trigger("click");
+					await flushPromises();
 
 					return {
 						folderStateMock,
@@ -452,15 +445,13 @@ describe("Folder.vue", () => {
 
 			describe("when delete folder button is clicked, dialog confirmed and parent not a board", () => {
 				const setup = async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
+
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
 						parentType: ParentNodeType.COURSE,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
-
-					const confirmationDialogMock = createConfirmationDialogMock();
-					vi.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog").mockReturnValueOnce(confirmationDialogMock);
-					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
 
 					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
@@ -474,6 +465,7 @@ describe("Folder.vue", () => {
 
 					const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 					await deleteButton.trigger("click");
+					await flushPromises();
 
 					return {
 						folderStateMock,
@@ -494,15 +486,13 @@ describe("Folder.vue", () => {
 
 			describe("when delete folder button is clicked and dialog not confirmed", () => {
 				const setup = async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(false);
+
 					const { folderStateMock, folderName, fileStorageApiMock, boardApiMock } = setupMocks({
 						parentType: ParentNodeType.BOARD,
 					});
 
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
-
-					const confirmationDialogMock = createConfirmationDialogMock();
-					vi.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog").mockReturnValueOnce(confirmationDialogMock);
-					confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(false);
 
 					const addCollaboraFileMock = createAddCollaboraFileMock({
 						isCollaboraFileDialogOpen: ref(false),
@@ -516,6 +506,7 @@ describe("Folder.vue", () => {
 
 					const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 					await deleteButton.trigger("click");
+					await flushPromises();
 
 					return {
 						folderStateMock,

@@ -30,11 +30,7 @@
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete
-					:name="fileProperties.name"
-					scope-language-key="components.cardElement.fileElement"
-					@click="onDelete"
-				/>
+				<KebabMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
@@ -47,7 +43,7 @@
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete scope-language-key="components.cardElement.fileElement" @click="onDelete" />
+				<KebabMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
 		<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
@@ -60,6 +56,7 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { convertDownloadToPreviewUrl, isPreviewPossible, isScanStatusBlocked } from "@/utils/fileHelper";
 import { FileRecordParentType, PreviewWidth } from "@api-file-storage";
 import { FileElementResponse } from "@api-server";
@@ -196,8 +193,8 @@ const onAddAlert = (alert: FileAlert) => {
 	addAlert(alert);
 };
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.fileElement");
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
 	}
