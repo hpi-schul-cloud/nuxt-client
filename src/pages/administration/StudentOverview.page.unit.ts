@@ -196,7 +196,6 @@ describe("student overview page", () => {
 		});
 
 		it("should notify error when delete users fails", async () => {
-
 			const { wrapper, usersStore, firstUser } = setup({ permissions: [Permission.STUDENT_DELETE] });
 			(usersStore.deleteUsers as Mock).mockRejectedValue(new Error("Delete failed"));
 
