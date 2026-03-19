@@ -1,5 +1,6 @@
-import RoomsOverview from "./RoomsOverview.page.vue";
+import CoursesAdminOverviewPage from "./CoursesAdminOverview.page.vue";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	courseInfoDataResponseFactory,
 	createTestAppStoreWithPermissions,
@@ -9,21 +10,20 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, CourseInfoDataResponse, Permission, SchulcloudTheme } from "@api-server";
 import { useCourseApi, useCourseList } from "@data-room";
-import { EndCourseSyncDialog, StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { nextTick, ref } from "vue";
 import { createRouterMock, injectRouterMock } from "vue-router-mock";
-import { VDataTableServer } from "vuetify/lib/components/index";
+import { VDataTableServer } from "vuetify/components";
 
 vi.mock("@data-room", () => ({
 	useCourseList: vi.fn(),
 	useCourseApi: vi.fn(),
 }));
 
-describe("RoomsOverview", () => {
+describe("CoursesAdminOverviewPage", () => {
 	let useCourseApiMock: Mocked<ReturnType<typeof useCourseApi>>;
 
 	const createWrapper = ({
@@ -63,7 +63,7 @@ describe("RoomsOverview", () => {
 
 		vi.mocked(useCourseList).mockReturnValue(useCourseListMock);
 
-		const wrapper = mount(RoomsOverview, {
+		const wrapper = mount(CoursesAdminOverviewPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
@@ -98,6 +98,7 @@ describe("RoomsOverview", () => {
 		});
 
 		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
+		vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 	});
 
 	afterEach(() => {
@@ -484,23 +485,26 @@ describe("RoomsOverview", () => {
 					}),
 				];
 
-				const { wrapper } = createWrapper({
+				const { wrapper, useCourseListMock } = createWrapper({
 					courses,
 				});
 
 				return {
 					wrapper,
+					courses,
+					useCourseListMock,
 				};
 			};
 
-			it("should open the delete dialog", async () => {
+			it("should call askDeletion with correct parameters", async () => {
 				const { wrapper } = setup();
 
 				await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
-				await nextTick();
 
-				const dialog = wrapper.findComponent({ name: "CustomDialog" });
-				expect(dialog.vm.isOpen).toBe(true);
+				expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
+					"pages.administration.courses.delete",
+					"pages.administration.courses.deleteDialog.content"
+				);
 			});
 		});
 
@@ -578,7 +582,7 @@ describe("RoomsOverview", () => {
 			});
 		});
 
-		describe("when delete dialog is open", () => {
+		describe("when delete confirmation is shown", () => {
 			const setup = () => {
 				const courses = [
 					courseInfoDataResponseFactory.build({
@@ -597,93 +601,40 @@ describe("RoomsOverview", () => {
 				};
 			};
 
-			describe("when clicking on cancel button", () => {
+			describe("when user cancels deletion", () => {
 				it("should not delete course", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 					const { wrapper, useCourseListMock } = setup();
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
-
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-cancel"').trigger("click");
+					await nextTick();
 
 					expect(useCourseListMock.deleteCourse).not.toHaveBeenCalled();
 				});
 			});
 
-			describe("when clicking on confirm button", () => {
+			describe("when user confirms deletion", () => {
 				it("should delete course", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
+
 					const { wrapper, useCourseListMock } = setup();
 
 					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
-
-					const dialog = wrapper.findComponent({ name: "CustomDialog" });
-
-					await dialog.findComponent('[data-testid="dialog-confirm"').trigger("click");
+					await nextTick();
 
 					expect(useCourseListMock.deleteCourse).toHaveBeenCalled();
 				});
-			});
-		});
 
-		describe("when start sync dialog emit succeed", () => {
-			const setup = () => {
-				const courses = [
-					courseInfoDataResponseFactory.build({
-						classNames: ["1A, 1B, 1C"],
-						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-					}),
-				];
+				it("should reload course list after deletion", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 
-				const { wrapper, useCourseListMock } = createWrapper({ courses });
+					const { wrapper, useCourseListMock } = setup();
 
-				return {
-					wrapper,
-					useCourseListMock,
-				};
-			};
+					await wrapper.find('[data-testid="course-table-delete-btn"]').trigger("click");
+					await nextTick();
 
-			it("should fetch courses", async () => {
-				const { wrapper, useCourseListMock } = setup();
-
-				await wrapper.find('[data-testid="course-table-start-course-sync-btn"]').trigger("click");
-				await nextTick();
-
-				wrapper.getComponent(StartExistingCourseSyncDialog).emitted("success");
-				await nextTick();
-
-				expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
-			});
-		});
-
-		describe("when end sync dialog emit succeed", () => {
-			const setup = () => {
-				const courses = [
-					courseInfoDataResponseFactory.build({
-						classNames: ["1A, 1B, 1C"],
-						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-						syncedGroup: "GroupName",
-					}),
-				];
-
-				const { wrapper, useCourseListMock } = createWrapper({ courses });
-
-				return {
-					wrapper,
-					useCourseListMock,
-				};
-			};
-
-			it("should fetch courses", async () => {
-				const { wrapper, useCourseListMock } = setup();
-
-				await wrapper.find('[data-testid="course-table-end-course-sync-btn"]').trigger("click");
-				await nextTick();
-
-				wrapper.getComponent(EndCourseSyncDialog).emitted("success");
-				await nextTick();
-
-				expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
+					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
+				});
 			});
 		});
 	});

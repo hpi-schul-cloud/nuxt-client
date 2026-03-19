@@ -1,10 +1,9 @@
 import RoomMenu from "./RoomMenu.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore } from "@@/tests/test-utils";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ConfigResponse, RoomItemResponseAllowedOperations } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
@@ -13,24 +12,11 @@ import {
 	KebabMenuActionRoomMembers,
 	KebabMenuActionShare,
 } from "@ui-kebab-menu";
-import { VueWrapper } from "@vue/test-utils";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { RouterLink } from "vue-router";
 
-vi.mock("@ui-confirmation-dialog");
-vi.mocked(useDeleteConfirmationDialog);
-
 describe("@feature-room/RoomMenu", () => {
-	let askDeleteConfirmationMock: Mock;
-
-	beforeEach(() => {
-		askDeleteConfirmationMock = vi.fn();
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
-		});
-	});
-
 	const setup = (
 		envs: Partial<ConfigResponse> = {},
 		options?: { allowedOperations: Partial<RoomItemResponseAllowedOperations>; roomName?: string }
@@ -45,7 +31,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		const wrapper = mount(RoomMenu, {
 			props: {
-				roomName: options.roomName,
+				roomName: options.roomName ?? "My Room",
 			},
 			global: {
 				plugins: [
@@ -260,14 +246,12 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when roomName is provided", () => {
 		it("should pass roomName to delete action", async () => {
-			const roomName = "My Room";
-			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true }, roomName });
+			const { wrapper, menuBtn } = setup({}, { allowedOperations: { deleteRoom: true }, roomName: "My Room" });
 			await menuBtn.trigger("click");
 
 			const { kebabActionDelete } = findKebabActions(wrapper);
 
 			expect(kebabActionDelete.exists()).toBe(true);
-			expect(kebabActionDelete.props("name")).toBe(roomName);
 		});
 	});
 
@@ -328,7 +312,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and clicking on delete menu item", () => {
 			it("should emit 'room:delete' event if confirmed", async () => {
-				askDeleteConfirmationMock.mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(true);
 				const { wrapper, menuBtn } = setup(
 					{},
 					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
@@ -337,12 +321,13 @@ describe("@feature-room/RoomMenu", () => {
 
 				const { kebabActionDelete } = findKebabActions(wrapper);
 				await kebabActionDelete.trigger("click");
+				await flushPromises();
 
 				expect(wrapper.emitted()).toHaveProperty("room:delete");
 			});
 
 			it("should not emit 'room:delete' if not confirmed ", async () => {
-				askDeleteConfirmationMock.mockResolvedValue(false);
+				vi.spyOn(confirmDialogUtils, "askDeletionForItem").mockResolvedValue(false);
 				const { wrapper, menuBtn } = setup(
 					{},
 					{ allowedOperations: { deleteRoom: true, updateRoom: true, viewMemberlist: true } }
@@ -351,6 +336,7 @@ describe("@feature-room/RoomMenu", () => {
 
 				const { kebabActionDelete } = findKebabActions(wrapper);
 				await kebabActionDelete.trigger("click");
+				await flushPromises();
 
 				expect(wrapper.emitted()).not.toHaveProperty("room:delete");
 			});

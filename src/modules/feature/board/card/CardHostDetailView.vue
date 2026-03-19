@@ -62,9 +62,9 @@ import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import type { ElementMove } from "@/types/board/DragAndDrop";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import type { CardResponse } from "@api-server";
 import { mdiClose } from "@icons/material";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { ref } from "vue";
 
 type Props = {
@@ -90,8 +90,6 @@ const emit = defineEmits<{
 
 const isEditMode = ref(false);
 const isFullscreen = ref(true);
-
-const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const onToggleEdit = () => {
 	isEditMode.value = !isEditMode.value;
@@ -123,7 +121,7 @@ const onDeleteElement = (elementId: string) => {
 };
 
 const onDeleteCard = async () => {
-	const shouldDelete = await askDeleteConfirmation(props.card.title, "components.boardCard");
+	const shouldDelete = await askDeletionForItem(props.card.title!, "components.boardCard");
 
 	if (shouldDelete) {
 		emit("delete:card");
