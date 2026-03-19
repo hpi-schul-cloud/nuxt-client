@@ -34,7 +34,7 @@
 							@tab-pressed="isDragging = false"
 							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
-							@delete-board="openItemDeleteDialog(item.content, item.type)"
+							@delete-board="onDeleteItem(item.content, item.type)"
 							@share-board="getSharedBoard(item.content.columnBoardId)"
 						/>
 						<CourseRoomTaskCard
@@ -57,7 +57,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
-							@delete-task="openItemDeleteDialog(item.content, item.type)"
+							@delete-task="onDeleteItem(item.content, item.type)"
 							@finish-task="finishTask(item.content.id)"
 							@restore-task="restoreTask(item.content.id)"
 							@copy-task="copyTask(item.content.id)"
@@ -84,7 +84,7 @@
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
 							@open-modal="getSharedLesson"
-							@delete-lesson="openItemDeleteDialog(item.content, item.type)"
+							@delete-lesson="onDeleteItem(item.content, item.type)"
 							@copy-lesson="copyLesson(item.content.id)"
 						/>
 					</div>
@@ -157,29 +157,15 @@
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
-		<CustomDialog
-			v-model:is-open="itemDelete.isOpen"
-			data-testid="delete-dialog-item"
-			:size="375"
-			has-buttons
-			confirm-btn-title-key="common.actions.delete"
-			@dialog-confirmed="deleteItem"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ deleteDialogTitle(itemDelete.itemType, itemDelete.itemData.name || itemDelete.itemData.title) }}
-				</h2>
-			</template>
-		</CustomDialog>
 	</div>
 </template>
 
 <script>
 import CourseRoomTaskCard from "./CourseRoomTaskCard.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { courseRoomDetailsModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils.ts";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import {
 	BoardElementResponseType,
@@ -197,7 +183,6 @@ export default {
 		RoomBoardCard,
 		CourseRoomTaskCard,
 		RoomLessonCard,
-		CustomDialog,
 		draggable,
 		EmptyState,
 		ShareModal,
@@ -219,7 +204,6 @@ export default {
 			cardTypes: BoardElementResponseType,
 			isDragging: false,
 			Roles: ImportUserResponseRoleNames,
-			itemDelete: { isOpen: false, itemData: {}, itemType: "" },
 			dragInProgressDelay: 100,
 			dragInProgress: false,
 		};
@@ -321,20 +305,32 @@ export default {
 				this.dragInProgress = false;
 			}, this.dragInProgressDelay);
 		},
-		openItemDeleteDialog(itemContent, itemType) {
-			this.itemDelete.itemData = itemContent;
-			this.itemDelete.isOpen = true;
-			this.itemDelete.itemType = itemType;
-		},
-		async deleteItem() {
-			if (this.itemDelete.itemType === this.cardTypes.TASK) {
-				await courseRoomDetailsModule.deleteTask(this.itemDelete.itemData.id);
-			} else if (this.itemDelete.itemType === this.cardTypes.LESSON) {
-				await courseRoomDetailsModule.deleteLesson(this.itemDelete.itemData.id);
-			} else if (this.itemDelete.itemType === this.cardTypes.COLUMN_BOARD) {
-				await courseRoomDetailsModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
-			} else {
-				return;
+		async onDeleteItem(itemContent, itemType) {
+			let typeKey = "";
+			switch (itemType) {
+				case this.cardTypes.TASK:
+					typeKey = "common.words.task";
+					break;
+				case this.cardTypes.LESSON:
+					typeKey = "common.words.topic";
+					break;
+				case this.cardTypes.COLUMN_BOARD:
+					typeKey = "common.words.board";
+					break;
+				default:
+					return;
+			}
+
+			const confirmed = await askDeletionForItem(itemContent.name || itemContent.title, typeKey);
+
+			if (!confirmed) return;
+
+			if (itemType === this.cardTypes.TASK) {
+				await courseRoomDetailsModule.deleteTask(itemContent.id);
+			} else if (itemType === this.cardTypes.LESSON) {
+				await courseRoomDetailsModule.deleteLesson(itemContent.id);
+			} else if (itemType === this.cardTypes.COLUMN_BOARD) {
+				await courseRoomDetailsModule.deleteBoard(itemContent.columnBoardId);
 			}
 			await courseRoomDetailsModule.fetchContent(this.roomData.roomId);
 		},
@@ -369,26 +365,6 @@ export default {
 			const isBoardCard = card.type === this.cardTypes.COLUMN_BOARD;
 			const isVisibleToStudent = card.content.published;
 			return isBoardCard && isVisibleToStudent;
-		},
-		deleteDialogTitle(itemType, itemTitle) {
-			let translatedItemType = "";
-
-			switch (itemType) {
-				case this.cardTypes.TASK:
-					translatedItemType = this.$t("common.words.task");
-					break;
-				case this.cardTypes.LESSON:
-					translatedItemType = this.$t("common.words.topic");
-					break;
-				case this.cardTypes.COLUMN_BOARD:
-					translatedItemType = this.$t("common.words.board");
-					break;
-			}
-
-			return this.$t("pages.room.itemDelete.text", {
-				itemType: translatedItemType,
-				itemTitle,
-			});
 		},
 	},
 };

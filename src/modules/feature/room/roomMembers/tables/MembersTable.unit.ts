@@ -3,13 +3,13 @@ import MembersTable from "./MembersTable.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import {
 	createTestAppStoreWithUser,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RoleName, RoomItemResponseAllowedOperations, RoomMemberResponseAllowedOperations } from "@api-server";
@@ -23,17 +23,13 @@ import {
 	mdiMenuUp,
 } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { SvsSearchField } from "@ui-controls";
 import { KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { Mock, vi } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { VCard, VDataTable, VDialog, VIcon, VTextField } from "vuetify/components";
-
-vi.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 vi.mock("@vueuse/integrations/useFocusTrap");
 
@@ -41,23 +37,12 @@ vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("MembersTable", () => {
-	let askConfirmationMock: Mock;
-
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
 	let deactivateMock: Mock;
 	let activateMock: Mock;
 
 	beforeEach(() => {
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
-		mockedUseRemoveConfirmationDialog.mockReturnValue({
-			askConfirmation: askConfirmationMock,
-			isDialogOpen: ref(false),
-		});
-
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
 		deactivateMock = vi.fn();
@@ -402,41 +387,28 @@ describe("MembersTable", () => {
 				await removeButton.trigger("click");
 			};
 
-			it("should open confirmation dialog with remove message for single member", async () => {
-				const { wrapper } = setup({
-					allowedOperations: { addMembers: true },
-					memberOperations: { removeMember: true },
-				});
-
-				askConfirmationMock.mockResolvedValue(true);
-
-				await triggerMemberRemoval(2, wrapper);
-
-				expect(askConfirmationMock).toHaveBeenCalledWith({
-					confirmActionLangKey: "common.actions.remove",
-					message: "pages.rooms.members.remove.confirmation",
-				});
-			});
-
-			it("should call removeMembers after confirmation", async () => {
+			it("should call removeMembers when confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper, roomMembersStore, roomMembers } = setup({
 					allowedOperations: { addMembers: true },
 					memberOperations: { removeMember: true },
 				});
 
-				askConfirmationMock.mockResolvedValue(true);
-
 				await triggerMemberRemoval(2, wrapper);
+
+				expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
+					title: "pages.rooms.members.remove.confirmation",
+					confirmBtnKey: "common.actions.remove",
+				});
 				expect(roomMembersStore.removeMembers).toHaveBeenCalledWith([roomMembers[2].userId]);
 			});
 
-			it("should not call removeMembers when dialog is cancelled", async () => {
+			it("should not call removeMembers when cancelled", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 				const { wrapper, roomMembersStore } = setup({
 					allowedOperations: { addMembers: true },
 					memberOperations: { removeMember: true },
 				});
-
-				askConfirmationMock.mockResolvedValue(false);
 
 				await triggerMemberRemoval(2, wrapper);
 

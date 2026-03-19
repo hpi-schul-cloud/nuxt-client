@@ -797,10 +797,6 @@ export default {
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting": "cambiar clasificación",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc": "ordenados en orden ascendente",
 	"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc": "ordenados en orden descendente",
-	"components.organisms.FormNews.cancel.confirm.title": "¿Descartar cambios?",
-	"components.organisms.FormNews.cancel.confirm.confirm": "Descartar los cambios",
-	"components.organisms.FormNews.cancel.confirm.message":
-		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"components.organisms.FormNews.editor.placeholder": "Érase una vez...",
 	"components.organisms.FormNews.error.patch": "Error al actualizar.",
 	"components.organisms.FormNews.error.remove": "Error durante la eliminación.",
@@ -1567,8 +1563,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
 	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
-	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
-	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
 	"pages.room.locked":
@@ -1979,8 +1973,11 @@ export default {
 	"error.4401": "Lamentablemente, falta la autorización para ver este contenido.",
 	"tldraw.error.ws.4400": "Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
-	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
+	"ui-confirmation-dialog.ask-delete": '¿Eliminar {itemType} "{itemTitle}"?',
+	"ui-confirmation-dialog.ask-delete-type": "¿Eliminar {itemType}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
+	"ui-confirmation-dialog.ask-cancel-warning-message":
+		"Si cancelas la edición, se perderán todos los cambios no guardados.",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"ui.actionMenu.selectedRows": "Menú de acciones para {count} líneas seleccionadas",
 	"ui.actionMenu.actions": "Acciones",

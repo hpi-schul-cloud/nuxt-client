@@ -1,9 +1,9 @@
 import ClassicEditor from "../editor/ClassicEditor.vue";
 import { useI18nGlobal } from "@/plugins/i18n";
 import { Status } from "@/store/types/commons";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { toCombinedDateTimeIso } from "@/utils/date-time.utils";
 import { newsResponseFactory } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsResponse } from "@api-server";
 import { NewsForm } from "@feature-news";
@@ -11,7 +11,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, MockInstance } from "vitest";
 import { nextTick } from "vue";
 import { VBtn, VForm, VMessages, VTextField } from "vuetify/components";
 
@@ -29,19 +29,15 @@ const classicEditorMock = {
 vi.mock("@/plugins/i18n");
 (useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
-vi.mock("@ui-confirmation-dialog");
-
 describe("NewsForm", () => {
 	let wrapper: VueWrapper<InstanceType<typeof NewsForm>>;
-	let askConfirmationMock: Mock;
+	let askConfirmationSpy: MockInstance;
+	let askCancelSpy: MockInstance;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		askConfirmationMock = vi.fn();
-
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
+		askConfirmationSpy = vi.spyOn(confirmDialogUtils, "askConfirmation");
+		askCancelSpy = vi.spyOn(confirmDialogUtils, "askCancel");
 	});
 
 	const setup = (options?: Partial<{ status: Status; news: NewsResponse | undefined; showDeleteButton: boolean }>) => {
@@ -230,7 +226,7 @@ describe("NewsForm", () => {
 		});
 
 		it("should not emit delete event on delete button click when deletion cancelled", async () => {
-			askConfirmationMock.mockResolvedValue(false);
+			askConfirmationSpy.mockResolvedValue(false);
 			const { wrapper } = setup({ showDeleteButton: true });
 
 			const deleteButton = getDeleteButton(wrapper);
@@ -241,7 +237,7 @@ describe("NewsForm", () => {
 		});
 
 		it("should emit delete event on delete button click when deletion confirmed", async () => {
-			askConfirmationMock.mockResolvedValue(true);
+			askConfirmationSpy.mockResolvedValue(true);
 			const { wrapper } = setup({ showDeleteButton: true });
 
 			const deleteButton = getDeleteButton(wrapper);
@@ -250,9 +246,9 @@ describe("NewsForm", () => {
 
 			expect(wrapper.emitted()).toHaveProperty("delete");
 			expect(wrapper.emitted().delete).toHaveLength(1);
-			expect(askConfirmationMock).toHaveBeenCalledWith({
-				message: "components.organisms.FormNews.remove.confirm.message",
-				confirmActionLangKey: "components.organisms.FormNews.remove.confirm.confirm",
+			expect(askConfirmationSpy).toHaveBeenCalledWith({
+				title: "components.organisms.FormNews.remove.confirm.message",
+				confirmBtnKey: "components.organisms.FormNews.remove.confirm.confirm",
 			});
 		});
 	});
@@ -262,7 +258,7 @@ describe("NewsForm", () => {
 			wrapper.findAllComponents(VBtn).find((btn) => btn.props("text") === "common.actions.discard");
 
 		it("should emit cancel event on cancel button click when cancel is confirmed", async () => {
-			askConfirmationMock.mockResolvedValue(true);
+			askCancelSpy.mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const cancelButton = getCancelButton(wrapper);
@@ -271,14 +267,11 @@ describe("NewsForm", () => {
 
 			expect(wrapper.emitted()).toHaveProperty("cancel");
 			expect(wrapper.emitted().cancel).toHaveLength(1);
-			expect(askConfirmationMock).toHaveBeenCalledWith({
-				message: "components.organisms.FormNews.cancel.confirm.title",
-				confirmActionLangKey: "components.organisms.FormNews.cancel.confirm.confirm",
-			});
+			expect(askCancelSpy).toHaveBeenCalled();
 		});
 
 		it("should not emit cancel event on cancel button click when cancellation is cancelled", async () => {
-			askConfirmationMock.mockResolvedValue(false);
+			askCancelSpy.mockResolvedValue(false);
 			const { wrapper } = setup();
 
 			const cancelButton = getCancelButton(wrapper);
