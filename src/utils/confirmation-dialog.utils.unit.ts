@@ -1,13 +1,19 @@
-import { askCancel, askConfirmation, askDeletion, askDeletionForItem, askDeletionForType } from "./confirmation-dialog.utils";
+import {
+	askCancel,
+	askConfirmation,
+	askDeletion,
+	askDeletionForItem,
+	askDeletionForType,
+} from "./confirmation-dialog.utils";
 import { useInternalConfirmationDialog } from "@/composables/confirmation-dialog.composable";
 import * as i18nModule from "@/plugins/i18n";
 import { mockComposable } from "@@/tests/test-utils";
 import { beforeEach, describe, expect, it, type Mocked, vi } from "vitest";
 
-vi.mock("@/composables/confirm-dialog.composable");
+vi.mock("@/composables/confirmation-dialog.composable");
 vi.mock("@/plugins/i18n");
 
-describe("confirm-dialog.utils", () => {
+describe("confirmation-dialog.utils", () => {
 	let useInternalConfirmationDialogMock: Mocked<ReturnType<typeof useInternalConfirmationDialog>>;
 
 	beforeEach(() => {
