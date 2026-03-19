@@ -1,6 +1,5 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 api.ts
 api/account-api.ts
 api/admin-students-api.ts
@@ -216,8 +215,6 @@ models/lernstore-resources.ts
 models/lesson-content-response.ts
 models/lesson-copy-api-params.ts
 models/lesson-linked-task-response.ts
-models/lesson-metadata-list-response.ts
-models/lesson-metadata-response.ts
 models/lesson-response.ts
 models/link-content-body.ts
 models/link-element-content-body.ts
