@@ -81,7 +81,7 @@
 								variant="text"
 								data-testid="system-table-button-delete"
 								:aria-label="ariaLabels(system).delete"
-								@click.stop="openConfirmDeleteDialog(system.id)"
+								@click.stop="onDelete(system.id)"
 							>
 								<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 							</v-btn>
@@ -99,39 +99,18 @@
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
-		<CustomDialog
-			v-model:is-open="confirmDeleteDialog.isOpen"
-			class="custom-dialog"
-			:size="375"
-			has-buttons
-			@dialog-confirmed="removeSystem(confirmDeleteDialog.systemId)"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ $t("pages.administration.school.index.authSystems.deleteAuthSystem") }}
-				</h2>
-			</template>
-			<template #content>
-				<p class="text-md mt-2">
-					{{ $t("pages.administration.school.index.authSystems.confirmDeleteText") }}
-				</p>
-			</template>
-		</CustomDialog>
 	</div>
 </template>
 
 <script>
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { schoolsModule } from "@/store";
+import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { mdiCheckCircle, mdiContentCopy, mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 
 export default {
-	components: {
-		CustomDialog,
-	},
 	props: {
 		systems: {
 			type: Array,
@@ -140,10 +119,6 @@ export default {
 	},
 	data() {
 		return {
-			confirmDeleteDialog: {
-				isOpen: false,
-				systemId: undefined,
-			},
 			iconMdiPencilOutline: mdiPencilOutline,
 			iconMdiTrashCanOutline: mdiTrashCanOutline,
 			iconMdiContentCopy: mdiContentCopy,
@@ -182,11 +157,15 @@ export default {
 			}
 			return `/administration/ldap/config?id=${system.id}`;
 		},
-		openConfirmDeleteDialog(systemId) {
-			this.confirmDeleteDialog = {
-				isOpen: true,
-				systemId,
-			};
+		async onDelete(systemId) {
+			const confirmed = await askDeletion(
+				"pages.administration.school.index.authSystems.deleteAuthSystem",
+				"pages.administration.school.index.authSystems.confirmDeleteText"
+			);
+
+			if (confirmed) {
+				this.removeSystem(systemId);
+			}
 		},
 		isLoginSystem(system) {
 			return system.oauthConfig || system.ldapConfig;

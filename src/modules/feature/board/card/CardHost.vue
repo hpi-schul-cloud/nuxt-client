@@ -50,7 +50,6 @@
 								v-if="allowedOperations?.deleteCard"
 								:name="card.title"
 								:scope="BoardMenuScope.CARD"
-								scope-language-key="components.boardCard"
 								@click="onDeleteCard"
 							/>
 						</BoardMenu>
@@ -106,6 +105,7 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
@@ -187,9 +187,9 @@ const _updateCardTitle = (newTitle: string) => {
 const _debouncedUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
 const onUpdateCardTitle = (newTitle: string) => _debouncedUpdateCardTitle(newTitle);
 
-const onDeleteCard = async (confirmation: Promise<boolean>) => {
+const onDeleteCard = async () => {
 	stopEditMode();
-	const shouldDelete = await confirmation;
+	const shouldDelete = await askDeletionForType("components.boardCard");
 	if (shouldDelete && card.value?.id) {
 		emit("delete:card", card.value.id);
 	}

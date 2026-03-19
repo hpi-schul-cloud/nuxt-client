@@ -94,7 +94,7 @@
 						size="small"
 						class="mx-1 px-1"
 						min-width="0"
-						@click="onClickDeleteIcon(item)"
+						@click="onDelete(item)"
 					>
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
@@ -144,31 +144,6 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<CustomDialog
-			:is-open="isDeleteDialogOpen"
-			max-width="360"
-			data-testid="delete-dialog"
-			has-buttons
-			confirm-btn-title-key="common.actions.delete"
-			:buttons="['cancel', 'confirm']"
-			@dialog-closed="onCancelClassDeletion"
-			@dialog-confirmed="onConfirmClassDeletion"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ t("pages.administration.classes.deleteDialog.title") }}
-				</h2>
-			</template>
-			<template #content>
-				<p>
-					{{
-						t("pages.administration.classes.deleteDialog.content", {
-							itemName: selectedItemName,
-						})
-					}}
-				</p>
-			</template>
-		</CustomDialog>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
@@ -189,13 +164,13 @@
 </template>
 
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
@@ -301,13 +276,9 @@ const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.typ
 
 const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.GROUP;
 
-const isDeleteDialogOpen = ref(false);
-
 const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
-
-const selectedItemName = computed(() => selectedItem.value?.name || "???");
 
 const selectedItemForSync: ComputedRef<{
 	courseName: string;
@@ -328,14 +299,17 @@ const onClickEndSyncIcon = (selectedClass: ClassInfo) => {
 	isEndSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedClass: ClassInfo) => {
-	selectedItem.value = selectedClass;
-	isDeleteDialogOpen.value = true;
-};
+const onDelete = async (selectedClass: ClassInfo) => {
+	const shouldDelete = await askDeletion(
+		"pages.administration.classes.deleteDialog.title",
+		t("pages.administration.classes.deleteDialog.content", { itemName: selectedClass.name })
+	);
+	if (!shouldDelete) return;
 
-const onCancelClassDeletion = () => {
-	selectedItem.value = undefined;
-	isDeleteDialogOpen.value = false;
+	await groupModule.deleteClass({
+		classId: selectedClass.id,
+		query: schoolYearQueryType.value,
+	});
 };
 
 const pagination: ComputedRef<Pagination> = computed(() => groupModule.getPagination);
@@ -388,15 +362,6 @@ const headers = computed(() => {
 
 	return headerList;
 });
-
-const onConfirmClassDeletion = async () => {
-	if (selectedItem.value) {
-		await groupModule.deleteClass({
-			classId: selectedItem.value.id,
-			query: schoolYearQueryType.value,
-		});
-	}
-};
 
 const loadClassList = async () => {
 	await groupModule.loadClassesForSchool({

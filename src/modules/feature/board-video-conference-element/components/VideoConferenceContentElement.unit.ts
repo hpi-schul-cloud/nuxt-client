@@ -2,6 +2,7 @@ import { useVideoConference } from "../composables/VideoConference.composable";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { VideoConferenceState } from "@/store/types/video-conference";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
@@ -235,7 +236,6 @@ describe("VideoConferenceContentElement", () => {
 					const { wrapper } = localSetup({ hasManageVideoConferencePermission: true });
 
 					const videoConferenceElement = wrapper.getComponent(VideoConferenceContentElementDisplay);
-					await flushPromises();
 
 					expect(videoConferenceElement.props("hasParticipationPermission")).toEqual(true);
 				});
@@ -280,7 +280,6 @@ describe("VideoConferenceContentElement", () => {
 					});
 
 					const videoConferenceElement = wrapper.getComponent(VideoConferenceContentElementDisplay);
-					await flushPromises();
 					expect(videoConferenceElement.props("canStart")).toEqual(false);
 				});
 
@@ -402,6 +401,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and delete menu item is clicked", () => {
 					it("should emit 'delete:element' event", async () => {
+						vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 						const videoConferenceElementContent = videoConferenceElementContentFactory.build();
 						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContent,
@@ -412,8 +412,7 @@ describe("VideoConferenceContentElement", () => {
 						await menuBtn.trigger("click");
 
 						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-						menuItem.vm.$emit("click", Promise.resolve(true));
-						await flushPromises();
+						await menuItem.trigger("click");
 
 						expect(wrapper.emitted()).toHaveProperty("delete:element");
 					});
@@ -447,8 +446,7 @@ describe("VideoConferenceContentElement", () => {
 						});
 
 						const videoConferenceElementDisplay = wrapper.getComponent(VideoConferenceContentElementDisplay);
-						videoConferenceElementDisplay.vm.$emit("click");
-						await flushPromises();
+						await videoConferenceElementDisplay.trigger("click");
 
 						const configurationDialog = wrapper.findComponent({
 							name: "VideoConferenceConfigurationDialog",
@@ -467,8 +465,7 @@ describe("VideoConferenceContentElement", () => {
 						});
 
 						const videoConferenceElementDisplay = wrapper.findComponent(VideoConferenceContentElementDisplay);
-						videoConferenceElementDisplay.vm.$emit("click");
-						await flushPromises();
+						await videoConferenceElementDisplay.trigger("click");
 
 						expect(useVideoConferenceMock.joinVideoConference).toHaveBeenCalledTimes(1);
 					});
@@ -607,6 +604,7 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and delete menu item is clicked", () => {
 					it("should emit 'delete:element' event", async () => {
+						vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 						const { wrapper } = setupWrapper({
 							isEditMode: true,
 						});
@@ -615,8 +613,7 @@ describe("VideoConferenceContentElement", () => {
 						await menuBtn.trigger("click");
 
 						const menuItem = wrapper.findComponent(KebabMenuActionDelete);
-						menuItem.vm.$emit("click", Promise.resolve(true));
-						await flushPromises();
+						await menuItem.trigger("click");
 
 						expect(wrapper.emitted()).toHaveProperty("delete:element");
 					});
@@ -653,11 +650,11 @@ describe("VideoConferenceContentElement", () => {
 				await videoConferenceElement.trigger("click");
 
 				useVideoConferenceMock.error.value = new Error("error");
-				await flushPromises();
 
 				const dialog = wrapper.findComponent({
 					ref: "errorDialog",
 				});
+				await flushPromises();
 
 				expect(dialog.props("modelValue")).toBe(true);
 			});
