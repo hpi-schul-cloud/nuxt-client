@@ -3,14 +3,21 @@
 		<h2 data-testid="dashboard-tasks-title">{{ title }}</h2>
 
 		<div class="d-flex flex-column" data-testid="task-courses">
-			<VCard v-for="task in tasks" :key="task.id" class="mb-4" :href="`/homework/${task.id}`" @dragstart.prevent>
+			<VCard
+				v-for="task in tasks"
+				:key="task.id"
+				class="mb-4"
+				:style="`border-left: 4px solid ${task.displayColor};`"
+				:href="`/homework/${task.id}`"
+				@dragstart.prevent
+			>
 				<VCardText>
 					<VIcon size="14" class="mr-1" :icon="mdiFormatListChecks" />
 					<span v-if="task.courseId" data-testid="task-course-name"> {{ task.courseName }} | </span>
 					<span>{{ task.dueDate ? fromNowUtc(task.dueDate) : t("pages.dashboard.no.due.date") }}</span>
 
 					<div class="d-flex flex-wrap ga-4">
-						<h3 class="text-h4 my-1" data-testid="task-name" :style="`background: ${task.displayColor}`">
+						<h3 class="text-h4 my-1" data-testid="task-name">
 							{{ task.name }}
 						</h3>
 						<div v-if="task.status?.maxSubmissions" class="d-flex ga-2 mt-2">
