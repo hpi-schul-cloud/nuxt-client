@@ -3,7 +3,7 @@
 		<template #header>
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
-		<template v-if="dashboardData && status === 'completed'" #default>
+		<template v-if="statusTasks === 'completed'" #default>
 			<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 			<!-- Dashboard news -->
@@ -22,7 +22,7 @@
 						v-for="news in latestNews"
 						:key="news.id"
 						class="d-flex flex-column"
-						:to="`/news/${news.id}`"
+						:href="`/news/${news.id}`"
 						data-testid="container_of_element"
 						@dragstart.prevent
 					>
@@ -46,20 +46,20 @@
 			<template v-if="isTeacher">
 				<!-- Tasks Feedback required -->
 				<DashboardTasksSection
-					v-if="dashboardData?.homeworksFeedbackRequired?.length > 0"
+					v-if="feedbackRequired.length > 0"
 					data-testid="tasks-with-required-feedback"
 					:title="t('pages.dashboard.schedule.with.feedback')"
-					:tasks="dashboardData.homeworksFeedbackRequired"
+					:tasks="take10(feedbackRequired)"
 				/>
 
-				<DashboardAssignedTasks :assigned-tasks="dashboardData?.assignedHomeworks" />
+				<DashboardAssignedTasks :tasks="take10(assignedToTeacher)" />
 
 				<!-- Tasks Private -->
 				<DashboardTasksSection
-					v-if="dashboardData?.privateHomeworks?.length > 0"
+					v-if="draftByCreated.length > 0"
 					data-testid="tasks-private"
 					:title="t('common.words.drafts')"
-					:tasks="dashboardData.privateHomeworks"
+					:tasks="take10(draftByCreated)"
 				/>
 				<div class="d-flex mt-2">
 					<VBtn variant="outlined" to="/tasks">
@@ -70,14 +70,14 @@
 
 			<!-- Student tasks -->
 			<template v-else-if="isStudent">
-				<DashboardAssignedTasks :assigned-tasks="dashboardData?.assignedHomeworks" />
+				<DashboardAssignedTasks :tasks="take10(assignedToStudent)" />
 
 				<!-- Tasks with feedback -->
 				<DashboardTasksSection
-					v-if="dashboardData?.homeworksWithFeedback?.length > 0"
+					v-if="withFeedback.length > 0"
 					data-testid="tasks-with-feedback"
 					:title="t('pages.dashboard.schedule.with.feedback')"
-					:tasks="dashboardData.homeworksWithFeedback"
+					:tasks="take10(withFeedback)"
 				/>
 				<div class="d-flex mt-2">
 					<VBtn variant="outlined" to="/tasks">
@@ -87,54 +87,54 @@
 			</template>
 
 			<!-- Dashboard new release announcement      -->
-			<SvsDialog
-				v-if="dashboardData?.showNewReleaseModal"
-				:model-value="true"
-				title="pages.dashboard.new.features.available"
-			>
-				<template #content>
-					<VImg
-						class="w-75 d-block mx-auto"
-						src="@/assets/img/surprise.gif"
-						alt=""
-						role="presentation"
-						max-width="360"
-					/>
-					<div class="text-md text-center">
-						<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>
-						<div>{{ t("pages.dashboard.new.features.forward") }}</div>
-					</div>
-				</template>
-				<template #actions>
-					<VBtn
-						class="w-100"
-						color="primary"
-						variant="flat"
-						:text="t('common.actions.click.here')"
-						to="/system/releases"
-					/>
-				</template>
-			</SvsDialog>
+			<!--			<SvsDialog-->
+			<!--				v-if="dashboardData?.showNewReleaseModal"-->
+			<!--				:model-value="true"-->
+			<!--				title="pages.dashboard.new.features.available"-->
+			<!--			>-->
+			<!--				<template #content>-->
+			<!--					<VImg-->
+			<!--						class="w-75 d-block mx-auto"-->
+			<!--						src="@/assets/img/surprise.gif"-->
+			<!--						alt=""-->
+			<!--						role="presentation"-->
+			<!--						max-width="360"-->
+			<!--					/>-->
+			<!--					<div class="text-md text-center">-->
+			<!--						<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>-->
+			<!--						<div>{{ t("pages.dashboard.new.features.forward") }}</div>-->
+			<!--					</div>-->
+			<!--				</template>-->
+			<!--				<template #actions>-->
+			<!--					<VBtn-->
+			<!--						class="w-100"-->
+			<!--						color="primary"-->
+			<!--						variant="flat"-->
+			<!--						:text="t('common.actions.click.here')"-->
+			<!--						to="/system/releases"-->
+			<!--					/>-->
+			<!--				</template>-->
+			<!--			</SvsDialog>-->
 		</template>
 	</DefaultWireframe>
 </template>
 <script lang="ts" setup>
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
+import { take10 } from "@/utils/array.utils";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse, TaskResponse } from "@api-server";
+import { NewsApiFactory, NewsResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { TASKS_ONE_YEAR_RANGE, useTasks } from "@data-tasks";
+import { TASKS_ONE_YEAR_RANGE, toSortedByCreatedDate, useTasks } from "@data-tasks";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
-import { DashboardAssignedTasks, DashBoardResponse, DashboardTasksSection } from "@ui-dashboard";
-import { SvsDialog } from "@ui-dialog";
+import { DashboardAssignedTasks, DashboardTasksSection } from "@ui-dashboard";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -143,38 +143,33 @@ const { isTeacher, isStudent } = useAppStoreRefs();
 const envConfig = useEnvConfig();
 
 const latestNews = ref<NewsResponse[]>([]);
-const dashboardData = ref<DashBoardResponse>();
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 const { execute, status } = useSafeAxiosTask();
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
+
+const {
+	assignedToStudent,
+	assignedToTeacher,
+	draft,
+	feedbackRequired,
+	withFeedback,
+	status: statusTasks,
+} = useTasks({
+	range: TASKS_ONE_YEAR_RANGE,
+});
+
+const draftByCreated = computed(() => take10(toSortedByCreatedDate(draft.value)));
+
 onMounted(async () => {
 	const { result, success } = await execute(
 		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
 	);
 	if (!success) return;
 	latestNews.value = result.data.data ?? [];
-
-	const { result: resultDb, success: successDb } = await execute(
-		async () =>
-			await $axios.get("/bff/dashboard", {
-				baseURL: "/",
-			})
-	);
-
-	if (!successDb) return;
-	dashboardData.value = resultDb.data as unknown as DashBoardResponse;
 });
-
-const sliceTo10 = (tasks: TaskResponse[]) => tasks.slice(0, 10);
-
-const { assignedToStudent, assignedToTeacher, draft, feedbackRequired, withFeedback } = useTasks({
-	range: TASKS_ONE_YEAR_RANGE,
-});
-
-console.log(assignedToTeacher);
 </script>
 
 <style lang="scss" scoped>

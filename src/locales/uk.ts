@@ -988,6 +988,7 @@ export default {
 	"pages.dashboard.new.features.available": "Доступні нові функції",
 	"pages.dashboard.new.features.forward": "Для отримання додаткової інформації натисніть цю кнопку",
 	"pages.dashboard.no.tasks": "Усі домашні завдання показуються в розділі домашніх завдань.",
+	"pages.dashboard.no.due.date": "Дата подання не встановлена",
 	"pages.dashboard.welcome": "Вітаємо",
 	"pages.dashboard.schedule": "Розклад",
 	"pages.dashboard.schedule.with.feedback": "Подання з коментарями викладача",

@@ -992,6 +992,7 @@ export default {
 	"pages.dashboard.new.features.available": "Nuevas funciones disponibles",
 	"pages.dashboard.new.features.forward": "Para más información, haz clic en este botón",
 	"pages.dashboard.no.tasks": "No hay tareas asignadas. Puedes encontrarar todas las tareas en el área de tareas.",
+	"pages.dashboard.no.due.date": "No se ha fijado una fecha de envío",
 	"pages.dashboard.welcome": "Hola",
 	"pages.dashboard.schedule": "Programación",
 	"pages.dashboard.schedule.with.feedback": "Envíos con comentarios de los profesores",

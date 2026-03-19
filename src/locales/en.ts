@@ -973,6 +973,7 @@ export default {
 	"pages.dashboard.new.features.available": "New features are available",
 	"pages.dashboard.new.features.forward": "For further information please click this button",
 	"pages.dashboard.no.tasks": "No assigned tasks. You can find all tasks in the tasks area.",
+	"pages.dashboard.no.due.date": "No submission date set",
 	"pages.dashboard.welcome": "Hello",
 	"pages.dashboard.schedule": "Schedule",
 	"pages.dashboard.schedule.with.feedback": "Submissions with teacher's comments",

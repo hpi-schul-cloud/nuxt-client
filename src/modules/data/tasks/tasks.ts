@@ -3,6 +3,7 @@ import { $axios } from "@/utils/api";
 import { nowUtc, parseUtc } from "@/utils/date-time.utils";
 import { TaskApiFactory, TaskResponse } from "@api-server";
 import { ManipulateType } from "dayjs";
+import { orderBy } from "lodash-es";
 import { computed, onMounted, ref } from "vue";
 
 const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] = []): Promise<TaskResponse[]> => {
@@ -26,8 +27,14 @@ export const TASKS_ONE_YEAR_RANGE: DateRange = {
 	to: { amount: 7, unit: "day" },
 };
 
+export const toSortedByDueDate = (tasks: TaskResponse[]) =>
+	orderBy(tasks, (t) => (t.dueDate ? parseUtc(t.dueDate).valueOf() : Infinity), "asc");
+
+export const toSortedByCreatedDate = (tasks: TaskResponse[]) =>
+	orderBy(tasks, (t) => parseUtc(t.createdAt).valueOf(), "desc");
+
 export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate = true) => {
-	const { execute, isRunning, error } = useSafeAxiosTask();
+	const { execute, isRunning, error, status } = useSafeAxiosTask();
 	const allTasks = ref<TaskResponse[]>([]);
 
 	const tasks = computed(() => {
@@ -36,11 +43,13 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		const from = range.from ? nowUtc().subtract(range.from.amount, range.from.unit) : null;
 		const to = range.to ? nowUtc().add(range.to.amount, range.to.unit) : null;
 
-		return allTasks.value.filter((t) => {
+		const filteredByTime = allTasks.value.filter((t) => {
 			if (!t.dueDate) return true;
 			const due = parseUtc(t.dueDate);
 			return (!from || due.isAfter(from)) && (!to || due.isBefore(to));
 		});
+
+		return toSortedByDueDate(filteredByTime);
 	});
 
 	const draft = computed(() => tasks.value.filter((t) => t.status.isDraft));
@@ -76,6 +85,7 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 
 	return {
 		isRunning,
+		status,
 		error,
 		fetch,
 		tasks,
