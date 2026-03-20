@@ -4,7 +4,7 @@
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
-			<template v-if="statusNews === 'completed'">
+			<SvsLoadingSpinner :loading="isLoadingNews">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -42,12 +42,17 @@
 
 					<VBtn href="/news" variant="outlined" :text="t('common.actions.show.all')" />
 				</template>
-			</template>
+			</SvsLoadingSpinner>
 
 			<DashBoardTasks v-if="isTeacher || isStudent" />
 
 			<!-- Dashboard new release announcement      -->
-			<SvsDialog v-if="hasNewReleaseNotes" :model-value="true" title="pages.dashboard.new.features.available">
+			<SvsDialog
+				v-if="hasNewReleaseNotes"
+				:model-value="true"
+				title="pages.dashboard.new.features.available"
+				@cancel="setReleasePreferences"
+			>
 				<template #content>
 					<VImg
 						class="w-75 d-block mx-auto"
@@ -67,7 +72,8 @@
 						color="primary"
 						variant="flat"
 						:text="t('common.actions.click.here')"
-						to="/system/releases"
+						href="/system/releases"
+						@click="setReleasePreferences"
 					/>
 				</template>
 			</SvsDialog>
@@ -79,11 +85,12 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse, ServerReleaseApiFactory } from "@api-server";
+import { MeApiFactory, NewsApiFactory, NewsResponse, ReleaseItemResponse, ServerReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
+import { SvsLoadingSpinner } from "@ui-containers";
 import { DashBoardTasks } from "@ui-dashboard";
 import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
@@ -94,36 +101,54 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const { isTeacher, isStudent, userPreferences } = useAppStoreRefs();
+const latestRelease = ref<ReleaseItemResponse>();
 const hasNewReleaseNotes = ref(false);
 const envConfig = useEnvConfig();
 
 const latestNews = ref<NewsResponse[]>([]);
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
+const meApi = MeApiFactory(undefined, "/v3", $axios);
 const releasesApi = ServerReleaseApiFactory(undefined, "/v3", $axios);
 
-const { execute, status: statusNews } = useSafeAxiosTask();
+const { execute: getNews, isRunning: isLoadingNews } = useSafeAxiosTask();
+const { execute: getReleases } = useSafeAxiosTask();
+const { execute: setPreference } = useSafeAxiosTask();
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
-onMounted(async () => {
-	const { result, success } = await execute(
-		async () => await newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
+const loadNews = async () => {
+	const { result } = await getNews(() =>
+		newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
 	);
-	if (!success) return;
-	latestNews.value = result.data.data ?? [];
+	latestNews.value = result?.data.data ?? [];
+};
 
-	const { result: releases, success: successRelease } = await execute(
-		async () => await releasesApi.serverReleaseControllerGetReleases(0, 1)
-	);
+const checkForNewReleases = async () => {
+	const { result } = await getReleases(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
 
-	if (!successRelease) return;
-	const newestRelease = releases?.data?.data?.[0];
+	const newestRelease = result?.data.data?.[0];
+	if (!newestRelease) return;
+	latestRelease.value = newestRelease;
 
-	hasNewReleaseNotes.value =
-		!userPreferences.value?.releaseDate ||
-		new Date(userPreferences.value?.releaseDate) < new Date(newestRelease?.publishedAt);
+	const lastSeenDate = userPreferences.value?.releaseDate;
+
+	hasNewReleaseNotes.value = !lastSeenDate || new Date(lastSeenDate) < new Date(newestRelease.publishedAt);
+};
+
+onMounted(() => {
+	Promise.all([loadNews(), checkForNewReleases()]);
 });
+
+const setReleasePreferences = () => {
+	setPreference(async () => {
+		if (latestRelease.value) {
+			await meApi.meControllerUpdateMePreferences({
+				releaseDate: latestRelease.value?.publishedAt,
+			});
+		}
+	});
+};
 </script>
 
 <style lang="scss" scoped>
