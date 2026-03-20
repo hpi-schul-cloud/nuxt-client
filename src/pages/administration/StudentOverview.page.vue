@@ -22,7 +22,7 @@
 		<BackendDataTable
 			v-model:current-page="page"
 			v-model:rows-per-page="limit"
-			v-model:selected-row-ids="tableSelection"
+			v-model:selected-row-ids="selectedIds"
 			v-model:selection-type="tableSelectionType"
 			:actions="filteredActions"
 			:columns="filteredColumns"
@@ -108,7 +108,7 @@ import { Permission, RoleName } from "@api-server";
 import { notifyError, notifyInfo, notifySuccess, useAppStore } from "@data-app";
 import { useClasses } from "@data-classes";
 import { useEnvConfig } from "@data-env";
-import { useUsers } from "@data-users";
+import { useUsersStore } from "@data-users";
 import {
 	mdiAccountPlus,
 	mdiCheck,
@@ -125,27 +125,21 @@ import { SvsSearchField } from "@ui-controls";
 import { DefaultWireframe } from "@ui-layout";
 import { printQrCodes } from "@util-browser";
 import { useDebounceFn, useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 
 const { t } = useI18n();
 const router = useRouter();
-const store = useStore();
 
 const { currentFilterQuery, sortBy, sortOrder, page, limit, searchQuery } = useFilterLocalStorage(User.STUDENT);
 const { fetchClasses, classNameList } = useClasses();
-const {
-	deletingProgress,
-	deleteUsers,
-	fetchUsers,
-	userList,
-	sendRegistrationLink,
-	getQrRegistrationLinks,
-	qrLinks,
-	pagination,
-} = useUsers(RoleName.STUDENT);
+
+const usersStore = useUsersStore();
+usersStore.init(RoleName.STUDENT);
+const { deletingProgress, userList, qrLinks, pagination, selectedIds } = storeToRefs(usersStore);
+const { deleteUsers, fetchUsers, sendRegistrationLink, getQrRegistrationLinks } = usersStore;
 
 const tableColumns = [
 	{
@@ -203,7 +197,6 @@ const tableColumns = [
 	},
 ];
 
-const tableSelection = ref<string[]>([]);
 const tableSelectionType = ref("inclusive");
 const isConfirmDialogOpen = ref(false);
 
@@ -308,10 +301,9 @@ const fab = computed(() => {
 	];
 });
 
-const selectedStudents = computed(() => {
-	const selectedStudents = userList?.value.filter((student) => tableSelection.value.includes(student._id));
-	return selectedStudents || [];
-});
+const selectedStudents = computed(
+	() => userList?.value.filter((student) => selectedIds.value.includes(student._id)) || []
+);
 
 useTitle(buildPageTitle(t("pages.administration.students.index.title")));
 
@@ -358,12 +350,7 @@ const onUpdateRowsPerPage = (newLimit: number) => {
 	onUpdateCurrentPage(1);
 };
 
-const handleBulkConsent = (rowIds: string[], selectionType: string) => {
-	store.commit("bulkConsent/setSelectedStudents", {
-		students: tableSelection,
-		selectionType: selectionType,
-	});
-
+const handleBulkConsent = () => {
 	router.push({
 		path: "/administration/students/consent",
 	});
@@ -397,13 +384,13 @@ const openDeleteDialog = () => {
 
 const onConfirmDelete = async () => {
 	try {
-		await deleteUsers(tableSelection.value);
+		await deleteUsers(selectedIds.value);
 		notifySuccess(t("pages.administration.remove.success"));
 		fetchFilteredStudents();
 	} catch {
 		notifyError(t("pages.administration.remove.error"));
 	} finally {
-		tableSelection.value = reactive([]);
+		selectedIds.value = reactive([]);
 		tableSelectionType.value = "inclusive";
 	}
 };

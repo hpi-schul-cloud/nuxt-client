@@ -36,7 +36,7 @@
 						:aria-label="t('pages.administration.school.index.termsOfUse.edit')"
 					/>
 				</VListItemAction>
-				<VListItemAction v-if="termsOfUse" data-testid="delete-button" @click.stop="isDeleteTermsDialogOpen = true">
+				<VListItemAction v-if="termsOfUse" data-testid="delete-button" @click.stop="onDelete">
 					<VBtn
 						:icon="mdiTrashCanOutline"
 						variant="text"
@@ -52,25 +52,13 @@
 			@confirm="onCreate"
 			@close="closeDialog"
 		/>
-		<SvsDialog
-			v-model="isDeleteTermsDialogOpen"
-			data-testid="delete-dialog"
-			:confirm-btn-lang-key="'common.actions.delete'"
-			:title="t('pages.administration.school.index.termsOfUse.delete.title')"
-			@confirm="deleteFile"
-		>
-			<template #content>
-				<InfoAlert>
-					{{ t("pages.administration.school.index.termsOfUse.delete.text") }}
-				</InfoAlert>
-			</template>
-		</SvsDialog>
 	</template>
 </template>
 
 <script setup lang="ts">
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
 import { School } from "@/store/types/schools";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { formatRecentOrActual } from "@/utils/date-time.utils";
 import { downloadFile } from "@/utils/fileHelper";
 import { injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
@@ -78,15 +66,13 @@ import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { CreateConsentVersionPayload, useSchoolTermsOfUse } from "@data-school";
 import { mdiFilePdfBox, mdiTrashCanOutline, mdiTrayArrowUp } from "@icons/material";
-import { ErrorAlert, InfoAlert } from "@ui-alert";
-import { SvsDialog } from "@ui-dialog";
+import { ErrorAlert } from "@ui-alert";
 import { computed, ComputedRef, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const isSchoolTermsFormDialogOpen: Ref<boolean> = ref(false);
-const isDeleteTermsDialogOpen: Ref<boolean> = ref(false);
 const { status, fetchTermsOfUse, termsOfUse, createTermsOfUse, deleteTermsOfUse } = useSchoolTermsOfUse();
 
 const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
@@ -106,8 +92,15 @@ const downloadTerms = () => {
 	}
 };
 
-const deleteFile = async () => {
-	await deleteTermsOfUse();
+const onDelete = async () => {
+	const confirmed = await askDeletion(
+		t("pages.administration.school.index.termsOfUse.delete.title"),
+		t("pages.administration.school.index.termsOfUse.delete.text"),
+		"info"
+	);
+	if (confirmed) {
+		await deleteTermsOfUse();
+	}
 };
 
 const closeDialog = () => {

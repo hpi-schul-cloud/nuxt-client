@@ -36,7 +36,7 @@ import { dateFromToday } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoleName } from "@api-server";
 import { useAppStore } from "@data-app";
-import { UserCreatingData, useUsers } from "@data-users";
+import { UserCreatingData, useUsersStore } from "@data-users";
 import { DatePicker } from "@ui-date-time-picker";
 import { DefaultWireframe } from "@ui-layout";
 import { ref } from "vue";
@@ -44,7 +44,9 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
-const { createUser } = useUsers(RoleName.STUDENT);
+const usersStore = useUsersStore();
+usersStore.init(RoleName.STUDENT);
+const { createUser } = usersStore;
 const router = useRouter();
 
 const date = ref<string | undefined>(undefined);

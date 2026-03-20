@@ -9,13 +9,12 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
-import { VCard } from "vuetify/lib/components/index";
+import { VCard } from "vuetify/components";
 
 // Mocks
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: vi.fn(),
 }));
 vi.mock("@feature-board");
 

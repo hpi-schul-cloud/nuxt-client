@@ -14,17 +14,13 @@
 			v-if="isRoomShareFeatureEnabled && allowedOperations.shareRoom"
 			@click="() => $emit('room:share')"
 		/>
-		<KebabMenuActionDelete
-			v-if="allowedOperations.deleteRoom"
-			scope-language-key="common.labels.room"
-			:name="roomName"
-			@click="onDeleteRoom"
-		/>
+		<KebabMenuActionDelete v-if="allowedOperations.deleteRoom" :name="roomName" @click="onDeleteRoom" />
 		<KebabMenuActionLeaveRoom @click="() => $emit('room:leave')" />
 	</KebabMenu>
 </template>
 
 <script setup lang="ts">
+import { askDeletionForItem } from "@/utils/confirmation-dialog.utils";
 import { useEnvConfig } from "@data-env";
 import { useRoomAllowedOperations } from "@data-room";
 import {
@@ -39,8 +35,8 @@ import {
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-defineProps({
-	roomName: { type: String, required: false, default: undefined },
+const props = defineProps({
+	roomName: { type: String, required: true },
 });
 
 const emit = defineEmits(["room:edit", "room:manage-members", "room:delete", "room:copy", "room:share", "room:leave"]);
@@ -56,8 +52,9 @@ const membersInfoText = computed(() =>
 	allowedOperations.value.addMembers ? t("pages.rooms.members.manage") : t("pages.rooms.members.view")
 );
 
-const onDeleteRoom = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDeleteRoom = async () => {
+	const shouldDelete = await askDeletionForItem(props.roomName, "common.labels.room");
+
 	if (shouldDelete) {
 		emit("room:delete");
 	}
