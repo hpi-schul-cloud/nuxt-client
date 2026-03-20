@@ -149,6 +149,44 @@ describe("userLoginMigration.composable", () => {
 			});
 		});
 
+		describe("when more than one migration is found", () => {
+			const setup = () => {
+				const userId = "user-id";
+				createTestAppStore({ me: { user: { id: userId } } });
+
+				const migrationResponse1 = userLoginMigrationResponseFactory.build();
+				const migrationResponse2 = userLoginMigrationResponseFactory.build();
+				const searchListResponse: UserLoginMigrationSearchListResponse = {
+					data: [migrationResponse1, migrationResponse2],
+					total: 2,
+					skip: 0,
+					limit: 2,
+				};
+
+				userLoginMigrationApi.userLoginMigrationControllerGetMigrations.mockResolvedValue(
+					mockApiResponse({ data: searchListResponse })
+				);
+			};
+
+			it("should set businessError", async () => {
+				setup();
+
+				const { fetchLatestUserLoginMigrationForCurrentUser, businessError } = useUserLoginMigration();
+				await fetchLatestUserLoginMigrationForCurrentUser();
+
+				expect(businessError.value.error).toBeDefined();
+			});
+
+			it("should not set userLoginMigration", async () => {
+				setup();
+
+				const { fetchLatestUserLoginMigrationForCurrentUser, userLoginMigration } = useUserLoginMigration();
+				await fetchLatestUserLoginMigrationForCurrentUser();
+
+				expect(userLoginMigration.value).toBeUndefined();
+			});
+		});
+
 		describe("when api returns error", () => {
 			const setup = () => {
 				const userId = "user-id";
