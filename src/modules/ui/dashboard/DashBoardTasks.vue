@@ -9,7 +9,11 @@
 				:tasks="take10(feedbackRequired)"
 			/>
 
-			<DashboardTasksAssigned :tasks="take10(assignedToTeacher)" />
+			<DashboardTasksAssigned
+				:title="t('common.labels.tasks.assigned')"
+				:empty-msg="t('pages.dashboard.no.tasks')"
+				:tasks="take10(assignedToTeacher)"
+			/>
 
 			<!-- Tasks Private -->
 			<DashboardTasksSection
@@ -25,7 +29,11 @@
 			</div>
 		</template>
 		<template v-else-if="isStudent">
-			<DashboardTasksAssigned :tasks="take10(assignedToStudent)" />
+			<DashboardTasksAssigned
+				:title="t('pages.tasks.student.openTasks')"
+				:empty-msg="t('pages.tasks.student.open.emptyState.title')"
+				:tasks="take10(assignedToStudent)"
+			/>
 
 			<!-- Tasks with feedback -->
 			<DashboardTasksSection
