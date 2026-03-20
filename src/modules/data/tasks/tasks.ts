@@ -92,6 +92,7 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		fetch,
 		tasks,
 		draft,
+		notDraft,
 		overdue,
 		assignedToTeacher,
 		assignedToStudent,

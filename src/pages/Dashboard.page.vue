@@ -81,11 +81,11 @@
 	</DefaultWireframe>
 </template>
 <script lang="ts" setup>
-import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useSafeAxiosQuery, useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { MeApiFactory, NewsApiFactory, NewsResponse, ReleaseItemResponse, ServerReleaseApiFactory } from "@api-server";
+import { MeApiFactory, NewsApiFactory, ServerReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
@@ -96,58 +96,48 @@ import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { onMounted, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+
 const { t } = useI18n();
-
 const { isTeacher, isStudent, userPreferences } = useAppStoreRefs();
-const latestRelease = ref<ReleaseItemResponse>();
-const hasNewReleaseNotes = ref(false);
 const envConfig = useEnvConfig();
-
-const latestNews = ref<NewsResponse[]>([]);
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 const meApi = MeApiFactory(undefined, "/v3", $axios);
 const releasesApi = ServerReleaseApiFactory(undefined, "/v3", $axios);
 
-const { execute: getNews, isRunning: isLoadingNews } = useSafeAxiosTask();
-const { execute: getReleases } = useSafeAxiosTask();
+useTitle(buildPageTitle(t("pages.dashboard.title")));
 const { execute: setPreference } = useSafeAxiosTask();
 
-useTitle(buildPageTitle(t("pages.dashboard.title")));
+/**
+ * News
+ */
+const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosQuery(() =>
+	newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
+);
+const latestNews = computed(() => newsResponse.value?.data.data ?? []);
 
-const loadNews = async () => {
-	const { result } = await getNews(() =>
-		newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
-	);
-	latestNews.value = result?.data.data ?? [];
-};
+/**
+ * Releases
+ */
+const { data: releasesResponse } = useSafeAxiosQuery(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
+const latestRelease = computed(() => releasesResponse.value?.data.data?.[0]);
 
-const checkForNewReleases = async () => {
-	const { result } = await getReleases(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
-
-	const newestRelease = result?.data.data?.[0];
-	if (!newestRelease) return;
-	latestRelease.value = newestRelease;
-
+const hasNewReleaseNotes = computed(() => {
+	if (!latestRelease.value) return false;
 	const lastSeenDate = userPreferences.value?.releaseDate;
-
-	hasNewReleaseNotes.value = !lastSeenDate || new Date(lastSeenDate) < new Date(newestRelease.publishedAt);
-};
-
-onMounted(() => {
-	Promise.all([loadNews(), checkForNewReleases()]);
+	return !lastSeenDate || new Date(lastSeenDate) < new Date(latestRelease.value.publishedAt);
 });
 
 const setReleasePreferences = () => {
-	setPreference(async () => {
-		if (latestRelease.value) {
-			await meApi.meControllerUpdateMePreferences({
-				releaseDate: latestRelease.value?.publishedAt,
-			});
-		}
-	});
+	if (!latestRelease.value) return;
+
+	setPreference(() =>
+		meApi.meControllerUpdateMePreferences({
+			releaseDate: latestRelease.value!.publishedAt,
+		})
+	);
 };
 </script>
 
