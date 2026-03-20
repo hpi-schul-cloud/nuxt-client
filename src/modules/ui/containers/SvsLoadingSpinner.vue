@@ -1,5 +1,5 @@
 <template>
-	<div v-if="displaySpinner" class="d-flex mt-10 justify-center align-center">
+	<div v-if="displaySpinner" class="d-flex my-10 justify-center align-center">
 		<VProgressCircular indeterminate :size />
 	</div>
 	<slot v-else-if="!loading" />
