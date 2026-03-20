@@ -5,7 +5,7 @@
 			<DashboardTasksSection
 				v-if="feedbackRequired.length > 0"
 				data-testid="tasks-with-required-feedback"
-				:title="t('pages.dashboard.schedule.with.feedback')"
+				:title="t('pages.dashboard.schedule.with.required.feedback')"
 				:tasks="take10(feedbackRequired)"
 			/>
 
