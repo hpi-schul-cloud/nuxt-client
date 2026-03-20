@@ -79,7 +79,7 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { NewsApiFactory, NewsResponse, ServerReleasesApiFactory } from "@api-server";
+import { NewsApiFactory, NewsResponse, ServerReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
@@ -89,17 +89,18 @@ import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const { isTeacher, isStudent, userPreferences } = useAppStoreRefs();
+const hasNewReleaseNotes = ref(false);
 const envConfig = useEnvConfig();
 
 const latestNews = ref<NewsResponse[]>([]);
 const NEWS_LIMIT = 4;
 const newsApi = NewsApiFactory(undefined, "/v3", $axios);
-const releasesApi = ServerReleasesApiFactory(undefined, "/v3", $axios);
+const releasesApi = ServerReleaseApiFactory(undefined, "/v3", $axios);
 
 const { execute, status: statusNews } = useSafeAxiosTask();
 
@@ -112,15 +113,17 @@ onMounted(async () => {
 	if (!success) return;
 	latestNews.value = result.data.data ?? [];
 
-	const { result: resultRelease, success: successRelease } = await execute(
-		async () => await releasesApi.serverReleasesControllerGetReleases()
+	const { result: releases, success: successRelease } = await execute(
+		async () => await releasesApi.serverReleaseControllerGetReleases(0, 1)
 	);
-	if (!successRelease) return;
-  console.log(resultRelease); // use the publishedAt and compare it to userPreferences.releaseDate
-});
 
-const hasNewReleaseNotes = computed(() => userPreferences.value?.releaseDate);
-console.log(userPreferences);
+	if (!successRelease) return;
+	const newestRelease = releases?.data?.data?.[0];
+
+	hasNewReleaseNotes.value =
+		!userPreferences.value?.releaseDate ||
+		new Date(userPreferences.value?.releaseDate) < new Date(newestRelease?.publishedAt);
+});
 </script>
 
 <style lang="scss" scoped>

@@ -55,7 +55,7 @@ export * from './api/school-api';
 export * from './api/school-license-api';
 export * from './api/server-api';
 export * from './api/server-config-api';
-export * from './api/server-releases-api';
+export * from './api/server-release-api';
 export * from './api/share-token-api';
 export * from './api/shd-api';
 export * from './api/submission-api';

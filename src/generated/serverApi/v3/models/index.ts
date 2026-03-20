@@ -247,6 +247,8 @@ export * from './redirect-response';
 export * from './registration-body-params';
 export * from './registration-item-response';
 export * from './registration-list-response';
+export * from './release-item-response';
+export * from './release-list-response';
 export * from './remove-room-members-body-params';
 export * from './rename-body-params';
 export * from './rich-text';

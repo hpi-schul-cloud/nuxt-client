@@ -42,7 +42,7 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
-api/server-releases-api.ts
+api/server-release-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts
@@ -309,6 +309,8 @@ models/redirect-response.ts
 models/registration-body-params.ts
 models/registration-item-response.ts
 models/registration-list-response.ts
+models/release-item-response.ts
+models/release-list-response.ts
 models/remove-room-members-body-params.ts
 models/rename-body-params.ts
 models/rich-text-content-body.ts
