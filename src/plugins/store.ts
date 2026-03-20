@@ -1,6 +1,5 @@
 // idea from: https://github.com/garyo/vuex-module-decorators-example/blob/master/src/store/index.ts
 
-import { bulkConsent } from "@/store/bulkConsent";
 import { ldapConfig } from "@/store/ldap-config";
 // Note: you shouldn't need to import store modules here.
 import { initializeStores, modules } from "@/store/store-accessor";
@@ -19,7 +18,7 @@ export default createStore({
 	plugins: [initializer], // triggers initializeStores
 	modules: {
 		...modules,
-		bulkConsent,
+
 		"ldap-config": ldapConfig,
 	},
 	state: {},
