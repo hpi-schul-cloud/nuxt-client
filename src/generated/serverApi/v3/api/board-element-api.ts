@@ -23,8 +23,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ApiValidationError } from '../models';
 // @ts-ignore
-import { CreateSubmissionItemBodyParams } from '../models';
-// @ts-ignore
 import { DrawingElementResponse } from '../models';
 // @ts-ignore
 import { ElementWithParentHierarchyResponse } from '../models';
@@ -43,10 +41,6 @@ import { MoveContentElementBody } from '../models';
 // @ts-ignore
 import { RichTextElementResponse } from '../models';
 // @ts-ignore
-import { SubmissionContainerElementResponse } from '../models';
-// @ts-ignore
-import { SubmissionItemResponse } from '../models';
-// @ts-ignore
 import { UpdateElementContentBodyParams } from '../models';
 // @ts-ignore
 import { VideoConferenceElementResponse } from '../models';
@@ -56,50 +50,6 @@ import { VideoConferenceElementResponse } from '../models';
  */
 export const BoardElementApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
-        /**
-         * 
-         * @summary Create a new submission item having parent a submission container element.
-         * @param {string} contentElementId The id of the element.
-         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerCreateSubmissionItem: async (contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contentElementId' is not null or undefined
-            assertParamExists('elementControllerCreateSubmissionItem', 'contentElementId', contentElementId)
-            // verify required parameter 'createSubmissionItemBodyParams' is not null or undefined
-            assertParamExists('elementControllerCreateSubmissionItem', 'createSubmissionItemBodyParams', createSubmissionItemBodyParams)
-            const localVarPath = `/elements/{contentElementId}/submissions`
-                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createSubmissionItemBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
         /**
          * 
          * @summary Delete a single content element.
@@ -314,18 +264,6 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Create a new submission item having parent a submission container element.
-         * @param {string} contentElementId The id of the element.
-         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async elementControllerCreateSubmissionItem(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubmissionItemResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerCreateSubmissionItem(contentElementId, createSubmissionItemBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Delete a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {*} [options] Override http request option.
@@ -377,7 +315,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -391,17 +329,6 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
 export const BoardElementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = BoardElementApiFp(configuration)
     return {
-        /**
-         * 
-         * @summary Create a new submission item having parent a submission container element.
-         * @param {string} contentElementId The id of the element.
-         * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        elementControllerCreateSubmissionItem(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): AxiosPromise<SubmissionItemResponse> {
-            return localVarFp.elementControllerCreateSubmissionItem(contentElementId, createSubmissionItemBodyParams, options).then((request) => request(axios, basePath));
-        },
         /**
          * 
          * @summary Delete a single content element.
@@ -451,7 +378,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -463,17 +390,6 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
  * @interface BoardElementApi
  */
 export interface BoardElementApiInterface {
-    /**
-     * 
-     * @summary Create a new submission item having parent a submission container element.
-     * @param {string} contentElementId The id of the element.
-     * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApiInterface
-     */
-    elementControllerCreateSubmissionItem(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any): AxiosPromise<SubmissionItemResponse>;
-
     /**
      * 
      * @summary Delete a single content element.
@@ -524,7 +440,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>;
 
 }
 
@@ -535,19 +451,6 @@ export interface BoardElementApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardElementApi extends BaseAPI implements BoardElementApiInterface {
-    /**
-     * 
-     * @summary Create a new submission item having parent a submission container element.
-     * @param {string} contentElementId The id of the element.
-     * @param {CreateSubmissionItemBodyParams} createSubmissionItemBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardElementApi
-     */
-    public elementControllerCreateSubmissionItem(contentElementId: string, createSubmissionItemBodyParams: CreateSubmissionItemBodyParams, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerCreateSubmissionItem(contentElementId, createSubmissionItemBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @summary Delete a single content element.

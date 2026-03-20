@@ -2,7 +2,8 @@ import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { RoleName, UserListResponse, UserResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
-import { Ref, ref } from "vue";
+import { defineStore } from "pinia";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export type UserCreatingData = {
@@ -16,29 +17,37 @@ export type UserCreatingData = {
 	birthday?: Date;
 };
 
-export const useUsers = (userType: RoleName.STUDENT | RoleName.TEACHER) => {
+export const useUsersStore = defineStore("usersStore", () => {
 	const { t } = useI18n();
 	const { execute } = useSafeAxiosTask();
 
-	const userTypePath = userType === RoleName.STUDENT ? "students" : "teachers";
-	const usersApi = `/v3/users/admin/${userTypePath}`;
-	const usersApiV1 = `/v1/users/admin/${userTypePath}`;
-
+	const userType = ref<RoleName.STUDENT | RoleName.TEACHER>(RoleName.STUDENT);
 	const userList = ref<UserResponse[]>([]);
-	const deletingProgress: Ref<{ active: boolean; percent: number }> = ref({
+	const deletingProgress = ref<{ active: boolean; percent: number }>({
 		active: false,
 		percent: 0,
 	});
-	// The type of the following ref is not mirroring the full backend type but for now only what's used
 	const qrLinks = ref<{ title?: string; qrContent: string }[]>([]);
 	const pagination = ref({
 		limit: 0,
 		skip: 0,
 		total: 0,
 	});
+	const selectedIds = ref<string[]>([]);
+
+	const isDeleting = computed(() => deletingProgress.value.active);
+	const deletedPercent = computed(() => deletingProgress.value.percent);
+	const userTypePath = computed(() => (userType.value === RoleName.STUDENT ? "students" : "teachers"));
+	const usersApi = computed(() => `/v3/users/admin/${userTypePath.value}`);
+	const usersApiV1 = computed(() => `/v1/users/admin/${userTypePath.value}`);
+
+	const init = (type: RoleName.STUDENT | RoleName.TEACHER) => {
+		userType.value = type;
+		selectedIds.value = [];
+	};
 
 	const fetchUsers = async (query: { $limit: number; $skip: number; $sort: object }) => {
-		const { result } = await execute(() => $axios.get<UserListResponse>(usersApi, { params: query }));
+		const { result } = await execute(() => $axios.get<UserListResponse>(usersApi.value, { params: query }));
 
 		const { data, ...paginationResponse } = result?.data || {
 			data: [],
@@ -74,19 +83,19 @@ export const useUsers = (userType: RoleName.STUDENT | RoleName.TEACHER) => {
 	};
 
 	const createUser = async (userData: UserCreatingData): Promise<{ result: UserResponse | null; error: unknown }> => {
-		const createUserErrorMessage =
-			userType === RoleName.STUDENT
+		const errorMessage =
+			userType.value === RoleName.STUDENT
 				? t("pages.administration.students.new.error")
 				: t("pages.administration.teachers.new.error");
-		const createUserSuccessMessage =
-			userType === RoleName.STUDENT
+		const successMessage =
+			userType.value === RoleName.STUDENT
 				? t("pages.administration.students.new.success")
 				: t("pages.administration.teachers.new.success");
 
-		const { result, error } = await execute(() => $axios.post(usersApiV1, userData), createUserErrorMessage);
+		const { result, error } = await execute(() => $axios.post(usersApiV1.value, userData), errorMessage);
 
 		if (!error) {
-			notifySuccess(createUserSuccessMessage);
+			notifySuccess(successMessage);
 		}
 
 		return {
@@ -107,7 +116,7 @@ export const useUsers = (userType: RoleName.STUDENT | RoleName.TEACHER) => {
 
 	const getQrRegistrationLinks = async (payload: { userIds: string[]; selectionType: string }) => {
 		const { success, result } = await execute(
-			() => $axios.post("/v1/users/qrRegistrationLink", { ...payload, roleName: userType }),
+			() => $axios.post("/v1/users/qrRegistrationLink", { ...payload, roleName: userType.value }),
 			t("pages.administration.printQr.error", payload.userIds.length)
 		);
 
@@ -115,15 +124,28 @@ export const useUsers = (userType: RoleName.STUDENT | RoleName.TEACHER) => {
 		qrLinks.value = result?.data || [];
 	};
 
+	const resetState = () => {
+		userList.value = [];
+		deletingProgress.value = { active: false, percent: 0 };
+		qrLinks.value = [];
+		pagination.value = { limit: 0, skip: 0, total: 0 };
+	};
+
 	return {
+		userType,
 		userList,
+		deletingProgress,
+		qrLinks,
+		pagination,
+		selectedIds,
+		isDeleting,
+		deletedPercent,
+		init,
 		fetchUsers,
-		createUser,
 		deleteUsers,
+		createUser,
 		sendRegistrationLink,
 		getQrRegistrationLinks,
-		deletingProgress,
-		pagination,
-		qrLinks,
+		resetState,
 	};
-};
+});
