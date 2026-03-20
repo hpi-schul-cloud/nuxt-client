@@ -2,7 +2,7 @@ import StudentCreate from "./StudentCreate.page.vue";
 import { createTestAppStore, mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useAppStore } from "@data-app";
-import { useUsers } from "@data-users";
+import { useUsersStore } from "@data-users";
 import { createTestingPinia } from "@pinia/testing";
 import { DatePicker } from "@ui-date-time-picker";
 import { flushPromises } from "@vue/test-utils";
@@ -12,14 +12,14 @@ import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 import { VForm } from "vuetify/components";
 
 vi.mock("@data-users");
-const useUsersMock = vi.mocked(useUsers);
+const useUsersMock = vi.mocked(useUsersStore);
 
 describe("students/new", () => {
-	let useUsersMockHandler: Mocked<ReturnType<typeof useUsers>>;
+	let useUsersMockHandler: Mocked<ReturnType<typeof useUsersStore>>;
 	injectRouterMock(createRouterMock());
 
 	beforeEach(() => {
-		useUsersMockHandler = mockComposable(useUsers);
+		useUsersMockHandler = mockComposable(useUsersStore);
 		useUsersMock.mockReturnValue(useUsersMockHandler);
 		setActivePinia(createTestingPinia());
 		createTestAppStore();

@@ -40,7 +40,7 @@
 				>
 					<template #datacolumn-birthday="slotProps">
 						<DatePicker
-							:date="germanDateToIso(slotProps.data)"
+							:date="slotProps.data"
 							class="ml-2"
 							hide-details
 							hide-icon
@@ -51,7 +51,7 @@
 							@update:date="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
-									birthDate: toGermanDate($event),
+									birthDate: toGermanDate($event) ?? '',
 								})
 							"
 						/>
@@ -234,294 +234,291 @@
 	</DefaultWireframe>
 </template>
 
-<script>
+<script setup lang="ts">
 import SafelyConnectedImage from "@/assets/img/safely_connected.png";
 import BackendDataTable from "@/components/administration/BackendDataTable.vue";
 import StepProgress from "@/components/administration/StepProgress.vue";
 import { filePathsModule } from "@/store";
-import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/utils/date-time.utils.ts";
+import { dateFromToday, fromGermanDate, germanDateToIso, toGermanDate } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
+import { useBulkConsent } from "@data-users";
 import { mdiAlert } from "@icons/material";
 import { ErrorAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { DefaultWireframe } from "@ui-layout";
-import { defineComponent } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-export default defineComponent({
-	components: {
-		SvsDialogBtnConfirm,
-		SvsDialogBtnCancel,
-		ErrorAlert,
-		DefaultWireframe,
-		SvsDialog,
-		BackendDataTable,
-		StepProgress,
-		DatePicker,
+import { useRouter } from "vue-router";
+
+const { t } = useI18n();
+const router = useRouter();
+const { selectedStudentsData, findConsentUsers, updateStudent, register: registerStudents } = useBulkConsent();
+
+const image = SafelyConnectedImage;
+
+const fileLinks = {
+	analogConsent: String(filePathsModule.getSpecificFiles.analogConsent),
+	termsOfUse: "/termsofuse",
+	dataProtection: "/privacypolicy",
+};
+
+const tableColumns = [
+	{
+		field: "fullName",
+		label: t("common.labels.name"),
+		sortable: true,
 	},
-	setup() {
-		const { t } = useI18n();
-		return { t };
+	{
+		field: "email",
+		label: t("common.labels.email"),
+		sortable: true,
 	},
-	data() {
-		return {
-			mdiAlert,
-			tableColumns: [
-				{
-					field: "fullName",
-					label: this.t("common.labels.name"),
-					sortable: true,
+	{
+		field: "birthday",
+		label: t("common.labels.birthdate"),
+		sortable: false,
+	},
+	{
+		field: "password",
+		label: t("common.labels.password"),
+		sortable: false,
+	},
+];
+
+const tableColumnsForPrint = [
+	{
+		field: "fullName",
+		label: t("common.labels.name"),
+		sortable: false,
+	},
+	{
+		field: "email",
+		label: t("common.labels.email"),
+		sortable: false,
+	},
+	{
+		field: "password",
+		label: t("common.labels.password"),
+		sortable: false,
+	},
+];
+
+const progressSteps = [
+	{
+		name: t("pages.administration.students.consent.steps.complete"),
+	},
+	{
+		name: t("pages.administration.students.consent.steps.register"),
+	},
+	{
+		name: t("pages.administration.students.consent.steps.download"),
+	},
+];
+
+const printPageInfo = t("pages.administration.students.consent.steps.register.print", {
+	hostName: window.location.origin,
+});
+
+const currentStep = ref(0);
+const birthdayWarning = ref(false);
+const cancelWarning = ref(false);
+const check = ref(false);
+const checkWarning = ref(false);
+const sortBy = ref("fullName");
+const sortOrder = ref<"asc" | "desc">("asc");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const tableData = ref<any[]>([]);
+
+let tableTimeOut: ReturnType<typeof setTimeout> | null = null;
+let printTimeOut: ReturnType<typeof setTimeout> | null = null;
+
+const isConsentNecessary = computed(() => useEnvConfig().value.FEATURE_CONSENT_NECESSARY);
+
+const title = computed(() =>
+	isConsentNecessary.value
+		? t("pages.administration.students.consent.title")
+		: t("pages.administration.students.manualRegistration.title")
+);
+
+const breadcrumbs = computed(() => [
+	{
+		title: t("pages.administration.students.index.title"),
+		to: "/administration/students",
+	},
+	{
+		title: title.value,
+		disabled: true,
+	},
+]);
+
+const passwordHint = computed(() =>
+	isConsentNecessary.value
+		? t("pages.administration.students.consent.steps.download.explanation")
+		: t("pages.administration.students.manualRegistration.steps.download.explanation")
+);
+
+const successMessage = computed(() =>
+	isConsentNecessary.value
+		? t("pages.administration.students.consent.steps.success")
+		: t("pages.administration.students.manualRegistration.steps.success")
+);
+
+const find = async () => {
+	const query = {
+		$limit: 1000,
+		$skip: 0,
+		$sort: {
+			[sortBy.value]: sortOrder.value === "asc" ? 1 : -1,
+		},
+	};
+	await findConsentUsers(query);
+	tableData.value = selectedStudentsData.value;
+};
+
+const onUpdateSort = (newSortBy: string, newSortOrder: "asc" | "desc") => {
+	sortBy.value = newSortBy === "fullName" ? "firstName" : newSortBy;
+	sortOrder.value = newSortOrder;
+	find();
+};
+
+const inputDate = (student: { id: string; birthDate: string }) => {
+	updateStudent(student);
+};
+
+const inputPass = (student: { id: string; pass: string }) => {
+	updateStudent(student);
+};
+
+const checkBirthdays = () =>
+	!tableData.value.some((element) => element.birthday === "" || element.birthday === null || !element.birthday);
+
+const next = () => {
+	if (currentStep.value === 0) {
+		if (!checkBirthdays()) {
+			birthdayWarning.value = true;
+			return;
+		}
+	}
+	currentStep.value += 1;
+};
+
+const register = () => {
+	if (isConsentNecessary.value && check.value === false) {
+		checkWarning.value = true;
+	} else {
+		const users = tableData.value.map((student) => ({
+			...student,
+			birthday: germanDateToIso(student.birthday),
+			password: student.password,
+			consent: {
+				userConsent: {
+					form: "analog",
+					privacyConsent: true,
+					termsOfUseConsent: true,
 				},
-				{
-					field: "email",
-					label: this.t("common.labels.email"),
-					sortable: true,
-				},
-				{
-					field: "birthday",
-					label: this.t("common.labels.birthdate"),
-					sortable: false,
-				},
-				{
-					field: "password",
-					label: this.t("common.labels.password"),
-					sortable: false,
-				},
-			],
-			tableColumnsForPrint: [
-				{
-					field: "fullName",
-					label: this.t("common.labels.name"),
-					sortable: false,
-				},
-				{
-					field: "email",
-					label: this.t("common.labels.email"),
-					sortable: false,
-				},
-				{
-					field: "password",
-					label: this.t("common.labels.password"),
-					sortable: false,
-				},
-			],
-			image: SafelyConnectedImage,
-			fileLinks: {
-				analogConsent: filePathsModule.getSpecificFiles.analogConsent,
-				termsOfUse: "/termsofuse",
-				dataProtection: "/privacypolicy",
+				parentConsents: [
+					{
+						form: "analog",
+						privacyConsent: true,
+						termsOfUseConsent: true,
+					},
+				],
 			},
-			progressSteps: [
-				{
-					name: this.t("pages.administration.students.consent.steps.complete"),
-				},
-				{
-					name: this.t("pages.administration.students.consent.steps.register"),
-				},
-				{
-					name: this.t("pages.administration.students.consent.steps.download"),
-				},
-			],
-			currentStep: 0,
-			birthdayWarning: false,
-			cancelWarning: false,
-			inputError: this.t("pages.administration.students.consent.input.missing"),
-			check: false,
-			checkWarning: false,
-			tableTimeOut: null,
-			printTimeOut: null,
-			printPageInfo: this.t("pages.administration.students.consent.steps.register.print", {
-				hostName: window.location.origin,
-			}),
-			sortBy: "fullName",
-			sortOrder: "asc",
-			tableData: [],
-		};
-	},
-	computed: {
-		breadcrumbs() {
-			return [
-				{
-					title: this.t("pages.administration.students.index.title"),
-					to: "/administration/students",
-				},
-				{
-					title: this.title,
-					disabled: true,
-				},
-			];
-		},
-		isConsentNecessary() {
-			return useEnvConfig().value.FEATURE_CONSENT_NECESSARY;
-		},
-		title() {
-			return this.isConsentNecessary
-				? this.t("pages.administration.students.consent.title")
-				: this.t("pages.administration.students.manualRegistration.title");
-		},
-		passwordHint() {
-			return this.isConsentNecessary
-				? this.t("pages.administration.students.consent.steps.download.explanation")
-				: this.t("pages.administration.students.manualRegistration.steps.download.explanation");
-		},
-		successMessage() {
-			return this.isConsentNecessary
-				? this.t("pages.administration.students.consent.steps.success")
-				: this.t("pages.administration.students.manualRegistration.steps.success");
-		},
-	},
-	async created() {
-		await this.find();
-		window.addEventListener("beforeunload", this.warningEventHandler);
-	},
-	beforeUnmount() {
-		window.removeEventListener("beforeunload", this.warningEventHandler);
-		clearTimeout(this.tableTimeOut);
-		clearTimeout(this.printTimeOut);
-	},
-	mounted() {
-		this.checkTableData();
-		document.title = buildPageTitle(this.title);
-	},
-	methods: {
-		toGermanDate,
-		fromGermanDate,
-		dateFromToday,
-		async find() {
-			const query = {
-				$sort: {
-					[this.sortBy]: this.sortOrder === "asc" ? 1 : -1,
-				},
-			};
-			await this.$store.dispatch("bulkConsent/findConsentUsers", query);
+		}));
+		registerStudents(users as Parameters<typeof registerStudents>[0]);
 
-			this.tableData = this.$store.getters["bulkConsent/getSelectedStudentsData"];
-		},
-		onUpdateSort(sortBy, sortOrder) {
-			this.sortBy = sortBy === "fullName" ? "firstName" : sortBy;
-			this.sortOrder = sortOrder;
-			this.find();
-		},
-		inputDate(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
-		},
-		inputPass(student) {
-			this.$store.dispatch("bulkConsent/updateStudent", student);
-		},
-		next() {
-			if (this.currentStep === 0) {
-				if (!this.checkBirthdays()) {
-					this.birthdayWarning = true;
-					return;
-				}
-			}
-			this.currentStep += 1;
-		},
-		checkBirthdays() {
-			return !this.tableData.some(
-				(element) => element.birthday === "" || element.birthday === null || !element.birthday
-			);
-		},
-		register() {
-			if (this.isConsentNecessary && this.check === false) {
-				this.checkWarning = true;
-			} else {
-				const users = this.tableData.map(
-					(student) => ({
-						_id: student._id,
-						birthday: germanDateToIso(student.birthday),
-						password: student.password,
-						consent: {
-							userConsent: {
-								form: "analog",
-								privacyConsent: true,
-								termsOfUseConsent: true,
-							},
-							parentConsents: [
-								{
-									form: "analog",
-									privacyConsent: true,
-									termsOfUseConsent: true,
-								},
-							],
-						},
-					}),
-					this
-				);
-				this.$store.dispatch("bulkConsent/register", users);
+		notifySuccess(t("pages.administration.students.consent.steps.register.success"));
+		next();
+	}
+};
 
-				notifySuccess(this.t("pages.administration.students.consent.steps.register.success"));
-				this.next();
-			}
-		},
-		download() {
-			const prtHtml = document.getElementById("tableStudentsForPrint").innerHTML;
-			let stylesHtml = "";
+const download = () => {
+	const prtHtml = document.getElementById("tableStudentsForPrint")?.innerHTML ?? "";
+	let stylesHtml = "";
 
-			for (const node of [...document.querySelectorAll("link[rel='stylesheet'], style")]) {
-				stylesHtml += node.outerHTML;
-			}
+	for (const node of [...document.querySelectorAll("link[rel='stylesheet'], style")]) {
+		stylesHtml += node.outerHTML;
+	}
 
-			const winPrint = window.open("", "", "left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0");
+	const winPrint = window.open("", "", "left=0,top=500,width=800,height=900,toolbar=0,scrollbars=0,status=0");
 
-			winPrint.document.write(`<!DOCTYPE html>
-				<html>
-				<head>
-					${stylesHtml}
-				</head>
-				<body>
-					${prtHtml}
-				</body>
-				</html>`);
+	winPrint?.document.write(`<!DOCTYPE html>
+		<html lang="de">
+		<head>
+			<title>${t("pages.administration.students.consent.print.title")}</title>
+			${stylesHtml}
+		</head>
+		<body>
+			<h1 class="centered">
+				&nbsp;
+			</h1>
+			<main>
+				${prtHtml}
+			</main>
+		</body>
+		</html>`);
 
-			winPrint.document.close();
-			winPrint.focus();
-			this.printTimeOut = setTimeout(() => {
-				winPrint.print();
-				winPrint.close();
-			}, 500);
-			this.cancelWarning = false;
-			this.next();
-		},
-		success() {
-			this.$router.push({
+	winPrint?.document.close();
+	winPrint?.focus();
+	printTimeOut = setTimeout(() => {
+		winPrint?.print();
+		winPrint?.close();
+	}, 500);
+	cancelWarning.value = false;
+	next();
+};
+
+const success = () => {
+	router.push({
+		path: `/administration/students`,
+	});
+};
+
+const cancel = () => {
+	router.push({
+		path: `/administration/students`,
+	});
+	cancelWarning.value = false;
+};
+
+const checkTableData = () => {
+	tableTimeOut = setTimeout(() => {
+		if (tableData.value.length === 0) {
+			notifyError(t("pages.administration.students.consent.table.empty"));
+
+			router.push({
 				path: `/administration/students`,
 			});
-		},
-		cancel() {
-			this.$store.commit("bulkConsent/setSelectedStudents", {
-				students: [],
-			});
-			this.$router.push({
-				path: `/administration/students`,
-			});
-			this.cancelWarning = false;
-		},
-		checkTableData() {
-			this.tableTimeOut = setTimeout(() => {
-				if (this.tableData.length === 0) {
-					notifyError(this.t("pages.administration.students.consent.table.empty"));
+		}
+	}, 2000);
+};
 
-					this.$router.push({
-						path: `/administration/students`,
-					});
-				}
-			}, 2000);
-		},
-		germanDateToIso,
-		warningEventHandler() {
-			if (this.currentStep === 2) {
-				// Cancel the event as stated by the standard.
-				event.preventDefault();
-				// Chrome requires returnValue to be set.
-				event.returnValue = "";
-				// then show customized warning modal
-				this.cancelWarning = true;
-			}
-		},
-	},
+const warningEventHandler = (event: BeforeUnloadEvent) => {
+	if (currentStep.value === 2) {
+		// Cancel the event as stated by the standard.
+		event.preventDefault();
+		// Chrome requires returnValue to be set.
+		event.returnValue = "";
+		// then show customized warning modal
+		cancelWarning.value = true;
+	}
+};
+
+window.addEventListener("beforeunload", warningEventHandler);
+
+onMounted(() => {
+	find();
+	checkTableData();
+	document.title = buildPageTitle(title.value);
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener("beforeunload", warningEventHandler);
+	if (tableTimeOut) clearTimeout(tableTimeOut);
+	if (printTimeOut) clearTimeout(printTimeOut);
 });
 </script>
 
