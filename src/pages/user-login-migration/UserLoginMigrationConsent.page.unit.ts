@@ -2,19 +2,24 @@ import UserLoginMigrationConsent from "./UserLoginMigrationConsent.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { UserLoginMigration } from "@/store/user-login-migration";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import { SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
+import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
+import { ref } from "vue";
+
+vi.mock("@data-user-login-migration");
+const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationConsent", () => {
 	let systemsModule: Mocked<SystemsModule>;
-	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
+	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = async (userLoginMigration?: Partial<UserLoginMigration>) => {
 		const systemsMock: System[] = [
@@ -32,16 +37,16 @@ describe("UserLoginMigrationConsent", () => {
 			getSystems: systemsMock,
 		});
 		const userLoginMigrationMock: UserLoginMigration = userLoginMigrationFactory.build({ ...userLoginMigration });
-		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
-			getUserLoginMigration: userLoginMigrationMock,
-		});
+
+		useUserLoginMigrationMockReturn = mockComposable(useUserLoginMigration);
+		useUserLoginMigrationMock.mockReturnValue(useUserLoginMigrationMockReturn);
+		useUserLoginMigrationMockReturn.userLoginMigration = ref(userLoginMigrationMock);
 
 		const wrapper = shallowMount(UserLoginMigrationConsent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string => key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
@@ -52,6 +57,7 @@ describe("UserLoginMigrationConsent", () => {
 		return {
 			wrapper,
 			userLoginMigrationMock,
+			useUserLoginMigrationMockReturn,
 		};
 	};
 
