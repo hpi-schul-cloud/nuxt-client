@@ -1,5 +1,5 @@
 <template>
-	<div v-if="debouncedIsLoading" class="d-flex mt-10 justify-center align-center">
+	<div v-if="displaySpinner" class="d-flex mt-10 justify-center align-center">
 		<VProgressCircular indeterminate :size />
 	</div>
 	<slot v-else />
@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { refDebounced } from "@vueuse/core";
-import { toRef } from "vue";
+import { computed, toRef } from "vue";
 
 const props = withDefaults(
 	defineProps<{
@@ -20,5 +20,8 @@ const props = withDefaults(
 	}
 );
 
-const debouncedIsLoading = refDebounced(toRef(props, "loading"), 200);
+const loadingRef = toRef(props, "loading");
+const debouncedIsLoading = refDebounced(loadingRef, 200);
+
+const displaySpinner = computed(() => loadingRef.value && debouncedIsLoading.value);
 </script>
