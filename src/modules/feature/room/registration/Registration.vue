@@ -140,7 +140,7 @@ const onContinue = async () => {
 		return;
 	}
 
-	if (stepValue.value === RegistrationSteps.DeclarationOfConsent || userData.value?.registeredUserExists) {
+	if (stepValue.value === RegistrationSteps.DeclarationOfConsent) {
 		const isSucceed = await completeRegistration(lang.value, password.value);
 		if (!isSucceed) return;
 	}
@@ -163,8 +163,9 @@ onMounted(async () => {
 	await fetchUserData();
 	if (userData.value?.registeredUserExists) {
 		const isSucceed = await completeRegistration(lang.value, password.value);
-		if (!isSucceed) return;
-		await goToStep(RegistrationSteps.Success);
+		if (isSucceed) {
+			await goToStep(RegistrationSteps.Success);
+		}
 	}
 });
 
