@@ -1,7 +1,6 @@
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { FileConfigApiFactory } from "@api-file-storage";
-import { FilesStorageConfigResponse } from "@api-file-storage";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
 import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
