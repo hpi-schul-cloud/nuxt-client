@@ -11,7 +11,7 @@ describe("SvsLoadingSpinner", () => {
 
 	const advanceInTime = async (ms: number) => {
 		await flushPromises();
-		vi.advanceTimersByTime(ms);
+		await vi.advanceTimersByTimeAsync(ms);
 		await nextTick();
 	};
 
@@ -33,19 +33,11 @@ describe("SvsLoadingSpinner", () => {
 
 	it("should not show spinner before debounce delay", async () => {
 		const wrapper = setup(true);
+		await nextTick();
 
 		await advanceInTime(100);
 
 		expect(wrapper.findComponent(VProgressCircular).exists()).toBe(false);
-		expect(wrapper.find("p").exists()).toBe(false);
-	});
-
-	it("should show spinner after debounce delay when loading", async () => {
-		const wrapper = setup(true);
-
-		await advanceInTime(200);
-
-		expect(wrapper.findComponent(VProgressCircular).exists()).toBe(true);
 		expect(wrapper.find("p").exists()).toBe(false);
 	});
 

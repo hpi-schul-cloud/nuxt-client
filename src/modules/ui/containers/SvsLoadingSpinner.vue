@@ -2,12 +2,11 @@
 	<div v-if="displaySpinner" class="d-flex mt-10 justify-center align-center">
 		<VProgressCircular indeterminate :size />
 	</div>
-	<slot v-else />
+	<slot v-else-if="!loading" />
 </template>
 
 <script setup lang="ts">
-import { refDebounced } from "@vueuse/core";
-import { computed, toRef } from "vue";
+import { ref, toRef, watch } from "vue";
 
 const props = withDefaults(
 	defineProps<{
@@ -21,7 +20,27 @@ const props = withDefaults(
 );
 
 const loadingRef = toRef(props, "loading");
-const debouncedIsLoading = refDebounced(loadingRef, 200);
 
-const displaySpinner = computed(() => loadingRef.value && debouncedIsLoading.value);
+const displaySpinner = ref(false);
+let timeout: ReturnType<typeof setTimeout>;
+
+watch(
+	loadingRef,
+	(val) => {
+		if (val) {
+			timeout = setTimeout(() => {
+				if (loadingRef.value) {
+					displaySpinner.value = true;
+				}
+			}, 200);
+		} else {
+			if (timeout) {
+				clearTimeout(timeout);
+				timeout = null;
+			}
+			displaySpinner.value = false;
+		}
+	},
+	{ immediate: true }
+);
 </script>
