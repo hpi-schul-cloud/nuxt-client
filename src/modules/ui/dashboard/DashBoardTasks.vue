@@ -17,10 +17,10 @@
 
 			<!-- Tasks Private -->
 			<DashboardTasksSection
-				v-if="draftByCreated.length > 0"
+				v-if="draft.length > 0"
 				data-testid="tasks-private"
 				:title="t('common.words.drafts')"
-				:tasks="take10(draftByCreated)"
+				:tasks="take10(draft)"
 			/>
 			<div class="d-flex mt-2">
 				<VBtn variant="outlined" to="/tasks">
@@ -56,9 +56,8 @@ import DashboardTasksAssigned from "./DashboardTasksAssigned.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { take10 } from "@/utils/array.utils";
 import { useAppStoreRefs } from "@data-app";
-import { TASKS_ONE_YEAR_RANGE, toSortedByCreatedDate, useTasks } from "@data-tasks";
+import { TASKS_ONE_YEAR_RANGE, useTasks } from "@data-tasks";
 import { SvsLoadingSpinner } from "@ui-containers";
-import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -66,7 +65,6 @@ const { isTeacher, isStudent } = useAppStoreRefs();
 const { assignedToStudent, assignedToTeacher, draft, feedbackRequired, withFeedback, isRunning } = useTasks({
 	range: TASKS_ONE_YEAR_RANGE,
 });
-const draftByCreated = computed(() => take10(toSortedByCreatedDate(draft.value)));
 </script>
 
 <style scoped lang="scss"></style>

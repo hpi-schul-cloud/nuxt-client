@@ -56,10 +56,14 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 
 	const notDraft = computed(() => tasks.value.filter((t) => !t.status.isDraft));
 
-	const assignedToTeacher = computed(() => notDraft.value.filter((t) => t.status.submitted < t.status.maxSubmissions));
+	const pendingTasks = computed(() => notDraft.value.filter((t) => !isTaskOverdue(t)));
+
+	const assignedToTeacher = computed(() =>
+		pendingTasks.value.filter((t) => t.status.submitted < t.status.maxSubmissions)
+	);
 
 	const assignedToStudent = computed(() =>
-		notDraft.value.filter(
+		pendingTasks.value.filter(
 			(t) => t.status.submitted === 0 && t.status.graded === 0 && !t.lessonHidden && !isTaskOverdue(t)
 		)
 	);
