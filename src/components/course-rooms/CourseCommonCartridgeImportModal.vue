@@ -74,9 +74,9 @@ const emit = defineEmits<{
 	import: [file: File];
 }>();
 
-const file = ref<File[] | undefined>(undefined);
+const file = ref<File | undefined>(undefined);
 
-const importButtonDisabled = computed(() => !file.value || file.value.length === 0);
+const importButtonDisabled = computed(() => !file.value);
 
 const onCancel = () => {
 	file.value = undefined;
@@ -84,8 +84,8 @@ const onCancel = () => {
 };
 
 const onConfirm = () => {
-	if (file.value && file.value.length > 0) {
-		emit("import", file.value[0]);
+	if (file.value) {
+		emit("import", file.value);
 		file.value = undefined;
 	}
 };
