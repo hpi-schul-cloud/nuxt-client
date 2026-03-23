@@ -3,7 +3,12 @@ import CourseRoomWrapper from "./CourseRoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import CourseRoomListModule from "@/store/course-room-list";
 import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStoreWithPermissions, createTestEnvStore, mockComposable } from "@@/tests/test-utils";
+import {
+	createTestAppStoreWithPermissions,
+	createTestEnvStore,
+	expectNotification,
+	mockComposable,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -12,7 +17,7 @@ import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { EmptyState } from "@ui-empty-state";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { ComponentMountingOptions, flushPromises, mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 import { ref } from "vue";
@@ -20,29 +25,6 @@ import { VBtn, VFab } from "vuetify/components";
 
 vi.mock("@data-common-cartridge");
 const useCommonCartridgeImportMock = vi.mocked(useCommonCartridgeImport);
-
-const getWrapper = (
-	options: ComponentMountingOptions<typeof CourseRoomWrapper> = {
-		props: { hasRooms: true },
-	}
-) => {
-	const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-		getAllElements: mockData,
-	});
-
-	return mount(CourseRoomWrapper, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-			},
-			stubs: {
-				CourseCommonCartridgeImportModal: true,
-			},
-		},
-		...options,
-	});
-};
 
 const mockData: CourseMetadataResponse[] = [
 	{
@@ -108,26 +90,57 @@ describe("CourseRoomWrapper.vue", () => {
 		useCommonCartridgeImportMock.mockReturnValue(useCommonCartridgeImportMockReturn);
 	});
 
+	const setup = (
+		options: {
+			hasRooms?: boolean;
+			isSuccess?: boolean;
+			stubImportModal?: boolean;
+			stubSyncDialog?: boolean;
+			isOpenInitialValue?: boolean;
+			isLoading?: boolean;
+			slots?: Record<string, string>;
+		} = {}
+	) => {
+		const {
+			hasRooms = true,
+			isSuccess = false,
+			stubImportModal = true,
+			stubSyncDialog = true,
+			isOpenInitialValue = false,
+			isLoading = false,
+			slots,
+		} = options;
+
+		if (isOpenInitialValue) {
+			useCommonCartridgeImportMockReturn.isOpen = ref(true);
+		}
+		useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
+		useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockResolvedValue();
+
+		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
+			getAllElements: mockData,
+			getLoading: isLoading,
+		});
+
+		return mount(CourseRoomWrapper, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
+				},
+				stubs: {
+					CourseCommonCartridgeImportModal: stubImportModal,
+					StartNewCourseSyncDialog: stubSyncDialog,
+				},
+			},
+			props: { hasRooms },
+			slots,
+		});
+	};
+
 	describe("when data is not loaded yet", () => {
 		it("should display skeleton loader", () => {
-			const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-				getAllElements: [],
-				getLoading: true,
-			});
-
-			const wrapper = mount(CourseRoomWrapper, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-					},
-					stubs: {
-						CourseCommonCartridgeImportModal: true,
-						StartNewCourseSyncDialog: true,
-					},
-				},
-				props: { hasRooms: false },
-			});
+			const wrapper = setup({ hasRooms: false, isLoading: true });
 
 			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(true);
 		});
@@ -136,9 +149,7 @@ describe("CourseRoomWrapper.vue", () => {
 	describe("when data is loaded", () => {
 		describe("when data is empty", () => {
 			it("should display empty state", () => {
-				const wrapper = getWrapper({
-					props: { hasRooms: false },
-				});
+				const wrapper = setup({ hasRooms: false });
 
 				expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
 			});
@@ -146,8 +157,8 @@ describe("CourseRoomWrapper.vue", () => {
 
 		describe("when data is not empty", () => {
 			it("should render page content slot", () => {
-				const wrapper = getWrapper({
-					props: { hasRooms: true },
+				const wrapper = setup({
+					hasRooms: true,
 					slots: {
 						"page-content": "<div>Page Content</div>",
 					},
@@ -160,7 +171,7 @@ describe("CourseRoomWrapper.vue", () => {
 
 	describe("when user has course create permission", () => {
 		it("should display fab", () => {
-			const wrapper = getWrapper();
+			const wrapper = setup();
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
@@ -168,7 +179,7 @@ describe("CourseRoomWrapper.vue", () => {
 
 		describe("when course synchronization is active", () => {
 			it("should have the course sync sub menu action", async () => {
-				const wrapper = getWrapper();
+				const wrapper = setup();
 
 				const fab = wrapper.getComponent(VFab);
 				await fab.trigger("click");
@@ -182,7 +193,7 @@ describe("CourseRoomWrapper.vue", () => {
 
 		describe("when course synchronization is active", () => {
 			it("should have the common cartridge sub menu action", async () => {
-				const wrapper = getWrapper();
+				const wrapper = setup();
 
 				const fab = wrapper.getComponent(VFab);
 				await fab.trigger("click");
@@ -198,7 +209,7 @@ describe("CourseRoomWrapper.vue", () => {
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
 			createTestAppStoreWithPermissions([]);
-			const wrapper = getWrapper();
+			const wrapper = setup();
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(false);
@@ -207,7 +218,7 @@ describe("CourseRoomWrapper.vue", () => {
 
 	describe("when clicking on the course sync fab action", () => {
 		it("should open the course sync dialog", async () => {
-			const wrapper = getWrapper();
+			const wrapper = setup();
 
 			const fab = wrapper.getComponent(VFab);
 			await fab.trigger("click");
@@ -220,83 +231,162 @@ describe("CourseRoomWrapper.vue", () => {
 		});
 	});
 
-	describe("when clicking on the common cartridge fab action", () => {
-		it("should open the common cartridge dialog", async () => {
-			const wrapper = getWrapper();
+	describe("when course sync dialog emits update:isOpen", () => {
+		it("should update isCourseSyncDialogOpen value", async () => {
+			const wrapper = setup({ stubImportModal: true, stubSyncDialog: false });
 
 			const fab = wrapper.getComponent(VFab);
 			await fab.trigger("click");
 
-			const openImportBtn = wrapper.findAllComponents(SpeedDialMenuAction)[2];
-			await openImportBtn.getComponent(VBtn).trigger("click");
+			const openSyncBtn = wrapper.findAllComponents(SpeedDialMenuAction)[1];
+			await openSyncBtn.getComponent(VBtn).trigger("click");
 
-			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(true);
+			expect((wrapper.vm as unknown as typeof CourseRoomWrapper).isCourseSyncDialogOpen).toBe(true);
+
+			const dialog = wrapper.findComponent({ name: "StartNewCourseSyncDialog" });
+			await dialog.vm.$emit("update:isOpen", false);
+
+			expect((wrapper.vm as unknown as typeof CourseRoomWrapper).isCourseSyncDialogOpen).toBe(false);
 		});
 	});
 
 	describe("when handling common cartridge import", () => {
-		it("should call import composable on successful import", async () => {
-			useCommonCartridgeImportMockReturn.isSuccess = ref(true);
-			useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockResolvedValue();
+		describe("when clicking on the common cartridge fab action", () => {
+			it("should open the common cartridge dialog", async () => {
+				const wrapper = setup();
 
-			const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-				getAllElements: mockData,
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
+
+				const openImportBtn = wrapper.findAllComponents(SpeedDialMenuAction)[2];
+				await openImportBtn.getComponent(VBtn).trigger("click");
+
+				expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(true);
 			});
-
-			const wrapper = mount(CourseRoomWrapper, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-					},
-					stubs: {
-						CourseCommonCartridgeImportModal: false,
-						StartNewCourseSyncDialog: true,
-					},
-				},
-				props: { hasRooms: true },
-			});
-
-			const testFile = new File([], "test.imscc");
-
-			const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
-			modal.vm.$emit("import", testFile);
-			await flushPromises();
-
-			expect(useCommonCartridgeImportMockReturn.importCommonCartridgeFile).toHaveBeenCalledWith(testFile);
-			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
 		});
 
-		it("should call import composable on failed import", async () => {
-			useCommonCartridgeImportMockReturn.isSuccess = ref(false);
-			useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockResolvedValue();
+		describe("when common cartridge import modal emits update:isOpen", () => {
+			it("should update commonCartridgeImport.isOpen value", async () => {
+				const wrapper = setup({ isOpenInitialValue: true, stubImportModal: false });
 
-			const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-				getAllElements: mockData,
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				await modal.vm.$emit("update:isOpen", false);
+
+				expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
+			});
+		});
+
+		describe("when import is successful", () => {
+			it("should call import composable", async () => {
+				const wrapper = setup({ isSuccess: true, stubImportModal: false });
+
+				const testFile = new File([], "test.imscc");
+
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expect(useCommonCartridgeImportMockReturn.importCommonCartridgeFile).toHaveBeenCalledWith(testFile);
+				expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
 			});
 
-			const wrapper = mount(CourseRoomWrapper, {
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-					},
-					stubs: {
-						CourseCommonCartridgeImportModal: false,
-						StartNewCourseSyncDialog: true,
-					},
-				},
-				props: { hasRooms: true },
+			it("should show success notification", async () => {
+				const wrapper = setup({ isSuccess: true, stubImportModal: false });
+
+				const testFile = new File([], "test.imscc");
+
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expectNotification("success");
+			});
+		});
+
+		describe("when import fails", () => {
+			it("should call import composable", async () => {
+				const wrapper = setup({ isSuccess: false, stubImportModal: false });
+
+				const testFile = new File([], "test.imscc");
+
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expect(useCommonCartridgeImportMockReturn.importCommonCartridgeFile).toHaveBeenCalledWith(testFile);
+				expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
 			});
 
-			const testFile = new File([], "test.imscc");
+			it("should show error notification", async () => {
+				const wrapper = setup({ isSuccess: false, stubImportModal: false });
 
-			const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
-			modal.vm.$emit("import", testFile);
-			await flushPromises();
+				const testFile = new File([], "test.imscc");
 
-			expect(useCommonCartridgeImportMockReturn.importCommonCartridgeFile).toHaveBeenCalledWith(testFile);
-			expect(useCommonCartridgeImportMockReturn.isOpen.value).toBe(false);
+				const modal = wrapper.findComponent(CourseCommonCartridgeImportModal);
+				modal.vm.$emit("import", testFile);
+				await flushPromises();
+
+				expectNotification("error");
+			});
+		});
+	});
+
+	describe("when some features are disabled", () => {
+		describe("when course sync feature is disabled", () => {
+			it("should not have the course sync sub menu action", async () => {
+				createTestEnvStore({
+					FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
+					FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
+				});
+
+				const wrapper = setup();
+
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
+
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+				expect(speedDialMenuActions.length).toBe(2);
+				expect(speedDialMenuActions[1].props("action").dataTestId).toBe("fab_button_import_course");
+			});
+		});
+
+		describe("when common cartridge import feature is disabled", () => {
+			it("should not have the common cartridge sub menu action", async () => {
+				createTestEnvStore({
+					FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+					FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
+				});
+
+				const wrapper = setup();
+
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
+
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+
+				expect(speedDialMenuActions.length).toBe(2);
+				expect(speedDialMenuActions[1].props("action").dataTestId).toBe("fab_button_add_synced_course");
+			});
+		});
+
+		describe("when both course sync and common cartridge import are disabled", () => {
+			it("should show only single add course button without sub-actions", async () => {
+				createTestEnvStore({
+					FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
+					FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
+				});
+
+				const wrapper = setup();
+
+				const fab = wrapper.getComponent(VFab);
+				await fab.trigger("click");
+
+				const speedDialMenuActions = wrapper.findAllComponents(SpeedDialMenuAction);
+				expect(speedDialMenuActions.length).toBe(0);
+
+				expect(fab.attributes("data-testid")).toBe("add-course-button");
+			});
 		});
 	});
 });

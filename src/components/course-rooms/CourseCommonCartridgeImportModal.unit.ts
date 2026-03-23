@@ -1,6 +1,7 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { VDialog } from "vuetify/components";
 
 describe("CourseCommonCartridgeImportModal", () => {
 	const getWrapper = (options: ComponentMountingOptions<typeof CourseCommonCartridgeImportModal> = {}) =>
@@ -16,11 +17,11 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 	describe("when dialog is closed", () => {
-		it("should not render the dialog", () => {
+		it("should not render the dialog content", () => {
 			const wrapper = getWrapper({ props: { isOpen: false } });
 
-			const dialog = wrapper.findComponent("[data-testid='common-cartridge-import-modal']");
-			expect(dialog.exists()).toBe(false);
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.props("modelValue")).toBe(false);
 		});
 	});
 
@@ -119,8 +120,8 @@ describe("CourseCommonCartridgeImportModal", () => {
 		it("should call onCancel on ESC which emits update:isOpen with false", async () => {
 			const wrapper = getWrapper({ props: { isOpen: true } });
 
-			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
-			await cancelBtn.trigger("click");
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("keydown", { key: "Escape" });
 
 			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
 			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
@@ -129,11 +130,67 @@ describe("CourseCommonCartridgeImportModal", () => {
 		it("should call onCancel on click outside which emits update:isOpen with false", async () => {
 			const wrapper = getWrapper({ props: { isOpen: true } });
 
-			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
-			await cancelBtn.trigger("click");
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("click:outside");
 
 			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
 			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
+
+		it("should clear the selected file on click outside", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue([new File([], "test.imscc")]);
+
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("click:outside");
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
+		});
+	});
+
+	describe("when dialog model-value is updated", () => {
+		it("should emit update:isOpen when VDialog emits update:model-value", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("update:model-value", false);
+
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
+	});
+
+	describe("maxWidth prop", () => {
+		it("should use default maxWidth of 480", () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.props("maxWidth")).toBe(480);
+		});
+
+		it("should use custom maxWidth when provided", () => {
+			const wrapper = getWrapper({ props: { isOpen: true, maxWidth: 600 } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.props("maxWidth")).toBe(600);
+		});
+	});
+
+	describe("when confirm is clicked with file selected", () => {
+		it("should clear the file after emitting import event", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+			const testFile = new File([], "test.imscc");
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue(testFile);
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			await confirmBtn.trigger("click");
+
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
 		});
 	});
 });
