@@ -77,6 +77,11 @@ describe("SchoolAdminMigrationSection", () => {
 				provide: {
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
+				stubs: {
+					"i18n-t": {
+						template: "<span><slot /></span>",
+					},
+				},
 			},
 		});
 
@@ -96,31 +101,55 @@ describe("SchoolAdminMigrationSection", () => {
 
 	describe("supportLink", () => {
 		it("should return support link without schoolnumber in subject", () => {
-			const { wrapper } = setup({});
-
-			const linkText = wrapper.vm.supportLink;
+			const { wrapper } = setup(
+				{},
+				{
+					userLoginMigration: {
+						sourceSystemId: "sourceSystemId",
+						targetSystemId: "targetSystemId",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
+					},
+				}
+			);
 
 			const subject = encodeURIComponent(
 				"Schule mit der Nummer: ??? soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
 			);
-			const expectedLink = `"mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${subject}"`;
+			const expectedLink = `mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${subject}`;
+			const supportLink = wrapper.find('[data-testid="support-link"]');
 
-			expect(expectedLink).toContain(linkText);
+			expect(supportLink.exists()).toBe(true);
+			expect(supportLink.attributes("href")).toBe(expectedLink);
 		});
 
 		it("should return support link with schoolnumber in subject", () => {
-			const { wrapper } = setup({
-				getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-			});
-
-			const linkText = wrapper.vm.supportLink;
+			const { wrapper } = setup(
+				{
+					getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
+				},
+				{
+					userLoginMigration: {
+						sourceSystemId: "sourceSystemId",
+						targetSystemId: "targetSystemId",
+						startedAt: new Date(2023, 1, 1),
+						closedAt: undefined,
+						finishedAt: undefined,
+						mandatorySince: undefined,
+					},
+				}
+			);
 
 			const subject = encodeURIComponent(
 				"Schule mit der Nummer: 12345 soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
 			);
-			const expectedLink = `"mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${subject}"`;
+			const expectedLink = `mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${subject}`;
+			const supportLink = wrapper.find('[data-testid="support-link"]');
 
-			expect(expectedLink).toContain(linkText);
+			expect(supportLink.exists()).toBe(true);
+			expect(supportLink.attributes("href")).toBe(expectedLink);
 		});
 	});
 
@@ -176,11 +205,10 @@ describe("SchoolAdminMigrationSection", () => {
 			);
 
 			const infoText = wrapper.get('[data-testId="migration-info-text"]');
-			const expectedText = ["firstParagraph", "secondParagraph", "thirdParagraph", "fourthParagraph"]
-				.map((text) => `components.administration.adminMigrationSection.infoText.${text}`)
-				.join("");
 
-			expect(infoText.text()).toEqual(expectedText);
+			expect(infoText.text()).toContain("components.administration.adminMigrationSection.infoText.firstParagraph");
+			expect(infoText.text()).toContain("components.administration.adminMigrationSection.infoText.secondParagraph");
+			expect(infoText.text()).toContain("components.administration.adminMigrationSection.infoText.fourthParagraph");
 		});
 
 		it("should display the info text activeMigration when the admin activated the migration", () => {
