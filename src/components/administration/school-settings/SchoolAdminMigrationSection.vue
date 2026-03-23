@@ -178,7 +178,7 @@
 	</p>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
 import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
@@ -191,190 +191,143 @@ import { useEnvConfig } from "@data-env";
 import { useUserLoginMigration } from "@data-user-login-migration";
 import { mdiAlertCircle, mdiCheck } from "@icons/material";
 import { InfoAlert } from "@ui-alert";
-import dayjs from "dayjs";
-import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export default defineComponent({
+defineOptions({
 	name: "SchoolAdminMigrationSection",
-	components: {
-		SchoolMigrationWarningCard,
-		InfoAlert,
-	},
-	setup() {
-		const { t } = useI18n();
-		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-		const {
-			userLoginMigration,
-			businessError,
-			fetchLatestUserLoginMigrationForSchool,
-			startUserLoginMigration,
-			restartUserLoginMigration,
-			setUserLoginMigrationMandatory,
-			closeUserLoginMigration,
-		} = useUserLoginMigration();
-
-		onMounted(async () => {
-			await fetchLatestUserLoginMigrationForSchool();
-		});
-
-		const isMigrationActive: ComputedRef<boolean> = computed(
-			() => !!userLoginMigration.value?.startedAt && !userLoginMigration.value.closedAt
-		);
-
-		const isMigrationMandatory: ComputedRef<boolean> = computed(() => !!userLoginMigration.value?.mandatorySince);
-
-		const error: ComputedRef<BusinessError | undefined> = computed(() =>
-			businessError.value.message ? businessError.value : undefined
-		);
-
-		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
-
-		const onStartMigration = () => {
-			if (userLoginMigration.value) {
-				restartUserLoginMigration();
-			} else {
-				startUserLoginMigration();
-			}
-		};
-
-		const setMigrationMandatory = (mandatory: boolean) => {
-			setUserLoginMigrationMandatory(mandatory);
-		};
-
-		const onCloseMigration = () => {
-			closeUserLoginMigration();
-		};
-
-		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-
-		const isEndWarningVisible: Ref<boolean> = ref(false);
-
-		const onToggleShowEndWarning = () => {
-			isEndWarningVisible.value = !isEndWarningVisible.value;
-		};
-
-		const isStartWarningVisible: Ref<boolean> = ref(false);
-
-		const onToggleShowStartWarning = () => {
-			isStartWarningVisible.value = !isStartWarningVisible.value;
-		};
-
-		const isEndButtonVisible: ComputedRef<boolean> = computed(
-			() => isMigrationActive.value && !isEndWarningVisible.value && !isStartWarningVisible.value
-		);
-
-		const isStartButtonVisible: ComputedRef<boolean> = computed(
-			() => !isEndButtonVisible.value && !isEndWarningVisible.value && !isStartWarningVisible.value
-		);
-
-		const isShowMandatorySwitch: ComputedRef<boolean> = computed(
-			() => !isEndWarningVisible.value && !isStartWarningVisible.value
-		);
-
-		const isGracePeriodExpired: ComputedRef<boolean> = computed(() => {
-			if (userLoginMigration.value?.finishedAt) {
-				return Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime();
-			}
-
-			return false;
-		});
-
-		const latestMigration = computed(() => {
-			if (isGracePeriodExpired.value) {
-				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
-			} else {
-				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
-			}
-		});
-
-		const officialSchoolNumber: ComputedRef<string | undefined> = computed(
-			() => schoolsModule.getSchool.officialSchoolNumber
-		);
-
-		const getSubject = (): string => {
-			const subject = encodeURIComponent(
-				`Schule mit der Nummer: ${
-					officialSchoolNumber.value ?? "???"
-				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
-			);
-
-			return subject;
-		};
-
-		const supportLink = computed(
-			() => `mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`
-		);
-
-		const globalFeatureEnableLdapSyncDuringMigration = computed(
-			() => useEnvConfig().value.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
-		);
-
-		const globalFeatureShowOutdatedUsers = computed(() => useEnvConfig().value.FEATURE_SHOW_OUTDATED_USERS);
-
-		const isSchoolMigrated = computed(() => {
-			let hasTargetSystem = false;
-
-			if (userLoginMigration.value?.targetSystemId) {
-				hasTargetSystem = schoolsModule.getSchool.systemIds.includes(userLoginMigration.value.targetSystemId);
-			}
-
-			return hasTargetSystem;
-		});
-
-		const showMigrationWizard = computed(() => !!useEnvConfig().value.FEATURE_SHOW_MIGRATION_WIZARD);
-
-		const isMigrationFinished = computed(() => !!userLoginMigration.value?.finishedAt);
-
-		const setSchoolFeatures = async () => {
-			await schoolsModule.update({
-				id: school.value.id,
-				props: {
-					features: mapSchoolFeatureObjectToArray(school.value.featureObject),
-				},
-			});
-		};
-
-		const contactEmailLink: ComputedRef<string> = computed(() =>
-			sanitizeUrl(`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}}?subject=Schulnummer nicht korrekt`)
-		);
-
-		return {
-			userLoginMigration,
-			onStartMigration,
-			setMigrationMandatory,
-			onCloseMigration,
-			t,
-			isEndWarningVisible,
-			onToggleShowEndWarning,
-			isStartWarningVisible,
-			onToggleShowStartWarning,
-			isStartButtonVisible,
-			isEndButtonVisible,
-			isShowMandatorySwitch,
-			isGracePeriodExpired,
-			latestMigration,
-			dayjs,
-			supportLink,
-			school,
-			setSchoolFeatures,
-			globalFeatureShowOutdatedUsers,
-			globalFeatureEnableLdapSyncDuringMigration,
-			officialSchoolNumber,
-			isMigrationActive,
-			isMigrationMandatory,
-			mdiCheck,
-			showMigrationWizard,
-			isMigrationFinished,
-			isSchoolMigrated,
-			error,
-			getBusinessErrorTranslationKey,
-			mdiAlertCircle,
-			contactEmailLink,
-		};
-	},
-	methods: { formatUtc },
 });
+
+const { t } = useI18n();
+const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const {
+	userLoginMigration,
+	businessError,
+	fetchLatestUserLoginMigrationForSchool,
+	startUserLoginMigration,
+	restartUserLoginMigration,
+	setUserLoginMigrationMandatory,
+	closeUserLoginMigration,
+} = useUserLoginMigration();
+
+onMounted(async () => {
+	await fetchLatestUserLoginMigrationForSchool();
+});
+
+const isMigrationActive = computed<boolean>(
+	() => !!userLoginMigration.value?.startedAt && !userLoginMigration.value.closedAt
+);
+
+const isMigrationMandatory = computed<boolean>(() => !!userLoginMigration.value?.mandatorySince);
+
+const error = computed<BusinessError | undefined>(() =>
+	businessError.value.message ? businessError.value : undefined
+);
+
+const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
+
+const onStartMigration = () => {
+	if (userLoginMigration.value) {
+		restartUserLoginMigration();
+	} else {
+		startUserLoginMigration();
+	}
+};
+
+const setMigrationMandatory = (mandatory: boolean) => {
+	setUserLoginMigrationMandatory(mandatory);
+};
+
+const onCloseMigration = () => {
+	closeUserLoginMigration();
+};
+
+const school = computed<School>(() => schoolsModule.getSchool);
+
+const isEndWarningVisible = ref<boolean>(false);
+
+const onToggleShowEndWarning = () => {
+	isEndWarningVisible.value = !isEndWarningVisible.value;
+};
+
+const isStartWarningVisible = ref<boolean>(false);
+
+const onToggleShowStartWarning = () => {
+	isStartWarningVisible.value = !isStartWarningVisible.value;
+};
+
+const isEndButtonVisible = computed<boolean>(
+	() => isMigrationActive.value && !isEndWarningVisible.value && !isStartWarningVisible.value
+);
+
+const isStartButtonVisible = computed<boolean>(
+	() => !isEndButtonVisible.value && !isEndWarningVisible.value && !isStartWarningVisible.value
+);
+
+const isShowMandatorySwitch = computed<boolean>(() => !isEndWarningVisible.value && !isStartWarningVisible.value);
+
+const isGracePeriodExpired = computed<boolean>(() => {
+	if (userLoginMigration.value?.finishedAt) {
+		return Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime();
+	}
+
+	return false;
+});
+
+const latestMigration = computed(() => {
+	if (isGracePeriodExpired.value) {
+		return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
+	} else {
+		return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
+	}
+});
+
+const officialSchoolNumber = computed<string | undefined>(() => schoolsModule.getSchool.officialSchoolNumber);
+
+const getSubject = (): string => {
+	const subject = encodeURIComponent(
+		`Schule mit der Nummer: ${
+			officialSchoolNumber.value ?? "???"
+		} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
+	);
+
+	return subject;
+};
+
+const supportLink = computed(() => `mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`);
+
+const globalFeatureEnableLdapSyncDuringMigration = computed(
+	() => useEnvConfig().value.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
+);
+
+const globalFeatureShowOutdatedUsers = computed(() => useEnvConfig().value.FEATURE_SHOW_OUTDATED_USERS);
+
+const isSchoolMigrated = computed(() => {
+	let hasTargetSystem = false;
+
+	if (userLoginMigration.value?.targetSystemId) {
+		hasTargetSystem = schoolsModule.getSchool.systemIds.includes(userLoginMigration.value.targetSystemId);
+	}
+
+	return hasTargetSystem;
+});
+
+const showMigrationWizard = computed(() => !!useEnvConfig().value.FEATURE_SHOW_MIGRATION_WIZARD);
+
+const isMigrationFinished = computed(() => !!userLoginMigration.value?.finishedAt);
+
+const setSchoolFeatures = async () => {
+	await schoolsModule.update({
+		id: school.value.id,
+		props: {
+			features: mapSchoolFeatureObjectToArray(school.value.featureObject),
+		},
+	});
+};
+
+const contactEmailLink = computed<string>(() =>
+	sanitizeUrl(`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}}?subject=Schulnummer nicht korrekt`)
+);
 </script>
 
 <style lang="scss" scoped>
