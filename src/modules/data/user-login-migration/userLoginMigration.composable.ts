@@ -1,6 +1,7 @@
+import { UserLoginMigration } from "./user-login-migration";
+import { UserLoginMigrationMapper } from "./user-login-migration.mapper";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { UserLoginMigration, UserLoginMigrationMapper } from "@/store/user-login-migration";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	UserLoginMigrationApiFactory,
