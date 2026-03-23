@@ -20,22 +20,6 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="rocketChatEnabled">
-			<v-col>
-				<v-switch
-					:model-value="features.rocketChat"
-					:label="$t('pages.administration.school.index.privacySettings.labels.chatFunction')"
-					:aria-label="$t('pages.administration.school.index.privacySettings.labels.chatFunction')"
-					:true-icon="mdiCheck"
-					class="ml-1 mt-0"
-					data-testid="toggle_chat"
-					@update:model-value="($event) => $emit('update-feature-settings', $event, 'rocketChat')"
-				/>
-				<p class="switch-hint">
-					{{ $t("pages.administration.school.index.privacySettings.longText.chatFunction") }}
-				</p>
-			</v-col>
-		</v-row>
 		<v-row v-if="videoConferenceEnabled">
 			<v-col>
 				<v-switch
@@ -101,8 +85,6 @@ const isTeacherStudentVisibilityVisible = computed(() => envConfig.value.TEACHER
 const videoConferenceEnabled = computed(() => envConfig.value.FEATURE_VIDEOCONFERENCE_ENABLED);
 
 const aiTutorEnabled = computed(() => envConfig.value.FEATURE_AI_TUTOR_ENABLED);
-
-const rocketChatEnabled = computed(() => envConfig.value.ROCKETCHAT_SERVICE_ENABLED);
 
 const theme = computed(() => envConfig.value.SC_THEME);
 

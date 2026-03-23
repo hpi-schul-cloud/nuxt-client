@@ -60,7 +60,6 @@ export default class SchoolsModule extends VuexModule {
 		purpose: undefined,
 		features: [],
 		featureObject: {
-			[SchoolFeature.ROCKET_CHAT]: false,
 			[SchoolFeature.VIDEOCONFERENCE]: false,
 			[SchoolFeature.STUDENT_VISIBILITY]: false,
 			[SchoolFeature.LDAP_UNIVENTION_MIGRATION_SCHOOL]: false,

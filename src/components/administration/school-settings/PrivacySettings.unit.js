@@ -11,14 +11,12 @@ const generateProps = () => ({
 		},
 	},
 	features: {
-		rocketChat: true,
 		videoconference: true,
 	},
 });
 
 const searchStrings = {
 	studentVisibility: "admin-school-toggle-student-visibility",
-	rocketChat: "toggle_chat",
 	videoconference: "toggle_video_conference",
 	aiTutor: "toggle_ai_tutor",
 };
@@ -120,24 +118,6 @@ describe("PrivacySettings", () => {
 				const wrapper = getWrapper();
 
 				expect(wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)).toHaveLength(0);
-			});
-		});
-
-		describe("when env var for rocketchat is true", () => {
-			it("should display rocketchat feature switch", () => {
-				createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: true });
-				const wrapper = getWrapper();
-
-				expect(wrapper.findAll(`[data-testid=${searchStrings.rocketChat}]`)).toHaveLength(1);
-			});
-		});
-
-		describe("when env var for rocketchat is false", () => {
-			it("should hide rocketchat feature switch", () => {
-				createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: false });
-				const wrapper = getWrapper();
-
-				expect(wrapper.findAll(`[data-testid=${searchStrings.rocketChat}]`)).toHaveLength(0);
 			});
 		});
 	});
@@ -265,39 +245,6 @@ describe("PrivacySettings", () => {
 				expect(videoconferenceSwitch.props().modelValue).toBe(false);
 			});
 		});
-
-		describe("rocketchat switch", () => {
-			it("should be set to true based on school feature", () => {
-				createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: true });
-
-				const wrapper = getWrapper(
-					Object.assign(generateProps(), {
-						features: {
-							rocketChat: true,
-						},
-					})
-				);
-
-				const rocketChatSwitch = wrapper.findComponent(`[data-testid=${searchStrings.rocketChat}]`);
-
-				expect(rocketChatSwitch.props().modelValue).toBe(true);
-			});
-
-			it("should be set to false based on school feature", () => {
-				createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: true });
-				const wrapper = getWrapper(
-					Object.assign(generateProps(), {
-						features: {
-							rocketChat: false,
-						},
-					})
-				);
-
-				const rocketChatSwitch = wrapper.findComponent(`[data-testid=${searchStrings.rocketChat}]`);
-
-				expect(rocketChatSwitch.props().modelValue).toBe(false);
-			});
-		});
 	});
 
 	describe("events", () => {
@@ -322,27 +269,6 @@ describe("PrivacySettings", () => {
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
 			expect(emitted["update-privacy-settings"][1][0]).toBe(true);
 			expect(emitted["update-privacy-settings"][1][1]).toBe("teacher.STUDENT_LIST");
-		});
-
-		it("should emit on value change for rocketChat switch", () => {
-			createTestEnvStore({ ROCKETCHAT_SERVICE_ENABLED: true });
-
-			const wrapper = getWrapper();
-
-			const rocketChatSwitch = wrapper.findComponent(`[data-testid=${searchStrings.rocketChat}]`);
-			rocketChatSwitch.vm.$emit("update:modelValue", false);
-
-			let emitted = wrapper.emitted();
-			expect(emitted["update-feature-settings"]).toHaveLength(1);
-			expect(emitted["update-feature-settings"][0][0]).toBe(false);
-			expect(emitted["update-feature-settings"][0][1]).toBe("rocketChat");
-
-			rocketChatSwitch.vm.$emit("update:modelValue", true);
-
-			emitted = wrapper.emitted();
-			expect(emitted["update-feature-settings"]).toHaveLength(2);
-			expect(emitted["update-feature-settings"][1][0]).toBe(true);
-			expect(emitted["update-feature-settings"][1][1]).toBe("rocketChat");
 		});
 
 		it("should emit on value change for videoConference switch", () => {
