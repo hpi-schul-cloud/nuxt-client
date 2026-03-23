@@ -70,7 +70,6 @@ export * from "./toolParameterEntryFactory";
 export * from "./toolParameterFactory";
 export * from "./toolReferenceResponseFactory";
 export * from "./userCreationDataFactory";
-export * from "./userDataResponseFactory";
 export * from "./userLoginMigration.factory";
 export * from "./userLoginMigrationResponse.factory";
 export * from "./userResponseFactory";

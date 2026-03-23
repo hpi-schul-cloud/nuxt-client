@@ -1,7 +1,6 @@
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios } from "@/utils/api";
-import { FileConfigApiFactory } from "@api-file-storage";
-import { FilesStorageConfigResponse } from "@api-file-storage";
+import { FileConfigApiFactory, FilesStorageConfigResponse } from "@api-file-storage";
 import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory, Timezone } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createSharedComposable } from "@vueuse/core";
@@ -44,7 +43,6 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
 	FEATURE_VIDEOCONFERENCE_ENABLED: false,
 	FEATURE_COLUMN_BOARD_ENABLED: false,
-	FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
 	FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: false,
 	FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
 	FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: false,
@@ -64,7 +62,6 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
 	FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
 	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: false,
-	ROCKETCHAT_SERVICE_ENABLED: false,
 	FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
 	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 	FEATURE_MEDIA_SHELF_ENABLED: false,

@@ -166,12 +166,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: boolean;
     /**
      * 
@@ -311,12 +305,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     GHOST_BASE_URL: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    ROCKETCHAT_SERVICE_ENABLED: boolean;
     /**
      * 
      * @type {Array<LanguageType>}
