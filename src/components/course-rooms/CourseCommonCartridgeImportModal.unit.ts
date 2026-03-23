@@ -70,7 +70,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 			const testFile = new File([], "test.imscc");
 
 			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
-			await fileInput.setValue([testFile]);
+			await fileInput.setValue(testFile);
 
 			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 			await confirmBtn.trigger("click");
