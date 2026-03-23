@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 describe("DashboardTasksAssigned", () => {
 	const setup = (tasks = [taskResponseFactory.build()]) => {
 		const wrapper = shallowMount(DashboardTasksAssigned, {
-			props: { tasks },
+			props: { tasks, title: "Any Title", emptyMsg: "Any Empty Message" },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 		return { wrapper };
