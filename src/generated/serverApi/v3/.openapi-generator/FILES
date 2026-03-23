@@ -12,7 +12,6 @@ api/board-card-api.ts
 api/board-column-api.ts
 api/board-element-api.ts
 api/board-error-report-api.ts
-api/board-submission-api.ts
 api/collaborative-storage-api.ts
 api/collaborative-text-editor-api.ts
 api/course-info-api.ts
@@ -145,7 +144,6 @@ models/create-news-params.ts
 models/create-or-update-registration-body-params.ts
 models/create-room-body-params.ts
 models/create-room-invitation-link-body-params.ts
-models/create-submission-item-body-params.ts
 models/custom-parameter-entry-param.ts
 models/custom-parameter-entry-response.ts
 models/custom-parameter-location-params.ts
@@ -371,14 +369,8 @@ models/share-token-payload-response.ts
 models/share-token-response.ts
 models/short-node-response.ts
 models/single-column-board-response.ts
-models/submission-container-content-body.ts
-models/submission-container-element-content-body.ts
-models/submission-container-element-content.ts
-models/submission-container-element-response.ts
-models/submission-item-response.ts
 models/submission-status-list-response.ts
 models/submission-status-response.ts
-models/submissions-response.ts
 models/successful-response.ts
 models/system-for-ldap-login-response.ts
 models/system-type.ts
@@ -407,9 +399,7 @@ models/update-news-params.ts
 models/update-room-body-params.ts
 models/update-room-invitation-link-body-params.ts
 models/update-runtime-config-value-body-params.ts
-models/update-submission-item-body-params.ts
 models/user-consent-response.ts
-models/user-data-response.ts
 models/user-info-response.ts
 models/user-list-response.ts
 models/user-login-migration-mandatory-params.ts

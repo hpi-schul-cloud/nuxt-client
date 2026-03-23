@@ -1,1 +1,2 @@
-export * from "./users.composable";
+export * from "./bulk-consent.composable";
+export * from "./users.store";
