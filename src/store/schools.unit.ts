@@ -51,13 +51,12 @@ describe("schools module", () => {
 			it("should set school state correctly", async () => {
 				createTestAppStore();
 				const mockSchoolResponse = schoolResponseFactory.build({
-					features: [serverApi.SchoolFeature.ROCKET_CHAT, serverApi.SchoolFeature.VIDEOCONFERENCE],
+					features: [serverApi.SchoolFeature.VIDEOCONFERENCE],
 				});
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(mockApiResponse({ data: mockSchoolResponse }));
 				const schoolsModule = new SchoolsModule({});
 
 				const expectedFeatureObject: Record<SchoolFeature, boolean> = {
-					rocketChat: true,
 					videoconference: true,
 					studentVisibility: false,
 					ldapUniventionMigrationSchool: false,
@@ -141,7 +140,7 @@ describe("schools module", () => {
 			it("should call backend and set state correctly", async () => {
 				const uploadData = {
 					name: "Paul Newname Gymnasium",
-					features: [serverApi.SchoolFeature.ROCKET_CHAT],
+					features: [serverApi.SchoolFeature.VIDEOCONFERENCE],
 				};
 
 				const mockSchoolResponse = schoolResponseFactory.build();
@@ -155,7 +154,7 @@ describe("schools module", () => {
 				await schoolsModule.update({ id: "111", props: uploadData });
 
 				expect(schoolApi.schoolControllerUpdateSchool).toHaveBeenCalledWith("111", {
-					features: ["rocketChat"],
+					features: ["videoconference"],
 					name: "Paul Newname Gymnasium",
 				});
 				expect(setLoadingSpy).toHaveBeenCalled();
@@ -168,7 +167,7 @@ describe("schools module", () => {
 			it("should trigger error and goes into the catch block", async () => {
 				const uploadData = {
 					data: "some data to be updated",
-					features: [serverApi.SchoolFeature.ROCKET_CHAT],
+					features: [serverApi.SchoolFeature.VIDEOCONFERENCE],
 				};
 				const schoolsModule = new SchoolsModule({});
 				schoolApi.schoolControllerUpdateSchool.mockRejectedValueOnce(new AxiosError());
