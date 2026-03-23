@@ -4,11 +4,12 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<KebabMenuActionDelete scope-language-key="components.cardElement.deletedElement" @click="onDelete" />
+		<KebabMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuActionDelete } from "@ui-kebab-menu";
 
@@ -22,8 +23,8 @@ const emit = defineEmits<{
 	(e: "delete:element"): void;
 }>();
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.deletedElement");
 	if (shouldDelete) {
 		emit("delete:element");
 	}

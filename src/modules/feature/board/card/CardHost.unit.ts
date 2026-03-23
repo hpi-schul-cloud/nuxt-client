@@ -6,15 +6,14 @@ import ContentElementList from "./ContentElementList.vue";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useCardSocketApi } from "@/modules/data/board/cardActions/cardSocketApi.composable";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { mockComposable, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { cardResponseFactory, fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { BoardResponseAllowedOperations, CardResponse } from "@api-server";
 import { useBoardFocusHandler, useCardStore, useCourseBoardEditMode, useSharedEditMode } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
@@ -35,7 +34,6 @@ vi.mock("@data-board/BoardFocusHandler.composable");
 vi.mock("@data-board/edit-mode.composable");
 
 vi.mock("../shared/AddElementDialog.composable");
-vi.mock("@ui-confirmation-dialog");
 
 vi.mock("@data-board/cardActions/cardRestApi.composable");
 vi.mocked(useCardRestApi).mockReturnValue(mockComposable(useCardRestApi));
@@ -74,17 +72,6 @@ describe("CardHost", () => {
 		);
 
 		setupAddElementDialogMock();
-		const askDeleteConfirmationMock = () => Promise.resolve(true);
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
-		});
-
-		vi.mocked(useDeleteConfirmationDialog).mockReturnValue(
-			mockComposable(useDeleteConfirmationDialog, {
-				askDeleteConfirmation: askDeleteConfirmationMock,
-				isDeleteDialogOpen: ref(false),
-			})
-		);
 
 		vi.mocked(useSharedLastCreatedElement).mockReturnValue(mockComposable(useSharedLastCreatedElement));
 
@@ -297,12 +284,14 @@ describe("CardHost", () => {
 		});
 
 		describe("when users click delete menu", () => {
-			it("should emit 'delete:card'", async () => {
+			it("should emit 'delete:card' when confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 				const { wrapper } = setup({ allowedOperations: { deleteCard: true } });
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
-				await deleteButton.vm.$emit("click", true);
+				await deleteButton.trigger("click");
 
+				expect(confirmDialogUtils.askDeletionForType).toHaveBeenCalledWith("components.boardCard");
 				expect(wrapper.emitted("delete:card")).toHaveLength(1);
 			});
 		});

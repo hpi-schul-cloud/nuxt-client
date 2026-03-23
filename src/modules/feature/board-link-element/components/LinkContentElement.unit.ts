@@ -2,6 +2,7 @@ import { MetaTagResult, useMetaTagExtractorApi } from "../composables/MetaTagExt
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -12,7 +13,7 @@ import { BoardMenu } from "@ui-board";
 import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { Mocked } from "vitest";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 
 vi.mock("@data-board/ContentElementState.composable");
 
@@ -331,6 +332,7 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 					const linkElementContent = linkElementContentFactory.build();
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
@@ -516,6 +518,7 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
@@ -576,10 +579,7 @@ describe("LinkContentElement", () => {
 						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(fakeMetaTags);
 
 						const component = wrapper.getComponent(LinkContentElementCreate);
-						component.vm.$emit("create:url", url);
-						await nextTick();
-						await nextTick();
-						await nextTick();
+						await component.vm.$emit("create:url", url);
 
 						expect(usePreviewGeneratorMock.createPreviewImage).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
 					});

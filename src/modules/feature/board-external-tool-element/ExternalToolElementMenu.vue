@@ -9,15 +9,12 @@
 		<KebabMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ t("common.labels.settings") }}
 		</KebabMenuAction>
-		<KebabMenuActionDelete
-			:name="displayName"
-			scope-language-key="components.cardElement.externalToolElement"
-			@click="onDelete"
-		/>
+		<KebabMenuActionDelete :name="displayName" @click="onDelete" />
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { mdiCogOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { KebabMenuAction, KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
@@ -39,8 +36,8 @@ defineProps({
 const emit = defineEmits(["edit:element", "delete:element", "move-down:element", "move-up:element"]);
 const onEdit = () => emit("edit:element");
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.externalToolElement");
 	if (shouldDelete) {
 		emit("delete:element");
 	}

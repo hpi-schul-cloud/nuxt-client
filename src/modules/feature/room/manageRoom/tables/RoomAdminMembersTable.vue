@@ -46,15 +46,14 @@
 		:is-admin-mode="true"
 		@close="onDialogClose"
 	/>
-	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import ChangeRole from "../../roomMembers/dialogs/ChangeRole.vue";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { RoleName } from "@api-server";
 import { RoomMember, useRoomMembersStore } from "@data-room";
 import { mdiAccountClockOutline, mdiAccountOutline, mdiAccountSchoolOutline } from "@icons/material";
-import { ConfirmationDialog, useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu, KebabMenuActionChangePermission, KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 import { storeToRefs } from "pinia";
@@ -76,7 +75,6 @@ const roomMembersStore = useRoomMembersStore();
 roomMembersStore.setAdminMode(true);
 const { roomMembersWithoutApplicants, selectedIds, baseTableHeaders } = storeToRefs(roomMembersStore);
 const { removeMembers, fetchMembers } = roomMembersStore;
-const { askConfirmation } = useConfirmationDialog();
 
 const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
@@ -117,19 +115,6 @@ const getSchoolRoleIcon = (schoolRoleNames: RoleName[]) => {
 	return undefined;
 };
 
-const confirmRemoval = async (userIds: string[]) => {
-	let message = t("pages.rooms.members.multipleRemove.confirmation");
-	if (userIds.length === 1) {
-		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
-		message = t("pages.rooms.members.remove.confirmation", { memberFullName });
-	}
-	const shouldRemove = await askConfirmation({
-		message,
-		confirmActionLangKey: "common.actions.remove",
-	});
-	return shouldRemove;
-};
-
 const canChangeRole = (userIds: string[]) => {
 	if (userIds.length !== 1) return false;
 	const member = roomMembersStore.getMemberById(userIds[0]);
@@ -144,9 +129,18 @@ const canRemoveMember = (userIds: string[]) => {
 	});
 };
 
-const onRemoveMembers = async (ids: string[]) => {
-	const shouldRemove = await confirmRemoval(ids);
-	if (shouldRemove) await removeMembers(ids);
+const onRemoveMembers = async (userIds: string[]) => {
+	let title = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const memberFullName = roomMembersStore.getMemberFullName(userIds[0]);
+		title = t("pages.rooms.members.remove.confirmation", { memberFullName });
+	}
+	const shouldRemove = await askConfirmation({
+		title,
+		confirmBtnKey: "common.actions.remove",
+	});
+
+	if (shouldRemove) await removeMembers(userIds);
 };
 
 const onChangePermission = (ids: string[]) => {

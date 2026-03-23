@@ -28,7 +28,6 @@
 			@download-files-as-archive="downloadFilesAsArchiveHandler"
 		/>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<RenameFolderDialog
 		v-model:is-dialog-open="isRenameDialogOpen"
 		:name="folderName"
@@ -46,6 +45,7 @@ import FolderMenu from "./FolderMenu.vue";
 import RenameFolderDialog from "./RenameFolderDialog.vue";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { downloadFile, downloadFilesAsArchive } from "@/utils/fileHelper";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useBoardAllowedOperations, useBoardApi, useBoardStore, useSharedBoardPageInformation } from "@data-board";
@@ -55,7 +55,6 @@ import { useFolderState } from "@data-folder";
 import type { CreateCollaboraFilePayload } from "@feature-collabora";
 import { AddCollaboraFileDialog, useAddCollaboraFile } from "@feature-collabora";
 import { mdiFileDocumentPlusOutline, mdiPlus, mdiTrayArrowUp } from "@icons/material";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { DefaultWireframe } from "@ui-layout";
 import { LightBox } from "@ui-light-box";
 import { FabAction } from "@ui-speed-dial-menu";
@@ -153,8 +152,8 @@ const uploadFile = () => {
 	}
 };
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
+const onDelete = async () => {
+	const shouldDelete = await askDeletionForType("components.cardElement.folderElement");
 
 	if (!shouldDelete) {
 		return;

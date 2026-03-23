@@ -57,3 +57,8 @@ declare module "@/assets/img/collabora.svg" {
 	const value: string;
 	export default value;
 }
+
+declare module "@/assets/img/safely_connected.png" {
+	const value: string;
+	export default value;
+}

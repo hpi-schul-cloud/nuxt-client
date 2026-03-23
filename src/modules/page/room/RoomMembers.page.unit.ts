@@ -2,8 +2,8 @@ import RoomMembersPage from "./RoomMembers.page.vue";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { Tab } from "@/types/room/RoomMembers";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestEnvStore, mockedPiniaStoreTyping, roomMemberFactory, schoolFactory } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -26,7 +26,6 @@ import {
 } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import { DefaultWireframe } from "@ui-layout";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
@@ -34,12 +33,9 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { setActivePinia } from "pinia";
 import { Mock } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
 import { VBtn, VCard, VDialog, VSkeletonLoader, VTab, VTabs } from "vuetify/components";
-
-vi.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
 
 vi.mock("@vueuse/integrations/useFocusTrap", () => ({
 	useFocusTrap: vi.fn(),
@@ -47,7 +43,6 @@ vi.mock("@vueuse/integrations/useFocusTrap", () => ({
 
 describe("RoomMembersPage", () => {
 	let router: RouterMock;
-	let askConfirmationMock: Mock;
 
 	let pauseMock: Mock;
 	let unpauseMock: Mock;
@@ -56,11 +51,6 @@ describe("RoomMembersPage", () => {
 	const routeRoomId = "room-id";
 
 	beforeEach(() => {
-		mockedUseRemoveConfirmationDialog.mockReturnValue({
-			askConfirmation: askConfirmationMock,
-			isDialogOpen: ref(false),
-		});
-
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
@@ -75,11 +65,6 @@ describe("RoomMembersPage", () => {
 		router = createRouterMock();
 		router.setParams({ id: routeRoomId });
 		injectRouterMock(router);
-
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
 
 		pauseMock = vi.fn();
 		unpauseMock = vi.fn();
@@ -255,40 +240,26 @@ describe("RoomMembersPage", () => {
 		});
 
 		describe("when user can leave the room", () => {
-			it("should open confirmation dialog when member can leave room", async () => {
-				const { wrapper } = setup({ allowedOperations: { leaveRoom: true, viewMemberlist: true } });
-				askConfirmationMock.mockResolvedValue(true);
-
-				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
-				await menuBtn.trigger("click");
-
-				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
-				await leaveMenu.trigger("click");
-
-				expect(askConfirmationMock).toHaveBeenCalledWith({
-					confirmActionLangKey: "common.actions.leave",
-					message: "pages.rooms.leaveRoom.confirmation",
-				});
-			});
-
-			it("should call remove method after confirmation", async () => {
+			it("should call leaveRoom when confirmed", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper, roomMembersStore } = setup({ allowedOperations: { leaveRoom: true, viewMemberlist: true } });
 
-				askConfirmationMock.mockResolvedValue(true);
-
 				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
 
 				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
 
+				expect(confirmDialogUtils.askConfirmation).toHaveBeenCalledWith({
+					title: "pages.rooms.leaveRoom.confirmation",
+					confirmBtnKey: "common.actions.leave",
+				});
 				expect(roomMembersStore.leaveRoom).toHaveBeenCalled();
 			});
 
-			it("should not call remove method when dialog is cancelled", async () => {
+			it("should not call leaveRoom when cancelled", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(false);
 				const { wrapper, roomMembersStore } = setup({ allowedOperations: { leaveRoom: true, viewMemberlist: true } });
-
-				askConfirmationMock.mockResolvedValue(false);
 
 				const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 				await menuBtn.trigger("click");
@@ -296,7 +267,7 @@ describe("RoomMembersPage", () => {
 				const leaveMenu = wrapper.findComponent('[data-testid="kebab-menu-action-leave-room"]');
 				await leaveMenu.trigger("click");
 
-				expect(roomMembersStore.removeMembers).not.toHaveBeenCalled();
+				expect(roomMembersStore.leaveRoom).not.toHaveBeenCalled();
 			});
 		});
 
