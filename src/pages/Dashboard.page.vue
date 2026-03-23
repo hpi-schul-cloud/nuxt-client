@@ -44,7 +44,7 @@
 				</template>
 			</SvsLoadingSpinner>
 
-			<DashBoardTasks v-if="isTeacher || isStudent" />
+			<DashboardTasks v-if="isTeacher || isStudent" />
 
 			<!-- Dashboard new release announcement      -->
 			<SvsDialog
@@ -91,7 +91,7 @@ import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
 import { SvsLoadingSpinner } from "@ui-containers";
-import { DashBoardTasks } from "@ui-dashboard";
+import { DashboardTasks } from "@ui-dashboard";
 import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";

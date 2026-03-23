@@ -989,8 +989,6 @@ export default {
 	"pages.dashboard.no.due.date": "Kein Abgabedatum festgelegt",
 	"pages.dashboard.welcome": "Hallo",
 	"pages.dashboard.schedule": "Stundenplan",
-	"pages.dashboard.schedule.with.feedback": "Aufgaben mit Lehrkräfte-Kommentar",
-	"pages.dashboard.schedule.with.required.feedback": "Aufgaben mit unkommentierten Abgaben",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss {0} eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "nicht",

@@ -1,4 +1,4 @@
-<!-- DashboardTasksAssigned.vue -->
+<!-- DashboardTasksOpen.vue -->
 <template>
 	<template v-if="!tasks || tasks.length === 0">
 		<h2>{{ t("common.words.tasks") }}</h2>
@@ -6,7 +6,7 @@
 			<template #media> <SvgTasksEmpty /></template>
 		</EmptyState>
 	</template>
-	<DashboardTasksSection v-else data-testid="assigned-tasks" :title :tasks />
+	<DashboardTasksSection v-else :data-testid="testId" :title :tasks />
 </template>
 <script setup lang="ts">
 import DashboardTasksSection from "./DashboardTasksSection.vue";
@@ -18,6 +18,7 @@ import { useI18n } from "vue-i18n";
 defineProps<{
 	title: string;
 	emptyMsg: string;
+	testId: string;
 	tasks: TaskResponse[];
 }>();
 

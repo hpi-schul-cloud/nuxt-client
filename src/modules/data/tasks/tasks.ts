@@ -16,14 +16,16 @@ const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] 
 };
 
 export const isTaskOverdue = (t: TaskResponse) => !!t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
+export const isGradedForTeacher = (t: TaskResponse) => t.status.graded === t.status.submitted;
+export const isGradedForStudent = (t: TaskResponse) => t.status.graded > 0;
 
 type DateRange = {
 	from: { amount: number; unit: ManipulateType };
 	to: { amount: number; unit: ManipulateType };
 };
 
-export const TASKS_ONE_YEAR_RANGE: DateRange = {
-	from: { amount: 1, unit: "year" },
+export const TASKS_RECENT_RANGE: DateRange = {
+	from: { amount: 1, unit: "month" },
 	to: { amount: 14, unit: "day" },
 };
 
@@ -54,31 +56,19 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 
 	const draft = computed(() => tasks.value.filter((t) => t.status.isDraft));
 
-	const notDraft = computed(() => tasks.value.filter((t) => !t.status.isDraft));
+	const publishedTasks = computed(() => tasks.value.filter((t) => !t.status.isDraft));
+	const overdue = computed(() => publishedTasks.value.filter(isTaskOverdue));
 
-	const pendingTasks = computed(() => notDraft.value.filter((t) => !isTaskOverdue(t)));
-
-	const assignedToTeacher = computed(() =>
-		pendingTasks.value.filter((t) => t.status.submitted < t.status.maxSubmissions)
+	const openTasksForTeacher = computed(() => publishedTasks.value.filter((t) => !isTaskOverdue(t)));
+	const openTasksForStudents = computed(() =>
+		publishedTasks.value.filter((t) => t.status.submitted === 0 && !t.lessonHidden)
 	);
 
-	const assignedToStudent = computed(() =>
-		pendingTasks.value.filter(
-			(t) => t.status.submitted === 0 && t.status.graded === 0 && !t.lessonHidden && !isTaskOverdue(t)
-		)
-	);
+	const ungradedForTeacher = computed(() => overdue.value.filter((t) => !isGradedForTeacher(t)));
+	const ungradedForStudent = computed(() => publishedTasks.value.filter((t) => !isGradedForStudent(t)));
 
-	const overdue = computed(() => notDraft.value.filter(isTaskOverdue));
-
-	const feedbackRequired = computed(() =>
-		notDraft.value.filter(
-			(t) =>
-				t.status.maxSubmissions > t.status.graded &&
-				((isTaskOverdue(t) && t.status.submitted > t.status.graded) || (!t.dueDate && t.status.submitted > 0))
-		)
-	);
-
-	const withFeedback = computed(() => notDraft.value.filter((t) => t.status.graded > 0));
+	const gradedForTeacher = computed(() => overdue.value.filter(isGradedForTeacher));
+	const gradedForStudent = computed(() => publishedTasks.value.filter(isGradedForStudent));
 
 	const fetch = async () => {
 		const { success, result } = await execute(fetchAllTasks);
@@ -96,11 +86,12 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		fetch,
 		tasks,
 		draft,
-		notDraft,
 		overdue,
-		assignedToTeacher,
-		assignedToStudent,
-		withFeedback,
-		feedbackRequired,
+		openTasksForTeacher,
+		openTasksForStudents,
+		ungradedForTeacher,
+		ungradedForStudent,
+		gradedForTeacher,
+		gradedForStudent,
 	};
 };

@@ -54,6 +54,7 @@ describe("useApplicationStore", () => {
 			meControllerMe(): AxiosPromise<MeResponse> {
 				return Promise.resolve(mockApiResponse({ data }));
 			},
+			meControllerUpdateMePreferences: vi.fn(),
 		});
 	};
 
@@ -172,6 +173,7 @@ describe("useApplicationStore", () => {
 
 			mockedMeApi.mockReturnValue({
 				meControllerMe: vi.fn().mockRejectedValue(new Error("Me data not available.")),
+				meControllerUpdateMePreferences: vi.fn(),
 			});
 
 			expect(store.isLoggedIn).toBe(false);

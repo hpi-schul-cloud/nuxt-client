@@ -63,7 +63,7 @@ describe("DashboardPage", () => {
 		);
 
 		const wrapper = mount(DashboardPage, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: ["DashBoardTasks"] },
+			global: { plugins: [createTestingVuetify(), createTestingI18n()], stubs: ["DashboardTasks"] },
 		});
 
 		return { wrapper };
@@ -95,21 +95,21 @@ describe("DashboardPage", () => {
 	});
 
 	describe("dashboard tasks", () => {
-		it("shows DashBoardTasks for teachers", async () => {
+		it("shows DashboardTasks for teachers", async () => {
 			const { wrapper } = setup({ roleName: RoleName.TEACHER });
 			await flushPromises();
 
 			expect(wrapper.findComponent({ name: "DashBoardTasks" }).exists()).toBe(true);
 		});
 
-		it("shows DashBoardTasks for students", async () => {
+		it("shows DashboardTasks for students", async () => {
 			const { wrapper } = setup({ roleName: RoleName.STUDENT });
 			await flushPromises();
 
 			expect(wrapper.findComponent({ name: "DashBoardTasks" }).exists()).toBe(true);
 		});
 
-		it("does not show DashBoardTasks for other roles", async () => {
+		it("does not show DashboardTasks for other roles", async () => {
 			const { wrapper } = setup();
 			await flushPromises();
 

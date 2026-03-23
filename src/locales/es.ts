@@ -991,8 +991,6 @@ export default {
 	"pages.dashboard.no.due.date": "No se ha fijado una fecha de envío",
 	"pages.dashboard.welcome": "Hola",
 	"pages.dashboard.schedule": "Programación",
-	"pages.dashboard.schedule.with.feedback": "Envíos con comentarios de los profesores",
-	"pages.dashboard.schedule.with.required.feedback": "Las tareas con envíos todavía no tienen comentarios",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "No",

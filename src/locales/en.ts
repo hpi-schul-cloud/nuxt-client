@@ -973,8 +973,6 @@ export default {
 	"pages.dashboard.no.due.date": "No submission date set",
 	"pages.dashboard.welcome": "Hello",
 	"pages.dashboard.schedule": "Schedule",
-	"pages.dashboard.schedule.with.feedback": "Submissions with teacher's comments",
-	"pages.dashboard.schedule.with.required.feedback": "Tasks with submissions without comments yet",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"A declaration of consent does {0} need to be obtained when registering students. The use of the Niedersächsischen Bildungscloud is regulated in the Lower Saxony Schools Act (Section 31 Para. 5 NSchG).",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "not",

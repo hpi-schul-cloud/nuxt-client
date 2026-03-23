@@ -26,7 +26,12 @@
 									task.status?.maxSubmissions
 								}}
 							</VChip>
-							<VChip v-if="task.status?.maxSubmissions" size="small" variant="tonal" data-testid="task-graded">
+							<VChip
+								v-if="task.status?.maxSubmissions && task.status.submitted"
+								size="small"
+								variant="tonal"
+								data-testid="task-graded"
+							>
 								{{ t("pages.room.taskCard.label.graded") }}
 								{{ task.status.graded }}/{{ task.status.submitted }}
 							</VChip>

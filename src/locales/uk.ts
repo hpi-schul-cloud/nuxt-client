@@ -987,8 +987,6 @@ export default {
 	"pages.dashboard.no.due.date": "Дата подання не встановлена",
 	"pages.dashboard.welcome": "Вітаємо",
 	"pages.dashboard.schedule": "Розклад",
-	"pages.dashboard.schedule.with.feedback": "Подання з коментарями викладача",
-	"pages.dashboard.schedule.with.required.feedback": "Завдання з поданнями ще без коментарів",
 	"pages.classMembers.infoBox.text.firstParagraph":
 		"Заява про згоду {0} потрібна під час реєстрації студентів. Використання Niedersächsischen Bildungscloud регулюється Законом про школи Нижньої Саксонії (розділ 31, параграф 5 NSchG).",
 	"pages.classMembers.infoBox.text.firstParagraph.bold": "не",
