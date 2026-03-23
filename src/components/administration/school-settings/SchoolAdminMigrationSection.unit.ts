@@ -1,6 +1,5 @@
 import SchoolAdminMigrationSection from "./SchoolAdminMigrationSection.vue";
 import SchoolMigrationWarningCard from "./SchoolMigrationWarningCard.vue";
-import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
 import SchoolsModule from "@/store/schools";
 import { BusinessError } from "@/store/types/commons";
 import { UserLoginMigration } from "@/store/user-login-migration";
@@ -24,11 +23,6 @@ const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 describe("SchoolAdminMigrationSection", () => {
 	let schoolsModule: Mocked<SchoolsModule>;
 	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
-
-	vi.spyOn(useUserLoginMigrationMappingsComposable, "useUserLoginMigrationMappings").mockReturnValue({
-		...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
-		getBusinessErrorTranslationKey: () => "",
-	});
 
 	const setup = (
 		schoolGetters: Partial<SchoolsModule> = {},

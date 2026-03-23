@@ -30,15 +30,15 @@
 				</p>
 			</div>
 			<div v-if="userLoginMigration" class="d-flex flex-wrap justify-center mt-8">
-				<v-btn
+				<VBtn
 					class="mx-8 mb-8"
 					variant="flat"
 					data-testId="btn-cancel"
 					:to="canSkipMigration ? '/dashboard' : '/logout'"
 				>
 					{{ $t(canSkipMigration ? "pages.userMigration.button.skip" : "common.actions.logout") }}
-				</v-btn>
-				<v-btn
+				</VBtn>
+				<VBtn
 					class="mx-8 mb-8"
 					color="primary"
 					variant="flat"
@@ -46,7 +46,7 @@
 					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
 				>
 					{{ $t("pages.userMigration.button.startMigration") }}
-				</v-btn>
+				</VBtn>
 			</div>
 		</div>
 	</div>

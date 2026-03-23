@@ -55,7 +55,7 @@
 				{{ t("components.administration.adminMigrationSection.migrationActive") }}
 			</InfoAlert>
 		</div>
-		<v-btn
+		<VBtn
 			v-if="isStartButtonVisible"
 			class="my-4 button-start"
 			color="primary"
@@ -65,8 +65,8 @@
 			@click="onToggleShowStartWarning"
 		>
 			{{ t("components.administration.adminMigrationSection.migrationEnableButton.label") }}
-		</v-btn>
-		<v-btn
+		</VBtn>
+		<VBtn
 			v-if="isEndButtonVisible"
 			class="my-4 button-end"
 			color="primary"
@@ -76,15 +76,15 @@
 			@click="onToggleShowEndWarning"
 		>
 			{{ t("components.administration.adminMigrationSection.migrationEndButton.label") }}
-		</v-btn>
-		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
+		</VBtn>
+		<VAlert v-if="error && error.message" type="error" :icon="mdiAlertCircle" data-testid="error-alert">
 			<div class="alert-text">
 				<span data-testid="migration-error-text">
 					{{ t(getBusinessErrorTranslationKey(error)!) }}
 				</span>
 			</div>
-		</v-alert>
-		<v-switch
+		</VAlert>
+		<VSwitch
 			v-show="isShowMandatorySwitch"
 			:label="t('components.administration.adminMigrationSection.mandatorySwitch.label')"
 			:disabled="!isMigrationActive"
@@ -137,7 +137,7 @@
 		</p>
 	</div>
 
-	<v-switch
+	<VSwitch
 		v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
 		v-model="school.featureObject.enableLdapSyncDuringMigration"
 		:label="t('components.administration.adminMigrationSection.enableSyncDuringMigration.label')"
@@ -149,7 +149,7 @@
 	/>
 
 	<template v-if="showMigrationWizard && !isMigrationFinished">
-		<v-btn
+		<VBtn
 			:disabled="!isMigrationActive || !isSchoolMigrated"
 			class="my-4"
 			color="primary"
@@ -158,13 +158,13 @@
 			:to="{ name: 'administration-migration' }"
 		>
 			{{ t("components.administration.adminMigrationSection.migrationWizardButton.label") }}
-		</v-btn>
+		</VBtn>
 		<p>
 			{{ t("components.administration.adminMigrationSection.migrationWizardButton.description") }}
 		</p>
 	</template>
 
-	<v-switch
+	<VSwitch
 		v-if="globalFeatureShowOutdatedUsers"
 		v-model="school.featureObject.showOutdatedUsers"
 		:label="t('components.administration.adminMigrationSection.showOutdatedUsers.label')"

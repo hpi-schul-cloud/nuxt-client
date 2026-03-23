@@ -37,9 +37,9 @@
 					}}
 				</span>
 			</p>
-			<v-btn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
+			<VBtn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
 				{{ $t("pages.userMigration.backToLogin") }}
-			</v-btn>
+			</VBtn>
 		</div>
 	</div>
 </template>
