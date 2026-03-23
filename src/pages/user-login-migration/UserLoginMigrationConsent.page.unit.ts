@@ -1,13 +1,12 @@
 import UserLoginMigrationConsent from "./UserLoginMigrationConsent.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { UserLoginMigration } from "@/store/user-login-migration";
 import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useUserLoginMigration } from "@data-user-login-migration";
+import { UserLoginMigration, useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";

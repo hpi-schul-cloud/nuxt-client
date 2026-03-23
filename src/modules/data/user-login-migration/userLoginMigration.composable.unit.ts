@@ -1,5 +1,5 @@
+import { UserLoginMigrationMapper } from "./user-login-migration.mapper";
 import { useUserLoginMigration } from "./userLoginMigration.composable";
-import { UserLoginMigrationMapper } from "@/store/user-login-migration";
 import {
 	axiosErrorFactory,
 	createTestAppStore,
