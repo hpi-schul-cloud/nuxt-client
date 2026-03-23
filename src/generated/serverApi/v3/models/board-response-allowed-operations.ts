@@ -187,24 +187,6 @@ export interface BoardResponseAllowedOperations {
      * @type {boolean}
      * @memberof BoardResponseAllowedOperations
      */
-    createSubmissionItemContent: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardResponseAllowedOperations
-     */
-    deleteSubmissionItem: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardResponseAllowedOperations
-     */
-    updateSubmissionItem: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof BoardResponseAllowedOperations
-     */
     manageVideoConference: boolean;
     /**
      * 
