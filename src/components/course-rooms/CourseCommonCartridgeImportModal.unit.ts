@@ -1,6 +1,6 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { ComponentMountingOptions, flushPromises, mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/components";
 
 describe("CourseCommonCartridgeImportModal", () => {
@@ -145,6 +145,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 
 			const dialog = wrapper.findComponent(VDialog);
 			dialog.vm.$emit("click:outside");
+			await flushPromises();
 
 			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 			expect(confirmBtn.classes()).toContain("v-btn--disabled");
