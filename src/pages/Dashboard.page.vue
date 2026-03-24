@@ -53,17 +53,17 @@
 				@cancel="setReleasePreferences"
 			>
 				<template #content>
+					<div class="text-md">
+						{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}
+						{{ t("pages.dashboard.new.features.forward") }}
+					</div>
 					<VImg
 						class="w-75 d-block mx-auto"
-						src="@/assets/img/surprise.gif"
+						src="@/assets/img/surprise.svg"
 						alt=""
 						role="presentation"
 						max-width="360"
 					/>
-					<div class="text-md text-center">
-						<div>{{ t("pages.dashboard.new.features", { instanceTitle: envConfig.SC_TITLE }) }}</div>
-						<div>{{ t("pages.dashboard.new.features.forward") }}</div>
-					</div>
 				</template>
 				<template #actions>
 					<VBtn
