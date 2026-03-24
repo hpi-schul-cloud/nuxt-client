@@ -22,7 +22,7 @@
 						<VCard
 							v-for="news in latestNews"
 							:key="news.id"
-							class="d-flex flex-column"
+							class="d-flex flex-column grid-item"
 							:href="`/news/${news.id}`"
 							data-testid="container_of_element"
 							@dragstart.prevent
@@ -145,8 +145,11 @@ const setReleasePreferences = () => {
 <style lang="scss" scoped>
 .grid-container {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-	gap: 1.5rem;
+	gap: 12px;
+	grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
+}
+.grid-item {
+	min-width: 320px;
 }
 
 .v-card-title {
