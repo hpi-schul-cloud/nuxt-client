@@ -1,12 +1,11 @@
 <template>
 	<VSheet>
-		<h2 data-testid="dashboard-tasks-title">{{ title }}</h2>
+		<h2 class="mt-12" data-testid="dashboard-tasks-title">{{ title }}</h2>
 
-		<div class="d-flex flex-column" data-testid="task-courses">
+		<div class="task-grid" data-testid="task-courses">
 			<VCard
 				v-for="task in tasks"
 				:key="task.id"
-				class="mb-4"
 				:style="`border-left: 4px solid ${task.displayColor};`"
 				:href="`/homework/${task.id}`"
 				@dragstart.prevent
@@ -69,3 +68,11 @@ defineProps<{
 
 const { t } = useI18n();
 </script>
+
+<style lang="scss" scoped>
+.task-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+	gap: 1.5rem;
+}
+</style>
