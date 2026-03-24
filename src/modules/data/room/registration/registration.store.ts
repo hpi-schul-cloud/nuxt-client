@@ -25,6 +25,7 @@ export const useRegistrationStore = defineStore("registration", () => {
 		firstName: string;
 		lastName: string;
 		email: string;
+		registeredUserExists: boolean;
 	} | null>(null);
 	const hasApiErrorOccurred = ref<boolean>(false);
 
@@ -50,11 +51,11 @@ export const useRegistrationStore = defineStore("registration", () => {
 	const fetchUserData = async () => {
 		isLoading.value = true;
 		try {
-			const { firstName, lastName, email } = (
+			const { firstName, lastName, email, registeredUserExists } = (
 				await registrationApi.registrationControllerGetBySecret(registrationSecret.value)
 			).data;
 
-			userData.value = { firstName, lastName, email };
+			userData.value = { firstName, lastName, email, registeredUserExists: !!registeredUserExists };
 		} catch (error: unknown) {
 			const { code } = mapAxiosErrorToResponseError(error);
 			hasApiErrorOccurred.value = true;
