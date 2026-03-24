@@ -1,5 +1,5 @@
 <template>
-	<SvsLoadingSpinner :loading="isRunning">
+	<SvsSuspense :loading="isRunning">
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
 				:title="t('common.labels.tasks.assigned')"
@@ -56,7 +56,7 @@
 		<VBtn class="mt-2" variant="outlined" to="/tasks">
 			{{ t("common.actions.show.all") }}
 		</VBtn>
-	</SvsLoadingSpinner>
+	</SvsSuspense>
 </template>
 
 <script setup lang="ts">
@@ -64,7 +64,7 @@ import DashboardTasksOpen from "./DashboardTasksOpen.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { useAppStoreRefs } from "@data-app";
 import { useTasks } from "@data-tasks";
-import { SvsLoadingSpinner } from "@ui-containers";
+import { SvsSuspense } from "@ui-containers";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

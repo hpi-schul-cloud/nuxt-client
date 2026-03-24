@@ -1,3 +1,3 @@
-import SvsLoadingSpinner from "./SvsLoadingSpinner.vue";
+import SvsSuspense from "./SvsSuspense.vue";
 
-export { SvsLoadingSpinner };
+export { SvsSuspense };

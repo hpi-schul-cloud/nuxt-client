@@ -4,7 +4,7 @@
 			<h1 data-testid="dashboard-title">{{ t("pages.dashboard.title") }}</h1>
 		</template>
 		<template #default>
-			<SvsLoadingSpinner :loading="isLoadingNews">
+			<SvsSuspense :loading="isLoadingNews">
 				<h2 class="mb-4">{{ t("pages.news.title") }}</h2>
 
 				<!-- Dashboard news -->
@@ -42,7 +42,7 @@
 
 					<VBtn href="/news" variant="outlined" :text="t('common.actions.show.all')" />
 				</template>
-			</SvsLoadingSpinner>
+			</SvsSuspense>
 
 			<DashboardTasks v-if="isTeacher || isStudent" />
 
@@ -91,7 +91,7 @@ import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import { mdiNewspaperVariantOutline } from "@icons/material";
-import { SvsLoadingSpinner } from "@ui-containers";
+import { SvsSuspense } from "@ui-containers";
 import { DashboardTasks } from "@ui-dashboard";
 import { SvsDialog } from "@ui-dialog";
 import { EmptyState } from "@ui-empty-state";

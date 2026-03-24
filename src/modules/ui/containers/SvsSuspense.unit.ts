@@ -1,11 +1,11 @@
-import SvsLoadingSpinner from "./SvsLoadingSpinner.vue";
+import SvsSuspense from "./SvsSuspense.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { flushPromises, mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick } from "vue";
 import { VProgressCircular } from "vuetify/components";
 
-describe("SvsLoadingSpinner", () => {
+describe("SvsSuspense", () => {
 	beforeEach(() => vi.useFakeTimers());
 	afterEach(() => vi.useRealTimers());
 
@@ -16,7 +16,7 @@ describe("SvsLoadingSpinner", () => {
 	};
 
 	const setup = (loading: boolean) =>
-		mount(SvsLoadingSpinner, {
+		mount(SvsSuspense, {
 			props: { loading },
 			slots: { default: "<p>Content</p>" },
 			global: {

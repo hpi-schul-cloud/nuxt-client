@@ -6,6 +6,12 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * A component to actually do, what vue wants to offer also:
+ * https://vuejs.org/guide/built-ins/suspense
+ *
+ * Potentially replaced by <suspense> in the future.
+ */
 import { ref, toRef, watch } from "vue";
 
 const props = withDefaults(
