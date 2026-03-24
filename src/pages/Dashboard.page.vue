@@ -14,7 +14,7 @@
 					:title="t('pages.dashboard.empty.news')"
 				>
 					<template #media>
-						<VImg height="160" src="@/assets/img/news-empty.svg" />
+						<SvgNewsEmpty />
 					</template>
 				</EmptyState>
 				<template v-else>
@@ -81,6 +81,7 @@
 </template>
 
 <script lang="ts" setup>
+import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
 import { useSafeAxiosQuery, useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
