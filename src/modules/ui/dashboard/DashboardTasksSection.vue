@@ -14,7 +14,11 @@
 				<VCardText>
 					<VIcon size="14" class="mr-1" :icon="mdiFormatListChecks" />
 					<span v-if="task.courseId" data-testid="task-course-name"> {{ task.courseName }} | </span>
-					<span>{{ task.dueDate ? fromNowUtc(task.dueDate) : t("pages.dashboard.no.due.date") }}</span>
+					<span>{{
+						task.dueDate
+							? `${t("pages.room.taskCard.label.due")} ${fromNowUtc(task.dueDate)}`
+							: t("pages.dashboard.no.due.date")
+					}}</span>
 
 					<div class="d-flex flex-wrap ga-4">
 						<h3 class="text-h4 my-1" data-testid="task-name">
