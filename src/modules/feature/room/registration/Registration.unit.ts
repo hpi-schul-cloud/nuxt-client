@@ -40,6 +40,9 @@ describe("Registration.vue", () => {
 			password: string;
 			queryParams?: string;
 			hasApiErrorOccurred?: boolean;
+			registeredUserExists?: boolean;
+			completeRegistrationSuccess?: boolean;
+			omitQueryParam?: boolean;
 		}>
 	) => {
 		useRegistrationStepperMock.mockReturnValue({
@@ -58,11 +61,17 @@ describe("Registration.vue", () => {
 			firstName: "Max",
 			lastName: "Mustermann",
 			email: "",
+			registeredUserExists: options?.registeredUserExists ?? false,
 		};
 		registrationStore.hasApiErrorOccurred = options?.hasApiErrorOccurred ?? false;
+		registrationStore.completeRegistration = vi.fn().mockResolvedValue(options?.completeRegistrationSuccess ?? true);
 
 		const router = createRouterMock();
-		router.setQuery({ "registration-secret": options?.queryParams ?? "secret-value" });
+		if (options?.omitQueryParam) {
+			router.setQuery({});
+		} else {
+			router.setQuery({ "registration-secret": options?.queryParams ?? "secret-value" });
+		}
 		injectRouterMock(router);
 
 		const wrapper = mount(Registration, {
@@ -73,7 +82,7 @@ describe("Registration.vue", () => {
 			},
 		});
 
-		return { wrapper, useRegistrationStepper: useRegistrationStepperMock() };
+		return { wrapper, useRegistrationStepper: useRegistrationStepperMock(), router };
 	};
 
 	it("should be rendered", () => {
@@ -178,36 +187,42 @@ describe("Registration.vue", () => {
 					expect(document.activeElement).toEqual(welcomeStepHeading.element);
 				});
 
-				it("should be disabled if API error has occurred", async () => {
-					const { wrapper } = setup({ hasApiErrorOccurred: true });
-					const stepper = wrapper.findComponent(VStepper);
-					const continueButton = wrapper
-						.find("[data-testid='registration-continue-button']")
-						.getComponent({ name: "VBtn" });
+				describe("when API error has occurred", () => {
+					it("should be disabled", async () => {
+						const { wrapper } = setup({ hasApiErrorOccurred: true });
+						const stepper = wrapper.findComponent(VStepper);
+						const continueButton = wrapper
+							.find("[data-testid='registration-continue-button']")
+							.getComponent({ name: "VBtn" });
 
-					expect(stepper.props("modelValue")).toBe(1);
-					expect(continueButton.props("disabled")).toStrictEqual(true);
+						expect(stepper.props("modelValue")).toBe(1);
+						expect(continueButton.props("disabled")).toStrictEqual(true);
+					});
 				});
 			});
 		});
 
 		describe("Language Selection Component", () => {
-			it("should call setSelectedLanguage when language is updated", async () => {
-				const { wrapper, useRegistrationStepper } = setup();
-				const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
+			describe("when language is updated", () => {
+				it("should call setSelectedLanguage", async () => {
+					const { wrapper, useRegistrationStepper } = setup();
+					const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
 
-				languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.EN);
-				await nextTick();
+					languageSelectionComponent.vm.$emit("update:selected-language", LanguageType.EN);
+					await nextTick();
 
-				expect(useRegistrationStepper.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.EN);
+					expect(useRegistrationStepper.setSelectedLanguage).toHaveBeenCalledWith(LanguageType.EN);
+				});
 			});
 
-			it("should have default language as German even if the selectedLanguage's value is undefined", () => {
-				const { wrapper, useRegistrationStepper } = setup();
-				useRegistrationStepper.selectedLanguage.value = undefined;
-				const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
+			describe("when selectedLanguage value is undefined", () => {
+				it("should have default language as German", () => {
+					const { wrapper, useRegistrationStepper } = setup();
+					useRegistrationStepper.selectedLanguage.value = undefined;
+					const languageSelectionComponent = wrapper.getComponent(LanguageSelection);
 
-				expect(languageSelectionComponent.props("selectedLanguage")).toBe(LanguageType.DE);
+					expect(languageSelectionComponent.props("selectedLanguage")).toBe(LanguageType.DE);
+				});
 			});
 		});
 
@@ -276,6 +291,134 @@ describe("Registration.vue", () => {
 
 				const privacyPolicyCheckbox = wrapper.get("[data-testid='privacy-policy-checkbox']").get("input");
 				expect(document.activeElement).toBe(privacyPolicyCheckbox.element);
+			});
+		});
+	});
+
+	describe("onMounted behavior", () => {
+		describe("when query param is missing", () => {
+			it("should redirect to home page", async () => {
+				const { router } = setup({ omitQueryParam: true });
+				await flushPromises();
+
+				expect(router.replace).toHaveBeenCalledWith("/");
+			});
+		});
+
+		describe("when query param is empty string", () => {
+			it("should redirect to home page", async () => {
+				const { router } = setup({ queryParams: "   " });
+				await flushPromises();
+
+				expect(router.replace).toHaveBeenCalledWith("/");
+			});
+		});
+
+		describe("when registered user already exists", () => {
+			describe("when completeRegistration succeeds", () => {
+				it("should navigate to Success step", async () => {
+					const { wrapper } = setup({
+						registeredUserExists: true,
+						completeRegistrationSuccess: true,
+					});
+					await flushPromises();
+
+					const stepper = wrapper.findComponent(VStepper);
+					expect(stepper.props("modelValue")).toBe(5);
+				});
+
+				it("should call completeRegistration", async () => {
+					setup({
+						registeredUserExists: true,
+						completeRegistrationSuccess: true,
+					});
+					await flushPromises();
+
+					expect(registrationStore.completeRegistration).toHaveBeenCalled();
+				});
+			});
+
+			describe("when completeRegistration fails", () => {
+				it("should not navigate to Success step", async () => {
+					const { wrapper } = setup({
+						registeredUserExists: true,
+						completeRegistrationSuccess: false,
+					});
+					await flushPromises();
+
+					const stepper = wrapper.findComponent(VStepper);
+					expect(stepper.props("modelValue")).toBe(1);
+				});
+			});
+		});
+	});
+
+	describe("onContinue behavior at consent step", () => {
+		describe("when completeRegistration fails", () => {
+			it("should not advance to next step", async () => {
+				const validPassword = "ValidPassword1!";
+				const { wrapper } = setup({
+					password: validPassword,
+					completeRegistrationSuccess: false,
+				});
+
+				// Navigate to consent step
+				const continueButton = wrapper.get("[data-testid='registration-continue-button']");
+				await continueButton.trigger("click"); // step 1 -> 2
+				await continueButton.trigger("click"); // step 2 -> 3
+
+				// Fill password
+				const confirmPasswordField = wrapper.get("[data-testid='confirm-password']").get("input");
+				await confirmPasswordField.setValue(validPassword);
+				await continueButton.trigger("click"); // step 3 -> 4
+				await flushPromises();
+
+				// Accept consent
+				const privacyCheckbox = wrapper.get("[data-testid='privacy-policy-checkbox']").get("input");
+				const termsCheckbox = wrapper.get("[data-testid='terms-of-use-checkbox']").get("input");
+				await privacyCheckbox.setValue(true);
+				await termsCheckbox.setValue(true);
+
+				// Click continue at consent step - should fail
+				await continueButton.trigger("click");
+				await flushPromises();
+
+				const stepper = wrapper.findComponent(VStepper);
+				expect(stepper.props("modelValue")).toBe(4);
+			});
+		});
+
+		describe("when completeRegistration succeeds", () => {
+			it("should advance to Success step", async () => {
+				const validPassword = "ValidPassword1!";
+				const { wrapper } = setup({
+					password: validPassword,
+					completeRegistrationSuccess: true,
+				});
+
+				// Navigate to consent step
+				const continueButton = wrapper.get("[data-testid='registration-continue-button']");
+				await continueButton.trigger("click"); // step 1 -> 2
+				await continueButton.trigger("click"); // step 2 -> 3
+
+				// Fill password
+				const confirmPasswordField = wrapper.get("[data-testid='confirm-password']").get("input");
+				await confirmPasswordField.setValue(validPassword);
+				await continueButton.trigger("click"); // step 3 -> 4
+				await flushPromises();
+
+				// Accept consent
+				const privacyCheckbox = wrapper.get("[data-testid='privacy-policy-checkbox']").get("input");
+				const termsCheckbox = wrapper.get("[data-testid='terms-of-use-checkbox']").get("input");
+				await privacyCheckbox.setValue(true);
+				await termsCheckbox.setValue(true);
+
+				// Click continue at consent step - should succeed
+				await continueButton.trigger("click");
+				await flushPromises();
+
+				const stepper = wrapper.findComponent(VStepper);
+				expect(stepper.props("modelValue")).toBe(5);
 			});
 		});
 	});
