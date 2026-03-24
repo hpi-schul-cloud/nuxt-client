@@ -19,7 +19,7 @@
 							: t("pages.dashboard.no.due.date")
 					}}</span>
 
-					<div class="d-flex flex-wrap ga-4">
+					<div class="d-flex flex-wrap gc-4 gr-0">
 						<h3 class="text-h4 my-1" data-testid="task-name">
 							{{ task.name }}
 						</h3>
