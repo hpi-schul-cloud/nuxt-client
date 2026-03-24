@@ -326,7 +326,7 @@ const setSchoolFeatures = async () => {
 };
 
 const contactEmailLink = computed<string>(() =>
-	sanitizeUrl(`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}}?subject=Schulnummer nicht korrekt`)
+	sanitizeUrl(`mailto:${useEnvConfig().value.SC_CONTACT_EMAIL}?subject=Schulnummer nicht korrekt`)
 );
 </script>
 
