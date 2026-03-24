@@ -1,4 +1,3 @@
-<!-- DashboardTasksOpen.vue -->
 <template>
 	<template v-if="!tasks || tasks.length === 0">
 		<h2>{{ t("common.words.tasks") }}</h2>
