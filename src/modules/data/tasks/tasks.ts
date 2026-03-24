@@ -49,7 +49,7 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		return toSortedByDueDate(filteredByTime);
 	});
 
-	const drafts = computed(() => tasks.value.filter((t) => t.status.isDraft));
+	const draftTasks = computed(() => tasks.value.filter((t) => t.status.isDraft));
 
 	const publishedTasks = computed(() => tasks.value.filter((t) => !t.status.isDraft));
 	const overdueTasks = computed(() => publishedTasks.value.filter(isTaskOverdue));
@@ -59,11 +59,11 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		publishedTasks.value.filter((t) => t.status.submitted === 0 && !t.lessonHidden)
 	);
 
-	const ungradedForTeacher = computed(() => overdueTasks.value.filter((t) => !isGradedForTeacher(t)));
-	const ungradedForStudent = computed(() => publishedTasks.value.filter((t) => !isGradedForStudent(t)));
+	const ungradedTasksForTeacher = computed(() => overdueTasks.value.filter((t) => !isGradedForTeacher(t)));
+	const ungradedTasksForStudent = computed(() => publishedTasks.value.filter((t) => !isGradedForStudent(t)));
 
-	const gradedForTeacher = computed(() => overdueTasks.value.filter(isGradedForTeacher));
-	const gradedForStudent = computed(() => publishedTasks.value.filter(isGradedForStudent));
+	const gradedTasksForTeacher = computed(() => overdueTasks.value.filter(isGradedForTeacher));
+	const gradedTasksForStudent = computed(() => publishedTasks.value.filter(isGradedForStudent));
 
 	const fetch = async () => {
 		const { success, result } = await execute(fetchAllTasks);
@@ -80,14 +80,14 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		error,
 		fetch,
 		tasks,
-		drafts,
+		draftTasks,
 		publishedTasks,
 		overdueTasks,
 		openTasksForTeacher,
 		openTasksForStudents,
-		ungradedForTeacher,
-		ungradedForStudent,
-		gradedForTeacher,
-		gradedForStudent,
+		ungradedTasksForTeacher,
+		ungradedTasksForStudent,
+		gradedTasksForTeacher,
+		gradedTasksForStudent,
 	};
 };
