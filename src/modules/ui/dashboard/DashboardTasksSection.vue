@@ -77,6 +77,6 @@ const { t } = useI18n();
 	grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
 }
 .grid-item {
-	min-width: 320px;
+	min-width: 312px; /* Minimum supported screen width (360px) minus horizontal padding (48px) */
 }
 </style>
