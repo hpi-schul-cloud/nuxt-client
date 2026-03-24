@@ -151,7 +151,7 @@ const onContinue = async () => {
 	focusHeadingForStep(stepValue.value - 1);
 };
 
-onMounted(() => {
+onMounted(async () => {
 	const queryValue = route.query[queryParamName] as string | undefined;
 	if (!isNotNullish(queryValue) || queryValue.trim() === "") {
 		router.replace("/");
@@ -160,8 +160,20 @@ onMounted(() => {
 	registrationSecret.value = queryValue;
 
 	initializeLanguage();
-	fetchUserData();
+	await fetchUserData();
+	if (userData.value?.registeredUserExists) {
+		const isSucceed = await completeRegistration(lang.value, password.value);
+		if (isSucceed) {
+			await goToStep(RegistrationSteps.Success);
+		}
+	}
 });
+
+const goToStep = async (step: RegistrationSteps) => {
+	stepValue.value = step;
+	await nextTick();
+	focusHeadingForStep(stepValue.value - 1);
+};
 
 const applicationName = computed(() => useEnvConfig().value.SC_TITLE.replace("Niedersächsische", "Niedersächsischen"));
 
