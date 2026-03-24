@@ -20,7 +20,6 @@
  * @enum {string}
  */
 export enum SchoolFeature {
-    ROCKET_CHAT = 'rocketChat',
     VIDEOCONFERENCE = 'videoconference',
     NEXTCLOUD = 'nextcloud',
     STUDENT_VISIBILITY = 'studentVisibility',

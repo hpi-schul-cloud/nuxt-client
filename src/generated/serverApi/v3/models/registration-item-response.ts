@@ -56,6 +56,12 @@ export interface RegistrationItemResponse {
      * @memberof RegistrationItemResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RegistrationItemResponse
+     */
+    registeredUserExists?: boolean;
 }
 
 
