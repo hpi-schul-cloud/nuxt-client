@@ -9,25 +9,25 @@
 			/>
 
 			<DashboardTasksSection
-				v-if="ungradedForTeacher.length > 0"
+				v-if="ungradedTasksForTeacher.length > 0"
 				data-testid="teacher-tasks-not-graded"
 				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="ungradedForTeacher"
+				:tasks="ungradedTasksForTeacher"
 			/>
 
 			<DashboardTasksSection
-				v-if="gradedForTeacher.length > 0"
+				v-if="gradedTasksForTeacher.length > 0"
 				data-testid="teacher-tasks-graded"
 				:title="t('pages.tasks.subtitleGraded')"
-				:tasks="gradedForTeacher"
+				:tasks="gradedTasksForTeacher"
 			/>
 
 			<!-- Tasks Draft and Private for teacher -->
 			<DashboardTasksSection
-				v-if="drafts.length > 0"
+				v-if="draftTasks.length > 0"
 				data-testid="teacher-tasks-private"
 				:title="t('common.words.drafts')"
-				:tasks="drafts"
+				:tasks="draftTasks"
 			/>
 		</template>
 		<template v-else-if="isStudent">
@@ -39,17 +39,17 @@
 			/>
 
 			<DashboardTasksSection
-				v-if="ungradedForStudent.length > 0"
+				v-if="ungradedTasksForStudent.length > 0"
 				data-testid="student-tasks-not-graded"
 				:title="t('pages.tasks.subtitleNotGraded')"
-				:tasks="ungradedForStudent"
+				:tasks="ungradedTasksForStudent"
 			/>
 
 			<DashboardTasksSection
-				v-if="gradedForStudent.length > 0"
+				v-if="gradedTasksForStudent.length > 0"
 				data-testid="student-tasks-graded"
 				:title="t('pages.tasks.subtitleGraded')"
-				:tasks="gradedForStudent"
+				:tasks="gradedTasksForStudent"
 			/>
 		</template>
 
@@ -71,11 +71,11 @@ const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();
 
 const {
-	drafts,
-	gradedForTeacher,
-	gradedForStudent,
-	ungradedForTeacher,
-	ungradedForStudent,
+	draftTasks,
+	gradedTasksForTeacher,
+	gradedTasksForStudent,
+	ungradedTasksForTeacher,
+	ungradedTasksForStudent,
 	openTasksForTeacher,
 	openTasksForStudents,
 	isRunning,

@@ -60,11 +60,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([draftTask, publishedTask]);
 
-			const { fetch, drafts, publishedTasks } = useTasks({}, false);
+			const { fetch, draftTasks, publishedTasks } = useTasks({}, false);
 			await fetch();
 
-			expect(drafts.value).toHaveLength(1);
-			expect(drafts.value[0].id).toBe("draft");
+			expect(draftTasks.value).toHaveLength(1);
+			expect(draftTasks.value[0].id).toBe("draft");
 			expect(publishedTasks.value).toHaveLength(1);
 			expect(publishedTasks.value[0].id).toBe("published");
 		});
@@ -142,11 +142,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([gradedTask, notGradedTask]);
 
-			const { fetch, gradedForStudent } = useTasks({}, false);
+			const { fetch, gradedTasksForStudent } = useTasks({}, false);
 			await fetch();
 
-			expect(gradedForStudent.value).toHaveLength(1);
-			expect(gradedForStudent.value[0].id).toBe("graded");
+			expect(gradedTasksForStudent.value).toHaveLength(1);
+			expect(gradedTasksForStudent.value[0].id).toBe("graded");
 		});
 
 		it("should filter ungradedForTeacher and gradedForTeacher based on overdue and graded==submitted", async () => {
@@ -162,14 +162,14 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([needsGrading, alreadyGraded]);
 
-			const { fetch, ungradedForTeacher, gradedForTeacher } = useTasks({}, false);
+			const { fetch, ungradedTasksForTeacher, gradedTasksForTeacher } = useTasks({}, false);
 			await fetch();
 
-			expect(ungradedForTeacher.value).toHaveLength(1);
-			expect(ungradedForTeacher.value[0].id).toBe("needs-grading");
+			expect(ungradedTasksForTeacher.value).toHaveLength(1);
+			expect(ungradedTasksForTeacher.value[0].id).toBe("needs-grading");
 
-			expect(gradedForTeacher.value).toHaveLength(1);
-			expect(gradedForTeacher.value[0].id).toBe("already-graded");
+			expect(gradedTasksForTeacher.value).toHaveLength(1);
+			expect(gradedTasksForTeacher.value[0].id).toBe("already-graded");
 		});
 
 		it("should filter ungradedForStudent (published with graded === 0)", async () => {
@@ -183,11 +183,11 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([notGraded, graded]);
 
-			const { fetch, ungradedForStudent } = useTasks({}, false);
+			const { fetch, ungradedTasksForStudent } = useTasks({}, false);
 			await fetch();
 
-			expect(ungradedForStudent.value).toHaveLength(1);
-			expect(ungradedForStudent.value[0].id).toBe("not-graded");
+			expect(ungradedTasksForStudent.value).toHaveLength(1);
+			expect(ungradedTasksForStudent.value[0].id).toBe("not-graded");
 		});
 	});
 });
