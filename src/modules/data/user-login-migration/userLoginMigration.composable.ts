@@ -1,5 +1,5 @@
-import { UserLoginMigration } from "./user-login-migration";
-import { UserLoginMigrationMapper } from "./user-login-migration.mapper";
+import { UserLoginMigration } from "./userLoginMigration";
+import { UserLoginMigrationMapper } from "./userLoginMigration.mapper";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -54,7 +54,13 @@ export const useUserLoginMigration = () => {
 				await userLoginMigrationApi.userLoginMigrationControllerGetMigrations(userId);
 
 			if (response.data.total > 1) {
-				throw new Error("More than one migration found for user.");
+				return {
+					error: {
+						statusCode: HttpStatusCode.BadRequest,
+						message: "pages.administration.migration.multipleUsersFound",
+						error: undefined,
+					},
+				};
 			}
 
 			if (response.data.data.length === 1) {

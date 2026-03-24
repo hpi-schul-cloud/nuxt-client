@@ -1,5 +1,5 @@
-import { UserLoginMigrationMapper } from "./user-login-migration.mapper";
 import { useUserLoginMigration } from "./userLoginMigration.composable";
+import { UserLoginMigrationMapper } from "./userLoginMigration.mapper";
 import {
 	axiosErrorFactory,
 	createTestAppStore,
@@ -174,7 +174,8 @@ describe("userLoginMigration.composable", () => {
 				const { fetchLatestUserLoginMigrationForCurrentUser, businessError } = useUserLoginMigration();
 				await fetchLatestUserLoginMigrationForCurrentUser();
 
-				expect(businessError.value.error).toBeDefined();
+				expect(businessError.value.statusCode).toBeDefined();
+				expect(businessError.value.message).toBe("pages.administration.migration.multipleUsersFound");
 			});
 
 			it("should not set userLoginMigration", async () => {
