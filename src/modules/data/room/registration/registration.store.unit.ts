@@ -13,8 +13,8 @@ import {
 	registrationFactory,
 	roomFactory,
 } from "@@/tests/test-utils";
-import { RegistrationListResponse } from "@api-server";
 import * as serverApi from "@api-server";
+import { RegistrationListResponse } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it, Mock, Mocked, vi } from "vitest";
@@ -114,7 +114,12 @@ describe("registration.store", () => {
 				const mockedSecret = "secret-123";
 				const { registrationStore } = setup({ registrationSecret: mockedSecret });
 
-				const mockedRegistrationData = { firstName: "Max", lastName: "Mustermann", email: "sample-mail@de.de" };
+				const mockedRegistrationData = {
+					firstName: "Max",
+					lastName: "Mustermann",
+					email: "sample-mail@de.de",
+					registeredUserExists: true,
+				};
 				registrationApi.registrationControllerGetBySecret.mockResolvedValueOnce(
 					mockApiResponse<serverApi.RegistrationItemResponse>({
 						data: mockedRegistrationData as serverApi.RegistrationItemResponse,
