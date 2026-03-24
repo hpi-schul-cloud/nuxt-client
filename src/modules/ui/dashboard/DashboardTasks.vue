@@ -53,7 +53,7 @@
 			/>
 		</template>
 
-		<VBtn class="mt-2" variant="outlined" to="/tasks">
+		<VBtn class="mt-4" variant="outlined" to="/tasks">
 			{{ t("common.actions.show.all") }}
 		</VBtn>
 	</SvsLoadingSpinner>
