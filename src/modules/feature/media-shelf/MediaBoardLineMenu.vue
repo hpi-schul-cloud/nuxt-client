@@ -33,7 +33,13 @@
 					</VListItemTitle>
 				</VListItem>
 			</template>
-			<VColorPicker
+			<SvsColorPicker
+				v-model="colorValue"
+				:swatches
+				data-testid="line-color-picker"
+				@update:model-value="onUpdateColor"
+			/>
+			<!-- <VColorPicker
 				hide-sliders
 				hide-inputs
 				hide-canvas
@@ -44,7 +50,7 @@
 				show-swatches
 				data-testid="line-color-picker"
 				@update:model-value="onUpdateColor"
-			/>
+			/> -->
 		</VListGroup>
 		<VListItem
 			v-if="lineId"
@@ -63,8 +69,9 @@
 import { ColorShade, MediaBoardColorMapper } from "./utils";
 import { MediaBoardColors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp, mdiPalette, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
+import { SvsColorPicker } from "@ui-color-picker";
 import { KebabMenu } from "@ui-kebab-menu";
-import { computed, ComputedRef, ModelRef, PropType } from "vue";
+import { computed, ModelRef, PropType } from "vue";
 
 defineProps({
 	lineId: {
@@ -86,7 +93,7 @@ const color: ModelRef<MediaBoardColors> = defineModel("color", {
 
 const swatchShade: ColorShade = "lighten4";
 
-const colorValue: ComputedRef<string> = computed(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
+const colorValue = computed<string>(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
 
 const onUpdateColor = (value: string) => {
 	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
@@ -96,7 +103,7 @@ const swatchColors = Object.values(MediaBoardColors).map((colorName: MediaBoardC
 	MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
 );
 
-const swatches: ComputedRef<string[][]> = computed(() => {
+const swatches = computed<string[][]>(() => {
 	const swatchesPerLine = 4;
 	const swatchRows = [];
 
