@@ -22,7 +22,7 @@ const props = withDefaults(
 const loadingRef = toRef(props, "loading");
 
 const displaySpinner = ref(false);
-let timeout: ReturnType<typeof setTimeout>;
+let timeout: ReturnType<typeof setTimeout> | undefined;
 
 watch(
 	loadingRef,
@@ -36,7 +36,7 @@ watch(
 		} else {
 			if (timeout) {
 				clearTimeout(timeout);
-				timeout = null;
+				timeout = undefined;
 			}
 			displaySpinner.value = false;
 		}

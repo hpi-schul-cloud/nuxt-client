@@ -31,7 +31,7 @@ export default {
 	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.actions.moved": "{elementName} було переміщено на позицію {position}",
-	"common.actions.click.here": "Більше інформації",
+	"common.labels.moreInfo": "Більше інформації",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.ariaLabel.openImageInLightBox": "Показати зображення в повному розмірі",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",

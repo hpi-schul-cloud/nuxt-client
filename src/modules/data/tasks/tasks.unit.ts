@@ -60,13 +60,13 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([draftTask, publishedTask]);
 
-			const { fetch, draft, notDraft } = useTasks({}, false);
+			const { fetch, drafts, publishedTasks } = useTasks({}, false);
 			await fetch();
 
-			expect(draft.value).toHaveLength(1);
-			expect(draft.value[0].id).toBe("draft");
-			expect(notDraft.value).toHaveLength(1);
-			expect(notDraft.value[0].id).toBe("published");
+			expect(drafts.value).toHaveLength(1);
+			expect(drafts.value[0].id).toBe("draft");
+			expect(publishedTasks.value).toHaveLength(1);
+			expect(publishedTasks.value[0].id).toBe("published");
 		});
 
 		it("should identify overdue tasks", async () => {
@@ -80,35 +80,36 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([overdueTask, futureTask]);
 
-			const { fetch, overdue } = useTasks({}, false);
+			const { fetch, overdueTasks } = useTasks({}, false);
 			await fetch();
 
-			expect(overdue.value).toHaveLength(1);
-			expect(overdue.value[0].id).toBe("overdue");
+			expect(overdueTasks.value).toHaveLength(1);
+			expect(overdueTasks.value[0].id).toBe("overdue");
 		});
 
-		it("should filter assignedToTeacher tasks", async () => {
-			const assignedTask = taskResponseFactory.build({
-				id: "assigned",
-				status: { submitted: 3, maxSubmissions: 10 },
+		it("should filter openTasksForTeacher (published and not overdue)", async () => {
+			const open = taskResponseFactory.build({
+				id: "open",
+				dueDate: dateFromToday(5, "day"),
+				status: { isDraft: false },
 			});
-			const fullySubmittedTask = taskResponseFactory.build({
-				id: "full",
-				status: { submitted: 10, maxSubmissions: 10 },
+			const overdueTask = taskResponseFactory.build({
+				id: "overdue",
+				dueDate: dateFromToday(-1, "day"),
+				status: { isDraft: false },
 			});
-			setupApiResponse([assignedTask, fullySubmittedTask]);
+			setupApiResponse([open, overdueTask]);
 
-			const { fetch, assignedToTeacher } = useTasks({}, false);
+			const { fetch, openTasksForTeacher } = useTasks({}, false);
 			await fetch();
 
-			expect(assignedToTeacher.value).toHaveLength(1);
-			expect(assignedToTeacher.value[0].id).toBe("assigned");
+			expect(openTasksForTeacher.value).toHaveLength(1);
+			expect(openTasksForTeacher.value[0].id).toBe("open");
 		});
 
-		it("should filter assignedToStudent tasks", async () => {
+		it("should filter openTasksForStudents (published, not hidden, not submitted)", async () => {
 			const validTask = taskResponseFactory.build({
 				id: "valid",
-				dueDate: dateFromToday(5, "day"),
 				lessonHidden: false,
 				status: { submitted: 0, graded: 0 },
 			});
@@ -121,21 +122,16 @@ describe("useTasks", () => {
 				lessonHidden: true,
 				status: { submitted: 0, graded: 0 },
 			});
-			const overdueTask = taskResponseFactory.build({
-				id: "overdue",
-				dueDate: dateFromToday(-1, "day"),
-				status: { submitted: 0, graded: 0 },
-			});
-			setupApiResponse([validTask, alreadySubmitted, hiddenLesson, overdueTask]);
+			setupApiResponse([validTask, alreadySubmitted, hiddenLesson]);
 
-			const { fetch, assignedToStudent } = useTasks({}, false);
+			const { fetch, openTasksForStudents } = useTasks({}, false);
 			await fetch();
 
-			expect(assignedToStudent.value).toHaveLength(1);
-			expect(assignedToStudent.value[0].id).toBe("valid");
+			expect(openTasksForStudents.value).toHaveLength(1);
+			expect(openTasksForStudents.value[0].id).toBe("valid");
 		});
 
-		it("should filter withFeedback tasks", async () => {
+		it("should filter gradedForStudent (published with graded > 0)", async () => {
 			const gradedTask = taskResponseFactory.build({
 				id: "graded",
 				status: { graded: 1 },
@@ -146,51 +142,52 @@ describe("useTasks", () => {
 			});
 			setupApiResponse([gradedTask, notGradedTask]);
 
-			const { fetch, withFeedback } = useTasks({}, false);
+			const { fetch, gradedForStudent } = useTasks({}, false);
 			await fetch();
 
-			expect(withFeedback.value).toHaveLength(1);
-			expect(withFeedback.value[0].id).toBe("graded");
+			expect(gradedForStudent.value).toHaveLength(1);
+			expect(gradedForStudent.value[0].id).toBe("graded");
 		});
 
-		it("should filter feedbackRequired - overdue with submissions", async () => {
-			const needsFeedback = taskResponseFactory.build({
-				id: "needs-feedback",
+		it("should filter ungradedForTeacher and gradedForTeacher based on overdue and graded==submitted", async () => {
+			const needsGrading = taskResponseFactory.build({
+				id: "needs-grading",
 				dueDate: dateFromToday(-1, "day"),
-				status: { maxSubmissions: 10, graded: 2, submitted: 5 },
+				status: { graded: 2, submitted: 5 },
 			});
 			const alreadyGraded = taskResponseFactory.build({
 				id: "already-graded",
 				dueDate: dateFromToday(-1, "day"),
-				status: { maxSubmissions: 10, graded: 5, submitted: 5 },
+				status: { graded: 5, submitted: 5 },
 			});
-			setupApiResponse([needsFeedback, alreadyGraded]);
+			setupApiResponse([needsGrading, alreadyGraded]);
 
-			const { fetch, feedbackRequired } = useTasks({}, false);
+			const { fetch, ungradedForTeacher, gradedForTeacher } = useTasks({}, false);
 			await fetch();
 
-			expect(feedbackRequired.value).toHaveLength(1);
-			expect(feedbackRequired.value[0].id).toBe("needs-feedback");
+			expect(ungradedForTeacher.value).toHaveLength(1);
+			expect(ungradedForTeacher.value[0].id).toBe("needs-grading");
+
+			expect(gradedForTeacher.value).toHaveLength(1);
+			expect(gradedForTeacher.value[0].id).toBe("already-graded");
 		});
 
-		it("should filter feedbackRequired - no dueDate with submissions", async () => {
-			const needsFeedback = taskResponseFactory.build({
-				id: "needs-feedback",
-				dueDate: undefined,
-				status: { maxSubmissions: 10, graded: 0, submitted: 3 },
+		it("should filter ungradedForStudent (published with graded === 0)", async () => {
+			const notGraded = taskResponseFactory.build({
+				id: "not-graded",
+				status: { graded: 0 },
 			});
-			const noSubmissions = taskResponseFactory.build({
-				id: "no-submissions",
-				dueDate: undefined,
-				status: { maxSubmissions: 10, graded: 0, submitted: 0 },
+			const graded = taskResponseFactory.build({
+				id: "graded",
+				status: { graded: 1 },
 			});
-			setupApiResponse([needsFeedback, noSubmissions]);
+			setupApiResponse([notGraded, graded]);
 
-			const { fetch, feedbackRequired } = useTasks({}, false);
+			const { fetch, ungradedForStudent } = useTasks({}, false);
 			await fetch();
 
-			expect(feedbackRequired.value).toHaveLength(1);
-			expect(feedbackRequired.value[0].id).toBe("needs-feedback");
+			expect(ungradedForStudent.value).toHaveLength(1);
+			expect(ungradedForStudent.value[0].id).toBe("not-graded");
 		});
 	});
 });

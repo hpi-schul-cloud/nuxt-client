@@ -3,7 +3,7 @@
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
 				:title="t('common.labels.tasks.assigned')"
-				test-id="teacher-open-tasks"
+				test-id="teacher-tasks-open"
 				:empty-msg="t('pages.dashboard.no.tasks')"
 				:tasks="openTasksForTeacher"
 			/>
@@ -18,22 +18,22 @@
 			<DashboardTasksSection
 				v-if="gradedForTeacher.length > 0"
 				data-testid="teacher-tasks-graded"
-				:title="t('pages.room.taskCard.label.graded')"
+				:title="t('pages.tasks.subtitleGraded')"
 				:tasks="gradedForTeacher"
 			/>
 
 			<!-- Tasks Draft and Private for teacher -->
 			<DashboardTasksSection
-				v-if="draft.length > 0"
+				v-if="drafts.length > 0"
 				data-testid="teacher-tasks-private"
 				:title="t('common.words.drafts')"
-				:tasks="draft"
+				:tasks="drafts"
 			/>
 		</template>
 		<template v-else-if="isStudent">
 			<DashboardTasksOpen
 				:title="t('pages.tasks.student.openTasks')"
-				test-id="student-open-tasks"
+				test-id="student-tasks-open"
 				:empty-msg="t('pages.tasks.student.open.emptyState.title')"
 				:tasks="openTasksForStudents"
 			/>
@@ -48,16 +48,14 @@
 			<DashboardTasksSection
 				v-if="gradedForStudent.length > 0"
 				data-testid="student-tasks-graded"
-				:title="t('pages.room.taskCard.label.graded')"
+				:title="t('pages.tasks.subtitleGraded')"
 				:tasks="gradedForStudent"
 			/>
 		</template>
 
-		<div class="d-flex mt-2">
-			<VBtn variant="outlined" to="/tasks">
-				{{ t("common.actions.show.all") }}
-			</VBtn>
-		</div>
+		<VBtn class="mt-2" variant="outlined" to="/tasks">
+			{{ t("common.actions.show.all") }}
+		</VBtn>
 	</SvsLoadingSpinner>
 </template>
 
@@ -65,14 +63,15 @@
 import DashboardTasksOpen from "./DashboardTasksOpen.vue";
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { useAppStoreRefs } from "@data-app";
-import { TASKS_RECENT_RANGE, useTasks } from "@data-tasks";
+import { useTasks } from "@data-tasks";
 import { SvsLoadingSpinner } from "@ui-containers";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const { isTeacher, isStudent } = useAppStoreRefs();
+
 const {
-	draft,
+	drafts,
 	gradedForTeacher,
 	gradedForStudent,
 	ungradedForTeacher,
@@ -81,8 +80,9 @@ const {
 	openTasksForStudents,
 	isRunning,
 } = useTasks({
-	range: TASKS_RECENT_RANGE,
+	range: {
+		from: { amount: 1, unit: "month" },
+		to: { amount: 14, unit: "day" },
+	},
 });
 </script>
-
-<style scoped lang="scss"></style>

@@ -31,7 +31,7 @@ export default {
 	"common.actions.shareLink": "Copy link",
 	"common.actions.update": "Update",
 	"common.actions.moved": "{elementName} was moved to position {position}",
-	"common.actions.click.here": "More information",
+	"common.labels.moreInfo": "More information",
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.openImageInLightBox": "Display image in full size",
 	"common.ariaLabel.sameTab": "opens in the same tab",

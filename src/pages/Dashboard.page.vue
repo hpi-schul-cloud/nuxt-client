@@ -48,8 +48,7 @@
 
 			<!-- Dashboard new release announcement      -->
 			<SvsDialog
-				v-if="hasNewReleaseNotes"
-				:model-value="true"
+				:model-value="hasNewReleaseNotes"
 				title="pages.dashboard.new.features.available"
 				@cancel="setReleasePreferences"
 			>
@@ -71,7 +70,7 @@
 						class="w-100"
 						color="primary"
 						variant="flat"
-						:text="t('common.actions.click.here')"
+						:text="t('common.labels.moreInfo')"
 						href="/system/releases"
 						@click="setReleasePreferences"
 					/>
@@ -80,6 +79,7 @@
 		</template>
 	</DefaultWireframe>
 </template>
+
 <script lang="ts" setup>
 import { useSafeAxiosQuery, useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";

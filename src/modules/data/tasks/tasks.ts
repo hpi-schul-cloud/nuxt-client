@@ -24,11 +24,6 @@ type DateRange = {
 	to: { amount: number; unit: ManipulateType };
 };
 
-export const TASKS_RECENT_RANGE: DateRange = {
-	from: { amount: 1, unit: "month" },
-	to: { amount: 14, unit: "day" },
-};
-
 export const toSortedByDueDate = (tasks: TaskResponse[]) =>
 	orderBy(tasks, (t) => (t.dueDate ? parseUtc(t.dueDate).valueOf() : Infinity), "asc");
 
@@ -54,20 +49,20 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		return toSortedByDueDate(filteredByTime);
 	});
 
-	const draft = computed(() => tasks.value.filter((t) => t.status.isDraft));
+	const drafts = computed(() => tasks.value.filter((t) => t.status.isDraft));
 
 	const publishedTasks = computed(() => tasks.value.filter((t) => !t.status.isDraft));
-	const overdue = computed(() => publishedTasks.value.filter(isTaskOverdue));
+	const overdueTasks = computed(() => publishedTasks.value.filter(isTaskOverdue));
 
 	const openTasksForTeacher = computed(() => publishedTasks.value.filter((t) => !isTaskOverdue(t)));
 	const openTasksForStudents = computed(() =>
 		publishedTasks.value.filter((t) => t.status.submitted === 0 && !t.lessonHidden)
 	);
 
-	const ungradedForTeacher = computed(() => overdue.value.filter((t) => !isGradedForTeacher(t)));
+	const ungradedForTeacher = computed(() => overdueTasks.value.filter((t) => !isGradedForTeacher(t)));
 	const ungradedForStudent = computed(() => publishedTasks.value.filter((t) => !isGradedForStudent(t)));
 
-	const gradedForTeacher = computed(() => overdue.value.filter(isGradedForTeacher));
+	const gradedForTeacher = computed(() => overdueTasks.value.filter(isGradedForTeacher));
 	const gradedForStudent = computed(() => publishedTasks.value.filter(isGradedForStudent));
 
 	const fetch = async () => {
@@ -85,8 +80,9 @@ export const useTasks = ({ range }: { range?: DateRange } = {}, fetchImmediate =
 		error,
 		fetch,
 		tasks,
-		draft,
-		overdue,
+		drafts,
+		publishedTasks,
+		overdueTasks,
 		openTasksForTeacher,
 		openTasksForStudents,
 		ungradedForTeacher,
