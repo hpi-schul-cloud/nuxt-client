@@ -94,7 +94,7 @@ export const useSafeTaskRunner = <T>(fn: AsyncFunction<T>, onErrorNotifyMessage?
 		data.value = result;
 		return { result, success };
 	};
-	return { error, status, data, isRunning, run, reset };
+	return { data: readonly(data), error, status, isRunning, run, reset };
 };
 
 export const useSafeAxiosQuery = <T>(
