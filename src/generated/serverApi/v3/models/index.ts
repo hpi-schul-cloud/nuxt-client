@@ -153,8 +153,6 @@ export * from './lernstore-resources';
 export * from './lesson-content-response';
 export * from './lesson-copy-api-params';
 export * from './lesson-linked-task-response';
-export * from './lesson-metadata-list-response';
-export * from './lesson-metadata-response';
 export * from './lesson-response';
 export * from './link-content-body';
 export * from './link-element-content';
