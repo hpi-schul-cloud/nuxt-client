@@ -11,7 +11,7 @@ import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
 import { Mocked } from "vitest";
 
-describe("DashBoardReleaseDialog", () => {
+describe("DashboardReleaseDialog", () => {
 	let releasesApi: Mocked<ServerReleaseApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
