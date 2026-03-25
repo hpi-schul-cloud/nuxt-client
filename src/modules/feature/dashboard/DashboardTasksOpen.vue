@@ -5,8 +5,9 @@
 			<template #media> <SvgTasksEmpty /></template>
 		</EmptyState>
 	</template>
-	<DashboardTasksSection v-else :data-testid="testId" :title :tasks />
+	<DashboardTasksSection v-else v-bind="$attrs" :title :tasks />
 </template>
+
 <script setup lang="ts">
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import SvgTasksEmpty from "@/assets/img/SvgTasksEmpty.vue";
@@ -17,9 +18,10 @@ import { useI18n } from "vue-i18n";
 defineProps<{
 	title: string;
 	emptyMsg: string;
-	testId: string;
 	tasks: TaskResponse[];
 }>();
+
+defineOptions({ inheritAttrs: false });
 
 const { t } = useI18n();
 </script>

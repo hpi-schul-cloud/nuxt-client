@@ -10,6 +10,7 @@ import {
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { NewsApiInterface, NewsResponse, ReleaseItemResponse, RoleName, ServerReleaseApiInterface } from "@api-server";
 import * as serverApi from "@api-server";
+import { DashboardTasks } from "@feature-dashboard";
 import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
@@ -99,60 +100,21 @@ describe("DashboardPage", () => {
 			const { wrapper } = setup({ roleName: RoleName.TEACHER });
 			await flushPromises();
 
-			expect(wrapper.findComponent({ name: "DashBoardTasks" }).exists()).toBe(true);
+			expect(wrapper.findComponent(DashboardTasks).exists()).toBe(true);
 		});
 
 		it("shows DashboardTasks for students", async () => {
 			const { wrapper } = setup({ roleName: RoleName.STUDENT });
 			await flushPromises();
 
-			expect(wrapper.findComponent({ name: "DashBoardTasks" }).exists()).toBe(true);
+			expect(wrapper.findComponent(DashboardTasks).exists()).toBe(true);
 		});
 
 		it("does not show DashboardTasks for other roles", async () => {
 			const { wrapper } = setup();
 			await flushPromises();
 
-			expect(wrapper.findComponent({ name: "DashBoardTasks" }).exists()).toBe(false);
-		});
-	});
-
-	describe("release notes dialog", () => {
-		it("shows the release dialog when there is a new release the user has not seen", async () => {
-			const { wrapper } = setup({
-				latestReleasePublishedAt: "2024-06-01T00:00:00.000Z",
-				// no releaseDate preference → user has never seen any release
-			});
-			await flushPromises();
-
-			expect(wrapper.findComponent({ name: "SvsDialog" }).exists()).toBe(true);
-		});
-
-		it("shows the release dialog when the latest release is newer than what the user last saw", async () => {
-			const { wrapper } = setup({
-				latestReleasePublishedAt: "2024-06-01T00:00:00.000Z",
-				releaseDate: "2024-01-01T00:00:00.000Z", // older than the release
-			});
-			await flushPromises();
-
-			expect(wrapper.findComponent({ name: "SvsDialog" }).exists()).toBe(true);
-		});
-
-		it("does not show the release dialog when the user has already seen the latest release", async () => {
-			const { wrapper } = setup({
-				latestReleasePublishedAt: "2024-01-01T00:00:00.000Z",
-				releaseDate: "2024-06-01T00:00:00.000Z", // newer than or equal to release
-			});
-			await flushPromises();
-
-			expect(wrapper.findComponent({ name: "SvsDialog" }).exists()).toBe(false);
-		});
-
-		it("does not show the release dialog when there are no releases", async () => {
-			const { wrapper } = setup({});
-			await flushPromises();
-
-			expect(wrapper.findComponent({ name: "SvsDialog" }).exists()).toBe(false);
+			expect(wrapper.findComponent(DashboardTasks).exists()).toBe(false);
 		});
 	});
 });

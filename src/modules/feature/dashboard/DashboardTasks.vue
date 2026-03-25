@@ -3,7 +3,7 @@
 		<template v-if="isTeacher">
 			<DashboardTasksOpen
 				:title="t('common.labels.tasks.assigned')"
-				test-id="teacher-tasks-open"
+				data-testid="teacher-tasks-open"
 				:empty-msg="t('pages.dashboard.no.tasks')"
 				:tasks="openTasksForTeacher"
 			/>
@@ -33,7 +33,7 @@
 		<template v-else-if="isStudent">
 			<DashboardTasksOpen
 				:title="t('pages.tasks.student.openTasks')"
-				test-id="student-tasks-open"
+				data-testid="student-tasks-open"
 				:empty-msg="t('pages.tasks.student.open.emptyState.title')"
 				:tasks="openTasksForStudents"
 			/>
