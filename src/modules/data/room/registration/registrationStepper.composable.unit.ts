@@ -90,6 +90,7 @@ describe("useRegistrationStepper", () => {
 			firstName: "Jane",
 			lastName: "Doe",
 			email: "",
+			registeredUserExists: false,
 		};
 
 		expect(fullName.value).toBe("Jane Doe");
