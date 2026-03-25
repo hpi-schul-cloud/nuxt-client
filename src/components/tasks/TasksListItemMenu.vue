@@ -77,7 +77,7 @@
 			class="task-action"
 			data-testId="task-delete"
 			role="menuitem"
-			@click="() => (confirmDeleteDialogIsOpen = true)"
+			@click="onDelete"
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
@@ -85,34 +85,12 @@
 			</v-list-item-title>
 		</v-list-item>
 	</KebabMenu>
-	<CustomDialog
-		v-model:is-open="confirmDeleteDialogIsOpen"
-		:size="375"
-		has-buttons
-		confirm-btn-title-key="common.actions.delete"
-		@dialog-confirmed="handleDelete"
-	>
-		<template #title>
-			<h2 class="my-2">
-				{{ $t("components.molecules.TaskItemMenu.confirmDelete.title") }}
-			</h2>
-		</template>
-		<template #content>
-			<p class="text-md mt-2">
-				{{
-					$t("components.molecules.TaskItemMenu.confirmDelete.text", {
-						taskTitle,
-					})
-				}}
-			</p>
-		</template>
-	</CustomDialog>
 </template>
 
 <script>
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { askDeletion } from "@/utils/confirmation-dialog.utils.ts";
 import { useEnvConfig } from "@data-env";
 import {
 	mdiArchiveOutline,
@@ -126,7 +104,7 @@ import { KebabMenu } from "@ui-kebab-menu";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	components: { CustomDialog, KebabMenu },
+	components: { KebabMenu },
 	inject: ["tasksModule"],
 	props: {
 		taskId: {
@@ -189,6 +167,18 @@ export default defineComponent({
 		},
 	},
 	methods: {
+		async onDelete() {
+			const confirmed = await askDeletion(
+				"components.molecules.TaskItemMenu.confirmDelete.title",
+				this.$t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: this.taskTitle }),
+				"warning",
+				"common.actions.remove"
+			);
+
+			if (confirmed) {
+				await this.tasksModule.deleteTask(this.taskId);
+			}
+		},
 		handleFinish() {
 			if (this.taskIsFinished) {
 				finishedTasksModule.restoreTask(this.taskId);

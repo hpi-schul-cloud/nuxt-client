@@ -1,10 +1,11 @@
 <template>
-	<CustomDialog :is-open="isOpen" :has-buttons="false" @dialog-closed="onCancel">
-		<template #title>
-			<h2 class="my-2">
-				{{ t("feature-board-external-tool-element.dialog.title") }}
-			</h2>
-		</template>
+	<SvsDialog
+		title="feature-board-external-tool-element.dialog.title"
+		:model-value="isOpen"
+		no-actions
+		@update:model-value="closeDialog"
+		@cancel="onCancel"
+	>
 		<template #content>
 			<ContextExternalToolConfigurator
 				ref="contextExternalToolConfigurator"
@@ -17,15 +18,15 @@
 				@cancel="onCancel"
 			/>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ToolContextType } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { ContextExternalTool } from "@data-external-tool";
+import { SvsDialog } from "@ui-dialog";
 import { nextTick, onMounted, PropType, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

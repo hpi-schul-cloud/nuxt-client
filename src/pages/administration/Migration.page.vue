@@ -67,22 +67,6 @@
 				</VStepperHeader>
 
 				<CustomDialog
-					ref="cancelMigrationDialog"
-					v-model:is-open="isCancelDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					data-testid="cancel-migration-dialog"
-					@dialog-confirmed="confirmCancelMigration()"
-				>
-					<template #title>
-						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Title") }}
-					</template>
-					<template #content>
-						{{ t("components.administration.adminMigrationSection.migrationWizardCancelDialog.Description") }}
-					</template>
-				</CustomDialog>
-
-				<CustomDialog
 					ref="clearAutoMatchesDialog"
 					v-model:is-open="isClearAutoMatchesDialogOpen"
 					has-buttons
@@ -436,6 +420,7 @@ import ImportUsers from "@/components/administration/ImportUsers.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
+import { askCancel } from "@/utils/confirmation-dialog.utils";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
@@ -464,8 +449,6 @@ const isLoading: Ref<boolean> = ref(false);
 const matchByPreferredName: Ref<boolean> = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
-
-const isCancelDialogOpen: Ref<boolean> = ref(false);
 
 const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
 
@@ -639,22 +622,19 @@ const nextStep = () => {
 	migrationStep.value = nextStep;
 };
 
-const cancelMigration = () => {
-	isCancelDialogOpen.value = true;
-};
-
-const confirmCancelMigration = async () => {
-	isLoading.value = true;
-
-	await importUsersModule.cancelMigration();
-
-	migrationStep.value = 0;
-
-	await schoolsModule.fetchSchool();
-
-	isLoading.value = false;
-
-	await redirectToAdminPage();
+const cancelMigration = async () => {
+	const isCancelled = await askCancel(
+		"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title",
+		"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+	);
+	if (isCancelled) {
+		isLoading.value = true;
+		await importUsersModule.cancelMigration();
+		migrationStep.value = 0;
+		await schoolsModule.fetchSchool();
+		isLoading.value = false;
+		await redirectToAdminPage();
+	}
 };
 
 const redirectToAdminPage = async () => {

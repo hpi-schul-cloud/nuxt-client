@@ -3,6 +3,7 @@ import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, schoolFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -32,7 +33,6 @@ type MigrationPageWrapperType = Partial<{
 	isLoading: boolean;
 	migrationStep: number;
 	isMigrationConfirm: boolean;
-	isCancelDialogOpen: boolean;
 	isClearAutoMatchesDialogOpen: boolean;
 	school: { inUserMigration: boolean; inMaintenance: boolean };
 }>;
@@ -363,34 +363,9 @@ describe("User Migration / Index", () => {
 				expect(button.exists()).toBe(true);
 			});
 
-			it("should show dialog on click", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
-				await button.trigger("click");
-
-				expect(wrapper.vm.isCancelDialogOpen).toBe(true);
-			});
-
-			it("should change isCancelDialogOpen on isOpen", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("update:isOpen", false);
-				await nextTick();
-
-				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
-			});
-
 			it("should call stores on dialog-confirm", async () => {
+				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(true);
+
 				const { wrapper } = await setup();
 
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
@@ -406,14 +381,7 @@ describe("User Migration / Index", () => {
 				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(await Promise.resolve());
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
 				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("dialog-confirmed");
 
 				await nextTick();
 
@@ -422,6 +390,7 @@ describe("User Migration / Index", () => {
 			});
 
 			it("should redirect to school settings migration section", async () => {
+				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(true);
 				const { wrapper } = await setup();
 
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
@@ -435,14 +404,8 @@ describe("User Migration / Index", () => {
 				});
 
 				const button = wrapper.findComponent("[data-testid=import-users-cancel-migration-btn]");
-
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({
-					ref: "cancelMigrationDialog",
-				});
-
-				dialog.vm.$emit("dialog-confirmed");
 				await flushPromises();
 
 				expect(getRouter().push).toHaveBeenCalledWith({
@@ -574,25 +537,6 @@ describe("User Migration / Index", () => {
 				expect(document.body.innerHTML).toContain(
 					"components.administration.adminMigrationSection.clearAutoMatchesDialog.description"
 				);
-			});
-
-			it("should close the dialog upon clicking on the cancel button", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent<typeof CustomDialog>({
-					ref: "clearAutoMatchesDialog",
-				});
-
-				dialog.vm.cancelDialog?.();
-				await nextTick();
-
-				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(false);
-				expect(dialog.exists()).toBe(true);
-				expect(dialog.vm.isOpen).toBeFalsy();
 			});
 
 			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
