@@ -37,6 +37,7 @@ describe("Consent.vue", () => {
 			firstName: "Max",
 			lastName: "Mustermann",
 			email: "",
+			registeredUserExists: false,
 		};
 		createTestEnvStore({
 			SC_THEME: theme ?? SchulcloudTheme.DEFAULT,
