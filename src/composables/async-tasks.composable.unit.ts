@@ -1,4 +1,4 @@
-import { useSafeAxiosQuery, useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
+import { useSafeAxiosRunner, useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-error-handling";
@@ -189,7 +189,7 @@ describe("useSafeAxiosQuery", () => {
 		it("should execute immediately and populate data", async () => {
 			const mockFn = vi.fn().mockResolvedValue("data");
 
-			const { data, status } = useSafeAxiosQuery(mockFn);
+			const { data, status } = useSafeAxiosRunner(mockFn);
 
 			expect(mockFn).toHaveBeenCalledTimes(1);
 			await vi.waitFor(() => {
@@ -202,7 +202,7 @@ describe("useSafeAxiosQuery", () => {
 			let counter = 0;
 			const mockFn = vi.fn().mockImplementation(() => Promise.resolve(++counter));
 
-			const { data, execute } = useSafeAxiosQuery(mockFn);
+			const { data, execute } = useSafeAxiosRunner(mockFn);
 
 			await vi.waitFor(() => expect(data.value).toBe(1));
 
@@ -215,7 +215,7 @@ describe("useSafeAxiosQuery", () => {
 		it("should NOT execute until execute() is called", async () => {
 			const mockFn = vi.fn().mockResolvedValue("lazy data");
 
-			const { data, execute } = useSafeAxiosQuery(mockFn, { immediate: false });
+			const { data, execute } = useSafeAxiosRunner(mockFn, { immediate: false });
 
 			expect(mockFn).not.toHaveBeenCalled();
 			expect(data.value).toBeUndefined();

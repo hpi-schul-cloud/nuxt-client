@@ -24,7 +24,7 @@
 	</SvsDialog>
 </template>
 <script lang="ts" setup>
-import { useSafeAxiosQuery, useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useSafeAxiosRunner, useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { MeApiFactory, ServerReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
@@ -42,7 +42,7 @@ const { execute: setPreference } = useSafeAxiosTask();
 const meApi = MeApiFactory(undefined, "/v3", $axios);
 const releasesApi = ServerReleaseApiFactory(undefined, "/v3", $axios);
 
-const { data: releasesResponse } = useSafeAxiosQuery(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
+const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
 const latestRelease = computed(() => releasesResponse.value?.data.data?.[0]);
 
 const hasNewReleaseNotes = computed(() => {

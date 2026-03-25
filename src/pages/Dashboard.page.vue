@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
 import SvgNewsEmpty from "@/assets/img/SvgNewsEmpty.vue";
-import { useSafeAxiosQuery } from "@/composables/async-tasks.composable";
+import { useSafeAxiosRunner } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -76,7 +76,7 @@ const newsApi = NewsApiFactory(undefined, "/v3", $axios);
 
 useTitle(buildPageTitle(t("pages.dashboard.title")));
 
-const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosQuery(() =>
+const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =>
 	newsApi.newsControllerFindAll("schools", undefined, undefined, undefined, NEWS_LIMIT)
 );
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);

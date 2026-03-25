@@ -10,10 +10,7 @@ const router = createRouter({
 	linkExactActiveClass: "nuxt-link-exact-active",
 	routes,
 	scrollBehavior(to, from, savedPosition) {
-		if (savedPosition) {
-			return savedPosition;
-		}
-		return { top: 0 };
+		return savedPosition ?? { top: 0 };
 	},
 });
 
