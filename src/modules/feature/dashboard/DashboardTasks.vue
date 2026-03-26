@@ -53,7 +53,7 @@
 			/>
 		</template>
 
-		<VBtn class="mt-4" variant="outlined" data-test-id="show-all-tasks" to="/tasks">
+		<VBtn class="mt-12" variant="outlined" data-test-id="show-all-tasks" to="/tasks">
 			{{ t("common.actions.show.all") }}
 		</VBtn>
 	</SvsSuspense>
