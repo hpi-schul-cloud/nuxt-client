@@ -1,9 +1,10 @@
 <template>
-	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<CourseRoomWrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
 			<h1 class="py-2">
 				{{ $t("pages.courseRooms.index.courses.active") }}
 			</h1>
+
 			<div class="mb-5 header-actions-section">
 				<v-btn variant="outlined" size="small" to="/rooms/courses-list" data-testid="go-to-all-courses">
 					{{ $t("pages.courseRooms.index.courses.all") }}
@@ -13,7 +14,6 @@
 					v-model="allowDragging"
 					class="enable-disable"
 					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>
@@ -21,16 +21,13 @@
 		</template>
 		<template #page-content>
 			<div>
-				<v-text-field
+				<SvsSearchField
 					ref="search"
 					v-model="searchText"
-					class="room-search px-1"
-					variant="solo"
-					rounded
-					single-line
+					density="default"
+					class="px-1 mb-6"
 					:label="$t('pages.courseRooms.index.search.label')"
-					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRooms.index.search.label')"
+					:clearable="false"
 					data-testid="search-field-course"
 				/>
 				<div v-for="(row, rowIndex) in dimensions.rowCount" :key="rowIndex" class="room-overview-row">
@@ -41,15 +38,15 @@
 						:style="{ width: dimensions.cellWidth }"
 					>
 						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
-							<vRoomEmptyAvatar
+							<RoomEmptyAvatar
 								v-if="isEmptyGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="RoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@drop-empty-avatar="setDropElement({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomGroupAvatar
+							<RoomGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-group-avatar"
@@ -57,21 +54,21 @@
 								:size="dimensions.cellWidth"
 								:device="device"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomGroupAvatar"
+								data-avatar-type="RoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-group-avatar="onDragend"
 								@drop-group-avatar="addGroupElements({ x: colIndex, y: rowIndex })"
 							/>
-							<vRoomAvatar
+							<RoomAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:draggable="allowDragging"
-								data-avatar-type="vRoomAvatar"
+								data-avatar-type="RoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragend-avatar="onDragend"
@@ -79,11 +76,11 @@
 							/>
 						</template>
 						<template v-else>
-							<vRoomEmptyAvatar
+							<RoomEmptyAvatar
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="RoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 								@drop-empty-avatar="setDropElement({ x: colIndex, y: rowIndex })"
 							/>
@@ -92,7 +89,7 @@
 				</div>
 			</div>
 		</template>
-	</room-wrapper>
+	</CourseRoomWrapper>
 	<room-modal
 		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
@@ -112,28 +109,29 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
-import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar.vue";
-import RoomModal from "@/components/molecules/RoomModal.vue";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
+import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
+import CourseRoomEmptyAvatar from "@/components/course-rooms/CourseRoomEmptyAvatar.vue";
+import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvatar.vue";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
+import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { mdiCheck, mdiMagnify } from "@icons/material";
+import { mdiCheck } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	components: {
-		RoomWrapper,
-		vRoomAvatar,
-		vRoomGroupAvatar,
-		vRoomEmptyAvatar,
-		RoomModal,
+		CourseRoomWrapper,
+		RoomAvatar: CourseRoomAvatar,
+		RoomGroupAvatar: CourseRoomGroupAvatar,
+		RoomEmptyAvatar: CourseRoomEmptyAvatar,
+		RoomModal: CourseRoomModal,
 		ImportFlow,
+		SvsSearchField,
 	},
-	layout: "defaultVuetify",
 	setup() {
 		const refs = reactive({});
 
@@ -166,7 +164,6 @@ export default defineComponent({
 			showDeleteSection: false,
 			roomNameEditMode: false,
 			draggedElementName: "",
-			mdiMagnify,
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
@@ -282,7 +279,7 @@ export default defineComponent({
 
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
-			if (toElementName === "vRoomEmptyAvatar") {
+			if (toElementName === "RoomEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -298,8 +295,8 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
-				toElementName === "vRoomAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomAvatar"
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
@@ -313,8 +310,8 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) === JSON.stringify(pos)) return;
 
 			if (
-				(this.draggedElementName === "vRoomAvatar" || this.draggedElementName === "groupItem") &&
-				toElementName === "vRoomGroupAvatar"
+				(this.draggedElementName === "RoomAvatar" || this.draggedElementName === "groupItem") &&
+				toElementName === "RoomGroupAvatar"
 			) {
 				this.savePosition();
 			}

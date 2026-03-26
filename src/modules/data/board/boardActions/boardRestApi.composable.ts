@@ -1,11 +1,13 @@
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
+import { useSharedEditMode } from "../edit-mode.composable";
 import {
 	CreateCardRequestPayload,
 	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
+	MoveCardToBoardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -14,11 +16,10 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { BoardObjectType, ErrorType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { courseRoomDetailsModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useAppStore } from "@data-app";
-import { useSharedEditMode } from "@util-board";
+import { BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -30,6 +31,7 @@ export const useBoardRestApi = () => {
 		deleteColumnCall,
 		fetchBoardCall,
 		moveCardCall,
+		moveCardToBoardCall,
 		moveColumnCall,
 		updateColumnTitleCall,
 		updateBoardTitleCall,
@@ -136,6 +138,22 @@ export const useBoardRestApi = () => {
 				...payload,
 				toColumnId,
 				toColumnIndex,
+				isOwnAction: true,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
+			});
+		}
+	};
+
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		try {
+			const { cardId, toColumnId } = payload;
+			const result = await moveCardToBoardCall(cardId, toColumnId);
+
+			await boardStore.moveCardToBoardSuccess({
+				...result,
 				isOwnAction: true,
 			});
 		} catch (error) {
@@ -279,6 +297,7 @@ export const useBoardRestApi = () => {
 		deleteBoardRequest,
 		deleteColumnRequest,
 		moveCardRequest,
+		moveCardToBoardRequest,
 		moveColumnRequest,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,

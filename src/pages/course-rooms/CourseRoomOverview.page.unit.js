@@ -1,16 +1,10 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
-import RoomModal from "@/components/molecules/RoomModal";
+import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import { courseRoomListModule } from "@/store";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
-import LoadingStateModule from "@/store/loading-state";
-import {
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_LIST_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-} from "@/utils/inject";
+import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COPY_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -96,7 +90,6 @@ const spyMocks = {
 };
 
 let copyModuleMock;
-let loadingStateModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
@@ -107,24 +100,21 @@ const getWrapper = () => {
 	copyModuleMock = createModuleMocks(CopyModule, {
 		getIsResultModalOpen: false,
 	});
-	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
 	return mount(CourseRoomOverviewPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				loadingStateModule: loadingStateModuleMock,
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
-				[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			},
 			mocks: defaultMocks,
 		},
 	});
 };
 
-describe("@/pages/CourseRoomOverview.page", () => {
+describe("CourseRoomOverview.page", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 		createTestAppStore();
@@ -192,18 +182,18 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent(CourseRoomModal);
 		expect(customDialog.props("isOpen")).toBe(true);
 	});
 
-	it("custom-dialog component should be visible", async () => {
+	it("CustomDialog component should be visible", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		await nextTick();
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent(CourseRoomModal);
 		await nextTick();
 		const input = customDialog.findComponent({ name: "v-text-field" });
 		expect(customDialog.props("isOpen")).toBe(true);
@@ -215,19 +205,19 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		await nextTick();
 		await nextTick();
 		expect(wrapper.findComponent('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomAvatar"
+			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomAvatar"
+			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomAvatar"
+			"RoomAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="3-2"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomGroupAvatar"
+			"RoomGroupAvatar"
 		);
 		expect(wrapper.findComponent('[data-test-position="3-3"]').attributes("data-avatar-type")).toStrictEqual(
-			"vRoomEmptyAvatar"
+			"RoomEmptyAvatar"
 		);
 	});
 
@@ -356,7 +346,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 			},
 		});
 
-		const roomModal = wrapper.findComponent(RoomModal);
+		const roomModal = wrapper.findComponent(CourseRoomModal);
 		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[0]);
 
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-1"]');
@@ -368,13 +358,13 @@ describe("@/pages/CourseRoomOverview.page", () => {
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
 
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
 
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomEmptyAvatar");
-		expect(wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomEmptyAvatar");
+		expect(wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
@@ -385,7 +375,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 
 		await wrapper.setData({ allowDragging: true });
 
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
@@ -424,8 +414,8 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		};
 		await nextTick();
 		await nextTick();
-		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
-		expect(wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual("vRoomAvatar");
+		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
+		expect(wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");

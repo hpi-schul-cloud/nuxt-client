@@ -1,14 +1,15 @@
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
+import { mockComposable } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useSystemApi } from "@data-system";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@data-system");
 
 describe("ClassMembersInfoBox", () => {
-	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
+	let useSystemApiMock: Mocked<ReturnType<typeof useSystemApi>>;
 
 	const setup = (props = {}) => {
 		const wrapper = mount(ClassMembersInfoBox, {
@@ -27,7 +28,7 @@ describe("ClassMembersInfoBox", () => {
 	};
 
 	beforeEach(() => {
-		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
+		useSystemApiMock = mockComposable(useSystemApi);
 
 		vi.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
 

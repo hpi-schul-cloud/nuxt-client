@@ -1,6 +1,5 @@
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useParentStatisticsStore } from "./ParentStatistics.state";
-import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@/fileStorageApi/v3";
 import {
 	EditorMode,
 	FileRecord,
@@ -10,7 +9,8 @@ import {
 	StorageLocation,
 } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { formatFileSize } from "@/utils/fileHelper";
+import { formatFileSize, getFileExtension } from "@/utils/fileHelper";
+import { FileApiFactory, FileApiInterface, WopiApiFactory, WopiApiInterface } from "@api-file-storage";
 import { notifyError, useAppStore } from "@data-app";
 import { useEnvFileConfig } from "@data-env";
 import { useI18n } from "vue-i18n";
@@ -22,14 +22,22 @@ export enum ErrorType {
 	FILE_NAME_EMPTY = "FILE_NAME_EMPTY",
 	COULD_NOT_CREATE_PATH = "COULD_NOT_CREATE_PATH",
 	FILE_TOO_BIG = "FILE_TOO_BIG",
+	FILE_LIMIT_PER_PARENT_EXCEEDED = "FILE_LIMIT_PER_PARENT_EXCEEDED",
 	Unauthorized = "Unauthorized",
 	Forbidden = "Forbidden",
+}
+
+export enum CollaboraFileType {
+	Text = "TEXT",
+	Spreadsheet = "SPREADSHEET",
+	Presentation = "PRESENTATION",
 }
 
 export const useFileStorageApi = () => {
 	const { t } = useI18n();
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const wopiApi: WopiApiInterface = WopiApiFactory(undefined, "/v3", $axios);
+	const fileConfig = useEnvFileConfig();
 
 	const { getFileRecordsByParentId, upsertFileRecords, deleteFileRecords, getFileRecordById } = useFileRecordsStore();
 
@@ -69,12 +77,40 @@ export const useFileStorageApi = () => {
 		}
 	};
 
+	const getCollaboraAssetUrl = (collaboraFileType: CollaboraFileType): string => {
+		const base = `${window.location.origin}/collabora`;
+
+		if (collaboraFileType === CollaboraFileType.Text) {
+			return `${base}/doc.docx`;
+		}
+		if (collaboraFileType === CollaboraFileType.Spreadsheet) {
+			return `${base}/spreadsheet.xlsx`;
+		}
+
+		return `${base}/presentation.pptx`;
+	};
+
+	const uploadCollaboraFile = async (
+		type: CollaboraFileType,
+		parentId: string,
+		parentType: FileRecordParent,
+		fileName: string
+	) => {
+		const assetUrl = getCollaboraAssetUrl(type);
+		const fileExtension = getFileExtension(assetUrl);
+		const fullFileName = `${fileName}.${fileExtension}`;
+
+		const fileRecord = await uploadFromUrl(assetUrl, parentId, parentType, fullFileName);
+
+		return fileRecord;
+	};
+
 	const uploadFromUrl = async (
 		imageUrl: string,
 		parentId: string,
 		parentType: FileRecordParent,
 		fileName?: string
-	): Promise<void> => {
+	): Promise<FileRecord | void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			fileName = fileName ?? pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -93,6 +129,8 @@ export const useFileStorageApi = () => {
 			);
 
 			upsertFileRecords([response.data]);
+
+			return response.data;
 		} catch (error) {
 			showError(error);
 		}
@@ -177,6 +215,13 @@ export const useFileStorageApi = () => {
 			case ErrorType.Forbidden:
 				notifyError(t("error.403"));
 				break;
+			case ErrorType.FILE_LIMIT_PER_PARENT_EXCEEDED:
+				notifyError(
+					t("components.board.notifications.errors.fileLimitPerParentExceeded", {
+						fileLimitPerParent: fileConfig.value.FILES_STORAGE_MAX_FILES_PER_PARENT,
+					})
+				);
+				break;
 			default:
 				notifyError(t("components.board.notifications.errors.fileServiceNotAvailable"));
 				break;
@@ -195,5 +240,6 @@ export const useFileStorageApi = () => {
 		tryGetParentStatisticFromApi: fetchFileStatistic,
 		getAuthorizedCollaboraDocumentUrl,
 		fetchFileById,
+		uploadCollaboraFile,
 	};
 };

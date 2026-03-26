@@ -1,10 +1,11 @@
-import BoardGrid from "./BoardGrid.vue";
 import RoomAdminMembersTable from "./manageRoom/tables/RoomAdminMembersTable.vue";
 import RoomAdminTable from "./manageRoom/tables/RoomAdminTable.vue";
 import Registration from "./registration/Registration.vue";
+import RoomContentGrid from "./RoomContentGrid.vue";
 import RoomCopyFlow from "./RoomCopyFlow.vue";
 import RoomForm from "./RoomForm.vue";
 import RoomGrid from "./RoomGrid.vue";
+import AddExternalPersonDialog from "./roomMembers/dialogs/add-external-person-dialog/AddExternalPersonDialog.vue";
 import AddMembersDialog from "./roomMembers/dialogs/AddMembersDialog.vue";
 import ChangeRole from "./roomMembers/dialogs/ChangeRole.vue";
 import InviteMembersDialog from "./roomMembers/dialogs/InviteMembersDialog.vue";
@@ -18,8 +19,8 @@ import RoomMenu from "./RoomMenu.vue";
 import RoomsWelcomeInfo from "./RoomsWelcomeInfo.vue";
 
 export {
+	AddExternalPersonDialog,
 	AddMembersDialog,
-	BoardGrid,
 	ChangeRole,
 	Confirmations,
 	ConfirmationTable,
@@ -31,6 +32,7 @@ export {
 	Registration,
 	RoomAdminMembersTable,
 	RoomAdminTable,
+	RoomContentGrid,
 	RoomCopyFlow,
 	RoomForm,
 	RoomGrid,

@@ -1,15 +1,16 @@
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardLayout,
 	BoardResponse,
 	CardResponse,
+	CardSkeletonResponse,
 	ColumnResponse,
-	CreateCardBodyParamsRequiredEmptyElementsEnum,
-} from "@/serverApi/v3";
-import { ColumnMove } from "@/types/board/DragAndDrop";
+	CreateCardBodyParamsRequiredEmptyElements,
+} from "@api-server";
 
 export type CreateCardRequestPayload = {
 	columnId: string;
-	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElementsEnum[];
+	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElements[];
 };
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;
@@ -64,6 +65,34 @@ export type MoveCardSuccessPayload = {
 	isOwnAction: boolean;
 };
 export type MoveCardFailurePayload = MoveCardRequestPayload;
+
+export type MoveCardToBoardRequestPayload = {
+	cardId: string;
+	fromColumnId: string;
+	toColumnId: string;
+};
+export type MoveCardToBoardSuccessPayload = {
+	fromBoard: {
+		id: string;
+		title: string;
+	};
+	toBoard: {
+		id: string;
+		title: string;
+	};
+	fromColumn: {
+		id: string;
+		title: string;
+	};
+	toColumn: {
+		id: string;
+		title: string;
+	};
+	card: CardSkeletonResponse;
+	isOwnAction?: boolean;
+};
+
+export type MoveCardToBoardFailurePayload = MoveCardToBoardRequestPayload;
 
 export type MoveColumnRequestPayload = {
 	columnMove: ColumnMove;

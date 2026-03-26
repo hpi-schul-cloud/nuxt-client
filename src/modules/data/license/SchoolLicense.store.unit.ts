@@ -1,19 +1,19 @@
 import { useSchoolLicenseStore } from "./SchoolLicense.store";
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
-import { MediaSchoolLicenseListResponse } from "@/serverApi/v3";
-import { mediaSchoolLicenseResponseFactory } from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { mediaSchoolLicenseResponseFactory, mockComposable } from "@@/tests/test-utils";
+import { MediaSchoolLicenseListResponse } from "@api-server";
 import { createPinia, setActivePinia } from "pinia";
+import { Mocked } from "vitest";
 
 vi.mock("./schoolLicenseApi.composable");
 
 describe("SchoolLicenseStore", () => {
-	let useSchoolLicenseApiMock: DeepMocked<ReturnType<typeof useSchoolLicenseApi>>;
+	let useSchoolLicenseApiMock: Mocked<ReturnType<typeof useSchoolLicenseApi>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
 
-		useSchoolLicenseApiMock = createMock<ReturnType<typeof useSchoolLicenseApi>>();
+		useSchoolLicenseApiMock = mockComposable(useSchoolLicenseApi);
 		vi.mocked(useSchoolLicenseApi).mockReturnValue(useSchoolLicenseApiMock);
 	});
 

@@ -15,10 +15,10 @@
 				@update:model-value="updateMediaBoardLayout"
 			>
 				<VBtn
-					icon="$shelfOutline"
+					icon="$gridRowOutline"
 					size="x-small"
 					width="48px"
-					:value="BoardLayout.List"
+					:value="BoardLayout.LIST"
 					:aria-label="$t('feature.media-shelf.layout.list')"
 					data-testid="media-board-layout-list"
 				/>
@@ -26,7 +26,7 @@
 					:icon="mdiViewGridOutline"
 					size="x-small"
 					width="48px"
-					:value="BoardLayout.Grid"
+					:value="BoardLayout.GRID"
 					:aria-label="$t('feature.media-shelf.layout.grid')"
 					data-testid="media-board-layout-grid"
 				/>
@@ -61,12 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardLayout } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { BoardLayout } from "@api-server";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { mdiViewGridOutline } from "@icons/material";
 import { EmptyState, MediaShelfEmptyStateSvg } from "@ui-empty-state";
+import { DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted } from "vue";
 import { useI18n } from "vue-i18n";

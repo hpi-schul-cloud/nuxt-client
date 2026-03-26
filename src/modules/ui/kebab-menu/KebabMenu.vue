@@ -2,7 +2,7 @@
 	<VMenu v-if="hasSlotContent($slots.default)" location="bottom end" min-width="250">
 		<template #activator="{ props }">
 			<VBtn
-				v-bind="props"
+				v-bind="{ ...props, ...safariAriaOwnsWorkaround }"
 				v-bind.attr="$attrs"
 				variant="text"
 				:ripple="false"
@@ -20,8 +20,9 @@
 </template>
 
 <script setup lang="ts">
+import KebabMenuList from "./KebabMenuList.vue";
 import { mdiDotsVertical } from "@icons/material";
-import { KebabMenuList } from "@ui-kebab-menu";
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import type { Slot, VNode } from "vue";
 import { Comment, Fragment } from "vue";
 

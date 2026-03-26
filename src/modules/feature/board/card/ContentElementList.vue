@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { ContentElementType } from "@api-server";
 import { useEnvConfig } from "@data-env";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
@@ -37,7 +37,6 @@ import { FileContentElement } from "@feature-board-file-element";
 import { FolderContentElement } from "@feature-board-folder-element";
 import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
-import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { PropType } from "vue";
@@ -104,48 +103,43 @@ const mapToComponent = (type: ContentElementType) => {
 	const envConfig = useEnvConfig();
 
 	switch (type) {
-		case ContentElementType.CollaborativeTextEditor:
+		case ContentElementType.COLLABORATIVE_TEXT_EDITOR:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED) {
 				return CollaborativeTextEditorElement;
 			}
 			break;
-		case ContentElementType.Drawing:
+		case ContentElementType.DRAWING:
 			if (envConfig.value.FEATURE_TLDRAW_ENABLED) {
 				return DrawingContentElement;
 			}
 			break;
-		case ContentElementType.ExternalTool:
+		case ContentElementType.EXTERNAL_TOOL:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 				return ExternalToolElement;
 			}
 			break;
-		case ContentElementType.File:
+		case ContentElementType.FILE:
 			return FileContentElement;
-		case ContentElementType.Link:
+		case ContentElementType.LINK:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 				return LinkContentElement;
 			}
 			break;
-		case ContentElementType.RichText:
+		case ContentElementType.RICH_TEXT:
 			return RichTextContentElement;
-		case ContentElementType.SubmissionContainer:
-			if (envConfig.value.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-				return SubmissionContentElement;
-			}
-			break;
-		case ContentElementType.VideoConference:
+		case ContentElementType.VIDEO_CONFERENCE:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
 				return VideoConferenceContentElement;
 			}
 			break;
-		case ContentElementType.Deleted:
+		case ContentElementType.DELETED:
 			return DeletedElement;
-		case ContentElementType.FileFolder:
+		case ContentElementType.FILE_FOLDER:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
 				return FolderContentElement;
 			}
 			break;
-		case ContentElementType.H5p:
+		case ContentElementType.H5P:
 			if (envConfig.value.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
 				return H5pElement;
 			}
@@ -156,12 +150,12 @@ const mapToComponent = (type: ContentElementType) => {
 };
 
 const elementTypesWithTabindexZero = [
-	ContentElementType.CollaborativeTextEditor,
-	ContentElementType.Drawing,
-	ContentElementType.ExternalTool,
-	ContentElementType.File,
-	ContentElementType.Link,
-	ContentElementType.H5p,
+	ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+	ContentElementType.DRAWING,
+	ContentElementType.EXTERNAL_TOOL,
+	ContentElementType.FILE,
+	ContentElementType.LINK,
+	ContentElementType.H5P,
 ];
 
 const getTabIndex = (element: AnyContentElement) => {

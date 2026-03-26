@@ -1,8 +1,8 @@
 import FileStatus from "./FileStatus.vue";
-import { FileRecordScanStatus, PreviewStatus } from "@/fileStorageApi/v3";
 import { FilePreviewStatus, FileRecord } from "@/types/file/File";
 import { fileRecordFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { FileRecordScanStatus, PreviewStatus } from "@api-file-storage";
 
 describe("FileStatus", () => {
 	const setupWrapper = (fileRecord: FileRecord) => {
@@ -72,6 +72,32 @@ describe("FileStatus", () => {
 			const { wrapper } = setupWrapper(fileRecord);
 
 			expect(wrapper.findComponent('[data-testid="file-status-scan-virus-detected"]').exists()).toBe(true);
+		});
+	});
+
+	describe("when collabora file size is exceeded", () => {
+		it("should show correct chip", () => {
+			const fileRecord = fileRecordFactory.build({
+				exceedsCollaboraEditableFileSize: true,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord);
+
+			expect(wrapper.findComponent('[data-testid="file-status-collabora-file-size-exceeded"]').exists()).toBe(true);
+		});
+	});
+
+	describe("when collabora file size is exceeded and virus detected", () => {
+		it("should only show virus info chip", () => {
+			const fileRecord = fileRecordFactory.build({
+				exceedsCollaboraEditableFileSize: true,
+				securityCheckStatus: FileRecordScanStatus.BLOCKED,
+			});
+
+			const { wrapper } = setupWrapper(fileRecord);
+
+			expect(wrapper.findComponent('[data-testid="file-status-scan-virus-detected"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="file-status-collabora-file-size-exceeded"]').exists()).toBe(false);
 		});
 	});
 });

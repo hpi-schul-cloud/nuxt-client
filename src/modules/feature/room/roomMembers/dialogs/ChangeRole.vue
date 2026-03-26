@@ -42,7 +42,7 @@
 						</VRadio>
 					</VRadioGroup>
 					<WarningAlert
-						v-if="selectedRole === RoleName.Roomowner && currentOwnerFullName"
+						v-if="selectedRole === RoleName.ROOMOWNER && currentOwnerFullName"
 						:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
 					>
 						<span class="alert-text">
@@ -115,7 +115,7 @@
 
 <script setup lang="ts">
 import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
-import { ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum, RoleName } from "@/serverApi/v3";
+import { ChangeRoomRoleBodyParamsRoleName as RoleEnum, RoleName } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
@@ -222,7 +222,7 @@ const memberFullName = computed(
 
 const memberSchoolRoles = computed(() => memberToChangeRole.value[0]?.schoolRoleNames);
 
-const isMemberStudent = computed(() => memberSchoolRoles.value.includes(RoleName.Student));
+const isMemberStudent = computed(() => memberSchoolRoles.value.includes(RoleName.STUDENT));
 
 const infoText = computed(() => {
 	const roomName = room.value?.name ?? "";
@@ -239,7 +239,7 @@ const infoText = computed(() => {
 
 const onConfirm = async () => {
 	if (!selectedRole.value) return;
-	if (selectedRole.value === RoleName.Roomowner) {
+	if (selectedRole.value === RoleName.ROOMOWNER) {
 		isOwnershipHandoverMode.value = true;
 		return;
 	}
@@ -270,7 +270,7 @@ const resetComponentState = () => {
 
 const radioOptions = computed(() => {
 	const roomOwnerOption = {
-		role: RoleName.Roomowner,
+		role: RoleName.ROOMOWNER,
 		labelHeader: t("pages.rooms.members.roomPermissions.owner"),
 		labelDescriptions: [
 			"pages.rooms.members.roleChange.Roomowner.label",
@@ -281,19 +281,19 @@ const radioOptions = computed(() => {
 
 	const baseRoles = [
 		{
-			role: RoleName.Roomviewer,
+			role: RoleName.ROOMVIEWER,
 			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
 			dataTestid: "change-role-option-viewer",
 		},
 		{
-			role: RoleName.Roomeditor,
+			role: RoleName.ROOMEDITOR,
 			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
 			dataTestid: "change-role-option-editor",
 		},
 		{
-			role: RoleName.Roomadmin,
+			role: RoleName.ROOMADMIN,
 			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
 			dataTestid: "change-role-option-admin",
@@ -304,9 +304,11 @@ const radioOptions = computed(() => {
 		return [roomOwnerOption];
 	}
 
-	const isExpertMember = memberToChangeRole?.value.some((member) => member.schoolRoleNames.includes(RoleName.Expert));
-	if (isExpertMember) {
-		return baseRoles.filter((r) => r.role === RoleName.Roomviewer || r.role === RoleName.Roomeditor);
+	const isExternalPersonMember = memberToChangeRole?.value.some((member) =>
+		member.schoolRoleNames.includes(RoleName.EXTERNAL_PERSON)
+	);
+	if (isExternalPersonMember) {
+		return baseRoles.filter((r) => r.role === RoleName.ROOMVIEWER || r.role === RoleName.ROOMEDITOR);
 	}
 
 	if (isChangeOwnershipOptionVisible.value) {

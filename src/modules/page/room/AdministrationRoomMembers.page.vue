@@ -1,5 +1,5 @@
 <template>
-	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction" @fab:clicked="onFabClick">
+	<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs" :fab-items="fabAction">
 		<template #header>
 			<div ref="header" class="d-flex align-items-center">
 				<h1 data-testid="admin-room-detail-title">
@@ -16,14 +16,13 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { schoolsModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { AddMembersDialog, RoomAdminMembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useElementBounding, useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, watch } from "vue";
@@ -93,12 +92,14 @@ const isOwnSchool = computed(() => room.value?.schoolId === adminSchoolId.value)
 
 const fabAction = computed(() =>
 	isOwnSchool.value
-		? {
-				icon: mdiPlus,
-				title: t("pages.rooms.members.add"),
-				ariaLabel: t("pages.rooms.members.add"),
-				dataTestId: "fab-add-members",
-			}
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.rooms.members.add"),
+					dataTestId: "fab-add-members",
+					clickHandler: onFabClick,
+				},
+			]
 		: undefined
 );
 

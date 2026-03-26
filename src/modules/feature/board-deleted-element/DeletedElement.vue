@@ -1,6 +1,6 @@
 <template>
 	<VCard
-		v-show="isTeacher"
+		v-show="allowedOperations.deleteElement"
 		ref="deletedElement"
 		class="mb-4"
 		data-testid="board-deleted-element"
@@ -22,7 +22,7 @@
 				/>
 			</template>
 		</ContentElementBar>
-		<WarningAlert v-if="element.content.deletedElementType === ContentElementType.ExternalTool">
+		<WarningAlert v-if="element.content.deletedElementType === ContentElementType.EXTERNAL_TOOL">
 			{{
 				t("components.cardElement.deletedElement.warning.externalToolElement", {
 					toolName: element.content.title,
@@ -34,13 +34,16 @@
 
 <script setup lang="ts">
 import DeletedElementMenu from "./DeletedElementMenu.vue";
-import { ContentElementType, DeletedElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { ContentElementType, DeletedElementResponse } from "@api-server";
+import { useBoardAllowedOperations, useBoardFocusHandler } from "@data-board";
 import { mdiPuzzleOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ContentElementBar } from "@ui-board";
 import { PropType, Ref, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+
+const { allowedOperations } = useBoardAllowedOperations();
+
 const { t } = useI18n();
 
 const props = defineProps({
@@ -57,8 +60,6 @@ const props = defineProps({
 const emit = defineEmits<{
 	(e: "delete:element", elementId: string): void;
 }>();
-
-const { isTeacher } = useBoardPermissions();
 
 const autofocus: Ref<boolean> = ref(false);
 const element: Ref<DeletedElementResponse> = toRef(props, "element");

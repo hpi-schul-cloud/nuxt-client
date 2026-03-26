@@ -7,23 +7,24 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { BoardLayout } from "@/serverApi/v3/api";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
 	columnResponseFactory,
+	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 } from "@@/tests/test-utils";
+import { BoardLayout, MoveCardResponse } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useBoardStore, useForceRender, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { Router, useRouter } from "vue-router";
+import { Mocked } from "vitest";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
@@ -37,42 +38,40 @@ const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 vi.mock("@util-board/LastCreatedElement.composable");
 const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
 }));
 
 describe("useBoardSocketApi", () => {
-	let socketMock: DeepMocked<ReturnType<typeof useSocketConnection>>;
-	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
-	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSharedLastCreatedElementActions: DeepMocked<ReturnType<typeof useSharedLastCreatedElement>>;
+	let socketMock: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedBoardRestApiHandler: Mocked<ReturnType<typeof useBoardRestApi>>;
+	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
+	let mockedSharedLastCreatedElementActions: Mocked<ReturnType<typeof useSharedLastCreatedElement>>;
 	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
-		socketMock = createMock<ReturnType<typeof useSocketConnection>>();
+		socketMock = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(socketMock);
 
-		mockedBoardRestApiHandler = createMock<ReturnType<typeof useBoardRestApi>>();
+		mockedBoardRestApiHandler = mockComposable(useBoardRestApi);
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
 
-		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedSharedLastCreatedElementActions = createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElementActions = mockComposable(useSharedLastCreatedElement);
 		mockedSharedLastCreatedElement.mockReturnValue(mockedSharedLastCreatedElementActions);
-		mockedUseForceRenderHandler = createMock<ReturnType<typeof useForceRender>>();
+
+		mockedUseForceRenderHandler = mockComposable(useForceRender);
 		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
+
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardSocketApi);
 	});
 
 	it("should be defined", () => {
@@ -87,7 +86,7 @@ describe("useBoardSocketApi", () => {
 				title: "sometitle",
 				columns: [],
 				isVisible: true,
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				timestamps: {
 					createdAt: new Date().toISOString(),
 					lastUpdatedAt: new Date().toISOString(),
@@ -95,7 +94,6 @@ describe("useBoardSocketApi", () => {
 				},
 				readersCanEdit: false,
 				features: [],
-				permissions: [],
 			};
 			const { dispatch } = useBoardSocketApi();
 			return { dispatch };
@@ -184,6 +182,36 @@ describe("useBoardSocketApi", () => {
 			expect(mockedUseForceRenderHandler.generateRenderKey).toHaveBeenCalled();
 		});
 
+		it("should call moveCardToBoardSuccess for corresponding action", () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const { dispatch } = useBoardSocketApi();
+			const cardPayload: MoveCardResponse = {
+				card: {
+					cardId: "cardId",
+					height: 100,
+				},
+				fromColumn: {
+					id: "1",
+					title: "fromColumnId",
+				},
+				toColumn: {
+					id: "2",
+					title: "toColumnId",
+				},
+				fromBoard: {
+					id: "3",
+					title: "toBoardId",
+				},
+				toBoard: {
+					id: "4",
+					title: "toBoardId",
+				},
+			};
+
+			dispatch(BoardActions.moveCardToBoardSuccess(cardPayload));
+			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalledWith(cardPayload);
+		});
+
 		it("should call moveColumnSuccess for corresponding action", () => {
 			const boardStore = mockedPiniaStoreTyping(useBoardStore);
 			const { dispatch } = useBoardSocketApi();
@@ -258,7 +286,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload: UpdateBoardLayoutSuccessPayload = {
 				boardId: "cardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateBoardLayoutSuccess(payload));
@@ -385,7 +413,7 @@ describe("useBoardSocketApi", () => {
 				dispatch(
 					BoardActions.updateBoardLayoutFailure({
 						boardId: "test",
-						layout: BoardLayout.Columns,
+						layout: BoardLayout.COLUMNS,
 					})
 				);
 
@@ -620,14 +648,14 @@ describe("useBoardSocketApi", () => {
 
 			updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(socketMock.emitOnSocket).toHaveBeenCalledWith<[string, UpdateBoardLayoutFailurePayload]>(
 				"update-board-layout-request",
 				{
 					boardId: "boardId",
-					layout: BoardLayout.Columns,
+					layout: BoardLayout.COLUMNS,
 				}
 			);
 		});

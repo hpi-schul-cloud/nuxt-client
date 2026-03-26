@@ -1,6 +1,6 @@
 import AudioPlayer from "./AudioPlayer.vue";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { mdiPause, mdiPlay } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { useMediaControls } from "@vueuse/core";
@@ -22,7 +22,7 @@ describe("AudioPlayer", () => {
 			const playingRef = ref(false);
 			const onSourceErrorMock = vi.fn();
 
-			const useMediaControlsMock = createMock<ReturnType<typeof useMediaControls>>({
+			const useMediaControlsMock = mockComposable(useMediaControls, {
 				playing: playingRef,
 				currentTime: currentTimeRef,
 				duration: durationRef,
@@ -159,7 +159,7 @@ describe("AudioPlayer", () => {
 			const rateRef = ref(1);
 			const playingRef = ref(true);
 
-			const useMediaControlsMock = createMock<ReturnType<typeof useMediaControls>>({
+			const useMediaControlsMock = mockComposable(useMediaControls, {
 				playing: playingRef,
 				currentTime: currentTimeRef,
 				duration: durationRef,

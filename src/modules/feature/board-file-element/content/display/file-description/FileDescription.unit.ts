@@ -13,8 +13,6 @@ describe("FileDescription", () => {
 		caption?: string;
 		src?: string;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const propsData = {
 			name: props.name ?? "testName",
 			caption: props.caption,
@@ -44,8 +42,6 @@ describe("FileDescription", () => {
 		caption?: string;
 		src?: string;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const propsData = {
 			name: props.name ?? "testName",
 			caption: props.caption,

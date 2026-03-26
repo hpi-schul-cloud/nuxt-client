@@ -1,8 +1,9 @@
 <template>
-	<Dialog
-		v-model:is-dialog-open="isDialogOpen"
-		:message="t('ui.rename.dialog.title', { entity: entityName })"
+	<SvsDialog
+		v-model="isDialogOpen"
+		:title="t('ui.rename.dialog.title', { entity: entityName })"
 		:confirm-btn-disabled="!isNameValid"
+		data-testid="rename-file-dialog"
 		@cancel="onCancel"
 		@confirm="onConfirm"
 	>
@@ -14,17 +15,17 @@
 				flat
 				:aria-label="$t('common.labels.name.new')"
 				:label="t('common.labels.name.new')"
-				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames]"
+				:rules="[rules.required, rules.validateOnOpeningTag, rules.checkDuplicatedNames, rules.checkInvalidCharacters]"
 			/>
 		</template>
-	</Dialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { FileRecord } from "@/types/file/File";
 import { getFileExtension, removeFileExtension } from "@/utils/fileHelper";
-import { Dialog } from "@ui-dialog";
-import { useOpeningTagValidator } from "@util-validators";
+import { SvsDialog } from "@ui-dialog";
+import { useInvalidCharactersValidator, useOpeningTagValidator } from "@util-validators";
 import { computed, PropType, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -59,6 +60,7 @@ watch(
 const { t } = useI18n();
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
+const { validateInvalidCharacters } = useInvalidCharactersValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
@@ -77,13 +79,15 @@ const rules = reactive({
 			t("pages.folder.rename-file-dialog.validation.duplicate-file-name")
 		);
 	},
+	checkInvalidCharacters: (value: string) => validateInvalidCharacters(value, ["/"]),
 });
 
 const isNameValid = computed(
 	() =>
 		rules.required(nameRef.value) === true &&
 		rules.validateOnOpeningTag(nameRef.value) === true &&
-		rules.checkDuplicatedNames(nameRef.value) === true
+		rules.checkDuplicatedNames(nameRef.value) === true &&
+		rules.checkInvalidCharacters(nameRef.value) === true
 );
 
 const onCancel = () => {

@@ -5,31 +5,44 @@
 		</div>
 	</template>
 	<template v-else>
-		<RoomLockedPage v-if="isRoom && lockedRoomName" :title="lockedRoomName" />
+		<RoomLockedPage v-if="isRoom && isLocked" :title="lockedRoomName" />
 		<RoomDetailsPage v-else-if="isRoom && room" :room="room" />
 		<CourseRoomDetailsPage v-else />
 	</template>
 </template>
 
 <script setup lang="ts">
+import RoomDetailsPage from "./RoomDetails.page.vue";
+import RoomLockedPage from "./RoomLocked.page.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { RoomDetailsPage, RoomLockedPage } from "@page-room";
 import { storeToRefs } from "pinia";
-import { computed, onUnmounted, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, roomVariant, room, lockedRoomName } = storeToRefs(roomDetailsStore);
+const { roomVariant, room } = storeToRefs(roomDetailsStore);
 
 const { fetchRoomAndBoards, resetState } = roomDetailsStore;
 
+const isLocked = ref(false);
+const lockedRoomName = ref("");
+
+const isLoading = ref(true);
+
 watch(
 	() => route.params.id,
-	async () => {
-		await fetchRoomAndBoards(route.params.id as string);
+	async (newRoomId) => {
+		isLoading.value = true;
+		const result = await fetchRoomAndBoards(newRoomId as string);
+		if (result?.isLocked) {
+			isLocked.value = result.isLocked;
+			lockedRoomName.value = result.lockedRoomName;
+		}
+
+		isLoading.value = false;
 	},
 	{ immediate: true }
 );

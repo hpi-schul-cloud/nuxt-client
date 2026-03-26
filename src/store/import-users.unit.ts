@@ -1,12 +1,8 @@
 import { BusinessError } from "./types/commons";
-import * as serverApi from "@/serverApi/v3/api";
-import {
-	ImportUserResponseRoleNamesEnum,
-	UserMatchResponseMatchedByEnum,
-	UserMatchResponseRoleNamesEnum,
-} from "@/serverApi/v3/api";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import { apiResponseErrorFactory, axiosErrorFactory, businessErrorFactory } from "@@/tests/test-utils";
+import * as serverApi from "@api-server";
+import { ImportUserResponseRoleNames, UserMatchResponseMatchedBy, UserMatchResponseRoleNames } from "@api-server";
 
 const mockResponse = {
 	data: {
@@ -29,14 +25,14 @@ const userListTestData = {
 			flagged: false,
 			importUserId: "extern.1234",
 			loginName: "samuel.vimes",
-			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			roleNames: [ImportUserResponseRoleNames.TEACHER],
 			match: {
 				firstName: "Samuel",
 				lastName: "Vimes",
 				loginName: "samuel.vimes@test.org",
-				roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
+				roleNames: [UserMatchResponseRoleNames.TEACHER],
 				userId: "1234",
-				matchedBy: UserMatchResponseMatchedByEnum.Auto,
+				matchedBy: UserMatchResponseMatchedBy.AUTO,
 			},
 		},
 		{
@@ -46,14 +42,14 @@ const userListTestData = {
 			flagged: false,
 			importUserId: "extern.5678",
 			loginName: "samuel.vimes",
-			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			roleNames: [ImportUserResponseRoleNames.TEACHER],
 			match: {
 				firstName: "Samuel",
 				lastName: "Vimes",
 				loginName: "samuel.vimes@test.org",
-				roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
+				roleNames: [UserMatchResponseRoleNames.TEACHER],
 				userId: "5678",
-				matchedBy: UserMatchResponseMatchedByEnum.Auto,
+				matchedBy: UserMatchResponseMatchedBy.AUTO,
 			},
 		},
 	],
@@ -228,7 +224,7 @@ describe("import-users store actions", () => {
 				importUserModule.setMatch([MatchedBy.Admin, MatchedBy.Auto, MatchedBy.None]);
 				importUserModule.setFlagged(true);
 				importUserModule.setClasses("5a");
-				importUserModule.setRole(ImportUserResponseRoleNamesEnum.Student);
+				importUserModule.setRole(ImportUserResponseRoleNames.STUDENT);
 				await importUserModule.fetchAllImportUsers();
 
 				expect(importUserModule.getImportUserList.data).toStrictEqual([

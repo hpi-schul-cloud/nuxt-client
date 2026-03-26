@@ -3,16 +3,15 @@ import { useBoardRestApi } from "../boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "../boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { useCardSocketApi } from "../cardActions/cardSocketApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockComposable, mockedPiniaStoreTyping, mountComposable } from "@@/tests/test-utils";
 import { boardResponseFactory, cardSkeletonResponseFactory, columnResponseFactory } from "@@/tests/test-utils/factory";
-import { useCardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { useCardStore, useSharedEditMode, useSocketConnection } from "@data-board";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { createPinia, setActivePinia } from "pinia";
-import type { Mock } from "vitest";
+import type { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRoute, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 vi.mock("../boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
@@ -21,10 +20,13 @@ vi.mock("../boardActions/boardRestApi.composable");
 const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
 vi.mock("@util-board");
-const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedUseSharedFileSelect = vi.mocked(useSharedFileSelect);
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@data-board");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
+
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("@data-board/socket/socket");
@@ -36,10 +38,6 @@ const mockedUseCardSocketApi = vi.mocked(useCardSocketApi);
 vi.mock("../BoardFocusHandler.composable");
 const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
-const useRouteMock = <Mock>useRoute;
-
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 }));
@@ -47,65 +45,49 @@ vi.mock("vue-i18n", () => ({
 type BoardSetup = Record<string, Array<string>>;
 
 describe("BoardStore - moveCardSuccess", () => {
-	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
-	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
-	let mockedBoardRestApiActions: DeepMocked<ReturnType<typeof useBoardRestApi>>;
-	let mockedCardSocketApiActions: DeepMocked<ReturnType<typeof useCardSocketApi>>;
-	let setEditModeId: Mock;
-	let mockedBoardFocusCalls: DeepMocked<ReturnType<typeof useBoardFocusHandler>>;
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
+	let mockedUseSharedFileSelectActions: Mocked<ReturnType<typeof useSharedFileSelect>>;
+	let mockedBoardFocusCalls: Mocked<ReturnType<typeof useBoardFocusHandler>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
 
-		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
-		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
+		mockedUseErrorHandler.mockReturnValue(mockComposable(useErrorHandler));
 
-		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
-		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
+		mockedUseSocketConnection.mockReturnValue(mockComposable(useSocketConnection));
+		mockedUseBoardSocketApi.mockReturnValue(mockComposable(useBoardSocketApi));
 
-		mockedSocketApiActions = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseBoardSocketApi.mockReturnValue(mockedSocketApiActions);
+		mockedUseBoardRestApi.mockReturnValue(mockComposable(useBoardRestApi));
 
-		mockedBoardRestApiActions = createMock<ReturnType<typeof useBoardRestApi>>();
-		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiActions);
+		mockedUseCardSocketApi.mockReturnValue(
+			mockComposable(useCardSocketApi, {
+				dispatch: vi.fn().mockResolvedValue(undefined),
+			})
+		);
 
-		mockedCardSocketApiActions = createMock<ReturnType<typeof useCardSocketApi>>({
-			dispatch: vi.fn().mockResolvedValue(undefined),
-			fetchCardRequest: vi.fn(),
-			createElementRequest: vi.fn(),
-			deleteElementRequest: vi.fn(),
-			updateElementRequest: vi.fn(),
-			moveElementRequest: vi.fn(),
-			deleteCardRequest: vi.fn(),
-			updateCardTitleRequest: vi.fn(),
-			updateCardHeightRequest: vi.fn(),
-			disconnectSocketRequest: vi.fn(),
-		});
-		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
-
-		setEditModeId = vi.fn();
-		mockedSharedEditMode.mockReturnValue({
-			setEditModeId,
-			editModeId: ref(undefined),
-			isInEditMode: computed(() => true),
-		});
+		mockedUseSharedEditMode.mockReturnValue(
+			mockComposable(useSharedEditMode, {
+				editModeId: ref(undefined),
+				isInEditMode: computed(() => true),
+			})
+		);
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: vi.fn(),
 		});
 
-		mockedBoardFocusCalls = createMock<ReturnType<typeof useBoardFocusHandler>>();
+		mockedUseSharedFileSelectActions = mockComposable(useSharedFileSelect, {
+			isFileSelectOnMountEnabled: ref(true),
+			resetFileSelectOnMountEnabled: vi.fn(),
+			disableFileSelectOnMount: vi.fn(),
+		});
+		mockedUseSharedFileSelect.mockReturnValue(mockedUseSharedFileSelectActions);
+
+		mockedBoardFocusCalls = mockComposable(useBoardFocusHandler);
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardStore);
 	});
 
 	afterEach(() => {

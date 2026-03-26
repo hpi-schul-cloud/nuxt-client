@@ -1,18 +1,18 @@
 import { Group, GroupType, GroupUser, GroupUserRole } from "./types";
-import { GroupResponse, GroupResponseTypeEnum, GroupUserResponse, RoleName } from "@/serverApi/v3";
+import { GroupResponse, GroupResponseType, GroupUserResponse, RoleName } from "@api-server";
 
-export const GroupTypeMapping: Record<GroupResponseTypeEnum, GroupType> = {
-	[GroupResponseTypeEnum.Class]: GroupType.Class,
-	[GroupResponseTypeEnum.Course]: GroupType.Course,
-	[GroupResponseTypeEnum.Other]: GroupType.Other,
-	[GroupResponseTypeEnum.Room]: GroupType.Room,
+export const GroupTypeMapping: Record<GroupResponseType, GroupType> = {
+	[GroupResponseType.CLASS]: GroupType.Class,
+	[GroupResponseType.COURSE]: GroupType.Course,
+	[GroupResponseType.OTHER]: GroupType.Other,
+	[GroupResponseType.ROOM]: GroupType.Room,
 };
 
 export const GroupUserRoleMapping: Partial<Record<RoleName, GroupUserRole>> = {
-	[RoleName.Administrator]: GroupUserRole.Administrator,
-	[RoleName.Student]: GroupUserRole.Student,
-	[RoleName.Teacher]: GroupUserRole.Teacher,
-	[RoleName.GroupSubstitutionTeacher]: GroupUserRole.GroupSubstitutionTeacher,
+	[RoleName.ADMINISTRATOR]: GroupUserRole.Administrator,
+	[RoleName.STUDENT]: GroupUserRole.Student,
+	[RoleName.TEACHER]: GroupUserRole.Teacher,
+	[RoleName.GROUP_SUBSTITUTION_TEACHER]: GroupUserRole.GroupSubstitutionTeacher,
 };
 
 export const GroupUserRoleNameTranslationMapping: Record<GroupUserRole, string> = {

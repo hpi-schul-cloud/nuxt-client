@@ -1,3 +1,4 @@
+import { useRoomDetailsStore } from "../RoomDetails.store";
 import {
 	CreateRoomInvitationLinkDto,
 	InvitationStep,
@@ -5,18 +6,18 @@ import {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./types";
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
-import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { $axios } from "@/utils/api";
+import { formatUtc } from "@/utils/date-time.utils";
+import { RoomApiFactory, RoomInvitationLinkApiFactory, SchulcloudTheme } from "@api-server";
 import { notifyError } from "@data-app";
-import { useRoomDetailsStore } from "@data-room";
+import { useEnvConfig } from "@data-env";
 import { isAxiosError } from "axios";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore", () => {
-	const { t } = useI18n();
+	const { t } = useI18nGlobal();
 
 	const { room } = storeToRefs(useRoomDetailsStore());
 
@@ -32,6 +33,12 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
+
+	const envConfig = useEnvConfig();
+	const theme = computed(() => envConfig.value.SC_THEME);
+	const isInviteExternalPersonsFeatureEnabled = computed(
+		() => envConfig.value.FEATURE_ROOM_LINK_INVITATION_EXTERNAL_PERSONS_ENABLED && theme.value !== SchulcloudTheme.THR
+	);
 
 	const fetchLinks = async () => {
 		const isRoomDetailsStoreLoaded = room.value !== undefined;
@@ -163,7 +170,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 				title: link.title,
 				isUsableByStudents: link.isUsableByStudents ? YES : NO,
 				isUsableByExternalPersons: link.isUsableByExternalPersons ? YES : NO,
-				activeUntil: link.activeUntil ? printFromStringUtcToFullDate(link.activeUntil) : NO,
+				activeUntil: link.activeUntil ? formatUtc(link.activeUntil, "date") : NO,
 				isExpired: isExpired(link.activeUntil!),
 				status: isExpired(link.activeUntil!) ? EXPIRED : ACTIVE,
 				restrictedToCreatorSchool: link.restrictedToCreatorSchool ? YES : NO,
@@ -184,6 +191,7 @@ export const useRoomInvitationLinkStore = defineStore("roomInvitationLinkStore",
 		editedLink,
 		invitationStep,
 		isInvitationDialogOpen,
+		isInviteExternalPersonsFeatureEnabled,
 		isLoading,
 		invitationTableData,
 		roomInvitationLinks,

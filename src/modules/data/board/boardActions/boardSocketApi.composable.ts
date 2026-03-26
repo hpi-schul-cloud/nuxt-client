@@ -11,6 +11,7 @@ import {
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -19,9 +20,9 @@ import {
 	UpdateReaderCanEditRequestPayload,
 } from "./boardActionPayload.types";
 import * as BoardActions from "./boardActions";
-import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
+import { CreateCardBodyParamsRequiredEmptyElements } from "@api-server";
 import { useAppStore } from "@data-app";
 
 export const useBoardSocketApi = () => {
@@ -32,6 +33,7 @@ export const useBoardSocketApi = () => {
 		notifyDeleteCardSuccess,
 		notifyDeleteColumnSuccess,
 		notifyMoveCardSuccess,
+		notifyMoveCardToBoardSuccess,
 		notifyMoveColumnSuccess,
 		notifySetBoardAsEditableForAllUsersSuccess,
 		notifySetBoardAsNotEditableForAllUsersSuccess,
@@ -50,6 +52,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, boardStore.moveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
 			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
 			on(BoardActions.updateColumnTitleSuccess, boardStore.updateColumnTitleSuccess),
@@ -66,6 +69,7 @@ export const useBoardSocketApi = () => {
 			on(CardActions.deleteCardFailure, reloadBoard),
 			on(BoardActions.deleteColumnFailure, reloadBoard),
 			on(BoardActions.moveCardFailure, reloadBoard),
+			on(BoardActions.moveCardToBoardFailure, reloadBoard),
 			on(BoardActions.moveColumnFailure, reloadBoard),
 			on(BoardActions.updateColumnTitleFailure, reloadBoard),
 			on(BoardActions.updateBoardTitleFailure, reloadBoard),
@@ -80,6 +84,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
 			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
 			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveCardToBoardSuccess, notifyMoveCardToBoardSuccess),
 			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
 			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
 			on(BoardActions.updateBoardVisibilitySuccess, notifyUpdateBoardVisibilitySuccess),
@@ -104,7 +109,7 @@ export const useBoardSocketApi = () => {
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", {
 			...payload,
-			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElementsEnum.RichText],
+			requiredEmptyElements: [CreateCardBodyParamsRequiredEmptyElements.RICH_TEXT],
 		});
 	};
 
@@ -145,6 +150,10 @@ export const useBoardSocketApi = () => {
 		} catch {
 			resetBoard();
 		}
+	};
+
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		emitOnSocket("move-card-to-board-request", payload);
 	};
 
 	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
@@ -210,6 +219,7 @@ export const useBoardSocketApi = () => {
 		fetchBoardRequest,
 		moveCardRequest,
 		moveColumnRequest,
+		moveCardToBoardRequest,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,

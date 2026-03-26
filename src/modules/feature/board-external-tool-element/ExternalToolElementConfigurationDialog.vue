@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog :is-open="isOpen" :has-buttons="false" @dialog-closed="onCancel">
+	<CustomDialog :is-open="isOpen" :has-buttons="false" @dialog-closed="onCancel">
 		<template #title>
 			<h2 class="my-2">
 				{{ t("feature-board-external-tool-element.dialog.title") }}
@@ -17,13 +17,13 @@
 				@cancel="onCancel"
 			/>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ToolContextType } from "@/serverApi/v3";
+import ContextExternalToolConfigurator from "@/components/administration/external-tools-configuration/ContextExternalToolConfigurator.vue";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { ToolContextType } from "@api-server";
 import { notifySuccess } from "@data-app";
 import { ContextExternalTool } from "@data-external-tool";
 import { nextTick, onMounted, PropType, Ref, ref, watch } from "vue";
@@ -40,7 +40,7 @@ const props = defineProps({
 	},
 	contextType: {
 		type: String as PropType<ToolContextType>,
-		default: ToolContextType.BoardElement,
+		default: ToolContextType.BOARD_ELEMENT,
 	},
 	configId: {
 		type: [String, null],

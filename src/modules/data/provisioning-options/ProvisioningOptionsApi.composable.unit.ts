@@ -1,17 +1,17 @@
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { ProvisioningOptions } from "./type/ProvisioningOptions";
-import * as serverApi from "@/serverApi/v3/api";
-import { SchoolApiInterface, SchulConneXProvisioningOptionsResponse } from "@/serverApi/v3/api";
 import SchoolsModule from "@/store/schools";
-import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { mockApi, mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import * as serverApi from "@api-server";
+import { SchoolApiInterface, SchulConneXProvisioningOptionsResponse } from "@api-server";
+import { Mocked } from "vitest";
 
 describe("ProvisioningOptionsApi.composable", () => {
-	let schoolApi: DeepMocked<SchoolApiInterface>;
+	let schoolApi: Mocked<SchoolApiInterface>;
 
 	beforeAll(() => {
-		schoolApi = createMock<SchoolApiInterface>();
+		schoolApi = mockApi<SchoolApiInterface>();
 
 		vi.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 

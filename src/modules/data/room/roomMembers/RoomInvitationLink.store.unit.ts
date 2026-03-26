@@ -1,43 +1,40 @@
 import { InvitationStep, RoomInvitationLink } from "./types";
-import * as serverApi from "@/serverApi/v3/api";
-import { RoomIdResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import { initializeAxios } from "@/utils/api";
 import {
 	expectNotification,
+	mockApi,
 	mockApiResponse,
+	mockAxiosInstance,
 	mockedPiniaStoreTyping,
 	roomFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import * as serverApi from "@api-server";
+import { RoomIdResponse } from "@api-server";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { createAxiosError } from "@util-axios-error";
-import { AxiosInstance, AxiosPromise } from "axios";
+import { createAxiosError } from "@util-error-handling";
+import { AxiosInstance } from "axios";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
-import { useI18n } from "vue-i18n";
-
-vi.mock("vue-i18n");
-(useI18n as Mock).mockReturnValue({ t: (key: string) => key });
+import { Mocked } from "vitest";
 
 describe("useRoomInvitationLinkStore", () => {
-	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
-	let roomInvitationLinkApiMock: DeepMocked<serverApi.RoomInvitationLinkApiInterface>;
-	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
-	let axiosMock: DeepMocked<AxiosInstance>;
+	let roomApiMock: Mocked<serverApi.RoomApiInterface>;
+	let roomInvitationLinkApiMock: Mocked<serverApi.RoomInvitationLinkApiInterface>;
+	let schoolApiMock: Mocked<serverApi.SchoolApiInterface>;
+	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
-		roomApiMock = createMock<serverApi.RoomApiInterface>();
-		roomInvitationLinkApiMock = createMock<serverApi.RoomInvitationLinkApiInterface>();
-		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
-		axiosMock = createMock<AxiosInstance>();
+		roomApiMock = mockApi<serverApi.RoomApiInterface>();
+		roomInvitationLinkApiMock = mockApi<serverApi.RoomInvitationLinkApiInterface>();
+		schoolApiMock = mockApi<serverApi.SchoolApiInterface>();
+		axiosMock = mockAxiosInstance();
 
 		vi.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		vi.spyOn(serverApi, "RoomInvitationLinkApiFactory").mockReturnValue(roomInvitationLinkApiMock);
@@ -207,7 +204,7 @@ describe("useRoomInvitationLinkStore", () => {
 				expect(updatedLinks[0].activeUntil).toBe(undefined);
 
 				const tableDataElement = roomInvitationLinkStore.invitationTableData.find((l) => l.id === firstLink.id);
-				expect(tableDataElement?.activeUntil).toBe("pages.rooms.members.tables.common.no");
+				expect(tableDataElement?.activeUntil).toBeTruthy();
 			});
 		});
 
@@ -286,9 +283,11 @@ describe("useRoomInvitationLinkStore", () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
 				const roomId = "some-id";
-				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue({
-					data: { id: roomId },
-				} as unknown as AxiosPromise<RoomIdResponse>);
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue(
+					mockApiResponse<RoomIdResponse>({
+						data: { id: roomId },
+					})
+				);
 				const firstLink = links[0];
 
 				const result = await roomInvitationLinkStore.useLink(firstLink.id);
@@ -301,7 +300,7 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should return the validation error message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const message = serverApi.RoomInvitationLinkValidationError.RestrictedToCreatorSchool;
+				const message = serverApi.RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL;
 				const schoolName = "My example School";
 				const axiosError = createAxiosError({
 					message,

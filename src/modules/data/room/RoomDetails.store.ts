@@ -1,7 +1,9 @@
-import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@/serverApi/v3";
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { RoomBoardItem, RoomDetails, RoomUpdateParams } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { BoardApiFactory, BoardLayout, BoardParentType, CreateBoardBodyParams, RoomApiFactory } from "@api-server";
+import { useAppStore } from "@data-app";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -11,14 +13,16 @@ export enum RoomVariant {
 }
 
 export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
+	const { t } = useI18nGlobal();
+	const PLURAL_COUNT = 2;
 	const isLoading = ref(true);
 	const room = ref<RoomDetails>();
 	const roomVariant = ref<RoomVariant>();
 	const roomBoards = ref<RoomBoardItem[]>([]);
-	const lockedRoomName = ref<string | undefined>();
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+	const { execute } = useSafeAxiosTask();
 
 	const fetchRoom = async (id: string, config = { loadBoards: false }) => {
 		try {
@@ -33,24 +37,30 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 			if (responseError.code === 404) {
 				roomVariant.value = RoomVariant.COURSE_ROOM;
 			} else if (responseError.code === 403 && responseError.type === "LOCKED_ROOM") {
-				lockedRoomName.value = responseError.message;
+				return { isLocked: true, lockedRoomName: responseError.message };
 			} else {
-				throw createApplicationError(responseError.code);
+				useAppStore().handleApplicationError(responseError.code);
 			}
 		} finally {
 			isLoading.value = false;
 		}
 	};
 
-	const fetchRoomAndBoards = async (id: string) => {
-		await fetchRoom(id, { loadBoards: true });
+	const fetchRoomAndBoards = async (id: string) => await fetchRoom(id, { loadBoards: true });
+
+	const fetchBoardsOfRoom = async (roomId: string) => {
+		const { result, error } = await execute(
+			() => roomApi.roomControllerGetRoomBoards(roomId),
+			t("common.notifications.errors.notLoaded", { type: t("common.words.board", PLURAL_COUNT) }, PLURAL_COUNT)
+		);
+		return { boards: result?.data.data, error };
 	};
 
 	const createBoard = async (roomId: string, layout: BoardLayout, title: string) => {
 		const params: CreateBoardBodyParams = {
 			title: title,
 			parentId: roomId,
-			parentType: BoardParentType.Room,
+			parentType: BoardParentType.ROOM,
 			layout,
 		};
 		const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
@@ -58,10 +68,14 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		return boardId;
 	};
 
+	const moveBoard = async (roomId: string, boardId: string, toPosition: number) => {
+		await roomApi.roomControllerMoveBoard(roomId, { id: boardId, toPosition });
+	};
+
 	/**
 	 * @throws ApiResponseError | ApiValidationError
 	 */
-	const updateRoom = async (id: string, params: RoomUpdateParams): Promise<void> => {
+	const updateRoom = async (id: string, params: RoomUpdateParams) => {
 		isLoading.value = true;
 		try {
 			await roomApi.roomControllerUpdateRoom(id, params);
@@ -79,14 +93,15 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 
 	return {
 		fetchRoomAndBoards,
+		fetchBoardsOfRoom,
 		fetchRoom,
 		createBoard,
+		moveBoard,
 		isLoading,
 		resetState,
 		room,
 		roomVariant,
 		roomBoards,
 		updateRoom,
-		lockedRoomName,
 	};
 });

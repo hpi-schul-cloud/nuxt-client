@@ -1,42 +1,26 @@
 import RoomAdminTable from "./RoomAdminTable.vue";
-import { RoomStatsItemResponse } from "@/serverApi/v3/api";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { mockedPiniaStoreTyping, roomStatsItemResponseFactory, schoolFactory } from "@@/tests/test-utils";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoomStatsItemResponse } from "@api-server";
 import { useAdministrationRoomStore } from "@data-room";
 import { mdiAlert } from "@icons/material";
 import { createTestingPinia } from "@pinia/testing";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { DataTable } from "@ui-data-table";
 import { KebabMenu } from "@ui-kebab-menu";
-import { Mock } from "vitest";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { VIcon } from "vuetify/components";
 
-vi.mock("@ui-confirmation-dialog");
-const mockedUseRemoveConfirmationDialog = vi.mocked(useConfirmationDialog);
-
 describe("RoomAdminTable", () => {
-	let askConfirmationMock: Mock;
-
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
 
 	beforeEach(() => {
-		askConfirmationMock = vi.fn();
-		setupConfirmationComposableMock({
-			askConfirmationMock,
-		});
-		mockedUseRemoveConfirmationDialog.mockReturnValue({
-			askConfirmation: askConfirmationMock,
-			isDialogOpen: ref(false),
-		});
-
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
@@ -170,41 +154,26 @@ describe("RoomAdminTable", () => {
 						expect(deleteAction.exists()).toBe(true);
 					});
 
-					it("should render confirmation dialog with correct text", async () => {
-						const { wrapper, roomList } = setup();
-
-						askConfirmationMock.mockResolvedValue(true);
-
-						const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`);
-						await kebabMenu.trigger("click");
-
-						const deleteAction = wrapper.findComponent(`[data-testid="menu-delete-room-${roomList[0].roomId}"]`);
-						await deleteAction.trigger("click");
-
-						expect(askConfirmationMock).toHaveBeenCalledWith({
-							confirmActionLangKey: "common.actions.delete",
-							message: "pages.room.itemDelete.text",
-						});
-					});
-
 					it("should call deleteRoom when deletion is confirmed", async () => {
+						vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(true);
 						const { wrapper, adminRoomStore, roomList } = setup();
 
-						askConfirmationMock.mockResolvedValue(true);
-
 						const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`);
 						await kebabMenu.trigger("click");
 
 						const deleteAction = wrapper.findComponent(`[data-testid="menu-delete-room-${roomList[0].roomId}"]`);
 						await deleteAction.trigger("click");
 
+						expect(confirmDialogUtils.askDeletion).toHaveBeenCalledWith(
+							expect.any(String),
+							"pages.rooms.administration.table.delete.infoMessage"
+						);
 						expect(adminRoomStore.deleteRoom).toHaveBeenCalledWith(roomList[0].roomId);
 					});
 
 					it("should not call deleteRoom when deletion is cancelled", async () => {
+						vi.spyOn(confirmDialogUtils, "askDeletion").mockResolvedValue(false);
 						const { wrapper, adminRoomStore, roomList } = setup();
-
-						askConfirmationMock.mockResolvedValue(false);
 
 						const kebabMenu = wrapper.findComponent(`[data-testid="kebab-menu-room-${roomList[0].roomId}"]`);
 						await kebabMenu.trigger("click");

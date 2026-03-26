@@ -14,10 +14,13 @@ import {
 } from "./cardActions/cardActionPayload.types";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@/serverApi/v3";
+import { useSharedEditMode } from "./edit-mode.composable";
+import { FileRecordParent } from "@/types/file/File";
+import { CardResponse, ContentElementType, PreferredToolResponse, ToolContextType } from "@api-server";
 import { notifyInfo } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
+import { CollaboraFileType, useFileStorageApi } from "@data-file";
+import { useSharedFileSelect, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, Ref, ref } from "vue";
 
@@ -27,6 +30,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const isPreferredToolsLoading: Ref<boolean> = ref(false);
 
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
+	const { disableFileSelectOnMount, resetFileSelectOnMountEnabled } = useSharedFileSelect();
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled = useEnvConfig().value.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
@@ -35,6 +39,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
+	const { uploadCollaboraFile } = useFileStorageApi();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -76,10 +81,20 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const duplicateCard = socketOrRest.duplicateCardRequest;
 
+	const hasRelevantContentForDuplicationWarning = (card: CardResponse): boolean =>
+		card.elements.some((element) =>
+			[
+				ContentElementType.COLLABORATIVE_TEXT_EDITOR,
+				ContentElementType.DRAWING,
+				ContentElementType.EXTERNAL_TOOL,
+			].includes(element.type)
+		);
+
 	const duplicateCardSuccess = (payload: DuplicateCardSuccessPayload) => {
-		if (payload.duplicatedCard.id) {
-			cards.value[payload.duplicatedCard.id] = payload.duplicatedCard;
-			if (payload.isOwnAction === true) {
+		const { duplicatedCard } = payload;
+		if (duplicatedCard.id) {
+			cards.value[duplicatedCard.id] = duplicatedCard;
+			if (payload.isOwnAction === true && hasRelevantContentForDuplicationWarning(duplicatedCard)) {
 				notifyInfo("components.board.notifications.info.cardDuplicated");
 			}
 		}
@@ -98,6 +113,28 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const createElementRequest = socketOrRest.createElementRequest;
+
+	const createFileElementWithCollabora = async (type: CollaboraFileType, fileName: string) => {
+		if (!editModeId.value) {
+			return;
+		}
+
+		disableFileSelectOnMount();
+		const element = await createElementRequest({
+			type: ContentElementType.FILE,
+			cardId: editModeId.value,
+		});
+		if (!element) {
+			resetFileSelectOnMountEnabled();
+			return;
+		}
+
+		const uploadedCollaboraFile = await uploadCollaboraFile(type, element.id, FileRecordParent.BOARDNODES, fileName);
+		if (!uploadedCollaboraFile) {
+			await deleteElementRequest({ elementId: element.id, cardId: editModeId.value });
+		}
+		resetFileSelectOnMountEnabled();
+	};
 
 	const createPreferredElement = (payload: CreateElementRequestPayload, tool: PreferredToolResponse) => {
 		restApi.createPreferredElement(payload, tool);
@@ -127,7 +164,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		return await createElementRequest({
-			type: ContentElementType.RichText,
+			type: ContentElementType.RICH_TEXT,
 			cardId: card.id,
 			toPosition: 0,
 		});
@@ -204,10 +241,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (elementIndex <= 0) return cardId;
 
 		const previousElement = elements[elementIndex - 1];
-		const { setEditModeId } = useSharedEditMode();
-		setEditModeId(cardId);
 
-		if (previousElement.type === ContentElementType.RichText) {
+		if (previousElement.type === ContentElementType.RICH_TEXT) {
 			return getPreviousElementId(previousElement.id, cardId);
 		}
 
@@ -255,5 +290,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		preferredTools,
 		isPreferredToolsLoading,
 		disconnectSocketRequest,
+		createFileElementWithCollabora,
 	};
 });

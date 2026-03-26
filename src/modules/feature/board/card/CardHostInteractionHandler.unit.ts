@@ -3,7 +3,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("CardHostInteractionHandler", () => {
 	const setup = (options: { isEditMode: boolean }) => {
-		document.body.setAttribute("data-app", "true");
 		const wrapper = shallowMount(CardHostInteractionHandlerVue, {
 			propsData: { isEditMode: options?.isEditMode },
 		});

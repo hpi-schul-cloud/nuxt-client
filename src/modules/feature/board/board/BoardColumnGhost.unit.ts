@@ -4,8 +4,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("BoardColumnGhost", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(BoardColumnGhost, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

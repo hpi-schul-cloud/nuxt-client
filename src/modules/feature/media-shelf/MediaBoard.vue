@@ -15,7 +15,7 @@
 				:options="{
 					direction: 'vertical',
 					group: 'lines',
-					delay: 300,
+					delay: 200,
 					delayOnTouchOnly: true,
 					disabled: isInEditMode,
 					ghostClass: 'sortable-drag-ghost',
@@ -57,10 +57,9 @@ import { lineLimit, LineMove, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useSharedEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
-import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { MediaAvailableLineResponse, MediaBoardResponse } from "@api-server";
+import { useSharedEditMode } from "@data-board";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";

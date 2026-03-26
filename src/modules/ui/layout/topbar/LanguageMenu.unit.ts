@@ -1,7 +1,7 @@
 import LanguageMenu from "./LanguageMenu.vue";
-import { LanguageType } from "@/serverApi/v3";
 import { createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { LanguageType } from "@api-server";
 import { useAppStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -12,17 +12,23 @@ describe("@ui-layout/LanguageMenu", () => {
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
-			I18N__AVAILABLE_LANGUAGES: [LanguageType.De, LanguageType.En],
+			I18N__AVAILABLE_LANGUAGES: [LanguageType.DE, LanguageType.EN],
 		});
 	});
 
 	const setup = (attrs = {}) => {
-		const wrapper = mount(LanguageMenu, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+		const wrapper = mount(
+			{
+				template: `<VList><LanguageMenu/></VList>`,
+				components: { LanguageMenu },
 			},
-			...attrs,
-		});
+			{
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				...attrs,
+			}
+		);
 
 		return { wrapper };
 	};
@@ -37,7 +43,6 @@ describe("@ui-layout/LanguageMenu", () => {
 	describe("with available languages", () => {
 		it("should render the selected language item", () => {
 			const { wrapper } = setup();
-
 			expect(wrapper.find("[data-testid=selected-language-de]").exists()).toBe(true);
 		});
 

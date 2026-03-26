@@ -4,11 +4,9 @@
 		ref="externalToolElement"
 		class="mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
-		elevation="0"
 		variant="outlined"
 		:ripple="false"
-		tabindex="0"
-		role="button"
+		:role="isEditMode ? undefined : 'link'"
 		:loading="isLoading"
 		:aria-label="ariaLabel"
 		@keyup.enter="onClickElement"
@@ -66,7 +64,7 @@
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { ExternalToolElementResponse } from "@/serverApi/v3";
+import { ExternalToolElementResponse } from "@api-server";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { useEnvConfig } from "@data-env";
 import {

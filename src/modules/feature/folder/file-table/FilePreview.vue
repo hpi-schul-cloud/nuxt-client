@@ -1,12 +1,13 @@
 <template>
 	<v-img
-		v-if="isPreviewPossible(fileRecord.previewStatus)"
+		v-if="isPreviewPossible(fileRecord.previewStatus) && !imgError"
 		:src="convertDownloadToPreviewUrl(fileRecord.url, srcWidth)"
 		:alt="fileRecord.name"
 		:aria-label="fileRecord.name"
 		:aspect-ratio="aspectRatio"
 		cover
 		:width="previewWidth"
+		@error="imgError = true"
 	/>
 	<v-icon v-else-if="isAudioMimeType(fileRecord.mimeType)">
 		{{ mdiFileMusicOutline }}
@@ -18,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { PreviewWidth } from "@/fileStorageApi/v3";
 import { FileRecord } from "@/types/file/File";
 import { convertDownloadToPreviewUrl, isAudioMimeType, isPreviewPossible, isVideoMimeType } from "@/utils/fileHelper";
+import { PreviewWidth } from "@api-file-storage";
 import { mdiFileDocumentOutline, mdiFileMusicOutline, mdiFileVideoOutline } from "@icons/material";
 import { computed, PropType, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
@@ -37,6 +38,7 @@ const { xs } = useDisplay();
 const previewWidth = computed(() => (xs.value ? 96 : 24));
 const aspectRatio = computed(() => (xs.value ? undefined : 1));
 
+const imgError = ref(false);
 const srcWidth = ref(xs.value ? PreviewWidth._150 : PreviewWidth._50);
 
 watch(xs, (newValue, oldValue) => {

@@ -2,6 +2,7 @@ import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useSharedEditMode } from "../edit-mode.composable";
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
@@ -13,22 +14,16 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload.types";
-import {
-	ApiErrorHandlerFactory,
-	BoardObjectType,
-	ErrorType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
+import { schoolExternalToolsModule } from "@/store";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { delay } from "@/utils/helpers";
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
 	PreferredToolListResponse,
 	PreferredToolResponse,
 	ToolContextType,
-} from "@/serverApi/v3";
-import { schoolExternalToolsModule } from "@/store";
-import { AnyContentElement } from "@/types/board/ContentElement";
-import { delay } from "@/utils/helpers";
+} from "@api-server";
 import { notifyError } from "@data-app";
 import {
 	ContextExternalTool,
@@ -36,7 +31,7 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { useSharedEditMode } from "@util-board";
+import { ApiErrorHandlerFactory, BoardObjectType, ErrorType, useErrorHandler } from "@util-error-handling";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 
@@ -105,7 +100,7 @@ export const useCardRestApi = () => {
 			if (tool.schoolExternalToolId) {
 				const availableTools: ContextExternalToolConfigurationTemplate[] = await fetchAvailableToolsForContextCall(
 					newElement.data.id,
-					ToolContextType.BoardElement
+					ToolContextType.BOARD_ELEMENT
 				);
 
 				const preferredTool: ContextExternalToolConfigurationTemplate | undefined = availableTools.find(
@@ -116,14 +111,14 @@ export const useCardRestApi = () => {
 					const contextExternalToolSave: ContextExternalToolSave = {
 						schoolToolId: tool.schoolExternalToolId,
 						contextId: newElement.data.id,
-						contextType: ToolContextType.BoardElement,
+						contextType: ToolContextType.BOARD_ELEMENT,
 						parameters: [],
 					};
 
 					const contextExternalTool: ContextExternalTool = await createContextExternalToolCall(contextExternalToolSave);
 
 					const isExternalToolElement = (element: AnyContentElement): element is ExternalToolElementResponse =>
-						element.type === ContentElementType.ExternalTool;
+						element.type === ContentElementType.EXTERNAL_TOOL;
 
 					if (isExternalToolElement(newElement.data)) {
 						newElement.data.content.contextExternalToolId = contextExternalTool.id;

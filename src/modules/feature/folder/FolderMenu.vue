@@ -4,8 +4,7 @@
 		<KebabMenuActionDelete
 			:aria-label="t('pages.folder.ariaLabels.menu.action.delete')"
 			:name="folderName"
-			scope-language-key="components.cardElement.folderElement"
-			@click="(confirmationPromise) => $emit('delete', confirmationPromise)"
+			@click="$emit('delete')"
 		/>
 	</KebabMenu>
 </template>

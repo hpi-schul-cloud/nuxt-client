@@ -27,11 +27,7 @@
 				<slot />
 			</template>
 			<template #statusInfo>
-				<div
-					v-if="isRunning && hasParticipationPermission"
-					class="pulsating-dot my-auto"
-					data-testid="vc-pulsating-dot"
-				/>
+				<div v-if="isRunning" class="pulsating-dot my-auto" data-testid="vc-pulsating-dot" />
 			</template>
 		</ContentElementBar>
 	</div>
@@ -112,7 +108,7 @@ const noPermissionMessage = computed(() => {
 });
 
 const notEnabledMessage = computed(() => {
-	if (props.boardParentType === BoardContextType.Course) {
+	if (props.boardParentType === BoardContextType.COURSE) {
 		return t("pages.videoConference.info.courseParent.notEnabledTeacher");
 	} else {
 		return t("pages.videoConference.info.roomParent.notEnabledTeacher");

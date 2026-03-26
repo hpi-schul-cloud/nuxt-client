@@ -1,4 +1,4 @@
-import { ConfigResponse, Permission, SchulcloudTheme } from "@/serverApi/v3";
+import { ConfigResponse, Permission, SchulcloudTheme } from "@api-server";
 
 export type ExternalLink = {
 	href: string;
@@ -33,3 +33,10 @@ export type SidebarGroupItem = {
 } & SidebarItemBaseData;
 
 export type SidebarItems = (SidebarSingleItem | SidebarGroupItem)[];
+
+export type Breadcrumb = {
+	title: string;
+	href?: string;
+	to?: string;
+	disabled?: boolean;
+};

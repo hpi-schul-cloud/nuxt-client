@@ -1,6 +1,5 @@
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 import { VTextField } from "vuetify/lib/components/index";
 
@@ -122,11 +121,9 @@ describe("@/components/share/ShareModalResult", () => {
 		it("should follow href and emit done when shareMailAction button is clicked", async () => {
 			const assignSpy = vi.fn();
 			Object.defineProperty(window, "location", {
-				set: () => createMock<Location>(),
-				get: () =>
-					createMock<Location>({
-						assign: assignSpy,
-					}),
+				value: {
+					assign: assignSpy,
+				},
 			});
 
 			const { wrapper, shareUrl } = setup();

@@ -5,7 +5,7 @@
 		@confirm="onConfirmGroupSelection"
 		@cancel="closeDialog"
 	/>
-	<vCustomDialog
+	<CustomDialog
 		ref="start-existing-course-sync-dialog"
 		:is-open="isOpen && step === 1"
 		has-buttons
@@ -38,13 +38,13 @@
 				}}
 			</p>
 		</template>
-	</vCustomDialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import { GroupResponse, GroupUserResponse, RoleName } from "@api-server";
 import { notifyError, notifySuccess, useAppStore } from "@data-app";
 import { useCourseApi } from "@data-room";
 import { WarningAlert } from "@ui-alert";
@@ -96,7 +96,7 @@ const isUserInGroup = computed(() => {
 
 	const isPartOfGroup: boolean = selectedGroup.value.users.some((user: GroupUserResponse) => user.id === me.user.id);
 
-	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.Administrator);
+	const isAdmin: boolean = me.roles.some((role) => role.name === RoleName.ADMINISTRATOR);
 
 	if (isAdmin && !isPartOfGroup) {
 		const allCourseTeacherPartOfGroup = props.courseTeachers?.every((teacher) =>

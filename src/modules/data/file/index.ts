@@ -1,2 +1,2 @@
 export * from "./FileRecords.state";
-export { useFileStorageApi } from "./FileStorageApi.composable";
+export { CollaboraFileType, useFileStorageApi } from "./FileStorageApi.composable";

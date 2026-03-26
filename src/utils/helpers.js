@@ -95,16 +95,6 @@ export const getUrl = (resource) => {
 export const isVideoContent = (resource) =>
 	resource.size && (resource.mediatype === "file-h5p" || resource.mediatype === "file-video");
 
-export const isMerlinContent = (resource) =>
-	resource.properties && getMetadataAttribute(resource.properties, "ccm:replicationsource").includes("merlin");
-
-export const getMerlinReference = (resource) => {
-	if (resource.properties && isMerlinContent(resource)) {
-		return getMetadataAttribute(resource.properties, "ccm:replicationsourceid");
-	}
-	return "";
-};
-
 export const getID = (resource) => {
 	if (resource.properties) {
 		return getMetadataAttribute(resource.properties, "ccm:replicationsourceuuid");

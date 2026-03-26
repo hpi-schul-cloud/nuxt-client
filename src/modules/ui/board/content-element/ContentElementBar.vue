@@ -1,5 +1,6 @@
 <template>
 	<div
+		data-testid="content-element-bar-board"
 		tabindex="-1"
 		class="content-element-bar d-flex"
 		:class="{

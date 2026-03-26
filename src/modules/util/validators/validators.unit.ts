@@ -1,19 +1,39 @@
+import { createTestingPinia } from "@pinia/testing";
 import {
+	hasLowercaseLetter,
+	hasNumber,
+	hasSpecialCharacter,
+	hasUppercaseLetter,
 	isNonEmptyString,
 	isOfMaxLength,
+	isOfMinLength,
 	isRequired,
-	isValidDateFormat,
-	isValidTimeFormat,
+	isValidDate,
+	isValidEmail,
+	isValidTime,
 	isValidUrl,
 } from "@util-validators";
+import { setActivePinia } from "pinia";
 
 describe("util-validators", () => {
 	const ERROR = "my error";
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("isRequired", () => {
 		it("should not accept empty value", () => {
 			const isValid = isRequired(ERROR);
 			expect(isValid("")).toBe(ERROR);
+			expect(isValid(undefined)).toBe(ERROR);
+			expect(isValid(null)).toBe(ERROR);
+		});
+
+		it("should accept non empty values", () => {
+			const isValid = isRequired(ERROR);
+			expect(isValid("A")).toBe(true);
+			expect(isValid(1)).toBe(true);
 		});
 	});
 
@@ -60,7 +80,7 @@ describe("util-validators", () => {
 			});
 
 			it("should accept urls with https-protocol", () => {
-				expect(isValid("http://medium.com/my-article")).toBe(true);
+				expect(isValid("https://medium.com/my-article")).toBe(true);
 			});
 
 			it("should return ERROR when urls with other protocols than http and https", () => {
@@ -99,28 +119,118 @@ describe("util-validators", () => {
 		});
 	});
 
-	describe("isValidTimeFormat", () => {
+	describe("isValidTime", () => {
 		it("should accept valid time format", () => {
-			expect(isValidTimeFormat("12:12")).toBe(true);
+			expect(isValidTime("12:12")).toBe(true);
 		});
 
 		it("should not accept invalid time format", () => {
-			expect(isValidTimeFormat("55:5")).toBe(false);
-			expect(isValidTimeFormat("55:55")).toBe(false);
+			expect(isValidTime("55:55")).not.toBe(true);
+			expect(typeof isValidTime("55:55")).toBe("string");
+			expect(isValidTime("55:5")).not.toBe(true);
+			expect(typeof isValidTime("55:5")).toBe("string");
 		});
 	});
 
 	describe("isValidDateFormat", () => {
-		const isValid = isValidDateFormat(ERROR);
-
 		it("should accept valid date format", () => {
-			expect(isValid("12.12.2023")).toBe(true);
+			expect(isValidDate("12.12.2023")).toBe(true);
 		});
 
 		it("should not accept invalid date format", () => {
-			expect(isValid("31.31.2023")).toBe(ERROR);
-			expect(isValid("1.1.2001")).toBe(ERROR);
-			expect(isValid("1.101")).toBe(ERROR);
+			expect(isValidDate("31.31.2023")).not.toBe(true);
+			expect(typeof isValidDate("31.31.2023")).toBe("string");
+
+			expect(isValidDate("1.1.2001")).not.toBe(true);
+			expect(typeof isValidDate("1.1.2001")).toBe("string");
+
+			expect(isValidDate("1.101")).not.toBe(true);
+			expect(typeof isValidDate("1.101")).toBe("string");
+		});
+	});
+
+	describe("isOfMinLength", () => {
+		it("should not accept string of less length than parameter given", () => {
+			const minLength = 5;
+			const tooShortValue = "1234";
+			const isValid = isOfMinLength(minLength)(ERROR);
+			expect(isValid(tooShortValue)).toBe(ERROR);
+		});
+
+		it("should accept values of null or undefined", () => {
+			const minLength = 5;
+			const isValid = isOfMinLength(minLength)(ERROR);
+			expect(isValid(null)).toBe(true);
+			expect(isValid(undefined)).toBe(true);
+		});
+	});
+
+	describe("hasUppercaseLetter", () => {
+		it("should accept string with at least one uppercase letter", () => {
+			const isValid = hasUppercaseLetter(ERROR);
+			expect(isValid("Abcdef")).toBe(true);
+		});
+
+		it("should not accept string without uppercase letter", () => {
+			const isValid = hasUppercaseLetter(ERROR);
+			expect(isValid("abcdef")).toBe(ERROR);
+		});
+	});
+
+	describe("hasLowercaseLetter", () => {
+		it("should accept string with at least one lowercase letter", () => {
+			const isValid = hasLowercaseLetter(ERROR);
+			expect(isValid("Abcdef")).toBe(true);
+		});
+
+		it("should not accept string without lowercase letter", () => {
+			const isValid = hasLowercaseLetter(ERROR);
+			expect(isValid("ABCDEF")).toBe(ERROR);
+		});
+	});
+
+	describe("hasNumber", () => {
+		it("should accept string with at least one number", () => {
+			const isValid = hasNumber(ERROR);
+			expect(isValid("Abcdef1")).toBe(true);
+		});
+
+		it("should not accept string without number", () => {
+			const isValid = hasNumber(ERROR);
+			expect(isValid("ABCDEF")).toBe(ERROR);
+		});
+	});
+
+	describe("hasSpecialCharacter", () => {
+		const specialChars = "!§$%&/()=?\\;:,.#+*~-".split("");
+
+		it.each(specialChars)("should accept string with at least one special character", (specialChar) => {
+			const isValid = hasSpecialCharacter(ERROR);
+			expect(isValid(`Abcdef${specialChar}`)).toBe(true);
+		});
+
+		it("should not accept string without special character", () => {
+			const isValid = hasSpecialCharacter(ERROR);
+			expect(isValid("ABCDEF")).toBe(ERROR);
+		});
+
+		it("should not accept special characters that are not allowed", () => {
+			const isValid = hasSpecialCharacter(ERROR);
+			expect(isValid("Abcdef€")).toBe(ERROR);
+		});
+	});
+
+	describe("isValidEmail", () => {
+		const isValid = isValidEmail(ERROR);
+
+		it("should accept valid email address", () => {
+			expect(isValid("test@example.com")).toBe(true);
+		});
+
+		it("should not accept invalid email address", () => {
+			expect(isValid("test@.com")).toBe(ERROR);
+			expect(isValid("testexample.com")).toBe(ERROR);
+			expect(isValid("test@exam_ple.com")).toBe(ERROR);
 		});
 	});
 });

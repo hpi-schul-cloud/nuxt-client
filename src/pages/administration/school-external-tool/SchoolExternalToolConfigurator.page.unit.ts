@@ -1,7 +1,6 @@
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import ExternalToolMediumDetails from "@/components/external-tools/configuration/ExternalToolMediumDetails.vue";
-import { ExternalToolMediumStatus } from "@/serverApi/v3";
+import ExternalToolConfigurator from "@/components/administration/external-tools-configuration/ExternalToolConfigurator.vue";
+import ExternalToolMediumDetails from "@/components/administration/external-tools-configuration/ExternalToolMediumDetails.vue";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
@@ -13,20 +12,14 @@ import {
 } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { ExternalToolMediumStatus } from "@api-server";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { beforeEach, Mock } from "vitest";
+import { beforeEach } from "vitest";
 import { Component, nextTick } from "vue";
-import { Router, useRouter } from "vue-router";
-
-vi.mock("vue-router", () => ({
-	useRouter: vi.fn(),
-}));
-
-const useRouterMock = <Mock>useRouter;
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
 describe("SchoolExternalToolConfigurator", () => {
 	beforeEach(() => {
@@ -43,8 +36,7 @@ describe("SchoolExternalToolConfigurator", () => {
 		const schoolId = "schoolId";
 		createTestAppStoreWithSchool(schoolId);
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		const { router } = injectRouterMock(createRouterMock());
 
 		const wrapper = mount(SchoolExternalToolConfigurator, {
 			global: {
@@ -331,7 +323,7 @@ describe("SchoolExternalToolConfigurator", () => {
 					baseUrl: "https://test.com",
 					parameters: [],
 					medium: {
-						status: ExternalToolMediumStatus.Active,
+						status: ExternalToolMediumStatus.ACTIVE,
 						mediaSourceId: "media-source-id",
 						mediumId: "medium-id",
 					},

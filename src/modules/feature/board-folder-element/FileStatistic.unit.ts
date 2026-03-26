@@ -1,8 +1,6 @@
 import FileStatistic from "./FileStatistic.vue";
 import { parentStatisticFactory } from "@@/tests/test-utils/factory/parentStatisticFactory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
 
 describe("FileStatistic", () => {
@@ -16,23 +14,14 @@ describe("FileStatistic", () => {
 				fileCount: 3,
 				totalSizeInBytes: 3000000,
 			});
-			const getStatisticByParentId = vi.fn(() => statistic);
-			const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
-				getStatisticByParentId,
-				tryGetParentStatisticFromApi,
-			});
-			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 			const wrapper = mount(FileStatistic, {
-				props: { elementId: "test-folder-id" },
+				props: { fileStatistics: statistic },
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			});
 
 			return {
 				wrapper,
-				getStatisticByParentId,
-				tryGetParentStatisticFromApi,
 				statistic,
 			};
 		};
@@ -51,22 +40,13 @@ describe("FileStatistic", () => {
 				fileCount: 1,
 				totalSizeInBytes: 2000,
 			});
-			const getStatisticByParentId = vi.fn(() => statistic);
-			const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
-				getStatisticByParentId,
-				tryGetParentStatisticFromApi,
-			});
-			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
 
 			const wrapper = mount(FileStatistic, {
-				props: { elementId: "test-folder-id" },
+				props: { fileStatistics: statistic },
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			});
 			return {
 				wrapper,
-				getStatisticByParentId,
-				tryGetParentStatisticFromApi,
 				statistic,
 			};
 		};
@@ -76,35 +56,6 @@ describe("FileStatistic", () => {
 
 			const expectedText = `${statistic.fileCount} common.file ⋅ 1.95 KB`;
 			expect(wrapper.text()).toContain(expectedText);
-		});
-	});
-
-	describe("when file statistics are not available", () => {
-		const setup = () => {
-			const getStatisticByParentId = vi.fn(() => undefined);
-			const tryGetParentStatisticFromApi = vi.fn(() => Promise.resolve());
-			const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>({
-				getStatisticByParentId,
-				tryGetParentStatisticFromApi,
-			});
-			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValue(fileStorageApiMock);
-
-			const wrapper = mount(FileStatistic, {
-				props: { elementId: "test-folder-id" },
-				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			});
-
-			return {
-				wrapper,
-				getStatisticByParentId,
-				tryGetParentStatisticFromApi,
-			};
-		};
-
-		it("should not render any statistic information", async () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.text()).toBe("");
 		});
 	});
 });

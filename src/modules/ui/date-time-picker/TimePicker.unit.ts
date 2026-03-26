@@ -1,8 +1,15 @@
 import TimePicker from "./TimePicker.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { VTextField } from "vuetify/components";
 
 describe("TimePicker", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const mountComponent = (options: ComponentMountingOptions<typeof TimePicker> = {}) =>
 		mount(TimePicker, {
 			global: {
@@ -26,36 +33,43 @@ describe("TimePicker", () => {
 		expect(wrapper.findComponent(TimePicker).exists()).toBe(true);
 	});
 
+	it("should format raw numeric input into HH:MM pattern", async () => {
+		const wrapper = mountComponent({
+			props: { time: "" },
+		});
+		const textField = wrapper.findComponent(VTextField);
+		const input = textField.find("input");
+
+		await input.setValue("1230");
+
+		expect(input.element.value).toBe("12:30");
+	});
+
 	describe("when picking a time through typing", () => {
-		it("should emit event on input", async () => {
+		it("should emit update:time event on valid input", async () => {
 			const wrapper = mountComponent({
 				props: { time: "12:30" },
 			});
 
 			const input = wrapper.findComponent({ name: "v-text-field" }).find("input");
-
 			await input.setValue("16:45");
 
-			expect(wrapper.emitted("update:time")).not.toBeUndefined();
-			expect(wrapper.emitted("update:time")!.length).toBeGreaterThan(0);
+			expect(wrapper.emitted("update:time")![1]).toEqual(["16:45"]);
 		});
 	});
 
 	describe("validation", () => {
 		describe("when time is required", () => {
-			it("should no emit update:time event but error event on empty input", async () => {
+			it("should show validation error on empty input", async () => {
 				const wrapper = mountComponent({
 					props: { time: "12:30", required: true },
 				});
 
-				const input = wrapper.findComponent({ name: "v-text-field" }).find("input");
+				const textField = wrapper.findComponent(VTextField);
+				await textField.setValue("");
+				await textField.vm.validate();
 
-				await input.trigger("focus");
-				await input.setValue("");
-				await wrapper.vm.$nextTick();
-
-				expect(wrapper.emitted("update:time")).toBeUndefined();
-				expect(wrapper.emitted("error")).not.toBeUndefined();
+				expect(textField.vm.isValid).toBe(false);
 			});
 		});
 
@@ -65,17 +79,15 @@ describe("TimePicker", () => {
 					props: { time: "12:30" },
 				});
 
-				const input = wrapper.findComponent({ name: "v-text-field" }).find("input");
-
+				const input = wrapper.findComponent(VTextField).find("input");
 				await input.setValue("");
 
-				expect(wrapper.emitted("update:time")).not.toBeUndefined();
-				expect(wrapper.emitted("update:time")!.length).toBeGreaterThan(0);
+				expect(wrapper.emitted("update:time")![1]).toEqual([""]);
 			});
 		});
 
 		describe("when time does not fit format", () => {
-			it("should no emit update:time event", async () => {
+			it("should not emit update:time event for invalid time", async () => {
 				const wrapper = mountComponent({
 					props: { time: "12:30" },
 				});
@@ -86,9 +98,6 @@ describe("TimePicker", () => {
 				await input.setValue("25:65");
 
 				expect(wrapper.emitted("update:time")).toBeUndefined();
-
-				expect(wrapper.emitted("error")).not.toBeUndefined();
-				expect(wrapper.emitted("error")!.length).toBeGreaterThan(0);
 			});
 		});
 	});

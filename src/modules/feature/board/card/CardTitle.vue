@@ -1,13 +1,10 @@
 <template>
-	<VCardTitle
-		v-if="isEditMode || value !== ''"
-		class="d-block text-break-word pt-0 pb-0"
-		:class="{ 'pointer-events-none': !isEditMode }"
-	>
+	<VCardTitle v-if="isEditMode || value !== ''" class="d-block text-break-word pt-0 pb-0">
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:is-edit-mode="isEditMode"
+			:has-edit-permission="allowedOperations.updateCardTitle"
 			:is-focused="isFocused"
 			data-testid="card-title"
 			@update:value="onUpdateValue"
@@ -18,7 +15,10 @@
 
 <script setup lang="ts">
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import { useBoardAllowedOperations } from "@data-board";
 import { useVModel } from "@vueuse/core";
+
+const { allowedOperations } = useBoardAllowedOperations();
 
 const props = defineProps({
 	value: {
@@ -43,9 +43,5 @@ const onEnter = () => emit("enter");
 <style scoped>
 .text-break-word {
 	word-break: break-word;
-}
-
-.pointer-events-none {
-	pointer-events: none;
 }
 </style>

@@ -1,8 +1,8 @@
 import CopyResultModal from "./CopyResultModal.vue";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CopyApiResponseType } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
@@ -10,24 +10,24 @@ import { beforeEach } from "vitest";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
-	type: CopyApiResponseTypeEnum.LessonContentGeogebra,
+	type: CopyApiResponseType.LESSON_CONTENT_GEOGEBRA,
 };
 const mockEtherpadItem = {
 	title: "Etherpad Element Title",
-	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
+	type: CopyApiResponseType.LESSON_CONTENT_ETHERPAD,
 };
 const mockCourseGroupItem = {
 	title: "CourseGroup Group Example",
-	type: CopyApiResponseTypeEnum.CoursegroupGroup,
+	type: CopyApiResponseType.COURSEGROUP_GROUP,
 };
 const mockFileItem = {
 	title: "File Error Example",
-	type: CopyApiResponseTypeEnum.File,
+	type: CopyApiResponseType.FILE,
 };
 
 const mockLessonResultItems = (elements = [mockGeoGebraItem, mockEtherpadItem, mockCourseGroupItem, mockFileItem]) => [
 	{
-		type: CopyApiResponseTypeEnum.Lesson,
+		type: CopyApiResponseType.LESSON,
 		title: "Lesson Title",
 		elementId: "mockId",
 		elements,
@@ -72,7 +72,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be closed by default", () => {
 			const wrapper = createWrapper();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const title = dialog.findComponent('[data-testid="dialog-title"');
 
 			expect(dialog.vm.isOpen).toBe(false);
@@ -82,7 +82,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be open when is-open property is true", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const title = dialog.findComponent('[data-testid="dialog-title"');
 
 			expect(dialog.vm.isOpen).toBe(true);
@@ -94,7 +94,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should show partial-title when copy was partially successful", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const headline = dialog.findComponent('[data-testid="dialog-title"]').text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
@@ -105,7 +105,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should forward the dialog-closed event of the wrapped dialog", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			dialog.vm.$emit("dialog-closed");
 
 			expect(wrapper.emitted("copy-dialog-closed")).toHaveLength(1);
@@ -119,10 +119,10 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const wrapper = createWrapper({
 				isOpen: true,
 				copyResultItems,
-				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+				copyResultRootItemType: CopyApiResponseType.COURSE,
 			});
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).toContain("components.molecules.copyResult.courseFiles.info");
@@ -136,14 +136,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					const copyResultItems = mockLessonResultItems([]);
 					copyResultItems[0].elements.push({
 						title: "Course External Tool",
-						type: CopyApiResponseTypeEnum.ExternalTool,
+						type: CopyApiResponseType.EXTERNAL_TOOL,
 					});
-					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
+					copyResultItems[0].type = CopyApiResponseType.COURSE;
 
 					const wrapper = createWrapper({
 						isOpen: true,
 						copyResultItems,
-						copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+						copyResultRootItemType: CopyApiResponseType.COURSE,
 					});
 
 					return { wrapper };
@@ -152,7 +152,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(CustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
 					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
@@ -166,14 +166,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					const copyResultItems = mockLessonResultItems([]);
 					copyResultItems[0].elements.push({
 						title: "Board External Tool Element",
-						type: CopyApiResponseTypeEnum.ExternalToolElement,
+						type: CopyApiResponseType.EXTERNAL_TOOL_ELEMENT,
 					});
-					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
+					copyResultItems[0].type = CopyApiResponseType.COURSE;
 
 					const wrapper = createWrapper({
 						isOpen: true,
 						copyResultItems,
-						copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+						copyResultRootItemType: CopyApiResponseType.COURSE,
 					});
 
 					return { wrapper };
@@ -182,7 +182,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
-					const dialog = wrapper.findComponent(vCustomDialog);
+					const dialog = wrapper.findComponent(CustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
 					expect(content).toContain("components.molecules.copyResult.ctlTools.withFeature.info");
@@ -201,14 +201,14 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					isOpen: true,
 					copyResultItems: [
 						{
-							type: CopyApiResponseTypeEnum.Course,
+							type: CopyApiResponseType.COURSE,
 							title: "Lesson Title",
 							elementId: "mockId",
 							elements: [mockGeoGebraItem, mockEtherpadItem, mockCourseGroupItem, mockFileItem],
 							url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 						},
 					],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+					copyResultRootItemType: CopyApiResponseType.COURSE,
 				},
 			});
 
@@ -218,7 +218,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).toContain("components.molecules.copyResult.membersAndPermissions");
@@ -234,7 +234,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Columnboard,
+					copyResultRootItemType: CopyApiResponseType.COLUMNBOARD,
 				},
 			});
 
@@ -244,7 +244,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
@@ -260,7 +260,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Room,
+					copyResultRootItemType: CopyApiResponseType.ROOM,
 				},
 			});
 
@@ -270,7 +270,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
@@ -286,7 +286,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Task,
+					copyResultRootItemType: CopyApiResponseType.TASK,
 				},
 			});
 
@@ -296,7 +296,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");
@@ -312,7 +312,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				props: {
 					isOpen: true,
 					copyResultItems: [],
-					copyResultRootItemType: CopyApiResponseTypeEnum.Lesson,
+					copyResultRootItemType: CopyApiResponseType.LESSON,
 				},
 			});
 
@@ -322,7 +322,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should not render members and permission information", () => {
 			const wrapper = setup();
 
-			const dialog = wrapper.findComponent(vCustomDialog);
+			const dialog = wrapper.findComponent(CustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
 			expect(content).not.toContain("components.molecules.copyResult.membersAndPermissions");

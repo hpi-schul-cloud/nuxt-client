@@ -1,17 +1,17 @@
 import ClassMembersPage from "./ClassMembers.page.vue";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { groupFactory } from "@@/tests/test-utils/factory";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { Group, useGroupState } from "@data-group";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
 import { mount } from "@vue/test-utils";
+import { Mocked } from "vitest";
 import { ref } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 vi.mock("@data-group/GroupState.composable");
 
 describe("@pages/ClassMembers.page.vue", () => {
-	let useGroupStateMock: DeepMocked<ReturnType<typeof useGroupState>>;
+	let useGroupStateMock: Mocked<ReturnType<typeof useGroupState>>;
 
 	const setup = (props: { groupId: string }) => {
 		const group: Group = groupFactory.build();
@@ -22,7 +22,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 		const wrapper = mount(ClassMembersPage, {
 			props,
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: { ClassMembersInfoBox: true },
 			},
 		});
@@ -34,7 +34,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 	};
 
 	beforeEach(() => {
-		useGroupStateMock = createMock<ReturnType<typeof useGroupState>>();
+		useGroupStateMock = mockComposable(useGroupState);
 
 		vi.mocked(useGroupState).mockReturnValue(useGroupStateMock);
 	});

@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
+import { FileElementResponse } from "@api-server";
 import { ContentElementBar } from "@ui-board";
 import { LightBoxContentType, LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";

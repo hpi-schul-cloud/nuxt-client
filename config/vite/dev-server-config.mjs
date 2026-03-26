@@ -1,12 +1,14 @@
-import { createProxyMiddleware } from "http-proxy-middleware";
 import {
+	isArchiveDownload,
 	isCommonCartridge,
 	isFileStorage,
+	isFWUEndpoint,
 	isH5pEditor,
 	isH5pStaticFiles,
 	isServer,
 } from "../../src/router/server-route.mjs";
 import { isVueClient } from "../../src/router/vue-client-route.mjs";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const createLegacyClientProxy = () => {
 	const legacyClientProxy = createProxyMiddleware({
@@ -40,12 +42,28 @@ const createFileStorageProxy = () => {
 	return fileStorageProxy;
 };
 
+const createArchiveDownloadProxy = () => {
+	const fileStorageProxy = createProxyMiddleware({
+		target: "http://localhost:3351",
+		changeOrigin: true,
+	});
+	return fileStorageProxy;
+};
+
 const createH5pEditorProxy = () => {
 	const h5pEditorProxy = createProxyMiddleware({
 		target: "http://localhost:4448",
 		changeOrigin: true,
 	});
 	return h5pEditorProxy;
+};
+
+const createFwuEditorProxy = () => {
+	const fwuEditorProxy = createProxyMiddleware({
+		target: "http://localhost:4446",
+		changeOrigin: true,
+	});
+	return fwuEditorProxy;
 };
 
 const createH5pStaticFilesProxy = () => {
@@ -71,8 +89,10 @@ const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
 	const vueClientProxy = createVueClientProxy();
 	const fileStorageProxy = createFileStorageProxy();
 	const h5pEditorProxy = createH5pEditorProxy();
+	const fwuEditorProxy = createFwuEditorProxy();
 	const h5pStaticFilesProxy = createH5pStaticFilesProxy();
 	const commonCartridgeProxy = createCommonCartridgeProxy();
+	const archiveDownloadProxy = createArchiveDownloadProxy();
 
 	return (req, res, next) => {
 		const url = req.originalUrl || req.url;
@@ -87,6 +107,10 @@ const proxyDispatcherMiddleware = ({ useVueClientProxy = false } = {}) => {
 			h5pStaticFilesProxy(req, res, next);
 		} else if (isH5pEditor(path)) {
 			h5pEditorProxy(req, res, next);
+		} else if (isArchiveDownload(path)) {
+			archiveDownloadProxy(req, res, next);
+		} else if (isFWUEndpoint(path)) {
+			fwuEditorProxy(req, res, next);
 		} else if (isCommonCartridge(path)) {
 			commonCartridgeProxy(req, res, next);
 		} else if (isServer(path)) {

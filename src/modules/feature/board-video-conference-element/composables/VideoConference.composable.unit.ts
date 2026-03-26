@@ -1,20 +1,21 @@
 import { useVideoConference } from "./VideoConference.composable";
-import * as serverApi from "@/serverApi/v3/api";
+import { VideoConferenceState } from "@/store/types/video-conference";
+import { mockApi } from "@@/tests/test-utils/mockApiFactory";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import * as serverApi from "@api-server";
 import {
 	VideoConferenceInfoResponse,
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3/api";
-import { VideoConferenceState } from "@/store/types/video-conference";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
-import { AxiosPromise } from "axios";
+} from "@api-server";
+import { Mocked } from "vitest";
 
-let videoConferenceApi: DeepMocked<serverApi.VideoConferenceApiInterface>;
+let videoConferenceApi: Mocked<serverApi.VideoConferenceApiInterface>;
 
 describe("VideoConferenceComposable", () => {
 	beforeEach(() => {
-		videoConferenceApi = createMock<serverApi.VideoConferenceApiInterface>();
+		videoConferenceApi = mockApi<serverApi.VideoConferenceApiInterface>();
 
 		vi.spyOn(serverApi, "VideoConferenceApiFactory").mockReturnValue(videoConferenceApi);
 	});
@@ -25,20 +26,20 @@ describe("VideoConferenceComposable", () => {
 
 	describe("fetchVideoConferenceInfo", () => {
 		const setup = () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
 				status: 200,
 				data: {
-					state: VideoConferenceStateResponse.Running,
+					state: VideoConferenceStateResponse.RUNNING,
 					options: {
 						everyAttendeeJoinsMuted: true,
 						everybodyJoinsAsModerator: false,
 						moderatorMustApproveJoinRequests: true,
 					},
 				},
-			};
+			});
 
 			const { fetchVideoConferenceInfo, error, videoConferenceInfo } = useVideoConference(scope, scopeId);
 
@@ -62,9 +63,7 @@ describe("VideoConferenceComposable", () => {
 
 		it("should update videoConferenceInfo state with the response data", async () => {
 			const { fetchVideoConferenceInfo, videoConferenceInfo, FAKE_RESPONSE } = setup();
-			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<VideoConferenceInfoResponse>
-			);
+			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			await fetchVideoConferenceInfo();
 
@@ -74,20 +73,18 @@ describe("VideoConferenceComposable", () => {
 
 		it("should set state to unknown if the response state is not recognized", async () => {
 			const { fetchVideoConferenceInfo, videoConferenceInfo } = setup();
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceInfoResponse>({
 				status: 200,
 				data: {
-					state: "bla-bla",
+					state: "bla-bla" as VideoConferenceStateResponse,
 					options: {
 						everyAttendeeJoinsMuted: true,
 						everybodyJoinsAsModerator: false,
 						moderatorMustApproveJoinRequests: true,
 					},
 				},
-			};
-			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<VideoConferenceInfoResponse>
-			);
+			});
+			videoConferenceApi.videoConferenceControllerInfo.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			await fetchVideoConferenceInfo();
 
@@ -95,7 +92,7 @@ describe("VideoConferenceComposable", () => {
 		});
 
 		it("should set error if the API call fails", async () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 
 			const { fetchVideoConferenceInfo, error } = useVideoConference(scope, scopeId);
@@ -112,24 +109,16 @@ describe("VideoConferenceComposable", () => {
 
 	describe("startVideoConference", () => {
 		const setup = () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 			const { startVideoConference, videoConferenceInfo, error } = useVideoConference(scope, scopeId);
 			const url = "https://example.com";
-			const logoutUrl = "https://logout.url";
 			const options = {
 				everyAttendeeJoinsMuted: true,
 				everybodyJoinsAsModerator: false,
 				moderatorMustApproveJoinRequests: true,
 			};
 
-			const FAKE_RESPONSE = {
-				status: 200,
-				data: {
-					url,
-				},
-			};
-			videoConferenceApi.videoConferenceControllerStart.mockResolvedValueOnce(FAKE_RESPONSE as unknown as AxiosPromise);
 			return {
 				scope,
 				scopeId,
@@ -137,38 +126,36 @@ describe("VideoConferenceComposable", () => {
 				videoConferenceInfo,
 				error,
 				url,
-				logoutUrl,
 				options,
 			};
 		};
 
 		it("should call videoConferenceControllerStart api", async () => {
-			const { scope, scopeId, startVideoConference, logoutUrl, options } = setup();
+			const { scope, scopeId, startVideoConference, options } = setup();
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(videoConferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(scope, scopeId, {
 				...options,
-				logoutUrl,
 			});
 		});
 
 		it("should update videoConferenceInfo", async () => {
-			const { startVideoConference, videoConferenceInfo, logoutUrl } = setup();
+			const { startVideoConference, videoConferenceInfo } = setup();
 			const options = {
 				everyAttendeeJoinsMuted: true,
 				everybodyJoinsAsModerator: false,
 				moderatorMustApproveJoinRequests: true,
 			};
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(videoConferenceInfo.value.state).toBe(VideoConferenceState.RUNNING);
 			expect(videoConferenceInfo.value.options).toEqual(options);
 		});
 
 		it("should set error to null", async () => {
-			const { startVideoConference, error, logoutUrl } = setup();
+			const { startVideoConference, error } = setup();
 
 			const options = {
 				everyAttendeeJoinsMuted: true,
@@ -176,16 +163,15 @@ describe("VideoConferenceComposable", () => {
 				moderatorMustApproveJoinRequests: true,
 			};
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(error.value).toBeNull();
 		});
 
 		it("should set error if the API call fails", async () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 			const { startVideoConference, error } = useVideoConference(scope, scopeId);
-			const logoutUrl = "https://logout.url";
 			const options = {
 				everyAttendeeJoinsMuted: true,
 				everybodyJoinsAsModerator: false,
@@ -195,7 +181,7 @@ describe("VideoConferenceComposable", () => {
 			const mockError = new Error("API call failed");
 			videoConferenceApi.videoConferenceControllerStart.mockRejectedValueOnce(mockError);
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(error.value).toBe(mockError);
 		});
@@ -203,19 +189,18 @@ describe("VideoConferenceComposable", () => {
 
 	describe("joinVideoConference", () => {
 		const setup = () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 			const url = "https://example.com";
 
-			const FAKE_RESPONSE = {
+			const FAKE_RESPONSE = mockApiResponse<VideoConferenceJoinResponse>({
 				status: 200,
 				data: {
 					url,
 				},
-			};
-			videoConferenceApi.videoConferenceControllerJoin.mockResolvedValueOnce(
-				FAKE_RESPONSE as unknown as AxiosPromise<VideoConferenceJoinResponse>
-			);
+			});
+
+			videoConferenceApi.videoConferenceControllerJoin.mockResolvedValueOnce(FAKE_RESPONSE);
 
 			const { joinVideoConference, error } = useVideoConference(scope, scopeId);
 
@@ -253,7 +238,7 @@ describe("VideoConferenceComposable", () => {
 		});
 
 		it("should set error if the API call fails", async () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 			const mockError = new Error("API call failed");
 
@@ -269,7 +254,7 @@ describe("VideoConferenceComposable", () => {
 
 	describe("resetError", () => {
 		const setup = () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 			const { error, resetError } = useVideoConference(scope, scopeId);
 
@@ -291,7 +276,7 @@ describe("VideoConferenceComposable", () => {
 
 	describe("isRunning", () => {
 		const setup = () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 
 			const { isRunning, videoConferenceInfo } = useVideoConference(scope, scopeId);
@@ -326,7 +311,7 @@ describe("VideoConferenceComposable", () => {
 
 	describe("isWaitingRoomActive", () => {
 		const setup = () => {
-			const scope = VideoConferenceScope.Room;
+			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 
 			const { isWaitingRoomActive, videoConferenceInfo } = useVideoConference(scope, scopeId);

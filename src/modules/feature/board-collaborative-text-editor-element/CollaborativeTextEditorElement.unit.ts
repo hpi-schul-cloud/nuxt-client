@@ -1,21 +1,20 @@
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
-import { CollaborativeTextEditorParentType } from "@/serverApi/v3";
 import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { CollaborativeTextEditorParentType } from "@api-server";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
-import { createMock } from "@golevelup/ts-vitest";
 import { ContentElementBar } from "@ui-board";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { mount } from "@vue/test-utils";
+import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
-import { VCard } from "vuetify/lib/components/index";
+import { VCard } from "vuetify/components";
 
 // Mocks
 vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: vi.fn(),
 }));
 vi.mock("@feature-board");
 
@@ -41,7 +40,7 @@ describe("CollaborativeTextEditorElement", () => {
 
 		const resolvedValue = getUrlHasError
 			? undefined
-			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
+			: `${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`;
 
 		mockedUseCollaborativeTextEditorApi.mockReturnValue({
 			getUrl: vi.fn().mockResolvedValueOnce(resolvedValue),
@@ -69,7 +68,7 @@ describe("CollaborativeTextEditorElement", () => {
 			},
 		});
 
-		const windowMock = createMock<Window>();
+		const windowMock = mock<Window>();
 		vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 		return {
@@ -109,6 +108,16 @@ describe("CollaborativeTextEditorElement", () => {
 			expect(boardMenu.exists()).toBe(false);
 		});
 
+		it("should have role link", () => {
+			const { wrapper } = setup({
+				isEditMode: false,
+			});
+
+			const elementCard = wrapper.findComponent(VCard);
+
+			expect(elementCard.attributes("role")).toEqual("link");
+		});
+
 		it("should have the correct aria-label", () => {
 			const { wrapper } = setup({
 				isEditMode: false,
@@ -134,7 +143,7 @@ describe("CollaborativeTextEditorElement", () => {
 				await elementCard.trigger(`keydown.${key}`);
 
 				expect(window.open).toHaveBeenCalledTimes(1);
-				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 			});
 
 			it.each(["enter", "space"])(
@@ -152,7 +161,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await elementCard.trigger(`keydown.${key}`);
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 				}
 			);
 
@@ -187,7 +196,7 @@ describe("CollaborativeTextEditorElement", () => {
 					expect(useCollaborativeTextEditorApi().getUrl).toHaveBeenCalledTimes(1);
 					expect(useCollaborativeTextEditorApi().getUrl).toHaveBeenCalledWith(
 						element.id,
-						CollaborativeTextEditorParentType.ContentElement
+						CollaborativeTextEditorParentType.CONTENT_ELEMENT
 					);
 				});
 
@@ -203,7 +212,7 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+					expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 				});
 			});
 
@@ -221,13 +230,26 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+					expect(windowMock.location).not.toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 				});
 			});
 		});
 	});
 
 	describe("when component is in edit-mode", () => {
+		it("should not have role link", () => {
+			// The card should not be a link in edit mode otherwise the three dot menu would not be accessible for screen readers,
+			// because of nested interactive elements
+			const { wrapper } = setup({
+				isEditMode: true,
+			});
+
+			const elementCard = wrapper.findComponent(VCard);
+
+			expect(elementCard.attributes("role")).not.toEqual("link");
+			expect(elementCard.attributes("role")).toBeUndefined();
+		});
+
 		describe("when element is focused", () => {
 			it.each(["up", "down"])("should emit 'move-keyboard:edit' when arrow key %s is pressed", async (key) => {
 				const { wrapper } = setup({
@@ -255,7 +277,7 @@ describe("CollaborativeTextEditorElement", () => {
 				await elementCard.trigger(`keydown.${key}`);
 
 				expect(window.open).toHaveBeenCalledTimes(1);
-				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`);
+				expect(windowMock.location).toBe(`${CollaborativeTextEditorParentType.CONTENT_ELEMENT}/${element.id}`);
 			});
 		});
 

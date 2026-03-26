@@ -2,16 +2,18 @@
 	<VMenu location="bottom end" min-width="250">
 		<template #activator="{ props: menuProps }">
 			<VBtn
-				v-bind="menuProps"
+				v-bind="{ ...menuProps, ...safariAriaOwnsWorkaround }"
 				:variant="variant"
 				:data-testid="dataTestid"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"
+				class="pt-1"
 				icon
 				size="36"
 				@click.stop.prevent="() => {}"
 				@dblclick.stop.prevent="() => {}"
-				@keydown.enter.stop
+				@keyup.enter.space.stop
+				@keydown.enter.space.stop
 				@keydown.left.right.up.down.stop="() => {}"
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
@@ -31,6 +33,7 @@ import { BoardMenuScope } from "./board-menu-scope";
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { safariAriaOwnsWorkaround } from "@util-device-detection";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -65,7 +68,6 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.FILE_ELEMENT]: "components.board.menu.fileElement",
 	[BoardMenuScope.FOLDER_ELEMENT]: "components.board.menu.folderElement",
 	[BoardMenuScope.LINK_ELEMENT]: "components.board.menu.linkElement",
-	[BoardMenuScope.SUBMISSION_ELEMENT]: "components.board.menu.submissionElement",
 	[BoardMenuScope.DELETED_ELEMENT]: "components.board.menu.deletedElement",
 	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]: "components.board.menu.mediaExternalToolElement",
 	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]: "components.board.menu.videoConferenceElement",

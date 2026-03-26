@@ -1,5 +1,5 @@
 <template>
-	<v-custom-dialog
+	<CustomDialog
 		ref="dialog"
 		:is-open="isOpen"
 		:size="480"
@@ -39,13 +39,13 @@
 				/>
 			</div>
 		</template>
-	</v-custom-dialog>
+	</CustomDialog>
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ImportDestinationItem } from "@/store/types/rooms";
+import { BoardExternalReferenceType } from "@api-server";
 import { mdiInformation } from "@icons/material";
 import { computed, PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -77,7 +77,7 @@ const rules = reactive({
 
 const infoText = computed(() =>
 	t(
-		props.destinationType === BoardExternalReferenceType.Room
+		props.destinationType === BoardExternalReferenceType.ROOM
 			? `components.molecules.import.${props.parentType}.options.selectRoom.infoText`
 			: `components.molecules.import.${props.parentType}.options.selectCourse.infoText`
 	)
@@ -85,14 +85,14 @@ const infoText = computed(() =>
 
 const selectionPlaceholder = computed(() =>
 	t(
-		props.destinationType === BoardExternalReferenceType.Room
+		props.destinationType === BoardExternalReferenceType.ROOM
 			? `components.molecules.import.${props.parentType}.options.selectRoom`
 			: `components.molecules.import.${props.parentType}.options.selectCourse`
 	)
 );
 
 const selectionHint = computed(() =>
-	t(props.destinationType === BoardExternalReferenceType.Room ? "common.labels.room" : "common.labels.course")
+	t(props.destinationType === BoardExternalReferenceType.ROOM ? "common.labels.room" : "common.labels.course")
 );
 
 const onNext = () => {

@@ -1,8 +1,10 @@
 import FolderTitleInput from "./FolderTitleInput.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { flushPromises } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
-import { VTextField } from "vuetify/lib/components/index";
+import { VTextField } from "vuetify/components";
 
 const VALID_TITLE = "My Folder Title";
 const INVALID_TITLE = "<A";
@@ -24,6 +26,10 @@ describe("FolderTitleInput.vue", () => {
 			wrapper,
 		};
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	describe("when valid title was entered", () => {
 		it("should not show error-message", async () => {
@@ -82,7 +88,7 @@ describe("FolderTitleInput.vue", () => {
 			await flushPromises();
 
 			const alerts = wrapper.find('[role="alert"]').text();
-			expect(alerts).toEqual("common.validation.required");
+			expect(alerts).toEqual("Bitte fülle dieses Feld aus");
 		});
 
 		it("should not emit update:title event", async () => {

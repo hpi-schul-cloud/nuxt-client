@@ -1,9 +1,4 @@
-import {
-	FilePreviewStatus,
-	FileRecord,
-	FileRecordParent,
-	FileRecordVirusScanStatus,
-} from "@/types/file/File";
+import { FilePreviewStatus, FileRecord, FileRecordParent, FileRecordVirusScanStatus } from "@/types/file/File";
 import { Factory } from "fishery";
 
 export const fileRecordFactory = Factory.define<FileRecord>(({ sequence }) => {
@@ -25,5 +20,6 @@ export const fileRecordFactory = Factory.define<FileRecord>(({ sequence }) => {
 		createdAt: new Date().toISOString(),
 		isCollaboraEditable: false,
 		exceedsCollaboraEditableFileSize: false,
+		contentLastModifiedAt: new Date().toISOString(),
 	};
 });

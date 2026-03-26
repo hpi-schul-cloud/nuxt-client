@@ -1,27 +1,37 @@
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import FilePathsModule from "@/store/filePaths";
-import StatusAlertsModule from "@/store/status-alerts";
-import { FILE_PATHS_MODULE_KEY, STATUS_ALERTS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { FILE_PATHS_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
+import { useStatusAlerts } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index";
+import { h, nextTick, ref } from "vue";
+import { VApp } from "vuetify/components";
+
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref([]),
+	fetchStatusAlerts: vi.fn(),
+});
 
 vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 	useRouter: vi.fn(),
 }));
 
-const setup = () => {
-	const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
-		getStatusAlerts: [],
-	});
+vi.mock("@data-app/status-alerts.composable");
+vi.mocked(useStatusAlerts).mockReturnValue({
+	status: ref(""),
+	statusAlerts: ref([]),
+	fetchStatusAlerts: vi.fn(),
+});
 
+const setup = () => {
 	const filePathsModule = createModuleMocks(FilePathsModule, {
 		getSpecificFiles: {
 			accessibilityStatement: "statement",
@@ -42,7 +52,6 @@ const setup = () => {
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,
 				},
-				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			},
 			stubs: {
 				"application-error-wrapper": { template: "<div></div>" },
@@ -51,6 +60,7 @@ const setup = () => {
 				"loading-state-dialog": { template: "<div></div>" },
 				"keep-alive": { template: "<div></div>" },
 				autoLogoutWarning: { template: "<div></div>" },
+				AlertContainer: true,
 			},
 		},
 	});

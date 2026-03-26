@@ -1,16 +1,17 @@
 import { defaultConfigEnvs, useEnvConfig, useEnvStore } from "./env-config.store";
-import { FileConfigApiFactory, FilesStorageConfigResponse } from "@/fileStorageApi/v3";
-import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@/serverApi/v3";
 import { mockApiResponse } from "@@/tests/test-utils";
+import { FileConfigApiFactory } from "@api-file-storage";
+import { FilesStorageConfigResponse } from "@api-file-storage";
+import { ConfigResponse, LanguageType, SchulcloudTheme, ServerConfigApiFactory } from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { beforeAll, beforeEach, expect } from "vitest";
 
-vi.mock("@/serverApi/v3");
+vi.mock("@api-server");
 const mockedServerApi = vi.mocked(ServerConfigApiFactory);
 
-vi.mock("@/fileStorageApi/v3");
+vi.mock("@api-file-storage");
 const mockedFileConfigApi = vi.mocked(FileConfigApiFactory);
 
 describe("useEnvStore", () => {
@@ -36,6 +37,7 @@ describe("useEnvStore", () => {
 		dataFileApi: FilesStorageConfigResponse = {
 			MAX_FILE_SIZE: 10,
 			COLLABORA_MAX_FILE_SIZE_IN_BYTES: 20,
+			FILES_STORAGE_MAX_FILES_PER_PARENT: 30,
 		}
 	) => {
 		doMockServerApiData({ ...defaultConfigEnvs, ...dataServerApi });
@@ -80,7 +82,7 @@ describe("useEnvStore", () => {
 	describe("instituteTitle", () => {
 		it("should render default title when the theme is default", async () => {
 			await setup(true, {
-				SC_THEME: SchulcloudTheme.Default,
+				SC_THEME: SchulcloudTheme.DEFAULT,
 			});
 
 			expect(useEnvStore().instituteTitle).toBe("Dataport");
@@ -88,7 +90,7 @@ describe("useEnvStore", () => {
 
 		it("should render brb title when the theme is brb", async () => {
 			await setup(true, {
-				SC_THEME: SchulcloudTheme.Brb,
+				SC_THEME: SchulcloudTheme.BRB,
 			});
 
 			expect(useEnvStore().instituteTitle).toBe("Ministerium für Bildung, Jugend und Sport des Landes Brandenburg");
@@ -96,7 +98,7 @@ describe("useEnvStore", () => {
 
 		it("should render thr title when the theme is thr", async () => {
 			await setup(true, {
-				SC_THEME: SchulcloudTheme.Thr,
+				SC_THEME: SchulcloudTheme.THR,
 			});
 
 			expect(useEnvStore().instituteTitle).toBe(
@@ -119,7 +121,7 @@ describe("useEnvStore", () => {
 		it("should request, process and provide env data.", async () => {
 			const mockData: ConfigResponse = {
 				...defaultConfigEnvs,
-				SC_THEME: SchulcloudTheme.Default,
+				SC_THEME: SchulcloudTheme.DEFAULT,
 				ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 				SC_TITLE: "SomeThing",
 			};
@@ -130,6 +132,7 @@ describe("useEnvStore", () => {
 		it("should request, process and provide env file data.", async () => {
 			const mockFileData: FilesStorageConfigResponse = {
 				MAX_FILE_SIZE: 1,
+				FILES_STORAGE_MAX_FILES_PER_PARENT: 1000,
 				COLLABORA_MAX_FILE_SIZE_IN_BYTES: 2,
 			};
 			await setup(true, undefined, mockFileData);

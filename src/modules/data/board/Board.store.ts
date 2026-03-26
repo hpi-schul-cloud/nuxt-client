@@ -11,6 +11,8 @@ import {
 	FetchBoardSuccessPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
+	MoveCardToBoardRequestPayload,
+	MoveCardToBoardSuccessPayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
 	UpdateBoardLayoutRequestPayload,
@@ -29,12 +31,12 @@ import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload, DuplicateCardSuccessPayload } from "./cardActions/cardActionPayload.types";
-import { ColumnResponse } from "@/serverApi/v3";
+import { useSharedEditMode } from "./edit-mode.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
-import { useAppStore } from "@data-app";
+import { ColumnResponse } from "@api-server";
+import { useAppStore, useNotificationStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
-import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -319,6 +321,40 @@ export const useBoardStore = defineStore("boardStore", () => {
 		toColumn.cards.splice(newIndex, 0, item);
 	};
 
+	const moveCardToBoardRequest = async (payload: MoveCardToBoardRequestPayload) => {
+		await socketOrRest.moveCardToBoardRequest(payload);
+	};
+
+	const moveCardToBoardSuccess = async (payload: MoveCardToBoardSuccessPayload) => {
+		if (!board.value) return;
+		const sourceColumn = board.value.columns.find((c) => c.id === payload.fromColumn.id);
+		const targetColumn = board.value.columns.find((c) => c.id === payload.toColumn.id);
+
+		if (sourceColumn) {
+			const cardIndex = sourceColumn.cards.findIndex((c) => c.cardId === payload.card.cardId);
+			sourceColumn.cards.splice(cardIndex, 1);
+		}
+
+		if (targetColumn) {
+			targetColumn.cards.push(payload.card);
+		}
+
+		if (payload.toColumn && payload.toBoard && payload.isOwnAction) {
+			useNotificationStore().notify({
+				status: "success",
+				text: "components.molecules.move.card.message.success",
+				link: {
+					to: `/boards/${payload.toBoard.id}`,
+					text: payload.toBoard.title,
+				},
+				replace: {
+					column: payload.toColumn.title,
+				},
+				duration: 10000,
+			});
+		}
+	};
+
 	const disconnectSocketRequest = () => {
 		socketOrRest.disconnectSocketRequest();
 	};
@@ -400,6 +436,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		moveCardToNewColumn,
 		moveCardRequest,
 		moveCardSuccess,
+		moveCardToBoardRequest,
+		moveCardToBoardSuccess,
 		moveColumnRequest,
 		moveColumnSuccess,
 		updateColumnTitleRequest,

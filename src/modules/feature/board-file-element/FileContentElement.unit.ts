@@ -1,33 +1,38 @@
+import FileAlerts from "./content/alert/FileAlerts.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import FileContentElement from "./FileContentElement.vue";
 import { FileProperties } from "./shared/types/file-properties";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
-import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@/fileStorageApi/v3";
-import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useBoardPermissions, useContentElementState } from "@data-board";
+import { FileRecordScanStatus, PreviewStatus, PreviewWidth } from "@api-file-storage";
+import { FileElementResponse } from "@api-server";
+import { useBoardAllowedOperations, useContentElementState } from "@data-board";
 import * as FileStorageApi from "@data-file";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
-import { shallowMount } from "@vue/test-utils";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 import { VCard } from "vuetify/components";
 
 vi.mock("@data-board");
 vi.mock("@feature-board");
 vi.mock("./content/alert/useFileAlerts.composable");
-vi.mock("vue-router");
 
 describe("FileContentElement", () => {
+	beforeEach(() => {
+		const router = createRouterMock({
+			routes: [{ path: "/collabora/:id", name: "collabora", component: { template: "<div />" } }],
+		});
+		injectRouterMock(router);
+	});
+
 	const getWrapper = (props: {
 		element: FileElementResponse;
 		isEditMode: boolean;
@@ -38,11 +43,15 @@ describe("FileContentElement", () => {
 	}) => {
 		const menu = "slot-menu";
 
-		const addAlertMock = vi.fn();
-		vi.mocked(useFileAlerts).mockReturnValue({
-			addAlert: addAlertMock,
-			alerts: computed(() => []),
+		const alertsArray: FileAlert[] = [];
+		const useFileAlertsMock = mockComposable(useFileAlerts, {
+			addAlert: vi.fn((alert: FileAlert) => {
+				alertsArray.push(alert);
+			}),
+			alerts: computed(() => alertsArray),
 		});
+		vi.mocked(useFileAlerts).mockReturnValue(useFileAlertsMock);
+
 		setActivePinia(createTestingPinia());
 		createTestEnvStore({
 			FEATURE_COLUMN_BOARD_COLLABORA_ENABLED: props.isCollaboraEnabled ?? false,
@@ -58,11 +67,62 @@ describe("FileContentElement", () => {
 			},
 		});
 
-		return { wrapper, menu, addAlertMock };
+		return { wrapper, menu, addAlertMock: useFileAlertsMock.addAlert, mockedAlerts: alertsArray };
 	};
 
 	afterEach(() => {
 		vi.resetAllMocks();
+	});
+
+	describe("when file fetching fails", () => {
+		const setup = () => {
+			const element = fileElementResponseFactory.build();
+
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+			fileStorageApiMock.fetchFiles.mockRejectedValueOnce(new Error());
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+			vi.mocked(useBoardAllowedOperations).mockReturnValue({
+				allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+			} as ReturnType<typeof useBoardAllowedOperations>);
+
+			const useContentElementStateMock = vi.mocked(useContentElementState);
+			const fileContentElement = fileElementResponseFactory.build();
+			useContentElementStateMock.mockReturnValueOnce({
+				modelValue: ref(fileContentElement),
+				computedElement: computed(() => fileContentElement),
+			});
+
+			const { wrapper, addAlertMock, mockedAlerts } = getWrapper({
+				element,
+				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			});
+
+			return {
+				wrapper,
+				fileStorageApiMock,
+				addAlertMock,
+				mockedAlerts,
+			};
+		};
+		it("should add FILE_STORAGE_ERROR alert when fetch fails", async () => {
+			const { fileStorageApiMock, addAlertMock } = setup();
+			await flushPromises();
+
+			expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(1);
+			expect(addAlertMock).toHaveBeenCalledWith(FileAlert.FILE_STORAGE_ERROR);
+		});
+
+		it("should add alert", async () => {
+			const { addAlertMock } = setup();
+			await flushPromises();
+
+			expect(addAlertMock).toHaveBeenCalledTimes(1);
+		});
 	});
 
 	describe("when component is in view mode", () => {
@@ -70,16 +130,14 @@ describe("FileContentElement", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 
-				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-				const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const useContentElementStateMock = vi.mocked(useContentElementState);
 				const fileContentElement = fileElementResponseFactory.build();
@@ -137,7 +195,6 @@ describe("FileContentElement", () => {
 
 			it("should not render slot menu component", async () => {
 				const { wrapper, menu } = setup();
-
 				await nextTick();
 
 				expect(wrapper.html()).not.toContain(menu);
@@ -162,13 +219,7 @@ describe("FileContentElement", () => {
 					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
 
-				const collaboraPageUrl = "/collabora/" + fileRecordResponse.id + "?editorMode=edit";
-				const router = createMock<Router>();
-				const useRouterMock = <Mock>useRouter;
-				useRouterMock.mockReturnValue(router);
-				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
-
-				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecordResponse]);
 
@@ -184,11 +235,9 @@ describe("FileContentElement", () => {
 					isCollaboraEditable: fileRecordResponse.isCollaboraEditable,
 				};
 
-				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-				const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const useContentElementStateMock = vi.mocked(useContentElementState);
 				const fileContentElement = fileElementResponseFactory.build();
@@ -404,7 +453,7 @@ describe("FileContentElement", () => {
 
 						card.trigger("click");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 						windowOpenSpy.mockRestore();
 					});
 				});
@@ -424,7 +473,7 @@ describe("FileContentElement", () => {
 
 						await card.trigger("keydown.enter");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 
 						windowOpenSpy.mockRestore();
 					});
@@ -600,23 +649,14 @@ describe("FileContentElement", () => {
 			describe("when upload is successful", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
-					document.body.setAttribute("data-app", "true");
 
-					const collaboraPageUrl = "/collabora/" + "123" + "?editorMode=edit";
-					const router = createMock<Router>();
-					const useRouterMock = <Mock>useRouter;
-					useRouterMock.mockReturnValue(router);
-					router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
-
-					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-					const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const useContentElementStateMock = vi.mocked(useContentElementState);
 					const fileContentElement = fileElementResponseFactory.build();
@@ -707,18 +747,15 @@ describe("FileContentElement", () => {
 			describe("when upload returns error", () => {
 				const setup = () => {
 					const element = fileElementResponseFactory.build();
-					document.body.setAttribute("data-app", "true");
 
-					const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 					vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 					fileStorageApiMock.upload.mockRejectedValueOnce(new Error("test"));
 					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
-					const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-					const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-						hasEditPermission: ref(true),
-					});
-					useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+					vi.mocked(useBoardAllowedOperations).mockReturnValue({
+						allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+					} as ReturnType<typeof useBoardAllowedOperations>);
 
 					const useContentElementStateMock = vi.mocked(useContentElementState);
 					const fileContentElement = fileElementResponseFactory.build();
@@ -775,8 +812,6 @@ describe("FileContentElement", () => {
 				isCollaboraEditable?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
-				document.body.setAttribute("data-app", "true");
-
 				const fileRecordResponse = fileRecordFactory.build({
 					securityCheckStatus: props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
@@ -785,14 +820,7 @@ describe("FileContentElement", () => {
 					isCollaboraEditable: props?.isCollaboraEditable ?? false,
 				});
 
-				const collaboraPageUrl = "/collabora/" + fileRecordResponse.id + "?editorMode=edit";
-				const router = createMock<Router>();
-				const useRouterMock = <Mock>useRouter;
-
-				useRouterMock.mockReturnValue(router);
-				router.resolve.mockReturnValueOnce({ href: collaboraPageUrl });
-
-				const fileStorageApiMock = createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
 				vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
 				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([fileRecordResponse]);
 
@@ -807,12 +835,9 @@ describe("FileContentElement", () => {
 					mimeType: fileRecordResponse.mimeType,
 					isCollaboraEditable: fileRecordResponse.isCollaboraEditable,
 				};
-
-				const useBoardPermissionsMockFn = vi.mocked(useBoardPermissions); // the mocked function
-				const useBoardPermissionsMockReturn = createMock<ReturnType<typeof useBoardPermissions>>({
-					hasEditPermission: ref(true),
-				});
-				useBoardPermissionsMockFn.mockReturnValueOnce(useBoardPermissionsMockReturn);
+				vi.mocked(useBoardAllowedOperations).mockReturnValue({
+					allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+				} as ReturnType<typeof useBoardAllowedOperations>);
 
 				const useContentElementStateMock = vi.mocked(useContentElementState);
 				const fileContentElement = fileElementResponseFactory.build();
@@ -1013,7 +1038,7 @@ describe("FileContentElement", () => {
 
 						card.trigger("click");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 						windowOpenSpy.mockRestore();
 					});
 				});
@@ -1033,7 +1058,7 @@ describe("FileContentElement", () => {
 
 						await card.trigger("keydown.enter");
 
-						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?editorMode=edit`, "_blank");
+						expect(windowOpenSpy).toHaveBeenCalledWith(`/collabora/${fileRecordResponse.id}?edit=true`, "_blank");
 
 						windowOpenSpy.mockRestore();
 					});
@@ -1200,6 +1225,63 @@ describe("FileContentElement", () => {
 						windowOpenSpy.mockRestore();
 					});
 				});
+			});
+		});
+	});
+
+	describe("file alerts", () => {
+		const setup = () => {
+			const element = fileElementResponseFactory.build();
+
+			const fileStorageApiMock = mockComposable(FileStorageApi.useFileStorageApi);
+			vi.spyOn(FileStorageApi, "useFileStorageApi").mockReturnValueOnce(fileStorageApiMock);
+			fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
+
+			vi.mocked(useBoardAllowedOperations).mockReturnValue({
+				allowedOperations: computed(() => ({ createFileElement: true }) as unknown),
+			} as ReturnType<typeof useBoardAllowedOperations>);
+
+			const useContentElementStateMock = vi.mocked(useContentElementState);
+			const fileContentElement = fileElementResponseFactory.build();
+			useContentElementStateMock.mockReturnValueOnce({
+				modelValue: ref(fileContentElement),
+				computedElement: computed(() => fileContentElement),
+			});
+
+			const { wrapper, mockedAlerts } = getWrapper({
+				element,
+				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			});
+
+			return {
+				wrapper,
+				mockedAlerts,
+				fileStorageApiMock,
+			};
+		};
+
+		it("should pass alerts to FileAlert", () => {
+			const { wrapper, mockedAlerts } = setup();
+
+			const fileAlert = wrapper.findComponent(FileAlerts);
+
+			expect(fileAlert.props()).toEqual({
+				alerts: mockedAlerts,
+			});
+		});
+
+		describe("when file alerts emits on-status-reload", () => {
+			it("should fetch file", async () => {
+				const { wrapper, fileStorageApiMock } = setup();
+
+				const fileAlert = wrapper.findComponent(FileAlerts);
+
+				await fileAlert.vm.$emit("on-status-reload");
+
+				expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(2);
 			});
 		});
 	});

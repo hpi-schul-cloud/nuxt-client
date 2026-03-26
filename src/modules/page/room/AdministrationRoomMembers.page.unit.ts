@@ -1,5 +1,5 @@
 import AdministrationRoomMembersPage from "./AdministrationRoomMembers.page.vue";
-import { RoleName } from "@/serverApi/v3";
+import { useI18nGlobal } from "@/plugins/i18n";
 import { schoolsModule } from "@/store";
 import SchoolsModule from "@/store/schools";
 import {
@@ -10,42 +10,36 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RoleName } from "@api-server";
 import { useAdministrationRoomStore, useRoomMembersStore } from "@data-room";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mock, vi } from "vitest";
 import { nextTick } from "vue";
 import { useI18n } from "vue-i18n";
-import { Router, useRoute } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
-vi.mock("vue-router");
-const useRouteMock = <Mock>useRoute;
+vi.mock("vue-i18n");
+(useI18n as Mock).mockReturnValue({ t: (key: string) => key, n: (key: string) => key });
 
-vi.mock("vue-i18n", () => ({
-	useI18n: vi.fn().mockReturnValue({
-		t: vi.fn().mockImplementation((key: string) => key),
-		n: vi.fn().mockImplementation((key: string) => key),
-	}),
-}));
-vi.mocked(useI18n());
+vi.mock("@/plugins/i18n");
+(useI18nGlobal as Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("AdministrationRoomMembers.page", () => {
 	const ownSchool = {
 		id: "school-id",
 		name: "Paul-Gerhardt-Gymnasium",
 	};
-	const router = createMock<Router>();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		useRouteMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
 
 		setupStores({
 			schoolsModule: SchoolsModule,
 		});
 
-		createTestAppStoreWithRole(RoleName.Administrator);
+		createTestAppStoreWithRole(RoleName.ADMINISTRATOR);
 
 		schoolsModule.setSchool(schoolFactory.build(ownSchool));
 	});

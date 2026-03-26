@@ -14,14 +14,14 @@
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
-				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+				:elevation="cardElevation"
 				:ripple="false"
-				:hover="isHovered"
+				:hover="isHovered && allowedOperations?.moveCard"
 				:data-testid="cardTestId"
 				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
-					<CardSkeleton :height="height" />
+					<CardSkeleton :height />
 				</template>
 				<template v-if="card">
 					<CardTitle
@@ -30,30 +30,27 @@
 						scope="card"
 						:is-focused="isFocusedById"
 						class="mx-n4 mb-n2"
-						@update:value="onUpdateCardTitle($event, cardId)"
+						:has-edit-permission="allowedOperations?.updateCardTitle"
+						@update:value="onUpdateCardTitle"
 						@enter="onEnter"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu
-							v-if="hasEditPermission"
-							:scope="BoardMenuScope.CARD"
-							has-background
-							:data-testid="boardMenuTestId"
-						>
-							<KebabMenuAction :icon="mdiOpenInNew" @click="onOpenCard"> Öffnen </KebabMenuAction>
-							<KebabMenuActionEdit v-if="hasDeletePermission && !isEditMode" @click="onStartEditMode" />
+						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
+							<KebabMenuAction @click="onOpenCard">Open</KebabMenuAction>
+							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
 							<KebabMenuActionDuplicate
-								v-if="hasEditPermission"
+								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
 								@click="duplicateCard"
 							/>
+							<KebabMenuActionExport v-if="allowedOperations?.moveCard" @click="onMoveCard(cardId)" />
+							<KebabMenuActionShare v-if="allowedOperations?.shareCard" @click="onShareCard" />
 							<KebabMenuActionShareLink :scope="BoardMenuScope.CARD" @click="onCopyShareLink" />
 							<KebabMenuActionDelete
-								v-if="hasDeletePermission"
+								v-if="allowedOperations?.deleteCard"
 								:name="card.title"
 								:scope="BoardMenuScope.CARD"
-								scope-language-key="components.boardCard"
 								@click="onDeleteCard"
 							/>
 						</BoardMenu>
@@ -76,6 +73,10 @@
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
+		<VCard v-if="isDuplicating" class="mt-3">
+			<CardSkeleton :height />
+		</VCard>
+
 		<!-- Detail View -->
 		<CardHostDetailView
 			v-if="card"
@@ -91,7 +92,6 @@
 			@enter:title="onEnter"
 			@update:title="onUpdateCardTitle"
 			@close:detail-view="onCloseDetailView"
-			@delete:card="onDeleteCard"
 		/>
 	</div>
 </template>
@@ -104,20 +104,19 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import BoardMenu from "@/modules/ui/board/BoardMenu.vue"; // FIX_CIRCULAR_DEPENDENCY
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { useCourseBoardEditMode } from "@/modules/util/board/editMode.composable"; // FIX_CIRCULAR_DEPENDENCY
+import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
+import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
-import { useBoardFocusHandler, useBoardPermissions, useCardStore } from "@data-board";
-import { mdiOpenInNew } from "@icons/material";
-import { BoardMenuScope } from "@ui-board";
+import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuAction,
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
 	KebabMenuActionEdit,
+	KebabMenuActionExport,
+	KebabMenuActionShare,
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
@@ -135,12 +134,16 @@ const props = defineProps<Props>();
 const emit = defineEmits<{
 	(e: "move:card-keyboard", keycode: string): void;
 	(e: "delete:card", cardId: string): void;
+	(e: "move:card", cardId: string): void;
 	(e: "reload:board"): void;
+	(e: "share:card", cardId: string): void;
 }>();
 
+const { allowedOperations } = useBoardAllowedOperations();
 const cardHost = ref(null);
 const cardId = toRef(props, "cardId");
 const { isFocusContained, isFocusedById } = useBoardFocusHandler(cardId.value, cardHost);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
 
 const isHovered = useElementHover(cardHost);
 const isDetailView = ref(false);
@@ -156,22 +159,39 @@ const boardMenuTestId = computed(() => `card-menu-btn-${props.columnIndex}-${pro
 const cardTestId = computed(() => `board-card-${props.columnIndex}-${props.rowIndex}`);
 
 const { height: cardHostHeight } = useElementSize(cardHost);
-const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(cardId.value);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const cardElevation = computed(() => {
+	if (isEditMode.value) {
+		return 6;
+	}
+	if (isHovered.value && allowedOperations.value.moveCard) {
+		return 4;
+	}
+	return 2;
+});
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
-const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
+const hasMenuItem = computed(() =>
+	Object.keys(allowedOperations.value || {}).some((key) =>
+		["copyCard", "deleteCard", "moveCard", "shareBoard", "shareCard", "updateCardTitle"].includes(key)
+	)
+);
 
-const _updateCardTitle = (newTitle: string, cardId: string) => {
-	cardStore.updateCardTitleRequest({ newTitle, cardId });
+const onMoveCardKeyboard = (event: KeyboardEvent) => emit("move:card-keyboard", event.code);
+const onMoveCard = (cardId: string) => emit("move:card", cardId);
+const onShareCard = () => {
+	emit("share:card", props.cardId);
 };
 
-const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
+const _updateCardTitle = (newTitle: string) => {
+	cardStore.updateCardTitleRequest({ newTitle, cardId: props.cardId });
+};
+const _debouncedUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
+const onUpdateCardTitle = (newTitle: string) => _debouncedUpdateCardTitle(newTitle);
 
-const onDeleteCard = async (confirmation: Promise<boolean>) => {
+const onDeleteCard = async () => {
 	stopEditMode();
-	const shouldDelete = await confirmation;
+	const shouldDelete = await askDeletionForType("components.boardCard");
 	if (shouldDelete && card.value?.id) {
 		emit("delete:card", card.value.id);
 	}
@@ -225,11 +245,9 @@ const boardMenuClasses = computed(() => {
 	return "hidden";
 });
 
-const duplicateCard = async () => {
-	if (!card.value) return;
-
-	await cardStore.duplicateCard({ cardId: card.value.id });
-};
+const { run: duplicateCard, isRunning: isDuplicating } = useSafeTaskRunner(async () => {
+	await cardStore.duplicateCard({ cardId: props.cardId });
+});
 
 const onOpenCard = () => {
 	isDetailView.value = true;

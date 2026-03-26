@@ -1,4 +1,5 @@
-import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
+import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";

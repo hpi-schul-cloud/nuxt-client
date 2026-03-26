@@ -1,13 +1,12 @@
 import { FileAlert } from "../shared/types/FileAlert.enum";
-import FileAlerts from "./alert/FileAlerts.vue";
 import FileDescription from "./display/file-description/FileDescription.vue";
 import FileDisplay from "./display/FileDisplay.vue";
 import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
-import { PreviewStatus } from "@/fileStorageApi/v3";
 import { createTestEnvStore, fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { PreviewStatus } from "@api-file-storage";
 import { createTestingPinia } from "@pinia/testing";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -663,30 +662,6 @@ describe("FileContent", () => {
 
 			expect(contentElementFooter.props()).toEqual({
 				fileProperties,
-			});
-		});
-	});
-
-	describe("file alerts", () => {
-		it("should pass props to FileAlert", () => {
-			const { wrapper, alerts } = setup();
-
-			const fileAlert = wrapper.findComponent(FileAlerts);
-
-			expect(fileAlert.props()).toEqual({
-				alerts,
-			});
-		});
-
-		describe("when file alerts emits on-status-reload", () => {
-			it("should emit fetch:file event", async () => {
-				const { wrapper } = setup();
-
-				const fileAlert = wrapper.findComponent(FileAlerts);
-
-				await fileAlert.vm.$emit("on-status-reload");
-
-				expect(wrapper.emitted("fetch:file")).toBeTruthy();
 			});
 		});
 	});

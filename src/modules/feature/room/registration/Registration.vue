@@ -10,32 +10,50 @@
 			<VStepperWindow>
 				<template v-for="step in steps" :key="step.value">
 					<VStepperWindowItem :value="step.value">
-						<h2 id="language-heading" class="mb-10">{{ step.subtitle }}</h2>
-						<LanguageSelection
-							v-if="step.value === 1"
-							:selected-language="lang"
-							@update:selected-language="onUpdateSelectedLanguage"
-						/>
+						<VForm ref="stepForms">
+							<h2 :id="`step-heading-${step.id}`" class="mb-4 heading" tabindex="-1">{{ step.heading }}</h2>
+							<LanguageSelection
+								v-if="step.value === RegistrationSteps.LanguageSelection"
+								:selected-language="lang"
+								@update:selected-language="onUpdateSelectedLanguage"
+							/>
+							<Welcome v-if="step.value === RegistrationSteps.Welcome" />
+							<Password
+								v-if="step.value === RegistrationSteps.PasswordSetup"
+								v-model="password"
+								:user-data="userData"
+							/>
+							<Consent
+								v-if="step.value === RegistrationSteps.DeclarationOfConsent"
+								v-model:is-terms-of-use-accepted="isTermsOfUseAccepted"
+								v-model:is-privacy-policy-accepted="isPrivacyPolicyAccepted"
+								:user-name="fullName"
+							/>
+							<Success v-if="step.value === RegistrationSteps.Success" />
+						</VForm>
 					</VStepperWindowItem>
 				</template>
 			</VStepperWindow>
 			<VStepperActions>
 				<template #prev>
-					<VBtn v-if="stepValue > 1" data-testid="registration-back-button" @click="onStepperClick(stepValue - 1)">
+					<VBtn
+						v-if="stepValue > 1 && stepValue < steps.length"
+						data-testid="registration-back-button"
+						@click="onBack(stepValue - 1)"
+					>
 						{{ t("common.actions.back") }}
 					</VBtn>
 				</template>
 				<template #next>
-					<VSpacer v-if="stepValue === 1" />
+					<VSpacer v-if="stepValue < steps.length" />
 					<VBtn
+						v-if="stepValue < steps.length"
 						variant="flat"
 						color="primary"
-						data-testid="registiration-continue-button"
-						:disabled="stepValue === steps.length"
-						@click="onStepperClick(stepValue + 1)"
-					>
-						{{ t("common.actions.continue") }}
-					</VBtn>
+						data-testid="registration-continue-button"
+						:disabled="stepValue === steps.length || hasApiErrorOccurred"
+						@click="onContinue"
+					/>
 				</template>
 			</VStepperActions>
 		</VStepper>
@@ -43,60 +61,161 @@
 </template>
 
 <script setup lang="ts">
+import Consent from "./steps/Consent.vue";
 import LanguageSelection from "./steps/LanguageSelection.vue";
-import { LanguageType } from "@/serverApi/v3";
-import { useRegistration } from "@data-room";
-import { computed, onMounted, ref } from "vue";
+import Password from "./steps/Password.vue";
+import Success from "./steps/Success.vue";
+import Welcome from "./steps/Welcome.vue";
+import { isNotNullish } from "@/utils/typeScript";
+import { LanguageType } from "@api-server";
+import { useEnvConfig } from "@data-env";
+import { useRegistrationStepper, useRegistrationStore } from "@data-room";
+import { storeToRefs } from "pinia";
+import { computed, nextTick, onMounted, ref, useTemplateRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
+import { VForm } from "vuetify/components";
+
+enum RegistrationSteps {
+	LanguageSelection = 1,
+	Welcome,
+	PasswordSetup,
+	DeclarationOfConsent,
+	Success,
+}
 
 const { t } = useI18n();
 const { xs, sm } = useDisplay();
 const mobileView = computed(() => xs.value || sm.value);
+const router = useRouter();
+const route = useRoute();
+const queryParamName = "registration-secret";
 
-const { selectedLanguage, setSelectedLanguage, initializeLanguage } = useRegistration();
-const lang = computed(() => selectedLanguage.value || LanguageType.De);
+const {
+	initializeLanguage,
+	isPrivacyPolicyAccepted,
+	isTermsOfUseAccepted,
+	password,
+	selectedLanguage,
+	setSelectedLanguage,
+	fullName,
+} = useRegistrationStepper();
+const registrationStore = useRegistrationStore();
+const { hasApiErrorOccurred, registrationSecret, userData } = storeToRefs(registrationStore);
+const { completeRegistration, fetchUserData } = registrationStore;
+const lang = computed(() => selectedLanguage.value || LanguageType.DE);
+const stepForms = useTemplateRef("stepForms");
 
 const onUpdateSelectedLanguage = (value: string) => {
 	setSelectedLanguage(value as LanguageType);
 };
 
-const stepValue = ref(1);
+const stepValue = ref(RegistrationSteps.LanguageSelection);
 
-const onStepperClick = (value: number) => {
-	stepValue.value = value;
+const focusHeadingForStep = async (stepIndex: number) => {
+	const step = steps.value[stepIndex];
+	if (!step) return;
+
+	const heading = document.getElementById(`step-heading-${step.id}`);
+	await nextTick();
+	heading?.focus();
 };
 
-onMounted(() => {
+const onBack = async (value: RegistrationSteps) => {
+	stepValue.value = value;
+	await focusHeadingForStep(stepValue.value - 1);
+};
+
+const onContinue = async () => {
+	if (stepForms.value === null) return;
+
+	const { valid, errors } = await stepForms.value[stepValue.value - 1]!.validate();
+	if (!valid && errors.length > 0) {
+		// Workaround for Vuetify 3.9.4 fast-fail inputs errors will not be announced to screen readers on submitting,
+		// so we are focusing the first invalid input to announce the error.
+		// More Information: https://github.com/vuetifyjs/vuetify/issues/21920
+		const firstErrorId = errors[0].id as string;
+		document.getElementById(firstErrorId)?.focus();
+		return;
+	}
+
+	if (stepValue.value === RegistrationSteps.DeclarationOfConsent) {
+		const isSucceed = await completeRegistration(lang.value, password.value);
+		if (!isSucceed) return;
+	}
+
+	stepValue.value += 1;
+	await nextTick();
+
+	focusHeadingForStep(stepValue.value - 1);
+};
+
+onMounted(async () => {
+	const queryValue = route.query[queryParamName] as string | undefined;
+	if (!isNotNullish(queryValue) || queryValue.trim() === "") {
+		router.replace("/");
+		return;
+	}
+	registrationSecret.value = queryValue;
+
 	initializeLanguage();
+	await fetchUserData();
+	if (userData.value?.registeredUserExists) {
+		const isSucceed = await completeRegistration(lang.value, password.value);
+		if (isSucceed) {
+			await goToStep(RegistrationSteps.Success);
+		}
+	}
 });
+
+const goToStep = async (step: RegistrationSteps) => {
+	stepValue.value = step;
+	await nextTick();
+	focusHeadingForStep(stepValue.value - 1);
+};
+
+const applicationName = computed(() => useEnvConfig().value.SC_TITLE.replace("Niedersächsische", "Niedersächsischen"));
 
 const steps = computed(() => [
 	{
-		value: 1,
+		value: RegistrationSteps.LanguageSelection,
 		title: t("common.labels.language"),
-		subtitle: t("pages.registrationExternalMembers.steps.language.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.language.heading"),
+		id: "language",
 	},
-	{ value: 2, title: t("common.labels.welcome"), subtitle: t("common.labels.welcome") },
 	{
-		value: 3,
+		value: RegistrationSteps.Welcome,
+		title: t("common.labels.welcome"),
+		heading: t("common.labels.welcome"),
+		id: "welcome",
+	},
+	{
+		value: RegistrationSteps.PasswordSetup,
 		title: t("common.labels.password"),
-		subtitle: t("pages.registrationExternalMembers.steps.password.subtitle"),
+		heading: t("pages.registrationExternalMembers.steps.password.heading"),
+		id: "password",
 	},
 	{
-		value: 4,
+		value: RegistrationSteps.DeclarationOfConsent,
 		title: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+		heading: t("pages.registrationExternalMembers.steps.declarationOfConsent.title"),
+		id: "consent",
 	},
 	{
-		value: 5,
-		title: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.confirmationCode.title"),
-	},
-	{
-		value: 6,
-		title: t("pages.registrationExternalMembers.steps.registration.title"),
-		subtitle: t("pages.registrationExternalMembers.steps.registration.subtitle"),
+		value: RegistrationSteps.Success,
+		title: t("pages.registrationExternalMembers.steps.success.title"),
+		heading: t("pages.registrationExternalMembers.steps.success.heading", { applicationName: applicationName.value }),
+		id: "success",
 	},
 ]);
 </script>
+<style scoped>
+.heading:focus {
+	outline: none;
+}
+.error-message {
+	color: #d32f2f;
+	margin-top: 1em;
+}
+</style>

@@ -1,7 +1,8 @@
+import { useGroupApi } from "./GroupApi.composable";
+import { Group } from "./types/group";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { notifyError } from "@data-app";
-import { Group, useGroupApi } from "@data-group";
 import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

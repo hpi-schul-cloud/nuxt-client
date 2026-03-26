@@ -1,7 +1,21 @@
 <template>
-	<InfoChip v-if="isScanStatusPending" class="ms-2" :icon="mdiClockTimeFour" data-testid="file-status-scan-pending">
+	<InfoChip
+		v-if="isScanStatusPending"
+		class="ms-2"
+		:icon="mdiClockTimeFourOutline"
+		data-testid="file-status-scan-pending"
+	>
 		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
 		{{ t("common.file.awaitingScan.short") }}
+	</InfoChip>
+	<InfoChip
+		v-if="exceedsCollaboraEditableFileSize"
+		class="ms-2"
+		:icon="mdiPencilOffOutline"
+		data-testid="file-status-collabora-file-size-exceeded"
+	>
+		<span class="d-sr-only">{{ t("common.labels.status") }}</span>
+		{{ t("common.file.exceedsCollaboraEditableFileSize.short") }}
 	</InfoChip>
 	<WarningChip
 		v-if="isScanStatusWontCheck"
@@ -30,7 +44,7 @@ import {
 	isScanStatusPending as isScanStatusPendingFn,
 	isScanStatusWontCheck as isScanStatusWontCheckFn,
 } from "@/utils/fileHelper";
-import { mdiClockTimeFour, mdiEyeOffOutline } from "@icons/material";
+import { mdiClockTimeFourOutline, mdiEyeOffOutline, mdiPencilOffOutline } from "@icons/material";
 import { ErrorChip, InfoChip, WarningChip } from "@ui-chip";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
@@ -47,4 +61,7 @@ const isScanStatusPending = computed(() => isScanStatusPendingFn(props.fileRecor
 const isScanStatusWontCheck = computed(() => isScanStatusWontCheckFn(props.fileRecord.previewStatus));
 const isScanStatusError = computed(() => isScanStatusErrorFn(props.fileRecord.previewStatus));
 const isScanStatusBlocked = computed(() => isScanStatusBlockedFn(props.fileRecord.securityCheckStatus));
+const exceedsCollaboraEditableFileSize = computed(
+	() => props.fileRecord.exceedsCollaboraEditableFileSize && !isScanStatusBlocked.value
+);
 </script>

@@ -1,5 +1,4 @@
 export * from "./school-external-tool";
-export * from "./school-external-tool";
 export * from "./school-external-tool-configuration-status";
 export * from "./school-external-tool-metadata";
 export * from "./tool-launch-request";

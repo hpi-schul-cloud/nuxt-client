@@ -1,5 +1,5 @@
 import { useSchoolLicenseApi } from "./schoolLicenseApi.composable";
-import { MediaSchoolLicenseListResponse, MediaSchoolLicenseResponse } from "@/serverApi/v3";
+import { MediaSchoolLicenseListResponse, MediaSchoolLicenseResponse } from "@api-server";
 import { defineStore } from "pinia";
 import { Ref, ref, ShallowRef, shallowRef } from "vue";
 

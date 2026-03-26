@@ -1,7 +1,7 @@
-import { printFromStringUtcToFullDate } from "@/plugins/datetime";
-import { RoomApiFactory, RoomStatsItemResponse } from "@/serverApi/v3";
 import { schoolsModule } from "@/store/store-accessor";
 import { $axios } from "@/utils/api";
+import { formatUtc } from "@/utils/date-time.utils";
+import { RoomApiFactory, RoomStatsItemResponse } from "@api-server";
 import { notifyError } from "@data-app";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
@@ -21,7 +21,7 @@ export const useAdministrationRoomStore = defineStore("administrationRoomStore",
 		return list
 			.map((room) => ({
 				...room,
-				createdAt: printFromStringUtcToFullDate(room.createdAt),
+				createdAt: formatUtc(room.createdAt, "date") ?? room.createdAt,
 			}))
 			.sort((a, b) => {
 				if (!a.owner && b.owner) return -1;

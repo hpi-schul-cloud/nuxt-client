@@ -1,18 +1,18 @@
+import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
+import { $axios } from "@/utils/api";
 import {
 	VideoConferenceApiFactory,
 	VideoConferenceInfoResponse,
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
-} from "@/serverApi/v3";
-import { VideoConferenceInfo, VideoConferenceOptions, VideoConferenceState } from "@/store/types/video-conference";
-import { $axios } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 import { computed, ref } from "vue";
 
 const videoConferenceStateMapping: Partial<Record<VideoConferenceStateResponse, VideoConferenceState>> = {
-	[VideoConferenceStateResponse.Running]: VideoConferenceState.RUNNING,
-	[VideoConferenceStateResponse.NotStarted]: VideoConferenceState.NOT_STARTED,
+	[VideoConferenceStateResponse.RUNNING]: VideoConferenceState.RUNNING,
+	[VideoConferenceStateResponse.NOT_STARTED]: VideoConferenceState.NOT_STARTED,
 };
 
 export const useVideoConference = (scope: VideoConferenceScope, scopeId: string) => {
@@ -49,12 +49,11 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string)
 		}
 	};
 
-	const startVideoConference = async (options: VideoConferenceOptions, logoutUrl?: string) => {
+	const startVideoConference = async (options: VideoConferenceOptions) => {
 		loading.value = true;
 		try {
 			await videoConferenceApi.videoConferenceControllerStart(scope, scopeId, {
 				...options,
-				logoutUrl,
 			});
 
 			videoConferenceInfo.value = {

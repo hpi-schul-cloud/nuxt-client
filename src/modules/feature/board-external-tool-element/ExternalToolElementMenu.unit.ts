@@ -1,7 +1,8 @@
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import * as confirmDialogUtils from "@/utils/confirmation-dialog.utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { KebabMenuAction, KebabMenuActionDelete } from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
+import { flushPromises, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 
 describe("ExternalToolElementMenu", () => {
@@ -13,8 +14,6 @@ describe("ExternalToolElementMenu", () => {
 		rowIndex: number;
 		elementIndex: number;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(ExternalToolElementMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -92,12 +91,13 @@ describe("ExternalToolElementMenu", () => {
 		});
 
 		it("should emit the delete event on click", async () => {
+			vi.spyOn(confirmDialogUtils, "askDeletionForType").mockResolvedValue(true);
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
-			menuItem.vm.$emit("click", Promise.resolve(true));
-			await nextTick();
+			await menuItem.trigger("click");
+			await flushPromises();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

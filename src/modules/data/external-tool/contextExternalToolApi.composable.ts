@@ -1,5 +1,6 @@
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
 import { ContextExternalTool, ContextExternalToolConfigurationTemplate, ContextExternalToolSave } from "./types";
+import { $axios } from "@/utils/api";
 import {
 	ContextExternalToolConfigurationTemplateListResponse,
 	ContextExternalToolConfigurationTemplateResponse,
@@ -9,8 +10,7 @@ import {
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolContextType,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+} from "@api-server";
 import { AxiosResponse } from "axios";
 
 export const useContextExternalToolApi = () => {
@@ -28,14 +28,9 @@ export const useContextExternalToolApi = () => {
 	const createContextExternalToolCall = async (
 		contextExternalTool: ContextExternalToolSave
 	): Promise<ContextExternalTool> => {
-		const contextExternalToolPostParams: ContextExternalToolPostParams =
-			ContextExternalToolMapper.mapToContextExternalToolPostParams(contextExternalTool);
+		const response = await toolApi.toolContextControllerCreateContextExternalTool(contextExternalTool);
 
-		const response: AxiosResponse<ContextExternalToolResponse> =
-			await toolApi.toolContextControllerCreateContextExternalTool(contextExternalToolPostParams);
-
-		const mapped: ContextExternalTool = ContextExternalToolMapper.mapToContextExternalTool(response.data);
-
+		const mapped = ContextExternalToolMapper.mapToContextExternalTool(response.data);
 		return mapped;
 	};
 

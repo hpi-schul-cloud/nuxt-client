@@ -1,27 +1,24 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		:headline="t('pages.administration.classes.index.title')"
 		max-width="full"
+		:fab-items="fab"
 		data-testid="admin-class-title"
 	>
-		<template #header>
-			<h1>
-				{{ t("pages.administration.classes.index.title") }}
-			</h1>
-			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
-					<v-tab value="next" data-testid="admin-class-next-year-tab">
-						<span>{{ nextYear }}</span>
-					</v-tab>
-					<v-tab value="current" data-testid="admin-class-current-year-tab">
-						<span>{{ currentYear }}</span>
-					</v-tab>
-					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-						<span>{{ t("pages.administration.common.label.archive") }}</span>
-					</v-tab>
-				</v-tabs>
-			</div>
-		</template>
+		<ThrInfoBanner />
+		<div class="mt-6 mx-n6 mx-md-0 pb-0 d-flex justify-center">
+			<v-tabs v-model="activeTab" class="tabs-max-width" grow>
+				<v-tab value="next" data-testid="admin-class-next-year-tab">
+					<span>{{ nextYear }}</span>
+				</v-tab>
+				<v-tab value="current" data-testid="admin-class-current-year-tab">
+					<span>{{ currentYear }}</span>
+				</v-tab>
+				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
+					<span>{{ t("pages.administration.common.label.archive") }}</span>
+				</v-tab>
+			</v-tabs>
+		</div>
 		<v-data-table-server
 			v-model:items-per-page="pagination.limit"
 			:headers="headers"
@@ -97,7 +94,7 @@
 						size="small"
 						class="mx-1 px-1"
 						min-width="0"
-						@click="onClickDeleteIcon(item)"
+						@click="onDelete(item)"
 					>
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
@@ -147,31 +144,6 @@
 				</template>
 			</template>
 		</v-data-table-server>
-		<v-custom-dialog
-			:is-open="isDeleteDialogOpen"
-			max-width="360"
-			data-testid="delete-dialog"
-			has-buttons
-			confirm-btn-title-key="common.actions.delete"
-			:buttons="['cancel', 'confirm']"
-			@dialog-closed="onCancelClassDeletion"
-			@dialog-confirmed="onConfirmClassDeletion"
-		>
-			<template #title>
-				<h2 class="my-2">
-					{{ t("pages.administration.classes.deleteDialog.title") }}
-				</h2>
-			</template>
-			<template #content>
-				<p>
-					{{
-						t("pages.administration.classes.deleteDialog.content", {
-							itemName: selectedItemName,
-						})
-					}}
-				</p>
-			</template>
-		</v-custom-dialog>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			data-testid="end-course-sync-dialog"
@@ -181,53 +153,40 @@
 			@success="loadClassList"
 		/>
 
-		<v-btn
-			v-if="hasCreatePermission"
-			class="my-5 button-start"
-			color="primary"
-			variant="flat"
-			data-testid="admin-class-add-button"
-			href="/administration/classes/create"
-		>
-			{{ t("pages.administration.classes.index.add") }}
-		</v-btn>
-
-		<InfoAlert
-			v-if="!hasCreatePermission"
-			class="mb-4"
-			:class="{ 'mt-4': !hasCreatePermission }"
-			data-testid="admin-class-info-alert"
-			alert-title="pages.administration.classes.thr.hint.title"
-		>
-			{{ t("pages.administration.classes.thr.hint.text") }}
-		</InfoAlert>
-
-		<p class="text-muted">
+		<p class="mt-4" data-testid="admin-class-hint">
 			{{
 				t("pages.administration.common.hint", {
 					institute_title: instituteTitle,
 				})
 			}}
 		</p>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { ClassSortQueryType, Permission, SchoolYearQueryType } from "@/serverApi/v3";
+import ThrInfoBanner from "@/pages/administration/ThrInfoBanner.vue";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
+import { askDeletion } from "@/utils/confirmation-dialog.utils";
 import { GROUP_MODULE_KEY, injectStrict, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { ClassSortQueryType, Permission, SchoolYearQueryType, SchulcloudTheme } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useEnvConfig, useEnvStore } from "@data-env";
 import { EndCourseSyncDialog } from "@feature-course-sync";
-import { mdiAccountGroupOutline, mdiArrowUp, mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@icons/material";
-import { InfoAlert } from "@ui-alert";
+import {
+	mdiAccountGroupOutline,
+	mdiArrowUp,
+	mdiPencilOutline,
+	mdiPlus,
+	mdiSyncOff,
+	mdiTrashCanOutline,
+} from "@icons/material";
+import { DefaultWireframe } from "@ui-layout";
+import { FabAction } from "@ui-speed-dial-menu";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
@@ -277,13 +236,13 @@ useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	switch (props.tab) {
 		case "next":
-			return SchoolYearQueryType.NextYear;
+			return SchoolYearQueryType.NEXT_YEAR;
 		case "current":
-			return SchoolYearQueryType.CurrentYear;
+			return SchoolYearQueryType.CURRENT_YEAR;
 		case "archive":
-			return SchoolYearQueryType.PreviousYears;
+			return SchoolYearQueryType.PREVIOUS_YEARS;
 		default:
-			return SchoolYearQueryType.CurrentYear;
+			return SchoolYearQueryType.CURRENT_YEAR;
 	}
 });
 
@@ -297,20 +256,29 @@ const showSourceHeader = computed(() => classes.value.some((classItem) => classI
 
 const isLoading = computed(() => groupModule.getLoading);
 
-const hasEditPermission = hasPermission(Permission.ClassEdit);
-const hasCreatePermission = hasPermission(Permission.ClassCreate);
+const hasEditPermission = hasPermission(Permission.CLASS_EDIT);
+const hasCreatePermission = hasPermission(Permission.CLASS_CREATE);
 
-const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Class;
+const fab: ComputedRef<FabAction[] | undefined> = computed(() =>
+	!(useEnvConfig().value.SC_THEME === SchulcloudTheme.THR) && hasCreatePermission.value
+		? [
+				{
+					icon: mdiPlus,
+					label: t("pages.administration.classes.index.add"),
+					href: "/administration/classes/create",
+					dataTestId: "fab_button_add_class",
+				},
+			]
+		: undefined
+);
 
-const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.Group;
+const showClassAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.CLASS;
 
-const isDeleteDialogOpen = ref(false);
+const showGroupAction = (item: ClassInfo) => hasEditPermission.value && item.type === ClassRootType.GROUP;
 
 const isEndSyncDialogOpen = ref(false);
 
 const selectedItem: Ref<ClassInfo | undefined> = ref();
-
-const selectedItemName = computed(() => selectedItem.value?.name || "???");
 
 const selectedItemForSync: ComputedRef<{
 	courseName: string;
@@ -331,14 +299,17 @@ const onClickEndSyncIcon = (selectedClass: ClassInfo) => {
 	isEndSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedClass: ClassInfo) => {
-	selectedItem.value = selectedClass;
-	isDeleteDialogOpen.value = true;
-};
+const onDelete = async (selectedClass: ClassInfo) => {
+	const shouldDelete = await askDeletion(
+		"pages.administration.classes.deleteDialog.title",
+		t("pages.administration.classes.deleteDialog.content", { itemName: selectedClass.name })
+	);
+	if (!shouldDelete) return;
 
-const onCancelClassDeletion = () => {
-	selectedItem.value = undefined;
-	isDeleteDialogOpen.value = false;
+	await groupModule.deleteClass({
+		classId: selectedClass.id,
+		query: schoolYearQueryType.value,
+	});
 };
 
 const pagination: ComputedRef<Pagination> = computed(() => groupModule.getPagination);
@@ -391,15 +362,6 @@ const headers = computed(() => {
 
 	return headerList;
 });
-
-const onConfirmClassDeletion = async () => {
-	if (selectedItem.value) {
-		await groupModule.deleteClass({
-			classId: selectedItem.value.id,
-			query: schoolYearQueryType.value,
-		});
-	}
-};
 
 const loadClassList = async () => {
 	await groupModule.loadClassesForSchool({

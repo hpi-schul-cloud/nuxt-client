@@ -4,7 +4,6 @@ import { shallowMount } from "@vue/test-utils";
 
 describe("CardSkeleton", () => {
 	const setup = (props: { height: number }) => {
-		document.body.setAttribute("data-app", "true");
 		const wrapper = shallowMount(CardSkeleton, {
 			global: {
 				plugins: [createTestingVuetify()],

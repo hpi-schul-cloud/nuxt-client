@@ -2,8 +2,8 @@
   Note: This app is for testing purposes only,
   e.g. in order to run the vue client in a docker container on localhost
 */
-import connect from "connect";
 import { createProxyMiddleware } from "./config/vite/dev-server-config.mjs";
+import connect from "connect";
 
 const app = connect();
 

@@ -1,38 +1,27 @@
 import LoggedOutLayout from "./LoggedOut.layout.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { SchulcloudTheme } from "@api-server";
 import { useAppStore } from "@data-app";
-import { createMock } from "@golevelup/ts-vitest";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { ref } from "vue";
-import { Router, useRouter } from "vue-router";
-
-vi.mock("vue-router");
-const router = vi.mocked(useRouter);
+import { createRouterMock, getRouter, injectRouterMock } from "vue-router-mock";
 
 describe("loggedOutLayout", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
-
-		router.mockReturnValue(
-			createMock<Router>({
-				currentRoute: ref({ path: "/" }),
-				replace: vi.fn(),
-			})
-		);
+		injectRouterMock(createRouterMock());
 	});
 
 	const mountComponent = () => {
 		createTestEnvStore({
 			GHOST_BASE_URL: "https://works-like-charm.com",
 			// SC_THEME must be set here because of dependency to NavigationBar
-			SC_THEME: SchulcloudTheme.Default,
+			SC_THEME: SchulcloudTheme.DEFAULT,
 		});
 
 		const wrapper = mount(LoggedOutLayout, {
@@ -43,7 +32,6 @@ describe("loggedOutLayout", () => {
 						name: "instance name",
 					},
 				},
-				stubs: ["base-link"],
 			},
 		});
 
@@ -65,12 +53,12 @@ describe("loggedOutLayout", () => {
 
 	it("should not routeToErrorPage without any errors", () => {
 		mountComponent();
-		expect(useRouter().replace).not.toHaveBeenCalledWith("/error");
+		expect(getRouter().replace).not.toHaveBeenCalledWith("/error");
 	});
 
 	it("should execute routeToErrorPage with any errors", () => {
 		useAppStore().handleApplicationError(HttpStatusCode.Unauthorized, "error.401");
 		mountComponent();
-		expect(useRouter().replace).toHaveBeenCalledWith("/error");
+		expect(getRouter().replace).toHaveBeenCalledWith("/error");
 	});
 });

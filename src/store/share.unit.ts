@@ -1,9 +1,9 @@
-import * as serverApi from "../serverApi/v3/api";
+import * as serverApi from "../generated/serverApi/v3";
 import {
 	BoardExternalReferenceType,
 	ShareTokenApiInterface,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "../serverApi/v3/api";
+	ShareTokenBodyParamsParentType,
+} from "../generated/serverApi/v3";
 import ShareModule, { ShareOptions } from "./share";
 import courseRoomDetailsModule from "@/store/course-room-details";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -46,7 +46,7 @@ describe("share module", () => {
 				it("should call the backend with the correct payload", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
-					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+					shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 
 					await shareModule.createShareUrl(shareOptions);
 
@@ -57,13 +57,13 @@ describe("share module", () => {
 				it("should call setShareUrl mutation", async () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
-					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+					shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 					const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
 
 					await shareModule.createShareUrl(shareOptions);
 					const result = setShareUrlMock.mock.calls[0][0];
 
-					expect(result).toContain("rooms/courses-overview?import=sampleToken");
+					expect(result).toContain("rooms/courses-overview?import=sampleToken&importedType=course");
 				});
 
 				it("should return undefined on error", async () => {
@@ -107,8 +107,8 @@ describe("share module", () => {
 				const setDestinationTypeMock = vi.spyOn(shareModule, "setDestinationType");
 				const setShareModalOpenMock = vi.spyOn(shareModule, "setShareModalOpen");
 				const testId = "test-id";
-				const type = ShareTokenBodyParamsParentTypeEnum.Courses;
-				const destinationType = BoardExternalReferenceType.Room;
+				const type = ShareTokenBodyParamsParentType.COURSES;
+				const destinationType = BoardExternalReferenceType.ROOM;
 				shareModule.startShareFlow({
 					id: testId,
 					type,
@@ -155,9 +155,9 @@ describe("share module", () => {
 
 		it("setParentType should set 'shareUrl' state", async () => {
 			const shareModule = new ShareModule({});
-			shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
+			shareModule.setParentType(ShareTokenBodyParamsParentType.COURSES);
 
-			expect(shareModule.getParentType).toStrictEqual(ShareTokenBodyParamsParentTypeEnum.Courses);
+			expect(shareModule.getParentType).toStrictEqual(ShareTokenBodyParamsParentType.COURSES);
 		});
 	});
 });

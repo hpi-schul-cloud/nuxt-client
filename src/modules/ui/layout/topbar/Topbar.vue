@@ -1,5 +1,5 @@
 <template>
-	<VAppBar flat :height="appBarHeight">
+	<VToolbar :height="appBarHeight" class="top-bar">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template #prepend>
 			<VAppBarNavIcon
@@ -16,8 +16,7 @@
 			class="mr-2"
 			:icon="mdiAlert"
 			:color="statusAlertColor"
-			:aria-label="$t('global.topbar.actions.alerts')"
-			:title="$t('global.topbar.actions.alerts')"
+			:aria-label="t('global.topbar.actions.alerts')"
 			data-test-id="status-alerts-icon"
 		>
 			<CloudStatusMessages :status-alerts="statusAlerts" />
@@ -26,8 +25,7 @@
 			v-if="isTabletOrBigger"
 			class="mr-2"
 			:icon="mdiQrcode"
-			:aria-label="$t('global.topbar.actions.qrCode')"
-			:title="$t('global.topbar.actions.qrCode')"
+			:aria-label="t('global.topbar.actions.qrCode')"
 			data-test-id="qr-code-btn"
 		>
 			<PageShare />
@@ -43,7 +41,7 @@
 			data-testid="school-logo"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
-	</VAppBar>
+	</VToolbar>
 </template>
 
 <script setup lang="ts">
@@ -52,11 +50,21 @@ import CloudStatusMessages from "./CloudStatusMessages.vue";
 import PageShare from "./PageShare.vue";
 import TopbarItem from "./TopbarItem.vue";
 import UserMenu from "./UserMenu.vue";
-import { injectStrict, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
-import { useAppStoreRefs } from "@data-app";
+import { useAppStoreRefs, useStatusAlerts } from "@data-app";
 import { mdiAlert, mdiMenu, mdiQrcode } from "@icons/material";
-import { computed, onMounted } from "vue";
+import { useWindowScroll } from "@vueuse/core";
+import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
+
+const { y } = useWindowScroll();
+const isScrollingDown = ref(false);
+const { fetchStatusAlerts, statusAlerts } = useStatusAlerts();
+const { t } = useI18n();
+
+watch(y, (newVal, oldVal) => {
+	isScrollingDown.value = newVal > oldVal;
+});
 
 defineProps({
 	sidebarExpanded: {
@@ -67,21 +75,11 @@ defineProps({
 
 defineEmits(["sidebar-toggled"]);
 
-const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-
-const { lgAndUp, mdAndUp } = useDisplay();
-
-const isDesktop = computed(() => lgAndUp.value);
-
-const isTabletOrBigger = computed(() => mdAndUp.value);
+const { lgAndUp: isDesktop, mdAndUp: isTabletOrBigger } = useDisplay();
 
 onMounted(() => {
-	(async () => {
-		await statusAlertsModule.fetchStatusAlerts();
-	})();
+	fetchStatusAlerts();
 });
-
-const statusAlerts = computed(() => statusAlertsModule.getStatusAlerts);
 
 const showStatusAlertIcon = computed(() => statusAlerts.value.length !== 0);
 
@@ -93,17 +91,23 @@ const statusAlertColor = computed(() => {
 
 const { user, school, userRoles: roleNames } = useAppStoreRefs();
 
-const hasLogo = computed(() => !!school.value?.logo?.url);
+const hasLogo = computed(() => school.value?.logo?.url !== undefined);
 
 const appBarHeight = computed(() => {
 	const height = window.getComputedStyle(document.documentElement).getPropertyValue("--topbar-height");
-	const heightWithoutUnit = parseInt(height);
-
-	return heightWithoutUnit;
+	return parseInt(height);
 });
 </script>
 
 <style scoped>
+.top-bar {
+	position: sticky;
+	background-color: #fff !important;
+	top: 0;
+	z-index: 1000;
+	transition: top 0.2s ease-in-out;
+}
+
 .school-name {
 	max-width: 280px;
 	text-overflow: ellipsis;

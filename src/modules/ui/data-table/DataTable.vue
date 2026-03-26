@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center ga-2 mb-2 pb-2 table-title-header sticky"
+		class="d-flex justify-space-between align-center ga-3 mb-2 pb-2 table-title-header sticky"
 		:class="{
 			'flex-column mt-4': isExtraSmallDisplay,
 			'pt-7': smAndUp,
@@ -16,30 +16,17 @@
 		>
 			<slot name="action-menu-items" v-bind="{ selectedIds }" />
 		</BatchActionMenu>
-
-		<v-spacer v-else />
-
 		<slot name="left-of-search" />
-		<v-text-field
+		<SvsSearchField
 			v-model="search"
-			density="compact"
-			flat
-			hide-details
-			max-width="400px"
-			mobile-breakpoint="sm"
-			single-line
-			variant="solo-filled"
 			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
-			:label="t('common.labels.search')"
-			:prepend-inner-icon="mdiMagnify"
+			mobile-breakpoint="sm"
 			:aria-label="t('pages.rooms.members.filter')"
 			data-testid="table-search"
 		/>
 	</div>
-
-	<v-divider role="presentation" />
-
-	<v-data-table
+	<VDivider role="presentation" />
+	<VDataTable
 		v-model:search="search"
 		v-model="selectedIds"
 		:data-testid="dataTestid"
@@ -60,6 +47,7 @@
 		<template #[`header.data-table-select`]="{ someSelected, allSelected, selectAll }">
 			<VCheckboxBtn
 				:model-value="allSelected"
+				color="primary"
 				:indeterminate="someSelected && !allSelected"
 				:aria-label="t('ui.dataTable.select.all')"
 				data-testid="select-all-checkbox"
@@ -88,12 +76,13 @@
 		<template v-for="slot in Object.keys($slots)" #[slot]="scope">
 			<slot :name="slot" v-bind="scope" />
 		</template>
-	</v-data-table>
+	</VDataTable>
 </template>
 
 <script setup lang="ts">
 import BatchActionMenu from "./BatchActionMenu.vue";
-import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { SvsSearchField } from "@ui-controls";
 import { computed, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";

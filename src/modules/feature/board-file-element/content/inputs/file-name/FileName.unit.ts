@@ -1,6 +1,8 @@
 import FileName from "./FileName.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 import { VTextField } from "vuetify/components";
 
@@ -20,6 +22,10 @@ describe("FileName", () => {
 			fileExtension,
 		};
 	};
+
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
 
 	it("should be found in dom", () => {
 		const { wrapper } = mountSetup();
@@ -57,6 +63,32 @@ describe("FileName", () => {
 
 			const textField = wrapper.findComponent(VTextField);
 			const newFileName = "my<NewImage";
+			await textField.setValue(newFileName);
+			await nextTick();
+
+			expect(wrapper.emitted("update:name")).toBeUndefined();
+		});
+	});
+
+	describe("when a value containing / is entered", () => {
+		it("should display an error message", async () => {
+			const { wrapper } = mountSetup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const input = textField.find("input[type='text']");
+			await input.setValue("invalid/name");
+			await nextTick();
+
+			expect(textField.text()).toContain(
+				wrapper.vm.$t("pages.folder.rename-file-dialog.validation.invalid-characters")
+			);
+		});
+
+		it("should not emit update:name", async () => {
+			const { wrapper } = mountSetup();
+
+			const textField = wrapper.findComponent(VTextField);
+			const newFileName = "my/NewImage";
 			await textField.setValue(newFileName);
 			await nextTick();
 

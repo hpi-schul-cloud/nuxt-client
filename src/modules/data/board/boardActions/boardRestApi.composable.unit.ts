@@ -1,7 +1,5 @@
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { BoardLayout } from "@/serverApi/v3/api";
 import { courseRoomDetailsModule } from "@/store";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
@@ -10,66 +8,64 @@ import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
+	mockComposable,
 	mockedPiniaStoreTyping,
+	mountComposable,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { BoardLayout } from "@api-server";
 import { useAppStore } from "@data-app";
-import { useBoardStore, useSocketConnection } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-vitest";
+import { useBoardStore, useSharedEditMode, useSocketConnection } from "@data-board";
 import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
+import { useErrorHandler } from "@util-error-handling";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import { Mocked } from "vitest";
 import { computed, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { createRouterMock, injectRouterMock } from "vue-router-mock";
 
-vi.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@util-error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
 vi.mock("../BoardApi.composable");
 const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-vi.mock("@util-board/editMode.composable");
-const mockedSharedEditMode = vi.mocked(useSharedEditMode);
+vi.mock("@data-board/edit-mode.composable");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
 vi.mock("../socket/socket");
 const mockedUseSocketConnection = vi.mocked(useSocketConnection);
-
-vi.mock("vue-router");
-const useRouterMock = <Mock>useRouter;
 
 vi.mock("vue-i18n", () => ({
 	useI18n: () => ({ t: (key: string) => key }),
 }));
 
 describe("boardRestApi", () => {
-	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedSocketConnectionHandler: DeepMocked<ReturnType<typeof useSocketConnection>>;
-	let setEditModeId: Mock;
+	let mockedErrorHandler: Mocked<ReturnType<typeof useErrorHandler>>;
+	let mockedBoardApiCalls: Mocked<ReturnType<typeof useBoardApi>>;
+	let mockedSocketConnectionHandler: Mocked<ReturnType<typeof useSocketConnection>>;
+	let mockedSharedEditMode: Mocked<ReturnType<typeof useSharedEditMode>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 
-		mockedSocketConnectionHandler = createMock<ReturnType<typeof useSocketConnection>>();
+		mockedSocketConnectionHandler = mockComposable(useSocketConnection);
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
-		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedErrorHandler = mockComposable(useErrorHandler);
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
-		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
+		mockedBoardApiCalls = mockComposable(useBoardApi);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
-		setEditModeId = vi.fn();
-		mockedSharedEditMode.mockReturnValue({
-			setEditModeId,
+		mockedSharedEditMode = mockComposable(useSharedEditMode, {
 			editModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
+		mockedUseSharedEditMode.mockReturnValue(mockedSharedEditMode);
 
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
+		injectRouterMock(createRouterMock());
+		mountComposable(useBoardRestApi);
 	});
 
 	const setup = (createBoard = true) => {
@@ -491,6 +487,26 @@ describe("boardRestApi", () => {
 		});
 	});
 
+	describe("moveCardToBoardRequest", () => {
+		it("should call moveCardToBoardSuccess action if card was successfully moved to another board", async () => {
+			const { boardStore } = setup();
+			const { moveCardToBoardRequest } = useBoardRestApi();
+
+			await moveCardToBoardRequest({ cardId: "123", fromColumnId: "A", toColumnId: "B" });
+			expect(boardStore.moveCardToBoardSuccess).toHaveBeenCalled();
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { moveCardToBoardRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.moveCardToBoardCall.mockRejectedValue({});
+			const cardPayload = { cardId: "123", fromColumnId: "A", toColumnId: "B" };
+			await moveCardToBoardRequest(cardPayload);
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("moveColumnRequest", () => {
 		it("should not call moveColumnSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);
@@ -713,7 +729,7 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(boardStore.updateBoardLayoutSuccess).not.toHaveBeenCalled();
@@ -725,12 +741,12 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(boardStore.updateBoardLayoutSuccess).toHaveBeenCalledWith({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 				isOwnAction: true,
 			});
 		});
@@ -743,7 +759,7 @@ describe("boardRestApi", () => {
 
 			await updateBoardLayoutRequest({
 				boardId: "boardId",
-				layout: BoardLayout.Columns,
+				layout: BoardLayout.COLUMNS,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
@@ -790,7 +806,7 @@ describe("boardRestApi", () => {
 			executeErrorHandler();
 			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith("notUpdated", "board");
 
-			expect(setEditModeId).toHaveBeenCalledWith(undefined);
+			expect(mockedSharedEditMode.setEditModeId).toHaveBeenCalledWith(undefined);
 		});
 	});
 
