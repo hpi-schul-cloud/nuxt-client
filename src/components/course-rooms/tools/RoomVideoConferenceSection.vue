@@ -124,14 +124,10 @@ const onCloseConfigurationDialog = () => {
 const startVideoConference = async () => {
 	onCloseConfigurationDialog();
 
-	const logoutUrl: URL = new URL(`/rooms/${props.roomId}`, window.location.origin);
-	logoutUrl.searchParams.append("tab", "tools");
-
 	await videoConferenceModule.startVideoConference({
 		scope: VideoConferenceScope.COURSE,
 		scopeId: props.roomId,
 		videoConferenceOptions: videoConferenceOptions.value,
-		logoutUrl: logoutUrl.toString(),
 	});
 
 	await joinVideoConference();
