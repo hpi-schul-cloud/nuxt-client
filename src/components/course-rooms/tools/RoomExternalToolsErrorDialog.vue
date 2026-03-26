@@ -1,26 +1,22 @@
 <template>
-	<CustomDialog
+	<SvsDialog
 		v-if="selectedItem.status"
-		:is-open="$props.isOpen"
-		:has-buttons="true"
-		:buttons="['close']"
-		data-testId="error-dialog"
-		@dialog-closed="onCloseCustomDialog"
+		no-confirm
+		cancel-btn-lang-key="common.labels.close"
+		:model-value="isOpen"
+		:title="t(getTitle, { toolName: selectedItem.name })"
+		data-testid="error-dialog"
+		@cancel="emit('closed')"
 	>
-		<template #title>
-			<h2 class="my-2">
-				{{ t(getTitle, { toolName: selectedItem.name }) }}
-			</h2>
-		</template>
 		<template #content>
 			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
-	</CustomDialog>
+	</SvsDialog>
 </template>
 <script setup lang="ts">
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { ExternalToolDisplayData, useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { computed, ComputedRef, PropType } from "vue";
+import { SvsDialog } from "@ui-dialog";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -43,17 +39,13 @@ const { determineDeactivatedTranslationKey, determineToolStatusTranslationKey, d
 
 const { t } = useI18n();
 
-const onCloseCustomDialog = () => {
-	emit("closed");
-};
-
-const isToolOutdated: ComputedRef<boolean> = computed(
+const isToolOutdated = computed(
 	() => props.selectedItem.status.isOutdatedOnScopeContext || props.selectedItem.status.isOutdatedOnScopeSchool
 );
 
-const isToolIncomplete: ComputedRef<boolean> = computed(() => props.selectedItem.status.isIncompleteOnScopeContext);
+const isToolIncomplete = computed(() => props.selectedItem.status.isIncompleteOnScopeContext);
 
-const getTitle: ComputedRef<string> = computed(() => {
+const getTitle = computed(() => {
 	if (props.selectedItem.status.isDeactivated) {
 		return "pages.rooms.tools.deactivatedDialog.title";
 	}
@@ -73,7 +65,7 @@ const getTitle: ComputedRef<string> = computed(() => {
 	return "error.generic";
 });
 
-const getText: ComputedRef<string> = computed(() => {
+const getText = computed(() => {
 	if (!props.selectedItem) {
 		return "";
 	}

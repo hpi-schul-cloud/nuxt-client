@@ -884,8 +884,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
-	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
-	"feature-course-sync.EndCourseSyncDialog.description":
+	"feature-course-sync.EndCourseSyncDialog":
 		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
