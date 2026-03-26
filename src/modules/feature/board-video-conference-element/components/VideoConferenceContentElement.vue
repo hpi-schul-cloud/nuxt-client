@@ -99,7 +99,6 @@ import { KebabMenuActionDelete, KebabMenuActionMoveDown, KebabMenuActionMoveUp }
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import { computed, onMounted, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 
 const props = defineProps({
 	element: {
@@ -154,9 +153,6 @@ const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
 });
 
-const route = useRoute();
-const boardId = route.params.id;
-
 const { isStudent, isTeacher, isExternalPerson } = useAppStoreRefs();
 
 const { t } = useI18n();
@@ -204,10 +200,9 @@ const onDelete = async () => {
 		emit("delete:element", computedElement.value.id);
 };
 const onStartVideoConference = async () => {
-	const logoutUrl: URL = new URL(`/boards/${boardId}`, window.location.origin);
 	const windowReference = window.open();
 
-	await startVideoConference(videoConferenceInfo.value.options, logoutUrl.toString());
+	await startVideoConference(videoConferenceInfo.value.options);
 
 	joinVideoConference().then((response: string | undefined) => {
 		if (response && windowReference) {
