@@ -323,12 +323,18 @@ onMounted(async () => {
 
 	await boardStore.fetchBoardRequest({ boardId: props.boardId });
 
-	if (allowedOperations.value.createExternalToolElement) {
-		await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
-	}
-
 	focusNodeFromHash();
 });
+
+watch(
+	() => allowedOperations.value.createExternalToolElement,
+	async (hasPermission) => {
+		if (hasPermission) {
+			await cardStore.loadPreferredTools(ToolContextType.BOARD_ELEMENT);
+		}
+	},
+	{ immediate: true }
+);
 
 onUnmounted(() => {
 	boardStore.disconnectSocketRequest();
