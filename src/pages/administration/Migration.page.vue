@@ -65,32 +65,6 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
-
-				<CustomDialog
-					ref="clearAutoMatchesDialog"
-					v-model:is-open="isClearAutoMatchesDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					data-testid="clear-auto-matches-dialog"
-					@dialog-confirmed="clearAllAutoMatches()"
-				>
-					<template #title>
-						{{ t("components.administration.adminMigrationSection.clearAutoMatchesDialog.title") }}
-					</template>
-					<template #content>
-						<p>
-							{{
-								t("components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph")
-							}}
-						</p>
-						<p>
-							{{
-								t("components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph")
-							}}
-							>
-						</p>
-					</template>
-				</CustomDialog>
 			</VStepper>
 		</template>
 
@@ -179,11 +153,7 @@
 								<VBtn data-testid="import-users-cancel-migration-btn" @click="cancelMigration()">
 									{{ t("common.actions.cancel") }}
 								</VBtn>
-								<VBtn
-									class="ml-2"
-									data-testid="import-users-clear-auto-matches-btn"
-									@click="showClearAutoMatchesDialog()"
-								>
+								<VBtn class="ml-2" data-testid="import-users-clear-auto-matches-btn" @click="doClearAllAutoMatches()">
 									{{ t("pages.administration.migration.clearAutoMatches") }}
 								</VBtn>
 							</div>
@@ -417,10 +387,9 @@
 </template>
 <script setup lang="ts">
 import ImportUsers from "@/components/administration/ImportUsers.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
-import { askCancel } from "@/utils/confirmation-dialog.utils";
+import { askConfirmation } from "@/utils/confirmation-dialog.utils";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@api-server";
@@ -449,8 +418,6 @@ const isLoading: Ref<boolean> = ref(false);
 const matchByPreferredName: Ref<boolean> = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> = ref(undefined);
-
-const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
 
 const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
 
@@ -623,11 +590,13 @@ const nextStep = () => {
 };
 
 const cancelMigration = async () => {
-	const isCancelled = await askCancel(
-		"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title",
-		"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
-	);
-	if (isCancelled) {
+	const isCancelConfirmed = await askConfirmation({
+		title: "components.administration.adminMigrationSection.migrationWizardCancelDialog.Title",
+		message: "components.administration.adminMigrationSection.migrationWizardCancelDialog.Description",
+		messageType: "warning",
+		confirmBtnKey: "common.actions.confirm",
+	});
+	if (isCancelConfirmed) {
 		isLoading.value = true;
 		await importUsersModule.cancelMigration();
 		migrationStep.value = 0;
@@ -644,18 +613,23 @@ const redirectToAdminPage = async () => {
 	});
 };
 
-const showClearAutoMatchesDialog = async () => {
-	isClearAutoMatchesDialogOpen.value = true;
-};
+const doClearAllAutoMatches = async () => {
+	const isClearConfirmed = await askConfirmation({
+		title: "components.administration.adminMigrationSection.clearAutoMatchesDialog.title",
+		message: "components.administration.adminMigrationSection.clearAutoMatchesDialog.description",
+		messageType: "warning",
+		confirmBtnKey: "common.actions.confirm",
+	});
 
-const clearAllAutoMatches = async () => {
-	isLoading.value = true;
+	if (isClearConfirmed) {
+		isLoading.value = true;
 
-	await importUsersModule.clearAllAutoMatches();
+		await importUsersModule.clearAllAutoMatches();
 
-	importUsersRef.value?.reloadData();
+		importUsersRef.value?.reloadData();
 
-	isLoading.value = false;
+		isLoading.value = false;
+	}
 };
 
 const migrationSummaryParagraphItems = computed(() => [

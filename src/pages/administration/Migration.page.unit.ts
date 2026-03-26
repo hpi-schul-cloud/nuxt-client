@@ -1,5 +1,4 @@
 import MigrationWizard from "./Migration.page.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { importUsersModule, schoolsModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
@@ -364,7 +363,7 @@ describe("User Migration / Index", () => {
 			});
 
 			it("should call stores on dialog-confirm", async () => {
-				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 
 				const { wrapper } = await setup();
 
@@ -390,7 +389,7 @@ describe("User Migration / Index", () => {
 			});
 
 			it("should redirect to school settings migration section", async () => {
-				vi.spyOn(confirmDialogUtils, "askCancel").mockResolvedValue(true);
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
 				const { wrapper } = await setup();
 
 				const cancelMigrationMock = vi.spyOn(importUsersModule, "cancelMigration");
@@ -507,55 +506,16 @@ describe("User Migration / Index", () => {
 				expect(button.text()).toBe("pages.administration.migration.clearAutoMatches");
 			});
 
-			it("should show the dialog on button click", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
-				await button.trigger("click");
-
-				const dialog = wrapper.findComponent({
-					ref: "clearAutoMatchesDialog",
-				});
-
-				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(true);
-				expect(dialog.exists()).toBe(true);
-				expect(dialog.vm.isOpen).toBeTruthy();
-			});
-
-			it("should display the correct dialog content and text", async () => {
-				const { wrapper } = await setup();
-
-				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
-				await button.trigger("click");
-
-				expect(document.body.innerHTML).toContain('data-testid="clear-auto-matches-dialog"');
-				expect(document.body.innerHTML).toContain(
-					"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
-				);
-				expect(document.body.innerHTML).toContain(
-					"components.administration.adminMigrationSection.clearAutoMatchesDialog.description"
-				);
-			});
-
 			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
+				vi.spyOn(confirmDialogUtils, "askConfirmation").mockResolvedValue(true);
+
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent('[data-testid="import-users-clear-auto-matches-btn"]');
-
 				await button.trigger("click");
-
-				const dialog = wrapper.findComponent<typeof CustomDialog>({
-					ref: "clearAutoMatchesDialog",
-				});
-
-				dialog.vm.confirmDialog?.();
-				await nextTick();
 
 				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
 				expect(importUsersStub.methods.reloadData).toHaveBeenCalled();
-				expect(dialog.vm.isOpen).toBeFalsy();
 			});
 		});
 	});

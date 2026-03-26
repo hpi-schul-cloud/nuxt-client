@@ -1,5 +1,4 @@
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { THEME_KEY } from "@/utils/inject";
 import { createTestEnvStore, mockComposable, provisioningOptionsDataFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -285,16 +284,6 @@ describe("ProvisioningOptionsPage", () => {
 					await saveButton.trigger("click");
 
 					expect(useProvisioningOptionsStateMock.updateProvisioningOptionsData).not.toHaveBeenCalled();
-				});
-
-				it("should open the warning dialog", async () => {
-					const { saveButton, wrapper } = await setup();
-
-					await saveButton.trigger("click");
-
-					const dialog = wrapper.findComponent(CustomDialog);
-
-					expect(dialog.props("isOpen")).toEqual(true);
 				});
 			});
 

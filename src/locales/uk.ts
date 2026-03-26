@@ -326,10 +326,8 @@ export default {
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
-		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
-		"Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів. Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add": "Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete": "Видалити інструменти",
 	"components.administration.externalToolsSection.action.edit": "інструмент редагування",
@@ -383,11 +381,9 @@ export default {
 	"components.administration.provisioningOptions.schoolExternalTools.label": "Активація зовнішніх інструментів",
 
 	"components.administration.provisioningOptions.page.title": "Параметри синхронізації даних",
-	"components.administration.provisioningOptions.warning.consequence":
+	"components.administration.provisioningOptions.warning":
 		"Усі раніше синхронізовані {groupTypes} буде видалено з вашої школи!",
-	"components.administration.provisioningOptions.warning.question":
-		"Ви впевнені, що бажаєте вимкнути синхронізацію для {groupTypes}?",
-	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію",
+	"components.administration.provisioningOptions.warning.title": "Вимкнути синхронізацію?",
 	"components.administration.schoolYearChangeSection.headers": "Зміна навчального року",
 	"components.administration.schoolYearChangeSection.info.part.one":
 		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
