@@ -32,7 +32,7 @@
 									<VIcon size="14" class="mr-1" :icon="mdiNewspaperVariantOutline" />
 									<span class="text-sm font-weight-regular">{{ fromNowUtc(news.displayAt) }}</span>
 								</div>
-								<h3 class="text-h4 my-1 news-header-truncate" data-testid="title_of_an_element">{{ news.title }}</h3>
+								<h3 class="text-h4 my-1 news-header-truncate" data-testid="news-title">{{ news.title }}</h3>
 							</VCardTitle>
 							<VCardText class="flex-grow-1 pt-3 text-md" data-testid="news-content">
 								<div class="news-content-truncate"><RenderHTML :html="news.content" /></div>
