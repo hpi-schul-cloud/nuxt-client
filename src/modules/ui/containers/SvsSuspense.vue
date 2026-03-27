@@ -12,7 +12,7 @@
  *
  * Potentially replaced by <suspense> in the future.
  */
-import { ref, toRef, watch } from "vue";
+import { onBeforeUnmount, ref, toRef, watch } from "vue";
 
 const props = withDefaults(
 	defineProps<{
@@ -29,6 +29,8 @@ const loadingRef = toRef(props, "loading");
 
 const displaySpinner = ref(false);
 let timeout: ReturnType<typeof setTimeout> | undefined;
+
+onBeforeUnmount(() => clearTimeout(timeout));
 
 watch(
 	loadingRef,

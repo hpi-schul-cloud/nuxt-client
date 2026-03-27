@@ -16,7 +16,7 @@ const fetchAllTasks = async (skip = 0, limit = 100, accumulated: TaskResponse[] 
 };
 
 export const isTaskOverdue = (t: TaskResponse) => !!t.dueDate && parseUtc(t.dueDate).isBefore(nowUtc());
-export const isGradedForTeacher = (t: TaskResponse) => t.status.graded === t.status.submitted;
+export const isGradedForTeacher = (t: TaskResponse) => t.status.submitted > 0 && t.status.graded === t.status.submitted;
 export const isGradedForStudent = (t: TaskResponse) => t.status.graded > 0;
 
 type DateRange = {
