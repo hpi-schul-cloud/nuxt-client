@@ -1,5 +1,5 @@
 <template>
-	<v-dialog
+	<VDialog
 		ref="commonCartridgeImportModal"
 		v-model="isOpen"
 		:max-width="props.maxWidth"
@@ -7,14 +7,14 @@
 		@click:outside="onCancel()"
 		@keydown.esc="onCancel()"
 	>
-		<v-card :ripple="false">
+		<VCard :ripple="false">
 			<template #title>
 				<h2 class="mt-2">
 					{{ t("pages.rooms.ccImportCourse.title") }}
 				</h2>
 			</template>
 			<template #text>
-				<v-file-input
+				<VFileInput
 					v-model="file"
 					class="truncate-file-input"
 					:label="t('pages.rooms.ccImportCourse.fileInputLabel')"
@@ -26,14 +26,14 @@
 				/>
 			</template>
 			<template #actions>
-				<v-spacer />
+				<VSpacer />
 				<div class="mb-2">
-					<v-btn data-testid="dialog-cancel-btn" variant="outlined" class="ml-2 mr-2" @click="onCancel">
+					<VBtn data-testid="dialog-cancel-btn" variant="outlined" class="ml-2 mr-2" @click="onCancel">
 						{{ t("common.labels.close") }}
-					</v-btn>
+					</VBtn>
 				</div>
 				<div class="mb-2">
-					<v-btn
+					<VBtn
 						type="submit"
 						variant="flat"
 						color="primary"
@@ -43,24 +43,25 @@
 						@click="onConfirm"
 					>
 						{{ t("pages.rooms.ccImportCourse.confirm") }}
-					</v-btn>
+					</VBtn>
 				</div>
 			</template>
-		</v-card>
-	</v-dialog>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
-import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
+import { useCourseRoomListStore } from "@data-courses";
 import { mdiTrayArrowUp } from "@icons/material";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const courseRoomListModule = injectStrict(COURSE_ROOM_LIST_MODULE_KEY);
 const commonCartridgeImportModule = injectStrict(COMMON_CARTRIDGE_IMPORT_MODULE_KEY);
 const { setLoadingState } = useLoadingStore();
+const { fetch, fetchAllElements } = useCourseRoomListStore();
 
 const props = withDefaults(
 	defineProps<{
@@ -95,7 +96,7 @@ async function onConfirm(): Promise<void> {
 
 	setLoadingState(false);
 
-	await Promise.allSettled([courseRoomListModule.fetch(), courseRoomListModule.fetchAllElements()]);
+	await Promise.allSettled([fetch(), fetchAllElements()]);
 
 	if (commonCartridgeImportModule.isSuccess) {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));

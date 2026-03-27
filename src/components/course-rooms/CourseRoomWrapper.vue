@@ -25,9 +25,10 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import { commonCartridgeImportModule, courseRoomListModule } from "@/store";
+import { commonCartridgeImportModule } from "@/store";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
+import { useCourseRoomListStore } from "@data-courses";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
@@ -49,6 +50,8 @@ const props = defineProps({
 		required: false,
 	},
 });
+
+const courseRoomListStore = useCourseRoomListStore();
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
@@ -105,9 +108,9 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	}
 });
 
-const isLoading = computed(() => courseRoomListModule.getLoading);
+const isLoading = computed(() => courseRoomListStore.getLoading);
 
-const isEmptyState = computed(() => !courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken);
+const isEmptyState = computed(() => !courseRoomListStore.getLoading && !props.hasRooms && !props.hasImportToken);
 </script>
 
 <style lang="scss" scoped>

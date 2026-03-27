@@ -2,7 +2,7 @@
 	<CustomDialog ref="customDialog" :is-open="isOpen" class="room-dialog" @dialog-closed="$emit('update:isOpen', false)">
 		<template #title>
 			<div class="pt-2 room-title">
-				<v-text-field
+				<VTextField
 					v-model="data.title"
 					density="compact"
 					flat
@@ -16,7 +16,7 @@
 			</div>
 		</template>
 		<template #content>
-			<course-room-avatar-iterator
+			<CourseRoomAvatarIterator
 				class="iterator"
 				:avatars="groupData.groupElements"
 				:item-size="itemSize"
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { courseRoomListModule } from "@/store";
+import { useCourseRoomListStore } from "@data-courses";
 import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";
 
@@ -80,6 +80,7 @@ const props = defineProps({
 defineEmits(["update:isOpen", "drag-from-group"]);
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
+const courseRoomListStore = useCourseRoomListStore();
 
 const data = ref<GroupDataType>({
 	title: "",
@@ -95,7 +96,7 @@ const data = ref<GroupDataType>({
 
 const updateCourseGroupName = async () => {
 	if (validateOnOpeningTag(data.value.title) === true) {
-		await courseRoomListModule.update({
+		await courseRoomListStore.update({
 			id: data.value.groupId,
 			title: data.value.title,
 			shortTitle: data.value.shortTitle,

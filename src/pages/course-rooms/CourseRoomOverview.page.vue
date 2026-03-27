@@ -115,9 +115,9 @@ import CourseRoomGroupAvatar from "@/components/course-rooms/CourseRoomGroupAvat
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import { courseRoomListModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
+import { useCourseRoomListStore } from "@data-courses";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";
@@ -134,6 +134,7 @@ export default defineComponent({
 	},
 	setup() {
 		const refs = reactive({});
+		const courseRoomListStore = useCourseRoomListStore();
 
 		const setElementRef = (rowIndex, colIndex, el) => {
 			refs[`${rowIndex}-${colIndex}`] = el;
@@ -141,7 +142,7 @@ export default defineComponent({
 
 		const getElementNameByRef = (pos) => refs[`${pos.y}-${pos.x}`].$attrs["data-avatar-type"];
 
-		return { setElementRef, getElementNameByRef };
+		return { setElementRef, getElementNameByRef, courseRoomListStore };
 	},
 	data() {
 		return {
@@ -172,10 +173,10 @@ export default defineComponent({
 	},
 	computed: {
 		hasCurrentRooms() {
-			return courseRoomListModule.hasCurrentRooms;
+			return this.courseRoomListStore.hasCurrentRooms;
 		},
 		rooms() {
-			return JSON.parse(JSON.stringify(courseRoomListModule.getRoomsData)).filter((item) => {
+			return JSON.parse(JSON.stringify(this.courseRoomListStore.getRoomsData)).filter((item) => {
 				if (item.groupElements) {
 					const groupElements = item.groupElements.filter((groupItem) =>
 						groupItem.title.toLowerCase().includes(this.searchText.toLowerCase())
@@ -187,7 +188,7 @@ export default defineComponent({
 			});
 		},
 		courses() {
-			return courseRoomListModule.getAllElements.map((item) => ({
+			return this.courseRoomListStore.getAllElements.map((item) => ({
 				id: item.id,
 				name: item.title,
 				isLocked: item.isLocked,
@@ -207,8 +208,8 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		await courseRoomListModule.fetch();
-		await courseRoomListModule.fetchAllElements();
+		await this.courseRoomListStore.fetch();
+		await this.courseRoomListStore.fetchAllElements();
 
 		this.dimensions = this.getDeviceDims();
 		this.setRowCount();
@@ -237,7 +238,7 @@ export default defineComponent({
 			return { ...this.dimensions, colCount: 6 };
 		},
 		setRowCount() {
-			const lastItem = courseRoomListModule.getRoomsData.reduce(
+			const lastItem = this.courseRoomListStore.getRoomsData.reduce(
 				(prev, current) => (prev.yPosition > current.yPosition ? prev : current),
 				{}
 			);
@@ -321,7 +322,7 @@ export default defineComponent({
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: courseRoomListModule.roomsData
+				groupIndex: this.courseRoomListStore.getRoomsData
 					.find((item) => item.groupId === this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id === element.id),
 			};
@@ -335,7 +336,7 @@ export default defineComponent({
 			this.dragging = true;
 		},
 		async savePosition() {
-			await courseRoomListModule.align(this.draggedElement);
+			await this.courseRoomListStore.align(this.draggedElement);
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
@@ -345,7 +346,7 @@ export default defineComponent({
 				xPosition: pos.x,
 				yPosition: pos.y,
 			};
-			courseRoomListModule.update(payload);
+			this.courseRoomListStore.update(payload);
 		},
 		onImportSuccess(name, id) {
 			this.showImportSuccess(name);
@@ -353,7 +354,7 @@ export default defineComponent({
 				this.$router.replace({ name: "room-details", params: { id } });
 			} else {
 				this.$router.replace({ name: "course-room-overview" });
-				courseRoomListModule.fetch();
+				this.courseRoomListStore.fetch();
 			}
 		},
 		showImportSuccess(name) {
@@ -367,7 +368,7 @@ export default defineComponent({
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(
 				async () => {
-					await courseRoomListModule.fetch({ indicateLoading: false });
+					await this.courseRoomListStore.fetch({ indicateLoading: false });
 					if (this.hasRoomsBeingCopied) {
 						this.initCoursePolling(started ?? new Date(), count + 1);
 					} else {
