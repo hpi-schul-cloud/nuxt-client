@@ -56,7 +56,7 @@ describe("EndCourseSyncDialog", () => {
 			const { wrapper } = getWrapper();
 
 			const dialog = wrapper.findComponent(SvsDialog);
-			dialog.vm.$emit("confirm");
+			await dialog.vm.$emit("confirm");
 
 			expectNotification("success");
 		});
@@ -65,7 +65,7 @@ describe("EndCourseSyncDialog", () => {
 			const { wrapper } = getWrapper();
 
 			const dialog = wrapper.findComponent(SvsDialog);
-			dialog.vm.$emit("confirm");
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted("success")).toBeDefined();
 		});
@@ -86,7 +86,7 @@ describe("EndCourseSyncDialog", () => {
 			const { wrapper } = setup();
 
 			const dialog = wrapper.findComponent(SvsDialog);
-			dialog.vm.$emit("confirm");
+			await dialog.vm.$emit("confirm");
 
 			expectNotification("error");
 		});
@@ -95,7 +95,7 @@ describe("EndCourseSyncDialog", () => {
 			const { wrapper } = setup();
 
 			const dialog = wrapper.findComponent(SvsDialog);
-			dialog.vm.$emit("confirm");
+			await dialog.vm.$emit("confirm");
 
 			expect(wrapper.emitted("success")).toBeUndefined();
 		});
