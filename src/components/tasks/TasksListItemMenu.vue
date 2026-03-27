@@ -136,7 +136,6 @@ export default defineComponent({
 	emits: ["copy-task", "share-task"],
 	data() {
 		return {
-			confirmDeleteDialogIsOpen: false,
 			mdiPencilOutline,
 			mdiUndoVariant,
 			mdiTrashCanOutline,
@@ -188,9 +187,6 @@ export default defineComponent({
 		},
 		handleRevertPublished() {
 			this.tasksModule.revertPublishedTask(this.taskId);
-		},
-		handleDelete() {
-			this.tasksModule.deleteTask(this.taskId);
 		},
 		onCopyTask() {
 			if (!this.copyServiceEnabled) {

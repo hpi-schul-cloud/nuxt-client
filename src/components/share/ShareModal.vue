@@ -1,11 +1,5 @@
 <template>
-	<SvsDialog
-		:title="modalTitle"
-		:model-value="isOpen"
-		:is-open="isOpen"
-		data-testid="share-dialog"
-		@after-leave="onCloseDialog"
-	>
+	<SvsDialog :title="modalTitle" :model-value="isOpen" data-testid="share-dialog" @after-leave="onCloseDialog">
 		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>

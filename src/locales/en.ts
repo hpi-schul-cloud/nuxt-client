@@ -319,7 +319,7 @@ export default {
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Are you sure you want to remove the accounts links that are found automatically?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"The migration assistant had automatically found account links based on the usernames. Do you want to remove the accounts links that are found automatically now?",
+		"The migration assistant had automatically found account links based on the usernames. Do you want to remove the account links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add": "Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
 	"components.administration.externalToolsSection.action.edit": "Edit Tool",
@@ -884,6 +884,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Select Tool...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
+	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Synchronization completed successfully",

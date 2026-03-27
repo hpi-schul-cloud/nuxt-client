@@ -903,6 +903,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Seleccionar contenido de {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
 	"feature-course-sync.EndCourseSyncDialog":
 		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Sincronización completada exitosamente",

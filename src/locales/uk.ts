@@ -899,6 +899,7 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool": "Виберіть інструмент...",
 	"feature-board-external-tool-element.placeholder.selectContent": "Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog":
 		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success": "Синхронізацію успішно завершено",
