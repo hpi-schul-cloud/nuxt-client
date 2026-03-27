@@ -3,7 +3,6 @@ import { VideoConferenceOptions } from "@/store/types/video-conference";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
-import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
 
@@ -18,23 +17,16 @@ describe("VideoConferenceConfigurationDialog", () => {
 		setActivePinia(createTestingPinia());
 	});
 
-	let wrapper: VueWrapper<InstanceType<typeof VideoConferenceConfigurationDialog>>;
-	const setup = (props: { isOpen: boolean }) => {
-		wrapper = mount(VideoConferenceConfigurationDialog, {
+	const setup = (props: { isOpen: boolean }) =>
+		mount(VideoConferenceConfigurationDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: { UseFocusTrap: true },
-				renderStubDefaultSlot: true, // to access content inside focus trap
 			},
 			props: {
 				options: defaultOptions.value,
 				...props,
 			},
-			attachTo: document.body,
 		});
-
-		return wrapper;
-	};
 
 	describe("when component is mounted", () => {
 		it("should render in the DOM", () => {

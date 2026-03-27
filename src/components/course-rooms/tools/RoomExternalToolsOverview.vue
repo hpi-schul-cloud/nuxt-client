@@ -19,11 +19,11 @@
 			:text="error.message"
 		/>
 
-		<v-progress-linear :active="loading" data-testId="progress-bar" indeterminate />
+		<VProgressLinear :active="loading" data-testId="progress-bar" indeterminate />
 
 		<RoomVideoConferenceSection v-if="isVideoConferenceAvailable" class="mb-4" :room-id="roomId" />
 
-		<room-external-tools-section
+		<RoomExternalToolsSection
 			:tools="tools"
 			:room-id="roomId"
 			data-testid="room-external-tool-section"
