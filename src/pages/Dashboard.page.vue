@@ -18,13 +18,13 @@
 					</template>
 				</EmptyState>
 				<template v-else>
-					<div class="grid-container mb-4">
+					<div class="grid-container mb-4" data-testid="news-section">
 						<VCard
 							v-for="news in latestNews"
 							:key="news.id"
 							class="d-flex flex-column grid-item"
 							:href="`/news/${news.id}`"
-							data-testid="container_of_element"
+							data-testid="news-card-item"
 							@dragstart.prevent
 						>
 							<VCardTitle class="bg-primary-lighten text-wrap" data-testid="news-header">

@@ -965,7 +965,7 @@ export default {
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
-	"global.topbar.language.longName.uk": "Українська",
+	"global.topbar.language.longName.uk": "Yкраїнська",
 	"global.topbar.language.select": "Sprachauswahl",
 	"global.topbar.language.selectedLanguage": "Ausgewählte Sprache",
 	"global.topbar.loggedOut.actions.blog": "Blog",
