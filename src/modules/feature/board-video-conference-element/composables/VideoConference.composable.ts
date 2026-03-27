@@ -49,12 +49,11 @@ export const useVideoConference = (scope: VideoConferenceScope, scopeId: string)
 		}
 	};
 
-	const startVideoConference = async (options: VideoConferenceOptions, logoutUrl?: string) => {
+	const startVideoConference = async (options: VideoConferenceOptions) => {
 		loading.value = true;
 		try {
 			await videoConferenceApi.videoConferenceControllerStart(scope, scopeId, {
 				...options,
-				logoutUrl,
 			});
 
 			videoConferenceInfo.value = {
