@@ -306,7 +306,7 @@ export default {
 			}, this.dragInProgressDelay);
 		},
 		async onDeleteItem(itemContent, itemType) {
-			let typeKey = "";
+			let typeKey;
 			switch (itemType) {
 				case this.cardTypes.TASK:
 					typeKey = "common.words.task";
