@@ -7,7 +7,6 @@ import router from "./router";
 import { initializeAxios } from "./utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
@@ -22,7 +21,6 @@ import {
 } from "./utils/inject";
 import {
 	commonCartridgeExportModule,
-	commonCartridgeImportModule,
 	copyModule,
 	courseRoomDetailsModule,
 	filePathsModule,
@@ -113,7 +111,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("tasksModule", tasksModule);
 	app.provide(USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(), userLoginMigrationModule);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
-	app.provide(COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(), commonCartridgeImportModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");

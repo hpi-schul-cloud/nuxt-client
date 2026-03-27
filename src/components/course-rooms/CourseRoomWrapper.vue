@@ -19,7 +19,12 @@
 			<slot name="page-content" />
 		</template>
 		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
-		<CourseCommonCartridgeImportModal :max-width="480" class="upload-modal" />
+		<CourseCommonCartridgeImportModal
+			v-model:is-open="commonCartridgeImport.isOpen.value"
+			:max-width="480"
+			class="upload-modal"
+			@import="handleImport"
+		/>
 	</DefaultWireframe>
 </template>
 
@@ -29,6 +34,9 @@ import { commonCartridgeImportModule } from "@/store";
 import { Permission } from "@api-server";
 import { useAppStore } from "@data-app";
 import { useCourseRoomListStore } from "@data-courses";
+import { Permission } from "@api-server";
+import { notifyError, notifySuccess, useAppStore, useLoadingStore } from "@data-app";
+import { useCommonCartridgeImport } from "@data-common-cartridge";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
@@ -39,6 +47,8 @@ import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+
+const { setLoadingState } = useLoadingStore();
 
 const props = defineProps({
 	hasRooms: {
@@ -56,6 +66,7 @@ const courseRoomListStore = useCourseRoomListStore();
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
 const canCreateCourse = useAppStore().hasPermission(Permission.COURSE_CREATE);
+const commonCartridgeImport = useCommonCartridgeImport();
 
 const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	if (!canCreateCourse.value) return;
@@ -83,7 +94,7 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 			icon: mdiImport,
 			label: t("pages.rooms.fab.import.course"),
 			dataTestId: "fab_button_import_course",
-			clickHandler: () => commonCartridgeImportModule.setIsOpen(true),
+			clickHandler: () => (commonCartridgeImport.isOpen.value = true),
 		});
 	}
 
@@ -109,6 +120,23 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 });
 
 const isLoading = computed(() => courseRoomListStore.getLoading);
+
+const isEmptyState = computed(() => !courseRoomListStore.getLoading && !props.hasRooms && !props.hasImportToken);
+const handleImport = async (file: File): Promise<void> => {
+	commonCartridgeImport.isOpen.value = false;
+	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
+
+	await commonCartridgeImport.importCommonCartridgeFile(file);
+	setLoadingState(false);
+
+	await Promise.allSettled([courseRoomListStore.fetch(), courseRoomListStore.fetchAllElements()]);
+
+	if (commonCartridgeImport.isSuccess.value) {
+		notifySuccess(t("pages.rooms.ccImportCourse.success"));
+	} else {
+		notifyError(t("pages.rooms.ccImportCourse.error"));
+	}
+};
 
 const isEmptyState = computed(() => !courseRoomListStore.getLoading && !props.hasRooms && !props.hasImportToken);
 </script>

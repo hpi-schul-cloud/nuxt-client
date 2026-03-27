@@ -24,6 +24,7 @@
       "@data-board": ["src/modules/data/board"],
       "@data-classes": ["src/modules/data/classes"],
       "@data-courses": ["src/modules/data/courses"],
+      "@data-common-cartridge": ["src/modules/data/common-cartridge"],
       "@data-env": ["src/modules/data/env"],
       "@data-external-tool": ["src/modules/data/external-tool"],
       "@data-file": ["src/modules/data/file"],
