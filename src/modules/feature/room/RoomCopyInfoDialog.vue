@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="isOpen" max-width="520">
+	<VDialog v-model="isOpen" max-width="520">
 		<v-card data-testid="copy-info-dialog">
 			<v-card-title class="text-h2 text-break px-6 pt-4" data-testid="copy-info-dialog-title">
 				{{ $t("feature-room.CopyInfoDialog.title") }}
@@ -42,7 +42,7 @@
 				</v-btn>
 			</v-card-actions>
 		</v-card>
-	</v-dialog>
+	</VDialog>
 </template>
 
 <script setup lang="ts">

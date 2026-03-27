@@ -1,5 +1,5 @@
 <template>
-	<v-dialog
+	<VDialog
 		ref="exportDialog"
 		v-model="isExportModalOpen"
 		:max-width="560"
@@ -156,7 +156,7 @@
 				</div>
 			</template>
 		</v-card>
-	</v-dialog>
+	</VDialog>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-	<v-dialog
+	<VDialog
 		ref="commonCartridgeImportModal"
 		v-model="isOpen"
 		:max-width="props.maxWidth"
@@ -47,7 +47,7 @@
 				</div>
 			</template>
 		</v-card>
-	</v-dialog>
+	</VDialog>
 </template>
 
 <script setup lang="ts">

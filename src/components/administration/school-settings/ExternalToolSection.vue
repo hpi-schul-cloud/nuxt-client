@@ -86,7 +86,7 @@
 			</VBtn>
 		</div>
 
-		<v-dialog v-if="metadata" v-model="isDeleteDialogOpen" data-testid="delete-dialog" max-width="360">
+		<VDialog v-if="metadata" v-model="isDeleteDialogOpen" data-testid="delete-dialog" max-width="360">
 			<v-card :ripple="false">
 				<v-card-title data-testid="delete-dialog-title">
 					<h2 class="my-2">
@@ -141,7 +141,7 @@
 					</v-btn>
 				</v-card-actions>
 			</v-card>
-		</v-dialog>
+		</VDialog>
 	</div>
 	<VidisMediaSyncSection v-if="isVidisEnabled" />
 </template>

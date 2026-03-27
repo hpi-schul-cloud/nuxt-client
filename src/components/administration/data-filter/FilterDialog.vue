@@ -1,5 +1,5 @@
 <template>
-	<v-dialog
+	<VDialog
 		ref="dialog"
 		:model-value="isOpen"
 		:max-width="defaultSize"
@@ -14,7 +14,7 @@
 				<slot name="content" />
 			</v-card-text>
 		</v-card>
-	</v-dialog>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
