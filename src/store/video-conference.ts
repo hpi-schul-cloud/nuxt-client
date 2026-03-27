@@ -111,14 +111,12 @@ export default class VideoConferenceModule extends VuexModule {
 		scope: VideoConferenceScope;
 		scopeId: string;
 		videoConferenceOptions: VideoConferenceOptions;
-		logoutUrl?: string;
 	}): Promise<void> {
 		this.setLoading(true);
 
 		try {
 			await this.videoConferenceApi.videoConferenceControllerStart(params.scope, params.scopeId, {
 				...params.videoConferenceOptions,
-				logoutUrl: params.logoutUrl,
 			});
 
 			this.setVideoConferenceInfo({
