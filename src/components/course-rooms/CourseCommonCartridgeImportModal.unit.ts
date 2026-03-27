@@ -1,57 +1,42 @@
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
-import CourseRoomListModule from "@/store/course-room-list";
-import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { expectNotification } from "@@/tests/test-utils";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
-import { setActivePinia } from "pinia";
-import { beforeEach } from "vitest";
+import { ComponentMountingOptions, flushPromises, mount } from "@vue/test-utils";
+import { VDialog } from "vuetify/components";
 
 describe("CourseCommonCartridgeImportModal", () => {
-	beforeEach(() => {
-		setActivePinia(createTestingPinia());
-	});
-
-	const setupWrapper = (getters: Partial<CommonCartridgeImportModule>) => {
-		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
-			getAllElements: [],
-		});
-		const commonCartridgeImportModule = createModuleMocks(CommonCartridgeImportModule, getters);
-
-		const wrapper = mount(CourseCommonCartridgeImportModal, {
+	const getWrapper = (options: ComponentMountingOptions<typeof CourseCommonCartridgeImportModal> = {}) =>
+		mount(CourseCommonCartridgeImportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
-					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: commonCartridgeImportModule,
-				},
 			},
+			props: {
+				isOpen: false,
+				...options.props,
+			},
+			...options,
 		});
 
-		return {
-			wrapper,
-			roomsModuleMock,
-			commonCartridgeImportModule,
-		};
-	};
+	describe("when dialog is closed", () => {
+		it("should not render the dialog content", () => {
+			const wrapper = getWrapper({ props: { isOpen: false } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.props("modelValue")).toBe(false);
+		});
+	});
 
 	describe("when dialog is open", () => {
-		const setup = () => setupWrapper({ isOpen: true });
+		it("should contain disabled confirm button when no file is selected", () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
-		it("should contain disabled confirm button", () => {
-			const { wrapper } = setup();
-
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 
 			expect(confirmBtn.exists()).toBe(true);
 			expect(confirmBtn.classes()).toContain("v-btn--disabled");
 		});
 
 		it("should contain enabled cancel button", () => {
-			const { wrapper } = setup();
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
 
@@ -60,7 +45,7 @@ describe("CourseCommonCartridgeImportModal", () => {
 		});
 
 		it("should contain file input", () => {
-			const { wrapper } = setup();
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
 			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
 
@@ -69,71 +54,144 @@ describe("CourseCommonCartridgeImportModal", () => {
 	});
 
 	describe("when a file is selected", () => {
-		const setup = () =>
-			setupWrapper({
-				isOpen: true,
-				file: new File([], "file"),
-			});
+		it("should enable confirm button", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
 
-		it("should enable confirm button", () => {
-			const { wrapper } = setup();
+			await fileInput.setValue([new File([], "test.imscc")]);
 
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
-
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 			expect(confirmBtn.classes()).not.toContain("v-btn--disabled");
 		});
 	});
 
-	describe("when file upload is successful", () => {
-		const setup = () =>
-			setupWrapper({
-				file: new File([], "file"),
-				isOpen: true,
-				isSuccess: true,
-			});
+	describe("when confirm is clicked", () => {
+		it("should emit import event with file", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+			const testFile = new File([], "test.imscc");
 
-		it("should show success message", async () => {
-			const { wrapper, roomsModuleMock } = setup();
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue(testFile);
 
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
 			await confirmBtn.trigger("click");
 
-			expect(roomsModuleMock.fetch).toHaveBeenCalledTimes(1);
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalledTimes(1);
-			expectNotification("success");
+			expect(wrapper.emitted("import")).toBeTruthy();
+			const emittedEvents = wrapper.emitted("import");
+			expect(emittedEvents?.[0]?.[0]).toBe(testFile);
+		});
+
+		it("should not emit import event when no file is selected", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			await confirmBtn.trigger("click");
+
+			expect(wrapper.emitted("import")).toBeFalsy();
 		});
 	});
 
-	describe("when file upload is unsuccessful", () => {
-		const setup = () =>
-			setupWrapper({
-				file: new File([], "file"),
-				isOpen: true,
-				isSuccess: false,
-			});
+	describe("when cancel is clicked", () => {
+		it("should emit update:isOpen with false", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
 
-		it("should show error message", async () => {
-			const { wrapper, roomsModuleMock } = setup();
-			const confirmBtn = wrapper.findComponent("[data-testId='dialog-confirm-btn']");
-
-			await confirmBtn.trigger("click");
-
-			expect(roomsModuleMock.fetch).toHaveBeenCalled();
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalled();
-			expectNotification("error");
-		});
-	});
-
-	describe("when dialog is closed", () => {
-		const setup = () => setupWrapper({ isOpen: true });
-
-		it("should reset the state", () => {
-			const { wrapper, commonCartridgeImportModule } = setup();
 			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+			await cancelBtn.trigger("click");
 
-			cancelBtn.trigger("click");
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
 
-			expect(commonCartridgeImportModule.setIsOpen).toHaveBeenCalledWith(false);
+		it("should clear the selected file", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue([new File([], "test.imscc")]);
+
+			const cancelBtn = wrapper.findComponent("[data-testid='dialog-cancel-btn']");
+			await cancelBtn.trigger("click");
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
+		});
+	});
+
+	describe("when dialog is closed via ESC or click outside", () => {
+		it("should call onCancel on ESC which emits update:isOpen with false", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("keydown", { key: "Escape" });
+
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
+
+		it("should call onCancel on click outside which emits update:isOpen with false", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("click:outside");
+
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
+
+		it("should clear the selected file on click outside", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue([new File([], "test.imscc")]);
+
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("click:outside");
+			await flushPromises();
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
+		});
+	});
+
+	describe("when dialog model-value is updated", () => {
+		it("should emit update:isOpen when VDialog emits update:model-value", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			dialog.vm.$emit("update:model-value", false);
+
+			expect(wrapper.emitted("update:isOpen")).toBeTruthy();
+			expect(wrapper.emitted("update:isOpen")?.[0]?.[0]).toBe(false);
+		});
+	});
+
+	describe("maxWidth prop", () => {
+		it("should use default maxWidth of 480", () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.props("maxWidth")).toBe(480);
+		});
+
+		it("should use custom maxWidth when provided", () => {
+			const wrapper = getWrapper({ props: { isOpen: true, maxWidth: 600 } });
+
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.props("maxWidth")).toBe(600);
+		});
+	});
+
+	describe("when confirm is clicked with file selected", () => {
+		it("should clear the file after emitting import event", async () => {
+			const wrapper = getWrapper({ props: { isOpen: true } });
+			const testFile = new File([], "test.imscc");
+
+			const fileInput = wrapper.findComponent("[data-testid='dialog-file-input']");
+			await fileInput.setValue(testFile);
+
+			const confirmBtn = wrapper.findComponent("[data-testid='dialog-confirm-btn']");
+			await confirmBtn.trigger("click");
+
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
 		});
 	});
 });
