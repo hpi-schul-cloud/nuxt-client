@@ -5,11 +5,10 @@ import { ThemeResolver } from "./config/vite/theme-resolver-plugin";
 import { getTsconfigAliases } from "./config/vite/tsconfig-aliases";
 import Vue from "@vitejs/plugin-vue";
 import { defineConfig, type UserConfig } from "vite";
-import Checker from "vite-plugin-checker";
 import VueDevTools from "vite-plugin-vue-devtools";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
-export default defineConfig(async ({ mode }): Promise<UserConfig> => {
+export default defineConfig(async (): Promise<UserConfig> => {
 	const replacements = await generateAliases(__dirname);
 	const tsconfigAliases = getTsconfigAliases();
 
@@ -33,15 +32,6 @@ export default defineConfig(async ({ mode }): Promise<UserConfig> => {
 			DevServerProxy(),
 			ThemeResolver(replacements),
 			CspNoncePlaceholder("**CSP_NONCE**"),
-			mode === "development"
-				? Checker({
-						vueTsc: true,
-						eslint: {
-							lintCommand: "eslint 'src/**/*.{ts,js,vue}'",
-							useFlatConfig: true,
-						},
-					})
-				: undefined,
 		],
 		optimizeDeps: {
 			include: [
