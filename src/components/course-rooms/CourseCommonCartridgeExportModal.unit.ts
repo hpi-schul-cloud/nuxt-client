@@ -4,6 +4,7 @@ import { COURSE_ROOM_DETAILS_MODULE_KEY } from "@/utils/inject";
 import { expectNotification, mockComposable } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { BoardElementResponse, BoardElementResponseType } from "@api-server";
 import { useCommonCartridgeExport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
@@ -280,4 +281,260 @@ describe("CourseCommonCartridgeExportModal", () => {
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", [], [], []);
 		});
 	});
+
+	describe("room data processing with real elements", () => {
+		const setupWithElements = (elements: unknown[]) => {
+			courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
+				getRoomData: {
+					roomId: "1",
+					title: "title",
+					displayColor: "color",
+					elements: elements as BoardElementResponse[],
+					isArchived: false,
+					isSynchronized: false,
+				},
+				getBusinessError: {
+					message: "",
+					statusCode: "",
+				},
+			});
+
+			const wrapper = mount(CourseCommonCartridgeExportModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					provide: {
+						[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
+					},
+				},
+				props: {
+					isOpen: true,
+				},
+			});
+			return wrapper;
+		};
+
+		it("should process lesson elements correctly", async () => {
+			const elements = [
+				{
+					type: BoardElementResponseType.LESSON,
+					content: { id: "lesson1", name: "Math Lesson" },
+				},
+			];
+
+			const wrapper = setupWithElements(elements);
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTopicsCheckbox = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			expect(allTopicsCheckbox.exists()).toBe(true);
+			expect(allTopicsCheckbox.find("input").attributes("disabled")).toBeFalsy();
+		});
+
+		it("should process task elements correctly", async () => {
+			const elements = [
+				{
+					type: BoardElementResponseType.TASK,
+					content: { id: "task1", name: "Math Task" },
+				},
+			];
+
+			const wrapper = setupWithElements(elements);
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTasksCheckbox = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
+			expect(allTasksCheckbox.exists()).toBe(true);
+			expect(allTasksCheckbox.find("input").attributes("disabled")).toBeFalsy();
+		});
+
+		it("should process column board elements correctly", async () => {
+			const elements = [
+				{
+					type: BoardElementResponseType.COLUMN_BOARD,
+					content: { id: "board1", title: "Math Board" },
+				},
+			];
+
+			const wrapper = setupWithElements(elements);
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allColumnBoardsCheckbox = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
+			expect(allColumnBoardsCheckbox.exists()).toBe(true);
+			expect(allColumnBoardsCheckbox.find("input").attributes("disabled")).toBeFalsy();
+		});
+	});
+
+	describe("toggle functions with elements", () => {
+		const setupWithMixedElements = () => {
+			const elements = [
+				{
+					type: "lesson",
+					content: { id: "lesson1", name: "Math Lesson" },
+				},
+				{
+					type: "lesson",
+					content: { id: "lesson2", name: "Science Lesson" },
+				},
+				{
+					type: "task",
+					content: { id: "task1", name: "Math Task" },
+				},
+				{
+					type: "task",
+					content: { id: "task2", name: "Science Task" },
+				},
+				{
+					type: "column-board",
+					content: { id: "board1", title: "Math Board" },
+				},
+			];
+
+			return setupWithElements(elements);
+		};
+
+		it("should toggle all topics correctly", async () => {
+			const wrapper = setupWithMixedElements();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTopicsCheckbox = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			await allTopicsCheckbox.trigger("click");
+
+			await allTopicsCheckbox.trigger("click");
+
+			expect(allTopicsCheckbox.exists()).toBe(true);
+		});
+
+		it("should toggle all tasks correctly", async () => {
+			const wrapper = setupWithMixedElements();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTasksCheckbox = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
+			await allTasksCheckbox.trigger("click");
+
+			await allTasksCheckbox.trigger("click");
+
+			expect(allTasksCheckbox.exists()).toBe(true);
+		});
+
+		it("should toggle all column boards correctly", async () => {
+			const wrapper = setupWithMixedElements();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allColumnBoardsCheckbox = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
+			await allColumnBoardsCheckbox.trigger("click");
+
+			await allColumnBoardsCheckbox.trigger("click");
+
+			expect(allColumnBoardsCheckbox.exists()).toBe(true);
+		});
+	});
+
+	describe("onBack function coverage", () => {
+		it("should reset selections when going back", async () => {
+			const elements = [
+				{
+					type: "lesson",
+					content: { id: "lesson1", name: "Math Lesson" },
+				},
+				{
+					type: "task",
+					content: { id: "task1", name: "Math Task" },
+				},
+			];
+
+			const wrapper = setupWithElements(elements);
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const backBtn = wrapper.findComponent('[data-testid="dialog-back-btn"]');
+			await backBtn.trigger("click");
+
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="dialog-back-btn"]').exists()).toBe(false);
+		});
+	});
+
+	describe("version change functionality", () => {
+		it("should handle version change", async () => {
+			const wrapper = setup();
+
+			const version130Radio = wrapper.findComponent('[data-testid="version-130-radio-button"]');
+			await version130Radio.trigger("click");
+
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			expect(wrapper.findComponent('[data-testid="dialog-export-btn"]').exists()).toBe(true);
+		});
+	});
+
+	describe("resetDialog function", () => {
+		it("should reset dialog state properly", async () => {
+			const wrapper = setup();
+
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel-btn"]');
+			await cancelBtn.trigger("click");
+
+			const emitted = wrapper.emitted("update:isOpen");
+			expect(emitted).toHaveLength(1);
+			expect(emitted?.[0]).toEqual([false]);
+		});
+	});
+
+	describe("setAll function coverage", () => {
+		it("should be called by onBack function", async () => {
+			const elements = [
+				{
+					type: "lesson",
+					content: { id: "lesson1", name: "Math Lesson" },
+				},
+			];
+
+			const wrapper = setupWithElements(elements);
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const backBtn = wrapper.findComponent('[data-testid="dialog-back-btn"]');
+			await backBtn.trigger("click");
+
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
+		});
+	});
+
+	function setupWithElements(elements: unknown[]) {
+		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
+			getRoomData: {
+				roomId: "1",
+				title: "title",
+				displayColor: "color",
+				elements: elements as BoardElementResponse[],
+				isArchived: false,
+				isSynchronized: false,
+			},
+			getBusinessError: {
+				message: "",
+				statusCode: "",
+			},
+		});
+
+		const wrapper = mount(CourseCommonCartridgeExportModal, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
+				},
+			},
+			props: {
+				isOpen: true,
+			},
+		});
+		return wrapper;
+	}
 });

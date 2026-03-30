@@ -136,6 +136,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			getRoomData: singleColumnBoard,
 			getPermissionData: permissionData,
 			getIsLocked: isLocked,
+			createBoard: vi.fn().mockResolvedValue({ id: "new-board-id" }),
 		});
 
 		createTestAppStore({
@@ -466,6 +467,212 @@ describe("CourseRoomDetails.page.vue", () => {
 
 				expect(toolsContent.exists()).toBe(true);
 			});
+		});
+
+		describe("tab navigation", () => {
+			it("should update route query when changing tabs", async () => {
+				const { wrapper } = setup();
+
+				// Change tab index to trigger watcher
+				wrapper.vm.tabIndex = 1;
+				await nextTick();
+
+				expect(wrapper.vm.$router.push).toHaveBeenCalled();
+			});
+
+			it("should default to first tab for invalid tab index", () => {
+				const { wrapper } = setup();
+
+				wrapper.vm.tabIndex = 999;
+				expect(wrapper.vm.currentTab).toBeTruthy();
+				expect(wrapper.vm.currentTab.name).toBe("learn-content");
+			});
+
+			it("should default to first tab for negative tab index", () => {
+				const { wrapper } = setup();
+
+				wrapper.vm.tabIndex = -1;
+				expect(wrapper.vm.currentTab).toBeTruthy();
+				expect(wrapper.vm.currentTab.name).toBe("learn-content");
+			});
+		});
+	});
+
+	describe("board creation functionality", () => {
+		it("should handle board layout dialog open/close", async () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.fabItemClickHandler();
+			expect(wrapper.vm.boardLayoutDialogIsOpen).toBe(true);
+		});
+
+		it("should create board with columns layout", async () => {
+			const { wrapper, singleColumnBoard } = setup();
+
+			vi.mocked(courseRoomDetailsModule.createBoard).mockResolvedValue({ id: "new-board-id" });
+
+			await wrapper.vm.onCreateBoard(singleColumnBoard.roomId, "columns");
+
+			expect(courseRoomDetailsModule.createBoard).toHaveBeenCalledWith({
+				title: expect.any(String),
+				parentType: "course",
+				parentId: singleColumnBoard.roomId,
+				layout: "columns",
+			});
+
+			expect(wrapper.vm.$router.push).toHaveBeenCalledWith("/boards/new-board-id");
+		});
+	});
+
+	describe("copy functionality", () => {
+		it("should handle successful course copying with redirection", async () => {
+			const { wrapper, singleColumnBoard } = setup();
+
+			await wrapper.vm.onCopyRoom(singleColumnBoard.roomId);
+
+			expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
+				path: "/rooms/copiedid",
+				replace: true,
+			});
+		});
+
+		it("should handle failed course copying with redirection to overview", async () => {
+			createTestAppStore({
+				me: { roles: [{ id: "1", name: ImportUserResponseRoleNames.TEACHER }] },
+			});
+
+			const failedCopyModule = createModuleMocks(CopyModule, {
+				getIsResultModalOpen: false,
+				getCopyResult: {
+					status: CopyApiResponseStatus.PARTIAL,
+					type: CopyApiResponseType.COURSE,
+				},
+			});
+
+			const singleColumnBoard = singleColumnBoardResponseFactory.build({ elements: boardElements });
+			const wrapper = mount(CourseRoomDetailsPage, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					mocks: {
+						$router: { push: vi.fn() },
+						$route: { params: { id: singleColumnBoard.roomId }, path: "/rooms/" },
+					},
+					provide: {
+						[COPY_MODULE_KEY.valueOf()]: failedCopyModule,
+						[SHARE_MODULE_KEY.valueOf()]: shareModule,
+						[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
+					},
+					stubs: {
+						CourseRoomDashboard: true,
+						RoomExternalToolsOverview: true,
+						EndCourseSyncDialog: true,
+						StartExistingCourseSyncDialog: true,
+						UseFocusTrap: true,
+					},
+				},
+			});
+
+			await wrapper.vm.onCopyRoom(singleColumnBoard.roomId);
+
+			expect(wrapper.vm.$router.push).toHaveBeenCalledWith("/rooms/courses-overview");
+		});
+
+		it("should handle board element copying", async () => {
+			const { wrapper } = setup();
+			const copyPayload = {
+				courseId: "course-id",
+				elementId: "element-id",
+				type: "task",
+			};
+
+			const copySpy = vi.spyOn(wrapper.vm, "copy");
+
+			await wrapper.vm.onCopyBoardElement(copyPayload);
+
+			expect(copySpy).toHaveBeenCalledWith(copyPayload);
+			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledWith("course-id");
+		});
+
+		it("should reset copy module when modal is closed", () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.onCopyResultModalClosed();
+
+			expect(copyModule.reset).toHaveBeenCalled();
+		});
+	});
+
+	describe("page lifecycle methods", () => {
+		it("should refresh room data", async () => {
+			const { wrapper, singleColumnBoard } = setup();
+
+			await wrapper.vm.refreshRoom();
+
+			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledWith(singleColumnBoard.roomId);
+		});
+
+		it("should handle page cached scenario", () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.$route.query = { tab: "tools" };
+			const mockEvent = { persisted: true };
+			wrapper.vm.setActiveTabIfPageCached(mockEvent);
+
+			expect(wrapper.vm.tabIndex).toBeGreaterThan(0);
+		});
+	});
+
+	describe("computed properties coverage", () => {
+		it("should return correct dashboard role for teachers", () => {
+			const { wrapper } = setup({ roleName: ImportUserResponseRoleNames.TEACHER });
+
+			expect(wrapper.vm.dashBoardRole).toBe(ImportUserResponseRoleNames.TEACHER);
+		});
+
+		it("should return correct dashboard role for students", () => {
+			const { wrapper } = setup({ roleName: ImportUserResponseRoleNames.STUDENT });
+
+			expect(wrapper.vm.dashBoardRole).toBe(ImportUserResponseRoleNames.STUDENT);
+		});
+
+		it("should return correct canEditTools permission", () => {
+			const { wrapper } = setup({ permissionData: [Permission.CONTEXT_TOOL_ADMIN] });
+
+			expect(wrapper.vm.canEditTools).toBe(true);
+		});
+
+		it("should return false for canEditTools without permission", () => {
+			const { wrapper } = setup({ permissionData: [] });
+
+			expect(wrapper.vm.canEditTools).toBe(false);
+		});
+
+		it("should return null fab items when user has no permissions", () => {
+			const { wrapper } = setup({
+				permissionData: [],
+				roleName: ImportUserResponseRoleNames.STUDENT,
+			});
+
+			expect(wrapper.vm.learnContentFabItems).toBeNull();
+		});
+
+		it("should return correct breadcrumbs", () => {
+			const { wrapper } = setup();
+			const breadcrumbs = wrapper.vm.breadcrumbs;
+
+			expect(breadcrumbs).toHaveLength(2);
+			expect(breadcrumbs[0].title).toContain("courses");
+			expect(breadcrumbs[1].disabled).toBe(true);
+		});
+	});
+
+	describe("export modal", () => {
+		it("should open export modal when called", () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.onOpenExportModal();
+
+			expect(wrapper.vm.isExportModalOpen).toBe(true);
 		});
 	});
 });
