@@ -17,7 +17,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
@@ -36,7 +35,6 @@ export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
-export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
 export let commonCartridgeExportModule: CommonCartridgeExportModule;
 
@@ -53,7 +51,6 @@ export function initializeStores(store: Store<unknown>): void {
 	shareModule = getModule(ShareModule, store);
 	systemsModule = getModule(SystemsModule, store);
 	tasksModule = getModule(TasksModule, store);
-	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
 	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
 }
@@ -73,7 +70,6 @@ export const modules = {
 	shareModule: ShareModule,
 	systemsModule: SystemsModule,
 	tasksModule: TasksModule,
-	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,
 	commonCartridgeExportModule: CommonCartridgeExportModule,
 };
