@@ -611,7 +611,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledWith(singleColumnBoard.roomId);
 		});
 
-		it("should handle page cached scenario", () => {
+		it("should handle page cached scenario with tab query", () => {
 			const { wrapper } = setup();
 
 			wrapper.vm.$route.query = { tab: "tools" };
@@ -619,6 +619,41 @@ describe("CourseRoomDetails.page.vue", () => {
 			wrapper.vm.setActiveTabIfPageCached(mockEvent);
 
 			expect(wrapper.vm.tabIndex).toBeGreaterThan(0);
+		});
+
+		it("should default to learn-content tab when page is cached without tab query", () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.$route.query = {};
+			const mockEvent = { persisted: true };
+			wrapper.vm.setActiveTabIfPageCached(mockEvent);
+
+			expect(wrapper.vm.tabIndex).toBe(0);
+		});
+
+		it("should not change tab when page is not from cache", () => {
+			const { wrapper } = setup();
+
+			wrapper.vm.tabIndex = 1;
+			const mockEvent = { persisted: false };
+			wrapper.vm.setActiveTabIfPageCached(mockEvent);
+
+			expect(wrapper.vm.tabIndex).toBe(1);
+		});
+
+		it("should call onCreateBoard when layout is selected", async () => {
+			const { wrapper, singleColumnBoard } = setup();
+
+			vi.mocked(courseRoomDetailsModule.createBoard).mockResolvedValue({ id: "new-board-id" });
+
+			await wrapper.vm.onLayoutSelected("columns");
+
+			expect(courseRoomDetailsModule.createBoard).toHaveBeenCalledWith({
+				title: expect.any(String),
+				parentType: "course",
+				parentId: singleColumnBoard.roomId,
+				layout: "columns",
+			});
 		});
 	});
 
