@@ -184,7 +184,6 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	};
 
 	return {
-		// State
 		roomsData,
 		gridElementsId,
 		allElements,
@@ -192,12 +191,8 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		importedCourseId,
 		loading,
 		error,
-
-		// Getters
 		hasRooms,
 		hasCurrentRooms,
-
-		// Actions
 		fetch,
 		align,
 		update,

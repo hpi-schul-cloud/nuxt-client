@@ -122,6 +122,7 @@ import { notifySuccess } from "@data-app";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
+import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -156,6 +157,8 @@ const display = useDisplay();
 
 const refs = reactive<Record<string, unknown>>({});
 const courseRoomListStore = useCourseRoomListStore();
+const { hasCurrentRooms, roomsData, allElements } = storeToRefs(courseRoomListStore);
+const { align, update, fetch, fetchAllElements } = courseRoomListStore;
 
 const device = ref("mobile");
 const dimensions = reactive({
@@ -190,25 +193,21 @@ const setElementRef = (rowIndex: number, colIndex: number, el: unknown) => {
 const getElementNameByRef = (pos: { x: number; y: number }) =>
 	(refs[`${pos.y}-${pos.x}`] as { $attrs: { "data-avatar-type": string } }).$attrs["data-avatar-type"];
 
-const hasCurrentRooms = computed(() => courseRoomListStore.hasCurrentRooms);
-
 const rooms = computed(() =>
-	JSON.parse(JSON.stringify(courseRoomListStore.roomsData)).filter(
-		(item: { groupElements?: { title: string }[]; title: string }) => {
-			if (item.groupElements) {
-				const groupElements = item.groupElements.filter((groupItem) =>
-					groupItem.title.toLowerCase().includes(searchText.value.toLowerCase())
-				);
-				item.groupElements = groupElements;
-				return groupElements.length > 0;
-			}
-			return item.title.toLowerCase().includes(searchText.value.toLowerCase());
+	JSON.parse(JSON.stringify(roomsData.value)).filter((item: { groupElements?: { title: string }[]; title: string }) => {
+		if (item.groupElements) {
+			const groupElements = item.groupElements.filter((groupItem) =>
+				groupItem.title.toLowerCase().includes(searchText.value.toLowerCase())
+			);
+			item.groupElements = groupElements;
+			return groupElements.length > 0;
 		}
-	)
+		return item.title.toLowerCase().includes(searchText.value.toLowerCase());
+	})
 );
 
 const courses = computed(() =>
-	courseRoomListStore.allElements.map((item: { id: string; title: string; isLocked: boolean }) => ({
+	allElements.value.map((item: { id: string; title: string; isLocked: boolean }) => ({
 		id: item.id,
 		name: item.title,
 		isLocked: item.isLocked,
@@ -240,7 +239,7 @@ const getDeviceDims = () => {
 };
 
 const setRowCount = () => {
-	const lastItem = courseRoomListStore.roomsData.reduce(
+	const lastItem = roomsData.value.reduce(
 		(prev: { yPosition?: number }, current: { yPosition?: number }) =>
 			(prev.yPosition ?? 0) > (current.yPosition ?? 0) ? prev : current,
 		{} as { yPosition?: number }
@@ -283,7 +282,7 @@ const onStartDrag = (element: Record<string, unknown>, pos: { x: number; y: numb
 
 const savePosition = async () => {
 	if (!draggedElement.from || !draggedElement.to) return;
-	await courseRoomListStore.align(draggedElement as DroppedObject);
+	await align(draggedElement as DroppedObject);
 	groupDialog.groupData = {} as GroupDataType;
 };
 
@@ -294,7 +293,7 @@ const defaultNaming = (pos: { x: number; y: number }) => {
 		(item: { xPosition: number; yPosition: number }) => item.xPosition === pos.x && item.yPosition === pos.y
 	);
 	if (existingRoom) {
-		courseRoomListStore.update({
+		update({
 			...existingRoom,
 			title,
 			xPosition: pos.x,
@@ -355,7 +354,7 @@ const dragFromGroup = (element: { id: string }) => {
 	draggedElement.from = {
 		x: groupDialog.groupData.xPosition as number,
 		y: groupDialog.groupData.yPosition as number,
-		groupIndex: courseRoomListStore.roomsData
+		groupIndex: roomsData.value
 			.find((item: { groupId: string }) => item.groupId === groupDialog.groupData.groupId)
 			?.groupElements?.findIndex((groupItem: { id: string }) => groupItem.id === element.id),
 	};
@@ -383,7 +382,7 @@ const onImportSuccess = (name: string, id?: string) => {
 		router.replace({ name: "room-details", params: { id } });
 	} else {
 		router.replace({ name: "course-room-overview" });
-		courseRoomListStore.fetch();
+		fetch();
 	}
 };
 
@@ -391,7 +390,7 @@ const initCoursePolling = (started: Date, count = 0) => {
 	const nextTimeout = count * count * 1000 + 5000;
 	setTimeout(
 		async () => {
-			await courseRoomListStore.fetch({ indicateLoading: false, device: device.value });
+			await fetch({ indicateLoading: false, device: device.value });
 			if (hasRoomsBeingCopied.value) {
 				initCoursePolling(started ?? new Date(), count + 1);
 			} else {
@@ -404,8 +403,7 @@ const initCoursePolling = (started: Date, count = 0) => {
 
 // Initialize on component creation
 const initializeComponent = async () => {
-	await courseRoomListStore.fetch();
-	await courseRoomListStore.fetchAllElements();
+	await Promise.allSettled([fetch(), fetchAllElements()]);
 
 	const newDims = getDeviceDims();
 	dimensions.colCount = newDims.colCount;
