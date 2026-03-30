@@ -1,21 +1,24 @@
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import { SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
-import { createTestEnvStore } from "@@/tests/test-utils";
+import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { createTestEnvStore, mockComposable } from "@@/tests/test-utils";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { useUserLoginMigration } from "@data-user-login-migration";
 import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mocked } from "vitest";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
+
+vi.mock("@data-user-login-migration");
+const useUserLoginMigrationMock = vi.mocked(useUserLoginMigration);
 
 describe("UserLoginMigrationError", () => {
 	let systemsModule: Mocked<SystemsModule>;
-	let userLoginMigrationModule: Mocked<UserLoginMigrationModule>;
+	let useUserLoginMigrationMockReturn: Mocked<ReturnType<typeof useUserLoginMigration>>;
 
 	const setup = (props: { sourceSchoolNumber?: string; targetSchoolNumber?: string; multipleUsersFound?: boolean }) => {
 		const systemsMock: System[] = [
@@ -36,16 +39,16 @@ describe("UserLoginMigrationError", () => {
 		createTestEnvStore({
 			ACCESSIBILITY_REPORT_EMAIL: "ticketsystem@niedersachsen.support",
 		});
-		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
-			getUserLoginMigration: userLoginMigrationFactory.build(),
-		});
+
+		useUserLoginMigrationMockReturn = mockComposable(useUserLoginMigration);
+		useUserLoginMigrationMock.mockReturnValue(useUserLoginMigrationMockReturn);
+		useUserLoginMigrationMockReturn.userLoginMigration = ref(userLoginMigrationFactory.build());
 
 		const wrapper = shallowMount(UserLoginMigrationError, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {
 					$theme: {
@@ -58,6 +61,7 @@ describe("UserLoginMigrationError", () => {
 
 		return {
 			wrapper,
+			useUserLoginMigrationMockReturn,
 		};
 	};
 
@@ -137,11 +141,11 @@ describe("UserLoginMigrationError", () => {
 			});
 
 			it("should fetch the user login migration", async () => {
-				setup({});
+				const { useUserLoginMigrationMockReturn } = setup({});
 
 				await nextTick();
 
-				expect(userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser).toHaveBeenCalled();
+				expect(useUserLoginMigrationMockReturn.fetchLatestUserLoginMigrationForSchool).toHaveBeenCalled();
 			});
 		});
 	});

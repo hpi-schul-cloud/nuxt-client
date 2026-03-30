@@ -7,7 +7,6 @@ import router from "./router";
 import { initializeAxios } from "./utils/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	COURSE_ROOM_LIST_MODULE_KEY,
@@ -18,12 +17,10 @@ import {
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	THEME_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import {
 	commonCartridgeExportModule,
-	commonCartridgeImportModule,
 	copyModule,
 	courseRoomDetailsModule,
 	courseRoomListModule,
@@ -36,7 +33,6 @@ import {
 	shareModule,
 	systemsModule,
 	tasksModule,
-	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
@@ -114,10 +110,8 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
-	app.provide(USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(), userLoginMigrationModule);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
-	app.provide(COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(), commonCartridgeImportModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
