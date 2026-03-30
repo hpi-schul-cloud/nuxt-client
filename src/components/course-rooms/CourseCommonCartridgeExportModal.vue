@@ -273,6 +273,8 @@ const resetDialog = (): void => {
 	setSelectedOnAllItems(allColumnBoards.value, true);
 };
 
+const onBack = (): void => resetDialog();
+
 const onNext = (): void => {
 	step.value = "ContentSelection";
 };
@@ -293,13 +295,6 @@ const onExport = async (): Promise<void> => {
 	}
 
 	onCloseDialog();
-};
-
-const onBack = (): void => {
-	step.value = "VersionSelection";
-	setSelectedOnAllItems(allTasks.value, true);
-	setSelectedOnAllItems(allTopics.value, true);
-	setSelectedOnAllItems(allColumnBoards.value, true);
 };
 
 const toggleAllTopics = (): void => {
