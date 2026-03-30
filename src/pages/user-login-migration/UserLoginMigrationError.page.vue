@@ -37,9 +37,9 @@
 					}}
 				</span>
 			</p>
-			<v-btn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
+			<VBtn color="primary" variant="flat" data-testId="btn-proceed" to="/logout">
 				{{ $t("pages.userMigration.backToLogin") }}
-			</v-btn>
+			</VBtn>
 		</div>
 	</div>
 </template>
@@ -47,12 +47,11 @@
 <script lang="ts">
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { UserLoginMigration } from "@/store/user-login-migration";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import { injectStrict, SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
+import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useEnvConfig } from "@data-env";
+import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -77,7 +76,8 @@ export default defineComponent({
 	},
 	setup(props) {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
+		const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
+
 		const { t } = useI18n();
 
 		const pageTitle = buildPageTitle(t("pages.userMigration.error.title"));
@@ -102,13 +102,9 @@ export default defineComponent({
 			sanitizeUrl(`mailto:${useEnvConfig().value.ACCESSIBILITY_REPORT_EMAIL}?subject=${getSubject()}`)
 		);
 
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> = computed(
-			() => userLoginMigrationModule.getUserLoginMigration
-		);
-
 		onMounted(async () => {
 			await systemsModule?.fetchSystems();
-			await userLoginMigrationModule?.fetchLatestUserLoginMigrationForCurrentUser();
+			await fetchLatestUserLoginMigrationForSchool();
 			isLoading.value = false;
 		});
 
