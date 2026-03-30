@@ -1,16 +1,16 @@
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import CourseRoomLockedPage from "./CourseRoomLocked.page.vue";
 import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExternalToolsOverview.vue";
-import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
-import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject/injection-keys";
+import { COPY_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject/injection-keys";
+import { mockComposable } from "@@/tests/test-utils/mockComposable";
+import { useCommonCartridgeExport } from "@data-common-cartridge";
+import { Mocked } from "vitest";
+
+vi.mock("@data-common-cartridge");
+const useCommonCartridgeExportMock = vi.mocked(useCommonCartridgeExport);
 import { createTestAppStore, createTestEnvStore, singleColumnBoardResponseFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -86,11 +86,17 @@ const mockPermissionsStudent = [Permission.BASE_VIEW];
 describe("CourseRoomDetails.page.vue", () => {
 	let copyModule: CopyModule;
 	let shareModule: ShareModule;
-	let downloadModule: CommonCartridgeExportModule;
 	let courseRoomDetailsModule: CourseRoomDetailsModule;
+	let useCommonCartridgeExportMockReturn: Mocked<ReturnType<typeof useCommonCartridgeExport>>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+
+		useCommonCartridgeExportMockReturn = mockComposable(useCommonCartridgeExport, {
+			startExport: vi.fn(),
+			allowedVersions: ["1.1.0", "1.3.0"],
+		});
+		useCommonCartridgeExportMock.mockReturnValue(useCommonCartridgeExportMockReturn);
 	});
 
 	afterEach(() => {
@@ -122,7 +128,6 @@ describe("CourseRoomDetails.page.vue", () => {
 				status: CopyApiResponseStatus.SUCCESS,
 			},
 		});
-		downloadModule = createModuleMocks(CommonCartridgeExportModule);
 		shareModule = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentType.COURSES,
@@ -160,7 +165,6 @@ describe("CourseRoomDetails.page.vue", () => {
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 				stubs: {
@@ -388,7 +392,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					expect(moreActionButton).not.toContain(`[data-testid=room-menu-common-cartridge-download]`);
 				});
 
-				it("should call onExport method when 'Export Course' menu clicked", async () => {
+				it("should open export modal when 'Export Course' menu clicked", async () => {
 					createTestEnvStore({
 						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
 					});
@@ -400,7 +404,7 @@ describe("CourseRoomDetails.page.vue", () => {
 					const moreActionButton = wrapper.findComponent(`[data-testid=room-menu-common-cartridge-download]`);
 					await moreActionButton.trigger("click");
 
-					expect(downloadModule.startExportFlow).toHaveBeenCalled();
+					expect(wrapper.vm.isExportModalOpen).toBe(true);
 				});
 			});
 
