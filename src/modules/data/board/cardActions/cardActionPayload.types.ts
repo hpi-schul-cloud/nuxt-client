@@ -21,6 +21,17 @@ export type UpdateCardTitleSuccessPayload = {
 };
 export type UpdateCardTitleFailurePayload = UpdateCardTitleRequestPayload;
 
+export type UpdateCardColorRequestPayload = {
+	cardId: string;
+	newColor: string;
+};
+export type UpdateCardColorSuccessPayload = {
+	cardId: string;
+	newColor: string;
+	isOwnAction: boolean;
+};
+export type UpdateCardColorFailurePayload = UpdateCardColorRequestPayload;
+
 export type UpdateCardHeightRequestPayload = {
 	cardId: string;
 	newHeight: number;

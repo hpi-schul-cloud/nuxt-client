@@ -10,6 +10,7 @@ import {
 	DuplicateCardRequestPayload,
 	FetchCardRequestPayload,
 	MoveElementRequestPayload,
+	UpdateCardColorRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
@@ -49,6 +50,7 @@ export const useCardRestApi = () => {
 		updateElementCall,
 		moveElementCall,
 		updateCardTitle,
+		updateCardColor,
 		updateCardHeightCall,
 		duplicateCardCall,
 	} = useBoardApi();
@@ -258,6 +260,20 @@ export const useCardRestApi = () => {
 		}
 	};
 
+	const updateCardColorRequest = async (payload: UpdateCardColorRequestPayload): Promise<void> => {
+		const card = cardStore.getCard(payload.cardId);
+		if (card === undefined) return;
+
+		try {
+			await updateCardColor(payload.cardId, payload.newColor);
+			cardStore.updateCardColorSuccess({ ...payload, isOwnAction: true });
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
+		}
+	};
+
 	const updateCardHeightRequest = async (payload: UpdateCardHeightRequestPayload) => {
 		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
@@ -294,6 +310,7 @@ export const useCardRestApi = () => {
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,
+		updateCardColorRequest,
 		updateCardHeightRequest,
 		disconnectSocketRequest,
 	};

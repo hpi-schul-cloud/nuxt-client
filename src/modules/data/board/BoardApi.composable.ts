@@ -80,6 +80,11 @@ export const useBoardApi = () => {
 			title,
 		});
 
+	const updateCardColor = async (id: string, color: string) =>
+		cardsApi.cardControllerUpdateCardColor(id, {
+			color,
+		});
+
 	const updateColumnTitleCall = async (id: string, title: string) =>
 		boardColumnApi.columnControllerUpdateColumnTitle(id, {
 			title,
@@ -299,6 +304,7 @@ export const useBoardApi = () => {
 		updateReadersCanEditCall,
 		updateCardHeightCall,
 		updateCardTitle,
+		updateCardColor,
 		updateColumnTitleCall,
 		updateElementCall,
 		createCardCall,

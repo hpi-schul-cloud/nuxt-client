@@ -13,7 +13,7 @@ import SvsColorPicker from "./SvsColorPicker.vue";
 import { mdiPalette } from "@icons/material";
 
 const emit = defineEmits<{
-	(e: "update:color", value: string | undefined): void;
+	(e: "update:color", value: string): void;
 }>();
 
 const color = defineModel("color", {

@@ -38,7 +38,7 @@
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
-							<SvsColorPickerMenu v-model:color="cardColor" />
+							<SvsColorPickerMenu v-model:color="cardColor" @update:color="onUpdateColor" />
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
@@ -257,6 +257,11 @@ onMounted(async () => {
 
 // Card Color
 const cardColor = ref<string | undefined>();
+
+const onUpdateColor = (newColor: string) => {
+	// cardColor.value = newColor;
+	cardStore.updateCardColorRequest({ cardId: props.cardId, newColor });
+};
 </script>
 
 <style scoped>

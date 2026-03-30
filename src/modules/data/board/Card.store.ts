@@ -8,6 +8,7 @@ import {
 	DuplicateCardSuccessPayload,
 	FetchCardSuccessPayload,
 	MoveElementSuccessPayload,
+	UpdateCardColorSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
@@ -68,6 +69,15 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		card.title = payload.newTitle;
+	};
+
+	const updateCardColorRequest = socketOrRest.updateCardColorRequest;
+
+	const updateCardColorSuccess = (payload: UpdateCardColorSuccessPayload) => {
+		const card = cards.value[payload.cardId];
+		if (card === undefined) return;
+
+		// card.color = payload.newColor;
 	};
 
 	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;
@@ -286,6 +296,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardHeightSuccess,
 		updateCardTitleRequest,
 		updateCardTitleSuccess,
+		updateCardColorRequest,
+		updateCardColorSuccess,
 		loadPreferredTools,
 		preferredTools,
 		isPreferredToolsLoading,
