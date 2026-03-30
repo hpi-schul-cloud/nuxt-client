@@ -180,7 +180,6 @@ import { CommonCartridgeVersion, useCommonCartridgeExport } from "@data-common-c
 import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { VCheckbox } from "vuetify/components";
 
 type Selection = {
 	isSelected: boolean;
@@ -221,20 +220,11 @@ const isLesson = (element: BoardElement): element is BoardElement & { content: B
 const isTask = (element: BoardElement): element is BoardElement & { content: BoardTask } =>
 	element.type === BoardElementType.TASK;
 
-const toSelectionItem = <T extends BoardLesson | BoardTask | BoardColumnBoard>(
-	element: BoardElement & { content: T }
-): Selection => {
-	const title = isColumnBoard(element)
-		? element.content.title
-		: isLesson(element) || isTask(element)
-			? element.content.name
-			: "";
-	return {
-		isSelected: true,
-		title,
-		id: element.content.id,
-	};
-};
+const toSelectionItem = (element: BoardElement): Selection => ({
+	isSelected: true,
+	title: "name" in element.content ? element.content.name : element.content.title,
+	id: element.content.id,
+});
 
 watch(
 	() => courseRoomDetailsModule.getRoomData.elements,
@@ -270,24 +260,25 @@ const onCloseDialog = (): void => {
 	resetDialog();
 };
 
+const setSelectedOnAllItems = (items: Selection[], newValue: boolean): void => {
+	items.forEach((item) => {
+		item.isSelected = newValue;
+	});
+};
+
 const resetDialog = (): void => {
 	step.value = "VersionSelection";
-	allTasks.value.forEach((task) => {
-		task.isSelected = true;
-	});
-	allTopics.value.forEach((topic) => {
-		topic.isSelected = true;
-	});
-	allColumnBoards.value.forEach((columnBoard) => {
-		columnBoard.isSelected = true;
-	});
+	setSelectedOnAllItems(allTasks.value, true);
+	setSelectedOnAllItems(allTopics.value, true);
+	setSelectedOnAllItems(allColumnBoards.value, true);
 };
 
 const onNext = (): void => {
 	step.value = "ContentSelection";
 };
+
 const onExport = async (): Promise<void> => {
-	notifySuccess(t("common.words.export")); // Kurs-Export wird heruntergeladen
+	notifySuccess(t("common.words.export"));
 
 	const topicIds = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);
 	const taskIds = allTasks.value.filter((task) => task.isSelected).map((task) => task.id);
@@ -296,40 +287,33 @@ const onExport = async (): Promise<void> => {
 		.map((columnBoard) => columnBoard.id);
 
 	await startExport(version.value, topicIds, taskIds, columnBoardIds);
-	onCloseDialog();
 
 	if (courseRoomDetailsModule.getBusinessError?.statusCode !== "") {
 		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 
-	resetDialog();
+	onCloseDialog();
 };
 
 const onBack = (): void => {
 	step.value = "VersionSelection";
-	setAll(allTasks.value, true);
-	setAll(allTopics.value, true);
-	setAll(allColumnBoards.value, true);
-};
-
-const setAll = (items: Selection[], newValue: boolean): void => {
-	items.forEach((item) => {
-		item.isSelected = newValue;
-	});
+	setSelectedOnAllItems(allTasks.value, true);
+	setSelectedOnAllItems(allTopics.value, true);
+	setSelectedOnAllItems(allColumnBoards.value, true);
 };
 
 const toggleAllTopics = (): void => {
 	const newValue = !allTopicsSelected.value;
-	setAll(allTopics.value, newValue);
+	setSelectedOnAllItems(allTopics.value, newValue);
 };
 
 const toggleAllTasks = (): void => {
 	const newValue = !allTasksSelected.value;
-	setAll(allTasks.value, newValue);
+	setSelectedOnAllItems(allTasks.value, newValue);
 };
 
 const toggleAllColumnBoards = (): void => {
 	const newValue = !allColumnBoardsSelected.value;
-	setAll(allColumnBoards.value, newValue);
+	setSelectedOnAllItems(allColumnBoards.value, newValue);
 };
 </script>
