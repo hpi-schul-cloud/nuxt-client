@@ -1,4 +1,4 @@
-import { UserLoginMigration } from "@/store/user-login-migration";
+import { UserLoginMigration } from "@data-user-login-migration";
 import { Factory } from "fishery";
 
 export const userLoginMigrationFactory = Factory.define<UserLoginMigration>(() => ({
