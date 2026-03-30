@@ -1,10 +1,9 @@
 <template>
 	<VDialog
-		ref="exportDialog"
 		:model-value="isOpen"
 		:max-width="560"
 		data-testid="export-dialog"
-		@update:model-value="emit('update:isOpen')"
+		@update:model-value="(value) => emit('update:isOpen', value)"
 		@click:outside="onCloseDialog"
 		@keydown.esc="onCloseDialog"
 	>
@@ -197,7 +196,9 @@ defineProps<{
 	isOpen: boolean;
 }>();
 
-const emit = defineEmits(["update:isOpen"]);
+const emit = defineEmits<{
+	"update:isOpen": [value: boolean];
+}>();
 
 const version = ref<CommonCartridgeVersion>("1.1.0");
 const step = ref<Steps>("VersionSelection");
@@ -236,7 +237,8 @@ watch(
 		allTopics.value = newValue.filter(isLesson).map(toSelectionItem);
 		allTasks.value = newValue.filter(isTask).map(toSelectionItem);
 		allColumnBoards.value = newValue.filter(isColumnBoard).map(toSelectionItem);
-	}
+	},
+	{ immediate: true }
 );
 
 const title = computed(() =>

@@ -1,6 +1,6 @@
 <template>
 	<CourseRoomLockedPage v-if="isLocked" :title="roomData.title" />
-	<DefaultWireframe v-else ref="main" :fab-items="getCurrentFabItems" :breadcrumbs="breadcrumbs" max-width="short">
+	<DefaultWireframe v-else :fab-items="getCurrentFabItems" :breadcrumbs="breadcrumbs" max-width="short">
 		<template #header>
 			<div class="d-flex mt-3">
 				<h1 class="pb-2 ma-0 course-title" :class="{ 'pr-5': roomData.isArchived }" data-testid="courses-course-title">
@@ -64,10 +64,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-		<CourseCommonCartridgeExportModal
-			v-model:is-open="isExportModalOpen"
-			@update:is-open="(value) => (isExportModalOpen = value)"
-		/>
+		<CourseCommonCartridgeExportModal v-model:is-open="isExportModalOpen" />
 		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
