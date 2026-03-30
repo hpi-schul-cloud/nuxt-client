@@ -64,7 +64,10 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
-		<CourseCommonCartridgeExportModal />
+		<CourseCommonCartridgeExportModal
+			v-model:is-open="isExportModalOpen"
+			@update:is-open="(value) => (isExportModalOpen = value)"
+		/>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
@@ -91,12 +94,7 @@ import RoomExternalToolsOverview from "@/components/course-rooms/tools/RoomExter
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import {
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { COPY_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	BoardParentType,
@@ -146,10 +144,10 @@ export default defineComponent({
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: { from: SHARE_MODULE_KEY },
-		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
 		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 	},
 	setup() {
+		// TODO evtl. statt options API komplett auf composition API umstellen
 		const { mdAndUp } = useDisplay();
 
 		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy();
@@ -179,6 +177,7 @@ export default defineComponent({
 			},
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
+			isExportModalOpen: false,
 			isEndSyncDialogOpen: false,
 			isStartSyncDialogOpen: false,
 			tabIndex: 0,
@@ -346,7 +345,7 @@ export default defineComponent({
 			if (useEnvConfig().value.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiExport,
-					action: () => this.onExport(),
+					action: () => this.onOpenExportModal(),
 					name: this.$t("common.actions.export"),
 					dataTestId: "room-menu-common-cartridge-download",
 				});
@@ -459,8 +458,8 @@ export default defineComponent({
 				});
 			}
 		},
-		onExport() {
-			this.commonCartridgeExportModule.startExportFlow();
+		onOpenExportModal() {
+			this.isExportModalOpen = true;
 		},
 		async refreshRoom() {
 			await this.courseRoomDetailsModule.fetchContent(this.courseId);

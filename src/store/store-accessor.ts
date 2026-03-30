@@ -5,7 +5,6 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import CommonCartridgeExportModule from "./common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import CourseRoomListModule from "@/store/course-room-list";
@@ -40,7 +39,6 @@ export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
-export let commonCartridgeExportModule: CommonCartridgeExportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
@@ -58,7 +56,6 @@ export function initializeStores(store: Store<unknown>): void {
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
-	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -79,5 +76,4 @@ export const modules = {
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,
-	commonCartridgeExportModule: CommonCartridgeExportModule,
 };
