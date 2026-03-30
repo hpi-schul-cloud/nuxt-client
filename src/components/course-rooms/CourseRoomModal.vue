@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { useCourseRoomListStore } from "@data-courses";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { useOpeningTagValidator } from "@util-validators";
 import { PropType, ref, watch } from "vue";
 

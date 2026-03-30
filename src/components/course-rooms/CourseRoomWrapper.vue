@@ -30,13 +30,10 @@
 
 <script setup lang="ts">
 import CourseCommonCartridgeImportModal from "./CourseCommonCartridgeImportModal.vue";
-import { commonCartridgeImportModule } from "@/store";
-import { Permission } from "@api-server";
-import { useAppStore } from "@data-app";
-import { useCourseRoomListStore } from "@data-courses";
 import { Permission } from "@api-server";
 import { notifyError, notifySuccess, useAppStore, useLoadingStore } from "@data-app";
 import { useCommonCartridgeImport } from "@data-common-cartridge";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { useEnvConfig } from "@data-env";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
@@ -121,7 +118,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 
 const isLoading = computed(() => courseRoomListStore.getLoading);
 
-const isEmptyState = computed(() => !courseRoomListStore.getLoading && !props.hasRooms && !props.hasImportToken);
 const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));

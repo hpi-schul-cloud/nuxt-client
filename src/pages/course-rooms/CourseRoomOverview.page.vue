@@ -117,7 +117,7 @@ import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { notifySuccess } from "@data-app";
-import { useCourseRoomListStore } from "@data-courses";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { defineComponent, reactive } from "vue";

@@ -49,7 +49,7 @@ import CourseRoomAvatar from "@/components/course-rooms/CourseRoomAvatar.vue";
 import CourseRoomWrapper from "@/components/course-rooms/CourseRoomWrapper.vue";
 import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useCourseRoomListStore } from "@data-courses";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { SvsSearchField } from "@ui-controls";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
