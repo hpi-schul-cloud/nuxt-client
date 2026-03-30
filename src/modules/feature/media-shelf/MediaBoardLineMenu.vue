@@ -20,38 +20,7 @@
 				<span>{{ $t("common.actions.rename") }}</span>
 			</VListItemTitle>
 		</VListItem>
-		<VListGroup>
-			<template #activator="{ props }">
-				<VListItem
-					v-bind="props"
-					:prepend-icon="mdiPalette"
-					data-testid="color-picker-btn"
-					@click.stop.prevent="() => {}"
-				>
-					<VListItemTitle>
-						<span>{{ $t("common.actions.pickColor") }}</span>
-					</VListItemTitle>
-				</VListItem>
-			</template>
-			<SvsColorPicker
-				v-model="colorValue"
-				:swatches
-				data-testid="line-color-picker"
-				@update:model-value="onUpdateColor"
-			/>
-			<!-- <VColorPicker
-				hide-sliders
-				hide-inputs
-				hide-canvas
-				elevation="0"
-				:model-value="colorValue"
-				:swatches="swatches"
-				class="ma-2"
-				show-swatches
-				data-testid="line-color-picker"
-				@update:model-value="onUpdateColor"
-			/> -->
-		</VListGroup>
+		<SvsColorPickerMenu v-model="color" @update:color="onUpdateColor" />
 		<VListItem
 			v-if="lineId"
 			:prepend-icon="mdiTrashCanOutline"
@@ -68,8 +37,8 @@
 <script setup lang="ts">
 import { ColorShade, MediaBoardColorMapper } from "./utils";
 import { MediaBoardColors } from "@api-server";
-import { mdiChevronDown, mdiChevronUp, mdiPalette, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
-import { SvsColorPicker } from "@ui-color-picker";
+import { mdiChevronDown, mdiChevronUp, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
+import { SvsColorPickerMenu } from "@ui-color-picker";
 import { KebabMenu } from "@ui-kebab-menu";
 import { computed, ModelRef, PropType } from "vue";
 
