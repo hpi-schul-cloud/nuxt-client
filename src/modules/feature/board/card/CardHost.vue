@@ -38,6 +38,7 @@
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
+							<SvsColorPickerMenu v-model:color="cardColor" />
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
@@ -109,6 +110,7 @@ import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { SvsColorPickerMenu } from "@ui-color-picker";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,
@@ -252,6 +254,9 @@ onMounted(async () => {
 		await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
 	}
 });
+
+// Card Color
+const cardColor = ref<string | undefined>();
 </script>
 
 <style scoped>
