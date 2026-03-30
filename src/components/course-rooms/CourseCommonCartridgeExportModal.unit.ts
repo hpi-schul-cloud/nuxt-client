@@ -185,4 +185,99 @@ describe("CourseCommonCartridgeExportModal", () => {
 			expect(allColumnBoards.findAll("input").some((input) => input.attributes("value") === "false")).toBe(false);
 		});
 	});
+
+	describe("version selection", () => {
+		it("should have version radio buttons available", () => {
+			const wrapper = setup();
+			const version110Radio = wrapper.findComponent('[data-testid="version-110-radio-button"]');
+			const version130Radio = wrapper.findComponent('[data-testid="version-130-radio-button"]');
+
+			expect(version110Radio.exists()).toBe(true);
+			expect(version130Radio.exists()).toBe(true);
+		});
+	});
+
+	describe("dialog structure", () => {
+		it("should show dialog when open", () => {
+			const wrapper = setup();
+			const dialog = wrapper.findComponent(VDialog);
+			expect(dialog.exists()).toBe(true);
+			expect(dialog.props("modelValue")).toBe(true);
+		});
+	});
+
+	describe("content steps", () => {
+		it("should navigate between steps and show appropriate content", async () => {
+			const wrapper = setup();
+
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(true);
+
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			expect(wrapper.findComponent('[data-testid="dialog-export-btn"]').exists()).toBe(true);
+			expect(wrapper.findComponent('[data-testid="dialog-next-btn"]').exists()).toBe(false);
+		});
+	});
+
+	describe("checkbox states", () => {
+		it("should handle disabled checkboxes when no items are available", async () => {
+			const wrapper = setup();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTopicsCheckbox = wrapper.findComponent('[data-testid="all-topics-checkbox"]');
+			const allTasksCheckbox = wrapper.findComponent('[data-testid="all-tasks-checkbox"]');
+			const allColumnBoardsCheckbox = wrapper.findComponent('[data-testid="all-column-boards-checkbox"]');
+
+			expect(allTopicsCheckbox.find("input").attributes("disabled")).toBeDefined();
+			expect(allTasksCheckbox.find("input").attributes("disabled")).toBeDefined();
+			expect(allColumnBoardsCheckbox.find("input").attributes("disabled")).toBeDefined();
+		});
+	});
+
+	describe("error notification", () => {
+		it("should show error notification when export fails with business error", async () => {
+			const wrapper = setup(false);
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
+			await exportBtn.trigger("click");
+
+			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalled();
+
+			expectNotification("error");
+		});
+	});
+
+	describe("reset functionality", () => {
+		it("should reset dialog when closing", async () => {
+			const wrapper = setup();
+
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const cancelBtn = wrapper.findComponent('[data-testid="dialog-cancel-btn"]');
+			await cancelBtn.trigger("click");
+
+			const emit = wrapper.emitted();
+			expect(emit).toHaveProperty("update:isOpen");
+			expect(emit["update:isOpen"]).toContainEqual([false]);
+		});
+	});
+
+	describe("export with selected items", () => {
+		it("should call startExport with correct parameters", async () => {
+			const wrapper = setup();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
+			await exportBtn.trigger("click");
+
+			// Should call startExport with version and empty arrays (no elements)
+			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", [], [], []);
+		});
+	});
 });
