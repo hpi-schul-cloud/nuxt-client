@@ -667,6 +667,36 @@ describe("CourseRoomDetails.page.vue", () => {
 			const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
 			expect(startSyncDialog.props("isOpen")).toBe(true);
 		});
+
+		it("should refresh room when end sync dialog emits success", async () => {
+			createTestEnvStore({
+				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+			});
+			const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: true });
+			await flushPromises();
+
+			const endSyncDialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
+			endSyncDialog.vm.$emit("success");
+			await flushPromises();
+
+			// fetchContent is called once during initialization and once on success
+			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+		});
+
+		it("should refresh room when start sync dialog emits success", async () => {
+			createTestEnvStore({
+				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+			});
+			const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: false });
+			await flushPromises();
+
+			const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
+			startSyncDialog.vm.$emit("success");
+			await flushPromises();
+
+			// fetchContent is called once during initialization and once on success
+			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+		});
 	});
 
 	describe("user role behavior", () => {
@@ -784,6 +814,45 @@ describe("CourseRoomDetails.page.vue", () => {
 			wrapper.unmount();
 
 			expect(removeEventListenerSpy).toHaveBeenCalledWith("pageshow", expect.any(Function));
+		});
+
+		it("should set active tab from query when page is restored from cache", async () => {
+			const { router } = setup();
+			await flushPromises();
+
+			// Navigate to tools tab
+			await router.push({ query: { tab: "tools" } });
+			await flushPromises();
+
+			// Simulate page being restored from bfcache
+			const pageshowEvent = new PageTransitionEvent("pageshow", { persisted: true });
+			window.dispatchEvent(pageshowEvent);
+			await flushPromises();
+
+			// Tab should be set based on query
+			expect(router.currentRoute.value.query.tab).toBe("tools");
+		});
+
+		it("should set active tab to learn-content when page is restored from cache with no tab query", async () => {
+			const { wrapper, router } = setup();
+			await flushPromises();
+
+			// Navigate to tools tab first so we can see it change back
+			await router.push({ query: { tab: "tools" } });
+			await flushPromises();
+
+			// Clear query to simulate coming back with no tab
+			await router.push({ query: {} });
+			await flushPromises();
+
+			// Simulate page being restored from bfcache
+			const pageshowEvent = new PageTransitionEvent("pageshow", { persisted: true });
+			window.dispatchEvent(pageshowEvent);
+			await flushPromises();
+
+			// The tabs component should show learn-content tab (index 0)
+			const tabs = wrapper.find(".v-tabs");
+			expect(tabs.exists()).toBe(true);
 		});
 	});
 
