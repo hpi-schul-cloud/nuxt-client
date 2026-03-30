@@ -126,7 +126,7 @@ import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
 import { storeToRefs } from "pinia";
-import { Component, computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { type Component, computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { LocationQueryValue, useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
