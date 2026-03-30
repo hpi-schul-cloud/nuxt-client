@@ -176,7 +176,7 @@ export default defineComponent({
 			return this.courseRoomListStore.hasCurrentRooms;
 		},
 		rooms() {
-			return JSON.parse(JSON.stringify(this.courseRoomListStore.getRoomsData)).filter((item) => {
+			return JSON.parse(JSON.stringify(this.courseRoomListStore.roomsData)).filter((item) => {
 				if (item.groupElements) {
 					const groupElements = item.groupElements.filter((groupItem) =>
 						groupItem.title.toLowerCase().includes(this.searchText.toLowerCase())
@@ -188,7 +188,7 @@ export default defineComponent({
 			});
 		},
 		courses() {
-			return this.courseRoomListStore.getAllElements.map((item) => ({
+			return this.courseRoomListStore.allElements.map((item) => ({
 				id: item.id,
 				name: item.title,
 				isLocked: item.isLocked,
@@ -238,7 +238,7 @@ export default defineComponent({
 			return { ...this.dimensions, colCount: 6 };
 		},
 		setRowCount() {
-			const lastItem = this.courseRoomListStore.getRoomsData.reduce(
+			const lastItem = this.courseRoomListStore.roomsData.reduce(
 				(prev, current) => (prev.yPosition > current.yPosition ? prev : current),
 				{}
 			);
@@ -322,7 +322,7 @@ export default defineComponent({
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: this.courseRoomListStore.getRoomsData
+				groupIndex: this.courseRoomListStore.roomsData
 					.find((item) => item.groupId === this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id === element.id),
 			};

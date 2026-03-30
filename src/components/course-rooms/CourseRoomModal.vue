@@ -34,7 +34,7 @@ import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { useOpeningTagValidator } from "@util-validators";
-import { PropType, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 type ItemType = {
 	id: string;
@@ -58,23 +58,16 @@ type GroupDataType = {
 	to: string;
 };
 
-const props = defineProps({
-	isOpen: {
-		type: Boolean,
-		required: true,
-	},
-	groupData: {
-		type: Object as PropType<GroupDataType>,
-		required: true,
-	},
-	itemSize: {
-		type: String,
-		default: "5em",
-	},
-	draggable: {
-		type: Boolean,
-		default: false,
-	},
+type Props = {
+	isOpen: boolean;
+	groupData: GroupDataType;
+	itemSize?: string;
+	draggable?: boolean;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+	itemSize: "5em",
+	draggable: false,
 });
 
 defineEmits(["update:isOpen", "drag-from-group"]);

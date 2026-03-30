@@ -3,7 +3,7 @@
 		<template #header>
 			<slot name="header" />
 		</template>
-		<template v-if="isLoading">
+		<template v-if="loading">
 			<VContainer class="loader">
 				<VSkeletonLoader ref="skeleton-loader" type="date-picker-days" class="mt-6" />
 			</VContainer>
@@ -40,6 +40,7 @@ import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { EmptyState, RoomsEmptyStateSvg } from "@ui-empty-state";
 import { DefaultWireframe } from "@ui-layout";
 import { FabAction } from "@ui-speed-dial-menu";
+import { storeToRefs } from "pinia";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -59,6 +60,8 @@ const props = defineProps({
 });
 
 const courseRoomListStore = useCourseRoomListStore();
+const { fetch, fetchAllElements } = courseRoomListStore;
+const { loading } = storeToRefs(courseRoomListStore);
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
@@ -116,8 +119,6 @@ const fabItems: ComputedRef<FabAction[] | undefined> = computed(() => {
 	}
 });
 
-const isLoading = computed(() => courseRoomListStore.getLoading);
-
 const handleImport = async (file: File): Promise<void> => {
 	commonCartridgeImport.isOpen.value = false;
 	setLoadingState(true, t("pages.rooms.ccImportCourse.loading"));
@@ -125,7 +126,7 @@ const handleImport = async (file: File): Promise<void> => {
 	await commonCartridgeImport.importCommonCartridgeFile(file);
 	setLoadingState(false);
 
-	await Promise.allSettled([courseRoomListStore.fetch(), courseRoomListStore.fetchAllElements()]);
+	await Promise.allSettled([fetch(), fetchAllElements()]);
 
 	if (commonCartridgeImport.isSuccess.value) {
 		notifySuccess(t("pages.rooms.ccImportCourse.success"));
@@ -134,7 +135,7 @@ const handleImport = async (file: File): Promise<void> => {
 	}
 };
 
-const isEmptyState = computed(() => !courseRoomListStore.getLoading && !props.hasRooms && !props.hasImportToken);
+const isEmptyState = computed(() => !loading.value && !props.hasRooms && !props.hasImportToken);
 </script>
 
 <style lang="scss" scoped>

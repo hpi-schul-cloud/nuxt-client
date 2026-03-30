@@ -4,8 +4,7 @@ import {
 	DashboardApiFactory,
 	DashboardGridElementResponse,
 } from "@/generated/serverApi/v3";
-import { BusinessError } from "@/store/types/commons";
-import { AllItems, DroppedObject, RoomsData, SharingCourseObject } from "@/store/types/rooms";
+import { DroppedObject, RoomsData, SharingCourseObject } from "@/store/types/rooms";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { isInPast } from "@/utils/date-time.utils";
 import { defineStore } from "pinia";
@@ -25,19 +24,14 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	const importedCourseId = ref("");
 	const loading = ref(false);
 	const error = ref<null | object>(null);
-	const businessError = ref<BusinessError>({
-		statusCode: "",
-		message: "",
-		error: {},
-	});
 
 	// API instances
 	const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
 	const coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
 
 	// Internal helpers
-	function processRoomData(data: DashboardGridElementResponse[]): DashboardGridElementResponse[] {
-		return data.map((item) => {
+	const processRoomData = (data: DashboardGridElementResponse[]): DashboardGridElementResponse[] =>
+		data.map((item) => {
 			let to = "";
 			if (item.groupElements) {
 				item.groupElements = item.groupElements.map((groupItem) => {
@@ -52,10 +46,9 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 			}
 			return { ...item, to };
 		});
-	}
 
-	function processAllElements(data: CourseMetadataResponse[]) {
-		return data.map((item: CourseMetadataResponse) => {
+	const processAllElements = (data: CourseMetadataResponse[]) =>
+		data.map((item: CourseMetadataResponse) => {
 			let to = null;
 			if (item.id) {
 				to = `/rooms/${item.id}`;
@@ -84,28 +77,6 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 				to,
 			};
 		});
-	}
-
-	// Setters (internal mutations)
-	const setRoomData = (data: DashboardGridElementResponse[]): void => {
-		roomsData.value = processRoomData(data);
-	};
-
-	const setAllElements = (data: CourseMetadataResponse[]): void => {
-		allElements.value = processAllElements(data);
-	};
-
-	const setRoomDataId = (id: string): void => {
-		gridElementsId.value = id;
-	};
-
-	const setLoading = (value: boolean): void => {
-		loading.value = value;
-	};
-
-	const setError = (err: object): void => {
-		error.value = err;
-	};
 
 	const setPosition = (droppedComponent: DroppedObject): void => {
 		const { to } = droppedComponent;
@@ -117,35 +88,10 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		}
 	};
 
-	const setSharedCourseData = (status: SharingCourseObject): void => {
-		sharedCourseData.value = status;
-	};
-
-	const setImportedCourseId = (id: string): void => {
-		importedCourseId.value = id;
-	};
-
-	const setBusinessError = (err: BusinessError): void => {
-		businessError.value = err;
-	};
-
-	const resetBusinessError = (): void => {
-		businessError.value = {
-			statusCode: "",
-			message: "",
-			error: {},
-		};
-	};
-
 	// Getters
-	const getRoomsData = computed<Array<RoomsData>>(() => roomsData.value as Array<RoomsData>);
-	const getAllElements = computed<AllItems>(() => allElements.value as AllItems);
-	const getLoading = computed<boolean>(() => loading.value);
-	const getError = computed<object | null>(() => error.value);
+
 	const getRoomsId = computed<string>(() => gridElementsId.value);
-	const getCourseSharingStatus = computed<object>(() => sharedCourseData.value);
-	const getImportedCourseId = computed<string>(() => importedCourseId.value);
-	const getBusinessError = computed(() => businessError.value);
+
 	const hasRooms = computed<boolean>(() => allElements.value.length > 0);
 	const hasCurrentRooms = computed<boolean>(() => roomsData.value.length > 0);
 
@@ -153,21 +99,16 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	const fetch = async (params?: { indicateLoading: boolean; device: string }): Promise<void> => {
 		// device parameter will be used to fetch data specified for device
 		const indicateLoading = params?.indicateLoading === undefined ? true : params.indicateLoading;
-		if (indicateLoading) setLoading(true);
+		if (indicateLoading) loading.value = true;
 		try {
 			const { data } = await dashboardApi.dashboardControllerFindForUser();
-			setRoomDataId(data.id || "");
-			setRoomData(data.gridElements || []);
-			if (indicateLoading) setLoading(false);
+			gridElementsId.value = data.id;
+			roomsData.value = processRoomData(data.gridElements || []);
+			if (indicateLoading) loading.value = false;
 		} catch (err: unknown) {
 			const apiError = mapAxiosErrorToResponseError(err);
 
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-			if (indicateLoading) setLoading(false);
+			if (indicateLoading) loading.value = false;
 		}
 	};
 
@@ -178,27 +119,22 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 			to,
 		};
 
-		setLoading(true);
+		loading.value = true;
 		try {
 			const response = await dashboardApi.dashboardControllerMoveElement(getRoomsId.value, reqObject);
 
 			setPosition(payload);
-			setRoomData(response.data.gridElements);
-			setLoading(false);
+			roomsData.value = processRoomData(response.data.gridElements || []);
+			loading.value = false;
 		} catch (err: unknown) {
 			const apiError = mapAxiosErrorToResponseError(err);
 
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-			setLoading(false);
+			loading.value = false;
 		}
 	};
 
 	const update = async (payload: RoomsData): Promise<void> => {
-		setLoading(true);
+		loading.value = true;
 		try {
 			await dashboardApi.dashboardControllerPatchGroup(getRoomsId.value, payload.xPosition, payload.yPosition, {
 				title: payload.title,
@@ -211,76 +147,39 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 				...roomsData.value[roomIndex],
 				title: payload.title,
 			};
-			setRoomData(updatedRoomsData);
-			setLoading(false);
+			roomsData.value = updatedRoomsData;
+			loading.value = false;
 		} catch (err: unknown) {
 			const apiError = mapAxiosErrorToResponseError(err);
 
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-			setLoading(false);
+			loading.value = false;
 		}
 	};
 
 	const deleteRoom = async (id: string): Promise<void> => {
-		setLoading(true);
+		loading.value = true;
 		try {
-			// TODO: delete call to to server
 			const tempData = roomsData.value.filter((item) => item.id !== id);
-			setRoomData(tempData);
-			setLoading(false);
+			roomsData.value = tempData;
+			loading.value = false;
 		} catch (err: unknown) {
 			const apiError = mapAxiosErrorToResponseError(err);
 
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-			setLoading(false);
+			loading.value = false;
 		}
 	};
 
 	const fetchAllElements = async (): Promise<void> => {
-		setLoading(true);
+		loading.value = true;
 		try {
 			const { data } = await coursesApi.courseControllerFindForUser(0, 100);
 
-			setAllElements(data.data);
-			setLoading(false);
+			allElements.value = processAllElements(data.data);
+			loading.value = false;
 		} catch (err: unknown) {
 			const apiError = mapAxiosErrorToResponseError(err);
 
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-			setLoading(false);
-		}
-	};
-
-	const confirmSharedCourseData = async (courseData: SharingCourseObject): Promise<void> => {
-		resetBusinessError();
-		try {
-			const importedCourseResponse = (
-				await $axios.post("/v1/courses-share", {
-					shareToken: courseData.code,
-					courseName: courseData.courseName,
-				})
-			).data;
-			setImportedCourseId(importedCourseResponse.id || "");
-		} catch (err: unknown) {
-			const apiError = mapAxiosErrorToResponseError(err);
-
-			setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
+			loading.value = false;
 		}
 	};
 
@@ -293,29 +192,8 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		importedCourseId,
 		loading,
 		error,
-		businessError,
-
-		// Setters
-		setRoomData,
-		setAllElements,
-		setRoomDataId,
-		setLoading,
-		setError,
-		setPosition,
-		setSharedCourseData,
-		setImportedCourseId,
-		setBusinessError,
-		resetBusinessError,
 
 		// Getters
-		getRoomsData,
-		getAllElements,
-		getLoading,
-		getError,
-		getRoomsId,
-		getCourseSharingStatus,
-		getImportedCourseId,
-		getBusinessError,
 		hasRooms,
 		hasCurrentRooms,
 
@@ -325,6 +203,5 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		update,
 		delete: deleteRoom,
 		fetchAllElements,
-		confirmSharedCourseData,
 	};
 });

@@ -57,18 +57,19 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const courseRoomListStore = useCourseRoomListStore();
-const { hasRooms } = storeToRefs(courseRoomListStore);
+const { fetchAllElements } = courseRoomListStore;
+const { hasRooms, allElements } = storeToRefs(courseRoomListStore);
 
 const searchText = ref("");
 const rooms = computed<Array<ListItemsObject>>(() =>
-	JSON.parse(JSON.stringify(courseRoomListStore.getAllElements)).filter((room: ListItemsObject) =>
+	JSON.parse(JSON.stringify(allElements.value)).filter((room: ListItemsObject) =>
 		room.searchText?.toLowerCase().includes(searchText.value.toLowerCase())
 	)
 );
 
 onMounted(async () => {
 	document.title = buildPageTitle(t("pages.courseRooms.index.courses.all").toString());
-	await courseRoomListStore.fetchAllElements();
+	await fetchAllElements();
 });
 </script>
 
