@@ -1,10 +1,12 @@
 import { courseRoomDetailsModule } from "@/store";
 
+export type CommonCartridgeVersion = "1.1.0" | "1.3.0";
+
 export const useCommonCartridgeExport = () => {
-	const allowedVersions = ["1.1.0", "1.3.0"];
+	const allowedVersions: CommonCartridgeVersion[] = ["1.1.0", "1.3.0"];
 
 	const startExport = async (
-		version: string,
+		version: CommonCartridgeVersion,
 		topics: string[],
 		tasks: string[],
 		columnBoards: string[]
@@ -14,7 +16,7 @@ export const useCommonCartridgeExport = () => {
 		}
 
 		await courseRoomDetailsModule.downloadCommonCartridgeCourse({
-			version: version as "1.1.0" | "1.3.0",
+			version,
 			topics,
 			tasks,
 			columnBoards,

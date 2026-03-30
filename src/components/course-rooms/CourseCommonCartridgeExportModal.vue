@@ -176,7 +176,7 @@ import {
 } from "@/types/course-room/CourseRoom";
 import { COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
-import { useCommonCartridgeExport } from "@data-common-cartridge";
+import { CommonCartridgeVersion, useCommonCartridgeExport } from "@data-common-cartridge";
 import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -189,7 +189,6 @@ type Selection = {
 };
 
 type Steps = "VersionSelection" | "ContentSelection";
-type CommonCartridgeVersion = "1.1.0" | "1.3.0";
 
 const { t } = useI18n();
 const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
@@ -199,7 +198,6 @@ defineProps<{
 	isOpen: boolean;
 }>();
 
-// reicht das?
 const emit = defineEmits(["update:isOpen"]);
 
 const version = ref<CommonCartridgeVersion>("1.1.0");
@@ -214,9 +212,6 @@ const allTasksSelected = computed(() => allTasks.value.every((task) => task.isSe
 const allColumnBoards = ref<Selection[]>([]);
 const allColumnBoardsSelected = computed(() => allColumnBoards.value.every((columnBoard) => columnBoard.isSelected));
 
-// const isLessonOrTask = (element: BoardElement): element is BoardElement & { content: BoardLesson | BoardTask } =>
-// 	element.type === BoardElementType.LESSON || element.type === BoardElementType.TASK;
-
 const isColumnBoard = (element: BoardElement): element is BoardElement & { content: BoardColumnBoard } =>
 	element.type === BoardElementType.COLUMN_BOARD;
 
@@ -226,6 +221,21 @@ const isLesson = (element: BoardElement): element is BoardElement & { content: B
 const isTask = (element: BoardElement): element is BoardElement & { content: BoardTask } =>
 	element.type === BoardElementType.TASK;
 
+const toSelectionItem = <T extends BoardLesson | BoardTask | BoardColumnBoard>(
+	element: BoardElement & { content: T }
+): Selection => {
+	const title = isColumnBoard(element)
+		? element.content.title
+		: isLesson(element) || isTask(element)
+			? element.content.name
+			: "";
+	return {
+		isSelected: true,
+		title,
+		id: element.content.id,
+	};
+};
+
 watch(
 	() => courseRoomDetailsModule.getRoomData.elements,
 	(newValue) => {
@@ -233,34 +243,9 @@ watch(
 		allTasks.value = [];
 		allColumnBoards.value = [];
 
-		// irgendwie cool über reduce machen... mal gucken
-		// const [topics, tasks, columnBoards] = newValue.reduce(
-		// 	(acc, element) => {
-		// 		return [
-		// 			...acc[0],
-		// 			...(isLesson(element) ? [{ ...element, content: element.content as BoardLesson }] : []),
-		// 		] as BoardElement[][];
-		// 	},
-		// 	[[], [], []] as [BoardElement[], BoardElement[], BoardElement[]]
-		// );
-
-		allTopics.value = newValue.filter(isLesson).map((element) => ({
-			isSelected: true,
-			title: element.content.name,
-			id: element.content.id,
-		}));
-
-		allTasks.value = newValue.filter(isTask).map((element) => ({
-			isSelected: true,
-			title: element.content.name,
-			id: element.content.id,
-		}));
-
-		allColumnBoards.value = newValue.filter(isColumnBoard).map((element) => ({
-			isSelected: true,
-			title: element.content.title,
-			id: element.content.id,
-		}));
+		allTopics.value = newValue.filter(isLesson).map(toSelectionItem);
+		allTasks.value = newValue.filter(isTask).map(toSelectionItem);
+		allColumnBoards.value = newValue.filter(isColumnBoard).map(toSelectionItem);
 	}
 );
 
@@ -302,8 +287,6 @@ const onNext = (): void => {
 	step.value = "ContentSelection";
 };
 const onExport = async (): Promise<void> => {
-	// benötigt?
-	// emit("dialog-confirmed", false);
 	notifySuccess(t("common.words.export")); // Kurs-Export wird heruntergeladen
 
 	const topicIds = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);

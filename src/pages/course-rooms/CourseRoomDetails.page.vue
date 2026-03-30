@@ -13,7 +13,7 @@
 					{{ $t("pages.courseRooms.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
-					<room-dot-menu
+					<RoomDotMenu
 						:menu-items="headlineMenuItems"
 						data-testid="room-menu"
 						:aria-label="$t('pages.courseRooms.headerSection.menu.ariaLabel')"
@@ -22,7 +22,7 @@
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
-					<v-btn
+					<VBtn
 						class="back-button"
 						variant="outlined"
 						size="small"
@@ -30,22 +30,22 @@
 						:data-testid="`room-${roomData.roomId}-files`"
 					>
 						{{ $t("pages.courseRooms.headerSection.toCourseFiles") }}
-					</v-btn>
+					</VBtn>
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tabIndex" :class="{ 'tabs-max-width': mdAndUp }" grow mandatory>
+				<VTabs v-model="tabIndex" :class="{ 'tabs-max-width': mdAndUp }" grow mandatory>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
-						<v-tab :data-testid="tabItem.dataTestId" :href="tabItem.href" class="no-active">
+						<VTab :data-testid="tabItem.dataTestId" :href="tabItem.href" class="no-active">
 							<template #default>
-								<v-icon size="large" class="mr-sm-3"> {{ tabItem.icon }}</v-icon>
+								<VIcon size="large" class="mr-sm-3"> {{ tabItem.icon }}</VIcon>
 								<span class="d-none d-sm-inline">
 									{{ tabItem.label }}
 								</span>
 							</template>
-						</v-tab>
+						</VTab>
 					</template>
-				</v-tabs>
+				</VTabs>
 			</div>
 		</template>
 		<component
@@ -68,14 +68,14 @@
 			v-model:is-open="isExportModalOpen"
 			@update:is-open="(value) => (isExportModalOpen = value)"
 		/>
-		<end-course-sync-dialog
+		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
-		<start-existing-course-sync-dialog
+		<StartExistingCourseSyncDialog
 			v-model:is-open="isStartSyncDialogOpen"
 			:course-name="roomData.title"
 			:course-id="roomData.roomId"
@@ -147,7 +147,6 @@ export default defineComponent({
 		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 	},
 	setup() {
-		// TODO evtl. statt options API komplett auf composition API umstellen
 		const { mdAndUp } = useDisplay();
 
 		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } = useCopy();
