@@ -25,7 +25,7 @@
 			<!-- Tasks Draft and Private for teacher -->
 			<DashboardTasksSection
 				v-if="draftTasks.length > 0"
-				data-testid="teacher-tasks-private"
+				data-testid="teacher-tasks-drafts"
 				:title="t('common.words.drafts')"
 				:tasks="draftTasks"
 			/>
