@@ -1,19 +1,23 @@
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CourseRoomModal from "./CourseRoomModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { courseRoomListModule } from "@/store";
-import CourseRoomListModule from "@/store/course-room-list";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { useCourseRoomListStore } from "@data-course-rooms";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 
 describe("RoomModal", () => {
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
-		setupStores({ courseRoomListModule: CourseRoomListModule });
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
+
+		const courseRoomListStore = mockedPiniaStoreTyping(useCourseRoomListStore);
 
 		const wrapper = mount(CourseRoomModal, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: { plugins: [pinia, createTestingVuetify(), createTestingI18n()] },
 			props: {
 				isOpen,
 				groupData: {
@@ -30,7 +34,7 @@ describe("RoomModal", () => {
 				draggable: true,
 			},
 		});
-		return { wrapper };
+		return { wrapper, courseRoomListStore };
 	};
 
 	afterEach(() => {
@@ -111,9 +115,8 @@ describe("RoomModal", () => {
 		describe("when enter is pressed", () => {
 			describe("when title is valid", () => {
 				const setup = async () => {
-					const { wrapper } = getWrapper({ isOpen: true });
+					const { wrapper, courseRoomListStore } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
 					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 
 					const newTitle = "changed title";
@@ -122,11 +125,11 @@ describe("RoomModal", () => {
 					await titleInput.trigger("keyup.enter");
 					await wrapper.vm.$nextTick();
 
-					return { storeRoomUpdateMock, newTitle, wrapper };
+					return { courseRoomListStore, newTitle, wrapper };
 				};
 
 				it("should change name on enter", async () => {
-					const { storeRoomUpdateMock, newTitle } = await setup();
+					const { courseRoomListStore, newTitle } = await setup();
 
 					const expectedGroupData = {
 						id: "",
@@ -138,16 +141,15 @@ describe("RoomModal", () => {
 						isSynchronized: false,
 					};
 
-					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-					expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+					expect(courseRoomListStore.updateCourse).toHaveBeenCalledTimes(1);
+					expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(expectedGroupData);
 				});
 			});
 
 			describe("when title is not valid", () => {
 				const setup = async () => {
-					const { wrapper } = getWrapper({ isOpen: true });
+					const { wrapper, courseRoomListStore } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
 					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 
 					const newTitle = "<changed title";
@@ -156,22 +158,21 @@ describe("RoomModal", () => {
 					await titleInput.trigger("keyup.enter");
 					await wrapper.vm.$nextTick();
 
-					return { storeRoomUpdateMock };
+					return { courseRoomListStore };
 				};
 
 				it("should not change name", async () => {
-					const { storeRoomUpdateMock } = await setup();
+					const { courseRoomListStore } = await setup();
 
-					expect(storeRoomUpdateMock).not.toHaveBeenCalled();
+					expect(courseRoomListStore.updateCourse).not.toHaveBeenCalled();
 				});
 			});
 		});
 
 		describe("when enter is pressed two times ", () => {
 			const setup = async () => {
-				const { wrapper } = getWrapper({ isOpen: true });
+				const { wrapper, courseRoomListStore } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
 				const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 
 				const newTitle = "changed title";
@@ -186,11 +187,11 @@ describe("RoomModal", () => {
 				await titleInput.trigger("keyup.enter");
 				await wrapper.vm.$nextTick();
 
-				return { storeRoomUpdateMock, newTitle2, wrapper };
+				return { courseRoomListStore, newTitle2, wrapper };
 			};
 
 			it("should change name on second enter again", async () => {
-				const { storeRoomUpdateMock, newTitle2 } = await setup();
+				const { courseRoomListStore, newTitle2 } = await setup();
 
 				const expectedGroupData = {
 					id: "",
@@ -202,17 +203,16 @@ describe("RoomModal", () => {
 					isSynchronized: false,
 				};
 
-				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(2);
-				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				expect(courseRoomListStore.updateCourse).toHaveBeenCalledTimes(2);
+				expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(expectedGroupData);
 			});
 		});
 
 		describe("when course group name input emits blur", () => {
 			describe("when title is valid", () => {
 				const setup = async () => {
-					const { wrapper } = getWrapper({ isOpen: true });
+					const { wrapper, courseRoomListStore } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
 					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 					const newTitle = "changed title";
 					await titleInput.setValue(newTitle);
@@ -220,11 +220,11 @@ describe("RoomModal", () => {
 					await titleInput.trigger("blur");
 					await wrapper.vm.$nextTick();
 
-					return { storeRoomUpdateMock, newTitle, wrapper };
+					return { courseRoomListStore, newTitle, wrapper };
 				};
 
 				it("should change name on blur", async () => {
-					const { storeRoomUpdateMock, newTitle } = await setup();
+					const { courseRoomListStore, newTitle } = await setup();
 					const expectedGroupData = {
 						id: "",
 						title: newTitle,
@@ -235,16 +235,15 @@ describe("RoomModal", () => {
 						isSynchronized: false,
 					};
 
-					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-					expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+					expect(courseRoomListStore.updateCourse).toHaveBeenCalledTimes(1);
+					expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(expectedGroupData);
 				});
 			});
 
 			describe("when title is not valid", () => {
 				const setup = async () => {
-					const { wrapper } = getWrapper({ isOpen: true });
+					const { wrapper, courseRoomListStore } = getWrapper({ isOpen: true });
 
-					const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update").mockImplementation(vi.fn());
 					const titleInput = wrapper.findComponent({ name: "v-text-field" }).find("input");
 					const newTitle = "<changed title";
 					await titleInput.setValue(newTitle);
@@ -252,13 +251,13 @@ describe("RoomModal", () => {
 					await titleInput.trigger("blur");
 					await wrapper.vm.$nextTick();
 
-					return { storeRoomUpdateMock, wrapper };
+					return { courseRoomListStore, wrapper };
 				};
 
 				it("should change name on blur", async () => {
-					const { storeRoomUpdateMock } = await setup();
+					const { courseRoomListStore } = await setup();
 
-					expect(storeRoomUpdateMock).not.toHaveBeenCalled();
+					expect(courseRoomListStore.updateCourse).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -299,6 +298,30 @@ describe("RoomModal", () => {
 				await input.setValue("<abc123");
 
 				expect(textField.text()).toContain("common.validation.containsOpeningTag");
+			});
+		});
+
+		describe("when groupData prop changes", () => {
+			it("should update internal data", async () => {
+				const { wrapper } = getWrapper({ isOpen: true });
+
+				const newGroupData = {
+					title: "new title",
+					groupElements: [],
+					shortTitle: "NT",
+					displayColor: "#ff0000",
+					xPosition: 5,
+					yPosition: 10,
+					groupId: "new-id",
+					isSynchronized: true,
+					to: "/new-path",
+				};
+
+				await wrapper.setProps({ groupData: newGroupData });
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+				expect((input.element as HTMLInputElement).value).toBe("new title");
 			});
 		});
 	});
