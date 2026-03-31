@@ -1,14 +1,5 @@
 <template>
-	<VColorPicker
-		v-model="color"
-		hide-sliders
-		hide-inputs
-		hide-canvas
-		show-swatches
-		:swatches
-		elevation="0"
-		class="ma-2"
-	/>
+	<VColorPicker v-model="color" hide-sliders hide-inputs hide-canvas show-swatches :swatches elevation="0" />
 </template>
 
 <script setup lang="ts">
@@ -44,5 +35,9 @@ const color = defineModel({
 <style scoped>
 :deep(.v-color-picker-swatches__color) {
 	border: 1px solid lightgray;
+}
+
+.v-color-picker {
+	width: auto;
 }
 </style>

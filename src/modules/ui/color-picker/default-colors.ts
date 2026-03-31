@@ -4,6 +4,7 @@ export enum ColorPickerDefaultColors {
 	WHITE = "white",
 	PINK = "pink",
 	PURPLE = "purple",
+	BLUE_GREY = "blueGrey",
 	INDIGO = "indigo",
 	BLUE = "blue",
 	CYAN = "cyan",
@@ -11,7 +12,6 @@ export enum ColorPickerDefaultColors {
 	LIGHT_GREEN = "lightGreen",
 	AMBER = "amber",
 	DEEP_ORANGE = "deepOrange",
-	BLUE_GREY = "blueGrey",
 }
 
 export type ColorPickerDefaultShade = "lighten-5";
