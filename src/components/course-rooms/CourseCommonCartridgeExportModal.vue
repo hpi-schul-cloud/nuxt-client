@@ -121,7 +121,13 @@
 			</template>
 			<template #actions>
 				<div class="mb-2">
-					<VBtn v-if="step === 'ContentSelection'" data-testid="dialog-back-btn" class="ml-2" depressed @click="onBack">
+					<VBtn
+						v-if="step === 'ContentSelection'"
+						data-testid="dialog-back-btn"
+						class="ml-2"
+						depressed
+						@click="onPreviousStep"
+					>
 						{{ t("common.actions.back") }}
 					</VBtn>
 				</div>
@@ -145,7 +151,7 @@
 						class="ml-2"
 						color="primary"
 						variant="flat"
-						@click="onNext"
+						@click="onNextStep"
 					>
 						{{ t("common.actions.continue") }}
 					</VBtn>
@@ -275,24 +281,21 @@ const resetDialog = (): void => {
 	setSelectedOnAllItems(allColumnBoards.value, true);
 };
 
-const onBack = (): void => resetDialog();
+const onPreviousStep = (): void => resetDialog();
 
-const onNext = (): void => {
+const onNextStep = (): void => {
 	step.value = "ContentSelection";
 };
 
 const onExport = async (): Promise<void> => {
-	notifySuccess(t("common.words.export"));
-
 	const topicIds = allTopics.value.filter((topic) => topic.isSelected).map((topic) => topic.id);
 	const taskIds = allTasks.value.filter((task) => task.isSelected).map((task) => task.id);
-	const columnBoardIds = allColumnBoards.value
-		.filter((columnBoard) => columnBoard.isSelected)
-		.map((columnBoard) => columnBoard.id);
+	const columnBoardIds = allColumnBoards.value.filter((board) => board.isSelected).map((board) => board.id);
 
+	notifySuccess(t("common.words.export"));
 	await startExport(version.value, topicIds, taskIds, columnBoardIds);
 
-	if (courseRoomDetailsModule.getBusinessError?.statusCode !== "") {
+	if (courseRoomDetailsModule.getBusinessError.statusCode !== "") {
 		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 

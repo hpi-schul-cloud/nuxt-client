@@ -140,7 +140,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			getIsLocked: isLocked,
 		});
 
-		// Mock createBoard action to return the new board id
 		vi.mocked(courseRoomDetailsModule.createBoard).mockResolvedValue({
 			id: "new-board-id",
 		});
@@ -391,10 +390,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			});
 
 			it("should redirect the page when 'Edit/Delete' menu is clicked", async () => {
-				Object.defineProperty(window, "location", {
-					value: { href: "" },
-					writable: true,
-				});
 				const { wrapper, singleColumnBoard } = setup();
 				await flushPromises();
 
@@ -406,7 +401,7 @@ describe("CourseRoomDetails.page.vue", () => {
 				const editAction = menuItems.find((item) => item.dataTestId === "room-menu-edit-delete");
 				editAction?.action();
 
-				expect(window.location.href).toBe("/courses/" + singleColumnBoard.roomId + "/edit");
+				expect(router.push).toHaveBeenCalledWith(`/courses/${singleColumnBoard.roomId}/edit`);
 			});
 
 			describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
@@ -820,7 +815,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			const { router } = setup();
 			await flushPromises();
 
-			// Navigate to tools tab
 			await router.push({ query: { tab: "tools" } });
 			await flushPromises();
 
@@ -829,7 +823,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			window.dispatchEvent(pageshowEvent);
 			await flushPromises();
 
-			// Tab should be set based on query
 			expect(router.currentRoute.value.query.tab).toBe("tools");
 		});
 
@@ -837,7 +830,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			const { wrapper, router } = setup();
 			await flushPromises();
 
-			// Navigate to tools tab first so we can see it change back
 			await router.push({ query: { tab: "tools" } });
 			await flushPromises();
 
@@ -850,7 +842,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			window.dispatchEvent(pageshowEvent);
 			await flushPromises();
 
-			// The tabs component should show learn-content tab (index 0)
 			const tabs = wrapper.find(".v-tabs");
 			expect(tabs.exists()).toBe(true);
 		});
@@ -862,7 +853,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			const { wrapper } = setup();
 			await flushPromises();
 
-			// First open the modal
 			const menuButton = wrapper.findComponent(RoomDotMenu);
 			const menuItems = menuButton.props("menuItems") as Array<{
 				dataTestId: string;
@@ -875,8 +865,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			const exportModal = wrapper.findComponent(CourseCommonCartridgeExportModal);
 			expect(exportModal.props("isOpen")).toBe(true);
 
-			// Close the modal by triggering the handler directly
-			// This simulates what happens when the modal emits update:is-open
+			// happens when pressing ESC or clicking outside the modal
 			exportModal.vm.$emit("update:isOpen", false);
 			await nextTick();
 
@@ -889,7 +878,6 @@ describe("CourseRoomDetails.page.vue", () => {
 			const { wrapper } = setup({ isArchived: true });
 			await flushPromises();
 
-			// The template doesn't have data-testid for archived chip, so check by text
 			expect(wrapper.text()).toContain("pages.courseRooms.headerSection.archived");
 		});
 	});

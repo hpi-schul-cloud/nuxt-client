@@ -90,13 +90,13 @@ describe("CourseCommonCartridgeExportModal", () => {
 		await wrapper.findComponent('[data-testid="dialog-next-btn"]').trigger("click");
 	};
 
-	describe("dialog rendering", () => {
+	describe("dialog", () => {
 		it("should render component", () => {
 			const wrapper = setup();
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		it("should open dialog when isOpen is true", () => {
+		it("should open when isOpen is true", () => {
 			const wrapper = setup();
 			const dialog = wrapper.findComponent(VDialog);
 			expect(dialog.props("modelValue")).toBe(true);
@@ -158,7 +158,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 			const wrapper = setup();
 			await goToContentSelection(wrapper);
 
-			// Check that the export button exists (confirms we're in content selection)
 			expect(wrapper.findComponent('[data-testid="dialog-export-btn"]').exists()).toBe(true);
 		});
 
@@ -173,7 +172,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 	});
 
 	describe("export functionality", () => {
-		it("should call startExport with default version and empty arrays when no elements", async () => {
+		it("should call startExport with default version and empty arrays when no elements are selected", async () => {
 			const wrapper = setup();
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
@@ -181,7 +180,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", [], [], []);
 		});
 
-		it("should close dialog after successful export", async () => {
+		it("should close dialog after starting export", async () => {
 			const wrapper = setup();
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
@@ -337,7 +336,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 		});
 	});
 
-	describe("back button resets selections", () => {
+	describe("back button", () => {
 		it("should reset all selections to true when going back", async () => {
 			const wrapper = await setupWithReactiveElements([
 				{ type: BoardElementResponseType.LESSON, content: { id: "l1", name: "Lesson 1" } },
@@ -373,8 +372,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 
 			const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
-			// Find and click individual item checkboxes (not the "all" checkboxes)
-			// The individual checkboxes don't have data-testid, so we find them by their labels
 			for (const checkbox of checkboxes) {
 				const label = checkbox.props("label");
 				if (label === "Lesson 1" || label === "Task 1" || label === "Board 1") {
@@ -388,8 +385,8 @@ describe("CourseCommonCartridgeExportModal", () => {
 		});
 	});
 
-	describe("dialog reset on close", () => {
-		it("should reset step to version selection when dialog closes", async () => {
+	describe("dialog close", () => {
+		it("should reset step to version selection", async () => {
 			const wrapper = setup();
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
