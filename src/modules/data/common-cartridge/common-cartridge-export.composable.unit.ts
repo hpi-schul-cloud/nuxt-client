@@ -74,7 +74,7 @@ describe("useCommonCartridgeExport composable", () => {
 			const tasks = ["task1"];
 			const columnBoards = ["board1"];
 
-			await startExport(version, topics, tasks, columnBoards);
+			await expect(startExport(version, topics, tasks, columnBoards)).rejects.toThrow("Invalid version");
 
 			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).not.toHaveBeenCalled();
 		});
