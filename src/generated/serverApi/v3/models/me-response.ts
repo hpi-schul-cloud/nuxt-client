@@ -15,6 +15,7 @@
 
 import { LanguageType } from './language-type';
 import { MeAccountResponse } from './me-account-response';
+import { MePreferencesResponse } from './me-preferences-response';
 import { MeRoleResponse } from './me-role-response';
 import { MeSchoolResponse } from './me-school-response';
 import { MeUserResponse } from './me-user-response';
@@ -56,6 +57,12 @@ export interface MeResponse {
      * @memberof MeResponse
      */
     language: LanguageType;
+    /**
+     * 
+     * @type {MePreferencesResponse}
+     * @memberof MeResponse
+     */
+    preferences: MePreferencesResponse;
     /**
      * 
      * @type {MeAccountResponse}
