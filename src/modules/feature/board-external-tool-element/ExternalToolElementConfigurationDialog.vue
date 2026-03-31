@@ -1,7 +1,7 @@
 <template>
 	<SvsDialog
-		title="feature-board-external-tool-element.dialog.title"
 		:model-value="isOpen"
+		title="feature-board-external-tool-element.dialog.title"
 		no-actions
 		@update:model-value="closeDialog"
 		@cancel="onCancel"

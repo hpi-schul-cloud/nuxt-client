@@ -97,9 +97,9 @@ import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useEnvConfig } from "@data-env";
 import { ProvisioningOptionsEnum, useProvisioningOptionsState } from "@data-provisioning-options";
-import { DefaultWireframe } from "@ui-layout";
+import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -123,7 +123,7 @@ const theme = injectStrict(THEME_KEY);
 const pageTitle = buildPageTitle(t("components.administration.provisioningOptions.page.title"));
 useTitle(pageTitle);
 
-const breadcrumbs = computed(() => [
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 	{
 		title: t("pages.administration.school.index.title"),
 		to: "/administration/school-settings",

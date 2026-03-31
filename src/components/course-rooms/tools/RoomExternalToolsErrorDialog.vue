@@ -1,9 +1,9 @@
 <template>
 	<SvsDialog
 		v-if="selectedItem.status"
+		:model-value="isOpen"
 		no-confirm
 		cancel-btn-lang-key="common.labels.close"
-		:model-value="isOpen"
 		:title="t(getTitle, { toolName: selectedItem.name })"
 		data-testid="error-dialog"
 		@cancel="emit('closed')"

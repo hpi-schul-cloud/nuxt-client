@@ -42,7 +42,7 @@
 			<div class="mb-4">
 				{{ t(`components.molecules.import.${parentType}.rename`) }}
 			</div>
-			<v-text-field
+			<VTextField
 				ref="nameInputText"
 				v-model="newName"
 				:label="t(`components.molecules.import.${parentType}.label`)"
