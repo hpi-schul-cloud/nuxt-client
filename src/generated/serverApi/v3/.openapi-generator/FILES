@@ -41,6 +41,7 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
+api/server-release-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts
@@ -234,6 +235,7 @@ models/maintenance-response.ts
 models/maintenance-status-response.ts
 models/material-response.ts
 models/me-account-response.ts
+models/me-preferences-response.ts
 models/me-response.ts
 models/me-role-response.ts
 models/me-school-logo-response.ts
@@ -303,6 +305,8 @@ models/redirect-response.ts
 models/registration-body-params.ts
 models/registration-item-response.ts
 models/registration-list-response.ts
+models/release-item-response.ts
+models/release-list-response.ts
 models/remove-room-members-body-params.ts
 models/rename-body-params.ts
 models/rich-text-content-body.ts
@@ -396,6 +400,7 @@ models/update-element-content-body-params.ts
 models/update-flag-params.ts
 models/update-match-params.ts
 models/update-news-params.ts
+models/update-preferences-body-params.ts
 models/update-room-body-params.ts
 models/update-room-invitation-link-body-params.ts
 models/update-runtime-config-value-body-params.ts

@@ -26,7 +26,7 @@ export const useSidebarItems = () => {
 	const pageLinks: ComputedRef<SidebarItems> = computed(() => [
 		{
 			title: "global.sidebar.item.overview",
-			href: "/dashboard",
+			to: "/dashboard",
 			icon: mdiViewGridOutline,
 			testId: "sidebar-dashboard",
 		},
