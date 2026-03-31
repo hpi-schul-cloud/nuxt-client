@@ -158,7 +158,7 @@ const display = useDisplay();
 const refs = reactive<Record<string, unknown>>({});
 const courseRoomListStore = useCourseRoomListStore();
 const { hasCurrentRooms, roomsData, allElements } = storeToRefs(courseRoomListStore);
-const { align, update, fetch, fetchAllElements } = courseRoomListStore;
+const { alignCourse, updateCourse, fetchCourses } = courseRoomListStore;
 
 const device = ref("mobile");
 const dimensions = reactive({
@@ -282,7 +282,7 @@ const onStartDrag = (element: Record<string, unknown>, pos: { x: number; y: numb
 
 const savePosition = async () => {
 	if (!draggedElement.from || !draggedElement.to) return;
-	await align(draggedElement as DroppedObject);
+	await alignCourse(draggedElement as DroppedObject);
 	groupDialog.groupData = {} as GroupDataType;
 };
 
@@ -293,7 +293,7 @@ const defaultNaming = (pos: { x: number; y: number }) => {
 		(item: { xPosition: number; yPosition: number }) => item.xPosition === pos.x && item.yPosition === pos.y
 	);
 	if (existingRoom) {
-		update({
+		updateCourse({
 			...existingRoom,
 			title,
 			xPosition: pos.x,
@@ -382,7 +382,7 @@ const onImportSuccess = (name: string, id?: string) => {
 		router.replace({ name: "room-details", params: { id } });
 	} else {
 		router.replace({ name: "course-room-overview" });
-		fetch();
+		fetchCourses();
 	}
 };
 
@@ -390,7 +390,7 @@ const initCoursePolling = (started: Date, count = 0) => {
 	const nextTimeout = count * count * 1000 + 5000;
 	setTimeout(
 		async () => {
-			await fetch();
+			await fetchCourses();
 			if (hasRoomsBeingCopied.value) {
 				initCoursePolling(started ?? new Date(), count + 1);
 			} else {
@@ -403,8 +403,6 @@ const initCoursePolling = (started: Date, count = 0) => {
 
 // Initialize on component creation
 const initializeComponent = async () => {
-	await Promise.allSettled([fetch(), fetchAllElements()]);
-
 	const newDims = getDeviceDims();
 	dimensions.colCount = newDims.colCount;
 	dimensions.cellWidth = newDims.cellWidth;
@@ -416,9 +414,8 @@ const initializeComponent = async () => {
 	}
 };
 
-initializeComponent();
-
 onMounted(() => {
+	initializeComponent();
 	document.title = buildPageTitle(t("pages.courseRooms.index.courses.active"));
 });
 </script>

@@ -57,7 +57,6 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const courseRoomListStore = useCourseRoomListStore();
-const { fetchAllElements } = courseRoomListStore;
 const { hasRooms, allElements } = storeToRefs(courseRoomListStore);
 
 const searchText = ref("");
@@ -69,7 +68,7 @@ const rooms = computed<Array<ListItemsObject>>(() =>
 
 onMounted(async () => {
 	document.title = buildPageTitle(t("pages.courseRooms.index.courses.all").toString());
-	await fetchAllElements();
+	// await fetchAllElements();
 });
 </script>
 

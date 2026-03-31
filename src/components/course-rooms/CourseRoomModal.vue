@@ -74,6 +74,7 @@ defineEmits(["update:isOpen", "drag-from-group"]);
 
 const { validateOnOpeningTag } = useOpeningTagValidator();
 const courseRoomListStore = useCourseRoomListStore();
+const { updateCourse } = courseRoomListStore;
 
 const data = ref<GroupDataType>({
 	title: "",
@@ -89,7 +90,7 @@ const data = ref<GroupDataType>({
 
 const updateCourseGroupName = async () => {
 	if (validateOnOpeningTag(data.value.title) === true) {
-		await courseRoomListStore.update({
+		await updateCourse({
 			id: data.value.groupId,
 			title: data.value.title,
 			shortTitle: data.value.shortTitle,

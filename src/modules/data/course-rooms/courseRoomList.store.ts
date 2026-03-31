@@ -89,7 +89,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	const hasRooms = computed<boolean>(() => allElements.value.length > 0);
 	const hasCurrentRooms = computed<boolean>(() => roomsData.value.length > 0);
 
-	const fetch = async (): Promise<void> => {
+	const fetchCourses = async (): Promise<void> => {
 		const { success, result } = await fetchTask.execute(() => dashboardApi.dashboardControllerFindForUser());
 
 		if (success && result) {
@@ -98,7 +98,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		}
 	};
 
-	const align = async (payload: DroppedObject): Promise<void> => {
+	const alignCourse = async (payload: DroppedObject): Promise<void> => {
 		const { from, to } = payload;
 		const reqObject = { from, to };
 
@@ -112,7 +112,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		}
 	};
 
-	const update = async (payload: RoomsData): Promise<void> => {
+	const updateCourse = async (payload: RoomsData): Promise<void> => {
 		const { success } = await updateTask.execute(() =>
 			dashboardApi.dashboardControllerPatchGroup(gridElementsId.value, payload.xPosition, payload.yPosition, {
 				title: payload.title,
@@ -153,9 +153,9 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		loading,
 		hasRooms,
 		hasCurrentRooms,
-		fetch,
-		align,
-		update,
+		fetchCourses,
+		alignCourse,
+		updateCourse,
 		delete: deleteRoom,
 		fetchAllElements,
 	};
