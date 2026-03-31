@@ -38,6 +38,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 			// TODO: Why is it not directly using useEnvStore().fallBackLanguage and if it is, why is here default preferred before fallBack ?!
 			userLocale.value ?? useEnvConfig().value.I18N__DEFAULT_LANGUAGE ?? LanguageType.DE
 	);
+	const userPreferences = computed(() => meResponse.value?.preferences);
 	const userPermissions = computed(() => meResponse.value?.permissions ?? []);
 	const systemId = computed(() => meResponse.value?.systemId);
 
@@ -134,6 +135,7 @@ export const useAppStore = defineStore("applicationStore", () => {
 		locale,
 		meResponse,
 		user,
+		userPreferences,
 		userPermissions,
 		hasPermission,
 		isTeacher,

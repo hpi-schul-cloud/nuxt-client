@@ -20,6 +20,9 @@ export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 			name: `logoName${sequence}`,
 		},
 	},
+	preferences: {
+		releaseDate: null,
+	},
 	roles: [],
 	permissions: [],
 	language: LanguageType.DE,

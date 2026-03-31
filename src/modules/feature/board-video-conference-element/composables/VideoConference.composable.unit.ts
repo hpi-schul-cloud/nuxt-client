@@ -113,7 +113,6 @@ describe("VideoConferenceComposable", () => {
 			const scopeId = "123124";
 			const { startVideoConference, videoConferenceInfo, error } = useVideoConference(scope, scopeId);
 			const url = "https://example.com";
-			const logoutUrl = "https://logout.url";
 			const options = {
 				everyAttendeeJoinsMuted: true,
 				everybodyJoinsAsModerator: false,
@@ -127,38 +126,36 @@ describe("VideoConferenceComposable", () => {
 				videoConferenceInfo,
 				error,
 				url,
-				logoutUrl,
 				options,
 			};
 		};
 
 		it("should call videoConferenceControllerStart api", async () => {
-			const { scope, scopeId, startVideoConference, logoutUrl, options } = setup();
+			const { scope, scopeId, startVideoConference, options } = setup();
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(videoConferenceApi.videoConferenceControllerStart).toHaveBeenCalledWith(scope, scopeId, {
 				...options,
-				logoutUrl,
 			});
 		});
 
 		it("should update videoConferenceInfo", async () => {
-			const { startVideoConference, videoConferenceInfo, logoutUrl } = setup();
+			const { startVideoConference, videoConferenceInfo } = setup();
 			const options = {
 				everyAttendeeJoinsMuted: true,
 				everybodyJoinsAsModerator: false,
 				moderatorMustApproveJoinRequests: true,
 			};
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(videoConferenceInfo.value.state).toBe(VideoConferenceState.RUNNING);
 			expect(videoConferenceInfo.value.options).toEqual(options);
 		});
 
 		it("should set error to null", async () => {
-			const { startVideoConference, error, logoutUrl } = setup();
+			const { startVideoConference, error } = setup();
 
 			const options = {
 				everyAttendeeJoinsMuted: true,
@@ -166,7 +163,7 @@ describe("VideoConferenceComposable", () => {
 				moderatorMustApproveJoinRequests: true,
 			};
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(error.value).toBeNull();
 		});
@@ -175,7 +172,6 @@ describe("VideoConferenceComposable", () => {
 			const scope = VideoConferenceScope.ROOM;
 			const scopeId = "123124";
 			const { startVideoConference, error } = useVideoConference(scope, scopeId);
-			const logoutUrl = "https://logout.url";
 			const options = {
 				everyAttendeeJoinsMuted: true,
 				everybodyJoinsAsModerator: false,
@@ -185,7 +181,7 @@ describe("VideoConferenceComposable", () => {
 			const mockError = new Error("API call failed");
 			videoConferenceApi.videoConferenceControllerStart.mockRejectedValueOnce(mockError);
 
-			await startVideoConference(options, logoutUrl);
+			await startVideoConference(options);
 
 			expect(error.value).toBe(mockError);
 		});

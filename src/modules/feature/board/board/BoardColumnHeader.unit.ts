@@ -13,7 +13,7 @@ import {
 	KebabMenuActionRename,
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
-import { flatten } from "lodash";
+import { flatten } from "lodash-es";
 import { computed } from "vue";
 
 vi.mock("@data-board/BoardFocusHandler.composable");
