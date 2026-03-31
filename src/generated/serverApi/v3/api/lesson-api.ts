@@ -23,8 +23,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { LessonLinkedTaskResponse } from '../models';
 // @ts-ignore
-import { LessonMetadataListResponse } from '../models';
-// @ts-ignore
 import { LessonResponse } from '../models';
 /**
  * LessonApi - axios parameter creator
@@ -51,43 +49,6 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
             }
 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} courseId The id of the course the lesson belongs to.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        lessonControllerGetCourseLessons: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'courseId' is not null or undefined
-            assertParamExists('lessonControllerGetCourseLessons', 'courseId', courseId)
-            const localVarPath = `/lessons/course/{courseId}`
-                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -202,16 +163,6 @@ export const LessonApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} courseId The id of the course the lesson belongs to.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async lessonControllerGetCourseLessons(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LessonMetadataListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetCourseLessons(courseId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @param {string} lessonId The id of the lesson.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -251,15 +202,6 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @param {string} courseId The id of the course the lesson belongs to.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse> {
-            return localVarFp.lessonControllerGetCourseLessons(courseId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @param {string} lessonId The id of the lesson.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -293,15 +235,6 @@ export interface LessonApiInterface {
      * @memberof LessonApiInterface
      */
     lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean>;
-
-    /**
-     * 
-     * @param {string} courseId The id of the course the lesson belongs to.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LessonApiInterface
-     */
-    lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse>;
 
     /**
      * 
@@ -339,17 +272,6 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      */
     public lessonControllerDelete(lessonId: string, options?: any) {
         return LessonApiFp(this.configuration).lessonControllerDelete(lessonId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} courseId The id of the course the lesson belongs to.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof LessonApi
-     */
-    public lessonControllerGetCourseLessons(courseId: string, options?: any) {
-        return LessonApiFp(this.configuration).lessonControllerGetCourseLessons(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -20,26 +20,26 @@
  * @enum {string}
  */
 export enum MediaBoardColors {
-    TRANSPARENT = 'transparent', // white
+    TRANSPARENT = 'transparent',
     RED = 'red',
-    PINK = 'pink', //
-    PURPLE = 'purple', //
+    PINK = 'pink',
+    PURPLE = 'purple',
     DEEP_PURPLE = 'deepPurple',
-    INDIGO = 'indigo', //
-    BLUE = 'blue', //
+    INDIGO = 'indigo',
+    BLUE = 'blue',
     LIGHT_BLUE = 'lightBlue',
-    CYAN = 'cyan', //
+    CYAN = 'cyan',
     TEAL = 'teal',
-    GREEN = 'green', //
-    LIGHT_GREEN = 'lightGreen', //
+    GREEN = 'green',
+    LIGHT_GREEN = 'lightGreen',
     LIME = 'lime',
     YELLOW = 'yellow',
-    AMBER = 'amber', //
+    AMBER = 'amber',
     ORANGE = 'orange',
-    DEEP_ORANGE = 'deepOrange', //
+    DEEP_ORANGE = 'deepOrange',
     BROWN = 'brown',
     GREY = 'grey',
-    BLUE_GREY = 'blueGrey' //
+    BLUE_GREY = 'blueGrey'
 }
 
 

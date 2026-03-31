@@ -213,8 +213,6 @@ models/lernstore-resources.ts
 models/lesson-content-response.ts
 models/lesson-copy-api-params.ts
 models/lesson-linked-task-response.ts
-models/lesson-metadata-list-response.ts
-models/lesson-metadata-response.ts
 models/lesson-response.ts
 models/link-content-body.ts
 models/link-element-content-body.ts
@@ -394,6 +392,7 @@ models/tool-launch-request-response.ts
 models/tool-reference-list-response.ts
 models/tool-reference-response.ts
 models/update-board-title-params.ts
+models/update-card-color-body-params.ts
 models/update-element-content-body-params.ts
 models/update-flag-params.ts
 models/update-match-params.ts

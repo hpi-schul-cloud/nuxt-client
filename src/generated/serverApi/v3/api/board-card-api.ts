@@ -53,6 +53,8 @@ import { RichTextElementResponse } from '../models';
 // @ts-ignore
 import { SetHeightBodyParams } from '../models';
 // @ts-ignore
+import { UpdateCardColorBodyParams } from '../models';
+// @ts-ignore
 import { VideoConferenceElementResponse } from '../models';
 /**
  * BoardCardApi - axios parameter creator
@@ -267,6 +269,50 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @summary Update the color of a single card.
+         * @param {string} cardId The id of the card.
+         * @param {UpdateCardColorBodyParams} updateCardColorBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerUpdateCardColor: async (cardId: string, updateCardColorBodyParams: UpdateCardColorBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cardId' is not null or undefined
+            assertParamExists('cardControllerUpdateCardColor', 'cardId', cardId)
+            // verify required parameter 'updateCardColorBodyParams' is not null or undefined
+            assertParamExists('cardControllerUpdateCardColor', 'updateCardColorBodyParams', updateCardColorBodyParams)
+            const localVarPath = `/cards/{cardId}/color`
+                .replace(`{${"cardId"}}`, encodeURIComponent(String(cardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateCardColorBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update the height of a single card.
          * @param {string} cardId The id of the card.
          * @param {SetHeightBodyParams} setHeightBodyParams 
@@ -422,6 +468,18 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Update the color of a single card.
+         * @param {string} cardId The id of the card.
+         * @param {UpdateCardColorBodyParams} updateCardColorBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cardControllerUpdateCardColor(cardId: string, updateCardColorBodyParams: UpdateCardColorBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerUpdateCardColor(cardId, updateCardColorBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update the height of a single card.
          * @param {string} cardId The id of the card.
          * @param {SetHeightBodyParams} setHeightBodyParams 
@@ -508,6 +566,17 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @summary Update the color of a single card.
+         * @param {string} cardId The id of the card.
+         * @param {UpdateCardColorBodyParams} updateCardColorBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerUpdateCardColor(cardId: string, updateCardColorBodyParams: UpdateCardColorBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.cardControllerUpdateCardColor(cardId, updateCardColorBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update the height of a single card.
          * @param {string} cardId The id of the card.
          * @param {SetHeightBodyParams} setHeightBodyParams 
@@ -588,6 +657,17 @@ export interface BoardCardApiInterface {
      * @memberof BoardCardApiInterface
      */
     cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any): AxiosPromise<MoveCardResponse>;
+
+    /**
+     * 
+     * @summary Update the color of a single card.
+     * @param {string} cardId The id of the card.
+     * @param {UpdateCardColorBodyParams} updateCardColorBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardCardApiInterface
+     */
+    cardControllerUpdateCardColor(cardId: string, updateCardColorBodyParams: UpdateCardColorBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -680,6 +760,19 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      */
     public cardControllerMoveCard(cardId: string, moveCardBodyParams: MoveCardBodyParams, options?: any) {
         return BoardCardApiFp(this.configuration).cardControllerMoveCard(cardId, moveCardBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the color of a single card.
+     * @param {string} cardId The id of the card.
+     * @param {UpdateCardColorBodyParams} updateCardColorBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardCardApi
+     */
+    public cardControllerUpdateCardColor(cardId: string, updateCardColorBodyParams: UpdateCardColorBodyParams, options?: any) {
+        return BoardCardApiFp(this.configuration).cardControllerUpdateCardColor(cardId, updateCardColorBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -46,6 +46,12 @@ export interface CardResponse {
     title?: string;
     /**
      * 
+     * @type {string}
+     * @memberof CardResponse
+     */
+    color?: string;
+    /**
+     * 
      * @type {number}
      * @memberof CardResponse
      */
