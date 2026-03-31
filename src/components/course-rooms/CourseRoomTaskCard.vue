@@ -88,6 +88,7 @@ import { useEnvConfig } from "@data-env";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiCheckCircleOutline,
+	mdiClockAlertOutline,
 	mdiContentCopy,
 	mdiFormatListChecks,
 	mdiPencilOutline,
@@ -210,7 +211,7 @@ const chipItems = computed(() => {
 
 		if (isOverDue.value) {
 			roleBasedChips[Roles.TEACHER].push({
-				icon: "$taskMissed",
+				icon: mdiClockAlertOutline,
 				name: t(`pages.room.taskCard.teacher.label.overdue`),
 				class: "overdue",
 				testid: `room-task-card-chip-overdue-${props.taskCardIndex}`,
@@ -245,7 +246,7 @@ const chipItems = computed(() => {
 
 		if (isOverDue.value && !isSubmitted.value) {
 			roleBasedChips[Roles.STUDENT].push({
-				icon: "$taskMissed",
+				icon: mdiClockAlertOutline,
 				name: t(`pages.room.taskCard.student.label.overdue`),
 				class: "overdue",
 			});
