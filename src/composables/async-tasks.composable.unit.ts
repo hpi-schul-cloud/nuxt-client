@@ -1,4 +1,4 @@
-import { useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
+import { useSafeAxiosRunner, useSafeAxiosTask, useSafeTask, useSafeTaskRunner } from "./async-tasks.composable";
 import { useNotificationStore } from "@data-app";
 import { createTestingPinia } from "@pinia/testing";
 import { createAxiosError } from "@util-error-handling";
@@ -97,7 +97,7 @@ describe("useSafeTask", () => {
 	});
 });
 
-describe("useSafeSingleTask", () => {
+describe("useSafeTaskRunner", () => {
 	it("should execute the same function multiple times", async () => {
 		let counter = 0;
 		const { data, run } = useSafeTaskRunner(() => Promise.resolve(++counter));
@@ -177,5 +177,53 @@ describe("useSafeAxiosTask", () => {
 		expect(useNotificationStore().notify).toHaveBeenCalledWith(
 			expect.objectContaining({ status: "error", text: "Request failed. Fehlerhafte Anfrage" })
 		);
+	});
+});
+
+describe("useSafeAxiosQuery", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
+	describe("immediate mode (default)", () => {
+		it("should execute immediately and populate data", async () => {
+			const mockFn = vi.fn().mockResolvedValue("data");
+
+			const { data, status } = useSafeAxiosRunner(mockFn);
+
+			expect(mockFn).toHaveBeenCalledTimes(1);
+			await vi.waitFor(() => {
+				expect(data.value).toBe("data");
+				expect(status.value).toBe("completed");
+			});
+		});
+
+		it("should allow refetch via execute()", async () => {
+			let counter = 0;
+			const mockFn = vi.fn().mockImplementation(() => Promise.resolve(++counter));
+
+			const { data, execute } = useSafeAxiosRunner(mockFn);
+
+			await vi.waitFor(() => expect(data.value).toBe(1));
+
+			await execute();
+			expect(data.value).toBe(2);
+		});
+	});
+
+	describe("lazy mode (immediate: false)", () => {
+		it("should NOT execute until execute() is called", async () => {
+			const mockFn = vi.fn().mockResolvedValue("lazy data");
+
+			const { data, execute } = useSafeAxiosRunner(mockFn, { immediate: false });
+
+			expect(mockFn).not.toHaveBeenCalled();
+			expect(data.value).toBeUndefined();
+
+			await execute();
+
+			expect(mockFn).toHaveBeenCalledTimes(1);
+			expect(data.value).toBe("lazy data");
+		});
 	});
 });

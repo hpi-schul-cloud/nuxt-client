@@ -9,6 +9,9 @@ const router = createRouter({
 	linkActiveClass: "nuxt-link-active",
 	linkExactActiveClass: "nuxt-link-exact-active",
 	routes,
+	scrollBehavior(to, from, savedPosition) {
+		return savedPosition ?? { top: 0 };
+	},
 });
 
 router.beforeEach(clearApplicationErrorGuard);
