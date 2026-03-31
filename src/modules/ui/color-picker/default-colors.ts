@@ -19,7 +19,7 @@ export type ColorPickerDefaultShade = "lighten-5";
 export const ColorNameToHexMap = Object.fromEntries(
 	Object.values(ColorPickerDefaultColors).map((color) => [
 		color,
-		color === ColorPickerDefaultColors.WHITE ? colors.shades.white : colors[color].base,
+		color === ColorPickerDefaultColors.WHITE ? colors.shades.white : colors[color].lighten3,
 	])
 ) as Record<ColorPickerDefaultColors, string>;
 
