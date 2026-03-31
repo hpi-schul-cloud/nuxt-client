@@ -3,7 +3,11 @@
 		<template #activator="{ props }">
 			<VListItem v-bind="props" :title="t('common.actions.pickColor')" :prepend-icon="mdiPalette" @click.prevent.stop />
 		</template>
-		<SvsColorPicker v-model="color" data-testid="color-picker" @update:model-value="emit('update:color', color)" />
+		<SvsColorPicker
+			v-model="color"
+			data-testid="color-picker"
+			@update:model-value="(newColor) => emit('update:color', newColor)"
+		/>
 	</VListGroup>
 </template>
 

@@ -38,7 +38,7 @@
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
-							<SvsColorPickerMenu v-model:color="cardColor" @update:color="onUpdateColor" />
+							<SvsColorPickerMenu v-model:color="card.color" @update:color="onUpdateColor" />
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
@@ -120,6 +120,7 @@ import {
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
+import { logger } from "@util-logger";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
 
@@ -253,13 +254,12 @@ onMounted(async () => {
 	if (card.value === undefined) {
 		await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
 	}
+	logger.log(card.value?.color);
 });
 
 // Card Color
-const cardColor = ref<string | undefined>();
-
 const onUpdateColor = (newColor: string) => {
-	// cardColor.value = newColor;
+	logger.log(card.value?.color, newColor);
 	cardStore.updateCardColorRequest({ cardId: props.cardId, newColor });
 };
 </script>
