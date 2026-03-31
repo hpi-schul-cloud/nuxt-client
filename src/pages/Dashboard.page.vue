@@ -82,7 +82,7 @@ const { data: newsResponse, isRunning: isLoadingNews } = useSafeAxiosRunner(() =
 const latestNews = computed(() => newsResponse.value?.data.data ?? []);
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .grid-container {
 	display: grid;
 	gap: 12px;
