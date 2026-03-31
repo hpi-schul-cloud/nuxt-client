@@ -16,13 +16,13 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	const gridElementsId = ref("");
 	const allElements = ref<CourseMetadataResponse[]>([]);
 
-	const fetchTask = useSafeAxiosTask();
-	const fetchAllElementsTask = useSafeAxiosTask();
-	const alignTask = useSafeAxiosTask();
-	const updateTask = useSafeAxiosTask();
+	const fetchCall = useSafeAxiosTask();
+	const fetchAllElementsCall = useSafeAxiosTask();
+	const alignElementCall = useSafeAxiosTask();
+	const updateElementCall = useSafeAxiosTask();
 
 	const loading = computed(() =>
-		[fetchTask, fetchAllElementsTask, alignTask, updateTask].some((task) => task.isRunning.value)
+		[fetchCall, fetchAllElementsCall, alignElementCall, updateElementCall].some((task) => task.isRunning.value)
 	);
 
 	const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
@@ -90,7 +90,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	const hasCurrentRooms = computed<boolean>(() => roomsData.value.length > 0);
 
 	const fetchCourses = async (): Promise<void> => {
-		const { success, result } = await fetchTask.execute(() => dashboardApi.dashboardControllerFindForUser());
+		const { success, result } = await fetchCall.execute(() => dashboardApi.dashboardControllerFindForUser());
 
 		if (success && result) {
 			gridElementsId.value = result.data.id;
@@ -102,7 +102,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		const { from, to } = payload;
 		const reqObject = { from, to };
 
-		const { success, result } = await alignTask.execute(() =>
+		const { success, result } = await alignElementCall.execute(() =>
 			dashboardApi.dashboardControllerMoveElement(gridElementsId.value, reqObject)
 		);
 
@@ -113,7 +113,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	};
 
 	const updateCourse = async (payload: RoomsData): Promise<void> => {
-		const { success } = await updateTask.execute(() =>
+		const { success } = await updateElementCall.execute(() =>
 			dashboardApi.dashboardControllerPatchGroup(gridElementsId.value, payload.xPosition, payload.yPosition, {
 				title: payload.title,
 			})
@@ -137,7 +137,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 	};
 
 	const fetchAllElements = async (): Promise<void> => {
-		const { success, result } = await fetchAllElementsTask.execute(() =>
+		const { success, result } = await fetchAllElementsCall.execute(() =>
 			coursesApi.courseControllerFindForUser(0, 100)
 		);
 
