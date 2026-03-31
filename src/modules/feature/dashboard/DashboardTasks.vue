@@ -22,7 +22,6 @@
 				:tasks="gradedTasksForTeacher"
 			/>
 
-			<!-- Tasks Draft and Private for teacher -->
 			<DashboardTasksSection
 				v-if="draftTasks.length > 0"
 				data-testid="teacher-tasks-drafts"
