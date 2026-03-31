@@ -26,7 +26,7 @@
 						class="back-button"
 						variant="outlined"
 						size="small"
-						:href="sanitizeUrl(`/files/courses/${roomData.roomId}`)"
+						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"
 					>
 						{{ t("pages.courseRooms.headerSection.toCourseFiles") }}
@@ -36,7 +36,7 @@
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<VTabs v-model="tabIndex" :class="{ 'tabs-max-width': mdAndUp }" grow mandatory>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
-						<VTab :data-testid="tabItem.dataTestId" :href="sanitizeUrl(tabItem.href)" class="no-active">
+						<VTab :data-testid="tabItem.dataTestId" :href="tabItem.href" class="no-active">
 							<template #default>
 								<VIcon size="large" class="mr-sm-3"> {{ tabItem.icon }}</VIcon>
 								<span class="d-none d-sm-inline">
@@ -102,7 +102,6 @@ import {
 	Permission,
 	ShareTokenBodyParamsParentType,
 } from "@api-server";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useAppStore } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
@@ -200,7 +199,7 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.task"),
 			icon: mdiFormatListChecks,
-			href: sanitizeUrl(`/homework/new?course=${roomData.value.roomId}&returnUrl=rooms/${roomData.value.roomId}`),
+			href: `/homework/new?course=${roomData.value.roomId}&returnUrl=rooms/${roomData.value.roomId}`,
 			dataTestId: "fab_button_add_task",
 		});
 	}
@@ -209,7 +208,7 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 		actions.push({
 			label: t("pages.courseRoomDetails.fab.add.lesson"),
 			icon: mdiViewListOutline,
-			href: sanitizeUrl(`/courses/${roomData.value.roomId}/topics/add?returnUrl=rooms/${roomData.value.roomId}`),
+			href: `/courses/${roomData.value.roomId}/topics/add?returnUrl=rooms/${roomData.value.roomId}`,
 			dataTestId: "fab_button_add_lesson",
 		});
 	}
@@ -254,7 +253,7 @@ const tabItems = computed<TabItem[]>(() => {
 			icon: mdiPlus,
 			label: t("pages.courseRoomDetails.fab.add.tool"),
 			dataTestId: "add-tool-button",
-			href: sanitizeUrl(`/tools/context/tool-configuration?contextId=${courseId.value}&contextType=course`),
+			href: `/tools/context/tool-configuration?contextId=${courseId.value}&contextType=course`,
 		},
 	];
 
@@ -271,7 +270,7 @@ const tabItems = computed<TabItem[]>(() => {
 		name: "groups",
 		label: t("pages.courseRooms.tabLabel.groups"),
 		icon: mdiAccountGroupOutline,
-		href: sanitizeUrl(`/courses/${roomData.value.roomId}/?activeTab=groups`),
+		href: `/courses/${roomData.value.roomId}/?activeTab=groups`,
 		dataTestId: "groups-tab",
 	});
 
@@ -296,7 +295,7 @@ const headlineMenuItems = computed<MenuItem[]>(() => {
 	const items: MenuItem[] = [
 		{
 			icon: mdiPencilOutline,
-			action: () => (window.location.href = sanitizeUrl(`/courses/${courseId.value}/edit`)),
+			action: () => (window.location.href = `/courses/${courseId.value}/edit`),
 			name: t("common.actions.edit") + "/" + t("common.actions.delete"),
 			dataTestId: "room-menu-edit-delete",
 		},
