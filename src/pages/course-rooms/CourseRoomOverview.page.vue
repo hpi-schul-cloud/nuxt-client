@@ -119,7 +119,7 @@ import { DroppedObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { BoardExternalReferenceType, DashboardGridElementResponse } from "@api-server";
 import { notifySuccess } from "@data-app";
-import { useCourseRoomListStore } from "@data-course-rooms";
+import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
 import { storeToRefs } from "pinia";
@@ -127,28 +127,6 @@ import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
-
-type ItemType = {
-	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	to: string;
-};
-
-type GroupDataType = {
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	groupId: string;
-	groupElements: ItemType[];
-	isSynchronized: boolean;
-	to: string;
-};
 
 const { t } = useI18n();
 const route = useRoute();

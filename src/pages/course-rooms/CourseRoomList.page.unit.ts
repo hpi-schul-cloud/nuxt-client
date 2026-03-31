@@ -1,5 +1,5 @@
 import CourseRoomList from "./CourseRoomList.page.vue";
-import { mockedPiniaStoreTyping, ProcessedRoomItem, processedRoomItemFactory } from "@@/tests/test-utils";
+import { courseRoomItemFactory, mockedPiniaStoreTyping, ProcessedRoomItem } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
@@ -22,7 +22,7 @@ const mockProcessedData = [
 	{ title: "History", searchText: "History 2015-2018" },
 	{ title: "Spanish", searchText: "Spanish" },
 	{ title: "English", searchText: "English" },
-].map((data) => processedRoomItemFactory.build(data));
+].map((data) => courseRoomItemFactory.build(data));
 
 type CourseRoomListVm = ComponentPublicInstance & {
 	rooms: ProcessedRoomItem[];
