@@ -35,12 +35,12 @@
 </template>
 
 <script setup lang="ts">
-import { ColorShade, MediaBoardColorMapper } from "./utils";
+import { MediaBoardColorMapper } from "./utils";
 import { MediaBoardColors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
 import { SvsColorPickerMenu } from "@ui-color-picker";
 import { KebabMenu } from "@ui-kebab-menu";
-import { computed, ModelRef, PropType } from "vue";
+import { ModelRef, PropType } from "vue";
 
 defineProps({
 	lineId: {
@@ -60,28 +60,28 @@ const color: ModelRef<MediaBoardColors> = defineModel("color", {
 	default: MediaBoardColors.TRANSPARENT,
 });
 
-const swatchShade: ColorShade = "lighten4";
+// const swatchShade: ColorShade = "lighten4";
 
-const colorValue = computed<string>(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
+// const colorValue = computed<string>(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
 
 const onUpdateColor = (value: string) => {
 	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
 };
 
-const swatchColors = Object.values(MediaBoardColors).map((colorName: MediaBoardColors) =>
-	MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
-);
+// const swatchColors = Object.values(MediaBoardColors).map((colorName: MediaBoardColors) =>
+// 	MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
+// );
 
-const swatches = computed<string[][]>(() => {
-	const swatchesPerLine = 4;
-	const swatchRows = [];
+// const swatches = computed<string[][]>(() => {
+// 	const swatchesPerLine = 4;
+// 	const swatchRows = [];
 
-	for (let i = 0; i < swatchColors.length; i += swatchesPerLine) {
-		swatchRows.push(swatchColors.slice(i, i + swatchesPerLine));
-	}
+// 	for (let i = 0; i < swatchColors.length; i += swatchesPerLine) {
+// 		swatchRows.push(swatchColors.slice(i, i + swatchesPerLine));
+// 	}
 
-	return swatchRows;
-});
+// 	return swatchRows;
+// });
 
 defineEmits<{
 	(e: "delete:line", lineId: string): void;
