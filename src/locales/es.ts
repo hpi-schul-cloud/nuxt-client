@@ -19,7 +19,7 @@ export default {
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
-	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.pickColor": "Seleccionar color",
 	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",

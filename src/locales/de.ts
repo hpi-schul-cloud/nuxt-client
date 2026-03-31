@@ -18,7 +18,7 @@ export default {
 	"common.actions.invite": "Kurslink versenden",
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
-	"common.actions.pickColor": "Hintergrundfarbe auswählen",
+	"common.actions.pickColor": "Farbe auswählen",
 	"common.actions.leave": "Verlassen",
 	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
