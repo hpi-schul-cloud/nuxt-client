@@ -7,15 +7,23 @@
 		no-confirm
 	>
 		<template #content>
-			<div class="d-flex flex-row flex-wrap align-center">
-				<ExtendedIconBtn
-					v-for="(item, key) in elementTypeOptions"
-					:key="key"
+			<div class="elements-grid">
+				<VBtn
+					v-for="item in elementTypeOptions"
+					:key="item.label"
 					:data-testid="item.testId"
-					:icon="item.icon"
-					:label="item.label"
+					height="auto"
+					variant="text"
+					size="large"
 					@click.stop="item.action"
-				/>
+				>
+					<div class="d-flex flex-column justify-center">
+						<VIcon size="x-large" class="mx-auto">{{ item.icon }}</VIcon>
+						<span class="mt-1 text-wrap">
+							{{ item.label }}
+						</span>
+					</div>
+				</VBtn>
 			</div>
 		</template>
 	</SvsDialog>
@@ -24,7 +32,13 @@
 <script setup lang="ts">
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { SvsDialog } from "@ui-dialog";
-import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
 const { isDialogOpen, isDialogLoading, elementTypeOptions } = useSharedElementTypeSelection();
 </script>
+<style lang="scss" scoped>
+.elements-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+	grid-auto-rows: 85px;
+}
+</style>
