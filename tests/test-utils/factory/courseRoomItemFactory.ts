@@ -7,7 +7,7 @@ export type ProcessedRoomItem = ListItemsObject & {
 	isArchived?: boolean;
 };
 
-export const processedRoomItemFactory = Factory.define<ProcessedRoomItem>(({ sequence }) => ({
+export const courseRoomItemFactory = Factory.define<ProcessedRoomItem>(({ sequence }) => ({
 	id: `room-${sequence}`,
 	title: `Course ${sequence}`,
 	shortTitle: `C${sequence}`,
