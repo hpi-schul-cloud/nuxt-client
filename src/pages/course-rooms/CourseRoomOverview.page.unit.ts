@@ -1,17 +1,18 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
-import { courseRoomListModule } from "@/store";
+import { DashboardGridElementResponse } from "@/generated/serverApi/v3";
 import CopyModule from "@/store/copy";
-import CourseRoomListModule from "@/store/course-room-list";
-import { COPY_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
+import { COPY_MODULE_KEY } from "@/utils/inject";
+import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { Mock } from "vitest";
+import { ComponentPublicInstance, nextTick, reactive } from "vue";
+import { useRoute } from "vue-router";
 
 vi.mock("vue-router");
 vi.mock("@data-common-cartridge", () => ({
@@ -23,6 +24,39 @@ vi.mock("@data-common-cartridge", () => ({
 	}),
 }));
 
+const useRouteMock = useRoute as Mock;
+
+interface GroupElement {
+	id: string;
+	title: string;
+	displayColor: string;
+	notification?: boolean;
+	to?: string;
+}
+
+interface GroupDialogData {
+	isOpen: boolean;
+	groupData: {
+		groupId: string;
+		title: string;
+		shortTitle: string;
+		displayColor: string;
+		url: string;
+		xPosition: number;
+		yPosition: number;
+		groupElements: GroupElement[];
+	};
+}
+
+type CourseRoomOverviewVm = ComponentPublicInstance & {
+	rooms: DashboardGridElementResponse[];
+	courses: { id: string; name: string; isLocked: boolean }[];
+	dimensions: { colCount: number; rowCount: number; cellWidth: string };
+	groupDialog: GroupDialogData;
+	searchText: string;
+	allowDragging: boolean;
+};
+
 const mockRoomStoreData = [
 	{
 		id: "1",
@@ -31,6 +65,7 @@ const mockRoomStoreData = [
 		displayColor: "purple",
 		xPosition: 1,
 		yPosition: 1,
+		to: "/rooms/1",
 	},
 	{
 		id: "2",
@@ -39,6 +74,7 @@ const mockRoomStoreData = [
 		displayColor: "#EC407A",
 		xPosition: 2,
 		yPosition: 2,
+		to: "/rooms/2",
 	},
 	{
 		id: "3",
@@ -47,6 +83,7 @@ const mockRoomStoreData = [
 		displayColor: "#EC407A",
 		xPosition: 0,
 		yPosition: 0,
+		to: "/rooms/3",
 	},
 	{
 		groupId: "4",
@@ -60,16 +97,19 @@ const mockRoomStoreData = [
 				id: "5",
 				title: "Math 7a",
 				displayColor: "yellow",
+				to: "/rooms/5",
 			},
 			{
 				id: "6",
 				title: "Bio 3a",
 				displayColor: "green",
+				to: "/rooms/6",
 			},
 			{
 				id: "7",
 				title: "Geo 7b",
 				displayColor: "yellow",
+				to: "/rooms/7",
 			},
 		],
 	},
@@ -85,55 +125,49 @@ const mockCourseData = [
 	},
 ];
 
-setupStores({
-	courseRoomListModule: CourseRoomListModule,
-});
-
-const spyMocks = {
-	storeRoomAlignMock: vi.spyOn(courseRoomListModule, "align").mockImplementation(() => ({})),
-	storeModuleFetchMock: vi.spyOn(courseRoomListModule, "fetch").mockImplementation(() => ({})),
-	storeModuleFetchAllMock: vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation(() => ({})),
-	storeModuleUpdateMock: vi.spyOn(courseRoomListModule, "update").mockImplementation(() => ({})),
-};
-
-let copyModuleMock;
-
-const defaultMocks = {
-	$route: { query: {} },
-	$router: { replace: vi.fn() },
-};
-
-const getWrapper = () => {
-	copyModuleMock = createModuleMocks(CopyModule, {
-		getIsResultModalOpen: false,
-	});
-	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
-	return mount(CourseRoomOverviewPage, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
-			},
-			mocks: defaultMocks,
-		},
-	});
-};
-
 describe("CourseRoomOverview.page", () => {
+	let courseRoomListStore: ReturnType<typeof mockedPiniaStoreTyping<typeof useCourseRoomListStore>>;
+	let pinia: ReturnType<typeof createTestingPinia>;
+
+	const getWrapper = (): VueWrapper<CourseRoomOverviewVm> => {
+		useRouteMock.mockReturnValue(reactive({ query: {} }));
+
+		const copyModuleMock = createModuleMocks(CopyModule, {
+			getIsResultModalOpen: false,
+		});
+
+		return mount(CourseRoomOverviewPage, {
+			global: {
+				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+				},
+			},
+		}) as VueWrapper<CourseRoomOverviewVm>;
+	};
+
 	beforeEach(() => {
-		setActivePinia(createTestingPinia({ stubActions: false }));
+		pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
 		createTestAppStore();
 		createTestEnvStore();
-		courseRoomListModule.setRoomData(mockRoomStoreData);
-		courseRoomListModule.setAllElements(mockCourseData);
+
+		courseRoomListStore = mockedPiniaStoreTyping(useCourseRoomListStore);
+		courseRoomListStore.$patch({
+			roomsData: mockRoomStoreData as never,
+			allElements: mockCourseData as never,
+		});
+		courseRoomListStore.fetchCourses.mockResolvedValue();
+		courseRoomListStore.fetchAllElements.mockResolvedValue();
+		courseRoomListStore.alignCourse.mockResolvedValue();
+		courseRoomListStore.updateCourse.mockResolvedValue();
 	});
 
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("should fetch the room data", async () => {
+	it("should display room data from store", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 
@@ -146,11 +180,10 @@ describe("CourseRoomOverview.page", () => {
 			yPosition: 1,
 			to: "/rooms/1",
 		};
-		expect(spyMocks.storeModuleFetchMock).toHaveBeenCalled();
 		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 	});
 
-	it("should fetch the course data", async () => {
+	it("should display course data from store", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 
@@ -162,7 +195,6 @@ describe("CourseRoomOverview.page", () => {
 			},
 		];
 
-		expect(spyMocks.storeModuleFetchAllMock).toHaveBeenCalled();
 		expect(wrapper.vm.courses).toStrictEqual(expected);
 	});
 
@@ -264,7 +296,7 @@ describe("CourseRoomOverview.page", () => {
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-3"]');
 		await emptyAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
+		expect(courseRoomListStore.alignCourse).toHaveBeenCalledWith(expectedPayload);
 	});
 
 	it("should call 'addGroupElements' method for grouping after avatar-to-groupAvatar drag&drop", async () => {
@@ -297,7 +329,7 @@ describe("CourseRoomOverview.page", () => {
 		const toAvatarComponent = wrapper.findComponent('[data-test-position="3-2"]');
 		await toAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
+		expect(courseRoomListStore.alignCourse).toHaveBeenCalledWith(expectedPayload);
 	});
 
 	it("should call 'setDropElement' method for grouping after ungroup action", async () => {
@@ -319,38 +351,35 @@ describe("CourseRoomOverview.page", () => {
 			},
 		};
 
-		await wrapper.setData({
-			groupDialog: {
-				isOpen: true,
-				groupData: {
-					groupId: "4",
-					title: "Fourth",
-					shortTitle: "Bi",
-					displayColor: "#EC407A",
-					url: "/api/xxxx/1234w",
-					xPosition: 2,
-					yPosition: 3,
-					groupElements: [
-						{
-							id: "5",
-							title: "Math 7a",
-							displayColor: "yellow",
-						},
-						{
-							id: "6",
-							title: "Bio 3a",
-							displayColor: "green",
-							notification: true,
-						},
-						{
-							id: "7",
-							title: "Geo 7b",
-							displayColor: "yellow",
-						},
-					],
+		wrapper.vm.groupDialog.isOpen = true;
+		wrapper.vm.groupDialog.groupData = {
+			groupId: "4",
+			title: "Fourth",
+			shortTitle: "Bi",
+			displayColor: "#EC407A",
+			url: "/api/xxxx/1234w",
+			xPosition: 2,
+			yPosition: 3,
+			groupElements: [
+				{
+					id: "5",
+					title: "Math 7a",
+					displayColor: "yellow",
 				},
-			},
-		});
+				{
+					id: "6",
+					title: "Bio 3a",
+					displayColor: "green",
+					notification: true,
+				},
+				{
+					id: "7",
+					title: "Geo 7b",
+					displayColor: "yellow",
+				},
+			],
+		};
+		await nextTick();
 
 		const roomModal = wrapper.findComponent(CourseRoomModal);
 		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[0]);
@@ -358,7 +387,7 @@ describe("CourseRoomOverview.page", () => {
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-1"]');
 		await emptyAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
+		expect(courseRoomListStore.alignCourse).toHaveBeenCalledWith(expectedPayload);
 	});
 
 	it("should search elements on dashboard", async () => {
@@ -379,7 +408,8 @@ describe("CourseRoomOverview.page", () => {
 	it("should reset search text while dragging", async () => {
 		const wrapper = getWrapper();
 
-		await wrapper.setData({ allowDragging: true });
+		wrapper.vm.allowDragging = true;
+		await nextTick();
 
 		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
@@ -394,7 +424,7 @@ describe("CourseRoomOverview.page", () => {
 
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
-		expect(wrapper.vm.$data.searchText).toStrictEqual("");
+		expect(wrapper.vm.searchText).toStrictEqual("");
 	});
 
 	it("should call 'setGroupElements' method for grouping after avatar-to-avatar drag&drop", async () => {
@@ -430,7 +460,7 @@ describe("CourseRoomOverview.page", () => {
 		await toAvatarComponent.trigger("drop");
 
 		await nextTick();
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(expectedPayload);
+		expect(courseRoomListStore.alignCourse).toHaveBeenCalledWith(expectedPayload);
 	});
 
 	it("should set rowCount while loading", async () => {
@@ -440,7 +470,6 @@ describe("CourseRoomOverview.page", () => {
 				title: "First",
 				shortTitle: "Ma",
 				displayColor: "purple",
-				url: "/api/xxxx/1234w",
 				xPosition: 1,
 				yPosition: 1,
 			},
@@ -449,8 +478,6 @@ describe("CourseRoomOverview.page", () => {
 				title: "Second",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				url: "/api/xxxx/1234w",
-				notification: true,
 				xPosition: 2,
 				yPosition: 2,
 			},
@@ -459,13 +486,14 @@ describe("CourseRoomOverview.page", () => {
 				title: "Third",
 				shortTitle: "Ma",
 				displayColor: "#EC407A",
-				url: "/api/xxxx/1234w",
 				xPosition: 3,
 				yPosition: 7,
 			},
 		];
 
-		courseRoomListModule.setRoomData(roomData);
+		courseRoomListStore.$patch({
+			roomsData: roomData as never,
+		});
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(false);
 		await nextTick();
