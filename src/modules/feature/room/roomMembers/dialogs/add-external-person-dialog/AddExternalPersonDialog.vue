@@ -1,38 +1,35 @@
 <template>
-	<VDialog
+	<SvsDialog
 		v-model="isOpen"
-		:width="xs ? 'auto' : 480"
+		:title="externalPersonTitle"
 		data-testid="dialog-add-external-person"
-		max-width="480"
-		@keydown.esc="onClose"
-		@click:outside="onClose"
+		no-actions
 		@after-leave="resetForm"
 	>
-		<StepEmail
-			v-if="step === ExternalMembersInvitationSteps.Email || step === ExternalMembersInvitationSteps.Error"
-			:email="email"
-			:has-error="step === ExternalMembersInvitationSteps.Error"
-			@submit:email="onSubmitEmail"
-			@close="onClose"
-		/>
-		<StepDetails
-			v-else-if="step === ExternalMembersInvitationSteps.Details"
-			:application-names="applicationNames"
-			:email="email"
-			:first-name="firstName"
-			:last-name="lastName"
-			@update:details="onUpdateDetails"
-			@submit:invitation="onSubmitInvitation"
-			@close="onClose"
-			@back="onBack"
-		/>
-	</VDialog>
+		<template #content>
+			<StepEmail
+				v-if="step === ExternalMembersInvitationSteps.Email || step === ExternalMembersInvitationSteps.Error"
+				:email="email"
+				:has-error="step === ExternalMembersInvitationSteps.Error"
+				@submit:email="onSubmitEmail"
+			/>
+			<StepDetails
+				v-else-if="step === ExternalMembersInvitationSteps.Details"
+				:application-names="applicationNames"
+				:email="email"
+				:first-name="firstName"
+				:last-name="lastName"
+				@update:details="onUpdateDetails"
+				@submit:invitation="onSubmitInvitation"
+				@back="onBack"
+			/>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import StepDetails from "./StepDetails.vue";
 import StepEmail from "./StepEmail.vue";
-import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { notifyError, notifySuccess } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import {
@@ -41,10 +38,9 @@ import {
 	useRegistrationStore,
 	useRoomMembersStore,
 } from "@data-room";
+import { SvsDialog } from "@ui-dialog";
 import { computed, nextTick, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
-import { type VCard } from "vuetify/components";
 
 const registrationStore = useRegistrationStore();
 const roomMembersStore = useRoomMembersStore();
@@ -61,22 +57,13 @@ const isOpen = defineModel({
 	required: true,
 });
 
-const emit = defineEmits<{
-	(e: "close"): void;
-}>();
-
 const { t } = useI18n();
-const { xs } = useDisplay();
-
-const addExternalPersonContent = ref<VCard>();
 
 const step = ref<ExternalMembersInvitationSteps>(ExternalMembersInvitationSteps.Email);
 
-const email = ref<string>("");
-const firstName = ref<string>("");
-const lastName = ref<string>("");
-
-useSafeFocusTrap(isOpen, addExternalPersonContent);
+const email = ref("");
+const firstName = ref("");
+const lastName = ref("");
 
 const onUpdateDetails = (newFirstName: string, newLastName: string) => {
 	firstName.value = newFirstName;
@@ -98,6 +85,14 @@ const onSubmitEmail = async (newEmail: string) => {
 	}
 };
 
+const externalPersonTitle = computed(() => {
+	if (step.value === ExternalMembersInvitationSteps.Email || step.value === ExternalMembersInvitationSteps.Error) {
+		return "pages.rooms.members.dialog.addExternalPerson.steps.email.heading";
+	} else {
+		return "pages.rooms.members.dialog.addExternalPerson.steps.details.heading";
+	}
+});
+
 const onSubmitInvitation = async () => {
 	try {
 		await roomMembersStore.startRegistrationProcess({
@@ -114,8 +109,6 @@ const onSubmitInvitation = async () => {
 	}
 };
 
-const onClose = () => closeDialog();
-
 const onBack = () => {
 	step.value = ExternalMembersInvitationSteps.Email;
 };
@@ -127,6 +120,5 @@ const resetForm = () => {
 
 const closeDialog = () => {
 	isOpen.value = false;
-	emit("close");
 };
 </script>

@@ -89,24 +89,15 @@
 		<SvsDialog
 			v-if="metadata"
 			v-model="isDeleteDialogOpen"
-			title="components.administration.externalToolsSection.dialog.title"
+			:title="t('components.administration.externalToolsSection.dialog.title', { itemName: getItemName })"
 			data-testid="delete-dialog"
 			@confirm="onDeleteTool"
 			@close="onCloseDeleteDialog"
 		>
 			<template #content>
-				<i18n-t
-					keypath="components.administration.externalToolsSection.dialog.content.header.firstParagraph"
-					scope="global"
-					tag="p"
-				>
-					<b>{{ getItemName }}</b>
-				</i18n-t>
-				<p>
-					{{ t("components.administration.externalToolsSection.dialog.content.header.secondParagraph") }}
-				</p>
+				<p>{{ t("components.administration.externalToolsSection.dialog.content.header") }}</p>
 
-				<ul>
+				<ul class="ml-6 mb-4">
 					<li data-testid="delete-dialog-content-courses">
 						{{ t("common.tool.context.type.courses") }} <b>({{ metadata.course }})</b>
 					</li>
