@@ -524,7 +524,7 @@ describe("RoomVideoConferenceSection", () => {
 		};
 
 		it("should call start with correct options", () => {
-			const { wrapper, videoConferenceModule, params, roomId } = setup();
+			const { wrapper, videoConferenceModule, params } = setup();
 
 			const configurationDialog = wrapper.findComponent(VideoConferenceConfigurationDialog);
 			configurationDialog.vm.$emit("start-video-conference");
@@ -537,12 +537,11 @@ describe("RoomVideoConferenceSection", () => {
 					moderatorMustApproveJoinRequests: true,
 					everybodyJoinsAsModerator: false,
 				},
-				logoutUrl: `${mockUrl}/rooms/${roomId}?tab=tools`,
 			});
 		});
 
 		it("should call start and join videoconference function of store", async () => {
-			const { wrapper, videoConferenceModule, params, roomId } = setup();
+			const { wrapper, videoConferenceModule, params } = setup();
 
 			const configurationDialog = wrapper.findComponent<typeof VDialog>(VideoConferenceConfigurationDialog);
 			configurationDialog.vm.$emit("start-video-conference");
@@ -557,7 +556,6 @@ describe("RoomVideoConferenceSection", () => {
 				scope: params.scope,
 				scopeId: params.scopeId,
 				videoConferenceOptions: videoConferenceModule.getVideoConferenceInfo.options,
-				logoutUrl: `${mockUrl}/rooms/${roomId}?tab=tools`,
 			});
 			expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,

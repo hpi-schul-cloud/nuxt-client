@@ -1,4 +1,4 @@
-import { UserLoginMigration } from "./user-login-migration";
+import { UserLoginMigration } from "./userLoginMigration";
 import { UserLoginMigrationResponse } from "@api-server";
 
 export class UserLoginMigrationMapper {
