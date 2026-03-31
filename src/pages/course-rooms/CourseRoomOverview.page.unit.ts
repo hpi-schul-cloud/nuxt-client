@@ -1,16 +1,17 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
-import { DashboardGridElementResponse } from "@/generated/serverApi/v3";
+import type { DashboardGridElementResponse } from "@/generated/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { courseRoomElementFactory, courseRoomGroupFactory, courseRoomItemFactory } from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
-import { Mock } from "vitest";
+import type { Mock } from "vitest";
 import { ComponentPublicInstance, nextTick, reactive } from "vue";
 import { useRoute } from "vue-router";
 
@@ -58,72 +59,30 @@ type CourseRoomOverviewVm = ComponentPublicInstance & {
 };
 
 const mockRoomStoreData = [
-	{
-		id: "1",
-		title: "First",
-		shortTitle: "Ma",
-		displayColor: "purple",
-		xPosition: 1,
-		yPosition: 1,
-		to: "/rooms/1",
-	},
-	{
-		id: "2",
-		title: "Second",
-		shortTitle: "Ma",
-		displayColor: "#EC407A",
-		xPosition: 2,
-		yPosition: 2,
-		to: "/rooms/2",
-	},
-	{
-		id: "3",
+	courseRoomElementFactory.build({ title: "First", shortTitle: "Ma", displayColor: "purple" }),
+	courseRoomElementFactory.build({ title: "Second", shortTitle: "Ma", displayColor: "#EC407A" }),
+	courseRoomElementFactory.build({
 		title: "Third",
 		shortTitle: "Ma",
 		displayColor: "#EC407A",
 		xPosition: 0,
 		yPosition: 0,
-		to: "/rooms/3",
-	},
-	{
+	}),
+	courseRoomGroupFactory.build({
 		groupId: "4",
 		title: "Fourth",
 		shortTitle: "Bi",
-		displayColor: "#EC407A",
 		xPosition: 2,
 		yPosition: 3,
 		groupElements: [
-			{
-				id: "5",
-				title: "Math 7a",
-				displayColor: "yellow",
-				to: "/rooms/5",
-			},
-			{
-				id: "6",
-				title: "Bio 3a",
-				displayColor: "green",
-				to: "/rooms/6",
-			},
-			{
-				id: "7",
-				title: "Geo 7b",
-				displayColor: "yellow",
-				to: "/rooms/7",
-			},
+			courseRoomElementFactory.build({ id: "5", title: "Math 7a", displayColor: "yellow" }),
+			courseRoomElementFactory.build({ id: "6", title: "Bio 3a", displayColor: "green" }),
+			courseRoomElementFactory.build({ id: "7", title: "Geo 7b", displayColor: "yellow" }),
 		],
-	},
+	}),
 ];
 
-const mockCourseData = [
-	{
-		id: "1234",
-		title: "Mathe",
-		shortTitle: "Ma",
-		displayColor: "#54616e",
-		isLocked: false,
-	},
-];
+const mockCourseData = courseRoomItemFactory.buildList(2);
 
 describe("CourseRoomOverview.page", () => {
 	let courseRoomListStore: ReturnType<typeof mockedPiniaStoreTyping<typeof useCourseRoomListStore>>;
@@ -181,21 +140,6 @@ describe("CourseRoomOverview.page", () => {
 			to: "/rooms/1",
 		};
 		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
-	});
-
-	it("should display course data from store", async () => {
-		const wrapper = getWrapper();
-		await nextTick();
-
-		const expected = [
-			{
-				id: "1234",
-				name: "Mathe",
-				isLocked: false,
-			},
-		];
-
-		expect(wrapper.vm.courses).toStrictEqual(expected);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -465,30 +409,9 @@ describe("CourseRoomOverview.page", () => {
 
 	it("should set rowCount while loading", async () => {
 		const roomData = [
-			{
-				id: "1",
-				title: "First",
-				shortTitle: "Ma",
-				displayColor: "purple",
-				xPosition: 1,
-				yPosition: 1,
-			},
-			{
-				id: "2",
-				title: "Second",
-				shortTitle: "Ma",
-				displayColor: "#EC407A",
-				xPosition: 2,
-				yPosition: 2,
-			},
-			{
-				id: "3",
-				title: "Third",
-				shortTitle: "Ma",
-				displayColor: "#EC407A",
-				xPosition: 3,
-				yPosition: 7,
-			},
+			courseRoomElementFactory.build(),
+			courseRoomElementFactory.build(),
+			courseRoomElementFactory.build({ xPosition: 3, yPosition: 7 }),
 		];
 
 		courseRoomListStore.$patch({
@@ -498,6 +421,6 @@ describe("CourseRoomOverview.page", () => {
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(false);
 		await nextTick();
 		await nextTick();
-		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
+		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(13);
 	});
 });

@@ -379,7 +379,6 @@ const initCoursePolling = (started: Date, count = 0) => {
 	);
 };
 
-// Initialize on component creation
 const initializeComponent = async () => {
 	const newDims = getDeviceDims();
 	dimensions.colCount = newDims.colCount;

@@ -1,48 +1,22 @@
+import type { GroupDataType, ItemType } from "@data-course-rooms";
 import { Factory } from "fishery";
 
-// Type for room store data elements (matches DashboardGridElementResponse with optional 'to' for routing)
-export type RoomStoreDataElement = {
-	id?: string;
-	groupId?: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	to?: string;
-	groupElements?: RoomStoreGroupElement[];
-};
-
-export type RoomStoreGroupElement = {
-	id: string;
-	title: string;
-	displayColor: string;
-	to?: string;
-};
-
-export const roomStoreGroupElementFactory = Factory.define<RoomStoreGroupElement>(({ sequence }) => ({
+export const courseRoomElementFactory = Factory.define<ItemType>(({ sequence }) => ({
 	id: `${sequence}`,
-	title: `Sub Element ${sequence}`,
+	title: `Group Element ${sequence}`,
+	shortTitle: `GE${sequence}`,
 	displayColor: "#54616e",
+	xPosition: sequence,
+	yPosition: sequence,
 	to: `/rooms/${sequence}`,
 }));
 
-export const roomStoreDataFactory = Factory.define<RoomStoreDataElement>(({ sequence }) => ({
-	id: `${sequence}`,
-	title: `Room ${sequence}`,
-	shortTitle: `R${sequence}`,
-	displayColor: "#54616e",
-	xPosition: sequence - 1,
-	yPosition: sequence - 1,
-	to: `/rooms/${sequence}`,
-}));
-
-export const roomStoreGroupFactory = Factory.define<RoomStoreDataElement>(({ sequence }) => ({
+export const courseRoomGroupFactory = Factory.define<Omit<GroupDataType, "isSynchronized" | "to">>(({ sequence }) => ({
 	groupId: `${sequence}`,
 	title: `Group ${sequence}`,
 	shortTitle: `G${sequence}`,
 	displayColor: "#EC407A",
 	xPosition: sequence,
 	yPosition: sequence,
-	groupElements: roomStoreGroupElementFactory.buildList(3),
+	groupElements: courseRoomElementFactory.buildList(3),
 }));
