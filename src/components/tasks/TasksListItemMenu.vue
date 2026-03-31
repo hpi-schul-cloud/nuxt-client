@@ -170,8 +170,7 @@ export default defineComponent({
 			const confirmed = await askDeletion(
 				"components.molecules.TaskItemMenu.confirmDelete.title",
 				this.$t("components.molecules.TaskItemMenu.confirmDelete.text", { taskTitle: this.taskTitle }),
-				"warning",
-				"common.actions.remove"
+				"warning"
 			);
 
 			if (confirmed) {
