@@ -116,10 +116,13 @@ describe("useCommonCartridgeExport composable", () => {
 		it("should validate version before making the call", async () => {
 			const { startExport, allowedVersions } = useCommonCartridgeExport();
 
-			// Test each allowed version
 			for (const version of allowedVersions) {
 				await startExport(version, [], [], []);
 			}
+
+			await expect(startExport("invalid_version" as CommonCartridgeVersion, [], [], [])).rejects.toThrow(
+				"Invalid version"
+			);
 
 			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledTimes(allowedVersions.length);
 		});

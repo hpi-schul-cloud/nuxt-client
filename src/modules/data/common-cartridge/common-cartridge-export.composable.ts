@@ -12,7 +12,7 @@ export const useCommonCartridgeExport = () => {
 		columnBoards: string[]
 	): Promise<void> => {
 		if (!allowedVersions.includes(version)) {
-			return;
+			throw new Error(`Invalid version: ${version}. Allowed versions are: ${allowedVersions.join(", ")}`);
 		}
 
 		await courseRoomDetailsModule.downloadCommonCartridgeCourse({

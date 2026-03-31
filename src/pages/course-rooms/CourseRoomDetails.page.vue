@@ -124,6 +124,7 @@ import {
 import { Breadcrumb, DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import { FabAction } from "@ui-speed-dial-menu";
+import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { type Component, computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -159,7 +160,7 @@ const { copy } = useCopy();
 const { mdAndUp } = useDisplay();
 const { roomVariant } = storeToRefs(useRoomDetailsStore());
 
-const courseId = ref<string>(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
+const courseId = ref(Array.isArray(route.params.id) ? route.params.id[0] : route.params.id);
 const tabIndex = ref(0);
 const isExportDialogOpen = ref(false);
 const isEndSyncDialogOpen = ref(false);
@@ -167,10 +168,9 @@ const isStartSyncDialogOpen = ref(false);
 const isBoardLayoutDialogOpen = ref(false);
 
 const roomData = computed(() => courseRoomDetailsModule.getRoomData);
-
 const scopedPermissions = computed(() => courseRoomDetailsModule.getPermissionData || []);
-
 const isLocked = computed(() => courseRoomDetailsModule.getIsLocked);
+const canEditTools = computed(() => !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN));
 
 const breadcrumbs = computed<Breadcrumb[]>(() => [
 	{
@@ -189,8 +189,6 @@ const dashBoardRole = computed(() => {
 	if (useAppStore().isStudent) return Roles.STUDENT;
 	return undefined;
 });
-
-const canEditTools = computed(() => !!useAppStore().userPermissions?.includes(Permission.CONTEXT_TOOL_ADMIN));
 
 const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 	const actions: FabAction[] = [];
@@ -218,7 +216,7 @@ const learnContentFabItems = computed<FabAction[] | undefined>(() => {
 			label: t("pages.courseRoomDetails.fab.add.board"),
 			icon: mdiViewGridPlusOutline,
 			dataTestId: "fab_button_add_board",
-			clickHandler: fabItemClickHandler,
+			clickHandler: onOpenBoardLayoutDialog,
 		});
 	}
 
@@ -330,20 +328,14 @@ const headlineMenuItems = computed<MenuItem[]>(() => {
 	if (roomData.value.isSynchronized) {
 		items.push({
 			icon: mdiSyncOff,
-			action: () => {
-				isEndSyncDialogOpen.value = true;
-			},
+			action: () => onOpenEndSyncDialog(),
 			name: t("pages.courseRooms.menuItems.endSync"),
 			dataTestId: "title-menu-end-sync",
 		});
-	}
-
-	if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED && !roomData.value.isSynchronized) {
+	} else if (useEnvConfig().value.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
 		items.push({
 			icon: mdiSync,
-			action: () => {
-				isStartSyncDialogOpen.value = true;
-			},
+			action: () => onOpenStartSyncDialog(),
 			name: t("pages.rooms.menuItems.startSync"),
 			dataTestId: "title-menu-start-sync",
 		});
@@ -356,14 +348,14 @@ const copyResultDialogItems = computed(() => copyModule.getCopyResultFailedItems
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 const isCopyDialogOpen = computed(() => copyModule.getIsResultModalOpen);
 
-const setActiveTab = (tabName: string | LocationQueryValue | LocationQueryValue[]) => {
-	const name = typeof tabName === "string" ? tabName : (tabName?.[0] ?? "learn-content");
-	const index = tabItems.value.findIndex((tabItem) => tabItem.name === name);
+const setActiveTab = (tabName: string) => {
+	const index = tabItems.value.findIndex((tabItem) => tabItem.name === tabName);
 	tabIndex.value = index >= 0 ? index : 0;
 };
 
 const initialize = async (id: string, activeTab?: LocationQueryValue | LocationQueryValue[]) => {
-	setActiveTab(activeTab ?? "learn-content");
+	const tabName = Array.isArray(activeTab) ? activeTab[0] : activeTab;
+	setActiveTab(tabName ?? "learn-content");
 	courseId.value = id;
 
 	await courseRoomDetailsModule.fetchContent(id);
@@ -380,20 +372,13 @@ const initialize = async (id: string, activeTab?: LocationQueryValue | LocationQ
 		});
 	}
 
-	document.title = buildPageTitle(roomData.value.title, t("common.words.courses"));
-};
-
-const fabItemClickHandler = () => {
-	isBoardLayoutDialogOpen.value = true;
+	useTitle(buildPageTitle(roomData.value.title, t("common.words.courses")));
 };
 
 const setActiveTabIfPageCached = (event: PageTransitionEvent) => {
 	if (event.persisted) {
-		if (route.query?.tab) {
-			setActiveTab(route.query.tab);
-		} else {
-			setActiveTab("learn-content");
-		}
+		const activeTab = Array.isArray(route.query.tab) ? route.query.tab[0] : route.query.tab;
+		setActiveTab(activeTab ?? "learn-content");
 	}
 };
 
@@ -460,6 +445,18 @@ const onEditCourse = () => {
 
 const onLayoutSelected = (layout: BoardLayout) => {
 	onCreateBoard(roomData.value.roomId, layout);
+};
+
+const onOpenBoardLayoutDialog = () => {
+	isBoardLayoutDialogOpen.value = true;
+};
+
+const onOpenStartSyncDialog = () => {
+	isStartSyncDialogOpen.value = true;
+};
+
+const onOpenEndSyncDialog = () => {
+	isEndSyncDialogOpen.value = true;
 };
 
 const onOpenExportDialog = () => {
