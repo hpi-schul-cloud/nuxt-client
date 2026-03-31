@@ -131,7 +131,7 @@ import { useI18n } from "vue-i18n";
 import { LocationQueryValue, useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 
-interface TabItem {
+type TabItem = {
 	name: string;
 	label: string;
 	icon: string;
@@ -139,14 +139,14 @@ interface TabItem {
 	component?: Component;
 	fabItems?: FabAction[] | undefined;
 	href?: string;
-}
+};
 
-interface MenuItem {
+type MenuItem = {
 	icon: string;
 	action: () => void;
 	name: string;
 	dataTestId: string;
-}
+};
 
 const route = useRoute();
 const router = useRouter();
