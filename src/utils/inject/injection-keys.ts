@@ -10,7 +10,6 @@ import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import SystemsModule from "@/store/systems";
 import TasksModule from "@/store/tasks";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { InjectionKey } from "vue";
 
@@ -19,8 +18,6 @@ export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsM
 	Symbol("schoolExternalToolsModule");
 export const COURSE_ROOM_DETAILS_MODULE_KEY: InjectionKey<CourseRoomDetailsModule> = Symbol("courseRoomDetailsModule");
 export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> = Symbol("videoConferenceModule");
-export const USER_LOGIN_MIGRATION_MODULE_KEY: InjectionKey<UserLoginMigrationModule> =
-	Symbol("userLoginMigrationModule");
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> = Symbol("systemsModule");
 export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");

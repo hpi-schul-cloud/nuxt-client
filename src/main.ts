@@ -17,7 +17,6 @@ import {
 	SHARE_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	THEME_KEY,
-	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 import {
@@ -34,7 +33,6 @@ import {
 	shareModule,
 	systemsModule,
 	tasksModule,
-	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
@@ -112,7 +110,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(), commonCartridgeExportModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);
-	app.provide(USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(), userLoginMigrationModule);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
 	app.provide(THEME_KEY.valueOf(), themeConfig);

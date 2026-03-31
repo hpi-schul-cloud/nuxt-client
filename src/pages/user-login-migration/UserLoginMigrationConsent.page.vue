@@ -30,15 +30,15 @@
 				</p>
 			</div>
 			<div v-if="userLoginMigration" class="d-flex flex-wrap justify-center mt-8">
-				<v-btn
+				<VBtn
 					class="mx-8 mb-8"
 					variant="flat"
 					data-testId="btn-cancel"
 					:to="canSkipMigration ? '/dashboard' : '/logout'"
 				>
 					{{ $t(canSkipMigration ? "pages.userMigration.button.skip" : "common.actions.logout") }}
-				</v-btn>
-				<v-btn
+				</VBtn>
+				<VBtn
 					class="mx-8 mb-8"
 					color="primary"
 					variant="flat"
@@ -46,7 +46,7 @@
 					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
 				>
 					{{ $t("pages.userMigration.button.startMigration") }}
-				</v-btn>
+				</VBtn>
 			</div>
 		</div>
 	</div>
@@ -55,10 +55,9 @@
 <script lang="ts">
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { UserLoginMigration } from "@/store/user-login-migration";
-import UserLoginMigrationModule from "@/store/user-login-migrations";
-import { injectStrict, SYSTEMS_MODULE_KEY, USER_LOGIN_MIGRATION_MODULE_KEY } from "@/utils/inject";
+import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useUserLoginMigration } from "@data-user-login-migration";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -67,7 +66,7 @@ export default defineComponent({
 	name: "UserLoginMigrationConsent",
 	setup() {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
-		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(USER_LOGIN_MIGRATION_MODULE_KEY);
+		const { userLoginMigration, fetchLatestUserLoginMigrationForSchool } = useUserLoginMigration();
 		const { t } = useI18n();
 
 		const pageTitle = buildPageTitle(t("pages.userMigration.title"));
@@ -77,9 +76,6 @@ export default defineComponent({
 			systemsModule?.getSystems.find(
 				(system: System): boolean => system.id === userLoginMigration.value?.targetSystemId
 			)?.name ?? "";
-		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> = computed(
-			() => userLoginMigrationModule.getUserLoginMigration
-		);
 
 		const migrationDescription: ComputedRef<string> = computed(() =>
 			userLoginMigration.value?.mandatorySince
@@ -92,7 +88,7 @@ export default defineComponent({
 		const isLoading: Ref<boolean> = ref(true);
 
 		onMounted(async () => {
-			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
+			await fetchLatestUserLoginMigrationForSchool();
 			await systemsModule.fetchSystems();
 			isLoading.value = false;
 		});
