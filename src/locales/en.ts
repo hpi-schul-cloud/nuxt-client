@@ -1168,6 +1168,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"The migration cannot start because the target login system and your school's current login system are the same!",
 	"pages.administration.migration.moin_schule_system_not_found": "Cannot find moin.schule system!",
+	"pages.administration.migration.multipleUsersFound": "More than one migration found for user.",
 	"pages.administration.or": "or",
 	"pages.administration.printQr.printPageTabTitle": "Share QR-Codes",
 	"pages.administration.printQr.printPageTitle": "Please scan the QR code to register.",

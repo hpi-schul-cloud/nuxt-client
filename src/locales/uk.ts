@@ -1181,6 +1181,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
 	"pages.administration.migration.moin_schule_system_not_found": "Не вдається знайти систему moin.schule!",
+	"pages.administration.migration.multipleUsersFound": "Для цього користувача знайдено більше однієї міграції.",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.printPageTabTitle": "Поділитися QR-кодами",
 	"pages.administration.printQr.printPageTitle": "Будь ласка, відскануйте QR-код для реєстрації.",

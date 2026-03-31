@@ -1,10 +1,9 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
 import { courseRoomListModule } from "@/store";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import CopyModule from "@/store/copy";
 import CourseRoomListModule from "@/store/course-room-list";
-import { COMMON_CARTRIDGE_IMPORT_MODULE_KEY, COPY_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
@@ -15,6 +14,14 @@ import { setActivePinia } from "pinia";
 import { nextTick } from "vue";
 
 vi.mock("vue-router");
+vi.mock("@data-common-cartridge", () => ({
+	useCommonCartridgeImport: () => ({
+		isOpen: { value: false },
+		isSuccess: { value: false },
+		file: { value: undefined },
+		importCommonCartridgeFile: vi.fn(),
+	}),
+}));
 
 const mockRoomStoreData = [
 	{
@@ -106,7 +113,6 @@ const getWrapper = () => {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(CommonCartridgeImportModule),
 				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
 			},
 			mocks: defaultMocks,
