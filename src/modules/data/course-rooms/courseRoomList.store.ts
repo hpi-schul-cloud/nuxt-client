@@ -1,35 +1,33 @@
+import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import {
 	CourseMetadataResponse,
 	CoursesApiFactory,
 	DashboardApiFactory,
 	DashboardGridElementResponse,
 } from "@/generated/serverApi/v3";
-import { DroppedObject, RoomsData, SharingCourseObject } from "@/store/types/rooms";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { DroppedObject, RoomsData } from "@/store/types/rooms";
+import { $axios } from "@/utils/api";
 import { isInPast } from "@/utils/date-time.utils";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
-	// State
 	const roomsData = ref<DashboardGridElementResponse[]>([]);
 	const gridElementsId = ref("");
 	const allElements = ref<CourseMetadataResponse[]>([]);
-	const sharedCourseData = ref<SharingCourseObject>({
-		code: "",
-		courseName: "",
-		status: "",
-		message: "",
-	});
-	const importedCourseId = ref("");
-	const loading = ref(false);
-	const error = ref<null | object>(null);
 
-	// API instances
+	const fetchTask = useSafeAxiosTask();
+	const fetchAllElementsTask = useSafeAxiosTask();
+	const alignTask = useSafeAxiosTask();
+	const updateTask = useSafeAxiosTask();
+
+	const loading = computed(() =>
+		[fetchTask, fetchAllElementsTask, alignTask, updateTask].some((task) => task.isRunning.value)
+	);
+
 	const dashboardApi = DashboardApiFactory(undefined, "/v3", $axios);
 	const coursesApi = CoursesApiFactory(undefined, "/v3", $axios);
 
-	// Internal helpers
 	const processRoomData = (data: DashboardGridElementResponse[]): DashboardGridElementResponse[] =>
 		data.map((item) => {
 			let to = "";
@@ -71,7 +69,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 
 			return {
 				...item,
-				titleDate: titleDate,
+				titleDate,
 				searchText: `${item.title} ${titleDate}`,
 				isArchived,
 				to,
@@ -88,57 +86,40 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		}
 	};
 
-	// Getters
-
-	const getRoomsId = computed<string>(() => gridElementsId.value);
-
 	const hasRooms = computed<boolean>(() => allElements.value.length > 0);
 	const hasCurrentRooms = computed<boolean>(() => roomsData.value.length > 0);
 
-	// Actions
-	const fetch = async (params?: { indicateLoading: boolean; device: string }): Promise<void> => {
-		// device parameter will be used to fetch data specified for device
-		const indicateLoading = params?.indicateLoading === undefined ? true : params.indicateLoading;
-		if (indicateLoading) loading.value = true;
-		try {
-			const { data } = await dashboardApi.dashboardControllerFindForUser();
-			gridElementsId.value = data.id;
-			roomsData.value = processRoomData(data.gridElements || []);
-			if (indicateLoading) loading.value = false;
-		} catch (err: unknown) {
-			const apiError = mapAxiosErrorToResponseError(err);
+	const fetch = async (): Promise<void> => {
+		const { success, result } = await fetchTask.execute(() => dashboardApi.dashboardControllerFindForUser());
 
-			if (indicateLoading) loading.value = false;
+		if (success && result) {
+			gridElementsId.value = result.data.id;
+			roomsData.value = processRoomData(result.data.gridElements || []);
 		}
 	};
 
 	const align = async (payload: DroppedObject): Promise<void> => {
 		const { from, to } = payload;
-		const reqObject = {
-			from,
-			to,
-		};
+		const reqObject = { from, to };
 
-		loading.value = true;
-		try {
-			const response = await dashboardApi.dashboardControllerMoveElement(getRoomsId.value, reqObject);
+		const { success, result } = await alignTask.execute(() =>
+			dashboardApi.dashboardControllerMoveElement(gridElementsId.value, reqObject)
+		);
 
+		if (success && result) {
 			setPosition(payload);
-			roomsData.value = processRoomData(response.data.gridElements || []);
-			loading.value = false;
-		} catch (err: unknown) {
-			const apiError = mapAxiosErrorToResponseError(err);
-
-			loading.value = false;
+			roomsData.value = processRoomData(result.data.gridElements || []);
 		}
 	};
 
 	const update = async (payload: RoomsData): Promise<void> => {
-		loading.value = true;
-		try {
-			await dashboardApi.dashboardControllerPatchGroup(getRoomsId.value, payload.xPosition, payload.yPosition, {
+		const { success } = await updateTask.execute(() =>
+			dashboardApi.dashboardControllerPatchGroup(gridElementsId.value, payload.xPosition, payload.yPosition, {
 				title: payload.title,
-			});
+			})
+		);
+
+		if (success) {
 			const roomIndex = roomsData.value.findIndex(
 				(room) => room.xPosition === payload.xPosition && room.yPosition === payload.yPosition
 			);
@@ -148,38 +129,20 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 				title: payload.title,
 			};
 			roomsData.value = updatedRoomsData;
-			loading.value = false;
-		} catch (err: unknown) {
-			const apiError = mapAxiosErrorToResponseError(err);
-
-			loading.value = false;
 		}
 	};
 
-	const deleteRoom = async (id: string): Promise<void> => {
-		loading.value = true;
-		try {
-			const tempData = roomsData.value.filter((item) => item.id !== id);
-			roomsData.value = tempData;
-			loading.value = false;
-		} catch (err: unknown) {
-			const apiError = mapAxiosErrorToResponseError(err);
-
-			loading.value = false;
-		}
+	const deleteRoom = (id: string): void => {
+		roomsData.value = roomsData.value.filter((item) => item.id !== id);
 	};
 
 	const fetchAllElements = async (): Promise<void> => {
-		loading.value = true;
-		try {
-			const { data } = await coursesApi.courseControllerFindForUser(0, 100);
+		const { success, result } = await fetchAllElementsTask.execute(() =>
+			coursesApi.courseControllerFindForUser(0, 100)
+		);
 
-			allElements.value = processAllElements(data.data);
-			loading.value = false;
-		} catch (err: unknown) {
-			const apiError = mapAxiosErrorToResponseError(err);
-
-			loading.value = false;
+		if (success && result) {
+			allElements.value = processAllElements(result.data.data);
 		}
 	};
 
@@ -187,10 +150,7 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 		roomsData,
 		gridElementsId,
 		allElements,
-		sharedCourseData,
-		importedCourseId,
 		loading,
-		error,
 		hasRooms,
 		hasCurrentRooms,
 		fetch,

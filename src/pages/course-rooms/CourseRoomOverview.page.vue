@@ -390,7 +390,7 @@ const initCoursePolling = (started: Date, count = 0) => {
 	const nextTimeout = count * count * 1000 + 5000;
 	setTimeout(
 		async () => {
-			await fetch({ indicateLoading: false, device: device.value });
+			await fetch();
 			if (hasRoomsBeingCopied.value) {
 				initCoursePolling(started ?? new Date(), count + 1);
 			} else {
