@@ -1,6 +1,5 @@
 <template>
 	<template v-if="!tasks || tasks.length === 0">
-		<h2>{{ t("common.words.tasks") }}</h2>
 		<EmptyState data-testid="empty-state-tasks" :title="emptyMsg">
 			<template #media> <SvgTasksEmpty /></template>
 		</EmptyState>

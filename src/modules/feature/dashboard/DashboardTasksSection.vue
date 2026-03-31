@@ -1,8 +1,7 @@
 <template>
 	<VSheet>
-		<h2 class="mt-12" data-testid="dashboard-tasks-title">{{ title }}</h2>
-
-		<div class="grid-container" data-testid="task-courses">
+		<h3 class="text-h3 mt-8" data-testid="dashboard-tasks-title">{{ title }}</h3>
+		<div class="grid-container pb-4" data-testid="task-courses">
 			<VCard
 				v-for="task in tasks"
 				:key="task.id"
@@ -21,17 +20,22 @@
 					}}</span>
 
 					<div class="d-flex flex-wrap gc-4 gr-0">
-						<h3 class="text-h4 my-1" data-testid="task-name">
+						<h4 class="my-1" data-testid="task-name">
 							{{ task.name }}
-						</h3>
+						</h4>
 						<div class="d-flex ga-2 mt-2">
-							<VChip v-if="task.status?.maxSubmissions" size="small" variant="tonal" data-testid="task-submitted">
+							<VChip
+								v-if="isTeacher && task.status?.maxSubmissions"
+								size="small"
+								variant="tonal"
+								data-testid="task-submitted"
+							>
 								{{ t("pages.room.taskCard.teacher.label.submitted") }} {{ task.status.submitted }}/{{
 									task.status?.maxSubmissions
 								}}
 							</VChip>
 							<VChip
-								v-if="task.status?.maxSubmissions && task.status.submitted"
+								v-if="isTeacher && task.status?.maxSubmissions && task.status.submitted"
 								size="small"
 								variant="tonal"
 								data-testid="task-graded"
@@ -59,9 +63,12 @@
 <script setup lang="ts">
 import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
+import { useAppStoreRefs } from "@data-app";
 import { isTaskOverdue } from "@data-tasks";
 import { mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
+
+const { isTeacher } = useAppStoreRefs();
 
 defineProps<{
 	title: string;
