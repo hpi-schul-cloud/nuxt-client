@@ -90,7 +90,7 @@ describe("DashboardPage", () => {
 			const { wrapper } = setup({ news });
 			await flushPromises();
 
-			const newsCards = wrapper.findAll("[data-testid='container_of_element']");
+			const newsCards = wrapper.findAll("[data-testid='news-card-item']");
 			expect(newsCards).toHaveLength(news.length);
 		});
 	});
