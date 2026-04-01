@@ -24,52 +24,57 @@
 							{{ task.name }}
 						</h4>
 						<div class="d-flex ga-2 mt-2">
-							<VChip
-								v-if="isTeacher && task.status?.maxSubmissions"
-								size="small"
-								variant="tonal"
-								data-testid="task-submitted-teacher"
-							>
-								{{ t("pages.room.taskCard.teacher.label.submitted") }} {{ task.status.submitted }}/{{
-									task.status?.maxSubmissions
-								}}
-							</VChip>
-							<VChip
-								v-if="isTeacher && task.status?.maxSubmissions && task.status.submitted"
-								size="small"
-								variant="tonal"
-								data-testid="task-graded"
-							>
-								{{ t("pages.room.taskCard.label.graded") }}
-								{{ task.status.graded }}/{{ task.status.submitted }}
-							</VChip>
-							<VChip
-								v-if="isStudent && task.status?.submitted"
-								:prepend-icon="mdiCheckCircleOutline"
-								size="small"
-								variant="tonal"
-								data-testid="task-submitted-student"
-							>
-								{{ t("pages.room.taskCard.student.label.submitted") }}
-							</VChip>
-							<VChip
-								v-if="isTeacher && isTaskOverdue(task)"
-								:prepend-icon="mdiClockAlertOutline"
-								size="small"
-								variant="tonal"
-								data-testid="task-overdue-teacher"
-							>
-								{{ t("pages.room.taskCard.teacher.label.overdue") }}
-							</VChip>
-							<VChip
-								v-if="isStudent && isTaskOverdue(task) && !task.status?.submitted"
-								:prepend-icon="mdiClockAlertOutline"
-								size="small"
-								variant="tonal"
-								data-testid="task-overdue-student"
-							>
-								{{ t("pages.room.taskCard.student.label.overdue") }}
-							</VChip>
+							<template v-if="isTeacher">
+								<VChip
+									v-if="task.status?.maxSubmissions"
+									size="small"
+									variant="tonal"
+									data-testid="task-submitted-teacher"
+								>
+									{{ t("pages.room.taskCard.teacher.label.submitted") }} {{ task.status.submitted }}/{{
+										task.status?.maxSubmissions
+									}}
+								</VChip>
+								<VChip
+									v-if="task.status?.maxSubmissions && task.status.submitted"
+									size="small"
+									variant="tonal"
+									data-testid="task-graded"
+								>
+									{{ t("pages.room.taskCard.label.graded") }}
+									{{ task.status.graded }}/{{ task.status.submitted }}
+								</VChip>
+
+								<VChip
+									v-if="isTaskOverdue(task)"
+									:prepend-icon="mdiClockAlertOutline"
+									size="small"
+									variant="tonal"
+									data-testid="task-overdue-teacher"
+								>
+									{{ t("pages.room.taskCard.teacher.label.overdue") }}
+								</VChip>
+							</template>
+							<template v-if="isStudent">
+								<VChip
+									v-if="task.status?.submitted"
+									:prepend-icon="mdiCheckCircleOutline"
+									size="small"
+									variant="tonal"
+									data-testid="task-submitted-student"
+								>
+									{{ t("pages.room.taskCard.student.label.submitted") }}
+								</VChip>
+								<VChip
+									v-if="isTaskOverdue(task) && !task.status?.submitted"
+									:prepend-icon="mdiClockAlertOutline"
+									size="small"
+									variant="tonal"
+									data-testid="task-overdue-student"
+								>
+									{{ t("pages.room.taskCard.student.label.overdue") }}
+								</VChip>
+							</template>
 						</div>
 					</div>
 				</VCardText>
