@@ -20,7 +20,7 @@
 					}}</span>
 
 					<div class="d-flex flex-wrap gc-4 gr-0">
-						<h4 class="my-1" data-testid="task-name">
+						<h4 class="text-h4 my-1" data-testid="task-name">
 							{{ task.name }}
 						</h4>
 						<div class="d-flex ga-2 mt-2">
