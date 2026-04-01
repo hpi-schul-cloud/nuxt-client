@@ -19,7 +19,7 @@
  * @export
  * @enum {string}
  */
-export enum MediaBoardColors {
+export enum Colors {
     TRANSPARENT = 'transparent',
     RED = 'red',
     PINK = 'pink',

@@ -4,7 +4,7 @@ import {
 	MediaAvailableLineResponse,
 	MediaBoardApiFactory,
 	MediaBoardApiInterface,
-	MediaBoardColors,
+	Colors,
 	MediaBoardResponse,
 	MediaElementApiFactory,
 	MediaElementApiInterface,
@@ -56,13 +56,13 @@ export const useMediaBoardApi = () => {
 		await mediaLineApi.mediaLineControllerUpdateLineTitle(lineId, { title });
 	};
 
-	const updateLineColor = async (lineId: string, backgroundColor: MediaBoardColors): Promise<void> => {
+	const updateLineColor = async (lineId: string, backgroundColor: Colors): Promise<void> => {
 		await mediaLineApi.mediaLineControllerUpdateBackgroundColor(lineId, {
 			backgroundColor,
 		});
 	};
 
-	const updateAvailableLineColor = async (boardId: string, backgroundColor: MediaBoardColors): Promise<void> => {
+	const updateAvailableLineColor = async (boardId: string, backgroundColor: Colors): Promise<void> => {
 		await mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor(boardId, {
 			backgroundColor,
 		});

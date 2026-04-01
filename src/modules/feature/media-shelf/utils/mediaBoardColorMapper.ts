@@ -1,8 +1,8 @@
-import { MediaBoardColors } from "@api-server";
+import { Colors } from "@api-server";
 import colors from "vuetify/lib/util/colors";
 
-export const isMediaBoardColor = (colorName: string): colorName is MediaBoardColors =>
-	Object.values<string>(MediaBoardColors).includes(colorName);
+export const isMediaBoardColor = (colorName: string): colorName is Colors =>
+	Object.values<string>(Colors).includes(colorName);
 
 export type ColorShade =
 	| "base"
@@ -16,16 +16,16 @@ export type ColorShade =
 	| "darken3"
 	| "darken4";
 
-const getHexToColorMap = (): Record<string, MediaBoardColors> => {
+const getHexToColorMap = (): Record<string, Colors> => {
 	const colorNames: string[] = Object.keys(colors);
 
-	const looseColorMap: Record<string, MediaBoardColors>[] = colorNames.map(
-		(colorName: string): Record<string, MediaBoardColors> => {
-			if (isMediaBoardColor(colorName) && colorName !== MediaBoardColors.TRANSPARENT) {
+	const looseColorMap: Record<string, Colors>[] = colorNames.map(
+		(colorName: string): Record<string, Colors> => {
+			if (isMediaBoardColor(colorName) && colorName !== Colors.TRANSPARENT) {
 				const hexValues: string[] = Object.values(colors[colorName]);
 
 				return hexValues.reduce(
-					(previousValue: Record<string, MediaBoardColors>, currentValue: string): Record<string, MediaBoardColors> => {
+					(previousValue: Record<string, Colors>, currentValue: string): Record<string, Colors> => {
 						previousValue[currentValue] = colorName;
 
 						return previousValue;
@@ -37,16 +37,16 @@ const getHexToColorMap = (): Record<string, MediaBoardColors> => {
 		}
 	);
 
-	const colorMap: Record<string, MediaBoardColors> = Object.assign({}, ...looseColorMap);
+	const colorMap: Record<string, Colors> = Object.assign({}, ...looseColorMap);
 
 	return colorMap;
 };
 
-const hexToColorMap: Record<string, MediaBoardColors> = getHexToColorMap();
+const hexToColorMap: Record<string, Colors> = getHexToColorMap();
 
 export class MediaBoardColorMapper {
-	static mapColorToHex(colorName: MediaBoardColors, shade: ColorShade): string {
-		if (colorName === MediaBoardColors.TRANSPARENT) {
+	static mapColorToHex(colorName: Colors, shade: ColorShade): string {
+		if (colorName === Colors.TRANSPARENT) {
 			return colors.shades.white;
 		}
 
@@ -55,9 +55,9 @@ export class MediaBoardColorMapper {
 		return colorSet[shade];
 	}
 
-	static mapHexToColor(hex: string): MediaBoardColors | undefined {
+	static mapHexToColor(hex: string): Colors | undefined {
 		if (hex.toLowerCase() === colors.shades.white) {
-			return MediaBoardColors.TRANSPARENT;
+			return Colors.TRANSPARENT;
 		}
 
 		return hexToColorMap[hex.toLowerCase()];

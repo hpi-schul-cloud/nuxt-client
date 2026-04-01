@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { MediaBoardColorMapper } from "./utils";
-import { MediaBoardColors } from "@api-server";
+import { Colors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
 import { SvsColorPickerMenu } from "@ui-color-picker";
 import { KebabMenu } from "@ui-kebab-menu";
@@ -55,9 +55,9 @@ const collapsed: ModelRef<boolean> = defineModel("collapsed", {
 	default: false,
 });
 
-const color: ModelRef<MediaBoardColors> = defineModel("color", {
-	type: String as PropType<MediaBoardColors>,
-	default: MediaBoardColors.TRANSPARENT,
+const color: ModelRef<Colors> = defineModel("color", {
+	type: String as PropType<Colors>,
+	default: Colors.TRANSPARENT,
 });
 
 // const swatchShade: ColorShade = "lighten4";
@@ -65,10 +65,10 @@ const color: ModelRef<MediaBoardColors> = defineModel("color", {
 // const colorValue = computed<string>(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
 
 const onUpdateColor = (value: string) => {
-	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
+	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? Colors.TRANSPARENT;
 };
 
-// const swatchColors = Object.values(MediaBoardColors).map((colorName: MediaBoardColors) =>
+// const swatchColors = Object.values(Colors).map((colorName: Colors) =>
 // 	MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
 // );
 

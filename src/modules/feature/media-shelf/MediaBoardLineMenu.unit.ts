@@ -1,6 +1,6 @@
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { MediaBoardColors } from "@api-server";
+import { Colors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
@@ -107,7 +107,7 @@ describe("MediaBoardLineMenu", () => {
 			colorPicker.vm.$emit("update:model-value", colors.red.lighten4);
 			await nextTick();
 
-			expect(wrapper.emitted("update:color")).toEqual([[MediaBoardColors.RED]]);
+			expect(wrapper.emitted("update:color")).toEqual([[Colors.RED]]);
 		});
 	});
 

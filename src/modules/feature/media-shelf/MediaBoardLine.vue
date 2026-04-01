@@ -81,7 +81,7 @@ import {
 	BoardLayout,
 	ContentElementType,
 	DeletedElementResponse,
-	MediaBoardColors,
+	Colors,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@api-server";
@@ -110,7 +110,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
 	(e: "update:line-title", newTitle: string): void;
-	(e: "update:line-background-color", color: MediaBoardColors): void;
+	(e: "update:line-background-color", color: Colors): void;
 	(e: "update:line-collapsed", value: boolean): void;
 	(e: "update:element-position", value: ElementMove): void;
 	(e: "delete:line", lineId: string): void;

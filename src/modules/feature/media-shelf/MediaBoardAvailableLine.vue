@@ -66,7 +66,7 @@ import {
 	BoardLayout,
 	MediaAvailableLineElementResponse,
 	MediaAvailableLineResponse,
-	MediaBoardColors,
+	Colors,
 } from "@api-server";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
@@ -88,7 +88,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
-	(e: "update:line-background-color", value: MediaBoardColors): void;
+	(e: "update:line-background-color", value: Colors): void;
 	(e: "update:line-collapsed", value: boolean): void;
 }>();
 
