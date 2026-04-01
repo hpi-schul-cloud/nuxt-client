@@ -80,4 +80,14 @@ describe("DashboardTasksSection", () => {
 
 		expect(wrapper.find("[data-testid='task-submitted-student']").exists()).toBe(true);
 	});
+
+	it("shows overdue chip for overdue tasks when student has not submitted", () => {
+		const overdueTask = taskResponseFactory.build({
+			dueDate: dateFromToday(-1, "day"),
+			status: { submitted: 0 },
+		});
+		const { wrapper } = setup([overdueTask], "student");
+
+		expect(wrapper.find("[data-testid='task-overdue-student']").exists()).toBe(true);
+	});
 });

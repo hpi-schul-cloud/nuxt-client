@@ -50,7 +50,7 @@
 								variant="tonal"
 								data-testid="task-submitted-student"
 							>
-								{{ t("components.organisms.TasksDashboardMain.tab.completed") }}
+								{{ t("pages.room.taskCard.student.label.submitted") }}
 							</VChip>
 							<VChip
 								v-if="isTeacher && isTaskOverdue(task)"
@@ -68,7 +68,7 @@
 								variant="tonal"
 								data-testid="task-overdue-student"
 							>
-								{{ t("pages.room.taskCard.teacher.label.overdue") }}
+								{{ t("pages.room.taskCard.student.label.overdue") }}
 							</VChip>
 						</div>
 					</div>
