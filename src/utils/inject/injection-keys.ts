@@ -1,4 +1,3 @@
-import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import CourseRoomListModule from "@/store/course-room-list";
@@ -21,8 +20,6 @@ export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> = 
 export const SYSTEMS_MODULE_KEY: InjectionKey<SystemsModule> = Symbol("systemsModule");
 export const GROUP_MODULE_KEY: InjectionKey<GroupModule> = Symbol("groupModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> = Symbol("schoolsModule");
-export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
-	Symbol("commonCartridgeExportModule");
 export const COURSE_ROOM_LIST_MODULE_KEY: InjectionKey<CourseRoomListModule> = Symbol("courseRoomListModule");
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const SHARE_MODULE_KEY: InjectionKey<ShareModule> = Symbol("shareModule");
