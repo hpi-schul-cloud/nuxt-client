@@ -32,31 +32,9 @@
 <script setup lang="ts">
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { useCourseRoomListStore } from "@data-course-rooms";
+import { type GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
 import { useOpeningTagValidator } from "@util-validators";
 import { ref, watch } from "vue";
-
-type ItemType = {
-	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	to: string;
-};
-
-type GroupDataType = {
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	groupId: string;
-	groupElements: ItemType[];
-	isSynchronized: boolean;
-	to: string;
-};
 
 type Props = {
 	isOpen: boolean;
@@ -77,6 +55,7 @@ const courseRoomListStore = useCourseRoomListStore();
 const { updateCourse } = courseRoomListStore;
 
 const data = ref<GroupDataType>({
+	id: "",
 	title: "",
 	shortTitle: "",
 	displayColor: "",
@@ -84,8 +63,9 @@ const data = ref<GroupDataType>({
 	yPosition: -1,
 	groupId: "",
 	groupElements: [],
+	copyingSince: "",
 	isSynchronized: false,
-	to: "",
+	isLocked: false,
 });
 
 const updateCourseGroupName = async () => {

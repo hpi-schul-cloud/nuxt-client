@@ -1,21 +1,16 @@
-export type ItemType = {
-	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	to: string;
+import type { DashboardGridElementResponse, DashboardGridSubElementResponse } from "@api-server";
+
+/**
+ * UI-extended version of DashboardGridSubElementResponse.
+ */
+export type ItemType = DashboardGridSubElementResponse & {
+	to?: string;
 };
 
-export type GroupDataType = {
-	title: string;
-	shortTitle: string;
-	displayColor: string;
-	xPosition: number;
-	yPosition: number;
-	groupId: string;
+/**
+ * UI-extended version of DashboardGridElementResponse.
+ */
+export type GroupDataType = Omit<DashboardGridElementResponse, "groupElements"> & {
 	groupElements: ItemType[];
-	isSynchronized: boolean;
-	to: string;
+	to?: string;
 };

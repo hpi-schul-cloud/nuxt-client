@@ -21,6 +21,7 @@ describe("RoomModal", () => {
 			props: {
 				isOpen,
 				groupData: {
+					id: "group-1",
 					title: "dummy title",
 					groupElements: [],
 					shortTitle: "",
@@ -28,8 +29,9 @@ describe("RoomModal", () => {
 					xPosition: 0,
 					yPosition: 0,
 					groupId: "",
+					copyingSince: "",
 					isSynchronized: false,
-					to: "",
+					isLocked: false,
 				},
 				draggable: true,
 			},
@@ -306,6 +308,7 @@ describe("RoomModal", () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
 				const newGroupData = {
+					id: "new-group-id",
 					title: "new title",
 					groupElements: [],
 					shortTitle: "NT",
@@ -313,8 +316,9 @@ describe("RoomModal", () => {
 					xPosition: 5,
 					yPosition: 10,
 					groupId: "new-id",
+					copyingSince: "",
 					isSynchronized: true,
-					to: "/new-path",
+					isLocked: false,
 				};
 
 				await wrapper.setProps({ groupData: newGroupData });

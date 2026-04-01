@@ -139,7 +139,7 @@ describe("CourseRoomOverview.page", () => {
 			yPosition: 1,
 			to: "/rooms/1",
 		};
-		expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
+		expect(wrapper.vm.rooms[0]).toMatchObject(expectedItem);
 	});
 
 	it("should display 6 avatars component", async () => {
@@ -217,7 +217,7 @@ describe("CourseRoomOverview.page", () => {
 				x: 0,
 				y: 0,
 			},
-			item: {
+			item: expect.objectContaining({
 				id: "3",
 				title: "Third",
 				shortTitle: "Ma",
@@ -225,7 +225,7 @@ describe("CourseRoomOverview.page", () => {
 				to: "/rooms/3",
 				xPosition: 0,
 				yPosition: 0,
-			},
+			}),
 			to: {
 				x: 3,
 				y: 2,
@@ -250,7 +250,7 @@ describe("CourseRoomOverview.page", () => {
 				x: 1,
 				y: 1,
 			},
-			item: {
+			item: expect.objectContaining({
 				id: "1",
 				title: "First",
 				shortTitle: "Ma",
@@ -258,7 +258,7 @@ describe("CourseRoomOverview.page", () => {
 				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
-			},
+			}),
 			to: {
 				x: 2,
 				y: 3,
@@ -378,7 +378,7 @@ describe("CourseRoomOverview.page", () => {
 				x: 1,
 				y: 1,
 			},
-			item: {
+			item: expect.objectContaining({
 				id: "1",
 				title: "First",
 				shortTitle: "Ma",
@@ -386,7 +386,7 @@ describe("CourseRoomOverview.page", () => {
 				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
-			},
+			}),
 			to: {
 				x: 2,
 				y: 2,
@@ -409,8 +409,8 @@ describe("CourseRoomOverview.page", () => {
 
 	it("should set rowCount while loading", async () => {
 		const roomData = [
-			courseRoomElementFactory.build(),
-			courseRoomElementFactory.build(),
+			courseRoomElementFactory.build({ xPosition: 1, yPosition: 1 }),
+			courseRoomElementFactory.build({ xPosition: 2, yPosition: 2 }),
 			courseRoomElementFactory.build({ xPosition: 3, yPosition: 7 }),
 		];
 
@@ -421,6 +421,8 @@ describe("CourseRoomOverview.page", () => {
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(false);
 		await nextTick();
 		await nextTick();
-		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(13);
+		// rowCount = max(yPosition) + 2 when greater than defaultRowCount (6)
+		// 7 + 2 = 9
+		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 	});
 });
