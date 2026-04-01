@@ -28,7 +28,7 @@
 								v-if="isTeacher && task.status?.maxSubmissions"
 								size="small"
 								variant="tonal"
-								data-testid="task-submitted"
+								data-testid="task-submitted-teacher"
 							>
 								{{ t("pages.room.taskCard.teacher.label.submitted") }} {{ task.status.submitted }}/{{
 									task.status?.maxSubmissions
@@ -48,7 +48,7 @@
 								:prepend-icon="mdiCheckCircleOutline"
 								size="small"
 								variant="tonal"
-								data-testid="task-submitted-not-graded"
+								data-testid="task-submitted-student"
 							>
 								{{ t("components.organisms.TasksDashboardMain.tab.completed") }}
 							</VChip>
@@ -57,7 +57,7 @@
 								:prepend-icon="mdiClockAlertOutline"
 								size="small"
 								variant="tonal"
-								data-testid="task-overdue"
+								data-testid="task-overdue-teacher"
 							>
 								{{ t("pages.room.taskCard.teacher.label.overdue") }}
 							</VChip>
@@ -66,7 +66,7 @@
 								:prepend-icon="mdiClockAlertOutline"
 								size="small"
 								variant="tonal"
-								data-testid="task-overdue"
+								data-testid="task-overdue-student"
 							>
 								{{ t("pages.room.taskCard.teacher.label.overdue") }}
 							</VChip>
@@ -84,14 +84,21 @@ import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { isTaskOverdue } from "@data-tasks";
 import { mdiCheckCircleOutline, mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
+import { computed, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { isTeacher, isStudent } = useAppStoreRefs();
+const { isTeacher: storeIsTeacher, isStudent: storeIsStudent } = useAppStoreRefs();
 
-defineProps<{
+const props = defineProps<{
 	title: string;
 	tasks: TaskResponse[];
+	role?: "teacher" | "student";
 }>();
+
+const { role } = toRefs(props);
+
+const isTeacher = computed(() => (role?.value ? role.value === "teacher" : storeIsTeacher.value));
+const isStudent = computed(() => (role?.value ? role.value === "student" : storeIsStudent.value));
 
 const { t } = useI18n();
 </script>

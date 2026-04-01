@@ -2,14 +2,15 @@ import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { dateFromToday } from "@/utils/date-time.utils";
 import { taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
 describe("DashboardTasksSection", () => {
-	const setup = (tasks = [taskResponseFactory.build()]) => {
+	const setup = (tasks = [taskResponseFactory.build()], role?: "teacher" | "student") => {
 		const wrapper = shallowMount(DashboardTasksSection, {
-			props: { title: "My Tasks", tasks },
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			props: { title: "My Tasks", tasks, role },
+			global: { plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()] },
 		});
 		return { wrapper };
 	};
@@ -32,31 +33,31 @@ describe("DashboardTasksSection", () => {
 		expect(taskNames[1].text()).toBe("Task 2");
 	});
 
-	it("shows overdue chip for overdue tasks", () => {
+	it("shows overdue chip for overdue tasks when teacher", () => {
 		const overdueTask = taskResponseFactory.build({
 			dueDate: dateFromToday(-1, "day"),
 		});
-		const { wrapper } = setup([overdueTask]);
+		const { wrapper } = setup([overdueTask], "teacher");
 
-		expect(wrapper.find("[data-testid='task-overdue']").exists()).toBe(true);
+		expect(wrapper.find("[data-testid='task-overdue-teacher']").exists()).toBe(true);
 	});
 
 	it("does not show overdue chip for future tasks", () => {
 		const futureTask = taskResponseFactory.build({
 			dueDate: dateFromToday(5, "day"),
 		});
-		const { wrapper } = setup([futureTask]);
+		const { wrapper } = setup([futureTask], "teacher");
 
-		expect(wrapper.find("[data-testid='task-overdue']").exists()).toBe(false);
+		expect(wrapper.find("[data-testid='task-overdue-teacher']").exists()).toBe(false);
 	});
 
-	it("shows submitted and graded chips when maxSubmissions exists", () => {
+	it("shows submitted and graded chips when maxSubmissions exists and role is teacher", () => {
 		const taskWithSubmissions = taskResponseFactory.build({
 			status: { maxSubmissions: 10, submitted: 5, graded: 2 },
 		});
-		const { wrapper } = setup([taskWithSubmissions]);
+		const { wrapper } = setup([taskWithSubmissions], "teacher");
 
-		expect(wrapper.find("[data-testid='task-submitted']").exists()).toBe(true);
+		expect(wrapper.find("[data-testid='task-submitted-teacher']").exists()).toBe(true);
 		expect(wrapper.find("[data-testid='task-graded']").exists()).toBe(true);
 	});
 
@@ -64,9 +65,19 @@ describe("DashboardTasksSection", () => {
 		const taskWithoutSubmissions = taskResponseFactory.build({
 			status: { maxSubmissions: 0 },
 		});
-		const { wrapper } = setup([taskWithoutSubmissions]);
+		const { wrapper } = setup([taskWithoutSubmissions], "teacher");
 
-		expect(wrapper.find("[data-testid='task-submitted']").exists()).toBe(false);
+		expect(wrapper.find("[data-testid='task-submitted-teacher']").exists()).toBe(false);
 		expect(wrapper.find("[data-testid='task-graded']").exists()).toBe(false);
+	});
+
+	it("shows submitted chip when task is submitted for student", () => {
+		const submittedTask = taskResponseFactory.build({
+			dueDate: dateFromToday(5, "day"),
+			status: { submitted: 1 },
+		});
+		const { wrapper } = setup([submittedTask], "student");
+
+		expect(wrapper.find("[data-testid='task-submitted-student']").exists()).toBe(true);
 	});
 });
