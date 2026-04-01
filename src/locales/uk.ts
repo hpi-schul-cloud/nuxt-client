@@ -257,7 +257,6 @@ export default {
 	"common.words.topic": "Тема",
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
-	"common.words.export": "Завантажується експорт курсу",
 	"common.alerts.room.not.available": "Нієї кімнати недоступно. | Немає доступних кімнат.",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
@@ -1645,6 +1644,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Триває завантаження...",
 	"pages.rooms.ccImportCourse.success": "Файл вашого курсу завантажено та зараз імпортується у фоновому режимі.",
 	"pages.rooms.ccImportCourse.error": "Під час завантаження файлу курсу сталася помилка.",
+	"pages.rooms.ccExportCourse.started": "Завантажується експорт курсу",
 	"pages.rooms.ccExportCourse.error": "Під час експорту курсу сталася помилка.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",

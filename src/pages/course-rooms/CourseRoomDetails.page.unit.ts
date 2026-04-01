@@ -29,11 +29,13 @@ import {
 import { createTestingPinia } from "@pinia/testing";
 import { DefaultWireframe } from "@ui-layout";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { flushPromises } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { mock } from "vitest-mock-extended";
 import { nextTick } from "vue";
 import { createRouterMock, injectRouterMock, RouterMock } from "vue-router-mock";
+import { VBtn, VListItem } from "vuetify/components";
 
 const boardElements: Array<BoardElementResponse> = [
 	{
@@ -138,6 +140,7 @@ describe("CourseRoomDetails.page.vue", () => {
 			getRoomData: singleColumnBoard,
 			getPermissionData: permissionData,
 			getIsLocked: isLocked,
+			roomIsEmpty: false,
 		});
 
 		vi.mocked(courseRoomDetailsModule.createBoard).mockResolvedValue({
@@ -156,6 +159,7 @@ describe("CourseRoomDetails.page.vue", () => {
 		router.setParams({ id: singleColumnBoard.roomId });
 
 		const wrapper = shallowMount(CourseRoomDetailsPage, {
+			// const wrapper = mount(CourseRoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -174,6 +178,10 @@ describe("CourseRoomDetails.page.vue", () => {
 					VTab: false,
 					VChip: false,
 					VBtn: false,
+					VFab: false,
+					VListItem: false,
+					SpeedDialMenu: false,
+					SpeedDialMenuAction: false,
 					EndCourseSyncDialog: true,
 					StartExistingCourseSyncDialog: true,
 					UseFocusTrap: true,
@@ -214,14 +222,6 @@ describe("CourseRoomDetails.page.vue", () => {
 		expect(title.text()).toContain(singleColumnBoard.title);
 	});
 
-	it("should not show FAB if user does not have permission to create courses", async () => {
-		const { wrapper } = setup({ permissionData: mockPermissionsStudent });
-		await flushPromises();
-
-		const wireframe = wrapper.findComponent(DefaultWireframe);
-		expect(wireframe.props("fabItems")).toBeUndefined();
-	});
-
 	describe("when course is locked", () => {
 		it("should show the locked course page", async () => {
 			const { wrapper } = setup({ isLocked: true });
@@ -233,31 +233,43 @@ describe("CourseRoomDetails.page.vue", () => {
 	});
 
 	describe("menu", () => {
-		it("should show FAB if user has permission to create homework", async () => {
-			const { wrapper } = setup({
-				permissionData: [Permission.HOMEWORK_CREATE],
-			});
-			await flushPromises();
+		describe("'add task' button", () => {
+			describe("when user does not have permission to create tasks", () => {
+				it("should not render task creation button in FAB", async () => {
+					const { wrapper } = setup({
+						permissionData: [],
+					});
+					await flushPromises();
+					const addTaskActionButton = wrapper.find('[data-testid="fab_button_add_task"]');
 
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			expect(wireframe.props("fabItems")).toBeDefined();
+					expect(addTaskActionButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when user does have permission to create tasks", () => {
+				it("should render task creation button in FAB", async () => {
+					const { wrapper } = setup({
+						permissionData: [Permission.HOMEWORK_CREATE],
+					});
+					await flushPromises();
+					const addTaskActionButton = wrapper.find('[data-testid="fab_button_add_task"]');
+
+					expect(addTaskActionButton.exists()).toBe(true);
+				});
+			});
 		});
 
 		describe("'add board' button", () => {
-			describe("when user doesn't have course edit permission", () => {
+			describe("when user does not have course edit permission", () => {
 				it("should not render board creation button in FAB", async () => {
 					const { wrapper } = setup({
 						permissionData: [Permission.HOMEWORK_CREATE, Permission.TOPIC_CREATE],
 					});
 					await flushPromises();
 
-					const wireframe = wrapper.findComponent(DefaultWireframe);
-					const fabItems = wireframe.props("fabItems") as Array<{
-						dataTestId: string;
-					}>;
-					const dataTestIds = fabItems?.map((item) => item.dataTestId) ?? [];
+					const addBoardActionButton = wrapper.find('[data-testid="fab_button_add_board"]');
 
-					expect(dataTestIds).not.toContain("fab_button_add_board");
+					expect(addBoardActionButton.exists()).toBe(false);
 				});
 			});
 
@@ -268,34 +280,29 @@ describe("CourseRoomDetails.page.vue", () => {
 					});
 					await flushPromises();
 
-					const wireframe = wrapper.findComponent(DefaultWireframe);
-					const fabItems = wireframe.props("fabItems") as Array<{
-						dataTestId: string;
-					}>;
-					const dataTestIds = fabItems?.map((item) => item.dataTestId) ?? [];
+					const addBoardActionButton = wrapper.find('[data-testid="fab_button_add_board"]');
 
-					expect(dataTestIds).toContain("fab_button_add_board");
+					expect(addBoardActionButton.exists()).toBe(true);
 				});
 
-				it("should open layout dialog when add board button is clicked", async () => {
-					const { wrapper } = setup({
-						permissionData: [Permission.COURSE_EDIT],
+				describe("when 'add board' button is clicked", () => {
+					it("should open layout dialog", async () => {
+						const { wrapper } = setup({
+							permissionData: [Permission.COURSE_EDIT],
+						});
+						await flushPromises();
+
+						const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+						expect(layoutDialog.props("modelValue")).toBe(false);
+
+						const speedDialMenu = wrapper.findComponent(SpeedDialMenu).findComponent(VBtn);
+						await speedDialMenu.trigger("click");
+
+						const addBoardActionButton = speedDialMenu.find('[data-testid="fab_button_add_board"]');
+						await addBoardActionButton.trigger("click");
+
+						expect(layoutDialog.props("modelValue")).toBe(true);
 					});
-					await flushPromises();
-
-					const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
-					expect(layoutDialog.props("modelValue")).toBe(false);
-
-					const wireframe = wrapper.findComponent(DefaultWireframe);
-					const fabItems = wireframe.props("fabItems") as Array<{
-						dataTestId: string;
-						clickHandler?: () => void;
-					}>;
-					const addBoardAction = fabItems?.find((item) => item.dataTestId === "fab_button_add_board");
-					addBoardAction?.clickHandler?.();
-					await nextTick();
-
-					expect(layoutDialog.props("modelValue")).toBe(true);
 				});
 			});
 		});
@@ -389,81 +396,89 @@ describe("CourseRoomDetails.page.vue", () => {
 				});
 			});
 
-			it("should redirect the page when 'Edit/Delete' menu is clicked", async () => {
-				const { wrapper, singleColumnBoard } = setup();
-				await flushPromises();
+			describe("when 'Edit/Delete' menu is clicked", () => {
+				it("should redirect the page", async () => {
+					const { wrapper, singleColumnBoard } = setup();
+					await flushPromises();
 
-				const menuButton = wrapper.findComponent(RoomDotMenu);
-				const menuItems = menuButton.props("menuItems") as Array<{
-					dataTestId: string;
-					action: () => void;
-				}>;
-				const editAction = menuItems.find((item) => item.dataTestId === "room-menu-edit-delete");
-				editAction?.action();
+					const menuButton = wrapper.findComponent(RoomDotMenu);
+					const menuItems = menuButton.props("menuItems") as Array<{
+						dataTestId: string;
+						action: () => void;
+					}>;
+					const editAction = menuItems.find((item) => item.dataTestId === "room-menu-edit-delete");
+					editAction?.action();
 
-				expect(router.push).toHaveBeenCalledWith(`/courses/${singleColumnBoard.roomId}/edit`);
+					expect(router.push).toHaveBeenCalledWith(`/courses/${singleColumnBoard.roomId}/edit`);
+				});
 			});
 
 			describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
-				it("should copy course and redirect when 'Copy course' menu is clicked", async () => {
-					createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
-					const { wrapper, copyModule } = setup();
-					await flushPromises();
+				describe("when 'Copy course' menu is clicked", () => {
+					it("should copy course and redirect when 'Copy course' menu is clicked", async () => {
+						createTestEnvStore({ FEATURE_COPY_SERVICE_ENABLED: true });
+						const { wrapper, copyModule } = setup();
+						await flushPromises();
 
-					const menuButton = wrapper.findComponent(RoomDotMenu);
-					const menuItems = menuButton.props("menuItems") as Array<{
-						dataTestId: string;
-						action: () => void;
-					}>;
-					const copyAction = menuItems.find((item) => item.dataTestId === "room-menu-copy");
-					await copyAction?.action();
-					await flushPromises();
+						const menuButton = wrapper.findComponent(RoomDotMenu);
+						const menuItems = menuButton.props("menuItems") as Array<{
+							dataTestId: string;
+							action: () => void;
+						}>;
+						const copyAction = menuItems.find((item) => item.dataTestId === "room-menu-copy");
+						await copyAction?.action();
+						await flushPromises();
 
-					expect(copyModule.copy).toHaveBeenCalled();
-					expect(router.push).toHaveBeenCalledWith({
-						path: "/rooms/copiedid",
-						replace: true,
+						expect(copyModule.copy).toHaveBeenCalled();
+						expect(router.push).toHaveBeenCalledWith({
+							path: "/rooms/copiedid",
+							replace: true,
+						});
 					});
 				});
 			});
 
-			describe("test Course export", () => {
-				it("should not find export button when feature flag is false", async () => {
-					createTestEnvStore({
-						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
+			describe("Course export", () => {
+				describe("when 'FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED' is turned off", () => {
+					it("should not find export button when feature flag is false", async () => {
+						createTestEnvStore({
+							FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
+						});
+						const { wrapper } = setup();
+						await flushPromises();
+
+						const menuButton = wrapper.findComponent(RoomDotMenu);
+						const menuItems = menuButton.props("menuItems") as Array<{
+							dataTestId: string;
+						}>;
+						const dataTestIds = menuItems.map((item) => item.dataTestId);
+
+						expect(dataTestIds).not.toContain("room-menu-common-cartridge-download");
 					});
-					const { wrapper } = setup();
-					await flushPromises();
-
-					const menuButton = wrapper.findComponent(RoomDotMenu);
-					const menuItems = menuButton.props("menuItems") as Array<{
-						dataTestId: string;
-					}>;
-					const dataTestIds = menuItems.map((item) => item.dataTestId);
-
-					expect(dataTestIds).not.toContain("room-menu-common-cartridge-download");
 				});
 
-				it("should open export modal when 'Export Course' menu is clicked", async () => {
-					createTestEnvStore({
-						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
+				describe("when 'FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED' is turned on", () => {
+					it("should open export modal when 'Export Course' menu is clicked", async () => {
+						createTestEnvStore({
+							FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
+						});
+						const { wrapper } = setup();
+						await flushPromises();
+
+						const exportModal = wrapper.findComponent(CourseCommonCartridgeExportModal);
+						expect(exportModal.props("isOpen")).toBe(false);
+
+						const menuButton = wrapper.findComponent(RoomDotMenu);
+						const menuItems = menuButton.props("menuItems") as Array<{
+							dataTestId: string;
+							action: () => void;
+						}>;
+						const exportAction = menuItems.find((item) => item.dataTestId === "room-menu-common-cartridge-download");
+						exportAction?.action();
+						await nextTick();
+
+						expect(exportModal.props("isOpen")).toBe(true);
 					});
-					const { wrapper } = setup();
-					await flushPromises();
-
-					const exportModal = wrapper.findComponent(CourseCommonCartridgeExportModal);
-					expect(exportModal.props("isOpen")).toBe(false);
-
-					const menuButton = wrapper.findComponent(RoomDotMenu);
-					const menuItems = menuButton.props("menuItems") as Array<{
-						dataTestId: string;
-						action: () => void;
-					}>;
-					const exportAction = menuItems.find((item) => item.dataTestId === "room-menu-common-cartridge-download");
-					exportAction?.action();
-					await nextTick();
-
-					expect(exportModal.props("isOpen")).toBe(true);
 				});
 			});
 
@@ -499,45 +514,49 @@ describe("CourseRoomDetails.page.vue", () => {
 	});
 
 	describe("board creation functionality", () => {
-		it("should open board layout dialog when add board action is triggered", async () => {
-			const { wrapper } = setup({
-				permissionData: [Permission.COURSE_EDIT],
+		describe("when add board action is triggered", () => {
+			it("should open board layout dialog when add board action is triggered", async () => {
+				const { wrapper } = setup({
+					permissionData: [Permission.COURSE_EDIT],
+				});
+				await flushPromises();
+
+				const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+				expect(layoutDialog.props("modelValue")).toBe(false);
+
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const fabItems = wireframe.props("fabItems") as Array<{
+					dataTestId: string;
+					clickHandler?: () => void;
+				}>;
+				const addBoardAction = fabItems?.find((item) => item.dataTestId === "fab_button_add_board");
+				addBoardAction?.clickHandler?.();
+				await nextTick();
+
+				expect(layoutDialog.props("modelValue")).toBe(true);
 			});
-			await flushPromises();
-
-			const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
-			expect(layoutDialog.props("modelValue")).toBe(false);
-
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const fabItems = wireframe.props("fabItems") as Array<{
-				dataTestId: string;
-				clickHandler?: () => void;
-			}>;
-			const addBoardAction = fabItems?.find((item) => item.dataTestId === "fab_button_add_board");
-			addBoardAction?.clickHandler?.();
-			await nextTick();
-
-			expect(layoutDialog.props("modelValue")).toBe(true);
 		});
 
-		it("should create board when layout is selected", async () => {
-			const { wrapper, courseRoomDetailsModule, singleColumnBoard, router } = setup({
-				permissionData: [Permission.COURSE_EDIT],
+		describe("when a layout is selected", () => {
+			it("should create board when layout is selected", async () => {
+				const { wrapper, courseRoomDetailsModule, singleColumnBoard, router } = setup({
+					permissionData: [Permission.COURSE_EDIT],
+				});
+				await flushPromises();
+
+				const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+				await layoutDialog.vm.$emit("select", BoardLayout.COLUMNS);
+				await flushPromises();
+
+				expect(courseRoomDetailsModule.createBoard).toHaveBeenCalledWith({
+					title: expect.any(String),
+					parentType: "course",
+					parentId: singleColumnBoard.roomId,
+					layout: BoardLayout.COLUMNS,
+				});
+
+				expect(router.push).toHaveBeenCalledWith("/boards/new-board-id");
 			});
-			await flushPromises();
-
-			const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
-			await layoutDialog.vm.$emit("select", BoardLayout.COLUMNS);
-			await flushPromises();
-
-			expect(courseRoomDetailsModule.createBoard).toHaveBeenCalledWith({
-				title: expect.any(String),
-				parentType: "course",
-				parentId: singleColumnBoard.roomId,
-				layout: BoardLayout.COLUMNS,
-			});
-
-			expect(router.push).toHaveBeenCalledWith("/boards/new-board-id");
 		});
 	});
 
@@ -579,300 +598,323 @@ describe("CourseRoomDetails.page.vue", () => {
 			expect(router.push).toHaveBeenCalledWith("/rooms/courses-overview");
 		});
 
-		it("should reset copy module when copy result modal is closed", async () => {
-			const { wrapper, copyModule } = setup();
-			await flushPromises();
+		describe("when copy result modal is closed", () => {
+			it("should reset copy module", async () => {
+				const { wrapper, copyModule } = setup();
+				await flushPromises();
 
-			const copyResultModal = wrapper.findComponent(CopyResultModal);
-			await copyResultModal.vm.$emit("copy-dialog-closed");
+				const copyResultModal = wrapper.findComponent(CopyResultModal);
+				await copyResultModal.vm.$emit("copy-dialog-closed");
 
-			expect(copyModule.reset).toHaveBeenCalled();
+				expect(copyModule.reset).toHaveBeenCalled();
+			});
 		});
 	});
 
 	describe("sync functionality", () => {
-		it("should show end sync option when course is synchronized", async () => {
-			createTestEnvStore({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		describe("when 'FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED' is enabled", () => {
+			describe("and course is synchronized", () => {
+				it("should show end sync option", async () => {
+					createTestEnvStore({
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+					});
+					const { wrapper } = setup({ isSynchronized: true });
+					await flushPromises();
+
+					const menuButton = wrapper.findComponent(RoomDotMenu);
+					const menuItems = menuButton.props("menuItems") as Array<{
+						dataTestId: string;
+					}>;
+					const dataTestIds = menuItems.map((item) => item.dataTestId);
+
+					expect(dataTestIds).toContain("title-menu-end-sync");
+				});
+
+				describe("when end sync menu item is clicked", () => {
+					it("should open end sync dialog", async () => {
+						createTestEnvStore({
+							FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+						});
+						const { wrapper } = setup({ isSynchronized: true });
+						await flushPromises();
+
+						const endSyncDialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
+						expect(endSyncDialog.props("isOpen")).toBe(false);
+
+						const endSyncAction = wrapper
+							.findComponent(RoomDotMenu)
+							.find('[data-testid="title-menu-end-sync"]')
+							.findComponent(VListItem);
+						await endSyncAction.trigger("click");
+
+						expect(endSyncDialog.props("isOpen")).toBe(true);
+					});
+				});
+
+				describe("when end sync dialog emits success", () => {
+					it("should refresh rooms", async () => {
+						createTestEnvStore({
+							FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+						});
+						const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: true });
+						await flushPromises();
+
+						const endSyncDialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
+						endSyncDialog.vm.$emit("success");
+						await flushPromises();
+
+						// fetchContent is called once during initialization and once on success
+						expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+					});
+				});
 			});
-			const { wrapper } = setup({ isSynchronized: true });
-			await flushPromises();
 
-			const menuButton = wrapper.findComponent(RoomDotMenu);
-			const menuItems = menuButton.props("menuItems") as Array<{
-				dataTestId: string;
-			}>;
-			const dataTestIds = menuItems.map((item) => item.dataTestId);
+			describe("and course is not synchronized", () => {
+				it("should show start sync option", async () => {
+					createTestEnvStore({
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+					});
+					const { wrapper } = setup({ isSynchronized: false });
+					await flushPromises();
 
-			expect(dataTestIds).toContain("title-menu-end-sync");
+					const menuButton = wrapper.findComponent(RoomDotMenu);
+					const menuItems = menuButton.props("menuItems") as Array<{
+						dataTestId: string;
+					}>;
+					const dataTestIds = menuItems.map((item) => item.dataTestId);
+
+					expect(dataTestIds).toContain("title-menu-start-sync");
+				});
+
+				describe("when start sync menu item is clicked", () => {
+					it("should open start sync dialog", async () => {
+						createTestEnvStore({
+							FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+						});
+						const { wrapper } = setup({ isSynchronized: false });
+						await flushPromises();
+
+						const menuButton = wrapper.findComponent(RoomDotMenu);
+						const menuItems = menuButton.props("menuItems") as Array<{
+							dataTestId: string;
+							action: () => void;
+						}>;
+						const startSyncAction = menuItems.find((item) => item.dataTestId === "title-menu-start-sync");
+						startSyncAction?.action();
+						await nextTick();
+
+						const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
+						expect(startSyncDialog.props("isOpen")).toBe(true);
+					});
+				});
+
+				describe("when start sync dialog emits success", () => {
+					it("should refresh room", async () => {
+						createTestEnvStore({
+							FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+						});
+						const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: false });
+						await flushPromises();
+
+						const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
+						startSyncDialog.vm.$emit("success");
+						await flushPromises();
+
+						// fetchContent is called once during initialization and once on success
+						expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+					});
+				});
+			});
 		});
 
-		it("should show start sync option when course is not synchronized", async () => {
-			createTestEnvStore({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		describe("user role behavior", () => {
+			describe("when user is teacher with permission", () => {
+				it("should show FAB items", async () => {
+					const { wrapper } = setup({
+						roleName: ImportUserResponseRoleNames.TEACHER,
+						permissionData: [Permission.HOMEWORK_CREATE, Permission.TOPIC_CREATE, Permission.COURSE_EDIT],
+					});
+					await flushPromises();
+
+					const wireframe = wrapper.findComponent(DefaultWireframe);
+					const fabItems = wireframe.props("fabItems") as Array<{
+						dataTestId: string;
+					}>;
+
+					expect(fabItems).toBeDefined();
+					expect(fabItems.length).toBeGreaterThan(1);
+				});
 			});
-			const { wrapper } = setup({ isSynchronized: false });
-			await flushPromises();
 
-			const menuButton = wrapper.findComponent(RoomDotMenu);
-			const menuItems = menuButton.props("menuItems") as Array<{
-				dataTestId: string;
-			}>;
-			const dataTestIds = menuItems.map((item) => item.dataTestId);
+			describe("when user is student", () => {
+				it("should not show FAB items", async () => {
+					const { wrapper } = setup({
+						roleName: ImportUserResponseRoleNames.STUDENT,
+						permissionData: [],
+					});
+					await flushPromises();
 
-			expect(dataTestIds).toContain("title-menu-start-sync");
+					const wireframe = wrapper.findComponent(DefaultWireframe);
+					expect(wireframe.props("fabItems")).toBeUndefined();
+				});
+			});
 		});
 
-		it("should open end sync dialog when end sync menu item is clicked", async () => {
-			createTestEnvStore({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		describe("breadcrumbs", () => {
+			it("should display correct breadcrumbs", async () => {
+				const { wrapper, singleColumnBoard } = setup();
+				await flushPromises();
+
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const breadcrumbs = wireframe.props("breadcrumbs") as Array<{
+					title: string;
+					to?: string;
+					disabled: boolean;
+				}>;
+
+				expect(breadcrumbs).toHaveLength(2);
+				expect(breadcrumbs[0].to).toBe("/rooms/courses-overview");
+				expect(breadcrumbs[1].title).toBe(singleColumnBoard.title);
+				expect(breadcrumbs[1].disabled).toBe(true);
 			});
-			const { wrapper } = setup({ isSynchronized: true });
-			await flushPromises();
-
-			const menuButton = wrapper.findComponent(RoomDotMenu);
-			const menuItems = menuButton.props("menuItems") as Array<{
-				dataTestId: string;
-				action: () => void;
-			}>;
-			const endSyncAction = menuItems.find((item) => item.dataTestId === "title-menu-end-sync");
-			endSyncAction?.action();
-			await nextTick();
-
-			const endSyncDialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
-			expect(endSyncDialog.props("isOpen")).toBe(true);
 		});
 
-		it("should open start sync dialog when start sync menu item is clicked", async () => {
-			createTestEnvStore({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		describe("synchronized course chip", () => {
+			it("should show synchronized chip when course is synchronized", async () => {
+				const { wrapper } = setup({ isSynchronized: true });
+				await flushPromises();
+
+				const syncChip = wrapper.find('[data-testid="synced-course-chip"]');
+				expect(syncChip.exists()).toBe(true);
 			});
-			const { wrapper } = setup({ isSynchronized: false });
-			await flushPromises();
 
-			const menuButton = wrapper.findComponent(RoomDotMenu);
-			const menuItems = menuButton.props("menuItems") as Array<{
-				dataTestId: string;
-				action: () => void;
-			}>;
-			const startSyncAction = menuItems.find((item) => item.dataTestId === "title-menu-start-sync");
-			startSyncAction?.action();
-			await nextTick();
+			it("should not show synchronized chip when course is not synchronized", async () => {
+				const { wrapper } = setup({ isSynchronized: false });
+				await flushPromises();
 
-			const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
-			expect(startSyncDialog.props("isOpen")).toBe(true);
+				const syncChip = wrapper.find('[data-testid="synced-course-chip"]');
+				expect(syncChip.exists()).toBe(false);
+			});
 		});
 
-		it("should refresh room when end sync dialog emits success", async () => {
-			createTestEnvStore({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		describe("tools tab", () => {
+			it("should include tools tab when tabItems are computed", async () => {
+				const { wrapper } = setup({
+					permissionData: [Permission.CONTEXT_TOOL_ADMIN, Permission.COURSE_EDIT],
+				});
+				await flushPromises();
+
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				expect(toolsTab.exists()).toBe(true);
 			});
-			const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: true });
-			await flushPromises();
-
-			const endSyncDialog = wrapper.findComponent({ name: "EndCourseSyncDialog" });
-			endSyncDialog.vm.$emit("success");
-			await flushPromises();
-
-			// fetchContent is called once during initialization and once on success
-			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
 		});
 
-		it("should refresh room when start sync dialog emits success", async () => {
-			createTestEnvStore({
-				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		describe("copy board element functionality", () => {
+			it("should call copy and fetch content when copy-board-element event is emitted", async () => {
+				const { wrapper, copyModule, singleColumnBoard } = setup();
+				await flushPromises();
+
+				// Find the component that emits copy-board-element (rendered as a stub)
+				const roomContent = wrapper.find('[data-testid="room-content"]');
+				const payload = {
+					id: "board-element-id",
+					type: CopyApiResponseType.LESSON,
+					courseId: singleColumnBoard.roomId,
+				};
+				await roomContent.trigger("copy-board-element", payload);
+				await flushPromises();
+
+				expect(copyModule.copy).toHaveBeenCalled();
 			});
-			const { wrapper, courseRoomDetailsModule } = setup({ isSynchronized: false });
-			await flushPromises();
+		});
 
-			const startSyncDialog = wrapper.findComponent({ name: "StartExistingCourseSyncDialog" });
-			startSyncDialog.vm.$emit("success");
-			await flushPromises();
+		describe("page visibility handling", () => {
+			it("should add pageshow event listener on mount", async () => {
+				const addEventListenerSpy = vi.spyOn(window, "addEventListener");
+				setup();
+				await flushPromises();
 
-			// fetchContent is called once during initialization and once on success
-			expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalledTimes(2);
+				expect(addEventListenerSpy).toHaveBeenCalledWith("pageshow", expect.any(Function));
+			});
+
+			it("should remove pageshow event listener on unmount", async () => {
+				const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
+				const { wrapper } = setup();
+				await flushPromises();
+
+				wrapper.unmount();
+
+				expect(removeEventListenerSpy).toHaveBeenCalledWith("pageshow", expect.any(Function));
+			});
+
+			describe("when page is restored from cache", () => {
+				describe("and tab query is present", () => {
+					it("should set active tab from query", async () => {
+						const { router } = setup();
+						await flushPromises();
+
+						await router.push({ query: { tab: "tools" } });
+						await flushPromises();
+
+						// Simulate page being restored from bfcache
+						const pageshowEvent = new PageTransitionEvent("pageshow", { persisted: true });
+						window.dispatchEvent(pageshowEvent);
+						await flushPromises();
+
+						expect(router.currentRoute.value.query.tab).toBe("tools");
+					});
+				});
+
+				describe("and tab query is not present", () => {
+					it("should set active tab to learn-content", async () => {
+						const { wrapper, router } = setup();
+						await flushPromises();
+
+						await router.push({ query: { tab: "tools" } });
+						await flushPromises();
+
+						// Clear query to simulate coming back with no tab
+						await router.push({ query: {} });
+						await flushPromises();
+
+						// Simulate page being restored from bfcache
+						const pageshowEvent = new PageTransitionEvent("pageshow", { persisted: true });
+						window.dispatchEvent(pageshowEvent);
+						await flushPromises();
+
+						const tabs = wrapper.find(".v-tabs");
+						expect(tabs.exists()).toBe(true);
+					});
+				});
+			});
+		});
+
+		describe("export modal", () => {
+			it("should close export modal when update:is-open event is emitted with false", async () => {
+				createTestEnvStore({ FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true });
+				const { wrapper } = setup();
+				await flushPromises();
+
+				const menuButton = wrapper.findComponent(RoomDotMenu);
+				const menuItems = menuButton.props("menuItems") as Array<{
+					dataTestId: string;
+					action: () => void;
+				}>;
+				const exportAction = menuItems.find((item) => item.dataTestId === "room-menu-common-cartridge-download");
+				exportAction?.action();
+				await nextTick();
+
+				const exportModal = wrapper.findComponent(CourseCommonCartridgeExportModal);
+				expect(exportModal.props("isOpen")).toBe(true);
+
+				// happens when pressing ESC or clicking outside the modal
+				exportModal.vm.$emit("update:isOpen", false);
+				await nextTick();
+
+				expect(exportModal.props("isOpen")).toBe(false);
+			});
 		});
 	});
-
-	describe("user role behavior", () => {
-		it("should show FAB items for teachers with permission", async () => {
-			const { wrapper } = setup({
-				roleName: ImportUserResponseRoleNames.TEACHER,
-				permissionData: [Permission.HOMEWORK_CREATE, Permission.TOPIC_CREATE, Permission.COURSE_EDIT],
-			});
-			await flushPromises();
-
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const fabItems = wireframe.props("fabItems") as Array<{
-				dataTestId: string;
-			}>;
-
-			expect(fabItems).toBeDefined();
-			expect(fabItems.length).toBeGreaterThan(1);
-		});
-
-		it("should not show FAB items for students", async () => {
-			const { wrapper } = setup({
-				roleName: ImportUserResponseRoleNames.STUDENT,
-				permissionData: [],
-			});
-			await flushPromises();
-
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			expect(wireframe.props("fabItems")).toBeUndefined();
-		});
-	});
-
-	describe("breadcrumbs", () => {
-		it("should display correct breadcrumbs", async () => {
-			const { wrapper, singleColumnBoard } = setup();
-			await flushPromises();
-
-			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const breadcrumbs = wireframe.props("breadcrumbs") as Array<{
-				title: string;
-				to?: string;
-				disabled: boolean;
-			}>;
-
-			expect(breadcrumbs).toHaveLength(2);
-			expect(breadcrumbs[0].to).toBe("/rooms/courses-overview");
-			expect(breadcrumbs[1].title).toBe(singleColumnBoard.title);
-			expect(breadcrumbs[1].disabled).toBe(true);
-		});
-	});
-
-	describe("synchronized course chip", () => {
-		it("should show synchronized chip when course is synchronized", async () => {
-			const { wrapper } = setup({ isSynchronized: true });
-			await flushPromises();
-
-			const syncChip = wrapper.find('[data-testid="synced-course-chip"]');
-			expect(syncChip.exists()).toBe(true);
-		});
-
-		it("should not show synchronized chip when course is not synchronized", async () => {
-			const { wrapper } = setup({ isSynchronized: false });
-			await flushPromises();
-
-			const syncChip = wrapper.find('[data-testid="synced-course-chip"]');
-			expect(syncChip.exists()).toBe(false);
-		});
-	});
-
-	describe("tools tab", () => {
-		it("should include tools tab when tabItems are computed", async () => {
-			const { wrapper } = setup({
-				permissionData: [Permission.CONTEXT_TOOL_ADMIN, Permission.COURSE_EDIT],
-			});
-			await flushPromises();
-
-			const toolsTab = wrapper.find('[data-testid="tools-tab"]');
-			expect(toolsTab.exists()).toBe(true);
-		});
-	});
-
-	describe("copy board element functionality", () => {
-		it("should call copy and fetch content when copy-board-element event is emitted", async () => {
-			const { wrapper, copyModule, singleColumnBoard } = setup();
-			await flushPromises();
-
-			// Find the component that emits copy-board-element (rendered as a stub)
-			const roomContent = wrapper.find('[data-testid="room-content"]');
-			const payload = {
-				id: "board-element-id",
-				type: CopyApiResponseType.LESSON,
-				courseId: singleColumnBoard.roomId,
-			};
-			await roomContent.trigger("copy-board-element", payload);
-			await flushPromises();
-
-			// The copy module should be called
-			expect(copyModule.copy).toHaveBeenCalled();
-		});
-	});
-
-	describe("page visibility handling", () => {
-		it("should add pageshow event listener on mount", async () => {
-			const addEventListenerSpy = vi.spyOn(window, "addEventListener");
-			setup();
-			await flushPromises();
-
-			expect(addEventListenerSpy).toHaveBeenCalledWith("pageshow", expect.any(Function));
-		});
-
-		it("should remove pageshow event listener on unmount", async () => {
-			const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
-			const { wrapper } = setup();
-			await flushPromises();
-
-			wrapper.unmount();
-
-			expect(removeEventListenerSpy).toHaveBeenCalledWith("pageshow", expect.any(Function));
-		});
-
-		it("should set active tab from query when page is restored from cache", async () => {
-			const { router } = setup();
-			await flushPromises();
-
-			await router.push({ query: { tab: "tools" } });
-			await flushPromises();
-
-			// Simulate page being restored from bfcache
-			const pageshowEvent = new PageTransitionEvent("pageshow", { persisted: true });
-			window.dispatchEvent(pageshowEvent);
-			await flushPromises();
-
-			expect(router.currentRoute.value.query.tab).toBe("tools");
-		});
-
-		it("should set active tab to learn-content when page is restored from cache with no tab query", async () => {
-			const { wrapper, router } = setup();
-			await flushPromises();
-
-			await router.push({ query: { tab: "tools" } });
-			await flushPromises();
-
-			// Clear query to simulate coming back with no tab
-			await router.push({ query: {} });
-			await flushPromises();
-
-			// Simulate page being restored from bfcache
-			const pageshowEvent = new PageTransitionEvent("pageshow", { persisted: true });
-			window.dispatchEvent(pageshowEvent);
-			await flushPromises();
-
-			const tabs = wrapper.find(".v-tabs");
-			expect(tabs.exists()).toBe(true);
-		});
-	});
-
-	describe("export modal", () => {
-		it("should close export modal when update:is-open event is emitted with false", async () => {
-			createTestEnvStore({ FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true });
-			const { wrapper } = setup();
-			await flushPromises();
-
-			const menuButton = wrapper.findComponent(RoomDotMenu);
-			const menuItems = menuButton.props("menuItems") as Array<{
-				dataTestId: string;
-				action: () => void;
-			}>;
-			const exportAction = menuItems.find((item) => item.dataTestId === "room-menu-common-cartridge-download");
-			exportAction?.action();
-			await nextTick();
-
-			const exportModal = wrapper.findComponent(CourseCommonCartridgeExportModal);
-			expect(exportModal.props("isOpen")).toBe(true);
-
-			// happens when pressing ESC or clicking outside the modal
-			exportModal.vm.$emit("update:isOpen", false);
-			await nextTick();
-
-			expect(exportModal.props("isOpen")).toBe(false);
-		});
-	});
-
 	describe("archived course", () => {
 		it("should show archived chip when course is archived", async () => {
 			const { wrapper } = setup({ isArchived: true });

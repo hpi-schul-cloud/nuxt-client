@@ -1,14 +1,8 @@
-import { courseRoomDetailsModule } from "@/store";
 import { CommonCartridgeVersion, useCommonCartridgeExport } from "@data-common-cartridge";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { vi } from "vitest";
-
-vi.mock("@/store", () => ({
-	courseRoomDetailsModule: {
-		downloadCommonCartridgeCourse: vi.fn(),
-	},
-}));
+import { mock } from "vitest-mock-extended";
 
 describe("useCommonCartridgeExport composable", () => {
 	beforeEach(() => {
@@ -16,115 +10,105 @@ describe("useCommonCartridgeExport composable", () => {
 		vi.clearAllMocks();
 	});
 
-	describe("state management", () => {
-		it("should return allowed versions", () => {
-			const { allowedVersions } = useCommonCartridgeExport();
-
-			expect(allowedVersions).toEqual(["1.1.0", "1.3.0"]);
-		});
-
-		it("should return startExport function", () => {
-			const { startExport } = useCommonCartridgeExport();
-
-			expect(typeof startExport).toBe("function");
-		});
-	});
-
 	describe("startExport", () => {
-		it("should call courseRoomDetailsModule.downloadCommonCartridgeCourse with correct parameters", async () => {
+		const setup = () => {
 			const { startExport } = useCommonCartridgeExport();
+
 			const version: CommonCartridgeVersion = "1.1.0";
+			const roomId = "roomId";
 			const topics = ["topic1", "topic2"];
 			const tasks = ["task1", "task2"];
-			const columnBoards = ["board1"];
+			const columnBoards = ["board1", "board2"];
 
-			await startExport(version, topics, tasks, columnBoards);
+			const inputMockTopicIds = mock<HTMLInputElement>();
+			const inputMockTaskIds = mock<HTMLInputElement>();
+			const inputMockColumnBoardIds = mock<HTMLInputElement>();
+			const formMock = mock<HTMLFormElement>();
 
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledTimes(1);
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledWith({
+			vi.spyOn(document, "createElement").mockReturnValueOnce(formMock);
+			vi.spyOn(document, "createElement").mockReturnValueOnce(inputMockTopicIds);
+			vi.spyOn(document, "createElement").mockReturnValueOnce(inputMockTaskIds);
+			vi.spyOn(document, "createElement").mockReturnValueOnce(inputMockColumnBoardIds);
+
+			const appendChildSpy = vi.spyOn(document.body, "appendChild").mockImplementationOnce(vi.fn());
+			const removeChildSpy = vi.spyOn(document.body, "removeChild").mockImplementationOnce(vi.fn());
+
+			return {
+				formMock,
+				appendChildSpy,
+				removeChildSpy,
+				inputMockTopicIds,
+				inputMockTaskIds,
+				inputMockColumnBoardIds,
 				version,
+				roomId,
 				topics,
 				tasks,
 				columnBoards,
+				startExport,
+			};
+		};
+
+		describe("when called with a valid version", () => {
+			it("should create a form", () => {
+				const { formMock, startExport, version, roomId, topics, tasks, columnBoards } = setup();
+
+				startExport(version, roomId, topics, tasks, columnBoards);
+
+				expect(formMock.method).toBe("POST");
+				expect(formMock.action).toBe(`/api/v3/common-cartridge/export/${roomId}?version=${version}`);
+				expect(formMock.enctype).toBe("application/json");
+				expect(formMock.target).toBe("_blank");
+			});
+
+			it("should create inputs with correct attributes", () => {
+				const {
+					inputMockTopicIds,
+					inputMockTaskIds,
+					inputMockColumnBoardIds,
+					startExport,
+					version,
+					roomId,
+					topics,
+					tasks,
+					columnBoards,
+				} = setup();
+
+				startExport(version, roomId, topics, tasks, columnBoards);
+
+				expect(inputMockTopicIds.type).toBe("hidden");
+				expect(inputMockTaskIds.type).toBe("hidden");
+				expect(inputMockColumnBoardIds.type).toBe("hidden");
+
+				expect(inputMockTopicIds.name).toBe("topics");
+				expect(inputMockTaskIds.name).toBe("tasks");
+				expect(inputMockColumnBoardIds.name).toBe("columnBoards");
+
+				expect(inputMockTopicIds.value).toBe(JSON.stringify(topics));
+				expect(inputMockTaskIds.value).toBe(JSON.stringify(tasks));
+				expect(inputMockColumnBoardIds.value).toBe(JSON.stringify(columnBoards));
+			});
+
+			it("should append/remove form to/from body", async () => {
+				const { formMock, appendChildSpy, removeChildSpy, startExport, version, roomId, topics, tasks, columnBoards } =
+					setup();
+
+				await startExport(version, roomId, topics, tasks, columnBoards);
+
+				expect(appendChildSpy).toHaveBeenCalledWith(formMock);
+				expect(removeChildSpy).toHaveBeenCalledWith(formMock);
+				expect(formMock.submit).toHaveBeenCalled();
 			});
 		});
 
-		it("should call courseRoomDetailsModule.downloadCommonCartridgeCourse with version 1.3.0", async () => {
-			const { startExport } = useCommonCartridgeExport();
-			const version: CommonCartridgeVersion = "1.3.0";
-			const topics = ["topic1"];
-			const tasks = ["task1"];
-			const columnBoards = ["board1"];
+		describe("when called with an invalid version", () => {
+			it("should throw an Error", async () => {
+				const { startExport, roomId, topics, tasks, columnBoards } = setup();
 
-			await startExport(version, topics, tasks, columnBoards);
-
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledTimes(1);
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledWith({
-				version,
-				topics,
-				tasks,
-				columnBoards,
+				await expect(
+					startExport("invalid_version" as CommonCartridgeVersion, roomId, topics, tasks, columnBoards)
+				).rejects.toThrow("Invalid version");
 			});
-		});
-
-		it("should not call courseRoomDetailsModule.downloadCommonCartridgeCourse with invalid version", async () => {
-			const { startExport } = useCommonCartridgeExport();
-			const version = "2.0.0" as CommonCartridgeVersion; // Invalid version
-			const topics = ["topic1"];
-			const tasks = ["task1"];
-			const columnBoards = ["board1"];
-
-			await expect(startExport(version, topics, tasks, columnBoards)).rejects.toThrow("Invalid version");
-
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).not.toHaveBeenCalled();
-		});
-
-		it("should handle empty arrays for topics, tasks, and columnBoards", async () => {
-			const { startExport } = useCommonCartridgeExport();
-			const version: CommonCartridgeVersion = "1.1.0";
-			const topics: string[] = [];
-			const tasks: string[] = [];
-			const columnBoards: string[] = [];
-
-			await startExport(version, topics, tasks, columnBoards);
-
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledTimes(1);
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledWith({
-				version,
-				topics,
-				tasks,
-				columnBoards,
-			});
-		});
-
-		it("should handle promise rejection from courseRoomDetailsModule", async () => {
-			const { startExport } = useCommonCartridgeExport();
-			const mockError = new Error("Download failed");
-
-			vi.mocked(courseRoomDetailsModule.downloadCommonCartridgeCourse).mockRejectedValueOnce(mockError);
-
-			const version: CommonCartridgeVersion = "1.1.0";
-			const topics = ["topic1"];
-			const tasks = ["task1"];
-			const columnBoards = ["board1"];
-
-			await expect(startExport(version, topics, tasks, columnBoards)).rejects.toThrow("Download failed");
-
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledTimes(1);
-		});
-
-		it("should validate version before making the call", async () => {
-			const { startExport, allowedVersions } = useCommonCartridgeExport();
-
-			for (const version of allowedVersions) {
-				await startExport(version, [], [], []);
-			}
-
-			await expect(startExport("invalid_version" as CommonCartridgeVersion, [], [], [])).rejects.toThrow(
-				"Invalid version"
-			);
-
-			expect(courseRoomDetailsModule.downloadCommonCartridgeCourse).toHaveBeenCalledTimes(allowedVersions.length);
 		});
 	});
 });

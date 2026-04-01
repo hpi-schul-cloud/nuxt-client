@@ -32,7 +32,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 	const createRoomData = (elements: BoardElementResponse[] = []) =>
 		reactive({
-			roomId: "1",
+			roomId: "room-id-1",
 			title: "title",
 			displayColor: "color",
 			elements,
@@ -58,6 +58,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			},
 			props: {
 				isOpen: true,
+				roomId: "room-id-1",
 			},
 		});
 	};
@@ -76,7 +77,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModuleMock,
 				},
 			},
-			props: { isOpen: true },
+			props: { isOpen: true, roomId: "room-id-1" },
 		});
 
 		roomData.elements = elements;
@@ -104,19 +105,22 @@ describe("CourseCommonCartridgeExportModal", () => {
 	});
 
 	describe("dialog close actions", () => {
-		it("should emit close event when cancel button is clicked", async () => {
-			const wrapper = setup();
-			await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
+		describe("when cancel button is clicked in version selection step", () => {
+			it("should emit close event", async () => {
+				const wrapper = setup();
+				await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
 
-			expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+				expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+			});
 		});
+		describe("when cancel button is clicked in content selection step", () => {
+			it("should emit close event", async () => {
+				const wrapper = setup();
+				await goToContentSelection(wrapper);
+				await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
 
-		it("should emit close event when cancel is clicked in content selection step", async () => {
-			const wrapper = setup();
-			await goToContentSelection(wrapper);
-			await wrapper.findComponent('[data-testid="dialog-cancel-btn"]').trigger("click");
-
-			expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+				expect(wrapper.emitted("update:isOpen")).toContainEqual([false]);
+			});
 		});
 	});
 
@@ -177,7 +181,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", [], [], []);
+			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", "room-id-1", [], [], []);
 		});
 
 		it("should close dialog after starting export", async () => {
@@ -255,6 +259,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
 				"1.1.0",
+				"room-id-1",
 				["lesson1"],
 				["task1"],
 				["board1"]
@@ -282,6 +287,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
 				"1.1.0",
+				"room-id-1",
 				[],
 				["t1", "t2"],
 				["b1", "b2"]
@@ -297,6 +303,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
 				"1.1.0",
+				"room-id-1",
 				["l1", "l2"],
 				[],
 				["b1", "b2"]
@@ -312,6 +319,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
 				"1.1.0",
+				"room-id-1",
 				["l1", "l2"],
 				["t1", "t2"],
 				[]
@@ -329,6 +337,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
 				"1.1.0",
+				"room-id-1",
 				["l1", "l2"],
 				["t1", "t2"],
 				["b1", "b2"]
@@ -354,7 +363,13 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await goToContentSelection(wrapper);
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", ["l1"], ["t1"], ["b1"]);
+			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
+				"1.1.0",
+				"room-id-1",
+				["l1"],
+				["t1"],
+				["b1"]
+			);
 		});
 	});
 
@@ -381,7 +396,13 @@ describe("CourseCommonCartridgeExportModal", () => {
 
 			await wrapper.findComponent('[data-testid="dialog-export-btn"]').trigger("click");
 
-			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith("1.1.0", ["l2"], ["t2"], ["b2"]);
+			expect(useCommonCartridgeExportMockReturn.startExport).toHaveBeenCalledWith(
+				"1.1.0",
+				"room-id-1",
+				["l2"],
+				["t2"],
+				["b2"]
+			);
 		});
 	});
 

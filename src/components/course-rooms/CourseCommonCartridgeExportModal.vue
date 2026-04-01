@@ -4,8 +4,8 @@
 		:max-width="560"
 		data-testid="export-dialog"
 		@update:model-value="(value) => emit('update:isOpen', value)"
-		@click:outside="onCloseDialog"
-		@keydown.esc="onCloseDialog"
+		@click:outside="closeDialog"
+		@keydown.esc="closeDialog"
 	>
 		<VCard :ripple="false">
 			<template #title>
@@ -138,11 +138,11 @@
 						data-testid="dialog-cancel-btn"
 						class="ml-2"
 						depressed
-						@click="onCloseDialog"
+						@click="closeDialog"
 					>
 						{{ t("common.actions.cancel") }}
 					</VBtn>
-					<VBtn v-if="step === 'VersionSelection'" data-testid="dialog-cancel-btn" depressed @click="onCloseDialog">
+					<VBtn v-if="step === 'VersionSelection'" data-testid="dialog-cancel-btn" depressed @click="closeDialog">
 						{{ t("common.actions.cancel") }}
 					</VBtn>
 					<VBtn
@@ -198,8 +198,9 @@ const { t } = useI18n();
 const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 const { startExport } = useCommonCartridgeExport();
 
-defineProps<{
+const props = defineProps<{
 	isOpen: boolean;
+	roomId: string;
 }>();
 
 const emit = defineEmits<{
@@ -263,15 +264,15 @@ const someColumnBoardsSelected = computed(
 	() => allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) && !allColumnBoardsSelected.value
 );
 
-const onCloseDialog = (): void => {
-	emit("update:isOpen", false);
-	resetDialog();
-};
-
 const setSelectedOnAllItems = (items: Selection[], newValue: boolean): void => {
 	items.forEach((item) => {
 		item.isSelected = newValue;
 	});
+};
+
+const closeDialog = (): void => {
+	emit("update:isOpen", false);
+	resetDialog();
 };
 
 const resetDialog = (): void => {
@@ -292,14 +293,14 @@ const onExport = async (): Promise<void> => {
 	const taskIds = allTasks.value.filter((task) => task.isSelected).map((task) => task.id);
 	const columnBoardIds = allColumnBoards.value.filter((board) => board.isSelected).map((board) => board.id);
 
-	notifySuccess(t("common.words.export"));
-	await startExport(version.value, topicIds, taskIds, columnBoardIds);
+	await startExport(version.value, props.roomId, topicIds, taskIds, columnBoardIds);
+	notifySuccess(t("pages.rooms.ccExportCourse.started"));
 
 	if (courseRoomDetailsModule.getBusinessError.statusCode !== "") {
 		notifyError(t("pages.rooms.ccExportCourse.error"));
 	}
 
-	onCloseDialog();
+	closeDialog();
 };
 
 const toggleAllTopics = (): void => {
