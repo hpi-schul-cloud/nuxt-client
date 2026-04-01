@@ -31,7 +31,7 @@ import { MeApiFactory, ServerReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SvsDialog } from "@ui-dialog";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const envConfig = useEnvConfig();
@@ -47,9 +47,12 @@ const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.serverRe
 const latestRelease = computed(() => releasesResponse.value?.data.data?.[0]);
 
 const hasNewReleaseNotes = computed(() => {
-	if (!latestRelease.value) return false;
+	const publishedAt = latestRelease.value?.publishedAt;
 	const lastSeenDate = userPreferences.value?.releaseDate;
-	return !lastSeenDate || new Date(lastSeenDate) < new Date(latestRelease.value.publishedAt);
+
+	if (!publishedAt || !lastSeenDate) return false;
+
+	return new Date(lastSeenDate) < new Date(publishedAt);
 });
 
 const setReleasePreferences = () => {
@@ -61,4 +64,15 @@ const setReleasePreferences = () => {
 		})
 	);
 };
+
+watch(
+	latestRelease,
+	(release) => {
+    console.log(release);
+		if (release && !userPreferences.value?.releaseDate) {
+			setReleasePreferences();
+		}
+	},
+	{ once: true }
+);
 </script>
