@@ -1,14 +1,11 @@
 import CourseRoomList from "./CourseRoomList.page.vue";
-import { courseRoomListModule } from "@/store";
-import CourseRoomListModule from "@/store/course-room-list";
-import { COURSE_ROOM_LIST_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { courseRoomItemFactory, mockedPiniaStoreTyping, ProcessedRoomItem } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { CourseMetadataResponse } from "@api-server";
-import { mount } from "@vue/test-utils";
-import { createPinia, setActivePinia } from "pinia";
-import { nextTick } from "vue";
+import { useCourseRoomListStore } from "@data-course-rooms";
+import { createTestingPinia } from "@pinia/testing";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
+import { ComponentPublicInstance, nextTick } from "vue";
 
 vi.mock("vue-router");
 vi.mock("@data-common-cartridge", () => ({
@@ -20,127 +17,92 @@ vi.mock("@data-common-cartridge", () => ({
 	}),
 }));
 
-const getWrapper = () =>
-	mount(CourseRoomList, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: createModuleMocks(CourseRoomListModule),
-			},
-		},
-	});
+const mockProcessedData = [
+	{ title: "Mathe", searchText: "Mathe 2019/20" },
+	{ title: "History", searchText: "History 2015-2018" },
+	{ title: "Spanish", searchText: "Spanish" },
+	{ title: "English", searchText: "English" },
+].map((data) => courseRoomItemFactory.build(data));
 
-const mockData: CourseMetadataResponse[] = [
-	{
-		id: "123",
-		title: "Mathe",
-		shortTitle: "Ma",
-		displayColor: "#54616e",
-		startDate: "2019-12-07T23:00:00.000Z",
-		untilDate: "2020-12-16T23:00:00.000Z",
-		isLocked: false,
-	},
-	{
-		id: "234",
-		title: "History",
-		shortTitle: "Hi",
-		displayColor: "#EF6C00",
-		startDate: "2015-07-31T22:00:00.000Z",
-		untilDate: "2018-07-30T22:00:00.000Z",
-		isLocked: false,
-	},
-	{
-		id: "345",
-		title: "Spanish",
-		shortTitle: "Sp",
-		displayColor: "#009688",
-		startDate: "2021-07-31T22:00:00.000Z",
-		untilDate: "2021-11-05T23:00:00.000Z",
-		isLocked: false,
-	},
-	{
-		id: "456",
-		title: "English",
-		shortTitle: "En",
-		displayColor: "#EC407A",
-		startDate: "2021-07-31T22:00:00.000Z",
-		untilDate: "2022-07-30T22:00:00.000Z",
-		isLocked: false,
-	},
-];
+type CourseRoomListVm = ComponentPublicInstance & {
+	rooms: ProcessedRoomItem[];
+	searchText: string;
+};
 
 describe("CourseRoomListPage", () => {
-	const setup = () => {
-		const wrapper = getWrapper();
+	const setup = (options?: { withEmptyStore?: boolean }) => {
+		const pinia = createTestingPinia({ stubActions: false });
+		setActivePinia(pinia);
 
-		return { wrapper };
+		const courseRoomListStore = mockedPiniaStoreTyping(useCourseRoomListStore);
+
+		if (!options?.withEmptyStore) {
+			courseRoomListStore.$patch({
+				allElements: mockProcessedData as never,
+			});
+		}
+		courseRoomListStore.fetchAllElements.mockResolvedValue();
+
+		const wrapper = mount(CourseRoomList, {
+			global: {
+				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
+			},
+		}) as VueWrapper<CourseRoomListVm>;
+
+		return { wrapper, courseRoomListStore };
 	};
 
-	beforeAll(() => {
-		setActivePinia(createPinia());
-	});
-
-	beforeEach(() => {
-		setupStores({
-			courseRoomListModule: CourseRoomListModule,
-		});
-		courseRoomListModule.setAllElements(mockData);
-		courseRoomListModule.fetchAllElements = vi.fn();
-	});
-
-	describe("when data is not loaded yet", () => {
-		it("should fetch data", async () => {
+	describe("when data is loaded", () => {
+		it("should display rooms from store", async () => {
 			const { wrapper } = setup();
 			await nextTick();
 
-			const expectedItem = {
-				id: "123",
-				title: "Mathe",
-				shortTitle: "Ma",
-				displayColor: "#54616e",
-				startDate: "2019-12-07T23:00:00.000Z",
-				untilDate: "2020-12-16T23:00:00.000Z",
-				titleDate: "2019/20",
-				searchText: "Mathe 2019/20",
-				isArchived: true,
-				to: "/rooms/123",
-				isLocked: false,
-			};
-
-			expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
+			expect(wrapper.vm.rooms[0]).toStrictEqual(mockProcessedData[0]);
 		});
-	});
 
-	describe("when data is loaded", () => {
 		describe("and data is not empty", () => {
-			it("should search elements on list", () => {
+			it("should search elements on list", async () => {
 				const { wrapper } = setup();
+				await nextTick();
 
 				expect(wrapper.vm.rooms.length).toEqual(4);
 
 				wrapper.vm.searchText = "math";
+				await nextTick();
 				expect(wrapper.vm.rooms.length).toEqual(1);
 
 				wrapper.vm.searchText = "";
+				await nextTick();
 				expect(wrapper.vm.rooms.length).toEqual(4);
 
 				wrapper.vm.searchText = "15";
+				await nextTick();
 				expect(wrapper.vm.rooms.length).toEqual(1);
-
-				expect(wrapper.vm.rooms[0]).toEqual({
-					id: "234",
-					title: "History",
-					shortTitle: "Hi",
-					displayColor: "#EF6C00",
-					startDate: "2015-07-31T22:00:00.000Z",
-					untilDate: "2018-07-30T22:00:00.000Z",
-					titleDate: "2015-2018",
-					searchText: "History 2015-2018",
-					isArchived: true,
-					to: "/rooms/234",
-					isLocked: false,
-				});
+				expect(wrapper.vm.rooms[0].title).toBe("History");
 			});
+
+			it("should filter rooms when typing in search field", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				expect(wrapper.vm.rooms.length).toEqual(4);
+
+				const searchField = wrapper.find('[data-testid="search-field-course"] input');
+				await searchField.setValue("Mathe");
+				await nextTick();
+
+				expect(wrapper.vm.rooms.length).toEqual(1);
+				expect(wrapper.vm.rooms[0].title).toBe("Mathe");
+			});
+		});
+	});
+
+	describe("when store is empty on mount", () => {
+		it("should call fetchAllElements", async () => {
+			const { courseRoomListStore } = setup({ withEmptyStore: true });
+			await nextTick();
+
+			expect(courseRoomListStore.fetchAllElements).toHaveBeenCalled();
 		});
 	});
 });
