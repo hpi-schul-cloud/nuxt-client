@@ -159,7 +159,6 @@ describe("CourseRoomDetails.page.vue", () => {
 		router.setParams({ id: singleColumnBoard.roomId });
 
 		const wrapper = shallowMount(CourseRoomDetailsPage, {
-			// const wrapper = mount(CourseRoomDetailsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
