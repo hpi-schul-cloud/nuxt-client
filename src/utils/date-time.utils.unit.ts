@@ -37,7 +37,7 @@ describe("date-time.utils", () => {
 		createDayJs();
 	});
 	describe("formatUtc", () => {
-		const localOffset = new Date().getTimezoneOffset();
+		const localOffset = new Date("2024-12-31T12:00:00.000Z").getTimezoneOffset();
 		const isoUtc = dayjs("2024-12-31T12:00:00.000Z").add(localOffset, "minutes").toISOString();
 
 		it.each([
