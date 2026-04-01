@@ -1,22 +1,17 @@
 import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { dateFromToday } from "@/utils/date-time.utils";
-import { taskResponseFactory } from "@@/tests/test-utils";
+import { createTestAppStoreWithRole, taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { useAppStoreRefs } from "@data-app";
+import { RoleName } from "@api-server";
+import { createTestingPinia } from "@pinia/testing";
 import { shallowMount } from "@vue/test-utils";
-import { describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
-
-vi.mock("@data-app", () => ({
-	useAppStoreRefs: vi.fn(),
-}));
+import { setActivePinia } from "pinia";
+import { describe, expect, it } from "vitest";
 
 describe("DashboardTasksSection", () => {
-	const setup = (tasks = [taskResponseFactory.build()], role: "teacher" | "student" = "teacher") => {
-		vi.mocked(useAppStoreRefs).mockReturnValue({
-			isTeacher: ref(role === "teacher"),
-			isStudent: ref(role === "student"),
-		} as unknown as ReturnType<typeof useAppStoreRefs>);
+	const setup = (tasks = [taskResponseFactory.build()], role: RoleName = RoleName.TEACHER) => {
+		setActivePinia(createTestingPinia());
+		createTestAppStoreWithRole(role);
 
 		const wrapper = shallowMount(DashboardTasksSection, {
 			props: { title: "My Tasks", tasks },
@@ -49,7 +44,7 @@ describe("DashboardTasksSection", () => {
 		const overdueTask = taskResponseFactory.build({
 			dueDate: dateFromToday(-1, "day"),
 		});
-		const { wrapper } = setup([overdueTask], "teacher");
+		const { wrapper } = setup([overdueTask], RoleName.TEACHER);
 
 		expect(wrapper.find("[data-testid='task-overdue-teacher']").exists()).toBe(true);
 	});
@@ -58,7 +53,7 @@ describe("DashboardTasksSection", () => {
 		const futureTask = taskResponseFactory.build({
 			dueDate: dateFromToday(5, "day"),
 		});
-		const { wrapper } = setup([futureTask], "teacher");
+		const { wrapper } = setup([futureTask], RoleName.TEACHER);
 
 		expect(wrapper.find("[data-testid='task-overdue-teacher']").exists()).toBe(false);
 	});
@@ -67,7 +62,7 @@ describe("DashboardTasksSection", () => {
 		const taskWithSubmissions = taskResponseFactory.build({
 			status: { maxSubmissions: 10, submitted: 5, graded: 2 },
 		});
-		const { wrapper } = setup([taskWithSubmissions], "teacher");
+		const { wrapper } = setup([taskWithSubmissions], RoleName.TEACHER);
 
 		expect(wrapper.find("[data-testid='task-submitted-teacher']").exists()).toBe(true);
 		expect(wrapper.find("[data-testid='task-graded']").exists()).toBe(true);
@@ -77,7 +72,7 @@ describe("DashboardTasksSection", () => {
 		const taskWithoutSubmissions = taskResponseFactory.build({
 			status: { maxSubmissions: 0 },
 		});
-		const { wrapper } = setup([taskWithoutSubmissions], "teacher");
+		const { wrapper } = setup([taskWithoutSubmissions], RoleName.TEACHER);
 
 		expect(wrapper.find("[data-testid='task-submitted-teacher']").exists()).toBe(false);
 		expect(wrapper.find("[data-testid='task-graded']").exists()).toBe(false);
@@ -88,7 +83,7 @@ describe("DashboardTasksSection", () => {
 			dueDate: dateFromToday(5, "day"),
 			status: { submitted: 1 },
 		});
-		const { wrapper } = setup([submittedTask], "student");
+		const { wrapper } = setup([submittedTask], RoleName.STUDENT);
 
 		expect(wrapper.find("[data-testid='task-submitted-student']").exists()).toBe(true);
 	});
@@ -98,7 +93,7 @@ describe("DashboardTasksSection", () => {
 			dueDate: dateFromToday(-1, "day"),
 			status: { submitted: 0 },
 		});
-		const { wrapper } = setup([overdueTask], "student");
+		const { wrapper } = setup([overdueTask], RoleName.STUDENT);
 
 		expect(wrapper.find("[data-testid='task-overdue-student']").exists()).toBe(true);
 	});
