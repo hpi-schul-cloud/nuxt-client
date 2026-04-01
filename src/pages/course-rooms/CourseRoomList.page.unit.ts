@@ -30,14 +30,17 @@ type CourseRoomListVm = ComponentPublicInstance & {
 };
 
 describe("CourseRoomListPage", () => {
-	const setup = () => {
+	const setup = (options?: { withEmptyStore?: boolean }) => {
 		const pinia = createTestingPinia({ stubActions: false });
 		setActivePinia(pinia);
 
 		const courseRoomListStore = mockedPiniaStoreTyping(useCourseRoomListStore);
-		courseRoomListStore.$patch({
-			allElements: mockProcessedData as never,
-		});
+
+		if (!options?.withEmptyStore) {
+			courseRoomListStore.$patch({
+				allElements: mockProcessedData as never,
+			});
+		}
 		courseRoomListStore.fetchAllElements.mockResolvedValue();
 
 		const wrapper = mount(CourseRoomList, {
@@ -91,6 +94,15 @@ describe("CourseRoomListPage", () => {
 				expect(wrapper.vm.rooms.length).toEqual(1);
 				expect(wrapper.vm.rooms[0].title).toBe("Mathe");
 			});
+		});
+	});
+
+	describe("when store is empty on mount", () => {
+		it("should call fetchAllElements", async () => {
+			const { courseRoomListStore } = setup({ withEmptyStore: true });
+			await nextTick();
+
+			expect(courseRoomListStore.fetchAllElements).toHaveBeenCalled();
 		});
 	});
 });
