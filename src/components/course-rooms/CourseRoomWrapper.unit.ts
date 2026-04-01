@@ -74,11 +74,9 @@ describe("CourseRoomWrapper.vue", () => {
 		}
 		useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
 		useCommonCartridgeImportMockReturn.importCommonCartridgeFile.mockImplementation(async () => {
-			// Simulate the success/failure state change that would happen in the real composable
 			useCommonCartridgeImportMockReturn.isSuccess = ref(isSuccess);
 		});
 
-		// Mock the loading computed property
 		Object.defineProperty(courseRoomListStore, "loading", {
 			get: () => ref(isLoading),
 			configurable: true,

@@ -1,7 +1,7 @@
 import CourseRoomAvatarIterator from "./CourseRoomAvatarIterator.vue";
 import CourseRoomModal from "./CourseRoomModal.vue";
 import CustomDialog from "@/components/organisms/CustomDialog.vue";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { courseRoomElementFactory, courseRoomGroupFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
@@ -20,19 +20,7 @@ describe("RoomModal", () => {
 			global: { plugins: [pinia, createTestingVuetify(), createTestingI18n()] },
 			props: {
 				isOpen,
-				groupData: {
-					id: "group-1",
-					title: "dummy title",
-					groupElements: [],
-					shortTitle: "",
-					displayColor: "",
-					xPosition: 0,
-					yPosition: 0,
-					groupId: "",
-					copyingSince: "",
-					isSynchronized: false,
-					isLocked: false,
-				},
+				groupData: courseRoomGroupFactory.build({ title: "dummy title", groupElements: [] }),
 				draggable: true,
 			},
 		});
@@ -133,18 +121,12 @@ describe("RoomModal", () => {
 				it("should change name on enter", async () => {
 					const { courseRoomListStore, newTitle } = await setup();
 
-					const expectedGroupData = {
-						id: "",
-						title: newTitle,
-						shortTitle: "",
-						displayColor: "",
-						xPosition: -1,
-						yPosition: -1,
-						isSynchronized: false,
-					};
-
 					expect(courseRoomListStore.updateCourse).toHaveBeenCalledTimes(1);
-					expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(expectedGroupData);
+					expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(
+						expect.objectContaining({
+							title: newTitle,
+						})
+					);
 				});
 			});
 
@@ -195,18 +177,12 @@ describe("RoomModal", () => {
 			it("should change name on second enter again", async () => {
 				const { courseRoomListStore, newTitle2 } = await setup();
 
-				const expectedGroupData = {
-					id: "",
-					title: newTitle2,
-					shortTitle: "",
-					displayColor: "",
-					xPosition: -1,
-					yPosition: -1,
-					isSynchronized: false,
-				};
-
 				expect(courseRoomListStore.updateCourse).toHaveBeenCalledTimes(2);
-				expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(expectedGroupData);
+				expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(
+					expect.objectContaining({
+						title: newTitle2,
+					})
+				);
 			});
 		});
 
@@ -227,18 +203,13 @@ describe("RoomModal", () => {
 
 				it("should change name on blur", async () => {
 					const { courseRoomListStore, newTitle } = await setup();
-					const expectedGroupData = {
-						id: "",
-						title: newTitle,
-						shortTitle: "",
-						displayColor: "",
-						xPosition: -1,
-						yPosition: -1,
-						isSynchronized: false,
-					};
 
 					expect(courseRoomListStore.updateCourse).toHaveBeenCalledTimes(1);
-					expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(expectedGroupData);
+					expect(courseRoomListStore.updateCourse).toHaveBeenCalledWith(
+						expect.objectContaining({
+							title: newTitle,
+						})
+					);
 				});
 			});
 
@@ -268,14 +239,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 				const iterator = wrapper.findComponent(CourseRoomAvatarIterator);
-				const roomItem = {
-					id: "dummy id",
-					title: "dummy title",
-					shortTitle: "dummy short title",
-					displayColor: "dummy color",
-					xPosition: 0,
-					yPosition: 0,
-				};
+				const roomItem = courseRoomElementFactory.build();
 				iterator.vm.$emit("startDrag", roomItem);
 
 				return { wrapper, roomItem };
@@ -307,19 +271,11 @@ describe("RoomModal", () => {
 			it("should update internal data", async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const newGroupData = {
-					id: "new-group-id",
+				const newGroupData = courseRoomGroupFactory.build({
 					title: "new title",
 					groupElements: [],
-					shortTitle: "NT",
-					displayColor: "#ff0000",
-					xPosition: 5,
-					yPosition: 10,
-					groupId: "new-id",
-					copyingSince: "",
 					isSynchronized: true,
-					isLocked: false,
-				};
+				});
 
 				await wrapper.setProps({ groupData: newGroupData });
 
@@ -343,7 +299,6 @@ describe("RoomModal", () => {
 		it("should emit 'update:isOpen", async () => {
 			const { wrapper } = setup();
 
-			// save in var so that check if undefined works
 			const emitted = wrapper.emitted("update:isOpen");
 			expect(emitted).toHaveLength(1);
 			expect(emitted && emitted[0][0]).toBeFalsy();

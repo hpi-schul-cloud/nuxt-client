@@ -1,12 +1,18 @@
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import CourseRoomModal from "@/components/course-rooms/CourseRoomModal.vue";
-import type { DashboardGridElementResponse } from "@/generated/serverApi/v3";
 import CopyModule from "@/store/copy";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 import { createTestAppStore, createTestEnvStore, mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { courseRoomElementFactory, courseRoomGroupFactory, courseRoomItemFactory } from "@@/tests/test-utils/factory";
+import {
+	courseRoomElementFactory,
+	courseRoomGroupFactory,
+	courseRoomItemFactory,
+	courseRoomSubElementFactory,
+} from "@@/tests/test-utils/factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import type { DashboardGridElementResponse } from "@api-server";
+import type { GroupDataType } from "@data-course-rooms";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
@@ -54,26 +60,9 @@ vi.mock("vue-router", async () => {
 
 const useRouteMock = useRoute as Mock;
 
-interface GroupElement {
-	id: string;
-	title: string;
-	displayColor: string;
-	notification?: boolean;
-	to?: string;
-}
-
 interface GroupDialogData {
 	isOpen: boolean;
-	groupData: {
-		groupId: string;
-		title: string;
-		shortTitle: string;
-		displayColor: string;
-		url: string;
-		xPosition: number;
-		yPosition: number;
-		groupElements: GroupElement[];
-	};
+	groupData: GroupDataType;
 }
 
 type CourseRoomOverviewVm = ComponentPublicInstance & {
@@ -102,9 +91,9 @@ const mockRoomStoreData = [
 		xPosition: 2,
 		yPosition: 3,
 		groupElements: [
-			courseRoomElementFactory.build({ id: "5", title: "Math 7a", displayColor: "yellow" }),
-			courseRoomElementFactory.build({ id: "6", title: "Bio 3a", displayColor: "green" }),
-			courseRoomElementFactory.build({ id: "7", title: "Geo 7b", displayColor: "yellow" }),
+			courseRoomSubElementFactory.build({ id: "5", title: "Math 7a", displayColor: "yellow" }),
+			courseRoomSubElementFactory.build({ id: "6", title: "Bio 3a", displayColor: "green" }),
+			courseRoomSubElementFactory.build({ id: "7", title: "Geo 7b", displayColor: "yellow" }),
 		],
 	}),
 ];
@@ -158,10 +147,12 @@ describe("CourseRoomOverview.page", () => {
 		await nextTick();
 
 		const expectedItem = {
+			...courseRoomElementFactory.build({
+				title: "First",
+				shortTitle: "Ma",
+				displayColor: "purple",
+			}),
 			id: "1",
-			title: "First",
-			shortTitle: "Ma",
-			displayColor: "purple",
 			xPosition: 1,
 			yPosition: 1,
 			to: "/rooms/1",
@@ -172,39 +163,37 @@ describe("CourseRoomOverview.page", () => {
 	it("should display 6 avatars component", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
+
 		expect(avatarComponents).toHaveLength(6);
 	});
 
 	it("should display 1 group-avatar component", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
 		const groupAvatarComponents = wrapper.findAll(".room-group-avatar");
+
 		expect(groupAvatarComponents).toHaveLength(1);
 	});
 
 	it("should call 'openDialog' event if groupAvatar component clicked", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		const customDialog = wrapper.findComponent(CourseRoomModal);
+
 		expect(customDialog.props("isOpen")).toBe(true);
 	});
 
 	it("CustomDialog component should be visible", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		await nextTick();
 		const customDialog = wrapper.findComponent(CourseRoomModal);
-		await nextTick();
 		const input = customDialog.findComponent({ name: "v-text-field" });
+
 		expect(customDialog.props("isOpen")).toBe(true);
 		expect(input.props("modelValue")).toBe("Fourth");
 	});
@@ -212,7 +201,7 @@ describe("CourseRoomOverview.page", () => {
 	it("'$refs' should be placed correctly for the components", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
+
 		expect(wrapper.findComponent('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual(
 			"RoomAvatar"
 		);
@@ -232,26 +221,26 @@ describe("CourseRoomOverview.page", () => {
 
 	it("should set the column count 4", async () => {
 		const wrapper = getWrapper();
-		await nextTick();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
 	});
 
 	it("should call 'setDropElement' method after avatar-to-emptyAvatar drag&drop", async () => {
 		const wrapper = getWrapper();
-
 		const expectedPayload = {
 			from: {
 				x: 0,
 				y: 0,
 			},
 			item: expect.objectContaining({
+				...courseRoomElementFactory.build({
+					title: "Third",
+					shortTitle: "Ma",
+					displayColor: "#EC407A",
+					xPosition: 0,
+					yPosition: 0,
+				}),
 				id: "3",
-				title: "Third",
-				shortTitle: "Ma",
-				displayColor: "#EC407A",
 				to: "/rooms/3",
-				xPosition: 0,
-				yPosition: 0,
 			}),
 			to: {
 				x: 3,
@@ -259,11 +248,9 @@ describe("CourseRoomOverview.page", () => {
 			},
 		};
 		await nextTick();
-		await nextTick();
 
 		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
 		await avatarComponent.trigger("dragstart");
-
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-3"]');
 		await emptyAvatarComponent.trigger("drop");
 
@@ -278,10 +265,12 @@ describe("CourseRoomOverview.page", () => {
 				y: 1,
 			},
 			item: expect.objectContaining({
+				...courseRoomElementFactory.build({
+					title: "First",
+					shortTitle: "Ma",
+					displayColor: "purple",
+				}),
 				id: "1",
-				title: "First",
-				shortTitle: "Ma",
-				displayColor: "purple",
 				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
@@ -292,11 +281,9 @@ describe("CourseRoomOverview.page", () => {
 			},
 		};
 		await nextTick();
-		await nextTick();
 
 		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");
-
 		const toAvatarComponent = wrapper.findComponent('[data-test-position="3-2"]');
 		await toAvatarComponent.trigger("drop");
 
@@ -305,17 +292,15 @@ describe("CourseRoomOverview.page", () => {
 
 	it("should call 'setDropElement' method for grouping after ungroup action", async () => {
 		const wrapper = getWrapper();
+
+		const element = courseRoomSubElementFactory.build();
 		const expectedPayload = {
 			from: {
 				x: 2,
 				y: 3,
-				groupIndex: 0,
+				groupIndex: 2,
 			},
-			item: {
-				id: "5",
-				title: "Math 7a",
-				displayColor: "yellow",
-			},
+			item: expect.objectContaining(element),
 			to: {
 				x: 1,
 				y: 2,
@@ -323,38 +308,19 @@ describe("CourseRoomOverview.page", () => {
 		};
 
 		wrapper.vm.groupDialog.isOpen = true;
-		wrapper.vm.groupDialog.groupData = {
+		wrapper.vm.groupDialog.groupData = courseRoomGroupFactory.build({
+			id: "4",
 			groupId: "4",
 			title: "Fourth",
 			shortTitle: "Bi",
 			displayColor: "#EC407A",
-			url: "/api/xxxx/1234w",
 			xPosition: 2,
 			yPosition: 3,
-			groupElements: [
-				{
-					id: "5",
-					title: "Math 7a",
-					displayColor: "yellow",
-				},
-				{
-					id: "6",
-					title: "Bio 3a",
-					displayColor: "green",
-					notification: true,
-				},
-				{
-					id: "7",
-					title: "Geo 7b",
-					displayColor: "yellow",
-				},
-			],
-		};
-		await nextTick();
+			groupElements: [...courseRoomSubElementFactory.buildList(2), element],
+		});
 
 		const roomModal = wrapper.findComponent(CourseRoomModal);
-		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[0]);
-
+		roomModal.vm.$emit("drag-from-group", wrapper.vm.groupDialog.groupData.groupElements[2]);
 		const emptyAvatarComponent = wrapper.findComponent('[data-test-position="2-1"]');
 		await emptyAvatarComponent.trigger("drop");
 
@@ -363,7 +329,6 @@ describe("CourseRoomOverview.page", () => {
 
 	it("should search elements on dashboard", async () => {
 		const wrapper = getWrapper();
-
 		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
@@ -380,20 +345,18 @@ describe("CourseRoomOverview.page", () => {
 		const wrapper = getWrapper();
 
 		wrapper.vm.allowDragging = true;
-		await nextTick();
-
 		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
-
 		const avatarComponents = wrapper.findAll(".room-avatar");
+
 		expect(avatarComponents).toHaveLength(1);
 
 		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
 		await avatarComponent.trigger("dragstart");
-
 		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
+
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.searchText).toStrictEqual("");
 	});
@@ -406,10 +369,12 @@ describe("CourseRoomOverview.page", () => {
 				y: 1,
 			},
 			item: expect.objectContaining({
+				...courseRoomElementFactory.build({
+					title: "First",
+					shortTitle: "Ma",
+					displayColor: "purple",
+				}),
 				id: "1",
-				title: "First",
-				shortTitle: "Ma",
-				displayColor: "purple",
 				to: "/rooms/1",
 				xPosition: 1,
 				yPosition: 1,
@@ -420,17 +385,15 @@ describe("CourseRoomOverview.page", () => {
 			},
 		};
 		await nextTick();
-		await nextTick();
+
 		expect(wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 		expect(wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")).toStrictEqual("RoomAvatar");
 
 		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");
-
 		const toAvatarComponent = wrapper.findComponent('[data-test-position="2-2"]');
 		await toAvatarComponent.trigger("drop");
 
-		await nextTick();
 		expect(courseRoomListStore.alignCourse).toHaveBeenCalledWith(expectedPayload);
 	});
 
@@ -445,11 +408,10 @@ describe("CourseRoomOverview.page", () => {
 			roomsData: roomData as never,
 		});
 		const wrapper = getWrapper();
+
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(false);
 		await nextTick();
-		await nextTick();
-		// rowCount = max(yPosition) + 2 when greater than defaultRowCount (6)
-		// 7 + 2 = 9
+
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
 	});
 
@@ -470,27 +432,22 @@ describe("CourseRoomOverview.page", () => {
 		});
 
 		const wrapper = getWrapper();
-		await nextTick();
-		await nextTick();
-
 		const emptyAvatar = wrapper.findComponent('[data-test-position="0-0"]');
+
 		expect(emptyAvatar.attributes("data-avatar-type")).toStrictEqual("RoomEmptyAvatar");
 	});
 
 	describe("import flow", () => {
 		it("should show import mode when query has import token", async () => {
 			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
-			await nextTick();
-
 			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
+
 			expect(importFlow.props("isActive")).toBe(true);
 			expect(importFlow.props("token")).toBe("test-token");
 		});
 
 		it("should navigate to room-details on import success with id", async () => {
 			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
-			await nextTick();
-
 			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
 			await importFlow.vm.$emit("success", "Test Room", "room-123");
 
@@ -502,8 +459,6 @@ describe("CourseRoomOverview.page", () => {
 
 		it("should navigate to course-room-overview on import success without id", async () => {
 			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
-			await nextTick();
-
 			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
 			await importFlow.vm.$emit("success", "Test Room");
 
@@ -538,12 +493,8 @@ describe("CourseRoomOverview.page", () => {
 			});
 
 			getWrapper();
-			await nextTick();
-			await nextTick();
 
 			expect(courseRoomListStore.fetchCourses).toHaveBeenCalled();
-
-			// Fast-forward to trigger polling
 			await vi.advanceTimersByTimeAsync(5000);
 
 			expect(courseRoomListStore.fetchCourses).toHaveBeenCalledTimes(2);
@@ -552,44 +503,28 @@ describe("CourseRoomOverview.page", () => {
 
 	it("should not call alignCourse when dragging to same position", async () => {
 		const wrapper = getWrapper();
-		await nextTick();
-		await nextTick();
-
 		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
 		await avatarComponent.trigger("dragstart");
-
-		// Drop on same position
 		await avatarComponent.trigger("drop");
 
-		// alignCourse should not be called for same position drag
 		expect(courseRoomListStore.alignCourse).not.toHaveBeenCalled();
 	});
 
 	it("should handle dragend event", async () => {
 		const wrapper = getWrapper();
-		await nextTick();
-		await nextTick();
-
 		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
 		await avatarComponent.trigger("dragstart");
 		await avatarComponent.trigger("dragend");
 
-		// Verify component is still rendered correctly after dragend
 		expect(wrapper.find('[data-test-position="0-0"]').exists()).toBe(true);
 	});
 
 	it("should filter group elements by search text", async () => {
 		const wrapper = getWrapper();
-		await nextTick();
-		await nextTick();
-
-		// Group has elements: Math 7a, Bio 3a, Geo 7b
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "Math");
-		await nextTick();
-
-		// The group should still appear since it has a matching element
 		const groupAvatar = wrapper.findAll(".room-group-avatar");
+
 		expect(groupAvatar).toHaveLength(1);
 	});
 
@@ -598,13 +533,10 @@ describe("CourseRoomOverview.page", () => {
 			courseRoomItemFactory.build({ id: "1", title: "Open Course", isLocked: false }),
 			courseRoomItemFactory.build({ id: "2", title: "Locked Course", isLocked: true }),
 		];
-
 		courseRoomListStore.$patch({
 			allElements: courseDataWithLocked as never,
 		});
-
 		const wrapper = getWrapper();
-		await nextTick();
 
 		expect(wrapper.vm.courses).toHaveLength(2);
 		expect(wrapper.vm.courses[0]).toMatchObject({ id: "1", name: "Open Course", isLocked: false });
@@ -614,32 +546,23 @@ describe("CourseRoomOverview.page", () => {
 	it("should not call alignCourse when dragging group avatar to same position", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
 
 		const groupAvatarComponent = wrapper.findComponent('[data-test-position="3-2"]');
 		await groupAvatarComponent.trigger("dragstart");
-
-		// Drop on same position
 		await groupAvatarComponent.trigger("drop");
 
-		// alignCourse should not be called for same position drag
 		expect(courseRoomListStore.alignCourse).not.toHaveBeenCalled();
 	});
 
 	it("should call updateCourse with default naming after grouping avatar-to-avatar", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
-		await nextTick();
 
 		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
 		await fromAvatarComponent.trigger("dragstart");
-
 		const toAvatarComponent = wrapper.findComponent('[data-test-position="2-2"]');
 		await toAvatarComponent.trigger("drop");
 
-		await nextTick();
-
-		// After grouping, updateCourse should be called with default naming
 		expect(courseRoomListStore.updateCourse).toHaveBeenCalled();
 	});
 
@@ -666,7 +589,6 @@ describe("CourseRoomOverview.page", () => {
 				roomsData: copyingRoomData as never,
 			});
 
-			// First call returns room with copyingSince, second call returns room without
 			const normalRoomData = [
 				courseRoomElementFactory.build({
 					title: "Copying Room",
@@ -682,10 +604,6 @@ describe("CourseRoomOverview.page", () => {
 			});
 
 			getWrapper();
-			await nextTick();
-			await nextTick();
-
-			// Fast-forward to trigger polling completion
 			await vi.advanceTimersByTimeAsync(5000);
 
 			expect(courseRoomListStore.fetchCourses).toHaveBeenCalledTimes(2);
@@ -694,7 +612,6 @@ describe("CourseRoomOverview.page", () => {
 
 	describe("device dimensions", () => {
 		afterEach(() => {
-			// Reset to default mdAndUp
 			mockDisplay.xs.value = false;
 			mockDisplay.sm.value = false;
 			mockDisplay.mdAndUp.value = true;
@@ -706,7 +623,6 @@ describe("CourseRoomOverview.page", () => {
 			mockDisplay.mdAndUp.value = false;
 
 			const wrapper = getWrapper();
-			await nextTick();
 
 			expect(wrapper.vm.dimensions.colCount).toBe(4);
 			expect(wrapper.vm.dimensions.cellWidth).toBe("3.7em");
@@ -718,7 +634,6 @@ describe("CourseRoomOverview.page", () => {
 			mockDisplay.mdAndUp.value = false;
 
 			const wrapper = getWrapper();
-			await nextTick();
 
 			expect(wrapper.vm.dimensions.colCount).toBe(4);
 			expect(wrapper.vm.dimensions.cellWidth).toBe("4em");
@@ -730,7 +645,6 @@ describe("CourseRoomOverview.page", () => {
 			mockDisplay.mdAndUp.value = false;
 
 			const wrapper = getWrapper();
-			await nextTick();
 
 			expect(wrapper.vm.dimensions.colCount).toBe(6);
 		});
@@ -749,11 +663,9 @@ describe("CourseRoomOverview.page", () => {
 
 		it("should show arrange courses switch on touch device", async () => {
 			(window as unknown as Record<string, unknown>).ontouchstart = () => undefined;
-
 			const wrapper = getWrapper();
-			await nextTick();
-
 			const vSwitch = wrapper.find(".enable-disable");
+
 			expect(vSwitch.exists()).toBe(true);
 		});
 	});
