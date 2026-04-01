@@ -122,6 +122,7 @@ import { notifySuccess } from "@data-app";
 import { GroupDataType, useCourseRoomListStore } from "@data-course-rooms";
 import { mdiCheck } from "@icons/material";
 import { SvsSearchField } from "@ui-controls";
+import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -392,9 +393,10 @@ const initializeComponent = async () => {
 	}
 };
 
+useTitle(buildPageTitle(t("pages.courseRooms.index.courses.active")));
+
 onMounted(() => {
 	initializeComponent();
-	document.title = buildPageTitle(t("pages.courseRooms.index.courses.active"));
 });
 </script>
 
