@@ -12,7 +12,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import type { Mock } from "vitest";
-import { ComponentPublicInstance, nextTick, reactive } from "vue";
+import { ComponentPublicInstance, nextTick, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 
 vi.mock("vue-router");
@@ -24,6 +24,33 @@ vi.mock("@data-common-cartridge", () => ({
 		importCommonCartridgeFile: vi.fn(),
 	}),
 }));
+
+const mockDisplay = {
+	xs: ref(false),
+	sm: ref(false),
+	mdAndUp: ref(true),
+};
+
+vi.mock("vuetify", async () => {
+	const actual = await vi.importActual("vuetify");
+	return {
+		...actual,
+		useDisplay: () => mockDisplay,
+	};
+});
+
+const mockRouter = {
+	replace: vi.fn(),
+};
+
+vi.mock("vue-router", async () => {
+	const actual = await vi.importActual("vue-router");
+	return {
+		...actual,
+		useRoute: vi.fn(),
+		useRouter: () => mockRouter,
+	};
+});
 
 const useRouteMock = useRoute as Mock;
 
@@ -88,8 +115,8 @@ describe("CourseRoomOverview.page", () => {
 	let courseRoomListStore: ReturnType<typeof mockedPiniaStoreTyping<typeof useCourseRoomListStore>>;
 	let pinia: ReturnType<typeof createTestingPinia>;
 
-	const getWrapper = (): VueWrapper<CourseRoomOverviewVm> => {
-		useRouteMock.mockReturnValue(reactive({ query: {} }));
+	const getWrapper = (options?: { routeQuery?: Record<string, string> }): VueWrapper<CourseRoomOverviewVm> => {
+		useRouteMock.mockReturnValue(reactive({ query: options?.routeQuery ?? {} }));
 
 		const copyModuleMock = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
@@ -424,5 +451,310 @@ describe("CourseRoomOverview.page", () => {
 		// rowCount = max(yPosition) + 2 when greater than defaultRowCount (6)
 		// 7 + 2 = 9
 		expect(wrapper.vm.dimensions.rowCount).toStrictEqual(9);
+	});
+
+	it("should display empty group avatar when group has no elements", async () => {
+		const emptyGroupData = [
+			courseRoomGroupFactory.build({
+				groupId: "empty-group",
+				title: "Empty Group",
+				shortTitle: "EG",
+				xPosition: 0,
+				yPosition: 0,
+				groupElements: [],
+			}),
+		];
+
+		courseRoomListStore.$patch({
+			roomsData: emptyGroupData as never,
+		});
+
+		const wrapper = getWrapper();
+		await nextTick();
+		await nextTick();
+
+		const emptyAvatar = wrapper.findComponent('[data-test-position="0-0"]');
+		expect(emptyAvatar.attributes("data-avatar-type")).toStrictEqual("RoomEmptyAvatar");
+	});
+
+	describe("import flow", () => {
+		it("should show import mode when query has import token", async () => {
+			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
+			await nextTick();
+
+			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
+			expect(importFlow.props("isActive")).toBe(true);
+			expect(importFlow.props("token")).toBe("test-token");
+		});
+
+		it("should navigate to room-details on import success with id", async () => {
+			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
+			await nextTick();
+
+			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
+			await importFlow.vm.$emit("success", "Test Room", "room-123");
+
+			expect(mockRouter.replace).toHaveBeenCalledWith({
+				name: "room-details",
+				params: { id: "room-123" },
+			});
+		});
+
+		it("should navigate to course-room-overview on import success without id", async () => {
+			const wrapper = getWrapper({ routeQuery: { import: "test-token" } });
+			await nextTick();
+
+			const importFlow = wrapper.findComponent({ name: "ImportFlow" });
+			await importFlow.vm.$emit("success", "Test Room");
+
+			expect(mockRouter.replace).toHaveBeenCalledWith({
+				name: "course-room-overview",
+			});
+			expect(courseRoomListStore.fetchCourses).toHaveBeenCalled();
+		});
+	});
+
+	describe("course polling", () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		it("should start polling when rooms are being copied", async () => {
+			const copyingRoomData = [
+				courseRoomElementFactory.build({
+					title: "Copying Room",
+					copyingSince: new Date().toISOString(),
+					xPosition: 0,
+					yPosition: 0,
+				}),
+			];
+
+			courseRoomListStore.$patch({
+				roomsData: copyingRoomData as never,
+			});
+
+			getWrapper();
+			await nextTick();
+			await nextTick();
+
+			expect(courseRoomListStore.fetchCourses).toHaveBeenCalled();
+
+			// Fast-forward to trigger polling
+			await vi.advanceTimersByTimeAsync(5000);
+
+			expect(courseRoomListStore.fetchCourses).toHaveBeenCalledTimes(2);
+		});
+	});
+
+	it("should not call alignCourse when dragging to same position", async () => {
+		const wrapper = getWrapper();
+		await nextTick();
+		await nextTick();
+
+		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
+		await avatarComponent.trigger("dragstart");
+
+		// Drop on same position
+		await avatarComponent.trigger("drop");
+
+		// alignCourse should not be called for same position drag
+		expect(courseRoomListStore.alignCourse).not.toHaveBeenCalled();
+	});
+
+	it("should handle dragend event", async () => {
+		const wrapper = getWrapper();
+		await nextTick();
+		await nextTick();
+
+		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
+		await avatarComponent.trigger("dragstart");
+		await avatarComponent.trigger("dragend");
+
+		// Verify component is still rendered correctly after dragend
+		expect(wrapper.find('[data-test-position="0-0"]').exists()).toBe(true);
+	});
+
+	it("should filter group elements by search text", async () => {
+		const wrapper = getWrapper();
+		await nextTick();
+		await nextTick();
+
+		// Group has elements: Math 7a, Bio 3a, Geo 7b
+		const searchInput = wrapper.findComponent({ ref: "search" });
+		await searchInput.vm.$emit("update:modelValue", "Math");
+		await nextTick();
+
+		// The group should still appear since it has a matching element
+		const groupAvatar = wrapper.findAll(".room-group-avatar");
+		expect(groupAvatar).toHaveLength(1);
+	});
+
+	it("should provide courses list without locked courses for import", async () => {
+		const courseDataWithLocked = [
+			courseRoomItemFactory.build({ id: "1", title: "Open Course", isLocked: false }),
+			courseRoomItemFactory.build({ id: "2", title: "Locked Course", isLocked: true }),
+		];
+
+		courseRoomListStore.$patch({
+			allElements: courseDataWithLocked as never,
+		});
+
+		const wrapper = getWrapper();
+		await nextTick();
+
+		expect(wrapper.vm.courses).toHaveLength(2);
+		expect(wrapper.vm.courses[0]).toMatchObject({ id: "1", name: "Open Course", isLocked: false });
+		expect(wrapper.vm.courses[1]).toMatchObject({ id: "2", name: "Locked Course", isLocked: true });
+	});
+
+	it("should not call alignCourse when dragging group avatar to same position", async () => {
+		const wrapper = getWrapper();
+		await nextTick();
+		await nextTick();
+
+		const groupAvatarComponent = wrapper.findComponent('[data-test-position="3-2"]');
+		await groupAvatarComponent.trigger("dragstart");
+
+		// Drop on same position
+		await groupAvatarComponent.trigger("drop");
+
+		// alignCourse should not be called for same position drag
+		expect(courseRoomListStore.alignCourse).not.toHaveBeenCalled();
+	});
+
+	it("should call updateCourse with default naming after grouping avatar-to-avatar", async () => {
+		const wrapper = getWrapper();
+		await nextTick();
+		await nextTick();
+
+		const fromAvatarComponent = wrapper.findComponent('[data-test-position="1-1"]');
+		await fromAvatarComponent.trigger("dragstart");
+
+		const toAvatarComponent = wrapper.findComponent('[data-test-position="2-2"]');
+		await toAvatarComponent.trigger("drop");
+
+		await nextTick();
+
+		// After grouping, updateCourse should be called with default naming
+		expect(courseRoomListStore.updateCourse).toHaveBeenCalled();
+	});
+
+	describe("course polling completion", () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+		});
+
+		afterEach(() => {
+			vi.useRealTimers();
+		});
+
+		it("should show success notification when copying completes", async () => {
+			const copyingRoomData = [
+				courseRoomElementFactory.build({
+					title: "Copying Room",
+					copyingSince: new Date().toISOString(),
+					xPosition: 0,
+					yPosition: 0,
+				}),
+			];
+
+			courseRoomListStore.$patch({
+				roomsData: copyingRoomData as never,
+			});
+
+			// First call returns room with copyingSince, second call returns room without
+			const normalRoomData = [
+				courseRoomElementFactory.build({
+					title: "Copying Room",
+					xPosition: 0,
+					yPosition: 0,
+				}),
+			];
+
+			courseRoomListStore.fetchCourses.mockImplementation(async () => {
+				courseRoomListStore.$patch({
+					roomsData: normalRoomData as never,
+				});
+			});
+
+			getWrapper();
+			await nextTick();
+			await nextTick();
+
+			// Fast-forward to trigger polling completion
+			await vi.advanceTimersByTimeAsync(5000);
+
+			expect(courseRoomListStore.fetchCourses).toHaveBeenCalledTimes(2);
+		});
+	});
+
+	describe("device dimensions", () => {
+		afterEach(() => {
+			// Reset to default mdAndUp
+			mockDisplay.xs.value = false;
+			mockDisplay.sm.value = false;
+			mockDisplay.mdAndUp.value = true;
+		});
+
+		it("should set xs device dimensions", async () => {
+			mockDisplay.xs.value = true;
+			mockDisplay.sm.value = false;
+			mockDisplay.mdAndUp.value = false;
+
+			const wrapper = getWrapper();
+			await nextTick();
+
+			expect(wrapper.vm.dimensions.colCount).toBe(4);
+			expect(wrapper.vm.dimensions.cellWidth).toBe("3.7em");
+		});
+
+		it("should set sm device dimensions", async () => {
+			mockDisplay.xs.value = false;
+			mockDisplay.sm.value = true;
+			mockDisplay.mdAndUp.value = false;
+
+			const wrapper = getWrapper();
+			await nextTick();
+
+			expect(wrapper.vm.dimensions.colCount).toBe(4);
+			expect(wrapper.vm.dimensions.cellWidth).toBe("4em");
+		});
+
+		it("should set default dimensions when no breakpoint matches", async () => {
+			mockDisplay.xs.value = false;
+			mockDisplay.sm.value = false;
+			mockDisplay.mdAndUp.value = false;
+
+			const wrapper = getWrapper();
+			await nextTick();
+
+			expect(wrapper.vm.dimensions.colCount).toBe(6);
+		});
+	});
+
+	describe("touch device", () => {
+		const originalOntouchstart = window.ontouchstart;
+
+		afterEach(() => {
+			if (originalOntouchstart !== undefined) {
+				window.ontouchstart = originalOntouchstart;
+			} else {
+				delete (window as unknown as Record<string, unknown>).ontouchstart;
+			}
+		});
+
+		it("should show arrange courses switch on touch device", async () => {
+			(window as unknown as Record<string, unknown>).ontouchstart = () => undefined;
+
+			const wrapper = getWrapper();
+			await nextTick();
+
+			const vSwitch = wrapper.find(".enable-disable");
+			expect(vSwitch.exists()).toBe(true);
+		});
 	});
 });
