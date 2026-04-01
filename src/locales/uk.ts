@@ -1868,7 +1868,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Відкриті завдання",
 	"pages.tasks.subtitleWithDue": "З терміном виконання",
 	"pages.tasks.teacher.drafts.emptyState.title": "Наразі немає чернеток",
-	"pages.tasks.teacher.open.emptyState.title": "Наразі завдань немає",
+	"pages.tasks.open.emptyState.title": "Наразі завдань немає",
 	"pages.tasks.teacher.subtitleOverDue": "Завдання, термін дії яких минув",
 	"pages.termsofuse.title": "Умови використання та політика конфіденційності",
 	"pages.tool.apiError.tool_param_duplicate":

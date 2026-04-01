@@ -1899,7 +1899,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Tareas abiertas",
 	"pages.tasks.subtitleWithDue": "Con plazo",
 	"pages.tasks.teacher.drafts.emptyState.title": "Actualmente no hay borradores",
-	"pages.tasks.teacher.open.emptyState.title": "Actualmente no hay tareas",
+	"pages.tasks.open.emptyState.title": "Actualmente no hay tareas",
 	"pages.tasks.teacher.subtitleOverDue": "Tareas expiradas",
 	"pages.termsofuse.title": "Condiciones de uso y política de privacidad",
 	"pages.tool.apiError.tool_param_duplicate":

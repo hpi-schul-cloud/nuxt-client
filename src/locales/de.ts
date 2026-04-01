@@ -1881,7 +1881,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
 	"pages.tasks.teacher.drafts.emptyState.title": "Aktuell gibt es  keine Entwürfe",
-	"pages.tasks.teacher.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
+	"pages.tasks.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":

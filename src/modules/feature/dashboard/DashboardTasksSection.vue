@@ -44,7 +44,25 @@
 								{{ task.status.graded }}/{{ task.status.submitted }}
 							</VChip>
 							<VChip
-								v-if="isTaskOverdue(task)"
+								v-if="isStudent && task.status?.submitted"
+								:prepend-icon="mdiCheckCircleOutline"
+								size="small"
+								variant="tonal"
+								data-testid="task-submitted-not-graded"
+							>
+								{{ t("components.organisms.TasksDashboardMain.tab.completed") }}
+							</VChip>
+							<VChip
+								v-if="isTeacher && isTaskOverdue(task)"
+								:prepend-icon="mdiClockAlertOutline"
+								size="small"
+								variant="tonal"
+								data-testid="task-overdue"
+							>
+								{{ t("pages.room.taskCard.teacher.label.overdue") }}
+							</VChip>
+							<VChip
+								v-if="isStudent && isTaskOverdue(task) && !task.status?.submitted"
 								:prepend-icon="mdiClockAlertOutline"
 								size="small"
 								variant="tonal"
@@ -65,10 +83,10 @@ import { fromNowUtc } from "@/utils/date-time.utils";
 import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { isTaskOverdue } from "@data-tasks";
-import { mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
+import { mdiCheckCircleOutline, mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
-const { isTeacher } = useAppStoreRefs();
+const { isTeacher, isStudent } = useAppStoreRefs();
 
 defineProps<{
 	title: string;

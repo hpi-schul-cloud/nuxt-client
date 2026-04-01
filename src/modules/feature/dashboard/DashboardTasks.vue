@@ -34,7 +34,7 @@
 			<DashboardTasksOpen
 				:title="t('components.organisms.TasksDashboardMain.tab.open')"
 				data-testid="student-tasks-open"
-				:empty-msg="t('pages.tasks.student.open.emptyState.title')"
+				:empty-msg="t('pages.tasks.open.emptyState.title')"
 				:tasks="openTasksForStudents"
 			/>
 

@@ -1856,7 +1856,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Open Tasks",
 	"pages.tasks.subtitleWithDue": "With Due Date",
 	"pages.tasks.teacher.drafts.emptyState.title": "Currently there are no drafts",
-	"pages.tasks.teacher.open.emptyState.title": "There are currently no tasks",
+	"pages.tasks.open.emptyState.title": "There are currently no tasks",
 	"pages.tasks.teacher.subtitleOverDue": "Expired Tasks",
 	"pages.termsofuse.title": "Terms of use and privacy policy",
 	"pages.tool.apiError.tool_param_duplicate": "This Tool has at least one duplicate parameter. Please contact support.",
