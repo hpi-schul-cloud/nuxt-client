@@ -64,7 +64,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultDialogClose"
 		/>
-		<CourseCommonCartridgeExportModal v-model:is-open="isExportDialogOpen" room-id="roomData.roomId" />
+		<CourseCommonCartridgeExportModal v-model:is-open="isExportDialogOpen" :room-id="roomData.roomId" />
 		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
