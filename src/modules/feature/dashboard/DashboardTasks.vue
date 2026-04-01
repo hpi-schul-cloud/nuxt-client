@@ -5,7 +5,7 @@
 			<DashboardTasksOpen
 				:title="t('components.organisms.TasksDashboardMain.tab.current')"
 				data-testid="teacher-tasks-open"
-				:empty-msg="t('pages.dashboard.no.tasks')"
+				:empty-msg="t('pages.tasks.open.emptyState.title')"
 				:tasks="openTasksForTeacher"
 			/>
 

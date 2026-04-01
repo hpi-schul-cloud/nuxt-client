@@ -985,7 +985,7 @@ export default {
 	"pages.dashboard.new.features": "Es gibt neue Features in der {instanceTitle}.",
 	"pages.dashboard.new.features.available": "Neue Features sind verfügbar",
 	"pages.dashboard.new.features.forward": "Mehr Informationen sind in den Release Notes zu finden.",
-	"pages.dashboard.no.tasks": "Keine gestellten Aufgaben. Du findest alle Aufgaben im Aufgaben-Bereich.",
+	"pages.dashboard.no.tasks": "Aktuell gibt es keine gestellten Aufgaben",
 	"pages.dashboard.no.due.date": "Kein Abgabedatum festgelegt",
 	"pages.dashboard.welcome": "Hallo",
 	"pages.dashboard.schedule": "Stundenplan",
@@ -1881,7 +1881,7 @@ export default {
 	"pages.tasks.subtitleOpen": "Offene Aufgaben",
 	"pages.tasks.subtitleWithDue": "Mit Abgabefrist",
 	"pages.tasks.teacher.drafts.emptyState.title": "Aktuell gibt es  keine Entwürfe",
-	"pages.tasks.open.emptyState.title": "Aktuell gibt es keine Aufgaben",
+	"pages.tasks.open.emptyState.title": "Es gibt keine aktuellen Aufgaben",
 	"pages.tasks.teacher.subtitleOverDue": "Abgelaufene Aufgaben",
 	"pages.termsofuse.title": "Nutzungsordnung und Datenschutzerklärung",
 	"pages.tool.apiError.tool_param_duplicate":
