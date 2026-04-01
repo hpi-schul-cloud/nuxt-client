@@ -1,13 +1,13 @@
 import { useSafeAxiosTask } from "@/composables/async-tasks.composable";
+import { DroppedObject, RoomsData } from "@/store/types/rooms";
+import { $axios } from "@/utils/api";
+import { isInPast } from "@/utils/date-time.utils";
 import {
 	CourseMetadataResponse,
 	CoursesApiFactory,
 	DashboardApiFactory,
 	DashboardGridElementResponse,
-} from "@/generated/serverApi/v3";
-import { DroppedObject, RoomsData } from "@/store/types/rooms";
-import { $axios } from "@/utils/api";
-import { isInPast } from "@/utils/date-time.utils";
+} from "@api-server";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
@@ -123,6 +123,11 @@ export const useCourseRoomListStore = defineStore("courseRoomListStore", () => {
 			const roomIndex = roomsData.value.findIndex(
 				(room) => room.xPosition === payload.xPosition && room.yPosition === payload.yPosition
 			);
+
+			if (roomIndex < 0) {
+				return;
+			}
+
 			const updatedRoomsData = [...roomsData.value];
 			updatedRoomsData[roomIndex] = {
 				...roomsData.value[roomIndex],

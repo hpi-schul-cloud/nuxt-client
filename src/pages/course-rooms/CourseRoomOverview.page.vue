@@ -384,6 +384,7 @@ const initializeComponent = async () => {
 	dimensions.colCount = newDims.colCount;
 	dimensions.cellWidth = newDims.cellWidth;
 
+	await fetchCourses();
 	setRowCount();
 
 	if (hasRoomsBeingCopied.value) {

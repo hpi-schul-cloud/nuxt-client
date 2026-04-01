@@ -51,6 +51,7 @@ import { ListItemsObject } from "@/store/types/rooms";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseRoomListStore } from "@data-course-rooms";
 import { SvsSearchField } from "@ui-controls";
+import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -65,10 +66,12 @@ const rooms = computed<Array<ListItemsObject>>(() =>
 		room.searchText?.toLowerCase().includes(searchText.value.toLowerCase())
 	)
 );
+useTitle(buildPageTitle(t("pages.courseRooms.index.courses.all")));
 
 onMounted(async () => {
-	document.title = buildPageTitle(t("pages.courseRooms.index.courses.all").toString());
-	// await fetchAllElements();
+	if (!allElements.value.length) {
+		await courseRoomListStore.fetchAllElements();
+	}
 });
 </script>
 
