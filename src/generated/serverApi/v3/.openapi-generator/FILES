@@ -244,7 +244,6 @@ models/me-school-response.ts
 models/me-user-response.ts
 models/media-available-line-element-response.ts
 models/media-available-line-response.ts
-models/media-board-colors.ts
 models/media-board-response.ts
 models/media-external-tool-element-content.ts
 models/media-external-tool-element-response.ts

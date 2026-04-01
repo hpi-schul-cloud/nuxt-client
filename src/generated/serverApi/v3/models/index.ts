@@ -183,7 +183,6 @@ export * from './me-school-response';
 export * from './me-user-response';
 export * from './media-available-line-element-response';
 export * from './media-available-line-response';
-export * from './media-board-colors';
 export * from './media-board-response';
 export * from './media-external-tool-element-content';
 export * from './media-external-tool-element-response';
