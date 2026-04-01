@@ -2,15 +2,27 @@ import DashboardTasksSection from "./DashboardTasksSection.vue";
 import { dateFromToday } from "@/utils/date-time.utils";
 import { taskResponseFactory } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createTestingPinia } from "@pinia/testing";
+import { useAppStoreRefs } from "@data-app";
 import { shallowMount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
+
+vi.mock("@data-app", () => ({
+	useAppStoreRefs: vi.fn(),
+}));
 
 describe("DashboardTasksSection", () => {
-	const setup = (tasks = [taskResponseFactory.build()], role?: "teacher" | "student") => {
+	const setup = (tasks = [taskResponseFactory.build()], role: "teacher" | "student" = "teacher") => {
+		vi.mocked(useAppStoreRefs).mockReturnValue({
+			isTeacher: ref(role === "teacher"),
+			isStudent: ref(role === "student"),
+		} as unknown as ReturnType<typeof useAppStoreRefs>);
+
 		const wrapper = shallowMount(DashboardTasksSection, {
-			props: { title: "My Tasks", tasks, role },
-			global: { plugins: [createTestingVuetify(), createTestingI18n(), createTestingPinia()] },
+			props: { title: "My Tasks", tasks },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 		});
 		return { wrapper };
 	};

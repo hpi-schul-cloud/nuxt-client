@@ -89,21 +89,14 @@ import { TaskResponse } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { isTaskOverdue } from "@data-tasks";
 import { mdiCheckCircleOutline, mdiClockAlertOutline, mdiFormatListChecks } from "@icons/material";
-import { computed, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { isTeacher: storeIsTeacher, isStudent: storeIsStudent } = useAppStoreRefs();
+const { isTeacher, isStudent } = useAppStoreRefs();
 
-const props = defineProps<{
+defineProps<{
 	title: string;
 	tasks: TaskResponse[];
-	role?: "teacher" | "student";
 }>();
-
-const { role } = toRefs(props);
-
-const isTeacher = computed(() => (role?.value ? role.value === "teacher" : storeIsTeacher.value));
-const isStudent = computed(() => (role?.value ? role.value === "student" : storeIsStudent.value));
 
 const { t } = useI18n();
 </script>
