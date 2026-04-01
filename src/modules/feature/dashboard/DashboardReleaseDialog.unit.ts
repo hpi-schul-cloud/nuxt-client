@@ -2,7 +2,7 @@ import DashboardReleaseDialog from "./DashboardReleaseDialog.vue";
 import { initializeAxios } from "@/utils/api";
 import { createTestAppStore, mockApi, mockApiResponse, mockAxiosInstance } from "@@/tests/test-utils";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { ReleaseItemResponse, ServerReleaseApiInterface } from "@api-server";
+import { MeApiInterface, ReleaseItemResponse, ServerReleaseApiInterface } from "@api-server";
 import * as serverApi from "@api-server";
 import { createTestingPinia } from "@pinia/testing";
 import { SvsDialog } from "@ui-dialog";
@@ -13,6 +13,7 @@ import { Mocked } from "vitest";
 
 describe("DashboardReleaseDialog", () => {
 	let releasesApi: Mocked<ServerReleaseApiInterface>;
+	let meApi: Mocked<MeApiInterface>;
 	let axiosMock: Mocked<AxiosInstance>;
 
 	beforeEach(() => {
@@ -21,8 +22,10 @@ describe("DashboardReleaseDialog", () => {
 		setActivePinia(createTestingPinia({ stubActions: false }));
 
 		releasesApi = mockApi<ServerReleaseApiInterface>();
+		meApi = mockApi<MeApiInterface>();
 
 		vi.spyOn(serverApi, "ServerReleaseApiFactory").mockReturnValue(releasesApi);
+		vi.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
 	});
 
 	const setup = (options?: { releaseDate?: string; latestReleasePublishedAt?: string }) => {
@@ -42,6 +45,8 @@ describe("DashboardReleaseDialog", () => {
 			})
 		);
 
+		meApi.meControllerUpdateMePreferences.mockResolvedValue(mockApiResponse({}));
+
 		const wrapper = mount(DashboardReleaseDialog, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
@@ -50,20 +55,19 @@ describe("DashboardReleaseDialog", () => {
 	};
 
 	describe("release notes dialog", () => {
-		it("shows the release dialog when there is a new release the user has not seen", async () => {
+		it("does not show dialog when user has no releaseDate yet", async () => {
 			const { wrapper } = setup({
 				latestReleasePublishedAt: "2024-06-01T00:00:00.000Z",
-				// no releaseDate preference → user has never seen any release
 			});
 			await flushPromises();
 
-			expect(wrapper.findComponent(SvsDialog).exists()).toBe(true);
+			expect(wrapper.findComponent(SvsDialog).props("modelValue")).toBe(false);
 		});
 
 		it("shows the release dialog when the latest release is newer than what the user last saw", async () => {
 			const { wrapper } = setup({
 				latestReleasePublishedAt: "2024-06-01T00:00:00.000Z",
-				releaseDate: "2024-01-01T00:00:00.000Z", // older than the release
+				releaseDate: "2024-01-01T00:00:00.000Z",
 			});
 			await flushPromises();
 
@@ -73,7 +77,7 @@ describe("DashboardReleaseDialog", () => {
 		it("does not show the release dialog when the user has already seen the latest release", async () => {
 			const { wrapper } = setup({
 				latestReleasePublishedAt: "2024-01-01T00:00:00.000Z",
-				releaseDate: "2024-06-01T00:00:00.000Z", // newer than or equal to release
+				releaseDate: "2024-06-01T00:00:00.000Z",
 			});
 			await flushPromises();
 
@@ -85,6 +89,17 @@ describe("DashboardReleaseDialog", () => {
 			await flushPromises();
 
 			expect(wrapper.findComponent(SvsDialog).props("modelValue")).toBe(false);
+		});
+
+		it("sets releaseDate preference when user has none and release exists", async () => {
+			setup({
+				latestReleasePublishedAt: "2024-06-01T00:00:00.000Z",
+			});
+			await flushPromises();
+
+			expect(meApi.meControllerUpdateMePreferences).toHaveBeenCalledWith({
+				releaseDate: "2024-06-01T00:00:00.000Z",
+			});
 		});
 	});
 });
