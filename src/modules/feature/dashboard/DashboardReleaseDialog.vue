@@ -68,7 +68,6 @@ const setReleasePreferences = () => {
 watch(
 	latestRelease,
 	(release) => {
-    console.log(release);
 		if (release && !userPreferences.value?.releaseDate) {
 			setReleasePreferences();
 		}
