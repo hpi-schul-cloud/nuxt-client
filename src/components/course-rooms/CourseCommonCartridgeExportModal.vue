@@ -1,162 +1,116 @@
 <template>
-	<VDialog
+	<SvsDialog
 		ref="exportDialog"
 		v-model="isExportModalOpen"
-		:max-width="560"
+		:title="title"
 		data-testid="export-dialog"
-		@click:outside="onCloseDialog"
-		@keydown.esc="onCloseDialog"
+		@close="onCloseDialog"
+		@after-leave="resetDialog"
 	>
-		<v-card :ripple="false">
-			<template #title>
-				<h2 class="mt-2 text-break">
-					{{ $t(title) }}
-				</h2>
+		<template #content>
+			<template v-if="step === 0">
+				<InfoAlert class="mb-4">
+					{{ t(`components.molecules.export.options.info.point3`) }}
+				</InfoAlert>
+				<VRadioGroup v-model="radios" data-testid="version-radio-group">
+					<VRadio
+						id="1.1.0"
+						data-testid="version-110-radio-button"
+						:label="$t('pages.room.modal.course.export.version1.1')"
+						value="1.1.0"
+					/>
+					<VRadio
+						id="1.3.0"
+						data-testid="version-130-radio-button"
+						:label="$t('pages.room.modal.course.export.version1.3')"
+						value="1.3.0"
+					/>
+				</VRadioGroup>
 			</template>
-			<template #text>
-				<div v-if="step === 0 && isExportModalOpen">
-					<div
-						data-testid="fixed-export-options-warning-info-point3"
-						class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5"
-					>
-						<div class="mx-2">
-							<v-icon color="info">{{ mdiInformation }}</v-icon>
-						</div>
-						<p>
-							{{ $t(`components.molecules.export.options.info.point3`) }}
-						</p>
-					</div>
-					<div data-testid="version-radio-group">
-						<v-radio-group v-model="radios">
-							<v-radio
-								id="1.1.0"
-								data-testid="version-110-radio-button"
-								:label="$t('pages.room.modal.course.export.version1.1')"
-								value="1.1.0"
-							/>
-							<v-radio
-								id="1.3.0"
-								data-testid="version-130-radio-button"
-								:label="$t('pages.room.modal.course.export.version1.3')"
-								value="1.3.0"
-							/>
-						</v-radio-group>
-					</div>
-				</div>
-				<div v-if="step === 1 && isExportModalOpen">
-					<div class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5">
-						<div class="mx-2">
-							<v-icon color="info">{{ mdiInformation }}</v-icon>
-						</div>
-						<p>
-							{{ $t(`components.molecules.export.options.info`) }}
-							<br />
-							&middot;
-							{{ $t(`components.molecules.export.options.info.point2`) }}
-							<span v-if="radios && radios == '1.1.0'" data-testid="export-options-info-point3">
-								<br />
-								&middot;
-								{{ $t(`components.molecules.export.options.info.point3`) }}
-							</span>
-							<br />
-						</p>
-					</div>
-					<v-container class="pt-0">
-						<v-checkbox
-							v-model="allTasksSelected"
-							class="d-flex"
-							data-testid="all-tasks-checkbox"
-							:indeterminate="someTasksSelected"
-							:disabled="allTasks.length === 0"
-							:label="$t('pages.room.modal.course.export.options.tasks')"
-							density="compact"
-							@click="toggleAllTasks"
-						/>
-						<v-checkbox
-							v-for="item in allTasks"
-							:key="item.id"
-							v-model="item.isSelected"
-							class="d-flex ml-8"
-							:label="item.title"
-							density="compact"
-						/>
-						<v-checkbox
-							v-model="allTopicsSelected"
-							class="d-flex"
-							data-testid="all-topics-checkbox"
-							:indeterminate="someTopicsSelected"
-							:disabled="allTopics.length === 0"
-							:label="$t('pages.room.modal.course.export.options.topics')"
-							density="compact"
-							@click="toggleAllTopics"
-						/>
-						<v-checkbox
-							v-for="item in allTopics"
-							:key="item.id"
-							v-model="item.isSelected"
-							class="d-flex ml-8"
-							:label="item.title"
-							density="compact"
-						/>
-						<v-checkbox
-							v-model="allColumnBoardsSelected"
-							class="d-flex"
-							data-testid="all-column-boards-checkbox"
-							:indeterminate="someColumnBoardsSelected"
-							:disabled="allColumnBoards.length === 0"
-							:label="$t('pages.room.modal.course.export.options.columnBoards')"
-							density="compact"
-							@click="toggleAllColumnBoards"
-						/>
-						<v-checkbox
-							v-for="item in allColumnBoards"
-							:key="item.id"
-							v-model="item.isSelected"
-							class="d-flex ml-8"
-							:label="item.title"
-							density="compact"
-						/>
-					</v-container>
-				</div>
+			<template v-if="step === 1">
+				<InfoAlert class="mb-4">
+					{{ t(`components.molecules.export.options.info`) }}
+
+					<ul class="ml-6">
+						<li>{{ t(`components.molecules.export.options.info.point2`) }}</li>
+						<li v-if="radios && radios == '1.1.0'">{{ t(`components.molecules.export.options.info.point3`) }}</li>
+					</ul>
+				</InfoAlert>
+				<VCheckbox
+					v-model="allTasksSelected"
+					class="d-flex"
+					data-testid="all-tasks-checkbox"
+					:indeterminate="someTasksSelected"
+					:disabled="allTasks.length === 0"
+					:label="t('pages.room.modal.course.export.options.tasks')"
+					density="compact"
+					@click="toggleAllTasks"
+				/>
+				<VCheckbox
+					v-for="item in allTasks"
+					:key="item.id"
+					v-model="item.isSelected"
+					class="d-flex ml-8"
+					:label="item.title"
+					density="compact"
+				/>
+				<VCheckbox
+					v-model="allTopicsSelected"
+					class="d-flex"
+					data-testid="all-topics-checkbox"
+					:indeterminate="someTopicsSelected"
+					:disabled="allTopics.length === 0"
+					:label="t('pages.room.modal.course.export.options.topics')"
+					density="compact"
+					@click="toggleAllTopics"
+				/>
+				<VCheckbox
+					v-for="item in allTopics"
+					:key="item.id"
+					v-model="item.isSelected"
+					class="d-flex ml-8"
+					:label="item.title"
+					density="compact"
+				/>
+				<VCheckbox
+					v-model="allColumnBoardsSelected"
+					class="d-flex"
+					data-testid="all-column-boards-checkbox"
+					:indeterminate="someColumnBoardsSelected"
+					:disabled="allColumnBoards.length === 0"
+					:label="t('pages.room.modal.course.export.options.columnBoards')"
+					density="compact"
+					@click="toggleAllColumnBoards"
+				/>
+				<VCheckbox
+					v-for="item in allColumnBoards"
+					:key="item.id"
+					v-model="item.isSelected"
+					class="d-flex ml-8"
+					:label="item.title"
+					density="compact"
+				/>
 			</template>
-			<template #actions>
-				<div class="mb-2">
-					<v-btn v-if="step === 1" data-testid="dialog-back-btn" class="ml-2" depressed @click="onBack">
-						{{ $t("common.actions.back") }}
-					</v-btn>
-				</div>
-				<v-spacer />
-				<div class="mb-2">
-					<v-btn v-if="step === 1" data-testid="dialog-cancel-btn" class="ml-2" depressed @click="onCloseDialog">
-						{{ $t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn v-if="step === 0" data-testid="dialog-cancel-btn" depressed @click="onCloseDialog">
-						{{ $t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn
-						v-if="step === 0"
-						data-testid="dialog-next-btn"
-						class="ml-2"
-						color="primary"
-						variant="flat"
-						@click="onNext"
-					>
-						{{ $t("common.actions.continue") }}
-					</v-btn>
-					<v-btn
-						v-if="step === 1"
-						data-testid="dialog-export-btn"
-						class="ml-2"
-						color="primary"
-						variant="flat"
-						@click="onExport"
-					>
-						{{ $t("common.actions.export") }}
-					</v-btn>
-				</div>
-			</template>
-		</v-card>
-	</VDialog>
+		</template>
+		<template #actions>
+			<VBtn v-if="step === 1" data-testid="dialog-back-btn" class="mr-auto" @click="onBack">
+				{{ t("common.actions.back") }}
+			</VBtn>
+			<SvsDialogBtnCancel data-testid="dialog-cancel-btn" @click="onCloseDialog" />
+			<SvsDialogBtnConfirm
+				v-if="step === 0"
+				data-testid="dialog-next-btn"
+				text-lang-key="common.actions.continue"
+				@click="onNext"
+			/>
+			<SvsDialogBtnConfirm
+				v-if="step === 1"
+				data-testid="dialog-export-btn"
+				text-lang-key="common.actions.export"
+				@click="onExport"
+			/>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
@@ -169,7 +123,8 @@ import {
 } from "@/types/course-room/CourseRoom";
 import { COMMON_CARTRIDGE_EXPORT_MODULE_KEY, COURSE_ROOM_DETAILS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifyError, notifySuccess } from "@data-app";
-import { mdiInformation } from "@icons/material";
+import { InfoAlert } from "@ui-alert";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -253,15 +208,10 @@ const someColumnBoardsSelected = computed(
 	() => allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) && !allColumnBoardsSelected.value
 );
 
-function onCloseDialog(): void {
-	closeDialog();
-	resetDialog();
-}
-
-function closeDialog() {
+const onCloseDialog = () => {
 	emit("dialog-closed", false);
 	isExportModalOpen.value = false;
-}
+};
 
 function resetDialog(): void {
 	commonCartridgeExportModule.resetExportFlow();
@@ -283,7 +233,7 @@ function onNext(): void {
 	step.value++;
 }
 
-async function onExport(): Promise<void> {
+async function onExport() {
 	emit("dialog-confirmed", false);
 	notifySuccess(t("common.words.export"));
 
@@ -297,7 +247,7 @@ async function onExport(): Promise<void> {
 	commonCartridgeExportModule.setTasks(taskIds);
 	commonCartridgeExportModule.setColumnBoards(columnBoardIds);
 
-	closeDialog();
+	onCloseDialog();
 	await commonCartridgeExportModule.startExport();
 
 	if (courseRoomDetailsModule.getBusinessError?.statusCode !== "") {

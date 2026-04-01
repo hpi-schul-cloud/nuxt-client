@@ -6,10 +6,10 @@ import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { VDialog } from "vuetify/components";
 
 describe("CourseCommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
@@ -69,7 +69,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 	describe("when getIsExportModalOpen is true", () => {
 		it("should open the Dialog", () => {
 			const wrapper = setup();
-			const dialog = wrapper.findComponent(VDialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			expect(dialog.props("modelValue")).toBe(true);
 		});
 	});

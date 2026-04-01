@@ -18,8 +18,7 @@
 	</v-menu>
 	<FilterChips :filters="filterChipTitles" @remove:filter="onRemoveChipFilter" @click:filter="onFilterClick" />
 
-	<FilterDialog :is-open="dialogOpen" @dialog-closed="onCloseDialog" @remove:filter="onRemoveFilter">
-		<template #title> {{ modalTitle }} </template>
+	<SvsDialog v-model="dialogOpen" :title="modalTitle ?? ''" no-actions @after-leave="onCloseDialog">
 		<template #content>
 			<ListSelection
 				v-if="isSelectFiltering"
@@ -37,15 +36,15 @@
 				@dialog-closed="onCloseDialog"
 			/>
 		</template>
-	</FilterDialog>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
 import { useDataTableFilter } from "./composables/filter.composable";
 import { DateBetween, FilterChips, ListSelection } from "./filter-components";
-import FilterDialog from "./FilterDialog.vue";
 import { DateSelection, FilterOption, FilterOptionsType, SelectOptionsType, User } from "./types";
 import { mdiMenuDown, mdiTune } from "@icons/material";
+import { SvsDialog } from "@ui-dialog";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -94,8 +93,8 @@ const filteredValues = computed(() => {
 });
 
 const onCloseDialog = () => {
-	selectedFilterType.value = undefined;
 	dialogOpen.value = false;
+	selectedFilterType.value = undefined;
 };
 
 const onFilterClick = (val: FilterOptionsType) => {
