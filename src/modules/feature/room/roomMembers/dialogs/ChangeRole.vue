@@ -1,129 +1,100 @@
 <template>
-	<VDialog
+	<SvsDialog
 		v-model="isOpen"
-		:width="xs ? 'auto' : 480"
+		:is-loading="isLoading"
+		:title="dialogTitle"
 		data-testid="dialog-change-role-participants"
-		max-width="480"
-		@keydown.esc="onClose"
-		@click:outside="onClose"
+		@cancel="onClose"
 	>
-		<VCard ref="changeRoleContent">
-			<template #title>
-				<h2 ref="textTitle" class="mt-2 dialog-title">
-					{{ dialogTitle }}
-				</h2>
-			</template>
-
-			<template #text>
-				<div v-if="!isOwnershipHandoverMode" class="mb-4">
-					{{ infoText }}
-				</div>
-				<div>
-					<VRadioGroup v-if="!isOwnershipHandoverMode" ref="radioGroup" v-model="selectedRole" hide-details>
-						<VRadio
-							v-for="option in radioOptions"
-							:key="option.role"
-							:value="option.role"
-							class="align-start mb-2"
-							:data-testid="option.dataTestid"
-						>
-							<template #label>
-								<div class="d-flex flex-column mt-2">
-									{{ option.labelHeader }}
-									<span
-										v-for="labelDescription in option.labelDescriptions"
-										:key="labelDescription"
-										class="radio-label"
-									>
-										{{ t(labelDescription) }}
-									</span>
-								</div>
-							</template>
-						</VRadio>
-					</VRadioGroup>
-					<WarningAlert
-						v-if="selectedRole === RoleName.ROOMOWNER && currentOwnerFullName"
-						:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
+		<template #content>
+			<div v-if="!isOwnershipHandoverMode" class="mb-4">
+				{{ infoText }}
+			</div>
+			<div>
+				<VRadioGroup v-if="!isOwnershipHandoverMode" ref="radioGroup" v-model="selectedRole" hide-details>
+					<VRadio
+						v-for="option in radioOptions"
+						:key="option.role"
+						:value="option.role"
+						class="align-start mb-2"
+						:data-testid="option.dataTestid"
 					>
-						<span class="alert-text">
-							<template v-if="!isOwnershipHandoverMode">
-								<i18n-t keypath="pages.rooms.members.handOverAlert.label" scope="global">
-									<template #memberFullName>{{ memberFullName }}</template>
-								</i18n-t>
-								<p class="mb-0">
-									{{
-										t("pages.rooms.members.handOverAlert.label.subText", {
-											roomOwner: currentOwnerFullName,
-										})
-									}}
-								</p>
-							</template>
-							<template v-else>
-								<i18n-t keypath="pages.rooms.members.handOverAlert.confirm.label" scope="global">
-									<template #roomOwner>
-										{{ currentOwnerFullName }}
-									</template>
-									<template #memberFullName>{{ memberFullName }}</template>
-								</i18n-t>
-								<p class="mb-0">
-									{{
-										t("pages.rooms.members.handOverAlert.confirm.label.subText", {
-											memberFullName,
-										})
-									}}
-								</p>
-							</template>
-						</span>
-					</WarningAlert>
-				</div>
-			</template>
+						<template #label>
+							<div class="d-flex flex-column mt-2">
+								{{ option.labelHeader }}
+								<span v-for="labelDescription in option.labelDescriptions" :key="labelDescription" class="radio-label">
+									{{ t(labelDescription) }}
+								</span>
+							</div>
+						</template>
+					</VRadio>
+				</VRadioGroup>
+				<WarningAlert
+					v-if="selectedRole === RoleName.ROOMOWNER && currentOwnerFullName"
+					:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
+				>
+					<span class="alert-text">
+						<template v-if="!isOwnershipHandoverMode">
+							<i18n-t keypath="pages.rooms.members.handOverAlert.label" scope="global">
+								<template #memberFullName>{{ memberFullName }}</template>
+							</i18n-t>
+							<p class="mb-0">
+								{{
+									t("pages.rooms.members.handOverAlert.label.subText", {
+										roomOwner: currentOwnerFullName,
+									})
+								}}
+							</p>
+						</template>
+						<template v-else>
+							<i18n-t keypath="pages.rooms.members.handOverAlert.confirm.label" scope="global">
+								<template #roomOwner>
+									{{ currentOwnerFullName }}
+								</template>
+								<template #memberFullName>{{ memberFullName }}</template>
+							</i18n-t>
+							<p class="mb-0">
+								{{
+									t("pages.rooms.members.handOverAlert.confirm.label.subText", {
+										memberFullName,
+									})
+								}}
+							</p>
+						</template>
+					</span>
+				</WarningAlert>
+			</div>
+		</template>
 
-			<template #actions>
-				<VSpacer />
-				<div class="mr-4 mb-3">
-					<VBtn
-						class="ms-auto mr-2"
-						:text="t('common.actions.cancel')"
-						data-testid="change-role-cancel-btn"
-						@click="onClose"
-					/>
-					<VBtn
-						v-if="!isOwnershipHandoverMode"
-						class="ms-auto"
-						color="primary"
-						variant="flat"
-						:text="t('common.actions.confirm')"
-						data-testid="change-role-confirm-btn"
-						:disabled="isLoading || !selectedRole"
-						@click="withLoading(() => onConfirm())"
-					/>
-					<VBtn
-						v-else
-						class="ms-auto"
-						color="primary"
-						variant="flat"
-						:text="t('pages.rooms.members.roleChange.handOverBtn.text')"
-						data-testid="change-owner-confirm-btn"
-						:disabled="isLoading || !selectedRole"
-						@click="withLoading(() => onChangeOwner())"
-					/>
-				</div>
-			</template>
-		</VCard>
-	</VDialog>
+		<template #actions>
+			<SvsDialogBtnCancel :disabled="isLoading" data-testid="change-role-cancel-btn" @click="onClose" />
+			<SvsDialogBtnConfirm
+				v-if="!isOwnershipHandoverMode"
+				:disabled="isLoading || !selectedRole"
+				data-testid="change-role-confirm-btn"
+				text-lang-key="common.actions.confirm"
+				@click="withLoading(() => onConfirm())"
+			/>
+			<SvsDialogBtnConfirm
+				v-else
+				:disabled="isLoading || !selectedRole"
+				data-testid="change-owner-confirm-btn"
+				text-lang-key="pages.rooms.members.roleChange.handOverBtn.text"
+				@click="withLoading(() => onChangeOwner())"
+			/>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import { useSafeFocusTrap } from "@/composables/safeFocusTrap";
 import { ChangeRoomRoleBodyParamsRoleName as RoleEnum, RoleName } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { RoomMember, useRoomDetailsStore, useRoomMembersStore } from "@data-room";
 import { WarningAlert } from "@ui-alert";
+import { SvsDialog, SvsDialogBtnCancel, SvsDialogBtnConfirm } from "@ui-dialog";
 import { storeToRefs } from "pinia";
 import { computed, ModelRef, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify";
-import { VCard } from "vuetify/components";
 
 const props = defineProps({
 	members: {
@@ -156,7 +127,6 @@ const withLoading = async (fn: () => Promise<void>) => {
 };
 
 const { t } = useI18n();
-const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const roomMembersStore = useRoomMembersStore();
@@ -320,10 +290,6 @@ const radioOptions = computed(() => {
 
 const changeRoleContent = ref();
 const radioGroup = ref();
-useSafeFocusTrap(isOpen, changeRoleContent, {
-	initialFocus: radioGroup?.value,
-	immediate: false,
-});
 </script>
 
 <style lang="scss" scoped>
