@@ -25,7 +25,7 @@ export interface MePreferencesResponse {
      * @type {string}
      * @memberof MePreferencesResponse
      */
-    releaseDate: string | null;
+    releaseDate?: string | null;
 }
 
 

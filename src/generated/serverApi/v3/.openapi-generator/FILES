@@ -34,6 +34,7 @@ api/oauth-api.ts
 api/oauth2-api.ts
 api/pseudonym-api.ts
 api/registration-api.ts
+api/release-api.ts
 api/room-api.ts
 api/room-invitation-link-api.ts
 api/runtime-config-api.ts
@@ -41,7 +42,6 @@ api/school-api.ts
 api/school-license-api.ts
 api/server-api.ts
 api/server-config-api.ts
-api/server-release-api.ts
 api/share-token-api.ts
 api/shd-api.ts
 api/submission-api.ts
@@ -101,6 +101,7 @@ models/collaborative-text-editor-parent-type.ts
 models/collaborative-text-editor-response.ts
 models/collapsable-body-params.ts
 models/color-body-params.ts
+models/colors.ts
 models/column-response.ts
 models/complete-registration-body-params.ts
 models/component-etherpad-props-impl.ts
@@ -396,7 +397,6 @@ models/tool-launch-request-response.ts
 models/tool-reference-list-response.ts
 models/tool-reference-response.ts
 models/update-board-title-params.ts
-models/update-card-color-body-params.ts
 models/update-element-content-body-params.ts
 models/update-flag-params.ts
 models/update-match-params.ts
