@@ -31,7 +31,7 @@ import { MeApiFactory, ServerReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SvsDialog } from "@ui-dialog";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const envConfig = useEnvConfig();
@@ -46,10 +46,14 @@ const releasesApi = ServerReleaseApiFactory(undefined, "/v3", $axios);
 const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
 const latestRelease = computed(() => releasesResponse.value?.data.data?.[0]);
 
+// New users should not see release notes on first login. Thus it is not shown when no preference is set.
 const hasNewReleaseNotes = computed(() => {
-	if (!latestRelease.value) return false;
+	const publishedAt = latestRelease.value?.publishedAt;
 	const lastSeenDate = userPreferences.value?.releaseDate;
-	return !lastSeenDate || new Date(lastSeenDate) < new Date(latestRelease.value.publishedAt);
+
+	if (!publishedAt || !lastSeenDate) return false;
+
+	return new Date(lastSeenDate) < new Date(publishedAt);
 });
 
 const setReleasePreferences = () => {
@@ -61,4 +65,14 @@ const setReleasePreferences = () => {
 		})
 	);
 };
+
+watch(
+	latestRelease,
+	(release) => {
+		if (release && !userPreferences.value?.releaseDate) {
+			setReleasePreferences();
+		}
+	},
+	{ once: true }
+);
 </script>
