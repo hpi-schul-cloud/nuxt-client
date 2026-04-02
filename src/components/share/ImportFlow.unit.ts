@@ -1,5 +1,5 @@
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
-import CustomDialog from "@/components/organisms/CustomDialog.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
 import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
@@ -207,10 +207,7 @@ describe("@components/share/ImportFlow", () => {
 				it("should open the importModal after selecting the course and closing the modal", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const select = wrapper.findComponent({ name: "v-select" });
-					select.setValue(course);
-
-					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(CustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal);
 					selectCourseDialog.vm.$emit("next");
 
 					await nextTick();
@@ -222,14 +219,11 @@ describe("@components/share/ImportFlow", () => {
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const select = wrapper.findComponent({ name: "v-select" });
-					select.setValue(course);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal);
+					selectCourseDialog.vm.$emit("next", course.id);
 
-					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(CustomDialog);
-					selectCourseDialog.vm.$emit("next");
-
-					const importModalDialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					importModalDialog.vm.$emit("dialog-confirmed");
+					const importModalDialog = wrapper.findComponent(ImportModal);
+					importModalDialog.vm.$emit("import", originalName);
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationId: course.id,
@@ -256,38 +250,30 @@ describe("@components/share/ImportFlow", () => {
 				it("should open selectCourseModal", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const selectCourseModal = wrapper.findComponent({
-						name: "SelectDestinationModal",
-					});
+					const selectCourseModal = wrapper.findComponent(SelectDestinationModal);
 					expect(selectCourseModal.props("isOpen")).toBe(true);
 				});
 
 				it("should open the importModal after selecting the course and closing the modal", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const select = wrapper.findComponent({ name: "v-select" });
-					select.setValue(course);
-
-					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(CustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal);
 					selectCourseDialog.vm.$emit("next");
 
 					await nextTick();
 
-					const importModal = wrapper.findComponent({ name: "import-modal" });
+					const importModal = wrapper.findComponent(ImportModal);
 					expect(importModal.props("isOpen")).toBe(true);
 				});
 
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const select = wrapper.findComponent({ name: "v-select" });
-					select.setValue(course);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal);
+					selectCourseDialog.vm.$emit("next", course.id);
 
-					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(CustomDialog);
-					selectCourseDialog.vm.$emit("next");
-
-					const importModalDialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					importModalDialog.vm.$emit("dialog-confirmed");
+					const dialog = wrapper.findComponent(ImportModal);
+					dialog.vm.$emit("import", originalName);
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationId: course.id,
@@ -328,8 +314,8 @@ describe("@components/share/ImportFlow", () => {
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
+					const dialog = wrapper.findComponent(ImportModal);
+					dialog.vm.$emit("import", originalName);
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						token,
@@ -342,8 +328,8 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.copyByShareToken = () => Promise.reject(new Error());
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					await dialog.vm.$emit("dialog-confirmed");
+					const dialog = wrapper.findComponent(ImportModal);
+					await dialog.vm.$emit("import");
 
 					expectNotification("error");
 				});
@@ -400,8 +386,8 @@ describe("@components/share/ImportFlow", () => {
 					it("opens copy result modal", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-						dialog.vm.$emit("dialog-confirmed");
+						const dialog = wrapper.findComponent(ImportModal);
+						dialog.vm.$emit("import");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
@@ -411,16 +397,14 @@ describe("@components/share/ImportFlow", () => {
 					it("emits success when modal is closed", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-						dialog.vm.$emit("dialog-confirmed");
+						const dialog = wrapper.findComponent(ImportModal);
+						dialog.vm.$emit("import");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 
-						const copyResultModal = wrapper.findComponent({
-							name: "copy-result-modal",
-						});
+						const copyResultModal = wrapper.findComponent(CopyResultModal);
 						await copyResultModal.vm.$emit("copy-dialog-closed");
 
 						expect(wrapper.emitted("success")).toHaveLength(1);
@@ -454,29 +438,23 @@ describe("@components/share/ImportFlow", () => {
 				it("should open the importModal after selecting the course and closing the modal", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const select = wrapper.findComponent({ name: "v-select" });
-					select.setValue(course);
-
-					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(CustomDialog);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal);
 					selectCourseDialog.vm.$emit("next");
 
 					await nextTick();
 
-					const importModal = wrapper.findComponent({ name: "import-modal" });
+					const importModal = wrapper.findComponent(ImportModal);
 					expect(importModal.props("isOpen")).toBe(true);
 				});
 
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const select = wrapper.findComponent({ name: "v-select" });
-					select.setValue(course);
+					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal);
+					selectCourseDialog.vm.$emit("next", course.id);
 
-					const selectCourseDialog = wrapper.findComponent(SelectDestinationModal).findComponent(CustomDialog);
-					selectCourseDialog.vm.$emit("next");
-
-					const importModalDialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					importModalDialog.vm.$emit("dialog-confirmed");
+					const importModalDialog = wrapper.findComponent(ImportModal);
+					importModalDialog.vm.$emit("import", originalName);
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						destinationId: course.id,
@@ -518,8 +496,8 @@ describe("@components/share/ImportFlow", () => {
 				it("should call copyByShareToken when import is started", async () => {
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					dialog.vm.$emit("dialog-confirmed");
+					const dialog = wrapper.findComponent(ImportModal);
+					dialog.vm.$emit("import", originalName);
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
 						token,
@@ -532,8 +510,8 @@ describe("@components/share/ImportFlow", () => {
 					copyModuleMock.copyByShareToken = () => Promise.reject(new Error());
 					const { wrapper } = await setupWithValidator();
 
-					const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-					await dialog.vm.$emit("dialog-confirmed");
+					const dialog = wrapper.findComponent(ImportModal);
+					await dialog.vm.$emit("import");
 
 					expectNotification("error");
 				});
@@ -590,8 +568,8 @@ describe("@components/share/ImportFlow", () => {
 					it("opens copy result modal", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-						dialog.vm.$emit("dialog-confirmed");
+						const dialog = wrapper.findComponent(ImportModal);
+						dialog.vm.$emit("import");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
@@ -601,16 +579,14 @@ describe("@components/share/ImportFlow", () => {
 					it("emits success when modal is closed", async () => {
 						const { wrapper } = await setupWithValidator();
 
-						const dialog = wrapper.findComponent(ImportModal).findComponent(CustomDialog);
-						dialog.vm.$emit("dialog-confirmed");
+						const dialog = wrapper.findComponent(ImportModal);
+						dialog.vm.$emit("import");
 						await flushPromises();
 
 						expect(copyModuleMock.copyByShareToken).toHaveBeenCalled();
 						expect(copyModuleMock.setResultModalOpen).toHaveBeenCalledWith(true);
 
-						const copyResultModal = wrapper.findComponent({
-							name: "copy-result-modal",
-						});
+						const copyResultModal = wrapper.findComponent(CopyResultModal);
 						await copyResultModal.vm.$emit("copy-dialog-closed");
 
 						expect(wrapper.emitted("success")).toHaveLength(1);

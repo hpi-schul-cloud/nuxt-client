@@ -90,7 +90,7 @@
 			</div>
 		</template>
 	</CourseRoomWrapper>
-	<room-modal
+	<CourseRoomModal
 		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
 		:group-data="groupDialog.groupData"
@@ -124,11 +124,11 @@ import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	components: {
+		CourseRoomModal,
 		CourseRoomWrapper,
 		RoomAvatar: CourseRoomAvatar,
 		RoomGroupAvatar: CourseRoomGroupAvatar,
 		RoomEmptyAvatar: CourseRoomEmptyAvatar,
-		RoomModal: CourseRoomModal,
 		ImportFlow,
 		SvsSearchField,
 	},

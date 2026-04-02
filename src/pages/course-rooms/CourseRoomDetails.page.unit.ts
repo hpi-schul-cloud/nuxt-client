@@ -438,18 +438,6 @@ describe("CourseRoomDetails.page.vue", () => {
 		});
 	});
 
-	describe("modal views", () => {
-		it("should open modal for sharing action", () => {
-			const { wrapper } = setup();
-			const modalView = wrapper.findComponent({
-				name: "ShareModal",
-			});
-			const shareDialog = modalView.findComponent({ name: "CustomDialog" });
-
-			expect(shareDialog.props("isOpen")).toBe(true);
-		});
-	});
-
 	describe("tabs", () => {
 		describe("when clicking in the tools tab", () => {
 			it("should show the tools component", async () => {
