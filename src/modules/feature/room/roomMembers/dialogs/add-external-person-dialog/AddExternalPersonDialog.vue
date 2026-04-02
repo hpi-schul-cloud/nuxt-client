@@ -12,6 +12,7 @@
 				:email="email"
 				:has-error="step === ExternalMembersInvitationSteps.Error"
 				@submit:email="onSubmitEmail"
+				@close="closeDialog"
 			/>
 			<StepDetails
 				v-else-if="step === ExternalMembersInvitationSteps.Details"

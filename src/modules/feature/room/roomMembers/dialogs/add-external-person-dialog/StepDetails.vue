@@ -15,6 +15,7 @@
 		<VTextField
 			ref="emailInput"
 			v-model="email"
+			disabled
 			class="mb-4"
 			:label="t('pages.rooms.members.dialog.addExternalPerson.label.email')"
 			data-testid="add-external-person-email"
@@ -50,6 +51,7 @@
 			ref="backButton"
 			class="ms-auto mr-2"
 			:text="t('common.actions.back')"
+			variant="flat"
 			data-testid="add-external-person-back-btn"
 			@click="onBack"
 		/>

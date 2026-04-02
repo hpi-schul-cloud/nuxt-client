@@ -30,6 +30,7 @@
 			<VBtn
 				ref="cancelButton"
 				class="ms-auto mr-2"
+				variant="flat"
 				:text="t('common.actions.cancel')"
 				data-testid="add-external-person-cancel-btn"
 				@click="onCancel"
