@@ -19,6 +19,7 @@ import {
 	DeleteElementSuccessPayload,
 	DuplicateCardSuccessPayload,
 	MoveElementSuccessPayload,
+	UpdateCardColorSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload.types";
@@ -44,6 +45,7 @@ export const SR_I18N_KEYS_MAP = {
 	COLUMN_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.columnTitleUpdated.success",
 	CARD_TITLE_UPDATED_SUCCESS: "components.board.screenReader.notification.cardTitleUpdated.success",
 	CARD_UPDATED_SUCCESS: "components.board.screenReader.notification.cardUpdated.success",
+	CARD_COLOR_UPDATED_SUCCESS: "components.board.screenReader.notification.cardColorUpdated.success",
 	BOARD_LAYOUT_UPDATED_SUCCESS: "components.board.screenReader.notification.boardLayoutUpdated.success",
 	BOARD_SET_AS_EDITABLE_FOR_ALL_USERS_SUCCESS:
 		"components.board.screenReader.notification.boardSetAsEditableForAllUsers.success",
@@ -60,9 +62,14 @@ export const useBoardAriaNotification = () => {
 	const getElementOwner = (elementId: string) => {
 		if (!cards) return;
 
+		// TODO - fix ts errors
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		const card = Object.values(cards).find((c) => c.elements.find((element) => element.id === elementId));
 		if (!card) return;
 
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		return card.id;
 	};
 
@@ -205,6 +212,24 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
+	const notifyUpdateCardColorSuccess = (action: UpdateCardColorSuccessPayload) => {
+		const { newColor, isOwnAction, cardId } = action;
+		if (isOwnAction) return;
+
+		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
+			columnIndex: number;
+			cardIndex: number;
+		};
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.CARD_COLOR_UPDATED_SUCCESS, {
+				cardPosition: cardIndex + 1,
+				columnPosition: columnIndex + 1,
+				newColor,
+			})
+		);
+	};
+
 	const notifyCreateElementSuccess = (action: CreateElementSuccessPayload) => {
 		const { cardId, isOwnAction } = action;
 		if (isOwnAction) return;
@@ -333,6 +358,7 @@ export const useBoardAriaNotification = () => {
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateCardTitleSuccess,
+		notifyUpdateCardColorSuccess,
 		notifyUpdateColumnTitleSuccess,
 		notifyUpdateElementSuccess,
 	};

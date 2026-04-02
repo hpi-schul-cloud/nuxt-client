@@ -20,7 +20,7 @@ export default {
 	"common.actions.invite": "Надіслати посилання на курс",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
-	"common.actions.pickColor": "Вибрати колір тла",
+	"common.actions.pickColor": "Вибрати колір",
 	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",

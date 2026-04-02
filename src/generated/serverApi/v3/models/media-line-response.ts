@@ -13,8 +13,8 @@
  */
 
 
+import { Colors } from './colors';
 import { DeletedElementResponse } from './deleted-element-response';
-import { MediaBoardColors } from './media-board-colors';
 import { MediaExternalToolElementResponse } from './media-external-tool-element-response';
 import { TimestampsResponse } from './timestamps-response';
 
@@ -50,10 +50,10 @@ export interface MediaLineResponse {
     timestamps: TimestampsResponse;
     /**
      * The background color of the media line
-     * @type {MediaBoardColors}
+     * @type {Colors}
      * @memberof MediaLineResponse
      */
-    backgroundColor: MediaBoardColors;
+    backgroundColor: Colors;
     /**
      * Collapse the media line
      * @type {boolean}

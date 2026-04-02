@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import { useSafeAxiosRunner, useSafeAxiosTask } from "@/composables/async-tasks.composable";
 import { $axios } from "@/utils/api";
-import { MeApiFactory, ServerReleaseApiFactory } from "@api-server";
+import { MeApiFactory, ReleaseApiFactory } from "@api-server";
 import { useAppStoreRefs } from "@data-app";
 import { useEnvConfig } from "@data-env";
 import { SvsDialog } from "@ui-dialog";
@@ -41,9 +41,9 @@ const { t } = useI18n();
 const { execute: setPreference } = useSafeAxiosTask();
 
 const meApi = MeApiFactory(undefined, "/v3", $axios);
-const releasesApi = ServerReleaseApiFactory(undefined, "/v3", $axios);
+const releasesApi = ReleaseApiFactory(undefined, "/v3", $axios);
 
-const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.serverReleaseControllerGetReleases(0, 1));
+const { data: releasesResponse } = useSafeAxiosRunner(() => releasesApi.releaseControllerGetReleases(0, 1));
 const latestRelease = computed(() => releasesResponse.value?.data.data?.[0]);
 
 // New users should not see release notes on first login. Thus it is not shown when no preference is set.
