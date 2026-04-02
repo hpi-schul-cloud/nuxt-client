@@ -1,35 +1,26 @@
 <template>
-	<VColorPicker v-model="color" hide-sliders hide-inputs hide-canvas show-swatches :swatches elevation="0" />
+	<VColorPicker v-model="hexValue" hide-sliders hide-inputs hide-canvas show-swatches :swatches elevation="0" />
 </template>
 
 <script setup lang="ts">
-import { ColorNameToHexMap, ColorPickerDefaultColors } from "./default-colors";
+import { COLORS_LIGHTEN3, colorToHexLighten3, hexToColorLighten3 } from "@/utils/color.utils";
+import { Colors } from "@api-server";
+import { chunk } from "lodash-es";
 import { computed } from "vue";
 
-const props = withDefaults(
-	defineProps<{
-		swatchColors?: string[];
-	}>(),
-	{
-		swatchColors: () => Object.values(ColorNameToHexMap),
-	}
-);
-
-const swatches = computed<string[][]>(() => {
-	const swatchesPerColumn = 3;
-	const swatchRows = [];
-
-	for (let i = 0; i < props.swatchColors.length; i += swatchesPerColumn) {
-		swatchRows.push(props.swatchColors.slice(i, i + swatchesPerColumn));
-	}
-
-	return swatchRows;
+const model = defineModel<Colors>({
+	default: Colors.TRANSPARENT,
 });
 
-const color = defineModel({
-	type: String,
-	default: ColorNameToHexMap[ColorPickerDefaultColors.WHITE],
+const hexValue = computed({
+	get: () => colorToHexLighten3(model.value),
+	set: (hex: string) => {
+		const match = hexToColorLighten3(hex);
+		if (match !== undefined) model.value = match as Colors;
+	},
 });
+
+const swatches = computed(() => chunk(Object.values(COLORS_LIGHTEN3), 3));
 </script>
 
 <style scoped>

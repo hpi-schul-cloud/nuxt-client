@@ -20,7 +20,7 @@
 				<span>{{ $t("common.actions.rename") }}</span>
 			</VListItemTitle>
 		</VListItem>
-		<SvsColorPickerMenu v-model="color" @update:color="onUpdateColor" />
+		<SvsColorPickerMenu v-model:color="color" />
 		<VListItem
 			v-if="lineId"
 			:prepend-icon="mdiTrashCanOutline"
@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import { MediaBoardColorMapper } from "./utils";
 import { Colors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
 import { SvsColorPickerMenu } from "@ui-color-picker";
@@ -59,29 +58,6 @@ const color: ModelRef<Colors> = defineModel("color", {
 	type: String as PropType<Colors>,
 	default: Colors.TRANSPARENT,
 });
-
-// const swatchShade: ColorShade = "lighten4";
-
-// const colorValue = computed<string>(() => MediaBoardColorMapper.mapColorToHex(color.value, swatchShade));
-
-const onUpdateColor = (value: string) => {
-	color.value = MediaBoardColorMapper.mapHexToColor(value) ?? Colors.TRANSPARENT;
-};
-
-// const swatchColors = Object.values(Colors).map((colorName: Colors) =>
-// 	MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
-// );
-
-// const swatches = computed<string[][]>(() => {
-// 	const swatchesPerLine = 4;
-// 	const swatchRows = [];
-
-// 	for (let i = 0; i < swatchColors.length; i += swatchesPerLine) {
-// 		swatchRows.push(swatchColors.slice(i, i + swatchesPerLine));
-// 	}
-
-// 	return swatchRows;
-// });
 
 defineEmits<{
 	(e: "delete:line", lineId: string): void;

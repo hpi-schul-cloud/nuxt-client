@@ -11,6 +11,7 @@
 				ref="cardHost"
 				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
+				:style="{ backgroundColor: cardBackground }"
 				:class="{ 'drag-disabled': isEditMode }"
 				tabindex="0"
 				min-height="120px"
@@ -38,7 +39,7 @@
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu v-if="hasMenuItem" :scope="BoardMenuScope.CARD" has-background :data-testid="boardMenuTestId">
 							<KebabMenuActionEdit v-if="allowedOperations?.deleteCard && !isEditMode" @click="onStartEditMode" />
-							<SvsColorPickerMenu v-model:color="card.color" @update:color="onUpdateColor" />
+							<SvsColorPickerMenu :color="card.backgroundColor" @update:color="onUpdateColor" />
 							<KebabMenuActionDuplicate
 								v-if="allowedOperations?.copyCard"
 								data-testid="kebab-menu-action-duplicate-card"
@@ -106,8 +107,10 @@ import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
 import { useSafeTaskRunner } from "@/composables/async-tasks.composable";
 import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
+import { colorToHexLighten5 } from "@/utils/color.utils";
 import { askDeletionForType } from "@/utils/confirmation-dialog.utils";
 import { delay } from "@/utils/helpers";
+import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import { SvsColorPickerMenu } from "@ui-color-picker";
@@ -120,7 +123,6 @@ import {
 	KebabMenuActionShareLink,
 } from "@ui-kebab-menu";
 import { useShareBoardLink } from "@util-board";
-import { logger } from "@util-logger";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, onMounted, ref, toRef } from "vue";
 
@@ -169,6 +171,8 @@ const cardElevation = computed(() => {
 	}
 	return 2;
 });
+
+const cardBackground = computed(() => colorToHexLighten5(card.value?.backgroundColor ?? Colors.TRANSPARENT));
 
 const { askType } = useAddElementDialog(cardStore.createElementRequest, cardId.value);
 
@@ -254,12 +258,10 @@ onMounted(async () => {
 	if (card.value === undefined) {
 		await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
 	}
-	logger.log(card.value?.color);
 });
 
 // Card Color
-const onUpdateColor = (newColor: string) => {
-	logger.log(card.value?.color, newColor);
+const onUpdateColor = (newColor: Colors) => {
 	cardStore.updateCardColorRequest({ cardId: props.cardId, newColor });
 };
 </script>

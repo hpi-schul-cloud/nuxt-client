@@ -60,14 +60,10 @@
 import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+import { useCollapsableState } from "./utils";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import {
-	BoardLayout,
-	MediaAvailableLineElementResponse,
-	MediaAvailableLineResponse,
-	Colors,
-} from "@api-server";
+import { colorToHexLighten5 } from "@/utils/color.utils";
+import { BoardLayout, Colors, MediaAvailableLineElementResponse, MediaAvailableLineResponse } from "@api-server";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash-es";
@@ -109,11 +105,9 @@ const { dragStart, dragEnd } = useDragAndDrop();
 
 const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(() => props.line.elements ?? []);
 
-const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.LIST);
+const isList = computed(() => props.layout === BoardLayout.LIST);
 
-const lineBackgroundColorHex: Ref<string> = computed(() =>
-	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
-);
+const lineBackgroundColorHex = computed(() => colorToHexLighten5(props.line.backgroundColor));
 
 const onElementDragEnd = async (event: SortableEvent) => {
 	dragEnd();

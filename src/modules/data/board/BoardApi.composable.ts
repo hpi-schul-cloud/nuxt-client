@@ -10,6 +10,7 @@ import {
 	BoardLayout,
 	BoardResponse,
 	CardResponse,
+	Colors,
 	ColumnResponse,
 	ContentElementType,
 	CourseRoomsApiFactory,
@@ -80,9 +81,9 @@ export const useBoardApi = () => {
 			title,
 		});
 
-	const updateCardColor = async (id: string, color: string) =>
+	const updateCardColor = async (id: string, backgroundColor: Colors) =>
 		cardsApi.cardControllerUpdateCardColor(id, {
-			color,
+			backgroundColor,
 		});
 
 	const updateColumnTitleCall = async (id: string, title: string) =>

@@ -1,5 +1,5 @@
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { CardResponse, ContentElementType } from "@api-server";
+import { CardResponse, Colors, ContentElementType } from "@api-server";
 
 export type FetchCardRequestPayload = {
 	cardIds: string[];
@@ -23,11 +23,11 @@ export type UpdateCardTitleFailurePayload = UpdateCardTitleRequestPayload;
 
 export type UpdateCardColorRequestPayload = {
 	cardId: string;
-	newColor: string;
+	newColor: Colors;
 };
 export type UpdateCardColorSuccessPayload = {
 	cardId: string;
-	newColor: string;
+	newColor: Colors;
 	isOwnAction: boolean;
 };
 export type UpdateCardColorFailurePayload = UpdateCardColorRequestPayload;

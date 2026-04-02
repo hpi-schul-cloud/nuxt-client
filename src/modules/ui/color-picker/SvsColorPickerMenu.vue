@@ -3,27 +3,18 @@
 		<template #activator="{ props }">
 			<VListItem v-bind="props" :title="t('common.actions.pickColor')" :prepend-icon="mdiPalette" @click.prevent.stop />
 		</template>
-		<SvsColorPicker
-			v-model="color"
-			data-testid="color-picker"
-			@update:model-value="(newColor) => emit('update:color', newColor)"
-		/>
+		<SvsColorPicker v-model="color" data-testid="color-picker" />
 	</VListGroup>
 </template>
 
 <script setup lang="ts">
-import { ColorNameToHexMap, ColorPickerDefaultColors } from "./default-colors";
 import SvsColorPicker from "./SvsColorPicker.vue";
+import { Colors } from "@api-server";
 import { mdiPalette } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
-const emit = defineEmits<{
-	(e: "update:color", value: string): void;
-}>();
-
-const color = defineModel("color", {
-	type: String,
-	default: ColorNameToHexMap[ColorPickerDefaultColors.WHITE],
+const color = defineModel<Colors>("color", {
+	default: Colors.TRANSPARENT,
 });
 
 const { t } = useI18n();
