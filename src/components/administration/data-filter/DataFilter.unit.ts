@@ -2,13 +2,19 @@ import { useDataTableFilter } from "./composables/filter.composable";
 import DataFilter from "./DataFilter.vue";
 import { User } from "./types";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 
 vi.mock("./composables/filter.composable");
 
 const mockedUseBoardApi = vi.mocked(useDataTableFilter);
 describe("@components/DataFilter/DataFilter.vue", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+	});
+
 	const updateFilterMock = vi.fn();
 	const removeFilterMock = vi.fn();
 	const removeChipFilterMock = vi.fn();
@@ -41,9 +47,6 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 		return mount(DataFilter, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: {
-					FilterDialog: true,
-				},
 			},
 			...options,
 		});
@@ -79,38 +82,6 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 
 			expect(wrapper.emitted()).toHaveProperty("update:filter");
 			expect(removeChipFilterMock).toHaveBeenCalled();
-		});
-
-		describe("filter dialog", () => {
-			it("should set the 'dialogOpen' false when 'close' event be emitted", async () => {
-				const wrapper = setup({ props: { filterFor: User.STUDENT } });
-
-				const filterDialogComponent = wrapper.getComponent({
-					name: "FilterDialog",
-				});
-				expect(filterDialogComponent.props("isOpen")).toBe(false);
-				wrapper.vm.dialogOpen = true;
-				await wrapper.vm.$nextTick();
-
-				expect(filterDialogComponent.props("isOpen")).toBe(true);
-
-				await filterDialogComponent.vm.$emit("dialog-closed");
-
-				expect(filterDialogComponent.props("isOpen")).toBe(false);
-				expect(wrapper.vm.dialogOpen).toBe(false);
-			});
-
-			it("should call updateFilter method", async () => {
-				const wrapper = setup({ props: { filterFor: User.TEACHER } });
-				wrapper.vm.dialogOpen = true;
-
-				const filterDialogComponent = wrapper.getComponent({
-					name: "FilterDialog",
-				});
-
-				await filterDialogComponent.vm.$emit("remove:filter");
-				expect(removeFilterMock).toHaveBeenCalled();
-			});
 		});
 
 		it("should set filter title", () => {

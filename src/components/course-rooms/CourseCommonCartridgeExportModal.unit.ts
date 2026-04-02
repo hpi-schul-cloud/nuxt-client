@@ -6,10 +6,10 @@ import { expectNotification } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
 import { beforeEach } from "vitest";
-import { VDialog } from "vuetify/components";
 
 describe("CourseCommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
@@ -49,7 +49,7 @@ describe("CourseCommonCartridgeExportModal", () => {
 					},
 		});
 
-		const wrapper = mount(CourseCommonCartridgeExportModal, {
+		return mount(CourseCommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -58,7 +58,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 				},
 			},
 		});
-		return wrapper;
 	};
 
 	it("should render CourseCommonCartridgeExportModal component", () => {
@@ -69,18 +68,8 @@ describe("CourseCommonCartridgeExportModal", () => {
 	describe("when getIsExportModalOpen is true", () => {
 		it("should open the Dialog", () => {
 			const wrapper = setup();
-			const dialog = wrapper.findComponent(VDialog);
+			const dialog = wrapper.findComponent(SvsDialog);
 			expect(dialog.props("modelValue")).toBe(true);
-		});
-	});
-
-	describe("onCancel / onCloseDialog", () => {
-		it("should close dialog when cancel button clicked", async () => {
-			const wrapper = setup();
-			const closeBtn = wrapper.findComponent('[data-testid="dialog-cancel-btn"]');
-			await closeBtn.trigger("click");
-			const emit = wrapper.emitted();
-			expect(emit).toHaveProperty("dialog-closed");
 		});
 	});
 
@@ -115,9 +104,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await nextBtn.trigger("click");
 			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
 			await exportBtn.trigger("click");
-			const emit = wrapper.emitted();
-			expect(emit).toHaveProperty("dialog-confirmed");
-			expect(emit).toHaveProperty("dialog-closed");
 
 			exportModuleMock.startExport();
 
@@ -131,9 +117,6 @@ describe("CourseCommonCartridgeExportModal", () => {
 			await nextBtn.trigger("click");
 			const exportBtn = wrapper.findComponent('[data-testid="dialog-export-btn"]');
 			await exportBtn.trigger("click");
-			const emit = wrapper.emitted();
-			expect(emit).toHaveProperty("dialog-confirmed");
-			expect(emit).toHaveProperty("dialog-closed");
 
 			exportModuleMock.startExport();
 

@@ -1,13 +1,48 @@
 <template>
-	<RoomCopyInfoDialog v-if="isRoomCopyInfoDialogOpen" @copy:cancel="onCancelCopy" @copy:confirm="onConfirmCopy" />
+	<SvsDialog
+		v-model="isOpen"
+		title="feature-room.CopyInfoDialog.title"
+		confirm-btn-lang-key="common.actions.duplicate"
+		@confirm="onConfirmCopy"
+		@cancel="onCancelCopy"
+	>
+		<template #content>
+			<p>
+				{{ t("feature-room.CopyInfoDialog.text.nextStep") }}
+			</p>
+			<InfoAlert class="mb-4" data-testid="copy-info-copyright-data-protection">
+				{{ t("components.molecules.share.checkPrivacyAndCopyright") }}
+			</InfoAlert>
+			<WarningAlert>
+				<p class="mb-1">
+					{{ t("feature-room.CopyInfoDialog.text.alert.followingContent") }}
+				</p>
+				<ul class="ml-6">
+					<li data-testid="copy-modal-room-member-permission">
+						{{ t("feature-room.CopyInfoDialog.text.alert.membersPermissions") }}
+					</li>
+					<li data-testid="copy-modal-content-etherpad">
+						{{ t("feature-room.CopyInfoDialog.text.alert.Etherpad") }}
+					</li>
+					<li data-testid="copy-modal-content-whiteboard">
+						{{ t("feature-room.CopyInfoDialog.text.alert.whiteboard") }}
+					</li>
+					<li data-testid="copy-modal-protected-external-tool">
+						{{ t("feature-room.CopyInfoDialog.text.alert.protectedSettings") }}
+					</li>
+				</ul>
+			</WarningAlert>
+		</template>
+	</SvsDialog>
 </template>
 
 <script setup lang="ts">
-import RoomCopyInfoDialog from "./RoomCopyInfoDialog.vue";
 import { RoomDetails } from "@/types/room/Room";
 import { CopyApiResponseStatus } from "@api-server";
 import { notifyError, notifySuccess, useLoadingStore } from "@data-app";
 import { useRoomStore } from "@data-room";
+import { InfoAlert, WarningAlert } from "@ui-alert";
+import { SvsDialog } from "@ui-dialog";
 import { nextTick, onMounted, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -16,6 +51,11 @@ const props = defineProps({
 		type: Object as PropType<RoomDetails>,
 		required: true,
 	},
+});
+
+const isOpen = defineModel({
+	type: Boolean,
+	required: true,
 });
 
 const emit = defineEmits<{
