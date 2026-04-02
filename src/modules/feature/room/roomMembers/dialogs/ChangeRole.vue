@@ -288,7 +288,6 @@ const radioOptions = computed(() => {
 	return baseRoles;
 });
 
-const changeRoleContent = ref();
 const radioGroup = ref();
 </script>
 
