@@ -8,8 +8,10 @@ import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/set
 import { Permission, RoleName } from "@api-server";
 import { ExternalToolDisplayData } from "@data-external-tool";
 import { createTestingPinia } from "@pinia/testing";
+import { SvsDialog } from "@ui-dialog";
 import { mount } from "@vue/test-utils";
 import { setActivePinia } from "pinia";
+import { VCardText } from "vuetify/components";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (props: { selectedItem: ExternalToolDisplayData; isOpen?: boolean }) => {
@@ -54,16 +56,13 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-
-				expect(title.text()).toEqual("pages.rooms.tools.outdatedDialog.title");
+				expect(wrapper.findComponent(SvsDialog).props("title")).toEqual("pages.rooms.tools.outdatedDialog.title");
 			});
 
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.outdatedOnSchool.teacher");
 			});
@@ -86,16 +85,13 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-
-				expect(title.text()).toEqual("pages.rooms.tools.incompleteDialog.title");
+				expect(wrapper.findComponent(SvsDialog).props("title")).toEqual("pages.rooms.tools.incompleteDialog.title");
 			});
 
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.outdated.teacher");
 			});
@@ -118,16 +114,13 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-
-				expect(title.text()).toEqual("error.generic");
+				expect(wrapper.findComponent(SvsDialog).props("title")).toEqual("error.generic");
 			});
 
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.outdated.teacher");
 			});
@@ -150,16 +143,13 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-
-				expect(title.text()).toEqual("pages.rooms.tools.deactivatedDialog.title");
+				expect(wrapper.findComponent(SvsDialog).props("title")).toEqual("pages.rooms.tools.deactivatedDialog.title");
 			});
 
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.deactivated.teacher");
 			});
@@ -182,16 +172,13 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
-
-				const title = wrapper.findComponent('[data-testid="dialog-title"]');
-
-				expect(title.text()).toEqual("pages.rooms.tools.notLicensedDialog.title");
+				expect(wrapper.findComponent(SvsDialog).props("title")).toEqual("pages.rooms.tools.notLicensedDialog.title");
 			});
 
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.findComponent(".v-card-text");
+				const content = wrapper.findComponent(VCardText);
 
 				expect(content.text()).toEqual("common.tool.information.notLicensed.teacher");
 			});
