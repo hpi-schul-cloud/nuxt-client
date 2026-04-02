@@ -1,5 +1,5 @@
 import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
-import { SvsColorPickerMenu } from "@ui-color-picker";
+import { SvsColorPickerMenu } from "@ui-controls";
 
 describe("SvsColorPickerMenu", () => {
 	const setup = () => {

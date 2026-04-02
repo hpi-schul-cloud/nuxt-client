@@ -1,5 +1,5 @@
+import SvsColorPicker from "./SvsColorPicker.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { SvsColorPicker } from "@ui-color-picker";
 
 describe("SvsColorPicker", () => {
 	const setup = () => {

@@ -77,7 +77,6 @@
       "@ui-audio-player": ["src/modules/ui/audio-player"],
       "@ui-board": ["src/modules/ui/board"],
       "@ui-chip": ["src/modules/ui/chip"],
-      "@ui-color-picker": ["src/modules/ui/color-picker"],
       "@ui-controls": ["src/modules/ui/controls"],
       "@ui-containers": ["src/modules/ui/containers"],
       "@ui-data-table": ["src/modules/ui/data-table"],

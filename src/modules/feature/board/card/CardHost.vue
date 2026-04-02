@@ -113,7 +113,7 @@ import { delay } from "@/utils/helpers";
 import { Colors } from "@api-server";
 import { useBoardAllowedOperations, useBoardFocusHandler, useCardStore, useCourseBoardEditMode } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
-import { SvsColorPickerMenu } from "@ui-color-picker";
+import { SvsColorPickerMenu } from "@ui-controls";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionDuplicate,

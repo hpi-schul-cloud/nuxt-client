@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { Colors } from "@api-server";
 import { mdiChevronDown, mdiChevronUp, mdiRenameOutline, mdiTrashCanOutline } from "@icons/material";
-import { SvsColorPickerMenu } from "@ui-color-picker";
+import { SvsColorPickerMenu } from "@ui-controls";
 import { KebabMenu } from "@ui-kebab-menu";
 import { ModelRef, PropType } from "vue";
 
